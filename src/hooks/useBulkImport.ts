@@ -47,6 +47,63 @@ function normalizeHeaders(headers: string[]): string[] {
 
 export type ImportEntityType = 'contacts' | 'companies';
 
+function mapImportRow(
+  row: Record<string, string>,
+  rawHeaders: string[],
+  normalizedHeaders: string[],
+  validFields: string[],
+  userId: string,
+  entityType: ImportEntityType,
+): { data: Record<string, unknown> | null; error?: string } {
+  const mapped: Record<string, unknown> = { user_id: userId };
+  rawHeaders.forEach((header, index) => {
+    const field = normalizedHeaders[index];
+    if (!validFields.includes(field) || !row[header]?.trim()) return;
+    mapped[field] = field === 'tags'
+      ? row[header].split(/[,;|]/).map(tag => tag.trim()).filter(Boolean)
+      : row[header].trim();
+  });
+
+  if (entityType === 'contacts') {
+    if (!mapped.first_name) return { data: null, error: 'Nome obrigatório' };
+    if (!mapped.last_name) mapped.last_name = '';
+  } else if (!mapped.name) {
+    return { data: null, error: 'Nome da empresa obrigatório' };
+  }
+  return { data: mapped };
+}
+
+interface MappedImportRecord {
+  data: Record<string, unknown>;
+  rowNumber: number;
+}
+
+export function mapImportBatch(
+  rows: Record<string, string>[],
+  rowOffset: number,
+  rawHeaders: string[],
+  normalizedHeaders: string[],
+  validFields: string[],
+  userId: string,
+  entityType: ImportEntityType,
+): { records: MappedImportRecord[]; errors: ImportResult['errors'] } {
+  const errors: ImportResult['errors'] = [];
+  const records = rows.flatMap((row, batchIndex) => {
+    const rowNumber = rowOffset + batchIndex + 2;
+    const mapped = mapImportRow(
+      row,
+      rawHeaders,
+      normalizedHeaders,
+      validFields,
+      userId,
+      entityType,
+    );
+    if (mapped.error) errors.push({ row: rowNumber, message: mapped.error });
+    return mapped.data ? [{ data: mapped.data, rowNumber }] : [];
+  });
+  return { records, errors };
+}
+
 export function useBulkImport(entityType: ImportEntityType) {
   const { user } = useAuth();
   const qc = useQueryClient();
@@ -69,7 +126,7 @@ export function useBulkImport(entityType: ImportEntityType) {
         setHeaders(normalized);
         const rows = (results.data as Record<string, string>[]).map(row => {
           const mapped: Record<string, string> = {};
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           rawHeaders.forEach((h, i) => {
             mapped[normalized[i]] = row[h];
           });
@@ -101,47 +158,29 @@ export function useBulkImport(entityType: ImportEntityType) {
 
             const BATCH_SIZE = 50;
             for (let i = 0; i < rows.length; i += BATCH_SIZE) {
-              // eslint-disable-next-line sonarjs/no-nested-functions
-              const batch = rows.slice(i, i + BATCH_SIZE).map((row, bIdx) => {
-                const mapped: Record<string, unknown> = { user_id: user.id };
-                rawHeaders.forEach((h, hIdx) => {
-                  const field = normalized[hIdx];
-                  if (validFields.includes(field) && row[h]?.trim()) {
-                    if (field === 'tags') {
-                      mapped[field] = row[h].split(/[,;|]/).map(t => t.trim()).filter(Boolean);
-                    } else {
-                      mapped[field] = row[h].trim();
-                    }
-                  }
-                });
+              const batch = mapImportBatch(
+                rows.slice(i, i + BATCH_SIZE),
+                i,
+                rawHeaders,
+                normalized,
+                validFields,
+                user.id,
+                entityType,
+              );
+              errors.push(...batch.errors);
 
-                if (entityType === 'contacts') {
-                  if (!mapped.first_name) {
-                    errors.push({ row: i + bIdx + 2, message: 'Nome obrigatório' });
-                    return null;
-                  }
-                  if (!mapped.last_name) mapped.last_name = '';
-                } else {
-                  if (!mapped.name) {
-                    errors.push({ row: i + bIdx + 2, message: 'Nome da empresa obrigatório' });
-                    return null;
-                  }
-                }
-                return mapped;
-              }).filter(Boolean);
-
-              if (batch.length > 0) {
+              if (batch.records.length > 0) {
+                const payloads = batch.records.map(record => record.data);
                 const { error } = entityType === 'contacts'
-                  ? await supabase.from('contacts').insert(batch as TablesInsert<'contacts'>[])
-                  : await supabase.from('companies').insert(batch as TablesInsert<'companies'>[]);
-                
+                  ? await supabase.from('contacts').insert(payloads as TablesInsert<'contacts'>[])
+                  : await supabase.from('companies').insert(payloads as TablesInsert<'companies'>[]);
+
                 if (error) {
-                  // eslint-disable-next-line sonarjs/no-nested-functions
-                  batch.forEach((_, bIdx) => {
-                    errors.push({ row: i + bIdx + 2, message: error.message });
+                  batch.records.forEach(record => {
+                    errors.push({ row: record.rowNumber, message: error.message });
                   });
                 } else {
-                  success += batch.length;
+                  success += batch.records.length;
                 }
               }
             }

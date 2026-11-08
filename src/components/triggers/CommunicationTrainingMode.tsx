@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   GraduationCap, Brain, BookOpen,
   Play, Trophy,
@@ -139,7 +140,7 @@ export function CommunicationTrainingMode() {
               Configure seu perfil PNL para acessar o treinamento personalizado
             </p>
             <Button variant="outline" asChild>
-              <a href="/configuracoes">Configurar Meu Perfil</a>
+              <Link to="/configuracoes">Configurar Meu Perfil</Link>
             </Button>
           </div>
         </CardContent>

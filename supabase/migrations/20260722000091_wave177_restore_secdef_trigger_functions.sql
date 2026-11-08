@@ -4,10 +4,25 @@
 -- handle_new_singu_profile fires on public.profiles INSERT that handle_new_user initiates.
 -- Both must remain SECURITY DEFINER so they run as postgres (owner) and bypass RLS.
 
-ALTER FUNCTION public.handle_new_user() SECURITY DEFINER;
-ALTER FUNCTION public.handle_new_singu_profile() SECURITY DEFINER;
-
--- Harden the search_path so these SECURITY DEFINER functions cannot be tricked via
--- a malicious public-schema object shadowing pg_catalog or auth functions.
-ALTER FUNCTION public.handle_new_user() SET search_path = public, auth, extensions;
-ALTER FUNCTION public.handle_new_singu_profile() SET search_path = public, auth, extensions;
+DO $migration$
+DECLARE
+  function_signature text;
+BEGIN
+  FOREACH function_signature IN ARRAY ARRAY[
+    'public.handle_new_user()',
+    'public.handle_new_singu_profile()'
+  ]
+  LOOP
+    IF to_regprocedure(function_signature) IS NOT NULL THEN
+      EXECUTE format(
+        'ALTER FUNCTION %s SECURITY DEFINER',
+        function_signature
+      );
+      EXECUTE format(
+        'ALTER FUNCTION %s SET search_path = public, auth, extensions',
+        function_signature
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

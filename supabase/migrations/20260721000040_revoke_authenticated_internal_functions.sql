@@ -7,45 +7,30 @@
 -- Revoking EXECUTE from `authenticated` (and confirming anon was already
 -- revoked in Wave 123) closes the attack surface on these internal functions.
 
--- ── Internal data collection / ingestion pipelines ───────────────────────────
-REVOKE EXECUTE ON FUNCTION public.fn_cf_collect_sm_legacy_dispatch(
-  p_start_page integer, p_end_page integer
-) FROM authenticated;
-
-REVOKE EXECUTE ON FUNCTION public.fn_cf_collect_sm_legacy_harvest(
-  p_first_id bigint, p_last_id bigint
-) FROM authenticated;
-
-REVOKE EXECUTE ON FUNCTION public.fn_ingest_asia_hg_batch(
-  p_produtos jsonb
-) FROM authenticated;
-
--- ── Internal sync / promotion pipelines ──────────────────────────────────────
-REVOKE EXECUTE ON FUNCTION public.fn_set_novelty_updated_at() FROM authenticated;
-
-REVOKE EXECUTE ON FUNCTION public.fn_sm_promote_images_to_gold(
-  p_limit integer
-) FROM authenticated;
-
-REVOKE EXECUTE ON FUNCTION public.fn_sync_novelty_to_product() FROM authenticated;
-
-REVOKE EXECUTE ON FUNCTION public.fn_promote_kit_components_batch(
-  p_batch_size integer
-) FROM authenticated;
-
--- ── Internal product tagging pipeline ────────────────────────────────────────
-REVOKE EXECUTE ON FUNCTION public.fn_apply_auto_tag_rules(
-  p_product_id uuid
-) FROM authenticated;
-
--- ── Admin-only portfolio redistribution ──────────────────────────────────────
-REVOKE EXECUTE ON FUNCTION public.redistribute_admin_portfolio(
-  p_admin_id uuid, p_target_users uuid[], p_batch_size integer
-) FROM authenticated;
-
--- ── Internal data maintenance utilities ──────────────────────────────────────
-REVOKE EXECUTE ON FUNCTION public.validate_data_batch(
-  p_table text
-) FROM authenticated;
-
-REVOKE EXECUTE ON FUNCTION public.get_data_cleanup_tasks() FROM authenticated;
+DO $migration$
+DECLARE
+  function_signature text;
+BEGIN
+  FOREACH function_signature IN ARRAY ARRAY[
+    'public.fn_cf_collect_sm_legacy_dispatch(integer,integer)',
+    'public.fn_cf_collect_sm_legacy_harvest(bigint,bigint)',
+    'public.fn_ingest_asia_hg_batch(jsonb)',
+    'public.fn_set_novelty_updated_at()',
+    'public.fn_sm_promote_images_to_gold(integer)',
+    'public.fn_sync_novelty_to_product()',
+    'public.fn_promote_kit_components_batch(integer)',
+    'public.fn_apply_auto_tag_rules(uuid)',
+    'public.redistribute_admin_portfolio(uuid,uuid[],integer)',
+    'public.validate_data_batch(text)',
+    'public.get_data_cleanup_tasks()'
+  ]
+  LOOP
+    IF to_regprocedure(function_signature) IS NOT NULL THEN
+      EXECUTE format(
+        'REVOKE EXECUTE ON FUNCTION %s FROM authenticated',
+        function_signature
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

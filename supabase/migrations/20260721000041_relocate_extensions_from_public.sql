@@ -14,6 +14,21 @@
 -- pg_net is NOT relocated here because extrelocatable=false for that extension.
 -- It is a Supabase-managed extension that must remain in public.
 
-ALTER EXTENSION pg_trgm SET SCHEMA extensions;
-ALTER EXTENSION unaccent SET SCHEMA extensions;
-ALTER EXTENSION vector    SET SCHEMA extensions;
+DO $migration$
+DECLARE
+  extension_name text;
+BEGIN
+  FOREACH extension_name IN ARRAY ARRAY['pg_trgm', 'unaccent', 'vector']
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_extension
+      WHERE extname = extension_name
+        AND extrelocatable
+        AND extnamespace <> 'extensions'::regnamespace
+    ) THEN
+      EXECUTE format('ALTER EXTENSION %I SET SCHEMA extensions', extension_name);
+    END IF;
+  END LOOP;
+END;
+$migration$;

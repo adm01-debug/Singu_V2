@@ -3,6 +3,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 import { validate } from "../_shared/validate.ts";
+import { fetchAllPages } from "../_shared/pagination.ts";
 
 const STAGES = ["visitor", "lead", "mql", "sql", "opportunity", "customer"] as const;
 
@@ -36,13 +37,17 @@ Deno.serve(async (req: Request) => {
   if (targetUserId) {
     userIds = [targetUserId];
   } else {
-    const [{ data: u1 }, { data: u2 }] = await Promise.all([
-      supabase.from("mql_classifications").select("user_id").limit(1000),
-      supabase.from("deal_forecasts").select("user_id").limit(1000),
+    const [u1, u2] = await Promise.all([
+      fetchAllPages((from, to) =>
+        supabase.from("mql_classifications").select("user_id").order("created_at").order("id").range(from, to)
+      ),
+      fetchAllPages((from, to) =>
+        supabase.from("deal_forecasts").select("user_id").order("created_at").order("id").range(from, to)
+      ),
     ]);
     const set = new Set<string>();
-    (u1 || []).forEach((r: { user_id: string }) => set.add(r.user_id));
-    (u2 || []).forEach((r: { user_id: string }) => set.add(r.user_id));
+    u1.forEach((r: { user_id: string }) => set.add(r.user_id));
+    u2.forEach((r: { user_id: string }) => set.add(r.user_id));
     userIds = Array.from(set);
   }
 
@@ -58,22 +63,32 @@ Deno.serve(async (req: Request) => {
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
-  const [mqlResult, sqlResult, oppResult, leadResult, prevSnapResult] = await Promise.all([
-    supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "mql").gte("created_at", since).limit(100_000),
-    supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "sql").gte("created_at", since).limit(100_000),
-    supabase.from("deal_forecasts").select("user_id").in("user_id", userIds).gte("created_at", since).limit(100_000),
-    supabase.from("contacts").select("user_id").in("user_id", userIds).limit(100_000),
-    supabase.from("revops_snapshots").select("user_id, funnel_stage, conversion_rate").in("user_id", userIds).eq("period", weekAgo),
+  const [mqlRows, sqlRows, oppRows, leadRows, prevSnapRows] = await Promise.all([
+    fetchAllPages((from, to) =>
+      supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "mql").gte("created_at", since).order("created_at").order("id").range(from, to)
+    ),
+    fetchAllPages((from, to) =>
+      supabase.from("mql_classifications").select("user_id").in("user_id", userIds).eq("status", "sql").gte("created_at", since).order("created_at").order("id").range(from, to)
+    ),
+    fetchAllPages((from, to) =>
+      supabase.from("deal_forecasts").select("user_id").in("user_id", userIds).gte("created_at", since).order("created_at").order("id").range(from, to)
+    ),
+    fetchAllPages((from, to) =>
+      supabase.from("contacts").select("user_id").in("user_id", userIds).order("created_at").order("id").range(from, to)
+    ),
+    fetchAllPages((from, to) =>
+      supabase.from("revops_snapshots").select("user_id, funnel_stage, conversion_rate").in("user_id", userIds).eq("period", weekAgo).order("created_at").order("id").range(from, to)
+    ),
   ]);
 
-  const mqlByUser = countByUser(mqlResult.data as Array<{ user_id: string }> | null);
-  const sqlByUser = countByUser(sqlResult.data as Array<{ user_id: string }> | null);
-  const oppByUser = countByUser(oppResult.data as Array<{ user_id: string }> | null);
-  const leadByUser = countByUser(leadResult.data as Array<{ user_id: string }> | null);
+  const mqlByUser = countByUser(mqlRows as Array<{ user_id: string }>);
+  const sqlByUser = countByUser(sqlRows as Array<{ user_id: string }>);
+  const oppByUser = countByUser(oppRows as Array<{ user_id: string }>);
+  const leadByUser = countByUser(leadRows as Array<{ user_id: string }>);
 
   type PrevSnapRow = { user_id: string; funnel_stage: string; conversion_rate: number | null };
   const prevSnapsByUser = new Map<string, Map<string, number>>();
-  for (const r of (prevSnapResult.data ?? []) as PrevSnapRow[]) {
+  for (const r of prevSnapRows as PrevSnapRow[]) {
     if (r.conversion_rate == null) continue;
     const userMap = prevSnapsByUser.get(r.user_id) ?? new Map<string, number>();
     userMap.set(r.funnel_stage, Number(r.conversion_rate));

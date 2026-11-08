@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { parseApiError } from '@/lib/errorMessages';
+import { z } from 'zod';
+import type { Tables } from '@/integrations/supabase/types';
 
 export type SentimentOverall = "positive" | "neutral" | "negative" | "mixed";
 
@@ -14,7 +16,7 @@ export interface ConversationAnalysis {
   talk_ratio_rep: number | null;
   talk_ratio_customer: number | null;
   longest_monologue_seconds: number | null;
-  questions_asked: number;
+  questions_asked: number | null;
   sentiment_overall: SentimentOverall | null;
   sentiment_timeline: Array<{ position_pct: number; sentiment: string; note?: string }>;
   topics: Array<{ topic_key?: string; label: string; category: string; mentions: number; relevance?: number }>;
@@ -47,6 +49,51 @@ export interface CoachingScorecard {
   is_default: boolean;
 }
 
+const sentimentSchema = z.enum(['positive', 'neutral', 'negative', 'mixed']);
+const topicsSchema = z.array(z.object({
+  topic_key: z.string().optional(), label: z.string(), category: z.string(),
+  mentions: z.number().int().nonnegative(), relevance: z.number().optional(),
+}));
+const objectionsSchema = z.array(z.object({
+  objection: z.string(), category: z.string(), handled: z.boolean(),
+  suggested_response: z.string().optional(),
+  reframing_suggestions: z.array(z.object({ pattern: z.string(), response: z.string() })).optional(),
+}));
+const timelineSchema = z.array(z.object({ position_pct: z.number(), sentiment: z.string(), note: z.string().optional() }));
+const actionItemsSchema = z.array(z.object({ task: z.string(), owner: z.string(), deadline: z.string().optional() }));
+const keyMomentsSchema = z.array(z.object({ position_pct: z.number(), moment_type: z.string(), description: z.string() }));
+const criteriaSchema = z.array(z.object({ key: z.string(), label: z.string(), weight: z.number() }));
+const topicCategorySchema = z.enum(['product', 'pricing', 'competition', 'objection', 'closing', 'discovery', 'other']);
+const analysisResponseSchema = z.union([
+  z.object({ ok: z.literal(true), id: z.string(), cached: z.literal(true) }),
+  z.object({ ok: z.literal(true), id: z.string(), analysis: z.object({
+    talk_ratio_rep: z.number(), talk_ratio_customer: z.number(), sentiment_overall: sentimentSchema,
+    topics: topicsSchema, objections: objectionsSchema, action_items: actionItemsSchema,
+    coaching_score: z.number(), coaching_tips: z.array(z.string()), next_best_action: z.string(),
+  }) }),
+]);
+
+function normalizeAnalysis(row: Tables<'conversation_analyses'>): ConversationAnalysis {
+  return {
+    ...row,
+    sentiment_overall: sentimentSchema.nullable().parse(row.sentiment_overall),
+    sentiment_timeline: timelineSchema.parse(row.sentiment_timeline).map(item => ({
+      position_pct: item.position_pct, sentiment: item.sentiment, note: item.note,
+    })),
+    topics: topicsSchema.parse(row.topics).map(item => ({
+      topic_key: item.topic_key, label: item.label, category: item.category, mentions: item.mentions, relevance: item.relevance,
+    })),
+    objections: objectionsSchema.parse(row.objections).map(item => ({
+      objection: item.objection, category: item.category, handled: item.handled,
+      suggested_response: item.suggested_response, reframing_suggestions: item.reframing_suggestions,
+    })),
+    action_items: actionItemsSchema.parse(row.action_items).map(item => ({ task: item.task, owner: item.owner, deadline: item.deadline })),
+    key_moments: keyMomentsSchema.parse(row.key_moments).map(item => ({
+      position_pct: item.position_pct, moment_type: item.moment_type, description: item.description,
+    })),
+  };
+}
+
 // ──────────── Analyses ────────────
 export function useConversationAnalysis(interactionId: string | undefined) {
   return useQuery({
@@ -61,7 +108,7 @@ export function useConversationAnalysis(interactionId: string | undefined) {
         .eq("interaction_id", interactionId!)
         .maybeSingle();
       if (error) throw error;
-      return data as unknown as ConversationAnalysis | null;
+      return data ? normalizeAnalysis(data) : null;
     },
   });
 }
@@ -76,7 +123,7 @@ export function useConversationAnalyses(filters?: { sentiment?: SentimentOverall
     queryFn: async () => {
       let q = supabase
         .from("conversation_analyses")
-        .select("*, interactions(title, type, created_at)")
+        .select("*")
         .eq("user_id", user!.id)
         .order("analyzed_at", { ascending: false })
         .limit(100);
@@ -88,7 +135,13 @@ export function useConversationAnalyses(filters?: { sentiment?: SentimentOverall
       }
       const { data, error } = await q;
       if (error) throw error;
-      return data ?? [];
+      if (!data?.length) return [];
+      const interactionIds = [...new Set(data.map(row => row.interaction_id))];
+      const { data: interactions, error: interactionsError } = await supabase.from('interactions')
+        .select('id, title, type, created_at').in('id', interactionIds);
+      if (interactionsError) throw interactionsError;
+      const byId = new Map((interactions ?? []).map(row => [row.id, row]));
+      return data.map(row => ({ ...normalizeAnalysis(row), interactions: byId.get(row.interaction_id) ?? null }));
     },
   });
 }
@@ -101,7 +154,9 @@ export function useAnalyzeConversation() {
         body: { interaction_id: interactionId, force },
       });
       if (error) throw error;
-      if ((data as { error?: string })?.error) throw new Error((data as { error: string }).error);
+      const failure = z.object({ error: z.string() }).safeParse(data);
+      if (failure.success) throw new Error(failure.data.error);
+      analysisResponseSchema.parse(data);
       return data;
     },
     onSuccess: (_, vars) => {
@@ -127,7 +182,7 @@ export function useTopicsCatalog() {
         .order("sort_order")
         .limit(100);
       if (error) throw error;
-      return (data ?? []) as ConversationTopic[];
+      return (data ?? []).map((row): ConversationTopic => ({ ...row, category: topicCategorySchema.parse(row.category) }));
     },
   });
 }
@@ -198,7 +253,9 @@ export function useCoachingScorecards() {
         .order("created_at", { ascending: false })
         .limit(50);
       if (error) throw error;
-      return (data ?? []) as unknown as CoachingScorecard[];
+      return (data ?? []).map((row): CoachingScorecard => ({
+        ...row, criteria: criteriaSchema.parse(row.criteria).map(item => ({ key: item.key, label: item.label, weight: item.weight })),
+      }));
     },
   });
 }
@@ -247,11 +304,11 @@ export function useCoachingMetrics(periodDays: number = 30) {
       let unhandled = 0;
       const topicCount: Record<string, number> = {};
       for (const a of list) {
-        for (const o of (a.objections as Array<{ objection: string; handled: boolean }> ?? [])) {
+        for (const o of objectionsSchema.parse(a.objections)) {
           objCount[o.objection] = (objCount[o.objection] ?? 0) + 1;
           if (!o.handled) unhandled++;
         }
-        for (const t of (a.topics as Array<{ label: string; mentions: number }> ?? [])) {
+        for (const t of topicsSchema.parse(a.topics)) {
           topicCount[t.label] = (topicCount[t.label] ?? 0) + (t.mentions ?? 1);
         }
       }

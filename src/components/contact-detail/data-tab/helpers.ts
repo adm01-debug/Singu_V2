@@ -14,6 +14,8 @@ export const EMAIL_TYPE_LABELS: Record<string, string> = {
   financeiro: 'Financeiro',
   nfe: 'NF-e',
   marketing: 'Marketing',
+  comercial: 'Comercial',
+  compras: 'Compras',
 };
 
 export const DAY_LABELS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];

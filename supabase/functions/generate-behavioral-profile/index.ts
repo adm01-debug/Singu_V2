@@ -1,8 +1,10 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { guardBody, scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret, timingSafeStringEqual } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { validate } from "../_shared/validate.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
 
+const limiter = rateLimit({ windowMs: 60_000, max: 20, message: "Limite de gerações atingido. Aguarde um minuto." });
 
 interface Body { contact_id: string }
 
@@ -51,36 +53,31 @@ Deno.serve(async (req) => {
   // Bind cors to module-scope json() helper
   const jsonWithCors = (body: unknown, status = 200) => json(body, status, cors);
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
-
   const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
   if (bodyError) return bodyError;
 
   try {
     const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const internalKey = req.headers.get('x-internal-key') ?? '';
-    const isInternal = internalKey && internalKey === SERVICE_KEY;
+    const isInternal = Boolean(internalKey) && await timingSafeStringEqual(internalKey, SERVICE_KEY);
 
     const vbp = validate(rawBody, {
       contact_id: { type: 'string', required: true, maxLength: 36 },
       user_id:    { type: 'string', maxLength: 36 },
+      claim_token: { type: 'string', maxLength: 36 },
+      manual_retry: { type: 'boolean' },
     });
     if (!vbp.ok) return jsonWithCors({ error: vbp.error }, 400);
-    const body = vbp.data as { contact_id: string; user_id?: string };
+    const body = vbp.data as { contact_id: string; user_id?: string; claim_token?: string; manual_retry?: boolean };
 
     let userId: string | null = null;
     let supabase;
 
     if (isInternal) {
+      const cronCheck = await requireCronSecret(req);
+      if (cronCheck) return cronCheck;
       supabase = createClient(Deno.env.get('SUPABASE_URL')!, SERVICE_KEY);
-      if (body.user_id) {
-        userId = body.user_id;
-      } else {
-        const { data: c } = await supabase.from('contacts').select('user_id').eq('id', body.contact_id).maybeSingle();
-        userId = (c as { user_id?: string } | null)?.user_id ?? null;
-      }
-      if (!userId) return jsonWithCors({ error: 'contato não encontrado' }, 404);
+      userId = body.user_id ?? null;
     } else {
       const authHeader = req.headers.get('Authorization') ?? '';
       if (!authHeader) return jsonWithCors({ error: 'Não autenticado' }, 401);
@@ -93,6 +90,21 @@ Deno.serve(async (req) => {
       if (!userData?.user) return jsonWithCors({ error: 'Não autenticado' }, 401);
       userId = userData.user.id;
     }
+
+    const { data: contact, error: contactError } = await supabase.from('contacts')
+      .select('user_id').eq('id', body.contact_id)
+      .abortSignal(AbortSignal.timeout(5_000)).maybeSingle();
+    if (contactError) return jsonWithCors({ error: 'Consulta de propriedade indisponível' }, 503);
+    if (typeof contact?.user_id !== 'string' || !contact.user_id || (userId && contact.user_id !== userId)) {
+      return jsonWithCors({ error: 'contato não pertence ao usuário' }, 403);
+    }
+    userId = contact.user_id;
+    if (!isInternal) {
+      const limited = limiter.check(userId, req);
+      if (limited) return limited;
+    }
+
+    const startedAt = new Date().toISOString();
 
     // Coleta histórico (RLS aplica escopo do usuário)
     const [wa, calls, ints] = await Promise.all([
@@ -230,34 +242,25 @@ Deno.serve(async (req) => {
       summary: parsed.summary ?? null,
       based_on_count: total,
       model,
-      last_updated_at: new Date().toISOString(),
+      last_updated_at: startedAt,
     };
 
-    const { data: saved, error: upErr } = await supabase
-      .from('contact_analytical_profiles')
-      .upsert(row, { onConflict: 'contact_id' })
-      .select()
-      .single();
-
-    if (upErr) { console.error("generate-behavioral-profile save error:", upErr); return jsonWithCors({ error: "Internal server error" }, 500); }
-
-    // Snapshot de versão (best-effort — não bloqueia a resposta)
-    supabase.from('contact_analytical_profile_versions').insert({
-      contact_id: body.contact_id,
-      user_id: userId,
-      profile_id: (saved as { id?: string } | null)?.id ?? null,
-      summary: row.summary,
-      tone: row.tone,
-      communication_style: row.communication_style,
-      sentiment_trend: row.sentiment_trend,
-      preferences: row.preferences,
-      hobbies: row.hobbies,
-      recurrent_topics: row.recurrent_topics,
-      based_on_count: row.based_on_count,
-      model: row.model,
-      trigger_source: isInternal ? 'auto' : 'manual',
-      generated_at: row.last_updated_at,
-    }).catch((e: unknown) => console.warn('Snapshot save failed (non-critical):', (e as Error).message));
+    const persistence = createClient(Deno.env.get('SUPABASE_URL')!, SERVICE_KEY);
+    const { data: saved, error: saveError } = await persistence.rpc(
+      'save_behavioral_profile_if_fresh',
+      {
+        p_contact_id: body.contact_id,
+        p_claim_token: isInternal ? body.claim_token ?? null : null,
+        p_profile: row,
+        p_started_at: startedAt,
+        p_trigger_source: isInternal && !body.manual_retry ? 'auto' : 'manual',
+      },
+    ).abortSignal(AbortSignal.timeout(5_000));
+    if (saveError) {
+      console.error("generate-behavioral-profile save error:", saveError);
+      return jsonWithCors({ error: "Não foi possível salvar o perfil" }, 503);
+    }
+    if (!saved) return jsonWithCors({ error: "Reserva substituída por uma nova geração" }, 409);
 
     return jsonWithCors({ profile: saved });
   } catch (e) {

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 import { FileText, ExternalLink, Inbox } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useErpProposals } from '@/hooks/useErpData';
@@ -12,7 +13,7 @@ function formatBRL(value: number | null | undefined) {
 
 /** Compact widget for company detail pages — shows ERP proposals tied to this company */
 export function CompanyErpProposalsWidget({ companyId }: { companyId: string }) {
-  const { data, isLoading } = useErpProposals(20, companyId);
+  const { data, isLoading, isError, refetch, isFetching } = useErpProposals(20, companyId);
 
   if (isLoading) {
     return (
@@ -28,12 +29,19 @@ export function CompanyErpProposalsWidget({ companyId }: { companyId: string }) 
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
           <FileText className="h-4 w-4 text-primary" />Propostas (ERP)
-          <Badge variant="outline" className="text-[10px] ml-auto">{data?.length ?? 0}</Badge>
+          <Badge variant="outline" className="text-[10px] ml-auto">{isError ? 'Indisponível' : data?.length ?? 0}</Badge>
         </CardTitle>
-        <CardDescription className="text-xs">Sincronizado do sistema de origem · somente leitura</CardDescription>
+        <CardDescription className="text-xs">{isError ? 'Consulta ao sistema de origem indisponível' : 'Sincronizado do sistema de origem · somente leitura'}</CardDescription>
       </CardHeader>
       <CardContent>
-        {!data || data.length === 0 ? (
+        {isError ? (
+          <div className="space-y-2 text-center py-4">
+            <p role="alert" className="text-xs text-muted-foreground">Não foi possível consultar as propostas do ERP.</p>
+            <Button variant="outline" size="sm" onClick={() => void refetch()} disabled={isFetching}>
+              Tentar novamente
+            </Button>
+          </div>
+        ) : !data || data.length === 0 ? (
           <div className="text-center py-4">
             <Inbox className="h-6 w-6 text-muted-foreground mx-auto mb-1 opacity-60" />
             <p className="text-xs text-muted-foreground">Nenhuma proposta no ERP.</p>

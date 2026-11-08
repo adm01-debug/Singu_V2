@@ -57,11 +57,11 @@ CREATE INDEX IF NOT EXISTS idx_whatsapp_messages_contact_timestamp
 CREATE INDEX IF NOT EXISTS idx_contact_next_actions_contact
   ON public.contact_next_actions (contact_id);
 
--- behavioral_profile_queue: process-behavioral-regen-queue cron queries
--- .eq('status','pending').order('priority','scheduled_at')
-CREATE INDEX IF NOT EXISTS idx_behavioral_profile_queue_pending
-  ON public.behavioral_profile_queue (priority DESC, scheduled_at ASC)
-  WHERE status = 'pending';
+-- behavioral_profile_regen_queue: process-behavioral-regen-queue cron queries
+-- .lt('attempts', 5).lte('next_run_at', now()).order('next_run_at')
+CREATE INDEX IF NOT EXISTS idx_bpr_queue_next_run
+  ON public.behavioral_profile_regen_queue (next_run_at)
+  WHERE attempts < 5;
 
 -- activities: frequently queried ordered by created_at for audit logs
 -- The existing idx_activities_user_id covers user_id alone.

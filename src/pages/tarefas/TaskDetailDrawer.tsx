@@ -36,6 +36,7 @@ import { format, parseISO } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 const taskSchema = z.object({
   title: z.string().min(3, 'Título deve ter pelo menos 3 caracteres'),
@@ -98,20 +99,21 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
     const fetchEntities = async () => {
       try {
         const [compRes, contRes] = await Promise.all([
-          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('companies').select('id, nome_crm').eq('user_id', user?.id ?? '').limit(100),
           supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
         ]);
         if (cancelled) return;
-        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+        if (compRes.error) throw compRes.error;
+        if (contRes.error) throw contRes.error;
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.nome_crm })));
         if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
       } catch {
-        // non-critical — dropdowns remain empty; task can still be saved with existing values
+        if (!cancelled) toast.error('Não foi possível carregar empresas e contatos. Reabra o formulário para tentar novamente.');
       }
     };
     fetchEntities();
     return () => { cancelled = true; };
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
-  }, [open]);
+  }, [open, user?.id]);
 
   const onSubmit = async (values: TaskFormValues) => {
     if (!task) return;

@@ -6,6 +6,18 @@
 --   lead_assignments.sla_met — NULL = "not yet assessed", semantically distinct from false
 --   trigger_intensity_history.is_escalation, reached_max_intensity — GENERATED columns
 
-ALTER TABLE public.interactions
-  ALTER COLUMN follow_up_required SET DEFAULT false,
-  ALTER COLUMN follow_up_required SET NOT NULL;
+DO $migration$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM pg_attribute
+    WHERE attrelid = to_regclass('public.interactions')
+      AND attname = 'follow_up_required'
+      AND NOT attisdropped
+  ) THEN
+    ALTER TABLE public.interactions
+      ALTER COLUMN follow_up_required SET DEFAULT false,
+      ALTER COLUMN follow_up_required SET NOT NULL;
+  END IF;
+END;
+$migration$;

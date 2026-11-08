@@ -34,7 +34,7 @@ export default function ResetPassword() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const parsed = pwSchema.safeParse(password);
-    if (!parsed.success) { toast.error(parsed.error.errors[0].message); return; }
+    if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
     if (password !== confirm) { toast.error('Senhas não coincidem.'); return; }
 
     setIsLoading(true);

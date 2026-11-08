@@ -10,7 +10,8 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -22,17 +23,78 @@ jobs:
         run: npm ci
 
       - name: Validate PR Title (Conventional Commits)
-        if: github.event_name == 'pull_request'
-        run: echo "${{ github.event.pull_request.title }}" | npx commitlint
+        if: github.event_name == 'pull_request' && !endsWith(github.event.pull_request.user.login, '[bot]')
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: echo "${PR_TITLE}" | npx commitlint
 
       - name: Check for circular dependencies
         run: npx depcruise src --config .dependency-cruiser.cjs
 
-      - name: Edge Function CORS scoped enforcer
+      - name: Edge Function CORS scoped enforces
         run: node scripts/check-edge-cors.mjs
 
+      - name: Edge Function import guard
+        run: npm run check:edge-imports
+
+      - name: Validar falhas de coleta nos gates de RLS e publicação
+        run: node --test scripts/check-publish-gates.test.mjs scripts/check-rls-profiles.test.mjs scripts/check-deploy-timeout.test.mjs
+
+      - name: Preparar Deno para os testes das funcções
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.9.7
+
+      - name: Testar isolamento e proteção SSRF das conexões
+        run: deno test --node-modules-dir=none --allow-net --allow-run --allow-env=HOME supabase/functions/_shared/safe-http_test.ts supabase/functions/connection-tester/index_test.ts supabase/functions/_shared/validation-contract_test.ts supabase/functions/_shared/behavioral-retry-contract_test.ts
+
+      - name: Verificar tipos de todas as Edge Funcções
+        run: deno check --no-lock --node-modules-dir=none supabase/functions/*/index.ts
+
+      - name: Validar contratos de tipos, webhook e SDK
+        run: deno test --no-lock --node-modules-dir=none --allow-net=127.0.0.1,0.0.0.0 --allow-run --allow-env=HOME,SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY supabase/functions/_shared/edge-types-contract_test.ts supabase/functions/_shared/evolution-dispatch-contract_test.ts supabase/functions/_shared/sdk-runtime-contract_test.ts supabase/functions/_shared/webhook-dlq-contract_test.ts
+
+      - name: Validar projecções e isolamento tenant
+        run: deno test --node-modules-dir=none supabase/functions/_shared/select-projection_test.ts supabase/functions/_shared/tenant-guard_test.ts
+
+      - name: Validar JWT nas escritas e conflitos de concorrência
+        run: deno test --no-lock --node-modules-dir=none --allow-net=127.0.0.1,0.0.0.0 --allow-run --allow-env=HOME supabase/functions/external-data/actor-writes_test.ts supabase/functions/_shared/write-error_test.ts
+
+      - name: Verificar tipos do gateway de dados
+        run: deno check --node-modules-dir=none supabase/functions/external-data/index.ts
+
+      - name: Validar confirmação e isolamento das sequências
+        run: deno test --no-lock --node-modules-dir=none --allow-net=127.0.0.1 --allow-run --allow-env=HOME supabase/functions/_shared/sequence-contract_test.ts
+
+      - name: Verificar tipos do processador de sequências
+        run: deno check --no-lock --node-modules-dir=none supabase/functions/sequence-processor/index.ts
+
+      - name: Validate required test secrets
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+          RLS_USER_A: ${{ secrets.RLS_USER_A }}
+          RLS_USER_B: ${{ secrets.RLS_USER_B }}
+          RLS_USER_ADMIN: ${{ secrets.RLS_USER_ADMIN }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+        run: |
+          missing=0
+          for name in PGHOST PGUSER PGPASSWORD PGDATABASE RLS_USER_A RLS_USER_B RLS_USER_ADMIN VITE_SUPABASE_URL VITE_SUPABASE_PUBLISHABLE_KEY TEST_USER_EMAIL TEST_USER_PASSWORD; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::Secret obrigatório ausente: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
       - name: Invalid indexes guard (public.*)
-        if: ${{ secrets.PGHOST != '' }}
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
         env:
           PGHOST: ${{ secrets.PGHOST }}
           PGPORT: ${{ secrets.PGPORT }}
@@ -42,10 +104,10 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/invalid-indexes-guard.sql
 
       - name: Typecheck
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
       - name: Lint (ESLint)
-        # Rodada 31/10 — Onda E ratchet GLOBAL:
+        # Rodada 31/10 – Onda E ratchet GLOBAL:
         # Todo o repo travado em 0/0 (src + supabase/functions + scripts + specs).
         # Novas violações devem vir com `eslint-disable-next-line <regra> -- <motivo>`
         # (ver docs/adr/ADR-020-zero-warning-ratchet.md e ADR-021-onda-e-external-ratchet.md).
@@ -58,30 +120,41 @@ jobs:
       - name: Security audit (high+ severity)
         run: npm audit --omit=dev --audit-level=high
 
+      - name: Build
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
       - name: Install Playwright Browsers
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
         run: npx playwright install --with-deps
 
       - name: Run Playwright E2E Tests
-        run: npm run test:e2e
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
+        run: npx playwright test
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          E2E_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          E2E_USER_PASS: ${{ secrets.TEST_USER_PASSWORD }}
           CI: true
 
       - name: Upload Playwright report and artifacts
         uses: actions/upload-artifact@v7
-        if: always()
+        if: ${{ always() && (github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]')) }}
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+          if-no-files-found: warn
 
 
       - name: Run unit tests with coverage
-        run: npm run test:unit -- --coverage --reporter=default
+        run: npm run test:coverage
 
       - name: Run RLS matrix tests (anon / user_a / user_b / user_admin)
-        if: ${{ secrets.PGHOST != '' }}
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
         env:
           PGHOST: ${{ secrets.PGHOST }}
           PGPORT: ${{ secrets.PGPORT }}
@@ -94,7 +167,7 @@ jobs:
         run: bash tests/rls/run.sh
 
       - name: RLS coverage (public.* tables must have RLS + policy)
-        if: ${{ secrets.PGHOST != '' }}
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
         env:
           PGHOST: ${{ secrets.PGHOST }}
           PGPORT: ${{ secrets.PGPORT }}
@@ -103,11 +176,9 @@ jobs:
           PGDATABASE: ${{ secrets.PGDATABASE }}
         run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/rls-coverage.sql
 
-      - name: Build
-        run: npm run build
-
       - name: Check bundle size budget
         run: node scripts/check-bundle-size.mjs
 
       - name: Lighthouse CI (performance budgets)
-        run: npx --yes @lhci/cli@0.13.x autorun || echo "::warning::Lighthouse-CI assertions failed (non-blocking)"
+        if: ${{ github.event_name != 'pull_request' || !endsWith(github.event.pull_request.user.login, '[bot]') }}
+        run: npx --yes @lhci/cli@0.13.x autorun

@@ -62,7 +62,7 @@ export const ImportantDatesCalendar = forwardRef<HTMLDivElement, ImportantDatesC
         <CardContent>
           <div className="space-y-3">
             {allDates.slice(0, 5).map((date) => (
-              <div key={date.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/50 cursor-pointer transition-colors" onClick={() => navigate(`/contato/${date.contactId}`)}>
+              <div key={date.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/50 cursor-pointer transition-colors" onClick={() => navigate(`/contatos/${date.contactId}`)}>
                 <div className={`p-2 rounded-full ${getEventColor(date.type)} bg-opacity-20`}>{getEventIcon(date.type)}</div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{date.title}</p>
@@ -148,14 +148,14 @@ export const ImportantDatesCalendar = forwardRef<HTMLDivElement, ImportantDatesC
                   {selectedDate ? (
                     selectedDateEvents.length > 0 ? (
                       <motion.div key="selected-events" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-2">
-                        {selectedDateEvents.map((event) => <EventCard key={event.id} event={event} onNavigate={() => navigate(`/contato/${event.contactId}`)} />)}
+                        {selectedDateEvents.map((event) => <EventCard key={event.id} event={event} onNavigate={() => navigate(`/contatos/${event.contactId}`)} />)}
                       </motion.div>
                     ) : (
                       <motion.p key="no-events" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-muted-foreground text-center py-8">Nenhum evento nesta data</motion.p>
                     )
                   ) : (
                     <motion.div key="upcoming-events" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-2">
-                      {allDates.slice(0, 8).map((event) => <EventCard key={event.id} event={event} showDate onNavigate={() => navigate(`/contato/${event.contactId}`)} />)}
+                      {allDates.slice(0, 8).map((event) => <EventCard key={event.id} event={event} showDate onNavigate={() => navigate(`/contatos/${event.contactId}`)} />)}
                       {allDates.length === 0 && <p className="text-sm text-muted-foreground text-center py-8">Nenhuma data importante encontrada</p>}
                     </motion.div>
                   )}

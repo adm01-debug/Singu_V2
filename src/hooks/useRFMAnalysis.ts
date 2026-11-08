@@ -5,13 +5,24 @@ import { useAuth } from '@/hooks/useAuth';
 import { useContacts } from '@/hooks/useContacts';
 import { useInteractions } from '@/hooks/useInteractions';
 import { differenceInDays } from 'date-fns';
-import type { TablesInsert } from '@/integrations/supabase/types';
+import type { Database } from '@/integrations/supabase/types';
 import {
   RFMAnalysis, RFMHistory, RFMSegment, RFMScore, RFMDashboardStats,
   RFMContactSummary, RFMAction, RFMOffer, RFMTrend, CommunicationPriority,
   RFM_SEGMENTS, determineRFMSegment, calculateRFMScore
 } from '@/types/rfm';
 import { logger } from "@/lib/logger";
+import { z } from 'zod';
+import { callExternalRpc } from '@/lib/externalData';
+
+const rfmActionsSchema = z.array(z.object({
+  id: z.string().min(1).nullish(), action: z.string(), description: z.string(), priority: z.number(),
+  channel: z.enum(['email', 'phone', 'whatsapp', 'meeting', 'any']), timing: z.string(), expectedImpact: z.string().nullish(),
+}));
+const rfmOffersSchema = z.array(z.object({
+  id: z.string().min(1).nullish(), offerType: z.string(), description: z.string(), discountPercent: z.number().optional(),
+  validDays: z.number(), reason: z.string(),
+}));
 
 interface PurchaseData {
   contactId: string;
@@ -23,7 +34,7 @@ interface PurchaseData {
 
 export function useRFMAnalysis(contactId?: string) {
   const { user } = useAuth();
-  const { contacts } = useContacts();
+  const { contacts } = useContacts(undefined, { fetchAll: true });
   const { interactions } = useInteractions();
   const queryClient = useQueryClient();
   const [analyzing, setAnalyzing] = useState(false);
@@ -38,7 +49,7 @@ export function useRFMAnalysis(contactId?: string) {
       return (data || []).map(item => ({
         id: item.id, userId: item.user_id, contactId: item.contact_id,
         recencyScore: item.recency_score as RFMScore, frequencyScore: item.frequency_score as RFMScore,
-        monetaryScore: item.monetary_score as RFMScore, rfmScore: item.rfm_score, totalScore: item.total_score,
+        monetaryScore: item.monetary_score as RFMScore, rfmScore: z.number().finite().parse(Number(item.rfm_score ?? (item.recency_score * 100 + item.frequency_score * 10 + item.monetary_score))), totalScore: item.total_score,
         daysSinceLastPurchase: item.days_since_last_purchase, daysSinceLastInteraction: item.days_since_last_interaction,
         totalPurchases: item.total_purchases || 0, totalInteractions: item.total_interactions || 0,
         totalMonetaryValue: Number(item.total_monetary_value) || 0, averageOrderValue: Number(item.average_order_value) || 0,
@@ -48,8 +59,12 @@ export function useRFMAnalysis(contactId?: string) {
         predictedNextPurchaseDate: item.predicted_next_purchase_date ? new Date(item.predicted_next_purchase_date) : null,
         predictedLifetimeValue: item.predicted_lifetime_value ? Number(item.predicted_lifetime_value) : null,
         churnProbability: item.churn_probability ? Number(item.churn_probability) : null,
-        recommendedActions: (item.recommended_actions as unknown as RFMAction[]) || [],
-        recommendedOffers: (item.recommended_offers as unknown as RFMOffer[]) || [],
+        recommendedActions: rfmActionsSchema.parse(item.recommended_actions ?? []).map((action, index) => ({
+          ...action, id: action.id ?? `${item.id}:action:${index}`, expectedImpact: action.expectedImpact ?? 'Impacto não estimado',
+        })),
+        recommendedOffers: rfmOffersSchema.parse(item.recommended_offers ?? []).map((offer, index) => ({
+          ...offer, id: offer.id ?? `${item.id}:offer:${index}`,
+        })),
         communicationPriority: item.communication_priority as CommunicationPriority || 'medium',
         analyzedAt: new Date(item.analyzed_at), createdAt: new Date(item.created_at), updatedAt: new Date(item.updated_at)
       })) as RFMAnalysis[];
@@ -87,7 +102,8 @@ export function useRFMAnalysis(contactId?: string) {
     if (!user?.id || contacts.length === 0) return;
     setAnalyzing(true);
     try {
-      const { data: purchaseData } = await supabase.from('purchase_history').select('contact_id, amount, purchase_date').eq('user_id', user.id).limit(10000);
+      const { data: purchaseData, error: purchaseError } = await supabase.from('purchase_history').select('contact_id, amount, purchase_date').eq('user_id', user.id).limit(10000);
+      if (purchaseError) throw purchaseError;
       const contactMetrics: Map<string, PurchaseData> = new Map();
       contacts.forEach(contact => {
         const contactInteractions = interactions.filter(i => i.contact_id === contact.id);
@@ -112,7 +128,7 @@ export function useRFMAnalysis(contactId?: string) {
       const recencyPercentiles = getPercentiles(recencyValues);
       const frequencyPercentiles = getPercentiles(frequencyValues);
       const monetaryPercentiles = getPercentiles(monetaryValues);
-      const rfmResults: TablesInsert<'rfm_analysis'>[] = [];
+      const rfmResults: Array<Database['public']['Tables']['rfm_analysis']['Insert'] & { segment_code: RFMSegment }> = [];
       for (const [cId, metrics] of contactMetrics) {
         const contact = contacts.find(c => c.id === cId);
         if (!contact) continue;
@@ -138,33 +154,25 @@ export function useRFMAnalysis(contactId?: string) {
           days_since_last_interaction: daysSinceLastInteraction < 999 ? daysSinceLastInteraction : null,
           total_purchases: metrics.totalPurchases, total_interactions: contactInts.length,
           total_monetary_value: metrics.totalValue, average_order_value: metrics.averageOrderValue,
-          segment, segment_description: segmentInfo.description, segment_color: segmentInfo.color,
+          segment, segment_code: segment, segment_description: segmentInfo.description, segment_color: segmentInfo.color,
           predicted_next_purchase_date: predictedNextPurchaseDate?.toISOString().split('T')[0],
           predicted_lifetime_value: predictedLifetimeValue, churn_probability: churnProbability,
-          recommended_actions: JSON.parse(JSON.stringify(recommendedActions)),
-          recommended_offers: JSON.parse(JSON.stringify(recommendedOffers)),
+          recommended_actions: recommendedActions.map(action => ({ ...action })),
+          recommended_offers: recommendedOffers.map(offer => ({ ...offer })),
           communication_priority: communicationPriority, analyzed_at: new Date().toISOString()
         });
       }
-      // Bulk upsert all results in two queries instead of 2N sequential writes
       if (rfmResults.length > 0) {
-        const { error: upsertError } = await supabase
-          .from('rfm_analysis')
-          .upsert(rfmResults, { onConflict: 'user_id,contact_id' });
-        if (upsertError) logger.error('Error upserting RFM:', upsertError);
-
-        const historyRows = rfmResults.map(r => ({
-          user_id: user.id, contact_id: r.contact_id, recency_score: r.recency_score,
-          frequency_score: r.frequency_score, monetary_score: r.monetary_score,
-          segment: r.segment, total_monetary_value: r.total_monetary_value,
-        }));
-        void (async () => { try { const { error: hErr } = await supabase.from('rfm_history').insert(historyRows as never); if (hErr) logger.error('rfm_history bulk insert error:', hErr); } catch (e) { logger.error('rfm_history bulk insert error:', e); } })();
+        const { data: saved, error } = await callExternalRpc<number>('persist_rfm_analysis', { _rows: rfmResults });
+        if (error) throw error;
+        if (saved !== rfmResults.length) throw new Error('Persistência RFM incompleta');
       }
       await queryClient.invalidateQueries({ queryKey: ['rfm-analysis'] });
       await queryClient.invalidateQueries({ queryKey: ['rfm-history'] });
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error running RFM analysis:', { error: msg });
+      throw error;
     } finally {
       setAnalyzing(false);
     }

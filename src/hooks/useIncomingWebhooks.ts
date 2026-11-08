@@ -79,7 +79,7 @@ export function useIncomingWebhooks() {
           is_active: input.is_active ?? true,
           allowed_origins: input.allowed_origins ?? [],
           field_mapping: (input.field_mapping ?? {}) as unknown as Json,
-          require_signature: input.require_signature ?? false,
+          require_signature: true,
           webhook_secret: input.webhook_secret ?? null,
           replay_window_seconds: input.replay_window_seconds ?? 300,
         } as TablesUpdate<'incoming_webhooks'>).eq('created_by', user!.id).eq('id', input.id);
@@ -93,7 +93,7 @@ export function useIncomingWebhooks() {
           is_active: input.is_active ?? true,
           allowed_origins: input.allowed_origins ?? [],
           field_mapping: (input.field_mapping ?? {}) as unknown as Json,
-          require_signature: input.require_signature ?? false,
+          require_signature: true,
           webhook_secret: input.webhook_secret ?? null,
           replay_window_seconds: input.replay_window_seconds ?? 300,
           created_by: user.id,

@@ -1,12 +1,30 @@
 # Allowlist — Funções `public.*` executáveis por `authenticated`
 
-> Rodada 48/10 · Baseline: 33 funções. Toda adição/remoção deve atualizar este documento e o teste `tests/rls/functions_authenticated_allowlist.sql`.
+> Rodada 48/10 · Baseline histórico: 33 funções. Toda adição/remoção deve atualizar este documento e o teste `tests/rls/functions_authenticated_allowlist.sql`.
+>
+> **Atualização 2026-10-06 (banco canônico):** o banco real tem ~1.100 funções executáveis por `authenticated` (SECURITY INVOKER, protegidas por RLS), então o teste deixou de exigir a lista de 33. O invariante verificado agora é: `anon` executa **exatamente** as 12 RPCs públicas abaixo (9 originais + `increment_landing_page_view`, `get_public_csat_survey`, `submit_public_csat_survey`) e, entre as `SECURITY DEFINER`, `authenticated` executa só essas 12 + `has_role` + as 15 RPCs do frontend escopadas por `auth.uid()` (migration `20261006130000`) + `get_ai_gateway_health` e `get_ai_gateway_partition_stats` (admin-only, migration `20261006140000`). Ver `docs/qa/security-definer-audit.md`.
 
 ## Regra
 
-- **Baseline**: exatamente 33 funções ganham `GRANT EXECUTE ... TO authenticated`. Novas funções nascem sem grant e devem ser explicitamente adicionadas via migração + PR revisado.
-- **anon** só recebe `EXECUTE` para endpoints públicos (Deal Rooms, Landing Pages, Forms). Total: 9 funções.
-- **service_role** sempre recebe `EXECUTE` (defesa em profundidade). Não faz parte deste baseline.
+### Mesclagem transacional — atualização autorizada em 2026-10-13
+
+A lista autenticada do teste contém 36 assinaturas, incluindo as 12 RPCs públicas. A lista pública permanece inalterada. A migration `20261013033431_merge_records_atomically.sql` acrescenta à lista autenticada somente:
+
+| Assinatura | Validação |
+|---|---|
+| `merge_records_atomically(text, uuid, uuid, jsonb)` | Exige sessão autenticada, dois registros do mesmo dono, relações com escopo verificável e campos permitidos; dados e auditoria na mesma transação |
+| `merge_companies(uuid, uuid)` | Alias legado; delega à operação central |
+| `merge_duplicate_companies(uuid, uuid)` | Alias legado; delega à operação central |
+| `merge_contacts(uuid, uuid)` | Alias legado; delega à operação central |
+| `merge_duplicate_contacts(uuid, uuid)` | Alias legado; delega à operação central |
+
+Todas fixam `search_path = public, pg_temp`. EXECUTE é revogado de PUBLIC, anon e service_role e concedido apenas a authenticated. Os aliases mantêm a validação central de `auth.role()` e `auth.uid()`, sem permitir acesso administrativo a registros de outro dono. `tests/rls/merge_records_atomic.sql` verifica isolamento, aliases, repetição, conflitos e rollback por falha de auditoria. O teste da allowlist continua rejeitando qualquer assinatura adicional e qualquer grant esperado ausente.
+
+As categorias abaixo conservam o inventário histórico; a lista verificável atual está em `tests/rls/functions_authenticated_allowlist.sql`.
+
+- **Baseline atual**: lista exata de assinaturas autenticadas auditadas no teste. Novas funções nascem sem grant e devem ser explicitamente adicionadas via migração + PR revisado.
+- **anon** só recebe `EXECUTE` para as 12 RPCs públicas auditadas.
+- **service_role** tem grants explícitos conforme o contrato de cada função; não recebe EXECUTE nas cinco funções de mesclagem.
 
 ## Categorias
 
@@ -57,11 +75,12 @@ Callable sem sessão via token/slug; RLS por token dentro da função.
 | `get_contact_life_event_gaps(uuid)` | Ficha360 → recomendações |
 | `validate_behavioral_consistency(uuid)` | Ficha360 diagnóstico |
 
-### ⚙️ Mutações de negócio (authenticated) — 4
+### ⚙️ Mutações de negócio (authenticated) — 5
 | Função | Consumo |
 |---|---|
 | `dismiss_revops_alert(uuid)` | Dashboard RevOps |
 | `enroll_contact_in_workflow(uuid, uuid)` | Sequências |
+| `confirm_sequence_manual_step(uuid, uuid, text)` | Confirmação manual pelo dono; etapa pendente, evento e avanço na mesma transação |
 | `evaluate_mql(uuid)` | Lead scoring |
 | `move_deal_atomic(uuid, text, integer)` + overload numeric | Pipeline drag&drop |
 
@@ -77,4 +96,4 @@ Callable sem sessão via token/slug; RLS por token dentro da função.
 1. Nova função em `public.*` **não** recebe `EXECUTE` a `authenticated` por padrão.
 2. Para adicionar: (a) atualizar tabela acima; (b) atualizar array em `tests/rls/functions_authenticated_allowlist.sql`; (c) migração com `GRANT EXECUTE ON FUNCTION public.<fn>(<args>) TO authenticated`.
 3. Para remover: `REVOKE EXECUTE ... FROM authenticated` + remover dos dois locais acima.
-4. Teste automatizado falha se contagem ≠ 33 ou se aparecer função fora da allowlist.
+4. Teste automatizado falha se aparecer função fora da allowlist ou se faltar um grant declarado. O total de DEFINERs é verificado separadamente em `tests/rls/security_definer_hardening.sql`.

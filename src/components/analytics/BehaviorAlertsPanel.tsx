@@ -28,6 +28,7 @@ import {
 import { useBehaviorAlerts, AlertType, AlertSeverity } from '@/hooks/useBehaviorAlerts';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { toast } from 'sonner';
 
 const ALERT_ICONS: Record<AlertType, React.ComponentType<{ className?: string }>> = {
   sentiment_drop: TrendingDown,
@@ -73,8 +74,13 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
 
   const handleDetectNew = async () => {
     setDetecting(true);
-    await detectNewAlerts();
-    setDetecting(false);
+    try {
+      await detectNewAlerts();
+    } catch {
+      toast.error('Não foi possível detectar novos alertas. Tente novamente.');
+    } finally {
+      setDetecting(false);
+    }
   };
 
   const filteredAlerts = filter === 'all' 
@@ -157,6 +163,8 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
               size="sm" 
               onClick={handleDetectNew}
               disabled={detecting}
+              aria-label={detecting ? 'Detectando novos alertas' : 'Detectar novos alertas'}
+              aria-busy={detecting}
             >
               <RefreshCw className={`w-4 h-4 ${detecting ? 'animate-spin' : ''}`} />
             </Button>

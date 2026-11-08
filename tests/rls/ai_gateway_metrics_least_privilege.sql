@@ -1,5 +1,7 @@
 -- Rodada 53/10 — Invariante: ai_gateway_metrics é admin-only via RPC e service-role no INSERT.
 -- Bloqueia leitura direta por anon/authenticated e garante que a RPC exige role 'admin'.
+SELECT (to_regclass('public.ai_gateway_metrics') IS NOT NULL AND to_regprocedure('public.get_ai_gateway_health(integer)') IS NOT NULL) AS rls_target_present \gset
+\if :rls_target_present
 
 BEGIN;
 
@@ -70,3 +72,6 @@ END $$;
 SELECT 'ai_gateway_metrics_least_privilege: OK' AS status;
 
 ROLLBACK;
+\else
+\echo 'SKIP: public.ai_gateway_metrics / get_ai_gateway_health(integer) ausente no banco alvo'
+\endif

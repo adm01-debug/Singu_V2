@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { 
@@ -74,7 +74,8 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
   const [, setIsLoadingEntities] = useState(false);
 
   const form = useForm<DealFormValues>({
-    resolver: zodResolver(dealSchema),
+    // zod v4 + resolvers v5: input (campos) e output (parseado) divergem; o form segue tipado pelo output como na v3.
+    resolver: zodResolver(dealSchema) as unknown as Resolver<DealFormValues>,
     defaultValues: {
       titulo: '',
       valor: 0,
@@ -102,12 +103,16 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
       setIsLoadingEntities(true);
       try {
         const [compRes, contRes] = await Promise.all([
-          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('companies').select('id, nome_crm, nome_fantasia').eq('user_id', user?.id ?? '').limit(100),
           supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
         ]);
         if (cancelled) return;
-        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+        if (compRes.error) throw compRes.error;
+        if (contRes.error) throw contRes.error;
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.nome_fantasia || c.nome_crm })));
         if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
+      } catch {
+        if (!cancelled) toast.error('Erro ao carregar empresas e contatos');
       } finally {
         if (!cancelled) setIsLoadingEntities(false);
       }

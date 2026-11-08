@@ -5,92 +5,52 @@
 --          email_logs.status (set by email provider, unknown external values),
 --          sync_log.status, trigger_ab_tests.status (needs more investigation).
 
--- automation_executions.status
-ALTER TABLE public.automation_executions
-  ADD CONSTRAINT chk_automation_executions_status
-  CHECK (status IN ('pending', 'running', 'completed', 'failed', 'cancelled'));
-
--- calendar_events.status
-ALTER TABLE public.calendar_events
-  ADD CONSTRAINT chk_calendar_events_status
-  CHECK (status IN ('scheduled', 'confirmed', 'completed', 'cancelled', 'tentative'));
-
--- campaign_members.status
-ALTER TABLE public.campaign_members
-  ADD CONSTRAINT chk_campaign_members_status
-  CHECK (status IN ('pending', 'active', 'completed', 'bounced', 'unsubscribed', 'opted_out'));
-
--- campaigns.status
-ALTER TABLE public.campaigns
-  ADD CONSTRAINT chk_campaigns_status
-  CHECK (status IN ('draft', 'active', 'paused', 'completed', 'cancelled', 'archived'));
-
--- campaigns.type
-ALTER TABLE public.campaigns
-  ADD CONSTRAINT chk_campaigns_type
-  CHECK (type IN ('email', 'sms', 'whatsapp', 'push', 'in_app'));
-
--- company_cadences.status
-ALTER TABLE public.company_cadences
-  ADD CONSTRAINT chk_company_cadences_status
-  CHECK (status IN ('active', 'paused', 'completed', 'archived'));
-
--- csat_surveys.status
-ALTER TABLE public.csat_surveys
-  ADD CONSTRAINT chk_csat_surveys_status
-  CHECK (status IN ('pending', 'sent', 'answered', 'expired'));
-
--- documents.status
-ALTER TABLE public.documents
-  ADD CONSTRAINT chk_documents_status
-  CHECK (status IN ('active', 'archived', 'draft'));
-
--- inactivity_alerts.status
-ALTER TABLE public.inactivity_alerts
-  ADD CONSTRAINT chk_inactivity_alerts_status
-  CHECK (status IN ('active', 'snoozed', 'resolved', 'dismissed'));
-
--- interactions.status (Portuguese values confirmed from live data: 'concluido')
-ALTER TABLE public.interactions
-  ADD CONSTRAINT chk_interactions_status
-  CHECK (status IN ('pendente', 'concluido', 'cancelado', 'agendado'));
-
--- password_reset_requests.status
-ALTER TABLE public.password_reset_requests
-  ADD CONSTRAINT chk_password_reset_requests_status
-  CHECK (status IN ('pending', 'approved', 'rejected', 'expired'));
-
--- reminders.priority (Portuguese values; live data: 'alta', 'baixa', 'media')
-ALTER TABLE public.reminders
-  ADD CONSTRAINT chk_reminders_priority
-  CHECK (priority IN ('alta', 'media', 'baixa', 'urgente'));
-
--- sales_opportunities.priority
-ALTER TABLE public.sales_opportunities
-  ADD CONSTRAINT chk_sales_opportunities_priority
-  CHECK (priority IN ('low', 'medium', 'high', 'urgent'));
-
--- sales_opportunities.status
-ALTER TABLE public.sales_opportunities
-  ADD CONSTRAINT chk_sales_opportunities_status
-  CHECK (status IN ('identified', 'qualified', 'proposal', 'negotiation', 'won', 'lost', 'on_hold'));
-
--- scheduled_visits.status (live data: 'scheduled', 'completed' — both present in list)
-ALTER TABLE public.scheduled_visits
-  ADD CONSTRAINT chk_scheduled_visits_status
-  CHECK (status IN ('scheduled', 'completed', 'cancelled', 'no_show', 'rescheduled'));
-
--- sequences.status
-ALTER TABLE public.sequences
-  ADD CONSTRAINT chk_sequences_status
-  CHECK (status IN ('draft', 'active', 'paused', 'archived'));
-
--- visit_checkins.visit_type (table is empty; values from original migration)
-ALTER TABLE public.visit_checkins
-  ADD CONSTRAINT chk_visit_checkins_visit_type
-  CHECK (visit_type IN ('presencial', 'prospeccao', 'suporte', 'entrega', 'outro'));
-
--- whatsapp_instances.status
-ALTER TABLE public.whatsapp_instances
-  ADD CONSTRAINT chk_whatsapp_instances_status
-  CHECK (status IN ('connected', 'disconnected', 'connecting', 'error', 'qr_code'));
+DO $migration$
+DECLARE
+  constraint_definition record;
+BEGIN
+  FOR constraint_definition IN
+    SELECT *
+    FROM (VALUES
+      ('automation_executions', 'status', 'chk_automation_executions_status', $$status IN ('pending', 'running', 'completed', 'failed', 'cancelled')$$),
+      ('calendar_events', 'status', 'chk_calendar_events_status', $$status IN ('scheduled', 'confirmed', 'completed', 'cancelled', 'tentative')$$),
+      ('campaign_members', 'status', 'chk_campaign_members_status', $$status IN ('pending', 'active', 'completed', 'bounced', 'unsubscribed', 'opted_out')$$),
+      ('campaigns', 'status', 'chk_campaigns_status', $$status IN ('draft', 'active', 'paused', 'completed', 'cancelled', 'archived')$$),
+      ('campaigns', 'type', 'chk_campaigns_type', $$type IN ('email', 'sms', 'whatsapp', 'push', 'in_app')$$),
+      ('company_cadences', 'status', 'chk_company_cadences_status', $$status IN ('active', 'paused', 'completed', 'archived')$$),
+      ('csat_surveys', 'status', 'chk_csat_surveys_status', $$status IN ('pending', 'sent', 'answered', 'expired')$$),
+      ('documents', 'status', 'chk_documents_status', $$status IN ('active', 'archived', 'draft')$$),
+      ('inactivity_alerts', 'status', 'chk_inactivity_alerts_status', $$status IN ('active', 'snoozed', 'resolved', 'dismissed')$$),
+      ('interactions', 'status', 'chk_interactions_status', $$status IN ('pendente', 'concluido', 'cancelado', 'agendado')$$),
+      ('password_reset_requests', 'status', 'chk_password_reset_requests_status', $$status IN ('pending', 'approved', 'rejected', 'expired')$$),
+      ('reminders', 'priority', 'chk_reminders_priority', $$priority IN ('alta', 'media', 'baixa', 'urgente')$$),
+      ('sales_opportunities', 'priority', 'chk_sales_opportunities_priority', $$priority IN ('low', 'medium', 'high', 'urgent')$$),
+      ('sales_opportunities', 'status', 'chk_sales_opportunities_status', $$status IN ('identified', 'qualified', 'proposal', 'negotiation', 'won', 'lost', 'on_hold')$$),
+      ('scheduled_visits', 'status', 'chk_scheduled_visits_status', $$status IN ('scheduled', 'completed', 'cancelled', 'no_show', 'rescheduled')$$),
+      ('sequences', 'status', 'chk_sequences_status', $$status IN ('draft', 'active', 'paused', 'archived')$$),
+      ('visit_checkins', 'visit_type', 'chk_visit_checkins_visit_type', $$visit_type IN ('presencial', 'prospeccao', 'suporte', 'entrega', 'outro')$$),
+      ('whatsapp_instances', 'status', 'chk_whatsapp_instances_status', $$status IN ('connected', 'disconnected', 'connecting', 'error', 'qr_code')$$)
+    ) AS constraints(table_name, column_name, constraint_name, expression)
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', constraint_definition.table_name))
+        AND attname = constraint_definition.column_name
+        AND NOT attisdropped
+    ) AND NOT EXISTS (
+      SELECT 1
+      FROM pg_constraint
+      WHERE conrelid = to_regclass(format('public.%I', constraint_definition.table_name))
+        AND conname = constraint_definition.constraint_name
+    ) THEN
+      EXECUTE format(
+        'ALTER TABLE public.%I ADD CONSTRAINT %I CHECK (%s)',
+        constraint_definition.table_name,
+        constraint_definition.constraint_name,
+        constraint_definition.expression
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

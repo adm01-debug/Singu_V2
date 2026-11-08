@@ -56,7 +56,7 @@ export function VoiceAITestPanel() {
 
       const audioBlob = await new Promise<Blob>((resolve) => {
         recorder.onstop = () => {
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           stream.getTracks().forEach((t) => t.stop());
           resolve(new Blob(chunks, { type: 'audio/webm' }));
         };

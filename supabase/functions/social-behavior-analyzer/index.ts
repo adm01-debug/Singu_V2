@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders, withAuthOrServiceRole, jsonError, jsonOk, isServiceRoleCaller, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
@@ -8,6 +9,7 @@ const limiter = rateLimit({ windowMs: 60_000, max: 5 });
 
 const SocialBehaviorInput = z.object({
   contactId: z.string().uuid('contactId deve ser UUID válido'),
+  userId: z.string().uuid().optional(),
 });
 
 Deno.serve(async (req) => {
@@ -41,12 +43,12 @@ Deno.serve(async (req) => {
 
      const parsed = SocialBehaviorInput.safeParse(rawBody);
      if (!parsed.success) {
-       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
      }
      const { contactId } = parsed.data;
-     const userId = isServiceRoleCaller(authResult) ? rawBody.userId : authResult;
+     const userId = isServiceRoleCaller(authResult) ? parsed.data.userId : authResult;
  
-     if (!userId) return jsonError("User ID required", 400);
+     if (!userId) return jsonError("User ID required", 400, req);
 
     // All three reads are independent — fetch in parallel
     const [
@@ -64,7 +66,7 @@ Deno.serve(async (req) => {
     ]);
 
     if (profilesError || !socialProfiles || socialProfiles.length === 0) {
-      return jsonError("No social profiles found for this contact", 404);
+      return jsonError("No social profiles found for this contact", 404, req);
     }
 
     const profilesSummary = socialProfiles.map(p => ({
@@ -112,8 +114,8 @@ Responda APENAS com um JSON válido no formato especificado.`;
     });
 
     if (!response.ok) {
-      if (response.status === 429) return jsonError("Rate limit exceeded. Please try again later.", 429);
-      if (response.status === 402) return jsonError("Insufficient credits.", 402);
+      if (response.status === 429) return jsonError("Rate limit exceeded. Please try again later.", 429, req);
+      if (response.status === 402) return jsonError("Insufficient credits.", 402, req);
       throw new Error(`AI gateway error: ${response.status}`);
     }
 
@@ -131,7 +133,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
       console.error("Error parsing AI response:", parseError);
     }
 
-    if (!analysis) { return jsonError("Failed to parse analysis results", 500); }
+    if (!analysis) { return jsonError("Failed to parse analysis results", 500, req); }
 
      const { data: savedAnalysis, error: saveError } = await supabaseClient
        .from("social_behavior_analysis")
@@ -151,7 +153,7 @@ Responda APENAS com um JSON válido no formato especificado.`;
      if (saveError) console.error("Error saving analysis:", saveError);
 
      if (analysis.analytical_profile) {
-       supabaseClient
+       await bestEffortWrite(supabaseClient
          .from("contact_analytical_profiles")
          .upsert({
            contact_id: contactId,
@@ -161,13 +163,12 @@ Responda APENAS com um JSON válido no formato especificado.`;
            communication_style: analysis.analytical_profile.communication_style_tag,
            sentiment_trend: analysis.overall_sentiment,
            last_updated_at: new Date().toISOString()
-         }, { onConflict: 'contact_id' })
-         .catch((e: unknown) => console.error("contact_analytical_profiles upsert error:", e));
+         }, { onConflict: 'contact_id' }), "contact_analytical_profiles upsert error:");
      }
 
-    return jsonOk({ success: true, analysis, savedId: savedAnalysis?.id });
+    return jsonOk({ success: true, analysis, savedId: savedAnalysis?.id }, req);
   } catch (error) {
     console.error("social-behavior-analyzer error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

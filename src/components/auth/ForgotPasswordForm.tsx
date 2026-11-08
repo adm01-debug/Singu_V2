@@ -22,7 +22,7 @@ export function ForgotPasswordForm({ onBack }: ForgotPasswordFormProps) {
     e.preventDefault();
     const parsed = emailSchema.safeParse(email);
     if (!parsed.success) {
-      toast.error(parsed.error.errors[0].message);
+      toast.error(parsed.error.issues[0].message);
       return;
     }
     setIsLoading(true);

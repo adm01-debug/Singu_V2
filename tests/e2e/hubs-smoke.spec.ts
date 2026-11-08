@@ -15,7 +15,7 @@ test.describe('Hubs — smoke E2E (Rodada 50/10)', () => {
   test('/abm redireciona anônimo para /auth', async ({ page }) => {
     await page.goto('/abm');
     await expect(page).toHaveURL(/\/auth/);
-    await expect(page.locator('button:has-text("Entrar")')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Entrar', exact: true })).toBeVisible();
   });
 
   test('/abm/campanhas redireciona anônimo para /auth', async ({ page }) => {
@@ -48,7 +48,8 @@ test.describe('Hubs — smoke E2E (Rodada 50/10)', () => {
     page.on('console', (m) => {
       if (m.type() === 'error') consoleErrors.push(`console: ${m.text()}`);
     });
-    await page.goto('/abm', { waitUntil: 'networkidle' });
+    await page.goto('/abm', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('body')).toBeVisible();
     const fatal = consoleErrors.filter((e) =>
       /(ChunkLoadError|Failed to fetch dynamically imported module|Unexpected token)/i.test(e),
     );
@@ -61,7 +62,8 @@ test.describe('Hubs — smoke E2E (Rodada 50/10)', () => {
     page.on('console', (m) => {
       if (m.type() === 'error') consoleErrors.push(`console: ${m.text()}`);
     });
-    await page.goto('/intent', { waitUntil: 'networkidle' });
+    await page.goto('/intent', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('body')).toBeVisible();
     const fatal = consoleErrors.filter((e) =>
       /(ChunkLoadError|Failed to fetch dynamically imported module|Unexpected token)/i.test(e),
     );

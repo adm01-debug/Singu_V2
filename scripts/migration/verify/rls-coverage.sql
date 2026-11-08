@@ -10,6 +10,8 @@ WITH tables_pub AS (
    WHERE n.nspname = 'public'
      AND c.relkind = 'r'
      AND c.relname NOT LIKE '\_%' ESCAPE '\'
+     -- partições herdam as policies da tabela-particionada (pg_policy só na pai)
+     AND NOT EXISTS (SELECT 1 FROM pg_inherits i WHERE i.inhrelid = c.oid)
 ),
 policies_pub AS (
   SELECT c.oid, COUNT(p.polname) AS n_policies
@@ -35,14 +37,19 @@ SELECT * FROM gaps ORDER BY gap, tabela;
 DO $$
 DECLARE v_gaps int;
 BEGIN
-  SELECT COUNT(*) INTO v_gaps
-    FROM pg_class c
-    JOIN pg_namespace n ON n.oid = c.relnamespace
-    LEFT JOIN pg_policy p ON p.polrelid = c.oid
-   WHERE n.nspname = 'public' AND c.relkind = 'r'
-     AND c.relname NOT LIKE '\_%' ESCAPE '\'
-   GROUP BY c.oid, c.relname, c.relrowsecurity
-  HAVING NOT bool_or(c.relrowsecurity) OR COUNT(p.polname) = 0;
+  -- Subquery wrapper necessário: sem ele, SELECT INTO scalar com GROUP BY
+  -- atribui a contagem do 1º grupo (sempre 1), não o total de tabelas com gap.
+  SELECT COUNT(*) INTO v_gaps FROM (
+    SELECT c.oid
+      FROM pg_class c
+      JOIN pg_namespace n ON n.oid = c.relnamespace
+      LEFT JOIN pg_policy p ON p.polrelid = c.oid
+     WHERE n.nspname = 'public' AND c.relkind = 'r'
+       AND c.relname NOT LIKE '\_%' ESCAPE '\'
+       AND NOT EXISTS (SELECT 1 FROM pg_inherits i WHERE i.inhrelid = c.oid)
+     GROUP BY c.oid, c.relname, c.relrowsecurity
+    HAVING NOT bool_or(c.relrowsecurity) OR COUNT(p.polname) = 0
+  ) _gaps;
 
   IF COALESCE(v_gaps, 0) > 0 THEN
     RAISE EXCEPTION '🚨 RLS COVERAGE FAILED: % tabela(s) sem RLS/policy', v_gaps;

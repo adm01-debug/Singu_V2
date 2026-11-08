@@ -1,4 +1,4 @@
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useEffect, useMemo } from 'react';
@@ -67,7 +67,8 @@ export function ContactForm({ contact, companies, defaultCompanyId, onSubmit, on
   const c = contact as Record<string, unknown> | null;
 
   const form = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
+    // zod v4 + resolvers v5: input (campos) e output (parseado) divergem; o form segue tipado pelo output como na v3.
+    resolver: zodResolver(contactSchema) as unknown as Resolver<ContactFormData>,
     mode: 'onBlur',
     defaultValues: {
       first_name: getField(c, 'first_name'), last_name: getField(c, 'last_name'),

@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Database } from "@/integrations/supabase/types";
 import { useAuth } from "@/hooks/useAuth";
+import { fetchContactBehaviorAudit, type BehavioralAuditLog } from "@/lib/contactBehaviorAudit";
+export type { BehavioralAuditLog } from "@/lib/contactBehaviorAudit";
 
 type PersonalityRow = Database['public']['Tables']['contact_personality']['Row'];
 export type ContactPersonality = Partial<PersonalityRow>;
@@ -53,21 +55,6 @@ export interface ContactBehaviorGap {
   issue_type: string;
   priority: 'high' | 'medium' | 'low';
 }
-
- export interface BehavioralAuditLog {
-   id: string;
-   timestamp: string;
-   user_email?: string;
-   change_source?: string;
-   field_name?: string;
-   old_value?: unknown;
-   new_value?: unknown;
-   reason?: string;
-   analysis_type?: string;
-   analyzed_text?: string;
-   is_validated?: boolean;
-   user_feedback?: string;
- }
 
 export interface ContactDecisionMaking {
   decision_speed?: string;
@@ -322,18 +309,10 @@ export const useContactBehavior = (contactId: string) => {
     refetchOnWindowFocus: false,
   });
 
-  const { data: auditLogs, isLoading: isLoadingAudit } = useQuery({
+  const { data: auditLogs, isLoading: isLoadingAudit, error: auditError, refetch: refreshAudit } = useQuery({
     queryKey: ["contact-behavior-audit", contactId, user?.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("v_contact_behavior_audit")
-        .select("*")
-        .eq("contact_id", contactId)
-        .limit(500);
-      if (error) throw error;
-      return data as BehavioralAuditLog[];
-    },
-    enabled: !!contactId,
+    queryFn: () => fetchContactBehaviorAudit(contactId, user!.id),
+    enabled: !!contactId && !!user,
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
   });
@@ -405,7 +384,8 @@ export const useContactBehavior = (contactId: string) => {
     metaprograms,
     rapport,
     gaps: [...(gaps || []), ...(frameworkGaps || []), ...(lifeEventGaps || [])],
-    auditLogs: [...(auditLogs || []), ...(frameworkAudit || [])],
+    auditLogs: [...(auditLogs || []), ...(frameworkAudit || [])].sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp)),
+    auditError, refreshAudit,
     consistency,
     isLoading: isLoadingBehavior || isLoadingDecision || isLoadingInfluence || isLoadingBusiness || isLoadingGaps || isLoadingAudit || isLoadingPersonality || isLoadingMetaprograms || isLoadingFGaps || isLoadingFAudit || isLoadingRapport || isLoadingLEGaps,
     updateBehavior: updateBehaviorMutation.mutate,

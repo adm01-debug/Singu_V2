@@ -10,6 +10,7 @@ interface UseFuzzySearchOptions<T> extends Omit<IFuseOptions<T>, 'keys'> {
   limit?: number;
   /** Debounce delay in ms */
   debounceMs?: number;
+  initialQuery?: string;
 }
 
 interface UseFuzzySearchReturn<T> {
@@ -42,13 +43,14 @@ export function useFuzzySearch<T>(
     minChars = 1,
     limit = 50,
     debounceMs = 150,
+    initialQuery = '',
     threshold = 0.3,
     ignoreLocation = true,
     ...fuseOptions
   } = options;
 
-  const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [query, setQuery] = useState(initialQuery);
+  const [debouncedQuery, setDebouncedQuery] = useState(initialQuery);
 
   // Debounce search query
   useEffect(() => {

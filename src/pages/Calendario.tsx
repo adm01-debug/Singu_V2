@@ -21,7 +21,7 @@ import { CalendarioContent, type FollowUp } from './calendario/CalendarioContent
 import { FollowUpDetailDialog } from './calendario/FollowUpDetailDialog';
 
 type ContactRow = Pick<Tables<'contacts'>, 'id' | 'first_name' | 'last_name'>;
-type CompanyRow = Pick<Tables<'companies'>, 'id' | 'name'>;
+type CompanyRow = Pick<Tables<'companies'>, 'id' | 'nome_crm'>;
 
 const Calendario = () => {
   usePageTitle('Calendário');
@@ -42,7 +42,7 @@ const Calendario = () => {
       const [interactionsRes, contactsRes, companiesRes] = await Promise.all([
         supabase.from('interactions').select('id, user_id, contact_id, company_id, title, type, content, follow_up_date, follow_up_required').eq('user_id', user.id).eq('follow_up_required', true).not('follow_up_date', 'is', null).order('follow_up_date', { ascending: true }).limit(500),
         supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user.id).limit(500),
-        supabase.from('companies').select('id, name').eq('user_id', user.id).limit(500),
+        supabase.from('companies').select('id, nome_crm').eq('user_id', user.id).limit(500),
       ]);
       if (interactionsRes.error) throw interactionsRes.error;
       if (contactsRes.error) throw contactsRes.error;

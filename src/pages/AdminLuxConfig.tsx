@@ -155,8 +155,14 @@ export default function AdminLuxConfig() {
   if (adminLoading || isLoading) return <div className="p-8">Carregando...</div>;
   if (!isAdmin) return <Navigate to="/" replace />;
 
-  const contactConfig = configs.find(c => c.entity_type === 'contact');
-  const companyConfig = configs.find(c => c.entity_type === 'company');
+  const webhookConfigs: LuxWebhookConfig[] = configs.map(c => ({
+    id: c.id, entity_type: c.entity_type, webhook_url: c.webhook_url,
+    is_active: c.is_active, timeout_ms: c.timeout_ms, max_retries: c.max_retries,
+    headers: c.headers, last_test_at: c.last_test_at, last_test_status: c.last_test_status,
+    created_at: c.created_at, updated_at: c.updated_at,
+  }));
+  const contactConfig = webhookConfigs.find(c => c.entity_type === 'contact');
+  const companyConfig = webhookConfigs.find(c => c.entity_type === 'company');
 
   const handleTest = async (entityType: string) => {
     setTestingType(entityType);

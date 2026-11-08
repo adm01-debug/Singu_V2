@@ -11,8 +11,21 @@
 --   service_role  — all operations via rolbypassrls=true (pipeline writes)
 --   anon          — no access
 
-CREATE POLICY phone_to_contact_select
-  ON zapp_history.phone_to_contact
-  FOR SELECT
-  TO authenticated
-  USING (true);
+DO $migration$
+BEGIN
+  IF to_regclass('zapp_history.phone_to_contact') IS NOT NULL
+    AND NOT EXISTS (
+      SELECT 1
+      FROM pg_policy
+      WHERE polrelid = to_regclass('zapp_history.phone_to_contact')
+        AND polname = 'phone_to_contact_select'
+    )
+  THEN
+    CREATE POLICY phone_to_contact_select
+      ON zapp_history.phone_to_contact
+      FOR SELECT
+      TO authenticated
+      USING (true);
+  END IF;
+END;
+$migration$;

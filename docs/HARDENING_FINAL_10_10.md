@@ -1,7 +1,10 @@
 # 🏆 SINGU SECURITY HARDENING - SCORE 10/10
 
-**Data:** 2026-04-11  
-**BD:** pgxfvjmuubtbowutlide  
+> **Registro histórico.** Este score não é uma certificação contínua e não prova
+> o estado atual do banco, dos secrets, dos backups ou do ambiente de produção.
+
+**Data:** 2026-04-11
+**BD:** pgxfvjmuubtbowutlide
 **Repo:** adm01-debug/singu
 
 ---

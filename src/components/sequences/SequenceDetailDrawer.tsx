@@ -2,14 +2,18 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
 import { Mail, MousePointerClick, Eye, MessageCircle, AlertCircle, Send } from 'lucide-react';
 import { useSequenceEvents, useSequenceMetrics, useSequenceSendLogs } from '@/hooks/useSequenceEvents';
 import type { Sequence } from '@/hooks/useSequences';
+import { SequenceManualSteps } from './SequenceManualSteps';
+import { SequencePausedEmails } from './SequencePausedEmails';
 
 interface Props {
   sequence: Sequence | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onEnroll: (sequenceId: string) => void;
 }
 
 const EVENT_ICONS: Record<string, typeof Mail> = {
@@ -19,6 +23,7 @@ const EVENT_ICONS: Record<string, typeof Mail> = {
   replied: MessageCircle,
   bounced: AlertCircle,
   failed: AlertCircle,
+  manual_completed: MessageCircle,
 };
 
 const EVENT_COLORS: Record<string, string> = {
@@ -28,14 +33,16 @@ const EVENT_COLORS: Record<string, string> = {
   replied: 'text-success',
   bounced: 'text-destructive',
   failed: 'text-destructive',
+  manual_completed: 'text-success',
 };
 
-export function SequenceDetailDrawer({ sequence, open, onOpenChange }: Props) {
+export function SequenceDetailDrawer({ sequence, open, onOpenChange, onEnroll }: Props) {
   const { data: metrics } = useSequenceMetrics(sequence?.id);
   const { data: events = [] } = useSequenceEvents(sequence?.id);
   const { data: sendLogs = [] } = useSequenceSendLogs(sequence?.id);
 
   if (!sequence) return null;
+  const capacityReached = sequence.total_enrolled >= (sequence.max_enrollments ?? 100);
 
   const funnel = [
     { label: 'Enviados', value: metrics?.sent ?? 0, icon: Send, cls: 'bg-primary/10 text-primary' },
@@ -54,7 +61,15 @@ export function SequenceDetailDrawer({ sequence, open, onOpenChange }: Props) {
           )}
         </SheetHeader>
 
+        {sequence.status === 'active' && (
+          <Button className="mt-6 w-full" disabled={capacityReached} onClick={() => onEnroll(sequence.id)}>
+            {capacityReached ? 'Limite de inscrições atingido' : 'Inscrever contato'}
+          </Button>
+        )}
+
         <div className="space-y-6 mt-6">
+          {open && <SequenceManualSteps key={sequence.id} sequenceId={sequence.id} active={sequence.status === 'active'} />}
+          {open && <SequencePausedEmails key={`email-${sequence.id}`} sequenceId={sequence.id} active={sequence.status === 'active'} />}
           {/* Funil */}
           <div>
             <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-2">Funil de Performance</h4>
@@ -93,7 +108,7 @@ export function SequenceDetailDrawer({ sequence, open, onOpenChange }: Props) {
                       <div key={ev.id} className="flex items-center gap-2 px-3 py-2 text-xs">
                         <Icon className={`w-3.5 h-3.5 ${cls} shrink-0`} />
                         <Badge variant="outline" className="text-[10px] h-5">step {ev.step_order ?? '-'}</Badge>
-                        <span className="capitalize">{ev.event_type}</span>
+                        <span className="capitalize">{ev.event_type === 'manual_completed' ? 'Execução manual confirmada' : ev.event_type === 'email_resumed' ? 'Retomada de email solicitada' : ev.event_type}</span>
                         <span className="ml-auto text-muted-foreground text-[10px]">
                           {new Date(ev.created_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
                         </span>

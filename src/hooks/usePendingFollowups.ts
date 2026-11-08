@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryExternalData } from '@/lib/externalData';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface PendingFollowup {
   interaction_id: string;
@@ -15,14 +16,16 @@ export interface PendingFollowup {
   owner_email: string | null;
   followup_status: string | null;
   days_overdue: number | null;
-  priority: string | null;
+  priority: number | null;
   contact_disc: string | null;
   closing_score: number | null;
 }
 
 export function usePendingFollowups(limit = 20) {
+  const { user } = useAuth();
   return useQuery({
-    queryKey: ['pending-followups', limit],
+    queryKey: ['pending-followups', limit, user?.id],
+    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await queryExternalData<PendingFollowup>({
         table: 'vw_pending_followups',

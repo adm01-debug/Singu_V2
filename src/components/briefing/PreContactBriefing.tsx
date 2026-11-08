@@ -77,7 +77,7 @@ export function PreContactBriefing({ className, compact = false }: PreContactBri
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-foreground">{briefing.contact.first_name} {briefing.contact.last_name}</h3>
-                    <p className="text-sm text-muted-foreground">{briefing.company?.name || briefing.contact.role_title || 'Contato'}</p>
+                    <p className="text-sm text-muted-foreground">{briefing.company?.nome_crm || briefing.contact.role_title || 'Contato'}</p>
                     <div className="flex items-center gap-2 mt-1"><Badge className="bg-primary/10 text-primary border-primary/30"><Clock className="w-3 h-3 mr-1" />Em {briefing.minutesUntilMeeting} min</Badge><Badge variant="outline" className="text-xs">{briefing.interaction.title}</Badge></div>
                   </div>
                 </div>

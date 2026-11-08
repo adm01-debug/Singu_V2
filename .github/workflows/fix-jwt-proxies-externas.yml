@@ -1,0 +1,97 @@
+# Fecha verify_jwt = false nas 23 proxies externas deployadas em
+# pgxfvjmuubtbowutlide mas sem código neste repositório.
+# Pré-requisito: SUPABASE_ACCESS_TOKEN cadastrado nos secrets do repo.
+# Disparo: Actions → Fix JWT proxies externas → Run workflow.
+name: Fix JWT proxies externas
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fix-verify-jwt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar SUPABASE_ACCESS_TOKEN
+        run: |
+          if [ -z "${{ secrets.SUPABASE_ACCESS_TOKEN }}" ]; then
+            echo "::error::SUPABASE_ACCESS_TOKEN não está cadastrado nos secrets do repositório."
+            echo "Crie em: supabase.com → Account → Access Tokens"
+            echo "Cadastre em: GitHub → Settings → Secrets and variables → Actions → New repository secret"
+            exit 1
+          fi
+          echo "Token presente — prosseguindo."
+
+      - name: Fechar verify_jwt nas 23 proxies
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          set -euo pipefail
+          PROJECT_REF="pgxfvjmuubtbowutlide"
+          BASE_URL="https://api.supabase.com/v1/projects/${PROJECT_REF}/functions"
+
+          slugs=(
+            bigquery-cnpj-proxy
+            bigquery-proxy
+            bitrix-extract-companies
+            bitrix24-proxy
+            bling-proxy
+            cloudflare-proxy
+            comtele-proxy
+            coop003-executor
+            coop004-pacs-report
+            evolution-proxy
+            fornecedores-proxy
+            lalamove-uapi-proxy
+            lalamove-unified
+            lalamove-v3-proxy
+            leadcontact-proxy
+            lusha-proxy
+            mapbox-proxy
+            mcp-query
+            phantombuster-proxy
+            rodonaves-unified
+            spot-unified
+            xbz-api-proxy
+            xbz-unified
+          )
+
+          ok=0
+          fail=0
+
+          for slug in "${slugs[@]}"; do
+            response=$(curl -s -o /tmp/resp.json -w "%{http_code}" \
+              -X PATCH "${BASE_URL}/${slug}" \
+              -H "Authorization: Bearer ${SUPABASE_ACCESS_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d '{"verify_jwt": true}')
+            if [ "$response" = "200" ]; then
+              echo "OK  ${slug}"
+              ok=$((ok + 1))
+            else
+              echo "ERR ${slug}: HTTP ${response} — $(cat /tmp/resp.json)"
+              fail=$((fail + 1))
+            fi
+          done
+
+          echo ""
+          echo "Resultado: ${ok} ok / ${fail} falhas"
+          [ "$fail" -eq 0 ] || exit 1
+
+      - name: Verificar estado final (deve sair vazio)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          PROJECT_REF="pgxfvjmuubtbowutlide"
+          echo "Funções com verify_jwt ainda false após o patch:"
+          still_open=$(
+            curl -s \
+              "https://api.supabase.com/v1/projects/${PROJECT_REF}/functions" \
+              -H "Authorization: Bearer ${SUPABASE_ACCESS_TOKEN}" | \
+            jq -r '[.[] | select(.verify_jwt == false) | .slug] | @tsv'
+          )
+          if [ -z "$still_open" ]; then
+            echo "Nenhuma — todas as 23 fechadas com sucesso."
+          else
+            echo "$still_open"
+            echo "::warning::Algumas funções ainda estão abertas."
+          fi

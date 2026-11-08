@@ -107,7 +107,7 @@ export function useEnrichmentExport() {
           .order("detected_at", { ascending: false })
           .limit(10000),
         supabase.from("companies")
-          .select("id, name")
+          .select("id, nome_crm")
           .eq("user_id", user.id)
           .limit(10000),
       ]);
@@ -137,7 +137,7 @@ export function useEnrichmentExport() {
 
       const companyMap = new Map<string, string>();
       for (const c of (companiesRes.data ?? [])) {
-        companyMap.set(c.id, c.name ?? "");
+        companyMap.set(c.id, c.nome_crm);
       }
 
       const findPhone = (phone: string | null) => {

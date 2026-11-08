@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk } from "../_shared/auth.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
+import { fetchAllPages } from "../_shared/pagination.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
@@ -30,18 +31,15 @@ Deno.serve(async (req) => {
 
     // Fetch last 30 days of audit logs for this user
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-    const { data: logs, error } = await supabase
-      .from("audit_log")
-      .select("entity_type, action, created_at, user_id")
-      .eq("user_id", userId)
-      .gte("created_at", thirtyDaysAgo)
-      .order("created_at", { ascending: false })
-      .limit(1000);
-
-    if (error) {
-      log.error("fetch_logs_failed", { error: error.message });
-      throw error;
-    }
+    const logs = await fetchAllPages((from, to) =>
+      supabase
+        .from("audit_log")
+        .select("entity_type, action, created_at, user_id")
+        .eq("user_id", userId)
+        .gte("created_at", thirtyDaysAgo)
+        .order("created_at", { ascending: false })
+        .range(from, to)
+    );
 
     // Top entities
     const entityCounts: Record<string, number> = {};

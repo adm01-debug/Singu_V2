@@ -123,7 +123,7 @@ export const OnboardingChecklist = React.memo(function OnboardingChecklist({
       label: 'Ative uma sequência',
       description: 'Cadência multi-canal',
       icon: Zap,
-      path: '/sequences',
+      path: '/sequencias',
       completed: hasSequence,
     },
   ];

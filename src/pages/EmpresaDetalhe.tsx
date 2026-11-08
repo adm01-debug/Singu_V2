@@ -1,16 +1,17 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { CustomFieldsDisplay } from '@/components/custom-fields/CustomFieldsDisplay';
 import { DocumentsPanel } from '@/components/documents/DocumentsPanel';
 import { useParams, Link } from 'react-router-dom';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { PageHeader } from '@/components/navigation/PageHeader';
-import { queryExternalData, updateExternalData } from '@/lib/externalData';
+import { queryExternalData, insertExternalData, updateExternalData } from '@/lib/externalData';
 import { toTitleCase } from '@/lib/formatters';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useLuxIntelligence } from '@/hooks/useLuxIntelligence';
 import { useCompanyPhones, useCompanyEmails, useCompanyAddresses, useCompanySocialMedia, useCompanyCnaes, useCompanyRfmScores, useCompanyStakeholders } from '@/hooks/useCompanyRelatedData';
 import { useCompanySummaryView } from '@/hooks/useCompanyViews';
+import { mapCompany, useCompanies, type Company } from '@/hooks/useCompanies';
 import { motion } from 'framer-motion';
 import {
   Building2, Users, Edit, Plus, MessageSquare,
@@ -42,7 +43,7 @@ import { CompanyErpProposalsWidget } from '@/components/erp/CompanyErpProposalsW
  import { RelatedContactsSection } from '@/components/company-detail/contacts/RelatedContactsSection';
  import { UnifiedTimelineSection } from '@/components/company-detail/timeline/UnifiedTimelineSection';
  import { QuickFollowUpGenerator } from '@/components/company-detail/QuickFollowUpGenerator';
-import { supabase } from '@/integrations/supabase/client';
+import { normalizeExternalContact, prepareContactWrite, type Contact } from '@/hooks/useContacts';
 import { useAuth } from '@/hooks/useAuth';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
@@ -50,14 +51,13 @@ import { useToast } from '@/hooks/use-toast';
 import { parseApiError } from '@/lib/errorMessages';
 import { CompanyExecutiveSummary } from '@/components/company-detail/CompanyExecutiveSummary';
 
-type Company = Tables<'companies'>;
-type Contact = Tables<'contacts'>;
 type Interaction = Tables<'interactions'>;
 type HealthStatus = 'growing' | 'stable' | 'cutting' | 'unknown';
 
 const EmpresaDetalhe = () => {
   const { id } = useParams();
   const { user } = useAuth();
+  const owner = user?.id ?? null;
   const { toast } = useToast();
   const { trackView } = useRecentlyViewed();
    const { 
@@ -70,11 +70,15 @@ const EmpresaDetalhe = () => {
    } = useLuxIntelligence('company', id);
   const { interactions: hookInteractions } = useInteractions(undefined, id);
   const [company, setCompany] = useState<Company | null>(null);
+  const [companyOwner, setCompanyOwner] = useState<string | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<'company' | 'contacts' | null>(null);
+  const requestRef = useRef<AbortController | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isAddContactOpen, setIsAddContactOpen] = useState(false);
   const [editSubmitting, setEditSubmitting] = useState(false);
+  const { updateCompany } = useCompanies({ enabled: false });
 
   const phonesHook = useCompanyPhones(id);
   const emailsHook = useCompanyEmails(id);
@@ -85,14 +89,15 @@ const EmpresaDetalhe = () => {
   const stakeholdersHook = useCompanyStakeholders(id);
   const { data: companySummary } = useCompanySummaryView(id);
 
-  const isDeleted = !!(company as Record<string, unknown>)?.deleted_at;
-  const leadScore = companySummary?.lead_score ?? (company as Record<string, unknown>)?.lead_score as number | null;
-  const leadStatus = companySummary?.lead_status ?? (company as Record<string, unknown>)?.lead_status as string | null;
+  const isDeleted = !!company?.deleted_at;
+  const leadScore = companySummary?.lead_score ?? company?.lead_score;
+  const leadStatus = companySummary?.lead_status ?? company?.lead_status;
 
   const handleRestore = async () => {
     if (!id) return;
     try {
-      await updateExternalData('companies', id, { deleted_at: null, deleted_by: null });
+      const { error } = await updateExternalData('companies', id, { deleted_at: null, deleted_by: null });
+      if (error) throw error;
       toast({ title: 'Empresa restaurada', description: 'A empresa foi reativada com sucesso.' });
       fetchCompanyData();
     } catch (e) {
@@ -101,31 +106,57 @@ const EmpresaDetalhe = () => {
   };
 
   const fetchCompanyData = useCallback(async () => {
+    requestRef.current?.abort();
+    const controller = new AbortController();
+    requestRef.current = controller;
     setLoading(true);
+    setLoadError(null);
+    let stage: 'company' | 'contacts' = 'company';
     try {
-      const { data: companyResult, error: companyError } = await queryExternalData<Record<string, unknown>>({ table: 'companies', filters: [{ type: 'eq', column: 'id', value: id }] });
+      const { data: companyResult, error: companyError } = await queryExternalData<unknown>({
+        table: 'companies',
+        select: '*,company_addresses(id,is_primary,logradouro,numero,cidade,estado,latitude,longitude),company_emails(id,is_primary,email),company_phones(id,is_primary,numero)',
+        filters: [{ type: 'eq', column: 'id', value: id }],
+        signal: controller.signal,
+      });
+      if (controller.signal.aborted) return;
       if (companyError) throw companyError;
-      const raw = Array.isArray(companyResult) ? (companyResult.at(0) ?? null) : null;
-      const companyData = raw ? { ...raw, name: (raw.nome_crm || raw.nome_fantasia || raw.razao_social || 'Sem nome') as string, industry: (raw.ramo_atividade || null) as string | null, tags: (raw.tags_array || []) as string[], challenges: (raw.challenges || []) as string[], competitors: (raw.competitors || []) as string[] } as Company : null;
+      const companyData = companyResult?.[0] ? mapCompany(companyResult[0]) : null;
       setCompany(companyData);
+      setCompanyOwner(owner);
 
       if (companyData && id) {
         trackView({ id, type: 'company', name: companyData.name, subtitle: companyData.industry || undefined, avatarUrl: companyData.logo_url || undefined });
       }
 
       if (companyData) {
-        const { data: contactsResult, error: contactsError } = await queryExternalData<Contact>({ table: 'contacts', filters: [{ type: 'eq', column: 'company_id', value: id }], order: { column: 'relationship_score', ascending: false } });
+        stage = 'contacts';
+        const { data: contactsResult, error: contactsError } = await queryExternalData<unknown>({ table: 'contacts', filters: [{ type: 'eq', column: 'company_id', value: id }], order: { column: 'relationship_score', ascending: false }, signal: controller.signal });
+        if (controller.signal.aborted) return;
         if (contactsError) throw contactsError;
-        const normalizedContacts = (contactsResult || []).map((c: Record<string, unknown>) => ({ ...c, first_name: c.first_name || c.nome || 'Sem', last_name: c.last_name || c.sobrenome || 'nome', tags: c.tags || [], hobbies: c.hobbies || [], interests: c.interests || [] })) as Contact[];
+        const normalizedContacts = (contactsResult || []).map(normalizeExternalContact);
         setContacts(normalizedContacts);
 
         // As interações agora são gerenciadas pelo hook useInteractions(undefined, id)
         // Isso remove o fetch manual e garante resiliência e cache via React Query.
       }
-    } catch (error) { logger.error('Error fetching company data:', error); } finally { setLoading(false); }
-  }, [id, trackView]);
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      setLoadError(stage);
+      logger.error('Error fetching company data:', error);
+      toast({ title: 'Erro ao carregar empresa', description: parseApiError(error, 'Tente novamente'), variant: 'destructive' });
+    } finally {
+      if (!controller.signal.aborted) setLoading(false);
+    }
+  }, [id, owner, trackView, toast]);
 
-  useEffect(() => { if (id && user) fetchCompanyData(); }, [id, user, fetchCompanyData]);
+  useEffect(() => {
+    setCompany(null);
+    setCompanyOwner(null);
+    setContacts([]);
+    if (id && owner) fetchCompanyData();
+    return () => requestRef.current?.abort();
+  }, [id, owner, fetchCompanyData]);
 
   const stats = useMemo(() => {
     const avgScore = contacts.length > 0 ? Math.round(contacts.reduce((sum, c) => sum + (c.relationship_score || 0), 0) / contacts.length) : 0;
@@ -141,10 +172,8 @@ const EmpresaDetalhe = () => {
     if (!id) return;
     setEditSubmitting(true);
     try {
-      const { name, industry, tags, notes, phone, email, address, city, state, instagram, linkedin, facebook, youtube, twitter, tiktok, ...cleanData } = data as Record<string, unknown>;
-      const { error } = await updateExternalData('companies', id, cleanData);
-      if (error) throw error;
-      toast({ title: 'Empresa atualizada', description: 'As alterações foram salvas.' });
+      const updated = await updateCompany(id, data, company?.version);
+      if (!updated) return;
       setIsEditOpen(false);
       fetchCompanyData();
     } catch (error) {
@@ -153,8 +182,8 @@ const EmpresaDetalhe = () => {
     } finally { setEditSubmitting(false); }
   };
 
-  if (loading) return (<AppLayout><EntityDetailPageSkeleton /></AppLayout>);
-  if (!company) { return (<AppLayout><div className="p-6 text-center"><Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" /><h2 className="text-xl font-semibold mb-2">Empresa não encontrada</h2><p className="text-muted-foreground mb-4">A empresa que você procura não existe ou foi removida.</p><Link to="/empresas"><Button>Voltar para Empresas</Button></Link></div></AppLayout>); }
+  if ((loading && !company) || (company && (company.id !== id || companyOwner !== owner))) return (<AppLayout><EntityDetailPageSkeleton /></AppLayout>);
+  if (!company) { return (<AppLayout><div className="p-6 text-center" role={loadError ? 'alert' : undefined}>{loadError ? <AlertTriangle className="w-16 h-16 text-destructive mx-auto mb-4" /> : <Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" />}<h2 className="text-xl font-semibold mb-2">{loadError ? 'Não foi possível carregar a empresa' : 'Empresa não encontrada'}</h2><p className="text-muted-foreground mb-4">{loadError ? 'Confira sua conexão e tente novamente.' : 'A empresa que você procura não existe ou foi removida.'}</p>{loadError && <Button onClick={fetchCompanyData} className="mr-2">Tentar novamente</Button>}<Link to="/empresas"><Button variant={loadError ? 'outline' : 'default'}>Voltar para Empresas</Button></Link></div></AppLayout>); }
 
    const healthStatus = (company.financial_health as HealthStatus) || 'unknown';
    const companyName = company.name || 'Empresa';
@@ -165,8 +194,16 @@ const EmpresaDetalhe = () => {
       <SEOHead title={toTitleCase(company.name)} description={`Detalhes da empresa ${toTitleCase(company.name)}`} />
       <div className="min-h-screen pt-2 md:pt-4">
         <div className="px-4 md:px-6 pt-3 md:pt-4">
-          <PageHeader backTo="/empresas" backLabel="Empresas" title={toTitleCase(company.name)} />
+          <PageHeader backFallback="/empresas" title={toTitleCase(company.name)} />
         </div>
+
+        {loading && <div role="status" className="mx-4 md:mx-6 mt-2 text-sm text-muted-foreground">Atualizando dados da empresa…</div>}
+        {loadError && (
+          <div role="alert" className="mx-4 md:mx-6 mt-2 p-3 rounded-lg border border-destructive/30 text-destructive flex items-center justify-between gap-2">
+            <span>{loadError === 'contacts' ? 'Não foi possível carregar os contatos desta empresa.' : 'Não foi possível atualizar os dados desta empresa.'}</span>
+            <Button variant="outline" size="sm" onClick={fetchCompanyData}>Tentar novamente</Button>
+          </div>
+        )}
 
         {isDeleted && (
           <div className="mx-4 md:mx-6 mt-2 mb-2 px-4 py-3 bg-destructive/10 border border-destructive/30 rounded-xl flex items-center justify-between gap-3">
@@ -307,13 +344,19 @@ const EmpresaDetalhe = () => {
           companies={company ? [company] : []}
           defaultCompanyId={id}
           onSubmit={async (data) => {
-            if (!user) return;
             try {
-              const { error } = await supabase.from('contacts').insert({ ...data, user_id: user.id, company_id: id } as unknown as import('@/integrations/supabase/types').Database['public']['Tables']['contacts']['Insert']);
+              if (!user || !id) throw new Error('Sua sessão expirou. Entre novamente para adicionar o contato.');
+              const { data: created, error } = await insertExternalData<unknown>('contacts', { ...prepareContactWrite(data), user_id: user.id, company_id: id });
               if (error) throw error;
+              if (!created) throw new Error('A criação não retornou um contato válido.');
+              normalizeExternalContact(created);
               setIsAddContactOpen(false);
               fetchCompanyData();
-            } catch (error) { logger.error('Error adding contact:', error); }
+            } catch (error) {
+              logger.error('Erro ao adicionar contato:', error);
+              toast({ title: 'Erro ao adicionar contato', description: parseApiError(error, 'Tente novamente'), variant: 'destructive' });
+              throw error;
+            }
           }}
           onCancel={() => setIsAddContactOpen(false)}
           isSubmitting={false}

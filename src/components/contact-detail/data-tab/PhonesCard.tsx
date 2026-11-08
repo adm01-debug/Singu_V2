@@ -14,13 +14,14 @@ import { EnrichmentBadge } from '@/components/enrichment/EnrichmentBadge';
 import { useContactValidationStatus } from '@/hooks/useContactValidationStatus';
 import { usePhoneValidator } from '@/hooks/useEnrichmentSuite';
 import { ShieldCheck } from 'lucide-react';
+import { Constants } from '@/integrations/supabase/types';
 
-const PHONE_TYPES = ['celular', 'fixo', 'comercial', 'whatsapp', 'recado', 'outro'];
+const PHONE_TYPES = Constants.public.Enums.phone_type.filter(type => type !== 'invalido');
 
 function AddPhoneDialog({ onAdd }: { onAdd: (data: Record<string, unknown>) => void }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
-    numero: '', phone_type: 'celular', is_primary: false, is_whatsapp: false,
+    numero: '', phone_type: 'celular_corporativo', is_primary: false, is_whatsapp: false,
     contexto: '', observacao: '',
   });
 
@@ -32,7 +33,7 @@ function AddPhoneDialog({ onAdd }: { onAdd: (data: Record<string, unknown>) => v
       contexto: form.contexto || undefined,
       observacao: form.observacao || undefined,
     });
-    setForm({ numero: '', phone_type: 'celular', is_primary: false, is_whatsapp: false, contexto: '', observacao: '' });
+    setForm({ numero: '', phone_type: 'celular_corporativo', is_primary: false, is_whatsapp: false, contexto: '', observacao: '' });
     setOpen(false);
   };
 

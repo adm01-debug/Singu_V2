@@ -6,14 +6,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useDataHealthView } from '@/hooks/useDataHealthView';
 import { cn } from '@/lib/utils';
 
-interface HealthRecord {
-  table_name?: string;
-  completeness_pct?: number;
-  total_records?: number;
-  missing_fields?: number;
-  quality_score?: number;
-  status?: string;
-  [key: string]: unknown;
+function toPercent(score: number | null): number | null {
+  return score === null || !Number.isFinite(score) ? null : Math.round(Math.min(100, Math.max(0, score * 10)));
 }
 
 export function DataHealthWidget() {
@@ -30,7 +24,7 @@ export function DataHealthWidget() {
     );
   }
 
-  if (error || !data) {
+  if (error || !data?.length) {
     return (
       <Card className="border-destructive/20">
         <CardHeader>
@@ -39,32 +33,48 @@ export function DataHealthWidget() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-xs text-muted-foreground text-center py-4">Erro ao carregar métricas de saúde</p>
+          <p className="text-xs text-muted-foreground text-center py-4">
+            {error ? 'Erro ao carregar métricas de saúde' : 'Nenhuma métrica de saúde disponível'}
+          </p>
         </CardContent>
       </Card>
     );
   }
 
-  const records = (data as HealthRecord[]) || [];
+  const health = data[0];
+  const overallScore = toPercent(health.health_score);
+  const metrics = [
+    { label: 'Empresas com proprietário', score: health.score_user_id_companies },
+    { label: 'Contatos com proprietário', score: health.score_user_id_contacts },
+    { label: 'Empresas com CNPJ', score: health.score_cnpj },
+    { label: 'Histórico de interações', score: health.score_interactions },
+    { label: 'Proteção por RLS', score: health.score_rls },
+    { label: 'Tabelas essenciais', score: health.score_singu_tables },
+    { label: 'Configurações iniciais', score: health.score_seeds },
+    { label: 'Consultas do Singu', score: health.score_views },
+    { label: 'Restrições de integridade', score: health.score_constraints },
+  ];
+  const counts = [
+    { label: 'Tabelas', count: health.total_tables },
+    { label: 'Consultas', count: health.total_views },
+    { label: 'Interações da carteira', count: health.interactions_total },
+  ];
 
-  // Compute overall health score
-  const avgScore = records.length > 0
-    ? Math.round(records.reduce((sum, r) => sum + (r.quality_score ?? r.completeness_pct ?? 0), 0) / records.length)
-    : 0;
-
-  const getScoreColor = (score: number) => {
+  const getScoreColor = (score: number | null) => {
+    if (score === null) return 'text-muted-foreground';
     if (score >= 80) return 'text-success';
     if (score >= 50) return 'text-warning';
     return 'text-destructive';
   };
 
-  const getScoreIcon = (score: number) => {
+  const getScoreIcon = (score: number | null) => {
+    if (score === null) return Shield;
     if (score >= 80) return CheckCircle;
     if (score >= 50) return AlertTriangle;
     return XCircle;
   };
 
-  const OverallIcon = getScoreIcon(avgScore);
+  const OverallIcon = getScoreIcon(overallScore);
 
   return (
     <Card>
@@ -73,41 +83,45 @@ export function DataHealthWidget() {
           <Shield className="h-5 w-5 text-primary" />
           Saúde dos Dados
         </CardTitle>
-        <CardDescription>Completude e qualidade das tabelas do CRM</CardDescription>
+        <CardDescription>Indicadores agregados da carteira e da estrutura do CRM</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Overall score */}
         <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/30">
-          <OverallIcon className={cn('h-10 w-10', getScoreColor(avgScore))} />
+          <OverallIcon className={cn('h-10 w-10', getScoreColor(overallScore))} />
           <div className="flex-1">
-            <p className="text-sm text-muted-foreground">Score Geral de Saúde</p>
-            <p className={cn('text-3xl font-bold', getScoreColor(avgScore))}>{avgScore}%</p>
+            <p className="text-sm text-muted-foreground">Pontuação geral de saúde</p>
+            <p className={cn('text-3xl font-bold', getScoreColor(overallScore))}>
+              {overallScore === null ? 'Sem pontuação' : `${overallScore}%`}
+            </p>
           </div>
           <Badge variant="outline" className="text-xs">
-            {records.length} tabelas
+            Métricas agregadas
           </Badge>
         </div>
 
-        {/* Per-table breakdown */}
+        <div className="grid grid-cols-3 gap-3 text-center">
+          {counts.map(({ label, count }) => (
+            <div key={label}>
+              <p className="font-semibold">{count === null ? '—' : count.toLocaleString('pt-BR')}</p>
+              <p className="text-xs text-muted-foreground">{label}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="space-y-2 max-h-[300px] overflow-y-auto">
-          {records.slice(0, 15).map((r, i) => {
-            const score = r.quality_score ?? r.completeness_pct ?? 0;
+          {metrics.map(metric => {
+            const score = toPercent(metric.score);
             return (
-              <div key={r.table_name || i} className="flex items-center gap-3 text-sm">
+              <div key={metric.label} className="flex items-center gap-3 text-sm">
                 <span className="flex-1 truncate font-medium text-foreground">
-                  {r.table_name || `Tabela ${i + 1}`}
+                  {metric.label}
                 </span>
                 <div className="w-24">
-                  <Progress value={score} className="h-2" />
+                  <Progress value={score ?? undefined} aria-label={metric.label} className="h-2" />
                 </div>
                 <span className={cn('w-10 text-right text-xs font-semibold', getScoreColor(score))}>
-                  {Math.round(score)}%
+                  {score === null ? '—' : `${score}%`}
                 </span>
-                {r.total_records != null && (
-                  <span className="text-xs text-muted-foreground w-16 text-right">
-                    {Number(r.total_records).toLocaleString('pt-BR')} reg
-                  </span>
-                )}
               </div>
             );
           })}

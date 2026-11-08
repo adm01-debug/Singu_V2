@@ -30,7 +30,7 @@ import { DeferredAppChrome } from './AppChrome';
  * 6. TooltipProvider         — sem dependências
  * 7. BrowserRouter           — sem dependências (React Router)
  * 8. AuthProvider            — DEPENDE de BrowserRouter + QueryClientProvider
- * 9. NavigationStackProvider — DEPENDE de BrowserRouter
+ * 9. NavigationStackProvider — DEPENDE de BrowserRouter + AuthProvider
  *
  * ⚠️ Alterar esta ordem PODE causar tela branca (white-screen crash).
  * Consulte: mem://architecture/provider-hierarchy-and-context

@@ -41,7 +41,7 @@ export const InteractionHistoryWidget = React.memo(function InteractionHistoryWi
                   <p className="font-medium text-foreground line-clamp-1">{item.resumo || item.type}</p>
                   <div className="flex items-center gap-2 text-[10px] text-muted-foreground mt-0.5">
                     {item.contact_name && <span className="truncate">{item.contact_name}</span>}
-                    <span>{format(new Date(item.data_interacao), "dd/MM HH:mm", { locale: ptBR })}</span>
+                    <span>{item.data_interacao ? format(new Date(item.data_interacao), "dd/MM HH:mm", { locale: ptBR }) : 'Data indisponível'}</span>
                   </div>
                 </div>
                 <Badge variant="outline" className="text-[9px] shrink-0">{item.channel || item.direction}</Badge>

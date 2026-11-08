@@ -15,7 +15,8 @@
 
 -- 1. Recreate view WITHOUT signature_token in the SELECT list.
 --    Keep security_barrier=true (already set by migration 20260711151001).
-CREATE OR REPLACE VIEW public.document_signatures_public
+DROP VIEW IF EXISTS public.document_signatures_public;
+CREATE VIEW public.document_signatures_public
 WITH (security_invoker = true, security_barrier = true) AS
 SELECT
   id,
@@ -34,6 +35,7 @@ WHERE signature_token IS NOT NULL
   AND (expires_at IS NULL OR expires_at > now());
 
 -- 2. Revoke anon SELECT on the view (access is via get-signature Edge Function only).
+GRANT SELECT ON public.document_signatures_public TO authenticated;
 REVOKE SELECT ON public.document_signatures_public FROM anon;
 
 -- 3. Drop the policy that lets anon enumerate every signature row on the base table.
@@ -44,7 +46,8 @@ DROP POLICY IF EXISTS "Anon can view own document signatures" ON public.document
 -- ─── csat_surveys ──────────────────────────────────────────────────────────
 
 -- 4. Recreate csat_surveys_public WITHOUT public_token in the SELECT.
-CREATE OR REPLACE VIEW public.csat_surveys_public
+DROP VIEW IF EXISTS public.csat_surveys_public;
+CREATE VIEW public.csat_surveys_public
 WITH (security_invoker = true, security_barrier = true) AS
 SELECT
   id,
@@ -61,6 +64,7 @@ WHERE public_token IS NOT NULL
 -- 5. Revoke anon SELECT on the csat_surveys_public view.
 --    PublicSurvey.tsx queries csat_surveys directly (filtered by public_token);
 --    this view is unused by any frontend page.
+GRANT SELECT ON public.csat_surveys_public TO authenticated;
 REVOKE SELECT ON public.csat_surveys_public FROM anon;
 
 -- 6. Tighten the anon SELECT policy on csat_surveys: keep access (needed for

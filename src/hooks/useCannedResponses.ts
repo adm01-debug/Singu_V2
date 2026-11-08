@@ -44,6 +44,7 @@ export function useCannedResponses() {
       if (!user) throw new Error('Não autenticado');
       const { error } = await supabase.from('canned_responses').insert([{
         ...input,
+        shortcut: input.shortcut?.trim() || input.title.trim(),
         user_id: user.id
       }]);
       if (error) throw error;

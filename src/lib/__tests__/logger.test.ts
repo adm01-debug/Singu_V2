@@ -63,6 +63,28 @@ describe('Logger Utility', () => {
     })]);
   });
 
+  it('não associa erros anteriores ao login à próxima conta', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const mockInsert = vi.fn().mockResolvedValue({ error: null });
+    vi.mocked(supabase.from).mockImplementation(vi.fn(() => ({ insert: mockInsert })) as never);
+
+    logger.error('antes do login');
+    expect(supabase.from).not.toHaveBeenCalled();
+
+    setLogUser('conta-A');
+    logger.error('erro da conta A');
+    setLogUser(null);
+    logger.error('após sair');
+    expect(mockInsert).toHaveBeenCalledTimes(1);
+    expect(mockInsert).toHaveBeenCalledWith([expect.objectContaining({ user_id: 'conta-A' })]);
+
+    setLogUser('conta-B');
+    logger.error('erro da conta B');
+    expect(mockInsert).toHaveBeenCalledTimes(2);
+    expect(mockInsert).toHaveBeenLastCalledWith([expect.objectContaining({ user_id: 'conta-B' })]);
+    consoleSpy.mockRestore();
+  });
+
   it('deve agrupar logs quando solicitado', () => {
     const groupSpy = vi.spyOn(console, 'group').mockImplementation(() => {});
     const endSpy = vi.spyOn(console, 'groupEnd').mockImplementation(() => {});

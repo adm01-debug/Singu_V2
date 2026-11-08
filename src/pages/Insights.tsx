@@ -19,11 +19,18 @@ import { cn } from '@/lib/utils';
 import type { Tables } from '@/integrations/supabase/types';
 import { logger } from "@/lib/logger";
 import { InsightsContent } from './insights/InsightsContent';
+import { z } from 'zod';
 
 type Contact = Tables<'contacts'>;
 type Interaction = Tables<'interactions'>;
-type Company = Tables<'companies'>;
+type Company = Pick<Tables<'companies'>, 'id' | 'nome_crm' | 'ramo_atividade' | 'financial_health'>;
 
+const insightsResponseSchema = z.object({
+  insights: z.array(z.object({
+    category: z.string(), title: z.string(), description: z.string(), action_suggestion: z.string(),
+    confidence: z.number().finite(), actionable: z.boolean(), contact_id: z.string().optional(), priority: z.string(),
+  })),
+});
 interface AIInsight {
   category: string; title: string; description: string; action_suggestion: string;
   confidence: number; actionable: boolean; contact_id?: string; priority: string;
@@ -52,18 +59,22 @@ const Insights = () => {
     setLoading(true);
     try {
       const [contactsRes, interactionsRes, companiesRes] = await Promise.all([
-        supabase.from('contacts').select('id, first_name, last_name, role_title, relationship_score, relationship_stage, sentiment, updated_at').eq('user_id', user.id).limit(50),
-        supabase.from('interactions').select('id, type, title, content, sentiment, follow_up_required, created_at, contact_id').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
-        supabase.from('companies').select('id, name, industry, financial_health').eq('user_id', user.id).limit(20),
+        supabase.from('contacts').select('*').eq('user_id', user.id).limit(50),
+        supabase.from('interactions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
+        supabase.from('companies').select('id, nome_crm, ramo_atividade, financial_health').eq('user_id', user.id).limit(20),
       ]);
       if (controller.signal.aborted) return;
-      setContacts((contactsRes.data || []) as Contact[]);
-      if ((contactsRes.data?.length || 0) > 0 || (interactionsRes.data?.length || 0) > 0) {
-        await generateInsights((contactsRes.data || []) as never, (interactionsRes.data || []) as never, (companiesRes.data || []) as never, controller.signal);
+      if (contactsRes.error) throw contactsRes.error;
+      if (interactionsRes.error) throw interactionsRes.error;
+      if (companiesRes.error) throw companiesRes.error;
+      setContacts(contactsRes.data || []);
+      if (contactsRes.data?.length || interactionsRes.data?.length) {
+        await generateInsights(contactsRes.data || [], interactionsRes.data || [], companiesRes.data || [], controller.signal);
       }
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') return;
       logger.error('Error fetching data:', error);
+      toast.error('Não foi possível carregar os dados para gerar insights.');
     }
     finally { if (!controller.signal.aborted) setLoading(false); }
   // session?.access_token can refresh hourly; including it ensures fetchData always
@@ -83,13 +94,24 @@ const Insights = () => {
         body: JSON.stringify({
           contacts: contactsData.map(c => ({ id: c.id, name: `${c.first_name} ${c.last_name}`, role: c.role_title, relationship_score: c.relationship_score, relationship_stage: c.relationship_stage, sentiment: c.sentiment, last_interaction: c.updated_at })),
           interactions: interactionsData.map(i => ({ id: i.id, type: i.type, title: i.title, content: i.content?.slice(0, 200), sentiment: i.sentiment, follow_up_required: i.follow_up_required, created_at: i.created_at, contact_id: i.contact_id })),
-          companies: companiesData.map(c => ({ id: c.id, name: c.name, industry: c.industry, financial_health: c.financial_health })),
+          companies: companiesData.map(c => ({ id: c.id, name: c.nome_crm, industry: c.ramo_atividade, financial_health: c.financial_health })),
         }),
       });
       if (signal?.aborted) return;
-      if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.error || 'Erro ao gerar insights'); }
-      const data = await response.json();
-      setInsights(data.insights || []);
+      if (!response.ok) {
+        const errorData: unknown = await response.json();
+        const parsedError = z.object({ error: z.string() }).safeParse(errorData);
+        throw new Error(parsedError.success ? parsedError.data.error : 'Erro ao gerar insights');
+      }
+      const payload: unknown = await response.json();
+      const parsed = insightsResponseSchema.safeParse(payload);
+      if (!parsed.success) throw new Error('Resposta inválida ao gerar insights. Tente novamente.');
+      const data = parsed.data;
+      setInsights(data.insights.map(insight => ({
+        category: insight.category, title: insight.title, description: insight.description,
+        action_suggestion: insight.action_suggestion, confidence: insight.confidence,
+        actionable: insight.actionable, contact_id: insight.contact_id, priority: insight.priority,
+      })));
       if (data.insights?.length > 0) accessibleToast.success(`${data.insights.length} insights gerados com IA!`);
       else accessibleToast.info('Adicione mais dados para gerar insights personalizados');
     } catch (error) {
@@ -103,11 +125,14 @@ const Insights = () => {
     try {
       if (!user) return;
       const [contactsRes, interactionsRes, companiesRes] = await Promise.all([
-        supabase.from('contacts').select('id, first_name, last_name, role_title, relationship_score, relationship_stage, sentiment, updated_at').eq('user_id', user.id).limit(50),
-        supabase.from('interactions').select('id, type, title, content, sentiment, follow_up_required, created_at, contact_id').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
-        supabase.from('companies').select('id, name, industry, financial_health').eq('user_id', user.id).limit(20),
+        supabase.from('contacts').select('*').eq('user_id', user.id).limit(50),
+        supabase.from('interactions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100),
+        supabase.from('companies').select('id, nome_crm, ramo_atividade, financial_health').eq('user_id', user.id).limit(20),
       ]);
-      await generateInsights((contactsRes.data || []) as Contact[], (interactionsRes.data || []) as Interaction[], (companiesRes.data || []) as Company[]);
+      if (contactsRes.error) throw contactsRes.error;
+      if (interactionsRes.error) throw interactionsRes.error;
+      if (companiesRes.error) throw companiesRes.error;
+      await generateInsights(contactsRes.data || [], interactionsRes.data || [], companiesRes.data || []);
     } catch (error) { logger.error('Error refreshing insights:', error); toast.error('Erro ao atualizar insights. Tente novamente.'); }
   };
 

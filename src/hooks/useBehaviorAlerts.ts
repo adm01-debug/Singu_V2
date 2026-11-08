@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { logger } from "@/lib/logger";
+import { z } from 'zod';
 
 export type AlertType = 
   | 'sentiment_drop' 
@@ -90,27 +91,29 @@ export function useBehaviorAlerts() {
   const queryClient = useQueryClient();
   const queryKey = useMemo(() => ['behavior-alerts', user?.id], [user?.id]);
 
-  const { data: alerts = [], isLoading: loading } = useQuery({
+  const { data: alerts = [], isLoading: loading, error: alertsError } = useQuery({
     queryKey,
     queryFn: async () => {
       const { data: existingAlerts, error } = await supabase
         .from('alerts')
-        .select(`
-          *,
-          contacts:contact_id (
-            first_name,
-            last_name
-          )
-        `)
+        .select('*')
         .eq('user_id', user!.id)
         .eq('dismissed', false)
         .order('created_at', { ascending: false })
         .limit(500);
 
       if (error) throw error;
+      const contactIds = [...new Set((existingAlerts ?? []).flatMap(alert => alert.contact_id ? [alert.contact_id] : []))];
+      const contactsById = new Map<string, { first_name: string; last_name: string }>();
+      for (let offset = 0; offset < contactIds.length; offset += 100) {
+        const { data: contacts, error: contactsError } = await supabase.from('contacts')
+          .select('id, first_name, last_name').in('id', contactIds.slice(offset, offset + 100)).eq('user_id', user!.id);
+        if (contactsError) throw contactsError;
+        for (const contact of contacts ?? []) contactsById.set(contact.id, contact);
+      }
 
-      return (existingAlerts || []).map(alert => {
-        const contact = alert.contacts;
+      return (existingAlerts || []).map((alert): BehaviorAlert => {
+        const contact = alert.contact_id ? contactsById.get(alert.contact_id) : undefined;
         const contactName = contact 
           ? `${contact.first_name} ${contact.last_name}` 
           : 'Contato Desconhecido';
@@ -130,13 +133,13 @@ export function useBehaviorAlerts() {
           contactId: alert.contact_id || '',
           contactName,
           type: alertType,
-          severity: (alert.priority as AlertSeverity) || config.defaultSeverity,
+          severity: alert.priority === null ? config.defaultSeverity : z.enum(['low', 'medium', 'high', 'critical']).parse(alert.priority),
           title: alert.title,
           description: alert.description || '',
-          detectedAt: alert.created_at,
+          detectedAt: z.string().parse(alert.created_at),
           recommendedAction: alert.action_url || 'Entrar em contato para entender a situação',
           dismissed: alert.dismissed || false
-        } as BehaviorAlert;
+        };
       });
     },
     enabled: !!user,
@@ -150,7 +153,7 @@ export function useBehaviorAlerts() {
   }, [queryClient, queryKey]);
 
   const detectNewAlerts = useCallback(async () => {
-    if (!user) return;
+    if (!user) throw new Error('Não autenticado');
 
     try {
       const thirtyDaysAgo = new Date();
@@ -272,12 +275,13 @@ export function useBehaviorAlerts() {
       if (newAlerts.length > 0) {
         const contactIds = [...new Set(newAlerts.map(a => a.contactId))];
         const types = [...new Set(newAlerts.map(a => a.type))];
-        const { data: existing } = await supabase
+        const { data: existing, error: existingError } = await supabase
           .from('alerts')
           .select('contact_id, type')
           .in('contact_id', contactIds)
           .in('type', types)
           .eq('dismissed', false);
+        if (existingError) throw existingError;
         const existingSet = new Set(
           (existing || []).map(e => `${e.contact_id}::${e.type}`)
         );
@@ -290,12 +294,13 @@ export function useBehaviorAlerts() {
             priority: a.severity,
             title: a.title,
             description: a.description,
+            message: a.description,
             action_url: `/contatos/${a.contactId}`,
             dismissed: false,
           }));
         if (toInsert.length > 0) {
           const { error: insertError } = await supabase.from('alerts').insert(toInsert);
-          if (insertError) logger.error('Error inserting alerts:', { error: insertError.message });
+          if (insertError) throw insertError;
         }
       }
 
@@ -311,6 +316,7 @@ export function useBehaviorAlerts() {
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error('Error detecting new alerts:', { error: msg });
+      throw error;
     }
   }, [user, fetchAlerts, toast]);
 
@@ -325,6 +331,7 @@ export function useBehaviorAlerts() {
       const msg = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error('Error dismissing alert:', { error: msg });
       toast({ title: 'Erro ao dispensar alerta', description: msg, variant: 'destructive' });
+      throw error;
     }
   }, [toast, queryClient, queryKey, user]);
 
@@ -339,6 +346,7 @@ export function useBehaviorAlerts() {
       const msg = error instanceof Error ? error.message : 'Erro desconhecido';
       logger.error('Error marking action taken:', { error: msg });
       toast({ title: 'Erro ao registrar ação', description: msg, variant: 'destructive' });
+      throw error;
     }
   }, [toast, queryClient, queryKey, user]);
 
@@ -368,6 +376,7 @@ export function useBehaviorAlerts() {
     alerts,
     stats,
     loading,
+    error: alertsError,
     fetchAlerts,
     detectNewAlerts,
     dismissAlert,

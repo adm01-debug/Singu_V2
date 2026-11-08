@@ -1,4 +1,4 @@
- 
+
  ## 📄 Documentação Estratégica
  - [Estratégia de UX e Navegação](docs/ux_improvement_strategy.md) - Guia completo de melhorias de interface e fluxos.
 # SINGU CRM
@@ -6,6 +6,11 @@
 > **Sistema de Inteligência Relacional** — CRM enterprise com módulos avançados de análise comportamental, PNL, neuromarketing e automação de relacionamento.
 
 ---
+
+## 🤖 Agentes de IA
+
+Estado real do sistema (código, banco e regras de negócio) é regerado sozinho a cada 10 minutos e
+publicado na branch `contexto`. Comece por [docs/agentes/contexto-ia.md](docs/agentes/contexto-ia.md).
 
 ## 📌 Sobre
 
@@ -76,7 +81,9 @@ npm run dev
 
  ## 📋 Auditoria Enterprise
 
- O sistema passa por processos rigorosos de auditoria técnica e funcional para garantir a excelência 10/10.
+ O sistema mantém auditorias técnicas versionadas. Selos históricos de “10/10” não
+ representam certificação contínua: o estado atual deve ser comprovado pelos gates
+ de CI e pelo relatório de auditoria mais recente.
 
  - **Relatório Completo (Markdown)**: [audit_report.md](./audit_report.md)
  - **Relatório Completo (PDF)**: [audit_report.pdf](./audit_report.pdf)
@@ -124,13 +131,13 @@ Decisões técnicas fundamentais estão documentadas em [ADRs](docs/adr/README.m
 
 ## 🔐 Segurança
 
-- **RLS** ativo em 100% das tabelas com políticas escopadas por `user_id`
+- **RLS** versionado nas migrations; cobertura e políticas do banco remoto devem ser validadas pelo gate `bash tests/rls/run.sh`
 - **RBAC** via tabela `user_roles` + função `has_role()` SECURITY DEFINER
-- **MFA** habilitado + verificação de senhas vazadas (HIBP)
+- **MFA/HIBP** dependem da configuração do projeto Supabase e não são inferidos pelo código
 - **Realtime** com políticas de canal escopadas por user ID
-- **CORS** restritivo (domínios `.lovable.app` autorizados)
+- **CORS** validado por allowlist e pelo checker automatizado de Edge Functions
 - **Headers de segurança**: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy
-- **Edge Functions**: JWT validado em código, webhooks com secret, cron com `CRON_SECRET`
+- **Edge Functions**: JWT nativo por padrão; funções públicas usam autenticação própria explícita
 - **Validação**: Zod schemas em Edge Functions e formulários frontend
 - **Sanitização**: DOMPurify + `encodeURIComponent` em inputs dinâmicos
 - **Circuit Breaker**: Proteção contra cascading failures em integrações externas
@@ -151,6 +158,30 @@ npm run test -- --coverage  # Com relatório de cobertura
 ```
 
 Cobertura inclui: lógica de negócio, validação de formulários, auditoria de filtros, integridade de dados, segurança, RLS, design system e voice AI.
+
+### Gate RLS com rollback
+
+`bash tests/rls/run.sh` usa as variáveis `PG*`, aplica apenas migrations posteriores
+ao ledger remoto e executa cada fixture dentro de uma transação revertida.
+Um advisory lock serializa os gates concorrentes. O preparo lexical mantém
+strings, comentários e blocos PL/pgSQL; remove apenas um wrapper transacional
+pareado. Migrations com outros controles de transação ou metacomandos psql
+são rejeitadas antes da execução.
+
+As fixtures aceitam `\echo`, `\set ON_ERROR_STOP on`, literais `test_*`,
+`\gset` com alias `rls_*`/`fixture_*` e condicionais `\if`/`\else`/`\endif`.
+Resultados de `\gset` recebem prefixo isolado para não alterar configurações
+do psql. `SKIP:` é reportado separadamente; qualquer falha retorna código não zero.
+Sem banco, valide o preparo com `node --test tests/rls/prepare-sql.node-test.mjs`.
+
+### Credencial dos scripts administrativos
+
+Os scripts `apply-*.js`, `chunk-apply.js`, `fix-enums.js`, `retry-failed.js` e `tmp_view_check.js`
+exigem `SUPABASE_ACCESS_TOKEN` pelo ambiente e encerram antes de qualquer requisição
+se a variável estiver ausente. Não inclua tokens em arquivos versionados.
+Tokens expostos em versões anteriores permanecem no histórico e precisam ser
+revogados em https://supabase.com/dashboard/account/tokens; remover do código
+atual não invalida uma credencial antiga.
 
 ## 🤝 Contribuindo
 

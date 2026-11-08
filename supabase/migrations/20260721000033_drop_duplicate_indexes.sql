@@ -37,10 +37,6 @@ DROP INDEX IF EXISTS public.idx_companies_razao_social_gin;
 -- Both search_vector GIN indexes are identical; shorter name kept
 DROP INDEX IF EXISTS public.idx_companies_search_vector;
 
--- ── compatibility_settings ───────────────────────────────────────────────────
--- Plain unique index (not a pg_constraint), duplicate of idx_compat_settings_user
-DROP INDEX IF EXISTS public.compatibility_settings_user_id_key;
-
 -- ── connector_log ────────────────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_connector_log_created_at;
 
@@ -84,13 +80,7 @@ DROP INDEX IF EXISTS public.idx_eq_analysis_history_contact_id;
 DROP INDEX IF EXISTS public.idx_eq_analysis_history_user_id;
 
 -- ── favorite_templates ───────────────────────────────────────────────────────
--- Plain unique index (not a pg_constraint), duplicate of idx_fav_templates_unique
-DROP INDEX IF EXISTS public.favorite_templates_user_id_template_id_key;
 DROP INDEX IF EXISTS public.idx_favorite_templates_user_id;
-
--- ── health_alert_settings ────────────────────────────────────────────────────
--- Plain unique index (not a pg_constraint), duplicate of idx_health_settings_user
-DROP INDEX IF EXISTS public.unique_user_health_settings;
 
 -- ── hidden_objections ────────────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_hidden_objections_contact;
@@ -116,10 +106,6 @@ DROP INDEX IF EXISTS public.idx_lead_score_history_company;
 DROP INDEX IF EXISTS public.idx_metaprogram_analysis_contact;
 DROP INDEX IF EXISTS public.idx_metaprogram_analysis_user;
 
--- ── nurturing_enrollments ────────────────────────────────────────────────────
--- Plain unique index; the real UNIQUE CONSTRAINT is uq_nurturing_enrollments_workflow_contact
-DROP INDEX IF EXISTS public.nurturing_enrollments_workflow_id_contact_id_key;
-
 -- ── offer_suggestions ────────────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_offer_suggestions_contact;
 
@@ -141,20 +127,12 @@ DROP INDEX IF EXISTS public.idx_search_products_cache_hash;
 -- ── seller_daily_metrics ─────────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_seller_metrics_user;
 
--- ── sequence_enrollments ─────────────────────────────────────────────────────
--- Plain unique index; the real UNIQUE CONSTRAINT is unique_enrollment
-DROP INDEX IF EXISTS public.sequence_enrollments_sequence_id_contact_id_key;
-
 -- ── sequence_steps ───────────────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_sequence_steps_seq;
 
 -- ── sms_campaign_recipients ──────────────────────────────────────────────────
 -- Identical btree (campaign_id, status); longer name dropped
 DROP INDEX IF EXISTS public.idx_sms_recipients_campaign;
-
--- ── sms_opt_outs ─────────────────────────────────────────────────────────────
--- Plain unique index (not a pg_constraint), duplicate of idx_sms_opt_outs_user_phone
-DROP INDEX IF EXISTS public.sms_opt_outs_user_id_phone_key;
 
 -- ── social_behavior_analysis ─────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_social_behavior_analysis_contact;
@@ -169,6 +147,30 @@ DROP INDEX IF EXISTS public.idx_tasks_due_date;
 DROP INDEX IF EXISTS public.idx_trigger_usage_history_contact_id;
 DROP INDEX IF EXISTS public.idx_trigger_usage_history_user_id;
 
--- ── weekly_report_settings ───────────────────────────────────────────────────
--- Plain unique index (not a pg_constraint); real constraint is weekly_report_settings_user_id_key
-DROP INDEX IF EXISTS public.unique_user_report_settings;
+DO $migration$
+DECLARE
+  index_name text;
+  index_oid regclass;
+BEGIN
+  FOREACH index_name IN ARRAY ARRAY[
+    'compatibility_settings_user_id_key',
+    'favorite_templates_user_id_template_id_key',
+    'unique_user_health_settings',
+    'nurturing_enrollments_workflow_id_contact_id_key',
+    'sequence_enrollments_sequence_id_contact_id_key',
+    'sms_opt_outs_user_id_phone_key',
+    'unique_user_report_settings'
+  ]
+  LOOP
+    index_oid := to_regclass(format('public.%I', index_name));
+
+    IF index_oid IS NOT NULL AND NOT EXISTS (
+      SELECT 1
+      FROM pg_constraint
+      WHERE conindid = index_oid
+    ) THEN
+      EXECUTE format('DROP INDEX public.%I', index_name);
+    END IF;
+  END LOOP;
+END;
+$migration$;

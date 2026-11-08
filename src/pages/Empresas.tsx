@@ -5,7 +5,7 @@ import { useSuccessCelebration } from '@/hooks/useSuccessCelebration';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { toast } from 'sonner';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { FloatingQuickActions } from '@/components/quick-actions/FloatingQuickActions';
 import { Header } from '@/components/layout/Header';
@@ -26,6 +26,7 @@ import { SavedViewsBar } from '@/components/views/SavedViewsBar';
 import { useSavedViews } from '@/hooks/useSavedViews';
 import { useActionToast } from '@/hooks/useActionToast';
 import { useRestoreEntity } from '@/hooks/useRestoreEntity';
+import { ErrorState } from '@/components/feedback/ErrorState';
 
 interface EmpresasViewState {
   localSearch: string;
@@ -41,14 +42,15 @@ const Empresas = () => {
   usePageTitle('Empresas');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { companies, loading, totalCount, searchTerm: activeSearch, setSearchTerm: triggerSearch, createCompany, updateCompany, deleteCompany, fetchNextPage, hasNextPage, isFetchingNextPage } = useCompanies();
+  const { pathname: ownPathname } = useLocation();
+  const { companies, loading, isFetching, error: queryError, fetchCompanies, totalCount, setSearchTerm: triggerSearch, createCompany, updateCompany, deleteCompany, fetchNextPage, hasNextPage, isFetchingNextPage } = useCompanies();
   const { destructive } = useActionToast();
   const { restore } = useRestoreEntity();
 
   const [secondaryReady, setSecondaryReady] = useState(false);
   useEffect(() => { if (!loading && companies.length > 0) { const t = setTimeout(() => setSecondaryReady(true), 800); return () => clearTimeout(t); } }, [loading, companies.length]);
 
-  const { contacts } = useContacts(undefined, { enabled: secondaryReady });
+  const { contacts } = useContacts(undefined, { enabled: secondaryReady, fetchAll: true });
   const { interactions } = useInteractions(undefined, undefined, { enabled: secondaryReady });
   const dynamicFilters = useCompanyFilterOptions({ enabled: secondaryReady });
 
@@ -93,8 +95,11 @@ const Empresas = () => {
       if (sortOrder !== 'desc') params.set('order', sortOrder);
     }
     if (gridColumns !== 3) params.set('cols', String(gridColumns));
+    // Não reescreve a URL se o usuário já saiu da página nem quando nada mudou.
+    if (window.location.pathname !== ownPathname) return;
+    if (params.toString() === new URLSearchParams(window.location.search).toString()) return;
     setSearchParams(params, { replace: true });
-  }, [localSearch, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
+  }, [ownPathname, localSearch, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const isSearching = localSearch.length > 0;
@@ -116,7 +121,7 @@ const Empresas = () => {
            if (!values.includes(String(companyValue ?? false))) { return false; }
            continue;
          }
-         
+
          if (key === 'vak_dominant' || key === 'motivation_direction' || key === 'working_style') {
            if (!companyValue || !values.includes(String(companyValue))) return false;
            continue;
@@ -130,7 +135,7 @@ const Empresas = () => {
       }
       return true;
     });
-    
+
     // Inject metrics into objects for sorting
     const enriched = result.map(c => ({
       ...c,
@@ -203,7 +208,7 @@ const Empresas = () => {
   return (
     <AppLayout>
       <SEOHead title="Empresas" description="Gestão de empresas e organizações" />
-       <Header title="Empresas" subtitle={totalCount ? `${filteredAndSortedCompanies.length} de ${totalCount} empresas` : `${filteredAndSortedCompanies.length} empresas`} showAddButton addButtonLabel="Nova Empresa" onAddClick={() => setIsFormOpen(true)} />
+       <Header title="Empresas" subtitle={queryError && companies.length === 0 ? 'Consulta indisponível' : totalCount ? `${filteredAndSortedCompanies.length} de ${totalCount} empresas` : `${filteredAndSortedCompanies.length} empresas`} showAddButton addButtonLabel="Nova Empresa" onAddClick={() => setIsFormOpen(true)} />
 
       <div className="px-4 md:px-6 -mt-2 mb-3">
         <EmpresasSavedViews
@@ -220,7 +225,16 @@ const Empresas = () => {
         />
       </div>
 
-      <EmpresasContent
+      {queryError && (
+        <ErrorState
+          title="Não foi possível carregar as empresas"
+          description={companies.length > 0 ? 'Os dados exibidos são da última consulta concluída. Tente atualizar novamente.' : 'A consulta falhou. Tente novamente para carregar suas empresas.'}
+          onRetry={() => { void fetchCompanies(); }}
+          isRetrying={isFetching}
+          secondaryAction={companies.length === 0 && isSearching ? { label: 'Limpar pesquisa', onClick: clearSearch } : undefined}
+        />
+      )}
+      {(!queryError || companies.length > 0) && <EmpresasContent
         companies={companies} loading={loading} filteredAndSortedCompanies={filteredAndSortedCompanies}
         localSearch={localSearch} onSearchChange={setLocalSearch} clearSearch={clearSearch} isSearching={isSearching}
         viewMode={viewMode} onViewModeChange={setViewMode} gridColumns={gridColumns} onGridColumnsChange={setGridColumns}
@@ -234,7 +248,7 @@ const Empresas = () => {
         updateCompany={updateCompany} companyMetrics={companyMetrics} selectedIndex={selectedIndex} triggerSearch={triggerSearch}
         fetchNextPage={fetchNextPage} hasNextPage={hasNextPage} isFetchingNextPage={isFetchingNextPage}
         totalCount={totalCount}
-      />
+      />}
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden"><CompanyForm onSubmit={handleCreate} onCancel={() => setIsFormOpen(false)} isSubmitting={isSubmitting} /></DialogContent>

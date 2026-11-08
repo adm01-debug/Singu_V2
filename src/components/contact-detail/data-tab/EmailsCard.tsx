@@ -15,13 +15,14 @@ import { useContactValidationStatus } from '@/hooks/useContactValidationStatus';
 import { useEmailVerifier } from '@/hooks/useEnrichmentSuite';
 import { EmailFinderDialog } from '@/components/enrichment/EmailFinderDialog';
 import { ShieldCheck } from 'lucide-react';
+import { Constants } from '@/integrations/supabase/types';
 
-const EMAIL_TYPES = ['pessoal', 'profissional', 'corporativo', 'outro'];
+const EMAIL_TYPES = Constants.public.Enums.email_type;
 
 function AddEmailDialog({ onAdd }: { onAdd: (data: Record<string, unknown>) => void }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
-    email: '', email_type: 'profissional', is_primary: false, contexto: '',
+    email: '', email_type: 'corporativo', is_primary: false, contexto: '',
   });
   // eslint-disable-next-line sonarjs/super-linear-regex -- regex verified non-catastrophic (no nested ambiguous quantifiers / bounded)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,7 +35,7 @@ function AddEmailDialog({ onAdd }: { onAdd: (data: Record<string, unknown>) => v
       email: form.email.trim(),
       contexto: form.contexto || undefined,
     });
-    setForm({ email: '', email_type: 'profissional', is_primary: false, contexto: '' });
+    setForm({ email: '', email_type: 'corporativo', is_primary: false, contexto: '' });
     setOpen(false);
   };
 

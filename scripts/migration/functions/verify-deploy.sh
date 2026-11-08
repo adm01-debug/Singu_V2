@@ -5,19 +5,22 @@
 # Faz:
 #   1. Lista funções remotas via `supabase functions list`.
 #   2. Diff contra o set local (supabase/functions/*).
-#   3. curl -I nos endpoints de health públicos.
+#   3. Confere HTTP e JSON dos endpoints de health autenticados.
 #   4. Alerta se cron.job tem URLs apontando para o project-ref ANTIGO.
 #
 # Uso:
 #   ./verify-deploy.sh --project-ref <novo-ref> [--old-ref <ref-antigo>]
 #   (ou exporte DEST_REF e OLD_REF)
+#   HEALTH_JWT e SUPABASE_ANON_KEY autenticam os health checks administrativos.
 # =============================================================================
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 FUNCTIONS_DIR="$REPO_ROOT/supabase/functions"
-REMOTE_LIST="$SCRIPT_DIR/remote-functions.txt"
+REMOTE_LIST="$(mktemp)"
+HEALTH_BODY="$(mktemp)"
+trap 'rm -f "$REMOTE_LIST" "$HEALTH_BODY"' EXIT
 
 PROJECT_REF="${DEST_REF:-}"
 OLD_REF="${OLD_REF:-}"
@@ -44,30 +47,61 @@ mapfile -t LOCAL < <(
 )
 echo "Locais: ${#LOCAL[@]}"
 
-supabase functions list --project-ref "$PROJECT_REF" > "$REMOTE_LIST" 2>/dev/null || {
-  echo "AVISO: não consegui listar funções remotas (CLI antiga?)."
+supabase functions list --project-ref "$PROJECT_REF" --output json > "$REMOTE_LIST" || {
+  echo "ERRO: não consegui listar funções remotas." >&2
+  exit 1
 }
 
-if [[ -s "$REMOTE_LIST" ]]; then
-  mapfile -t REMOTE < <(awk 'NR>1 {for(i=1;i<=NF;i++) if ($i ~ /^[a-z][a-z0-9-]+$/) {print $i; next}}' "$REMOTE_LIST" | sort -u)
-  echo "Remotos: ${#REMOTE[@]}"
-  echo
-  echo "-- Locais faltando no remoto --"
-  comm -23 <(printf '%s\n' "${LOCAL[@]}") <(printf '%s\n' "${REMOTE[@]}") || true
-  echo "-- Remotos que nao estao no repo --"
-  comm -13 <(printf '%s\n' "${LOCAL[@]}") <(printf '%s\n' "${REMOTE[@]}") || true
+REMOTE_SLUGS="$(node --input-type=module -e '
+  import { readFileSync } from "node:fs";
+  const rows = JSON.parse(readFileSync(process.argv[1], "utf8"));
+  if (!Array.isArray(rows) || rows.length === 0 || rows.some(row =>
+    !row || typeof row.slug !== "string" || !/^[a-z][a-z0-9-]*$/.test(row.slug) || typeof row.status !== "string"
+  )) process.exit(1);
+  console.log([...new Set(rows.filter(row => row.status === "ACTIVE").map(row => row.slug))].sort().join("\n"));
+' "$REMOTE_LIST")" || { echo "ERRO: inventário remoto inválido." >&2; exit 1; }
+mapfile -t REMOTE <<< "$REMOTE_SLUGS"
+echo "Remotos ativos: ${#REMOTE[@]}"
+echo
+echo "-- Locais faltando no remoto --"
+MISSING="$(comm -23 <(printf '%s\n' "${LOCAL[@]}") <(printf '%s\n' "${REMOTE[@]}"))"
+if [[ -n "$MISSING" ]]; then
+  printf '%s\n' "$MISSING"
+  echo "ERRO: há funções locais ausentes ou inativas no destino." >&2
+  exit 1
 fi
+echo "-- Remotos que nao estao no repo --"
+comm -13 <(printf '%s\n' "${LOCAL[@]}") <(printf '%s\n' "${REMOTE[@]}")
 
 echo
 echo "== 2. Health endpoints =="
 HEALTH_FNS=(health system-health voice-ai-health email-pipeline-health)
+# fetchAPI permite 30s por consulta; o fallback de email pode consumir outros 30s.
+HEALTH_TIMEOUT_SECONDS=75
+CURL_AUTH=()
+if [[ -n "${HEALTH_JWT:-}" ]]; then CURL_AUTH+=(-H "Authorization: Bearer $HEALTH_JWT"); fi
+if [[ -n "${SUPABASE_ANON_KEY:-}" ]]; then CURL_AUTH+=(-H "apikey: $SUPABASE_ANON_KEY"); fi
+FALHAS=0
 for fn in "${HEALTH_FNS[@]}"; do
   url="$BASE_URL/$fn"
-  code="$(curl -s -o /dev/null -w '%{http_code}' -I "$url" || echo '000')"
+  if ! code="$(curl -sS --max-time "$HEALTH_TIMEOUT_SECONDS" "${CURL_AUTH[@]}" -o "$HEALTH_BODY" -w '%{http_code}' "$url")"; then
+    echo "ERRO: não consegui consultar $fn." >&2
+    FALHAS=$((FALHAS + 1))
+    continue
+  fi
   case "$code" in
-    200|401) echo "  ok $fn  -> HTTP $code" ;;
-    404)     echo "  !! $fn  -> HTTP 404 (nao deployada?)" ;;
-    *)       echo "  ?  $fn  -> HTTP $code" ;;
+    200)
+      if node --input-type=module -e '
+        import { readFileSync } from "node:fs";
+        try { process.exit(JSON.parse(readFileSync(process.argv[1], "utf8"))?.status === "healthy" ? 0 : 1); }
+        catch { process.exit(1); }
+      ' "$HEALTH_BODY"; then
+        echo "  ok $fn -> HTTP 200, healthy"
+      else
+        echo "ERRO: $fn -> HTTP 200 sem JSON de saúde healthy." >&2
+        FALHAS=$((FALHAS + 1))
+      fi ;;
+    *) echo "ERRO: $fn -> HTTP $code; saúde não confirmada." >&2; FALHAS=$((FALHAS + 1)) ;;
   esac
 done
 
@@ -89,4 +123,8 @@ else
 fi
 
 echo
-echo "OK - revise itens marcados com !! ou ?."
+if [[ "$FALHAS" -gt 0 ]]; then
+  echo "ERRO: $FALHAS endpoint(s) sem confirmação de saúde." >&2
+  exit 1
+fi
+echo "OK - inventário ativo e health checks verificados; revise os agendamentos no banco."

@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { requireWebhookSecret, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -91,7 +92,7 @@ Deno.serve(async (req) => {
         .select('entity_type, entity_id, user_id')
         .eq('id', luxRecordId)
         .single();
-      luxRecord = data as typeof luxRecord;
+      luxRecord = data;
     }
 
     // If there are entity updates, apply them — only allowed columns to prevent arbitrary writes
@@ -126,8 +127,7 @@ Deno.serve(async (req) => {
         phone: stakeholder.phone ? String(stakeholder.phone).slice(0, 50) : null,
         linkedin: stakeholder.linkedin ? String(stakeholder.linkedin).slice(0, 500) : null,
       }));
-      supabase.from('contacts').insert(contactRows)
-        .catch((e: unknown) => console.error('Error creating stakeholder contacts:', e));
+      await bestEffortWrite(supabase.from('contacts').insert(contactRows), 'Error creating stakeholder contacts:');
     }
 
     console.log(`Lux record ${luxRecordId} updated successfully`);

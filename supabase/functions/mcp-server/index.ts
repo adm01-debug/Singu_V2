@@ -1,4 +1,5 @@
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
@@ -34,7 +35,7 @@ const TOOLS = [
   { name: "get_pipeline_summary", description: "Resumo do pipeline (count e valor por estágio)", inputSchema: { type: "object", properties: {} } },
 ];
 
-type Admin = ReturnType<typeof createClient>;
+type Admin = SupabaseClient;
 
 async function callTool(name: string, args: Record<string, unknown>, admin: Admin, ownerUserId: string) {
   const limit = Math.min(Number(args.limit ?? 10), 100);
@@ -211,23 +212,23 @@ Deno.serve(async (req) => {
         const startedAt = Date.now();
         try {
           result = await callTool(callParsed.data.name, callParsed.data.arguments, admin, conn.created_by);
-          admin.from("mcp_tool_calls").insert({
+          await bestEffortWrite(admin.from("mcp_tool_calls").insert({
             connection_id: conn.id,
             tool_name: callParsed.data.name,
             arguments_summary: { keys: Object.keys(callParsed.data.arguments) },
             status: "success",
             latency_ms: Date.now() - startedAt,
-          }).catch((e: unknown) => console.error("mcp_tool_calls insert error:", e));
+          }), "mcp_tool_calls insert error:");
         } catch (toolErr) {
           const message = toolErr instanceof Error ? toolErr.message : "Erro";
-          admin.from("mcp_tool_calls").insert({
+          await bestEffortWrite(admin.from("mcp_tool_calls").insert({
             connection_id: conn.id,
             tool_name: callParsed.data.name,
             arguments_summary: { keys: Object.keys(callParsed.data.arguments) },
             status: "error",
             error_message: message.slice(0, 500),
             latency_ms: Date.now() - startedAt,
-          }).catch((e: unknown) => console.error("mcp_tool_calls error insert error:", e));
+          }), "mcp_tool_calls error insert error:");
           throw toolErr;
         }
         break;

@@ -1,4 +1,7 @@
 # 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM
+> **Documento histórico.** O score abaixo não deve ser usado como certificação
+> vigente sem reproduzir os gates de CI e validar o ambiente remoto.
+
 > **Versão:** 2.0 (Full Inventory & Compliance)
 > **Data:** 14 de Maio de 2026
 > **Status:** 10/10 (Excelência Técnica)

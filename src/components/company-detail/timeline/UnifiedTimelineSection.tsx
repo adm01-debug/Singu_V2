@@ -65,7 +65,7 @@
         const matchesPerson = filterPerson === 'all' || item.contact_name === filterPerson;
         
         const matchesDate = !date || 
-          format(new Date(item.data_interacao), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
+          (item.data_interacao && format(new Date(item.data_interacao), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
   
         return matchesSearch && matchesType && matchesPerson && matchesDate;
       });
@@ -193,7 +193,7 @@
                            )}
                          </div>
                          <span className="text-[10px] text-muted-foreground tabular-nums">
-                           {format(new Date(item.data_interacao), "dd/MM HH:mm", { locale: ptBR })}
+                           {item.data_interacao ? format(new Date(item.data_interacao), "dd/MM HH:mm", { locale: ptBR }) : 'Data indisponível'}
                          </span>
                        </div>
                        

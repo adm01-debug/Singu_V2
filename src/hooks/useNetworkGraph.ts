@@ -70,7 +70,7 @@ export function useNetworkGraph() {
         { data: contacts, error: contactsError },
         { data: interactions, error: interactionsError },
       ] = await Promise.all([
-        supabase.from('companies').select('id, name, industry, logo_url').eq('user_id', user.id).limit(3000),
+        supabase.from('companies').select('id, nome_crm, industry, logo_url').eq('user_id', user.id).limit(3000),
         supabase.from('contacts').select('id, first_name, last_name, company_id, relationship_score, role, avatar_url').eq('user_id', user.id).limit(5000),
         supabase.from('interactions').select('id, contact_id, company_id, created_at').eq('user_id', user.id).limit(5000),
       ]);
@@ -104,7 +104,7 @@ export function useNetworkGraph() {
       companies?.forEach(company => {
         nodes.push({
           id: `company-${company.id}`,
-          name: company.name,
+          name: company.nome_crm,
           type: 'company',
           val: 15,
           color: NODE_COLORS.company,

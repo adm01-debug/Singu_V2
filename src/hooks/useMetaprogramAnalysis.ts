@@ -71,8 +71,7 @@ export function useMetaprogramAnalysis() {
           procedures_score: analysisResult.scores.procedures,
           options_words: analysisResult.detectedWords.options,
           procedures_words: analysisResult.detectedWords.procedures,
-          analyzed_text: analyzedText.substring(0, 1000),
-          is_validated: false
+          analyzed_text: analyzedText.substring(0, 1000)
         })
         .select()
         .maybeSingle();
@@ -83,7 +82,7 @@ export function useMetaprogramAnalysis() {
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Error saving metaprogram analysis:', { error: msg });
-      return null;
+      throw error;
     }
   }, [user]);
 

@@ -50,20 +50,10 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
   const handleExportPDF = async () => {
     setIsExportingPDF(true);
     try {
-      // Note: Real PDF generation usually requires an edge function or library like jspdf/pdfmake.
-      // For this 10/10 implementation, we simulate the request to the report engine.
-      toast.info('Gerando relatório consolidado com insights e recomendações...');
-      
-      // Simulate delay for AI engine processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // For now, we'll use the browser print functionality as a high-fidelity fallback
-      // or provide a placeholder for the specialized edge function
+      toast.info('Abrindo a impressão do relatório...');
       window.print();
-      
-      toast.success('Relatório PDF pronto para download/impressão');
     } catch (err) {
-      toast.error('Erro ao gerar PDF: ' + parseApiError(err));
+      toast.error('Erro ao abrir a impressão: ' + parseApiError(err));
     } finally {
       setIsExportingPDF(false);
     }
@@ -81,9 +71,9 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
         </div>
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-3">
-        <Button 
-          variant="outline" 
-          size="sm" 
+        <Button
+          variant="outline"
+          size="sm"
           className="h-9 gap-2 text-xs"
           onClick={handleExportCSV}
           disabled={isExportingCSV}
@@ -91,9 +81,9 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
           {isExportingCSV ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <FileSpreadsheet className="h-3.5 w-3.5" />}
           Exportar CSV
         </Button>
-        <Button 
-          variant="default" 
-          size="sm" 
+        <Button
+          variant="default"
+          size="sm"
           className="h-9 gap-2 text-xs"
           onClick={handleExportPDF}
           disabled={isExportingPDF}
@@ -101,7 +91,7 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
           {isExportingPDF ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
           Exportar PDF
         </Button>
-        
+
         <div className="col-span-2 mt-2 pt-2 border-t border-primary/10 flex items-start gap-2">
           <Sparkles className="h-3 w-3 text-primary mt-0.5" />
           <p className="text-[10px] text-muted-foreground leading-relaxed">

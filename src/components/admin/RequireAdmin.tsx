@@ -39,8 +39,8 @@ export function RequireAdmin({ children }: RequireAdminProps) {
     queryKey: ["mfa-enrolled", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.auth.mfa.listFactors();
-      if (error) return true; // fail-open: não mostrar banner em caso de erro
-      return (data?.totp?.length ?? 0) > 0 || (data?.all?.length ?? 0) > 0;
+      if (error) throw error;
+      return data.all.some(factor => factor.status === 'verified');
     },
     enabled: !!user && !!isAdmin,
     staleTime: 10 * 60 * 1000,
@@ -57,7 +57,7 @@ export function RequireAdmin({ children }: RequireAdminProps) {
           <AlertTitle>MFA não configurado</AlertTitle>
           <AlertDescription>
             Como administrador, você deve ativar autenticação em duas etapas.{" "}
-            <Link to="/configuracoes/seguranca" className="underline font-medium">
+            <Link to="/seguranca" className="underline font-medium">
               Configurar agora
             </Link>
           </AlertDescription>

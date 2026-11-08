@@ -5,7 +5,21 @@
  *   deno test supabase/functions/_shared/auth_test.ts
  */
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { timingSafeStringEqual } from "./auth.ts";
+import { assertInstanceOf } from "https://deno.land/std@0.224.0/assert/assert_instance_of.ts";
+import {
+  isServiceRoleCaller,
+  guardBody,
+  jsonOk,
+  jsonError,
+  scopedCorsHeaders,
+  timingSafeStringEqual,
+  withAuthOrServiceRole,
+} from "./auth.ts";
+
+function restoreEnv(name: string, value: string | undefined): void {
+  if (value === undefined) Deno.env.delete(name);
+  else Deno.env.set(name, value);
+}
 
 // ─── Correctness tests ────────────────────────────────────────────────────────
 
@@ -49,7 +63,6 @@ Deno.test("timingSafeStringEqual: string with trailing null bytes vs shorter str
 });
 
 Deno.test("timingSafeStringEqual: long realistic secret strings match → true", async () => {
-  // eslint-disable-next-line sonarjs/no-hardcoded-secrets -- test fixture, not a real secret
   const secret = "sk_live_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGH";
   const matchResult = await timingSafeStringEqual(secret, secret);
   assertEquals(matchResult, true);
@@ -103,4 +116,107 @@ Deno.test("timingSafeStringEqual: empty string vs single NUL byte → false", as
 
 Deno.test("timingSafeStringEqual: two NUL strings of different length → false", async () => {
   assertEquals(await timingSafeStringEqual("\x00", "\x00\x00"), false);
+});
+
+Deno.test("withAuthOrServiceRole: aceita somente o segredo service_role exato", async () => {
+  const previous = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "service-role-test-key");
+  try {
+    const req = new Request("https://example.test", {
+      method: "POST",
+      headers: { Authorization: "Bearer service-role-test-key" },
+    });
+    const result = await withAuthOrServiceRole(req);
+    assertEquals(typeof result, "string");
+    assertEquals(isServiceRoleCaller(result as string), true);
+  } finally {
+    if (previous === undefined) Deno.env.delete("SUPABASE_SERVICE_ROLE_KEY");
+    else Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", previous);
+  }
+});
+
+Deno.test("withAuthOrServiceRole: rejeita JWT forjado com claim service_role", async () => {
+  const previous = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "service-role-test-key");
+  try {
+    const payload = btoa(JSON.stringify({ role: "service_role" }))
+      .replaceAll("+", "-")
+      .replaceAll("/", "_")
+      .replaceAll("=", "");
+    const req = new Request("https://example.test", {
+      method: "POST",
+      headers: { Authorization: `Bearer e30.${payload}.assinatura-forjada` },
+    });
+    const result = await withAuthOrServiceRole(req);
+    assertInstanceOf(result, Response);
+    assertEquals(result.status, 401);
+  } finally {
+    if (previous === undefined) Deno.env.delete("SUPABASE_SERVICE_ROLE_KEY");
+    else Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", previous);
+  }
+});
+
+Deno.test("withAuthOrServiceRole: rejeita JWT expirado", async () => {
+  const previousUrl = Deno.env.get("SUPABASE_URL");
+  const previousAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
+  const previousServiceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  try {
+    Deno.env.set("SUPABASE_URL", "https://invalid.test");
+    Deno.env.set("SUPABASE_ANON_KEY", "anon-key-for-test");
+    Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "service-role-for-test");
+    const payload = btoa(JSON.stringify({ sub: "user-1", exp: 1 }));
+    const request = new Request("https://example.test", {
+      headers: { Authorization: `Bearer header.${payload}.signature` },
+    });
+    const result = await withAuthOrServiceRole(request);
+    assertInstanceOf(result, Response);
+    assertEquals(result.status, 401);
+  } finally {
+    restoreEnv("SUPABASE_URL", previousUrl);
+    restoreEnv("SUPABASE_ANON_KEY", previousAnonKey);
+    restoreEnv("SUPABASE_SERVICE_ROLE_KEY", previousServiceRole);
+  }
+});
+
+Deno.test("scopedCorsHeaders: autoriza os headers assinados de webhook", () => {
+  const headers = scopedCorsHeaders(new Request("https://example.test"));
+  const allowedHeaders = headers["Access-Control-Allow-Headers"];
+
+  assertEquals(allowedHeaders.includes("x-lovable-timestamp"), true);
+  assertEquals(allowedHeaders.includes("x-webhook-idempotency-key"), true);
+  assertEquals(allowedHeaders.includes("x-lovable-signature"), true);
+});
+
+Deno.test("scopedCorsHeaders: permite o site canônico e seus previews, sem aceitar domínios alheios", () => {
+  for (const origin of [
+    "https://singu-v2.vercel.app",
+    "https://singu-v2-git-fix-hermes-h761328-ux-navegacao-juca1.vercel.app",
+    "https://singu-v2-75ystiviarfvmcg-vk-juca1.vercel.app",
+    "http://localhost:8080",
+  ]) {
+    const headers = scopedCorsHeaders(new Request("https://example.test", { headers: { Origin: origin } }));
+    assertEquals(headers["Access-Control-Allow-Origin"], origin);
+  }
+
+  for (const origin of [
+    "http://127.0.0.1:8080",
+    "https://singu-v2.vercel.app.evil.test",
+    "https://outro-projeto-juca1.vercel.app",
+    "https://singu-v2-git-hack-juca1.vercel.app.evil.test",
+  ]) {
+    const headers = scopedCorsHeaders(new Request("https://example.test", { headers: { Origin: origin } }));
+    assertEquals(headers["Access-Control-Allow-Origin"], "https://dialogue-diamond.lovable.app");
+  }
+});
+
+Deno.test("respostas JSON e validação do corpo preservam a origem da requisição", async () => {
+  for (const origin of ["https://singu-v2.vercel.app", "https://dialogue-diamond.lovable.app", "http://localhost:8080"]) {
+    const req = new Request("https://example.test", { method: "POST", headers: { Origin: origin }, body: "invalid-json" });
+    assertEquals(jsonOk({ ok: true }, req).headers.get("Access-Control-Allow-Origin"), origin);
+    assertEquals(jsonError("bad request", 400, req).headers.get("Access-Control-Allow-Origin"), origin);
+    const result = await guardBody(req);
+    assertInstanceOf(result.error, Response);
+    assertEquals(result.error.headers.get("Access-Control-Allow-Origin"), origin);
+  }
+  assertEquals(jsonOk({ ok: true }).headers.get("Access-Control-Allow-Origin"), "https://dialogue-diamond.lovable.app");
 });

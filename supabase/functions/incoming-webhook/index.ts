@@ -1,9 +1,12 @@
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
-import { guardBody, scopedCorsHeaders } from "../_shared/auth.ts";
-
+import { scopedCorsHeaders } from "../_shared/auth.ts";
+import {
+  isValidIdempotencyKey,
+  verifyWebhookHmac,
+} from "../_shared/webhook-signature.ts";
 
 const limiter = rateLimit({
   windowMs: 60_000,
@@ -16,40 +19,76 @@ const PayloadSchema = z.record(z.unknown()).refine(
   { message: "Payload excede 256KB" },
 );
 
-async function verifyHmac(
+async function releaseNonce(
+  operation: PromiseLike<{ error: { message: string } | null }>,
+  log: { error: (event: string, context: Record<string, unknown>) => void },
+): Promise<void> {
+  const { error } = await operation;
+  if (error) log.error("idempotency_release_failed", { error: error.message });
+}
+
+async function isAdminReplay(req: Request, admin: SupabaseClient): Promise<boolean> {
+  const authHeader = req.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) return false;
+
+  const { data: userData, error: userError } = await admin.auth.getUser(
+    authHeader.slice("Bearer ".length),
+  );
+  if (userError || !userData.user) return false;
+
+  const { data: hasAdminRole, error: roleError } = await admin.rpc("has_role", {
+    _user_id: userData.user.id,
+    _role: "admin",
+  });
+  return !roleError && hasAdminRole === true;
+}
+
+interface SignatureContext {
+  timestampMs: number;
+  idempotencyKey: string;
+}
+
+async function resolveSignatureContext(
+  req: Request,
+  adminReplay: boolean,
   secret: string,
-  timestamp: string,
   rawBody: string,
-  signature: string,
-): Promise<boolean> {
-  try {
-    const enc = new TextEncoder();
-    const key = await crypto.subtle.importKey(
-      "raw",
-      enc.encode(secret),
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["sign"],
-    );
-    const sig = await crypto.subtle.sign("HMAC", key, enc.encode(`${timestamp}.${rawBody}`));
-    const hex = Array.from(new Uint8Array(sig))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-    const expected = `sha256=${hex}`;
-    if (expected.length !== signature.length) return false;
-    let diff = 0;
-    for (let i = 0; i < expected.length; i++) {
-      diff |= expected.charCodeAt(i) ^ signature.charCodeAt(i);
-    }
-    return diff === 0;
-  } catch {
-    return false;
-  }
+  windowMs: number,
+): Promise<SignatureContext | null> {
+  const signature = adminReplay ? "" : req.headers.get("x-lovable-signature") ?? "";
+  const timestamp = adminReplay
+    ? Date.now().toString()
+    : req.headers.get("x-lovable-timestamp") ?? "";
+  const idempotencyKey = adminReplay
+    ? `admin-replay-${crypto.randomUUID()}`
+    : req.headers.get("x-webhook-idempotency-key") ?? "";
+  const timestampMs = Number(timestamp);
+
+  if (
+    (!adminReplay && !signature) ||
+    !timestamp ||
+    !isValidIdempotencyKey(idempotencyKey) ||
+    !Number.isFinite(timestampMs) ||
+    Math.abs(Date.now() - timestampMs) > windowMs
+  ) return null;
+
+  if (
+    !adminReplay &&
+    !await verifyWebhookHmac(secret, timestamp, idempotencyKey, rawBody, signature)
+  ) return null;
+
+  return { timestampMs, idempotencyKey };
 }
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Método não permitido" }), {
+      status: 405,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
   const t0 = Date.now();
 
   const traceId = extractTraceId(req);
@@ -71,14 +110,43 @@ Deno.serve(async (req) => {
   const headerToken = req.headers.get("x-webhook-token");
   const token = pathToken && pathToken !== "incoming-webhook" ? pathToken : headerToken;
   const dryRun = url.searchParams.get("dry_run") === "true";
+  const adminReplay = url.searchParams.get("admin_replay") === "true";
 
   const admin = createClient(
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
-  const { body: rawBody, error: bodyError } = await guardBody(req, 512 * 1024);
-  if (bodyError) return bodyError;
+  if (adminReplay && !await isAdminReplay(req, admin)) {
+    return new Response(JSON.stringify({ error: "Replay restrito a administradores" }), {
+      status: 403,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
+  const contentLength = Number(req.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > 512 * 1024) {
+    return new Response(JSON.stringify({ error: "Payload excede 512KB" }), {
+      status: 413,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+  const rawBodyText = await req.text();
+  if (new TextEncoder().encode(rawBodyText).byteLength > 512 * 1024) {
+    return new Response(JSON.stringify({ error: "Payload excede 512KB" }), {
+      status: 413,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+  let rawBody: unknown;
+  try {
+    rawBody = JSON.parse(rawBodyText);
+  } catch {
+    return new Response(JSON.stringify({ error: "JSON inválido" }), {
+      status: 400,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
 
   const parsed = PayloadSchema.safeParse(rawBody);
   if (!parsed.success) {
@@ -110,45 +178,42 @@ Deno.serve(async (req) => {
     });
   }
 
-  // Verificação HMAC + anti-replay
-  if (webhook.require_signature) {
-    const sig = req.headers.get("x-lovable-signature") ?? "";
-    const ts = req.headers.get("x-lovable-timestamp") ?? "";
-    const tsNum = Number(ts);
-    const window = (webhook.replay_window_seconds ?? 300) * 1000;
-    if (!sig || !ts || !Number.isFinite(tsNum) || Math.abs(Date.now() - tsNum) > window) {
-      return new Response(JSON.stringify({ error: "Timestamp ausente ou expirado" }), {
-        status: 401,
-        headers: { ...cors, "Content-Type": "application/json" },
-      });
-    }
-    const ok = webhook.webhook_secret
-      ? await verifyHmac(webhook.webhook_secret, ts, JSON.stringify(rawBody ?? {}), sig)
-      : false;
-    if (!ok) {
-      await admin.from("incoming_webhook_logs").insert({
-        webhook_id: webhook.id,
-        status: "error",
-        http_status: 401,
-        payload,
-        error_message: "Assinatura HMAC inválida",
-        source_ip: sourceIp,
-        user_agent: userAgent,
-        latency_ms: Date.now() - t0,
-      });
-      return new Response(JSON.stringify({ error: "Assinatura inválida" }), {
-        status: 401,
-        headers: { ...cors, "Content-Type": "application/json" },
-      });
-    }
+  if (!webhook.require_signature || !webhook.webhook_secret) {
+    return new Response(JSON.stringify({ error: "Webhook desativado até configurar assinatura HMAC" }), {
+      status: 503,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
   }
 
-  // Origem (opcional)
-  if (webhook.allowed_origins?.length) {
+  const window = (webhook.replay_window_seconds ?? 300) * 1000;
+  const signatureContext = await resolveSignatureContext(
+    req,
+    adminReplay,
+    webhook.webhook_secret,
+    rawBodyText,
+    window,
+  );
+  if (!signatureContext) {
+    await admin.from("incoming_webhook_logs").insert({
+      webhook_id: webhook.id,
+      status: "error",
+      http_status: 401,
+      payload,
+      error_message: "Assinatura HMAC inválida",
+      source_ip: sourceIp,
+      user_agent: userAgent,
+      latency_ms: Date.now() - t0,
+    });
+    return new Response(JSON.stringify({ error: "Headers ou assinatura inválidos" }), {
+      status: 401,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+  const { timestampMs: tsNum, idempotencyKey } = signatureContext;
+
+  if (!adminReplay && webhook.allowed_origins?.length) {
     const origin = req.headers.get("origin") ?? "";
-    // Exact-match only — substring matching (includes) would allow evil-trusted.com to
-    // bypass a whitelist entry of trusted.com.
-    const ok = webhook.allowed_origins.some((o: string) => origin === o);
+    const ok = webhook.allowed_origins.some((allowedOrigin: string) => origin === allowedOrigin);
     if (!ok) {
       await admin.from("incoming_webhook_logs").insert({
         webhook_id: webhook.id,
@@ -167,6 +232,39 @@ Deno.serve(async (req) => {
     }
   }
 
+  const { error: cleanupError } = await admin
+    .from("incoming_webhook_nonces")
+    .delete()
+    .eq("webhook_id", webhook.id)
+    .lt("expires_at", new Date().toISOString());
+  if (cleanupError) {
+    log.error("idempotency_cleanup_failed", { error: cleanupError.message });
+    return new Response(JSON.stringify({ error: "Falha ao limpar idempotência" }), {
+      status: 500,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
+  const expiresAt = new Date(tsNum + window).toISOString();
+  const { error: nonceError } = await admin.from("incoming_webhook_nonces").insert({
+    webhook_id: webhook.id,
+    idempotency_key: idempotencyKey,
+    expires_at: expiresAt,
+  });
+  if (nonceError) {
+    if (nonceError.code !== "23505") {
+      log.error("idempotency_store_failed", { error: nonceError.message });
+      return new Response(JSON.stringify({ error: "Falha ao registrar idempotência" }), {
+        status: 500,
+        headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
+    return new Response(JSON.stringify({ error: "Requisição duplicada" }), {
+      status: 409,
+      headers: { ...cors, "Content-Type": "application/json" },
+    });
+  }
+
   // Quotas mensais
   if (!dryRun) {
     const { data: quota } = await admin.rpc("increment_webhook_quota", {
@@ -174,6 +272,14 @@ Deno.serve(async (req) => {
     });
     const q = quota as { exceeded?: boolean; overage_blocked?: boolean } | null;
     if (q?.exceeded && q?.overage_blocked) {
+      await releaseNonce(
+        admin
+          .from("incoming_webhook_nonces")
+          .delete()
+          .eq("webhook_id", webhook.id)
+          .eq("idempotency_key", idempotencyKey),
+        log,
+      );
       await admin.from("incoming_webhook_logs").insert({
         webhook_id: webhook.id,
         status: "error",
@@ -214,6 +320,7 @@ Deno.serve(async (req) => {
   let insertResult: unknown = null;
   let httpStatus = 200;
   let errorMessage: string | null = null;
+  let queueMessage: string | null = null;
 
   if (dryRun) {
     insertResult = { dry_run: true, mapped_row: finalRow, target_table: targetTable };
@@ -222,9 +329,7 @@ Deno.serve(async (req) => {
     const { data, error } = await admin.from(targetTable).insert(row).select().maybeSingle();
     if (error) {
       console.error("incoming-webhook insert error:", error);
-      httpStatus = 500;
-      errorMessage = "Falha ao processar webhook";
-      await admin.from("incoming_webhook_dlq").insert({
+      const { error: dlqError } = await admin.from("incoming_webhook_dlq").insert({
         webhook_id: webhook.id,
         payload,
         source_ip: sourceIp,
@@ -232,23 +337,41 @@ Deno.serve(async (req) => {
         last_error: error.message,
         next_retry_at: new Date(Date.now() + 2 * 60_000).toISOString(),
       });
+      if (dlqError) {
+        await releaseNonce(
+          admin
+            .from("incoming_webhook_nonces")
+            .delete()
+            .eq("webhook_id", webhook.id)
+            .eq("idempotency_key", idempotencyKey),
+          log,
+        );
+        httpStatus = 500;
+        errorMessage = "Falha ao processar webhook";
+      } else {
+        httpStatus = 202;
+        queueMessage = "Webhook aceito e enfileirado para nova tentativa";
+        insertResult = { queued: true };
+      }
     } else insertResult = data;
   } else {
     insertResult = { received: true, payload: finalRow };
   }
 
   // Flush stats update and audit log in parallel (both independent)
+  const queued = httpStatus === 202;
+  const failed = httpStatus >= 400;
   await Promise.all([
     dryRun
       ? Promise.resolve()
       : admin.from("incoming_webhooks").update({
           total_calls: (webhook.total_calls ?? 0) + 1,
-          total_errors: (webhook.total_errors ?? 0) + (errorMessage ? 1 : 0),
+          total_errors: (webhook.total_errors ?? 0) + (failed ? 1 : 0),
           last_called_at: new Date().toISOString(),
         }).eq("id", webhook.id),
     admin.from("incoming_webhook_logs").insert({
       webhook_id: webhook.id,
-      status: errorMessage ? "error" : "success",
+      status: queued ? "queued" : failed ? "error" : "success",
       http_status: httpStatus,
       payload,
       response: insertResult,
@@ -261,9 +384,11 @@ Deno.serve(async (req) => {
 
   return new Response(
     JSON.stringify({
-      success: !errorMessage,
+      success: !failed,
+      queued,
       data: insertResult,
       error: errorMessage,
+      message: queueMessage,
       dry_run: dryRun,
     }),
     {

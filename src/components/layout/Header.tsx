@@ -1,6 +1,6 @@
 import { forwardRef, memo } from 'react';
-import { Plus, Search, ChevronLeft } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Plus, Search } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { BackButton } from '@/components/navigation/BackButton';
@@ -9,6 +9,7 @@ import { SmartNotificationsBell } from '@/components/notifications/SmartNotifica
 import { GlobalDensityToggle } from '@/components/ui/global-density-toggle';
 import { SystemStatusBadge } from '@/components/ui/SystemStatusBadge';
 import { Input } from '@/components/ui/input';
+import { getSectionFallback } from '@/lib/navigationLabels';
 
 interface HeaderProps {
   title: string;
@@ -20,23 +21,10 @@ interface HeaderProps {
   backTo?: string;
   hideBack?: boolean;
   showSearch?: boolean;
+  searchValue?: string;
   onSearchChange?: (val: string) => void;
   className?: string;
 }
-
-const PARENT_ROUTES: Record<string, string> = {
-  '/contatos': '/',
-  '/empresas': '/',
-  '/interacoes': '/',
-  '/analytics': '/',
-  '/insights': '/',
-  '/calendario': '/',
-  '/notificacoes': '/',
-  '/network': '/',
-  '/automacoes': '/',
-  '/configuracoes': '/',
-  '/mapa-empresas': '/',
-};
 
 export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({ 
   title, 
@@ -48,13 +36,12 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
   backTo,
   hideBack = false,
   showSearch,
+  searchValue,
   onSearchChange,
 }, ref) {
   const location = useLocation();
-  const navigate = useNavigate();
   const isRoot = location.pathname === '/';
   const showBack = !hideBack && !isRoot;
-  const resolvedBackTo = backTo || PARENT_ROUTES[location.pathname] || '/';
 
   return (
     <header 
@@ -64,22 +51,14 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
           {showBack && (
-            <div className="flex items-center">
+            <div className="hidden md:flex items-center">
               <BackButton
-                to={resolvedBackTo}
+                to={backTo}
+                fallback={getSectionFallback(location.pathname)}
                 label="Voltar"
                 variant="ghost"
-                className="shrink-0 -ml-1 hidden md:inline-flex"
+                className="shrink-0 -ml-1"
               />
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden h-11 w-11 -ml-2"
-                onClick={() => navigate(-1)}
-                aria-label="Voltar"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </Button>
             </div>
           )}
           <div className="min-w-0 flex items-center gap-2">
@@ -107,6 +86,8 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <Input 
                 placeholder="Buscar..." 
+                aria-label={`Buscar em ${title}`}
+                value={searchValue}
                 className="pl-8 h-8 text-[11px] bg-muted/40 border-none focus-visible:ring-1 focus-visible:ring-primary/20"
                 onChange={(e) => onSearchChange?.(e.target.value)}
               />

@@ -1,6 +1,6 @@
 import { ReactNode, useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { useRageClickDetector } from '@/hooks/useRageClickDetector';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Search, Command, Settings, LogOut, Mic } from 'lucide-react';
 import { AppSidebar } from './AppSidebar';
 import { MobileHeader } from './MobileHeader';
@@ -9,7 +9,7 @@ import { QuickAddButton } from '@/components/quick-add/QuickAddButton';
 import { SlowQueryIndicator } from '@/components/feedback/SlowQueryIndicator';
 import { AIEmailComposerTrigger } from '@/components/ai/AIEmailComposerTrigger';
 import { NotificationCenter } from '@/components/notifications/NotificationCenter';
-import { generateRequestId, setRequestId, setLogUser } from '@/lib/logger';
+import { generateRequestId, setRequestId } from '@/lib/logger';
 
 // Heavy global chrome — lazy + deferred to idle to avoid blocking route transitions
 const AskCrmChat = lazy(() => import('@/components/ask-crm/AskCrmChat').then(m => ({ default: m.AskCrmChat })));
@@ -104,11 +104,6 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
   const { user, signOut } = useAuth();
 
   useKeyboardShortcutsEnhanced();
-
-  // Set user for logging
-  useEffect(() => {
-    setLogUser(user?.id || null);
-  }, [user?.id]);
 
   // Track Request ID per route change for correlation
   useEffect(() => {
@@ -228,9 +223,9 @@ function AppLayoutInner({ children, title }: AppLayoutProps) {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild className="gap-2 cursor-pointer">
-                    <a href="/configuracoes">
+                    <Link to="/configuracoes">
                       <Settings className="h-3.5 w-3.5" /> Configurações
-                    </a>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="gap-2 cursor-pointer text-destructive focus:text-destructive">

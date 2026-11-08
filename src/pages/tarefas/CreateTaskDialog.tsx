@@ -25,6 +25,7 @@ import {
 import { useCreateTask } from '@/hooks/useTasks';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 /**
  * Validações do formulário rápido:
@@ -173,20 +174,21 @@ export function CreateTaskDialog() {
     const fetchEntities = async () => {
       try {
         const [compRes, contRes] = await Promise.all([
-          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('companies').select('id, nome_crm').eq('user_id', user?.id ?? '').limit(100),
           supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
         ]);
         if (cancelled) return;
-        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+        if (compRes.error) throw compRes.error;
+        if (contRes.error) throw contRes.error;
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.nome_crm })));
         if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
       } catch {
-        // non-critical — dropdowns remain empty; user can type IDs manually or retry
+        if (!cancelled) toast.error('Não foi possível carregar empresas e contatos. Reabra o formulário para tentar novamente.');
       }
     };
     fetchEntities();
     return () => { cancelled = true; };
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- deps estáveis (storage keys/user id/refs) — adicionar causaria re-execução desnecessária ou loop
-  }, [open]);
+  }, [open, user?.id]);
 
   const reset = () => {
     setTitle('');

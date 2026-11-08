@@ -200,7 +200,7 @@ function SeasonalityChart() {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
-          <Sun className="h-4 w-4 text-warning" /> Sazonalidade (12 meses)
+          <Sun className="h-4 w-4 text-warning" /> Sazonalidade por Mês do Ano (12 meses)
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -258,8 +258,8 @@ function ChannelChart() {
 
   const radarData = channels.map(c => ({
     channel: c.channel,
-    'Taxa Resposta': c.response_rate,
-    'Taxa Conversão': c.conversion_rate,
+    'Tempo de Resposta Registrado': c.response_rate,
+    'Empresas com Negócios Ganhos': c.conversion_rate,
   }));
 
   return (
@@ -275,11 +275,12 @@ function ChannelChart() {
             <PolarGrid stroke="hsl(var(--border))" />
             <PolarAngleAxis dataKey="channel" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} />
             <PolarRadiusAxis tick={{ fontSize: 9 }} />
-            <Radar name="Taxa Resposta" dataKey="Taxa Resposta" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.2)" strokeWidth={2} />
-            <Radar name="Taxa Conversão" dataKey="Taxa Conversão" stroke="hsl(var(--success))" fill="hsl(var(--success)/0.2)" strokeWidth={2} />
+            <Radar name="Tempo de Resposta Registrado" dataKey="Tempo de Resposta Registrado" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.2)" strokeWidth={2} />
+            <Radar name="Empresas com Negócios Ganhos" dataKey="Empresas com Negócios Ganhos" stroke="hsl(var(--success))" fill="hsl(var(--success)/0.2)" strokeWidth={2} />
             <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8 }} />
           </RadarChart>
         </ResponsiveContainer>
+        <p className="text-xs text-muted-foreground">Percentuais por canal. Sem tempos de resposta registrados, essa medida fica indisponível.</p>
       </CardContent>
     </Card>
   );

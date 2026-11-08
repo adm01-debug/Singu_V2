@@ -22,7 +22,7 @@ Deno.serve(async (req) => {
       contactId: { type: 'string', required: true, maxLength: 36 },
       queueId:   { type: 'string', required: true, maxLength: 36 },
     });
-    if (!vsi.ok) return jsonError(vsi.error, 400);
+    if (!vsi.ok) return jsonError(vsi.error, 400, req);
     const { contactId, queueId } = vsi.data as { contactId: string; queueId: string };
 
     // Mark as processing + fetch current analysis concurrently (independent)
@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
     supabase.functions.invoke('generate-offer-suggestions', { body: { contactId } })
       .catch(err => console.error('Error triggering offer regeneration:', err));
 
-    return jsonOk({ success: true });
+    return jsonOk({ success: true }, req);
   } catch (error) {
     console.error('sync-social-interests error:', error);
     return new Response(JSON.stringify({ error: 'Internal server error' }), {

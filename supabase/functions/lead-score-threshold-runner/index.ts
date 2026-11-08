@@ -2,7 +2,7 @@
 // Modo: { contact_id, from_grade, to_grade, from_score, to_score }
 // Aciona ações: notify | create_task | enroll_sequence | webhook | tag (respeitando cooldown).
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuthOrServiceRole, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { validate } from "../_shared/validate.ts";
 
@@ -77,18 +77,35 @@ Deno.serve(async (req: Request) => {
     to_score:   { type: 'number', min: 0, max: 100 },
   });
   if (!vls.ok) return jsonError(vls.error, 400, req);
-  const body = vls.data as Payload;
+  const { user_id, contact_id, from_grade, to_grade, from_score, to_score } = vls.data;
+  if (typeof user_id !== 'string' || typeof contact_id !== 'string'
+    || typeof from_score !== 'number' || typeof to_score !== 'number') {
+    return jsonError('Transição de pontuação incompleta', 400, req);
+  }
+  const body: Payload = {
+    user_id, contact_id, from_score, to_score,
+    from_grade: typeof from_grade === 'string' ? from_grade : null,
+    to_grade: typeof to_grade === 'string' ? to_grade : null,
+  };
+  if (!isServiceRoleCaller(auth) && auth.toLowerCase() !== body.user_id.toLowerCase()) {
+    return jsonError('Usuário divergente do login', 403, req);
+  }
 
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
   );
 
-  const { data: automations } = await supabase
+  const { data: contact, error: contactError } = await supabase.from('contacts').select('id')
+    .eq('id', body.contact_id).eq('user_id', body.user_id).is('deleted_at', null).maybeSingle();
+  if (contactError || !contact) return jsonError('Contato indisponível', 403, req);
+
+  const { data: automations, error: automationError } = await supabase
     .from('lead_score_threshold_automations')
     .select('*')
     .eq('user_id', body.user_id)
     .eq('active', true);
+  if (automationError) return jsonError('Não foi possível consultar as automações', 500, req);
 
   const list = (automations ?? []) as Automation[];
   const now = Date.now();
@@ -121,31 +138,10 @@ Deno.serve(async (req: Request) => {
     contactCurrentTags = (c?.tags as string[] | null) ?? [];
   }
 
-  // Pre-fetch existing active/paused enrollments for all enroll_sequence actions (one query)
-  const alreadyEnrolledSequences = new Set<string>();
-  const enrollActions = toFire.filter(a => a.action_type === 'enroll_sequence');
-  if (enrollActions.length > 0) {
-    const seqIds = enrollActions
-      .map(a => a.action_config.sequence_id as string)
-      .filter(Boolean);
-    if (seqIds.length > 0) {
-      const { data: existing } = await supabase
-        .from('sequence_enrollments')
-        .select('sequence_id')
-        .eq('contact_id', body.contact_id)
-        .in('sequence_id', seqIds)
-        .in('status', ['active', 'paused']);
-      for (const e of (existing ?? []) as Array<{ sequence_id: string }>) {
-        alreadyEnrolledSequences.add(e.sequence_id);
-      }
-    }
-  }
-
   // --- DISPATCH LOOP (accumulate writes; only webhooks hit external I/O here) ---
 
   type AlertRow = { user_id: string; contact_id: string; type: string; title: string; description: string; priority: string; expires_at?: string };
   const pendingAlerts: AlertRow[] = [];
-  const pendingEnrollments: Array<{ user_id: string; contact_id: string; sequence_id: string; status: string; current_step: number }> = [];
   let accumulatedTags = [...contactCurrentTags];
   let tagsModified = false;
 
@@ -191,21 +187,16 @@ Deno.serve(async (req: Request) => {
           break;
         }
         case 'enroll_sequence': {
-          const sequenceId = a.action_config.sequence_id as string;
-          if (!sequenceId) throw new Error('sequence_id missing');
-          if (alreadyEnrolledSequences.has(sequenceId)) {
-            results.push({ a, success: true, result: { kind: 'enroll_sequence', skipped: 'already_enrolled' } });
-            fired.push({ automation_id: a.id, name: a.name, success: true });
-            break;
-          }
-          pendingEnrollments.push({
-            user_id: a.user_id,
-            contact_id: body.contact_id,
-            sequence_id: sequenceId,
-            status: 'active',
-            current_step: 0,
+          const { data, error } = await supabase.rpc('enroll_lead_score_contact', {
+            p_automation_id: a.id, p_contact_id: body.contact_id, p_user_id: a.user_id, p_event: body,
           });
-          results.push({ a, success: true, result: { kind: 'enroll_sequence', sequence_id: sequenceId } });
+          if (error) throw error;
+          const result: unknown = data;
+          if (result && typeof result === 'object' && 'skipped' in result
+            && (result.skipped === 'cooldown' || result.skipped === 'already_enrolled')) break;
+          if (!result || typeof result !== 'object' || !('id' in result) || typeof result.id !== 'string') {
+            throw new Error('Inscrição automática não confirmada');
+          }
           fired.push({ automation_id: a.id, name: a.name, success: true });
           break;
         }
@@ -271,7 +262,6 @@ Deno.serve(async (req: Request) => {
   await Promise.all([
     logRows.length > 0 ? supabase.from('lead_score_threshold_log').insert(logRows) : Promise.resolve(),
     pendingAlerts.length > 0 ? supabase.from('alerts').insert(pendingAlerts) : Promise.resolve(),
-    pendingEnrollments.length > 0 ? supabase.from('sequence_enrollments').insert(pendingEnrollments) : Promise.resolve(),
     tagsModified ? supabase.from('contacts').update({ tags: accumulatedTags }).eq('id', body.contact_id) : Promise.resolve(),
     ...successfulAutomations.map(({ a }) =>
       supabase.from('lead_score_threshold_automations').update({
@@ -281,5 +271,5 @@ Deno.serve(async (req: Request) => {
     ),
   ]);
 
-  return jsonOk({ ok: true, fired_count: fired.length, fired }, req);
+  return jsonOk({ ok: fired.every(action => action.success), fired_count: fired.filter(action => action.success).length, fired }, req);
 });

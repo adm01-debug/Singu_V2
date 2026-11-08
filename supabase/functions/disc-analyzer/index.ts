@@ -4,6 +4,7 @@
 // ==============================================
 
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { z } from "npm:zod@3.23.8";
 import { withAuth, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
@@ -138,13 +139,13 @@ Deno.serve(async (req) => {
 
     const parsed = DiscAnalyzerInput.safeParse(rawBody);
     if (!parsed.success) {
-      return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+      return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     }
     const { texts, contactId, interactionId } = parsed.data;
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
-      return jsonError("LOVABLE_API_KEY não configurada", 500);
+      return jsonError("LOVABLE_API_KEY não configurada", 500, req);
     }
 
     const combinedText = texts.join("\n\n---\n\n");
@@ -167,10 +168,10 @@ Deno.serve(async (req) => {
 
     if (!aiResponse.ok) {
       if (aiResponse.status === 429) {
-        return jsonError("Rate limit exceeded. Tente novamente em alguns segundos.", 429);
+        return jsonError("Rate limit exceeded. Tente novamente em alguns segundos.", 429, req);
       }
       if (aiResponse.status === 402) {
-        return jsonError("Créditos insuficientes. Adicione créditos ao workspace.", 402);
+        return jsonError("Créditos insuficientes. Adicione créditos ao workspace.", 402, req);
       }
       const errorText = await aiResponse.text();
       console.error("AI error:", errorText);
@@ -263,7 +264,7 @@ Deno.serve(async (req) => {
 
     if (contactOwnership) {
       const currentBehavior = (contactOwnership.behavior as Record<string, unknown>) || {};
-      supabase
+      await bestEffortWrite(supabase
         .from("contacts")
         .update({
           behavior: {
@@ -275,18 +276,16 @@ Deno.serve(async (req) => {
           }
         })
         .eq("id", contactId)
-        .eq("user_id", userId)
-        .catch((e: unknown) => console.error("contacts behavior update error:", e));
+        .eq("user_id", userId), "contacts behavior update error:");
     }
 
-    // Fire-and-forget communication log (non-critical)
-    supabase.from("disc_communication_logs").insert({
+    await bestEffortWrite(supabase.from("disc_communication_logs").insert({
       user_id: userId,
       contact_id: contactId,
       contact_disc_profile: primary,
       approach_adapted: false,
       adaptation_tips_shown: analysisResult.salesStrategies
-    }).catch((err: unknown) => console.error("disc_communication_logs insert error:", err));
+    }), "disc_communication_logs insert error:");
 
     return jsonOk({
       success: true,
@@ -305,10 +304,10 @@ Deno.serve(async (req) => {
         avoidBehaviors: analysisResult.avoidBehaviors,
         profileSummary: analysisResult.profileSummary
       }
-    });
+    }, req);
 
   } catch (error) {
     console.error("disc-analyzer error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

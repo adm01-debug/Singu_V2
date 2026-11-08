@@ -7,7 +7,7 @@ export default function Rodizio() {
     <>
       <Helmet>
         <title>Rodízio de Carteira | SINGU</title>
-        <meta name="description" content="Gestão de distribuição de leads entre SDRs e Closers com round-robin ponderado e handoff inteligente." />
+        <meta name="description" content="Gestão do rodízio de carteira entre SDRs e Closers por ondas, com bloqueio de clientes e aprovação." />
       </Helmet>
       <div className="container mx-auto px-4 py-6 max-w-6xl">
         <LeadRoutingModule />

@@ -10,10 +10,23 @@
 -- Fix: drop the combined policy, replace with authenticated-only variant.
 -- service_role retains full access via the existing service_all_novelties policy.
 
-DROP POLICY IF EXISTS anon_read_novelties ON public.product_novelties;
+DO $migration$
+BEGIN
+  IF to_regclass('public.product_novelties') IS NOT NULL THEN
+    DROP POLICY IF EXISTS anon_read_novelties ON public.product_novelties;
 
-CREATE POLICY authenticated_read_novelties
-  ON public.product_novelties
-  FOR SELECT
-  TO authenticated
-  USING (true);
+    IF NOT EXISTS (
+      SELECT 1
+      FROM pg_policy
+      WHERE polrelid = to_regclass('public.product_novelties')
+        AND polname = 'authenticated_read_novelties'
+    ) THEN
+      CREATE POLICY authenticated_read_novelties
+        ON public.product_novelties
+        FOR SELECT
+        TO authenticated
+        USING (true);
+    END IF;
+  END IF;
+END;
+$migration$;

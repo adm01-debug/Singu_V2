@@ -111,7 +111,7 @@ async function checkEmailPipeline(): Promise<Check> {
   }
 }
 
-async function getActiveAlerts(): Promise<number> {
+async function getActiveAlerts(): Promise<number | null> {
   try {
     const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
     const { count } = await supabase
@@ -120,7 +120,7 @@ async function getActiveAlerts(): Promise<number> {
       .eq("dismissed", false);
     return count ?? 0;
   } catch {
-    return 0;
+    return null;
   }
 }
 
@@ -189,10 +189,17 @@ Deno.serve(async (req) => {
     ]);
 
   const components = { database_local, database_external, whatsapp, email_pipeline, voice_ai, connections };
-  const considered = Object.values(components).filter((c) => c.status !== "not_configured");
+  const considered = Object.values(components);
   const hasDown = considered.some((c) => c.status === "down");
   const hasDegraded = considered.some((c) => c.status === "degraded");
-  const overall = hasDown ? "unhealthy" : hasDegraded ? "degraded" : "healthy";
+  const hasUnavailable = considered.some((c) => c.status === "not_configured");
+  const overall = hasDown
+    ? "unhealthy"
+    : hasUnavailable
+      ? "unavailable"
+      : hasDegraded
+        ? "degraded"
+        : "healthy";
 
   return new Response(
     JSON.stringify({
@@ -204,7 +211,7 @@ Deno.serve(async (req) => {
       version: "3.1.0",
     }),
     {
-      status: overall === "unhealthy" ? 503 : 200,
+      status: overall === "healthy" ? 200 : 503,
       headers: { ...cors, "Content-Type": "application/json" },
     },
   );

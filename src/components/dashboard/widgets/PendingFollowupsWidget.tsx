@@ -6,14 +6,15 @@ import { usePendingFollowups } from '@/hooks/usePendingFollowups';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 
-const PRIORITY_CONFIG: Record<string, { color: string; label: string }> = {
-  high: { color: 'border-destructive/50 bg-destructive/5', label: 'Alta' },
-  medium: { color: 'border-warning/50 bg-warning/5', label: 'Média' },
-  low: { color: 'border-muted bg-muted/30', label: 'Baixa' },
+const PRIORITY_CONFIG: Record<number, { color: string; label: string }> = {
+  1: { color: 'border-destructive bg-destructive/10', label: 'Crítica' },
+  2: { color: 'border-destructive/50 bg-destructive/5', label: 'Alta' },
+  3: { color: 'border-warning/50 bg-warning/5', label: 'Média' },
+  4: { color: 'border-muted bg-muted/30', label: 'Baixa' },
 };
 
 export function PendingFollowupsWidget() {
-  const { data: followups = [], isLoading } = usePendingFollowups(10);
+  const { data: followups = [], isLoading, error } = usePendingFollowups(10);
 
   if (isLoading) {
     return (
@@ -38,17 +39,19 @@ export function PendingFollowupsWidget() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {followups.length === 0 ? (
+        {error ? (
+          <p role="alert" className="text-xs text-destructive text-center py-4">Erro ao carregar follow-ups pendentes</p>
+        ) : followups.length === 0 ? (
           <p className="text-xs text-muted-foreground text-center py-4">Nenhum follow-up pendente 🎉</p>
         ) : (
           <ScrollArea className="max-h-[300px]">
             <div className="space-y-2">
               {followups.map((f) => {
-                const prio = PRIORITY_CONFIG[f.priority || 'low'] || PRIORITY_CONFIG.low;
+                const prio = f.priority === null ? null : PRIORITY_CONFIG[f.priority];
                 const isOverdue = (f.days_overdue ?? 0) > 0;
 
                 return (
-                  <div key={f.interaction_id} className={cn('rounded-lg border p-2.5 text-sm', prio.color)}>
+                  <div key={f.interaction_id} className={cn('rounded-lg border p-2.5 text-sm', prio?.color)}>
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
@@ -66,6 +69,7 @@ export function PendingFollowupsWidget() {
                         )}
                       </div>
                       <div className="text-right flex-shrink-0">
+                        <Badge variant="outline" className="text-[9px]">{prio?.label ?? 'Sem prioridade'}</Badge>
                         {f.follow_up_date && (
                           <p className="text-[10px] text-muted-foreground">
                             <Calendar className="h-2.5 w-2.5 inline mr-0.5" />

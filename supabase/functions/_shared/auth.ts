@@ -70,6 +70,7 @@ export async function timingSafeStringEqual(a: string, b: string): Promise<boole
 const ALLOWED_ORIGINS = [
   "https://dialogue-diamond.lovable.app",
   "https://id-preview--08cba815-22fa-42db-9361-0cffd81afd61.lovable.app",
+  "https://singu-v2.vercel.app",
   "http://localhost:8080",
   "http://localhost:3000",
 ];
@@ -83,7 +84,8 @@ function getOrigin(req?: Request): string {
   if (!req) return ALLOWED_ORIGINS[0];
   const origin = req.headers.get("Origin") || "";
   const isKnownOrigin = ALLOWED_ORIGINS.includes(origin);
-  const isAllowedPreviewOrigin = ALLOWED_ORIGIN_SUFFIXES.some((suffix) => origin.endsWith(suffix));
+  const isAllowedPreviewOrigin = ALLOWED_ORIGIN_SUFFIXES.some((suffix) => origin.endsWith(suffix))
+    || /^https:\/\/singu-v2-[a-z0-9-]+-juca1\.vercel\.app$/.test(origin);
 
   if (isKnownOrigin || isAllowedPreviewOrigin) {
     return origin;
@@ -94,14 +96,14 @@ function getOrigin(req?: Request): string {
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": ALLOWED_ORIGINS[0],
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-lovable-timestamp, x-webhook-idempotency-key, x-lovable-signature",
 };
 
 /** Returns CORS headers scoped to the request's origin */
 export function scopedCorsHeaders(req: Request) {
   return {
     "Access-Control-Allow-Origin": getOrigin(req),
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-trace-id, x-request-id",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-trace-id, x-request-id, x-lovable-timestamp, x-webhook-idempotency-key, x-lovable-signature",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Vary": "Origin",
   };
@@ -206,57 +208,24 @@ export function isServiceRoleCaller(authResult: string): boolean {
 }
 
 /**
- * withAuthOrServiceRole — Accepts either a user JWT or the service_role key.
- * If the Authorization header carries the service_role key, returns the sentinel.
- * Otherwise delegates to withAuth (user JWT).
+ * withAuthOrServiceRole — Accepts either a verified user JWT or the exact
+ * service_role secret configured in the function environment.
  */
-/** Decodes a JWT payload (base64url) without signature verification. */
-function decodeJwtPayload(token: string): Record<string, unknown> | null {
-  try {
-    const parts = token.split(".");
-    if (parts.length !== 3) return null;
-    const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
-    const padded = payload + "=".repeat((4 - (payload.length % 4)) % 4);
-    const decoded = atob(padded);
-    return JSON.parse(decoded);
-  } catch {
-    return null;
-  }
-}
-
 export async function withAuthOrServiceRole(req: Request): Promise<string | Response> {
   const authHeader = req.headers.get("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
-    return jsonError("Unauthorized", 401);
+    return jsonError("Unauthorized", 401, req);
   }
-  const token = authHeader.replace("Bearer ", "");
-
-  // Fast path: decode JWT payload (no verification needed) and check for service role.
-  // Supabase service role JWTs have role: "service_role".
-  let payload: Record<string, unknown> | null = null;
-  try {
-    const parts = token.split(".");
-    if (parts.length === 3) {
-      const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
-      const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-      const decoded = atob(padded);
-      payload = JSON.parse(decoded);
-    }
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    return new Response(JSON.stringify({ decodeError: msg, tokenPrefix: token.slice(0, 20) }), {
-      status: 500, headers: { "Content-Type": "application/json" }
-    });
-  }
-
-  if (payload && payload.role === "service_role") {
+  const token = authHeader.slice("Bearer ".length);
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (serviceRoleKey && await timingSafeStringEqual(token, serviceRoleKey)) {
     return SERVICE_ROLE_SENTINEL;
   }
 
   try {
     return await authenticateRequest(req);
   } catch {
-    return jsonError("Unauthorized", 401);
+    return jsonError("Unauthorized", 401, req);
   }
 }
 
@@ -271,11 +240,11 @@ export async function requireCronSecret(req: Request): Promise<Response | null> 
   const secret = Deno.env.get("CRON_SECRET");
   if (!secret) {
     console.error("CRON_SECRET not configured");
-    return jsonError("Server misconfigured", 500);
+    return jsonError("Server misconfigured", 500, req);
   }
   const provided = req.headers.get("x-cron-secret") ?? "";
   if (!await timingSafeStringEqual(provided, secret)) {
-    return jsonError("Unauthorized", 401);
+    return jsonError("Unauthorized", 401, req);
   }
   return null;
 }
@@ -301,22 +270,22 @@ export async function guardBody(
 ): Promise<{ body: unknown; error: null } | { body: null; error: Response }> {
   const cl = parseInt(req.headers.get("content-length") ?? "0", 10);
   if (!isNaN(cl) && cl > maxBytes) {
-    return { body: null, error: jsonError("Payload too large", 413) };
+    return { body: null, error: jsonError("Payload too large", 413, req) };
   }
   let buf: ArrayBuffer;
   try {
     buf = await req.arrayBuffer();
   } catch {
-    return { body: null, error: jsonError("Failed to read request body", 400) };
+    return { body: null, error: jsonError("Failed to read request body", 400, req) };
   }
   if (buf.byteLength > maxBytes) {
-    return { body: null, error: jsonError("Payload too large", 413) };
+    return { body: null, error: jsonError("Payload too large", 413, req) };
   }
   try {
     const body = JSON.parse(new TextDecoder().decode(buf));
     return { body, error: null };
   } catch {
-    return { body: null, error: jsonError("Invalid JSON body", 400) };
+    return { body: null, error: jsonError("Invalid JSON body", 400, req) };
   }
 }
 
@@ -338,11 +307,11 @@ export async function requireWebhookSecret(
   const secret = Deno.env.get(envName);
   if (!secret) {
     console.error(`${envName} not configured`);
-    return jsonError("Server misconfigured", 500);
+    return jsonError("Server misconfigured", 500, req);
   }
   const provided = req.headers.get(headerName) ?? "";
   if (!await timingSafeStringEqual(provided, secret)) {
-    return jsonError("Unauthorized", 401);
+    return jsonError("Unauthorized", 401, req);
   }
   return null;
 }

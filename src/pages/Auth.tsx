@@ -44,11 +44,11 @@ const Auth = () => {
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-    try { emailSchema.parse(email); } catch (e) { if (e instanceof z.ZodError) newErrors.email = e.errors[0].message; }
-    try { passwordSchema.parse(password); } catch (e) { if (e instanceof z.ZodError) newErrors.password = e.errors[0].message; }
+    try { emailSchema.parse(email); } catch (e) { if (e instanceof z.ZodError) newErrors.email = e.issues[0].message; }
+    try { passwordSchema.parse(password); } catch (e) { if (e instanceof z.ZodError) newErrors.password = e.issues[0].message; }
     if (mode === 'signup') {
-      try { nameSchema.parse(firstName); } catch (e) { if (e instanceof z.ZodError) newErrors.firstName = e.errors[0].message; }
-      try { nameSchema.parse(lastName); } catch (e) { if (e instanceof z.ZodError) newErrors.lastName = e.errors[0].message; }
+      try { nameSchema.parse(firstName); } catch (e) { if (e instanceof z.ZodError) newErrors.firstName = e.issues[0].message; }
+      try { nameSchema.parse(lastName); } catch (e) { if (e instanceof z.ZodError) newErrors.lastName = e.issues[0].message; }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

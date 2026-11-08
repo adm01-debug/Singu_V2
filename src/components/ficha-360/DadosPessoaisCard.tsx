@@ -85,7 +85,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
       spouse: spouseName,
       children: children
     });
-    
+
     await mutation.mutateAsync({
       family_info: updatedFamilyInfo,
       birthday: birthday || null,
@@ -205,9 +205,9 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                           <div key={entry.id} className="p-2.5 rounded-lg border border-border bg-muted/30 text-xs space-y-2 hover:border-primary/30 transition-colors">
                             <div className="flex justify-between items-center text-[10px] text-muted-foreground">
                               <span className="font-medium">{formatDistanceToNow(new Date(entry.changed_at), { addSuffix: true, locale: ptBR })}</span>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 className="h-6 px-2 gap-1 text-[10px] hover:bg-primary hover:text-primary-foreground border-primary/20"
                                 onClick={() => {
                                   revert(entry);
@@ -230,9 +230,9 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
             </Popover>
 
             {!isEditing ? (
-              <Button 
-                variant="ghost" 
-                size="icon" aria-label="Editar" 
+              <Button
+                variant="ghost"
+                size="icon" aria-label="Editar"
                 className="h-8 w-8 text-muted-foreground hover:text-primary"
                 onClick={() => setIsEditing(true)}
               >
@@ -250,9 +250,9 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                 >
                   <X className="h-4 w-4" />
                 </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" aria-label="Carregando" 
+                <Button
+                  variant="ghost"
+                  size="icon" aria-label="Carregando"
                   className="h-8 w-8 text-success"
                   onClick={handleSave}
                   disabled={mutation.isPending}
@@ -333,9 +333,9 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground">Aniversário</p>
                 {isEditing ? (
-                  <Input 
-                    type="date" 
-                    value={birthday} 
+                  <Input
+                    type="date"
+                    value={birthday}
                     onChange={(e) => setBirthday(e.target.value)}
                     className="h-8 mt-1 text-sm"
                   />
@@ -354,8 +354,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                   <div className="space-y-3 mt-1">
                     <div>
                       <Label className="text-[10px] uppercase text-muted-foreground">Cônjuge</Label>
-                      <Input 
-                        value={spouseName} 
+                      <Input
+                        value={spouseName}
                         onChange={(e) => setSpouseName(e.target.value)}
                         placeholder="Nome do cônjuge"
                         className="h-8 text-sm"
@@ -367,7 +367,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                         {children.map((child, i) => (
                           <Badge key={i} variant="secondary" className="text-xs py-0.5 pr-1 gap-1">
                             {child}
-                            {/* eslint-disable-next-line sonarjs/no-nested-functions */}
+                            { }
                             <button aria-label={`Remover filho ${child}`} onClick={() => setChildren(prev => prev.filter((_, idx) => idx !== i))}>
                               <Trash2 className="h-3 w-3 text-destructive" />
                             </button>
@@ -375,8 +375,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                         ))}
                       </div>
                       <div className="flex gap-1">
-                        <Input 
-                          value={newChild} 
+                        <Input
+                          value={newChild}
                           onChange={(e) => setNewChild(e.target.value)}
                           placeholder="Adicionar filho..."
                           className="h-8 text-sm"
@@ -441,7 +441,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                       {hobbies.map((hobby, i) => (
                         <Badge key={hobby} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-amber-50 text-amber-700 border-amber-100">
                           {hobby}
-                          {/* eslint-disable-next-line sonarjs/no-nested-functions */}
+                          { }
                           <button aria-label={`Remover hobby ${hobby}`} onClick={() => setHobbies(prev => prev.filter((_, idx) => idx !== i))}>
                             <X className="h-3 w-3" />
                           </button>
@@ -449,8 +449,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                       ))}
                     </div>
                     <div className="flex gap-1">
-                      <Input 
-                        value={newHobby} 
+                      <Input
+                        value={newHobby}
                         onChange={(e) => setNewHobby(e.target.value)}
                         placeholder="Novo hobby..."
                         className="h-8 text-sm"
@@ -498,7 +498,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                       {interests.map((interest, i) => (
                         <Badge key={interest} variant="secondary" className="text-xs py-0.5 pr-1 gap-1 bg-purple-50 text-purple-700 border-purple-100">
                           {interest}
-                          {/* eslint-disable-next-line sonarjs/no-nested-functions */}
+                          { }
                           <button aria-label={`Remover interesse ${interest}`} onClick={() => setInterests(prev => prev.filter((_, idx) => idx !== i))}>
                             <X className="h-3 w-3" />
                           </button>
@@ -506,8 +506,8 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                       ))}
                     </div>
                     <div className="flex gap-1">
-                      <Input 
-                        value={newInterest} 
+                      <Input
+                        value={newInterest}
                         onChange={(e) => setNewInterest(e.target.value)}
                         placeholder="Novo interesse..."
                         className="h-8 text-sm"
@@ -553,7 +553,7 @@ export const DadosPessoaisCard = memo(({ rapportIntel }: Props) => {
                 {(isEditing ? anchors : currentAnchors).map((a, i) => (
                   <Badge
                     key={`anchor-${a}-${i}`}
-                    variant="secondary" 
+                    variant="secondary"
                     className={cn("text-xs font-normal", isEditing && "pr-1 gap-1")}
                   >
                     {a}

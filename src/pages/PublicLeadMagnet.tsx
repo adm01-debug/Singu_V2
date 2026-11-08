@@ -28,7 +28,7 @@ export default function PublicLeadMagnet() {
     let cancelled = false;
     const currentSlug = slug;
     (async () => {
-      const { data } = await supabase.from('lead_magnets').select('id, user_id, title, slug, description, type, file_path, external_url, thumbnail_url, gated, form_id, download_count, view_count, is_published, created_at, updated_at').eq('slug', currentSlug).eq('is_published', true).maybeSingle();
+      const { data } = await supabase.from('lead_magnets').select('id, title, slug, description, type, thumbnail_url, is_published').eq('slug', currentSlug).eq('is_published', true).maybeSingle();
       if (cancelled) return;
       if (data) {
         setMagnet(data as unknown as LeadMagnet);

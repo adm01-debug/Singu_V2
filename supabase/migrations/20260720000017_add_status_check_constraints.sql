@@ -2,58 +2,49 @@
 -- Uses NOT VALID so existing rows are not scanned (no table lock).
 -- VALIDATE CONSTRAINT runs after as a separate, non-blocking step.
 
--- ── document_signatures.status ─────────────────────────────────────────────
-ALTER TABLE public.document_signatures
-  ADD CONSTRAINT chk_document_signatures_status
-    CHECK (status IN ('pending','viewed','signed','declined','expired'))
-    NOT VALID;
-ALTER TABLE public.document_signatures
-  VALIDATE CONSTRAINT chk_document_signatures_status;
+DO $migration$
+DECLARE
+  constraint_definition record;
+BEGIN
+  FOR constraint_definition IN
+    SELECT *
+    FROM (VALUES
+      ('document_signatures', 'chk_document_signatures_status', $$status IN ('pending','viewed','signed','declined','expired')$$),
+      ('social_sync_queue', 'chk_social_sync_queue_status', $$status IN ('pending','processing','completed','failed')$$),
+      ('whatsapp_messages', 'chk_whatsapp_messages_status', $$status IN ('pending','sent','delivered','read','played','failed')$$),
+      ('whatsapp_instances', 'chk_whatsapp_instances_status', $$status IN ('connected','disconnected','connecting')$$),
+      ('follow_up_approvals', 'chk_follow_up_approvals_status', $$status IN ('pending','approved','rejected','sent')$$),
+      ('crm_automation_logs', 'chk_crm_automation_logs_status', $$status IN ('pending','success','failed','error')$$),
+      ('crm_automation_reprocess_queue', 'chk_crm_automation_reprocess_queue_status', $$status IN ('pending','retrying','failed','success')$$)
+    ) AS constraints(table_name, constraint_name, expression)
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', constraint_definition.table_name))
+        AND attname = 'status'
+        AND NOT attisdropped
+    ) THEN
+      IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conrelid = to_regclass(format('public.%I', constraint_definition.table_name))
+          AND conname = constraint_definition.constraint_name
+      ) THEN
+        EXECUTE format(
+          'ALTER TABLE public.%I ADD CONSTRAINT %I CHECK (%s) NOT VALID',
+          constraint_definition.table_name,
+          constraint_definition.constraint_name,
+          constraint_definition.expression
+        );
+      END IF;
 
--- ── social_sync_queue.status ───────────────────────────────────────────────
-ALTER TABLE public.social_sync_queue
-  ADD CONSTRAINT chk_social_sync_queue_status
-    CHECK (status IN ('pending','processing','completed','failed'))
-    NOT VALID;
-ALTER TABLE public.social_sync_queue
-  VALIDATE CONSTRAINT chk_social_sync_queue_status;
-
--- ── whatsapp_messages.status ───────────────────────────────────────────────
-ALTER TABLE public.whatsapp_messages
-  ADD CONSTRAINT chk_whatsapp_messages_status
-    CHECK (status IN ('pending','sent','delivered','read','played','failed'))
-    NOT VALID;
-ALTER TABLE public.whatsapp_messages
-  VALIDATE CONSTRAINT chk_whatsapp_messages_status;
-
--- ── whatsapp_instances.status ──────────────────────────────────────────────
-ALTER TABLE public.whatsapp_instances
-  ADD CONSTRAINT chk_whatsapp_instances_status
-    CHECK (status IN ('connected','disconnected','connecting'))
-    NOT VALID;
-ALTER TABLE public.whatsapp_instances
-  VALIDATE CONSTRAINT chk_whatsapp_instances_status;
-
--- ── follow_up_approvals.status ─────────────────────────────────────────────
-ALTER TABLE public.follow_up_approvals
-  ADD CONSTRAINT chk_follow_up_approvals_status
-    CHECK (status IN ('pending','approved','rejected','sent'))
-    NOT VALID;
-ALTER TABLE public.follow_up_approvals
-  VALIDATE CONSTRAINT chk_follow_up_approvals_status;
-
--- ── crm_automation_logs.status ─────────────────────────────────────────────
-ALTER TABLE public.crm_automation_logs
-  ADD CONSTRAINT chk_crm_automation_logs_status
-    CHECK (status IN ('pending','success','failed','error'))
-    NOT VALID;
-ALTER TABLE public.crm_automation_logs
-  VALIDATE CONSTRAINT chk_crm_automation_logs_status;
-
--- ── crm_automation_reprocess_queue.status ──────────────────────────────────
-ALTER TABLE public.crm_automation_reprocess_queue
-  ADD CONSTRAINT chk_crm_automation_reprocess_queue_status
-    CHECK (status IN ('pending','retrying','failed','success'))
-    NOT VALID;
-ALTER TABLE public.crm_automation_reprocess_queue
-  VALIDATE CONSTRAINT chk_crm_automation_reprocess_queue_status;
+      EXECUTE format(
+        'ALTER TABLE public.%I VALIDATE CONSTRAINT %I',
+        constraint_definition.table_name,
+        constraint_definition.constraint_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

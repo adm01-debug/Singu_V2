@@ -88,7 +88,7 @@ Usuário → React App → TanStack Query → Edge Function → DB Externo
 ```bash
 npm test              # Roda 4.470+ testes
 npm run test:watch    # Watch mode para desenvolvimento
-npx tsc --noEmit      # Type checking (deve dar 0 erros)
+npm run typecheck     # Verifica aplicativo e configuração Node (deve dar 0 erros)
 ```
 
 ### Onde estão os testes:
@@ -109,7 +109,7 @@ npx tsc --noEmit      # Type checking (deve dar 0 erros)
 2. Localize o `DashboardStatsGrid`
 3. Adicione um tooltip explicativo em um dos cards de KPI
 4. Rode os testes para garantir que nada quebrou
-5. Verifique o TypeScript: `npx tsc --noEmit`
+5. Verifique o TypeScript: `npm run typecheck`
 
 ---
 

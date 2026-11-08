@@ -39,17 +39,11 @@ export interface PerformanceMetrics {
   lastWeekCount: number;
   weekOverWeekChange: number;
 
-  // NLP Mastery
-  nlpMasteryScore: number;
-  vakConsistency: number;
-  rapportDepth: number;
-  reframingProficiency: number;
-
   loading: boolean;
 }
 
 export function usePerformanceMetrics(): PerformanceMetrics {
-  const { contacts, loading: cLoading } = useContacts();
+  const { contacts, loading: cLoading } = useContacts(undefined, { fetchAll: true });
   const { companies, loading: coLoading } = useCompanies();
   const { interactions, loading: iLoading } = useInteractions();
 
@@ -157,12 +151,6 @@ export function usePerformanceMetrics(): PerformanceMetrics {
       ? Math.round(((interactionsThisWeek - lastWeekInteractions) / lastWeekInteractions) * 100)
       : interactionsThisWeek > 0 ? 100 : 0;
 
-    // Simulated NLP Mastery Metrics based on interaction quality
-    const nlpMasteryScore = 88;
-    const vakConsistency = 92;
-    const rapportDepth = 85;
-    const reframingProficiency = 79;
-
     return {
       totalInteractions, interactionsToday, interactionsThisWeek, interactionsThisMonth,
       avgInteractionsPerDay, activeDays,
@@ -173,10 +161,6 @@ export function usePerformanceMetrics(): PerformanceMetrics {
       channelBreakdown, dailyActivity,
       thisWeekCount: interactionsThisWeek, lastWeekCount: lastWeekInteractions,
       weekOverWeekChange,
-      nlpMasteryScore,
-      vakConsistency,
-      rapportDepth,
-      reframingProficiency,
       loading: false,
     };
   }, [contacts, companies, interactions, loading]);

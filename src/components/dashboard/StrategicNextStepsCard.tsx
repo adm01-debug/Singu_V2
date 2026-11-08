@@ -45,8 +45,6 @@ import { useContactDetail } from '@/hooks/useContactDetail';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { supabase } from '@/integrations/supabase/client';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { useAuth } from '@/hooks/useAuth';
 import { useQueryClient } from '@tanstack/react-query';
 import { logger } from '@/lib/logger';
@@ -281,9 +279,26 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
   const { mutate: logAudit } = useRecommendationAudit();
   const queryClient = useQueryClient();
 
-  const exportToPDF = useCallback(() => {
+  const exportToPDF = useCallback(async () => {
     if (!contact) return;
 
+    // jsPDF/autotable carregados sob demanda (~360KB raw fora do entry)
+    let jsPDF: (typeof import('jspdf'))['default'];
+    let autoTable: (typeof import('jspdf-autotable'))['default'];
+    try {
+      [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+        import('jspdf'),
+        import('jspdf-autotable'),
+      ]);
+    } catch (error) {
+      logger.error('Erro ao carregar bibliotecas de exportação de PDF', error);
+      toast({
+        title: "Erro na exportação",
+        description: "Não foi possível carregar as bibliotecas de PDF. Verifique sua conexão e tente novamente.",
+        variant: "destructive",
+      });
+      return;
+    }
     const doc = new jsPDF();
     const fullName = `${contact.first_name} ${contact.last_name}`;
     
@@ -404,6 +419,9 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
         contact_id: contact.id,
         company_id: contact.company_id,
         type: 'note',
+        channel: 'note',
+        direction: 'outbound',
+        initiated_by: 'us',
         title: `Lembrete: Follow-up com ${contact.first_name}`,
         content: `Agendado via recomendação da IA. Próximo passo sugerido: Fortalecer relacionamento.`,
         follow_up_required: true,

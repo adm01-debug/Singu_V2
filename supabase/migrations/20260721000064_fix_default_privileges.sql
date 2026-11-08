@@ -32,8 +32,14 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public
 
 -- _dormant schema: revoke all from anon and authenticated
 -- (service_role uses BYPASSRLS, so no policies or default grants needed)
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA _dormant
-  REVOKE ALL ON TABLES FROM anon;
+DO $migration$
+BEGIN
+  IF to_regnamespace('_dormant') IS NOT NULL THEN
+    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA _dormant
+      REVOKE ALL ON TABLES FROM anon;
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA _dormant
-  REVOKE ALL ON TABLES FROM authenticated;
+    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA _dormant
+      REVOKE ALL ON TABLES FROM authenticated;
+  END IF;
+END;
+$migration$;

@@ -188,14 +188,6 @@ interface Example {
   sentiment: string | null;
 }
 
-interface ContactRow {
-  id: string;
-  first_name: string | null;
-  last_name: string | null;
-  role_title: string | null;
-  company: { name: string | null; nome_fantasia: string | null } | null;
-}
-
 interface ContactSummary {
   name: string | null;
   role: string | null;
@@ -378,15 +370,28 @@ function ObjectionExamplesModalImpl({ objection, onClose }: Props) {
     queryFn: async (): Promise<Record<string, ContactSummary>> => {
       const { data, error } = await supabase
         .from("contacts")
-        .select("id, first_name, last_name, role_title, company:companies(name, nome_fantasia)")
+        .select("id, first_name, last_name, role_title, company_id")
         .in("id", contactIds)
         .eq("user_id", user!.id)
         .limit(500);
       if (error) throw error;
+      const companyIds = [...new Set((data ?? []).flatMap(c => c.company_id ? [c.company_id] : []))];
+      const companyNames = new Map<string, string>();
+      if (companyIds.length > 0) {
+        const { data: companies, error: companiesError } = await supabase
+          .from("companies")
+          .select("id, nome_crm, nome_fantasia")
+          .in("id", companyIds)
+          .eq("user_id", user!.id);
+        if (companiesError) throw companiesError;
+        for (const company of companies ?? []) {
+          companyNames.set(company.id, company.nome_fantasia || company.nome_crm);
+        }
+      }
       const map: Record<string, ContactSummary> = {};
-      for (const c of (data ?? []) as ContactRow[]) {
+      for (const c of data ?? []) {
         const name = [c.first_name, c.last_name].filter(Boolean).join(" ").trim() || null;
-        const company = c.company?.nome_fantasia || c.company?.name || null;
+        const company = c.company_id ? companyNames.get(c.company_id) ?? null : null;
         map[c.id] = { name, role: c.role_title ?? null, company };
       }
       return map;

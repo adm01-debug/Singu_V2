@@ -5,6 +5,159 @@ Todas as mudanças notáveis do SINGU CRM são documentadas neste arquivo.
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [Unreleased]
+- A Inteligência Proativa distingue aniversários de hoje e amanhã pelo dia local. Editar um contato atualiza sua ficha sem recarregar a página, e o cabeçalho preserva a data de aniversário em fusos negativos.
+- A ficha preserva os dados carregados quando a atualização falha e oferece nova tentativa. As recomendações se atualizam na virada do dia e ao retomar uma aba suspensa.
+- O funil da ficha só confirma a mudança de estágio quando a gravação retorna o contato atualizado; falhas mantêm o estágio anterior e permitem tentar novamente.
+- A ficha deixa de oferecer dados e ações anteriores quando a consulta confirma que o contato não existe mais; falhas de consulta continuam preservando os dados para nova tentativa.
+- Falhas nas consultas da empresa, interações, insights ou alertas preservam a ficha anterior e oferecem nova tentativa. A restauração pelo desfazer omite o nome gerado pelo banco; mover para a lixeira e restaurar renovam o detalhe da conta correta e só anunciam sucesso com confirmação. O diálogo fecha após arquivamento confirmado, e a confirmação de exclusão informa a opção Desfazer.
+- O calendário de datas importantes também se atualiza à meia-noite local e ao retomar a aba, sem depender de alterações nos contatos ou nas interações.
+
+- Mesclagem de empresas rejeita nome substituto nulo, não textual ou em branco antes dos gatilhos de compatibilidade, preservando o nome original e a transação.
+
+- O webhook Evolution aceita timestamps numéricos enviados como texto, rejeita valores não finitos e preserva a época zero ao registrar a mensagem.
+
+- **Histórico social:** falhas da consulta não geram biografias, promoções ou pontuações fictícias. Os dois painéis distinguem erro de ausência confirmada, oferecem nova tentativa manual e mantêm dados reais após falha de recarga; consulta e cache são isolados por usuário. Não ativa coleta social nem altera o catálogo do banco.
+- **Recuperação da ficha:** falhas de recarga mantêm os dados confirmados visíveis, com aviso e nova tentativa. Erros da busca externa do próprio contato preservam seus códigos para retry e mensagens seguras; somente ausência confirmada nas duas fontes limpa a ficha e suas relações.
+
+- A recuperação de webhooks recusa destinos inválidos, reserva somente registros pendentes e exige confirmação de todas as gravações antes de anunciar sucesso. Atualizações parciais não tentam inserir novas entradas; falhas após o efeito permanecem em processamento para evitar repetição cega.
+
+- Registrar uma interação na Ficha 360 usa um contrato próprio de contato na RPC existente, sem alterar o fluxo de empresas. A gravação exige contato ativo do usuário autenticado e aguarda transferências concorrentes. A ficha só confirma e atualiza seus caches após receber o identificador da interação para o contato solicitado; falhas preservam o resumo e Enter repetido não duplica a requisição pendente.
+
+- Verificações de RLS e publicação rejeitam coletas incompletas, inventários inválidos e health checks sem confirmação real de saúde. Uma falha de coleta preserva o baseline mesmo com `--update`.
+- O baseline de RLS exige todos os perfis declarados e bloqueia a coleta sem o JWT necessário; os runbooks de publicação preparam a sessão de teste no destino e distinguem ausência de atividade de email de saúde comprovada.
+
+- **Ficha de contato:** erros ao consultar empresa, interações, insights ou alertas preservam o último conjunto confirmado no cache e expõem a falha para nova tentativa, inclusive erros Supabase que não são instâncias de `Error`. A ficha só repete automaticamente falhas transitórias identificadas, incluindo indisponibilidade declarada pela fonte externa e gateways 520–524; erros permanentes de permissão, esquema e requisição aguardam tentativa manual. As mensagens usam o filtro existente, incluindo respostas de schema cache e Edge Functions, sem expor detalhes internos nem alterar os códigos usados pelo retry.
+- A ficha e a lista descartam leituras anteriores à gravação e respostas de escrita com versão inferior à já confirmada. Edições e exclusões mantêm os dados confirmados até a resposta do servidor, sem rollback integral que apague outra edição. Excluir/Desfazer atualiza a ficha exata do proprietário; restaurar exige identidade e estado ativo confirmados.
+- O CI verifica os tipos das 108 Edge Functions. Gravações auxiliares usam a rotina best-effort existente; os eventos Evolution têm validação explícita e contratos locais para o webhook, logger e proxy.
+- Correção do gate de segurança do CI: zod atualizado para a linha 4.x (vulnerabilidade alta GHSA-mrhx-c7xc-m3w5 só corrigida na 4.x) e serialize-javascript para ^7.1.3, alinhando `dependencies` e `overrides` (o conflito EOVERRIDE também derrubava o Dependabot). Compatibilidade do zod v4 aplicada em hooks e formulários sem mudança de comportamento; `@hookform/resolvers` atualizado para a versão compatível com zod v4.
+
+- O calendário compacto usa os nomes do modelo de contatos; aniversários e eventos contam dias de calendário, preservando a data local e os eventos de hoje.
+
+- Alertas e datas importantes abrem a ficha correta do contato; os relatórios e o checklist de sequências usam as rotas existentes. A ação de insights PNL se apresenta como abertura do relatório, onde é possível imprimir ou salvar PDF. O painel de logs de conexões passa a ter rota protegida por autenticação, administração e MFA.
+
+- A espera por confirmação de uma etapa manual deixa de ser contada como falha do processador. A inscrição continua pausada, sem envio nem avanço até a confirmação.
+
+- Restaura no banco o vínculo entre inscrições e sequências, desbloqueando o processador. Requisições que podem gravar dados deixam de ser repetidas automaticamente após erros HTTP ou de rede.
+
+- Todas as inscrições em sequências validam contato, proprietário, status e capacidade no banco. O lead score grava inscrição, histórico e contador em uma transação. Reservas de envio impedem arquivamento ou pausa concorrente da sequência; resultados incertos exigem revisão e rejeições confirmadas sem reserva pausam a inscrição.
+
+- A primeira etapa da sequência respeita o atraso configurado; repetir a inscrição preserva a data já agendada. Buscas compostas aceitam até dez palavras e retornam erro de entrada quando ultrapassam esse limite.
+
+- Inscrições exigem sequência ativa no banco e não permitem fechar o diálogo enquanto aguardam confirmação. O processador consulta novamente o proprietário e o arquivamento do contato imediatamente antes de despachar um email.
+
+- Sequências ativas permitem buscar contatos da própria carteira e inscrevê-los pelo detalhe, com confirmação da operação atômica no banco e sem listar contatos arquivados.
+- A inscrição revalida o contato no banco e o processador pausa contatos arquivados; a busca aceita nome completo, renova a carteira alterada e permite tentar o mesmo termo após falha.
+- A capacidade da sequência é verificada atomicamente pela quantidade real de inscrições, preservando o retry de inscrições existentes e sinalizando o limite no detalhe.
+
+- A confirmação de mesclagem compara a identidade dos UUIDs mesmo com maiúsculas, chaves ou ausência de hífens, evitando apresentar falha depois de uma operação confirmada pelo banco. IDs de outras operações e respostas sem confirmação continuam rejeitados.
+
+- Mesclagem de contatos e empresas usa uma transação com bloqueio por proprietário, validação de vínculos, exclusão lógica e auditoria. Falhas revertem o conjunto sem declarar sucesso. Emails e telefones equivalentes conservam seus metadados na cópia arquivada, e registros arquivados deixam de aparecer na deduplicação. A reconstrução do banco inclui as marcações de duplicidade necessárias para arquivar o contato mesclado.
+
+- O painel de saúde usa a pontuação agregada do banco na escala de 0 a 10 e exibe os indicadores e totais reais. Alertas têm leitura protegida por proprietário, inclusive em instalações com bloqueio legado na fonte, e pendências usam o histórico DISC ativo, sem liberar as avaliações legadas bloqueadas.
+
+- A reconstrução do dashboard provisiona nomes gerados, fontes de contato e a view agregada quando ausentes, preservando as estruturas e permissões já existentes no banco canônico. As novas fontes permitem gravação somente para o proprietário do contato ativo, normalizam telefones e mantêm o email único nas tentativas de atualização.
+
+- Os formulários de email e telefone oferecem os tipos aceitos pelo banco canônico; WhatsApp permanece uma opção independente do tipo de telefone.
+
+- A pontuação geral de saúde passa a combinar as notas exibidas com os pesos já existentes, tanto na reconstrução quanto na view do banco publicado, sem regravar histórico.
+
+- Consultas de alertas, pendências e qualidade de dados respeitam a carteira autenticada e ocultam relações de outros usuários ou contatos arquivados. O cache do dashboard é separado por conta, e erros anteriores ao login não são associados ao próximo usuário.
+
+- Retomadas de email legado exigem recibo do proprietário antes de uma nova tentativa. A confirmação real substitui registros sem comprovante atomicamente e consome a autorização, sem duplicar o evento; contatos sem endereço não podem ser retomados.
+
+- Sequências permitem retomar explicitamente emails pausados após revisão da integração, com recibo, isolamento por proprietário e proteção contra uma pausa substituída. A retomada preserva o progresso e não inventa confirmação de envio.
+
+- Cron de reanálise seleciona e reserva até cinco contatos em uma operação do banco e processa todos na mesma onda, sem varrer milhares de candidatos com chamadas sequenciais à API.
+
+- Regenerações por SLA reservam cada contato atomicamente e encaminham o token ao gerador, impedindo chamadas concorrentes e preservando pedidos posteriores. O cron exige perfil confirmado e processa até dez reservas em grupos de cinco, sem recriar filas já concluídas.
+
+- Geração manual de perfil comportamental verifica o proprietário antes de ler o histórico e limita requisições por usuário em cada instância da função.
+
+### Added
+- Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
+
+### Fixed
+- Transferências de contato e gravações de emails, telefones, endereços e redes sociais aguardam o mesmo bloqueio no banco; o antigo proprietário é recusado quando a transferência termina primeiro. O proxy conserva o JWT do usuário nas escritas, não declara exclusão sem linha afetada e distingue conflitos transitórios (`WRITE_CONFLICT`) de versão obsoleta (`CONCURRENT_EDIT`), sem repetição automática nem contorno de permissões.
+- Emails e telefones relacionados exigem o dono do contato ativo para leitura e escrita de contas comuns, mesmo com policies permissivas antigas; administradores conservam o acesso global somente com MFA confirmado em AAL2. O proprietário também pode manter seus telefones nas instalações que antes permitiam apenas administradores.
+- Histórico novo invalida a reserva comportamental anterior e reinicia a espera, impedindo que a análise ou o erro de um worker antigo consumam o pedido posterior. A geração manual mantém as leituras sob o login do usuário e confirma perfil, histórico e fila pelo serviço após validar a propriedade, rejeitando trocas de proprietário durante a geração.
+- Validações enfileiradas gravam resultado e conclusão da tarefa na mesma transação, com recibo idempotente e token da reserva, evitando registros duplicados após perda da resposta. Gerações manuais concluem pedidos anteriores e preservam os criados após o início da análise; o worker e a reanálise aguardam o prazo completo da IA mais uma margem para persistência.
+- As filas de validação e perfis reservam lotes atomicamente, recuperam tentativas interrompidas e impedem workers antigos de sobrescrever novos pedidos; usuários não podem alterar reservas e a gravação do perfil e seu histórico conclui a reserva atual na mesma transação, evitando regeneração repetida após uma interrupção. Os validadores e workers conferem a propriedade do contato e o recibo persistido antes de anunciar sucesso. Reanálises administrativas usam uma reserva controlada pelo servidor, preservam tentativas e respeitam reservas e pausas vigentes; o painel deixa de editar a fila diretamente.
+- Etapas manuais das sequências ficam disponíveis nos detalhes com instruções e confirmação explícita pelo dono; a execução, o histórico e a retomada são atômicos e idempotentes, sem contar confirmação manual como email entregue. Contatos arquivados não podem confirmar etapas pendentes.
+- O processador de sequências só registra emails como enviados e avança a inscrição após confirmação do provedor e persistência, sinaliza falhas na interface e não chama o contador inexistente. Atualizações usam campos canônicos e conferem o passo vigente; chamadas manuais ficam restritas ao usuário autenticado, sequências pausadas não executam e canais sem confirmação ficam pausados em vez de produzir envios fictícios.
+- Confirmação de email, evento e avanço da sequência passam a ser atômicos; retomadas recuperam eventos ausentes de envios confirmados sem reenviar nem duplicar o histórico. Os campos de pausa, proprietário e posição dos passos do banco canônico também são garantidos por migration nas reconstruções. Inscrições de sequências pausadas deixam de ocupar o limite de processamento; devoluções confirmadas respeitam a espera das condições.
+- Inscrições antigas sem progresso começam na primeira etapa, novas inscrições não aceitam progresso nulo e a busca de confirmações percorre todas as páginas, evitando reenvio depois de 1.000 registros.
+- A atualização de emails por RPC encontra o índice único exigido pelo `ON CONFLICT`, preserva o registro nas novas tentativas com diferenças de maiúsculas e mantém o isolamento por proprietário.
+- A tela de 2FA permite escolher o autenticador a desativar quando há vários fatores, exibindo seu nome na ação e preservando os demais.
+- Administradores podem configurar e confirmar o MFA em AAL1 numa tela de recuperação restrita; as configurações de segurança e demais telas permanecem bloqueadas até AAL2. Um fator já cadastrado oferece confirmação do acesso atual, erros de consulta permitem nova tentativa e o retorno preserva a página, a pesquisa e a âncora sem duplicar o histórico. A troca de sessão exige nova verificação.
+- A recuperação MFA espera a confirmação do papel, preserva o QR contra consultas atrasadas e permite escolher entre autenticadores verificados; remover um fator invalida imediatamente a aprovação do token anterior e exige nova confirmação.
+- A exigência de novo código após remover um fator persiste mesmo com renovação do token e navegação; consultas MFA indisponíveis oferecem nova tentativa sem anunciar falsamente que não há fator cadastrado.
+- O teste de conexões limita a cinco segundos a consulta de propriedade e as gravações auxiliares; o histórico é persistido pelo servidor somente após confirmar o dono, preservando o bloqueio de escrita direta aos usuários.
+- Testes de conexões verificam o proprietário antes de executar ou registrar o teste, usam a sessão autenticada para consultar e atualizar a configuração e identificam o responsável também nas falhas. Endereços privados e reservados, DNS misto, redirecionamentos e porta zero são bloqueados; a conexão usa um dos IPs validados, preservando o hostname na validação TLS e tentando IPv6 quando IPv4 falha. A espera pelo TLS também respeita o prazo global; URLs do Supabase exigem HTTPS antes do envio de credenciais.
+- Consultas externas validam todas as relações embutidas, inclusive aliases e aninhamentos, pela lista de tabelas permitidas. Consultas globais com credencial administrativa recusam relações para preservar o isolamento; sintaxe não suportada e projeções excessivas são rejeitadas antes de consultar o banco.
+- Sugestões de Rodízio filtram UF pelo endereço prioritário da empresa; a busca legada de emails duplicados usa os emails relacionados, considera empresas distintas e mantém o escopo do usuário.
+- Auditorias de contato, empresa e interação aceitam os eventos atuais também no banco reconstruído, preservando os tipos anteriores; os campos opcionais de motivo e metadados são criados quando ausentes. Leituras agregadas usam identificador nulo e contagem de registros; consultas por ID preservam a entidade. Consultas e exclusões confirmadas esperam no máximo cinco segundos pela auditoria auxiliar, sem repetir a gravação atrasada nem perder o dono após a renovação do login.
+- O envio de erros ao ocultar a página usa a sessão em memória e keepalive; a migração comercial também adiciona o vínculo único de login em tabelas antigas sem essa coluna, sem atribuir vendedores por nome.
+- As funções Edge aguardam e verificam a gravação de logs opcionais, sem apresentar uma operação concluída como falha quando a auditoria não puder ser registrada.
+- Lembretes WhatsApp reservam um marcador único antes do envio; entregas incertas não são reenviadas automaticamente nem anunciadas como sucesso, e rejeições HTTP confirmadas permitem nova tentativa. A rejeição fica registrada, sem excluir a reserva; apenas uma execução pode retomá-la, e o identificador da tentativa protege sua confirmação. A URL do provedor é validada antes de reservar a entrega. Envios de email não executados deixam de ser contabilizados. A sincronização social e a validação de sugestões informam falha quando o resultado principal não é confirmado.
+- Erros anteriores ao login são descartados ao autenticar; o envio também descarta lotes cuja sessão muda durante a consulta. Criar uma interação pela lista registra somente a auditoria do hook.
+- Indicadores ERP preservam os totais da origem saudável quando a outra falha. O envio final de erros inicia com a sessão autenticada em memória, sem aguardar uma consulta de autenticação durante o fechamento da página.
+- Exclusões de contatos e empresas possuem uma única auditoria autenticada; falha desse registro auxiliar não desfaz nem apresenta como falha uma exclusão confirmada. A lista de contatos também deixa a auditoria de criação com o hook responsável.
+- Excluir o último contato atualiza também a contagem da paginação, evitando solicitar uma página que já não existe.
+- Auditorias de criação/edição/exclusão usam os eventos aceitos pelo banco; leituras da ficha 360 registram visualização de contato e outras consultas não inventam interações criadas. Relatórios de erros usam o JWT da sessão e descartam contextos de outro usuário.
+- Falhas nas consultas de produtos/propostas do ERP aparecem como indisponibilidade, sem confirmar uma carteira vazia ou totais zero. O quadro de propostas da empresa permite repetir a consulta.
+- Consultas externas compartilham uma pausa de 30 segundos após falhas de transporte, HTTP 5xx, 408 ou 429, sem bloquear a persistência canônica independente. Erros de autenticação, autorização ou contrato não abrem circuitos. O legado comercial é lido com o JWT do usuário, limitado ao vendedor vinculado e sem escrita pelas sessões comuns; atividades sem atribuição ou ligadas a uma venda de outro usuário ficam inacessíveis. As telas de empresa e contato informam a ausência de vínculo canônico com atividades, sem atribuí-las por nomes, consultar colunas inexistentes ou apresentar histórico vazio como confirmado. Ler atividades comerciais não registra uma falsa criação de interação na auditoria.
+- A pesquisa de contatos mostra e aplica o termo preservado na URL após Voltar, recarregar e aplicar uma pesquisa salva.
+- A lista de empresas diferencia consulta indisponível de carteira vazia, oferece nova tentativa e preserva os registros confirmados quando uma atualização falha.
+- Voltar e o histórico usam as entradas do navegador, mantêm filtros e âncoras (inclusive URLs extensas) e permitem avançar novamente sem criar ciclos. Destinos explícitos são respeitados e o rastro é validado e ocultado imediatamente na troca de usuário. O menu distingue buscas e visitas; abrir/fechar a busca não duplica índices nem desfaz o destino escolhido.
+- O site publicado e seus previews podem consultar as funções Supabase a partir das suas próprias origens; quando a consulta de uma empresa falha, a tela indica o erro e permite tentar de novo, sem confundi-la com um registro inexistente.
+- Ambientes Supabase reconstruídos incluem telefones, emails e endereços de empresas com normalização, integridade referencial e acesso restrito ao dono ou administrador; o schema canônico existente é preservado. O perfil recebe o email do cadastro também no schema legado, evitando falha ao criar usuários.
+- Gerar uma nova próxima ação reabre a sugestão concluída e apaga os dados da conclusão anterior. Falha na consulta de métricas de concorrentes ocorre antes da gravação para evitar relatar uma operação concluída como erro. O mapa geolocaliza até 50 empresas por vez, pede continuação para as demais e interrompe a operação quando a tela é fechada. Marcadores acompanham inclusões, exclusões e alterações de coordenadas da carteira sem iniciar outro lote automático.
+- Históricos de empresa aceitam tipo/canal/data nulos sem inventar datas; consultas de segmentação/perfis dividem relações em lotes restritos ao usuário. Documentos privados removem o upload incompleto após falha e a contagem de destinatários só é gravada após concluir os lotes.
+- Inscrições em sequências salvam o contato e o contador na mesma transação e reconhecem tentativas repetidas; o banco exige que contato e sequência pertençam ao usuário. A busca conversacional filtra cidade/UF nas relações, e os alertas consultam contatos em lotes para evitar URLs excessivas. O mapa permite repetir geolocalizações não concluídas; o teste de webhook separa falhas HTTP de falhas de registro.
+- A fila de pontuação conclui entradas de contatos excluídos para não bloquear os próximos recálculos.
+- Pontuação de leads usa as categorias e colunas do banco canônico, preserva A/B/C/D na interface e nas automações, e grava pontuação, histórico por contato e conclusão da fila em uma transação com erros propagados.
+- Criação e edição de empresas salvam campos, telefones, emails e endereços em uma transação, preservam a versão e reutilizam a identificação após perda de resposta. Relações de empresas ficam restritas ao dono ou administrador.
+- Mesclagens concluídas deixam de aparecer como falhas após erro na auditoria adicional; os dados são atualizados e o usuário recebe um aviso da falha de auditoria.
+- A próxima ação usa a unicidade por usuário/contato; históricos de empresa preservam registros sem tipo/canal. Valores personalizados de formulários ainda não persistidos deixam de gerar avisos indevidos de auditoria.
+- Auditoria comportamental reúne alterações de relacionamento e análises VAK/metaprogramas do usuário, preservando IDs e validações humanas. Deduplicação busca emails/telefones em lotes paginados e prefere a relação primária, evitando URLs extensas e truncamento das relações.
+- A geolocalização do BI pagina a carteira, as contagens e os endereços por lotes, mantém o endereço primário com coordenadas válidas e restringe a leitura ao dono.
+- Históricos aceitam interações com tipo/canal nulos e conservam a duração dos áudios em metadata. Recomendações RFM e perfis sociais normalizam os formatos realmente persistidos sem inventar estimativas; falhas em Meu Dia encerram o carregamento e oferecem nova tentativa.
+- A captura do backup confia na CA oficial do Supabase e verifica certificado e hostname; o dump recebe a conexão por ambiente, sem URL nos argumentos, e falhas registram somente etapa e SQLSTATE.
+- O teste de restauração compara o destino com o snapshot do dump, exige manifesto correspondente e isola a cópia com senha efêmera e limpeza independente. Diagnósticos omitem conexões e dados; verificar um dump sem GPG não falha mais no cleanup.
+- Cadastro e edição de empresas convertem as cores e os dados compostos para o contrato canônico, preservam telefones/emails distintos sem duplicar aliases e salvam os campos de contato da tela detalhada. O mapa pagina a carteira por ID e mantém o score restrito ao usuário. A geração de próxima ação só retorna sucesso após a persistência; falhas na detecção de alertas liberam o botão para tentar novamente.
+- A checagem TypeScript passa a verificar o aplicativo e a configuração Node; tipos gerados do banco canônico e contratos de leitura/escrita validam os campos reais de contatos, empresas, relatórios, automações e páginas públicas.
+- As notificações de NPS incluem pesquisas pendentes, identificam links ainda não enviados e filtram a modalidade para não apresentar pesquisas CSAT como NPS.
+- Falhas no proxy externo e na persistência RFM canônica usam circuitos independentes, preservando o acesso à origem saudável.
+- Erros de autenticação, validação e permissão das RPCs canônicas não bloqueiam requisições válidas no circuito de disponibilidade. Ramificações de sequências validam suas condições também em bases parcialmente migradas.
+- A atualização do contrato de pesquisas exige reconciliação explícita em bases com histórico, preserva a modalidade existente e impede classificações silenciosas de NPS como CSAT.
+- O painel CSAT separa suas pesquisas das NPS, cria registros pendentes sem simular envio e aceita somente notas inteiras de 1 a 5. O registro manual exige uma pesquisa aberta do dono e preserva a nota escolhida se a gravação falhar.
+- O forecast de confiança não atribui zero dias a negócios sem histórico de estágio; marca a estimativa como parcial ou indisponível e exclui negócios concluídos.
+- O Pipeline preserva negócios com status vazio, evita contagens e auditorias indevidas durante a paginação, permite editar negócios sem empresa e atualiza os indicadores e as empresas envolvidas após alterações.
+- O gate RLS preserva o rollback externo mesmo quando migrations incluem `BEGIN`/`COMMIT`; o preparo lexical mantém blocos PL/pgSQL e rejeita controles transacionais ambíguos antes de executar alterações.
+- Análises RFM exigem um contato ou empresa vinculada e salvam lotes diretamente no banco com o login do usuário, preservando a transação única sem passar pelo limite de 128 KiB do proxy externo. A aba Pendentes do NPS inclui pesquisas recém-criadas e permite registrar suas respostas.
+- Pesquisas CSAT/NPS podem ser criadas sem uma nota fictícia; validações humanas de VAK/metaprogramas e ramificações de sequências recuperam os campos previstos. A análise RFM por contato deixa de exigir uma empresa artificial.
+- A pesquisa pública usa a escala e a coluna corretas (CSAT 1–5, NPS 0–10 e CES 1–7), exige nota ao responder, bloqueia reenvio e não inventa data de envio. O acesso do dono às pesquisas é restaurado no schema limpo. O analisador RFM grava `segment_code` e devolve erro quando a persistência falha.
+- O painel NPS cria pesquisas do tipo correto, calcula suas métricas a partir de `nps_score` e confirma criação do link sem prometer entrega. As análises RFM do painel e do servidor salvam a análise e o histórico na mesma transação, com escopo por usuário e rejeição de contatos de outro tenant.
+- Pipeline lê páginas de negócios pelo mesmo proxy externo usado nas gravações; ordenação por data e ID mantém a paginação estável mesmo com datas iguais.
+- Resumo do Pipeline mantém o envelope de empresas e obtém a UF de um único endereço prioritário, evitando coluna inexistente, contagem duplicada e falha para empresas sem status. O contrato TypeScript acompanha o retorno real da RPC.
+- Pipeline carrega negócios individuais sob RLS, preserva datas de fechamentos anteriores e atualiza relatórios/aba comercial ao fechar negócios. Status canônicos aparecem corretamente nos indicadores da empresa. O resumo diário usa a data e o fuso da interface, inclusive após a virada do dia UTC; chamadas legadas mantêm o fuso da sessão.
+- Fechar negócios pelo Pipeline grava os estados canônicos `ganho`/`perdido` e o instante real de fechamento, permitindo contagens e receita nos relatórios sem criar datas para negócios antigos.
+- Resumo diário e relatórios passam a usar os contratos reais das RPCs: séries de sazonalidade e canais, etapas do funil e contagens de negócios/interações/follow-ups. Formatos legados são preservados e tempos de resposta ausentes ficam indisponíveis. A auditoria de relacionamento detecta divergências da última interação, respeita o dono do contato e mostra falhas de consulta sem declarar integridade global. Gravação do histórico pelo gatilho volta a permitir alterações de score/estágio/sentimento e exclusão de interações pelo dono, mantendo bloqueada a escrita direta de logs.
+- A checagem TypeScript passa a verificar o aplicativo e a configuração Node; tipos gerados do banco canônico e contratos de leitura/escrita validam os campos reais de contatos, empresas, relatórios, automações e páginas públicas.
+- `supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql` — 32 RPCs chamadas pelo `external-data` deixam de falhar no banco canônico por tabelas/colunas inexistentes (telefone→`phone`, cidade/UF→`company_addresses`, emails→`contact_emails`/`company_emails`, `tipo_interacao`→`type`, `followup_pendente`→`requer_followup`/`followup_concluido`, `notes`→`description`, `due_date`→`reminder_date`, `time_analysis`→`contact_time_analysis`, `observacao`→`contexto`, `canal`→`channel`, `full_name` gerada via `first_name`/`last_name`) e criam as 7 RPCs allowlisted ausentes (`get_all_tasks`, `get_tasks_by_contact`, `reopen_task`, `update_territory`, `approve_follow_up`, `reject_follow_up`, `get_ai_recommendation_logs`). Filtros de follow-up cobrem os dois formatos de coluna (`requer_followup`/`data_followup` e `follow_up_required`/`follow_up_date`), `assign_territory`/`update_territory` exigem território gerenciado pelo usuário, e `get_company_360_view` expõe os campos do contrato `Company360` no topo. Validado no banco canônico: 0 erros de compilação nas 177 RPCs e smoke test executando as funções com fixture transacional.
+- `src/hooks/useTasks.ts` + `src/hooks/useInteractionsRpc.ts` — hooks mapeiam os aliases das RPCs ao contrato do frontend: `usePendingTasks` passa `p_user_id` (seleciona o overload tabular) e `task_id`→`id`; `useOverdueTasks` gera `id`/`title` para lembretes e follow-ups atrasados; `useInteractionHistory` traduz `tipo_interacao`→`type`, `canal`→`channel` e `created_at`→`data_interacao`.
+- `supabase/migrations/20261006140000_ai_gateway_observability.sql` — painel admin do AI Gateway (saúde, partições, latência de RPCs, tendência e planos de execução) deixa de falhar no banco canônico: cria `ai_gateway_metrics` (particionada por mês, retenção 90 dias), `rpc_perf_samples`, `rpc_plan_snapshots`, as RPCs de leitura e os jobs de alerta automático. As edge functions de IA voltam a registrar telemetria. A RPC de saúde usa as colunas que as funções realmente gravam e o dia da semana ISO esperado pelo heatmap.
+- `vercel.json` — fallback SPA na Vercel: links diretos e recarregamento de rotas internas (`/auth`, `/dashboard`, `/contatos` etc.) deixam de responder 404.
+- `supabase/migrations/20261011120000_rpc_plan_structural_hash.sql` — cartão de planos de RPC do AI Gateway deixa de acusar troca de plano quando só muda o que a execução observou (ordenação em memória ou em disco, workers executados, tempos); o hash considera apenas a estrutura escolhida pelo planejador, incluindo paralelismo e workers planejados. O plano capturado de `get_ai_gateway_partition_stats` passa a mostrar a leitura de `min/max` de cada partição, que é o que fica lento.
+- O helper de formatação `to_title_case_pt(text)` publicado no canônico deixa de ter execução anônima fora da lista de endpoints públicos; chamadas autenticadas e de serviço são preservadas.
+
+### Security
+- Popups do mapa exibem os dados como texto, sem interpretar HTML do cadastro, e aceitam links de site somente com HTTP/HTTPS.
+- Leituras de dados pessoais pelo proxy respeitam o JWT e o RLS do usuário também nos relacionamentos; negócios próprios não expõem nomes de empresas ou contatos de outros usuários.
+- `supabase/functions/external-data/index.ts` + `supabase/migrations/20261007100000_external_rpc_user_scope.sql` — RPCs chamadas por usuários via `external-data` passam a rodar com o JWT do próprio usuário em vez da service role: os guards `assert_*` e o RLS voltam a valer, e um usuário deixa de conseguir ler ou alterar dados de outro passando o ID de uma empresa, contato ou tarefa. `get_instant_kpis` passa a SECURITY INVOKER (contagens respeitam o RLS).
+- `vercel.json` — cabeçalhos de segurança passam a ser enviados pela Vercel (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` e CSP mínima `frame-ancestors 'none'; object-src 'none'; base-uri 'self'`), além de cache imutável para `/assets/*` e `no-cache` para `index.html`, service workers e manifest.
+
 ## [2.7.4] - 2026-04-20 — Rodada S: Optimistic Locking End-to-End
 
 ### Added
@@ -260,71 +413,4 @@ Marco final consolidando 40 melhorias atômicas distribuídas em 8 rodadas (A-H)
 - Resilient fetch com retry exponencial
 - Logger centralizado substituindo console.log em libs
 
-## [1.5.0] - 2026-04-08
-
-### Adicionado
-- Análise DISC com AI (perfil comportamental de contatos)
-- Análise RFM (Recência, Frequência, Valor Monetário)
-- Sistema de insights AI com geração automática
-- AI Writing Assistant para composição de mensagens
-- Smart Reminders com sugestão inteligente de follow-ups
-
-### Melhorado
-- PWA com Service Worker e caching offline (NetworkFirst + CacheFirst)
-- Web Vitals monitoring em produção
-
-## [1.4.0] - 2026-04-05
-
-### Adicionado
-- Dashboard com métricas de pipeline e atividades recentes
-- Weekly Digest (relatório semanal automatizado)
-- Sistema de notificações push
-- Health check endpoint com monitoramento de DB
-
-### Melhorado
-- Search unaccent para busca sem acentos (contatos, empresas, interações)
-- Audit trail automático para operações CRUD
-
-## [1.3.0] - 2026-04-02
-
-### Adicionado
-- Módulo de Empresas com dados do banco externo (220 tabelas)
-- Mapa interativo de empresas (Leaflet + MarkerCluster)
-- Filtros avançados com 30+ critérios
-- Sistema de cooperativas (singular, central, confederação)
-
-### Melhorado
-- Paginação server-side com batch loading
-- Formatação automática de CNPJ, capital social, razão social
-
-## [1.2.0] - 2026-03-28
-
-### Adicionado
-- Módulo de Contatos com CRUD completo
-- Sistema de interações (reuniões, calls, emails, notas)
-- Relationship Score e Relationship Stage
-- Análise de sentimento em interações
-- Cadência de contato com lembretes automáticos
-
-### Segurança
-- RLS em todas as tabelas (user_id scoping)
-- RBAC com tabela user_roles e função has_role()
-- Autenticação Supabase com email + Google OAuth
-
-## [1.1.0] - 2026-03-22
-
-### Adicionado
-- Sistema de automação (rules + triggers + actions)
-- Templates de mensagens com variáveis dinâmicas
-- Favoritos de templates
-- Sistema de alertas e compatibilidade
-
-## [1.0.0] - 2026-03-15
-
-### Adicionado
-- Lançamento inicial do SINGU CRM
-- Autenticação com email/senha e Google
-- Dashboard principal
-- Perfil de usuário
-- Tema claro/escuro
-- Layout responsivo mobile-first
+[Histórico das versões 1.0.0 a 1.5.0](docs/CHANGELOG_1.0_1.5.md).

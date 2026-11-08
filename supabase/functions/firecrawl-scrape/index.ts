@@ -33,13 +33,13 @@ Deno.serve(async (req) => {
 
     const parsed = bodySchema.safeParse(rawBody);
     if (!parsed.success) {
-      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400);
+      return jsonError(parsed.error.issues[0]?.message ?? "Invalid request body", 400, req);
     }
     const { url, options } = parsed.data;
 
     const apiKey = Deno.env.get('FIRECRAWL_API_KEY');
     if (!apiKey) {
-      return jsonError('Firecrawl connector not configured', 500);
+      return jsonError('Firecrawl connector not configured', 500, req);
     }
 
     const response = await fetchScrape('https://api.firecrawl.dev/v1/scrape', {
@@ -60,12 +60,12 @@ Deno.serve(async (req) => {
     const data = await response.json();
 
     if (!response.ok) {
-      return jsonError(data.error || `Request failed with status ${response.status}`, response.status);
+      return jsonError(data.error || `Request failed with status ${response.status}`, response.status, req);
     }
 
-    return jsonOk(data);
+    return jsonOk(data, req);
   } catch (error) {
     console.error("firecrawl-scrape error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

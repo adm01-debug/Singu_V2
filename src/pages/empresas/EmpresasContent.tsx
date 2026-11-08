@@ -89,7 +89,7 @@ export function EmpresasContent(props: Props) {
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el || !fetchNextPage || !hasNextPage) return;
-    // eslint-disable-next-line sonarjs/no-nested-functions
+
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && !isFetchingNextPage) fetchNextPage();
     }, { rootMargin: '600px' });
@@ -145,13 +145,13 @@ export function EmpresasContent(props: Props) {
         </div>
       </div>
 
-      <AdvancedFilters 
-        filters={dynamicFilters} 
-        sortOptions={companySortOptions} 
-        activeFilters={activeFilters} 
-        onFiltersChange={onFiltersChange} 
-        sortBy={sortBy} 
-        sortOrder={sortOrder} 
+      <AdvancedFilters
+        filters={dynamicFilters}
+        sortOptions={companySortOptions}
+        activeFilters={activeFilters}
+        onFiltersChange={onFiltersChange}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
         onSortChange={onSortChange}
         multiSort={props.multiSort}
         onMultiSortChange={props.onMultiSortChange}

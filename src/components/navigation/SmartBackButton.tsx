@@ -2,6 +2,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useNavigationStack } from '@/contexts/NavigationStackContext';
+import { getReadableLabel } from '@/lib/navigationLabels';
 
 interface SmartBackButtonProps {
   fallback?: string;
@@ -18,15 +19,7 @@ interface SmartBackButtonProps {
 export const SmartBackButton = ({ fallback = '/', label, className }: SmartBackButtonProps) => {
   const { goBack, previousPath } = useNavigationStack();
 
-  // Deriva um rótulo curto a partir do último segmento da rota anterior.
-  const derivedLabel = (() => {
-    if (!previousPath) return null;
-    const seg = previousPath.split('?')[0].split('/').filter(Boolean).pop();
-    if (!seg) return 'Início';
-    return seg.charAt(0).toUpperCase() + seg.slice(1).replace(/-/g, ' ');
-  })();
-
-  const computedLabel = label ?? (derivedLabel ? `Voltar para ${derivedLabel}` : 'Voltar');
+  const computedLabel = label ?? `Voltar para ${getReadableLabel(previousPath || fallback)}`;
 
   const handleClick = () => goBack(fallback);
 

@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
 
     const parsed = EvolutionInput.safeParse(rawBody);
     if (!parsed.success) {
-      return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+      return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     }
     const { action, instanceName, remoteJid, message, phoneNumber, limit, body: extraBody } = parsed.data;
 
@@ -377,7 +377,7 @@ Deno.serve(async (req) => {
         break;
 
       default:
-        return jsonError(`Unknown action: ${action}`, 400);
+        return jsonError(`Unknown action: ${action}`, 400, req);
     }
 
     // Evolution API call logged;
@@ -395,10 +395,10 @@ Deno.serve(async (req) => {
       throw new Error(data.message || data.error || 'Evolution API error');
     }
 
-    return jsonOk({ success: true, data });
+    return jsonOk({ success: true, data }, req);
 
   } catch (error) {
     console.error('Evolution API function error:', error);
-    return jsonError('Internal server error', 500);
+    return jsonError('Internal server error', 500, req);
   }
 });

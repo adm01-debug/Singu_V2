@@ -1,7 +1,18 @@
 import { test, expect } from '@playwright/test';
+import {
+  loginWithTestUser,
+  requireTestCredentials,
+  requireWritableEnvironment,
+} from '../e2e/support/auth';
 
 test.describe('Contatos e Rapport (Meta 10/10)', () => {
+  test.beforeEach(async ({ page }) => {
+    requireTestCredentials();
+    await loginWithTestUser(page);
+  });
+
   test('Fluxo completo: CRUD, Filtros por Hobbies e Rapport', async ({ page }) => {
+    requireWritableEnvironment();
     // 1. Navegação e Listagem (Paginação/LoadMore)
     await page.goto('/contatos');
     await expect(page.locator('h1')).toContainText('Contatos');
@@ -77,6 +88,7 @@ test.describe('Contatos e Rapport (Meta 10/10)', () => {
   });
 
   test('Sincronização Social e Enriquecimento', async ({ page }) => {
+    requireWritableEnvironment();
     await page.goto('/contatos');
     const firstContact = page.locator('[data-testid="contact-card"]').first();
     await firstContact.click();
@@ -89,6 +101,7 @@ test.describe('Contatos e Rapport (Meta 10/10)', () => {
   });
 
   test('Consistência Rapport e Metadata no Supabase', async ({ page }) => {
+    requireWritableEnvironment();
     // Valida se as tags têm ícones de origem após aprovação
     await page.goto('/contatos');
     const firstContact = page.locator('[data-testid="contact-card"]').first();

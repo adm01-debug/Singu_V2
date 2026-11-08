@@ -11,6 +11,7 @@ import type { EmailBlock } from '@/components/email-builder/types';
 import { toast } from 'sonner';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { safehref } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface PublicPage {
   id: string;
@@ -23,12 +24,27 @@ interface PublicPage {
   view_count: number;
 }
 
+function isEmailBlock(value: unknown): value is EmailBlock {
+  if (!value || typeof value !== 'object' || !('id' in value) || typeof value.id !== 'string' || !('type' in value)) return false;
+  const aligned = 'align' in value && (value.align === 'left' || value.align === 'center' || value.align === 'right');
+  switch (value.type) {
+    case 'heading': return aligned && 'text' in value && typeof value.text === 'string' && 'level' in value && (value.level === 1 || value.level === 2 || value.level === 3);
+    case 'text': return aligned && 'text' in value && typeof value.text === 'string';
+    case 'button': return aligned && 'label' in value && typeof value.label === 'string' && 'href' in value && typeof value.href === 'string';
+    case 'image': return 'src' in value && typeof value.src === 'string' && 'alt' in value && typeof value.alt === 'string' && (!('width' in value) || value.width === undefined || (typeof value.width === 'number' && Number.isFinite(value.width)));
+    case 'divider': return true;
+    case 'spacer': return 'height' in value && typeof value.height === 'number' && Number.isFinite(value.height);
+    default: return false;
+  }
+}
+
 export default function PublicLandingPage() {
   const { slug } = useParams<{ slug: string }>();
   const [params] = useSearchParams();
   const [page, setPage] = useState<PublicPage | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -41,6 +57,9 @@ export default function PublicLandingPage() {
     (async () => {
       if (!slug) return;
       setLoading(true);
+      setNotFound(false);
+      setLoadError(null);
+      setPage(null);
       const { data, error } = await supabase
         .from('landing_pages')
         .select('id, user_id, slug, title, description, blocks, redirect_url, view_count, is_published')
@@ -48,15 +67,28 @@ export default function PublicLandingPage() {
         .eq('is_published', true)
         .maybeSingle();
       if (!alive) return;
-      if (error || !data) {
+      if (error) {
+        setLoadError('Não foi possível carregar esta página. Tente novamente.');
+        setLoading(false);
+        return;
+      }
+      if (!data) {
         setNotFound(true);
         setLoading(false);
         return;
       }
-      setPage(data as unknown as PublicPage);
+      const blocks: unknown = data.blocks;
+      if (!Array.isArray(blocks) || !blocks.every(isEmailBlock)) {
+        setLoadError('O conteúdo desta página é inválido.');
+        setLoading(false);
+        return;
+      }
+      setPage({ ...data, blocks, view_count: data.view_count ?? 0 });
       setLoading(false);
-      // Increment view count via SECURITY DEFINER RPC (anon has no direct UPDATE policy)
-      supabase.rpc('increment_landing_page_view' as never, { page_id: data.id } as never).then(() => {}, () => {});
+      // Registra a visualização pela RPC; acesso anônimo não pode atualizar a tabela diretamente.
+      supabase.rpc('increment_landing_page_view', { page_id: data.id }).then(({ error }) => {
+        if (error) logger.warn('Falha ao registrar visualização da landing page:', error);
+      });
     })();
     return () => { alive = false; };
   }, [slug]);
@@ -80,6 +112,7 @@ export default function PublicLandingPage() {
       utm_source: params.get('utm_source'),
       utm_medium: params.get('utm_medium'),
       utm_campaign: params.get('utm_campaign'),
+      form_data: { name, email, phone },
       data: Object.fromEntries(params.entries()),
       user_agent: navigator.userAgent,
     });
@@ -100,6 +133,9 @@ export default function PublicLandingPage() {
         <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
       </div>
     );
+  }
+  if (loadError) {
+    return <div role="alert" className="min-h-screen flex items-center justify-center text-destructive p-6">{loadError}</div>;
   }
   if (notFound || !page) {
     return (

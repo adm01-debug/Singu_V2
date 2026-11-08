@@ -151,7 +151,7 @@ export default function NurturingPage() {
                         {step.type === 'wait' && (
                           <Input
                             type="number" value={step.delay_days} className="h-6 w-14 text-[10px]"
-                            // eslint-disable-next-line sonarjs/no-nested-functions
+
                             onChange={e => setSteps(prev => prev.map((s, j) => j === i ? { ...s, delay_days: Number(e.target.value) } : s))}
                           />
                         )}

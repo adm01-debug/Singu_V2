@@ -113,18 +113,19 @@ const ContatoDetalhe = () => {
       linkedin: contact.linkedin,
       instagram: contact.instagram,
       twitter: contact.twitter,
-      company_name: company?.name,
+      company_name: company?.nome_crm,
     });
   };
 
   if (loading) return <ContactDetailSkeleton />;
 
-  if (error || !contact) {
+  if (!contact) {
     return (
       <AppLayout>
         <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center">
           <AlertCircle className="w-12 h-12 text-muted-foreground mb-4" />
           <p className="text-muted-foreground mb-4">{error || 'Contato não encontrado'}</p>
+          {error && <Button variant="outline" onClick={() => refetch()}>Tentar novamente</Button>}
           <Link to="/contatos">
             <Button variant="link">
               <ArrowLeft className="mr-1.5 h-4 w-4" />
@@ -143,10 +144,15 @@ const ContatoDetalhe = () => {
     <AppLayout>
       <SEOHead title={formatContactName(contact.first_name, contact.last_name)} description={`Detalhes do contato ${formatContactName(contact.first_name, contact.last_name)}`} />
       <div className="min-h-screen p-4 md:p-6 space-y-4">
+        {error && (
+          <div role="alert" className="p-3 rounded-lg border border-destructive/30 text-destructive flex items-center justify-between gap-2">
+            <span>Não foi possível atualizar a ficha. Exibindo os dados da última consulta concluída.</span>
+            <Button variant="outline" size="sm" onClick={() => refetch()}>Tentar novamente</Button>
+          </div>
+        )}
         {/* Breadcrumb + Lux */}
         <PageHeader
-          backTo="/contatos"
-          backLabel="Contatos"
+          backFallback="/contatos"
           title={formatContactName(contact.first_name, contact.last_name)}
           actions={
             <div className="flex items-center gap-2">
@@ -163,7 +169,7 @@ const ContatoDetalhe = () => {
                 fallbackPhone={contact.phone}
               />
               <Button asChild variant="outline" size="sm" className="gap-1.5">
-                <Link to={`/contatos/${contact.id}/relatorio`}>
+                <Link to={`/relatorio/${contact.id}`}>
                   <FileText className="h-4 w-4" />
                   Relatório Completo
                 </Link>

@@ -11,11 +11,11 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  AlertCircle, 
-  Award, 
-  TrendingUp, 
-  Plus, 
+import {
+  AlertCircle,
+  Award,
+  TrendingUp,
+  Plus,
   Trash2,
   Copy,
   Sparkles,
@@ -36,17 +36,17 @@ const PainClaimGainBuilder = ({
   onGenerate
 }: PainClaimGainBuilderProps) => {
   const [activeTab, setActiveTab] = useState<'pain' | 'claim' | 'gain'>('pain');
-  
+
   // Pain State
   const [pains, setPains] = useState<PainPoint[]>([]);
   const [newPain, setNewPain] = useState('');
   const [newPainIntensity, setNewPainIntensity] = useState(7);
-  
+
   // Claim State
   const [claims, setClaims] = useState<ClaimStatement[]>([]);
   const [newClaim, setNewClaim] = useState('');
   const [newClaimProof, setNewClaimProof] = useState('');
-  
+
   // Gain State
   const [gains, setGains] = useState<GainProof[]>([]);
   const [newGain, setNewGain] = useState('');
@@ -55,7 +55,7 @@ const PainClaimGainBuilder = ({
   // Add pain
   const addPain = () => {
     if (!newPain.trim()) return;
-    
+
     setPains(prev => [...prev, {
       id: `pain-${Date.now()}`,
       description: newPain,
@@ -71,7 +71,7 @@ const PainClaimGainBuilder = ({
   // Add claim
   const addClaim = () => {
     if (!newClaim.trim()) return;
-    
+
     setClaims(prev => [...prev, {
       id: `claim-${Date.now()}`,
       claim: newClaim,
@@ -87,7 +87,7 @@ const PainClaimGainBuilder = ({
   // Add gain
   const addGain = () => {
     if (!newGain.trim()) return;
-    
+
     setGains(prev => [...prev, {
       id: `gain-${Date.now()}`,
       gainType: newGainType,
@@ -227,10 +227,10 @@ O que faz mais sentido para você?"
                     <p className="text-sm font-medium">{pain.description}</p>
                     <p className="text-xs text-muted-foreground">Intensidade: {pain.intensity}/10</p>
                   </div>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="sm"
-                    // eslint-disable-next-line sonarjs/no-nested-functions
+
                     onClick={() => setPains(prev => prev.filter((_, idx) => idx !== i))}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -301,10 +301,10 @@ O que faz mais sentido para você?"
                       <p className="text-xs text-muted-foreground">Prova: {claim.proofPoints[0]}</p>
                     )}
                   </div>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="sm"
-                    // eslint-disable-next-line sonarjs/no-nested-functions
+
                     onClick={() => setClaims(prev => prev.filter((_, idx) => idx !== i))}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -354,10 +354,10 @@ O que faz mais sentido para você?"
                       {gain.quantified && <Badge variant="secondary" className="text-xs">Quantificado ✓</Badge>}
                     </div>
                   </div>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="sm"
-                    // eslint-disable-next-line sonarjs/no-nested-functions
+
                     onClick={() => setGains(prev => prev.filter((_, idx) => idx !== i))}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -395,8 +395,8 @@ O que faz mais sentido para você?"
 
         {/* Generate Button */}
         <div className="mt-6 pt-4 border-t">
-          <Button 
-            onClick={generateScript} 
+          <Button
+            onClick={generateScript}
             className="w-full"
             disabled={alignmentScore < 50}
           >

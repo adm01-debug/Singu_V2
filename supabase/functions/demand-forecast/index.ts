@@ -109,8 +109,8 @@ Retorne EXATAMENTE um JSON com a estrutura usando a tool fornecida.`;
     });
 
     if (!response.ok) {
-      if (response.status === 429) return jsonError('Rate limit exceeded', 429);
-      if (response.status === 402) return jsonError('Payment required', 402);
+      if (response.status === 429) return jsonError('Rate limit exceeded', 429, req);
+      if (response.status === 402) return jsonError('Payment required', 402, req);
       throw new Error(`AI Gateway error: ${response.status}`);
     }
 
@@ -123,9 +123,9 @@ Retorne EXATAMENTE um JSON com a estrutura usando a tool fornecida.`;
     return jsonOk({
       historical: monthlyData,
       ...forecastData,
-    });
+    }, req);
   } catch (error: unknown) {
     console.error("demand-forecast error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

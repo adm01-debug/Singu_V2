@@ -11,50 +11,90 @@
 -- PART 1 — Tables with zero NULL user_id rows (safe direct constraint)
 -- ============================================================
 
-ALTER TABLE public.activity_feed          ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.cadence_enrollments    ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.commissions            ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.company_cadences       ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.deals                  ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.documents              ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.favorites              ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.meetings               ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.notifications          ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.proposals              ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.quick_notes            ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.reminders              ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.sales_forecasts        ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.sales_goals            ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.scheduled_visits       ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.seller_daily_metrics   ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.sla_violations         ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.tasks                  ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.territory_assignments  ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.user_badges            ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.user_goals             ALTER COLUMN user_id SET NOT NULL;
+DO $migration$
+DECLARE
+  table_name text;
+BEGIN
+  FOR table_name IN
+    SELECT unnest(ARRAY[
+      'activity_feed',
+      'cadence_enrollments',
+      'commissions',
+      'company_cadences',
+      'deals',
+      'documents',
+      'favorites',
+      'meetings',
+      'notifications',
+      'proposals',
+      'quick_notes',
+      'reminders',
+      'sales_forecasts',
+      'sales_goals',
+      'scheduled_visits',
+      'seller_daily_metrics',
+      'sla_violations',
+      'tasks',
+      'territory_assignments',
+      'user_badges',
+      'user_goals'
+    ])
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', table_name))
+        AND attname = 'user_id'
+        AND NOT attisdropped
+    ) THEN
+      EXECUTE format(
+        'ALTER TABLE public.%I ALTER COLUMN user_id SET NOT NULL',
+        table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;
 
 -- ============================================================
 -- PART 2 — Analytics tables: backfill via contact owner, then constrain
 -- ============================================================
 
-UPDATE public.relationship_score_history rsh
-SET user_id = c.user_id
-FROM public.contacts c
-WHERE rsh.contact_id = c.id
-  AND rsh.user_id IS NULL;
+DO $migration$
+DECLARE
+  table_name text;
+BEGIN
+  IF to_regclass('public.contacts') IS NULL THEN
+    RETURN;
+  END IF;
 
-UPDATE public.churn_predictions cp
-SET user_id = c.user_id
-FROM public.contacts c
-WHERE cp.contact_id = c.id
-  AND cp.user_id IS NULL;
-
-UPDATE public.deal_velocity_analysis dv
-SET user_id = c.user_id
-FROM public.contacts c
-WHERE dv.contact_id = c.id
-  AND dv.user_id IS NULL;
-
-ALTER TABLE public.relationship_score_history ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.churn_predictions          ALTER COLUMN user_id SET NOT NULL;
-ALTER TABLE public.deal_velocity_analysis     ALTER COLUMN user_id SET NOT NULL;
+  FOR table_name IN
+    SELECT unnest(ARRAY[
+      'relationship_score_history',
+      'churn_predictions',
+      'deal_velocity_analysis'
+    ])
+  LOOP
+    IF (
+      SELECT count(*) = 2
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', table_name))
+        AND attname = ANY(ARRAY['contact_id', 'user_id'])
+        AND NOT attisdropped
+    ) THEN
+      EXECUTE format(
+        'UPDATE public.%I target
+         SET user_id = contacts.user_id
+         FROM public.contacts contacts
+         WHERE target.contact_id = contacts.id
+           AND target.user_id IS NULL',
+        table_name
+      );
+      EXECUTE format(
+        'ALTER TABLE public.%I ALTER COLUMN user_id SET NOT NULL',
+        table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;

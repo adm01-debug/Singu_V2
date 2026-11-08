@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import type { BehavioralInsightItem } from '@/hooks/useBehavioralProfile';
+import { z } from 'zod';
+import type { Tables } from '@/integrations/supabase/types';
 
 export interface BehavioralProfileListItem {
   id: string;
@@ -35,27 +37,10 @@ function periodToDate(period: BehavioralProfilesFilters['period']): string | nul
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
 }
 
-const asArr = <T,>(v: unknown, fallback: T[]): T[] => (Array.isArray(v) ? (v as T[]) : fallback);
+const insightItemsSchema = z.array(z.union([z.string(), z.object({ label: z.string(), evidence: z.string().optional() })]));
 
-interface RawProfileRow {
-  id: string;
-  contact_id: string;
-  summary: string | null;
-  tone: string | null;
-  communication_style: string | null;
-  sentiment_trend: string | null;
-  preferences: unknown;
-  hobbies: unknown;
-  recurrent_topics: unknown;
-  based_on_count: number | null;
-  model: string | null;
-  last_updated_at: string;
-  contacts: {
-    name: string | null;
-    avatar_url: string | null;
-    company_id: string | null;
-    companies: { name: string | null } | null;
-  } | null;
+function normalizeInsights(value: unknown): BehavioralInsightItem[] {
+  return insightItemsSchema.parse(value ?? []).map(item => typeof item === 'string' ? { label: item } : { label: item.label, evidence: item.evidence });
 }
 
 export interface BehavioralProfilesListResult {
@@ -77,8 +62,7 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
         .from('contact_analytical_profiles')
         .select(`
           id, contact_id, summary, tone, communication_style, sentiment_trend,
-          preferences, hobbies, recurrent_topics, based_on_count, model, last_updated_at,
-          contacts:contact_id ( name, avatar_url, company_id, companies:company_id ( name ) )
+          preferences, hobbies, recurrent_topics, based_on_count, model, last_updated_at
         `)
         .eq('user_id', user!.id)
         .order('last_updated_at', { ascending: false });
@@ -88,24 +72,40 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
       const { data, error } = await q;
       if (error) throw error;
 
-      const rows = (data ?? []) as unknown as RawProfileRow[];
+      const rows = data ?? [];
+      const contactIds = [...new Set(rows.flatMap(row => row.contact_id ? [row.contact_id] : []))];
+      const contactsById = new Map<string, Pick<Tables<'contacts'>, 'id' | 'full_name' | 'avatar_url' | 'company_id'>>();
+      for (let offset = 0; offset < contactIds.length; offset += 100) {
+        const { data: contacts, error: contactsError } = await supabase.from('contacts')
+          .select('id, full_name, avatar_url, company_id').in('id', contactIds.slice(offset, offset + 100)).eq('user_id', user!.id);
+        if (contactsError) throw contactsError;
+        for (const contact of contacts ?? []) contactsById.set(contact.id, contact);
+      }
+      const companyIds = [...new Set([...contactsById.values()].flatMap(contact => contact.company_id ? [contact.company_id] : []))];
+      const companiesById = new Map<string, Pick<Tables<'companies'>, 'id' | 'nome_crm'>>();
+      for (let offset = 0; offset < companyIds.length; offset += 100) {
+        const { data: companies, error: companiesError } = await supabase.from('companies')
+          .select('id, nome_crm').in('id', companyIds.slice(offset, offset + 100)).eq('user_id', user!.id);
+        if (companiesError) throw companiesError;
+        for (const company of companies ?? []) companiesById.set(company.id, company);
+      }
       return rows.map((r) => ({
         id: r.id,
-        contact_id: r.contact_id,
-        contact_name: r.contacts?.name ?? null,
-        contact_avatar: r.contacts?.avatar_url ?? null,
-        company_id: r.contacts?.company_id ?? null,
-        company_name: r.contacts?.companies?.name ?? null,
+        contact_id: z.string().parse(r.contact_id),
+        contact_name: contactsById.get(r.contact_id)?.full_name ?? null,
+        contact_avatar: contactsById.get(r.contact_id)?.avatar_url ?? null,
+        company_id: contactsById.get(r.contact_id)?.company_id ?? null,
+        company_name: companiesById.get(contactsById.get(r.contact_id)?.company_id)?.nome_crm ?? null,
         summary: r.summary,
         tone: r.tone,
         communication_style: r.communication_style,
         sentiment_trend: r.sentiment_trend,
-        preferences: asArr<BehavioralInsightItem>(r.preferences, []),
-        hobbies: asArr<BehavioralInsightItem>(r.hobbies, []),
-        recurrent_topics: asArr<string>(r.recurrent_topics, []),
+        preferences: normalizeInsights(r.preferences),
+        hobbies: normalizeInsights(r.hobbies),
+        recurrent_topics: z.array(z.string()).parse(r.recurrent_topics ?? []),
         based_on_count: Number(r.based_on_count ?? 0),
         model: r.model,
-        last_updated_at: r.last_updated_at,
+        last_updated_at: z.string().parse(r.last_updated_at),
       }));
     },
   });

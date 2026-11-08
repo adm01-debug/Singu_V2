@@ -29,21 +29,21 @@ export function useDocuments(entityType: string, entityId?: string) {
   const qc = useQueryClient();
   const key = ['documents', user?.id, entityType, entityId];
 
-  const { data: documents = [], isLoading } = useQuery({
+  const { data: documents = [], isLoading, error: documentsError } = useQuery({
     queryKey: key,
     queryFn: async () => {
       if (!entityId) return [];
       if (!user) return [];
       const { data, error } = await supabase
         .from('documents')
-        .select('id, user_id, entity_type, entity_id, name, description, document_type, file_url, file_size, mime_type, version, status, tags, created_at, updated_at')
+        .select('id, user_id, entity_type, entity_id, file_name, description, document_type, file_url, file_size, file_type, version, status, tags, created_at, updated_at')
         .eq('user_id', user.id)
         .eq('entity_type', entityType)
         .eq('entity_id', entityId)
         .order('created_at', { ascending: false })
         .limit(100);
       if (error) throw error;
-      return (data || []) as Document[];
+      return (data || []).map(row => ({ ...row, name: row.file_name, mime_type: row.file_type })) as Document[];
     },
     enabled: !!entityId,
     staleTime: 5 * 60_000,
@@ -61,24 +61,32 @@ export function useDocuments(entityType: string, entityId?: string) {
       const { error: uploadError } = await supabase.storage.from('documents').upload(path, file);
       if (uploadError) throw uploadError;
 
-      const { data: urlData } = supabase.storage.from('documents').getPublicUrl(path);
+      try {
+        const { data: signedData, error: signedUrlError } = await supabase.storage.from('documents').createSignedUrl(path, 60 * 60 * 24 * 365);
+        if (signedUrlError) throw signedUrlError;
+        if (!signedData?.signedUrl) throw new Error('Não foi possível gerar o link privado do documento');
 
-      // For private bucket, we need signed URL
-      const { data: signedData } = await supabase.storage.from('documents').createSignedUrl(path, 60 * 60 * 24 * 365);
-      const fileUrl = signedData?.signedUrl || urlData.publicUrl;
-
-      const { error } = await supabase.from('documents').insert({
-        user_id: user.id,
-        entity_type: entityType,
-        entity_id: entityId,
-        name: file.name,
-        description: description || null,
-        document_type: docType,
-        file_url: fileUrl,
-        file_size: file.size,
-        mime_type: file.type,
-      });
-      if (error) throw error;
+        const { error } = await supabase.from('documents').insert({
+          user_id: user.id,
+          entity_type: entityType,
+          entity_id: entityId,
+          file_name: file.name,
+          description: description || null,
+          document_type: docType,
+          file_url: signedData.signedUrl,
+          file_size: file.size,
+          file_type: file.type,
+        });
+        if (error) throw error;
+      } catch (error) {
+        try {
+          const { error: cleanupError } = await supabase.storage.from('documents').remove([path]);
+          if (cleanupError) toast.warning('O envio falhou e o arquivo incompleto não pôde ser removido.');
+        } catch {
+          toast.warning('O envio falhou e o arquivo incompleto não pôde ser removido.');
+        }
+        throw error;
+      }
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: key });
@@ -100,5 +108,5 @@ export function useDocuments(entityType: string, entityId?: string) {
     onError: (e: Error) => toast.error(parseApiError(e)),
   });
 
-  return { documents, isLoading, upload, remove };
+  return { documents, isLoading, error: documentsError, upload, remove };
 }

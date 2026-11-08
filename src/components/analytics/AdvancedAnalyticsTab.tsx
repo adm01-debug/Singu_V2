@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
 // ===================== RELATIONSHIP FUNNEL =====================
 
 function RelationshipFunnel() {
-  const { contacts, loading } = useContacts();
+  const { contacts, loading } = useContacts(undefined, { fetchAll: true });
 
   const funnelData = useMemo(() => {
     if (!contacts.length) return [];
@@ -162,7 +162,7 @@ function ActivityHeatmap() {
 // ===================== CONTACT RANKING =====================
 
 function ContactRanking() {
-  const { contacts, loading } = useContacts();
+  const { contacts, loading } = useContacts(undefined, { fetchAll: true });
   const { companies } = useCompanies();
   const { interactions } = useInteractions();
 
@@ -285,7 +285,7 @@ function InteractionsPerWeekChart() {
 // ===================== SENTIMENT EVOLUTION CHART =====================
 
 function SentimentEvolutionChart() {
-  const { contacts, loading } = useContacts();
+  const { contacts, loading } = useContacts(undefined, { fetchAll: true });
 
   const sentimentData = useMemo(() => {
     const sentiments = { positive: 0, neutral: 0, negative: 0 };

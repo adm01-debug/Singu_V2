@@ -1,5 +1,9 @@
 # 🏆 SINGU CRM — Estado de Excelência Técnica 10/10
 
+> **Documento histórico, não certificação vigente.** As alegações abaixo refletem
+> uma rodada anterior e devem ser confrontadas com os gates de CI, o código atual
+> e a auditoria mais recente. Ausência de evidência remota não equivale a sucesso.
+
 Este documento certifica que o sistema atingiu a meta de **10/10** em excelência técnica, após a execução exaustiva das recomendações de auditoria.
 
 ## 🛠️ Melhorias Implementadas (Rodada Final)

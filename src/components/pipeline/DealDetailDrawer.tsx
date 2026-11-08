@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { 
@@ -49,7 +49,7 @@ const dealSchema = z.object({
   valor: z.string().or(z.number()).transform(v => Number(v) || 0),
   pipeline_stage: z.string(),
   probabilidade: z.string().or(z.number()).transform(v => Number(v) || 0),
-  company_id: z.string().uuid('Selecione uma empresa'),
+  company_id: z.string().uuid('Selecione uma empresa').nullable(),
   contact_id: z.string().uuid('Selecione um contato').optional().nullable(),
   previsao_fechamento: z.date().optional().nullable(),
 });
@@ -70,14 +70,26 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
   const [, setContacts] = useState<{ value: string; label: string }[]>([]);
 
+  const invalidateDealQueries = (companyId?: string | null) => {
+    for (const key of ['deals-pipeline', 'pipeline-summary', 'weighted-forecast', 'velocity-metrics',
+      'stage-velocity', 'stalled-deals', 'daily-summary', 'channel-analysis', 'seasonality']) {
+      queryClient.invalidateQueries({ queryKey: [key] });
+    }
+    queryClient.invalidateQueries({ queryKey: ['company-deals', deal?.company_id] });
+    if (companyId && companyId !== deal?.company_id) {
+      queryClient.invalidateQueries({ queryKey: ['company-deals', companyId] });
+    }
+  };
+
   const form = useForm<DealFormValues>({
-    resolver: zodResolver(dealSchema),
+    // zod v4 + resolvers v5: input (campos) e output (parseado) divergem; o form segue tipado pelo output como na v3.
+    resolver: zodResolver(dealSchema) as unknown as Resolver<DealFormValues>,
     defaultValues: {
       titulo: '',
       valor: 0,
       pipeline_stage: 'lead',
       probabilidade: 10,
-      company_id: '',
+      company_id: null,
       contact_id: null,
       previsao_fechamento: null,
     },
@@ -103,14 +115,16 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
     const fetchEntities = async () => {
       try {
         const [compRes, contRes] = await Promise.all([
-          supabase.from('companies').select('id, name').eq('user_id', user?.id ?? '').limit(100),
+          supabase.from('companies').select('id, nome_crm, nome_fantasia').eq('user_id', user?.id ?? '').limit(100),
           supabase.from('contacts').select('id, first_name, last_name').eq('user_id', user?.id ?? '').limit(100),
         ]);
         if (cancelled) return;
-        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.name })));
+        if (compRes.error) throw compRes.error;
+        if (contRes.error) throw contRes.error;
+        if (compRes.data) setCompanies(compRes.data.map(c => ({ value: c.id, label: c.nome_fantasia || c.nome_crm })));
         if (contRes.data) setContacts(contRes.data.map(c => ({ value: c.id, label: `${c.first_name} ${c.last_name || ''}`.trim() })));
       } catch {
-        // non-critical — dropdowns remain empty; user can still submit with IDs already on the deal
+        if (!cancelled) toast.error('Erro ao carregar empresas e contatos');
       }
     };
     fetchEntities();
@@ -129,7 +143,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       if (error) throw error;
       
       toast.success('Deal atualizado!');
-      queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
+      invalidateDealQueries(values.company_id);
       onOpenChange(false);
     } catch {
       toast.error('Erro ao atualizar deal');
@@ -145,7 +159,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       const { error } = await deleteExternalData('deals', deal.id);
       if (error) throw error;
       toast.success('Deal excluído');
-      queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
+      invalidateDealQueries();
       onOpenChange(false);
     } catch {
       toast.error('Erro ao excluir deal');
@@ -159,13 +173,15 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
     setIsSaving(true);
     try {
       const { error } = await updateExternalData('deals', deal.id, { 
-        status,
+        status: status === 'won' ? 'ganho' : 'perdido',
+        ...(!['ganho', 'perdido', 'won', 'lost'].includes(deal.status)
+          ? { closed_at: new Date().toISOString() } : {}),
         pipeline_stage: status === 'won' ? 'fechamento' : deal.pipeline_stage,
         probabilidade: status === 'won' ? 100 : 0
       });
       if (error) throw error;
       toast.success(status === 'won' ? 'Parabéns! Deal Ganho! 🏆' : 'Deal marcado como perdido.');
-      queryClient.invalidateQueries({ queryKey: ['deals-pipeline'] });
+      invalidateDealQueries();
       onOpenChange(false);
     } catch {
       toast.error('Erro ao atualizar status');

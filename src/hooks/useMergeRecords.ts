@@ -1,25 +1,31 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { callExternalRpc } from '@/lib/externalData';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
-import type { Json } from '@/integrations/supabase/types';
-import { logger } from '@/lib/logger';
+import { z } from 'zod';
 import { parseApiError } from '@/lib/errorMessages';
+import { areUuidsEqual } from '@/lib/utils';
 
 export type MergeEntity = 'contacts' | 'companies';
+
+const contactOverridesSchema = z.object({
+  first_name: z.string().nullable(), last_name: z.string().nullable(), email: z.string().nullable(),
+  phone: z.string().nullable(), role_title: z.string().nullable(), company_id: z.string().nullable(),
+  whatsapp: z.string().nullable(), linkedin: z.string().nullable(), instagram: z.string().nullable(),
+  notes: z.string().nullable(), family_info: z.string().nullable(),
+}).partial().strict();
+const companyOverridesSchema = z.object({
+  nome_crm: z.string().regex(/\S/, 'Nome principal obrigatório'), cnpj: z.string().nullable(), industry: z.string().nullable(),
+  website: z.string().nullable(), notes: z.string().nullable(), tags: z.array(z.string()).nullable(),
+}).partial().strict();
 
 interface MergeArgs {
   entity: MergeEntity;
   primaryId: string;
   secondaryId: string;
-  /** Field-level overrides to apply on the primary before deleting the secondary */
   fieldOverrides?: Record<string, unknown>;
 }
 
-/**
- * Local merge: applies field overrides on the primary record then deletes the secondary.
- * Related rows referencing the secondary (contacts.company_id, etc.) are repointed.
- */
 export function useMergeRecords() {
   const { user } = useAuth();
   const qc = useQueryClient();
@@ -28,50 +34,24 @@ export function useMergeRecords() {
       if (primaryId === secondaryId) throw new Error('IDs idênticos');
       if (!user?.id) throw new Error('Não autenticado');
 
-      // 1. Apply overrides on primary (if any)
-      if (fieldOverrides && Object.keys(fieldOverrides).length > 0) {
-        const { error: updErr } = await supabase
-          .from(entity)
-          .update(fieldOverrides as never)
-          .eq('user_id', user.id)
-          .eq('id', primaryId);
-        if (updErr) throw updErr;
+      const contactOverrides = entity === 'contacts' ? contactOverridesSchema.parse(fieldOverrides ?? {}) : null;
+      const companyOverrides = entity === 'companies' ? companyOverridesSchema.parse(fieldOverrides ?? {}) : null;
+      const overrides = contactOverrides ?? companyOverrides ?? {};
+
+      const { data, error } = await callExternalRpc<{
+        success: boolean; primary_id: string; secondary_id: string;
+      }>('merge_records_atomically', {
+        p_entity: entity, p_primary_id: primaryId, p_secondary_id: secondaryId,
+        p_field_overrides: overrides,
+      });
+      if (error) throw error;
+      if (data?.success !== true || !areUuidsEqual(data.primary_id, primaryId) || !areUuidsEqual(data.secondary_id, secondaryId)) {
+        throw new Error('Mesclagem não confirmada pelo banco');
       }
-
-      // 2. Repoint relations when merging companies (contacts.company_id)
-      if (entity === 'companies') {
-        const { error: repointErr } = await supabase
-          .from('contacts')
-          .update({ company_id: primaryId })
-          .eq('user_id', user!.id)
-          .eq('company_id', secondaryId);
-        if (repointErr) throw repointErr;
-      }
-
-      // 3. Delete the secondary
-      const { error: delErr } = await supabase.from(entity).delete().eq('user_id', user!.id).eq('id', secondaryId);
-      if (delErr) throw delErr;
-
-      // 4. Audit log entry
-      if (user?.id) {
-        const { error: auditErr } = await supabase.from('audit_log').insert([{
-          user_id: user.id,
-          action: 'merge',
-          entity_type: entity,
-          entity_id: primaryId,
-          old_data: { merged_from: secondaryId },
-          new_data: (fieldOverrides ?? {}) as Json,
-        }]);
-        if (auditErr) logger.warn('Failed to write audit log', { error: auditErr.message });
-      }
-
       return { primaryId, secondaryId };
     },
-    onSuccess: (_, vars) => {
-      qc.invalidateQueries({ queryKey: ['dedup-source', vars.entity] });
-      qc.invalidateQueries({ queryKey: [vars.entity] });
-      qc.invalidateQueries({ queryKey: ['contacts'] });
-      qc.invalidateQueries({ queryKey: ['companies'] });
+    onSuccess: () => {
+      qc.invalidateQueries();
       toast.success('Registros mesclados com sucesso');
     },
     onError: (e: Error) => toast.error(`Falha ao mesclar: ${parseApiError(e)}`),

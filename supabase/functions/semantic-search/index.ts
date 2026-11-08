@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
@@ -207,9 +208,9 @@ Deno.serve(async (req) => {
       }),
     );
 
-    // Cache (best-effort — fire-and-forget, response uses in-memory results)
+    // Cache (best-effort, response uses in-memory results)
     const expiresAt = new Date(Date.now() + CACHE_TTL_MINUTES * 60 * 1000).toISOString();
-    supabase
+    await bestEffortWrite(supabase
       .from("semantic_search_cache")
       .upsert(
         {
@@ -220,8 +221,7 @@ Deno.serve(async (req) => {
           expires_at: expiresAt,
         },
         { onConflict: "user_id,query_hash" },
-      )
-      .catch((e: unknown) => console.error("semantic_search_cache upsert error:", e));
+      ), "semantic_search_cache upsert error:");
 
     return new Response(
       JSON.stringify({ results, cached: false, query, variations, entities: requested }),

@@ -56,7 +56,9 @@ export function IPRestrictionManager() {
                 <div className="flex items-center gap-3">
                   <Switch checked={ip.is_active} onCheckedChange={active => toggleIP({ id: ip.id, active })} />
                   <div>
-                    <IPDisplay ip={ip.ip_address} className="text-sm font-mono" />
+                    {typeof ip.ip_address === 'string'
+                      ? <IPDisplay ip={ip.ip_address} className="text-sm font-mono" />
+                      : <span className="text-sm text-destructive">IP inválido no cadastro</span>}
                     {ip.label && <p className="text-[10px] text-muted-foreground">{ip.label}</p>}
                   </div>
                 </div>

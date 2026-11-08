@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { DISCProfile } from '@/types';
+import { z } from 'zod';
 import { VAKType, VAK_LABELS } from '@/types/vak';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,9 +15,37 @@ import {
   getDISCAdaptation,
 } from '@/components/triggers/portfolio/portfolioTypes';
 
+const discProfileSchema = z.enum(['D', 'I', 'S', 'C']);
+const salespersonProfileSchema = z.object({
+  vakProfile: z.enum(['V', 'A', 'K', 'D']).nullish(),
+  discProfile: discProfileSchema.nullish(),
+  metaprograms: z.object({
+    motivationDirection: z.string().nullish(), referenceFrame: z.string().nullish(),
+    workingStyle: z.string().nullish(), chunkSize: z.string().nullish(),
+    actionFilter: z.string().nullish(), comparisonStyle: z.string().nullish(),
+  }).nullish(),
+});
+
+function normalizeSalespersonProfile(value: unknown): SalespersonProfile | null {
+  if (value === null || value === undefined) return null;
+  const profile = salespersonProfileSchema.parse(value);
+  return {
+    vakProfile: profile.vakProfile ?? null, discProfile: profile.discProfile ?? null,
+    metaprograms: {
+      motivationDirection: profile.metaprograms?.motivationDirection ?? null,
+      referenceFrame: profile.metaprograms?.referenceFrame ?? null,
+      workingStyle: profile.metaprograms?.workingStyle ?? null,
+      chunkSize: profile.metaprograms?.chunkSize ?? null,
+      actionFilter: profile.metaprograms?.actionFilter ?? null,
+      comparisonStyle: profile.metaprograms?.comparisonStyle ?? null,
+    },
+  };
+}
+
 export function usePortfolioCompatibility() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<unknown>(null);
   const [salespersonProfile, setSalespersonProfile] = useState<SalespersonProfile | null>(null);
   const [contacts, setContacts] = useState<ContactWithCompatibility[]>([]);
   const [expandedContact, setExpandedContact] = useState<string | null>(null);
@@ -40,25 +68,39 @@ export function usePortfolioCompatibility() {
   const loadData = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
     setLoading(true);
+    setLoadError(null);
 
     try {
       // All 4 queries are independent — run in parallel
       const [
-        { data: profileData },
+        { data: profileData, error: profileError },
         { data: contactsData, error },
-        { data: vakData },
-        { data: metaData },
+        { data: vakData, error: vakError },
+        { data: metaData, error: metaError },
       ] = await Promise.all([
         supabase.from('profiles').select('nlp_profile').eq('id', user.id).maybeSingle(),
-        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score, companies(name)').eq('user_id', user.id).limit(2000),
+        supabase.from('contacts').select('id, first_name, last_name, behavior, relationship_score, company_id').eq('user_id', user.id).limit(2000),
         supabase.from('vak_analysis_history').select('contact_id, visual_score, auditory_score, kinesthetic_score, digital_score').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5000),
         supabase.from('metaprogram_analysis').select('contact_id, toward_score, away_from_score, internal_score, external_score, options_score, procedures_score').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5000),
       ]);
 
       if (signal?.cancelled) return;
       if (error) throw error;
+      if (profileError) throw profileError;
+      if (vakError) throw vakError;
+      if (metaError) throw metaError;
 
-      const spProfile = profileData?.nlp_profile as unknown as SalespersonProfile | null;
+      const companyIds = [...new Set((contactsData ?? []).flatMap(c => c.company_id ? [c.company_id] : []))];
+      const companyNames = new Map<string, string>();
+      for (let offset = 0; offset < companyIds.length; offset += 500) {
+        const { data: companies, error: companiesError } = await supabase
+          .from('companies').select('id, nome_crm').in('id', companyIds.slice(offset, offset + 500)).eq('user_id', user.id);
+        if (signal?.cancelled) return;
+        if (companiesError) throw companiesError;
+        for (const company of companies ?? []) companyNames.set(company.id, company.nome_crm);
+      }
+
+      const spProfile = normalizeSalespersonProfile(profileData?.nlp_profile);
       setSalespersonProfile(spProfile);
 
       const vakMap = new Map<string, VAKType>();
@@ -82,7 +124,7 @@ export function usePortfolioCompatibility() {
       });
 
       const contactsWithCompatibility: ContactWithCompatibility[] = (contactsData || []).map((c) => {
-        const behavior = c.behavior as { discProfile?: DISCProfile; disc_profile?: DISCProfile } | null;
+        const behavior = z.object({ discProfile: discProfileSchema.nullish(), disc_profile: discProfileSchema.nullish() }).parse(c.behavior ?? {});
         const discProfile = behavior?.discProfile || behavior?.disc_profile || null;
         const vakProfile = vakMap.get(c.id) || null;
         const metaProfile = metaMap.get(c.id);
@@ -130,7 +172,7 @@ export function usePortfolioCompatibility() {
 
         return {
           id: c.id, firstName: c.first_name, lastName: c.last_name,
-          company: (c.companies as { name: string } | null)?.name,
+          company: c.company_id ? companyNames.get(c.company_id) : undefined,
           discProfile, vakProfile, compatibilityScore, discScore, vakScore, metaprogramScore,
           level, opportunities, challenges, relationshipScore: c.relationship_score,
         };
@@ -142,7 +184,9 @@ export function usePortfolioCompatibility() {
         const msg = error instanceof Error ? error.message : 'Unknown error';
         logger.error('Error loading portfolio data:', { error: msg });
         toast.error('Erro ao carregar dados', { description: msg });
+        setLoadError(error);
       }
+      throw error;
     } finally {
       if (!signal?.cancelled) setLoading(false);
     }
@@ -151,7 +195,9 @@ export function usePortfolioCompatibility() {
   useEffect(() => {
     if (!user) return;
     const signal = { cancelled: false };
-    loadData(signal);
+    loadData(signal).catch(error => {
+      if (!signal.cancelled) setLoadError(error);
+    });
     return () => { signal.cancelled = true; };
   }, [user, loadData]);
 
@@ -183,7 +229,7 @@ export function usePortfolioCompatibility() {
   }, [contacts]);
 
   return {
-    loading, salespersonProfile, contacts, filteredContacts, stats,
+    loading, error: loadError, salespersonProfile, contacts, filteredContacts, stats,
     expandedContact, setExpandedContact,
     filterLevel, setFilterLevel,
     sortBy, setSortBy,

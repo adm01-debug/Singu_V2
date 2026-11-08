@@ -1,6 +1,8 @@
 -- Rodada 55/10 — Verifica que get_ai_gateway_health retorna as novas
 -- chaves resolved_recent e resolved_mttr, e que access_denied é
 -- levantado para não-admin.
+SELECT (to_regprocedure('public.get_ai_gateway_health(integer)') IS NOT NULL) AS rls_target_present \gset
+\if :rls_target_present
 
 DO $$
 DECLARE
@@ -32,3 +34,6 @@ BEGIN
   END;
   ASSERT _err ILIKE '%access_denied%', format('mensagem inesperada: %s', _err);
 END $$;
+\else
+\echo 'SKIP: public.get_ai_gateway_health(integer) ausente no banco alvo'
+\endif

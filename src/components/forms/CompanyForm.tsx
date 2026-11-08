@@ -1,6 +1,6 @@
  import { useUnsavedChangesGuard } from '@/hooks/useUnsavedChangesGuard';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFormDraft } from '@/hooks/useFormDraft';
 import { useExternalLookup } from '@/hooks/useExternalLookup';
@@ -14,7 +14,7 @@ import { CompanyPhonesForm } from '@/components/forms/company/CompanyPhonesForm'
 import { CompanyEmailsForm } from '@/components/forms/company/CompanyEmailsForm';
 import { CompanyAddressesForm } from '@/components/forms/company/CompanyAddressesForm';
 import { CompanySocialMediaForm } from '@/components/forms/company/CompanySocialMediaForm';
-import { companySchema, getCompanyField, type CompanyFormData } from './company/CompanyFormSchema';
+import { companySchema, companyBrandColorsSchema, getCompanyField, type CompanyFormData } from './company/CompanyFormSchema';
 import { CompanyFormBasicTab } from './company/CompanyFormBasicTab';
 import { CompanyFormFiscalTab } from './company/CompanyFormFiscalTab';
 import { CompanyFormClassificationTab } from './company/CompanyFormClassificationTab';
@@ -43,7 +43,8 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
   const socialMediaHook = useCompanySocialMedia(companyId);
 
   const form = useForm<CompanyFormData>({
-    resolver: zodResolver(companySchema),
+    // zod v4 + resolvers v5: input (campos) e output (parseado) divergem; o form segue tipado pelo output como na v3.
+    resolver: zodResolver(companySchema) as unknown as Resolver<CompanyFormData>,
     mode: 'onBlur',
     defaultValues: {
       nome_crm: getCompanyField(c, 'nome_crm') || getCompanyField(c, 'name') || getCompanyField(c, 'nome_fantasia'),
@@ -84,7 +85,7 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
       employee_count: getCompanyField(c, 'employee_count'),
       annual_revenue: getCompanyField(c, 'annual_revenue'),
       financial_health: getCompanyField(c, 'financial_health', 'unknown'),
-      cores_marca: getCompanyField(c, 'cores_marca'),
+      cores_marca: Array.isArray(company?.cores_marca) ? company.cores_marca.join(', ') : getCompanyField(c, 'cores_marca'),
       matriz_id: getCompanyField(c, 'matriz_id'),
       central_id: getCompanyField(c, 'central_id'),
       singular_id: getCompanyField(c, 'singular_id'),
@@ -111,6 +112,7 @@ export function CompanyForm({ company, onSubmit, onCancel, isSubmitting }: Compa
     if (Array.isArray(data.tags_array) && data.tags_array.length === 0) cleaned.tags_array = null;
     if (Array.isArray(data.challenges) && data.challenges.length === 0) cleaned.challenges = null;
     if (Array.isArray(data.competitors) && data.competitors.length === 0) cleaned.competitors = null;
+    cleaned.cores_marca = companyBrandColorsSchema.parse(data.cores_marca ?? '');
     cleaned.logo_url = logoUrl;
     delete cleaned.razao_social_fiscal;
     await onSubmit(cleaned);

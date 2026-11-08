@@ -24,6 +24,31 @@ interface ContactMetrics {
   averageOrderValue: number;
 }
 
+interface RfmResult {
+  user_id: string;
+  contact_id: string;
+  recency_score: number;
+  frequency_score: number;
+  monetary_score: number;
+  days_since_last_purchase: number | null;
+  days_since_last_interaction: number | null;
+  total_purchases: number;
+  total_interactions: number;
+  total_monetary_value: number;
+  average_order_value: number;
+  segment: string;
+  segment_code: string;
+  segment_description: string;
+  segment_color: string;
+  churn_probability: number;
+  communication_priority: string;
+  predicted_next_purchase_date: string | undefined;
+  predicted_lifetime_value: number;
+  recommended_actions: ReturnType<typeof generateActions>;
+  recommended_offers: ReturnType<typeof generateOffers>;
+  analyzed_at: string;
+}
+
 const limiter = rateLimit({ windowMs: 60_000, max: 15 });
 
 Deno.serve(async (req) => {
@@ -44,17 +69,19 @@ Deno.serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(supabaseUrl, supabaseKey, isServiceRoleCaller(authResult) ? {} : {
+      global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } },
+    });
 
     let requestBody: z.infer<typeof RfmInput> = {};
     const parsed = RfmInput.safeParse(raw);
-    if (!parsed.success) return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400);
+    if (!parsed.success) return jsonError(`Entrada inválida: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     requestBody = parsed.data;
     const { contactId } = requestBody;
 
     let userId: string;
     if (isServiceRoleCaller(authResult)) {
-      if (!requestBody.userId) return jsonError("userId required for service-role calls", 400);
+      if (!requestBody.userId) return jsonError("userId required for service-role calls", 400, req);
       userId = requestBody.userId;
     } else {
       userId = authResult;
@@ -181,9 +208,7 @@ Deno.serve(async (req) => {
       lost: 'Menor recência, frequência e valor monetário'
     };
 
-    const results = [];
-    const rfmUpsertRows: typeof results = [];
-    const rfmHistoryRows: Array<Record<string, unknown>> = [];
+    const results: RfmResult[] = [];
 
     for (const [cId, metrics] of contactMetrics) {
       const recencyScore = calculateScore(metrics.daysSinceLastPurchase, recencyPercentiles, true);
@@ -228,6 +253,7 @@ Deno.serve(async (req) => {
         total_monetary_value: metrics.totalValue,
         average_order_value: metrics.averageOrderValue,
         segment,
+        segment_code: segment,
         segment_description: segmentDescriptions[segment],
         segment_color: getSegmentColor(segment),
         churn_probability: churnProbability,
@@ -239,40 +265,24 @@ Deno.serve(async (req) => {
         analyzed_at: now.toISOString()
       };
 
-      rfmUpsertRows.push(rfmResult);
-      rfmHistoryRows.push({
-        user_id: userId,
-        contact_id: cId,
-        recency_score: recencyScore,
-        frequency_score: frequencyScore,
-        monetary_score: monetaryScore,
-        segment,
-        total_monetary_value: metrics.totalValue
-      });
       results.push(rfmResult);
     }
 
-    // Bulk-flush all writes after the scoring loop
-    await Promise.all([
-      rfmUpsertRows.length > 0
-        ? supabase.from('rfm_analysis').upsert(rfmUpsertRows, { onConflict: 'user_id,contact_id' })
-            .then(({ error }) => { if (error) console.error('Error upserting RFM:', error); })
-        : Promise.resolve(),
-      rfmHistoryRows.length > 0
-        ? supabase.from('rfm_history').insert(rfmHistoryRows)
-            .then(({ error }) => { if (error) console.error('Error inserting RFM history:', error); })
-        : Promise.resolve(),
-    ]);
+    if (results.length > 0) {
+      const { data, error } = await supabase.rpc('persist_rfm_analysis', { _rows: results, _user_id: userId });
+      if (error) throw error;
+      if (data !== results.length) throw new Error('Persistência RFM incompleta');
+    }
 
     return jsonOk({
       success: true,
       analyzed: results.length,
       results
-    });
+    }, req);
 
   } catch (error: unknown) {
     console.error('RFM analysis error:', error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });
 

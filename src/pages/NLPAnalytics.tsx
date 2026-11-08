@@ -67,22 +67,31 @@ const NLPAnalytics = () => {
        if (!selectedContactId || !user) return null;
        const { data, error } = await supabase
          .from('contacts')
-         .select('*, companies(name)')
+         .select('*')
          .eq('id', selectedContactId)
          .eq('user_id', user.id)
           .maybeSingle();
        
         if (error) throw error;
 
-        const row = data as typeof data & {
-          companies?: { name?: string | null } | null;
-          interactions_count?: number | null;
-        };
+        if (!data) throw new Error('Contato não encontrado');
+        let companyName: string | null = null;
+        if (data.company_id) {
+          const { data: company, error: companyError } = await supabase
+            .from('companies').select('nome_crm').eq('id', data.company_id).eq('user_id', user.id).maybeSingle();
+          if (companyError) throw companyError;
+          companyName = company?.nome_crm ?? null;
+        }
+        const { count: interactionCount, error: interactionsError } = await supabase
+          .from('interactions').select('id', { count: 'exact', head: true })
+          .eq('contact_id', selectedContactId).eq('user_id', user.id);
+        if (interactionsError) throw interactionsError;
+        if (interactionCount === null) throw new Error('Contagem de interações não disponível');
 
         const contact: Contact = {
          id: data.id,
          companyId: data.company_id || '',
-          companyName: row.companies?.name || 'Empresa desconhecida',
+          companyName: companyName || 'Empresa desconhecida',
          firstName: data.first_name || '',
          lastName: data.last_name || '',
           role: (data.role as ContactRole) || 'contact',
@@ -94,7 +103,7 @@ const NLPAnalytics = () => {
          tags: data.tags || [],
           relationshipStage: (data.relationship_stage as RelationshipStage) || 'prospect',
          relationshipScore: data.relationship_score || 0,
-          interactionCount: row.interactions_count || 0,
+          interactionCount,
           sentiment: (data.sentiment as SentimentType) || 'neutral',
           behavior: (data.behavior as unknown as ContactBehavior) || ({} as ContactBehavior),
          hobbies: data.hobbies || [],

@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
@@ -157,9 +158,8 @@ Deno.serve(async (req) => {
         analyzed_at: new Date().toISOString(),
         expires_at: new Date(Date.now() + 7 * 86400000).toISOString(),
       }));
-      supabase.from("churn_risk_scores").delete().eq("user_id", userId).in("contact_id", riskContactIds)
-        .then(() => supabase.from("churn_risk_scores").insert(rows))
-        .catch((e: unknown) => console.error("churn_risk_scores upsert error:", e));
+      await bestEffortWrite(supabase.from("churn_risk_scores").delete().eq("user_id", userId).in("contact_id", riskContactIds)
+        .then(() => supabase.from("churn_risk_scores").insert(rows)), "churn_risk_scores upsert error:");
     }
 
     return jsonOk({ success: true, analyzed: contacts.length, risks: top }, req);

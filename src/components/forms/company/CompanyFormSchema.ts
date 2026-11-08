@@ -1,4 +1,9 @@
 import { z } from 'zod';
+import { Constants } from '@/integrations/supabase/types';
+
+export const companyBrandColorsSchema = z.string()
+  .transform(value => value.split(/[,;]+/).map(color => color.trim().toLowerCase().replace(/\s+/g, '_')).filter(Boolean))
+  .pipe(z.array(z.enum(Constants.public.Enums.cor_grupo)));
 
 export const companyPhoneSchema = z.object({
   id: z.string().uuid().optional(),
@@ -69,7 +74,10 @@ export const companySchema = z.object({
   employee_count: z.string().optional(),
   annual_revenue: z.string().trim().max(50).optional().or(z.literal('')),
   financial_health: z.string().optional(),
-  cores_marca: z.string().trim().max(100).optional().or(z.literal('')),
+  cores_marca: z.string().trim().max(100).optional().refine(
+    value => value === undefined || companyBrandColorsSchema.safeParse(value).success,
+    'Informe cores válidas separadas por vírgula, como azul, branco ou azul marinho',
+  ),
   matriz_id: z.string().trim().max(50).optional().or(z.literal('')),
   central_id: z.string().trim().max(50).optional().or(z.literal('')),
   singular_id: z.string().trim().max(50).optional().or(z.literal('')),

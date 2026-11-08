@@ -1,3 +1,4 @@
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
@@ -224,8 +225,8 @@ Gere o resumo estruturado.`;
   const model = "google/gemini-3-flash-preview";
   const generated_at = new Date().toISOString();
 
-  // Persiste cache + histórico (best-effort — não bloqueia resposta)
-  supabase
+  // Persiste cache + histórico (best-effort)
+  await bestEffortWrite(supabase
     .from("ficha360_conversation_summaries")
     .insert({
       user_id: userId,
@@ -236,8 +237,7 @@ Gere o resumo estruturado.`;
       summary,
       model,
       interactions_analyzed: trimmed.length,
-    })
-    .catch((e: unknown) => console.error("Failed to cache summary:", e));
+    }), "Failed to cache summary:");
 
   return jsonOk({
     summary,

@@ -9,14 +9,32 @@
 --   search_products_cache  — SELECT policy added in Wave 173 Part A
 -- (semantic_search_cache already had an index from Wave 168)
 
-CREATE INDEX IF NOT EXISTS idx_churn_predictions_user_id
-  ON public.churn_predictions (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_deal_velocity_analysis_user_id
-  ON public.deal_velocity_analysis (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_search_products_cache_user_id
-  ON public.search_products_cache (user_id);
+DO $migration$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY[
+    'churn_predictions',
+    'deal_velocity_analysis',
+    'search_products_cache'
+  ]
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', table_name))
+        AND attname = 'user_id'
+        AND NOT attisdropped
+    ) THEN
+      EXECUTE format(
+        'CREATE INDEX IF NOT EXISTS %I ON public.%I (user_id)',
+        'idx_' || table_name || '_user_id',
+        table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$migration$;
 
 -- ── Verification ──────────────────────────────────────────────────────────────
 DO $$

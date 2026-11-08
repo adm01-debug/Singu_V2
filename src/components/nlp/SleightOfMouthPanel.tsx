@@ -20,16 +20,6 @@ import type { SleightOfMouthPattern } from '@/data/sleightOfMouth';
 import { useNLPAnalysisValidation } from "@/hooks/useNLPAnalysisValidation";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 
-interface ReframingItem {
-  id: string;
-  objection: string;
-  objection_category: string;
-  pattern_used: string;
-  suggested_response: string;
-  status: string;
-  created_at: string;
-}
-
 interface SleightOfMouthPanelProps {
   contactId: string;
   interactionId?: string;
@@ -41,12 +31,14 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<'detected' | 'templates'>('detected');
 
-  const { data: reframings = [], isLoading } = useQuery({
+  const { data: reframings = [], isLoading, isError } = useQuery({
     queryKey: ['reframing-analysis', contactId, interactionId, user?.id],
     queryFn: async () => {
+      if (!user) throw new Error('Não autenticado');
       let query = supabase
         .from('reframing_analysis')
-        .select('id, objection, objection_category, pattern_used, suggested_response, status, created_at, contacts(first_name, last_name)')
+        .select('id, objection, objection_category, pattern_used, suggested_response, status, created_at')
+        .eq('user_id', user.id)
         .eq('contact_id', contactId)
         .order('created_at', { ascending: false })
         .limit(100);
@@ -55,14 +47,17 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
         query = query.eq('interaction_id', interactionId);
       }
 
-      const { data, error } = await query;
+      const [{ data, error }, { data: contact, error: contactError }] = await Promise.all([
+        query,
+        supabase.from('contacts').select('first_name').eq('user_id', user.id).eq('id', contactId).maybeSingle(),
+      ]);
       if (error) throw error;
-      type Row = ReframingItem & { contacts?: { first_name?: string | null; last_name?: string | null } | null };
-      return ((data || []) as Row[]).map(item => ({
+      if (contactError) throw contactError;
+      return (data || []).map(item => ({
         ...item,
         suggested_response: item.suggested_response
-          .replace(/{nome}/g, item.contacts?.first_name || 'Fulano')
-      })) as ReframingItem[];
+          .replace(/{nome}/g, contact?.first_name || 'Fulano')
+      }));
     },
     enabled: !!user && !!contactId,
     staleTime: 5 * 60_000,
@@ -92,6 +87,7 @@ export function SleightOfMouthPanel({ contactId, interactionId }: SleightOfMouth
   };
 
   if (isLoading) return <div className="h-40 animate-pulse bg-muted rounded-lg" />;
+  if (isError) return <p role="alert" className="text-sm text-destructive">Não foi possível carregar os reenquadramentos.</p>;
 
   return (
     <Card className="border-primary/20 bg-primary/5 dark:bg-primary/10">

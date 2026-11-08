@@ -5,7 +5,6 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { ThumbsUp, ThumbsDown, TrendingDown, AlertTriangle, ExternalLink, RefreshCcw, Loader2, Download } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
 import { logger } from '@/lib/logger';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -157,7 +156,6 @@ function RankingTable({ items, sort }: { items: LabelAgg[]; sort: 'down' | 'up' 
 }
 
 function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
-  const { user } = useAuth();
   const [batchRunning, setBatchRunning] = useState(false);
 
   const agg = useMemo(() => {
@@ -182,43 +180,21 @@ function ContactsWithMostDownvotes({ rows }: { rows: Row[] }) {
   async function runBatch() {
     if (eligibleForRebatch.length === 0) return;
     setBatchRunning(true);
-    const userId = user?.id ?? null;
     let ok = 0;
     let fail = 0;
     // Sequencial + delay pequeno para evitar rate-limit da IA
     for (const contactId of eligibleForRebatch) {
-      const nowIso = new Date().toISOString();
-      await supabase
-        .from('behavioral_profile_regen_queue')
-        .upsert(
-          {
-            contact_id: contactId,
-            user_id: userId,
-            enqueued_at: nowIso,
-            next_run_at: nowIso,
-            trigger_source: 'admin_manual_batch',
-            last_processed_at: nowIso,
-          },
-          { onConflict: 'contact_id' },
-        );
       try {
-        const { error } = await supabase.functions.invoke('generate-behavioral-profile', {
+        const { data, error } = await supabase.functions.invoke<{ ok: boolean }>('retry-behavioral-profile', {
           body: { contact_id: contactId, trigger: 'admin_manual_batch' },
         });
         if (error) throw error;
+        if (data?.ok !== true) throw new Error('Reanálise não confirmada');
         ok += 1;
-        await supabase
-          .from('behavioral_profile_regen_queue')
-          .update({ last_error: null })
-          .eq('contact_id', contactId);
       } catch (e) {
         fail += 1;
         const msg = e instanceof Error ? e.message : String(e);
         logger.error('[runBatch] falha ao reanalisar', contactId, msg);
-        await supabase
-          .from('behavioral_profile_regen_queue')
-          .update({ last_error: msg })
-          .eq('contact_id', contactId);
       }
       await new Promise((r) => setTimeout(r, 800));
     }

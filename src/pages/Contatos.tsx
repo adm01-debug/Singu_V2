@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { sortArray } from '@/lib/sorting-utils';
 import { Crown, Briefcase, ShoppingCart, User } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
@@ -23,7 +23,6 @@ import { useMiniCelebration } from '@/components/celebrations/MiniCelebration';
 import { useKeyboardShortcutsEnhanced } from '@/hooks/useKeyboardShortcutsEnhanced';
 import { hapticHeavy, hapticSuccess } from '@/lib/haptics';
 import { useSuccessCelebration } from '@/hooks/useSuccessCelebration';
-import { useActivityLogger } from '@/hooks/useActivityLogger';
 import type { ViewMode, GridColumns } from '@/components/ui/view-mode-switcher';
 import { ContatosContent } from './contatos/ContatosContent';
 import { SavedViewsBar } from '@/components/views/SavedViewsBar';
@@ -91,6 +90,7 @@ const sortOptions = [
 const Contatos = () => {
   usePageTitle('Contatos');
   const [searchParams, setSearchParams] = useSearchParams();
+  const { pathname: ownPathname } = useLocation();
   const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts, hasMore, loadMore, totalCount } = useContacts();
 
   const dynamicFilterConfigs = useMemo(() => {
@@ -143,7 +143,6 @@ const Contatos = () => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const celebration = useMiniCelebration();
   const { celebrate } = useSuccessCelebration();
-  const { logActivity } = useActivityLogger();
   const { destructive } = useActionToast();
   const { restore } = useRestoreEntity();
 
@@ -173,11 +172,15 @@ const Contatos = () => {
       if (sortOrder !== 'desc') params.set('order', sortOrder);
     }
     if (gridColumns !== 3) params.set('cols', String(gridColumns));
+    // Não reescreve a URL se o usuário já saiu da página nem quando nada mudou.
+    if (window.location.pathname !== ownPathname) return;
+    if (params.toString() === new URLSearchParams(window.location.search).toString()) return;
     setSearchParams(params, { replace: true });
-  }, [searchTerm, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
+  }, [ownPathname, searchTerm, viewMode, activeFilters, sortBy, sortOrder, gridColumns, multiSort, setSearchParams]);
 
-  const { results: fuzzyResults, setQuery: setFuzzyQuery } = useFuzzySearch(contacts, { keys: ['first_name', 'last_name', 'email', 'role_title', 'hobbies', 'interests'], threshold: 0.4 });
-  const handleSearchChange = useCallback((value: string) => { setSearchTerm(value); setFuzzyQuery(value); }, [setFuzzyQuery]);
+  const { results: fuzzyResults, setQuery: setFuzzyQuery } = useFuzzySearch(contacts, { keys: ['first_name', 'last_name', 'email', 'role_title', 'hobbies', 'interests'], threshold: 0.4, initialQuery: searchTerm });
+  useEffect(() => { setFuzzyQuery(searchTerm); }, [searchTerm, setFuzzyQuery]);
+  const handleSearchChange = useCallback((value: string) => { setSearchTerm(value); }, []);
 
   const filteredAndSortedContacts = useMemo(() => {
     let result = searchTerm ? fuzzyResults : contacts;
@@ -217,7 +220,6 @@ const Contatos = () => {
     setIsSubmitting(false);
     if (result) {
       setIsFormOpen(false); hapticSuccess();
-      logActivity({ type: 'created', entityType: 'contact', entityId: result.id || '', entityName: `${data.first_name} ${data.last_name}`.trim() });
       if (contacts.length === 0) celebrate('confetti');
       const pos = event ? event : { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
       celebration.trigger(pos, { variant: 'success', message: 'Contato criado!' });
@@ -247,7 +249,6 @@ const Contatos = () => {
         description: 'Clique em Desfazer para restaurar',
         onUndo: () => { void restore('contacts', snapshot, [['contacts']]); },
       });
-      logActivity({ type: 'deleted', entityType: 'contact', entityId: ct.id, entityName: ct.first_name });
     }
   };
 
@@ -345,7 +346,7 @@ const Contatos = () => {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Excluir contato?</AlertDialogTitle>
-              <AlertDialogDescription>Tem certeza que deseja excluir <strong>{deletingContact?.first_name} {deletingContact?.last_name}</strong>? Esta ação não pode ser desfeita.</AlertDialogDescription>
+              <AlertDialogDescription>Tem certeza que deseja excluir <strong>{deletingContact?.first_name} {deletingContact?.last_name}</strong>? Após a exclusão, você terá a opção Desfazer na mensagem de confirmação.</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>

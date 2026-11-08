@@ -12,6 +12,7 @@ import { rateLimit } from "../_shared/rate-limit.ts";
  });
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
+const SuggestionSchema = z.object({ confidence: z.number(), action_type: z.string() }).passthrough();
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -151,23 +152,25 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
     });
 
     if (!response.ok) {
-      if (response.status === 429) return jsonError("Limite de requisições excedido. Tente novamente em alguns minutos.", 429);
-      if (response.status === 402) return jsonError("Créditos insuficientes. Adicione créditos em Configurações > Workspace > Uso.", 402);
+      if (response.status === 429) return jsonError("Limite de requisições excedido. Tente novamente em alguns minutos.", 429, req);
+      if (response.status === 402) return jsonError("Créditos insuficientes. Adicione créditos em Configurações > Workspace > Uso.", 402, req);
       const errorText = await response.text();
       console.error("AI gateway error:", response.status, errorText);
-      return jsonError("Erro ao gerar sugestão", 500);
+      return jsonError("Erro ao gerar sugestão", 500, req);
     }
 
      const aiResponse = await response.json();
-     let suggestion = null;
+     let suggestion: z.infer<typeof SuggestionSchema> | null = null;
      const toolCall = aiResponse.choices?.[0]?.message?.tool_calls?.[0];
      
      if (toolCall?.function?.arguments) {
        try {
-         suggestion = JSON.parse(toolCall.function.arguments);
+         const parsedSuggestion: unknown = JSON.parse(toolCall.function.arguments);
+         const nextSuggestion = SuggestionSchema.parse(parsedSuggestion);
+         suggestion = nextSuggestion;
          
          // 🔮 Roadmap Prediction Logic (Only if high confidence)
-         if (contactId && suggestion.confidence > 80) {
+         if (contactId && nextSuggestion.confidence > 80) {
            // Generate 3 milestone predictions for the roadmap
            const roadmapMonths = [1, 3, 6];
            const roadmapPromises = roadmapMonths.map(async (monthsAhead) => {
@@ -191,20 +194,23 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
                // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
                predicted_need: needs[Math.floor(Math.random() * needs.length)],
                suggested_offering: `Pacote de Serviços ${monthsAhead}m`,
-               probability: Math.max(40, suggestion.confidence - (monthsAhead * 5)),
-               rationale: `Projeção baseada na tendência atual de ${suggestion.action_type}.`
+               probability: Math.max(40, nextSuggestion.confidence - (monthsAhead * 5)),
+               rationale: `Projeção baseada na tendência atual de ${nextSuggestion.action_type}.`
              });
            });
            await Promise.all(roadmapPromises);
          }
        } catch (parseError) {
          console.error("Error parsing/persisting prediction:", parseError);
+         throw parseError;
        }
      }
+
+     if (!suggestion) throw new Error("O gateway não retornou uma sugestão válida");
  
-     return jsonOk({ suggestion });
+     return jsonOk({ suggestion }, req);
   } catch (error) {
     console.error("suggest-next-action error:", error);
-    return jsonError("Internal server error", 500);
+    return jsonError("Internal server error", 500, req);
   }
 });

@@ -110,11 +110,13 @@ const OnboardingWizard = ({ onComplete }: OnboardingWizardProps) => {
     
     setIsLoading(true);
     try {
+      if (!user.email) throw new Error('E-mail da conta indisponível para concluir o cadastro.');
       // Save profile data
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert({
           id: user.id,
+          email: user.email,
           first_name: data.profile.firstName,
           last_name: data.profile.lastName,
           company_name: data.profile.companyName,
@@ -128,6 +130,7 @@ const OnboardingWizard = ({ onComplete }: OnboardingWizardProps) => {
             onboardingCompleted: true,
             onboardingCompletedAt: new Date().toISOString(),
           },
+          onboarding_completed: true,
           updated_at: new Date().toISOString(),
         });
 

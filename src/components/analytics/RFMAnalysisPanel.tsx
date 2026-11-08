@@ -16,6 +16,7 @@ import {
   RefreshCw, Search, ChevronRight,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 import { useRFMAnalysis } from '@/hooks/useRFMAnalysis';
 import { RFM_SEGMENTS, RFMSegment } from '@/types/rfm';
 import {
@@ -34,6 +35,14 @@ export function RFMAnalysisPanel({ compact = false, contactId }: RFMAnalysisPane
   const [searchTerm, setSearchTerm] = useState('');
   const [segmentFilter, setSegmentFilter] = useState<string>('all');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
+
+  const handleRunAnalysis = async () => {
+    try {
+      await runAnalysis();
+    } catch {
+      toast.error('Não foi possível salvar a análise RFM. Tente novamente.');
+    }
+  };
 
   const filteredContacts = useMemo(() => {
     return contactSummaries.filter(summary => {
@@ -70,7 +79,7 @@ export function RFMAnalysisPanel({ compact = false, contactId }: RFMAnalysisPane
   }
 
   if (contactId && contactRFM) {
-    return <ContactRFMDetail rfm={contactRFM} history={history} onRefresh={runAnalysis} analyzing={analyzing} />;
+    return <ContactRFMDetail rfm={contactRFM} history={history} onRefresh={handleRunAnalysis} analyzing={analyzing} />;
   }
 
   if (compact) {
@@ -79,7 +88,7 @@ export function RFMAnalysisPanel({ compact = false, contactId }: RFMAnalysisPane
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2"><BarChart3 className="h-5 w-5 text-primary" /><CardTitle className="text-lg">Análise RFM</CardTitle></div>
-            <Button variant="ghost" size="sm" onClick={runAnalysis} disabled={analyzing}><RefreshCw className={`h-4 w-4 ${analyzing ? 'animate-spin' : ''}`} /></Button>
+            <Button variant="ghost" size="sm" onClick={handleRunAnalysis} disabled={analyzing}><RefreshCw className={`h-4 w-4 ${analyzing ? 'animate-spin' : ''}`} /></Button>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -114,7 +123,7 @@ export function RFMAnalysisPanel({ compact = false, contactId }: RFMAnalysisPane
         <div><h2 className="text-2xl font-bold">Análise RFM Completa</h2><p className="text-muted-foreground">Segmentação baseada em Recência, Frequência e Valor Monetário</p></div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={refresh}><RefreshCw className="h-4 w-4 mr-2" />Atualizar</Button>
-          <Button onClick={runAnalysis} disabled={analyzing}>{analyzing ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Analisando...</> : <><Zap className="h-4 w-4 mr-2" />Executar Análise</>}</Button>
+          <Button onClick={handleRunAnalysis} disabled={analyzing}>{analyzing ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Analisando...</> : <><Zap className="h-4 w-4 mr-2" />Executar Análise</>}</Button>
         </div>
       </div>
 

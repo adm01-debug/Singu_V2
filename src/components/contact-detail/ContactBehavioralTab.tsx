@@ -150,7 +150,6 @@ import type { Contact } from '@/hooks/useContactDetail';
         hobbies={contact.hobbies as string[]}
         interests={contact.interests as string[]}
         familyInfo={contact.family_info || undefined}
-        metadata={(contact.rapport_metadata ?? undefined) as { hobbies?: Record<string, string>; interests?: Record<string, string> } | undefined}
         onUpdate={async (data) => {
           if (!user) throw new Error('Não autenticado');
           const { error } = await supabase.from('contacts').update(data).eq('id', contact.id).eq('user_id', user.id);

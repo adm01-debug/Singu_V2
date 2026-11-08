@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
  import { RequireAuth } from '@/hooks/useAuth';
- import { MFAGuard } from '@/components/auth/MFAGuard';
 import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
 import { PageLoadingFallback } from '@/components/feedback/PageLoadingFallback';
 import { useWebVitals } from '@/hooks/useWebVitals';
@@ -28,21 +27,23 @@ const LazyPage = ({ children, fallback }: { children: React.ReactNode; fallback?
   </ErrorBoundary>
 );
 
- const Protected = ({ children, fallback }: { children: React.ReactNode; fallback?: React.ReactNode }) => (
+ const Protected = ({ children, fallback, allowMfaSetup = false }: { children: React.ReactNode; fallback?: React.ReactNode; allowMfaSetup?: boolean }) => (
    <RequireAuth>
-     <MFAGuard>
-       <LazyPage fallback={fallback}>{children}</LazyPage>
-     </MFAGuard>
+     <LazyPage fallback={fallback}>
+       <P.MFAGuardLazy setupFallback={allowMfaSetup ? <P.SecurityPage recoveryOnly /> : undefined}>
+         {children}
+       </P.MFAGuardLazy>
+     </LazyPage>
    </RequireAuth>
  );
 
 const Admin = ({ children }: { children: React.ReactNode }) => (
   <RequireAuth>
-    <MFAGuard>
-      <LazyPage>
+    <LazyPage>
+      <P.MFAGuardLazy>
         <P.RequireAdminLazy>{children}</P.RequireAdminLazy>
-      </LazyPage>
-    </MFAGuard>
+      </P.MFAGuardLazy>
+    </LazyPage>
   </RequireAuth>
 );
 
@@ -130,7 +131,7 @@ export const AppRoutes = () => {
       <Route path="/playbooks" element={<Protected><P.PlaybooksPage /></Protected>} />
       <Route path="/playbooks/battle-cards/:id" element={<Protected><P.BattleCardDetailPage /></Protected>} />
       <Route path="/playbooks/:id" element={<Protected><P.PlaybookDetailPage /></Protected>} />
-      <Route path="/rodizio" element={<Protected><P.Rodizio /></Protected>} />
+      <Route path="/rodizio" element={<Admin><P.Rodizio /></Admin>} />
       <Route path="/tarefas" element={<Protected><P.Tarefas /></Protected>} />
       <Route path="/bi" element={<Protected><P.BIAvancado /></Protected>} />
       <Route path="/suporte" element={<Protected><P.Suporte /></Protected>} />
@@ -151,7 +152,7 @@ export const AppRoutes = () => {
       <Route path="/erp" element={<Protected><P.ErpViewer /></Protected>} />
       <Route path="/documentos" element={<Protected><P.Documentos /></Protected>} />
       <Route path="/whatsapp" element={<RequireAuth><Navigate to="/interacoes?canal=whatsapp" replace /></RequireAuth>} />
-      <Route path="/seguranca" element={<Protected><P.SecurityPage /></Protected>} />
+      <Route path="/seguranca" element={<Protected allowMfaSetup><P.SecurityPage /></Protected>} />
 
       {/* Admin routes */}
       <Route path="/admin" element={<Admin><P.AdminDashboard /></Admin>} />
@@ -167,6 +168,7 @@ export const AppRoutes = () => {
       <Route path="/admin/lux-config" element={<Admin><P.AdminLuxConfig /></Admin>} />
       <Route path="/admin/secrets-management" element={<Admin><P.AdminSecretsManagement /></Admin>} />
       <Route path="/admin/conexoes" element={<Admin><P.AdminConexoes /></Admin>} />
+      <Route path="/admin/conexoes/logs" element={<Admin><P.AdminConexoesLogs /></Admin>} />
       <Route path="/admin/audit-trail" element={<Admin><P.AdminAuditTrail /></Admin>} />
       <Route path="/admin/knowledge-export" element={<Admin><P.AdminKnowledgeExport /></Admin>} />
       <Route path="/admin/error-logs" element={<Admin><P.AdminErrorLogs /></Admin>} />

@@ -27,21 +27,34 @@ const DISCAnalyticsPanel = () => {
   const { user } = useAuth();
   const { dashboardData, fetchDashboardData } = useDISCAnalysis();
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [contacts, setContacts] = useState<ContactWithDISC[]>([]);
   const [stats, setStats] = useState({ totalProfiled: 0, avgConfidence: 0, mostCommon: 'I' as DISCProfile, recentAnalyses: 0 });
 
   const loadData = useCallback(async (signal?: { cancelled: boolean }) => {
     if (!user) return;
     setLoading(true);
+    setLoadError(false);
     try {
-      const [{ data: contactsData }, { count: recentCount }] = await Promise.all([
-        supabase.from('contacts').select('id, first_name, last_name, avatar_url, behavior, relationship_score, companies(name)').eq('user_id', user.id).limit(5000),
+      const [{ data: contactsData, error: contactsError }, { count: recentCount, error: recentError }] = await Promise.all([
+        supabase.from('contacts').select('id, first_name, last_name, avatar_url, behavior, relationship_score, company_id').eq('user_id', user.id).limit(5000),
         supabase.from('disc_analysis_history').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('analyzed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
       ]);
       if (signal?.cancelled) return;
+      if (contactsError) throw contactsError;
+      if (recentError) throw recentError;
+      const companyIds = [...new Set((contactsData ?? []).flatMap(c => c.company_id ? [c.company_id] : []))];
+      const companyNames = new Map<string, string>();
+      for (let offset = 0; offset < companyIds.length; offset += 500) {
+        const { data: companies, error: companiesError } = await supabase
+          .from('companies').select('id, nome_crm').in('id', companyIds.slice(offset, offset + 500)).eq('user_id', user.id);
+        if (signal?.cancelled) return;
+        if (companiesError) throw companiesError;
+        for (const company of companies ?? []) companyNames.set(company.id, company.nome_crm);
+      }
       const mappedContacts: ContactWithDISC[] = (contactsData || []).map(c => {
         const behavior = getContactBehavior(c);
-        return { id: c.id, firstName: c.first_name, lastName: c.last_name, avatar: c.avatar_url || undefined, discProfile: behavior?.discProfile as DISCProfile, discConfidence: behavior?.discConfidence, relationshipScore: c.relationship_score || 0, companyName: (c.companies as { name: string } | null)?.name };
+        return { id: c.id, firstName: c.first_name, lastName: c.last_name, avatar: c.avatar_url || undefined, discProfile: behavior?.discProfile as DISCProfile, discConfidence: behavior?.discConfidence, relationshipScore: c.relationship_score || 0, companyName: c.company_id ? companyNames.get(c.company_id) : undefined };
       }).filter(c => c.discProfile);
       setContacts(mappedContacts);
 
@@ -55,9 +68,11 @@ const DISCAnalyticsPanel = () => {
       setStats({ totalProfiled: mappedContacts.length, avgConfidence: confidenceCount > 0 ? Math.round(totalConfidence / confidenceCount) : 0, mostCommon, recentAnalyses: recentCount || 0 });
       await fetchDashboardData();
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Unknown error';
+      if (signal?.cancelled) return;
+      setLoadError(true);
+      const msg = err instanceof Error ? err.message : 'Erro desconhecido';
       logger.error('Error loading DISC data:', { error: msg });
-    } finally { setLoading(false); }
+    } finally { if (!signal?.cancelled) setLoading(false); }
   }, [user, fetchDashboardData]);
 
   useEffect(() => {
@@ -67,6 +82,8 @@ const DISCAnalyticsPanel = () => {
   }, [loadData]);
 
   if (loading) return (<div className="space-y-6"><div className="grid grid-cols-2 md:grid-cols-4 gap-4">{[1,2,3,4].map(i => <Skeleton key={i} className="h-28" />)}</div><div className="grid grid-cols-1 lg:grid-cols-2 gap-6">{[1,2,3,4].map(i => <Skeleton key={i} className="h-80" />)}</div></div>);
+
+  if (loadError) return (<div role="alert" className="space-y-3"><p className="text-destructive">Não foi possível carregar as análises DISC.</p><Button onClick={() => loadData()} variant="outline" size="sm">Tentar novamente</Button></div>);
 
   const distributionData = (['D','I','S','C'] as const).map(p => ({ name: DISC_PROFILES[p]?.name || p, value: contacts.filter(c => c.discProfile === p).length, profile: p, color: DISC_COLORS[p] }));
   const compatibilityRadarData = (['D','I','S','C'] as const).map(p => { const pc = contacts.filter(c => c.discProfile === p); return { profile: DISC_PROFILES[p]?.name || p, score: pc.length > 0 ? Math.round(pc.reduce((s, c) => s + c.relationshipScore, 0) / pc.length) : 0, fullMark: 100 }; });

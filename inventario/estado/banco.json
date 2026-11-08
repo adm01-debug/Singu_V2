@@ -1,0 +1,6881 @@
+{
+  "alertas": [
+    {
+      "detalhe": [
+        "665595 linhas com mais de 7 dias"
+      ],
+      "tipo": "historico_cron_sem_limpeza"
+    }
+  ],
+  "cron": {
+    "config": {
+      "cron.max_running_jobs": "32",
+      "cron.use_background_workers": "off",
+      "max_worker_processes": "6"
+    },
+    "historico": {
+      "bytes": 141688832,
+      "linhas": 692360,
+      "mais_antigo": "2026-04-08T20:15:00Z",
+      "mais_de_7_dias": 665595
+    },
+    "horas_paradas_7d": [],
+    "jobs": [
+      {
+        "agenda": "*/5 * * * *",
+        "ativo": true,
+        "chama": [
+          "public.evaluate_ai_gateway_alerts"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 288,
+        "execucoes_7d": 2016,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "ai-gateway-alerts-eval",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 4 * * 0",
+        "ativo": true,
+        "chama": [
+          "public.drop_old_ai_gateway_metrics_partitions"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "ai-gateway-metrics-drop-old",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "15 3 * * *",
+        "ativo": true,
+        "chama": [
+          "public.ensure_ai_gateway_metrics_partition"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 7,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "ai-gateway-metrics-ensure-partition",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "2-59/5 * * * *",
+        "ativo": true,
+        "chama": [
+          "public.auto_resolve_ai_gateway_alerts"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 288,
+        "execucoes_7d": 2016,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "auto_resolve_ai_gateway_alerts",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "*/15 * * * *",
+        "ativo": true,
+        "chama": [
+          "public.capture_degraded_rpc_plans"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 96,
+        "execucoes_7d": 672,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "capture-degraded-rpc-plans",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "30 3 * * *",
+        "ativo": true,
+        "chama": [
+          "public.cleanup_rpc_perf_samples"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 7,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "cleanup_rpc_perf_samples_daily",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "10 7 * * *",
+        "ativo": true,
+        "chama": [
+          "public.rodizio_expirar_bloqueios"
+        ],
+        "duracao_max_s_7d": 1,
+        "execucoes_24h": 1,
+        "execucoes_7d": 7,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-rodizio-bloqueios",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 6 * * 1",
+        "ativo": true,
+        "chama": [
+          "public.cron_rodizio_closer_tick"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 0,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-rodizio-closer",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "10 6 * * 1",
+        "ativo": true,
+        "chama": [
+          "public.cron_rodizio_sdr_tick"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 0,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-rodizio-sdr",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 1 * * *",
+        "ativo": true,
+        "chama": [
+          "public.rodizio_segmentar_carteira"
+        ],
+        "duracao_max_s_7d": 11,
+        "execucoes_24h": 1,
+        "execucoes_7d": 7,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-rodizio-segmentar",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 5 * * *",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 7,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-cleanup-expired-media",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 4 * * 0",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-curate-training-dataset",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "*/30 * * * *",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 48,
+        "execucoes_7d": 336,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-embed-pending-messages",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "*/15 * * * *",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 96,
+        "execucoes_7d": 672,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-gc-zombie-messages",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 2 * * *",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 7,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-generate-daily-summaries",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "*/15 * * * *",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 96,
+        "execucoes_7d": 672,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-process-pending-media",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "* * * * *",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1440,
+        "execucoes_7d": 10080,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-reconcile-nlp",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "* * * * *",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 31,
+        "execucoes_24h": 1440,
+        "execucoes_7d": 10080,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-reconcile-nlp-30s",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 3 * * *",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 8,
+        "execucoes_24h": 1,
+        "execucoes_7d": 7,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-refresh-contact-stats",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "30 * * * *",
+        "ativo": true,
+        "chama": [],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 24,
+        "execucoes_7d": 168,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "zapp-sync-pending-summaries",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      }
+    ]
+  },
+  "edge_functions": {
+    "no_repo": 108,
+    "no_repo_sem_deploy": null,
+    "publicadas": null,
+    "publicadas_sem_codigo_no_repo": null
+  },
+  "fonte": "scripts/inventario/banco.sql + GET /functions + .from() em src/ e supabase/functions/ (scripts/inventario/gerar-banco.mjs)",
+  "format_version": 1,
+  "medido_em": "2026-11-08T15:43:18Z",
+  "resumo": {
+    "cron_ativos": 20,
+    "cron_jobs": 20,
+    "funcoes_public": 1381,
+    "ledger_registros": 677,
+    "ledger_versao_max": "20261022203935",
+    "max_connections": 60,
+    "policies": 1477,
+    "postgres": "17.6",
+    "tabelas_public": 406,
+    "tabelas_sem_rls": 0,
+    "tamanho_bytes": 3249278099,
+    "triggers_public": 436,
+    "views_public": 139
+  },
+  "tabelas": [
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "abm_account_plans",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "abm_accounts",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "abm_buying_committee",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "abm_campaigns",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "abm_whitespace_opportunities",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "access_blocked_log",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "access_security_settings",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 2,
+      "linhas_exatas": true,
+      "nome": "achievements",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 9666560,
+      "citada_no_banco": true,
+      "linhas": 8441,
+      "linhas_exatas": true,
+      "nome": "activities",
+      "particao_de": null,
+      "policies": 9,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 131072,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "activity_feed",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_chat_messages",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_chat_threads",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 0,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_gateway_metrics",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_gateway_metrics_2026_08",
+      "particao_de": "ai_gateway_metrics",
+      "policies": 0,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_gateway_metrics_2026_09",
+      "particao_de": "ai_gateway_metrics",
+      "policies": 0,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_gateway_metrics_2026_10",
+      "particao_de": "ai_gateway_metrics",
+      "policies": 0,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_gateway_metrics_2026_11",
+      "particao_de": "ai_gateway_metrics",
+      "policies": 0,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_gateway_metrics_2026_12",
+      "particao_de": "ai_gateway_metrics",
+      "policies": 0,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_gateway_metrics_2027_01",
+      "particao_de": "ai_gateway_metrics",
+      "policies": 0,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_recommendation_audit_logs",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": false,
+      "linhas": 64,
+      "linhas_exatas": true,
+      "nome": "ai_recommendation_audit_logs_v2",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_recommendation_logs",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ai_tone_preferences",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 16,
+      "linhas_exatas": true,
+      "nome": "alert_rules",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "alerts",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 7,
+        "src": 13
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "applied_objection_responses",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "asia_upload_mapping",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "attribution_models_cache",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "attribution_touchpoints",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 1672249344,
+      "citada_no_banco": true,
+      "linhas": 400965,
+      "linhas_exatas": false,
+      "nome": "audit_log",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "automation_executions",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "automation_logs",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 50,
+      "linhas_exatas": true,
+      "nome": "automation_rules",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 3,
+      "linhas_exatas": true,
+      "nome": "automations",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 10,
+      "linhas_exatas": true,
+      "nome": "badges",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "battle_cards",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "behavioral_insight_feedback",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "behavioral_profile_regen_queue",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 7,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "brain_dominance_analysis",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "cadence_enrollments",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "calendar_events",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "call_logs",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "campaign_members",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "campaign_recipients",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "campaigns",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "canned_responses",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "carrier_evaluations",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "carrier_homologations",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 5,
+      "linhas_exatas": true,
+      "nome": "carrier_qualification_config",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "carrier_score_history",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "carrier_scores",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 139264,
+      "citada_no_banco": true,
+      "linhas": 114,
+      "linhas_exatas": true,
+      "nome": "carriers",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 6,
+      "linhas_exatas": true,
+      "nome": "churn_predictions",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 4,
+      "linhas_exatas": true,
+      "nome": "churn_risk_factors",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "churn_risk_scores",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 1130496,
+      "citada_no_banco": true,
+      "linhas": 5571,
+      "linhas_exatas": true,
+      "nome": "cidades",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "city_whitelist",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "client_values",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "clients",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 5,
+      "linhas_exatas": true,
+      "nome": "closing_score_config",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 286720,
+      "citada_no_banco": false,
+      "linhas": 1494,
+      "linhas_exatas": true,
+      "nome": "cnaes",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "cnpj_cache",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "coaching_scorecards",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "cognitive_bias_history",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "commission_rules",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "commissions",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "communication_preferences",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 929718272,
+      "citada_no_banco": true,
+      "linhas": 57475,
+      "linhas_exatas": true,
+      "nome": "companies",
+      "particao_de": null,
+      "policies": 7,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 14,
+      "uso_no_codigo": {
+        "edges": 7,
+        "src": 27
+      }
+    },
+    {
+      "bytes": 49283072,
+      "citada_no_banco": true,
+      "linhas": 91154,
+      "linhas_exatas": true,
+      "nome": "company_addresses",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "company_cadences",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 64290816,
+      "citada_no_banco": false,
+      "linhas": 287500,
+      "linhas_exatas": false,
+      "nome": "company_cnaes",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 28393472,
+      "citada_no_banco": true,
+      "linhas": 56923,
+      "linhas_exatas": true,
+      "nome": "company_emails",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 32014336,
+      "citada_no_banco": true,
+      "linhas": 87977,
+      "linhas_exatas": true,
+      "nome": "company_phones",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 14639104,
+      "citada_no_banco": true,
+      "linhas": 48615,
+      "linhas_exatas": true,
+      "nome": "company_rfm_scores",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 33865728,
+      "citada_no_banco": true,
+      "linhas": 99245,
+      "linhas_exatas": true,
+      "nome": "company_social_media",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": false,
+      "linhas": 12,
+      "linhas_exatas": true,
+      "nome": "company_stakeholder_map",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "company_territories",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "compatibility_alerts",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 73728,
+      "citada_no_banco": true,
+      "linhas": 19,
+      "linhas_exatas": true,
+      "nome": "compatibility_settings",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "competitive_losses",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 5,
+      "linhas_exatas": true,
+      "nome": "competitors",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 33,
+      "linhas_exatas": true,
+      "nome": "config_regras_negocio",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "connection_anomalies",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "connection_configs",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 8,
+        "src": 6
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "connection_quotas",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "connection_test_logs",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "connector_log",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": false,
+      "linhas": 17,
+      "linhas_exatas": true,
+      "nome": "contact_addresses",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_analytical_profile_versions",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_analytical_profiles",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_automation_settings",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_behavior",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_business_context",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_cadence",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 6,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 7
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_cadence_audit",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_decision_making",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 1310720,
+      "citada_no_banco": true,
+      "linhas": 3070,
+      "linhas_exatas": true,
+      "nome": "contact_emails",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_family_history",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_influence",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_metaprograms",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_next_actions",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_notes",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_objection_scripts",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_personality",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 1114112,
+      "citada_no_banco": true,
+      "linhas": 3141,
+      "linhas_exatas": true,
+      "nome": "contact_phones",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_predictive_roadmap",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_preferences",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 5,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_preferences_audit",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_rapport_strategy",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_relatives",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 6,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 7
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_relatives_audit",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_report_overrides",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 565248,
+      "citada_no_banco": true,
+      "linhas": 1023,
+      "linhas_exatas": true,
+      "nome": "contact_social_media",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_time_analysis",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "contact_time_analysis_audit",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16605184,
+      "citada_no_banco": true,
+      "linhas": 4754,
+      "linhas_exatas": true,
+      "nome": "contacts",
+      "particao_de": null,
+      "policies": 10,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 20,
+      "uso_no_codigo": {
+        "edges": 57,
+        "src": 77
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "conversation_analyses",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "conversation_topics_catalog",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "conversational_search_cache",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 8,
+      "linhas_exatas": true,
+      "nome": "coop_sistemas",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "crm_alerts",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "crm_automation_logs",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "crm_automation_reprocess_queue",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "crm_cadence_rules",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "crm_consent_audit_logs",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "crm_metric_overrides",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "crm_objection_intelligence",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 90112,
+      "citada_no_banco": true,
+      "linhas": 7,
+      "linhas_exatas": true,
+      "nome": "crm_relationship_audit_logs",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "cron_secrets",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "cs_accounts",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "cs_health_signals",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "cs_nps_responses",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "cs_qbrs",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "cs_renewals",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "csat_surveys",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 8
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "custom_field_values",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 9,
+      "linhas_exatas": true,
+      "nome": "custom_fields",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 622592,
+      "citada_no_banco": true,
+      "linhas": 45,
+      "linhas_exatas": true,
+      "nome": "customer_events",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "customer_health_scores",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 131072,
+      "citada_no_banco": true,
+      "linhas": 12,
+      "linhas_exatas": true,
+      "nome": "customer_ownership_history",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 360448,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "customer_purchases",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 18325504,
+      "citada_no_banco": true,
+      "linhas": 48623,
+      "linhas_exatas": true,
+      "nome": "customer_rotation_state",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 5,
+      "linhas_exatas": true,
+      "nome": "customer_sdr_history",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "customer_surveys",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40886272,
+      "citada_no_banco": true,
+      "linhas": 48623,
+      "linhas_exatas": true,
+      "nome": "customers",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 90112,
+      "citada_no_banco": false,
+      "linhas": 258,
+      "linhas_exatas": true,
+      "nome": "daily_challenges",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 5,
+      "linhas_exatas": true,
+      "nome": "data_quality_audits",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "deal_competitors",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "deal_forecasts",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 5,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "deal_items",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "deal_room_activities",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "deal_room_comments",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "deal_room_documents",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "deal_room_milestones",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "deal_room_stakeholders",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "deal_rooms",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "deal_velocity_analysis",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 163840,
+      "citada_no_banco": true,
+      "linhas": 3,
+      "linhas_exatas": true,
+      "nome": "deals",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 7,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "decision_criteria",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "device_login_notifications",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 147456,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "disc_analysis_history",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 10
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "disc_analysis_history_audit",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 73728,
+      "citada_no_banco": true,
+      "linhas": 12,
+      "linhas_exatas": true,
+      "nome": "disc_approach_recommendations",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "disc_communication_logs",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "disc_conversion_metrics",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 163840,
+      "citada_no_banco": true,
+      "linhas": 4,
+      "linhas_exatas": true,
+      "nome": "disc_profile_config",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 5,
+      "linhas_exatas": true,
+      "nome": "disc_templates",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "document_signatures",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 6,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "document_templates",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 6
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "document_views",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "documents",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "duplicate_candidates",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "economic_group_members",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "economic_groups",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "email_campaigns",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "email_finder_results",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 122880,
+      "citada_no_banco": true,
+      "linhas": 182,
+      "linhas_exatas": true,
+      "nome": "email_logs",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "email_thread_summaries",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "email_verifications",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 4,
+      "linhas_exatas": true,
+      "nome": "embedding_configs",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "emotional_anchors",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "emotional_states_history",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "entity_relationships",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "eq_analysis_history",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 12,
+      "linhas_exatas": true,
+      "nome": "eq_assessment_questions",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 9183232,
+      "citada_no_banco": false,
+      "linhas": 11777,
+      "linhas_exatas": true,
+      "nome": "error_logs",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 27,
+      "linhas_exatas": true,
+      "nome": "estados",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "favorite_templates",
+      "particao_de": null,
+      "policies": 7,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "favorites",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "feature_flags",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ficha360_conversation_summaries",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "follow_up_approvals",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "follow_up_approvals_v2",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "forecast_categories_history",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "forecast_periods",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "forecast_quota_settings",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "forecast_snapshots",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "form_submissions",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "forms",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 8
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "geo_allowed_countries",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 344064,
+      "citada_no_banco": true,
+      "linhas": 1334,
+      "linhas_exatas": true,
+      "nome": "grupos_economicos",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "guardrail_ml_logs",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "handoff_requests",
+      "particao_de": null,
+      "policies": 9,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 19,
+      "linhas_exatas": true,
+      "nome": "health_alert_settings",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "health_alerts",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "hidden_objections",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "import_jobs",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "inactivity_alerts",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "incoming_webhook_dlq",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 7,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "incoming_webhook_logs",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 6,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "incoming_webhooks",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 6
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "insights",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "integration_logs",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "integrations",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "intent_scores",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "intent_signals",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "intent_tracking_pixels",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "interaction_summaries",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 4,
+      "linhas_exatas": true,
+      "nome": "interaction_templates",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 8126464,
+      "citada_no_banco": true,
+      "linhas": 10461,
+      "linhas_exatas": true,
+      "nome": "interactions",
+      "particao_de": null,
+      "policies": 10,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 15,
+      "uso_no_codigo": {
+        "edges": 35,
+        "src": 58
+      }
+    },
+    {
+      "bytes": 221184,
+      "citada_no_banco": true,
+      "linhas": 21,
+      "linhas_exatas": true,
+      "nome": "interactions_audit",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ip_whitelist",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "knowledge_base_articles",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "landing_page_submissions",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "landing_pages",
+      "particao_de": null,
+      "policies": 7,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 6
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_assignments",
+      "particao_de": null,
+      "policies": 9,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_magnet_downloads",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_magnets",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 8
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_routing_rules",
+      "particao_de": null,
+      "policies": 9,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_score_config",
+      "particao_de": null,
+      "policies": 7,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 131072,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_score_history",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_score_recompute_queue",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_score_rules",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_score_threshold_automations",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_score_threshold_log",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_score_thresholds",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lead_scores",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 7
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 10,
+      "linhas_exatas": true,
+      "nome": "lead_sources",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "life_events",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 7,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 9
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "life_events_history",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "login_attempts",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 8,
+      "linhas_exatas": true,
+      "nome": "loss_reasons",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lux_intelligence",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "lux_webhook_config",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "marketing_campaign_stats",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "marketing_roi_data",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "mcp_tool_calls",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "meeting_summaries",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "meetings",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "message_templates",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "metaprogram_analysis",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 10
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 13,
+      "linhas_exatas": true,
+      "nome": "model_pricing_v2",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "mql_classifications",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 5,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "mql_criteria",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "neuro_behavioral_history",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "neuro_pnl_sessions",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "nlp_extractions",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "nlp_feedback",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "notification_logs",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 9,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "notification_preferences",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "notifications",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "nps_surveys",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "nurturing_enrollments",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "nurturing_executions",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "nurturing_workflows",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "oauth_tokens",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "objection_example_feedback",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "offer_suggestions",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "password_reset_requests",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 122880,
+      "citada_no_banco": true,
+      "linhas": 12,
+      "linhas_exatas": true,
+      "nome": "people_intelligence_events",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": false,
+      "linhas": 29,
+      "linhas_exatas": true,
+      "nome": "permissions",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "phone_validations",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "pipeline_stage_transitions",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 8,
+      "linhas_exatas": true,
+      "nome": "pipeline_stages",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "pipelines",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "playbook_usage_log",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 3,
+      "linhas_exatas": true,
+      "nome": "portfolio_settings",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "product_novelties",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 10,
+      "linhas_exatas": true,
+      "nome": "products",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 147456,
+      "citada_no_banco": true,
+      "linhas": 19,
+      "linhas_exatas": true,
+      "nome": "profiles",
+      "particao_de": null,
+      "policies": 7,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 8,
+        "src": 17
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "proposals",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "proximo_passo_feedback",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "psychographic_audit_log",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "purchase_history",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "push_subscriptions",
+      "particao_de": null,
+      "policies": 9,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "query_telemetry",
+      "particao_de": null,
+      "policies": 7,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "quick_notes",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ragas_scores",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "redistribution_log",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "reframing_analysis",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "reframing_analysis_audit",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 7,
+      "linhas_exatas": true,
+      "nome": "relationship_score_history",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 3,
+      "linhas_exatas": true,
+      "nome": "reminders",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "report_executions",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "revops_alerts",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "revops_benchmarks",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "revops_snapshots",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 147456,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "rfm_analysis",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "rfm_history",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "rfm_metrics",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": false,
+      "linhas": 11,
+      "linhas_exatas": true,
+      "nome": "rfm_segment_config",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "rodizio_distribuicao_staging",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 6,
+      "linhas_exatas": true,
+      "nome": "rodizio_execucoes",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": false,
+      "linhas": 63,
+      "linhas_exatas": true,
+      "nome": "role_permissions",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "rpc_perf_samples",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 212992,
+      "citada_no_banco": true,
+      "linhas": 6,
+      "linhas_exatas": true,
+      "nome": "rpc_plan_snapshots",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sales",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 147456,
+      "citada_no_banco": false,
+      "linhas": 5,
+      "linhas_exatas": true,
+      "nome": "sales_activities",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sales_cadences",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sales_forecasts",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "sales_goals",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sales_opportunities",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sales_playbooks",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 3,
+      "linhas_exatas": true,
+      "nome": "sales_scripts",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 90112,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sales_tasks",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sales_team_members",
+      "particao_de": null,
+      "policies": 9,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 12,
+      "linhas_exatas": true,
+      "nome": "salespeople",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "scheduled_reports",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 3,
+      "linhas_exatas": true,
+      "nome": "scheduled_visits",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "schema_drift_alerts",
+      "particao_de": null,
+      "policies": 7,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "score_history",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "script_sections",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 89,
+      "linhas_exatas": true,
+      "nome": "sdr_alert_history",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sdr_closer_assignments",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "search_products_cache",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "secret_rotation_log",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "seller_daily_metrics",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "semantic_search_cache",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sentiment_annotations",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sequence_email_reservations",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sequence_enrollments",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sequence_events",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 106496,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sequence_send_log",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sequence_steps",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sequences",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 4,
+      "linhas_exatas": true,
+      "nome": "sla_rules",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sla_violations",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 2,
+      "linhas_exatas": true,
+      "nome": "sleight_of_mouth_examples",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 10,
+      "linhas_exatas": true,
+      "nome": "sleight_of_mouth_patterns",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sm_upload_mapping",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "smart_notifications",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 4,
+      "linhas_exatas": true,
+      "nome": "smart_segments",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sms_campaign_recipients",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 5,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sms_campaigns",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sms_opt_outs",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "sms_templates",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "social_behavior_analysis",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "social_consent_audit",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "social_life_events",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "social_profiles",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 6,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "social_scraping_schedule",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "social_sync_queue",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 1523712,
+      "citada_no_banco": true,
+      "linhas": 4423,
+      "linhas_exatas": true,
+      "nome": "staging_portal_sicoob",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "stakeholder_alerts",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "suggested_life_events",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "suggested_rapport_intel",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "supplier_evaluations",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 90112,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "supplier_homologations",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 4,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": true,
+      "linhas": 5,
+      "linhas_exatas": true,
+      "nome": "supplier_qualification_config",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 57344,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "supplier_score_history",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 73728,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "supplier_scores",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 565248,
+      "citada_no_banco": true,
+      "linhas": 754,
+      "linhas_exatas": true,
+      "nome": "suppliers",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "support_tickets",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 704512,
+      "citada_no_banco": true,
+      "linhas": 1545,
+      "linhas_exatas": true,
+      "nome": "sync_log",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 122880,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "system_alerts",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 6,
+        "src": 6
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "system_config",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "system_health_snapshots",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 40960,
+      "citada_no_banco": true,
+      "linhas": 10,
+      "linhas_exatas": true,
+      "nome": "tags",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 147456,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "tasks",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "territories",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "territory_assignments",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "ticket_comments",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "trigger_ab_tests",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 90112,
+      "citada_no_banco": false,
+      "linhas": 6,
+      "linhas_exatas": true,
+      "nome": "trigger_bundles",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "trigger_channel_effectiveness",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "trigger_intensity_history",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": true,
+      "linhas": 18,
+      "linhas_exatas": true,
+      "nome": "trigger_types",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "trigger_usage_history",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 6
+      }
+    },
+    {
+      "bytes": 81920,
+      "citada_no_banco": false,
+      "linhas": 21,
+      "linhas_exatas": true,
+      "nome": "uapi_sessions",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "user_badges",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 65536,
+      "citada_no_banco": true,
+      "linhas": 6,
+      "linhas_exatas": true,
+      "nome": "user_goals",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "user_known_devices",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 73728,
+      "citada_no_banco": true,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "user_roles",
+      "particao_de": null,
+      "policies": 9,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 1,
+      "linhas_exatas": true,
+      "nome": "user_ui_preferences",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 6
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 26,
+      "linhas_exatas": true,
+      "nome": "users",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "vak_analysis_history",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 14
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 36,
+      "linhas_exatas": true,
+      "nome": "vak_keywords",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 98304,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "validation_queue",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 3,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "visit_checkins",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "webauthn_credentials",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 3
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "webhook_logs",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "webhooks",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": false,
+      "linhas": 5,
+      "linhas_exatas": true,
+      "nome": "weekly_challenges",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "weekly_report_settings",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "weekly_reports",
+      "particao_de": null,
+      "policies": 8,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "whatsapp_ingestion_logs",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "whatsapp_instances",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 4,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "whatsapp_kpis",
+      "particao_de": null,
+      "policies": 5,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 106496,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "whatsapp_messages",
+      "particao_de": null,
+      "policies": 6,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 3,
+      "uso_no_codigo": {
+        "edges": 12,
+        "src": 5
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "whatsapp_messages_index",
+      "particao_de": null,
+      "policies": 2,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "whatsapp_transcriptions",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 1
+      }
+    },
+    {
+      "bytes": 24576,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "win_loss_insights",
+      "particao_de": null,
+      "policies": 3,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 1,
+        "src": 2
+      }
+    },
+    {
+      "bytes": 32768,
+      "citada_no_banco": true,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "win_loss_reasons",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 1,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 4
+      }
+    },
+    {
+      "bytes": 49152,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "win_loss_records",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 2,
+        "src": 7
+      }
+    },
+    {
+      "bytes": 114688,
+      "citada_no_banco": true,
+      "linhas": 29,
+      "linhas_exatas": true,
+      "nome": "workspace_accounts",
+      "particao_de": null,
+      "policies": 4,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 2,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    },
+    {
+      "bytes": 16384,
+      "citada_no_banco": false,
+      "linhas": 0,
+      "linhas_exatas": true,
+      "nome": "xbz_upload_mapping",
+      "particao_de": null,
+      "policies": 1,
+      "rls": true,
+      "rls_forcado": false,
+      "triggers": 0,
+      "uso_no_codigo": {
+        "edges": 0,
+        "src": 0
+      }
+    }
+  ],
+  "tabelas_orfas": {
+    "criterio": "0 linhas + nao citada em funcao/view do banco + nenhum .from() em src/ ou supabase/functions/",
+    "lista": [
+      "ai_gateway_metrics_2026_08",
+      "ai_gateway_metrics_2026_09",
+      "ai_gateway_metrics_2026_10",
+      "ai_gateway_metrics_2026_11",
+      "ai_gateway_metrics_2026_12",
+      "ai_gateway_metrics_2027_01",
+      "ai_recommendation_logs",
+      "asia_upload_mapping",
+      "city_whitelist",
+      "clients",
+      "contact_notes",
+      "handoff_requests",
+      "interaction_summaries",
+      "lead_assignments",
+      "lead_routing_rules",
+      "marketing_roi_data",
+      "neuro_pnl_sessions",
+      "nlp_feedback",
+      "nurturing_enrollments",
+      "product_novelties",
+      "sales_tasks",
+      "sm_upload_mapping",
+      "territory_assignments",
+      "xbz_upload_mapping"
+    ]
+  },
+  "whatsapp": {
+    "conexoes": [],
+    "mensagens_7d": 0
+  }
+}

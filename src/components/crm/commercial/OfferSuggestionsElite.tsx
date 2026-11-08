@@ -34,7 +34,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { useSocialSync } from '@/hooks/commercial/useSocialSync';
-import { SocialMatchPanel } from './components/SocialMatchPanel';
 import { AuditLogDrawer } from './components/AuditLogDrawer';
 import { cn } from '@/lib/utils';
 
@@ -47,13 +46,13 @@ export function OfferSuggestionsElite({ contactId }: Props) {
   const queryClient = useQueryClient();
   const { queueStatus, auditLogs, syncNow } = useSocialSync(contactId);
 
-  const { data: offers, isLoading } = useQuery({
+  const { data: offers, isLoading, isError } = useQuery({
     queryKey: ['offer-suggestions-elite', contactId, user?.id],
     enabled: !!contactId && !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from('offer_suggestions')
-        .select('id, confidence_score, contact_id, created_at, expires_at, metadata, offer_category, offer_name, presented_at, reason, result, status, user_id')
+        .select('id, confidence_score, contact_id, created_at, expires_at, offer_category, offer_name, presented_at, reason, result, status, user_id')
         .eq('contact_id', contactId)
         .eq('user_id', user!.id)
         .order('confidence_score', { ascending: false })
@@ -102,6 +101,7 @@ export function OfferSuggestionsElite({ contactId }: Props) {
 
   return (
     <div className="space-y-4">
+      {isError && <p role="alert" className="text-sm text-destructive">Não foi possível carregar as sugestões de oferta.</p>}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600">
@@ -211,11 +211,9 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                       <p className="text-xs text-muted-foreground leading-relaxed italic">
                         "{offer.reason}"
                       </p>
-                      <SocialMatchPanel
-                        contactId={contactId}
-                        offerName={offer.offer_name}
-                        metadata={(offer.metadata as { sources?: string[]; keywords?: string[]; social_insight_ids?: string[] } | null) ?? {}}
-                      />
+                      {offer.reason?.toLowerCase().includes('social') && (
+                        <p className="text-xs text-muted-foreground">Evidências do match social indisponíveis: esta oferta não registra fontes ou palavras-chave.</p>
+                      )}
                     </div>
                     <div className="text-right shrink-0">
                       <div className="flex flex-col items-end">

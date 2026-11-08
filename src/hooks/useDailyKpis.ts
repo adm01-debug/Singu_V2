@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { queryExternalData } from '@/lib/externalData';
 import { useAuth } from '@/hooks/useAuth';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
 
 export interface DailyKpi {
   snapshot_date?: string;
@@ -30,9 +31,10 @@ export interface DailyStats {
 
 export function useDailyKpis() {
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   return useQuery({
     queryKey: ['daily-kpis-v2', user?.id],
-    enabled: !!user,
+    enabled: !!user && isAdmin,
     queryFn: async () => {
       const { data, error } = await queryExternalData<DailyKpi>({
         table: 'mv_daily_kpis',
@@ -48,9 +50,10 @@ export function useDailyKpis() {
 
 export function useDailyStats() {
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   return useQuery({
     queryKey: ['daily-stats', user?.id],
-    enabled: !!user,
+    enabled: !!user && isAdmin,
     queryFn: async () => {
       const { data, error } = await queryExternalData<DailyStats>({
         table: 'mv_daily_stats',

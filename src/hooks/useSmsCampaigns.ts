@@ -196,7 +196,7 @@ export function useSmsTemplates() {
       const variables = Array.from(new Set([...input.body.matchAll(/\{\{\s*(\w+)\s*\}\}/g)].map((m) => m[1])));
       const { data, error } = await supabase
         .from('sms_templates')
-        .insert({ ...input, variables, user_id: userId })
+        .insert({ ...input, message: input.body, variables, user_id: userId })
         .select()
         .maybeSingle();
       if (error) throw error;

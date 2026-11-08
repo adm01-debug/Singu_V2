@@ -24,7 +24,8 @@ export async function resilientFetch(
   init?: RequestInit,
   options?: RetryOptions,
 ): Promise<Response> {
-  const maxRetries = options?.maxRetries ?? 2;
+  const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase();
+  const maxRetries = ['GET', 'HEAD', 'OPTIONS'].includes(method) ? options?.maxRetries ?? 2 : 0;
   const baseDelay = options?.baseDelayMs ?? 1000;
   const maxDelay = options?.maxDelayMs ?? 10_000;
   const retryStatuses = options?.retryStatuses ?? DEFAULT_RETRY_STATUSES;

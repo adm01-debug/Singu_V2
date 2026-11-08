@@ -147,7 +147,7 @@ export function HealthAlertsPanel() {
                       key={alert.id} 
                       alert={alert} 
                       onDismiss={dismissAlert}
-                      onNavigate={() => navigate(`/contato/${alert.contact_id}`)}
+                      onNavigate={() => navigate(`/contatos/${alert.contact_id}`)}
                     />
                   ))}
                 </AnimatePresence>

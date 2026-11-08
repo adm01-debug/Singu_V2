@@ -65,7 +65,7 @@ export function useDISCConversionData(period: ConversionPeriod) {
             profileData[discProfile].closedCount++;
           }
 
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           const contactInteractions = (interactions || []).filter(i => i.contact_id === contact.id);
           if (contactInteractions.length >= 2) {
             const firstDate = new Date(contactInteractions[0].created_at);

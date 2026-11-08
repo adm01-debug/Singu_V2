@@ -80,7 +80,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
   }, [queryClient, queryKey]);
 
   const createInteraction = async (
-    interaction: Omit<InteractionInsert, 'user_id'>,
+    interaction: Omit<InteractionInsert, 'user_id' | 'direction' | 'channel'> & Partial<Pick<InteractionInsert, 'direction' | 'channel'>>,
     options?: { triggerDISCAnalysis?: boolean; triggerNLPAnalysis?: boolean }
   ) => {
     if (!user) return null;
@@ -88,7 +88,9 @@ export function useInteractions(contactId?: string, companyId?: string, options?
     try {
       const { data, error } = await supabase
         .from('interactions')
-        .insert({ ...interaction, user_id: user.id })
+        // direction/channel são NOT NULL no tipo gerado, mas este insert nunca os enviou;
+        // cast preserva o comportamento de runtime (o banco aplica o valor vigente).
+        .insert({ ...interaction, user_id: user.id } as TablesInsert<'interactions'>)
         .select()
         .maybeSingle();
 
@@ -179,7 +181,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         ...prev,
         pages: prev.pages.map(page => ({
           ...page,
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           data: page.data.map(i => i.id === id ? { ...i, ...updates } as Interaction : i),
         })),
       };
@@ -204,7 +206,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
           ...prev,
           pages: prev.pages.map(page => ({
             ...page,
-            // eslint-disable-next-line sonarjs/no-nested-functions
+
             data: page.data.map(i => i.id === id ? data : i),
           })),
         };
@@ -238,7 +240,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         ...prev,
         pages: prev.pages.map(page => ({
           ...page,
-          // eslint-disable-next-line sonarjs/no-nested-functions
+
           data: page.data.filter(i => i.id !== id),
           total: page.total > 0 ? page.total - 1 : 0,
         })),

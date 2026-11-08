@@ -11,6 +11,7 @@ import { DashboardStatsGrid } from '@/components/dashboard/DashboardStatsGrid';
 import { RecentActivityCard } from '@/components/dashboard/RecentActivityCard';
 import { TopContactsCard } from '@/components/dashboard/TopContactsCard';
 import type { DashboardStats } from '@/hooks/useDashboardStats';
+import { useDashboardMappedData } from '@/hooks/useDashboardMappedData';
 
 const YourDaySection = lazy(() => import('@/components/dashboard/YourDaySection').then(m => ({ default: m.YourDaySection })));
 const PreContactBriefing = lazy(() => import('@/components/briefing/PreContactBriefing').then(m => ({ default: m.PreContactBriefing })));
@@ -65,6 +66,7 @@ export function OverviewTab({
   tabDirection,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Raw supabase rows diverge from Contact/Company/Interaction domain types in child components; broader refactor tracked separately
 }: OverviewTabProps & { contacts: any[]; companies: any[]; interactions: any[] }) {
+  const { mappedContacts, mappedInteractions } = useDashboardMappedData(contacts, companies, interactions, true);
   const animVariants = {
     initial: { opacity: 0, x: prefersReducedMotion ? 0 : tabDirection * 20 },
     animate: { opacity: 1, x: 0 },
@@ -190,7 +192,7 @@ export function OverviewTab({
         </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Datas Importantes">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-48 w-full" />}>
-            <ImportantDatesCalendar contacts={contacts} interactions={interactions} compact />
+            <ImportantDatesCalendar contacts={mappedContacts} interactions={mappedInteractions} compact />
           </Suspense>
         </DashboardErrorBoundary>
       </div>

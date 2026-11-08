@@ -37,6 +37,8 @@ const TECHNICAL_PATTERNS = [
   /deadlock detected/i,
   /pgrst\d+/i,
   /postgrest/i,
+  /schema cache/i,
+  /edge function error \[\d{3}\]:/i,
   /supabase\.co/i,
   /jwt/i,
   /table ".+" (of relation|doesn't)/i,

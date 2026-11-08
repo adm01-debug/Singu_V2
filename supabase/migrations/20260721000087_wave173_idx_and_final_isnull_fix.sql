@@ -12,99 +12,97 @@
 
 -- ── PART A: Final IS NOT NULL SELECT policy fixes ────────────────────────────
 
--- 1. churn_predictions — drop IS NOT NULL read_only_auth, add user-scoped SELECT
-DROP POLICY IF EXISTS "read_only_auth" ON public.churn_predictions;
-CREATE POLICY "churn_predictions_select" ON public.churn_predictions
-  FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
-
--- 2. deal_velocity_analysis — same fix
-DROP POLICY IF EXISTS "read_only_auth" ON public.deal_velocity_analysis;
-CREATE POLICY "deal_velocity_analysis_select" ON public.deal_velocity_analysis
-  FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
-
--- 3. search_products_cache — per-user cache read
-DROP POLICY IF EXISTS "authenticated_read" ON public.search_products_cache;
-CREATE POLICY "search_products_cache_select" ON public.search_products_cache
-  FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
-
--- 4. semantic_search_cache — per-user cache read
-DROP POLICY IF EXISTS "authenticated_read" ON public.semantic_search_cache;
-CREATE POLICY "semantic_search_cache_select" ON public.semantic_search_cache
-  FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
+DO $policies$
+DECLARE
+  table_definition record;
+BEGIN
+  FOR table_definition IN
+    SELECT *
+    FROM (VALUES
+      ('churn_predictions', 'read_only_auth'),
+      ('deal_velocity_analysis', 'read_only_auth'),
+      ('search_products_cache', 'authenticated_read'),
+      ('semantic_search_cache', 'authenticated_read')
+    ) AS tables(table_name, old_policy)
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', table_definition.table_name))
+        AND attname = 'user_id'
+        AND NOT attisdropped
+    ) THEN
+      EXECUTE format(
+        'DROP POLICY IF EXISTS %I ON public.%I',
+        table_definition.old_policy,
+        table_definition.table_name
+      );
+      EXECUTE format(
+        'DROP POLICY IF EXISTS %I ON public.%I',
+        table_definition.table_name || '_select',
+        table_definition.table_name
+      );
+      EXECUTE format(
+        'CREATE POLICY %I ON public.%I FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()))',
+        table_definition.table_name || '_select',
+        table_definition.table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$policies$;
 
 -- ── PART B: user_id indexes for Wave 171 policy tables ───────────────────────
 -- 23 tables received ownership-scoped RLS policies in Wave 171 but lacked
 -- user_id indexes, causing seq scans on every authenticated REST query.
 -- connector_log excluded — references user_id via join, not a direct column.
 
-CREATE INDEX IF NOT EXISTS idx_activity_feed_user_id
-  ON public.activity_feed (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_cadence_enrollments_user_id
-  ON public.cadence_enrollments (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_commissions_user_id
-  ON public.commissions (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_company_cadences_user_id
-  ON public.company_cadences (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_company_stakeholder_map_user_id
-  ON public.company_stakeholder_map (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_interaction_templates_user_id
-  ON public.interaction_templates (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_query_telemetry_user_id
-  ON public.query_telemetry (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_relationship_score_history_user_id
-  ON public.relationship_score_history (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_rfm_history_user_id
-  ON public.rfm_history (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_sales_goals_user_id
-  ON public.sales_goals (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_schema_drift_alerts_user_id
-  ON public.schema_drift_alerts (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_score_history_user_id
-  ON public.score_history (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_sla_violations_user_id
-  ON public.sla_violations (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_social_behavior_analysis_user_id
-  ON public.social_behavior_analysis (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_social_life_events_user_id
-  ON public.social_life_events (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_social_profiles_user_id
-  ON public.social_profiles (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_social_scraping_schedule_user_id
-  ON public.social_scraping_schedule (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_stakeholder_alerts_user_id
-  ON public.stakeholder_alerts (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_trigger_ab_tests_user_id
-  ON public.trigger_ab_tests (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_trigger_bundles_user_id
-  ON public.trigger_bundles (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_trigger_usage_history_user_id
-  ON public.trigger_usage_history (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_weekly_reports_user_id
-  ON public.weekly_reports (user_id);
-
-CREATE INDEX IF NOT EXISTS idx_whatsapp_kpis_user_id
-  ON public.whatsapp_kpis (user_id);
+DO $indexes$
+DECLARE
+  table_name text;
+BEGIN
+  FOREACH table_name IN ARRAY ARRAY[
+    'activity_feed',
+    'cadence_enrollments',
+    'commissions',
+    'company_cadences',
+    'company_stakeholder_map',
+    'interaction_templates',
+    'query_telemetry',
+    'relationship_score_history',
+    'rfm_history',
+    'sales_goals',
+    'schema_drift_alerts',
+    'score_history',
+    'sla_violations',
+    'social_behavior_analysis',
+    'social_life_events',
+    'social_profiles',
+    'social_scraping_schedule',
+    'stakeholder_alerts',
+    'trigger_ab_tests',
+    'trigger_bundles',
+    'trigger_usage_history',
+    'weekly_reports',
+    'whatsapp_kpis'
+  ]
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM pg_attribute
+      WHERE attrelid = to_regclass(format('public.%I', table_name))
+        AND attname = 'user_id'
+        AND NOT attisdropped
+    ) THEN
+      EXECUTE format(
+        'CREATE INDEX IF NOT EXISTS %I ON public.%I (user_id)',
+        'idx_' || table_name || '_user_id',
+        table_name
+      );
+    END IF;
+  END LOOP;
+END;
+$indexes$;
 
 -- ── Verification ──────────────────────────────────────────────────────────────
 DO $$

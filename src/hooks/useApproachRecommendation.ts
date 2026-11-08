@@ -34,7 +34,6 @@ export function useApproachRecommendation({
       vakProfile?.confidence || 50,
       metaprogramProfile?.overallConfidence || 50,
       eqResult?.confidence || 0,
-      biasResult?.confidence || 0,
     ].filter(c => c > 0);
 
     const overallConfidence = confidenceFactors.length > 0
