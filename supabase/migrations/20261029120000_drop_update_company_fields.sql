@@ -1,0 +1,21 @@
+-- Remove public.update_company_fields(uuid, jsonb).
+--
+-- Contexto: a função foi criada direto no banco (ledger 20261022203935
+-- "update_company_fields_security_fix", sem arquivo no repositório). É
+-- SECURITY DEFINER, monta UPDATE dinâmico em public.companies com QUALQUER
+-- coluna vinda do jsonb e estava executável por `authenticated`. O ramo
+-- "service_role" era decidido por auth.uid() IS NULL, o que não identifica
+-- o papel de quem chama.
+--
+-- Nenhum chamador no repositório (src/, supabase/functions/, scripts/):
+-- a superfície é só risco. Por isso o caminho é remover, e não endurecer.
+-- Isso também devolve o inventário DEFINER à baseline de 109 e tira a
+-- função da allowlist de `authenticated` (gates functions_authenticated_allowlist
+-- e security_definer_hardening, que hoje deixam a main vermelha).
+--
+-- DROP remove também os GRANTs; IF EXISTS mantém a migration idempotente
+-- em bancos onde a função nunca existiu (local, preview).
+--
+-- Reversão: recriar a função a partir do backup do banco; nenhum dado é afetado.
+
+DROP FUNCTION IF EXISTS public.update_company_fields(uuid, jsonb);

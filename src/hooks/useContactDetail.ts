@@ -79,17 +79,15 @@ export function useContactDetail(contactId: string | undefined) {
       if (localContact) {
         contactData = normalizeExternalContact(localContact as unknown as Record<string, unknown>);
       } else {
-        const { data: externalContacts, error: externalError } = await queryExternalData<Contact>({
+        const { data: externalContacts, error: externalContactError } = await queryExternalData<Contact>({
           table: 'contacts',
           filters: [{ type: 'eq', column: 'id', value: contactId! }],
         });
-        if (externalError) throw externalError;
+        if (externalContactError) throw externalContactError;
         contactData = externalContacts?.[0] ? normalizeExternalContact(externalContacts[0] as unknown as Record<string, unknown>) : null;
       }
 
-      if (!contactData) {
-        return { contact: null, company: null, interactions: [], insights: [], alerts: [] };
-      }
+      if (!contactData) return { contact: null, company: null, interactions: [], insights: [], alerts: [] };
 
       // 2. Fetch company (depends on contactData.company_id — must be sequential)
       let companyData: Company | null = null;
