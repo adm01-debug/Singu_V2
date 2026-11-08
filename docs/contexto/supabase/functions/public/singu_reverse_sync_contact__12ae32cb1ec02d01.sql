@@ -1,0 +1,50 @@
+CREATE OR REPLACE FUNCTION public.singu_reverse_sync_contact()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SET search_path TO 'public'
+AS $function$
+BEGIN
+  -- email: se SINGU inseriu/atualizou email inline e não existe em contact_emails, criar
+  IF NEW.email IS NOT NULL AND length(trim(NEW.email)) > 0 THEN
+    IF NOT EXISTS (
+      SELECT 1 FROM public.contact_emails 
+      WHERE contact_id = NEW.id AND lower(email) = lower(NEW.email)
+    ) THEN
+      INSERT INTO public.contact_emails (contact_id, email, is_primary, email_type, fonte)
+      VALUES (NEW.id, NEW.email, true, 'pessoal'::email_type, 'SINGU')
+      ON CONFLICT DO NOTHING;
+    END IF;
+  END IF;
+
+  -- phone: idem
+  IF NEW.phone IS NOT NULL AND length(trim(NEW.phone)) > 0 THEN
+    IF NOT EXISTS (
+      SELECT 1 FROM public.contact_phones 
+      WHERE contact_id = NEW.id AND (numero = NEW.phone OR numero_e164 = NEW.phone)
+    ) THEN
+      INSERT INTO public.contact_phones (contact_id, numero, is_primary, is_whatsapp, phone_type, fonte)
+      VALUES (
+        NEW.id, NEW.phone, true, 
+        (NEW.whatsapp IS NOT NULL AND NEW.whatsapp = NEW.phone),
+        'celular_corporativo'::phone_type, 'SINGU'
+      )
+      ON CONFLICT DO NOTHING;
+    END IF;
+  END IF;
+
+  -- whatsapp separado: se é diferente de phone
+  IF NEW.whatsapp IS NOT NULL AND length(trim(NEW.whatsapp)) > 0 
+     AND NEW.whatsapp IS DISTINCT FROM NEW.phone THEN
+    IF NOT EXISTS (
+      SELECT 1 FROM public.contact_phones 
+      WHERE contact_id = NEW.id AND (numero = NEW.whatsapp OR numero_e164 = NEW.whatsapp)
+    ) THEN
+      INSERT INTO public.contact_phones (contact_id, numero, is_primary, is_whatsapp, phone_type, fonte)
+      VALUES (NEW.id, NEW.whatsapp, false, true, 'celular_corporativo'::phone_type, 'SINGU')
+      ON CONFLICT DO NOTHING;
+    END IF;
+  END IF;
+
+  RETURN NEW;
+END;
+$function$

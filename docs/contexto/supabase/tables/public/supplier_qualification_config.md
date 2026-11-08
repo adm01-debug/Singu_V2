@@ -1,0 +1,114 @@
+# public.supplier_qualification_config
+
+> Configuração dos segmentos de classificação (Excelente/Bom/Regular/Insuficiente/Crítico) com faixas de score e cores.
+
+| propriedade | valor |
+|---|---|
+| tipo | table |
+| owner | postgres |
+| RLS habilitado | sim |
+| RLS forçado (owner) | não |
+| policies | 4 |
+| realtime (publication) | não |
+| replica identity | default |
+| vem de extensão | não |
+| usada por views | public.vw_supplier_ranking |
+
+
+## Colunas
+
+| # | coluna | tipo | nullable | default | identity/generated | comentário |
+|---|---|---|---|---|---|---|
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
+| 2 | `segment_code` | `text` | não |  |  |  |
+| 3 | `name_pt` | `text` | não |  |  |  |
+| 4 | `description_pt` | `text` | sim |  |  |  |
+| 5 | `score_min` | `numeric(5,2)` | não |  |  |  |
+| 6 | `score_max` | `numeric(5,2)` | não |  |  |  |
+| 7 | `color` | `text` | sim |  |  |  |
+| 8 | `icon` | `text` | sim |  |  |  |
+| 9 | `priority` | `integer` | não |  |  |  |
+| 10 | `recommended_actions_pt` | `text[]` | sim |  |  |  |
+| 11 | `is_active` | `boolean` | não | `true` |  |  |
+| 12 | `created_at` | `timestamp with time zone` | não | `now()` |  |  |
+| 13 | `updated_at` | `timestamp with time zone` | não | `now()` |  |  |
+
+
+## Constraints
+
+| nome | tipo | definição | on delete | on update | validada |
+|---|---|---|---|---|---|
+| supplier_qualification_config_pkey | PRIMARY KEY | `PRIMARY KEY (id)` |  |  | sim |
+| supplier_qualification_config_segment_code_key | UNIQUE | `UNIQUE (segment_code)` |  |  | sim |
+
+
+## Referenciada por (FKs de outras tabelas)
+
+| tabela | constraint | colunas | on delete |
+|---|---|---|---|
+| public.supplier_scores | supplier_scores_segment_code_fkey | segment_code | NO ACTION |
+
+
+## Índices
+
+| nome | método | colunas | único | válido | predicado | definição |
+|---|---|---|---|---|---|---|
+| supplier_qualification_config_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX supplier_qualification_config_pkey ON public.supplier_qualification_config USING btree (id)` |
+| supplier_qualification_config_segment_code_key | btree | segment_code | sim | sim |  | `CREATE UNIQUE INDEX supplier_qualification_config_segment_code_key ON public.supplier_qualification_config USING btree (segment_code)` |
+
+
+## Policies (RLS)
+
+### `sqc_delete`
+
+| campo | valor |
+|---|---|
+| comando | DELETE |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| WITH CHECK |  |
+
+### `sqc_insert`
+
+| campo | valor |
+|---|---|
+| comando | INSERT |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING |  |
+| WITH CHECK | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+
+### `sqc_select`
+
+| campo | valor |
+|---|---|
+| comando | SELECT |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| WITH CHECK |  |
+
+### `sqc_update`
+
+| campo | valor |
+|---|---|
+| comando | UPDATE |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| WITH CHECK |  |
+
+
+## Triggers
+
+| nome | timing | eventos | nível | status | função |
+|---|---|---|---|---|---|
+| set_updated_at | BEFORE | UPDATE | ROW | enabled | public.set_updated_at |
+| trg_protect_qualification_config_delete | BEFORE | DELETE | ROW | enabled | public.trg_fn_protect_qualification_config |
+| trg_supplier_qualification_config_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
+
+
+## Grants
+
+_nenhum_

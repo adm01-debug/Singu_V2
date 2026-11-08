@@ -1,0 +1,50 @@
+CREATE OR REPLACE FUNCTION zapp_history.classify_customer_type(p_text text, p_has_cnpj boolean, p_qty integer)
+ RETURNS text
+ LANGUAGE plpgsql
+ IMMUTABLE
+ SET search_path TO 'zapp_history', 'pg_catalog'
+AS $function$
+DECLARE
+  v_text_lower TEXT;
+BEGIN
+  IF p_text IS NULL THEN RETURN 'indefinido'; END IF;
+  v_text_lower := lower(p_text);
+
+  -- 1. REVENDEDOR (sempre prioridade máxima)
+  IF v_text_lower ~ '(revenda|revendedor|revender|distribuid(or|ora)|atacad(o|ista)|loja(s)? f[íi]sica|pra revender|para revender|comprar pra revender|tabela de pre[cç]o atacado|wholesale)' THEN
+    RETURN 'revendedor';
+  END IF;
+
+  -- 2. B2C explícito (eventos pessoais ANTES de qualquer regra B2B)
+  IF v_text_lower ~ '(meu casamento|minha festa|meu anivers[áa]rio|noivado|ch[áa] de beb[êe]|ch[áa] de cozinha|ch[áa] revela[çc][ãa]o|formatura|despedida de solteir[ao]|presente pra (?:minha|meu)|presentinho|para mim|pessoal|individual|lembrancinha)' THEN
+    RETURN 'b2c';
+  END IF;
+
+  -- 3. B2B FORTE: empresa explícita
+  IF v_text_lower ~ '(empresa|corporativ[oa]|institucional|colaborador(es)?|funcion[áa]rios?|evento corporativo|evento da empresa|departamento|brinde corporativo|kit boas vindas|endomarketing|setor de rh|departamento de rh|nossa marca|nosso stand|nosso evento)' THEN
+    RETURN 'b2b';
+  END IF;
+
+  -- 4. B2B: tem CNPJ + volume
+  IF p_has_cnpj AND p_qty IS NOT NULL AND p_qty >= 100 THEN
+    RETURN 'b2b';
+  END IF;
+
+  -- 5. B2B provável: só CNPJ
+  IF p_has_cnpj THEN
+    RETURN 'b2b';
+  END IF;
+
+  -- 6. B2B provável: volume alto sem CNPJ
+  IF p_qty IS NOT NULL AND p_qty >= 200 THEN
+    RETURN 'b2b';
+  END IF;
+
+  -- 7. B2C: volume baixo
+  IF p_qty IS NOT NULL AND p_qty < 200 THEN
+    RETURN 'b2c';
+  END IF;
+
+  RETURN 'indefinido';
+END;
+$function$

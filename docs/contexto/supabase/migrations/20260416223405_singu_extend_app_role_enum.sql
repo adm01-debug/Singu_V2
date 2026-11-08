@@ -1,0 +1,6 @@
+-- Extender app_role com os valores do origem (moderator, user)
+-- Preserva os valores existentes (admin, manager, salesperson) que são do CRM
+ALTER TYPE public.app_role ADD VALUE IF NOT EXISTS 'moderator';
+ALTER TYPE public.app_role ADD VALUE IF NOT EXISTS 'user';
+
+COMMENT ON TYPE public.app_role IS 'SINGU + CRM: Roles de aplicação. Valores CRM: admin, manager, salesperson. Valores SINGU: admin, moderator, user. admin é compartilhado.';

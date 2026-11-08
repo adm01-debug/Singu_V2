@@ -1,0 +1,11 @@
+REVOKE EXECUTE ON FUNCTION public.audit_companies_trigger()         FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.audit_trigger_fn()               FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.audit_trigger_func()             FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.auto_calculate_lead_score()      FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.companies_search_vector_update() FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.handle_new_singu_profile()       FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.handle_new_user()                FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.log_deal_status_change()         FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.mark_customer_on_deal_won()      FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.set_updated_at()                 FROM authenticated;
+REVOKE EXECUTE ON FUNCTION public.singu_audit_trigger_fn()         FROM authenticated;

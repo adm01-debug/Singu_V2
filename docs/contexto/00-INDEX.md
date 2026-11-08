@@ -1,6 +1,6 @@
 # CONTEXTO PARA AGENTES DE IA — ÍNDICE ÚNICO
 
-> Gerado automaticamente por indice.py · 2026-11-08 15:43 UTC · HEAD `de99442c53` · Não edite à mão.
+> Gerado automaticamente por indice.py · 2026-11-08 15:48 UTC · HEAD `de99442c53` · Não edite à mão.
 
 Um sistema, três fontes de verdade, três produtores independentes. **Leia este arquivo e vá direto à fonte certa.** Cada fato tem um dono: se duas fontes discordarem, vale o dono.
 
@@ -8,9 +8,9 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 
 | Preciso de… | Fonte (dona do fato) | Onde ler | Estado |
 |---|---|---|---|
-| Regras que não podem ser quebradas: RLS por operação, estados e transições, validações, fórmulas, prazos, erros de negócio, testes como especificação, inconsistências código×schema (NÃO VERIFICADO) e regras humanas (`manual/`) | **regras de negócio** | `docs/contexto/regras/07-REGRAS-DE-NEGOCIO.md` | ok · 1 min atrás |
-| Tabelas, colunas, RLS/políticas, funções, triggers, cron, storage, lints — **como está em produção agora** | **banco real** | `docs/contexto/supabase/` (ainda não existe — o produtor não rodou) | ainda não gerado |
-| Rotas, telas, módulos, hooks, edge functions, grafo de dependências, testes, scripts, convenções | **código** | `docs/contexto/codigo/INDEX.md` | ok · 0 min atrás |
+| Regras que não podem ser quebradas: RLS por operação, estados e transições, validações, fórmulas, prazos, erros de negócio, testes como especificação, inconsistências código×schema (NÃO VERIFICADO) e regras humanas (`manual/`) | **regras de negócio** | `docs/contexto/regras/07-REGRAS-DE-NEGOCIO.md` | ok · 2 min atrás |
+| Tabelas, colunas, RLS/políticas, funções, triggers, cron, storage, lints — **como está em produção agora** | **banco real** | `docs/contexto/supabase/README.md` | parcial · 0 min atrás · ⚠️ 1 erro(s) de coleta no manifest (erros); 1 seção(ões) com erro em errors.md |
+| Rotas, telas, módulos, hooks, edge functions, grafo de dependências, testes, scripts, convenções | **código** | `docs/contexto/codigo/INDEX.md` | ok · 2 min atrás |
 
 ## Ordem de leitura antes de qualquer tarefa ou planejamento
 
@@ -25,6 +25,92 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 - Pode fazer isso? Qual estado vem depois? Qual o limite? → **regras de negócio** (inclui `manual/`, escrito por humanos, prioridade máxima).
 - Item listado como **NÃO VERIFICADO** ou **inconsistência** em qualquer fonte: confirme na fonte dona antes de assumir.
 - Nada aqui é editado à mão. Para registrar uma regra que só o negócio sabe, escreva em `manual/` da fonte de regras.
+
+<details><summary>Arquivos de <b>banco real</b> (`docs/contexto/supabase/`)</summary>
+
+- `docs/contexto/supabase/CHANGELOG.md`
+- `docs/contexto/supabase/README.md`
+- `docs/contexto/supabase/auth.md`
+- `docs/contexto/supabase/cron-runs.md`
+- `docs/contexto/supabase/cron.md`
+- `docs/contexto/supabase/edge-functions.md`
+- `docs/contexto/supabase/errors.md`
+- `docs/contexto/supabase/extensions.md`
+- `docs/contexto/supabase/foreign-servers.md`
+- `docs/contexto/supabase/functions.md`
+- `docs/contexto/supabase/grants.md`
+- `docs/contexto/supabase/indexes.md`
+- `docs/contexto/supabase/lints.md`
+- `docs/contexto/supabase/manifest.json`
+- `docs/contexto/supabase/migrations.md`
+- `docs/contexto/supabase/policies.md`
+- `docs/contexto/supabase/project-config.md`
+- `docs/contexto/supabase/queues.md`
+- `docs/contexto/supabase/realtime.md`
+- `docs/contexto/supabase/relationships.md`
+- `docs/contexto/supabase/roles.md`
+- `docs/contexto/supabase/schemas.md`
+- `docs/contexto/supabase/sequences.md`
+- `docs/contexto/supabase/snapshot.json`
+- `docs/contexto/supabase/stats.json`
+- `docs/contexto/supabase/stats.md`
+- `docs/contexto/supabase/storage.md`
+- `docs/contexto/supabase/tables.md`
+- `docs/contexto/supabase/tables/_supabase_internal_triggers.md`
+- `docs/contexto/supabase/tables/dormant/access_denied_logs.md`
+- `docs/contexto/supabase/tables/dormant/active_power_ups.md`
+- `docs/contexto/supabase/tables/dormant/active_sessions.md`
+- `docs/contexto/supabase/tables/dormant/activity_goals.md`
+- `docs/contexto/supabase/tables/dormant/activity_log.md`
+- `docs/contexto/supabase/tables/dormant/alert_log.md`
+- `docs/contexto/supabase/tables/dormant/alertas_inativacao.md`
+- `docs/contexto/supabase/tables/dormant/api_usage_log.md`
+- `docs/contexto/supabase/tables/dormant/automation_logs.md`
+- `docs/contexto/supabase/tables/dormant/automation_rules.md`
+- `docs/contexto/supabase/tables/dormant/available_spins.md`
+- `docs/contexto/supabase/tables/dormant/battle_participants.md`
+- `docs/contexto/supabase/tables/dormant/bitrix24_sync_logs.md`
+- `docs/contexto/supabase/tables/dormant/blocked_ips.md`
+- `docs/contexto/supabase/tables/dormant/cadence_steps.md`
+- `docs/contexto/supabase/tables/dormant/cadence_tasks.md`
+- `docs/contexto/supabase/tables/dormant/cadences.md`
+- `docs/contexto/supabase/tables/dormant/carrier_contacts.md`
+- `docs/contexto/supabase/tables/dormant/category_metrics.md`
+- `docs/contexto/supabase/tables/dormant/challenge_progress.md`
+- `docs/contexto/supabase/tables/dormant/chat_conversations.md`
+- `docs/contexto/supabase/tables/dormant/chat_messages.md`
+- `docs/contexto/supabase/tables/dormant/circuit_breaker_events.md`
+- `docs/contexto/supabase/tables/dormant/client_portfolio.md`
+- `docs/contexto/supabase/tables/dormant/client_values.md`
+- `docs/contexto/supabase/tables/dormant/closing_moment_analysis.md`
+- `docs/contexto/supabase/tables/dormant/cognitive_bias_history.md`
+- `docs/contexto/supabase/tables/dormant/cognitive_biases.md`
+- `docs/contexto/supabase/tables/dormant/collectible_badges.md`
+- `docs/contexto/supabase/tables/dormant/communication_cadence.md`
+- `docs/contexto/supabase/tables/dormant/communication_preferences.md`
+- `docs/contexto/supabase/tables/dormant/company_tags.md`
+- `docs/contexto/supabase/tables/dormant/compatibility_alerts.md`
+- `docs/contexto/supabase/tables/dormant/compatibility_settings.md`
+- `docs/contexto/supabase/tables/dormant/competitive_chat_messages.md`
+- `docs/contexto/supabase/tables/dormant/competitive_seasons.md`
+- `docs/contexto/supabase/tables/dormant/contact_availability.md`
+- `docs/contexto/supabase/tables/dormant/contact_cadence.md`
+- `docs/contexto/supabase/tables/dormant/contact_communication_style.md`
+- `docs/contexto/supabase/tables/dormant/contact_compatibility.md`
+- `docs/contexto/supabase/tables/dormant/contact_eq_scores.md`
+- `docs/contexto/supabase/tables/dormant/contact_metaprograms.md`
+- `docs/contexto/supabase/tables/dormant/contact_preferences.md`
+- `docs/contexto/supabase/tables/dormant/contact_relationships.md`
+- `docs/contexto/supabase/tables/dormant/contact_relatives.md`
+- `docs/contexto/supabase/tables/dormant/contact_rfm_scores.md`
+- `docs/contexto/supabase/tables/dormant/contact_tags.md`
+- `docs/contexto/supabase/tables/dormant/contact_time_analysis.md`
+- `docs/contexto/supabase/tables/dormant/contact_trigger_preferences.md`
+- `docs/contexto/supabase/tables/dormant/contact_values.md`
+- `docs/contexto/supabase/tables/dormant/custom_field_values.md`
+- … +599
+
+</details>
 
 <details><summary>Arquivos de <b>código</b> (`docs/contexto/codigo/`)</summary>
 

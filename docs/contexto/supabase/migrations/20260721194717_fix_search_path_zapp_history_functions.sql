@@ -1,0 +1,25 @@
+DO $$
+DECLARE
+  f record;
+BEGIN
+  FOR f IN
+    SELECT p.oid, p.proname, pg_get_function_identity_arguments(p.oid) AS args
+    FROM pg_proc p
+    JOIN pg_namespace n ON n.oid = p.pronamespace
+    WHERE n.nspname = 'zapp_history'
+      AND p.prokind = 'f'
+      AND (p.proconfig IS NULL OR NOT EXISTS (
+        SELECT 1 FROM unnest(p.proconfig) c WHERE c LIKE 'search_path=%'
+      ))
+    ORDER BY p.proname
+  LOOP
+    BEGIN
+      EXECUTE format(
+        'ALTER FUNCTION zapp_history.%I(%s) SET search_path = ''zapp_history'', pg_catalog',
+        f.proname, f.args
+      );
+    EXCEPTION WHEN OTHERS THEN
+      RAISE WARNING 'Could not alter function zapp_history.%(%): %', f.proname, f.args, SQLERRM;
+    END;
+  END LOOP;
+END $$;

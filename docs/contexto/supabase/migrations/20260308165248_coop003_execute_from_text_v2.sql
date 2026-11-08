@@ -1,0 +1,21 @@
+CREATE OR REPLACE FUNCTION coop003_exec(p_data text) RETURNS jsonb AS $$
+DECLARE
+  parts text[];
+  line text;
+  upd int := 0;
+  skp int := 0;
+BEGIN
+  FOREACH line IN ARRAY string_to_array(p_data, E'\n')
+  LOOP
+    IF line = '' OR line IS NULL THEN CONTINUE; END IF;
+    parts := string_to_array(line, '|');
+    IF array_length(parts, 1) = 3 THEN
+      UPDATE companies SET
+        cnpj = parts[2],
+        merge_notes = to_jsonb(CONCAT(COALESCE(merge_notes #>> '{}', ''), '|COOP-003-T001:cnpj=' || parts[2] || '|metodo=' || parts[3]))
+      WHERE id = parts[1]::uuid AND cnpj IS NULL;
+      IF FOUND THEN upd := upd + 1; ELSE skp := skp + 1; END IF;
+    END IF;
+  END LOOP;
+  RETURN jsonb_build_object('updated', upd, 'skipped', skp);
+END $$ LANGUAGE plpgsql;

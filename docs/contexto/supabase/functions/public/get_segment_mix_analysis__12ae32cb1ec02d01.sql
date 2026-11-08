@@ -1,0 +1,41 @@
+CREATE OR REPLACE FUNCTION public.get_segment_mix_analysis()
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ STABLE
+ SET search_path TO 'public'
+AS $function$
+DECLARE
+  result jsonb;
+BEGIN
+  SELECT jsonb_build_object(
+    'timestamp', now(),
+    'por_cnae', (
+      SELECT jsonb_agg(row_to_json(t) ORDER BY t.valor DESC NULLS LAST)
+      FROM (
+        SELECT 
+          COALESCE(SUBSTRING(c.cnae_principal FROM 1 FOR 2), 'N/I') as cnae_grupo,
+          COUNT(DISTINCT c.id) as empresas,
+          COALESCE(SUM(cu.valor_total_compras), 0) as valor,
+          ROUND(AVG(cu.ticket_medio), 2) as ticket_medio
+        FROM companies c
+        LEFT JOIN customers cu ON cu.company_id = c.id AND cu.deleted_at IS NULL
+        WHERE c.deleted_at IS NULL
+        GROUP BY SUBSTRING(c.cnae_principal FROM 1 FOR 2)
+        ORDER BY COALESCE(SUM(cu.valor_total_compras), 0) DESC
+        LIMIT 15
+      ) t
+    ),
+    'segmento_mais_lucrativo', (
+      SELECT SUBSTRING(c.cnae_principal FROM 1 FOR 2)
+      FROM companies c
+      JOIN customers cu ON cu.company_id = c.id AND cu.deleted_at IS NULL
+      WHERE c.deleted_at IS NULL
+      GROUP BY SUBSTRING(c.cnae_principal FROM 1 FOR 2)
+      ORDER BY SUM(cu.valor_total_compras) DESC NULLS LAST
+      LIMIT 1
+    )
+  ) INTO result;
+  
+  RETURN result;
+END;
+$function$

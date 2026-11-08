@@ -1,0 +1,27 @@
+CREATE OR REPLACE FUNCTION zapp_history.detect_buying_triggers(p_text text)
+ RETURNS text[]
+ LANGUAGE plpgsql
+ IMMUTABLE
+ SET search_path TO 'zapp_history', 'pg_catalog'
+AS $function$
+DECLARE
+  v_text_lower TEXT;
+  v_triggers TEXT[] := ARRAY[]::TEXT[];
+BEGIN
+  IF p_text IS NULL THEN RETURN v_triggers; END IF;
+  v_text_lower := lower(p_text);
+
+  IF v_text_lower ~ '(deadline|prazo apertado|pra ontem|preciso urgente|tem como (entregar|ser) (rapido|rápido))' THEN v_triggers := array_append(v_triggers, 'deadline_apertado'); END IF;
+  IF v_text_lower ~ '(verba aprovada|or[çc]amento aprovado|j[áa] tenho or[çc]amento|tenho budget|budget liberado)' THEN v_triggers := array_append(v_triggers, 'budget_aprovado'); END IF;
+  IF v_text_lower ~ '(decis[ãa]o tomada|j[áa] decidimos|definimos|estamos decididos|j[áa] escolhemos)' THEN v_triggers := array_append(v_triggers, 'decisao_tomada'); END IF;
+  IF v_text_lower ~ '(comprou ano passado|fizemos ano passado|sempre fa[çc]emos|todo ano|recompra|tradi[çc][ãa]o)' THEN v_triggers := array_append(v_triggers, 'recorrente'); END IF;
+  IF v_text_lower ~ '(black friday|natal|fim de ano|p[áa]scoa|dia das m[ãa]es|dia dos pais|festas?)' THEN v_triggers := array_append(v_triggers, 'sazonal'); END IF;
+  IF v_text_lower ~ '(precisamos urgente|n[ãa]o pode atrasar|projeto crítico|crítico|vai atrasar)' THEN v_triggers := array_append(v_triggers, 'projeto_critico'); END IF;
+  IF v_text_lower ~ '(novo cliente|primeira compra|primeira vez|nunca compramos|conhecendo voc[êe]s)' THEN v_triggers := array_append(v_triggers, 'primeira_compra'); END IF;
+  IF v_text_lower ~ '(expandindo|crescendo|abrindo (filial|loja|unidade)|nova sede|mudan[çc]a)' THEN v_triggers := array_append(v_triggers, 'expansao'); END IF;
+  IF v_text_lower ~ '(troquei de fornecedor|fornecedor anterior|antigo fornecedor (n[ãa]o|n)|sa[íi] da empresa)' THEN v_triggers := array_append(v_triggers, 'troca_fornecedor'); END IF;
+  IF v_text_lower ~ '(licita[çc][ãa]o|pregão|edital|processo licitat[óo]rio)' THEN v_triggers := array_append(v_triggers, 'licitacao'); END IF;
+
+  RETURN v_triggers;
+END;
+$function$

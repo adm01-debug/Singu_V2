@@ -420,9 +420,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 4 — ex.: scripts/ai-context/cenarios.mjs:102, supabase/functions/_shared/auth_test.ts:61, supabase/functions/_shared/auth_test.ts:68
 
 ## Grafo de código (graphify)
-- 18892 nós · 30847 arestas · 2049 comunidades · grafo do commit `de99442c`
-- comunidades maiores: ref_components (304), _shared/auth.ts (270), useAuth (258), framer-motion (240), react-router-dom (238), sonner (235), ref_lib (233), 📖 Dicionário de Dados — SINGU CRM (232), date-fns (214), react (186), ref_hooks (171), @tanstack/react-query (167)
-- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), jsonError() (supabase/functions/_shared/auth.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), uniq() (scripts/ai-context/gerar.mjs), readText() (scripts/ai-context/gerar.mjs), md_table() (scripts/regras_negocio/generate.py), function() (scripts/supabase_snapshot/test_snapshot.py), getContactBehavior() (src/lib/contact-utils.ts)
+- 17192 nós · 27503 arestas · 1916 comunidades · grafo do commit `9e96cb58` (DESATUALIZADO em relação ao HEAD)
+- comunidades maiores: Community 0 (285), Community 1 (258), Community 2 (254), Community 3 (250), Community 4 (243), Community 5 (226), Community 6 (205), Community 7 (168), Community 8 (158), Community 9 (150), Community 10 (146), Community 11 (146)
+- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), getContactBehavior() (src/lib/contact-utils.ts), createTabHandler() (src/lib/tab-utils.ts), json() (supabase/functions/evolution-bitrix-connector/index.ts), jsonError() (supabase/functions/_shared/auth.ts), jsonResponse() (supabase/functions/evolution-webhook/index.ts), useCompanyRelated() (src/hooks/useCompanyRelatedData.ts), callExternalData() (src/lib/externalData.ts), normalizeWeek() (src/components/interactions/insights/weekUtils.ts), authHeaders() (scripts/migration/storage/_lib.ts), fetchAI() (supabase/functions/_shared/fetch-utils.ts), formatCurrency() (src/pages/Pipeline.tsx)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
