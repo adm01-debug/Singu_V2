@@ -238,7 +238,11 @@ export function useContacts(
           await queryClient.invalidateQueries({ queryKey, exact: true });
         } else queryClient.setQueryData<InfiniteData<Page>>(queryKey, prev => {
           if (!prev || prev.pages.some(page => page.items.some(c => c.id === normalized.id))) return prev;
-          const items = [normalized, ...prev.pages.flatMap(page => page.items)];
+          const items = [normalized, ...prev.pages.flatMap(page => page.items)].sort((a, b) => {
+            const aTime = a.updated_at === null ? Infinity : Date.parse(a.updated_at);
+            const bTime = b.updated_at === null ? Infinity : Date.parse(b.updated_at);
+            return bTime - aTime;
+          });
           return { ...prev, pages: prev.pages.map((page, index) => ({
             ...page, items: items.slice(index * PAGE_SIZE, (index + 1) * PAGE_SIZE),
             endReached: page.endReached && items.length <= prev.pages.length * PAGE_SIZE,
