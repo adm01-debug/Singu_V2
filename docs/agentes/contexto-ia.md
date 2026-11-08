@@ -24,6 +24,12 @@ ou, pelo MCP do GitHub, `github_get_content` com `ref=contexto`.
 Se duas fontes discordarem, **vale o dono do fato**. Migrations do repositório são histórico, não estado:
 o que existe no banco é o que a fonte `supabase/` diz.
 
+## Edge functions de outro sistema no mesmo projeto
+
+O projeto Supabase é compartilhado: 43 das 151 edge functions deployadas não têm código aqui e
+são de outro sistema. **Não apague nem desative nenhuma delas** — três são dependência viva do
+banco. Análise completa e a lista: [edges-externas.md](edges-externas.md).
+
 ## Regras de uso
 
 - A branch `contexto` é **gerada**: nunca edite, nunca abra PR dela, nunca faça merge dela em `main`.
