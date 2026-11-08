@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `79380cd7ec` · branch `main` · 2026-11-08 18:35 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `33752b40a6` · branch `main` · 2026-11-08 18:44 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1010,6 +1010,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `enroll_lead_score_contact` | Inscrição indisponível | `supabase/migrations/20261013033433_sequence_write_fences.sql` |
 | `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 | `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
+| `cleanup_cron_job_run_details` | retencao minima de 1 dia (recebido: %) | `supabase/migrations/20261108190000_cron_job_run_details_retention.sql` |
 
 ## E. Estados, máquinas de estado e transições
 

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "79380cd7ec8d387f8c95bba27a539967ffc7a0eb",
+  "sha": "33752b40a62b873b5a5b5baa4add1cfef979c359",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-08 18:35 UTC",
-  "files_total": 3073,
-  "code_files": 2705,
-  "code_lines": 380869
+  "generated_at": "2026-11-08 18:44 UTC",
+  "files_total": 3076,
+  "code_files": 2706,
+  "code_lines": 380964
  },
  "version": "1.3.2",
- "facts_hash": "a851b13cf015b673",
+ "facts_hash": "6c3169ec0473c3e2",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -196,7 +196,7 @@
   "languages": {
    ".tsx": 1145,
    ".ts": 867,
-   ".sql": 641,
+   ".sql": 642,
    ".mjs": 22,
    ".js": 18,
    ".py": 10,
@@ -40182,6 +40182,21 @@
      "unnest"
     ]
    },
+   "cleanup_cron_job_run_details": {
+    "args": "_dias integer DEFAULT 7",
+    "returns": "bigint",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE _apagadas bigint; BEGIN IF _dias < 1 THEN RAISE EXCEPTION 'retencao minima de 1 dia (recebido: %)', _dias; END IF; DELETE FROM cron.job_run_details WHERE start_time < now() - make_interval(days => _dias); GET DIAGNOSTICS _apagadas = ROW_COUNT; RETURN _apagadas; END;",
+    "raises": [
+     "retencao minima de 1 dia (recebido: %)"
+    ],
+    "tables": [
+     "cron"
+    ]
+   },
    "record_update": {
     "args": "",
     "returns": "trigger",
@@ -47390,6 +47405,7 @@
    "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql",
    "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql",
    "supabase/migrations/20261029120000_drop_update_company_fields.sql",
+   "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
    "supabase/tests/check-rls-coverage.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/report_schema_compatibility.sql"
@@ -56002,6 +56018,38 @@
     "objkind": "function",
     "roles": "PUBLIC, anon, authenticated, service_role",
     "src": "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "cleanup_cron_job_run_details",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "cleanup_cron_job_run_details",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "cleanup_cron_job_run_details",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cleanup_cron_job_run_details",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
    }
   ],
   "raises": [
@@ -56919,6 +56967,11 @@
     "function": "guard_contact_relation_write",
     "msg": "Contact relation write forbidden",
     "src": "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql"
+   },
+   {
+    "function": "cleanup_cron_job_run_details",
+    "msg": "retencao minima de 1 dia (recebido: %)",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
    }
   ],
   "seed": [],
@@ -66542,7 +66595,7 @@
   {
    "module": "scripts",
    "files": 174,
-   "lines": 25850,
+   "lines": 25878,
    "tables": [
     "_migration_cdc_checkpoint",
     "a",
@@ -68450,8 +68503,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 475,
-   "lines": 42172,
+   "files": 476,
+   "lines": 42239,
    "tables": [
     "users"
    ],
@@ -140119,6 +140172,21 @@
      "unnest"
     ]
    },
+   "cleanup_cron_job_run_details": {
+    "args": "_dias integer DEFAULT 7",
+    "returns": "bigint",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE _apagadas bigint; BEGIN IF _dias < 1 THEN RAISE EXCEPTION 'retencao minima de 1 dia (recebido: %)', _dias; END IF; DELETE FROM cron.job_run_details WHERE start_time < now() - make_interval(days => _dias); GET DIAGNOSTICS _apagadas = ROW_COUNT; RETURN _apagadas; END;",
+    "raises": [
+     "retencao minima de 1 dia (recebido: %)"
+    ],
+    "tables": [
+     "cron"
+    ]
+   },
    "record_update": {
     "args": "",
     "returns": "trigger",
@@ -141097,6 +141165,11 @@
     "function": "guard_contact_relation_write",
     "msg": "Contact relation write forbidden",
     "src": "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql"
+   },
+   {
+    "function": "cleanup_cron_job_run_details",
+    "msg": "retencao minima de 1 dia (recebido: %)",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
    }
   ],
   "db_generated": [
@@ -150190,6 +150263,7 @@
    "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql",
    "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql",
    "supabase/migrations/20261029120000_drop_update_company_fields.sql",
+   "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -150245,6 +150319,7 @@
    "calculate_next_contact_due",
    "check_behavioral_regen_cron_staleness",
    "check_mtta_auto_ack_heartbeat",
+   "cleanup_cron_job_run_details",
    "cleanup_old_data",
    "cleanup_old_health_snapshots",
    "cleanup_rpc_perf_samples",
@@ -158711,6 +158786,38 @@
     "objkind": "function",
     "roles": "PUBLIC, anon, authenticated, service_role",
     "src": "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "cleanup_cron_job_run_details",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "cleanup_cron_job_run_details",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "cleanup_cron_job_run_details",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cleanup_cron_job_run_details",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
    }
   ],
   "guards": [
@@ -164162,7 +164269,7 @@
   },
   "scripts/inventario/gerar-banco.mjs": {
    "path": "scripts/inventario/gerar-banco.mjs",
-   "lines": 334,
+   "lines": 362,
    "exports": [
     "const PROJETO_OFICIAL",
     "const LIMIARES",
@@ -164173,6 +164280,7 @@
     "function conferirOrigem",
     "const versoesDoRepo",
     "function edgesNoRepo",
+    "function edgesExternasCatalogadas",
     "function compararEdges",
     "function rodaTodoDia",
     "function montarInventario"
@@ -222223,6 +222331,11 @@
    "lines": 22,
    "uses_service_role": true
   },
+  "supabase/migrations/20261108190000_cron_job_run_details_retention.sql": {
+   "path": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
+   "lines": 67,
+   "uses_service_role": true
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -222798,10 +222911,33 @@
   }
  },
  "git": {
-  "sha": "79380cd7ec8d387f8c95bba27a539967ffc7a0eb",
+  "sha": "33752b40a62b873b5a5b5baa4add1cfef979c359",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "33752b4",
+    "date": "2026-11-08",
+    "author": "adm01-debug",
+    "subject": "feat(db): agenda retenção de 7 dias no histórico do pg_cron",
+    "files": [
+     "docs/qa/security-definer-audit.md",
+     "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
+     "tests/rls/security_definer_hardening.sql"
+    ]
+   },
+   {
+    "sha": "3570870",
+    "date": "2026-11-08",
+    "author": "adm01-debug",
+    "subject": "chore(inventario): cataloga as 43 edge functions de outro sistema",
+    "files": [
+     "docs/agentes/contexto-ia.md",
+     "docs/agentes/edges-externas.md",
+     "scripts/inventario/edges-externas.txt",
+     "scripts/inventario/gerar-banco.mjs"
+    ]
+   },
    {
     "sha": "79380cd",
     "date": "2026-11-08",
@@ -223147,40 +223283,20 @@
     "files": [
      "supabase/tests/get_contact_sidebar_by_phone.sql"
     ]
-   },
-   {
-    "sha": "45e77ce",
-    "date": "2026-10-28",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(cache): preserva confirmações concorrentes de contatos (#145)",
-    "files": [
-     "CHANGELOG.md",
-     "src/hooks/__tests__/contact-cache-concurrency.test.tsx",
-     "src/hooks/__tests__/restore-response-contract.test.tsx",
-     "src/hooks/useContactDetail.ts",
-     "src/hooks/useContacts.ts",
-     "src/hooks/useRestoreEntity.ts"
-    ]
-   },
-   {
-    "sha": "c05ede0",
-    "date": "2026-10-27",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(test): endereça review da #139 — name NOT NULL em preview + rollback correto (#144)",
-    "files": [
-     "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql",
-     "supabase/tests/get_contact_sidebar_by_phone.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "CHANGELOG.md",
-    7
+    6
    ],
    [
     ".github/workflows/ci.yml",
     5
+   ],
+   [
+    "scripts/inventario/gerar-banco.mjs",
+    3
    ],
    [
     "package.json",
@@ -223191,8 +223307,16 @@
     3
    ],
    [
-    "src/hooks/useContactDetail.ts",
-    3
+    "docs/qa/security-definer-audit.md",
+    2
+   ],
+   [
+    "tests/rls/security_definer_hardening.sql",
+    2
+   ],
+   [
+    "docs/agentes/contexto-ia.md",
+    2
    ],
    [
     ".github/workflows/inventario-estado-semanal.yml",
@@ -223212,10 +223336,6 @@
    ],
    [
     "scripts/inventario/banco.sql",
-    2
-   ],
-   [
-    "scripts/inventario/gerar-banco.mjs",
     2
    ],
    [
@@ -223244,14 +223364,6 @@
    ],
    [
     "src/hooks/__tests__/contact-detail-external-retry.test.tsx",
-    2
-   ],
-   [
-    "PENDENCIAS.md",
-    2
-   ],
-   [
-    "RELATORIO_CI.md",
     2
    ]
   ]

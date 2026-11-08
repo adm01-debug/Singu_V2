@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 475,
+ "migrations": 476,
  "seeds": [],
  "avisos": [
   "129 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -199,6 +199,7 @@
   "claim_regen_batch",
   "claim_validation_batch",
   "cleanup_behavioral_regen_queue",
+  "cleanup_cron_job_run_details",
   "cleanup_old_data",
   "cleanup_old_health_snapshots",
   "cleanup_rpc_perf_samples",
@@ -1851,6 +1852,11 @@
    "nome": "check-contact-health-daily",
    "agenda": "0 0 * * *",
    "migration": "20260509173046_0804c068-faa0-46de-939b-bd5006dc2ba9.sql"
+  },
+  {
+   "nome": "cleanup_cron_job_run_details_daily",
+   "agenda": "37 4 * * *",
+   "migration": "20261108190000_cron_job_run_details_retention.sql"
   },
   {
    "nome": "cleanup_rpc_perf_samples_daily",

@@ -58,11 +58,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(db): agenda retenção de 7 dias no histórico do pg_cron",
+   "chore(inventario): cataloga as 43 edge functions de outro sistema",
    "feat(inventario): liga a conferência deployada × versionada das edge functions",
    "fix(snapshot): coleta de grants por coluna sai do information_schema (#172)",
-   "fix(inventario): não alerta partição cujo pai define o acesso (#171)",
-   "feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)",
-   "feat(contexto): produtores autônomos que mantêm o estado real do repositório para agentes de IA (#169)"
+   "fix(inventario): não alerta partição cujo pai define o acesso (#171)"
   ]
  },
  "pr_template": null,

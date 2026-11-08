@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `79380cd7ec` · branch `main` · 2026-11-08 18:35 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `33752b40a6` · branch `main` · 2026-11-08 18:44 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -301,7 +301,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 261 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 262 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.unit.mjs`
@@ -453,7 +453,7 @@
 - `supabase/migrations/20260713105030_f26185f4-df7c-4f97-b866-a909011939b3.sql`
 - `supabase/migrations/20260713124628_449b2996-71fd-45fe-bd67-a73e8f011a72.sql`
 - `supabase/migrations/20260715184735_158ce47d-f19e-4371-a652-b6fc4c158271.sql`
-- … +111 (lista completa em `context.json`)
+- … +112 (lista completa em `context.json`)
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -493,6 +493,7 @@
 - `calculate_next_contact_due`
 - `check_behavioral_regen_cron_staleness`
 - `check_mtta_auto_ack_heartbeat`
+- `cleanup_cron_job_run_details`
 - `cleanup_old_data`
 - `cleanup_old_health_snapshots`
 - `cleanup_rpc_perf_samples`
@@ -721,10 +722,10 @@ Middleware matcher (Next.js): nenhum
 | grant | authenticated, service_role | execute | `get_system_config_num`, `assert_self_user_id`, `assert_self_user_id`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access` … +15 |
 | grant | authenticated, service_role | select | `_dormant.inactivity_alerts` |
 | grant | service_role | all | `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences` … +261 |
-| grant | service_role | execute | `increment_webhook_quota`, `execute_readonly_query`, `cleanup_behavioral_regen_queue`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `auto_ack_stale_mtta_sla_breaches`, `check_mtta_auto_ack_heartbeat`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access` … +55 |
+| grant | service_role | execute | `increment_webhook_quota`, `execute_readonly_query`, `cleanup_behavioral_regen_queue`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `auto_ack_stale_mtta_sla_breaches`, `check_mtta_auto_ack_heartbeat`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access` … +56 |
 | grant | service_role | select, insert, delete | `incoming_webhook_nonces` |
 | grant | service_role, authenticated | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition` |
-| revoke | PUBLIC | all | `get_connection_metrics`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `assert_self_user_id`, `assert_self_user_id`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `record_rpc_perf_sample`, `get_rpc_perf_stats`, `cleanup_rpc_perf_samples`, `get_top_slow_rpcs` … +9 |
+| revoke | PUBLIC | all | `get_connection_metrics`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `assert_self_user_id`, `assert_self_user_id`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `record_rpc_perf_sample`, `get_rpc_perf_stats`, `cleanup_rpc_perf_samples`, `get_top_slow_rpcs` … +10 |
 | revoke | PUBLIC | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `net` |
 | revoke | PUBLIC, anon | all | `auto_ack_stale_mtta_sla_breaches`, `get_system_config_num`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access`, `assert_violation_access` … +20 |
 | revoke | PUBLIC, anon | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition`, `get_ai_gateway_health` |
@@ -736,7 +737,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC, anon, service_role | all | `resume_sequence_email`, `merge_records_atomically`, `merge_records_atomically` |
 | revoke | PUBLIC, authenticated, anon | execute | `public` |
 | revoke | anon | all | `public`, `assert_self_user_id`, `assert_self_user_id`, `get_contact_sidebar_by_phone`, `public`, `public`, `get_contact_sidebar_by_phone` |
-| revoke | anon | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `net`, `check_behavioral_regen_cron_staleness`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `enqueue_behavioral_profile_regen`, `get_behavioral_regen_cron_health`, `notify_admins_on_critical_behavioral_alert`, `simulate_behavioral_regen_alert` |
+| revoke | anon | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `net`, `check_behavioral_regen_cron_staleness`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `enqueue_behavioral_profile_regen`, `get_behavioral_regen_cron_health`, `notify_admins_on_critical_behavioral_alert`, `simulate_behavioral_regen_alert`, `cleanup_cron_job_run_details` |
 | revoke | anon | insert, update, delete | `deal_rooms`, `deal_room_milestones`, `deal_room_stakeholders`, `deal_room_documents`, `deal_room_comments`, `forms`, `lead_magnets`, `landing_pages` |
 | revoke | anon | select | `document_signatures_public`, `csat_surveys_public` |
 | revoke | anon | select, insert, update, delete | `form_submissions`, `lead_magnet_downloads`, `deal_room_activities` |
@@ -745,7 +746,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | anon, authenticated | all | `incoming_webhook_nonces` |
 | revoke | anon, authenticated, PUBLIC | execute | `tg_set_updated_at`, `touch_system_config`, `update_bpr_queue_updated_at`, `validate_entity_relationship`, `cleanup_behavioral_regen_queue`, `execute_readonly_query`, `increment_webhook_quota`, `publish_mtta_sla_breach_alert`, `reset_daily_lead_counts`, `compute_attribution` |
 | revoke | authenticated | all | `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone` |
-| revoke | authenticated | execute | `execute_readonly_query`, `handle_new_user`, `execute_readonly_query`, `net` |
+| revoke | authenticated | execute | `execute_readonly_query`, `handle_new_user`, `execute_readonly_query`, `net`, `cleanup_cron_job_run_details` |
 | revoke | authenticated | update | `public` |
 | revoke | authenticated, PUBLIC | execute | `enqueue_behavioral_profile_regen`, `notify_admins_on_critical_behavioral_alert`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `get_behavioral_regen_cron_health`, `simulate_behavioral_regen_alert` |
 | revoke | authenticated, anon, PUBLIC | execute | `audit_life_events`, `audit_trigger_fn`, `audit_connection_changes`, `calculate_interaction_response_time`, `calculate_next_contact_due`, `connection_configs_encrypt_trigger`, `detect_contact_intel_changes`, `enqueue_contact_validation`, `handle_new_user`, `increment_playbook_usage`, `increment_version_column`, `log_behavioral_change`, `log_contact_tag_changes`, `log_deal_forecast_category_change`, `notify_connection_failures` … +42 |

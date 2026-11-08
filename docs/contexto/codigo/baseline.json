@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "79380cd7ec8d387f8c95bba27a539967ffc7a0eb",
+  "commit": "33752b40a62b873b5a5b5baa4add1cfef979c359",
   "branch": "main",
-  "data_commit": "2026-11-08T15:34:45-03:00",
+  "data_commit": "2026-11-08T15:44:09-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "33752b40",
+    "data": "2026-11-08",
+    "assunto": "feat(db): agenda retenção de 7 dias no histórico do pg_cron"
+   },
+   {
+    "sha": "3570870d",
+    "data": "2026-11-08",
+    "assunto": "chore(inventario): cataloga as 43 edge functions de outro sistema"
+   },
    {
     "sha": "79380cd7",
     "data": "2026-11-08",
@@ -121,19 +131,9 @@
     "sha": "22882c7a",
     "data": "2026-10-29",
     "assunto": "docs: confirma bloqueio definitivo billing GitHub Actions (4 runs queued)"
-   },
-   {
-    "sha": "e5562ef9",
-    "data": "2026-10-29",
-    "assunto": "docs: RELATORIO_CI.md e PENDENCIAS.md pós-correção PR #136"
-   },
-   {
-    "sha": "7566982e",
-    "data": "2026-10-29",
-    "assunto": "fix(security): remove update_company_fields sem chamador (DEFINER com UPDATE dinâmico)"
    }
   ],
-  "arquivos_mudados_7d": 57,
+  "arquivos_mudados_7d": 60,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "CHANGELOG.md",
@@ -188,11 +188,11 @@
     "mudancas": 6
    },
    {
-    "pasta": "package.json",
+    "pasta": "docs/qa/security-definer-audit.md",
     "mudancas": 6
    },
    {
-    "pasta": "src/components/company-detail",
+    "pasta": "package.json",
     "mudancas": 6
    }
   ],
@@ -218,12 +218,12 @@
     "mudancas": 11
    },
    {
-    "arquivo": "src/lib/externalData.ts",
+    "arquivo": "docs/qa/security-definer-audit.md",
     "mudancas": 10
    },
    {
-    "arquivo": "docs/qa/security-definer-audit.md",
-    "mudancas": 9
+    "arquivo": "src/lib/externalData.ts",
+    "mudancas": 10
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -231,7 +231,7 @@
    },
    {
     "arquivo": "tests/rls/security_definer_hardening.sql",
-    "mudancas": 8
+    "mudancas": 9
    },
    {
     "arquivo": "supabase/tests/get_contact_sidebar_by_phone.sql",
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 29
+    "commits": 31
    },
    {
     "autor": "dependabot[bot]",
@@ -318,9 +318,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 2970,
+  "arquivos_total": 2973,
   "arquivos_codigo": 2063,
-  "linhas_codigo": 388198,
+  "linhas_codigo": 388226,
   "rotas": 114,
   "rotas_http_backend": 12,
   "vistas_por_id": 0,
@@ -330,12 +330,12 @@
   "hooks": 407,
   "edge_functions": 108,
   "tabelas": 418,
-  "migrations": 475,
-  "cron_jobs": 19,
+  "migrations": 476,
+  "cron_jobs": 20,
   "testes": 202,
   "workflows": 6,
   "scripts": 213,
-  "docs_md": 147
+  "docs_md": 148
  },
  "por_pasta": {
   "commitlint.config.cjs": {
@@ -480,7 +480,7 @@
   },
   "scripts/inventario": {
    "arquivos": 3,
-   "linhas": 499
+   "linhas": 527
   },
   "scripts/lint-providers.cjs": {
    "arquivos": 1,

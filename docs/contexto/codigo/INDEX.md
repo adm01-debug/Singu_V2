@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `79380cd7ec8d387f8c95bba27a539967ffc7a0eb` (2026-11-08T15:34:45-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `33752b40a62b873b5a5b5baa4add1cfef979c359` (2026-11-08T15:44:09-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2012), SQL (641), Markdown (147), Shell (70), JavaScript (42), JSON (14), YAML (12), Python (10)
+- linguagens: TypeScript (2012), SQL (642), Markdown (148), Shell (70), JavaScript (42), JSON (14), YAML (12), Python (10)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 2970 |
+| arquivos_total | 2973 |
 | arquivos_codigo | 2063 |
-| linhas_codigo | 388198 |
+| linhas_codigo | 388226 |
 | rotas | 114 |
 | rotas_http_backend | 12 |
 | vistas_por_id | 0 |
@@ -46,12 +46,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 407 |
 | edge_functions | 108 |
 | tabelas | 418 |
-| migrations | 475 |
-| cron_jobs | 19 |
+| migrations | 476 |
+| cron_jobs | 20 |
 | testes | 202 |
 | workflows | 6 |
 | scripts | 213 |
-| docs_md | 147 |
+| docs_md | 148 |
 
 ## Onde ficam as coisas
 - telas: src/components (1), src/pages (1)
@@ -377,6 +377,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `auto_resolve_ai_gateway_alerts` 2-59/5 * * * * (20260723153336_b3712da2-293a-4171-a31a-fc96c83b4051.sql)
 - `capture-degraded-rpc-plans` */15 * * * * (20260726144422_a6bd4ac3-10b1-4e7d-a630-5e05b9b2da19.sql)
 - `check-contact-health-daily` 0 0 * * * (20260509173046_0804c068-faa0-46de-939b-bd5006dc2ba9.sql)
+- `cleanup_cron_job_run_details_daily` 37 4 * * * (20261108190000_cron_job_run_details_retention.sql)
 - `cleanup_rpc_perf_samples_daily` 15 3 * * * (20260723154748_e54bdf5c-194f-4d5a-b5af-46c786cfc8ac.sql)
 - `cleanup-simulated-alerts-weekly` 0 3 * * 0 (20260713124628_449b2996-71fd-45fe-bd67-a73e8f011a72.sql)
 - `mtta-auto-ack-heartbeat-watchdog` */30 * * * * (20260717142132_7f20a3a3-be27-43dd-9546-4993978d4377.sql)
@@ -420,8 +421,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 4 — ex.: scripts/ai-context/cenarios.mjs:102, supabase/functions/_shared/auth_test.ts:61, supabase/functions/_shared/auth_test.ts:68
 
 ## Grafo de código (graphify)
-- 18892 nós · 30847 arestas · 2049 comunidades · grafo do commit `79380cd7`
-- comunidades maiores: ref_components (304), _shared/auth.ts (270), useAuth (258), framer-motion (240), react-router-dom (238), sonner (235), ref_lib (233), 📖 Dicionário de Dados — SINGU CRM (232), date-fns (214), react (186), ref_hooks (171), @tanstack/react-query (167)
+- 18904 nós · 30859 arestas · 2037 comunidades · grafo do commit `33752b40`
+- comunidades maiores: react (285), ref_types (253), _shared/auth.ts (253), ref_lib (251), react-router-dom (233), 📖 Dicionário de Dados — SINGU CRM (232), framer-motion (225), lucide-react (223), ref_components (209), date-fns (204), useAuth (201), ref_hooks (185)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), jsonError() (supabase/functions/_shared/auth.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), uniq() (scripts/ai-context/gerar.mjs), readText() (scripts/ai-context/gerar.mjs), md_table() (scripts/regras_negocio/generate.py), function() (scripts/supabase_snapshot/test_snapshot.py), getContactBehavior() (src/lib/contact-utils.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -431,10 +432,10 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - supabase/functions/external-data/index.ts (15)
 - package.json (14)
 - package-lock.json (11)
+- docs/qa/security-definer-audit.md (10)
 - src/lib/externalData.ts (10)
-- docs/qa/security-definer-audit.md (9)
 - src/hooks/useContacts.ts (9)
-- tests/rls/security_definer_hardening.sql (8)
+- tests/rls/security_definer_hardening.sql (9)
 - supabase/tests/get_contact_sidebar_by_phone.sql (7)
 - .github/workflows/rls-exposure-guard.yml (6)
 - RELATORIO_CI.md (6)
@@ -529,10 +530,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/postmortem-example.md` — Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data) (99 linhas)
 - `docs/postmortem-template.md` — Post-Mortem — {Título do Incidente} (96 linhas)
 - `docs/ux_improvement_strategy.md` (73 linhas)
-- subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/agentes (1), docs/perf (1)
+- subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (2), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/perf (1)
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-08 `33752b40` feat(db): agenda retenção de 7 dias no histórico do pg_cron
+- 2026-11-08 `3570870d` chore(inventario): cataloga as 43 edge functions de outro sistema
 - 2026-11-08 `79380cd7` feat(inventario): liga a conferência deployada × versionada das edge functions
 - 2026-11-08 `d664a7bb` fix(snapshot): coleta de grants por coluna sai do information_schema (#172)
 - 2026-11-08 `c3cc11d3` fix(inventario): não alerta partição cujo pai define o acesso (#171)
@@ -546,8 +549,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-06 `f665f675` fix(ci): remove script injection no step de validação do título da PR (#162)
 - 2026-11-06 `d00de592` fix(ci): corrige corrupção de texto nos workflows restore-drill e rls-exposure-guard (#161)
 - 2026-11-06 `b911f821` chore: sobe actions/checkout para v5 nos workflows de monitoramento, restore e RLS (#160)
-- 2026-11-06 `92d94662` chore: sobe actions/checkout para v5 no ci.yml (#159)
-- 2026-11-06 `cf83f3a4` fix(ci): baseline SECURITY DEFINER 109 → 110 (guard_contact_relation_write) (#158)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
