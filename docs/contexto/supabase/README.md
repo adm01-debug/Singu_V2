@@ -46,7 +46,7 @@ Cada fonte é atualizada independentemente; referências anteriores não comprov
 | código do repo | coleta atual |
 | cron | coleta atual |
 | triggers | coleta atual |
-| views | coleta atual |
+| views | coleta anterior |
 | outras funções | coleta atual |
 
 
@@ -88,3 +88,14 @@ Cada fonte é atualizada independentemente; referências anteriores não comprov
 | `manifest.json` | data UTC da coleta concluída, erros e seções reaproveitadas; usado pelo índice de contexto |
 | `CHANGELOG.md` | diff semântico a cada mudança |
 | `errors.md` | seções que falharam na última coleta |
+
+## ⚠️ Problemas na última coleta
+
+Seções reaproveitadas da coleta anterior: `columns`, `constraints`, `indexes`, `views`.
+
+| seção | erro |
+|---|---|
+| columns | canceling statement due to lock timeout |
+| constraints | canceling statement due to lock timeout |
+| indexes | canceling statement due to lock timeout |
+| views | canceling statement due to lock timeout |

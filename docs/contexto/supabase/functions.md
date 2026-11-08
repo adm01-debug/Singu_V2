@@ -13,7 +13,7 @@ Cada fonte é atualizada independentemente; referências anteriores não comprov
 | código do repo | coleta atual |
 | cron | coleta atual |
 | triggers | coleta atual |
-| views | coleta atual |
+| views | coleta anterior |
 | outras funções | coleta atual |
 
 | função | args | retorno | linguagem | tipo | trigger fn | security definer | volatilidade | config | EXECUTE (roles API) | código | cron | triggers | banco | comentário |

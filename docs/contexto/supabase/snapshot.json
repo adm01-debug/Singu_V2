@@ -2,7 +2,12 @@
   "api": {
     "enabled": false
   },
-  "carried": [],
+  "carried": [
+    "columns",
+    "constraints",
+    "indexes",
+    "views"
+  ],
   "db": {
     "columns": [
       {
@@ -316968,6 +316973,23 @@
     ],
     "webhooks": []
   },
-  "errors": [],
+  "errors": [
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "columns"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "constraints"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "indexes"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "views"
+    }
+  ],
   "format_version": 2
 }
