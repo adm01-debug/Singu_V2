@@ -2,7 +2,9 @@
   "api": {
     "enabled": false
   },
-  "carried": [],
+  "carried": [
+    "constraints"
+  ],
   "db": {
     "columns": [
       {
@@ -220131,9 +220133,13 @@
             {
               "file": "supabase/migrations/20261013033431_merge_records_atomically.sql",
               "hits": 4
+            },
+            {
+              "file": "supabase/migrations/20261013033435_guard_company_merge_name.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.merge_companies",
@@ -316972,6 +316978,15 @@
     ],
     "webhooks": []
   },
-  "errors": [],
+  "errors": [
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "constraints"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "db_stats"
+    }
+  ],
   "format_version": 2
 }

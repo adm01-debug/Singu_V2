@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-08 19:57 UTC
+
+- **functions** alterado (1): `public.merge_records_atomically(p_entity text, p_primary_id uuid, p_secondary_id uuid, p_field_overrides jsonb)`
+
 ## 2026-11-08 18:49 UTC
 
 - **functions** alterado (1): `public.cleanup_rpc_perf_samples()`
