@@ -16,13 +16,16 @@ WITH
 -- messages = 1 com 53 mil linhas reais).
 base AS (
   SELECT c.oid, c.relname AS nome, c.relrowsecurity AS rls, c.relforcerowsecurity AS rls_forcado,
-         c.reltuples, pg_total_relation_size(c.oid)::bigint AS bytes
+         c.reltuples, pg_total_relation_size(c.oid)::bigint AS bytes,
+         -- Particao: as policies que valem para ela sao as do pai quando o acesso passa pelo pai.
+         (SELECT pai.relname FROM pg_inherits i JOIN pg_class pai ON pai.oid = i.inhparent
+           WHERE i.inhrelid = c.oid AND c.relispartition) AS particao_de
     FROM pg_class c
     JOIN pg_namespace n ON n.oid = c.relnamespace
    WHERE n.nspname = 'public' AND c.relkind IN ('r', 'p')
 ),
 tabelas AS (
-  SELECT b.oid, b.nome, b.rls, b.rls_forcado, b.bytes,
+  SELECT b.oid, b.nome, b.rls, b.rls_forcado, b.bytes, b.particao_de,
          b.reltuples < 200000 AS linhas_exatas,
          CASE WHEN b.reltuples < 200000
               THEN (xpath('/row/n/text()',
@@ -96,6 +99,7 @@ SELECT jsonb_build_object(
              'linhas', t.linhas,
              'linhas_exatas', t.linhas_exatas,
              'bytes', t.bytes,
+             'particao_de', t.particao_de,
              'citada_no_banco', EXISTS (SELECT 1 FROM corpos c WHERE c.txt ~ ('\m' || t.nome || '\M'))
            ) ORDER BY t.nome), '[]'::jsonb)
       FROM tabelas t

@@ -220,7 +220,15 @@ export function montarInventario(dado, uso, edges = compararEdges(null, [])) {
   // cima, rolbypassrls). Pode ser de proposito (tabela so-interna), mas hoje fica invisivel: nem
   // tabela_sem_rls (tem RLS) nem nenhum outro alerta aponta — inclusive tabela vazia hoje (ex. um
   // cofre de credencial ainda sem linha) merece o aviso do mesmo jeito.
-  const rlsSemPolicy = tabelas.filter((t) => t.rls && t.policies === 0).map((t) => t.nome);
+  // Particao com RLS e zero policy propria nao e buraco: quem define o acesso e o pai, e as
+  // policies do pai valem para a particao quando a consulta passa pelo pai (o caso normal).
+  // Ex. verificado em 2026-11-08: ai_gateway_metrics_2026_08..2027_01 sao particoes de
+  // ai_gateway_metrics, que tem RLS e a policy ALL de service_role. Sem esta regra o alerta
+  // dispararia para sempre e ensinaria a ignorar alertas.
+  const comPolicyNoPai = new Set(tabelas.filter((t) => t.policies > 0).map((t) => t.nome));
+  const rlsSemPolicy = tabelas
+    .filter((t) => t.rls && t.policies === 0 && !(t.particao_de && comPolicyNoPai.has(t.particao_de)))
+    .map((t) => t.nome);
   if (rlsSemPolicy.length) alertas.push({ tipo: 'rls_sem_policy', detalhe: rlsSemPolicy });
   const cronRuim = dado.cron.jobs
     .filter((j) => j.ativo && j.taxa_falha_7d_pct >= LIMIARES.taxaFalhaCronPct)
