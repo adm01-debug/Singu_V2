@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "d664a7bbccba481b66bd83491ca143509a7951e6",
+  "sha": "79380cd7ec8d387f8c95bba27a539967ffc7a0eb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-08 17:35 UTC",
+  "generated_at": "2026-11-08 18:35 UTC",
   "files_total": 3073,
   "code_files": 2705,
   "code_lines": 380869
@@ -222798,10 +222798,20 @@
   }
  },
  "git": {
-  "sha": "d664a7bbccba481b66bd83491ca143509a7951e6",
+  "sha": "79380cd7ec8d387f8c95bba27a539967ffc7a0eb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "79380cd",
+    "date": "2026-11-08",
+    "author": "adm01-debug",
+    "subject": "feat(inventario): liga a conferência deployada × versionada das edge functions",
+    "files": [
+     ".github/workflows/inventario-estado-semanal.yml",
+     "inventario/estado/README.md"
+    ]
+   },
    {
     "sha": "d664a7b",
     "date": "2026-11-08",
@@ -223161,62 +223171,16 @@
      "supabase/migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql",
      "supabase/tests/get_contact_sidebar_by_phone.sql"
     ]
-   },
-   {
-    "sha": "70fe40d",
-    "date": "2026-10-27",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(edge): valida tipos das 108 funções e preserva contratos de execução (#141)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "CHANGELOG.md",
-     "docs/CHANGELOG_1.0_1.5.md",
-     "supabase/functions/_shared/aiGatewayLogger.ts",
-     "supabase/functions/_shared/edge-test-harness.ts",
-     "supabase/functions/_shared/edge-types-contract_test.ts",
-     "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
-     "supabase/functions/_shared/sdk-runtime-contract_test.ts",
-     "supabase/functions/ai-assistant/index.ts",
-     "supabase/functions/bulk-revalidate/index.ts",
-     "supabase/functions/connection-introspect/index.ts",
-     "supabase/functions/conversational-search/index.ts",
-     "supabase/functions/deal-room-health/index.ts",
-     "supabase/functions/detect-churn-risk/index.ts",
-     "supabase/functions/detect-new-device/index.ts",
-     "supabase/functions/dual-write-proxy/index.ts",
-     "supabase/functions/email-finder/index.ts",
-     "supabase/functions/error-budget/index.ts",
-     "supabase/functions/evolution-webhook/events.ts",
-     "supabase/functions/evolution-webhook/helpers.ts",
-     "supabase/functions/evolution-webhook/index.ts",
-     "supabase/functions/evolution-webhook/messages.ts",
-     "supabase/functions/evolution-webhook/payload.ts",
-     "supabase/functions/ficha360-conversation-summary/index.ts",
-     "supabase/functions/form-submit-handler/index.ts",
-     "supabase/functions/generate-insights/index.ts",
-     "supabase/functions/get-signature/index.ts",
-     "supabase/functions/intent-tracker/index.ts",
-     "supabase/functions/lux-trigger/index.ts",
-     "supabase/functions/lux-webhook/index.ts",
-     "supabase/functions/mcp-server/index.ts",
-     "supabase/functions/nurturing-runner/index.ts",
-     "supabase/functions/playbook-recommender/index.ts",
-     "supabase/functions/process-webhook-dlq/index.ts",
-     "supabase/functions/semantic-search/index.ts",
-     "supabase/functions/validate-access/index.ts",
-     "supabase/functions/voice-to-text/index.ts",
-     "supabase/functions/win-loss-analyzer/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "CHANGELOG.md",
-    8
+    7
    ],
    [
     ".github/workflows/ci.yml",
-    6
+    5
    ],
    [
     "package.json",
@@ -223229,6 +223193,14 @@
    [
     "src/hooks/useContactDetail.ts",
     3
+   ],
+   [
+    ".github/workflows/inventario-estado-semanal.yml",
+    2
+   ],
+   [
+    "inventario/estado/README.md",
+    2
    ],
    [
     "scripts/supabase_snapshot/snapshot.py",
@@ -223263,10 +223235,6 @@
     2
    ],
    [
-    "supabase/functions/evolution-webhook/messages.ts",
-    2
-   ],
-   [
     "package-lock.json",
     2
    ],
@@ -223284,10 +223252,6 @@
    ],
    [
     "RELATORIO_CI.md",
-    2
-   ],
-   [
-    "supabase/tests/get_contact_sidebar_by_phone.sql",
     2
    ]
   ]

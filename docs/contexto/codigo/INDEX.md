@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d664a7bbccba481b66bd83491ca143509a7951e6` (2026-11-08T14:33:20-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `79380cd7ec8d387f8c95bba27a539967ffc7a0eb` (2026-11-08T15:34:45-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -420,9 +420,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 4 — ex.: scripts/ai-context/cenarios.mjs:102, supabase/functions/_shared/auth_test.ts:61, supabase/functions/_shared/auth_test.ts:68
 
 ## Grafo de código (graphify)
-- 17192 nós · 27503 arestas · 1916 comunidades · grafo do commit `9e96cb58` (DESATUALIZADO em relação ao HEAD)
-- comunidades maiores: Community 0 (285), Community 1 (258), Community 2 (254), Community 3 (250), Community 4 (243), Community 5 (226), Community 6 (205), Community 7 (168), Community 8 (158), Community 9 (150), Community 10 (146), Community 11 (146)
-- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), getContactBehavior() (src/lib/contact-utils.ts), createTabHandler() (src/lib/tab-utils.ts), json() (supabase/functions/evolution-bitrix-connector/index.ts), jsonError() (supabase/functions/_shared/auth.ts), jsonResponse() (supabase/functions/evolution-webhook/index.ts), useCompanyRelated() (src/hooks/useCompanyRelatedData.ts), callExternalData() (src/lib/externalData.ts), normalizeWeek() (src/components/interactions/insights/weekUtils.ts), authHeaders() (scripts/migration/storage/_lib.ts), fetchAI() (supabase/functions/_shared/fetch-utils.ts), formatCurrency() (src/pages/Pipeline.tsx)
+- 18892 nós · 30847 arestas · 2049 comunidades · grafo do commit `79380cd7`
+- comunidades maiores: ref_components (304), _shared/auth.ts (270), useAuth (258), framer-motion (240), react-router-dom (238), sonner (235), ref_lib (233), 📖 Dicionário de Dados — SINGU CRM (232), date-fns (214), react (186), ref_hooks (171), @tanstack/react-query (167)
+- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), jsonError() (supabase/functions/_shared/auth.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), uniq() (scripts/ai-context/gerar.mjs), readText() (scripts/ai-context/gerar.mjs), md_table() (scripts/regras_negocio/generate.py), function() (scripts/supabase_snapshot/test_snapshot.py), getContactBehavior() (src/lib/contact-utils.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -533,6 +533,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-08 `79380cd7` feat(inventario): liga a conferência deployada × versionada das edge functions
 - 2026-11-08 `d664a7bb` fix(snapshot): coleta de grants por coluna sai do information_schema (#172)
 - 2026-11-08 `c3cc11d3` fix(inventario): não alerta partição cujo pai define o acesso (#171)
 - 2026-11-08 `de99442c` feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)
@@ -547,7 +548,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-06 `b911f821` chore: sobe actions/checkout para v5 nos workflows de monitoramento, restore e RLS (#160)
 - 2026-11-06 `92d94662` chore: sobe actions/checkout para v5 no ci.yml (#159)
 - 2026-11-06 `cf83f3a4` fix(ci): baseline SECURITY DEFINER 109 → 110 (guard_contact_relation_write) (#158)
-- 2026-11-05 `738a2a40` fix(webhook): preserva timestamps textuais do Evolution (#157)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

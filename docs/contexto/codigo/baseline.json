@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "d664a7bbccba481b66bd83491ca143509a7951e6",
+  "commit": "79380cd7ec8d387f8c95bba27a539967ffc7a0eb",
   "branch": "main",
-  "data_commit": "2026-11-08T14:33:20-03:00",
+  "data_commit": "2026-11-08T15:34:45-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "79380cd7",
+    "data": "2026-11-08",
+    "assunto": "feat(inventario): liga a conferência deployada × versionada das edge functions"
+   },
    {
     "sha": "d664a7bb",
     "data": "2026-11-08",
@@ -126,11 +131,6 @@
     "sha": "7566982e",
     "data": "2026-10-29",
     "assunto": "fix(security): remove update_company_fields sem chamador (DEFINER com UPDATE dinâmico)"
-   },
-   {
-    "sha": "a74c3729",
-    "data": "2026-10-29",
-    "assunto": "fix(gates): rejeita coletas incompletas de RLS e publicação (#126)"
    }
   ],
   "arquivos_mudados_7d": 57,
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 28
+    "commits": 29
    },
    {
     "autor": "dependabot[bot]",

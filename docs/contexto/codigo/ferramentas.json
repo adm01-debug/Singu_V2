@@ -237,7 +237,8 @@
     "PGHOST",
     "PGPASSWORD",
     "PGPORT",
-    "PGUSER"
+    "PGUSER",
+    "SUPABASE_ACCESS_TOKEN"
    ],
    "actions": [
     "actions/checkout",
@@ -745,6 +746,7 @@
    "RLS_USER_A",
    "RLS_USER_ADMIN",
    "RLS_USER_B",
+   "SUPABASE_ACCESS_TOKEN",
    "SUPABASE_DB_URL",
    "TEST_USER_EMAIL",
    "TEST_USER_PASSWORD",
