@@ -13,6 +13,8 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Falhas nas consultas da empresa, interações, insights ou alertas preservam a ficha anterior e oferecem nova tentativa. A restauração pelo desfazer omite o nome gerado pelo banco; mover para a lixeira e restaurar renovam o detalhe da conta correta e só anunciam sucesso com confirmação. O diálogo fecha após arquivamento confirmado, e a confirmação de exclusão informa a opção Desfazer.
 - O calendário de datas importantes também se atualiza à meia-noite local e ao retomar a aba, sem depender de alterações nos contatos ou nas interações.
 
+- Mesclagem de empresas rejeita nome substituto nulo, não textual ou em branco antes dos gatilhos de compatibilidade, preservando o nome original e a transação.
+
 - O webhook Evolution aceita timestamps numéricos enviados como texto, rejeita valores não finitos e preserva a época zero ao registrar a mensagem.
 
 - **Histórico social:** falhas da consulta não geram biografias, promoções ou pontuações fictícias. Os dois painéis distinguem erro de ausência confirmada, oferecem nova tentativa manual e mantêm dados reais após falha de recarga; consulta e cache são isolados por usuário. Não ativa coleta social nem altera o catálogo do banco.
