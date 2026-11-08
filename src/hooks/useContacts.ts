@@ -167,7 +167,7 @@ export function useContacts(
       const loaded = allPages.reduce((sum, p) => sum + p.items.length, 0);
       const total = allPages.find(page => page.totalCount != null)?.totalCount;
       if (total != null) {
-        return loaded < total ? allPages.length : undefined;
+        return loaded < total || lastPage.items.length === PAGE_SIZE ? allPages.length : undefined;
       }
       return lastPage.items.length === PAGE_SIZE ? allPages.length : undefined;
     },
