@@ -91,6 +91,10 @@ Cada fonte é atualizada independentemente; referências anteriores não comprov
 
 ## ⚠️ Problemas na última coleta
 
+Seções reaproveitadas da coleta anterior: `columns`, `constraints`.
+
 | seção | erro |
 |---|---|
+| columns | canceling statement due to lock timeout |
+| constraints | canceling statement due to lock timeout |
 | grants | canceling statement due to statement timeout |
