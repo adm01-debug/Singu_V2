@@ -1,0 +1,2488 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "frameworks": [
+  "vitest",
+  "playwright"
+ ],
+ "total": 202,
+ "por_tipo": {
+  "contrato": 37,
+  "e2e": 12,
+  "pytest": 2,
+  "unit": 149
+ },
+ "onde_ficam": [
+  {
+   "padrao": "co-localizado (__tests__)",
+   "arquivos": 88
+  },
+  {
+   "padrao": "co-localizado (*.test)",
+   "arquivos": 80
+  },
+  {
+   "padrao": "tests/",
+   "arquivos": 22
+  },
+  {
+   "padrao": "e2e/",
+   "arquivos": 6
+  },
+  {
+   "padrao": "outro",
+   "arquivos": 4
+  }
+ ],
+ "arquivos": [
+  {
+   "arquivo": "e2e/contacts-rapport.spec.ts",
+   "tipo": "e2e",
+   "linhas": 80,
+   "testa": [],
+   "casos": 5
+  },
+  {
+   "arquivo": "e2e/gap-modules-smoke.spec.ts",
+   "tipo": "e2e",
+   "linhas": 98,
+   "testa": [],
+   "casos": 6
+  },
+  {
+   "arquivo": "e2e/interacoes-prefs-back-button.spec.ts",
+   "tipo": "e2e",
+   "linhas": 151,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "e2e/smoke.spec.ts",
+   "tipo": "e2e",
+   "linhas": 69,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/support/auth.ts",
+   "tipo": "e2e",
+   "linhas": 24,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/support/contacts.ts",
+   "tipo": "e2e",
+   "linhas": 14,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "scripts/ai-context/gerar.unit.mjs",
+   "tipo": "unit",
+   "linhas": 361,
+   "testa": [
+    "src/hooks/useContacts.ts"
+   ],
+   "casos": 18
+  },
+  {
+   "arquivo": "scripts/check-deploy-timeout.test.mjs",
+   "tipo": "unit",
+   "linhas": 81,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "scripts/check-edge-cors.test.mjs",
+   "tipo": "unit",
+   "linhas": 120,
+   "testa": [],
+   "casos": 10
+  },
+  {
+   "arquivo": "scripts/check-publish-gates.test.mjs",
+   "tipo": "unit",
+   "linhas": 165,
+   "testa": [],
+   "casos": 8
+  },
+  {
+   "arquivo": "scripts/check-rls-profiles.test.mjs",
+   "tipo": "unit",
+   "linhas": 69,
+   "testa": [],
+   "casos": 5
+  },
+  {
+   "arquivo": "scripts/regras_negocio/test_generate.py",
+   "tipo": "pytest",
+   "linhas": 164,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "scripts/supabase_snapshot/test_snapshot.py",
+   "tipo": "pytest",
+   "linhas": 878,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/__tests__/architecture-compliance.test.ts",
+   "tipo": "unit",
+   "linhas": 223,
+   "testa": [],
+   "casos": 17
+  },
+  {
+   "arquivo": "src/__tests__/design-system-audit.test.ts",
+   "tipo": "unit",
+   "linhas": 486,
+   "testa": [],
+   "casos": 43
+  },
+  {
+   "arquivo": "src/__tests__/e2e-regression-suite.test.ts",
+   "tipo": "unit",
+   "linhas": 342,
+   "testa": [],
+   "casos": 38
+  },
+  {
+   "arquivo": "src/__tests__/integration/auth-flow.test.ts",
+   "tipo": "unit",
+   "linhas": 207,
+   "testa": [
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "src/__tests__/integration/data-validation.test.ts",
+   "tipo": "unit",
+   "linhas": 165,
+   "testa": [],
+   "casos": 40
+  },
+  {
+   "arquivo": "src/__tests__/integration/resilience-patterns.test.ts",
+   "tipo": "unit",
+   "linhas": 217,
+   "testa": [],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/__tests__/performance-and-a11y.test.ts",
+   "tipo": "unit",
+   "linhas": 108,
+   "testa": [],
+   "casos": 14
+  },
+  {
+   "arquivo": "src/__tests__/ui-improvements-verification.test.ts",
+   "tipo": "unit",
+   "linhas": 959,
+   "testa": [
+    "src/lib/formatters.ts"
+   ],
+   "casos": 195
+  },
+  {
+   "arquivo": "src/__tests__/validate-dashboard-improvements.test.ts",
+   "tipo": "unit",
+   "linhas": 362,
+   "testa": [],
+   "casos": 71
+  },
+  {
+   "arquivo": "src/components/admin/conexoes/WebhookReplayButton.test.tsx",
+   "tipo": "unit",
+   "linhas": 63,
+   "testa": [
+    "src/components/admin/conexoes/WebhookReplayButton.tsx"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/components/admin/conexoes/webhookSnippetBuilders.test.ts",
+   "tipo": "unit",
+   "linhas": 17,
+   "testa": [
+    "src/components/admin/conexoes/webhookSnippetBuilders.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/components/admin/RequireAdmin.test.tsx",
+   "tipo": "unit",
+   "linhas": 39,
+   "testa": [
+    "src/components/admin/RequireAdmin.tsx"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/components/analytics/BehaviorAlertsPanel.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 31,
+   "testa": [
+    "src/components/analytics/BehaviorAlertsPanel.tsx"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/components/analytics/DataHealthWidget.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 78,
+   "testa": [
+    "src/components/analytics/DataHealthWidget.tsx",
+    "src/hooks/useDataHealthView.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/components/campaigns/__tests__/CampaignDetailDrawer.test.tsx",
+   "tipo": "unit",
+   "linhas": 113,
+   "testa": [
+    "src/components/campaigns/CampaignDetailDrawer.tsx",
+    "src/hooks/useEmailCampaigns.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/components/company-detail/CompanyCommercialTab.test.tsx",
+   "tipo": "unit",
+   "linhas": 26,
+   "testa": [
+    "src/components/company-detail/CompanyCommercialTab.tsx",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/components/contact-detail/__tests__/LifeEventsTab.test.tsx",
+   "tipo": "unit",
+   "linhas": 73,
+   "testa": [
+    "src/components/contact-detail/LifeEventsTab.tsx",
+    "src/components/ui/toaster.tsx",
+    "src/hooks/useAuth.tsx"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/components/contact-detail/SalesActivitiesWidget.test.tsx",
+   "tipo": "unit",
+   "linhas": 17,
+   "testa": [
+    "src/components/contact-detail/SalesActivitiesWidget.tsx",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/components/crm/NextBestAction.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 72,
+   "testa": [
+    "src/components/crm/NextBestAction.tsx"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/components/csat/CSATPanel.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 36,
+   "testa": [
+    "src/components/csat/CSATPanel.tsx"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/components/dashboard/widgets/PendingFollowupsWidget.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 43,
+   "testa": [
+    "src/components/dashboard/widgets/PendingFollowupsWidget.tsx",
+    "src/hooks/usePendingFollowups.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/components/erp/CompanyErpProposalsWidget.test.tsx",
+   "tipo": "unit",
+   "linhas": 53,
+   "testa": [
+    "src/components/erp/CompanyErpProposalsWidget.tsx",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/components/forms/company/CompanyFormSchema.contract.test.ts",
+   "tipo": "contrato",
+   "linhas": 17,
+   "testa": [
+    "src/components/forms/company/CompanyFormSchema.ts",
+    "src/hooks/useCompanies.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/ActiveFiltersBar.onAfterRemove.test.tsx",
+   "tipo": "unit",
+   "linhas": 275,
+   "testa": [
+    "src/components/interactions/ActiveFiltersBar.tsx",
+    "src/hooks/useInteractionsAdvancedFilter.ts"
+   ],
+   "casos": 13
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/CanaisQuickFilter.test.tsx",
+   "tipo": "unit",
+   "linhas": 456,
+   "testa": [
+    "src/components/interactions/CanaisQuickFilter.tsx"
+   ],
+   "casos": 35
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/DateRangePopover.clear.integration.test.tsx",
+   "tipo": "unit",
+   "linhas": 141,
+   "testa": [
+    "src/components/interactions/DateRangePopover.tsx",
+    "src/hooks/useInteractionsAdvancedFilter.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/DateRangePopover.shortcut.test.tsx",
+   "tipo": "unit",
+   "linhas": 127,
+   "testa": [
+    "src/components/interactions/DateRangePopover.tsx"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/DensityChips.test.tsx",
+   "tipo": "unit",
+   "linhas": 72,
+   "testa": [
+    "src/components/interactions/DensityChips.tsx"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/IncrementalLoadStickyBar.test.tsx",
+   "tipo": "unit",
+   "linhas": 78,
+   "testa": [
+    "src/components/interactions/IncrementalLoadStickyBar.tsx"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/InfiniteScrollSentinel.density.test.tsx",
+   "tipo": "unit",
+   "linhas": 88,
+   "testa": [
+    "src/components/interactions/InfiniteScrollSentinel.tsx",
+    "src/contexts/DensityContext.tsx"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/InfiniteScrollSentinel.test.tsx",
+   "tipo": "unit",
+   "linhas": 66,
+   "testa": [
+    "src/components/interactions/InfiniteScrollSentinel.tsx"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/PaginationBar.test.tsx",
+   "tipo": "unit",
+   "linhas": 70,
+   "testa": [
+    "src/components/interactions/PaginationBar.tsx"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/SentimentQuickFilter.a11y.test.tsx",
+   "tipo": "unit",
+   "linhas": 107,
+   "testa": [
+    "src/components/interactions/SentimentQuickFilter.tsx",
+    "src/hooks/useInteractionsAdvancedFilter.ts"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/SortChips.test.tsx",
+   "tipo": "unit",
+   "linhas": 180,
+   "testa": [
+    "src/components/interactions/SortChips.tsx",
+    "src/hooks/useInteractionsAdvancedFilter.ts"
+   ],
+   "casos": 18
+  },
+  {
+   "arquivo": "src/components/interactions/__tests__/ViewModeChips.test.tsx",
+   "tipo": "unit",
+   "linhas": 33,
+   "testa": [
+    "src/components/interactions/ViewModeChips.tsx"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/components/interactions/insights/__tests__/SentimentDistributionChart.a11y.test.tsx",
+   "tipo": "unit",
+   "linhas": 368,
+   "testa": [
+    "src/components/interactions/insights/SentimentDistributionChart.tsx",
+    "src/hooks/useConversationIntel.ts"
+   ],
+   "casos": 25
+  },
+  {
+   "arquivo": "src/components/interactions/insights/__tests__/weekUtils.test.ts",
+   "tipo": "unit",
+   "linhas": 271,
+   "testa": [
+    "src/components/interactions/insights/weekUtils.ts"
+   ],
+   "casos": 31
+  },
+  {
+   "arquivo": "src/components/layout/Header.search.test.tsx",
+   "tipo": "unit",
+   "linhas": 29,
+   "testa": [
+    "src/components/layout/Header.tsx"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/components/navigation/__tests__/ScrollToTopButton.test.tsx",
+   "tipo": "unit",
+   "linhas": 144,
+   "testa": [
+    "src/components/navigation/ScrollToTopButton.tsx"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/components/pipeline/DealDetailDrawer.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 79,
+   "testa": [
+    "src/components/pipeline/DealDetailDrawer.tsx",
+    "src/hooks/usePipeline.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/components/pipeline/ForecastConfidencePanel.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 41,
+   "testa": [
+    "src/components/pipeline/ForecastConfidencePanel.tsx",
+    "src/hooks/usePipeline.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/components/security/TwoFactorSetup.test.tsx",
+   "tipo": "unit",
+   "linhas": 191,
+   "testa": [
+    "src/components/security/TwoFactorSetup.tsx",
+    "src/hooks/use2FA.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/components/sequences/SequenceEnrollDialog.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 86,
+   "testa": [
+    "src/components/sequences/SequenceEnrollDialog.tsx",
+    "src/hooks/useSequences.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/components/sequences/SequenceManualSteps.test.tsx",
+   "tipo": "unit",
+   "linhas": 66,
+   "testa": [
+    "src/components/sequences/SequenceManualSteps.tsx"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/components/sequences/SequencePausedEmails.test.tsx",
+   "tipo": "unit",
+   "linhas": 67,
+   "testa": [
+    "src/components/sequences/SequencePausedEmails.tsx"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/contexts/NavigationStackContext.test.tsx",
+   "tipo": "unit",
+   "linhas": 194,
+   "testa": [
+    "src/components/navigation/BackButton.tsx",
+    "src/contexts/NavigationStackContext.tsx",
+    "src/hooks/useModalHistory.ts",
+    "src/lib/navigationLabels.ts"
+   ],
+   "casos": 13
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieAppreciation.test.ts",
+   "tipo": "unit",
+   "linhas": 39,
+   "testa": [
+    "src/data/carnegieAppreciation.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieCriticismEmpathy.test.ts",
+   "tipo": "unit",
+   "linhas": 315,
+   "testa": [
+    "src/data/carnegieCriticismDetector.ts",
+    "src/data/carnegieEmpathyTemplates.ts"
+   ],
+   "casos": 53
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieDataIntegrity.test.ts",
+   "tipo": "unit",
+   "linhas": 351,
+   "testa": [
+    "src/data/carnegieFaceSaving.ts",
+    "src/data/carnegieIdentityLabels.ts",
+    "src/data/carnegieOwnershipTransfer.ts",
+    "src/data/carnegieProgressCelebration.ts",
+    "src/data/carnegieVulnerability.ts",
+    "src/data/carnegieYesLadder.ts"
+   ],
+   "casos": 45
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieEagerWantNobleCauses.test.ts",
+   "tipo": "unit",
+   "linhas": 288,
+   "testa": [
+    "src/data/carnegieEagerWant.ts",
+    "src/data/carnegieNobleCauses.ts"
+   ],
+   "casos": 39
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieEncouragementFaceSaving.test.ts",
+   "tipo": "unit",
+   "linhas": 191,
+   "testa": [
+    "src/data/carnegieEncouragement.ts",
+    "src/data/carnegieFaceSaving.ts"
+   ],
+   "casos": 26
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieExtended.test.ts",
+   "tipo": "unit",
+   "linhas": 136,
+   "testa": [
+    "src/data/carnegieStorytelling.ts",
+    "src/data/carnegieYesLadder.ts"
+   ],
+   "casos": 18
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieFunctions.test.ts",
+   "tipo": "unit",
+   "linhas": 453,
+   "testa": [
+    "src/data/carnegieCriticismDetector.ts",
+    "src/data/carnegieEmpathyTemplates.ts",
+    "src/data/carnegieEncouragement.ts",
+    "src/data/carnegieQuestionInfluence.ts"
+   ],
+   "casos": 66
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieIdentityOwnership.test.ts",
+   "tipo": "unit",
+   "linhas": 186,
+   "testa": [
+    "src/data/carnegieIdentityLabels.ts",
+    "src/data/carnegieOwnershipTransfer.ts"
+   ],
+   "casos": 27
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieInterestTalkRatio.test.ts",
+   "tipo": "unit",
+   "linhas": 220,
+   "testa": [
+    "src/data/carnegieGenuineInterest.ts",
+    "src/data/carnegieTalkRatio.ts"
+   ],
+   "casos": 31
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieModules.test.ts",
+   "tipo": "unit",
+   "linhas": 284,
+   "testa": [
+    "src/data/carnegieCriticismDetector.ts",
+    "src/data/carnegieEagerWant.ts",
+    "src/data/carnegieGenuineInterest.ts",
+    "src/data/carnegieNobleCauses.ts",
+    "src/data/carnegieWarmth.ts"
+   ],
+   "casos": 39
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieProgressStorytellingQuestions.test.ts",
+   "tipo": "unit",
+   "linhas": 282,
+   "testa": [
+    "src/data/carnegieProgressCelebration.ts",
+    "src/data/carnegieQuestionInfluence.ts",
+    "src/data/carnegieStorytelling.ts"
+   ],
+   "casos": 44
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieVulnerabilityYesLadderInterest.test.ts",
+   "tipo": "unit",
+   "linhas": 282,
+   "testa": [
+    "src/data/carnegieGenuineInterest.ts",
+    "src/data/carnegieVulnerability.ts",
+    "src/data/carnegieYesLadder.ts"
+   ],
+   "casos": 54
+  },
+  {
+   "arquivo": "src/data/__tests__/carnegieWarmth.test.ts",
+   "tipo": "unit",
+   "linhas": 221,
+   "testa": [
+    "src/data/carnegieWarmth.ts"
+   ],
+   "casos": 31
+  },
+  {
+   "arquivo": "src/data/__tests__/cognitiveBiasesData.test.ts",
+   "tipo": "unit",
+   "linhas": 47,
+   "testa": [
+    "src/data/cognitiveBiasesData.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/data/__tests__/communicationTrainingData.test.ts",
+   "tipo": "unit",
+   "linhas": 238,
+   "testa": [
+    "src/data/communicationTrainingData.ts",
+    "src/types/index.ts",
+    "src/types/vak.ts"
+   ],
+   "casos": 32
+  },
+  {
+   "arquivo": "src/data/__tests__/copywritingData.test.ts",
+   "tipo": "unit",
+   "linhas": 53,
+   "testa": [
+    "src/data/copywritingData.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/data/__tests__/discAdvancedData.test.ts",
+   "tipo": "unit",
+   "linhas": 87,
+   "testa": [
+    "src/data/discAdvancedData.ts"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "src/data/__tests__/emotionalIntelligence.test.ts",
+   "tipo": "unit",
+   "linhas": 53,
+   "testa": [
+    "src/data/emotionalIntelligenceData.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/data/__tests__/metaprogramTemplates.test.ts",
+   "tipo": "unit",
+   "linhas": 172,
+   "testa": [
+    "src/data/metaprogramTemplates.ts",
+    "src/data/triggerTemplatesMetaprograms.ts"
+   ],
+   "casos": 24
+  },
+  {
+   "arquivo": "src/data/__tests__/neuromarketingData.test.ts",
+   "tipo": "unit",
+   "linhas": 58,
+   "testa": [
+    "src/data/neuromarketingData.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/data/__tests__/nlpAdvancedCopywritingAdvanced.test.ts",
+   "tipo": "unit",
+   "linhas": 129,
+   "testa": [
+    "src/data/copywritingAdvancedData.ts",
+    "src/data/nlpAdvancedData.ts"
+   ],
+   "casos": 17
+  },
+  {
+   "arquivo": "src/data/__tests__/sleightOfMouth.test.ts",
+   "tipo": "unit",
+   "linhas": 86,
+   "testa": [
+    "src/data/sleightOfMouth.ts"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "src/data/__tests__/triggerBundles.test.ts",
+   "tipo": "unit",
+   "linhas": 83,
+   "testa": [
+    "src/data/triggerBundles.ts"
+   ],
+   "casos": 14
+  },
+  {
+   "arquivo": "src/data/__tests__/triggerConflicts.test.ts",
+   "tipo": "unit",
+   "linhas": 67,
+   "testa": [
+    "src/data/triggerConflictsMatrix.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/data/__tests__/triggerConflictsSynergiesMatrix.test.ts",
+   "tipo": "unit",
+   "linhas": 178,
+   "testa": [
+    "src/data/triggerConflictsMatrix.ts"
+   ],
+   "casos": 22
+  },
+  {
+   "arquivo": "src/data/__tests__/triggersAdvancedExtended.test.ts",
+   "tipo": "unit",
+   "linhas": 173,
+   "testa": [
+    "src/data/triggersAdvancedData.ts",
+    "src/data/triggersExtendedData.ts"
+   ],
+   "casos": 22
+  },
+  {
+   "arquivo": "src/data/__tests__/triggerTemplatesVAK.test.ts",
+   "tipo": "unit",
+   "linhas": 114,
+   "testa": [
+    "src/data/triggerTemplatesVAK.ts"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "src/data/__tests__/vakTemplates.test.ts",
+   "tipo": "unit",
+   "linhas": 105,
+   "testa": [
+    "src/data/vakTemplates.ts"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "src/hooks/__tests__/auth-logger.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 62,
+   "testa": [
+    "src/hooks/useAuth.tsx",
+    "src/lib/logger.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-communication-contracts.test.tsx",
+   "tipo": "contrato",
+   "linhas": 217,
+   "testa": [
+    "src/hooks/useBehavioralProfilesList.ts",
+    "src/hooks/useInteractionsRpc.ts",
+    "src/hooks/useNpsSurveys.ts",
+    "src/hooks/useWhatsAppImport.ts"
+   ],
+   "casos": 14
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-competitor-save-contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 59,
+   "testa": [
+    "src/hooks/useWinLoss.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-conversation-contracts.test.tsx",
+   "tipo": "contrato",
+   "linhas": 154,
+   "testa": [
+    "src/hooks/useConversationIntel.ts",
+    "src/hooks/useInteractionsInsights.ts"
+   ],
+   "casos": 13
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-delivery-retry-contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 185,
+   "testa": [
+    "src/hooks/useEmailCampaigns.ts",
+    "src/hooks/useNextBestAction.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-geo-contracts.test.tsx",
+   "tipo": "contrato",
+   "linhas": 164,
+   "testa": [
+    "src/hooks/useBIAdvanced.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-hook-contracts.test.tsx",
+   "tipo": "contrato",
+   "linhas": 126,
+   "testa": [
+    "src/hooks/useInteractionsRpc.ts",
+    "src/hooks/useLuxWebhookConfig.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-mutation-contracts.test.tsx",
+   "tipo": "contrato",
+   "linhas": 148,
+   "testa": [
+    "src/hooks/useCompanyActions.ts",
+    "src/hooks/useMergeRecords.ts",
+    "src/hooks/usePortfolioCompatibility.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-next-action-contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 179,
+   "testa": [
+    "src/hooks/useCSATSurveys.ts",
+    "src/hooks/useNextBestAction.ts"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-related-recovery-contracts.test.tsx",
+   "tipo": "contrato",
+   "linhas": 128,
+   "testa": [
+    "src/hooks/useBehavioralProfilesList.ts",
+    "src/hooks/useContactSegmentation.ts",
+    "src/hooks/useDocuments.ts",
+    "src/hooks/useEmailCampaigns.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-rfm-day-contracts.test.tsx",
+   "tipo": "contrato",
+   "linhas": 99,
+   "testa": [
+    "src/components/dashboard/YourDaySection.tsx",
+    "src/hooks/useRFMAnalysis.ts",
+    "src/hooks/useYourDay.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/hooks/__tests__/canonical-side-effect-contracts.test.tsx",
+   "tipo": "contrato",
+   "linhas": 185,
+   "testa": [
+    "src/hooks/useDashboardMappedData.ts",
+    "src/hooks/useEmailCampaigns.ts",
+    "src/hooks/useLuxWebhookConfig.ts",
+    "src/hooks/useSequences.ts",
+    "src/hooks/useUnifiedHistory.ts"
+   ],
+   "casos": 13
+  },
+  {
+   "arquivo": "src/hooks/__tests__/company-composite.contract.test.ts",
+   "tipo": "contrato",
+   "linhas": 54,
+   "testa": [
+    "src/components/forms/company/CompanyFormSchema.ts",
+    "src/hooks/useCompanies.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/__tests__/company-contracts.test.ts",
+   "tipo": "contrato",
+   "linhas": 190,
+   "testa": [
+    "src/hooks/useCompanies.ts"
+   ],
+   "casos": 13
+  },
+  {
+   "arquivo": "src/hooks/__tests__/company-history-null-contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 28,
+   "testa": [
+    "src/hooks/useInteractionsRpc.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/__tests__/contact-cache-concurrency.test.tsx",
+   "tipo": "unit",
+   "linhas": 246,
+   "testa": [
+    "src/hooks/useContactDetail.ts",
+    "src/hooks/useContacts.ts",
+    "src/hooks/useRestoreEntity.ts"
+   ],
+   "casos": 16
+  },
+  {
+   "arquivo": "src/hooks/__tests__/contact-contracts.test.ts",
+   "tipo": "contrato",
+   "linhas": 128,
+   "testa": [
+    "src/hooks/useContacts.ts"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "src/hooks/__tests__/contact-detail-external-retry.test.tsx",
+   "tipo": "unit",
+   "linhas": 194,
+   "testa": [
+    "src/hooks/useContactDetail.ts",
+    "src/hooks/useContacts.ts",
+    "src/lib/circuitBreaker.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/hooks/__tests__/contact-detail-partial-failures.test.tsx",
+   "tipo": "unit",
+   "linhas": 317,
+   "testa": [
+    "src/app/queryClient.ts",
+    "src/hooks/useContactDetail.ts",
+    "src/hooks/useContacts.ts"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "src/hooks/__tests__/dashboard-session.test.tsx",
+   "tipo": "unit",
+   "linhas": 51,
+   "testa": [
+    "src/hooks/useActiveAlerts.ts",
+    "src/hooks/useDataHealthView.ts",
+    "src/hooks/usePendingFollowups.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/__tests__/dedup-relations.contract.test.ts",
+   "tipo": "contrato",
+   "linhas": 66,
+   "testa": [
+    "src/hooks/useDedupEngine.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/hooks/__tests__/restore-response-contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 41,
+   "testa": [
+    "src/hooks/useRestoreEntity.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/hooks/useActivityLogger.test.tsx",
+   "tipo": "unit",
+   "linhas": 34,
+   "testa": [
+    "src/hooks/useActivityLogger.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/hooks/useBulkImport.test.ts",
+   "tipo": "unit",
+   "linhas": 24,
+   "testa": [
+    "src/hooks/useBulkImport.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/useContacts.pagination-deletion.test.tsx",
+   "tipo": "unit",
+   "linhas": 48,
+   "testa": [
+    "src/hooks/useContacts.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/useContacts.test.tsx",
+   "tipo": "unit",
+   "linhas": 198,
+   "testa": [
+    "src/hooks/useContacts.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/useCSATSurveys.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 92,
+   "testa": [
+    "src/hooks/useCSATSurveys.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/useDailyKpis.test.tsx",
+   "tipo": "unit",
+   "linhas": 61,
+   "testa": [
+    "src/hooks/useDailyKpis.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/hooks/useDailySummary.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 59,
+   "testa": [
+    "src/hooks/useDailySummary.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/hooks/useErpData.partial-failure.test.tsx",
+   "tipo": "unit",
+   "linhas": 35,
+   "testa": [
+    "src/hooks/useErpData.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/useImportantDates.test.tsx",
+   "tipo": "unit",
+   "linhas": 101,
+   "testa": [
+    "src/hooks/useImportantDates.ts",
+    "src/types/index.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/useIsAdmin.test.tsx",
+   "tipo": "unit",
+   "linhas": 28,
+   "testa": [
+    "src/hooks/useIsAdmin.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/useMFAGuard.test.tsx",
+   "tipo": "unit",
+   "linhas": 178,
+   "testa": [
+    "src/app/lazyPages.tsx",
+    "src/components/auth/MFAGuard.tsx",
+    "src/hooks/use2FA.ts"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "src/hooks/useModalHistory.test.tsx",
+   "tipo": "unit",
+   "linhas": 35,
+   "testa": [
+    "src/hooks/useModalHistory.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/useNpsSurveys.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 72,
+   "testa": [
+    "src/hooks/useNpsSurveys.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/hooks/usePipeline.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 118,
+   "testa": [
+    "src/hooks/usePipeline.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/useRFMAnalysis.persistence.test.tsx",
+   "tipo": "unit",
+   "linhas": 72,
+   "testa": [
+    "src/hooks/useRFMAnalysis.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/hooks/useSequenceProcessor.test.tsx",
+   "tipo": "unit",
+   "linhas": 30,
+   "testa": [
+    "src/hooks/useSequenceProcessor.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/hooks/useSocialInsights.test.tsx",
+   "tipo": "unit",
+   "linhas": 184,
+   "testa": [
+    "src/components/contact-detail/SocialIntelligencePanel.tsx",
+    "src/components/crm/commercial/components/SocialMatchDetails.tsx",
+    "src/hooks/useSocialInsights.ts"
+   ],
+   "casos": 14
+  },
+  {
+   "arquivo": "src/hooks/voice/__tests__/voice-system-exhaustive.test.ts",
+   "tipo": "unit",
+   "linhas": 861,
+   "testa": [
+    "src/hooks/voice/auth.ts",
+    "src/hooks/voice/retry.ts"
+   ],
+   "casos": 111
+  },
+  {
+   "arquivo": "src/lib/__tests__/behavioralAlertStats.test.ts",
+   "tipo": "unit",
+   "linhas": 88,
+   "testa": [
+    "src/lib/behavioralAlertStats.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/lib/__tests__/leadScoreContract.test.ts",
+   "tipo": "unit",
+   "linhas": 44,
+   "testa": [
+    "supabase/functions/_shared/lead-score-contract.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/lib/__tests__/logger.test.ts",
+   "tipo": "unit",
+   "linhas": 102,
+   "testa": [
+    "src/integrations/supabase/client.ts",
+    "src/lib/logger.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/lib/__tests__/providerGuard.test.ts",
+   "tipo": "unit",
+   "linhas": 62,
+   "testa": [
+    "src/lib/providerGuard.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/lib/__tests__/rpcChurn.test.ts",
+   "tipo": "unit",
+   "linhas": 32,
+   "testa": [
+    "src/lib/rpcChurn.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/lib/__tests__/rpcPlanDiff.test.ts",
+   "tipo": "unit",
+   "linhas": 50,
+   "testa": [
+    "src/lib/rpcPlanDiff.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/lib/__tests__/sanitize.test.ts",
+   "tipo": "unit",
+   "linhas": 94,
+   "testa": [
+    "src/lib/sanitize.ts"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "src/lib/__tests__/validation-schemas.test.ts",
+   "tipo": "unit",
+   "linhas": 57,
+   "testa": [
+    "src/domain/validationSchemas.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/lib/contactBehaviorAudit.test.ts",
+   "tipo": "unit",
+   "linhas": 40,
+   "testa": [
+    "src/lib/contactBehaviorAudit.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/lib/deployAllScript.test.ts",
+   "tipo": "unit",
+   "linhas": 21,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/lib/errorReporting.auth.test.ts",
+   "tipo": "unit",
+   "linhas": 50,
+   "testa": [
+    "src/lib/errorReporting.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/lib/errorReporting.unload.test.ts",
+   "tipo": "unit",
+   "linhas": 104,
+   "testa": [
+    "src/lib/errorReporting.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/lib/externalData.canonical-rpc.test.ts",
+   "tipo": "unit",
+   "linhas": 56,
+   "testa": [
+    "src/lib/externalData.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/lib/externalData.circuit-isolation.test.ts",
+   "tipo": "unit",
+   "linhas": 157,
+   "testa": [
+    "src/lib/circuitBreaker.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/lib/externalData.contract.test.ts",
+   "tipo": "contrato",
+   "linhas": 138,
+   "testa": [
+    "src/lib/externalData.ts"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "src/lib/externalData.delete-audit.test.ts",
+   "tipo": "unit",
+   "linhas": 90,
+   "testa": [
+    "src/lib/circuitBreaker.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/lib/externalData.read-audit.test.ts",
+   "tipo": "unit",
+   "linhas": 85,
+   "testa": [
+    "src/lib/externalData.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/lib/externalData.rpc-errors.test.ts",
+   "tipo": "unit",
+   "linhas": 45,
+   "testa": [
+    "src/lib/circuitBreaker.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/lib/externalData.sales-activity-audit.test.ts",
+   "tipo": "unit",
+   "linhas": 24,
+   "testa": [
+    "src/lib/externalData.ts"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/lib/externalQueryOrder.contract.test.ts",
+   "tipo": "contrato",
+   "linhas": 32,
+   "testa": [
+    "supabase/functions/_shared/tenant-guard.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/lib/externalSearchFilter.contract.test.ts",
+   "tipo": "contrato",
+   "linhas": 27,
+   "testa": [
+    "supabase/functions/_shared/search-filter.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/lib/externalSearchFilter.limits.test.ts",
+   "tipo": "unit",
+   "linhas": 27,
+   "testa": [
+    "supabase/functions/_shared/search-filter.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/lib/insights/__tests__/extractExcerpts.test.ts",
+   "tipo": "unit",
+   "linhas": 73,
+   "testa": [
+    "src/lib/insights/extractExcerpts.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/lib/insights/__tests__/pickTopPassages.test.ts",
+   "tipo": "unit",
+   "linhas": 75,
+   "testa": [
+    "src/lib/insights/pickTopPassages.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/lib/resilientFetch.test.ts",
+   "tipo": "unit",
+   "linhas": 40,
+   "testa": [
+    "src/lib/resilientFetch.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/lib/systemHealth.test.ts",
+   "tipo": "unit",
+   "linhas": 33,
+   "testa": [
+    "src/lib/systemHealth.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/pages/ContatoDetalhe.errors.test.tsx",
+   "tipo": "unit",
+   "linhas": 113,
+   "testa": [
+    "src/hooks/useContactDetail.ts",
+    "src/hooks/useContacts.ts",
+    "src/pages/ContatoDetalhe.tsx"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/pages/Contatos.search.test.tsx",
+   "tipo": "unit",
+   "linhas": 107,
+   "testa": [
+    "src/components/layout/Header.tsx",
+    "src/pages/Contatos.tsx",
+    "src/pages/contatos/ContatosContent.tsx"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/pages/Empresas.errors.test.tsx",
+   "tipo": "unit",
+   "linhas": 106,
+   "testa": [
+    "src/pages/Empresas.tsx"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/pages/mapa/companyQueries.contract.test.ts",
+   "tipo": "contrato",
+   "linhas": 56,
+   "testa": [
+    "src/pages/mapa/companyQueries.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/pages/mapa/geocoding.test.ts",
+   "tipo": "unit",
+   "linhas": 83,
+   "testa": [
+    "src/pages/mapa/geocoding.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/pages/mapa/MapMarkerCluster.security.test.ts",
+   "tipo": "unit",
+   "linhas": 34,
+   "testa": [
+    "src/pages/mapa/MapMarkerCluster.tsx",
+    "src/pages/mapa/companyPopup.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/pages/mapa/relationshipScores.contract.test.ts",
+   "tipo": "contrato",
+   "linhas": 79,
+   "testa": [
+    "src/pages/mapa/relationshipScores.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/pages/MapaEmpresas.batch.test.tsx",
+   "tipo": "unit",
+   "linhas": 125,
+   "testa": [
+    "src/pages/MapaEmpresas.tsx"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/pages/NPS.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 44,
+   "testa": [
+    "src/hooks/useNpsSurveys.ts",
+    "src/pages/NPS.tsx"
+   ],
+   "casos": 1
+  },
+  {
+   "arquivo": "src/pages/PublicSurvey.test.tsx",
+   "tipo": "unit",
+   "linhas": 61,
+   "testa": [
+    "src/pages/PublicSurvey.tsx"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/test/a11y/critical-components.test.tsx",
+   "tipo": "unit",
+   "linhas": 64,
+   "testa": [
+    "src/components/ui/badge.tsx",
+    "src/components/ui/button.tsx",
+    "src/components/ui/empty-state.tsx"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/test/company-filters-audit.test.ts",
+   "tipo": "unit",
+   "linhas": 640,
+   "testa": [],
+   "casos": 66
+  },
+  {
+   "arquivo": "src/test/company-form-exhaustive.test.tsx",
+   "tipo": "unit",
+   "linhas": 682,
+   "testa": [
+    "src/components/forms/CompanyForm.tsx"
+   ],
+   "casos": 51
+  },
+  {
+   "arquivo": "src/test/providers.test.ts",
+   "tipo": "unit",
+   "linhas": 92,
+   "testa": [
+    "src/lib/providerGuard.ts"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "src/test/setup.ts",
+   "tipo": "unit",
+   "linhas": 43,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/test/telemetry/external-data-telemetry.test.ts",
+   "tipo": "unit",
+   "linhas": 507,
+   "testa": [],
+   "casos": 53
+  },
+  {
+   "arquivo": "src/test/telemetry/telemetry-charts.test.ts",
+   "tipo": "unit",
+   "linhas": 290,
+   "testa": [],
+   "casos": 20
+  },
+  {
+   "arquivo": "src/test/telemetry/telemetry-data-integrity.test.ts",
+   "tipo": "unit",
+   "linhas": 464,
+   "testa": [],
+   "casos": 46
+  },
+  {
+   "arquivo": "src/test/telemetry/telemetry-helpers.test.ts",
+   "tipo": "unit",
+   "linhas": 711,
+   "testa": [],
+   "casos": 60
+  },
+  {
+   "arquivo": "src/types/__tests__/rfm.test.ts",
+   "tipo": "unit",
+   "linhas": 91,
+   "testa": [
+    "src/types/rfm.ts"
+   ],
+   "casos": 17
+  },
+  {
+   "arquivo": "supabase/functions/external-data/index.test.ts",
+   "tipo": "unit",
+   "linhas": 33,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "supabase/functions/generate-insights/index.test.ts",
+   "tipo": "unit",
+   "linhas": 44,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "supabase/functions/health/index.test.ts",
+   "tipo": "unit",
+   "linhas": 51,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "supabase/functions/voice-agent/index.test.ts",
+   "tipo": "unit",
+   "linhas": 43,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "supabase/functions/voice-to-text/index.test.ts",
+   "tipo": "unit",
+   "linhas": 34,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "tests/contacts-e2e.test.ts",
+   "tipo": "unit",
+   "linhas": 52,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "tests/contacts-rapport.spec.ts",
+   "tipo": "unit",
+   "linhas": 80,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "tests/contacts.spec.ts",
+   "tipo": "unit",
+   "linhas": 35,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "tests/contatos-excelencia.spec.ts",
+   "tipo": "unit",
+   "linhas": 121,
+   "testa": [],
+   "casos": 3
+  },
+  {
+   "arquivo": "tests/e2e/ai-gateway-card.spec.ts",
+   "tipo": "e2e",
+   "linhas": 23,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "tests/e2e/ai-gateway-heatmap.spec.ts",
+   "tipo": "e2e",
+   "linhas": 23,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "tests/e2e/auth-parallel-refresh.spec.ts",
+   "tipo": "e2e",
+   "linhas": 15,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "tests/e2e/contacts.spec.ts",
+   "tipo": "e2e",
+   "linhas": 67,
+   "testa": [],
+   "casos": 5
+  },
+  {
+   "arquivo": "tests/e2e/hubs-smoke.spec.ts",
+   "tipo": "e2e",
+   "linhas": 87,
+   "testa": [],
+   "casos": 10
+  },
+  {
+   "arquivo": "tests/e2e/navigation.spec.ts",
+   "tipo": "e2e",
+   "linhas": 82,
+   "testa": [],
+   "casos": 7
+  },
+  {
+   "arquivo": "tests/integration/auth-external-data.test.ts",
+   "tipo": "unit",
+   "linhas": 64,
+   "testa": [
+    "src/lib/externalData.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "tests/integration/rate-limit.test.ts",
+   "tipo": "unit",
+   "linhas": 27,
+   "testa": [
+    "supabase/functions/_shared/rate-limit.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "tests/load/ask-crm.js",
+   "tipo": "unit",
+   "linhas": 47,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "tests/load/external-data.js",
+   "tipo": "unit",
+   "linhas": 43,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "tests/load/incoming-webhook.js",
+   "tipo": "unit",
+   "linhas": 37,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "tests/load/pool-saturation.js",
+   "tipo": "unit",
+   "linhas": 66,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "tests/rls/contact-relation-concurrency.mjs",
+   "tipo": "unit",
+   "linhas": 244,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "tests/rls/prepare-sql.mjs",
+   "tipo": "unit",
+   "linhas": 161,
+   "testa": [],
+   "casos": 8
+  },
+  {
+   "arquivo": "tests/rls/prepare-sql.node-test.mjs",
+   "tipo": "unit",
+   "linhas": 74,
+   "testa": [],
+   "casos": 14
+  },
+  {
+   "arquivo": "tests/security/xss-sanitization.test.ts",
+   "tipo": "unit",
+   "linhas": 16,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "tests/stress/batch-processing.test.ts",
+   "tipo": "unit",
+   "linhas": 21,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "tests/stress/thousand-scenarios.test.ts",
+   "tipo": "unit",
+   "linhas": 60,
+   "testa": [
+    "supabase/functions/_shared/rate-limit.ts"
+   ],
+   "casos": 3
+  }
+ ],
+ "sql": [
+  "supabase/tests/check-rls-coverage.sql",
+  "supabase/tests/get_contact_sidebar_by_phone.sql"
+ ],
+ "cobertura_por_arquivo": {
+  "src/app/lazyPages.tsx": 1,
+  "src/app/queryClient.ts": 1,
+  "src/components/admin/RequireAdmin.tsx": 1,
+  "src/components/admin/conexoes/WebhookReplayButton.tsx": 1,
+  "src/components/admin/conexoes/webhookSnippetBuilders.ts": 1,
+  "src/components/analytics/BehaviorAlertsPanel.tsx": 1,
+  "src/components/analytics/DataHealthWidget.tsx": 1,
+  "src/components/auth/MFAGuard.tsx": 1,
+  "src/components/campaigns/CampaignDetailDrawer.tsx": 1,
+  "src/components/company-detail/CompanyCommercialTab.tsx": 1,
+  "src/components/contact-detail/LifeEventsTab.tsx": 1,
+  "src/components/contact-detail/SalesActivitiesWidget.tsx": 1,
+  "src/components/contact-detail/SocialIntelligencePanel.tsx": 1,
+  "src/components/crm/NextBestAction.tsx": 1,
+  "src/components/crm/commercial/components/SocialMatchDetails.tsx": 1,
+  "src/components/csat/CSATPanel.tsx": 1,
+  "src/components/dashboard/YourDaySection.tsx": 1,
+  "src/components/dashboard/widgets/PendingFollowupsWidget.tsx": 1,
+  "src/components/erp/CompanyErpProposalsWidget.tsx": 1,
+  "src/components/forms/CompanyForm.tsx": 1,
+  "src/components/forms/company/CompanyFormSchema.ts": 2,
+  "src/components/interactions/ActiveFiltersBar.tsx": 1,
+  "src/components/interactions/CanaisQuickFilter.tsx": 1,
+  "src/components/interactions/DateRangePopover.tsx": 2,
+  "src/components/interactions/DensityChips.tsx": 1,
+  "src/components/interactions/IncrementalLoadStickyBar.tsx": 1,
+  "src/components/interactions/InfiniteScrollSentinel.tsx": 2,
+  "src/components/interactions/PaginationBar.tsx": 1,
+  "src/components/interactions/SentimentQuickFilter.tsx": 1,
+  "src/components/interactions/SortChips.tsx": 1,
+  "src/components/interactions/ViewModeChips.tsx": 1,
+  "src/components/interactions/insights/SentimentDistributionChart.tsx": 1,
+  "src/components/interactions/insights/weekUtils.ts": 1,
+  "src/components/layout/Header.tsx": 2,
+  "src/components/navigation/BackButton.tsx": 1,
+  "src/components/navigation/ScrollToTopButton.tsx": 1,
+  "src/components/pipeline/DealDetailDrawer.tsx": 1,
+  "src/components/pipeline/ForecastConfidencePanel.tsx": 1,
+  "src/components/security/TwoFactorSetup.tsx": 1,
+  "src/components/sequences/SequenceEnrollDialog.tsx": 1,
+  "src/components/sequences/SequenceManualSteps.tsx": 1,
+  "src/components/sequences/SequencePausedEmails.tsx": 1,
+  "src/components/ui/badge.tsx": 1,
+  "src/components/ui/button.tsx": 1,
+  "src/components/ui/empty-state.tsx": 1,
+  "src/components/ui/toaster.tsx": 1,
+  "src/contexts/DensityContext.tsx": 1,
+  "src/contexts/NavigationStackContext.tsx": 1,
+  "src/data/carnegieAppreciation.ts": 1,
+  "src/data/carnegieCriticismDetector.ts": 3,
+  "src/data/carnegieEagerWant.ts": 2,
+  "src/data/carnegieEmpathyTemplates.ts": 2,
+  "src/data/carnegieEncouragement.ts": 2,
+  "src/data/carnegieFaceSaving.ts": 2,
+  "src/data/carnegieGenuineInterest.ts": 3,
+  "src/data/carnegieIdentityLabels.ts": 2,
+  "src/data/carnegieNobleCauses.ts": 2,
+  "src/data/carnegieOwnershipTransfer.ts": 2,
+  "src/data/carnegieProgressCelebration.ts": 2,
+  "src/data/carnegieQuestionInfluence.ts": 2,
+  "src/data/carnegieStorytelling.ts": 2,
+  "src/data/carnegieTalkRatio.ts": 1,
+  "src/data/carnegieVulnerability.ts": 2,
+  "src/data/carnegieWarmth.ts": 2,
+  "src/data/carnegieYesLadder.ts": 3,
+  "src/data/cognitiveBiasesData.ts": 1,
+  "src/data/communicationTrainingData.ts": 1,
+  "src/data/copywritingAdvancedData.ts": 1,
+  "src/data/copywritingData.ts": 1,
+  "src/data/discAdvancedData.ts": 1,
+  "src/data/emotionalIntelligenceData.ts": 1,
+  "src/data/metaprogramTemplates.ts": 1,
+  "src/data/neuromarketingData.ts": 1,
+  "src/data/nlpAdvancedData.ts": 1,
+  "src/data/sleightOfMouth.ts": 1,
+  "src/data/triggerBundles.ts": 1,
+  "src/data/triggerConflictsMatrix.ts": 2,
+  "src/data/triggerTemplatesMetaprograms.ts": 1,
+  "src/data/triggerTemplatesVAK.ts": 1,
+  "src/data/triggersAdvancedData.ts": 1,
+  "src/data/triggersExtendedData.ts": 1,
+  "src/data/vakTemplates.ts": 1,
+  "src/domain/validationSchemas.ts": 1,
+  "src/hooks/use2FA.ts": 2,
+  "src/hooks/useActiveAlerts.ts": 1,
+  "src/hooks/useActivityLogger.ts": 1,
+  "src/hooks/useAuth.tsx": 2,
+  "src/hooks/useBIAdvanced.ts": 1,
+  "src/hooks/useBehavioralProfilesList.ts": 2,
+  "src/hooks/useBulkImport.ts": 1,
+  "src/hooks/useCSATSurveys.ts": 2,
+  "src/hooks/useCompanies.ts": 3,
+  "src/hooks/useCompanyActions.ts": 1,
+  "src/hooks/useContactDetail.ts": 4,
+  "src/hooks/useContactSegmentation.ts": 1,
+  "src/hooks/useContacts.ts": 8,
+  "src/hooks/useConversationIntel.ts": 2,
+  "src/hooks/useDailyKpis.ts": 1,
+  "src/hooks/useDailySummary.ts": 1,
+  "src/hooks/useDashboardMappedData.ts": 1,
+  "src/hooks/useDataHealthView.ts": 2,
+  "src/hooks/useDedupEngine.ts": 1,
+  "src/hooks/useDocuments.ts": 1,
+  "src/hooks/useEmailCampaigns.ts": 4,
+  "src/hooks/useErpData.ts": 1,
+  "src/hooks/useImportantDates.ts": 1,
+  "src/hooks/useInteractionsAdvancedFilter.ts": 4,
+  "src/hooks/useInteractionsInsights.ts": 1,
+  "src/hooks/useInteractionsRpc.ts": 3,
+  "src/hooks/useIsAdmin.ts": 1,
+  "src/hooks/useLuxWebhookConfig.ts": 2,
+  "src/hooks/useMergeRecords.ts": 1,
+  "src/hooks/useModalHistory.ts": 2,
+  "src/hooks/useNextBestAction.ts": 2,
+  "src/hooks/useNpsSurveys.ts": 3,
+  "src/hooks/usePendingFollowups.ts": 2,
+  "src/hooks/usePipeline.ts": 3,
+  "src/hooks/usePortfolioCompatibility.ts": 1,
+  "src/hooks/useRFMAnalysis.ts": 2,
+  "src/hooks/useRestoreEntity.ts": 2,
+  "src/hooks/useSequenceProcessor.ts": 1,
+  "src/hooks/useSequences.ts": 2,
+  "src/hooks/useSocialInsights.ts": 1,
+  "src/hooks/useUnifiedHistory.ts": 1,
+  "src/hooks/useWhatsAppImport.ts": 1,
+  "src/hooks/useWinLoss.ts": 1,
+  "src/hooks/useYourDay.ts": 1,
+  "src/hooks/voice/auth.ts": 1,
+  "src/hooks/voice/retry.ts": 1,
+  "src/integrations/supabase/client.ts": 2,
+  "src/lib/behavioralAlertStats.ts": 1,
+  "src/lib/circuitBreaker.ts": 4,
+  "src/lib/contactBehaviorAudit.ts": 1,
+  "src/lib/errorReporting.ts": 2,
+  "src/lib/externalData.ts": 19,
+  "src/lib/formatters.ts": 1,
+  "src/lib/insights/extractExcerpts.ts": 1,
+  "src/lib/insights/pickTopPassages.ts": 1,
+  "src/lib/logger.ts": 2,
+  "src/lib/navigationLabels.ts": 1,
+  "src/lib/providerGuard.ts": 2,
+  "src/lib/resilientFetch.ts": 1,
+  "src/lib/rpcChurn.ts": 1,
+  "src/lib/rpcPlanDiff.ts": 1,
+  "src/lib/sanitize.ts": 1,
+  "src/lib/systemHealth.ts": 1,
+  "src/pages/ContatoDetalhe.tsx": 1,
+  "src/pages/Contatos.tsx": 1,
+  "src/pages/Empresas.tsx": 1,
+  "src/pages/MapaEmpresas.tsx": 1,
+  "src/pages/NPS.tsx": 1,
+  "src/pages/PublicSurvey.tsx": 1,
+  "src/pages/contatos/ContatosContent.tsx": 1,
+  "src/pages/mapa/MapMarkerCluster.tsx": 1,
+  "src/pages/mapa/companyPopup.ts": 1,
+  "src/pages/mapa/companyQueries.ts": 1,
+  "src/pages/mapa/geocoding.ts": 1,
+  "src/pages/mapa/relationshipScores.ts": 1,
+  "src/types/index.ts": 2,
+  "src/types/rfm.ts": 1,
+  "src/types/vak.ts": 1,
+  "supabase/functions/_shared/lead-score-contract.ts": 1,
+  "supabase/functions/_shared/rate-limit.ts": 2,
+  "supabase/functions/_shared/search-filter.ts": 2,
+  "supabase/functions/_shared/tenant-guard.ts": 1
+ },
+ "sem_teste": {
+  "telas": [
+   "src/components/skeletons/PageSkeletons.tsx",
+   "src/pages/Index.tsx"
+  ],
+  "hooks": [
+   "scripts/ai-context/cenarios.mjs",
+   "src/components/celebrations/CelebrationProvider.tsx",
+   "src/components/celebrations/index.ts",
+   "src/components/celebrations/MiniCelebration.tsx",
+   "src/components/companies/CompanyGrouping.tsx",
+   "src/components/features/WhatsNewModal.tsx",
+   "src/components/feedback/AriaLiveRegion.tsx",
+   "src/components/feedback/index.ts",
+   "src/components/feedback/ToastSystem.tsx",
+   "src/components/navigation/NavigationPatterns.tsx",
+   "src/components/navigation/PrefetchLink.tsx",
+   "src/components/onboarding/OnboardingTour.tsx",
+   "src/components/pwa/NotificationAndMisc.tsx",
+   "src/components/pwa/PWAComponents.tsx",
+   "src/components/search/voice/usePhaseColors.ts",
+   "src/components/theme/ThemeProvider.tsx",
+   "src/components/triggers/template-history/useTemplateHistoryMetrics.ts",
+   "src/components/triggers/trigger-analytics/useTriggerAnalyticsData.ts",
+   "src/components/ui/form.tsx",
+   "src/components/ui/sidebar.tsx",
+   "src/components/ui/sidebar/sidebar-context.tsx",
+   "src/hooks/commercial/useSocialSync.ts",
+   "src/hooks/use-mobile.tsx",
+   "src/hooks/use-toast.ts",
+   "src/hooks/useABM.ts",
+   "src/hooks/useAccessibleToast.ts",
+   "src/hooks/useAccessSecurity.ts",
+   "src/hooks/useAccountChurnPrediction.ts",
+   "src/hooks/useActionToast.ts",
+   "src/hooks/useAdvancedTriggers.ts",
+   "src/hooks/useAIApprovals.ts",
+   "src/hooks/useAiAssistant.ts",
+   "src/hooks/useAiGatewayCriticalToast.ts",
+   "src/hooks/useAiGatewayHealth.ts",
+   "src/hooks/useAiGatewayPartitionStats.ts",
+   "src/hooks/useAIWritingAssistant.ts",
+   "src/hooks/useAllowedIPs.ts",
+   "src/hooks/useAppliedResponses.ts",
+   "src/hooks/useApplyFoundEmail.ts",
+   "src/hooks/useApproachRecommendation.ts",
+   "src/hooks/useAppUserId.ts",
+   "src/hooks/useAskCrm.ts",
+   "src/hooks/useAttribution.ts",
+   "src/hooks/useAutomationRules.ts",
+   "src/hooks/useBattleCards.ts",
+   "src/hooks/useBehaviorAlerts.ts",
+   "src/hooks/useBehavioralProfile.ts",
+   "src/hooks/useBehavioralProfileVersions.ts",
+   "src/hooks/useBestClosingMoments.ts",
+   "src/hooks/useBestContactTime.ts",
+   "src/hooks/useBestTimeHeatmap.ts",
+   "src/hooks/useBestTimeToContact.ts",
+   "src/hooks/useBirthdayContacts.ts",
+   "src/hooks/useBulkRevalidate.ts",
+   "src/hooks/useBulkSelection.ts",
+   "src/hooks/useBusinessAlerts.ts",
+   "src/hooks/useCadenceEnrollments.ts",
+   "src/hooks/useCampaignRecipients.ts",
+   "src/hooks/useCannedResponses.ts",
+   "src/hooks/useCarnegieAnalysis.ts",
+   "src/hooks/useChannelHistory.ts",
+   "src/hooks/useChannelPerformanceMatrix.ts",
+   "src/hooks/useChannelSyncMode.ts",
+   "src/hooks/useChurnPrediction.ts",
+   "src/hooks/useChurnRisk.ts",
+   "src/hooks/useCircuitBreakerHandler.ts",
+   "src/hooks/useClientHealth.ts",
+   "src/hooks/useClientTriggers.ts",
+   "src/hooks/useClientValues.ts",
+   "src/hooks/useClosingScoreAlerts.ts",
+   "src/hooks/useClosingScoreAlertsView.ts",
+   "src/hooks/useClosingScoreRanking.ts",
+   "src/hooks/useClosingScoreView.ts",
+   "src/hooks/useCoalitionDetection.ts",
+   "src/hooks/useCognitiveBiases.ts",
+   "src/hooks/useCognitiveBiasPersistence.ts",
+   "src/hooks/useCommunicationDashboard.ts",
+   "src/hooks/useCommunicationIntelView.ts",
+   "src/hooks/useCommunicationPreferences.ts",
+   "src/hooks/useCompaniesCompletoView.ts",
+   "src/hooks/useCompaniesDuplicatasView.ts",
+   "src/hooks/useCompanyCommercial.ts",
+   "src/hooks/useCompanyFilterOptions.ts",
+   "src/hooks/useCompanyIntelligence.ts",
+   "src/hooks/useCompanyProfileAnalytics.ts",
+   "src/hooks/useCompanyRelatedData.ts",
+   "src/hooks/useCompanyViews.ts",
+   "src/hooks/useCompatibilityAlerts.ts",
+   "src/hooks/useCompleteDashboard.ts",
+   "src/hooks/useConnectionAnomalies.ts",
+   "src/hooks/useConnectionMetrics.ts",
+   "src/hooks/useConnectionQuota.ts",
+   "src/hooks/useConnections.ts",
+   "src/hooks/useContactBehavior.ts",
+   "src/hooks/useContactCadence.ts",
+   "src/hooks/useContactDaysWithout.ts",
+   "src/hooks/useContactDeals.ts",
+   "src/hooks/useContactEffectiveness.ts",
+   "src/hooks/useContactEmailLogs.ts",
+   "src/hooks/useContactEngagement.ts",
+   "src/hooks/useContactIntelligence.ts",
+   "src/hooks/useContactMeetings.ts",
+   "src/hooks/useContactNpsSurveys.ts",
+   "src/hooks/useContactProposals.ts",
+   "src/hooks/useContactRelationalData.ts",
+   "src/hooks/useContactsCompletoView.ts",
+   "src/hooks/useContactsContatoView.ts",
+   "src/hooks/useContactSentimentTrend.ts",
+   "src/hooks/useContactsFullView.ts",
+   "src/hooks/useContactSocialMediaView.ts",
+   "src/hooks/useContactsSemApelidoView.ts",
+   "src/hooks/useContactStatistics.ts",
+   "src/hooks/useContactTagsHistory.ts",
+   "src/hooks/useContactTasks.ts",
+   "src/hooks/useContactTimeAnalysis.ts",
+   "src/hooks/useContactTimeline.ts",
+   "src/hooks/useContactValidationStatus.ts",
+   "src/hooks/useContactView360.ts",
+   "src/hooks/useContextualSuggestions.ts",
+   "src/hooks/useConversationalSearch.ts",
+   "src/hooks/useCopywritingAdvanced.ts",
+   "src/hooks/useCopywritingTools.ts",
+   "src/hooks/useCreateMeeting.ts",
+   "src/hooks/useCRMAlerts.ts",
+   "src/hooks/useCrossReference.ts",
+   "src/hooks/useCustomerSuccess.ts",
+   "src/hooks/useCustomFields.ts",
+   "src/hooks/useDashboardStats.ts",
+   "src/hooks/useDealForecastConfidence.ts",
+   "src/hooks/useDealRooms.ts",
+   "src/hooks/useDealsAtRisk.ts",
+   "src/hooks/useDealsFullView.ts",
+   "src/hooks/useDealSlipRisk.ts",
+   "src/hooks/useDealVelocity.ts",
+   "src/hooks/useDealVelocityBenchmark.ts",
+   "src/hooks/useDebounce.ts",
+   "src/hooks/useDeviceDetection.ts",
+   "src/hooks/useDISCAnalysis.ts",
+   "src/hooks/useDISCAutoAnalysis.ts",
+   "src/hooks/useDISCCommunicationLogs.ts",
+   "src/hooks/useDiscCompatibility.ts",
+   "src/hooks/useDISCConversionData.ts",
+   "src/hooks/useDISCConversionMetrics.ts",
+   "src/hooks/useDiscDashboardView.ts",
+   "src/hooks/useDocumentTemplates.ts",
+   "src/hooks/useDuplicateContacts.ts",
+   "src/hooks/useEasterEggs.ts",
+   "src/hooks/useEdgeFunctionActions.ts",
+   "src/hooks/useEmailPipelineHealth.ts",
+   "src/hooks/useEmailRefine.ts",
+   "src/hooks/useEmailThreadSummary.ts",
+   "src/hooks/useEmotionalAnchors.ts",
+   "src/hooks/useEmotionalIntelligence.ts",
+   "src/hooks/useEmotionalStates.ts",
+   "src/hooks/useEmotionalTrend.ts",
+   "src/hooks/useEmotionalTrendView.ts",
+   "src/hooks/useEnrichmentCoverage.ts",
+   "src/hooks/useEnrichmentExport.ts",
+   "src/hooks/useEnrichmentSuite.ts",
+   "src/hooks/useEnrichSocialProfiles.ts",
+   "src/hooks/useEntity360.ts",
+   "src/hooks/useEntityBookmarks.ts",
+   "src/hooks/useEntityHistory.ts",
+   "src/hooks/useEntityNotes.ts",
+   "src/hooks/useEntityRelationships.ts",
+   "src/hooks/useEqEvolution.ts",
+   "src/hooks/useErrorBudget.ts",
+   "src/hooks/useErrorLogs.ts",
+   "src/hooks/useEvidenceForLabel.ts",
+   "src/hooks/useExternalInteractions.ts",
+   "src/hooks/useExternalLookup.ts",
+   "src/hooks/useExternalRelationalMutations.ts",
+   "src/hooks/useFamilyHistory.ts",
+   "src/hooks/useFavoriteTemplates.ts",
+   "src/hooks/useFeatureDiscovery.ts",
+   "src/hooks/useFeatureFlag.ts",
+   "src/hooks/useFicha360.ts",
+   "src/hooks/useFicha360ChannelCounts.ts",
+   "src/hooks/useFicha360ConversationSummary.ts",
+   "src/hooks/useFicha360DeeplinkToast.ts",
+   "src/hooks/useFicha360Domain.ts",
+   "src/hooks/useFicha360DraftFilters.ts",
+   "src/hooks/useFicha360FilterFavorites.ts",
+   "src/hooks/useFicha360FilterPresets.ts",
+   "src/hooks/useFicha360Filters.ts",
+   "src/hooks/useFicha360FilterShortcuts.ts",
+   "src/hooks/useFicha360NLP.ts",
+   "src/hooks/useFicha360PreferencesSync.ts",
+   "src/hooks/useFicha360Sort.ts",
+   "src/hooks/useFocusTrap.ts",
+   "src/hooks/useForecasting.ts",
+   "src/hooks/useFormDraft.ts",
+   "src/hooks/useForms.ts",
+   "src/hooks/useFuzzySearch.ts",
+   "src/hooks/useGamification.ts",
+   "src/hooks/useGeoBlocking.ts",
+   "src/hooks/useGlobalDensity.ts",
+   "src/hooks/useGlobalSearch.ts",
+   "src/hooks/useGraphLayout.ts",
+   "src/hooks/useHapticFeedback.ts",
+   "src/hooks/useHealthAlerts.ts",
+   "src/hooks/useHiddenObjections.ts",
+   "src/hooks/useInactivityAlerts.ts",
+   "src/hooks/useInboundActivityHeatmap.ts",
+   "src/hooks/useIncomingWebhooks.ts",
+   "src/hooks/useInfiniteList.ts",
+   "src/hooks/useInsightFeedback.ts",
+   "src/hooks/useInstantKpis.ts",
+   "src/hooks/useIntelDensity.ts",
+   "src/hooks/useIntelHotkeys.ts",
+   "src/hooks/useIntelPresentation.ts",
+   "src/hooks/useIntelSnapshots.ts",
+   "src/hooks/useIntelTelemetry.ts",
+   "src/hooks/useIntelTheme.ts",
+   "src/hooks/useIntelTour.ts",
+   "src/hooks/useIntent.ts",
+   "src/hooks/useInteracoesSemApelidoView.ts",
+   "src/hooks/useInteractions.ts",
+   "src/hooks/useIPMaskingPreference.ts",
+   "src/hooks/useIPValidation.ts",
+   "src/hooks/useKeyboardShortcutsEnhanced.ts",
+   "src/hooks/useKnowledgeBase.ts",
+   "src/hooks/useLandingPages.ts",
+   "src/hooks/useLazySection.ts",
+   "src/hooks/useLeadMagnets.ts",
+   "src/hooks/useLeadScore.ts",
+   "src/hooks/useLeadScoring.ts",
+   "src/hooks/useLeadsFullView.ts",
+   "src/hooks/useLuxIntelligence.ts",
+   "src/hooks/useMarketingInsights.ts",
+   "src/hooks/useMarkObjectionHandled.ts",
+   "src/hooks/useMeetingSummary.ts",
+   "src/hooks/useMetaprogramAnalysis.ts",
+   "src/hooks/useMFAGuard.ts",
+   "src/hooks/useMQL.ts",
+   "src/hooks/useMttaSlaBreachSnapshot.ts",
+   "src/hooks/useMttaSlaThreshold.ts",
+   "src/hooks/useNetworkGraph.ts",
+   "src/hooks/useNeuromarketing.ts",
+   "src/hooks/useNextPagePrefetch.ts",
+   "src/hooks/useNLPAnalysisValidation.ts",
+   "src/hooks/useNLPAnalyticsData.ts",
+   "src/hooks/useNLPAutoAnalysis.ts",
+   "src/hooks/useNLPClosingProbability.ts",
+   "src/hooks/useNotificationPreferences.ts",
+   "src/hooks/useNotifications.ts",
+   "src/hooks/useNurturingExecutions.ts",
+   "src/hooks/useNurturingWorkflows.ts",
+   "src/hooks/useObjectionContextSummary.ts",
+   "src/hooks/useObjectionExampleFeedback.ts",
+   "src/hooks/useOnlineStatus.ts",
+   "src/hooks/useOrphanContacts.ts",
+   "src/hooks/usePageTitle.ts",
+   "src/hooks/usePasswordBreachCheck.tsx",
+   "src/hooks/usePasswordResetRequests.ts",
+   "src/hooks/usePendingNotifications.ts",
+   "src/hooks/usePerformanceMetrics.ts",
+   "src/hooks/usePersistentBoolean.ts",
+   "src/hooks/usePlaybooks.ts",
+   "src/hooks/usePortfolioHealth.ts",
+   "src/hooks/usePreContactBriefing.ts",
+   "src/hooks/usePrefetch.ts",
+   "src/hooks/useProactiveIntelligence.ts",
+   "src/hooks/useProximoPassoFeedback.ts",
+   "src/hooks/useProximosPassosFilters.ts",
+   "src/hooks/usePurchasePatterns.ts",
+   "src/hooks/useRageClickDetector.ts",
+   "src/hooks/useRapportGenerator.ts",
+   "src/hooks/useRapportIntelMutation.ts",
+   "src/hooks/useRapportIntelView.ts",
+   "src/hooks/useRapportPoints.ts",
+   "src/hooks/useRBAC.tsx",
+   "src/hooks/useRealtimeNotifications.ts",
+   "src/hooks/useRecentlyViewed.ts",
+   "src/hooks/useRecommendationAudit.ts",
+   "src/hooks/useReducedMotion.ts",
+   "src/hooks/useRelationshipScoreHistory.ts",
+   "src/hooks/useReportInfiniteScrollProgress.ts",
+   "src/hooks/useReportsAnalytics.ts",
+   "src/hooks/useRevOps.ts",
+   "src/hooks/useRFMSegmentConfig.ts",
+   "src/hooks/useRodizioBloqueios.ts",
+   "src/hooks/useRodizioEquipe.ts",
+   "src/hooks/useRodizioOndas.ts",
+   "src/hooks/useRoutingMetrics.ts",
+   "src/hooks/useRpcPerfStats.ts",
+   "src/hooks/useRpcPlanChurn.ts",
+   "src/hooks/useRpcPlanChurnTimeline.ts",
+   "src/hooks/useRpcPlanDiff.ts",
+   "src/hooks/useRpcPlanSnapshots.ts",
+   "src/hooks/useSatisfactionTrend.ts",
+   "src/hooks/useSavedAskViews.ts",
+   "src/hooks/useSavedFilters.ts",
+   "src/hooks/useSavedReports.ts",
+   "src/hooks/useSavedViews.ts",
+   "src/hooks/useSchemaDriftAlerts.ts",
+   "src/hooks/useScoreAutomations.ts",
+   "src/hooks/useScoreHistory.ts",
+   "src/hooks/useSearchContactsView.ts",
+   "src/hooks/useSearchPresets.ts",
+   "src/hooks/useSecretRotation.ts",
+   "src/hooks/useSemanticSearch.ts",
+   "src/hooks/useSentimentAnnotations.ts",
+   "src/hooks/useSequenceEvents.ts",
+   "src/hooks/useSlowQueryDetector.ts",
+   "src/hooks/useSlowRpcTrend.ts",
+   "src/hooks/useSmartNotifications.ts",
+   "src/hooks/useSmartReminders.ts",
+   "src/hooks/useSmartTemplateSuggestions.ts",
+   "src/hooks/useSmsCampaigns.ts",
+   "src/hooks/useSocialIntelligence.ts",
+   "src/hooks/useStaggerAnimation.ts",
+   "src/hooks/useStakeholderAlerts.ts",
+   "src/hooks/useStakeholderAnalysis.ts",
+   "src/hooks/useStakeholderSimulator.ts",
+   "src/hooks/useSuccessCelebration.ts",
+   "src/hooks/useSupportTickets.ts",
+   "src/hooks/useTableDensity.ts",
+   "src/hooks/useTasks.ts",
+   "src/hooks/useTeamDashboard.ts",
+   "src/hooks/useTelemetryExport.ts",
+   "src/hooks/useTemplateNotifications.ts",
+   "src/hooks/useTemplatePerformanceData.ts",
+   "src/hooks/useTerritories.ts",
+   "src/hooks/useTerritoryOptimization.ts",
+   "src/hooks/useTimelineByEntity.ts",
+   "src/hooks/useTodaysReminders.ts",
+   "src/hooks/useTonePersistence.ts",
+   "src/hooks/useTouchpointSequences.ts",
+   "src/hooks/useTriggerAnalytics.ts",
+   "src/hooks/useTriggerHistory.ts",
+   "src/hooks/useUiPreferencesSync.ts",
+   "src/hooks/useUnifiedNotifications.ts",
+   "src/hooks/useUnifiedTimeline.ts",
+   "src/hooks/useUnsavedChangesGuard.ts",
+   "src/hooks/useUpcomingLifeEvents.ts",
+   "src/hooks/useUsageKpisView.ts",
+   "src/hooks/useVAKAnalysis.ts",
+   "src/hooks/useValidationQueue.ts",
+   "src/hooks/useViewTransitions.ts",
+   "src/hooks/useVisitCheckins.ts",
+   "src/hooks/useVoiceAgent.ts",
+   "src/hooks/useVoiceAIHealth.ts",
+   "src/hooks/useWebAuthn.ts",
+   "src/hooks/useWebhookDlq.ts",
+   "src/hooks/useWebVitals.ts",
+   "src/hooks/useWeeklyReport.ts",
+   "src/hooks/useWeeklySummary.ts",
+   "src/hooks/useWhatsAppData.ts",
+   "src/hooks/useWhatsappMessages.ts",
+   "src/hooks/useWhyScoreDrawerPreference.ts",
+   "src/hooks/useWorkspaceAccounts.ts",
+   "src/hooks/voice/useTranscriptProcessor.ts",
+   "src/hooks/voice/useVoiceState.ts",
+   "src/lib/keyboardShortcutRegistry.ts",
+   "src/store/emailComposerStore.ts",
+   "src/stores/useCustomSimulationPresetsStore.ts",
+   "src/stores/useProntidaoTargetStore.ts",
+   "src/stores/useProntidaoWeightsStore.ts",
+   "src/stores/useSimulationStore.ts",
+   "src/stores/useUIStore.ts"
+  ],
+  "edges": [
+   "abm-account-scorer",
+   "abm-whitespace-analyzer",
+   "ai-assistant",
+   "ai-email-refine",
+   "ai-suggest-mapping",
+   "ai-writing-assistant",
+   "ask-crm",
+   "attribution-calculator",
+   "audit-analytics",
+   "auto-rebatch-behavioral",
+   "auto-regen-behavioral-profiles",
+   "bitrix24-webhook",
+   "bulk-revalidate",
+   "check-health-alerts",
+   "check-notifications",
+   "clear-must-reset-flag",
+   "client-notifications",
+   "connection-anomaly-detector",
+   "connection-introspect",
+   "connection-tester",
+   "conversation-analyzer",
+   "conversation-coaching-digest",
+   "conversational-search",
+   "crm-automation-monitor",
+   "cs-health-recalc",
+   "deal-room-buyer-view",
+   "deal-room-health",
+   "deal-room-share",
+   "demand-forecast",
+   "detect-churn-risk",
+   "detect-new-device",
+   "disc-analyzer",
+   "dual-write-proxy",
+   "elevenlabs-scribe-token",
+   "elevenlabs-tts",
+   "email-finder",
+   "email-pipeline-health",
+   "email-thread-summary",
+   "email-verifier",
+   "enrich-contacts",
+   "enrichlayer-linkedin",
+   "error-budget",
+   "evolution-api",
+   "evolution-bitrix-connector",
+   "evolution-webhook",
+   "ficha360-conversation-summary",
+   "firecrawl-scrape",
+   "forecast-analyzer",
+   "forecast-narrative",
+   "forecast-snapshot-cron",
+   "form-submit-handler",
+   "generate-behavioral-profile",
+   "generate-offer-suggestions",
+   "get-signature",
+   "health-aggregate",
+   "incoming-webhook",
+   "intent-aggregator",
+   "intent-pixel-snippet",
+   "intent-tracker",
+   "lead-score-cron",
+   "lead-score-threshold-runner",
+   "lead-scorer",
+   "lux-trigger",
+   "lux-webhook",
+   "mcp-server",
+   "meeting-summary",
+   "mql-evaluator",
+   "next-best-action",
+   "nurturing-runner",
+   "objection-context-summary",
+   "objection-handler",
+   "phone-validator",
+   "playbook-generator",
+   "playbook-recommender",
+   "process-behavioral-regen-queue",
+   "process-webhook-dlq",
+   "retry-behavioral-profile",
+   "revops-snapshot-builder",
+   "rfm-analyzer",
+   "semantic-search",
+   "send-push-notification",
+   "send-sms-campaign",
+   "sequence-processor",
+   "sequence-track",
+   "smart-notify",
+   "smart-reminders",
+   "social-behavior-analyzer",
+   "social-events-detector",
+   "social-profile-scraper",
+   "submit-signature",
+   "suggest-next-action",
+   "sync-social-interests",
+   "system-health",
+   "template-success-notifications",
+   "territory-optimization",
+   "validate-access",
+   "validation-queue-worker",
+   "visual-search",
+   "voice-ai-health",
+   "weekly-digest",
+   "whatsapp-import",
+   "win-loss-analyzer",
+   "win-loss-record-deal"
+  ],
+  "servicos": []
+ }
+}

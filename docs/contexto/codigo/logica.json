@@ -1,0 +1,4297 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "total": 143,
+ "por_camada": {
+  "config": 1,
+  "data": 46,
+  "domain": 8,
+  "integrations": 3,
+  "lib": 71,
+  "python": 8,
+  "store": 1,
+  "stores": 5
+ },
+ "arquivos": [
+  {
+   "arquivo": "scripts/generate_data_dictionary.py",
+   "camada": "python",
+   "exports": [],
+   "linhas": 18,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/generate_er_diagram.py",
+   "camada": "python",
+   "exports": [],
+   "linhas": 34,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "json"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/generate_real_dict.py",
+   "camada": "python",
+   "exports": [],
+   "linhas": 35,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "collections"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/generate_real_er.py",
+   "camada": "python",
+   "exports": [],
+   "linhas": 27,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/regras_negocio/generate.py",
+   "camada": "python",
+   "exports": [
+    "analyze_code_file",
+    "balanced",
+    "detect_stack",
+    "dir_tree",
+    "extract_html_constraints",
+    "extract_zod",
+    "files_cell",
+    "git",
+    "header",
+    "is_app_code",
+    "is_archived_sql",
+    "is_test_file",
+    "llm_synthesis",
+    "log",
+    "main",
+    "md_table",
+    "op_from_chain",
+    "read_text",
+    "redact",
+    "rel",
+    "render_access",
+    "render_architecture",
+    "render_changes",
+    "render_database",
+    "render_database_pointer",
+    "render_dataflow",
+    "render_features",
+    "render_glossary",
+    "render_index",
+    "render_integrations",
+    "render_modules",
+    "render_overview",
+    "render_rules",
+    "squash",
+    "stable_hash",
+    "strip_sql_comments",
+    "trunc",
+    "upsert_pointer",
+    "walk_repo"
+   ],
+   "linhas": 2138,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "AI_CONTEXT_INDEX",
+    "AI_CONTEXT_MODEL",
+    "AI_CONTEXT_PROFILE",
+    "AI_CONTEXT_SCHEMA_SNAPSHOT",
+    "ANTHROPIC_API_KEY"
+   ],
+   "externos": [
+    "__future__",
+    "argparse",
+    "collections",
+    "datetime",
+    "hashlib",
+    "json",
+    "os",
+    "pathlib",
+    "re",
+    "subprocess",
+    "sys",
+    "urllib"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/regras_negocio/indice.py",
+   "camada": "python",
+   "exports": [
+    "entry_file",
+    "git",
+    "main",
+    "parse_dt",
+    "producer_health",
+    "read_manifest"
+   ],
+   "linhas": 237,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "__future__",
+    "argparse",
+    "datetime",
+    "json",
+    "pathlib",
+    "re",
+    "subprocess",
+    "sys"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/run_explain_analyze.py",
+   "camada": "python",
+   "exports": [],
+   "linhas": 41,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "json",
+    "subprocess"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/supabase_snapshot/snapshot.py",
+   "camada": "python",
+   "exports": [
+    "api",
+    "api_section",
+    "approx",
+    "banner",
+    "build_function_callers",
+    "callers_status_table",
+    "code",
+    "diff_fingerprints",
+    "dumps",
+    "env_int",
+    "excluded_sql",
+    "fingerprints",
+    "get_columns",
+    "get_constraints",
+    "get_cron",
+    "get_cron_runs",
+    "get_db_stats",
+    "get_extensions",
+    "get_foreign",
+    "get_functions",
+    "get_grants",
+    "get_index_stats",
+    "get_indexes",
+    "get_lints",
+    "get_migrations",
+    "get_policies",
+    "get_queues",
+    "get_realtime",
+    "get_roles",
+    "get_schemas",
+    "get_sequences",
+    "get_server",
+    "get_storage",
+    "get_table_stats",
+    "get_tables",
+    "get_triggers",
+    "get_types",
+    "get_vault",
+    "get_views",
+    "get_webhooks",
+    "group",
+    "has_ext",
+    "has_table",
+    "human_bytes",
+    "introspect_api",
+    "introspect_db",
+    "is_caller_source",
+    "jsonable",
+    "log",
+    "main",
+    "md_cell",
+    "md_table",
+    "prepare_output_directory",
+    "q",
+    "record_error",
+    "redact",
+    "render_readme",
+    "render_relationships",
+    "render_simple",
+    "render_stats",
+    "render_tables",
+    "run_gen_types",
+    "run_pg_dump",
+    "rx_name_keys",
+    "scan_code_files",
+    "scrub",
+    "scrub_value",
+    "section",
+    "sha",
+    "slug",
+    "sql_without_routine_declarations",
+    "update_changelog",
+    "uslug",
+    "valid_previous_snapshot",
+    "write"
+   ],
+   "linhas": 1791,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "CODE_SCAN_DIRS",
+    "GEN_TYPES",
+    "PGDUMP",
+    "PGDUMP_SCHEMAS",
+    "REPO_ROOT",
+    "SNAPSHOT_DIR",
+    "SNAPSHOT_EXCLUDE_SCHEMAS",
+    "SNAPSHOT_INCLUDE_SCHEMAS",
+    "SUPABASE_ACCESS_TOKEN",
+    "SUPABASE_DB_URL",
+    "SUPABASE_PROJECT_REF",
+    "SUPABASE_SNAPSHOT_PUBLICACAO"
+   ],
+   "externos": [
+    "__future__",
+    "datetime",
+    "decimal",
+    "hashlib",
+    "json",
+    "os",
+    "pathlib",
+    "psycopg",
+    "re",
+    "shutil",
+    "subprocess",
+    "sys",
+    "typing",
+    "urllib"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/config/channelPersistence.config.ts",
+   "camada": "config",
+   "exports": [
+    "CHANNEL_PERSISTENCE_KEY",
+    "CHANNEL_PERSISTENCE_TTL_DAYS",
+    "CHANNEL_PERSISTENCE_TTL_MS",
+    "CHANNEL_PERSISTENCE_VALID_VALUES",
+    "PersistedChannel"
+   ],
+   "export_default": null,
+   "linhas": 29,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/analyticsData.ts",
+   "camada": "data",
+   "exports": [
+    "PeriodComparison",
+    "calcChange",
+    "getEngagementByChannelData",
+    "getEngagementRadarData",
+    "getMetricsStats",
+    "getRelationshipEvolutionData",
+    "getSentimentColors",
+    "getSentimentDistributionData",
+    "getTopPerformersData",
+    "periodOptions"
+   ],
+   "export_default": null,
+   "linhas": 214,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/analytics",
+    "pages",
+    "pages/analytics"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/anchorTrackingData.ts",
+   "camada": "data",
+   "exports": [
+    "AnchorSuggestion",
+    "COMMON_NEGATIVE_ANCHORS",
+    "COMMON_POSITIVE_ANCHORS"
+   ],
+   "export_default": null,
+   "linhas": 22,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/nlp"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/carnegieAppreciation.ts",
+   "camada": "data",
+   "exports": [
+    "APPRECIATION_BY_DISC",
+    "APPRECIATION_FORMULAS",
+    "APPRECIATION_GAP_THRESHOLDS",
+    "APPRECIATION_TEMPLATES",
+    "APPRECIATION_TIMING",
+    "RECIPROCITY_INDICATORS",
+    "generateAppreciationSuggestion",
+    "getAppreciationForDISC",
+    "getAppreciationTemplates"
+   ],
+   "export_default": null,
+   "linhas": 409,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/carnegie"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/carnegieCriticismDetector.ts",
+   "camada": "data",
+   "exports": [
+    "CRITICAL_PATTERNS",
+    "CRITICISM_PRINCIPLES",
+    "POSITIVE_ALTERNATIVES",
+    "calculateCriticismScore",
+    "detectCriticalLanguage",
+    "getCriticismTone",
+    "rewriteWithoutCriticism"
+   ],
+   "export_default": null,
+   "linhas": 334,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 3,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/carnegieEagerWant.ts",
+   "camada": "data",
+   "exports": [
+    "ALL_EAGER_WANT_KEYWORDS",
+    "EAGER_WANTS",
+    "detectEagerWants",
+    "generateEagerWantScript",
+    "getEagerWantByCategory",
+    "getEagerWantsByDISC",
+    "getTechniquesForWant"
+   ],
+   "export_default": null,
+   "linhas": 417,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 2,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/carnegieEmpathyTemplates.ts",
+   "camada": "data",
+   "exports": [
+    "EMPATHY_DETECTION",
+    "EMPATHY_PHRASES",
+    "EMPATHY_TEMPLATES",
+    "analyzeEmpathyInText",
+    "getEmpathyForSituation",
+    "getEmpathyTemplateForDISC",
+    "getEmpathyTemplatesByType"
+   ],
+   "export_default": null,
+   "linhas": 313,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 2,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/carnegieEncouragement.ts",
+   "camada": "data",
+   "exports": [
+    "CONFIDENCE_BOOSTERS",
+    "DISCOURAGEMENT_PATTERNS",
+    "ENCOURAGEMENT_TEMPLATES",
+    "MINIMIZATION_PHRASES",
+    "calculateEncouragementScore",
+    "detectDiscouragement",
+    "generateEncouragementScript",
+    "getEncouragementForContext"
+   ],
+   "export_default": null,
+   "linhas": 326,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 2,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/carnegieFaceSaving.ts",
+   "camada": "data",
+   "exports": [
+    "FACE_SAVING_DETECTION",
+    "FACE_SAVING_TECHNIQUES",
+    "detectFaceSavingScenario",
+    "getAllTechniquesForScenario",
+    "getTechniqueForDISC",
+    "getTechniqueForScenario"
+   ],
+   "export_default": null,
+   "linhas": 525,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/carnegie",
+    "hooks"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/carnegieGenuineInterest.ts",
+   "camada": "data",
+   "exports": [
+    "GENUINE_INTEREST_PATTERNS",
+    "INTEREST_INDICATORS",
+    "INTEREST_SCORING",
+    "INTEREST_SUGGESTIONS",
+    "INTEREST_TECHNIQUES",
+    "calculateInterestScore",
+    "countInterestIndicators",
+    "getInterestLevel",
+    "getInterestSuggestions"
+   ],
+   "export_default": null,
+   "linhas": 273,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 3,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/carnegieIdentityLabels.ts",
+   "camada": "data",
+   "exports": [
+    "IDENTITY_DETECTION_PATTERNS",
+    "IDENTITY_LABELS",
+    "IDENTITY_REINFORCEMENT_SCRIPTS",
+    "getLabelsByCategory",
+    "getLabelsByDISC",
+    "getReinforcementScript",
+    "getTopLabelsForContact"
+   ],
+   "export_default": null,
+   "linhas": 496,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/carnegieNobleCauses.ts",
+   "camada": "data",
+   "exports": [
+    "NOBLE_CAUSES",
+    "NOBLE_CAUSE_INTENSIFIERS",
+    "NOBLE_CAUSE_KEYWORDS",
+    "getNobleCausesByCategory",
+    "getNobleCausesByDISC",
+    "getRandomTemplate"
+   ],
+   "export_default": null,
+   "linhas": 439,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/carnegieOwnershipTransfer.ts",
+   "camada": "data",
+   "exports": [
+    "OWNERSHIP_BY_DISC",
+    "OWNERSHIP_LANGUAGE",
+    "OWNERSHIP_TECHNIQUES",
+    "analyzeOwnershipLanguage",
+    "getOwnershipTechnique",
+    "getTechniquesForDISC"
+   ],
+   "export_default": null,
+   "linhas": 322,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 2,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/carnegieProgressCelebration.ts",
+   "camada": "data",
+   "exports": [
+    "CELEBRATION_BY_DISC",
+    "CELEBRATION_INTENSITY_GUIDELINES",
+    "PROGRESS_CELEBRATIONS",
+    "PROGRESS_DETECTION_PATTERNS",
+    "detectProgressType",
+    "getCelebrationForDISC",
+    "getCelebrationTemplate",
+    "selectCelebrationIntensity"
+   ],
+   "export_default": null,
+   "linhas": 473,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/carnegie",
+    "hooks"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/carnegieQuestionInfluence.ts",
+   "camada": "data",
+   "exports": [
+    "ORDER_PATTERNS",
+    "ORDER_TO_QUESTION",
+    "QUESTION_BY_DISC",
+    "QUESTION_TYPES",
+    "analyzeQuestionInfluence",
+    "countQuestionsVsOrders",
+    "detectOrders",
+    "getQuestionAlternative",
+    "suggestQuestions"
+   ],
+   "export_default": null,
+   "linhas": 339,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 2,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/carnegieStorytelling.ts",
+   "camada": "data",
+   "exports": [
+    "STORY_BY_DISC",
+    "STORY_ELEMENTS",
+    "STORY_TEMPLATES",
+    "analyzeStorytellingInText",
+    "generateStoryOutline",
+    "getStoriesForDISC",
+    "getStoryTemplateByType"
+   ],
+   "export_default": null,
+   "linhas": 389,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 2,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/carnegieTalkRatio.ts",
+   "camada": "data",
+   "exports": [
+    "IDEAL_TALK_RATIOS",
+    "INTERRUPTION_INDICATORS",
+    "LISTENING_INDICATORS",
+    "QUESTION_PATTERNS",
+    "SILENCE_TECHNIQUES",
+    "TALK_RATIO_QUALITY",
+    "TALK_RATIO_RECOMMENDATIONS",
+    "calculateQuality",
+    "getIdealRatio",
+    "getRecommendations"
+   ],
+   "export_default": null,
+   "linhas": 411,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/carnegieVulnerability.ts",
+   "camada": "data",
+   "exports": [
+    "VULNERABILITY_GUIDELINES",
+    "VULNERABILITY_TEMPLATES",
+    "VULNERABILITY_TIMING",
+    "getRandomVulnerabilityTemplate",
+    "getVulnerabilityForDISC",
+    "getVulnerabilityTemplate",
+    "isSafeToShareVulnerability"
+   ],
+   "export_default": null,
+   "linhas": 529,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/carnegie"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/carnegieWarmth.ts",
+   "camada": "data",
+   "exports": [
+    "WARMTH_BY_DISC",
+    "WARMTH_LEVELS",
+    "WARMTH_PATTERNS",
+    "WARMTH_TEMPLATES",
+    "calculateWarmthScore",
+    "detectColdIndicators",
+    "detectWarmthIndicators",
+    "getWarmthLevel",
+    "getWarmthSuggestions"
+   ],
+   "export_default": null,
+   "linhas": 434,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/carnegieYesLadder.ts",
+   "camada": "data",
+   "exports": [
+    "UNIVERSAL_YES_QUESTIONS",
+    "YES_LADDER_TEMPLATES",
+    "YES_MOMENTUM_PRINCIPLES",
+    "calculateYesReadiness",
+    "countYesOpportunities",
+    "suggestYesQuestions"
+   ],
+   "export_default": null,
+   "linhas": 291,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 3,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/cognitiveBiasesData.ts",
+   "camada": "data",
+   "exports": [
+    "BIAS_CATEGORY_INFO",
+    "COGNITIVE_BIAS_INFO",
+    "getAllBiasIndicators",
+    "getBiasesByCategory"
+   ],
+   "export_default": null,
+   "linhas": 609,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/analytics",
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/communicationTrainingData.ts",
+   "camada": "data",
+   "exports": [
+    "DISC_TRAINING",
+    "SalespersonProfile",
+    "TrainingScenario",
+    "TrainingTip",
+    "VAK_TRAINING",
+    "generateScenarios"
+   ],
+   "export_default": null,
+   "linhas": 268,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/triggers"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/copywritingAdvancedData.ts",
+   "camada": "data",
+   "exports": [
+    "CHANNEL_LIMITS",
+    "EMOJI_CONTEXTS",
+    "FOUR_PS_TEMPLATES",
+    "PAS_TEMPLATES",
+    "READABILITY_LEVELS",
+    "STORYTELLING_TEMPLATES",
+    "TRIGGER_DETECTION_WORDS"
+   ],
+   "export_default": null,
+   "linhas": 397,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/copywritingData.ts",
+   "camada": "data",
+   "exports": [
+    "AIDA_TEMPLATES",
+    "CTA_TEMPLATES",
+    "DEFAULT_SEGMENTS",
+    "FAB_TEMPLATES",
+    "HEADLINE_FORMULAS",
+    "PERSUASIVE_CONNECTORS",
+    "POWER_WORDS_CATEGORIES",
+    "TRANSITION_WORDS"
+   ],
+   "export_default": null,
+   "linhas": 628,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/discAdvancedData.ts",
+   "camada": "data",
+   "exports": [
+    "BlendProfileInfo",
+    "CompatibilityInfo",
+    "DISCProfileInfo",
+    "DISC_BLEND_PROFILES",
+    "DISC_COMPATIBILITY_MATRIX",
+    "DISC_DETECTION_PATTERNS",
+    "DISC_PROFILES",
+    "DISC_STRESS_SHIFTS",
+    "DetectionPattern",
+    "calculateBlendCode",
+    "getBlendProfile",
+    "getCompatibility",
+    "getProfileInfo"
+   ],
+   "export_default": null,
+   "linhas": 904,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 10,
+   "usado_por_modulos": [
+    "components/analytics",
+    "components/disc",
+    "components/nlp",
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/discTemplatesData.ts",
+   "camada": "data",
+   "exports": [
+    "DISCTemplate",
+    "DISC_TEMPLATES"
+   ],
+   "export_default": null,
+   "linhas": 39,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/disc"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/emotionalIntelligenceData.ts",
+   "camada": "data",
+   "exports": [
+    "EQ_KEYWORDS",
+    "EQ_LEVEL_INFO",
+    "EQ_PILLAR_INFO",
+    "EQ_SALES_STRATEGIES",
+    "generatePillarInsights",
+    "getEQLevel"
+   ],
+   "export_default": null,
+   "linhas": 378,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/exporterConfigs.ts",
+   "camada": "data",
+   "exports": [
+    "ColumnConfig",
+    "EntityType",
+    "entityConfigs"
+   ],
+   "export_default": null,
+   "linhas": 66,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/data-export"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/metaprogramTemplates.ts",
+   "camada": "data",
+   "exports": [
+    "METAPROGRAM_TEMPLATES",
+    "MetaprogramTemplate",
+    "combineTemplateMessage",
+    "getAdaptedMessage"
+   ],
+   "export_default": null,
+   "linhas": 227,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/triggers"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/neuromarketingData.ts",
+   "camada": "data",
+   "exports": [
+    "BIAS_BRAIN_MAPPING",
+    "BRAIN_SYSTEM_INFO",
+    "DISC_BRAIN_CORRELATION",
+    "GAIN_KEYWORDS",
+    "NEUROCHEMICAL_INFO",
+    "PAIN_KEYWORDS",
+    "PRIMAL_STIMULUS_INFO",
+    "TRIGGER_BRAIN_MAPPING"
+   ],
+   "export_default": null,
+   "linhas": 575,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 7,
+   "usado_por_modulos": [
+    "components/neuromarketing",
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/neuroObjectionData.ts",
+   "camada": "data",
+   "exports": [
+    "OBJECTION_TEMPLATES",
+    "ObjectionTemplate"
+   ],
+   "export_default": null,
+   "linhas": 63,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/neuromarketing"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/neuroScriptSections.ts",
+   "camada": "data",
+   "exports": [
+    "ScriptSection",
+    "generateScriptSections"
+   ],
+   "export_default": null,
+   "linhas": 122,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/neuromarketing"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/neuroTrainingQuestions.ts",
+   "camada": "data",
+   "exports": [
+    "TRAINING_QUESTIONS",
+    "TrainingQuestion"
+   ],
+   "export_default": null,
+   "linhas": 114,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/neuromarketing"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/nlpAdvancedData.ts",
+   "camada": "data",
+   "exports": [
+    "EMOTIONAL_STATE_INFO",
+    "EMOTIONAL_STATE_KEYWORDS",
+    "OBJECTION_PATTERNS",
+    "POWER_WORDS",
+    "RAPPORT_TEMPLATES",
+    "SALES_STAGE_INFO",
+    "VALUE_CATEGORY_INFO"
+   ],
+   "export_default": null,
+   "linhas": 653,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 8,
+   "usado_por_modulos": [
+    "components/nlp",
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/nlpAnalyticsConstants.ts",
+   "camada": "data",
+   "exports": [
+    "CHART_COLORS",
+    "discColors",
+    "emotionColors",
+    "periodOptions",
+    "vakColors"
+   ],
+   "export_default": null,
+   "linhas": 41,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/analytics",
+    "components/interactions"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/nlpTrainingScenarios.ts",
+   "camada": "data",
+   "exports": [
+    "TRAINING_SCENARIOS",
+    "TrainingScenario"
+   ],
+   "export_default": null,
+   "linhas": 146,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/nlp"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/persuasionTemplates.ts",
+   "camada": "data",
+   "exports": [
+    "DISC_TRIGGER_PRIORITY",
+    "PERSUASION_TEMPLATES",
+    "STAGE_TRIGGER_PRIORITY"
+   ],
+   "export_default": null,
+   "linhas": 532,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/sleightOfMouth.ts",
+   "camada": "data",
+   "exports": [
+    "SLEIGHT_OF_MOUTH_PATTERNS",
+    "SLEIGHT_TEMPLATES",
+    "SleightOfMouthPattern",
+    "SleightPattern",
+    "SleightTemplate",
+    "getRecommendedPatterns",
+    "getTemplatesByObjection",
+    "getTemplatesByPattern"
+   ],
+   "export_default": null,
+   "linhas": 612,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/nlp",
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/stateElicitationData.ts",
+   "camada": "data",
+   "exports": [
+    "EMOTIONAL_STATES_DATA",
+    "EmotionalStateData"
+   ],
+   "export_default": null,
+   "linhas": 106,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/nlp"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/triggerBundles.ts",
+   "camada": "data",
+   "exports": [
+    "TRIGGER_BUNDLES",
+    "TriggerBundle",
+    "getBundleById",
+    "getBundleByScenario",
+    "getBundlesForProfile",
+    "getRecommendedBundle"
+   ],
+   "export_default": null,
+   "linhas": 500,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/triggerConflictsMatrix.ts",
+   "camada": "data",
+   "exports": [
+    "COMPLETE_TRIGGER_CONFLICTS",
+    "COMPLETE_TRIGGER_SYNERGIES",
+    "checkConflict",
+    "checkSynergy",
+    "getConflictSeverity",
+    "getConflictsForTrigger",
+    "getRecommendedCombos",
+    "getSynergiesForTrigger"
+   ],
+   "export_default": null,
+   "linhas": 606,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 2,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/triggersAdvancedData.ts",
+   "camada": "data",
+   "exports": [
+    "ADVANCED_MENTAL_TRIGGERS",
+    "ALL_TRIGGER_IDS",
+    "INTENSITY_LEVELS",
+    "NEUROCHEMICAL_TIMING",
+    "TRIGGER_CONFLICTS",
+    "TRIGGER_FALLBACKS",
+    "TRIGGER_SYNERGIES",
+    "VALIDATED_TRIGGER_CHAINS"
+   ],
+   "export_default": null,
+   "linhas": 691,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/triggersAdvancedRelations.ts",
+   "camada": "data",
+   "exports": [
+    "ALL_TRIGGER_IDS",
+    "INTENSITY_LEVELS",
+    "NEUROCHEMICAL_TIMING",
+    "TRIGGER_CONFLICTS",
+    "TRIGGER_FALLBACKS",
+    "TRIGGER_SYNERGIES",
+    "VALIDATED_TRIGGER_CHAINS"
+   ],
+   "export_default": null,
+   "linhas": 408,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "data"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/data/triggersExtendedData.ts",
+   "camada": "data",
+   "exports": [
+    "ALL_EXTENDED_TRIGGER_IDS",
+    "EXTENDED_MENTAL_TRIGGERS",
+    "EXTENDED_TRIGGER_CONFLICTS",
+    "EXTENDED_TRIGGER_FALLBACKS",
+    "EXTENDED_TRIGGER_SYNERGIES",
+    "ExtendedTriggerType"
+   ],
+   "export_default": null,
+   "linhas": 538,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/triggerTemplatesMetaprograms.ts",
+   "camada": "data",
+   "exports": [
+    "METAPROGRAM_TRIGGER_TEMPLATES",
+    "MetaprogramTriggerTemplate",
+    "MetaprogramType",
+    "adaptTemplateToMetaprogram",
+    "detectMetaprogramFromText",
+    "getMetaprogramKeywords",
+    "getMetaprogramTemplatesForTrigger"
+   ],
+   "export_default": null,
+   "linhas": 203,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/triggerTemplatesVAK.ts",
+   "camada": "data",
+   "exports": [
+    "VAKTriggerTemplate",
+    "VAK_TRIGGER_TEMPLATES",
+    "adaptTemplateToVAK",
+    "getVAKKeywords",
+    "getVAKTemplatesForTrigger"
+   ],
+   "export_default": null,
+   "linhas": 199,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 1,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/data/vakTemplates.ts",
+   "camada": "data",
+   "exports": [
+    "VAKAdaptedTemplate",
+    "VAKTemplateVariation",
+    "VAK_ADAPTED_TEMPLATES",
+    "getAllTemplatesForVAK",
+    "getVAKAdaptedTemplate"
+   ],
+   "export_default": null,
+   "linhas": 578,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/triggers"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/domain/churnRisk.ts",
+   "camada": "domain",
+   "exports": [
+    "ProntidaoFactorContribution",
+    "ProntidaoTrendPoint",
+    "TrendDirection",
+    "classifyTrend",
+    "computeProntidaoTrend",
+    "computeTrendSlope"
+   ],
+   "export_default": null,
+   "linhas": 225,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/ficha-360",
+    "hooks",
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/domain/closingScore.ts",
+   "camada": "domain",
+   "exports": [
+    "DISC_CLOSING_FACTORS",
+    "EMOTIONAL_SCORES",
+    "calculateConfidence",
+    "calculateDISCScore",
+    "calculateEngagementScore",
+    "calculateObjectionScore",
+    "calculateValuesScore",
+    "calculateWeightedScore",
+    "getProbability",
+    "getSentimentScore"
+   ],
+   "export_default": null,
+   "linhas": 59,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/domain/dealState.ts",
+   "camada": "domain",
+   "exports": [
+    "DealStage",
+    "ForecastConfidenceInput",
+    "ForecastConfidenceResult",
+    "computeForecastConfidence",
+    "dealStageSchema",
+    "forecastConfidenceSchema",
+    "isValidStageTransition"
+   ],
+   "export_default": null,
+   "linhas": 108,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zod"
+   ],
+   "zod_schemas": 1,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/domain/demoEntities.ts",
+   "camada": "domain",
+   "exports": [
+    "DEMO_CONTACT",
+    "DEMO_TEMPERAMENT_PROFILE"
+   ],
+   "export_default": null,
+   "linhas": 108,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [
+    "decision_maker"
+   ],
+   "usado_por": 14,
+   "usado_por_modulos": [
+    "components/nlp",
+    "components/triggers"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/domain/forecastSimulation.ts",
+   "camada": "domain",
+   "exports": [
+    "SIMULATION_PRESETS",
+    "SimulationPreset",
+    "SimulationResult",
+    "applySimulation",
+    "hasActiveOverrides"
+   ],
+   "export_default": null,
+   "linhas": 150,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/ficha-360",
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/domain/leadScoring.ts",
+   "camada": "domain",
+   "exports": [
+    "DEFAULT_PRONTIDAO_WEIGHTS",
+    "ProntidaoBreakdown",
+    "ProntidaoFactor",
+    "ProntidaoLevel",
+    "ProntidaoResult",
+    "ProntidaoStatus",
+    "ProntidaoWeights",
+    "computeProntidaoScore"
+   ],
+   "export_default": null,
+   "linhas": 205,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 8,
+   "usado_por_modulos": [
+    "components/ficha-360",
+    "components/settings",
+    "domain",
+    "hooks",
+    "lib",
+    "stores"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/domain/nextStepLogic.ts",
+   "camada": "domain",
+   "exports": [
+    "ComputeProximosPassosInput",
+    "FeedbackHint",
+    "PassoFeedbackOutcomeHint",
+    "ProximoPasso",
+    "ProximoPassoChannel",
+    "ProximoPassoPriority",
+    "computeProximosPassos"
+   ],
+   "export_default": null,
+   "linhas": 271,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 6,
+   "usado_por_modulos": [
+    "components/ficha-360",
+    "hooks",
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/domain/validationSchemas.ts",
+   "camada": "domain",
+   "exports": [
+    "CompanyFormData",
+    "ContactFormData",
+    "InteractionFormData",
+    "cnpjSchema",
+    "companyFormSchema",
+    "contactFormSchema",
+    "emailSchema",
+    "interactionFormSchema",
+    "phoneSchema",
+    "urlSchema",
+    "uuidSchema"
+   ],
+   "export_default": null,
+   "linhas": 128,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zod"
+   ],
+   "zod_schemas": 3,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/integrations/lovable/index.ts",
+   "camada": "integrations",
+   "exports": [
+    "lovable"
+   ],
+   "export_default": null,
+   "linhas": 39,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "@lovable.dev/cloud-auth-js"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/integrations/supabase/client.ts",
+   "camada": "integrations",
+   "exports": [
+    "supabase"
+   ],
+   "export_default": null,
+   "linhas": 23,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "externos": [
+    "@supabase/supabase-js"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 327,
+   "usado_por_modulos": [
+    "components/admin",
+    "components/analytics",
+    "components/auth",
+    "components/contact-detail",
+    "components/contacts",
+    "components/crm",
+    "components/dashboard",
+    "components/data-export",
+    "components/disc",
+    "components/ficha-360",
+    "components/forms",
+    "components/interactions",
+    "components/lead-score",
+    "components/nlp",
+    "components/onboarding",
+    "components/pipeline",
+    "components/search",
+    "components/security",
+    "components/session",
+    "components/triggers",
+    "components/ui",
+    "components/voice",
+    "components/whatsapp",
+    "hooks",
+    "hooks/commercial",
+    "hooks/voice",
+    "integrations/lovable",
+    "lib",
+    "lib/reports",
+    "pages",
+    "pages/admin",
+    "pages/mapa",
+    "pages/tarefas"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/integrations/supabase/types.ts",
+   "camada": "integrations",
+   "exports": [
+    "CompositeTypes",
+    "Constants",
+    "Database",
+    "Enums",
+    "Json",
+    "Tables",
+    "TablesInsert",
+    "TablesUpdate"
+   ],
+   "export_default": null,
+   "linhas": 69313,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 108,
+   "usado_por_modulos": [
+    "components/company-detail",
+    "components/contact-detail",
+    "components/crm",
+    "components/forms",
+    "components/quick-add",
+    "components/stakeholders",
+    "components/triggers",
+    "components/ui",
+    "hooks",
+    "integrations/supabase",
+    "lib",
+    "lib/reports",
+    "pages",
+    "pages/calendario",
+    "pages/empresa-detalhe",
+    "pages/insights",
+    "pages/relatorio"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/behavioralAlertStats.ts",
+   "camada": "lib",
+   "exports": [
+    "AlertRowLike",
+    "AlertStats",
+    "computeAlertStats",
+    "formatMtta"
+   ],
+   "export_default": null,
+   "linhas": 94,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/admin"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/brazilianStates.ts",
+   "camada": "lib",
+   "exports": [
+    "BRAZILIAN_STATES",
+    "BrazilianUF",
+    "getRegion"
+   ],
+   "export_default": null,
+   "linhas": 45,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/territories",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/canaisInteracao.ts",
+   "camada": "lib",
+   "exports": [
+    "FICHA360_CHANNELS",
+    "FICHA360_CHANNELS_SET",
+    "Ficha360Channel",
+    "INTERACTION_CHANNELS",
+    "INTERACTION_CHANNELS_SET",
+    "InteractionChannel",
+    "findIgnoredCanais",
+    "normalizeCanaisArray",
+    "normalizeChannelToken",
+    "parseCanaisFromString"
+   ],
+   "export_default": null,
+   "linhas": 98,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/celebrate.ts",
+   "camada": "lib",
+   "exports": [
+    "celebrate"
+   ],
+   "export_default": null,
+   "linhas": 80,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "sonner"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/dashboard"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/channelCountsCache.ts",
+   "camada": "lib",
+   "exports": [
+    "channelCountsCacheSize",
+    "clearChannelCountsCache",
+    "getChannelCountsCached"
+   ],
+   "export_default": null,
+   "linhas": 66,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "pages/interacoes"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/channelPersistence.ts",
+   "camada": "lib",
+   "exports": [
+    "clearAppliedCanais",
+    "readAppliedCanais",
+    "writeAppliedCanais"
+   ],
+   "export_default": null,
+   "linhas": 64,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/circuitBreaker.ts",
+   "camada": "lib",
+   "exports": [
+    "CircuitBreaker",
+    "CircuitOpenError",
+    "CircuitState",
+    "getCircuitBreaker"
+   ],
+   "export_default": null,
+   "linhas": 145,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/ui",
+    "hooks",
+    "lib",
+    "pages/admin"
+   ],
+   "coberto_por_testes": 4,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/civilDate.ts",
+   "camada": "lib",
+   "exports": [
+    "formatCivilDate",
+    "parseCivilDate"
+   ],
+   "export_default": null,
+   "linhas": 46,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/computeIsolatedFilterCounts.ts",
+   "camada": "lib",
+   "exports": [
+    "IsolatedFilterCount",
+    "IsolatedFilterKey",
+    "computeIsolatedFilterCounts",
+    "pickMostReducingFilters"
+   ],
+   "export_default": null,
+   "linhas": 161,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/interactions",
+    "pages/interacoes"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/concurrentEditToast.ts",
+   "camada": "lib",
+   "exports": [
+    "ConcurrentEditToastOptions",
+    "showConcurrentEditToast"
+   ],
+   "export_default": null,
+   "linhas": 38,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "@tanstack/react-query",
+    "sonner"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/contact-utils.ts",
+   "camada": "lib",
+   "exports": [
+    "DEFAULT_VAK_PROFILE",
+    "ExtendedBehavior",
+    "MetaprogramProfile",
+    "getCareerStage",
+    "getContactBehavior",
+    "getDISCConfidence",
+    "getDISCProfile",
+    "getDecisionPower",
+    "getDecisionRole",
+    "getDecisionSpeed",
+    "getDominantVAK",
+    "getMetaprogramProfile",
+    "getSupportLevel",
+    "getVAKProfile",
+    "hasCompleteBehaviorProfile"
+   ],
+   "export_default": null,
+   "linhas": 158,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 18,
+   "usado_por_modulos": [
+    "components/analytics",
+    "components/disc",
+    "components/nlp",
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/contactBehaviorAudit.ts",
+   "camada": "lib",
+   "exports": [
+    "BehavioralAuditLog",
+    "fetchContactBehaviorAudit"
+   ],
+   "export_default": null,
+   "linhas": 56,
+   "tabelas": [
+    "crm_relationship_audit_logs",
+    "metaprogram_analysis",
+    "vak_analysis_history"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/countByChannel.ts",
+   "camada": "lib",
+   "exports": [
+    "countByChannel"
+   ],
+   "export_default": null,
+   "linhas": 24,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks",
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/crossRefInsights.ts",
+   "camada": "lib",
+   "exports": [
+    "CrossRefInsight",
+    "InsightEvent",
+    "InsightTemporalDay",
+    "buildCrossRefInsights"
+   ],
+   "export_default": null,
+   "linhas": 128,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "date-fns"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/intel",
+    "components/intelligence"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/deal-risk-constants.ts",
+   "camada": "lib",
+   "exports": [
+    "DEAL_ENGAGEMENT_GAP_DAYS",
+    "DEAL_RISK_ATTENTION_THRESHOLD",
+    "DEAL_RISK_HIGH_THRESHOLD",
+    "DEAL_RISK_LOOKBACK_DAYS",
+    "DealRiskLevel",
+    "STAGE_BENCHMARK_DAYS",
+    "clamp",
+    "levelFromScore",
+    "sentimentValue"
+   ],
+   "export_default": null,
+   "linhas": 29,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/emailBuilderRenderer.ts",
+   "camada": "lib",
+   "exports": [
+    "renderBlocksToHtml",
+    "renderBlocksToText"
+   ],
+   "export_default": null,
+   "linhas": 75,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [
+    "presentation"
+   ],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/email-builder",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/entityDiff.ts",
+   "camada": "lib",
+   "exports": [
+    "DiffRow",
+    "DiffStatus",
+    "computeMetadataDiff"
+   ],
+   "export_default": null,
+   "linhas": 49,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/intel"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/errorMessages.ts",
+   "camada": "lib",
+   "exports": [
+    "parseApiError"
+   ],
+   "export_default": null,
+   "linhas": 97,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 113,
+   "usado_por_modulos": [
+    "components/admin",
+    "components/bulk-actions",
+    "components/contact-detail",
+    "components/contacts",
+    "components/crm",
+    "components/data-export",
+    "components/deal-rooms",
+    "components/ficha-360",
+    "components/interactions",
+    "components/lead-routing",
+    "components/onboarding",
+    "components/search",
+    "components/sequences",
+    "components/session",
+    "components/settings",
+    "components/win-loss",
+    "hooks",
+    "hooks/commercial",
+    "pages",
+    "pages/admin",
+    "pages/cadastro"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/errorReporting.ts",
+   "camada": "lib",
+   "exports": [
+    "captureError",
+    "clearUserContext",
+    "initGlobalErrorHandlers",
+    "useErrorReporter"
+   ],
+   "export_default": null,
+   "linhas": 244,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "DEV",
+    "VITE_APP_VERSION",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "externos": [
+    "@supabase/supabase-js"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "hooks",
+    "lib"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/export-utils.ts",
+   "camada": "lib",
+   "exports": [
+    "exportToCSV"
+   ],
+   "export_default": null,
+   "linhas": 52,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/crm",
+    "pages/contatos"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/externalData.ts",
+   "camada": "lib",
+   "exports": [
+    "CircuitOpenError",
+    "ConcurrentEditError",
+    "callExternalRpc",
+    "deleteExternalData",
+    "insertExternalData",
+    "queryExternalData",
+    "updateExternalData",
+    "updateExternalDataWithVersion"
+   ],
+   "export_default": null,
+   "linhas": 338,
+   "tabelas": [
+    "activities"
+   ],
+   "rpcs": [],
+   "edges": [
+    "external-data"
+   ],
+   "env": [
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "externos": [
+    "zod"
+   ],
+   "zod_schemas": 1,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 106,
+   "usado_por_modulos": [
+    "components/contact-detail",
+    "components/contacts",
+    "components/dashboard",
+    "components/intelligence",
+    "components/pipeline",
+    "components/search",
+    "components/sequences",
+    "hooks",
+    "pages",
+    "pages/cadastro"
+   ],
+   "coberto_por_testes": 19,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/ficha360Formatters.ts",
+   "camada": "lib",
+   "exports": [
+    "periodLabelShort"
+   ],
+   "export_default": null,
+   "linhas": 9,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/ficha-360",
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/fileValidation.ts",
+   "camada": "lib",
+   "exports": [
+    "validateFileUpload"
+   ],
+   "export_default": null,
+   "linhas": 50,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "DEV"
+   ],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/filterProximosPassos.ts",
+   "camada": "lib",
+   "exports": [
+    "filterAndSortPassos",
+    "scorePasso"
+   ],
+   "export_default": null,
+   "linhas": 122,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/ficha-360"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/formatters.ts",
+   "camada": "lib",
+   "exports": [
+    "formatCapitalSocial",
+    "formatCnpj",
+    "formatContactName",
+    "getContactInitials",
+    "getRelationshipScoreColor",
+    "getScoreColor",
+    "pluralize",
+    "toTitleCase"
+   ],
+   "export_default": null,
+   "linhas": 246,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 17,
+   "usado_por_modulos": [
+    "components/companies",
+    "components/company-card",
+    "components/company-detail",
+    "components/contact-card",
+    "components/contact-detail",
+    "components/contacts",
+    "components/dashboard",
+    "components/recently-viewed",
+    "components/search",
+    "pages"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/fuzzyDedup.ts",
+   "camada": "lib",
+   "exports": [
+    "DedupRecord",
+    "DuplicatePair",
+    "detectDuplicates",
+    "digitsOnly",
+    "normalize",
+    "similarity"
+   ],
+   "export_default": null,
+   "linhas": 128,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "fast-levenshtein"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/graphSnapshot.ts",
+   "camada": "lib",
+   "exports": [
+    "snapshotGraphCanvas"
+   ],
+   "export_default": null,
+   "linhas": 23,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/intelligence"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/groupInteractions.ts",
+   "camada": "lib",
+   "exports": [
+    "GroupMode",
+    "GroupableInteraction",
+    "LocalTimelineEvent",
+    "LocalTimelineGroup",
+    "groupInteractions"
+   ],
+   "export_default": null,
+   "linhas": 147,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "pages/interacoes"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/haptics.ts",
+   "camada": "lib",
+   "exports": [
+    "hapticHeavy",
+    "hapticLight",
+    "hapticMedium",
+    "hapticSuccess",
+    "hapticWarning"
+   ],
+   "export_default": null,
+   "linhas": 32,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/insights/excerptWindow.ts",
+   "camada": "lib",
+   "exports": [
+    "DEFAULT_EXCERPT_PRESET",
+    "EXCERPT_PRESET_STORAGE_KEY",
+    "EXCERPT_WINDOW_PRESETS",
+    "ExcerptWindowPreset",
+    "FALLBACK_WINDOW_RATIO",
+    "getExcerptWindow",
+    "getFallbackWindow",
+    "isExcerptWindowPreset"
+   ],
+   "export_default": null,
+   "linhas": 26,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/interactions"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/insights/extractExcerpts.ts",
+   "camada": "lib",
+   "exports": [
+    "Excerpt",
+    "ExtractOptions",
+    "MatchMode",
+    "extractExcerpts"
+   ],
+   "export_default": null,
+   "linhas": 115,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/interactions",
+    "lib/insights"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/insights/pickTopPassages.ts",
+   "camada": "lib",
+   "exports": [
+    "MAX_TOTAL_CAP",
+    "PickOptions",
+    "pickTopPassages"
+   ],
+   "export_default": null,
+   "linhas": 133,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/interactions"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/intelExport.ts",
+   "camada": "lib",
+   "exports": [
+    "downloadCsv"
+   ],
+   "export_default": null,
+   "linhas": 37,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/intelligence"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/intelExportUniversal.ts",
+   "camada": "lib",
+   "exports": [
+    "IntelExportFormat",
+    "intelExportUniversal"
+   ],
+   "export_default": null,
+   "linhas": 99,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/intel",
+    "components/intelligence"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/intelHealth.ts",
+   "camada": "lib",
+   "exports": [
+    "INTEL_NOTES_PREFIX",
+    "INTEL_STORAGE_KEYS",
+    "INTEL_TELEMETRY_KEY",
+    "IntelStorageStat",
+    "formatBytes",
+    "inspectIntelStorage",
+    "resetIntelState"
+   ],
+   "export_default": null,
+   "linhas": 123,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/intel"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/intelSnapshot.ts",
+   "camada": "lib",
+   "exports": [
+    "BASE_STORAGE_KEY",
+    "IntelSnapshotPayload",
+    "RecentSnapshot",
+    "SNAPSHOT_LIMIT",
+    "buildShareUrl",
+    "decodeSnapshot",
+    "encodeSnapshot",
+    "pushRecentSnapshot",
+    "readRecentSnapshots"
+   ],
+   "export_default": null,
+   "linhas": 93,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/intel",
+    "hooks",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/interactionTags.ts",
+   "camada": "lib",
+   "exports": [
+    "ALL_TAGS",
+    "InteractionTag",
+    "TAG_DICTIONARY",
+    "countByTag",
+    "extractTags",
+    "interactionMatchesTags",
+    "sanitizeTags"
+   ],
+   "export_default": null,
+   "linhas": 151,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 8,
+   "usado_por_modulos": [
+    "components/ficha-360",
+    "hooks",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/ipMasking.ts",
+   "camada": "lib",
+   "exports": [
+    "maskIP",
+    "maskIPv6"
+   ],
+   "export_default": null,
+   "linhas": 31,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/security"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/jaccard.ts",
+   "camada": "lib",
+   "exports": [
+    "JaccardResult",
+    "jaccardIndex"
+   ],
+   "export_default": null,
+   "linhas": 26,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/intelligence"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/keyboardShortcutRegistry.ts",
+   "camada": "lib",
+   "exports": [
+    "ScopedShortcut",
+    "getRegisteredShortcuts",
+    "registerShortcut",
+    "subscribeShortcuts",
+    "useScopedShortcut"
+   ],
+   "export_default": null,
+   "linhas": 80,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "react"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/interactions",
+    "hooks",
+    "pages/interacoes"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/logger.ts",
+   "camada": "lib",
+   "exports": [
+    "generateRequestId",
+    "logger",
+    "setLogUser",
+    "setRequestId"
+   ],
+   "export_default": null,
+   "linhas": 103,
+   "tabelas": [
+    "error_logs"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "DEV"
+   ],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 160,
+   "usado_por_modulos": [
+    "components/admin",
+    "components/analytics",
+    "components/contact-detail",
+    "components/dashboard",
+    "components/data-export",
+    "components/disc",
+    "components/feedback",
+    "components/ficha-360",
+    "components/forms",
+    "components/hoc",
+    "components/layout",
+    "components/lead-routing",
+    "components/nlp",
+    "components/onboarding",
+    "components/pipeline",
+    "components/search",
+    "components/session",
+    "components/settings",
+    "components/triggers",
+    "components/voice",
+    "hooks",
+    "hooks/commercial",
+    "hooks/voice",
+    "lib",
+    "pages",
+    "pages/admin"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/mfaEvents.ts",
+   "camada": "lib",
+   "exports": [
+    "MFA_STATUS_CHANGED_EVENT",
+    "MFA_VERIFIED_EVENT"
+   ],
+   "export_default": null,
+   "linhas": 3,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/navigationLabels.ts",
+   "camada": "lib",
+   "exports": [
+    "getNavigationDescription",
+    "getReadableLabel",
+    "getSectionFallback"
+   ],
+   "export_default": null,
+   "linhas": 40,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/layout",
+    "components/navigation"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/preserveScroll.ts",
+   "camada": "lib",
+   "exports": [
+    "PreserveScrollHandle",
+    "preserveScroll"
+   ],
+   "export_default": null,
+   "linhas": 61,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "pages/interacoes"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/prontidaoTrendMilestones.ts",
+   "camada": "lib",
+   "exports": [
+    "MilestoneKind",
+    "TrendMilestone",
+    "computeTrendMilestones",
+    "groupMilestonesByWeek"
+   ],
+   "export_default": null,
+   "linhas": 115,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/ficha-360"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/prontidaoWeightsHealth.ts",
+   "camada": "lib",
+   "exports": [
+    "WeightsHealth",
+    "WeightsHealthInfo",
+    "evaluateWeightsHealth"
+   ],
+   "export_default": null,
+   "linhas": 42,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/ficha-360",
+    "components/settings"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/providerGuard.ts",
+   "camada": "lib",
+   "exports": [
+    "PROVIDER_ORDER",
+    "ProviderDependency",
+    "assertProviderOrder",
+    "isProviderOrderError",
+    "validateProviderOrder"
+   ],
+   "export_default": null,
+   "linhas": 101,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "DEV"
+   ],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "app",
+    "components/feedback"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/proximoPassoDefaults.ts",
+   "camada": "lib",
+   "exports": [
+    "BestTimeHint",
+    "PassoDefaults",
+    "computePassoDefaults",
+    "priorityToTaskPriority"
+   ],
+   "export_default": null,
+   "linhas": 183,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/ficha-360"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/pushNotifications.ts",
+   "camada": "lib",
+   "exports": [
+    "getSubscriptionStatus",
+    "isPushSupported",
+    "registerServiceWorker",
+    "subscribeToPush",
+    "unsubscribeFromPush"
+   ],
+   "export_default": null,
+   "linhas": 160,
+   "tabelas": [
+    "push_subscriptions"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/settings",
+    "components/triggers",
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/queryErrorReporter.ts",
+   "camada": "lib",
+   "exports": [
+    "attachQueryErrorReporter"
+   ],
+   "export_default": null,
+   "linhas": 39,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "@tanstack/react-query"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "app"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/rateLimiter.ts",
+   "camada": "lib",
+   "exports": [
+    "checkRateLimit",
+    "formatRetryTime",
+    "getRemainingAttempts",
+    "recordFailedAttempt",
+    "recordSuccessfulAttempt"
+   ],
+   "export_default": null,
+   "linhas": 97,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/reports/reportEngine.ts",
+   "camada": "lib",
+   "exports": [
+    "AggregationFn",
+    "ENTITIES",
+    "EntityDef",
+    "EntityKey",
+    "FieldType",
+    "FilterOperator",
+    "ReportAggregation",
+    "ReportConfig",
+    "ReportField",
+    "ReportFilter",
+    "ReportResult",
+    "aggregate",
+    "applyFilters",
+    "downloadCsv",
+    "exportToCsv",
+    "getValue",
+    "runReport"
+   ],
+   "export_default": null,
+   "linhas": 266,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/reports",
+    "hooks",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/requestId.ts",
+   "camada": "lib",
+   "exports": [
+    "TRACE_HEADER_NAME",
+    "newTraceId",
+    "withTraceHeaders"
+   ],
+   "export_default": null,
+   "linhas": 37,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/resilientFetch.ts",
+   "camada": "lib",
+   "exports": [
+    "resilientFetch"
+   ],
+   "export_default": null,
+   "linhas": 84,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "integrations/supabase"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/rodizioRpc.ts",
+   "camada": "lib",
+   "exports": [
+    "RodizioRpc",
+    "RodizioTable",
+    "callRodizioRpc",
+    "rodizioFrom"
+   ],
+   "export_default": null,
+   "linhas": 64,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/lead-routing",
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/rpcChurn.ts",
+   "camada": "lib",
+   "exports": [
+    "CHURN_WINDOW_VALUES",
+    "ChurnCsvRow",
+    "ChurnWindow",
+    "DEFAULT_CHURN_WINDOW",
+    "churnToCsv",
+    "parseChurnWindow"
+   ],
+   "export_default": null,
+   "linhas": 48,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/admin"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/rpcPlanDiff.ts",
+   "camada": "lib",
+   "exports": [
+    "PlanDiffRow",
+    "PlanNode",
+    "PlanNodeStatus",
+    "diffPlans",
+    "flattenPlan",
+    "hasScanRegression",
+    "summarizeDiff"
+   ],
+   "export_default": null,
+   "linhas": 127,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/admin"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/sanitize.ts",
+   "camada": "lib",
+   "exports": [
+    "sanitizeDocumentHtml",
+    "sanitizeHtml",
+    "sanitizeText",
+    "sanitizeUrl"
+   ],
+   "export_default": null,
+   "linhas": 83,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "dompurify"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/playbooks",
+    "pages"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/scriptGenerator.ts",
+   "camada": "lib",
+   "exports": [
+    "GeneratedScript",
+    "MeetingInviteContext",
+    "ScriptChannel",
+    "ScriptContext",
+    "SentimentTone",
+    "buildEmailSubject",
+    "generateMeetingInvite",
+    "generateScripts"
+   ],
+   "export_default": null,
+   "linhas": 414,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/ficha-360"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/searchPresetTransport.ts",
+   "camada": "lib",
+   "exports": [
+    "ExportablePreset",
+    "PRESET_KIND",
+    "PRESET_VERSION",
+    "ParseResult",
+    "PresetBundle",
+    "base64UrlToBundle",
+    "buildBundle",
+    "bundleToBase64Url",
+    "dedupeNameAgainst",
+    "downloadBundleAsFile",
+    "findSimilarPresetName",
+    "normalizePresetName",
+    "parseBundle"
+   ],
+   "export_default": null,
+   "linhas": 211,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/interactions",
+    "components/search",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/secretRotation.ts",
+   "camada": "lib",
+   "exports": [
+    "SecretHealthStatus",
+    "daysSince",
+    "generateSecureSecret",
+    "getSecretHealth",
+    "hashForAudit"
+   ],
+   "export_default": null,
+   "linhas": 47,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "hooks",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/sorting-utils.ts",
+   "camada": "lib",
+   "exports": [
+    "compareDates",
+    "compareValues",
+    "getSortValue",
+    "sortArray"
+   ],
+   "export_default": null,
+   "linhas": 105,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "pages",
+    "pages/interacoes"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/sortInteractions.ts",
+   "camada": "lib",
+   "exports": [
+    "SortKey",
+    "sortInteractions"
+   ],
+   "export_default": null,
+   "linhas": 115,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 5,
+   "usado_por_modulos": [
+    "components/interactions",
+    "hooks",
+    "lib",
+    "pages",
+    "pages/interacoes"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/suggestPresetName.ts",
+   "camada": "lib",
+   "exports": [
+    "formatDateRange",
+    "formatToday",
+    "suggestGenericPresetName",
+    "suggestInteracoesPresetName"
+   ],
+   "export_default": null,
+   "linhas": 163,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/interactions",
+    "components/search"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/supabaseInvoke.ts",
+   "camada": "lib",
+   "exports": [
+    "InvokeResult",
+    "InvokeWithTraceOptions",
+    "invokeWithTrace"
+   ],
+   "export_default": null,
+   "linhas": 54,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/admin",
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/systemHealth.ts",
+   "camada": "lib",
+   "exports": [
+    "ComponentCheck",
+    "HealthResponse",
+    "resolveHealthResponse"
+   ],
+   "export_default": null,
+   "linhas": 43,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "@supabase/supabase-js"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/admin",
+    "pages"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/tab-utils.ts",
+   "camada": "lib",
+   "exports": [
+    "EITabType",
+    "EITabWithHistory",
+    "EI_TAB_VALUES",
+    "EI_TAB_WITH_HISTORY_VALUES",
+    "FOCUS_TYPE_VALUES",
+    "FocusType",
+    "METAPROGRAM_FOCUS_VALUES",
+    "MetaprogramFocusType",
+    "PERIOD_FILTER_VALUES",
+    "PeriodFilter",
+    "TRIGGER_ANALYTICS_TAB_VALUES",
+    "TRIGGER_CATEGORY_VALUES",
+    "TRIGGER_CATEGORY_WITH_TIPS_VALUES",
+    "TriggerAnalyticsTab",
+    "TriggerCategoryTab",
+    "TriggerCategoryWithTipsTab",
+    "createEITabHandler",
+    "createEITabWithHistoryHandler",
+    "createFocusTypeHandler",
+    "createMetaprogramFocusHandler",
+    "createPeriodFilterHandler",
+    "createTabHandler",
+    "createTriggerAnalyticsTabHandler",
+    "createTriggerCategoryHandler",
+    "createTriggerCategoryWithTipsHandler"
+   ],
+   "export_default": null,
+   "linhas": 131,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "data",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/trackScoreChange.ts",
+   "camada": "lib",
+   "exports": [
+    "trackScoreChange"
+   ],
+   "export_default": null,
+   "linhas": 32,
+   "tabelas": [
+    "score_history"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/utils.ts",
+   "camada": "lib",
+   "exports": [
+    "areUuidsEqual",
+    "cn",
+    "safehref"
+   ],
+   "export_default": null,
+   "linhas": 20,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "clsx",
+    "tailwind-merge"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 424,
+   "usado_por_modulos": [
+    "components/abm",
+    "components/admin",
+    "components/ai",
+    "components/analytics",
+    "components/ask-crm",
+    "components/bi",
+    "components/briefing",
+    "components/carnegie",
+    "components/celebrations",
+    "components/command",
+    "components/companies",
+    "components/company-card",
+    "components/company-detail",
+    "components/contact-card",
+    "components/contact-detail",
+    "components/contacts",
+    "components/conversation-intel",
+    "components/crm",
+    "components/customer-success",
+    "components/dashboard",
+    "components/data-export",
+    "components/docs",
+    "components/enrichment",
+    "components/features",
+    "components/feedback",
+    "components/ficha-360",
+    "components/filters",
+    "components/forecasting",
+    "components/forms",
+    "components/gamification",
+    "components/help",
+    "components/import",
+    "components/inline-edit",
+    "components/intel",
+    "components/intelligence",
+    "components/intent",
+    "components/interactions",
+    "components/keyboard",
+    "components/layout",
+    "components/lux",
+    "components/meeting-summary",
+    "components/micro-interactions",
+    "components/navigation",
+    "components/network",
+    "components/neuromarketing",
+    "components/nlp",
+    "components/notifications",
+    "components/nps",
+    "components/onboarding",
+    "components/pipeline",
+    "components/proactive-intelligence",
+    "components/quick-actions",
+    "components/quick-add",
+    "components/revops",
+    "components/search",
+    "components/security",
+    "components/skeletons",
+    "components/smart-reminders",
+    "components/stakeholders",
+    "components/support",
+    "components/territory-optimization",
+    "components/triggers",
+    "components/ui",
+    "components/views",
+    "components/voice",
+    "components/whatsapp",
+    "components/win-loss",
+    "hooks",
+    "pages",
+    "pages/admin",
+    "pages/cadastro",
+    "pages/calendario",
+    "pages/empresas",
+    "pages/insights",
+    "pages/interacoes",
+    "pages/tarefas"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/ux-messages.ts",
+   "camada": "lib",
+   "exports": [
+    "emptyStateMessages",
+    "errorMessages",
+    "getEmptyStateMessage",
+    "getErrorMessage",
+    "getGreeting",
+    "getLoadingMessage",
+    "getRandomMessage",
+    "getSuccessMessage",
+    "greetingMessages",
+    "loadingMessages",
+    "successMessages"
+   ],
+   "export_default": null,
+   "linhas": 248,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/feedback"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/validationSchemas.ts",
+   "camada": "lib",
+   "exports": [],
+   "export_default": null,
+   "linhas": 2,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "src/store/emailComposerStore.ts",
+   "camada": "store",
+   "exports": [
+    "useEmailComposerStore"
+   ],
+   "export_default": null,
+   "linhas": 16,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zustand"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/ai"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/stores/useCustomSimulationPresetsStore.ts",
+   "camada": "stores",
+   "exports": [
+    "CustomSimulationPreset",
+    "useCustomSimulationPresetsStore"
+   ],
+   "export_default": null,
+   "linhas": 76,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zustand"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/ficha-360"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/stores/useProntidaoTargetStore.ts",
+   "camada": "stores",
+   "exports": [
+    "PRONTIDAO_TARGET_DEFAULT",
+    "useProntidaoTargetStore"
+   ],
+   "export_default": null,
+   "linhas": 34,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zustand"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/ficha-360"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/stores/useProntidaoWeightsStore.ts",
+   "camada": "stores",
+   "exports": [
+    "useEffectiveProntidaoWeights",
+    "useProntidaoWeightsStore"
+   ],
+   "export_default": null,
+   "linhas": 81,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zustand"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 3,
+   "usado_por_modulos": [
+    "components/ficha-360",
+    "components/settings",
+    "pages"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/stores/useSimulationStore.ts",
+   "camada": "stores",
+   "exports": [
+    "EMPTY_OVERRIDES",
+    "SimulationOverrides",
+    "SimulationSentiment",
+    "useSimulationStore"
+   ],
+   "export_default": null,
+   "linhas": 72,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zustand"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 6,
+   "usado_por_modulos": [
+    "components/ficha-360",
+    "domain",
+    "hooks",
+    "pages",
+    "stores"
+   ],
+   "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/stores/useUIStore.ts",
+   "camada": "stores",
+   "exports": [
+    "useUIStore"
+   ],
+   "export_default": null,
+   "linhas": 40,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [
+    "zustand"
+   ],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  }
+ ]
+}

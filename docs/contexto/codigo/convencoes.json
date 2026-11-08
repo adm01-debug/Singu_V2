@@ -1,0 +1,84 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "onde_ficam": {
+  "telas": [
+   "src/components (1)",
+   "src/pages (1)"
+  ],
+  "componentes": [
+   "src/components (907)",
+   "src/pages (140)",
+   "src/app (4)"
+  ],
+  "hooks": [
+   "src/hooks (376)",
+   "src/components (20)",
+   "src/stores (5)"
+  ],
+  "servicos_logica": [
+   "src/lib (71)",
+   "src/data (46)",
+   "src/domain (8)"
+  ],
+  "testes": [
+   "co-localizado (__tests__) (88)",
+   "co-localizado (*.test) (80)",
+   "tests/ (22)"
+  ],
+  "edge_functions": "supabase/functions",
+  "migrations": "supabase/migrations",
+  "scripts": [
+   "scripts/migration (159)",
+   "scripts/hardening (9)",
+   "scripts/monitoring (4)"
+  ],
+  "docs": [
+   "docs (39)",
+   "(raiz) (16)"
+  ]
+ },
+ "nomenclatura": {
+  "componentes": "PascalCase (93%)",
+  "hooks": "use + PascalCase",
+  "servicos": "camelCase (92%)",
+  "edge_functions": "kebab-case (99%)",
+  "tabelas": "snake_case (90%)"
+ },
+ "barrels_index": 8,
+ "extensao_componentes": [
+  ".tsx (1056)"
+ ],
+ "alias_imports": {
+  "(raiz)": {
+   "@/": "src/",
+   "~/": "src/"
+  }
+ },
+ "commits": {
+  "convencao": "commitlint",
+  "exemplos": [
+   "feat(contexto): produtores autônomos que mantêm o estado real do repositório para agentes de IA (#169)",
+   "fix(ci): corrige YAML fatal do CI, secret fantasma e portabilidade dos gate tests (#164)",
+   "feat: teste de auditoria de cobertura RLS (check-rls-coverage.sql) (#168)",
+   "feat: scripts de verificação de índices/perf e hardening (auditoria read-only) (#167)",
+   "fix: corrige cast inválido de active_pid no replication-slot-idle-guard (#165)"
+  ]
+ },
+ "pr_template": null,
+ "codeowners": null,
+ "contributing": "CONTRIBUTING.md",
+ "instrucoes_agentes": [
+  "AGENTS.md",
+  "CLAUDE.md"
+ ],
+ "typescript": {
+  "strict": false,
+  "noImplicitAny": null,
+  "tsconfigs": [
+   "tsconfig.app.json",
+   "tsconfig.json",
+   "tsconfig.node.json"
+  ]
+ }
+}

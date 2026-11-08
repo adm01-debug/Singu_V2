@@ -1,0 +1,2037 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 2,
+ "total": 209,
+ "scripts": [
+  {
+   "arquivo": "scripts/ai-context/cenarios.mjs",
+   "descricao": "Simulação de cenários do gerador: monta centenas de repositórios sintéticos (variantes de SQL, rotas, menus, edges, workflows, monorepo, Python, arquivos corrompidos, fuzz) e confere:",
+   "linhas": 173,
+   "env": [
+    "A",
+    "K",
+    "NODE_ENV",
+    "SCRIPT_ONLY",
+    "SRK",
+    "SUPABASE_URL",
+    "VITE_A",
+    "VITE_C",
+    "VITE_FEATURE_X",
+    "X"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ai-context/gerar.mjs",
+   "descricao": "Gera o contexto de projeto para agentes de IA (padrão: inventario/ia/*). Zero dependências. Node >= 18. Genérico: funciona em qualquer repositório.",
+   "linhas": 924,
+   "env": [
+    "AI_CONTEXT_DIR",
+    "AI_CONTEXT_PUBLICACAO",
+    "AI_CONTEXT_ROOT"
+   ],
+   "npm_scripts": [
+    "contexto:ia"
+   ],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-all.js",
+   "descricao": "apply-all.js — abordagem robusta: DO blocks + statements individuais",
+   "linhas": 307,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-functions.js",
+   "descricao": "apply-functions.js — aplica functions e triggers usando split por newline-ponto-vírgula-newline",
+   "linhas": 116,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-migrations.js",
+   "descricao": "apply-migrations.js — usa Supabase Management API via PAT",
+   "linhas": 86,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-missing.js",
+   "descricao": "apply-missing.js — extrai e aplica só as tabelas faltando",
+   "linhas": 130,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-remaining.js",
+   "descricao": "apply-remaining.js — aplica indexes, FKs, grants, RLS, functions, triggers, views",
+   "linhas": 139,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-rls.js",
+   "descricao": "apply-rls.js — RLS ENABLE + POLICIES em statements individuais (resiliente a 502)",
+   "linhas": 123,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-triggers-views.js",
+   "descricao": "apply-triggers-views.js — triggers (1 por linha) + views (split por ; + depth tracking)",
+   "linhas": 119,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/audit-ausentes.mjs",
+   "descricao": "scripts/audit-ausentes.mjs - versão definitiva",
+   "linhas": 86,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/check-backend-linter-baseline.mjs",
+   "descricao": "* Backend Linter Baseline Ratchet — Rodada 32/10 (ADR-022).",
+   "linhas": 39,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/check-bundle-size.mjs",
+   "descricao": "* Performance budget enforcement.",
+   "linhas": 75,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "ci.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/check-edge-cors.mjs",
+   "descricao": "* Lint guard: bloqueia `Access-Control-Allow-Origin: *` em edge functions",
+   "linhas": 50,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "ci.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/check-edge-imports.mjs",
+   "descricao": "* Lint guard: bloqueia imports `https://esm.sh/...` em edge functions.",
+   "linhas": 42,
+   "env": [],
+   "npm_scripts": [
+    "check:edge-imports"
+   ],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/check_unified_comm.sql",
+   "descricao": null,
+   "linhas": 9,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/chunk-apply.js",
+   "descricao": "chunk-apply.js — aplica SQL em chunks idempotentes via Supabase Management API",
+   "linhas": 248,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/diff-tables.mjs",
+   "descricao": "scripts/diff-tables.mjs - Cruzar tabelas/views usadas no codigo vs schema novo Extrair tabelas/views existentes",
+   "linhas": 65,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/drop_unified_comm.sql",
+   "descricao": null,
+   "linhas": 4,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/explain-top-queries.sql",
+   "descricao": null,
+   "linhas": 15,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/fix-enums.js",
+   "descricao": "fix-enums.js — cria enums faltantes e cria system_alerts corrigido",
+   "linhas": 90,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/gen-supabase-types.mjs",
+   "descricao": "Gera src/integrations/supabase/types.ts a partir do OpenAPI do PostgREST. Usa https nativo para evitar bug de DNS do c-ares no Node 24 dentro do sandbox.",
+   "linhas": 153,
+   "env": [
+    "SUPABASE_HOST",
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/generate_data_dictionary.py",
+   "descricao": null,
+   "linhas": 18,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/generate_er_diagram.py",
+   "descricao": "This script would normally fetch data from the DB, but since I have the tool output, I will simulate the generation of a Mermaid diagram for core tables.",
+   "linhas": 34,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/generate_real_dict.py",
+   "descricao": "Simple parser for psql output",
+   "linhas": 35,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/generate_real_er.py",
+   "descricao": "Avoid duplicate relations for Mermaid",
+   "linhas": 27,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/get_unified_def.sql",
+   "descricao": null,
+   "linhas": 12,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/hardening/check-client-tls.sql",
+   "descricao": null,
+   "linhas": 50,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/hardening/check-extensions-hardening.sql",
+   "descricao": null,
+   "linhas": 61,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/hardening/check-indexes-duplicated.sql",
+   "descricao": null,
+   "linhas": 77,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/hardening/check-indexes-overlapped.sql",
+   "descricao": null,
+   "linhas": 72,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/hardening/check-indexes-unused.sql",
+   "descricao": null,
+   "linhas": 56,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/hardening/check-publication-without-pk.sql",
+   "descricao": null,
+   "linhas": 60,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/hardening/check-replication-config.sql",
+   "descricao": null,
+   "linhas": 50,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/hardening/check-security-definer-search-path.sql",
+   "descricao": null,
+   "linhas": 60,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/hardening/check-tables-without-pk.sql",
+   "descricao": null,
+   "linhas": 50,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/lint-providers.cjs",
+   "descricao": "* Script de lint para validar a ordem dos providers em App.tsx.",
+   "linhas": 73,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/auth/export-identities.sh",
+   "descricao": "Exporta auth.identities (provedores OAuth linkados aos usuários). Uso: SRC_DB_URL=... ./export-identities.sh",
+   "linhas": 12,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/auth/import-identities.sh",
+   "descricao": "Importa auth.identities no destino. Idempotente (ON CONFLICT DO NOTHING).",
+   "linhas": 19,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/auth/rotate-jwt.sh",
+   "descricao": "Signing Key Rotation — fluxo dual-key com overlap de 24h. Não invalida sessões existentes de imediato: novas emissões usam a nova chave,",
+   "linhas": 68,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/cdc/checkpoint.sql",
+   "descricao": null,
+   "linhas": 9,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/cdc/drain.sh",
+   "descricao": "Drena o slot lógico wal2json para arquivos rotacionados em CDC_OUT_DIR. Roda em foreground; use `nohup ./drain.sh &` para background.",
+   "linhas": 26,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/cdc/dry-run.sh",
+   "descricao": "───────────────────────────────────────────────────────────────────────────── CDC dry-run em STAGING",
+   "linhas": 230,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/cdc/lag-watch.sh",
+   "descricao": "CDC Lag Watchdog — monitora lag do slot lógico e alerta antes de encher disco. Uso: CDC_SLOT=migration_slot LAG_MAX_SEC=30 LAG_MAX_BYTES=1073741824 ./cdc/lag-watch.sh",
+   "linhas": 47,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/cdc/order-guard.ts",
+   "descricao": "CDC Event Ordering Guard — valida monotonicidade de LSN e detecta clock skew entre origem e destino durante replay. Aborta se skew > SKEW_MAX_SEC.",
+   "linhas": 81,
+   "env": [
+    "CDC_SLOT",
+    "DEST_DB_URL",
+    "POLL_SEC",
+    "SKEW_MAX_SEC",
+    "SRC_DB_URL"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/cdc/replay.ts",
+   "descricao": "Replay idempotente de WAL wal2json (format-version=2) no destino. Uso: deno run --allow-env --allow-net --allow-read cdc/replay.ts",
+   "linhas": 71,
+   "env": [
+    "CDC_OUT_DIR",
+    "DEST_SERVICE_ROLE_KEY",
+    "DEST_SUPABASE_URL"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/chaos/inject.sh",
+   "descricao": "Chaos Drill — injeta falhas controladas em STAGING para validar resposta. NUNCA rode em produção. Requer STAGING_CONFIRM=1.",
+   "linhas": 49,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/compare-counts.sh",
+   "descricao": "============================================================================ compare-counts.sh — compara contagens de linhas ORIGEM × DESTINO.",
+   "linhas": 62,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/compliance/lgpd-snapshot.ts",
+   "descricao": "LGPD Snapshot Manifest — hash agregado + assinatura HMAC do dataset migrado.",
+   "linhas": 47,
+   "env": [
+    "DEST_SERVICE_ROLE_KEY",
+    "DEST_SUPABASE_URL",
+    "LGPD_MANIFEST_SECRET"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/cutover/freeze-origin.sh",
+   "descricao": "freeze-origin.sh — Coloca a origem em modo read-only durante a janela de cutover. - Revoga INSERT/UPDATE/DELETE/TRUNCATE de authenticated/anon em schemas de app",
+   "linhas": 63,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/cutover/smoke-tests.ts",
+   "descricao": "Smoke tests E2E pós-cutover contra o novo Supabase. Uso: deno run --allow-env --allow-net --allow-read --allow-write cutover/smoke-tests.ts",
+   "linhas": 65,
+   "env": [
+    "DEST_ANON_KEY",
+    "DEST_SUPABASE_URL",
+    "TEST_EMAIL",
+    "TEST_PASSWORD",
+    "TEST_URL"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/dashboard.sh",
+   "descricao": "TUI de progresso da janela de migração. Uso: ./dashboard.sh   (Ctrl+C para sair)",
+   "linhas": 49,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/00_extensions.sql",
+   "descricao": null,
+   "linhas": 15,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/01_schemas_and_enums.sql",
+   "descricao": null,
+   "linhas": 17,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/02_tables.sql",
+   "descricao": null,
+   "linhas": 4791,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/03_indexes.sql",
+   "descricao": null,
+   "linhas": 383,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/04_foreign_keys.sql",
+   "descricao": null,
+   "linhas": 262,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/05_grants.sql",
+   "descricao": null,
+   "linhas": 524,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/06_rls_enable.sql",
+   "descricao": null,
+   "linhas": 261,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/07_policies.sql",
+   "descricao": null,
+   "linhas": 872,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/08_functions.sql",
+   "descricao": null,
+   "linhas": 3981,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/09_triggers.sql",
+   "descricao": null,
+   "linhas": 205,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/10_views.sql",
+   "descricao": null,
+   "linhas": 151,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/11_partitions.sql",
+   "descricao": null,
+   "linhas": 31,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/12_cron_jobs.sql",
+   "descricao": null,
+   "linhas": 4,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/99_apply_all.sql",
+   "descricao": null,
+   "linhas": 43,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/ddl/verify-extensions.sh",
+   "descricao": "Compara extensões declaradas em 00_extensions.sql com pg_extension no destino.",
+   "linhas": 22,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/dr/backup-encryption-check.sh",
+   "descricao": "Backup Encryption Verifier — confirma que o backup mais recente é decriptável. Dry-run: gpg decrypt (se aplicável) + pg_restore --list. Não escreve dados restaurados.",
+   "linhas": 50,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "restore-drill.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/dr/create-drill-backup.mjs",
+   "descricao": null,
+   "linhas": 83,
+   "env": [
+    "BACKUP_FILE",
+    "CONTAINER_BACKUP_FILE",
+    "CRITICAL_TABLES",
+    "DUMP_CONTAINER",
+    "PGDATABASE",
+    "PGPASSWORD",
+    "PGSSLMODE",
+    "PGUSER",
+    "PROD_DB_URL",
+    "SOURCE_COUNTS_FILE"
+   ],
+   "npm_scripts": [],
+   "workflows": [
+    "restore-drill.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/dr/restore-drill.sh",
+   "descricao": "Backup Restore Drill — restaura o backup mais recente em instância efêmera, roda smoke queries e compara contagens com o snapshot do dump.",
+   "linhas": 147,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "restore-drill.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/dr/wal-archive-check.sh",
+   "descricao": "WAL Archive Health — alerta se archiving parou ou está falhando (encolhe PITR window). Uso: SRC_DB_URL=... ARCHIVE_MAX_LAG_SEC=300 ./dr/wal-archive-check.sh",
+   "linhas": 55,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/export-data.sh",
+   "descricao": "============================================================================ export-data.sh — exporta dados do schema public da ORIGEM para CSVs gzipados.",
+   "linhas": 111,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/extract-ddl.sh",
+   "descricao": "============================================================================ extract-ddl.sh — Extrai o schema completo do banco de origem (Lovable Cloud)",
+   "linhas": 382,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/functions/deploy-all.sh",
+   "descricao": "============================================================================= deploy-all.sh — deploya todas as Edge Functions no NOVO Supabase.",
+   "linhas": 121,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/functions/preflight-secrets.sh",
+   "descricao": "Preflight: valida que TODA Deno.env.get(\"X\") usada nas edge functions está declarada em secrets.template.env.",
+   "linhas": 42,
+   "env": [
+    "X"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/functions/rewrite-cron-urls.sh",
+   "descricao": "Gera SQL para reescrever URLs de projetos antigos em cron.job.command. Uso: OLD_REF=abc NEW_REF=xyz ./rewrite-cron-urls.sh > /tmp/rewrite.sql",
+   "linhas": 29,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/functions/secrets-leak-scan.sh",
+   "descricao": "Secrets Leak Scanner — bloqueia deploy se encontrar secrets hardcoded em edge functions. Uso: ./functions/secrets-leak-scan.sh [dir]",
+   "linhas": 51,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/functions/set-secrets.sh",
+   "descricao": "============================================================================= set-secrets.sh — aplica secrets no NOVO projeto Supabase (destino).",
+   "linhas": 101,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/functions/verify-deploy.sh",
+   "descricao": "============================================================================= verify-deploy.sh — sanity check pós-deploy.",
+   "linhas": 130,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/import-data-parallel.sh",
+   "descricao": "Import paralelo por camadas topológicas. table-order.sql tem \"-- table: public.<name>\" um por linha em ordem topológica.",
+   "linhas": 56,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/import-data.sh",
+   "descricao": "============================================================================ import-data.sh — carrega CSVs de scripts/migration/data/ no DESTINO.",
+   "linhas": 95,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/monitoring/post-cutover-watch.sh",
+   "descricao": "post-cutover-watch.sh — Loop de vigília pós-cutover. Uso: WINDOW_HRS=24 INTERVAL_SEC=60 ./monitoring/post-cutover-watch.sh",
+   "linhas": 56,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/monitoring/synthetic-checks.ts",
+   "descricao": "synthetic-checks.ts — Jornadas sintéticas contra o app pós-cutover. Uso: deno run --allow-env --allow-net monitoring/synthetic-checks.ts",
+   "linhas": 90,
+   "env": [
+    "APP_URL",
+    "DEST_ANON_KEY",
+    "DEST_SUPABASE_URL",
+    "INTERVAL_MS",
+    "SENTRY_DSN",
+    "SYNTHETIC_EMAIL",
+    "SYNTHETIC_PASSWORD"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/reset-passwords.sh",
+   "descricao": "============================================================================ reset-passwords.sh",
+   "linhas": 50,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/reset-passwords.ts",
+   "descricao": "============================================================================ reset-passwords.ts (Deno)",
+   "linhas": 218,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/rollback.sh",
+   "descricao": "Orquestrador de rollback do cutover. EXIGE --i-know-what-im-doing para executar destrutivo.",
+   "linhas": 50,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/rollback/full-restore.sh",
+   "descricao": "full-restore.sh — Restauração completa a partir de snapshot pré-migração. Uso:",
+   "linhas": 60,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/sql/create-reset-log.sql",
+   "descricao": null,
+   "linhas": 57,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/sql/heal-sequences.sql",
+   "descricao": null,
+   "linhas": 38,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/sql/mark-must-reset.sql",
+   "descricao": null,
+   "linhas": 41,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/storage/_lib.ts",
+   "descricao": "Utilitários compartilhados pelos scripts de migração de Storage. Deno 1.44+. Sem dependências externas.",
+   "linhas": 188,
+   "env": [
+    "CONCURRENCY",
+    "DRY_RUN",
+    "ONLY_BUCKET",
+    "STREAM_TMPFILE_THRESHOLD"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/storage/copy-large.ts",
+   "descricao": "Storage Large-Object Handler — objetos > 100MB via multipart resumível com checkpointing. Uso: BUCKET=avatars OBJECT=path/file.bin deno run --allow-env --allow-net --allow-read --allow-write storage/c",
+   "linhas": 66,
+   "env": [
+    "BUCKET",
+    "CHUNK_BYTES",
+    "LARGE_THRESHOLD",
+    "OBJECT"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/storage/copy-objects.ts",
+   "descricao": "Copia objetos ORIGEM → DESTINO, stream direto, com upsert e retry. Uso: deno run --allow-env --allow-net --allow-write --allow-read storage/copy-objects.ts",
+   "linhas": 157,
+   "env": [
+    "RATE_LIMIT_BPS"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/storage/create-buckets.ts",
+   "descricao": "Cria/atualiza buckets no DESTINO a partir da configuração da ORIGEM. Idempotente. Uso: deno run --allow-env --allow-net storage/create-buckets.ts",
+   "linhas": 73,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/storage/list-buckets.ts",
+   "descricao": "Lista buckets da ORIGEM com contagem estimada de objetos. Uso: deno run --allow-env --allow-net storage/list-buckets.ts",
+   "linhas": 32,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/storage/run.sh",
+   "descricao": "Wrapper: list-buckets → create-buckets → copy-objects → verify-counts. Uso:",
+   "linhas": 46,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/storage/verify-counts.ts",
+   "descricao": "Compara contagens e amostragem entre ORIGEM e DESTINO. Uso: deno run --allow-env --allow-net --allow-write storage/verify-counts.ts",
+   "linhas": 69,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/table-order.sql",
+   "descricao": null,
+   "linhas": 63,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/unmark-must-reset.sh",
+   "descricao": "============================================================================ unmark-must-reset.sh",
+   "linhas": 56,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/access-exclusive-locks-guard.sql",
+   "descricao": null,
+   "linhas": 24,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/archive-command-health.sql",
+   "descricao": null,
+   "linhas": 27,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/autovacuum-audit.sql",
+   "descricao": null,
+   "linhas": 26,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/autovacuum-throttle-audit.sql",
+   "descricao": null,
+   "linhas": 19,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/autovacuum-worker-saturation.sql",
+   "descricao": null,
+   "linhas": 12,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/bgwriter-efficiency-audit.sql",
+   "descricao": null,
+   "linhas": 9,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/bloat-monitor.sql",
+   "descricao": null,
+   "linhas": 39,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/cache-hit-ratio-audit.sql",
+   "descricao": null,
+   "linhas": 11,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/checksum-failures-guard.sql",
+   "descricao": null,
+   "linhas": 24,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/collation-version-mismatch.sql",
+   "descricao": null,
+   "linhas": 29,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/connection-pool-exhaustion-canary.sh",
+   "descricao": "connection-pool-exhaustion-canary.sh — Rodada 19/10 Canario: alerta se pg_stat_activity > 80% de max_connections.",
+   "linhas": 31,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/cron-job-failover-guard.sql",
+   "descricao": null,
+   "linhas": 22,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/cron-timezone-audit.sql",
+   "descricao": null,
+   "linhas": 32,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/datfrozenxid-age-guard.sql",
+   "descricao": null,
+   "linhas": 15,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/dead-tuple-ratio-guard.sql",
+   "descricao": null,
+   "linhas": 22,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/deadlock-frequency-monitor.sql",
+   "descricao": null,
+   "linhas": 8,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/dns-multi-region.sh",
+   "descricao": "DNS Multi-Region Verifier — consulta 12 resolvers globais. Uso: DOMAIN=harmony-bank.lovable.app EXPECTED=... ./verify/dns-multi-region.sh",
+   "linhas": 43,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/dns-propagation.sh",
+   "descricao": "dns-propagation.sh — Verifica propagação DNS em múltiplos resolvers globais. Uso: ./verify/dns-propagation.sh <dominio> <ip_esperado> [max_wait_seg=1800]",
+   "linhas": 45,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/dual-write-diverge.ts",
+   "descricao": "Dual-Write Divergence Detector — compara linhas modificadas nos últimos N minutos entre banco LEGADO e DESTINO. Se mismatch > threshold, aciona system_alerts e",
+   "linhas": 72,
+   "env": [
+    "DEST_SERVICE_ROLE_KEY",
+    "DEST_SUPABASE_URL",
+    "LEGACY_SERVICE_ROLE_KEY",
+    "LEGACY_SUPABASE_URL",
+    "MISMATCH_PCT",
+    "TABLES",
+    "WINDOW_MIN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/duplicate-indexes.sql",
+   "descricao": null,
+   "linhas": 19,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/exporter/full-audit-exporter.sh",
+   "descricao": "full-audit-exporter.sh — Rodada 26/10 Executa full-audit.sh, parseia saida e emite metricas no formato Prometheus",
+   "linhas": 72,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/extension-minor-version-parity.sql",
+   "descricao": null,
+   "linhas": 8,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/extension-upgrade-available-audit.sql",
+   "descricao": null,
+   "linhas": 12,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/extensions-parity.sql",
+   "descricao": null,
+   "linhas": 11,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/extensions-versions.sh",
+   "descricao": "Wrapper que compara extensões críticas entre origem e destino. Uso: SRC_DB_URL=... DEST_DB_URL=... ./verify/extensions-versions.sh",
+   "linhas": 19,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/extensions-versions.sql",
+   "descricao": null,
+   "linhas": 12,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/fdw-credentials-audit.sql",
+   "descricao": null,
+   "linhas": 21,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/fillfactor-hot-audit.sql",
+   "descricao": null,
+   "linhas": 13,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/fk-integrity.sql",
+   "descricao": null,
+   "linhas": 34,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/full-audit.sh",
+   "descricao": "full-audit.sh — Orquestrador da bateria 16/10 no destino. shellcheck disable=SC1091",
+   "linhas": 99,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/function-search-path-reset-audit.sql",
+   "descricao": null,
+   "linhas": 41,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/function-volatility-audit.sql",
+   "descricao": null,
+   "linhas": 21,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/grants-parity.sh",
+   "descricao": "Wrapper: diff canônico de GRANTs em public.* entre origem e destino. Uso: SRC_DB_URL=... DEST_DB_URL=... ./verify/grants-parity.sh",
+   "linhas": 34,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/grants-parity.sql",
+   "descricao": null,
+   "linhas": 10,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/heap-corruption-scan.sql",
+   "descricao": null,
+   "linhas": 39,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/hot-standby-feedback-audit.sql",
+   "descricao": null,
+   "linhas": 9,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/idle-in-transaction-guard.sql",
+   "descricao": null,
+   "linhas": 24,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/index-corruption-amcheck.sql",
+   "descricao": null,
+   "linhas": 33,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/invalid-indexes-guard.sql",
+   "descricao": null,
+   "linhas": 30,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/jit-checkpoint-audit.sql",
+   "descricao": null,
+   "linhas": 12,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/lock-wait-duration-guard.sql",
+   "descricao": null,
+   "linhas": 15,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/log-retention-audit.sql",
+   "descricao": null,
+   "linhas": 19,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/logical-publication-guard.sql",
+   "descricao": null,
+   "linhas": 34,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/logical-replica-identity.sql",
+   "descricao": null,
+   "linhas": 26,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/logical-vs-physical-drift.sql",
+   "descricao": null,
+   "linhas": 17,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/long-running-tx-guard.sql",
+   "descricao": null,
+   "linhas": 24,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/multixact-wraparound-guard.sql",
+   "descricao": null,
+   "linhas": 15,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/mv-refresh-audit.sql",
+   "descricao": null,
+   "linhas": 51,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/not-valid-constraints.sql",
+   "descricao": null,
+   "linhas": 25,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/orphaned-large-objects.sql",
+   "descricao": null,
+   "linhas": 41,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/password-encryption-audit.sql",
+   "descricao": null,
+   "linhas": 26,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/pg-hba-permissive-audit.sql",
+   "descricao": null,
+   "linhas": 11,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/pg-stat-statements-config.sql",
+   "descricao": null,
+   "linhas": 27,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/pg-stat-statements-reset-guard.sql",
+   "descricao": null,
+   "linhas": 15,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/pitr-retention-window.sql",
+   "descricao": null,
+   "linhas": 22,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/pitr-window-verifier.sh",
+   "descricao": "pitr-window-verifier.sh — Rodada 19/10 Valida que WAL retention cobre o RPO declarado (default 48h).",
+   "linhas": 29,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/plan-cache-bloat.sql",
+   "descricao": null,
+   "linhas": 33,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/planner-stats-freshness.sh",
+   "descricao": "planner-stats-freshness.sh — ANALYZE + verifica frescor de estatisticas do planner. Sem ANALYZE, planner usa defaults -> seq scan em vez de index.",
+   "linhas": 45,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/prepared-xacts-guard.sql",
+   "descricao": null,
+   "linhas": 14,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/public-role-privileges-audit.sql",
+   "descricao": null,
+   "linhas": 16,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/publication-tables-coverage.sql",
+   "descricao": null,
+   "linhas": 20,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/query-plan-regression.sql",
+   "descricao": null,
+   "linhas": 18,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/relfrozenxid-table-guard.sql",
+   "descricao": null,
+   "linhas": 21,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/replication-lag-guard.sql",
+   "descricao": null,
+   "linhas": 25,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/replication-slot-idle-guard.sql",
+   "descricao": null,
+   "linhas": 21,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/replication-slots-guard.sql",
+   "descricao": null,
+   "linhas": 23,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/rls-coverage.sql",
+   "descricao": null,
+   "linhas": 58,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/rls-force-audit.sql",
+   "descricao": null,
+   "linhas": 15,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/rls-parity.ts",
+   "descricao": "rls-parity.ts — Compara policies RLS entre origem e destino. Uso: deno run --allow-env --allow-net verify/rls-parity.ts",
+   "linhas": 54,
+   "env": [
+    "DEST_DB_URL",
+    "SRC_DB_URL"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/role-membership-parity.sql",
+   "descricao": null,
+   "linhas": 13,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/row-diff-deep.ts",
+   "descricao": "Deep row hash sampling — head/tail/random 1% + SHA-256 + relatório HTML.",
+   "linhas": 42,
+   "env": [
+    "HEAD_N",
+    "SAMPLE_PCT",
+    "TAIL_N"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/row-diff.ts",
+   "descricao": "Amostra N linhas por tabela e compara hash md5 origem×destino. Uso: deno run --allow-env --allow-net --allow-read --allow-write verify/row-diff.ts",
+   "linhas": 71,
+   "env": [
+    "ONLY_TABLE",
+    "SAMPLE_SIZE"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/schema-freeze-guard.sql",
+   "descricao": null,
+   "linhas": 55,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/security-definer-audit.sql",
+   "descricao": null,
+   "linhas": 36,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/seq-scan-large-tables-audit.sql",
+   "descricao": null,
+   "linhas": 13,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/sequence-overflow-guard.sql",
+   "descricao": null,
+   "linhas": 20,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/sequences-audit.sql",
+   "descricao": null,
+   "linhas": 18,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/sequences-gap-check.sql",
+   "descricao": null,
+   "linhas": 52,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/ssl-enforcement-audit.sql",
+   "descricao": null,
+   "linhas": 25,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/statement-timeout-audit.sql",
+   "descricao": null,
+   "linhas": 15,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/storage-bytes.ts",
+   "descricao": "Storage byte-level verify — baixa amostra aleatória e compara SHA-256.",
+   "linhas": 53,
+   "env": [
+    "BYTES_MAX_PER_BUCKET",
+    "BYTES_SAMPLE_PCT"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/storage-public-guard.ts",
+   "descricao": "storage-public-guard.ts — Falha se buckets públicos não estão no allowlist. Uso: node --experimental-strip-types verify/storage-public-guard.ts",
+   "linhas": 45,
+   "env": [
+    "DEST_SERVICE_ROLE_KEY",
+    "DEST_SUPABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/subscription-lag-guard.sql",
+   "descricao": null,
+   "linhas": 17,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/superuser-count-audit.sql",
+   "descricao": null,
+   "linhas": 7,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/synchronous-commit-drift-audit.sql",
+   "descricao": null,
+   "linhas": 11,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/tables-without-pk.sql",
+   "descricao": null,
+   "linhas": 28,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/temp-file-usage-audit.sql",
+   "descricao": null,
+   "linhas": 9,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/timeline-divergence-guard.sh",
+   "descricao": "timeline-divergence-guard.sh — Rodada 20/10",
+   "linhas": 19,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/toast-compression-audit.sql",
+   "descricao": null,
+   "linhas": 25,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/toast-storage-audit.sql",
+   "descricao": null,
+   "linhas": 23,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/triggers-parity.sh",
+   "descricao": "Wrapper: diff canônico de triggers + hash de functions entre origem e destino. Uso: SRC_DB_URL=... DEST_DB_URL=... ./verify/triggers-parity.sh",
+   "linhas": 34,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/triggers-parity.sql",
+   "descricao": null,
+   "linhas": 33,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/tz-locale-parity.sh",
+   "descricao": "Wrapper de tz/locale parity — falha em qualquer divergência.",
+   "linhas": 16,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/migration/verify/tz-locale-parity.sql",
+   "descricao": null,
+   "linhas": 15,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/unused-indexes.sql",
+   "descricao": null,
+   "linhas": 26,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/wal-level-logical-guard.sql",
+   "descricao": null,
+   "linhas": 27,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/migration/verify/wal-sender-timeout-guard.sql",
+   "descricao": null,
+   "linhas": 14,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/monitoring/ai-gateway-partitions-exporter.sh",
+   "descricao": "ai-gateway-partitions-exporter.sh — Rodada 59/10 Emite metricas Prometheus (textfile collector) sobre as particoes de",
+   "linhas": 142,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/monitoring/check-runbook-coverage.sh",
+   "descricao": "check-runbook-coverage.sh — Rodada 26/10",
+   "linhas": 43,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "monitoring-lint.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/monitoring/rpc-perf-exporter.sh",
+   "descricao": "rpc-perf-exporter.sh — Prometheus textfile collector for RPC performance samples. Emits per-RPC latency histograms (p50/p95/p99) and sample counts over a",
+   "linhas": 48,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/monitoring/rpc-plan-exporter.sh",
+   "descricao": "rpc-plan-exporter.sh — Prometheus textfile collector para regressões de plano. Rodada 65/10. Exporta, por RPC monitorada, quantas mudanças estruturais de",
+   "linhas": 59,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/recreate_data_health_view.sql",
+   "descricao": null,
+   "linhas": 54,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/recreate_unified_comm.sql",
+   "descricao": null,
+   "linhas": 39,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/regras_negocio/generate.py",
+   "descricao": null,
+   "linhas": 2138,
+   "env": [],
+   "npm_scripts": [
+    "contexto:regras"
+   ],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/regras_negocio/indice.py",
+   "descricao": null,
+   "linhas": 237,
+   "env": [],
+   "npm_scripts": [
+    "contexto:indice"
+   ],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/retry-failed.js",
+   "descricao": "retry-failed.js — tenta criar as 5 tabelas que falharam por falta de enums",
+   "linhas": 71,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/rls-matrix/check-rls-baseline.mjs",
+   "descricao": "Etapa 84 do plano banco-unico: detector de regressao de exposicao RLS. Mede via PostgREST (o mesmo caminho do front), nao via SQL direto — e o que o cliente real enxerga.",
+   "linhas": 104,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "rls-exposure-guard.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/run_explain_analyze.py",
+   "descricao": "core_queries = [     \"SELECT * FROM contacts LIMIT 10\",",
+   "linhas": 41,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/supabase_snapshot/snapshot.py",
+   "descricao": "Somente leitura no banco (sessão read-only, statement_timeout, lock_timeout). Nunca grava linhas de tabelas, valores de segredos, chaves, senhas ou DSN.",
+   "linhas": 1791,
+   "env": [],
+   "npm_scripts": [
+    "contexto:banco"
+   ],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/test_unified_comm.sql",
+   "descricao": null,
+   "linhas": 5,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/test_unified_comm2.sql",
+   "descricao": null,
+   "linhas": 13,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  }
+ ]
+}
