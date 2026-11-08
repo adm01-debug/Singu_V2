@@ -32,9 +32,11 @@ node scripts/inventario/mudou-conteudo.mjs
 
 - **Rotas do front não estão aqui.** Elas saem do gerador genérico de contexto
   (`scripts/ai-context/gerar.mjs` → `docs/contexto/codigo/rotas.json`, 114 rotas).
-- `edge_functions.publicadas` fica `null`: ler as funções publicadas exigiria
-  `SUPABASE_ACCESS_TOKEN`, que este repositório não tem. O que está listado é o que existe em
-  `supabase/functions/`.
+- `edge_functions.publicadas` só é preenchido quando o secret `SUPABASE_ACCESS_TOKEN` existe
+  (leitura de `GET /functions`). Com ele, função no ar sem código no repositório vira o alerta
+  `edge_publicada_sem_codigo`; sem ele o campo fica `null` e o que está listado é apenas o que
+  existe em `supabase/functions/`. Medido à mão em 2026-11-08: **151 deployadas contra 108
+  versionadas** — 43 funções no ar sem código neste repositório.
 - `citada_no_banco` e o uso de tabelas são extraídos estaticamente: referência encontrada não prova
   execução, e ausência de referência não prova que a tabela não é usada por cliente externo.
 - A conferência de origem não usa `supabase/schema-manifest.json` (este repositório não o versiona);
