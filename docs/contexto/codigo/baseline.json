@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "ecfcdf078097efe5162400a4b3c6812b28c3da20",
+  "commit": "1fecfa69f5d6ce8ea22d580ea75c067f1bc7fe66",
   "branch": "main",
-  "data_commit": "2026-11-09T18:03:47-03:00",
+  "data_commit": "2026-11-09T18:03:59-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "1fecfa69",
+    "data": "2026-11-09",
+    "assunto": "fix(push): um único service worker com os handlers de push (A-007) (#184)"
+   },
    {
     "sha": "ecfcdf07",
     "data": "2026-11-09",
@@ -126,14 +131,9 @@
     "sha": "f665f675",
     "data": "2026-11-06",
     "assunto": "fix(ci): remove script injection no step de validação do título da PR (#162)"
-   },
-   {
-    "sha": "d00de592",
-    "data": "2026-11-06",
-    "assunto": "fix(ci): corrige corrupção de texto nos workflows restore-drill e rls-exposure-guard (#161)"
    }
   ],
-  "arquivos_mudados_7d": 96,
+  "arquivos_mudados_7d": 100,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "CHANGELOG.md",
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 36
+    "commits": 37
    },
    {
     "autor": "dependabot[bot]",
@@ -318,9 +318,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 2995,
-  "arquivos_codigo": 2078,
-  "linhas_codigo": 389342,
+  "arquivos_total": 2996,
+  "arquivos_codigo": 2079,
+  "linhas_codigo": 389366,
   "rotas": 114,
   "rotas_http_backend": 12,
   "vistas_por_id": 0,
@@ -332,7 +332,7 @@
   "tabelas": 418,
   "migrations": 479,
   "cron_jobs": 20,
-  "testes": 213,
+  "testes": 214,
   "workflows": 7,
   "scripts": 213,
   "docs_md": 150
@@ -555,12 +555,12 @@
    "linhas": 69375
   },
   "src/lib": {
-   "arquivos": 98,
-   "linhas": 8736
+   "arquivos": 99,
+   "linhas": 8812
   },
   "src/main.tsx": {
    "arquivos": 1,
-   "linhas": 155
+   "linhas": 97
   },
   "src/pages": {
    "arquivos": 154,
@@ -636,7 +636,7 @@
   },
   "vite.config.ts": {
    "arquivos": 1,
-   "linhas": 140
+   "linhas": 146
   },
   "vitest.config.ts": {
    "arquivos": 1,

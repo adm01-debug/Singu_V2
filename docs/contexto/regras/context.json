@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ecfcdf078097efe5162400a4b3c6812b28c3da20",
+  "sha": "1fecfa69f5d6ce8ea22d580ea75c067f1bc7fe66",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-09 21:08 UTC",
-  "files_total": 3098,
-  "code_files": 2725,
-  "code_lines": 382309
+  "generated_at": "2026-11-09 21:14 UTC",
+  "files_total": 3099,
+  "code_files": 2726,
+  "code_lines": 382333
  },
  "version": "1.3.2",
- "facts_hash": "5a3597110f4064c6",
+ "facts_hash": "2454c0c3bf2a27b6",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -202,7 +202,7 @@
   "package_manager": "bun",
   "languages": {
    ".tsx": 1156,
-   ".ts": 870,
+   ".ts": 871,
    ".sql": 646,
    ".mjs": 23,
    ".js": 18,
@@ -66592,7 +66592,7 @@
   {
    "module": "(raiz)",
    "files": 9,
-   "lines": 563,
+   "lines": 569,
    "tables": [],
    "exports": [
     "eslint.config.js: tseslint",
@@ -66844,7 +66844,7 @@
   {
    "module": "src",
    "files": 3,
-   "lines": 163,
+   "lines": 105,
    "tables": [],
    "exports": [
     "App.tsx: App"
@@ -67786,8 +67786,8 @@
   },
   {
    "module": "src/lib",
-   "files": 98,
-   "lines": 8736,
+   "files": 99,
+   "lines": 8812,
    "tables": [
     "activities",
     "crm_relationship_audit_logs",
@@ -67932,6 +67932,7 @@
     "src/lib/prontidaoWeightsHealth.ts",
     "src/lib/providerGuard.ts",
     "src/lib/proximoPassoDefaults.ts",
+    "src/lib/pushNotifications.sw.test.ts",
     "src/lib/pushNotifications.ts",
     "src/lib/queryErrorReporter.ts",
     "src/lib/rateLimiter.ts",
@@ -67950,8 +67951,7 @@
     "src/lib/suggestPresetName.ts",
     "src/lib/supabaseInvoke.ts",
     "src/lib/systemHealth.test.ts",
-    "src/lib/systemHealth.ts",
-    "src/lib/tab-utils.ts"
+    "src/lib/systemHealth.ts"
    ]
   },
   {
@@ -74569,6 +74569,7 @@
     "scripts/migration/cdc/order-guard.ts"
    ],
    "PROD": [
+    "src/lib/pushNotifications.ts",
     "src/main.tsx"
    ],
    "PROD_DB_URL": [
@@ -83057,11 +83058,7 @@
    },
    {
     "file": "src/main.tsx",
-    "text": "re-grant Notification permission — browser policy prevents re-prompting"
-   },
-   {
-    "file": "src/main.tsx",
-    "text": "Step 1 — Clean up the competing legacy SW.  Must happen before VitePWA"
+    "text": "requires the user to re-grant Notification permission — browser policy"
    },
    {
     "file": "src/main.tsx",
@@ -97054,6 +97051,11 @@
     "file": "src/lib/prontidaoTrendMilestones.ts",
     "name": "PEAK_THRESHOLD",
     "value": "3"
+   },
+   {
+    "file": "src/lib/pushNotifications.ts",
+    "name": "SW_READY_TIMEOUT_MS",
+    "value": "10"
    },
    {
     "file": "src/lib/rateLimiter.ts",
@@ -122821,6 +122823,30 @@
    {
     "file": "src/lib/externalSearchFilter.limits.test.ts",
     "name": "preserva frases com mais palavras quando a busca composta não foi solicitada"
+   },
+   {
+    "file": "src/lib/pushNotifications.sw.test.ts",
+    "name": "A-007: service worker de push unificado"
+   },
+   {
+    "file": "src/lib/pushNotifications.sw.test.ts",
+    "name": "vite.config importa sw-push.js no SW gerado (sem precache duplicado)"
+   },
+   {
+    "file": "src/lib/pushNotifications.sw.test.ts",
+    "name": "main.tsx nunca cancela inscrição nem desregistra service worker"
+   },
+   {
+    "file": "src/lib/pushNotifications.sw.test.ts",
+    "name": "em produção usa serviceWorker.ready e NÃO registra /sw-push.js"
+   },
+   {
+    "file": "src/lib/pushNotifications.sw.test.ts",
+    "name": "em produção, se o SW nunca ficar pronto, devolve null (não trava)"
+   },
+   {
+    "file": "src/lib/pushNotifications.sw.test.ts",
+    "name": "em dev registra /sw-push.js direto"
    },
    {
     "file": "src/lib/resilientFetch.test.ts",
@@ -163479,7 +163505,7 @@
   },
   "vite.config.ts": {
    "path": "vite.config.ts",
-   "lines": 140,
+   "lines": 146,
    "exports": [
     "default defineConfig"
    ]
@@ -165926,14 +165952,13 @@
   },
   "src/main.tsx": {
    "path": "src/main.tsx",
-   "lines": 155,
+   "lines": 97,
    "env": [
     "PROD"
    ],
    "rule_comments": [
     "• pushNotifications.ts must use navigator.serviceWorker.ready (the",
-    "re-grant Notification permission — browser policy prevents re-prompting",
-    "Step 1 — Clean up the competing legacy SW.  Must happen before VitePWA",
+    "requires the user to re-grant Notification permission — browser policy",
     "* The UpdateAvailable component in NotificationAndMisc.tsx must"
    ]
   },
@@ -204143,9 +204168,26 @@
     }
    ]
   },
+  "src/lib/pushNotifications.sw.test.ts": {
+   "path": "src/lib/pushNotifications.sw.test.ts",
+   "lines": 59,
+   "is_test": true,
+   "rule_comments": [
+    "A-007: um único service worker (VitePWA) deve dono do escopo \"/\", com os handlers de push importados nele."
+   ],
+   "doc": "A-007: um único service worker (VitePWA) deve dono do escopo \"/\", com os handlers de push importados nele.",
+   "tests": [
+    "A-007: service worker de push unificado",
+    "vite.config importa sw-push.js no SW gerado (sem precache duplicado)",
+    "main.tsx nunca cancela inscrição nem desregistra service worker",
+    "em produção usa serviceWorker.ready e NÃO registra /sw-push.js",
+    "em produção, se o SW nunca ficar pronto, devolve null (não trava)",
+    "em dev registra /sw-push.js direto"
+   ]
+  },
   "src/lib/pushNotifications.ts": {
    "path": "src/lib/pushNotifications.ts",
-   "lines": 160,
+   "lines": 177,
    "exports": [
     "function registerServiceWorker",
     "function subscribeToPush",
@@ -204169,8 +204211,17 @@
      "user_id"
     ]
    },
+   "env": [
+    "PROD"
+   ],
    "errors": [
     "User not authenticated"
+   ],
+   "params": [
+    {
+     "name": "SW_READY_TIMEOUT_MS",
+     "value": "10"
+    }
    ]
   },
   "src/lib/queryErrorReporter.ts": {
@@ -223517,10 +223568,22 @@
   }
  },
  "git": {
-  "sha": "ecfcdf078097efe5162400a4b3c6812b28c3da20",
+  "sha": "1fecfa69f5d6ce8ea22d580ea75c067f1bc7fe66",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "1fecfa6",
+    "date": "2026-11-09",
+    "author": "adm01-debug",
+    "subject": "fix(push): um único service worker com os handlers de push (A-007) (#184)",
+    "files": [
+     "src/lib/pushNotifications.sw.test.ts",
+     "src/lib/pushNotifications.ts",
+     "src/main.tsx",
+     "vite.config.ts"
+    ]
+   },
    {
     "sha": "ecfcdf0",
     "date": "2026-11-09",
@@ -223871,16 +223934,6 @@
      "CHANGELOG.md",
      "supabase/functions/evolution-webhook/messages.ts"
     ]
-   },
-   {
-    "sha": "8ed532a",
-    "date": "2026-11-05",
-    "author": "adm01-debug",
-    "subject": "chore: atualizar AGENTS.md com texto mestre",
-    "files": [
-     "AGENTS.md",
-     "CLAUDE.md"
-    ]
    }
   ],
   "hot_files": [
@@ -223893,12 +223946,12 @@
     5
    ],
    [
-    "AGENTS.md",
+    "scripts/inventario/gerar-banco.mjs",
     3
    ],
    [
-    "scripts/inventario/gerar-banco.mjs",
-    3
+    "AGENTS.md",
+    2
    ],
    [
     ".github/workflows/contexto.yml",
@@ -223906,10 +223959,6 @@
    ],
    [
     "package.json",
-    2
-   ],
-   [
-    "CLAUDE.md",
     2
    ],
    [
@@ -223953,15 +224002,19 @@
     2
    ],
    [
-    "scripts/check-supabase-project-ref.test.mjs",
+    "src/lib/pushNotifications.sw.test.ts",
     1
    ],
    [
-    "supabase/config.toml",
+    "src/lib/pushNotifications.ts",
     1
    ],
    [
-    "package-lock.json",
+    "src/main.tsx",
+    1
+   ],
+   [
+    "vite.config.ts",
     1
    ]
   ]

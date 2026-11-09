@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ecfcdf0780` · branch `main` · 2026-11-09 21:08 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1fecfa69f5` · branch `main` · 2026-11-09 21:14 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3374,6 +3374,7 @@ _nenhum item encontrado_
 | `MFA_STATUS_CHANGED_EVENT` | `'singu:mfa-status-changed'` | `src/lib/mfaEvents.ts` |
 | `MFA_VERIFIED_EVENT` | `'singu:mfa-verified'` | `src/lib/mfaEvents.ts` |
 | `PEAK_THRESHOLD` | `3` | `src/lib/prontidaoTrendMilestones.ts` |
+| `SW_READY_TIMEOUT_MS` | `10` | `src/lib/pushNotifications.ts` |
 | `WINDOW_MS` | `15` | `src/lib/rateLimiter.ts` |
 | `MAX_ATTEMPTS` | `5` | `src/lib/rateLimiter.ts` |
 | `TRACE_HEADER` | `"x-trace-id"` | `src/lib/requestId.ts` |
@@ -4374,7 +4375,7 @@ _nenhum item encontrado_
 | `admin` | `tests/rls/contact_relations_owner_scope.sql` |
 | `admin` | `tests/rls/psychographic_matrix.sql` |
 
-## K. Testes como especificação (2638 testes em 198 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (2644 testes em 199 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4480,6 +4481,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/canonical-rfm-day-contracts.test.tsx` | 6 | RFM conserva recomendações do produtor e metadados existentes · normaliza IDs locais estáveis e marca o impacto ausente sem inventar uma estimativa · Meu Dia distingue falha, carregamento e ausência de login · encerra carregamento ao falhar e recupera os dados após nova tentativa … |
 | `src/hooks/__tests__/company-composite.contract.test.ts` | 6 | dados compostos da empresa no contrato canônico · converte os três formatos reais do formulário sem perder dados · identifica WhatsApp sem assumir um tipo de aparelho e mantém o enum canônico explícito · deduplica os aliases básicos sem substituir os metadados compostos … |
 | `src/hooks/__tests__/contact-detail-external-retry.test.tsx` | 6 | Consulta do contato disponível apenas na fonte externa · limpa somente a ficha cuja ausência foi confirmada nas duas fontes; cache=%s · limita retries de indisponibilidade sem declarar ausência; cache=%s · Recuperação da ficha com o cliente externo real e transporte simulado … |
+| `src/lib/pushNotifications.sw.test.ts` | 6 | A-007: service worker de push unificado · vite.config importa sw-push.js no SW gerado (sem precache duplicado) · main.tsx nunca cancela inscrição nem desregistra service worker · em produção usa serviceWorker.ready e NÃO registra /sw-push.js … |
 | `src/lib/__tests__/logger.test.ts` | 6 | Logger Utility · deve gerar IDs de requisição únicos · deve formatar logs corretamente em desenvolvimento · deve persistir erros no banco de dados … |
 | `src/lib/__tests__/providerGuard.test.ts` | 6 | Provider Guard & Hierarchy · deve validar corretamente uma ordem de providers válida · deve detectar violação quando AuthProvider vem antes de BrowserRouter · deve detectar violação quando AuthProvider vem antes de QueryClientProvider … |
 | `src/lib/__tests__/rpcChurn.test.ts` | 6 | parseChurnWindow · aceita janelas válidas · cai no default para valores inválidos, nulos ou maliciosos · churnToCsv … |
@@ -4731,8 +4733,7 @@ _nenhum item encontrado_
 | This override must appear AFTER the main config block so it wins. | `eslint.config.js` |
 | and must not run under vitest. Vitest unit/integration tests live in src/ and | `vitest.config.ts` |
 | • pushNotifications.ts must use navigator.serviceWorker.ready (the | `src/main.tsx` |
-| re-grant Notification permission — browser policy prevents re-prompting | `src/main.tsx` |
-| Step 1 — Clean up the competing legacy SW.  Must happen before VitePWA | `src/main.tsx` |
+| requires the user to re-grant Notification permission — browser policy | `src/main.tsx` |
 | * The UpdateAvailable component in NotificationAndMisc.tsx must | `src/main.tsx` |
 | * Modal "O que há de novo" — apenas para usuários autenticados fora de /auth */ | `src/app/AppChrome.tsx` |
 | após 800ms de idle, apenas para usuários autenticados. | `src/app/AppChrome.tsx` |

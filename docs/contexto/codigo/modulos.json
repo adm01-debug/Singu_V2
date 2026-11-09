@@ -1039,6 +1039,7 @@
    ],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PROJECT_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -1573,6 +1574,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
@@ -2515,6 +2517,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
@@ -5721,6 +5724,7 @@
    ],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
@@ -6684,6 +6688,7 @@
    ],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
@@ -8027,6 +8032,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "PROD",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -8207,6 +8213,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
@@ -8532,6 +8539,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
@@ -10894,6 +10902,7 @@
    ],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
@@ -11626,8 +11635,8 @@
   {
    "modulo": "lib",
    "arquivos": 68,
-   "testes": 16,
-   "linhas": 6550,
+   "testes": 17,
+   "linhas": 6567,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -11678,6 +11687,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
@@ -12888,6 +12898,7 @@
    ],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PROJECT_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -13581,6 +13592,7 @@
    ],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
@@ -13910,6 +13922,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"

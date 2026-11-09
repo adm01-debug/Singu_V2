@@ -3432,13 +3432,15 @@
     "unsubscribeFromPush"
    ],
    "export_default": null,
-   "linhas": 160,
+   "linhas": 177,
    "tabelas": [
     "push_subscriptions"
    ],
    "rpcs": [],
    "edges": [],
-   "env": [],
+   "env": [
+    "PROD"
+   ],
    "externos": [],
    "zod_schemas": 0,
    "flags": [],
@@ -3449,7 +3451,7 @@
     "components/triggers",
     "hooks"
    ],
-   "coberto_por_testes": 0,
+   "coberto_por_testes": 1,
    "orfao": false
   },
   {
