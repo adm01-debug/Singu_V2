@@ -16,18 +16,18 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-09 16:15:00 | succeeded | 0.10 | 1 row |
-| 2026-11-09 16:00:00 | succeeded | 0.03 | 1 row |
-| 2026-11-09 15:45:00 | succeeded | 0.06 | 1 row |
+| 2026-11-09 17:30:00 | succeeded | 0.14 | 1 row |
+| 2026-11-09 17:15:00 | succeeded | 0.10 | 1 row |
+| 2026-11-09 17:00:00 | succeeded | 0.13 | 1 row |
 
 
 ## 3 · zapp-embed-pending-messages
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-09 16:00:00 | succeeded | 0.13 | 1 row |
-| 2026-11-09 15:30:00 | succeeded | 0.03 | 1 row |
-| 2026-11-09 15:00:00 | succeeded | 0.05 | 1 row |
+| 2026-11-09 17:30:00 | succeeded | 0.18 | 1 row |
+| 2026-11-09 17:00:00 | succeeded | 0.09 | 1 row |
+| 2026-11-09 16:30:00 | succeeded | 0.04 | 1 row |
 
 
 ## 4 · zapp-curate-training-dataset
@@ -50,9 +50,9 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-09 17:30:00 | succeeded | 0.10 | 0 rows |
+| 2026-11-09 16:30:00 | succeeded | 0.10 | 0 rows |
 | 2026-11-09 15:30:00 | succeeded | 0.04 | 0 rows |
-| 2026-11-09 14:30:00 | succeeded | 0.07 | 0 rows |
-| 2026-11-09 13:30:00 | succeeded | 0.14 | 0 rows |
 
 
 ## 7 · zapp-refresh-contact-stats
@@ -68,27 +68,27 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-09 16:29:00 | succeeded | 0.03 | 1 row |
-| 2026-11-09 16:28:00 | succeeded | 0.03 | 1 row |
-| 2026-11-09 16:27:00 | succeeded | 0.02 | 1 row |
+| 2026-11-09 17:33:00 | succeeded | 0.01 | 1 row |
+| 2026-11-09 17:32:00 | succeeded | 0.02 | 1 row |
+| 2026-11-09 17:31:00 | succeeded | 0.03 | 1 row |
 
 
 ## 10 · zapp-reconcile-nlp-30s
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-09 16:29:00 | succeeded | 30.03 | 1 row |
-| 2026-11-09 16:28:00 | succeeded | 30.04 | 1 row |
-| 2026-11-09 16:27:00 | succeeded | 30.04 | 1 row |
+| 2026-11-09 17:33:00 | running |  |  |
+| 2026-11-09 17:32:00 | succeeded | 30.03 | 1 row |
+| 2026-11-09 17:31:00 | succeeded | 30.04 | 1 row |
 
 
 ## 11 · zapp-gc-zombie-messages
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-09 16:15:00 | succeeded | 0.03 | 1 row |
-| 2026-11-09 16:00:00 | succeeded | 0.01 | 1 row |
-| 2026-11-09 15:45:00 | succeeded | 0.02 | 1 row |
+| 2026-11-09 17:30:00 | succeeded | 0.05 | 1 row |
+| 2026-11-09 17:15:00 | succeeded | 0.07 | 1 row |
+| 2026-11-09 17:00:00 | succeeded | 0.11 | 1 row |
 
 
 ## 12 · singu-rodizio-segmentar
@@ -127,18 +127,18 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-09 16:25:00 | succeeded | 0.05 | 1 row |
-| 2026-11-09 16:20:00 | succeeded | 0.02 | 1 row |
-| 2026-11-09 16:15:00 | succeeded | 0.06 | 1 row |
+| 2026-11-09 17:30:00 | succeeded | 0.05 | 1 row |
+| 2026-11-09 17:25:00 | succeeded | 0.02 | 1 row |
+| 2026-11-09 17:20:00 | succeeded | 0.04 | 1 row |
 
 
 ## 289 · auto_resolve_ai_gateway_alerts
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-09 16:27:00 | succeeded | 0.01 | 1 row |
-| 2026-11-09 16:22:00 | succeeded | 0.02 | 1 row |
-| 2026-11-09 16:17:00 | succeeded | 0.02 | 1 row |
+| 2026-11-09 17:32:00 | succeeded | 0.01 | 1 row |
+| 2026-11-09 17:27:00 | succeeded | 0.06 | 1 row |
+| 2026-11-09 17:22:00 | succeeded | 0.06 | 1 row |
 
 
 ## 290 · ai-gateway-metrics-ensure-partition
@@ -170,6 +170,6 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-09 16:15:00 | succeeded | 0.10 | 1 row |
-| 2026-11-09 16:00:00 | succeeded | 0.05 | 1 row |
-| 2026-11-09 15:45:00 | succeeded | 0.15 | 1 row |
+| 2026-11-09 17:30:00 | succeeded | 0.07 | 1 row |
+| 2026-11-09 17:15:00 | succeeded | 0.14 | 1 row |
+| 2026-11-09 17:00:00 | succeeded | 0.14 | 1 row |
