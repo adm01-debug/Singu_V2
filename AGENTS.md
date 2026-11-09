@@ -9,7 +9,7 @@ Sistema ~80% pronto, em manutenção: bugs, hardening (RLS, CI, segredos), infra
 ## Projeto
 
 - Repo `adm01-debug/Singu_V2` (privado, branch `main`). Merge em `main` = deploy automático na Vercel = **produção**.
-- Supabase canônico: `pgxfvjmuubtbowutlide`. `supabase/config.toml` aponta `hjhthvzwtvwgdrochcam` — não é o canônico.
+- Supabase canônico: `pgxfvjmuubtbowutlide`. `supabase/config.toml` e `supabase/.temp/linked-project.json` apontam para ele; `scripts/check-supabase-project-ref.test.mjs` (CI) impede a divergência.
 - Stack: Vite 6 + React 18 + TypeScript 5 + Tailwind 3 + shadcn/ui; TanStack Query 5; Zod 4; Supabase (Postgres, Auth, Storage, Edge Functions/Deno).
 - Onde: `src/` (pages, components, hooks, domain, integrations) · `supabase/functions/` (`_shared/` = auth com CORS, rate-limit, safe-http) · `supabase/migrations/` · `tests/rls/` · `e2e/` · `scripts/` · `docs/`.
 
