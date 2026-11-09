@@ -8,11 +8,20 @@
  * fora. Na duvida, nao resolve — e melhor faltar do que apontar tabela errada.
  */
 
+/** Zera o miolo de literais `'...'`/`"..."`/`` `...` `` de uma linha (preservando o tamanho),
+ * para chave dentro de string nao desregular a contagem de profundidade abaixo. So cobre literal
+ * que nao atravessa linha — limite ja documentado da contagem por linha. */
+function semLiteraisDeString(linha) {
+  return linha.replace(/'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"|`(?:\\.|[^`\\])*`/g, (m) => ' '.repeat(m.length));
+}
+
 /**
  * Mapa nome -> valor dos `const NOME = 'literal'` de nivel de modulo. Conta profundidade de
  * chaves linha a linha porque um `const` dentro de funcao tambem pode cair em coluna zero quando
- * o arquivo nao passou por formatador. Contagem ingenua (nao ignora chave dentro de string ou
- * template) de proposito: erra para o lado de nao resolver.
+ * o arquivo nao passou por formatador; ignora chave dentro de string/template de uma linha
+ * (`semLiteraisDeString`) para uma chave desbalanceada numa string nao cegar os `const` seguintes
+ * do arquivo inteiro (achado da auditoria adversarial de 2026-11-08). Nao cobre template literal
+ * que atravessa varias linhas — limite aceito, erra para o lado de nao resolver.
  */
 export function constantesDeString(texto) {
   const mapa = new Map();
@@ -22,7 +31,7 @@ export function constantesDeString(texto) {
       const m = linha.match(/^(?:export\s+)?const\s+([A-Za-z_][A-Za-z0-9_]*)\s*(?::\s*[^=]+)?=\s*['"`]([A-Za-z0-9_.-]+)['"`]\s*[;,]?\s*$/);
       if (m) mapa.set(m[1], m[2]);
     }
-    for (const ch of linha) {
+    for (const ch of semLiteraisDeString(linha)) {
       if (ch === '{') profundidade += 1;
       else if (ch === '}') profundidade -= 1;
     }

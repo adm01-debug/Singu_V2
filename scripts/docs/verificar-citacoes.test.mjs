@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { extrairCitacoes, listarDocs, conferir, comparar, serializarBaseline } from './verificar-citacoes.mjs';
+import { extrairCitacoes, listarDocs, conferir, comparar, serializarBaseline, novasQueTravariamBaseline } from './verificar-citacoes.mjs';
 
 function repoFalso() {
   const raiz = fs.mkdtempSync(path.join(os.tmpdir(), 'cit-'));
@@ -80,6 +80,27 @@ test('comparar devolve so a quebra que nao esta no baseline, e a que foi corrigi
     novas: ['b -> y (arquivo nao existe)'],
     corrigidas: ['c -> z (arquivo nao existe)'],
   });
+});
+
+test('novasQueTravariamBaseline bloqueia quebra nova, libera com --force ou sem introduzir nenhuma', () => {
+  // Achado da auditoria adversarial de 2026-11-08: sem essa checagem, corrigir uma quebra antiga
+  // e introduzir uma nova no mesmo commit destrava --baseline escondendo a nova em silencio.
+  const baselineAntigo = { quebras: ['a -> x (arquivo nao existe)'] };
+  const corrigiuEIntroduziu = { citacoes: 2, quebras: ['a -> x (arquivo nao existe)', 'b -> y (arquivo nao existe)'] };
+  assert.deepEqual(
+    novasQueTravariamBaseline(corrigiuEIntroduziu, baselineAntigo, false),
+    ['b -> y (arquivo nao existe)'],
+  );
+  assert.deepEqual(novasQueTravariamBaseline(corrigiuEIntroduziu, baselineAntigo, true), [], '--force libera');
+
+  const soCorrigiu = { citacoes: 1, quebras: [] };
+  assert.deepEqual(novasQueTravariamBaseline(soCorrigiu, baselineAntigo, false), [], 'so corrigir, sem introduzir, nao bloqueia');
+
+  assert.deepEqual(
+    novasQueTravariamBaseline(corrigiuEIntroduziu, null, false),
+    [],
+    'sem baseline anterior (primeira vez), nada bloqueia',
+  );
 });
 
 test('o baseline e JSON estavel e carrega de volta igual', () => {

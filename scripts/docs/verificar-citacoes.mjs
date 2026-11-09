@@ -15,9 +15,12 @@
  * de novo abaixa a catraca; nunca sobe sozinha.
  *
  * Uso:
- *   node scripts/docs/verificar-citacoes.mjs             valida contra o baseline (exit 1 em quebra nova)
- *   node scripts/docs/verificar-citacoes.mjs --baseline   regrava o baseline com as quebras de hoje
- *   node scripts/docs/verificar-citacoes.mjs --listar     imprime todas as quebras, exit 0
+ *   node scripts/docs/verificar-citacoes.mjs                 valida contra o baseline (exit 1 em quebra nova)
+ *   node scripts/docs/verificar-citacoes.mjs --baseline       regrava o baseline com as quebras de hoje; recusa
+ *                                                              (exit 1) se isso for absorver quebra NOVA em
+ *                                                              silencio (corrigiu uma e introduziu outra no
+ *                                                              mesmo commit) — confirme com --baseline --force
+ *   node scripts/docs/verificar-citacoes.mjs --listar         imprime todas as quebras, exit 0
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -125,6 +128,18 @@ export function comparar(atual, baseline) {
   };
 }
 
+/**
+ * Quebras que `--baseline` absorveria em silencio: sem isso, corrigir uma quebra antiga e
+ * introduzir uma nova no mesmo commit destrava o CI escondendo a nova dentro do baseline
+ * (achado da auditoria adversarial de 2026-11-08, reproduzido literalmente). `forcar` (--force)
+ * ignora a checagem - uso legitimo quando a "quebra nova" e so um doc movido de lugar na mesma
+ * mudanca. Sem baseline anterior (primeira vez) nada bloqueia.
+ */
+export function novasQueTravariamBaseline(atual, baselineAntigo, forcar) {
+  if (!baselineAntigo || forcar) return [];
+  return comparar(atual, baselineAntigo).novas;
+}
+
 function main(argv) {
   const atual = conferir(RAIZ_PADRAO);
 
@@ -135,6 +150,15 @@ function main(argv) {
   }
 
   if (argv.includes('--baseline')) {
+    const baselineAntigo = lerBaseline(RAIZ_PADRAO);
+    const bloqueando = novasQueTravariamBaseline(atual, baselineAntigo, argv.includes('--force'));
+    if (bloqueando.length) {
+      console.error(`${bloqueando.length} quebra(s) NOVA(s) seria(m) absorvida(s) em silencio pelo --baseline:`);
+      for (const q of bloqueando) console.error(`  ${q}`);
+      console.error('\nCorrija essas citacoes antes de rodar --baseline, ou use --baseline --force se forem '
+        + 'mesmo herdadas (ex.: doc movido de lugar na mesma mudanca).');
+      process.exit(1);
+    }
     fs.writeFileSync(path.join(RAIZ_PADRAO, BASELINE_REL), serializarBaseline(atual.quebras));
     console.log(`${BASELINE_REL}: ${atual.quebras.length} quebras registradas de ${atual.citacoes} citacoes.`);
     return;

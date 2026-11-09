@@ -41,6 +41,19 @@ test('constantesDeString pega const de modulo e ignora const dentro de funcao', 
   assert.equal(m.has('B'), false);
 });
 
+test('constantesDeString nao deixa chave desbalanceada dentro de string cegar os consts seguintes', () => {
+  // Achado da auditoria adversarial de 2026-11-08: antes do fix, UMA string de uma linha com
+  // chave solta (`'a { b'`) desregulava a contagem de profundidade para o resto do arquivo
+  // inteiro, e todo const de modulo depois dela desaparecia do mapa em silencio.
+  const m = constantesDeString("const TEXT = 'a { b';\nconst REAL = 'tabela_real';\n");
+  assert.equal(m.get('REAL'), 'tabela_real');
+});
+
+test('constantesDeString ignora chave dentro de template literal de uma linha', () => {
+  const m = constantesDeString("const A = `x {y} z`;\nconst B = 'tabela_b';\n");
+  assert.equal(m.get('B'), 'tabela_b');
+});
+
 test('extrairChamadas separa tabela de bucket e aceita a URL direta', () => {
   const c = extrairChamadas("const B = 'midia';\nsupabase.from('contacts');\nsupabase.storage.from(B);\nfetch(`${U}/rest/v1/companies`);\nfetch(`${U}/functions/v1/enriquecer`);\n");
   assert.deepEqual([...new Set(c.tabelas)].sort(), ['companies', 'contacts']);
