@@ -21,6 +21,9 @@
  *      Aceita a resposta crua do MCP ({"rows":[{"inventario":{...}}]}) ou o objeto direto.
  *      Sem token, as edges publicadas ficam de fora (`edge_functions.publicadas: null`).
  *
+ * Opcoes: --entrada <json> (resposta do banco.sql) · --functions <json> (GET /functions ja salvo, so com --entrada)
+ *         --saida <arquivo> (padrao inventario/estado/banco.json) · --dry-run (nao grava) · --help
+ * INVENTARIO_RAIZ=<pasta> troca a raiz do repositorio lido (so para teste).
  * Antes de gravar, recusa saida com cara de credencial (Bearer, JWT, sb_secret_).
  * Exit: 0 = gravado; 2 = entrada invalida, consulta falhou ou saida com credencial.
  */
@@ -28,14 +31,16 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const SQL_PATH = path.join(RAIZ, 'scripts/inventario/banco.sql');
+const AQUI = path.dirname(fileURLToPath(import.meta.url));
+const RAIZ = path.resolve(process.env.INVENTARIO_RAIZ?.trim() || path.join(AQUI, '..', '..'));
+const SQL_PATH = path.join(AQUI, 'banco.sql');
 const SAIDA = path.join(RAIZ, 'inventario/estado/banco.json');
 const PASTAS_CODIGO = ['src', 'supabase/functions'];
 const EXTENSOES = /\.(ts|tsx|js|jsx|mjs)$/;
 export const PROJETO_OFICIAL = 'pgxfvjmuubtbowutlide';
-// SUPABASE_API_URL so existe para o teste apontar um servidor local.
+// SUPABASE_API_URL so existe para o teste apontar um servidor local (o token so sai para loopback).
 const API = `${(process.env.SUPABASE_API_URL || 'https://api.supabase.com').replace(/\/$/, '')}/v1/projects`;
+const API_LOCAL = /^https?:\/\/(127\.0\.0\.1|localhost|\[::1\])(:\d+)?(\/|$)/;
 
 // Limiares dos alertas: o que um agente precisa saber antes de mexer no sistema.
 export const LIMIARES = {
@@ -48,19 +53,35 @@ export const PARECE_CREDENCIAL = /Bearer\s+[A-Za-z0-9._-]{20,}|eyJ[A-Za-z0-9_-]{
 
 /** Extrai o objeto do inventario da Management API, do MCP (resposta ou envelope tools/call) ou do objeto direto. */
 export function extrairInventario(bruto) {
-  let dado = typeof bruto === 'string' ? JSON.parse(bruto.trim()) : bruto;
+  const lerJson = (texto) => {
+    try { return JSON.parse(texto.replace(/^\uFEFF/, '').trim()); } catch {
+      throw new Error(texto.trim() ? 'a entrada nao e JSON (o psql precisa de --no-align --tuples-only --quiet).' : 'entrada vazia: a consulta nao devolveu nada.');
+    }
+  };
+  let dado = typeof bruto === 'string' ? lerJson(bruto) : bruto;
   // Envelope cru de tools/call do MCP: { result: { content: [{ type: 'text', text: '<json>' }] } }.
   const conteudo = dado?.result?.content ?? dado?.content;
-  if (Array.isArray(conteudo) && typeof conteudo[0]?.text === 'string') dado = JSON.parse(conteudo[0].text);
+  if (Array.isArray(conteudo) && typeof conteudo[0]?.text === 'string') dado = lerJson(conteudo[0].text);
   if (dado && Array.isArray(dado.rows)) dado = dado.rows[0];
   if (Array.isArray(dado)) dado = dado[0];
   if (dado && dado.inventario) dado = dado.inventario;
-  if (typeof dado === 'string') dado = JSON.parse(dado);
+  if (typeof dado === 'string') dado = lerJson(dado);
+  const ehObjeto = (v) => Boolean(v) && typeof v === 'object' && !Array.isArray(v);
   const faltando = ['format_version', 'medido_em', 'resumo', 'tabelas', 'cron', 'whatsapp']
-    .filter((chave) => !(dado && chave in dado));
+    .filter((chave) => !(ehObjeto(dado) && chave in dado));
   if (faltando.length) throw new Error(`entrada sem as chaves: ${faltando.join(', ')}`);
   if (dado.format_version !== 1) throw new Error(`format_version ${dado.format_version} desconhecido (esperado 1)`);
   if (!Array.isArray(dado.tabelas) || dado.tabelas.length === 0) throw new Error('entrada sem tabelas');
+  // Formato por dentro: sem isto um campo ausente virava "Cannot read properties of undefined".
+  const ruins = Object.entries({
+    'tabelas[].nome': dado.tabelas.every((t) => ehObjeto(t) && typeof t.nome === 'string' && t.nome),
+    resumo: ehObjeto(dado.resumo),
+    'cron.jobs': Array.isArray(dado.cron?.jobs) && dado.cron.jobs.every(ehObjeto),
+    'cron.horas_paradas_7d': Array.isArray(dado.cron?.horas_paradas_7d),
+    'cron.historico': ehObjeto(dado.cron?.historico),
+    'whatsapp.conexoes': Array.isArray(dado.whatsapp?.conexoes) && dado.whatsapp.conexoes.every(ehObjeto),
+  }).filter(([, ok]) => !ok).map(([campo]) => campo);
+  if (ruins.length) throw new Error(`entrada fora do formato do banco.sql atual: ${ruins.join(', ')}`);
   return dado;
 }
 
@@ -81,7 +102,8 @@ function listarArquivos(dir, acc = []) {
  * Limite conhecido: `.from(variavel)` nao e resolvido.
  */
 export function contarUsoNoCodigo(raiz, nomes) {
-  const uso = Object.fromEntries(nomes.map((n) => [n, { src: 0, edges: 0 }]));
+  // Sem prototipo: uma tabela chamada `constructor` ou `__proto__` nao pode cair em Object.prototype.
+  const uso = Object.assign(Object.create(null), Object.fromEntries(nomes.map((n) => [n, { src: 0, edges: 0 }])));
   const reFrom = /(\bstorage\s*)?\.from\(\s*['"`]([A-Za-z0-9_]+)['"`]/g;
   const reRest = /\/rest\/v1\/([A-Za-z0-9_]+)/g;
   for (const pasta of PASTAS_CODIGO) {
@@ -236,7 +258,7 @@ export function rodaTodoDia(agenda) {
 
 /** Junta banco + codigo + edges e calcula orfas e alertas. Funcao pura (testada em scripts/ci/). */
 export function montarInventario(dado, uso, edges = compararEdges(null, [])) {
-  const tabelas = dado.tabelas.map((t) => ({ ...t, uso_no_codigo: uso[t.nome] ?? { src: 0, edges: 0 } }));
+  const tabelas = dado.tabelas.map((t) => ({ ...t, uso_no_codigo: (Object.hasOwn(uso, t.nome) && uso[t.nome]) || { src: 0, edges: 0 } }));
   const orfas = tabelas
     .filter((t) => t.linhas === 0 && !t.citada_no_banco && t.uso_no_codigo.src + t.uso_no_codigo.edges === 0)
     .map((t) => t.nome);
@@ -306,6 +328,7 @@ function projeto() {
 
 async function chamarApi(caminho, init = {}) {
   const token = process.env.SUPABASE_ACCESS_TOKEN?.trim();
+  if (process.env.SUPABASE_API_URL && !API_LOCAL.test(process.env.SUPABASE_API_URL)) throw new Error('SUPABASE_API_URL so aceita 127.0.0.1/localhost (e para teste).');
   const res = await fetch(`${API}/${encodeURIComponent(projeto())}${caminho}`, {
     ...init,
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...(init.headers || {}) },
@@ -313,20 +336,30 @@ async function chamarApi(caminho, init = {}) {
   });
   // Nunca repassa o corpo do erro: pode ecoar cabecalho ou parte da consulta.
   if (!res.ok) throw new Error(`Management API ${caminho} respondeu HTTP ${res.status}`);
-  return res.json();
+  try { return await res.json(); } catch { throw new Error(`Management API ${caminho} nao devolveu JSON`); }
+}
+const AJUDA = 'Uso: node scripts/inventario/gerar-banco.mjs [--entrada <json> [--functions <json>]] [--saida <arquivo>] [--dry-run] (detalhes no cabecalho)';
+function valorDe(argv, flag) {
+  const i = argv.indexOf(flag);
+  if (i !== -1 && (!argv[i + 1] || argv[i + 1].startsWith('--'))) throw new Error(`${flag} exige o caminho de um arquivo`);
+  return i === -1 ? null : argv[i + 1];
+}
+function lerArquivo(arquivo, flag) {
+  try { return fs.readFileSync(arquivo, 'utf8'); } catch (e) { throw new Error(`nao consegui ler o arquivo de ${flag} (${arquivo}): ${e.code ?? e.message}`); }
 }
 
-async function main(argv) {
-  const iEntrada = argv.indexOf('--entrada');
-  const iFunctions = argv.indexOf('--functions');
+export async function main(argv) {
+  if (argv.includes('--help') || argv.includes('-h')) { console.log(AJUDA); return; }
+  const entrada = valorDe(argv, '--entrada');
+  const functions = valorDe(argv, '--functions');
+  const saida = path.resolve(valorDe(argv, '--saida') ?? SAIDA);
   const token = process.env.SUPABASE_ACCESS_TOKEN?.trim();
   let bruto;
   let publicadasApi = null;
-  if (iEntrada !== -1) {
-    const arquivo = argv[iEntrada + 1];
-    if (!arquivo) throw new Error('--entrada exige o caminho do arquivo com a resposta do banco.sql');
-    bruto = fs.readFileSync(arquivo, 'utf8');
-    if (iFunctions !== -1) publicadasApi = JSON.parse(fs.readFileSync(argv[iFunctions + 1], 'utf8'));
+  if (entrada) {
+    bruto = lerArquivo(entrada, '--entrada');
+    const texto = functions ? lerArquivo(functions, '--functions') : null;
+    try { publicadasApi = texto === null ? null : JSON.parse(texto); } catch { throw new Error('--functions: o arquivo nao e JSON'); }
   } else {
     if (!token) throw new Error('sem --entrada e sem SUPABASE_ACCESS_TOKEN: nada para ler (veja o cabecalho do script).');
     bruto = await chamarApi('/database/query/read-only', {
@@ -335,6 +368,8 @@ async function main(argv) {
     });
   }
   if (!publicadasApi && token) publicadasApi = await chamarApi('/functions');
+  const listaOk = publicadasApi === null || (Array.isArray(publicadasApi) && publicadasApi.every((f) => f && typeof f.slug === 'string'));
+  if (!listaOk) throw new Error('a lista de edge functions publicadas nao e uma lista de { slug, ... }');
 
   const dado = extrairInventario(bruto);
   conferirOrigem(dado, tabelasDoManifesto(RAIZ), versoesDoRepo(RAIZ));
@@ -344,10 +379,14 @@ async function main(argv) {
   if (PARECE_CREDENCIAL.test(texto)) {
     throw new Error('a saida tem algo com cara de credencial; nada foi gravado. Revise banco.sql.');
   }
-  fs.mkdirSync(path.dirname(SAIDA), { recursive: true });
-  fs.writeFileSync(SAIDA, texto);
   const ed = inventario.edge_functions;
-  console.log(`banco.json: ${inventario.tabelas.length} tabelas, ${inventario.cron.jobs.length} cron jobs, `
+  if (!argv.includes('--dry-run')) {
+    // Grava ao lado e renomeia: uma interrupcao no meio nao deixa banco.json pela metade.
+    fs.mkdirSync(path.dirname(saida), { recursive: true });
+    fs.writeFileSync(`${saida}.${process.pid}.tmp`, texto);
+    fs.renameSync(`${saida}.${process.pid}.tmp`, saida);
+  }
+  console.log(`${argv.includes('--dry-run') ? '(--dry-run, nada gravado) ' : ''}banco.json: ${inventario.tabelas.length} tabelas, ${inventario.cron.jobs.length} cron jobs, `
     + `${inventario.tabelas_orfas.lista.length} orfas, ${inventario.alertas.length} alertas, `
     + `edges ${ed.publicadas ? `${ed.publicadas.length} publicadas/${ed.no_repo} no repo/${ed.externas?.no_ar?.length ?? 0} externas catalogadas` : `${ed.no_repo} no repo (publicadas nao consultadas)`} `
     + `(medido_em ${inventario.medido_em}).`);

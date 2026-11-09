@@ -133,9 +133,21 @@ def squash(s: str) -> str:
 
 def git(root: Path, *args: str) -> str:
     try:
-        return subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, timeout=60).stdout.strip()
+        res = subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, timeout=60)
+        # Falha do git não é dado: `rev-parse HEAD` num repo sem commit imprime "HEAD" no stdout e virava o `commit`.
+        return res.stdout.strip() if res.returncode == 0 else ""
     except Exception:
         return ""
+
+
+def write_atomic(path: Path, content: str) -> None:
+    """Grava em arquivo temporário e troca: interrupção ou execução concorrente não deixa arquivo pela metade."""
+    tmp = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    try:
+        tmp.write_text(content, encoding="utf-8")
+        os.replace(tmp, path)
+    finally:
+        tmp.unlink(missing_ok=True)
 
 
 MAX_ROWS = 300
@@ -717,17 +729,18 @@ SQL_DROP_CONSTRAINT_RE = re.compile(r"alter\s+table\s+(?:if\s+exists\s+)?(?:only
 SQL_POLICY_HEAD_RE = re.compile(r"create\s+policy\s+(?:\"([^\"]+)\"|(\w+))\s+on\s+(?:\"?(\w+)\"?\.)?\"?(\w+)\"?\s*(?:as\s+(permissive|restrictive)\s*)?(?:for\s+(select|insert|update|delete|all)\s*)?(?:to\s+([\w\s,]+?)\s*)?(?=using|with\s+check|;|$)", re.I)
 
 
-SQL_ALTER_POLICY_RE = re.compile(r"alter\s+policy\s+(?:\"([^\"]+)\"|(\w+))\s+on\s+(?:\"?(\w+)\"?\.)?\"?(\w+)\"?\s*", re.I)
-DO_BLOCK_RE = re.compile(r"do\b[\s\S]*?(\$[A-Za-z_]*\$)([\s\S]*)\1", re.I)
-DO_INNER_DDL_RE = re.compile(r"(?:^|\b(?:begin|then|else|loop)\s+)((?:create|alter|drop|grant|revoke)\s[\s\S]*)$", re.I)
+SQL_ALTER_POLICY_RE = re.compile(r"alter\s+policy\s+(?:\"([^\"]+)\"|(\w+))\s+on\s+(?:\"?(\w+)\"?\.)?\"?(\w+)\"?\s*", re.IGNORECASE)
+DO_BLOCK_RE = re.compile(r"do\b[\s\S]*?(\$[A-Za-z_]*\$)([\s\S]*)\1", re.IGNORECASE)
+DO_INNER_DDL_RE = re.compile(r"(?:^|\b(?:begin|then|else|loop)\s+)((?:create|alter|drop|grant|revoke)\s[\s\S]*)$", re.IGNORECASE)
+DO_STATIC_EXECUTE_RE = re.compile(r"(?:^|\b(?:begin|then|else|loop)\s+)execute\s+'((?:create|alter|drop|grant|revoke)\s(?:[^'%]|'')*)'\s*;?\s*$", re.IGNORECASE)
 
 
 def expand_do_blocks(statements: list[str]):
     """DDL estático dentro de `DO $$ ... $$` (padrão de migration idempotente) também muda o schema.
 
     Cada statement do corpo é devolvido a partir do verbo DDL, sem o prefixo de controle
-    (BEGIN / IF ... THEN / ELSE / LOOP). SQL dinâmico (`EXECUTE '...'`, `format(...)`) fica de fora:
-    o verbo está dentro de aspas e não dá para saber o alvo sem executar.
+    (BEGIN / IF ... THEN / ELSE / LOOP). `EXECUTE '<sql fixo>'` vale pelo literal. SQL dinâmico
+    (`EXECUTE format(...)`, concatenação) fica de fora: não dá para saber o alvo sem executar.
     """
     for st in statements:
         m = DO_BLOCK_RE.match(st)
@@ -735,6 +748,10 @@ def expand_do_blocks(statements: list[str]):
             yield st
             continue
         for piece in split_sql_statements(m.group(2)):
+            static = DO_STATIC_EXECUTE_RE.search(piece)
+            if static and piece[:static.start(1)].count("'") % 2 == 1:   # só a aspa que abre o literal
+                yield static.group(1).replace("''", "'") + ";"
+                continue
             for im in DO_INNER_DDL_RE.finditer(piece):
                 if piece[:im.start(1)].count("'") % 2 == 0:   # fora de literal
                     yield im.group(1)
@@ -742,7 +759,7 @@ def expand_do_blocks(statements: list[str]):
 
 
 def policy_clause(rest: str, kw: str) -> str:
-    km = re.search(kw + r"\s*\(", rest, re.I)
+    km = re.search(kw + r"\s*\(", rest, re.IGNORECASE)
     if not km:
         return ""
     close = balanced(rest, km.end() - 1)
@@ -755,8 +772,8 @@ def alter_policy(policies: list[dict], st: str, src: str) -> None:
     if not m:
         return
     name, table, rest = (m.group(1) or m.group(2)).strip(), tkey(m.group(3), m.group(4)), st[m.end():]
-    renamed = re.match(r"rename\s+to\s+(?:\"([^\"]+)\"|(\w+))", rest, re.I)
-    roles = re.match(r"to\s+([\w\s,]+?)\s*(?=using|with\s+check|;|$)", rest, re.I)
+    renamed = re.match(r"rename\s+to\s+(?:\"([^\"]+)\"|(\w+))", rest, re.IGNORECASE)
+    roles = re.match(r"to\s+([\w\s,]+?)\s*(?=using|with\s+check|;|$)", rest, re.IGNORECASE)
     using, check = policy_clause(rest, r"\busing"), policy_clause(rest, r"with\s+check")
     for pol in policies:
         if pol["name"] != name or pol["table"] != table:
@@ -902,7 +919,13 @@ def parse_sql_schema(root: Path, files: list[Path]) -> dict:
                 continue
             m = SQL_DROP_TABLE_RE.match(st)
             if m:
-                T.pop(tkey(m.group(1), m.group(2)), None); continue
+                # policies, triggers, índices e o estado de RLS morrem com a tabela; sem isto a matriz
+                # de acesso continuava listando as policies da versão antiga de uma tabela recriada.
+                key = tkey(m.group(1), m.group(2))
+                T.pop(key, None); schema["rls"].pop(key, None)
+                for kind in ("policies", "triggers", "indexes"):
+                    schema[kind] = [x for x in schema[kind] if x["table"] != key]
+                continue
             if low.startswith("create policy"):
                 pol = parse_policy(st)
                 if pol:
@@ -1417,7 +1440,8 @@ def build_access(code, schema, feats, dataflow, stack, rules) -> dict:
     # matriz tabela × comando → quem
     matrix = {}
     for key in sorted(schema["tables"]):
-        pols = [p for p in schema["policies"] if p["table"] == key or p["table"] == key.split(".")[-1]]
+        # Só nome exato: casar pelo sufixo atribuía as policies de `public.contacts` a `outro_schema.contacts`.
+        pols = [p for p in schema["policies"] if p["table"] == key]
         row = {"rls": schema["rls"].get(key, "não encontrado"), "SELECT": [], "INSERT": [], "UPDATE": [], "DELETE": []}
         for p in pols:
             cmds = ["SELECT", "INSERT", "UPDATE", "DELETE"] if p["cmd"] == "ALL" else [p["cmd"]]
@@ -2076,6 +2100,9 @@ def main() -> int:
     args = ap.parse_args()
 
     root = Path(args.repo).resolve()
+    if not root.is_dir():
+        log(f"erro: --repo não é um diretório: {root}")
+        return 2
     out_dir = (root / args.out).resolve()
     out_rel = rel(out_dir, root) if out_dir.is_relative_to(root) else args.out.rstrip("/")
     log(f"repo={root} out={out_dir}")
@@ -2120,11 +2147,15 @@ def main() -> int:
     if state_path.exists():
         try: prev = json.loads(state_path.read_text())
         except Exception: prev = {}
+        if not isinstance(prev, dict):   # .state.json corrompido com JSON válido (lista, null)
+            prev = {}
     changed = prev.get("facts_hash") != facts_hash or prev.get("version") != VERSION
     log(f"facts_hash={facts_hash} prev={prev.get('facts_hash')} changed={changed}")
     if args.check:
         return 1 if changed else 0
-    if not changed and prev.get("sha") == gitd["sha"] and not args.force:
+    # "nada mudou" só vale com a saída inteira no lugar; execução interrompida deixa .state.json sem manifest.
+    complete = (out_dir / "manifest.json").is_file() and (out_dir / "context.json").is_file()
+    if not changed and prev.get("sha") == gitd["sha"] and not args.force and complete:
         log("nada mudou — nenhuma escrita")
         return 0
 
@@ -2173,16 +2204,17 @@ def main() -> int:
         p = out_dir / name
         content = redact(content)
         if not p.exists() or p.read_text(encoding="utf-8") != content:
-            p.write_text(content, encoding="utf-8"); written.append(name)
+            write_atomic(p, content); written.append(name)
     ctx = {"meta": meta, "version": VERSION, "facts_hash": facts_hash, **facts,
            "code_files": {k: {kk: vv for kk, vv in v.items() if kk != "imports" and vv not in ([], {}, "", 0, False)} for k, v in code.items()}, "git": gitd}
-    (out_dir / "context.json").write_text(json.dumps(ctx, ensure_ascii=False, indent=1, default=list), encoding="utf-8")
-    state_path.write_text(json.dumps({"facts_hash": facts_hash, "sha": gitd["sha"], "version": VERSION, "generated_at": meta["generated_at"]}, indent=1), encoding="utf-8")
+    write_atomic(out_dir / "context.json", json.dumps(ctx, ensure_ascii=False, indent=1, default=list))
+    write_atomic(state_path, json.dumps({"facts_hash": facts_hash, "sha": gitd["sha"], "version": VERSION, "generated_at": meta["generated_at"]}, indent=1))
     manifest = {"produtor": "ai-context-sync", "versao": VERSION, "perfil": args.profile, "gerado_em": meta["generated_at"], "commit": gitd["sha"],
                 "fonte": {"full": "código do repo + migrations/types + manual/", "codigo": "código do repo", "regras": "código + migrations/types + manual/ (regras de negócio)"}[args.profile],
                 "entrada": sorted(outputs)[0] if outputs else "", "arquivos": sorted(outputs) + ["context.json"],
                 "schema_real_em": snap if snap_dir else "", "inconsistencias": len(audit["issues"]), "lacunas": len(audit["gaps"])}
-    (out_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
+    # manifest por último: é o que o índice e o gate do workflow leem como "coleta concluída"
+    write_atomic(out_dir / "manifest.json", json.dumps(manifest, ensure_ascii=False, indent=1))
     if not args.no_pointer:
         index_rel = args.index_path.strip("/") or f"{out_rel}/00-INDEX.md"
         written += upsert_pointer(root, out_rel, index_rel, create_if_missing=True)
@@ -2191,4 +2223,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except OSError as error:   # saída sem permissão, disco cheio, --out apontando para arquivo
+        log(f"erro de E/S: {error}")
+        sys.exit(2)

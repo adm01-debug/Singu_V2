@@ -1,5 +1,10 @@
 -- rls-force-audit.sql — Rodada 17/10
 -- Tabelas cujo owner e superuser bypassam RLS sem FORCE ROW LEVEL SECURITY.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== rls-force-audit =='
 SELECT n.nspname AS schemaname, c.relname AS table_name,
        c.relrowsecurity AS rls_enabled,

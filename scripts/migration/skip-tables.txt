@@ -1,19 +1,20 @@
-# Tabelas ignoradas por export-data.sh / import-data.sh.
+# Tabelas ignoradas por export-data.sh (e toleradas por compare-counts.sh).
 # Uma por linha. Comentários com #. Suporta curingas glob simples (fnmatch).
+# tests/data-files.test.sh falha se uma entrada sem curinga não existir mais
+# em ddl/02_tables.sql / ddl/11_partitions.sql.
 #
 # Motivo geral: dados voláteis, caches ou partições que serão recriadas vazias.
 
 # Auditoria — partições recriadas vazias (a estrutura vem do DDL 11)
 audit_log
 audit_log_default
-audit_log_2026_*
+audit_log_20*
 
 # Caches / snapshots efêmeros
 attribution_models_cache
 conversational_search_cache
 search_products_cache
 semantic_search_cache
-channel_counts_cache
 system_health_snapshots
 
 # Filas de processamento (serão repopuladas pelos triggers)
@@ -31,7 +32,6 @@ connection_test_logs
 # Logs de alto volume — migrar seletivamente se necessário
 notification_logs
 error_logs
-ai_gateway_logs
 incoming_webhook_logs
 incoming_webhook_dlq
 sequence_send_log

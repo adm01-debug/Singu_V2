@@ -23,7 +23,7 @@ CREATE TABLE auth.identities (
   last_sign_in_at timestamptz,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now(),
-  email text,
+  email text GENERATED ALWAYS AS (lower(identity_data->>'email')) STORED,
   provider_id text NOT NULL,
   UNIQUE (provider, provider_id)
 );

@@ -1,12 +1,21 @@
 -- ============================================================================
 -- Ordem topológica de tabelas do schema public via Kahn sobre pg_constraint.
 -- Saída: uma tabela por linha, no formato "NN\tnome_tabela" (NN = 3 dígitos).
--- Uso:   psql "$SOURCE_DB_URL" -Atq -f scripts/migration/table-order.sql
+-- Uso:   psql "$SRC_DB_URL" -Atq -f scripts/migration/table-order.sql
+--        psql ... -v with_depth=1 -f ...   → acrescenta 3ª coluna "\tprofundidade"
+--        (camada topológica; usada por import-data-parallel.sh)
 -- ----------------------------------------------------------------------------
--- Tabelas em ciclo (FK auto-referente ou mútua) aparecem no final, marcadas
--- com prefixo "999" — o import as processa com session_replication_role=replica
--- então a ordem exata deixa de importar para elas.
+-- Tabelas em ciclo mútuo de FK não alcançável a partir de uma raiz ficam no
+-- final com profundidade 999; ciclos alcançáveis saturam em 20. O import usa
+-- session_replication_role=replica, então a ordem exata não importa para elas.
+-- A recursão usa UNION (não UNION ALL): deduplica (tabela, nível) e mantém o
+-- custo polinomial mesmo em grafo denso de FKs.
 -- ============================================================================
+
+\if :{?with_depth}
+\else
+\set with_depth 0
+\endif
 
 WITH RECURSIVE
 base_tables AS (
@@ -33,7 +42,7 @@ kahn AS (
   SELECT bt.oid, bt.relname, 0 AS level
   FROM base_tables bt
   WHERE NOT EXISTS (SELECT 1 FROM fk_edges e WHERE e.dependent_oid = bt.oid)
-  UNION ALL
+  UNION
   -- nível N+1: dependente cujo pai já entrou em nível <= N
   SELECT bt.oid, bt.relname, k.level + 1
   FROM base_tables bt
@@ -59,5 +68,6 @@ ordered AS (
 )
 SELECT lpad((row_number() OVER (ORDER BY depth, relname))::text, 3, '0')
        || E'\t' || relname
+       || CASE WHEN :with_depth = 1 THEN E'\t' || depth::text ELSE '' END
 FROM ordered
 ORDER BY depth, relname;

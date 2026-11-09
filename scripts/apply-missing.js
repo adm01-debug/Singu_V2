@@ -1,129 +1,52 @@
-// apply-missing.js — extrai e aplica só as tabelas faltando
-import { readFileSync } from 'node:fs';
-import https from 'node:https';
+// apply-missing.js — cria só as tabelas (02_tables.sql) e partições (11_partitions.sql) que ainda não existem no banco.
+// Com --apply, primeiro consulta as tabelas existentes (somente leitura) e envia um CREATE TABLE IF NOT EXISTS por
+// tabela faltante. Na simulação não há consulta: lista todas as tabelas dos arquivos como candidatas.
+//
+// ATENÇÃO: escreve DDL no projeto Supabase de PRODUÇÃO (ref canônico do AGENTS.md) pela Management API.
+// O padrão é SIMULAÇÃO: nada é enviado, o script só mostra o que faria. Aplicar de verdade exige --apply.
+//   node scripts/apply-missing.js                    simula (não precisa de token)
+//   node scripts/apply-missing.js --sql              simula e imprime o SQL completo que seria enviado
+//   SUPABASE_ACCESS_TOKEN=... node scripts/apply-missing.js --apply
+// Reexecutar é seguro: cada instrução é enviada em forma idempotente (ver scripts/lib/sql-split.mjs).
+// Ambiente: SUPABASE_ACCESS_TOKEN (só com --apply; nunca aparece em log), SUPABASE_PROJECT_REF,
+// SUPABASE_MGMT_API_URL, timeout/retentativas (ver scripts/lib/supabase-mgmt.mjs).
+// Saída: 0 ok · 1 alguma instrução/requisição falhou · 2 uso/configuração/SQL malformado · 130 interrompido.
+import { carregarDdl, ehCli, emUnidades, ErroDeUso, principal, rodarComoCli } from './lib/supabase-mgmt.mjs';
+import { tabelaCriada, tornarIdempotente } from './lib/sql-split.mjs';
 
-const PAT = process.env.SUPABASE_ACCESS_TOKEN;
-if (!PAT) throw new Error('SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro');
-const REF = 'pgxfvjmuubtbowutlide';
+export const ARQUIVOS = ['02_tables.sql', '11_partitions.sql'];
+export const SQL_TABELAS_EXISTENTES = "SELECT table_schema, table_name FROM information_schema.tables "
+  + "WHERE table_type = 'BASE TABLE' AND table_schema NOT IN ('pg_catalog', 'information_schema')";
 
-function mgmt(sql) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({ query: sql });
-    const req = https.request({
-      hostname: 'api.supabase.com', port: 443,
-      path: `/v1/projects/${REF}/database/query`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${PAT}`,
-        'apikey': PAT,
-        'Content-Length': Buffer.byteLength(body),
-      },
-      timeout: 55000,
-    }, (res) => {
-      let d = '';
-      res.on('data', c => d += c);
-      res.on('end', () => resolve({ status: res.statusCode, body: d }));
-    });
-    req.on('error', reject);
-    req.on('timeout', () => { req.destroy(); reject(new Error('TIMEOUT')); });
-    req.write(body);
-    req.end();
+/** CREATE TABLE dos arquivos, na ordem: [{ origem, sql (já com IF NOT EXISTS), chave: 'esquema.nome' }]. */
+export function tabelasDoArquivo(dirDdl) {
+  return ARQUIVOS.flatMap((arquivo) => carregarDdl(dirDdl, arquivo)).flatMap((i) => {
+    const t = tabelaCriada(i.sql);
+    return t ? [{ origem: i.origem, sql: tornarIdempotente(i.sql), chave: `${t.esquema ?? 'public'}.${t.nome}` }] : [];
   });
 }
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-// ── extract table blocks via simple string search ──────────────────────────────
-
-function extractTableBlocks(sql) {
-  const blocks = [];
-  // Find all "CREATE TABLE name (" starts
-  const startRe = /CREATE TABLE (?:\w+\.)?(\w+)\s*\(/g;
-  let m;
-  while ((m = startRe.exec(sql)) !== null) {
-    const name = m[1];
-    const start = m.index;
-    // Find matching close paren (track depth)
-    let depth = 0;
-    let end = -1;
-    for (let i = start + m[0].length - 1; i < sql.length; i++) {
-      if (sql[i] === '(') depth++;
-      else if (sql[i] === ')') {
-        depth--;
-        if (depth === 0) { end = i + 1; break; }
-      }
-    }
-    if (end !== -1) {
-      // Include everything up to and including the closing paren
-      // Then capture constraint lines until semicolon
-      let semi = sql.indexOf(';', end);
-      if (semi !== -1) {
-        // include newline before CREATE
-        const lineStart = sql.lastIndexOf('\n', start - 1) + 1;
-        blocks.push({ name, start: lineStart, semi: semi + 1 });
-      }
-    }
-  }
-  return blocks;
+/** Filtra as tabelas cuja chave não está em `existentes` (linhas { table_schema, table_name }). */
+export function faltantes(tabelas, existentes) {
+  const tem = new Set(existentes.map((l) => `${l.table_schema}.${l.table_name}`));
+  return tabelas.filter((t) => !tem.has(t.chave));
 }
 
-// ── main ────────────────────────────────────────────────────────────────────
-
-async function main() {
-  // 1. Existing tables
-  process.stdout.write('Verificando tabelas existentes... ');
-  const existingRaw = await mgmt(
-    "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'"
-  );
-  const existing = new Set(JSON.parse(existingRaw.body).map(r => r.table_name));
-  console.log(`${existing.size} ja existem\n`);
-
-  // 2. Extract blocks from 02_tables.sql
-  const sql = readFileSync('scripts/migration/ddl/02_tables.sql', 'utf8');
-  const blocks = extractTableBlocks(sql);
-
-  // 3. Filter to only missing
-  const toCreate = blocks.filter(b => !existing.has(b.name));
-  console.log(`${toCreate.length} tabelas para criar (de ${blocks.length} no arquivo)\n`);
-
-  // 4. Apply each
-  let ok = 0, skip = 0, err = 0;
-  for (const blk of toCreate) {
-    const raw = sql.slice(blk.start, blk.semi).trim();
-    // Replace CREATE TABLE [schema.]name with CREATE TABLE IF NOT EXISTS [schema.]name
-    const createStmt = raw.replace(
-      /CREATE TABLE (?:\w+\.)?(\w+)/,
-      (m, name) => `CREATE TABLE IF NOT EXISTS ${name}`
-    );
-
-    process.stdout.write(`  ${blk.name}... `);
-    try {
-      const r = await mgmt(createStmt);
-      if (r.status >= 200 && r.status < 300) {
-        ok++; console.log('OK');
-      } else {
-        let msg = r.body.slice(0, 250);
-        try { const j = JSON.parse(r.body); msg = j.message ?? msg; } catch (_) {}
-        if (msg.includes('already exists') || msg.includes('duplicate')) {
-          skip++; console.log('SKIP');
-        } else {
-          err++; console.log(`ERR ${r.status}: ${msg.slice(0, 80)}`);
-        }
-      }
-    } catch (e) {
-      console.log(`NET: ${e.message}`); err++;
+export const definicao = {
+  nome: 'apply-missing.js',
+  descricao: 'cria só as tabelas (02_tables.sql) e partições (11_partitions.sql) que ainda não existem no banco.',
+  async montarEtapas({ args, cliente }) {
+    const tabelas = tabelasDoArquivo(args.dirDdl);
+    if (!cliente) {
+      return [{ titulo: ARQUIVOS.join(' + '), unidades: emUnidades(tabelas), nota: 'a simulação não consulta o banco: estas são TODAS as tabelas dos arquivos; com --apply só as que faltarem são criadas' }];
     }
-    await sleep(150);
-  }
+    const r = await cliente.consultar(SQL_TABELAS_EXISTENTES);
+    if (r.tipo !== 'ok') throw new ErroDeUso(`não consegui listar as tabelas existentes: ${r.mensagem}`, 1);
+    const criar = faltantes(tabelas, r.linhas);
+    return [{ titulo: `${ARQUIVOS.join(' + ')}: ${criar.length} tabela(s) faltando de ${tabelas.length}`, unidades: emUnidades(criar) }];
+  },
+};
 
-  console.log(`\nTabelas: ${ok} criadas, ${skip} ja existiam, ${err} erros`);
+export const main = (argv, env, io) => principal(definicao, argv, env, io);
 
-  const final = await mgmt(
-    "SELECT count(*)::int as t FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'"
-  );
-  const count = JSON.parse(final.body)[0].t;
-  console.log(`Total: ${count} (antes: ${existing.size}, diff: +${count - existing.size})`);
-}
-
-main().catch(e => { console.error('Fatal:', e.message); process.exit(1); });
+if (ehCli(import.meta.url)) await rodarComoCli(main);

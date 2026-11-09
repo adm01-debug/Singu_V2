@@ -3,6 +3,8 @@
 --   psql "$SRC_DB_URL"  -Atqf verify/triggers-parity.sql > verify/triggers-src.txt
 --   psql "$DEST_DB_URL" -Atqf verify/triggers-parity.sql > verify/triggers-dest.txt
 --   diff -u verify/triggers-src.txt verify/triggers-dest.txt
+-- Classe   : SNAPSHOT (saida canonica para diff origem x destino; sem veredito)
+-- Saida    : 0.
 
 SELECT
   n.nspname || '.' || c.relname || '::' || t.tgname || '::' ||

@@ -42,7 +42,7 @@ function runRls(t, scenario, update = false) {
   `);
   const result = spawnSync(process.execPath, ['--import', pathToFileURL(loader).href, script, ...(update ? ['--update'] : [])], {
     encoding: 'utf8', timeout: 10000,
-    env: { ...process.env, SCENARIO: scenario, SUPABASE_URL: 'https://fixture.invalid',
+    env: { ...process.env, SCENARIO: scenario, SUPABASE_URL: 'https://fixture.invalid', RLS_RETRY_DELAY_MS: '5',
       SUPABASE_ANON_KEY: 'fixture-anon', TEST_USER_JWT: 'fixture-user' },
   });
   assert.ifError(result.error);

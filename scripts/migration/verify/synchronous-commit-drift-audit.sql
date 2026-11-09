@@ -1,5 +1,10 @@
 -- synchronous-commit-drift-audit.sql — Rodada 24/10 (gap 23)
 -- Drift de synchronous_commit por role/database pode causar perda de commits em crash.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== synchronous-commit-drift-audit =='
 SELECT name, setting, source, sourcefile, sourceline
   FROM pg_settings

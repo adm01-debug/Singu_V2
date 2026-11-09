@@ -1,89 +1,59 @@
-// fix-enums.js — cria enums faltantes e cria system_alerts corrigido
-import https from 'node:https';
+// fix-enums.js — cria os enums que faltavam e a tabela system_alerts com o DEFAULT corrigido.
+// O CREATE TABLE de system_alerts em 02_tables.sql é inválido (DEFAULT com referência a coluna); aqui vai a versão que roda.
+// Os enums espelham 01_schemas_and_enums.sql (um teste garante que não divergem).
+//
+// ATENÇÃO: escreve DDL no projeto Supabase de PRODUÇÃO (ref canônico do AGENTS.md) pela Management API.
+// O padrão é SIMULAÇÃO: nada é enviado, o script só mostra o que faria. Aplicar de verdade exige --apply.
+//   node scripts/fix-enums.js                    simula (não precisa de token)
+//   node scripts/fix-enums.js --sql              simula e imprime o SQL completo que seria enviado
+//   SUPABASE_ACCESS_TOKEN=... node scripts/fix-enums.js --apply
+// Reexecutar é seguro: cada instrução é enviada em forma idempotente (ver scripts/lib/sql-split.mjs).
+// Ambiente: SUPABASE_ACCESS_TOKEN (só com --apply; nunca aparece em log), SUPABASE_PROJECT_REF,
+// SUPABASE_MGMT_API_URL, timeout/retentativas (ver scripts/lib/supabase-mgmt.mjs).
+// Saída: 0 ok · 1 alguma instrução/requisição falhou · 2 uso/configuração/SQL malformado · 130 interrompido.
+import { ehCli, emUnidades, principal, rodarComoCli } from './lib/supabase-mgmt.mjs';
+import { sqlCriarEnum } from './lib/sql-split.mjs';
 
-const PAT = process.env.SUPABASE_ACCESS_TOKEN;
-if (!PAT) throw new Error('SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro');
-const REF = 'pgxfvjmuubtbowutlide';
+export const ENUMS = {
+  'public.entity_relationship_role': ['buyer', 'manager', 'owner', 'decision_maker', 'influencer', 'user',
+    'sponsor', 'partner', 'supplier', 'subsidiary', 'parent', 'employee_of', 'other'],
+  'public.entity_type': ['company', 'contact'],
+  'public.error_severity': ['info', 'warning', 'error', 'critical'],
+  'public.passo_outcome': ['respondeu_positivo', 'respondeu_neutro', 'nao_respondeu', 'nao_atendeu', 'pulou'],
+  'public.validation_kind': ['email', 'phone'],
+  'public.validation_queue_status': ['pending', 'processing', 'done', 'error'],
+};
 
-function mgmt(sql) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({ query: sql });
-    const req = https.request({
-      hostname: 'api.supabase.com', port: 443,
-      path: `/v1/projects/${REF}/database/query`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${PAT}`,
-        'apikey': PAT,
-        'Content-Length': Buffer.byteLength(body),
-      },
-      timeout: 30000,
-    }, (res) => {
-      let d = '';
-      res.on('data', c => d += c);
-      res.on('end', () => resolve({ status: res.statusCode, body: d.slice(0, 500) }));
-    });
-    req.on('error', reject);
-    req.write(body);
-    req.end();
-  });
+export const SQL_SYSTEM_ALERTS = `CREATE TABLE IF NOT EXISTS public.system_alerts (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  alert_type text NOT NULL,
+  severity text NOT NULL,
+  threshold_pct numeric NOT NULL,
+  consumed_pct numeric NOT NULL,
+  message text NOT NULL,
+  metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+  acknowledged_at timestamp with time zone,
+  acknowledged_by uuid,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  is_simulated boolean DEFAULT false,
+  CONSTRAINT system_alerts_pkey PRIMARY KEY (id),
+  CONSTRAINT system_alerts_severity_check CHECK ((severity = ANY (ARRAY['warning'::text, 'high'::text, 'critical'::text])))
+)`;
+
+export function montarEtapas() {
+  const enums = Object.entries(ENUMS).map(([nome, valores]) => ({ origem: `enum ${nome}`, sql: sqlCriarEnum(nome, valores) }));
+  return [
+    { titulo: 'enums faltantes', unidades: emUnidades(enums) },
+    { titulo: 'system_alerts (DEFAULT corrigido)', unidades: emUnidades([{ origem: 'tabela public.system_alerts', sql: SQL_SYSTEM_ALERTS }]) },
+  ];
 }
 
-async function createEnum(name, values) {
-  const vals = values.map(v => `'${v}'`).join(',');
-  const sql = `DO $$ BEGIN CREATE TYPE ${name} AS ENUM (${vals}); EXCEPTION WHEN duplicate_object THEN null; END $$;`;
-  process.stdout.write(`  ${name}... `);
-  const r = await mgmt(sql);
-  if (r.status >= 200 && r.status < 300) {
-    console.log('OK');
-  } else {
-    console.log(`ERR ${r.status}: ${r.body.slice(0, 150)}`);
-  }
-}
+export const definicao = {
+  nome: 'fix-enums.js',
+  descricao: 'cria os enums que faltavam e a tabela system_alerts com o DEFAULT corrigido.',
+  montarEtapas,
+};
 
-async function main() {
-  console.log('Criando enums faltantes:');
-  await createEnum('entity_relationship_role', [
-    'buyer','manager','owner','decision_maker','influencer','user',
-    'sponsor','partner','supplier','subsidiary','parent','employee_of','other'
-  ]);
-  await createEnum('entity_type', ['company', 'contact']);
-  await createEnum('error_severity', ['info', 'warning', 'error', 'critical']);
-  await createEnum('passo_outcome', ['respondeu_positivo','respondeu_neutro','nao_respondeu','nao_atendeu','pulou']);
-  await createEnum('validation_kind', ['email', 'phone']);
-  await createEnum('validation_queue_status', ['pending', 'processing', 'done', 'error']);
+export const main = (argv, env, io) => principal(definicao, argv, env, io);
 
-  // system_alerts: corrected DEFAULT
-  console.log('\nCriando system_alerts (DEFAULT corrigido):');
-  const r = await mgmt(
-    `CREATE TABLE IF NOT EXISTS system_alerts (
-      id uuid DEFAULT gen_random_uuid() NOT NULL,
-      alert_type text NOT NULL,
-      severity text NOT NULL,
-      threshold_pct numeric NOT NULL,
-      consumed_pct numeric NOT NULL,
-      message text NOT NULL,
-      metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
-      acknowledged_at timestamp with time zone,
-      acknowledged_by uuid,
-      created_at timestamp with time zone DEFAULT now() NOT NULL,
-      is_simulated boolean DEFAULT false,
-      CONSTRAINT system_alerts_pkey PRIMARY KEY (id),
-      CONSTRAINT system_alerts_severity_check CHECK ((severity = ANY (ARRAY['warning'::text, 'high'::text, 'critical'::text])))
-    )`
-  );
-  if (r.status >= 200 && r.status < 300) {
-    console.log('  OK');
-  } else {
-    console.log(`  ERR ${r.status}: ${r.body.slice(0, 200)}`);
-  }
-
-  // Final count
-  const count = await mgmt(
-    "SELECT count(*)::int as t FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'"
-  );
-  console.log(`\nTotal de tabelas: ${JSON.parse(count.body)[0].t}`);
-}
-
-main().catch(e => { console.error('Fatal:', e.message); process.exit(1); });
+if (ehCli(import.meta.url)) await rodarComoCli(main);

@@ -100,7 +100,10 @@ SELECT jsonb_build_object(
              'linhas_exatas', t.linhas_exatas,
              'bytes', t.bytes,
              'particao_de', t.particao_de,
-             'citada_no_banco', EXISTS (SELECT 1 FROM corpos c WHERE c.txt ~ ('\m' || t.nome || '\M'))
+             -- O nome entra na regex com todo caractere especial escapado e com fronteira de palavra
+             -- explicita: sem isso "a.b" casava com "axb" e um nome com "(" ou "[" derrubava a consulta.
+             'citada_no_banco', EXISTS (SELECT 1 FROM corpos c WHERE c.txt ~ (
+               '(^|[^[:alnum:]_])' || regexp_replace(t.nome, '([^[:alnum:]_])', '\\\1', 'g') || '($|[^[:alnum:]_])'))
            ) ORDER BY t.nome), '[]'::jsonb)
       FROM tabelas t
       LEFT JOIN policies p ON p.nome = t.nome

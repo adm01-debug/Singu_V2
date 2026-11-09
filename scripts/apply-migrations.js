@@ -1,85 +1,27 @@
-// apply-migrations.js — usa Supabase Management API via PAT
-import { readFileSync } from 'node:fs';
-import https from 'node:https';
+// apply-migrations.js — aplica os DDL de scripts/migration/ddl, um POST por arquivo (cada arquivo é atômico).
+// Cada arquivo vai inteiro numa única requisição: ou entra todo, ou nada dele entra (a falha é relatada por arquivo).
+// Ordem: a de 99_apply_all.sql (extensões, enums, tabelas, partições, índices, FKs, grants, functions, RLS, policies, triggers, views).
+//
+// ATENÇÃO: escreve DDL no projeto Supabase de PRODUÇÃO (ref canônico do AGENTS.md) pela Management API.
+// O padrão é SIMULAÇÃO: nada é enviado, o script só mostra o que faria. Aplicar de verdade exige --apply.
+//   node scripts/apply-migrations.js                    simula (não precisa de token)
+//   node scripts/apply-migrations.js --sql              simula e imprime o SQL completo que seria enviado
+//   SUPABASE_ACCESS_TOKEN=... node scripts/apply-migrations.js --apply
+// Reexecutar é seguro: cada instrução é enviada em forma idempotente (ver scripts/lib/sql-split.mjs).
+// Ambiente: SUPABASE_ACCESS_TOKEN (só com --apply; nunca aparece em log), SUPABASE_PROJECT_REF,
+// SUPABASE_MGMT_API_URL, timeout/retentativas (ver scripts/lib/supabase-mgmt.mjs).
+// Saída: 0 ok · 1 alguma instrução/requisição falhou · 2 uso/configuração/SQL malformado · 130 interrompido.
+import { ehCli, etapasDeArquivos, principal, rodarComoCli } from './lib/supabase-mgmt.mjs';
 
-const PAT = process.env.SUPABASE_ACCESS_TOKEN;
-if (!PAT) throw new Error('SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro');
-const REF = 'pgxfvjmuubtbowutlide';
+export const ARQUIVOS = ['00_extensions.sql', '01_schemas_and_enums.sql', '02_tables.sql', '11_partitions.sql', '03_indexes.sql', '04_foreign_keys.sql',
+  '05_grants.sql', '08_functions.sql', '06_rls_enable.sql', '07_policies.sql', '09_triggers.sql', '10_views.sql'];
 
-const FILES = [
-  'scripts/migration/ddl/00_extensions.sql',
-  'scripts/migration/ddl/01_schemas_and_enums.sql',
-  'scripts/migration/ddl/02_tables.sql',
-  'scripts/migration/ddl/03_indexes.sql',
-  'scripts/migration/ddl/04_foreign_keys.sql',
-  'scripts/migration/ddl/05_grants.sql',
-  'scripts/migration/ddl/06_rls_enable.sql',
-  'scripts/migration/ddl/07_policies.sql',
-  'scripts/migration/ddl/08_functions.sql',
-  'scripts/migration/ddl/09_triggers.sql',
-  'scripts/migration/ddl/10_views.sql',
-];
+export const definicao = {
+  nome: 'apply-migrations.js',
+  descricao: 'aplica os DDL de scripts/migration/ddl, um POST por arquivo (cada arquivo é atômico).',
+  montarEtapas: ({ args }) => etapasDeArquivos(args.dirDdl, ARQUIVOS, { atomico: true }),
+};
 
-async function mgmt(sql) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({ query: sql });
-    const req = https.request({
-      hostname: 'api.supabase.com', port: 443,
-      path: `/v1/projects/${REF}/database/query`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${PAT}`,
-        'apikey': PAT,
-        'Content-Length': Buffer.byteLength(body),
-      },
-    }, (res) => {
-      let d = '';
-      res.on('data', c => d += c);
-      res.on('end', () => resolve({ status: res.statusCode, body: d }));
-    });
-    req.on('error', reject);
-    req.write(body);
-    req.end();
-  });
-}
+export const main = (argv, env, io) => principal(definicao, argv, env, io);
 
-async function main() {
-  // Status inicial
-  const start = await mgmt(
-    "SELECT count(*)::int as t FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'"
-  );
-  const before = JSON.parse(start.body);
-  console.log(`Tabelas antes: ${before[0].t}\n`);
-
-  for (const file of FILES) {
-    const sql = readFileSync(file, 'utf8');
-    const lines = sql.split('\n').length;
-    const content = sql.split('\n').filter(l => !l.trim().startsWith('--')).join('\n').trim();
-    if (!content) { console.log(`[SKIP] ${file}`); continue; }
-
-    process.stdout.write(`[RUN ] ${file} (${lines} linhas) ... `);
-    const t0 = Date.now();
-    try {
-      const r = await mgmt(sql);
-      const ms = Date.now() - t0;
-      if (r.status >= 200 && r.status < 300) {
-        console.log(`OK ${r.status} (${ms}ms)`);
-      } else {
-        const err = JSON.parse(r.body);
-        console.log(`ERRO ${r.status}: ${err.message ?? err.slice(0, 200)}`);
-      }
-    } catch (err) {
-      console.log(`NET ERRO: ${err.message}`);
-    }
-  }
-
-  // Status final
-  const end = await mgmt(
-    "SELECT count(*)::int as t FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'"
-  );
-  const after = JSON.parse(end.body);
-  console.log(`\nTabelas depois: ${after[0].t} (+${after[0].t - before[0].t})`);
-}
-
-main().catch(e => { console.error(e.message); process.exit(1); });
+if (ehCli(import.meta.url)) await rodarComoCli(main);

@@ -1,122 +1,25 @@
-// apply-rls.js — RLS ENABLE + POLICIES em statements individuais (resiliente a 502)
-import { readFileSync } from 'node:fs';
-import https from 'node:https';
+// apply-rls.js — liga RLS (06_rls_enable.sql) e cria as policies (07_policies.sql), uma instrução por requisição.
+// Pré-requisito: tabelas e functions já aplicadas (as policies chamam has_role e afins).
+//
+// ATENÇÃO: escreve DDL no projeto Supabase de PRODUÇÃO (ref canônico do AGENTS.md) pela Management API.
+// O padrão é SIMULAÇÃO: nada é enviado, o script só mostra o que faria. Aplicar de verdade exige --apply.
+//   node scripts/apply-rls.js                    simula (não precisa de token)
+//   node scripts/apply-rls.js --sql              simula e imprime o SQL completo que seria enviado
+//   SUPABASE_ACCESS_TOKEN=... node scripts/apply-rls.js --apply
+// Reexecutar é seguro: cada instrução é enviada em forma idempotente (ver scripts/lib/sql-split.mjs).
+// Ambiente: SUPABASE_ACCESS_TOKEN (só com --apply; nunca aparece em log), SUPABASE_PROJECT_REF,
+// SUPABASE_MGMT_API_URL, timeout/retentativas (ver scripts/lib/supabase-mgmt.mjs).
+// Saída: 0 ok · 1 alguma instrução/requisição falhou · 2 uso/configuração/SQL malformado · 130 interrompido.
+import { ehCli, etapasDeArquivos, principal, rodarComoCli } from './lib/supabase-mgmt.mjs';
 
-const PAT = process.env.SUPABASE_ACCESS_TOKEN;
-if (!PAT) throw new Error('SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro');
-const REF = 'pgxfvjmuubtbowutlide';
+export const ARQUIVOS = ['06_rls_enable.sql', '07_policies.sql'];
 
-function mgmt(sql) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({ query: sql });
-    const req = https.request({
-      hostname: 'api.supabase.com', port: 443,
-      path: `/v1/projects/${REF}/database/query`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${PAT}`,
-        'apikey': PAT,
-        'Content-Length': Buffer.byteLength(body),
-      },
-      timeout: 30000,
-    }, (res) => {
-      let d = '';
-      res.on('data', c => d += c);
-      res.on('end', () => resolve({ status: res.statusCode, body: d }));
-    });
-    req.on('error', reject);
-    req.on('timeout', () => { req.destroy(); reject(new Error('TIMEOUT')); });
-    req.write(body);
-    req.end();
-  });
-}
+export const definicao = {
+  nome: 'apply-rls.js',
+  descricao: 'liga RLS (06_rls_enable.sql) e cria as policies (07_policies.sql), uma instrução por requisição.',
+  montarEtapas: ({ args }) => etapasDeArquivos(args.dirDdl, ARQUIVOS, { lote: 1 }),
+};
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+export const main = (argv, env, io) => principal(definicao, argv, env, io);
 
-// Simple: ALTER TABLE ... ENABLE ROW LEVEL SECURITY
-// and: CREATE POLICY ... ON ... FOR ... USING (...)
-function splitSimpleStmts(sql) {
-  const stmts = [];
-  let buf = '', depth = 0, inStr = false;
-  for (let i = 0; i < sql.length; i++) {
-    const c = sql[i];
-    if (c === "'" && !inStr) { inStr = true; buf += c; continue; }
-    if (c === "'" && inStr) {
-      if (sql[i+1] === "'") { buf += "''"; i++; }
-      else inStr = false;
-      buf += c; continue;
-    }
-    if (!inStr) {
-      if (c === '(') { depth++; buf += c; continue; }
-      if (c === ')') { depth--; buf += c; continue; }
-      if (c === ';' && depth === 0) {
-        const s = buf.trim();
-        if (s && !s.startsWith('--')) stmts.push(s);
-        buf = ''; continue;
-      }
-    }
-    buf += c;
-  }
-  if (buf.trim()) stmts.push(buf.trim());
-  return stmts;
-}
-
-async function runFile(label, filename, expectedCount) {
-  console.log(`\n[${label}]`);
-  const raw = readFileSync(filename, 'utf8');
-  const stmts = splitSimpleStmts(raw);
-  console.log(`  ${stmts.length} statements (esperados: ${expectedCount})`);
-
-  let ok = 0, skip = 0, err = 0, retry = 0;
-  for (let i = 0; i < stmts.length; i++) {
-    const s = stmts[i].trim();
-    if (!s || s.startsWith('--')) continue;
-    process.stdout.write(`  ${i+1}/${stmts.length}... `);
-
-    let success = false;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        const r = await mgmt(s);
-        if (r.status >= 200 && r.status < 300) {
-          ok++; success = true; console.log('OK');
-          break;
-        } else {
-          let msg = r.body.slice(0, 300);
-          try { msg = JSON.parse(r.body).message ?? msg; } catch (_) {}
-          if (msg.includes('already exists') || msg.includes('duplicate')) {
-            skip++; success = true; console.log('SKIP');
-            break;
-          }
-          if (r.status === 502 || r.status === 504 || r.status === 503) {
-            // Gateway error — retry after delay
-            if (attempt < 2) {
-              await sleep(500 * (attempt + 1));
-              retry++;
-              continue;
-            }
-          }
-          // Hard error
-          err++; success = true; console.log(`ERR ${r.status}: ${msg.slice(0, 60)}`);
-          break;
-        }
-      } catch (e) {
-        if (e.message === 'TIMEOUT' && attempt < 2) {
-          await sleep(1000); retry++; continue;
-        }
-        err++; success = true; console.log(`NET: ${e.message}`);
-        break;
-      }
-    }
-    if (!success) { err++; console.log('MAX RETRY'); }
-    if (i < stmts.length - 1) await sleep(100);
-  }
-  console.log(`  -> ${ok} OK, ${skip} SKIP, ${err} ERR (${retry} retries)`);
-}
-
-async function main() {
-  await runFile('RLS ENABLE', 'scripts/migration/ddl/06_rls_enable.sql', 257);
-  await runFile('RLS POLICIES', 'scripts/migration/ddl/07_policies.sql', 725);
-}
-
-main().catch(e => { console.error('Fatal:', e.message); process.exit(1); });
+if (ehCli(import.meta.url)) await rodarComoCli(main);

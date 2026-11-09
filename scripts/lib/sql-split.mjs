@@ -188,13 +188,17 @@ export function tornarIdempotente(instrucao, { manterConcurrently = false } = {}
   return instrucao;
 }
 
-/** Nome (sem schema, sem aspas, minúsculo se não citado) da tabela de um CREATE TABLE; null se não for. */
-export function nomeDaTabelaCriada(instrucao) {
-  const m = new RegExp(String.raw`^CREATE\s+(?:UNLOGGED\s+)?TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(${NOME_QUALIFICADO})`, 'i').exec(instrucao);
+const semAspas = (id) => (id.startsWith('"') ? id.slice(1, -1).replace(/""/g, '"') : id.toLowerCase());
+const RE_TABELA_CRIADA = new RegExp(String.raw`^CREATE\s+(?:UNLOGGED\s+)?TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(${NOME})(?:\s*\.\s*(${NOME}))?`, 'i');
+
+/**
+ * Se a instrução for CREATE TABLE, devolve { esquema, nome } como o Postgres os guarda (sem aspas;
+ * minúsculos quando não citados; esquema null se não qualificado). Caso contrário, null.
+ */
+export function tabelaCriada(instrucao) {
+  const m = RE_TABELA_CRIADA.exec(instrucao);
   if (!m) return null;
-  const partes = m[1].match(new RegExp(NOME, 'g'));
-  const ultimo = partes[partes.length - 1];
-  return ultimo.startsWith('"') ? ultimo.slice(1, -1).replace(/""/g, '"') : ultimo.toLowerCase();
+  return m[2] ? { esquema: semAspas(m[1]), nome: semAspas(m[2]) } : { esquema: null, nome: semAspas(m[1]) };
 }
 
 /** Monta um CREATE TYPE ... AS ENUM idempotente, com identificador e rótulos devidamente citados. */

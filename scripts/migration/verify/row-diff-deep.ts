@@ -1,42 +1,49 @@
-// Deep row hash sampling — head/tail/random 1% + SHA-256 + relatório HTML.
-const SAMPLE_PCT = Number(Deno.env.get("SAMPLE_PCT") ?? "1");
-const HEAD = Number(Deno.env.get("HEAD_N") ?? "100");
-const TAIL = Number(Deno.env.get("TAIL_N") ?? "100");
-const orderSql = await Deno.readTextFile(new URL("../table-order.sql", import.meta.url));
-const tables = [...orderSql.matchAll(/-- table:\s*public\.([a-z0-9_]+)/gi)].map((m) => m[1]);
-await Deno.mkdir(new URL("./row-diff-deep-out/", import.meta.url), { recursive: true });
+// Deep row hash sampling — início + fim + amostra DETERMINÍSTICA de ~SAMPLE_PCT% das linhas
+// (mesmas linhas nos dois bancos), SHA-256 nativo do Postgres + relatório HTML.
+// Passo 1: deno run --allow-env --allow-read --allow-write verify/row-diff-deep.ts
+// Passo 2: psql -X -v ON_ERROR_STOP=1 "$SRC_DB_URL"  -f verify/row-diff-deep.sql > verify/row-diff-deep-out/src.json
+//          psql -X -v ON_ERROR_STOP=1 "$DEST_DB_URL" -f verify/row-diff-deep.sql > verify/row-diff-deep-out/dest.json
+// Passo 3: deno run --allow-env --allow-read --allow-write verify/row-diff-deep.ts --compare
+// Envs: SAMPLE_PCT (1), HEAD_N (100), TAIL_N (100) + as de row-diff.ts (ONLY_TABLE, TABLES_DDL, ROW_DIFF_BASE…).
+// Saída: 0 íntegro · 1 divergência · 2 configuração/entrada inválida.
+import { caminhos, carregarTabelas, comparar, ErroEntrada, gerarSql, inteiro, lerAmostras, sair, tabelaOk, type ResultadoTabela } from "./row-diff.ts";
 
-const parts = tables.map((t) => `
-  SELECT '${t}' AS t, COALESCE(json_agg(json_build_object('pk', pk, 'h', h)), '[]'::json) AS samples FROM (
-    (SELECT id::text AS pk, encode(digest(row_to_json(x)::text, 'sha256'), 'hex') AS h
-       FROM public.${t} x WHERE id IS NOT NULL ORDER BY id ASC  LIMIT ${HEAD})
-    UNION ALL
-    (SELECT id::text, encode(digest(row_to_json(x)::text,'sha256'),'hex')
-       FROM public.${t} x WHERE id IS NOT NULL ORDER BY id DESC LIMIT ${TAIL})
-    UNION ALL
-    (SELECT id::text, encode(digest(row_to_json(x)::text,'sha256'),'hex')
-       FROM public.${t} TABLESAMPLE BERNOULLI(${SAMPLE_PCT}) x WHERE id IS NOT NULL)
-  ) s`);
-const sql = `\\pset format unaligned\n\\pset tuples_only on\nSELECT json_object_agg(t, samples) FROM (\n${parts.join("\n  UNION ALL\n")}\n) q;\n`;
-await Deno.writeTextFile(new URL("./row-diff-deep.sql", import.meta.url), sql);
-console.log("✔ SQL: verify/row-diff-deep.sql (rode em ORIGEM e DESTINO → src.json/dest.json)");
+const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
-if (Deno.args.includes("--compare")) {
-  const src = JSON.parse(await Deno.readTextFile(new URL("./row-diff-deep-out/src.json", import.meta.url)));
-  const dst = JSON.parse(await Deno.readTextFile(new URL("./row-diff-deep-out/dest.json", import.meta.url)));
-  const rows: string[] = []; let fail = 0;
-  for (const t of Object.keys(src)) {
-    const dmap = new Map<string, string>((dst[t] ?? []).map((r: { pk: string; h: string }) => [r.pk, r.h]));
-    let ok = 0, miss = 0, bad = 0;
-    for (const r of src[t]) { const h = dmap.get(r.pk); if (!h) miss++; else if (h !== r.h) bad++; else ok++; }
-    if (miss + bad > 0) fail++;
-    rows.push(`<tr class="${miss + bad ? "bad" : "ok"}"><td>${t}</td><td>${ok}</td><td>${miss}</td><td>${bad}</td></tr>`);
-  }
-  const html = `<!doctype html><meta charset=utf-8><title>row-diff-deep</title>
+export function relatorioHtml(rel: Record<string, ResultadoTabela>, geradoEm: string): string {
+  const linhas = Object.entries(rel).map(([t, r]) =>
+    `<tr class="${tabelaOk(r) ? "ok" : "bad"}"><td>${esc(t)}</td><td>${r.ok}</td><td>${r.missing}</td><td>${r.mismatch}</td><td>${r.extra}</td><td>${r.count_src ?? ""}</td><td>${r.count_dst ?? ""}</td><td>${esc(r.falha ?? "")}</td></tr>`);
+  return `<!doctype html><meta charset=utf-8><title>row-diff-deep</title>
 <style>body{font:14px system-ui;margin:2rem}table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:.4rem .8rem}.bad{background:#fee}.ok{background:#efe}</style>
-<h1>Row Diff Deep — ${new Date().toISOString()}</h1>
-<table><tr><th>tabela</th><th>ok</th><th>missing</th><th>mismatch</th></tr>${rows.join("")}</table>`;
-  await Deno.writeTextFile(new URL("./row-diff-deep-out/report.html", import.meta.url), html);
-  console.log(`Relatório: verify/row-diff-deep-out/report.html — ${fail} tabelas com divergência`);
-  if (fail > 0) Deno.exit(1);
+<h1>Row Diff Deep — ${esc(geradoEm)}</h1>
+<table><tr><th>tabela</th><th>ok</th><th>missing</th><th>mismatch</th><th>extra</th><th>linhas origem</th><th>linhas destino</th><th>falha</th></tr>${linhas.join("")}</table>`;
+}
+
+if (import.meta.main) {
+  try {
+    const c = caminhos();
+    const outDir = new URL("./row-diff-deep-out/", c.base);
+    if (Deno.args.includes("--compare")) {
+      const [src, dst] = await lerAmostras(outDir);
+      const rel = comparar(src, dst);
+      const fail = Object.values(rel).filter((r) => !tabelaOk(r)).length;
+      for (const [t, r] of Object.entries(rel)) {
+        if (!tabelaOk(r)) console.log(`✖ ${t}: missing=${r.missing} mismatch=${r.mismatch} extra=${r.extra}${r.falha ? ` — ${r.falha}` : ""}`);
+      }
+      const destino = new URL("./report.html", outDir);
+      await Deno.writeTextFile(destino, relatorioHtml(rel, new Date().toISOString()));
+      console.log(`Relatório: ${destino.pathname} — ${fail} de ${Object.keys(rel).length} tabelas com divergência`);
+      if (fail > 0) Deno.exit(1);
+    } else {
+      const pct = Number(Deno.env.get("SAMPLE_PCT") ?? "1");
+      if (!Number.isFinite(pct) || pct < 0 || pct > 100) throw new ErroEntrada("SAMPLE_PCT inválido: esperado número entre 0 e 100");
+      const tabelas = await carregarTabelas(c);
+      await Deno.mkdir(outDir, { recursive: true });
+      const sqlPath = new URL("./row-diff-deep.sql", c.base);
+      await Deno.writeTextFile(sqlPath, gerarSql(tabelas, { modo: "profundo", head: inteiro("HEAD_N", 100, 0), tail: inteiro("TAIL_N", 100, 0), pct }));
+      console.log(`✔ SQL: ${sqlPath.pathname} (${tabelas.length} tabelas; rode em ORIGEM e DESTINO → ${outDir.pathname}src.json / dest.json)`);
+    }
+  } catch (e) {
+    sair(e);
+  }
 }

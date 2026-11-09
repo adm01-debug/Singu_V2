@@ -3,6 +3,8 @@
 --   psql "$SRC_DB_URL"  -f verify/extensions-parity.sql > src-ext.txt
 --   psql "$DEST_DB_URL" -f verify/extensions-parity.sql > dest-ext.txt
 --   diff src-ext.txt dest-ext.txt   # deve ser vazio
+-- Classe   : SNAPSHOT (saida canonica para diff origem x destino; sem veredito)
+-- Saida    : 0.
 \pset format unaligned
 \pset tuples_only on
 SELECT extname || '=' || extversion

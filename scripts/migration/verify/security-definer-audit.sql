@@ -1,5 +1,10 @@
 -- security-definer-audit.sql — Falha se funcao SECURITY DEFINER nao tiver search_path fixo.
 -- Vetor classico de privilege escalation via search_path hijack.
+-- Classe   : GUARD FATAL
+-- Limiar   : qualquer function SECURITY DEFINER de public sem SET search_path.
+--            (O valor do search_path e avaliado por function-search-path-reset-audit.sql.)
+-- Variaveis: nenhuma
+-- Saida    : 0 = ok; 3 = condicao ruim (RAISE EXCEPTION sob ON_ERROR_STOP).
 \set ON_ERROR_STOP on
 \pset pager off
 

@@ -1,4 +1,7 @@
 -- autovacuum-audit.sql — Sinaliza tabelas public.* com autovacuum DESLIGADO.
+-- Classe   : AUDIT (RAISE WARNING no achado; nunca falha)
+-- Variaveis: nenhuma
+-- Saida    : 0.
 \set ON_ERROR_STOP on
 \pset pager off
 

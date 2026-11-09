@@ -84,6 +84,21 @@ export function lerExpressao(texto, i) {
   return { literais, idents, codigo };
 }
 
+/** Índice logo depois do `}` que fecha o bloco aberto em `abre` (ignora chaves dentro de strings). */
+function fimDoBloco(texto, abre) {
+  let nivel = 0;
+  for (let i = abre; i < texto.length; i++) {
+    const c = texto[i];
+    if (c === '"' || c === "'" || c === "`") {
+      let j = i + 1;
+      while (j < texto.length && texto[j] !== c && !(c !== "`" && texto[j] === "\n")) j += texto[j] === "\\" ? 2 : 1;
+      i = j;
+    } else if (c === "{") nivel++;
+    else if (c === "}" && --nivel === 0) return i + 1;
+  }
+  return texto.length;
+}
+
 const ehWildcard = (literal) => literal.trim() === "*";
 const escapar = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -102,10 +117,9 @@ function podeSerWildcard(texto, pos, vistos = new Set(), salto = 0) {
     for (const d of texto.matchAll(new RegExp(`\\bfunction\\s+${n}\\s*\\(`, "g"))) {
       const abre = texto.indexOf("{", texto.indexOf(")", d.index));
       if (abre === -1) continue;
-      const corpo = lerExpressao(texto, abre).codigo; // do `{` até fechar o bloco
-      const inicio = abre;
-      for (const r of texto.slice(inicio, inicio + corpo.length + 4000).matchAll(/\breturn\b/g)) {
-        if (podeSerWildcard(texto, inicio + r.index + r[0].length, vistos, salto + 1)) return true;
+      const corpo = texto.slice(abre, fimDoBloco(texto, abre));
+      for (const r of corpo.matchAll(/\breturn\b/g)) {
+        if (podeSerWildcard(texto, abre + r.index + r[0].length, vistos, salto + 1)) return true;
       }
     }
   }
@@ -131,8 +145,8 @@ export function acharWildcards(conteudo) {
     }
   }
   for (const u of usos) {
-    // Depois do nome: `:` (objeto), `,` (set/append/tupla) ou `] =` (atribuição). Nunca `==`/`=>`.
-    const sep = /^\s*\]?\s*(?::|,|=(?![=>]))/.exec(texto.slice(u.fim, u.fim + 200));
+    // Depois do nome: `:` (objeto), `,` (set/append/tupla), `] =` (atribuição) ou `]:` (chave computada).
+    const sep = /^\s*(?:\]\s*(?::|(?:\?\?|\|\|)?=(?![=>]))|:|,)/.exec(texto.slice(u.fim, u.fim + 200));
     if (sep && podeSerWildcard(texto, u.fim + sep[0].length)) marcar(u.inicio, "valor pode ser *");
   }
   return [...achados].map(([linha, motivo]) => ({ linha, motivo })).sort((a, b) => a.linha - b.linha);

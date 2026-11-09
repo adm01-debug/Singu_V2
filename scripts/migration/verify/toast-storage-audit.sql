@@ -1,5 +1,10 @@
 -- toast-storage-audit.sql — Rodada 18/10
 -- Colunas TEXT/JSONB/BYTEA com storage PLAIN/MAIN nao usam TOAST e causam bloat silencioso.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== toast-storage-audit =='
 SELECT n.nspname AS schema, c.relname AS table, a.attname AS column,
        format_type(a.atttypid, a.atttypmod) AS type,

@@ -147,7 +147,7 @@ export class MockSupabase {
         corpo, etag: md5Hex(corpo),
         contentType: req.headers.get("content-type") ?? "application/octet-stream",
         cacheControl: req.headers.get("cache-control") ?? "no-cache",
-        userMetadata: xm ? JSON.parse(atob(xm)) : undefined,
+        userMetadata: xm ? JSON.parse(dec.decode(Uint8Array.from(atob(xm), (c) => c.charCodeAt(0)))) : undefined,
       });
       return j({ Key: `${bucket}/${chave}`, Id: crypto.randomUUID() });
     }
@@ -245,8 +245,9 @@ export class MockSupabase {
     const dados = corpo.length ? JSON.parse(dec.decode(corpo)) : {};
     const novas: Record<string, unknown>[] = Array.isArray(dados) ? dados : [dados];
     if (req.method === "PATCH") {
-      for (const l of t.linhas) if (casa(l)) Object.assign(l, novas[0]);
-      return new Response(null, { status: 204 });
+      const tocadas = t.linhas.filter(casa);
+      for (const l of tocadas) Object.assign(l, novas[0]);
+      return (req.headers.get("prefer") ?? "").includes("return=representation") ? Response.json(tocadas) : new Response(null, { status: 204 });
     }
     if (req.method === "POST") {
       const mesclar = (req.headers.get("prefer") ?? "").includes("resolution=merge-duplicates");
@@ -282,20 +283,6 @@ export class MockSupabase {
     if (p === "recover") { this.recuperacoes.push(dados.email); return Response.json({}); }
     return Response.json({ error: "rota" }, { status: 404 });
   }
-}
-
-/** Extrai do HEAD do git a versão ORIGINAL de arquivos (para provar bug antigo). */
-export async function extrairOriginal(caminhosRepo: string[]): Promise<string> {
-  const dir = await Deno.makeTempDir({ prefix: "g7-orig-" });
-  const raiz = new URL("../../", import.meta.url).pathname;
-  for (const c of caminhosRepo) {
-    const r = await new Deno.Command("git", { args: ["-C", raiz, "show", `HEAD:${c}`], stdout: "piped", stderr: "piped" }).output();
-    if (!r.success) throw new Error(`git show HEAD:${c} falhou`);
-    const destino = `${dir}/${c}`;
-    await Deno.mkdir(destino.slice(0, destino.lastIndexOf("/")), { recursive: true });
-    await Deno.writeFile(destino, r.stdout);
-  }
-  return dir;
 }
 
 export interface Saida { code: number; out: string; err: string }

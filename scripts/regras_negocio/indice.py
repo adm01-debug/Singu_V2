@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -44,7 +45,9 @@ ORDEM = ["regras de negócio", "banco real", "código"]
 
 def git(root: Path, *a: str) -> str:
     try:
-        return subprocess.run(["git", *a], cwd=root, capture_output=True, text=True, timeout=30).stdout.strip()
+        res = subprocess.run(["git", *a], cwd=root, capture_output=True, text=True, timeout=30)
+        # `rev-parse HEAD` sem commit imprime "HEAD" no stdout e sai com erro: isso não é um sha.
+        return res.stdout.strip() if res.returncode == 0 else ""
     except Exception:
         return ""
 
@@ -103,7 +106,8 @@ def producer_health(d: Path, man: dict) -> tuple[str, list[str]]:
 
 def entry_file(d: Path, man: dict) -> str:
     cand = man.get("entrada") or man.get("entry") or ""
-    if cand and (d / cand).exists():
+    # só arquivo DENTRO da pasta da fonte: o manifest não pode apontar o índice para `../../outro`
+    if isinstance(cand, str) and cand and (d / cand).is_file() and (d / cand).resolve().is_relative_to(d.resolve()):
         return cand
     for name in ("00-INDEX.md", "INDEX.md", "README.md", "index.md"):
         if (d / name).exists():
@@ -123,7 +127,11 @@ def main() -> int:
     ap.add_argument("--head", default="", help="sha do commit de código de referência (default: HEAD do --repo); use quando o índice é montado numa branch gerada")
     args = ap.parse_args()
     root = Path(args.repo).resolve()
+    if not root.is_dir():
+        print(f"[indice] --repo não é um diretório: {root}", file=sys.stderr); return 2
     out = (root / args.out).resolve()
+    if out.is_dir():
+        print(f"[indice] --out aponta para um diretório, não para o arquivo do índice: {out}", file=sys.stderr); return 2
     remote = args.remote or re.sub(r"^.*github\.com[:/]|\.git$", "", git(root, "config", "--get", "remote.origin.url"))
     now = datetime.now(timezone.utc)
     head = args.head or git(root, "rev-parse", "HEAD")
@@ -151,6 +159,10 @@ def main() -> int:
         idade_min = int((now - gerado).total_seconds() // 60) if gerado else None
         commit = man.get("commit") or man.get("sha") or ""
         status, avisos = producer_health(d, man) if local else ("ok", [])
+        if idade_min is not None and idade_min < -5:
+            # Relógio/manifest errado: "ok · -37944023 min atrás" passava por coleta fresca.
+            avisos.append(f"data da coleta no futuro ({gerado.strftime('%Y-%m-%d %H:%M UTC')})")
+            status, idade_min = "não verificável", None
         if not local:
             status = "não disponível neste checkout" if branch else "ainda não gerado"
         mesmo_commit = (isinstance(commit, str) and isinstance(head, str)
@@ -224,13 +236,23 @@ def main() -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     # não reescreve se só o timestamp/idade mudou e nada estrutural
     strip = lambda t: re.sub(r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC|\d+ min atrás|\d+h atrás|há \d+h\d{2}", "", t)
-    if out.exists() and strip(out.read_text(encoding="utf-8")) == strip(content):
+    # errors="replace": índice anterior corrompido é só "diferente" e será reescrito, não um traceback a cada run
+    if out.exists() and strip(out.read_text(encoding="utf-8", errors="replace")) == strip(content):
         print("[indice] sem mudança estrutural — não reescrito", file=sys.stderr)
         return 0
-    out.write_text(content, encoding="utf-8")
+    tmp = out.with_name(f".{out.name}.{os.getpid()}.tmp")   # troca atômica: nunca um índice pela metade
+    try:
+        tmp.write_text(content, encoding="utf-8")
+        os.replace(tmp, out)
+    finally:
+        tmp.unlink(missing_ok=True)
     print(f"[indice] escrito {out} ({len(fontes)} fontes: " + ", ".join(f"{f['nome']}={f['status']}" for f in fontes) + ")", file=sys.stderr)
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except OSError as error:   # saída sem permissão, pai que é arquivo, disco cheio
+        print(f"[indice] erro de E/S: {error}", file=sys.stderr)
+        sys.exit(2)

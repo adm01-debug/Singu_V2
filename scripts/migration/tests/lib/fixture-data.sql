@@ -4,10 +4,10 @@ INSERT INTO auth.users (id, email, raw_user_meta_data) VALUES
   ('00000000-0000-0000-0000-000000000002', 'Bia@Exemplo.test',  '{"must_reset_password": true}'),
   ('00000000-0000-0000-0000-000000000003', 'o''brien@exemplo.test', '{"must_reset_password": true}'),
   ('00000000-0000-0000-0000-000000000004', 'livre@exemplo.test', '{}');
-INSERT INTO auth.identities (user_id, provider, provider_id, email, identity_data) VALUES
-  ('00000000-0000-0000-0000-000000000001', 'google', 'g-1', 'ana@exemplo.test', '{"sub": "g-1", "nome": "Ana, \"a\" primeira"}'),
-  ('00000000-0000-0000-0000-000000000002', 'github', 'h-2', 'bia@exemplo.test', '{"sub": "h-2"}'),
-  ('00000000-0000-0000-0000-000000000002', 'google', 'g-2', 'bia@exemplo.test', '{}');
+INSERT INTO auth.identities (user_id, provider, provider_id, identity_data) VALUES
+  ('00000000-0000-0000-0000-000000000001', 'google', 'g-1', '{"sub": "g-1", "email": "Ana@Exemplo.test", "nome": "Ana, \"a\" primeira"}'),
+  ('00000000-0000-0000-0000-000000000002', 'github', 'h-2', E'{"sub": "h-2", "bio": "linha 1\\nlinha 2"}'),
+  ('00000000-0000-0000-0000-000000000002', 'google', 'g-2', '{}');
 INSERT INTO storage.buckets VALUES ('documents', 'documents', false), ('avatars', 'avatars', true);
 INSERT INTO storage.objects (bucket_id, name) VALUES ('documents', 'a.pdf'), ('documents', 'b.pdf'), ('avatars', 'x.png');
 SELECT cron.schedule('nightly', '0 3 * * *', $c$SELECT net.http_post('https://refantigo.supabase.co/functions/v1/x', '{}')$c$);

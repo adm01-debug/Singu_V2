@@ -1,6 +1,11 @@
 -- RLS Coverage Enforcer — falha se qualquer tabela pública não tem RLS habilitada
 -- ou não tem policy definida. Roda em CI.
 -- Uso: psql "$DB_URL" -v ON_ERROR_STOP=1 -f verify/rls-coverage.sql
+-- Classe   : GUARD (chamado pelo CI: psql -v ON_ERROR_STOP=1 -f ...; WARN no full-audit)
+-- Limiar   : tabela comum de public (fora particoes-filhas e nomes iniciados por _)
+--            sem RLS habilitada ou sem nenhuma policy.
+-- Variaveis: nenhuma
+-- Saida    : 0 = ok; 3 = condicao ruim (RAISE EXCEPTION sob ON_ERROR_STOP).
 \set ON_ERROR_STOP on
 
 WITH tables_pub AS (

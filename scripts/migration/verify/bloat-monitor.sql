@@ -1,5 +1,10 @@
 -- bloat-monitor.sql — Estima bloat via pg_stat_user_tables.
 -- Sinaliza tabelas > 100MB com dead_ratio > 20%.
+-- Classe   : AUDIT (RAISE WARNING no achado; nunca falha)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \pset pager off
 
 SELECT
