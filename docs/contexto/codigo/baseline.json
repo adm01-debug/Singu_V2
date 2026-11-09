@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "f5438f281cf9a4e00b895fa52f509c9b11d80c5e",
+  "commit": "36fc1e233f21136381d01e4d2d9c71aaf0e3e196",
   "branch": "main",
-  "data_commit": "2026-11-09T17:22:35-03:00",
+  "data_commit": "2026-11-09T17:22:54-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "36fc1e23",
+    "data": "2026-11-09",
+    "assunto": "build(deps): bump actions/download-artifact from 7.0.0 to 8.0.2 (#181)"
+   },
    {
     "sha": "f5438f28",
     "data": "2026-11-09",
@@ -126,11 +131,6 @@
     "sha": "b911f821",
     "data": "2026-11-06",
     "assunto": "chore: sobe actions/checkout para v5 nos workflows de monitoramento, restore e RLS (#160)"
-   },
-   {
-    "sha": "92d94662",
-    "data": "2026-11-06",
-    "assunto": "chore: sobe actions/checkout para v5 no ci.yml (#159)"
    }
   ],
   "arquivos_mudados_7d": 94,
@@ -309,7 +309,7 @@
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 4
+    "commits": 5
    },
    {
     "autor": "Joaquim Promo Brindes",

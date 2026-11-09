@@ -58,11 +58,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "build(deps): bump actions/download-artifact from 7.0.0 to 8.0.2 (#181)",
    "build(deps): bump the minor-and-patch group with 6 updates (#182)",
    "fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)",
    "feat(segurança): workflow para fechar verify_jwt nas 23 proxies externas (#176)",
-   "chore: instruções enxutas para agentes (#163)",
-   "fix(ficha): registra interações pelo contrato de contato (#153)"
+   "chore: instruções enxutas para agentes (#163)"
   ]
  },
  "pr_template": null,

@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "f5438f281cf9a4e00b895fa52f509c9b11d80c5e",
+  "sha": "36fc1e233f21136381d01e4d2d9c71aaf0e3e196",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-09 20:24 UTC",
+  "generated_at": "2026-11-09 20:26 UTC",
   "files_total": 3097,
   "code_files": 2724,
   "code_lines": 382277
@@ -223489,10 +223489,19 @@
   }
  },
  "git": {
-  "sha": "f5438f281cf9a4e00b895fa52f509c9b11d80c5e",
+  "sha": "36fc1e233f21136381d01e4d2d9c71aaf0e3e196",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "36fc1e2",
+    "date": "2026-11-09",
+    "author": "dependabot[bot]",
+    "subject": "build(deps): bump actions/download-artifact from 7.0.0 to 8.0.2 (#181)",
+    "files": [
+     ".github/workflows/contexto.yml"
+    ]
+   },
    {
     "sha": "f5438f2",
     "date": "2026-11-09",
@@ -223842,39 +223851,16 @@
      "package-lock.json",
      "package.json"
     ]
-   },
-   {
-    "sha": "09ddc77",
-    "date": "2026-10-31",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(segurança): serializa transferência e edição de relações (#143)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "CHANGELOG.md",
-     "docs/adr/023-serializacao-de-relacoes-de-contato.md",
-     "src/lib/externalData.contract.test.ts",
-     "src/lib/externalData.ts",
-     "supabase/functions/_shared/write-error.ts",
-     "supabase/functions/_shared/write-error_test.ts",
-     "supabase/functions/external-data/actor-writes_test.ts",
-     "supabase/functions/external-data/database.ts",
-     "supabase/functions/external-data/index.ts",
-     "supabase/functions/external-data/mutations.ts",
-     "supabase/functions/external-data/tables.ts",
-     "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql",
-     "tests/rls/contact-relation-concurrency.mjs",
-     "tests/rls/fixtures/contact-relation-version-fixture.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "CHANGELOG.md",
-    6
+    5
    ],
    [
     ".github/workflows/ci.yml",
-    5
+    4
    ],
    [
     "package.json",
@@ -223883,6 +223869,10 @@
    [
     "scripts/inventario/gerar-banco.mjs",
     3
+   ],
+   [
+    ".github/workflows/contexto.yml",
+    2
    ],
    [
     "package-lock.json",
@@ -223942,10 +223932,6 @@
    ],
    [
     ".github/workflows/fix-jwt-proxies-externas.yml",
-    1
-   ],
-   [
-    "docs/agentes/banco-edge-ci.md",
     1
    ]
   ]
