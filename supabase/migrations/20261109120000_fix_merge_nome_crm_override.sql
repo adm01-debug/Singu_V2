@@ -1,0 +1,388 @@
+-- fix(merge): rejeita overrides de nome que anulem o campo obrigatório
+-- Achado de auditoria: a validação pós-UPDATE era bypassada pelo trigger
+-- `a_db01_company_compat` que converte nome_crm=NULL → 'Empresa sem nome',
+-- impedindo que o check `NULLIF(btrim(nome_crm), '') IS NULL` disparasse.
+-- Além disso, o caminho `already_merged` (early-return antes do UPDATE)
+-- nunca chegava à validação pós-UPDATE. A correção valida o override ANTES
+-- de qualquer fetch de registro, cobrindo os dois caminhos. Também rejeita
+-- valores não-string (número, booleano, array, objeto) e strings com apenas
+-- espaços Unicode.
+CREATE OR REPLACE FUNCTION public.merge_records_atomically(
+  p_entity text,
+  p_primary_id uuid,
+  p_secondary_id uuid,
+  p_field_overrides jsonb DEFAULT '{}'::jsonb
+) RETURNS jsonb
+  LANGUAGE plpgsql
+  SECURITY DEFINER
+  SET search_path TO 'public', 'pg_temp'
+AS $function$
+DECLARE
+  v_owner uuid := auth.uid();
+  v_primary record;
+  v_secondary record;
+  v_field text;
+  v_type text;
+  v_filter text;
+  v_assignments text := '';
+  v_columns text := '';
+  v_relation record;
+  v_scope record;
+  v_scope_count integer;
+  v_other_owner boolean;
+  v_parent uuid;
+  v_parent_owner uuid;
+  v_ancestors uuid[];
+  v_count integer;
+  v_moved integer := 0;
+  v_moved_by_table jsonb := '{}'::jsonb;
+BEGIN
+  IF auth.role() IS DISTINCT FROM 'authenticated' OR v_owner IS NULL THEN
+    RAISE EXCEPTION 'Autenticação obrigatória' USING ERRCODE = '42501';
+  END IF;
+  IF p_entity IS NULL OR p_entity NOT IN ('contacts', 'companies') OR p_primary_id IS NULL
+     OR p_secondary_id IS NULL OR p_primary_id = p_secondary_id THEN
+    RAISE EXCEPTION 'Entidade ou identificadores inválidos' USING ERRCODE = '22023';
+  END IF;
+  IF jsonb_typeof(p_field_overrides) IS DISTINCT FROM 'object' THEN
+    RAISE EXCEPTION 'Substituições devem ser um objeto' USING ERRCODE = '22023';
+  END IF;
+
+  -- Valida overrides de nome ANTES do fetch de registros para cobrir:
+  --   1) trigger que converte nome=NULL → fallback (bypassa o check pós-UPDATE)
+  --   2) caminho already_merged que faz early-return antes do check pós-UPDATE
+  -- Rejeita: JSON null, não-string (número/bool/array/object), string vazia,
+  -- string com apenas espaços ASCII e espaços Unicode (U+00A0, U+1680, U+2000-200A,
+  -- U+2028, U+2029, U+202F, U+205F, U+3000, U+FEFF).
+  IF p_entity = 'companies' AND p_field_overrides ? 'nome_crm'
+     AND (
+       jsonb_typeof(p_field_overrides->'nome_crm') IS DISTINCT FROM 'string'
+       OR NULLIF(regexp_replace(
+            p_field_overrides->>'nome_crm',
+            '[\s' || chr(160) || chr(5760) ||
+            chr(8192) || chr(8193) || chr(8194) || chr(8195) || chr(8196) ||
+            chr(8197) || chr(8198) || chr(8199) || chr(8200) || chr(8201) ||
+            chr(8202) || chr(8232) || chr(8233) || chr(8239) || chr(8287) ||
+            chr(12288) || chr(65279) || ']',
+            '', 'g'), '') IS NULL
+     ) THEN
+    RAISE EXCEPTION 'Override de nome_crm deve ser texto não vazio' USING ERRCODE = '22023';
+  END IF;
+  IF p_entity = 'contacts' AND p_field_overrides ? 'first_name'
+     AND (
+       jsonb_typeof(p_field_overrides->'first_name') IS DISTINCT FROM 'string'
+       OR NULLIF(regexp_replace(
+            p_field_overrides->>'first_name',
+            '[\s' || chr(160) || chr(5760) ||
+            chr(8192) || chr(8193) || chr(8194) || chr(8195) || chr(8196) ||
+            chr(8197) || chr(8198) || chr(8199) || chr(8200) || chr(8201) ||
+            chr(8202) || chr(8232) || chr(8233) || chr(8239) || chr(8287) ||
+            chr(12288) || chr(65279) || ']',
+            '', 'g'), '') IS NULL
+     ) THEN
+    RAISE EXCEPTION 'Override de first_name deve ser texto não vazio' USING ERRCODE = '22023';
+  END IF;
+
+  IF p_entity = 'contacts' THEN
+    PERFORM 1 FROM public.contacts
+    WHERE id IN (p_primary_id, p_secondary_id) ORDER BY id FOR UPDATE;
+    SELECT * INTO v_primary FROM public.contacts WHERE id = p_primary_id;
+    SELECT * INTO v_secondary FROM public.contacts WHERE id = p_secondary_id;
+  ELSE
+    PERFORM 1 FROM public.companies
+    WHERE id IN (p_primary_id, p_secondary_id) ORDER BY id FOR UPDATE;
+    SELECT * INTO v_primary FROM public.companies WHERE id = p_primary_id;
+    SELECT * INTO v_secondary FROM public.companies WHERE id = p_secondary_id;
+  END IF;
+  IF v_primary.id IS NULL OR v_secondary.id IS NULL
+     OR v_primary.user_id IS DISTINCT FROM v_owner
+     OR v_secondary.user_id IS DISTINCT FROM v_owner THEN
+    RAISE EXCEPTION 'Registros inexistentes ou pertencentes a outro usuário' USING ERRCODE = '42501';
+  END IF;
+  IF v_primary.deleted_at IS NOT NULL THEN
+    RAISE EXCEPTION 'Registro principal excluído' USING ERRCODE = '55000';
+  END IF;
+  IF v_secondary.deleted_at IS NOT NULL THEN
+    IF p_entity = 'contacts' THEN
+      IF v_secondary.duplicate_of = p_primary_id AND EXISTS (
+        SELECT 1 FROM public.audit_log AS audit
+        WHERE audit.user_id = v_owner AND audit.entity_type = p_entity
+          AND audit.entity_id = p_primary_id
+          AND audit.old_data->>'merged_from' = p_secondary_id::text
+          AND audit.new_data->>'operation' = 'merge'
+      ) THEN
+        RETURN jsonb_build_object('success', true, 'primary_id', p_primary_id,
+          'secondary_id', p_secondary_id, 'already_merged', true);
+      END IF;
+    ELSIF v_secondary.merge_notes->>'merged_into' = p_primary_id::text AND EXISTS (
+      SELECT 1 FROM public.audit_log AS audit
+      WHERE audit.user_id = v_owner AND audit.entity_type = p_entity
+        AND audit.entity_id = p_primary_id
+        AND audit.old_data->>'merged_from' = p_secondary_id::text
+        AND audit.new_data->>'operation' = 'merge'
+    ) THEN
+      RETURN jsonb_build_object('success', true, 'primary_id', p_primary_id,
+        'secondary_id', p_secondary_id, 'already_merged', true);
+    END IF;
+    RAISE EXCEPTION 'Registro secundário indisponível' USING ERRCODE = '55000';
+  END IF;
+
+  IF p_entity = 'contacts' AND p_field_overrides ? 'company_id'
+     AND p_field_overrides->>'company_id' IS NOT NULL
+     AND NOT EXISTS (
+       SELECT 1 FROM public.companies
+       WHERE id = (p_field_overrides->>'company_id')::uuid
+         AND user_id = v_owner AND deleted_at IS NULL
+     ) THEN
+    RAISE EXCEPTION 'Empresa da substituição indisponível' USING ERRCODE = '42501';
+  END IF;
+  FOR v_field IN SELECT jsonb_object_keys(p_field_overrides) LOOP
+    IF (p_entity = 'contacts' AND v_field NOT IN (
+        'first_name', 'last_name', 'email', 'phone', 'role_title', 'company_id',
+        'whatsapp', 'linkedin', 'instagram', 'notes', 'family_info'))
+       OR (p_entity = 'companies' AND v_field NOT IN (
+        'nome_crm', 'cnpj', 'industry', 'website', 'notes', 'tags')) THEN
+      RAISE EXCEPTION 'Campo não permitido: %', v_field USING ERRCODE = '22023';
+    END IF;
+    SELECT a.atttypid::regtype::text INTO v_type
+    FROM pg_catalog.pg_attribute AS a
+    WHERE a.attrelid = format('public.%I', p_entity)::regclass
+      AND a.attname = v_field AND NOT a.attisdropped;
+    IF v_type IS NULL THEN
+      RAISE EXCEPTION 'Campo não encontrado: %', v_field USING ERRCODE = '42703';
+    END IF;
+    v_assignments := concat_ws(', ', NULLIF(v_assignments, ''), format('%I = patch.%I', v_field, v_field));
+    v_columns := concat_ws(', ', NULLIF(v_columns, ''), format('%I %s', v_field, v_type));
+  END LOOP;
+  IF v_assignments <> '' THEN
+    EXECUTE format('UPDATE public.%I AS target SET %s FROM jsonb_to_record($1) AS patch(%s)
+      WHERE target.id = $2 AND target.user_id = $3', p_entity, v_assignments, v_columns)
+    USING p_field_overrides, p_primary_id, v_owner;
+  END IF;
+  IF p_entity = 'contacts' AND EXISTS (
+      SELECT 1 FROM public.contacts WHERE id = p_primary_id
+        AND NULLIF(btrim(first_name), '') IS NULL
+    ) OR p_entity = 'companies' AND EXISTS (
+      SELECT 1 FROM public.companies WHERE id = p_primary_id
+        AND NULLIF(btrim(nome_crm), '') IS NULL
+    ) THEN
+    RAISE EXCEPTION 'Nome principal obrigatório' USING ERRCODE = '23514';
+  END IF;
+
+  FOR v_relation IN
+    SELECT n.nspname, child.relname, attribute.attname,
+      attribute.atttypid::regtype::text AS attribute_type,
+      EXISTS (SELECT 1 FROM pg_catalog.pg_attribute AS owner_column
+        WHERE owner_column.attrelid = child.oid
+          AND owner_column.attname = 'user_id' AND owner_column.atttypid = 'uuid'::regtype
+          AND NOT owner_column.attisdropped) AS has_owner,
+      EXISTS (SELECT 1 FROM pg_catalog.pg_index AS unique_reference
+        WHERE unique_reference.indrelid = child.oid AND unique_reference.indisunique
+          AND unique_reference.indnkeyatts = 1 AND unique_reference.indkey[0] = attribute.attnum
+          AND unique_reference.indpred IS NULL AND unique_reference.indexprs IS NULL
+      ) AS has_unique_reference
+    FROM pg_catalog.pg_class AS child
+    JOIN pg_catalog.pg_namespace AS n ON n.oid = child.relnamespace
+    JOIN pg_catalog.pg_attribute AS attribute
+      ON attribute.attrelid = child.oid
+    WHERE n.nspname = 'public' AND child.relkind IN ('r', 'p')
+      AND child.oid <> format('public.%I', p_entity)::regclass
+      AND child.relname <> 'audit_log'
+      AND attribute.attnum > 0 AND NOT attribute.attisdropped
+      AND (
+        attribute.attname = CASE p_entity WHEN 'contacts' THEN 'contact_id' ELSE 'company_id' END
+          AND attribute.atttypid = 'uuid'::regtype
+        OR EXISTS (
+          SELECT 1 FROM pg_catalog.pg_constraint AS constraint_row
+          JOIN pg_catalog.pg_attribute AS parent_id
+            ON parent_id.attrelid = constraint_row.confrelid
+              AND parent_id.attnum = constraint_row.confkey[1] AND parent_id.attname = 'id'
+          WHERE constraint_row.contype = 'f' AND cardinality(constraint_row.conkey) = 1
+            AND constraint_row.conrelid = child.oid AND constraint_row.conkey[1] = attribute.attnum
+            AND constraint_row.confrelid = format('public.%I', p_entity)::regclass
+        )
+        OR attribute.attname = 'entity_id'
+          AND attribute.atttypid IN ('uuid'::regtype, 'text'::regtype)
+          AND (EXISTS (SELECT 1 FROM pg_catalog.pg_attribute AS entity_type
+            WHERE entity_type.attrelid = child.oid AND entity_type.attname = 'entity_type'
+              AND NOT entity_type.attisdropped) OR child.relname = 'custom_field_values')
+      )
+    ORDER BY n.nspname, child.relname, attribute.attname
+  LOOP
+    v_filter := CASE WHEN v_relation.attname = 'entity_id' THEN
+      CASE WHEN v_relation.relname = 'custom_field_values' THEN
+        format(' AND EXISTS (SELECT 1 FROM public.custom_fields AS definition
+          WHERE definition.id = child.custom_field_id
+            AND definition.entity_type::text IN (%L, %L)
+            AND (definition.user_id = %L::uuid OR definition.user_id IS NULL))',
+          p_entity, CASE p_entity WHEN 'contacts' THEN 'contact' ELSE 'company' END, v_owner)
+      ELSE format(' AND child.entity_type::text IN (%L, %L)', p_entity,
+        CASE p_entity WHEN 'contacts' THEN 'contact' ELSE 'company' END) END
+      ELSE '' END;
+    EXECUTE format('SELECT 1 FROM %I.%I AS child WHERE child.%I = $1::%s %s
+      ORDER BY child.ctid FOR UPDATE',
+      v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type, v_filter)
+    USING p_secondary_id;
+    IF NOT v_relation.has_owner THEN
+      v_scope_count := 0;
+      FOR v_scope IN
+        SELECT parent_namespace.nspname, parent.relname,
+          child_column.attname AS child_column, parent_column.attname AS parent_column
+        FROM pg_catalog.pg_constraint AS scope_fk
+        JOIN pg_catalog.pg_class AS parent ON parent.oid = scope_fk.confrelid
+        JOIN pg_catalog.pg_namespace AS parent_namespace ON parent_namespace.oid = parent.relnamespace
+        JOIN pg_catalog.pg_attribute AS child_column
+          ON child_column.attrelid = scope_fk.conrelid AND child_column.attnum = scope_fk.conkey[1]
+        JOIN pg_catalog.pg_attribute AS parent_column
+          ON parent_column.attrelid = scope_fk.confrelid AND parent_column.attnum = scope_fk.confkey[1]
+        WHERE scope_fk.contype = 'f' AND cardinality(scope_fk.conkey) = 1
+          AND scope_fk.conrelid = format('%I.%I', v_relation.nspname, v_relation.relname)::regclass
+          AND EXISTS (SELECT 1 FROM pg_catalog.pg_attribute AS owner_column
+            WHERE owner_column.attrelid = scope_fk.confrelid
+              AND owner_column.attname = 'user_id' AND owner_column.atttypid = 'uuid'::regtype
+              AND NOT owner_column.attisdropped)
+      LOOP
+        v_scope_count := v_scope_count + 1;
+        EXECUTE format('SELECT EXISTS (SELECT 1 FROM %I.%I AS child
+          LEFT JOIN %I.%I AS parent ON child.%I = parent.%I
+          WHERE child.%I = $1::%s %s
+            AND (child.%I IS NULL OR parent.user_id IS DISTINCT FROM $2))',
+          v_relation.nspname, v_relation.relname, v_scope.nspname, v_scope.relname,
+          v_scope.child_column, v_scope.parent_column, v_relation.attname,
+          v_relation.attribute_type, v_filter, v_scope.child_column)
+        INTO v_other_owner USING p_secondary_id, v_owner;
+        IF v_other_owner THEN
+          RAISE EXCEPTION 'Vínculo indireto de outro proprietário: %.%',
+            v_relation.nspname, v_relation.relname USING ERRCODE = '42501';
+        END IF;
+      END LOOP;
+      IF v_relation.attname = 'entity_id' AND v_scope_count = 0 THEN
+        EXECUTE format('SELECT EXISTS (SELECT 1 FROM %I.%I AS child
+          WHERE child.%I = $1::%s %s)',
+          v_relation.nspname, v_relation.relname, v_relation.attname,
+          v_relation.attribute_type, v_filter)
+        INTO v_other_owner USING p_secondary_id;
+        IF v_other_owner THEN
+          RAISE EXCEPTION 'Vínculo polimórfico sem proprietário: %.%',
+            v_relation.nspname, v_relation.relname USING ERRCODE = '42501';
+        END IF;
+      END IF;
+    ELSE
+      EXECUTE format('SELECT EXISTS (SELECT 1 FROM %I.%I AS child
+        WHERE child.%I = $1::%s %s AND child.user_id IS DISTINCT FROM $2)',
+        v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type, v_filter)
+      INTO v_other_owner USING p_secondary_id, v_owner;
+      IF v_other_owner THEN
+        RAISE EXCEPTION 'Vínculo de outro proprietário: %.%',
+          v_relation.nspname, v_relation.relname USING ERRCODE = '42501';
+      END IF;
+    END IF;
+    IF p_entity = 'companies' AND v_relation.relname = 'company_emails'
+       AND v_relation.attname = 'company_id' THEN
+      UPDATE public.company_emails AS child SET company_id = p_primary_id
+      WHERE child.company_id = p_secondary_id
+        AND NOT EXISTS (SELECT 1 FROM public.company_emails AS existing
+          WHERE existing.company_id = p_primary_id
+            AND lower(existing.email::text) = lower(child.email::text));
+    ELSIF p_entity = 'companies' AND v_relation.relname = 'company_phones'
+       AND v_relation.attname = 'company_id' THEN
+      UPDATE public.company_phones AS child SET company_id = p_primary_id
+      WHERE child.company_id = p_secondary_id
+        AND NOT EXISTS (SELECT 1 FROM public.company_phones AS existing
+          WHERE existing.company_id = p_primary_id
+            AND existing.numero_normalizado = child.numero_normalizado);
+    ELSIF v_relation.has_unique_reference THEN
+      EXECUTE format('UPDATE %I.%I AS child SET %I = $1::%s
+        WHERE child.%I = $2::%s %s %s AND NOT EXISTS (
+          SELECT 1 FROM %I.%I AS existing WHERE existing.%I = $1::%s
+        )', v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type,
+        v_relation.attname, v_relation.attribute_type, v_filter,
+        CASE WHEN v_relation.has_owner THEN 'AND child.user_id = $3' ELSE '' END,
+        v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type)
+      USING p_primary_id, p_secondary_id, v_owner;
+    ELSIF v_relation.has_owner THEN
+      EXECUTE format('UPDATE %I.%I AS child SET %I = $1::%s
+        WHERE child.%I = $2::%s %s AND child.user_id = $3',
+        v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type,
+        v_relation.attname, v_relation.attribute_type, v_filter)
+      USING p_primary_id, p_secondary_id, v_owner;
+    ELSE
+      EXECUTE format('UPDATE %I.%I AS child SET %I = $1::%s WHERE child.%I = $2::%s %s',
+        v_relation.nspname, v_relation.relname, v_relation.attname, v_relation.attribute_type,
+        v_relation.attname, v_relation.attribute_type, v_filter)
+      USING p_primary_id, p_secondary_id;
+    END IF;
+    GET DIAGNOSTICS v_count = ROW_COUNT;
+    v_moved := v_moved + v_count;
+    v_moved_by_table := v_moved_by_table || jsonb_build_object(v_relation.relname,
+      coalesce((v_moved_by_table->>v_relation.relname)::integer, 0) + v_count);
+  END LOOP;
+
+  FOR v_relation IN
+      SELECT attribute.attname
+      FROM pg_catalog.pg_constraint AS constraint_row
+      JOIN pg_catalog.pg_attribute AS attribute
+        ON attribute.attrelid = constraint_row.conrelid
+          AND attribute.attnum = constraint_row.conkey[1]
+      WHERE constraint_row.contype = 'f'
+        AND cardinality(constraint_row.conkey) = 1
+        AND constraint_row.conrelid = format('public.%I', p_entity)::regclass
+        AND constraint_row.confrelid = format('public.%I', p_entity)::regclass
+      ORDER BY attribute.attname
+    LOOP
+      v_parent := p_primary_id;
+      v_ancestors := '{}'::uuid[];
+      WHILE v_parent IS NOT NULL LOOP
+        IF v_parent = p_secondary_id OR v_parent = ANY(v_ancestors) THEN
+          RAISE EXCEPTION 'Mesclagem criaria relação circular: %',
+            v_relation.attname USING ERRCODE = '23514';
+        END IF;
+        v_ancestors := array_append(v_ancestors, v_parent);
+        EXECUTE format('SELECT %I, user_id FROM public.%I WHERE id = $1 FOR UPDATE',
+          v_relation.attname, p_entity)
+        INTO v_parent, v_parent_owner USING v_parent;
+        IF v_parent_owner IS DISTINCT FROM v_owner THEN
+          RAISE EXCEPTION 'Ancestral de outro proprietário' USING ERRCODE = '42501';
+        END IF;
+      END LOOP;
+      EXECUTE format('SELECT 1 FROM public.%I WHERE %I = $1 ORDER BY id FOR UPDATE',
+        p_entity, v_relation.attname) USING p_secondary_id;
+      EXECUTE format('SELECT EXISTS (SELECT 1 FROM public.%I
+        WHERE %I = $1 AND user_id IS DISTINCT FROM $2)', p_entity, v_relation.attname)
+      INTO v_other_owner USING p_secondary_id, v_owner;
+      IF v_other_owner THEN
+        RAISE EXCEPTION 'Relação pertence a outro usuário' USING ERRCODE = '42501';
+      END IF;
+      EXECUTE format('UPDATE public.%I SET %I = $1
+        WHERE id <> $2 AND %I = $3 AND user_id = $4',
+        p_entity, v_relation.attname, v_relation.attname)
+      USING p_primary_id, p_secondary_id, p_secondary_id, v_owner;
+      GET DIAGNOSTICS v_count = ROW_COUNT;
+      v_moved := v_moved + v_count;
+      v_moved_by_table := v_moved_by_table || jsonb_build_object(p_entity,
+        coalesce((v_moved_by_table->>p_entity)::integer, 0) + v_count);
+    END LOOP;
+
+  IF p_entity = 'contacts' THEN
+    UPDATE public.contacts SET deleted_at = now(), is_duplicate = true, duplicate_of = p_primary_id
+    WHERE id = p_secondary_id AND user_id = v_owner;
+  ELSE
+    UPDATE public.companies SET deleted_at = now(),
+      merge_notes = coalesce(merge_notes, '{}'::jsonb) ||
+        jsonb_build_object('merged_into', p_primary_id)
+    WHERE id = p_secondary_id AND user_id = v_owner;
+  END IF;
+  INSERT INTO public.audit_log (
+    user_id, action, entity_type, entity_id, table_name, record_id, old_data, new_data
+  ) VALUES (
+    v_owner, 'UPDATE', p_entity, p_primary_id, p_entity, p_primary_id::text,
+    jsonb_build_object('merged_from', p_secondary_id, 'primary', to_jsonb(v_primary),
+      'secondary', to_jsonb(v_secondary)),
+    jsonb_build_object('operation', 'merge', 'overrides', p_field_overrides,
+      'relations_moved', v_moved, 'relations_by_table', v_moved_by_table)
+  );
+  RETURN jsonb_build_object('success', true, 'primary_id', p_primary_id,
+    'secondary_id', p_secondary_id, 'relations_moved', v_moved,
+    'relations_by_table', v_moved_by_table, 'already_merged', false);
+END;
+$function$;
