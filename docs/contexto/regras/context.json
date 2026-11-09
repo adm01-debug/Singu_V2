@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "b7f73b43b0a73641b63b723aa7e9fa717d3ff4a9",
+  "sha": "f5438f281cf9a4e00b895fa52f509c9b11d80c5e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-08 21:51 UTC",
+  "generated_at": "2026-11-09 20:24 UTC",
   "files_total": 3097,
   "code_files": 2724,
   "code_lines": 382277
  },
  "version": "1.3.2",
- "facts_hash": "8a0a67ed80a4fd40",
+ "facts_hash": "cb3a67fae0b2be9e",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22,12 +22,12 @@
     "in": "package.json"
    },
    "@supabase/supabase-js": {
-    "version": "^2.118.0",
+    "version": "^2.119.0",
     "role": "Supabase (DB/Auth/Storage/Functions)",
     "in": "package.json"
    },
    "@tanstack/react-query": {
-    "version": "^5.105.0",
+    "version": "^5.106.1",
     "role": "Cache/fetch de dados (TanStack Query)",
     "in": "package.json"
    },
@@ -77,7 +77,7 @@
     "in": "package.json"
    },
    "@playwright/test": {
-    "version": "^1.64.1",
+    "version": "^1.65.0",
     "role": "E2E Playwright",
     "in": "package.json"
    },
@@ -223489,10 +223489,20 @@
   }
  },
  "git": {
-  "sha": "b7f73b43b0a73641b63b723aa7e9fa717d3ff4a9",
+  "sha": "f5438f281cf9a4e00b895fa52f509c9b11d80c5e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "f5438f2",
+    "date": "2026-11-09",
+    "author": "dependabot[bot]",
+    "subject": "build(deps): bump the minor-and-patch group with 6 updates (#182)",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
    {
     "sha": "b7f73b4",
     "date": "2026-11-08",
@@ -223855,37 +223865,28 @@
      "tests/rls/contact-relation-concurrency.mjs",
      "tests/rls/fixtures/contact-relation-version-fixture.sql"
     ]
-   },
-   {
-    "sha": "2b44ae7",
-    "date": "2026-10-31",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(social): remove biografias fictícias e expõe falhas da consulta (#154)",
-    "files": [
-     "CHANGELOG.md",
-     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_BANCO_CI.md",
-     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_CONTRATOS.md",
-     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_UX.md",
-     "src/components/contact-detail/SocialInsightsError.tsx",
-     "src/components/contact-detail/SocialIntelligencePanel.tsx",
-     "src/components/crm/commercial/components/SocialMatchDetails.tsx",
-     "src/hooks/useSocialInsights.test.tsx",
-     "src/hooks/useSocialInsights.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "CHANGELOG.md",
-    7
+    6
    ],
    [
     ".github/workflows/ci.yml",
     5
    ],
    [
+    "package.json",
+    3
+   ],
+   [
     "scripts/inventario/gerar-banco.mjs",
     3
+   ],
+   [
+    "package-lock.json",
+    2
    ],
    [
     "AGENTS.md",
@@ -223893,10 +223894,6 @@
    ],
    [
     "CLAUDE.md",
-    2
-   ],
-   [
-    "docs/lacunas/MATRIZ_RECONCILIADA_20261012_CONTRATOS.md",
     2
    ],
    [
@@ -223929,10 +223926,6 @@
    ],
    [
     "scripts/inventario/banco.sql",
-    2
-   ],
-   [
-    "package.json",
     2
    ],
    [

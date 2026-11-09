@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "b7f73b43b0a73641b63b723aa7e9fa717d3ff4a9",
+  "commit": "f5438f281cf9a4e00b895fa52f509c9b11d80c5e",
   "branch": "main",
-  "data_commit": "2026-11-08T17:37:53-03:00",
+  "data_commit": "2026-11-09T17:22:35-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "f5438f28",
+    "data": "2026-11-09",
+    "assunto": "build(deps): bump the minor-and-patch group with 6 updates (#182)"
+   },
    {
     "sha": "b7f73b43",
     "data": "2026-11-08",
@@ -126,11 +131,6 @@
     "sha": "92d94662",
     "data": "2026-11-06",
     "assunto": "chore: sobe actions/checkout para v5 no ci.yml (#159)"
-   },
-   {
-    "sha": "cf83f3a4",
-    "data": "2026-11-06",
-    "assunto": "fix(ci): baseline SECURITY DEFINER 109 → 110 (guard_contact_relation_write) (#158)"
    }
   ],
   "arquivos_mudados_7d": 94,
@@ -180,6 +180,10 @@
     "mudancas": 8
    },
    {
+    "pasta": "package.json",
+    "mudancas": 7
+   },
+   {
     "pasta": "src/components/analytics",
     "mudancas": 7
    },
@@ -189,10 +193,6 @@
    },
    {
     "pasta": "docs/qa/security-definer-audit.md",
-    "mudancas": 6
-   },
-   {
-    "pasta": "package.json",
     "mudancas": 6
    }
   ],
@@ -206,16 +206,16 @@
     "mudancas": 17
    },
    {
+    "arquivo": "package.json",
+    "mudancas": 15
+   },
+   {
     "arquivo": "supabase/functions/external-data/index.ts",
     "mudancas": 15
    },
    {
-    "arquivo": "package.json",
-    "mudancas": 14
-   },
-   {
     "arquivo": "package-lock.json",
-    "mudancas": 11
+    "mudancas": 12
    },
    {
     "arquivo": "docs/qa/security-definer-audit.md",
@@ -309,7 +309,7 @@
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 3
+    "commits": 4
    },
    {
     "autor": "Joaquim Promo Brindes",

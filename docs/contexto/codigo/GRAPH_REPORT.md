@@ -1,4 +1,4 @@
-# Graph Report - Singu_V2  (2026-11-08)
+# Graph Report - Singu_V2  (2026-11-09)
 
 ## Corpus Check
 - 3059 files · ~2,048,499 words
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b7f73b43`
+- Built from commit: `f5438f28`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
