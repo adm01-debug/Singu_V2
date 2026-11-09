@@ -220163,7 +220163,7 @@
           "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "d5d674bc9d8ad991",
+        "definition_sha": "3854e18d4e1c5d3f",
         "execute_api_roles": "authenticated",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -276713,6 +276713,12 @@
         "statements": 1,
         "statements_sha": "248510aec34355d6",
         "version": "20261108203932"
+      },
+      {
+        "name": "fix_merge_nome_crm_override",
+        "statements": 1,
+        "statements_sha": "a413394a9121e7c0",
+        "version": "20261109010329"
       }
     ],
     "policies": [
@@ -297192,11 +297198,6 @@
         {
           "publication": "supabase_realtime_messages_publication",
           "schema": "realtime",
-          "table": "messages_2026_11_05"
-        },
-        {
-          "publication": "supabase_realtime_messages_publication",
-          "schema": "realtime",
           "table": "messages_2026_11_06"
         },
         {
@@ -297223,6 +297224,11 @@
           "publication": "supabase_realtime_messages_publication",
           "schema": "realtime",
           "table": "messages_2026_11_11"
+        },
+        {
+          "publication": "supabase_realtime_messages_publication",
+          "schema": "realtime",
+          "table": "messages_2026_11_12"
         }
       ]
     },

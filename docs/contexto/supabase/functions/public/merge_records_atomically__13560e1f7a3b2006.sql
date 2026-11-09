@@ -35,6 +35,35 @@ BEGIN
     RAISE EXCEPTION 'Substituições devem ser um objeto' USING ERRCODE = '22023';
   END IF;
 
+  IF p_entity = 'companies' AND p_field_overrides ? 'nome_crm'
+     AND (
+       jsonb_typeof(p_field_overrides->'nome_crm') IS DISTINCT FROM 'string'
+       OR NULLIF(regexp_replace(
+            p_field_overrides->>'nome_crm',
+            '[\s' || chr(160) || chr(5760) ||
+            chr(8192) || chr(8193) || chr(8194) || chr(8195) || chr(8196) ||
+            chr(8197) || chr(8198) || chr(8199) || chr(8200) || chr(8201) ||
+            chr(8202) || chr(8232) || chr(8233) || chr(8239) || chr(8287) ||
+            chr(12288) || chr(65279) || ']',
+            '', 'g'), '') IS NULL
+     ) THEN
+    RAISE EXCEPTION 'Override de nome_crm deve ser texto não vazio' USING ERRCODE = '22023';
+  END IF;
+  IF p_entity = 'contacts' AND p_field_overrides ? 'first_name'
+     AND (
+       jsonb_typeof(p_field_overrides->'first_name') IS DISTINCT FROM 'string'
+       OR NULLIF(regexp_replace(
+            p_field_overrides->>'first_name',
+            '[\s' || chr(160) || chr(5760) ||
+            chr(8192) || chr(8193) || chr(8194) || chr(8195) || chr(8196) ||
+            chr(8197) || chr(8198) || chr(8199) || chr(8200) || chr(8201) ||
+            chr(8202) || chr(8232) || chr(8233) || chr(8239) || chr(8287) ||
+            chr(12288) || chr(65279) || ']',
+            '', 'g'), '') IS NULL
+     ) THEN
+    RAISE EXCEPTION 'Override de first_name deve ser texto não vazio' USING ERRCODE = '22023';
+  END IF;
+
   IF p_entity = 'contacts' THEN
     PERFORM 1 FROM public.contacts
     WHERE id IN (p_primary_id, p_secondary_id) ORDER BY id FOR UPDATE;

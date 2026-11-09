@@ -2,6 +2,13 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-09 04:22 UTC
+
+- **functions** alterado (1): `public.merge_records_atomically(p_entity text, p_primary_id uuid, p_secondary_id uuid, p_field_overrides jsonb)`
+- **migrations** adicionado (1): `20261109010329_fix_merge_nome_crm_override`
+- **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_12`
+- **realtime** removido (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_05`
+
 ## 2026-11-08 21:48 UTC
 
 - **functions** alterado (3): `public.get_birthday_contacts(p_days_ahead integer)`, `public.get_duplicate_contacts(p_limit integer)`, `public.set_updated_at()`

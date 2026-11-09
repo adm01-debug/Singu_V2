@@ -682,3 +682,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261022195616 | [fix_update_company_fields_security_definer_search_path](migrations/20261022195616_fix_update_company_fields_security_definer_search_path.sql) | 1 |
 | 20261022203935 | [update_company_fields_security_fix](migrations/20261022203935_update_company_fields_security_fix.sql) | 1 |
 | 20261108203932 | [fix_contact_phones_trigger_primary_indexes](migrations/20261108203932_fix_contact_phones_trigger_primary_indexes.sql) | 1 |
+| 20261109010329 | [fix_merge_nome_crm_override](migrations/20261109010329_fix_merge_nome_crm_override.sql) | 1 |
