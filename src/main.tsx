@@ -16,75 +16,21 @@ bootstrapTheme(ACTIVE_THEME_STORAGE_KEY, "dark");
 // Architecture contract:
 //   • ONE unified SW, registered exclusively by VitePWA via the
 //     virtual:pwa-register module below (scope "/", script "sw.js").
-//   • registerType is "prompt" in vite.config.ts.  The waiting SW activates
-//     ONLY when the user accepts the update banner, so active push
-//     subscriptions are never silently destroyed mid-session.
+//   • registerType is "autoUpdate" in vite.config.ts and the Workbox SW is
+//     generated (generateSW).  The push / notificationclick handlers live in
+//     public/sw-push.js and are injected into that SW through
+//     workbox.importScripts, so ONE worker owns scope "/" and handles both
+//     precaching and push.
 //   • pushNotifications.ts must use navigator.serviceWorker.ready (the
-//     already-registered VitePWA SW) instead of re-registering /sw-push.js.
-//     Push event handlers are injected into the unified SW via the
-//     injectManifest strategy (src/sw.ts imports both Workbox precaching and
-//     the push / notificationclick handlers from sw-push.js).
+//     already-registered VitePWA SW) and NEVER register /sw-push.js itself.
 //
-// NEVER add navigator.serviceWorker.getRegistrations().then(forEach unregister)
-// here without first capturing push subscriptions.  Blind unregistration
-// silently destroys PushSubscription objects and requires the user to
-// re-grant Notification permission — browser policy prevents re-prompting
-// in many cases, making the breakage permanent for that install.
-
-/**
- * One-time migration: remove any legacy /sw-push.js registration left over
- * from the previous dual-SW architecture.  The competing registration caused
- * Workbox to lose scope control on every push-subscribe call.
- *
- * Preservation strategy:
- *   1. Capture the active push endpoint before unsubscribing.
- *   2. Store it in sessionStorage under __legacy_push_endpoint.
- *   3. After the VitePWA unified SW activates (next load), pushNotifications.ts
- *      reads this key and re-registers the subscription via the new SW.
- */
-async function migrateLegacyPushSW(): Promise<void> {
-  if (!("serviceWorker" in navigator)) return;
-
-  let registrations: ReadonlyArray<ServiceWorkerRegistration>;
-  try {
-    registrations = await navigator.serviceWorker.getRegistrations();
-  } catch {
-    return;
-  }
-
-  for (const reg of registrations) {
-    const scriptURL =
-      reg.active?.scriptURL ??
-      reg.installing?.scriptURL ??
-      reg.waiting?.scriptURL ??
-      "";
-
-    // Only touch the legacy push-only SW — never the VitePWA Workbox SW.
-    if (!scriptURL.includes("sw-push.js")) continue;
-
-    try {
-      const sub = await reg.pushManager?.getSubscription();
-      if (sub) {
-        // Persist endpoint so the app can resubscribe via the unified SW.
-        sessionStorage.setItem("__legacy_push_endpoint", sub.endpoint);
-        // Unsubscribe cleanly so the browser releases the VAPID association.
-        await sub.unsubscribe();
-      }
-    } catch {
-      /* Subscription already gone — still safe to unregister the SW. */
-    }
-
-    try {
-      await reg.unregister();
-      logger.info(
-        "[main] Migrated: removed legacy sw-push.js." +
-          " Push notifications will reactivate after next login."
-      );
-    } catch (err) {
-      logger.warn("[main] Could not unregister legacy sw-push.js:", err);
-    }
-  }
-}
+// NEVER unregister service workers or unsubscribe push subscriptions here.
+// Blind unregistration silently destroys PushSubscription objects and
+// requires the user to re-grant Notification permission — browser policy
+// prevents re-prompting in many cases, making the breakage permanent for that
+// install.  A legacy sw-push.js registration at scope "/" needs no migration:
+// the VitePWA SW registers at the same scope, replaces its script and the
+// existing PushSubscription survives (it belongs to the registration).
 
 // Only run SW management in production builds.  In dev, Vite's HMR handles
 // module updates and there is no built SW file to manage.
@@ -92,11 +38,7 @@ if (import.meta.env.PROD) {
   window.addEventListener(
     "load",
     () => {
-      // Step 1 — Clean up the competing legacy SW.  Must happen before VitePWA
-      // registers its SW so the Workbox SW wins scope "/" cleanly.
-      migrateLegacyPushSW();
-
-      // Step 2 — Register the unified VitePWA SW.
+      // Register the unified VitePWA SW.
       // "virtual:pwa-register" only exists when VitePWA plugin runs (prod build).
       // Use @vite-ignore + variable to prevent dev-time resolution error.
       const pwaModule = "virtual:pwa-register";

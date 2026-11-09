@@ -20,6 +20,17 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
   return outputArray;
 }
 
+const SW_READY_TIMEOUT_MS = 10_000;
+
+/**
+ * Returns the registration of the app's single service worker.
+ *
+ * In production that is the VitePWA Workbox SW (scope "/"), which already
+ * contains the push handlers from public/sw-push.js (workbox.importScripts).
+ * Registering /sw-push.js here would replace it at the same scope and drop the
+ * precache + push subscription, so we only WAIT for `ready`.  In dev there is
+ * no built SW, so sw-push.js is registered directly to keep push testable.
+ */
 export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (!('serviceWorker' in navigator)) {
     logger.warn('Service Worker not supported');
@@ -27,10 +38,16 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
   }
 
   try {
-    const registration = await navigator.serviceWorker.register('/sw-push.js', {
-      scope: '/'
+    if (!import.meta.env.PROD) {
+      return await navigator.serviceWorker.register('/sw-push.js', { scope: '/' });
+    }
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<null>((resolve) => {
+      timer = setTimeout(() => resolve(null), SW_READY_TIMEOUT_MS);
     });
-    logger.info('Service Worker registered:', registration);
+    const registration = await Promise.race([navigator.serviceWorker.ready, timeout]);
+    if (timer) clearTimeout(timer);
+    if (!registration) logger.warn('Service Worker not ready after timeout');
     return registration;
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Unknown error';
