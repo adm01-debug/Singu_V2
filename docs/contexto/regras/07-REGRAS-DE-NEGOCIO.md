@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `36fc1e233f` · branch `main` · 2026-11-09 20:26 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ecfcdf0780` · branch `main` · 2026-11-09 21:08 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4374,7 +4374,7 @@ _nenhum item encontrado_
 | `admin` | `tests/rls/contact_relations_owner_scope.sql` |
 | `admin` | `tests/rls/psychographic_matrix.sql` |
 
-## K. Testes como especificação (2634 testes em 197 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (2638 testes em 198 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4505,6 +4505,7 @@ _nenhum item encontrado_
 | `tests/e2e/contacts.spec.ts` | 5 | Contatos CRUD & Filtros E2E · deve criar um novo contato e aparecer na lista · deve navegar para ficha 360 e validar rapport e histórico familiar · deve validar fluxo de aprovação de sugestões IA … |
 | `e2e/contacts-rapport.spec.ts` | 4 | Contacts Rapport & Intelligence · CRUD de contatos com Hobbies e Interesses · Filtro por Hobbies e Interesses · Ficha 360: Edição Inline de Família e Histórico |
 | `e2e/smoke.spec.ts` | 4 | SINGU Smoke Tests · jornada A: dashboard → criar contato · jornada B: pipeline → mover deal · jornada C: inbox → completar tarefa → desfazer |
+| `scripts/check-supabase-project-ref.test.mjs` | 4 | AGENTS.md declara o projeto Supabase canônico · supabase/config.toml aponta para o projeto canônico · supabase/.temp/linked-project.json aponta para o projeto canônico · a CSP do vite.config.ts permite conexão ao projeto canônico |
 | `src/components/analytics/DataHealthWidget.contract.test.tsx` | 4 | Contrato agregado da saúde dos dados · converte a escala de 0 a 10 e mostra os totais reais sem inventar tabelas · distingue pontuação ausente de zero real · distingue ausência de métricas de falha na consulta |
 | `src/components/contact-detail/__tests__/LifeEventsTab.test.tsx` | 4 | LifeEventsTab · renders correctly and shows the title · displays the gap checklist tab · displays the audit trail tab |
 | `src/components/crm/NextBestAction.contract.test.tsx` | 4 | Contrato canônico de conclusão de próxima ação · preserva o tipo permitido %s e informa canal e direção · registra %s como nota sem violar a constraint de tipo · não anuncia conclusão quando a gravação da interação falha |

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "36fc1e233f21136381d01e4d2d9c71aaf0e3e196",
+  "sha": "ecfcdf078097efe5162400a4b3c6812b28c3da20",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-09 20:26 UTC",
-  "files_total": 3097,
-  "code_files": 2724,
-  "code_lines": 382277
+  "generated_at": "2026-11-09 21:08 UTC",
+  "files_total": 3098,
+  "code_files": 2725,
+  "code_lines": 382309
  },
  "version": "1.3.2",
- "facts_hash": "cb3a67fae0b2be9e",
+ "facts_hash": "5a3597110f4064c6",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -204,7 +204,7 @@
    ".tsx": 1156,
    ".ts": 870,
    ".sql": 646,
-   ".mjs": 22,
+   ".mjs": 23,
    ".js": 18,
    ".py": 10,
    ".cjs": 3
@@ -66677,8 +66677,8 @@
   },
   {
    "module": "scripts",
-   "files": 174,
-   "lines": 25884,
+   "files": 175,
+   "lines": 25916,
    "tables": [
     "_migration_cdc_checkpoint",
     "a",
@@ -66775,6 +66775,7 @@
     "scripts/check-edge-imports.mjs",
     "scripts/check-publish-gates.test.mjs",
     "scripts/check-rls-profiles.test.mjs",
+    "scripts/check-supabase-project-ref.test.mjs",
     "scripts/check_unified_comm.sql",
     "scripts/chunk-apply.js",
     "scripts/diff-tables.mjs",
@@ -66837,8 +66838,7 @@
     "scripts/migration/sql/heal-sequences.sql",
     "scripts/migration/sql/mark-must-reset.sql",
     "scripts/migration/storage/_lib.ts",
-    "scripts/migration/storage/copy-large.ts",
-    "scripts/migration/storage/copy-objects.ts"
+    "scripts/migration/storage/copy-large.ts"
    ]
   },
   {
@@ -114853,6 +114853,22 @@
    {
     "file": "scripts/check-rls-profiles.test.mjs",
     "name": "RLS aprova os dois perfis quando o JWT está disponível"
+   },
+   {
+    "file": "scripts/check-supabase-project-ref.test.mjs",
+    "name": "AGENTS.md declara o projeto Supabase canônico"
+   },
+   {
+    "file": "scripts/check-supabase-project-ref.test.mjs",
+    "name": "supabase/config.toml aponta para o projeto canônico"
+   },
+   {
+    "file": "scripts/check-supabase-project-ref.test.mjs",
+    "name": "supabase/.temp/linked-project.json aponta para o projeto canônico"
+   },
+   {
+    "file": "scripts/check-supabase-project-ref.test.mjs",
+    "name": "a CSP do vite.config.ts permite conexão ao projeto canônico"
    },
    {
     "file": "src/__tests__/architecture-compliance.test.ts",
@@ -164006,6 +164022,18 @@
     "RLS não ignora perfil desconhecido no baseline",
     "RLS permite coleta anônima quando somente esse perfil é exigido",
     "RLS aprova os dois perfis quando o JWT está disponível"
+   ]
+  },
+  "scripts/check-supabase-project-ref.test.mjs": {
+   "path": "scripts/check-supabase-project-ref.test.mjs",
+   "lines": 32,
+   "is_test": true,
+   "doc": "Garante que o projeto Supabase canônico é um só em todo o repositório. Fonte da verdade: a linha \"Supabase canônico: `<ref>`\" do AGENTS.md. Devem apontar para o mesmo ref: supabase/config.toml (project_id), supabase/.temp/linked-project.json (ref) e a CSP do vite.config.ts.",
+   "tests": [
+    "AGENTS.md declara o projeto Supabase canônico",
+    "supabase/config.toml aponta para o projeto canônico",
+    "supabase/.temp/linked-project.json aponta para o projeto canônico",
+    "a CSP do vite.config.ts permite conexão ao projeto canônico"
    ]
   },
   "scripts/check_unified_comm.sql": {
@@ -223489,10 +223517,22 @@
   }
  },
  "git": {
-  "sha": "36fc1e233f21136381d01e4d2d9c71aaf0e3e196",
+  "sha": "ecfcdf078097efe5162400a4b3c6812b28c3da20",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "ecfcdf0",
+    "date": "2026-11-09",
+    "author": "adm01-debug",
+    "subject": "fix(config): alinha o project_id do config.toml ao projeto Supabase canônico e trava divergência (#183)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "AGENTS.md",
+     "scripts/check-supabase-project-ref.test.mjs",
+     "supabase/config.toml"
+    ]
+   },
    {
     "sha": "36fc1e2",
     "date": "2026-11-09",
@@ -223841,29 +223881,19 @@
      "AGENTS.md",
      "CLAUDE.md"
     ]
-   },
-   {
-    "sha": "3678663",
-    "date": "2026-11-05",
-    "author": "dependabot[bot]",
-    "subject": "build(deps): bump minor-and-patch dependencies",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
    }
   ],
   "hot_files": [
+   [
+    ".github/workflows/ci.yml",
+    5
+   ],
    [
     "CHANGELOG.md",
     5
    ],
    [
-    ".github/workflows/ci.yml",
-    4
-   ],
-   [
-    "package.json",
+    "AGENTS.md",
     3
    ],
    [
@@ -223875,11 +223905,7 @@
     2
    ],
    [
-    "package-lock.json",
-    2
-   ],
-   [
-    "AGENTS.md",
+    "package.json",
     2
    ],
    [
@@ -223927,11 +223953,15 @@
     2
    ],
    [
-    "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
+    "scripts/check-supabase-project-ref.test.mjs",
     1
    ],
    [
-    ".github/workflows/fix-jwt-proxies-externas.yml",
+    "supabase/config.toml",
+    1
+   ],
+   [
+    "package-lock.json",
     1
    ]
   ]

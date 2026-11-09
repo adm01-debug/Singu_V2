@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "36fc1e233f21136381d01e4d2d9c71aaf0e3e196",
+  "commit": "ecfcdf078097efe5162400a4b3c6812b28c3da20",
   "branch": "main",
-  "data_commit": "2026-11-09T17:22:54-03:00",
+  "data_commit": "2026-11-09T18:03:47-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "ecfcdf07",
+    "data": "2026-11-09",
+    "assunto": "fix(config): alinha o project_id do config.toml ao projeto Supabase canônico e trava divergência (#183)"
+   },
    {
     "sha": "36fc1e23",
     "data": "2026-11-09",
@@ -126,14 +131,9 @@
     "sha": "d00de592",
     "data": "2026-11-06",
     "assunto": "fix(ci): corrige corrupção de texto nos workflows restore-drill e rls-exposure-guard (#161)"
-   },
-   {
-    "sha": "b911f821",
-    "data": "2026-11-06",
-    "assunto": "chore: sobe actions/checkout para v5 nos workflows de monitoramento, restore e RLS (#160)"
    }
   ],
-  "arquivos_mudados_7d": 94,
+  "arquivos_mudados_7d": 96,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "CHANGELOG.md",
@@ -148,12 +148,12 @@
     "mudancas": 26
    },
    {
-    "pasta": "src/components/contact-detail",
+    "pasta": ".github/workflows/ci.yml",
     "mudancas": 15
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 14
+    "pasta": "src/components/contact-detail",
+    "mudancas": 15
    },
    {
     "pasta": "supabase/functions/external-data",
@@ -203,7 +203,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "arquivo": "package.json",
@@ -270,6 +270,10 @@
     "mudancas": 5
    },
    {
+    "arquivo": "AGENTS.md",
+    "mudancas": 4
+   },
+   {
     "arquivo": "PENDENCIAS.md",
     "mudancas": 4
    },
@@ -292,10 +296,6 @@
    {
     "arquivo": "src/pages/ContatoDetalhe.tsx",
     "mudancas": 4
-   },
-   {
-    "arquivo": "src/pages/Contatos.tsx",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 35
+    "commits": 36
    },
    {
     "autor": "dependabot[bot]",
@@ -318,9 +318,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 2994,
-  "arquivos_codigo": 2077,
-  "linhas_codigo": 389310,
+  "arquivos_total": 2995,
+  "arquivos_codigo": 2078,
+  "linhas_codigo": 389342,
   "rotas": 114,
   "rotas_http_backend": 12,
   "vistas_por_id": 0,
@@ -332,7 +332,7 @@
   "tabelas": 418,
   "migrations": 479,
   "cron_jobs": 20,
-  "testes": 212,
+  "testes": 213,
   "workflows": 7,
   "scripts": 213,
   "docs_md": 150
@@ -445,6 +445,10 @@
   "scripts/check-rls-profiles.test.mjs": {
    "arquivos": 1,
    "linhas": 69
+  },
+  "scripts/check-supabase-project-ref.test.mjs": {
+   "arquivos": 1,
+   "linhas": 32
   },
   "scripts/chunk-apply.js": {
    "arquivos": 1,

@@ -5,17 +5,17 @@
   "vitest",
   "playwright"
  ],
- "total": 212,
+ "total": 213,
  "por_tipo": {
   "contrato": 38,
   "e2e": 12,
   "pytest": 2,
-  "unit": 158
+  "unit": 159
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 89
+   "arquivos": 90
   },
   {
    "padrao": "co-localizado (__tests__)",
@@ -113,6 +113,13 @@
    "linhas": 69,
    "testa": [],
    "casos": 5
+  },
+  {
+   "arquivo": "scripts/check-supabase-project-ref.test.mjs",
+   "tipo": "unit",
+   "linhas": 32,
+   "testa": [],
+   "casos": 4
   },
   {
    "arquivo": "scripts/regras_negocio/test_generate.py",
