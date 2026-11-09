@@ -56,6 +56,12 @@ export default defineConfig(({ mode }) => ({
         },
         workbox: {
           globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+          // Push handlers (push / notificationclick / pushsubscriptionchange) live in
+          // public/sw-push.js and are imported into the generated SW, so ONE worker owns
+          // scope "/". The browser byte-checks imported scripts, so editing sw-push.js
+          // still triggers a SW update. It is imported, not precached.
+          importScripts: ["sw-push.js"],
+          globIgnores: ["sw-push.js"],
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
           // TQ-8: Supabase API responses contain PII (contacts, interactions, etc.).
           // Runtime caching them would persist PII in the browser's Cache Storage
