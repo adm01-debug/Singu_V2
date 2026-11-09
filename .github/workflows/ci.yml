@@ -38,7 +38,7 @@ jobs:
         run: npm run check:edge-imports
 
       - name: Validar falhas de coleta nos gates de RLS e publicação
-        run: node --test scripts/check-publish-gates.test.mjs scripts/check-rls-profiles.test.mjs scripts/check-deploy-timeout.test.mjs
+        run: node --test scripts/check-publish-gates.test.mjs scripts/check-rls-profiles.test.mjs scripts/check-deploy-timeout.test.mjs scripts/check-supabase-project-ref.test.mjs
 
       - name: Preparar Deno para os testes das funcções
         uses: denoland/setup-deno@v2
