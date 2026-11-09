@@ -7,7 +7,8 @@ import {
   subscribeToPush, 
   unsubscribeFromPush, 
   getSubscriptionStatus,
-  registerServiceWorker
+  registerServiceWorker,
+  ensureCurrentPushSubscription
 } from '@/lib/pushNotifications';
 import { logger } from "@/lib/logger";
 
@@ -45,11 +46,16 @@ export const useNotifications = () => {
     return () => { alive = false; };
   }, []);
 
-  // Register service worker on mount
+  // Register service worker on mount e migra, sem prompt, assinaturas feitas com outra chave VAPID
   useEffect(() => {
-    if (isPushSupported()) {
-      registerServiceWorker();
-    }
+    if (!isPushSupported()) return;
+    registerServiceWorker();
+    void ensureCurrentPushSubscription();
+    const onMessage = (e: MessageEvent) => {
+      if (e.data?.type === 'PUSH_SUBSCRIPTION_CHANGED') void ensureCurrentPushSubscription();
+    };
+    navigator.serviceWorker?.addEventListener('message', onMessage);
+    return () => navigator.serviceWorker?.removeEventListener('message', onMessage);
   }, []);
 
   // Request notification permission and subscribe

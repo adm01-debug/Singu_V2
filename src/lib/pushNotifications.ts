@@ -1,9 +1,10 @@
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from "@/lib/logger";
 
-// VAPID public key - this should be generated and stored securely
-// For now, we'll generate it dynamically or use a placeholder
-const VAPID_PUBLIC_KEY = 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U';
+// Chave VAPID PÚBLICA do projeto (é pública por definição). A privada vive só no secret VAPID_PRIVATE_KEY das edge functions.
+// A chave que existia aqui era o EXEMPLO público da biblioteca web-push (a privada correspondente é pública): quem a usasse
+// podia enviar push em nome do app. Pode ser sobrescrita no build por VITE_VAPID_PUBLIC_KEY.
+const VAPID_PUBLIC_KEY: string = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined)?.trim() || 'BAJKcL3nMj8dessmzBsyQskJAd3_7wsX4KstjX7Tk3XwA97DikYGgjodxpw9SoZr_fl1yGjbDu7Wg9OpLJUodTI';
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -56,16 +57,32 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
   }
 }
 
+/** true se a assinatura foi criada com a chave VAPID atual. Navegador que não informa a chave (null) = não dá para saber: não mexe. */
+function usesCurrentKey(subscription: PushSubscription): boolean {
+  const raw = subscription.options?.applicationServerKey;
+  if (!raw) return true;
+  const have = new Uint8Array(raw);
+  const want = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+  return have.length === want.length && have.every((v, i) => v === want[i]);
+}
+
 export async function subscribeToPush(): Promise<PushSubscription | null> {
   const registration = await registerServiceWorker();
   if (!registration) return null;
 
   try {
-    // Check if already subscribed
     let subscription = await registration.pushManager?.getSubscription();
-    
+    let staleEndpoint: string | null = null;
+
+    // Assinatura feita com OUTRA chave (a de exemplo antiga): o serviço de push a rejeita e subscribe() com chave diferente
+    // dá InvalidStateError. Cancela e refaz com a chave atual; a permissão já concedida é mantida (sem novo prompt).
+    if (subscription && !usesCurrentKey(subscription)) {
+      staleEndpoint = subscription.endpoint;
+      await subscription.unsubscribe();
+      subscription = null;
+    }
+
     if (!subscription) {
-      // Subscribe to push notifications
       const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
       subscription = await registration.pushManager?.subscribe({
         userVisibleOnly: true,
@@ -73,14 +90,33 @@ export async function subscribeToPush(): Promise<PushSubscription | null> {
       });
     }
 
-    // Save subscription to database
+    // grava a nova ANTES de apagar a antiga: se a gravação falhar, a linha velha continua lá (nada se perde)
     await saveSubscription(subscription);
-    
+    if (staleEndpoint) await removeSubscription(staleEndpoint);
+
     return subscription;
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Unknown error';
     logger.error('Failed to subscribe to push notifications:', { error: msg });
     return null;
+  }
+}
+
+/**
+ * Migra em silêncio quem já tem permissão e uma assinatura criada com outra chave VAPID. Barato: só olha a assinatura local.
+ * Retorna true se reassinou.
+ */
+export async function ensureCurrentPushSubscription(): Promise<boolean> {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return false;
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return false;
+  try {
+    const registration = await navigator.serviceWorker.ready;
+    const existing = await registration.pushManager?.getSubscription();
+    if (!existing || usesCurrentKey(existing)) return false;
+    return (await subscribeToPush()) !== null;
+  } catch (error) {
+    logger.warn('ensureCurrentPushSubscription failed:', { error: error instanceof Error ? error.message : 'Unknown error' });
+    return false;
   }
 }
 

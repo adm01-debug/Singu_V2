@@ -177,24 +177,17 @@ self.addEventListener('notificationclose', function(event) {
   }
 });
 
-// Handle subscription change
+// Handle subscription change. O SW não tem token de auth (e /api/push/subscribe não existe): só reassina com a MESMA chave
+// da assinatura anterior e pede às páginas abertas que gravem a nova (src/hooks/useNotifications.ts reage a esta mensagem).
 self.addEventListener('pushsubscriptionchange', function(event) {
-  console.log('[Service Worker] Push subscription changed');
-  
+  const oldKey = event.oldSubscription && event.oldSubscription.options &&
+    event.oldSubscription.options.applicationServerKey;
+  if (!oldKey) return; // nada seguro para reaproveitar: o app reassina no próximo carregamento
   event.waitUntil(
-    self.registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: self.vapidPublicKey
-    }).then(function(subscription) {
-      // Re-register the subscription
-      return fetch('/api/push/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(subscription)
-      });
-    })
+    self.registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: oldKey })
+      .then(function() { return clients.matchAll({ type: 'window', includeUncontrolled: true }); })
+      .then(function(list) { list.forEach(function(c) { c.postMessage({ type: 'PUSH_SUBSCRIPTION_CHANGED' }); }); })
+      .catch(function(e) { console.error('[Service Worker] resubscribe failed', e); })
   );
 });
 
@@ -214,7 +207,7 @@ async function checkForNotifications() {
 self.addEventListener('message', function(event) {
   console.log('[Service Worker] Message received:', event.data);
   
-  if (event.data.type === 'SKIP_WAITING') {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
 });
