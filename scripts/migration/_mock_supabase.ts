@@ -1,6 +1,7 @@
 // _mock_supabase.ts — servidor HTTP local (127.0.0.1) que imita o mínimo de
 // Storage, PostgREST e Auth do Supabase. SOMENTE PARA TESTES (*_test.ts):
 // nenhum script de migração importa este arquivo. Nunca fala com rede externa.
+import { createHash } from "node:crypto";
 
 export interface MockObjeto {
   corpo: Uint8Array;
@@ -35,8 +36,6 @@ const enc = new TextEncoder();
 const dec = new TextDecoder();
 
 export function md5Hex(b: Uint8Array): string {
-  // deno-lint-ignore no-process-global
-  const { createHash } = (globalThis as unknown as { process: { getBuiltinModule(n: string): { createHash(a: string): { update(b: Uint8Array): { digest(e: string): string } } } } }).process.getBuiltinModule("node:crypto");
   return createHash("md5").update(b).digest("hex");
 }
 
