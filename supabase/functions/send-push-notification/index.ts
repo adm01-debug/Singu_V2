@@ -9,64 +9,13 @@ import {
 } from "../_shared/auth.ts";
 import { validate } from "../_shared/validate.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
-import { fetchAPI } from "../_shared/fetch-utils.ts";
+import webpush from "npm:web-push@3.6.7";
+import { buildPayload, deliver, readVapidConfig, type PushPayload } from "../_shared/push.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
 
-interface PushPayload {
+interface SendPayload extends PushPayload {
   userId?: string;
-  title: string;
-  body: string;
-  data?: Record<string, unknown>;
-  tag?: string;
-  requireInteraction?: boolean;
-}
-
-interface Subscription {
-  endpoint: string;
-  p256dh: string;
-  auth: string;
-  user_id: string;
-}
-
-async function sendWebPush(subscription: Subscription, payload: PushPayload): Promise<boolean> {
-  try {
-    const pushData = JSON.stringify({
-      title: payload.title,
-      body: payload.body,
-      icon: '/pwa-192x192.png',
-      badge: '/pwa-192x192.png',
-      data: payload.data || {},
-      tag: payload.tag || 'notification',
-      requireInteraction: payload.requireInteraction || false
-    });
-
-    const response = await fetchAPI(subscription.endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/octet-stream',
-        'Content-Encoding': 'aes128gcm',
-        'TTL': '86400',
-      },
-      body: pushData
-    });
-
-    if (!response.ok) {
-      if (response.status === 404 || response.status === 410) {
-        console.log('Subscription expired, should be removed');
-        return false;
-      }
-      const errText = await response.text();
-      console.error('Push failed:', response.status, errText);
-      return false;
-    }
-    await response.text(); // consume body
-
-    return true;
-  } catch (error) {
-    console.error('Error sending push:', error);
-    return false;
-  }
 }
 
 Deno.serve(async (req) => {
@@ -79,6 +28,13 @@ Deno.serve(async (req) => {
   if (!isServiceRoleCaller(authResult)) {
     const rl = limiter.check(authResult, req);
     if (rl) return rl;
+  }
+
+  const vapid = readVapidConfig((k) => Deno.env.get(k));
+  if (!vapid) {
+    // Par VAPID ausente/inválido: NÃO tenta enviar e NÃO apaga assinatura (todas continuam válidas até configurar os secrets)
+    console.error('push_not_configured: defina VAPID_PUBLIC_KEY e VAPID_PRIVATE_KEY (Cloud -> Secrets)');
+    return jsonError('Push notifications not configured', 503, req);
   }
 
   const { body: rawPush, error: bodyError } = await guardBody(req, 16 * 1024);
@@ -98,7 +54,7 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const payload = rawPush as PushPayload;
+    const payload = rawPush as SendPayload;
 
     let targetUserId: string;
     if (isServiceRoleCaller(authResult)) {
@@ -124,16 +80,25 @@ Deno.serve(async (req) => {
       return jsonOk({ success: true, message: 'No subscriptions found', sent: 0 }, req);
     }
 
-    const results = await Promise.all(
-      subscriptions.map(sub => sendWebPush(sub, payload))
-    );
+    const body = buildPayload(payload);
+    const results = await Promise.all(subscriptions.map((sub) => deliver(webpush, sub, body, vapid)));
 
-    const successCount = results.filter(Boolean).length;
+    // 404/410 = assinatura morta: remove SÓ essas linhas (e só do usuário alvo). 401/403/5xx não apagam nada.
+    const gone = subscriptions.filter((_, i) => results[i].outcome === 'gone').map((s) => s.endpoint);
+    if (gone.length) {
+      const { error: delError } = await supabaseClient.from('push_subscriptions').delete().eq('user_id', targetUserId).in('endpoint', gone);
+      if (delError) console.error('push cleanup failed:', delError.message);
+    }
+    const count = (o: string) => results.filter((r) => r.outcome === o).length;
 
-    return jsonOk({ 
-      success: true, 
-      sent: successCount,
-      total: subscriptions.length
+    return jsonOk({
+      success: true,
+      sent: count('sent'),
+      total: subscriptions.length,
+      removed: gone.length,
+      rejected: count('rejected'),
+      failed: count('error'),
+      blocked: count('blocked'),
     }, req);
   } catch (error: unknown) {
     console.error('Error:', error);
