@@ -191,7 +191,8 @@ def strip_sql_comments(txt: str) -> str:
 
 
 def is_test_file(r: str) -> bool:
-    return bool(re.search(r"(\.test\.|\.spec\.|__tests__/|/tests?/|/e2e/|/cypress/)", r))
+    # (^|/): `tests/`, `e2e/` e `cypress/` na RAIZ também são teste (antes só casavam com barra à esquerda).
+    return bool(re.search(r"(\.test\.|\.spec\.|__tests__/|(?:^|/)tests?/|(?:^|/)e2e/|(?:^|/)cypress/)", r))
 
 
 # --------------------------------------------------------------------------- #
@@ -716,6 +717,61 @@ SQL_DROP_CONSTRAINT_RE = re.compile(r"alter\s+table\s+(?:if\s+exists\s+)?(?:only
 SQL_POLICY_HEAD_RE = re.compile(r"create\s+policy\s+(?:\"([^\"]+)\"|(\w+))\s+on\s+(?:\"?(\w+)\"?\.)?\"?(\w+)\"?\s*(?:as\s+(permissive|restrictive)\s*)?(?:for\s+(select|insert|update|delete|all)\s*)?(?:to\s+([\w\s,]+?)\s*)?(?=using|with\s+check|;|$)", re.I)
 
 
+SQL_ALTER_POLICY_RE = re.compile(r"alter\s+policy\s+(?:\"([^\"]+)\"|(\w+))\s+on\s+(?:\"?(\w+)\"?\.)?\"?(\w+)\"?\s*", re.I)
+DO_BLOCK_RE = re.compile(r"do\b[\s\S]*?(\$[A-Za-z_]*\$)([\s\S]*)\1", re.I)
+DO_INNER_DDL_RE = re.compile(r"(?:^|\b(?:begin|then|else|loop)\s+)((?:create|alter|drop|grant|revoke)\s[\s\S]*)$", re.I)
+
+
+def expand_do_blocks(statements: list[str]):
+    """DDL estático dentro de `DO $$ ... $$` (padrão de migration idempotente) também muda o schema.
+
+    Cada statement do corpo é devolvido a partir do verbo DDL, sem o prefixo de controle
+    (BEGIN / IF ... THEN / ELSE / LOOP). SQL dinâmico (`EXECUTE '...'`, `format(...)`) fica de fora:
+    o verbo está dentro de aspas e não dá para saber o alvo sem executar.
+    """
+    for st in statements:
+        m = DO_BLOCK_RE.match(st)
+        if not m:
+            yield st
+            continue
+        for piece in split_sql_statements(m.group(2)):
+            for im in DO_INNER_DDL_RE.finditer(piece):
+                if piece[:im.start(1)].count("'") % 2 == 0:   # fora de literal
+                    yield im.group(1)
+                    break
+
+
+def policy_clause(rest: str, kw: str) -> str:
+    km = re.search(kw + r"\s*\(", rest, re.I)
+    if not km:
+        return ""
+    close = balanced(rest, km.end() - 1)
+    return squash(rest[km.end():close]) if close > 0 else squash(rest[km.end():])
+
+
+def alter_policy(policies: list[dict], st: str, src: str) -> None:
+    """ALTER POLICY troca roles/USING/WITH CHECK (ou o nome) de uma policy já criada; o resto fica como estava."""
+    m = SQL_ALTER_POLICY_RE.match(st)
+    if not m:
+        return
+    name, table, rest = (m.group(1) or m.group(2)).strip(), tkey(m.group(3), m.group(4)), st[m.end():]
+    renamed = re.match(r"rename\s+to\s+(?:\"([^\"]+)\"|(\w+))", rest, re.I)
+    roles = re.match(r"to\s+([\w\s,]+?)\s*(?=using|with\s+check|;|$)", rest, re.I)
+    using, check = policy_clause(rest, r"\busing"), policy_clause(rest, r"with\s+check")
+    for pol in policies:
+        if pol["name"] != name or pol["table"] != table:
+            continue
+        if renamed:
+            pol["name"] = (renamed.group(1) or renamed.group(2)).strip()
+        if roles:
+            pol["roles"] = squash(roles.group(1))
+        if using:
+            pol["using"] = trunc(using, 300)
+        if check:
+            pol["check"] = trunc(check, 300)
+        pol["src"] = src
+
+
 def parse_policy(st: str) -> dict | None:
     m = SQL_POLICY_HEAD_RE.match(st)
     if not m:
@@ -723,11 +779,7 @@ def parse_policy(st: str) -> dict | None:
     pname = m.group(1) or m.group(2)
     rest = st[m.end():]
     def clause(kw: str) -> str:
-        km = re.search(kw + r"\s*\(", rest, re.I)
-        if not km:
-            return ""
-        close = balanced(rest, km.end() - 1)
-        return squash(rest[km.end():close]) if close > 0 else squash(rest[km.end():])
+        return policy_clause(rest, kw)
     return {"name": pname.strip(), "table": tkey(m.group(3), m.group(4)), "cmd": (m.group(6) or "ALL").upper(),
             "roles": squash(m.group(7) or "public"), "mode": (m.group(5) or "permissive").lower(),
             "using": trunc(clause(r"\busing"), 300), "check": trunc(clause(r"with\s+check"), 300)}
@@ -740,6 +792,8 @@ def new_table(src: str) -> dict:
 def parse_sql_schema(root: Path, files: list[Path]) -> dict:
     sql_files = sorted(
         [f for f in files if f.suffix == ".sql" and not is_archived_sql(f, root)
+         # fixture/teste (supabase/tests, tests/rls, scripts/**/tests) cria tabelas e policies falsas: não é schema
+         and not is_test_file(rel(f, root))
          and ("migration" in rel(f, root).lower() or "schema" in f.name.lower()
               or rel(f, root).startswith(("supabase/", "db/", "sql/", "database/", "prisma/")))],
         key=lambda f: rel(f, root))
@@ -761,7 +815,7 @@ def parse_sql_schema(root: Path, files: list[Path]) -> dict:
         for kind, target, comment in SQL_COMMENT_RE.findall(txt):
             tgt = target.replace('"', "").replace("public.", "")
             schema["comments"][f"{kind.lower()}:{tgt}"] = comment.replace("''", "'")
-        for st in split_sql_statements(txt_nc):
+        for st in expand_do_blocks(split_sql_statements(txt_nc)):
             low = st.lower().lstrip()
             # ---- CREATE TABLE
             m = SQL_CREATE_TABLE_RE.match(st)
@@ -854,6 +908,9 @@ def parse_sql_schema(root: Path, files: list[Path]) -> dict:
                 if pol:
                     schema["policies"] = [p for p in schema["policies"] if not (p["name"] == pol["name"] and p["table"] == pol["table"])]
                     schema["policies"].append({**pol, "src": src})
+                continue
+            if low.startswith("alter policy"):
+                alter_policy(schema["policies"], st, src)
                 continue
             m = SQL_DROP_POLICY_RE.match(st)
             if m:

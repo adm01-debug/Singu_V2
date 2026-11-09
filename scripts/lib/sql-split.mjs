@@ -19,9 +19,9 @@ export class ErroSqlMalformado extends Error {
   }
 }
 
-const INICIO_IDENT = /[A-Za-z_\u0080-￿]/;
-const RESTO_IDENT = /[A-Za-z0-9_$\u0080-￿]/;
-const TAG_DOLAR = /\$(?:[A-Za-z_\u0080-￿][A-Za-z0-9_\u0080-￿]*)?\$/y;
+const INICIO_IDENT = /[A-Za-z_\u0080-\uffff]/;
+const RESTO_IDENT = /[A-Za-z0-9_$\u0080-\uffff]/;
+const TAG_DOLAR = /\$(?:[A-Za-z_\u0080-\uffff][A-Za-z0-9_\u0080-\uffff]*)?\$/y;
 
 /**
  * Divide `sql` em instruções. Cada item traz o texto sem o `;` final, sem comentários antes/depois
@@ -132,7 +132,7 @@ export function dividirSql(sql) {
     if (c === '(') parenteses++;
     else if (c === ')' && parenteses > 0) parenteses--;
     if (c === '\n') linha++;
-    else if (c !== ' ' && c !== '\t' && c !== '\r' && c !== '\f' && c !== '\v' && c !== ' ') marcar(i, i + 1);
+    else if (c !== ' ' && c !== '\t' && c !== '\r' && c !== '\f' && c !== '\v') marcar(i, i + 1);
     i++;
   }
   fechar();
