@@ -511,3 +511,21 @@ CREATE TABLE public.depois (id int, nota text DEFAULT 'x;y');`);
   assert.ok(!saida.some((f) => f.endsWith('.tmp')), 'temporário esquecido após concorrência');
   for (const f of saida.filter((x) => x.endsWith('.json'))) JSON.parse(fs.readFileSync(path.join(repo.dir, 'inventario/ia', f), 'utf8')); // nenhum JSON pela metade
 });
+
+test('segredos do repo (script npm, default de coluna, JWT em cron, DSN) não são replicados na saída', (t) => {
+  const repo = miniRepo(t, {
+    'supabase/migrations/1_a.sql': `select cron.schedule('job-nome', '* * * * *', $$ select net.http_post('https://x.supabase.co/functions/v1/fx', headers := '{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIn0.CANARIOsig1234567890"}'::jsonb) $$);
+create table public.t (id int, k text default 'sk_live_CANARIOdefault123456', dsn text default 'postgresql://app:CANARIOsenha@db.interno:5432/app');`,
+    'src/a.ts': "export const a = 1; const KEY = 'ghp_CANARIOsrc12345678901234567890';\n",
+  });
+  w(repo.dir, 'package.json', JSON.stringify({ name: 'x', scripts: { deploy: 'curl -H "Authorization: Bearer CANARIOscriptTOKEN123456" https://x' } }));
+  assert.equal(repo.run().status, 0);
+  const out = path.join(repo.dir, 'inventario/ia');
+  for (const f of fs.readdirSync(out)) assert.doesNotMatch(fs.readFileSync(path.join(out, f), 'utf8'), /CANARIO/, f);
+  assert.match(repo.read('ferramentas.json').scripts_npm?.deploy ?? JSON.stringify(repo.read('ferramentas.json')), /Bearer \[REDACTED\]/);
+  assert.equal(repo.read('banco.json').tabelas.t.colunas.dsn.default, "'postgresql://[REDACTED]@db.interno:5432/app'");
+  assert.deepEqual(repo.read('banco.json').cron_jobs.map((c) => c.nome), ['job-nome']); // nome de job não é segredo
+  const manifest = repo.read('manifest.json'); // hash confere com o que foi gravado (já redigido)
+  const crypto = { sha: (s) => execFileSync(process.execPath, ['-e', "process.stdout.write(require('crypto').createHash('sha256').update(require('fs').readFileSync(process.argv[1])).digest('hex').slice(0,16))", s], { encoding: 'utf8' }) };
+  assert.equal(manifest.arquivos['banco.json'], crypto.sha(path.join(out, 'banco.json')));
+});

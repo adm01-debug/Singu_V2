@@ -17,7 +17,7 @@ run_guard(){
   contem "$prom" '^guard_status\{name="autovacuum-audit",severity="warn"\} 1$' || return 1   # fixture tem autovacuum desligado
   contem "$prom" '^guard_exporter_up 1$' || return 1
   # toda métrica guard_* citada nas regras de alerta existe no arquivo publicado
-  for m in $(grep -ohE '\bguard_[a-z_]+' "$REPO_ROOT/monitoring/prometheus/rules/db-guards.yml" | sort -u); do
-    grep -q "^$m[ {]" "$prom" || { echo "regra usa $m, exporter não emite"; return 1; }
-  done
+  while IFS= read -r m; do
+    grep -q "^${m}[ {]" "$prom" || { echo "regra usa $m, exporter não emite"; return 1; }
+  done < <(grep -ohE '\bguard_[a-z_]+' "$REPO_ROOT/monitoring/prometheus/rules/db-guards.yml" | sort -u)
 }

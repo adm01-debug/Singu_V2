@@ -844,7 +844,11 @@ const baseline = {
 // ---------- escrita ----------
 try { fs.mkdirSync(OUT, { recursive: true }); } catch (e) { sairComErro(`não foi possível criar a pasta de saída ${OUT}: ${e.message}`); }
 // troca atômica: interrupção ou duas execuções na mesma pasta nunca deixam um JSON pela metade
-const escrever = (nome, txt) => { const tmp = path.join(OUT, `.${nome}.${process.pid}.tmp`); try { fs.writeFileSync(tmp, txt); fs.renameSync(tmp, path.join(OUT, nome)); } finally { fs.rmSync(tmp, { force: true }); } };
+// Última barreira antes de publicar: scripts npm, defaults de coluna e trechos de código são copiados como estão;
+// token/JWT/senha de DSN que esteja no repo não deve ser replicado na branch gerada.
+const SEGREDO_RE = /eyJ[\w-]{20,}\.[\w-]{10,}(?:\.[\w-]+)?|\b(?:sk_live_|sk_test_|rk_live_|ghp_|github_pat_|sb_secret_|whsec_|xox[baprs]-)[\w-]{10,}|\b((?:postgres(?:ql)?|mysql|mongodb(?:\+srv)?|rediss?|amqps?):\/\/)[^\s:@/'"\\]+:[^\s@'"\\]+@|\b(Bearer\s+)[A-Za-z0-9._~+/=-]{16,}/g;
+const semSegredo = (txt) => txt.replace(SEGREDO_RE, (m0, dsn, bearer) => (dsn ? `${dsn}[REDACTED]@` : bearer ? `${bearer}[REDACTED]` : '[REDACTED]'));
+const escrever = (nome, bruto) => { const txt = semSegredo(bruto); const tmp = path.join(OUT, `.${nome}.${process.pid}.tmp`); try { fs.writeFileSync(tmp, txt); fs.renameSync(tmp, path.join(OUT, nome)); } finally { fs.rmSync(tmp, { force: true }); } return txt; };
 const AVISO = 'GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.';
 const c = baseline.contagens;
 const files = {
@@ -865,7 +869,7 @@ const files = {
   'baseline.json': { aviso: AVISO, format_version: FORMAT_VERSION, ...baseline },
 };
 const hashes = {};
-for (const [name, data] of Object.entries(files)) { const txt = JSON.stringify(data, null, 1) + '\n'; escrever(name, txt); hashes[name] = sha(txt); }
+for (const [name, data] of Object.entries(files)) { const txt = JSON.stringify(data, null, 1) + '\n'; hashes[name] = sha(escrever(name, txt)); }
 const li = (arr, f = (x) => x) => (arr.length ? arr.map((x) => `- ${f(x)}`).join('\n') : '- (nenhum)');
 const kv = (o) => Object.entries(o || {}).map(([k, v]) => `- ${k}: ${Array.isArray(v) ? v.join(', ') || 'n/d' : v && typeof v === 'object' ? JSON.stringify(v) : v ?? 'n/d'}`).join('\n');
 const indexMd = `# Contexto do projeto para agentes de IA
@@ -958,8 +962,7 @@ ${li((gitInfo.ultimos_commits || []).slice(0, 15), (x) => `${x.data} \`${x.sha}\
 ${Object.keys(files).map((f) => `- \`${OUT_REL}/${f}\``).join('\n')}
 - \`${OUT_REL}/manifest.json\` (commit, data, hashes, erros — único arquivo com data/hora)
 `;
-escrever('INDEX.md', indexMd);
-hashes['INDEX.md'] = sha(indexMd);
+hashes['INDEX.md'] = sha(escrever('INDEX.md', indexMd));
 escrever('manifest.json', JSON.stringify({ aviso: AVISO, format_version: FORMAT_VERSION, gerado_em: new Date().toISOString(), commit: gitInfo.commit || null, branch: gitInfo.branch || null, gerador: 'scripts/ai-context/gerar.mjs', node: process.version, arquivos: sortObj(hashes), contagens: c, erros: ERROS }, null, 1) + '\n');
 log(`escrito em ${OUT_REL}/ (${Object.keys(files).length + 2} arquivos)${ERROS.length ? `; ${ERROS.length} erro(s) de seção` : ''}`);
 log(`rotas=${c.rotas} http=${c.rotas_http_backend} vistas=${c.vistas_por_id} menu=${c.itens_menu} modulos=${c.modulos} hooks=${c.hooks} edges=${c.edge_functions} tabelas=${c.tabelas} cron=${c.cron_jobs} testes=${c.testes}`);

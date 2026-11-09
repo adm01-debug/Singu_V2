@@ -201,7 +201,7 @@ executa_cenario() {
   local f="$1" name="$2" log="$OUT_DIR/$2.log" obs motivo
   set +e
   EXPECTED_EXIT=0; DOIS_LADOS=0
-  # shellcheck source=lib.sh
+  # shellcheck source-path=SCRIPTDIR source=lib.sh
   source "$SCRIPT_DIR/lib.sh"
   # shellcheck disable=SC1090
   source "$f"

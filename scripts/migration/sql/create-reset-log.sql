@@ -4,7 +4,11 @@
 -- Log idempotente de envios de recovery-link pós-migração.
 -- Executar no BANCO DE DESTINO antes do disparo em massa.
 -- UNIQUE(user_id) garante que reruns pulem usuários já processados.
+-- Idempotente e atômico: pode rodar mais de uma vez; ou aplica tudo, ou nada.
+-- Pré-requisito: public.has_role(uuid, app_role) (vem de ddl/08_functions.sql).
 -- ============================================================================
+
+BEGIN;
 
 CREATE TABLE IF NOT EXISTS public.migration_password_reset_log (
   id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -32,6 +36,7 @@ GRANT ALL                    ON public.migration_password_reset_log TO service_r
 ALTER TABLE public.migration_password_reset_log ENABLE ROW LEVEL SECURITY;
 
 -- Apenas admins podem ler o log; escrita fica reservada ao service_role.
+DROP POLICY IF EXISTS "mprl_admin_read" ON public.migration_password_reset_log;
 CREATE POLICY "mprl_admin_read"
   ON public.migration_password_reset_log
   FOR SELECT
@@ -55,3 +60,5 @@ DROP TRIGGER IF EXISTS trg_mprl_touch ON public.migration_password_reset_log;
 CREATE TRIGGER trg_mprl_touch
   BEFORE UPDATE ON public.migration_password_reset_log
   FOR EACH ROW EXECUTE FUNCTION public.tg_mprl_touch_updated_at();
+
+COMMIT;

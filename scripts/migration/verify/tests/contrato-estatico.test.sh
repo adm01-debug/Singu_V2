@@ -33,15 +33,16 @@ for f in "$VERIFY"/*.sql; do
   fi
   # variáveis psql: :nome ou :'nome' fora de comentário; ignora casts (::tipo) e horários
   sem_coment="$(sed 's/--.*$//' "$f")"
-  for v in $(grep -oE "(^|[^:[:alnum:]_]):'?[a-z_][a-z0-9_]*" <<<"$sem_coment" | grep -oE "[a-z_][a-z0-9_]*$" | sort -u); do
+  while IFS= read -r v; do
+    [[ -n "$v" ]] || continue
     grep -qE "^\\\\if :\{\?$v\}" "$f" && continue
     grep -qE "\\\\gset" "$f" && grep -qE "AS $v([ ,]|$)" "$f" && continue
     ruim "$b: variável psql :$v sem default (\\if :{?$v})"
-  done
+  done < <(grep -oE "(^|[^:[:alnum:]_]):'?[a-z_][a-z0-9_]*" <<<"$sem_coment" | grep -oE "[a-z_][a-z0-9_]*$" | sort -u)
 done
 
 for b in extensions-versions.sql tz-locale-parity.sql; do
-  grep -qE '^\\' "$VERIFY/$b" && ruim "$b: consumido via psql -c, não pode ter meta-comando"
+  grep -q '^[\]' "$VERIFY/$b" && ruim "$b: consumido via psql -c, não pode ter meta-comando"
 done
 
 bash "$VERIFY/full-audit.sh" --verificar-lista >/dev/null 2>&1 || ruim "full-audit.sh --verificar-lista acusou divergência"
