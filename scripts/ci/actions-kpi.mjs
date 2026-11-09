@@ -71,12 +71,18 @@ export function paginaTemMais(pagina, { janelaDias = 7, agora = Date.now(), porP
   return maisAntigo >= agora - janelaDias * UM_DIA;
 }
 
-export function maisLentos(jobs, { limite = 5 } = {}) {
+// Achado de auditoria adversarial: job ainda em execução (sem completed_at) virava `minutos: 0`
+// em duracaoMinutos (updated_at ausente -> Date.parse NaN -> 0) e desaparecia do ranking — bem no
+// caso que o KPI deveria pegar (job preso rodando há horas). Sem completed_at, usa `agora` como
+// fim: o job aparece com o tempo já decorrido, que só cresce enquanto ele continuar rodando.
+export function maisLentos(jobs, { limite = 5, agora = Date.now() } = {}) {
   return (jobs ?? [])
     .map((j) => ({
       job: j.name,
       workflow: j.workflow_name ?? '',
-      minutos: Math.round(duracaoMinutos({ run_started_at: j.started_at, updated_at: j.completed_at }) * 10) / 10,
+      minutos: Math.round(
+        duracaoMinutos({ run_started_at: j.started_at, updated_at: j.completed_at ?? new Date(agora).toISOString() }) * 10,
+      ) / 10,
     }))
     .sort((a, b) => b.minutos - a.minutos)
     .slice(0, limite);
@@ -117,7 +123,7 @@ export function corpoDoKpi(runs, jobs, { janelaDias = 7, agora = Date.now(), tit
   return [
     tabela(agregado, { titulo: titulo ?? `KPI do GitHub Actions — ${janelaDias} dias` }),
     '',
-    tabelaLentos(maisLentos(jobs, { limite: 5 })),
+    tabelaLentos(maisLentos(jobs, { limite: 5, agora })),
   ].join('\n');
 }
 

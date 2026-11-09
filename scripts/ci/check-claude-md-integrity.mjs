@@ -4,9 +4,12 @@
  * Alvo: AGENTS.md (regras) + docs/agentes/*.md (referencia). CLAUDE.md e so `@AGENTS.md`.
  * Base no CI: a `main` buscada (CLAUDE_MD_BASE=origin/main); local, sem a variavel, o HEAD.
  * Verifica: AGENTS.md existe, cabecalhos obrigatorios presentes, o conjunto
- * AGENTS.md + CLAUDE.md + docs/agentes/*.md nao encolheu >30% em bytes vs a base, e cada arquivo
+ * AGENTS.md + CLAUDE.md + docs/agentes/*.md nao encolheu >30% em bytes vs a base, cada arquivo
  * vigiado (AGENTS.md e cada docs/agentes/*.md que exista na base) continua existindo com >=50% do
- * tamanho que tem na base (o limiar do conjunto sozinho nao pega o esvaziamento de 1 arquivo).
+ * tamanho que tem na base (o limiar do conjunto sozinho nao pega o esvaziamento de 1 arquivo), e
+ * o CORPO de cada secao obrigatoria de AGENTS.md continua com >=50% do tamanho que tinha na base
+ * (achado de auditoria adversarial: apagar o corpo das secoes mantendo so os titulos escapava do
+ * limiar por arquivo inteiro, desde que o total ficasse pouco acima de 50%).
  * Base: CLAUDE_MD_BASE (no CI, a main buscada; no checkout do CI o HEAD e o proprio arquivo
  * e a comparacao viraria no-op). Localmente, sem a variavel, compara com o HEAD.
  * Na base o conjunto e o que existir la (na main antiga, CLAUDE.md + AGENTS.md).
@@ -46,6 +49,34 @@ if (missing.length > 0) {
   for (const s of missing) console.error(`::error::${AGENTS}: secao obrigatoria ausente: ${s}`);
   process.exitCode = 1;
   process.exit();
+}
+
+/** Corpo de cada `## titulo` (do fim da linha do titulo at o proximo `## `, ou fim do arquivo). */
+export function secoesPorTitulo(conteudo) {
+  const linhas = conteudo.split('\n');
+  const secoes = new Map();
+  let titulo = null;
+  let corpo = [];
+  for (const linha of linhas) {
+    if (/^## /.test(linha)) {
+      if (titulo !== null) secoes.set(titulo, corpo.join('\n'));
+      titulo = linha.trim();
+      corpo = [];
+    } else if (titulo !== null) {
+      corpo.push(linha);
+    }
+  }
+  if (titulo !== null) secoes.set(titulo, corpo.join('\n'));
+  return secoes;
+}
+
+/** Conteudo de AGENTS.md na base, ou '' se a ref/arquivo nao existir la. */
+function agentsNaBase(base) {
+  try {
+    return execSync(`git show ${base}:${AGENTS}`, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+  } catch {
+    return '';
+  }
 }
 
 function bytesAtuais() {
@@ -112,6 +143,31 @@ if (base) {
     if (agora < naBase * FILE_SHRINK_THRESHOLD) {
       console.error(`::error::${path} encolheu ${Math.round((1 - agora / naBase) * 100)}% vs ${BASE} (atual: ${agora} bytes, base: ${naBase} bytes); limite por arquivo e ${Math.round(FILE_SHRINK_THRESHOLD * 100)}%.`);
       falhas += 1;
+    }
+  }
+  // Por secao: um wipe pode preservar os 9 titulos obrigatorios e so apagar o corpo deles,
+  // escapando os dois limiares acima (arquivo inteiro ainda >= 50%, conjunto ainda >= 70%).
+  // Compara o corpo de cada secao obrigatoria contra o mesmo corpo na base, mesmo limiar.
+  const baseAgents = agentsNaBase(BASE);
+  if (baseAgents) {
+    const secoesBase = secoesPorTitulo(baseAgents);
+    const secoesAtual = secoesPorTitulo(content);
+    for (const titulo of REQUIRED_SECTIONS) {
+      // REQUIRED_SECTIONS guarda so o prefixo (ex. '## Fluxo Git'); o titulo real na base/atual
+      // pode ter texto extra na mesma linha (ex. '## Fluxo Git (varios agentes ao mesmo tempo)').
+      // Mesma semantica de substring do `missing` acima, so que por chave do mapa de secoes.
+      const chaveBase = [...secoesBase.keys()].find((k) => k.startsWith(titulo));
+      if (!chaveBase) continue; // titulo nao existia como secao de topo na base: nada pra comparar
+      const corpoBase = secoesBase.get(chaveBase);
+      const baseBytes = Buffer.byteLength(corpoBase);
+      if (baseBytes === 0) continue; // secao sem corpo na base: nada pra comparar
+      const chaveAtual = [...secoesAtual.keys()].find((k) => k.startsWith(titulo));
+      const corpoAtual = chaveAtual ? secoesAtual.get(chaveAtual) : '';
+      const atualBytes = Buffer.byteLength(corpoAtual);
+      if (atualBytes < baseBytes * FILE_SHRINK_THRESHOLD) {
+        console.error(`::error::${AGENTS}: corpo da secao "${titulo}" encolheu ${Math.round((1 - atualBytes / baseBytes) * 100)}% vs ${BASE} (atual: ${atualBytes} bytes, base: ${baseBytes} bytes); limite por secao e ${Math.round(FILE_SHRINK_THRESHOLD * 100)}%. Possivel wipe que preserva titulos e apaga corpo.`);
+        falhas += 1;
+      }
     }
   }
   if (falhas > 0) {

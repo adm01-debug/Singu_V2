@@ -29,7 +29,17 @@ export function avaliarSla(alertas, agoraMs = Date.now()) {
   for (const a of alertas) {
     const sev = nivel(a);
     const prazo = sev === 'high' || sev === 'critical' ? SLA_DIAS.alto : SLA_DIAS.baixo;
-    const dias = Math.floor((agoraMs - new Date(a.created_at).getTime()) / 86_400_000);
+    const criadoMs = new Date(a.created_at).getTime();
+    // Achado de auditoria adversarial: created_at ausente/invalido virava NaN e `NaN > prazo` e'
+    // sempre false -- um alerta critical com data corrompida saia do relatorio como "sem violacao",
+    // fail-OPEN (o resto do repo e fail-closed, ex. branch-podaveis.mjs). Data que nao dá pra provar
+    // dentro do prazo conta como violacao, nao como "limpo".
+    if (!Number.isFinite(criadoMs)) {
+      const local = a.most_recent_instance?.location?.path ?? '?';
+      violacoes.push(`${sev.toUpperCase()} (created_at inválido/ausente) — #${a.number}: ${a.rule?.id ?? '?'} em ${local}`);
+      continue;
+    }
+    const dias = Math.floor((agoraMs - criadoMs) / 86_400_000);
     if (dias > prazo) {
       const local = a.most_recent_instance?.location?.path ?? '?';
       violacoes.push(`${sev.toUpperCase()} (${dias}d > ${prazo}d) — #${a.number}: ${a.rule?.id ?? '?'} em ${local}`);

@@ -46,9 +46,12 @@ export function resolverExecutavel(comando) {
     const candidato = path.join(diretorio, comando);
     try {
       fs.accessSync(candidato, fs.constants.X_OK);
-      return candidato;
+      // Achado de auditoria adversarial: todo diretorio tem o bit X (travessia), entao accessSync
+      // sozinho aceita um DIRETORIO chamado igual ao comando antes do binario real no PATH. Exige
+      // ser arquivo regular -- do contrario segue a busca, igual ao shell faria.
+      if (fs.statSync(candidato).isFile()) return candidato;
     } catch {
-      // Nao esta neste diretorio: segue a busca, igual ao shell.
+      // Nao esta neste diretorio (ou nao e executavel/nao existe): segue a busca, igual ao shell.
     }
   }
   throw new Error('comando nao encontrado no PATH: ' + comando);
@@ -91,6 +94,12 @@ function caminhoRealMesmoSeAusente(caminho) {
  * legivel + `process.exit` com o codigo de entrada invalida do proprio script.
  */
 export function resolverCaminhoPermitido(valor, rotulo, raizes = RAIZES_PERMITIDAS) {
+  // Achado de auditoria adversarial: entrada nao-string vazava TypeError nativo do Node em vez do
+  // erro fail-closed que este arquivo promete, e string vazia resolvia em silencio para cwd() (que
+  // normalmente fica dentro de uma raiz permitida, entao "caminho vazio" passava como valido).
+  if (typeof valor !== 'string' || valor === '') {
+    throw new Error('caminho de ' + rotulo + ' invalido (esperada string nao vazia): ' + JSON.stringify(valor));
+  }
   const resolvido = caminhoRealMesmoSeAusente(path.resolve(valor));
   const raizesReais = raizes.map((raiz) => caminhoRealMesmoSeAusente(path.resolve(raiz)));
   if (!raizesReais.some((raiz) => estaDentro(raiz, resolvido))) {

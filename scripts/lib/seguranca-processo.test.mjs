@@ -119,3 +119,40 @@ test('RAIZ_REPO aponta para o pacote do repositorio e esta entre as raizes permi
   assert.equal(pacote.name, 'vite_react_shadcn_ts');
   assert.equal(RAIZES_PERMITIDAS.includes(RAIZ_REPO), true);
 });
+
+test('REGRESSÃO: resolverCaminhoPermitido recusa entrada não-string com erro fail-closed, não TypeError nativo', () => {
+  for (const entrada of [undefined, 12345, null, {}]) {
+    assert.throws(
+      () => resolverCaminhoPermitido(entrada, 'entrada'),
+      /caminho de entrada invalido \(esperada string nao vazia\)/,
+      `entrada ${JSON.stringify(entrada)} deveria lançar o erro fail-closed, não um TypeError nativo`,
+    );
+  }
+});
+
+test('REGRESSÃO: resolverCaminhoPermitido recusa string vazia em vez de resolver para cwd()', () => {
+  assert.throws(() => resolverCaminhoPermitido('', 'entrada'), /caminho de entrada invalido/);
+});
+
+test('REGRESSÃO: resolverExecutavel ignora diretório com o mesmo nome do comando no PATH', () => {
+  const base = fs.mkdtempSync(path.join(os.tmpdir(), 'resolver-executavel-dir-'));
+  try {
+    const binDirFalso = path.join(base, 'bindir-falso');
+    const binDirReal = path.join(base, 'bindir-real');
+    fs.mkdirSync(path.join(binDirFalso, 'comando-fantasma-xyz'), { recursive: true }); // diretório, não arquivo
+    fs.mkdirSync(binDirReal, { recursive: true });
+    const binReal = path.join(binDirReal, 'comando-fantasma-xyz');
+    fs.writeFileSync(binReal, '#!/bin/sh\necho ok\n');
+    fs.chmodSync(binReal, 0o755);
+    const pathOriginal = process.env.PATH;
+    process.env.PATH = `${binDirFalso}${path.delimiter}${binDirReal}${path.delimiter}${pathOriginal}`;
+    try {
+      const resolvido = resolverExecutavel('comando-fantasma-xyz');
+      assert.equal(resolvido, binReal, 'deveria pular o diretório homônimo e achar o binário real depois dele');
+    } finally {
+      process.env.PATH = pathOriginal;
+    }
+  } finally {
+    fs.rmSync(base, { recursive: true, force: true });
+  }
+});

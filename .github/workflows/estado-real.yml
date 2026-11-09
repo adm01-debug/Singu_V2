@@ -71,6 +71,7 @@ jobs:
             scripts/ci/check-test-inventory.test.mjs \
             scripts/ci/sla-code-scanning.test.mjs \
             scripts/ci/workflow-invariants.test.mjs \
+            scripts/ci/check-claude-md-integrity.test.mjs \
             scripts/check-edge-cors.test.mjs
 
       - name: Inventário de testes (nenhum teste fora do CI)

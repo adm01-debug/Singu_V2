@@ -192,3 +192,14 @@ test('#365: o corpo do KPI publica o ranking real dos jobs, nao um ranking vazio
   assert.doesNotMatch(md, /nenhum job/, 'com jobs reais o placeholder nao pode aparecer');
   assert.match(md, /\| workflow \| runs \|/);
 });
+
+test('REGRESSÃO: job ainda em execução (sem completed_at) aparece com o tempo já decorrido, não 0', () => {
+  const agora = Date.parse('2026-11-08T12:00:00Z');
+  const jobs = [
+    { name: 'lint', workflow_name: 'CI', started_at: '2026-11-08T11:59:00Z', completed_at: '2026-11-08T12:00:00Z' }, // 1 min
+    { name: 'build-gigante', workflow_name: 'CI', started_at: '2026-11-08T06:00:00Z', completed_at: null }, // preso há 6h
+  ];
+  const lentos = maisLentos(jobs, { limite: 5, agora });
+  assert.equal(lentos[0].job, 'build-gigante', 'job preso tem que vencer o job de 1 min no ranking');
+  assert.ok(lentos[0].minutos >= 359, `esperava ~360 min decorridos, veio ${lentos[0].minutos}`);
+});

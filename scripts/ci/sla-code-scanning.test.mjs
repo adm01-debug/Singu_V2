@@ -70,3 +70,14 @@ test('o workflow passa os alertas pelo stdin e não tem mais Node inline', () =>
   assert.match(code, /gh api --paginate --slurp[^\n]*code-scanning\/alerts[^\n]*\| jq 'add'/);
   assert.doesNotMatch(code, /\|\|\s*true|NODE_EOF|node --input-type=module/);
 });
+
+test('REGRESSÃO: created_at inválido ou ausente conta como violação (fail-closed), não "limpo"', () => {
+  const agora = Date.now();
+  const { violacoes } = avaliarSla([
+    { number: 1, created_at: 'nao-e-data', rule: { severity: 'error' } },
+    { number: 2, rule: { severity: 'error' } }, // created_at ausente
+  ], agora);
+  assert.equal(violacoes.length, 2);
+  assert.match(violacoes[0], /created_at inválido\/ausente/);
+  assert.match(violacoes[1], /created_at inválido\/ausente/);
+});
