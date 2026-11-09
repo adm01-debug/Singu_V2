@@ -198,8 +198,43 @@ def balanced(txt: str, start: int, open_ch: str = "(", close_ch: str = ")") -> i
 
 
 def strip_sql_comments(txt: str) -> str:
-    txt = re.sub(r"/\*[\s\S]*?\*/", "", txt)
-    return re.sub(r"--[^\n]*", "", txt)
+    """Remove `--` e `/* */` (aninhado) fora de literais: `'a -- b'` é texto, não comentário.
+
+    A versão por regex cortava a linha no `--` de dentro da string, deixava uma aspa sem par e os
+    statements seguintes (CREATE TABLE, CREATE POLICY) sumiam dentro do "literal".
+    """
+    out, i, n = [], 0, len(txt)
+    while i < n:
+        ch = txt[i]
+        if ch in "'\"":
+            j = i + 1
+            while j < n and (txt[j] != ch or txt[j + 1:j + 2] == ch):
+                j += 2 if txt[j] == ch else 1
+            out.append(txt[i:j + 1])
+            i = j + 1
+        elif txt.startswith("--", i):
+            j = txt.find("\n", i)
+            i = n if j < 0 else j
+        elif txt.startswith("/*", i):
+            depth, j = 1, i + 2
+            while j < n and depth:
+                if txt.startswith("/*", j):
+                    depth, j = depth + 1, j + 2
+                elif txt.startswith("*/", j):
+                    depth, j = depth - 1, j + 2
+                else:
+                    j += 1
+            i = j
+        else:
+            # copia de uma vez até o próximo caractere que pode abrir literal ou comentário
+            m = _SQL_SPECIAL_RE.search(txt, i + 1)
+            j = m.start() if m else n
+            out.append(txt[i:j])
+            i = j
+    return "".join(out)
+
+
+_SQL_SPECIAL_RE = re.compile(r"['\"]|--|/\*")
 
 
 def is_test_file(r: str) -> bool:

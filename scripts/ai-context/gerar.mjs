@@ -19,8 +19,18 @@ import { execFileSync } from 'node:child_process';
 
 const FORMAT_VERSION = 2;
 const args = process.argv.slice(2);
+// Argumentos validados antes de qualquer trabalho: `--help` executava a geração inteira no cwd, `--out` sem
+// valor (variável vazia no shell) caía calado em inventario/ia e `--root` inexistente gerava um contexto vazio.
+const USO = 'Uso: node scripts/ai-context/gerar.mjs [--root <dir>] [--out <dir>] [--quiet]';
+const sairComErro = (msg) => { console.error(`[contexto-ia] ${msg}\n${USO}`); process.exit(2); };
+if (args.includes('--help') || args.includes('-h')) { console.log(USO); process.exit(0); }
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === '--root' || args[i] === '--out') { if (!args[i + 1] || args[i + 1].startsWith('--')) sairComErro(`${args[i]} exige um valor`); i++; }
+  else if (args[i] !== '--quiet') sairComErro(`argumento desconhecido: ${args[i]}`);
+}
 const argOf = (k, d) => { const i = args.indexOf(k); return i >= 0 && args[i + 1] ? args[i + 1] : d; };
 const ROOT = path.resolve(argOf('--root', process.env.AI_CONTEXT_ROOT || process.cwd()));
+if (!fs.existsSync(ROOT) || !fs.statSync(ROOT).isDirectory()) sairComErro(`--root não é um diretório: ${ROOT}`);
 const QUIET = args.includes('--quiet');
 const log = (...m) => { if (!QUIET) console.log('[contexto-ia]', ...m); };
 const ERROS = [];
@@ -29,7 +39,12 @@ const secao = (nome, fn, fallback) => { try { return fn(); } catch (e) { ERROS.p
 // ---------- util ----------
 const rel = (p) => path.relative(ROOT, p).split(path.sep).join('/');
 const abs = (p) => path.join(ROOT, p);
-const CFG = (() => { try { return JSON.parse(fs.readFileSync(abs('ai-context.config.json'), 'utf8')); } catch { return {}; } })();
+const CFG = (() => {
+  let raw; try { raw = fs.readFileSync(abs('ai-context.config.json'), 'utf8'); } catch { return {}; } // sem config: padrões
+  // config quebrada não some calada: os padrões valem, mas o erro vai para manifest.json → erros
+  try { const cfg = JSON.parse(raw.replace(/^\uFEFF/, '')); if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) throw new Error('não é um objeto JSON'); return cfg; }
+  catch (e) { ERROS.push({ secao: 'config', erro: `ai-context.config.json inválido (${e.message}); usando os padrões` }); log(`ERRO: ai-context.config.json inválido (${e.message}); usando os padrões`); return {}; }
+})();
 const OUT = path.resolve(ROOT, argOf('--out', process.env.AI_CONTEXT_DIR || CFG.out || 'inventario/ia'));
 const OUT_REL = rel(OUT);
 const MAX_FILE_BYTES = (CFG.maxFileMB || 8) * 1024 * 1024;
@@ -442,6 +457,19 @@ const migDir = ['supabase/migrations', 'migrations', 'db/migrations', 'database/
 const tname = (name) => { const n = name.replace(/"/g, ''); return /^public\./i.test(n) ? n.slice(7) : n; };
 const T = (name) => { const n = tname(name); if (!banco.tabelas[n]) banco.tabelas[n] = { colunas: {}, rls: false, policies: [], indices: [], fks: [], criada_em: null }; return banco.tabelas[n]; };
 const splitStatements = (text) => { const out = []; let cur = '', q = null; for (let i = 0; i < text.length; i++) { const ch = text[i]; if (q) { cur += ch; if (ch === q) { if (text[i + 1] === q) { cur += q; i++; } else q = null; } continue; } if (ch === "'" || ch === '"') { q = ch; cur += ch; continue; } if (ch === ';') { out.push(cur); cur = ''; continue; } cur += ch; } out.push(cur); return out; };
+// Tira comentários SQL respeitando literais: `'a -- b'` e `'/* x */'` são texto, não comentário. A regex antiga
+// cortava a linha no `--` de dentro da string, abria uma aspa sem par e engolia os statements seguintes.
+const stripSqlComments = (text) => {
+  let out = ''; const n = text.length;
+  for (let i = 0; i < n;) {
+    const ch = text[i];
+    if (ch === "'" || ch === '"') { let j = i + 1; while (j < n && (text[j] !== ch || text[j + 1] === ch)) j += text[j] === ch ? 2 : 1; out += text.slice(i, j + 1); i = j + 1; continue; }
+    if (ch === '-' && text[i + 1] === '-') { const j = text.indexOf('\n', i); i = j < 0 ? n : j; continue; }
+    if (ch === '/' && text[i + 1] === '*') { let depth = 1, j = i + 2; while (j < n && depth) { if (text[j] === '/' && text[j + 1] === '*') { depth++; j += 2; } else if (text[j] === '*' && text[j + 1] === '/') { depth--; j += 2; } else j++; } i = j; continue; }
+    out += ch; i++;
+  }
+  return out;
+};
 const parseCols = (body, table) => {
   let depth = 0, cur = ''; const parts = [];
   for (const ch of body) { if (ch === '(') depth++; if (ch === ')') depth--; if (ch === ',' && depth === 0) { parts.push(cur); cur = ''; } else cur += ch; }
@@ -465,7 +493,7 @@ secao('banco-sql', () => {
   banco.migrations = sqlFiles.length; banco.fonte.push(migDir || '*.sql');
   const allSql = [];
   for (const f of sqlFiles) {
-    const sql = readText(f).replace(/--[^\n]*/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
+    const sql = stripSqlComments(readText(f));
     // pos = onde o corpo ficava no texto sem corpos: o DDL de um DO $$...$$ roda na ordem do arquivo
     // (antes ia para o fim e `DO $$ DROP POLICY p $$; CREATE POLICY p` terminava sem a policy).
     const bodies = []; let cut = 0; const sqlNoBody = sql.replace(/\$(\w*)\$[\s\S]*?\$\1\$/g, (m0, _tag, off) => { bodies.push({ texto: m0, pos: off - cut }); cut += m0.length - 2; return "''"; });
@@ -814,7 +842,9 @@ const baseline = {
 };
 
 // ---------- escrita ----------
-fs.mkdirSync(OUT, { recursive: true });
+try { fs.mkdirSync(OUT, { recursive: true }); } catch (e) { sairComErro(`não foi possível criar a pasta de saída ${OUT}: ${e.message}`); }
+// troca atômica: interrupção ou duas execuções na mesma pasta nunca deixam um JSON pela metade
+const escrever = (nome, txt) => { const tmp = path.join(OUT, `.${nome}.${process.pid}.tmp`); try { fs.writeFileSync(tmp, txt); fs.renameSync(tmp, path.join(OUT, nome)); } finally { fs.rmSync(tmp, { force: true }); } };
 const AVISO = 'GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.';
 const c = baseline.contagens;
 const files = {
@@ -835,7 +865,7 @@ const files = {
   'baseline.json': { aviso: AVISO, format_version: FORMAT_VERSION, ...baseline },
 };
 const hashes = {};
-for (const [name, data] of Object.entries(files)) { const txt = JSON.stringify(data, null, 1) + '\n'; fs.writeFileSync(path.join(OUT, name), txt); hashes[name] = sha(txt); }
+for (const [name, data] of Object.entries(files)) { const txt = JSON.stringify(data, null, 1) + '\n'; escrever(name, txt); hashes[name] = sha(txt); }
 const li = (arr, f = (x) => x) => (arr.length ? arr.map((x) => `- ${f(x)}`).join('\n') : '- (nenhum)');
 const kv = (o) => Object.entries(o || {}).map(([k, v]) => `- ${k}: ${Array.isArray(v) ? v.join(', ') || 'n/d' : v && typeof v === 'object' ? JSON.stringify(v) : v ?? 'n/d'}`).join('\n');
 const indexMd = `# Contexto do projeto para agentes de IA
@@ -928,8 +958,8 @@ ${li((gitInfo.ultimos_commits || []).slice(0, 15), (x) => `${x.data} \`${x.sha}\
 ${Object.keys(files).map((f) => `- \`${OUT_REL}/${f}\``).join('\n')}
 - \`${OUT_REL}/manifest.json\` (commit, data, hashes, erros — único arquivo com data/hora)
 `;
-fs.writeFileSync(path.join(OUT, 'INDEX.md'), indexMd);
+escrever('INDEX.md', indexMd);
 hashes['INDEX.md'] = sha(indexMd);
-fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify({ aviso: AVISO, format_version: FORMAT_VERSION, gerado_em: new Date().toISOString(), commit: gitInfo.commit || null, branch: gitInfo.branch || null, gerador: 'scripts/ai-context/gerar.mjs', node: process.version, arquivos: sortObj(hashes), contagens: c, erros: ERROS }, null, 1) + '\n');
+escrever('manifest.json', JSON.stringify({ aviso: AVISO, format_version: FORMAT_VERSION, gerado_em: new Date().toISOString(), commit: gitInfo.commit || null, branch: gitInfo.branch || null, gerador: 'scripts/ai-context/gerar.mjs', node: process.version, arquivos: sortObj(hashes), contagens: c, erros: ERROS }, null, 1) + '\n');
 log(`escrito em ${OUT_REL}/ (${Object.keys(files).length + 2} arquivos)${ERROS.length ? `; ${ERROS.length} erro(s) de seção` : ''}`);
 log(`rotas=${c.rotas} http=${c.rotas_http_backend} vistas=${c.vistas_por_id} menu=${c.itens_menu} modulos=${c.modulos} hooks=${c.hooks} edges=${c.edge_functions} tabelas=${c.tabelas} cron=${c.cron_jobs} testes=${c.testes}`);

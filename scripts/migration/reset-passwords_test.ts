@@ -87,10 +87,10 @@ Deno.test("429/5xx/rede: backoff exponencial e sucesso; erro definitivo não é 
     return { ok: false, status: 429, message: "rate limit" };
   };
   const { p, estado } = portas([usuario(1), usuario(2), usuario(3), usuario(4)], resp);
-  const c = await executar(cfg(["--execute"], { RESET_MAX_RETRIES: "4", RESET_BACKOFF_MS: "100", RESET_BATCH_PAUSE_MS: "0" }), p);
+  const c = await executar(cfg(["--execute"], { RESET_MAX_RETRIES: "4", RESET_BACKOFF_MS: "100", RESET_BATCH_PAUSE_MS: "0", RESET_THROTTLE_RPS: "1000" }), p);
   assert.deepEqual({ sent: c.sent, failed: c.failed }, { sent: 2, failed: 2 });
   assert.deepEqual([1, 2, 3, 4].map((i) => estado.tentativas.get(`pessoa${i}@exemplo.com`)), [3, 2, 1, 4]);
-  assert.deepEqual(estado.sonos.filter((s) => s >= 100 && s !== 0), [100, 200, 100, 100, 100, 200, 400, 100]);
+  assert.deepEqual(estado.sonos.filter((s) => s >= 100), [100, 200, 100, 100, 200, 400]);
   const f = estado.log.get(uid(3))!;
   assert.equal(f.status, "failed"); assert.equal(f.error_code, "validation_failed");
   assert.ok(!/pessoa3@|SEGREDO/.test(f.error_message!), f.error_message!);
@@ -138,7 +138,7 @@ Deno.test("processo ponta a ponta: sem flag NADA é enviado; --execute envia por
     r = await rodar(SCRIPT, env, ["--execute"]); // rerun: ninguém recebe duas vezes
     assert.equal(r.code, 0); assert.equal(m.recuperacoes.length, 5);
     m.usuarios.push({ id: uid(77), email: "novo@exemplo.com", identities: [{ provider: "email" }] });
-    m.falhar("POST", /auth\/v1\/recover/, [400]);
+    m.falhar("POST", /auth\/v1\/recover/, [400], { corpo: JSON.stringify({ code: 400, error_code: "validation_failed", msg: "Unable to validate email address: invalid format" }), headers: { "content-type": "application/json" } });
     r = await rodar(SCRIPT, env, ["--execute"]);
     assert.equal(r.code, 2); assert.equal(log.linhas.find((l) => l.user_id === uid(77))!.status, "failed");
     assert.equal((await rodar(SCRIPT, env, ["--help"])).code, 0);

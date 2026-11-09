@@ -42,7 +42,7 @@ export interface LinhaLog {
   user_id: string; email_hash: string; status: "sent" | "failed"; attempts: number; provider: string;
   sent_at?: string; error_code: string | null; error_message: string | null;
 }
-export type Envio = { ok: true } | { ok: false; status?: number; code?: string; message: string };
+export type Envio = { ok: true } | { ok: false; status?: number; code?: string; message: string; retentavel?: boolean };
 export interface Portas {
   listar(page: number, perPage: number): Promise<Usuario[]>;
   /** status atual no log (null = sem registro). Deve lançar em erro de leitura. */
@@ -113,7 +113,7 @@ export function sanitizar(msg: string | undefined, email: string): string | null
 }
 
 const recuperavel = (e: Extract<Envio, { ok: false }>) =>
-  e.status === 429 || (e.status !== undefined && e.status >= 500) || e.status === 0 || /rate limit|too many|timeout|network|fetch failed/i.test(e.message);
+  e.retentavel === true || e.status === 429 || (e.status !== undefined && e.status >= 500) || e.status === 0 || /rate limit|too many|timeout|network|fetch failed/i.test(e.message);
 
 async function processar(cfg: Config, p: Portas, c: Contadores, u: Usuario & { email: string }, provider: string): Promise<void> {
   const emailHash = await sha256Hex(u.email.toLowerCase().trim());
@@ -203,8 +203,10 @@ export function portasSupabase(url: string, chave: string): Portas {
     async enviar(email, redirectTo) {
       const { error } = await admin.auth.resetPasswordForEmail(email, { redirectTo });
       if (!error) return { ok: true };
-      const e = error as { status?: number; code?: string; message: string };
-      return { ok: false, status: e.status, code: e.code, message: e.message };
+      const e = error as { name?: string; status?: number; code?: string; message: string };
+      // Resposta não-JSON de gateway (429/502 em HTML) chega sem status: é transitória, vale retentar.
+      const retentavel = e.name === "AuthRetryableFetchError" || e.name === "AuthUnknownError";
+      return { ok: false, status: e.status, code: e.code, message: e.message, retentavel };
     },
     dormir: (ms) => new Promise((r) => setTimeout(r, ms)),
     log: (rec) => console.log(JSON.stringify({ ts: new Date().toISOString(), ...rec })),

@@ -89,13 +89,21 @@ psql_admin() { # psql_admin <cluster> <args...> — conecta no banco de manuten�
     PGSSLMODE="${C_SSL[$c]}" PGDATABASE="${GUARD_PGDATABASE:-postgres}" PGCONNECT_TIMEOUT=5 psql -X -q "$@"
 }
 
+dropa_bancos() { # dropa_bancos <cluster> <banco> — o banco do cenário e auxiliares "<banco>_*"
+  local d
+  for d in "$2" $(psql_admin "$1" -Atc "SELECT datname FROM pg_database WHERE datname LIKE replace('$2', '_', '\\_') || '\\_%'" 2>/dev/null); do
+    psql_admin "$1" -c "DROP DATABASE IF EXISTS \"$d\" WITH (FORCE)" >/dev/null 2>&1
+  done
+  return 0
+}
+
 # shellcheck disable=SC2329 # chamada pelo trap EXIT
 limpa_tudo() {
   local item
   if [[ $MANTER_DB -eq 0 ]]; then
     for item in "${DBS_CRIADOS[@]:-}"; do
       [[ -n "$item" ]] || continue
-      psql_admin "${item%%:*}" -c "DROP DATABASE IF EXISTS \"${item#*:}\" WITH (FORCE)" >/dev/null 2>&1
+      dropa_bancos "${item%%:*}" "${item#*:}"
     done
   fi
   for item in "${CONTAINERS[@]:-}"; do [[ -n "$item" ]] && docker rm -f -v "$item" >/dev/null 2>&1; done
@@ -251,9 +259,7 @@ run_one() {
   if [[ $(wc -l <"$ROWS_FILE") -eq $antes || $rc -eq 124 ]]; then
     linha FAIL "$name" "-" "-" "cenário abortou (rc=$rc; limite ${SCN_TIMEOUT}s) — out/$name.log"
   fi
-  if [[ $MANTER_DB -eq 0 ]]; then
-    psql_admin "$cluster" -c "DROP DATABASE IF EXISTS \"$db\" WITH (FORCE)" >/dev/null 2>&1
-  fi
+  [[ $MANTER_DB -eq 0 ]] && dropa_bancos "$cluster" "$db"
   rm -rf "$RUN_TMP/scn-$seq"
 }
 

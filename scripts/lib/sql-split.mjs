@@ -150,7 +150,7 @@ export const juntarInstrucoes = (lista) => lista.map((s) => `${typeof s === 'str
 const NOME = String.raw`(?:"(?:[^"]|"")+"|[A-Za-z_][\w$]*)`;
 const NOME_QUALIFICADO = `${NOME}(?:\\s*\\.\\s*${NOME})?`;
 const RE_TABELA = new RegExp(String.raw`^(CREATE\s+(?:UNLOGGED\s+)?TABLE)\s+(?!IF\s+NOT\s+EXISTS\b)(${NOME_QUALIFICADO})`, 'i');
-const RE_INDICE = new RegExp(String.raw`^(CREATE\s+(?:UNIQUE\s+)?INDEX)\s+(CONCURRENTLY\s+)?(?:IF\s+NOT\s+EXISTS\s+)?(${NOME})\s+ON\b`, 'i');
+const RE_INDICE = new RegExp(String.raw`^(CREATE\s+(?:UNIQUE\s+)?INDEX)\s+(?:CONCURRENTLY\s+)?(?:IF\s+NOT\s+EXISTS\s+)?(${NOME})\s+ON\b`, 'i');
 const RE_PRECISA_GUARDA = /^(?:CREATE\s+TYPE\b|CREATE\s+POLICY\b|CREATE\s+(?:CONSTRAINT\s+)?TRIGGER\b|CREATE\s+DOMAIN\b|ALTER\s+TABLE\s[\s\S]*?\bADD\s+CONSTRAINT\b)/i;
 
 /** Escolhe uma tag de dollar-quote que não aparece no texto. */
@@ -169,21 +169,17 @@ export function comGuardaDeDuplicado(instrucao) {
 /**
  * Torna UMA instrução DDL reexecutável sem mudar o que ela cria:
  *  - CREATE TABLE → CREATE TABLE IF NOT EXISTS (vale também para PARTITION BY / PARTITION OF);
- *  - CREATE [UNIQUE] INDEX [CONCURRENTLY] → ... IF NOT EXISTS, e SEM CONCURRENTLY por padrão, porque a
- *    Management API roda cada POST em transação implícita e CONCURRENTLY falha em lote;
+ *  - CREATE [UNIQUE] INDEX [CONCURRENTLY] → ... IF NOT EXISTS, e SEM CONCURRENTLY, porque a Management API
+ *    roda cada POST em transação implícita e CONCURRENTLY falha em lote (25001);
  *  - CREATE TYPE / DOMAIN / POLICY / TRIGGER e ALTER TABLE ... ADD CONSTRAINT → bloco DO que ignora
  *    duplicate_object (o Postgres não tem IF NOT EXISTS para eles);
  *  - o resto (CREATE OR REPLACE, GRANT, ENABLE ROW LEVEL SECURITY, IF NOT EXISTS, COMMENT) já é idempotente.
  * @param {string} instrucao texto sem o `;` final (como devolvido por dividirSql)
- * @param {{ manterConcurrently?: boolean }} [opcoes]
  */
-export function tornarIdempotente(instrucao, { manterConcurrently = false } = {}) {
+export function tornarIdempotente(instrucao) {
   if (RE_TABELA.test(instrucao)) return instrucao.replace(RE_TABELA, '$1 IF NOT EXISTS $2');
   const mi = RE_INDICE.exec(instrucao);
-  if (mi) {
-    const conc = manterConcurrently && mi[2] ? 'CONCURRENTLY ' : '';
-    return `${mi[1]} ${conc}IF NOT EXISTS ${mi[3]} ON${instrucao.slice(mi[0].length)}`;
-  }
+  if (mi) return `${mi[1]} IF NOT EXISTS ${mi[2]} ON${instrucao.slice(mi[0].length)}`;
   if (RE_PRECISA_GUARDA.test(instrucao)) return comGuardaDeDuplicado(instrucao);
   return instrucao;
 }

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -89,9 +89,16 @@ function runDeploy(t, options = {}) {
   const bin = join(dir, 'bin');
   mkdirSync(scripts, { recursive: true });
   mkdirSync(bin);
-  for (const slug of slugs) mkdirSync(join(dir, 'supabase/functions', slug), { recursive: true });
+  // Função local de verdade = pasta com index.ts (pasta vazia não conta para o script).
+  for (const slug of slugs) {
+    mkdirSync(join(dir, 'supabase/functions', slug), { recursive: true });
+    writeFileSync(join(dir, 'supabase/functions', slug, 'index.ts'), 'export {};\n');
+  }
   const script = join(scripts, 'verify-deploy.sh');
-  cpSync(join(root, 'scripts/migration/functions/verify-deploy.sh'), script);
+  // VERIFY_DEPLOY_SCRIPT só existe para rodar estes mesmos casos contra outra versão do script.
+  cpSync(process.env.VERIFY_DEPLOY_SCRIPT || join(root, 'scripts/migration/functions/verify-deploy.sh'), script);
+  // O script carrega a biblioteca comum da pasta de cima (scripts/migration/_lib.sh), quando ela existe.
+  if (existsSync(join(root, 'scripts/migration/_lib.sh'))) cpSync(join(root, 'scripts/migration/_lib.sh'), join(dir, 'scripts/migration/_lib.sh'));
   writeFileSync(join(bin, 'supabase'), `#!/usr/bin/env node
     if (!process.argv.includes('--output') || !process.argv.includes('json')) process.exit(2);
     process.stdout.write(process.env.REMOTE_INVENTORY);
@@ -107,7 +114,8 @@ function runDeploy(t, options = {}) {
     process.stdout.write(process.env.HTTP_CODE);
     process.exit(Number(process.env.CURL_EXIT));
   `, { mode: 0o755 });
-  const result = spawnSync('bash', [script, '--project-ref', 'fixture'], {
+  // Ref de mentira no formato de um project-ref real (o script valida o formato antes de qualquer chamada).
+  const result = spawnSync('bash', [script, '--project-ref', 'fixtureprojectref000'], {
     encoding: 'utf8', timeout: 10000,
     env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, CLI_EXIT: '0', CURL_EXIT: '0',
       REMOTE_INVENTORY: JSON.stringify(slugs.map(slug => ({ slug, status: 'ACTIVE' }))),

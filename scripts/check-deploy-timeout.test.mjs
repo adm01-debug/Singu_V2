@@ -1,7 +1,7 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,6 +23,7 @@ const TEMPO_REAL = process.env.DEPLOY_TIMEOUT_TEMPO_REAL === '1';
 const ESCALA = TEMPO_REAL ? 1 : 10;
 const CASOS = TEMPO_REAL ? [18, 74, 76] : [18, 70, 80];
 const LIMITE = 75; // HEALTH_TIMEOUT_SECONDS do verify-deploy.sh
+const REF = 'fixtureprojectref000'; // ref de mentira no formato de um project-ref real (o script valida o formato)
 // Folga para o custo fixo do script (CLI falsa, 4 curls, 4 validações). Um retry somaria LIMITE/ESCALA inteiro.
 const TETO = LIMITE / ESCALA + (TEMPO_REAL ? 15 : 5);
 
@@ -52,9 +53,16 @@ for (const seconds of CASOS) {
     const bin = join(dir, 'bin');
     mkdirSync(scripts, { recursive: true });
     mkdirSync(bin);
-    for (const slug of slugs) mkdirSync(join(dir, 'supabase/functions', slug), { recursive: true });
+    // Função local de verdade = pasta com index.ts (pasta vazia não conta para o script).
+    for (const slug of slugs) {
+      mkdirSync(join(dir, 'supabase/functions', slug), { recursive: true });
+      writeFileSync(join(dir, 'supabase/functions', slug, 'index.ts'), 'export {};\n');
+    }
     const script = join(scripts, 'verify-deploy.sh');
     cpSync(ORIGEM, script);
+    // O script carrega a biblioteca comum da pasta de cima (scripts/migration/_lib.sh), quando ela existe.
+    const lib = join(root, 'scripts/migration/_lib.sh');
+    if (existsSync(lib)) cpSync(lib, join(dir, 'scripts/migration/_lib.sh'));
     writeFileSync(join(bin, 'supabase'), `#!/usr/bin/env node
       process.stdout.write(${JSON.stringify(JSON.stringify(slugs.map(slug => ({ slug, status: 'ACTIVE' }))))});
     `, { mode: 0o755 });
@@ -62,7 +70,7 @@ for (const seconds of CASOS) {
       const { spawnSync } = require('node:child_process');
       const { existsSync } = require('node:fs');
       const args = process.argv.slice(2).map(arg => arg.replace(
-        'https://fixture.supabase.co/functions/v1', 'http://127.0.0.1:${port}'));
+        'https://${REF}.supabase.co/functions/v1', 'http://127.0.0.1:${port}'));
       // O script tem de pedir exatamente o prazo combinado; só então o relógio é reduzido pela escala.
       const i = args.indexOf('--max-time');
       if (i === -1 || args[i + 1] !== '${LIMITE}') {
@@ -76,7 +84,7 @@ for (const seconds of CASOS) {
       process.exit(result.status ?? 1);
     `, { mode: 0o755 });
     const start = performance.now();
-    const child = spawn('bash', [script, '--project-ref', 'fixture'], {
+    const child = spawn('bash', [script, '--project-ref', REF], {
       env: { ...process.env, PATH: `${bin}:${process.env.PATH}`,
         HEALTH_JWT: 'fixture-user', SUPABASE_ANON_KEY: 'fixture-anon' },
     });

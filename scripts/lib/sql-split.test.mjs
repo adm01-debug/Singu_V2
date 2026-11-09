@@ -176,10 +176,6 @@ for (const [entrada, esperado] of IDEM) {
   });
 }
 
-test('idempotência: CONCURRENTLY só é mantido a pedido', () => {
-  assert.equal(tornarIdempotente('CREATE INDEX CONCURRENTLY i ON t (a)', { manterConcurrently: true }), 'CREATE INDEX CONCURRENTLY IF NOT EXISTS i ON t (a)');
-});
-
 test('idempotência: a guarda escolhe uma tag de dollar-quote que não colide com o corpo', () => {
   assert.equal(tagLivre('nada'), '$idem$');
   const corpo = "CREATE POLICY p ON t USING (x = $idem$a$idem$ AND y = $idem1$b$idem1$)";

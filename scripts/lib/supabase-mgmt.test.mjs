@@ -62,7 +62,6 @@ test('args: o padrão é simulação; --apply é explícito', () => {
   assert.equal(lerArgs(['--sql']).sql, true);
   assert.equal(lerArgs(['--ddl-dir', '/tmp/x y']).dirDdl, '/tmp/x y');
   assert.equal(lerArgs(['--ddl-dir=/tmp/ação']).dirDdl, '/tmp/ação');
-  assert.equal(lerArgs(['--extra'], ['--extra']).extra, true);
 });
 
 test('args: combinações inválidas e flags desconhecidas são erro de uso', () => {

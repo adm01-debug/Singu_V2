@@ -4,6 +4,8 @@
 -- tambem retem locks.
 -- Classe   : GUARD FATAL
 -- Limiar   : sessao idle-in-transaction com transacao aberta ha mais de :max_min minutos.
+--            Numa transacao ABORTADA o Postgres zera xact_start; ai a idade e contada a
+--            partir de state_change (quando a sessao ficou ociosa).
 -- Variaveis: -v max_min=30 (default 30; aceita decimal)
 -- Saida    : 0 = ok; 3 = condicao ruim (RAISE EXCEPTION sob ON_ERROR_STOP).
 -- Nota     : sem pg_read_all_stats o papel so enxerga o estado das proprias sessoes.
@@ -16,12 +18,11 @@
 SELECT set_config('guard.max_min', :'max_min', false) AS _cfg \gset
 \echo '== idle-in-transaction-guard =='
 SELECT pid, usename, application_name, state,
-       now() - xact_start AS xact_age,
+       now() - COALESCE(xact_start, state_change) AS xact_age,
        LEFT(query, 120) AS last_query
   FROM pg_stat_activity
  WHERE state LIKE 'idle in transaction%'
-   AND xact_start IS NOT NULL
- ORDER BY xact_start;
+ ORDER BY COALESCE(xact_start, state_change);
 DO $$
 DECLARE
   v_count int;
@@ -30,7 +31,7 @@ BEGIN
   SELECT COUNT(*) INTO v_count
     FROM pg_stat_activity
    WHERE state LIKE 'idle in transaction%'
-     AND xact_start < now() - v_min * interval '1 minute';
+     AND COALESCE(xact_start, state_change) < now() - v_min * interval '1 minute';
   IF v_count > 0 THEN
     RAISE EXCEPTION 'FATAL: % sessoes idle-in-transaction > %min. pg_terminate_backend(pid) urgente.', v_count, v_min;
   END IF;

@@ -7,10 +7,9 @@ setup(){
   psql -X -q -v ON_ERROR_STOP=1 >/dev/null <<'SQL'
 CREATE TABLE public.a(id serial PRIMARY KEY);
 CREATE TABLE public."Mista"("Id" serial PRIMARY KEY);
-CREATE SCHEMA outro;
-CREATE SEQUENCE outro.seq_b;
-CREATE TABLE public.b(id bigint PRIMARY KEY DEFAULT nextval('outro.seq_b'));
-ALTER SEQUENCE outro.seq_b OWNED BY public.b.id;
+CREATE SEQUENCE public."Seq B";
+CREATE TABLE public.b(id bigint PRIMARY KEY DEFAULT nextval('public."Seq B"'));
+ALTER SEQUENCE public."Seq B" OWNED BY public.b.id;
 INSERT INTO public.a(id) VALUES (50);
 INSERT INTO public."Mista"("Id") VALUES (70);
 INSERT INTO public.b(id) VALUES (90);

@@ -29,6 +29,28 @@ Reduziu exposição de propósito? Fixe o novo patamar **no mesmo PR**:
 node scripts/rls-matrix/check-rls-baseline.mjs --update
 ```
 
+`--update` aceita o estado atual inteiro — inclusive o que **piorou**. Quando isso acontece o script
+escreve `REGRESSAO ACEITA PELO --update` no stderr com cada tabela, para a piora ficar visível no log do PR.
+
+## Códigos de saída e ajustes
+
+| exit | significado |
+|---|---|
+| `0` | nenhuma regressão (ou baseline regravado com `--update`) |
+| `1` | regressão de exposição **ou** coleta incompleta (rede, HTTP inesperado, JWT inválido, perfil exigido ausente) |
+| `2` | falta `SUPABASE_URL`/`SUPABASE_ANON_KEY`, ou o baseline está ilegível/fora do formato (valor que não é inteiro ≥ -1) |
+
+- Falha passageira (erro de rede, HTTP 429/500/502/503/504) é tentada mais 2 vezes antes de reprovar.
+- `RLS_RETRY_DELAY_MS` (padrão 2000) e `RLS_TIMEOUT_MS` (padrão 30000) ajustam a espera entre tentativas e o prazo por requisição.
+- `RLS_BASELINE_FILE` aponta outro arquivo de baseline (é o que os testes usam).
+- Tabela removida do banco devolve HTTP 404 e reprova: tire a linha dela do `rls-baseline.json` à mão no mesmo PR.
+
+Testes (PostgREST de mentira em 127.0.0.1, sem rede externa):
+
+```sh
+node --test scripts/rls-matrix/check-rls-baseline.test.mjs
+```
+
 ## Como ler o baseline
 
 - `-1` = sem grant (a role nem chega na tabela). É o estado mais fechado.

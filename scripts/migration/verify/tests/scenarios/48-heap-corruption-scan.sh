@@ -8,8 +8,8 @@ requires(){ exige_extensao_disponivel pg_visibility; }
 setup_ok(){
   sql "CREATE EXTENSION pg_visibility;
        CREATE TABLE public.t(id int PRIMARY KEY, v text);
-       INSERT INTO public.t SELECT g, 'v' || g FROM generate_series(1, 500) g;
-       VACUUM public.t;"
+       INSERT INTO public.t SELECT g, 'v' || g FROM generate_series(1, 500) g;" || return 1
+  sql "VACUUM public.t"
 }
 setup(){
   sql "CREATE OR REPLACE FUNCTION public.pg_check_visible(regclass, OUT t_ctid tid)

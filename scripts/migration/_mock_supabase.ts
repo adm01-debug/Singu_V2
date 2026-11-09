@@ -30,7 +30,7 @@ export interface MockUsuario {
   identities?: { provider: string }[];
 }
 export interface MockReq { method: string; path: string; search: string; headers: Headers; corpo: Uint8Array }
-interface Falha { metodo: string; re: RegExp; status: number[]; headers?: Record<string, string>; atrasoMs?: number }
+interface Falha { metodo: string; re: RegExp; status: number[]; headers?: Record<string, string>; atrasoMs?: number; corpo?: string }
 
 const enc = new TextEncoder();
 const dec = new TextDecoder();
@@ -68,7 +68,7 @@ export class MockSupabase {
   async parar(): Promise<void> { await this.servidor.shutdown(); }
 
   /** Enfileira respostas de erro para as próximas requisições que casarem. */
-  falhar(metodo: string, re: RegExp, status: number[], extra: { headers?: Record<string, string>; atrasoMs?: number } = {}): void {
+  falhar(metodo: string, re: RegExp, status: number[], extra: { headers?: Record<string, string>; atrasoMs?: number; corpo?: string } = {}): void {
     this.falhas.push({ metodo, re, status: [...status], ...extra });
   }
   bucket(id: string, pub = false, extra: Partial<MockBucket> = {}): void {
@@ -100,7 +100,7 @@ export class MockSupabase {
         if (f.status.length && f.metodo === req.method && f.re.test(u.pathname)) {
           const s = f.status.shift()!;
           if (f.atrasoMs) await new Promise((r) => setTimeout(r, f.atrasoMs));
-          if (s > 0) return new Response(req.method === "HEAD" ? null : `falha injetada ${s}`, { status: s, headers: f.headers });
+          if (s > 0) return new Response(req.method === "HEAD" ? null : f.corpo ?? `falha injetada ${s}`, { status: s, headers: f.headers });
         }
       }
       await new Promise((r) => setTimeout(r, 2)); // deixa a concorrência aparecer

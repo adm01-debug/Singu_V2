@@ -116,8 +116,8 @@ export function criarCliente(cfg, { fetchImpl = globalThis.fetch, dormir = dormi
   return { consultar, estatisticas };
 }
 
-/** Interpreta os argumentos comuns. `extras` = nomes de flags booleanas adicionais aceitas pelo script. */
-export function lerArgs(argv, extras = []) {
+/** Interpreta os argumentos de linha de comando (iguais para todos os scripts da família). */
+export function lerArgs(argv) {
   const args = { aplicar: false, simular: false, ajuda: false, sql: false, dirDdl: DIR_DDL_PADRAO };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -129,15 +129,14 @@ export function lerArgs(argv, extras = []) {
       const v = a.includes('=') ? a.slice(a.indexOf('=') + 1) : argv[++i];
       if (!v) throw new ErroDeUso('--ddl-dir exige um caminho');
       args.dirDdl = resolve(v);
-    } else if (extras.includes(a)) args[a.replace(/^--/, '')] = true;
-    else throw new ErroDeUso(`argumento desconhecido: ${a}`);
+    } else throw new ErroDeUso(`argumento desconhecido: ${a}`);
   }
   if (args.aplicar && args.simular) throw new ErroDeUso('use --apply OU --dry-run, não os dois');
   if (args.aplicar && args.sql) throw new ErroDeUso('--sql só vale na simulação (sem --apply)');
   return args;
 }
 
-export function textoDeAjuda({ nome, descricao, extrasAjuda = '' }) {
+export function textoDeAjuda({ nome, descricao }) {
   return `${nome} — ${descricao}
 
 Uso: node scripts/${nome} [--dry-run] [--apply] [--sql] [--ddl-dir <dir>] [--help]
@@ -147,7 +146,7 @@ Uso: node scripts/${nome} [--dry-run] [--apply] [--sql] [--ddl-dir <dir>] [--hel
   --apply          APLICA no projeto Supabase (produção por padrão). Exige SUPABASE_ACCESS_TOKEN.
   --sql            na simulação, imprime o SQL completo que seria enviado (saída é um script SQL válido).
   --ddl-dir <dir>  lê os .sql de outro diretório (padrão: scripts/migration/ddl na raiz do repo).
-${extrasAjuda}
+
 Ambiente: SUPABASE_ACCESS_TOKEN, SUPABASE_PROJECT_REF (padrão ${REF_CANONICO}), SUPABASE_MGMT_API_URL,
           SUPABASE_MGMT_TIMEOUT_MS, SUPABASE_MGMT_RETRIES, SUPABASE_MGMT_BACKOFF_MS, SUPABASE_MGMT_PAUSA_MS.
 Saída: 0 ok · 1 houve falha · 2 uso/configuração/SQL malformado · 130 interrompido.
@@ -171,9 +170,9 @@ export function emUnidades(instrucoes, lote = 1, atomico = false) {
 }
 
 /** Monta as etapas (uma por arquivo, na ordem canônica) com cada instrução já idempotente. */
-export function etapasDeArquivos(dirDdl, arquivos, { lote = 1, atomico = false, filtro = () => true, transformar = tornarIdempotente } = {}) {
+export function etapasDeArquivos(dirDdl, arquivos, { lote = 1, atomico = false } = {}) {
   return emOrdemCanonica(arquivos).map((arquivo) => {
-    const instrucoes = carregarDdl(dirDdl, arquivo).filter((i) => filtro(i, arquivo)).map((i) => ({ origem: i.origem, sql: transformar(i.sql) }));
+    const instrucoes = carregarDdl(dirDdl, arquivo).map((i) => ({ origem: i.origem, sql: tornarIdempotente(i.sql) }));
     return { titulo: arquivo, unidades: emUnidades(instrucoes, lote, atomico) };
   });
 }
@@ -182,7 +181,7 @@ const resumir = (sql) => { const l = sql.replace(/\s+/g, ' ').trim(); return l.l
 const totalDe = (etapas) => etapas.reduce((n, e) => n + e.unidades.reduce((m, u) => m + u.instrucoes.length, 0), 0);
 
 /** Executa (ou simula) o plano e imprime o resumo. Devolve o código de saída. */
-export async function executarPlano({ nome, etapas, args, cfg, cliente, escrever, contarTabelas = true, estado = { parar: null } }) {
+export async function executarPlano({ nome, etapas, args, cfg, cliente, escrever, estado = { parar: null } }) {
   const total = totalDe(etapas);
   const requisicoes = etapas.reduce((n, e) => n + e.unidades.length, 0);
   if (!args.aplicar) {
@@ -203,12 +202,9 @@ export async function executarPlano({ nome, etapas, args, cfg, cliente, escrever
   const r = { ok: 0, jaExistia: 0, falhas: [], naoExecutadas: 0, fatal: null };
   const contar = async () => { const x = await cliente.consultar(SQL_CONTAR_TABELAS); return x.tipo === 'ok' && Number.isInteger(x.linhas[0]?.t) ? x.linhas[0].t : x; };
   escrever(`${nome}: APLICAÇÃO REAL no projeto ${cfg.ref} em ${cfg.urlBase} — ${total} instrução(ões), ${requisicoes} requisição(ões).`);
-  let antes = null;
-  if (contarTabelas) {
-    antes = await contar();
-    if (antes?.tipo === 'fatal') r.fatal = antes.mensagem;
-    escrever(`Tabelas em public antes: ${Number.isInteger(antes) ? antes : 'indisponível'}`);
-  }
+  const antes = await contar();
+  if (antes?.tipo === 'fatal') r.fatal = antes.mensagem;
+  escrever(`Tabelas em public antes: ${Number.isInteger(antes) ? antes : 'indisponível'}`);
   const pausa = () => (cfg.pausaMs ? dormirPadrao(cfg.pausaMs) : null);
   // Envia uma unidade; em erro de SQL num lote não atômico, reenvia instrução a instrução para isolar a culpada.
   const enviar = async (u, etapa, repescagem = false) => {
@@ -252,7 +248,7 @@ export async function executarPlano({ nome, etapas, args, cfg, cliente, escrever
       await pausa();
     }
   }
-  if (contarTabelas && !r.fatal) {
+  if (!r.fatal) {
     const depois = await contar();
     escrever(`Tabelas em public depois: ${Number.isInteger(depois) ? `${depois}${Number.isInteger(antes) ? ` (${depois - antes >= 0 ? '+' : ''}${depois - antes})` : ''}` : 'indisponível'}`);
   }
@@ -268,7 +264,7 @@ export async function executarPlano({ nome, etapas, args, cfg, cliente, escrever
 }
 
 /**
- * Ponto de entrada comum. `def` = { nome, descricao, extras?, extrasAjuda?, contarTabelas?, montarEtapas({ args, cfg, cliente }) }.
+ * Ponto de entrada comum. `def` = { nome, descricao, montarEtapas({ args, cfg, cliente }) }.
  * `montarEtapas` pode ser assíncrono; `cliente` só existe com --apply. Devolve o código de saída (não chama process.exit).
  */
 export async function principal(def, argv = process.argv.slice(2), env = process.env, io = {}) {
@@ -281,14 +277,14 @@ export async function principal(def, argv = process.argv.slice(2), env = process
   saida.on?.('error', aoFecharSaida);
   process.once('SIGINT', aoSigint);
   try {
-    const args = lerArgs(argv, def.extras);
+    const args = lerArgs(argv);
     if (args.ajuda) { escrever(textoDeAjuda(def)); return 0; }
     const cfg = lerConfig(env);
     token = cfg.token;
     if (args.aplicar && !cfg.token) throw new ErroDeUso('SUPABASE_ACCESS_TOKEN é obrigatório com --apply (forneça pelo ambiente seguro; nunca em arquivo versionado)');
     const cliente = args.aplicar ? criarCliente(cfg, io) : null;
     const etapas = await def.montarEtapas({ args, cfg, cliente });
-    return await executarPlano({ nome: def.nome, etapas, args, cfg, cliente, escrever, contarTabelas: def.contarTabelas ?? true, estado });
+    return await executarPlano({ nome: def.nome, etapas, args, cfg, cliente, escrever, estado });
   } catch (e) {
     const texto = String(e instanceof ErroDeUso ? e.message : e?.stack ?? e);
     const limpo = token ? texto.split(token).join('***') : texto;
