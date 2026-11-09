@@ -92,6 +92,16 @@ function bytesAtuais() {
   return total;
 }
 
+/** Verdadeiro so' se `base` resolve pra um commit real (git rev-parse --verify). */
+function baseResolve(base) {
+  try {
+    execSync(`git rev-parse --verify ${base}^{commit}`, { stdio: ['ignore', 'pipe', 'ignore'] });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // Tamanho na base de cada arquivo do conjunto: { total, porArquivo: Map(path -> bytes) } ou null
 // quando a base nao tem nenhum deles (ref inexistente, checkout raso sem a main).
 function bytesNaBase(base) {
@@ -120,7 +130,16 @@ function bytesNaBase(base) {
 
 const BASE = process.env.CLAUDE_MD_BASE || 'HEAD';
 const atual = bytesAtuais();
-const base = bytesNaBase(BASE);
+// Achado de auditoria adversarial: se CLAUDE_MD_BASE='origin/main' e o `git fetch` anterior (no
+// CI) falhar, origin/main nao resolve, bytesNaBase() so' encontra 0 arquivos e devolve null --
+// o bloco de deteccao de encolhimento inteiro era pulado em SILENCIO, exit 0, parecendo "tudo
+// verificado" quando nada foi comparado. Agora, quando uma base EXPLICITA (via env var) nao
+// resolve, isso fica visivel no log em vez de passar como se a comparacao tivesse rodado.
+const baseExplicitaNaoResolve = Boolean(process.env.CLAUDE_MD_BASE) && !baseResolve(BASE);
+if (baseExplicitaNaoResolve) {
+  console.error(`::warning::CLAUDE_MD_BASE='${BASE}' nao resolveu para um commit (fetch pode ter falhado) -- comparacao de encolhimento/wipe PULADA; so a presenca das secoes obrigatorias foi verificada.`);
+}
+const base = baseExplicitaNaoResolve ? null : bytesNaBase(BASE);
 
 if (base) {
   const ratio = atual / base.total;

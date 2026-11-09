@@ -190,3 +190,25 @@ test('secoesPorTitulo: título com texto extra na mesma linha é a chave complet
   assert.deepEqual([...mapa.keys()], ['## Fluxo Git (vários agentes)', '## Outro']);
   assert.equal(mapa.get('## Fluxo Git (vários agentes)'), 'corpo aqui');
 });
+
+test('REGRESSÃO: base explícita que não resolve (fetch falhou) avisa visivelmente, não passa em silêncio', () => {
+  comRepo((dir) => {
+    // 'origin/main' nunca foi buscado neste repositório descartável: não resolve.
+    const r = spawnSync(process.execPath, [SCRIPT], {
+      cwd: dir,
+      encoding: 'utf8',
+      env: { ...process.env, CLAUDE_MD_BASE: 'origin/main' },
+    });
+    assert.equal(r.status, 0, 'não deve bloquear merge por rede instável (fail-open controlado)');
+    assert.match(r.stderr, /::warning::CLAUDE_MD_BASE='origin\/main' nao resolveu/);
+    assert.match(r.stderr, /comparacao de encolhimento\/wipe PULADA/);
+  });
+});
+
+test('base ausente (sem CLAUDE_MD_BASE) cai pra HEAD sem aviso — comportamento local normal', () => {
+  comRepo((dir) => {
+    const r = spawnSync(process.execPath, [SCRIPT], { cwd: dir, encoding: 'utf8', env: process.env });
+    assert.equal(r.status, 0, r.stderr);
+    assert.ok(!r.stderr.includes('::warning::'), 'HEAD sempre resolve; não é o caso que o aviso cobre');
+  });
+});
