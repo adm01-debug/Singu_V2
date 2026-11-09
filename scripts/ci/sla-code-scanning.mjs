@@ -24,25 +24,33 @@ export function nivel(alerta) {
   return alerta?.rule?.severity === 'error' ? 'high' : 'low';
 }
 
+// Achado de auditoria adversarial: rule.id e location.path vem do alerta (quem tem permissao de
+// escrita em code scanning controla a regra) e iam crus pra dentro do fence ``` de relatorio() --
+// um backtick embutido rompe o fence e o resto do texto vaza como markdown solto na issue.
+function textoSeguro(texto) {
+  return String(texto).replace(/`/g, "'").replace(/[\r\n]+/g, ' ');
+}
+
 export function avaliarSla(alertas, agoraMs = Date.now()) {
   const violacoes = [];
   for (const a of alertas) {
     const sev = nivel(a);
     const prazo = sev === 'high' || sev === 'critical' ? SLA_DIAS.alto : SLA_DIAS.baixo;
     const criadoMs = new Date(a.created_at).getTime();
+    const regra = textoSeguro(a.rule?.id ?? '?');
     // Achado de auditoria adversarial: created_at ausente/invalido virava NaN e `NaN > prazo` e'
     // sempre false -- um alerta critical com data corrompida saia do relatorio como "sem violacao",
     // fail-OPEN (o resto do repo e fail-closed, ex. branch-podaveis.mjs). Data que nao dá pra provar
     // dentro do prazo conta como violacao, nao como "limpo".
     if (!Number.isFinite(criadoMs)) {
-      const local = a.most_recent_instance?.location?.path ?? '?';
-      violacoes.push(`${sev.toUpperCase()} (created_at inválido/ausente) — #${a.number}: ${a.rule?.id ?? '?'} em ${local}`);
+      const local = textoSeguro(a.most_recent_instance?.location?.path ?? '?');
+      violacoes.push(`${sev.toUpperCase()} (created_at inválido/ausente) — #${a.number}: ${regra} em ${local}`);
       continue;
     }
     const dias = Math.floor((agoraMs - criadoMs) / 86_400_000);
     if (dias > prazo) {
-      const local = a.most_recent_instance?.location?.path ?? '?';
-      violacoes.push(`${sev.toUpperCase()} (${dias}d > ${prazo}d) — #${a.number}: ${a.rule?.id ?? '?'} em ${local}`);
+      const local = textoSeguro(a.most_recent_instance?.location?.path ?? '?');
+      violacoes.push(`${sev.toUpperCase()} (${dias}d > ${prazo}d) — #${a.number}: ${regra} em ${local}`);
     }
   }
   return { total: alertas.length, violacoes };

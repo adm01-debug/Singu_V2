@@ -203,3 +203,14 @@ test('REGRESSÃO: job ainda em execução (sem completed_at) aparece com o tempo
   assert.equal(lentos[0].job, 'build-gigante', 'job preso tem que vencer o job de 1 min no ranking');
   assert.ok(lentos[0].minutos >= 359, `esperava ~360 min decorridos, veio ${lentos[0].minutos}`);
 });
+
+test('REGRESSÃO: nome de workflow com `|` ou newline não quebra a tabela markdown', () => {
+  const agregado = agregar([
+    { name: '| --- | DROP TABLE |\n](javascript:alert(1))', run_started_at: new Date().toISOString(), updated_at: new Date().toISOString(), conclusion: 'success' },
+  ]);
+  const md = tabela(agregado);
+  const linhasDeTabela = md.split('\n').filter((l) => l.startsWith('|'));
+  // cabeçalho + separador + exatamente 1 linha de dados: nome malicioso não abriu linha extra
+  assert.equal(linhasDeTabela.length, 3, md);
+  assert.ok(!md.includes('\n](javascript:alert(1))'), 'newline do nome não pode virar linha solta no markdown');
+});

@@ -88,6 +88,13 @@ export function maisLentos(jobs, { limite = 5, agora = Date.now() } = {}) {
     .slice(0, limite);
 }
 
+// Achado de auditoria adversarial: nome de workflow vem da API do GitHub (quem tem push pode
+// nomear um workflow livremente) e entrava cru na celula da tabela markdown -- `|` quebra a
+// tabela, newline quebra a linha. Escapa os dois antes de montar a celula.
+function celulaSegura(texto) {
+  return String(texto).replace(/\|/g, '\\|').replace(/[\r\n]+/g, ' ');
+}
+
 export function tabela(agregado, { titulo = 'KPI do GitHub Actions — 7 dias' } = {}) {
   const linhas = [
     `## ${titulo}`,
@@ -96,7 +103,7 @@ export function tabela(agregado, { titulo = 'KPI do GitHub Actions — 7 dias' }
     '| --- | ---: | ---: | ---: | ---: | ---: | ---: |',
     ...agregado.map(
       (l) =>
-        `| ${l.workflow} | ${l.runs} | ${l.cancelados} | ${l.taxaCancelamento}% | ${l.falhas} | ${l.taxaFalha}% | ${l.minutos} |`,
+        `| ${celulaSegura(l.workflow)} | ${l.runs} | ${l.cancelados} | ${l.taxaCancelamento}% | ${l.falhas} | ${l.taxaFalha}% | ${l.minutos} |`,
     ),
   ];
   const totalRuns = agregado.reduce((a, l) => a + l.runs, 0);
@@ -112,7 +119,7 @@ export function tabelaLentos(lentos) {
     '',
     '| job | workflow | minutos |',
     '| --- | --- | ---: |',
-    ...lentos.map((l) => `| ${l.job} | ${l.workflow} | ${l.minutos} |`),
+    ...lentos.map((l) => `| ${celulaSegura(l.job)} | ${celulaSegura(l.workflow)} | ${l.minutos} |`),
   ].join('\n');
 }
 

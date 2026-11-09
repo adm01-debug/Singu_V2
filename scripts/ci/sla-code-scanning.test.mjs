@@ -81,3 +81,12 @@ test('REGRESSÃO: created_at inválido ou ausente conta como violação (fail-cl
   assert.match(violacoes[0], /created_at inválido\/ausente/);
   assert.match(violacoes[1], /created_at inválido\/ausente/);
 });
+
+test('REGRESSÃO: backtick em rule.id não rompe o fence ``` do relatório', () => {
+  const r = relatorio(avaliarSla([
+    { number: 9, created_at: '2000-01-01T00:00:00Z', rule: { id: 'regra`\nalerta falso, nada a ver', severity: 'error' } },
+  ], Date.now()));
+  const abre = (r.match(/```/g) ?? []).length;
+  assert.equal(abre, 2, 'fence tem que continuar fechando certo (2 marcadores ```)');
+  assert.ok(!r.includes('regra`'), 'backtick cru não pode sobreviver no texto');
+});
