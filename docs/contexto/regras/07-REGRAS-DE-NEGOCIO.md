@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1fecfa69f5` · branch `main` · 2026-11-09 21:14 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2143482397` · branch `main` · 2026-11-10 00:59 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -12,7 +12,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | Tabela | Política | Comando | Roles | Modo | USING | WITH CHECK |
 |---|---|---|---|---|---|---|
 | `_migration_cdc_checkpoint` | cdc checkpoint service only | ALL | service_role | permissive | `true` | `true` |
-| `ai_recommendation_audit_logs_v2` | Users can manage their own recommendation logs v2 | ALL | public | permissive | `(auth.uid() = user_id)` |  |
+| `ai_recommendation_audit_logs_v2` | Users can manage their own recommendation logs v2 | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `audit_log_2026_07` | deny_authenticated_direct_access | ALL | anon, authenticated | restrictive | `false` | `false` |
 | `audit_log_2026_08` | deny_authenticated_direct_access | ALL | anon, authenticated | restrictive | `false` | `false` |
 | `audit_log_2026_09` | deny_authenticated_direct_access | ALL | anon, authenticated | restrictive | `false` | `false` |
@@ -20,298 +20,298 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `audit_log_2026_11` | deny_authenticated_direct_access | ALL | anon, authenticated | restrictive | `false` | `false` |
 | `audit_log_2026_12` | deny_authenticated_direct_access | ALL | anon, authenticated | restrictive | `false` | `false` |
 | `audit_log_default` | deny_authenticated_direct_access | ALL | anon, authenticated | restrictive | `false` | `false` |
-| `contact_behavior` | Owner or admin can delete contact_behavior | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_behavior` | Owner or admin can insert contact_behavior | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_behavior` | Owner or admin can select contact_behavior | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_behavior` | Owner or admin can update contact_behavior | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_business_context` | Owner or admin can delete contact_business_context | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_business_context` | Owner or admin can insert contact_business_context | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_business_context` | Owner or admin can select contact_business_context | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_business_context` | Owner or admin can update contact_business_context | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_decision_making` | Owner or admin can delete contact_decision_making | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_decision_making` | Owner or admin can insert contact_decision_making | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_decision_making` | Owner or admin can select contact_decision_making | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_decision_making` | Owner or admin can update contact_decision_making | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_influence` | Owner or admin can delete contact_influence | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_influence` | Owner or admin can insert contact_influence | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_influence` | Owner or admin can select contact_influence | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_influence` | Owner or admin can update contact_influence | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_metaprograms` | Owner or admin can delete contact_metaprograms | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_metaprograms` | Owner or admin can insert contact_metaprograms | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_metaprograms` | Owner or admin can select contact_metaprograms | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_metaprograms` | Owner or admin can update contact_metaprograms | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_personality` | Owner or admin can delete contact_personality | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_personality` | Owner or admin can insert contact_personality | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
+| `contact_behavior` | Owner or admin can delete contact_behavior | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_behavior` | Owner or admin can insert contact_behavior | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_behavior` | Owner or admin can select contact_behavior | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_behavior` | Owner or admin can update contact_behavior | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_business_context` | Owner or admin can delete contact_business_context | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_business_context` | Owner or admin can insert contact_business_context | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_business_context` | Owner or admin can select contact_business_context | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_business_context` | Owner or admin can update contact_business_context | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_decision_making` | Owner or admin can delete contact_decision_making | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_decision_making` | Owner or admin can insert contact_decision_making | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_decision_making` | Owner or admin can select contact_decision_making | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_decision_making` | Owner or admin can update contact_decision_making | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_influence` | Owner or admin can delete contact_influence | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_influence` | Owner or admin can insert contact_influence | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_influence` | Owner or admin can select contact_influence | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_influence` | Owner or admin can update contact_influence | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_metaprograms` | Owner or admin can delete contact_metaprograms | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_metaprograms` | Owner or admin can insert contact_metaprograms | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_metaprograms` | Owner or admin can select contact_metaprograms | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_metaprograms` | Owner or admin can update contact_metaprograms | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_personality` | Owner or admin can delete contact_personality | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_personality` | Owner or admin can insert contact_personality | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
 | `contact_personality` | Owner or admin can select contact_personality | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_personality` | Owner or admin can update contact_personality | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_rapport_strategy` | Owner or admin can delete contact_rapport_strategy | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_rapport_strategy` | Owner or admin can insert contact_rapport_strategy | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `contact_rapport_strategy` | Owner or admin can select contact_rapport_strategy | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |  |
-| `contact_rapport_strategy` | Owner or admin can update contact_rapport_strategy | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = auth.uid())))) OR has_role(auth.uid(), 'admin'::app_role))` |
-| `crm_consent_audit_logs` | Users can insert their own consent logs | INSERT | public | permissive |  | `(auth.uid() = user_id)` |
-| `follow_up_approvals_v2` | Users can manage their own follow-up approvals v2 | ALL | public | permissive | `(auth.uid() = user_id)` |  |
-| `interactions` | Users can access their own interactions | ALL | public | permissive | `(auth.uid() = user_id)` |  |
-| `lead_score_recompute_queue` | lead_score_queue_insert_own | INSERT | public | permissive |  | `(auth.uid() = user_id)` |
-| `lead_score_recompute_queue` | lead_score_queue_select_own | SELECT | public | permissive | `(auth.uid() = user_id)` |  |
-| `lead_score_rules` | lead_score_rules_delete_own | DELETE | public | permissive | `(auth.uid() = user_id)` |  |
-| `lead_score_rules` | lead_score_rules_insert_own | INSERT | public | permissive |  | `(auth.uid() = user_id)` |
-| `lead_score_rules` | lead_score_rules_select_own | SELECT | public | permissive | `(auth.uid() = user_id)` |  |
-| `lead_score_rules` | lead_score_rules_update_own | UPDATE | public | permissive | `(auth.uid() = user_id)` |  |
-| `lead_score_thresholds` | lead_score_thresholds_delete_own | DELETE | public | permissive | `(auth.uid() = user_id)` |  |
-| `lead_score_thresholds` | lead_score_thresholds_insert_own | INSERT | public | permissive |  | `(auth.uid() = user_id)` |
-| `lead_score_thresholds` | lead_score_thresholds_select_own | SELECT | public | permissive | `(auth.uid() = user_id)` |  |
-| `lead_score_thresholds` | lead_score_thresholds_update_own | UPDATE | public | permissive | `(auth.uid() = user_id)` |  |
-| `neuro_behavioral_history` | Users can insert their own contact's neuro history | INSERT | public | permissive | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid()))))` | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid()))))` |
-| `pipeline_stage_transitions` | Transitions are viewable by everyone authenticated | SELECT | authenticated | permissive | `true` |  |
-| `semantic_search_cache` | Users update own search cache | UPDATE | public | permissive | `(auth.uid() = user_id)` | `(auth.uid() = user_id)` |
-| `whatsapp_messages` | Users can manage their own whatsapp messages | ALL | public | permissive | `(auth.uid() = user_id)` |  |
+| `contact_personality` | Owner or admin can update contact_personality | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_rapport_strategy` | Owner or admin can delete contact_rapport_strategy | DELETE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_rapport_strategy` | Owner or admin can insert contact_rapport_strategy | INSERT | authenticated | permissive |  | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `contact_rapport_strategy` | Owner or admin can select contact_rapport_strategy | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
+| `contact_rapport_strategy` | Owner or admin can update contact_rapport_strategy | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
+| `follow_up_approvals_v2` | Users can manage their own follow-up approvals v2 | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `neuro_behavioral_history` | Users can insert their own contact's neuro history | INSERT | public | permissive | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))` | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))` |
+| `whatsapp_messages` | Users can manage their own whatsapp messages | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `migration_password_reset_log` | mprl_admin_read | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `profiles` | Users can view their own profile | SELECT | public | permissive | `auth.uid() = id` |  |
-| `profiles` | Users can update their own profile | UPDATE | public | permissive | `auth.uid() = id` |  |
-| `profiles` | Users can insert their own profile | INSERT | public | permissive |  | `auth.uid() = id` |
-| `companies` | Users can view their own companies | SELECT | public | permissive | `auth.uid() = user_id` |  |
+| `profiles` | Users can view their own profile | SELECT | public | permissive | `((select auth.uid()) = id)` |  |
+| `profiles` | Users can update their own profile | UPDATE | public | permissive | `((select auth.uid()) = id)` |  |
+| `profiles` | Users can insert their own profile | INSERT | public | permissive |  | `((select auth.uid()) = id)` |
+| `companies` | Users can view their own companies | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `companies` | Users can insert their own companies | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `companies` | Users can update their own companies | UPDATE | public | permissive | `auth.uid() = user_id` |  |
+| `companies` | Users can update their own companies | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `companies` | Users can delete their own companies | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `contacts` | Users can view their own contacts | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `contacts` | Users can insert their own contacts | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `contacts` | Users can update their own contacts | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `contacts` | Users can delete their own contacts | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `interactions` | Users can view their own interactions | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `interactions` | Users can insert their own interactions | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `interactions` | Users can update their own interactions | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `interactions` | Users can delete their own interactions | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `insights` | Users can view their own insights | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `insights` | Users can insert their own insights | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `insights` | Users can update their own insights | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `insights` | Users can delete their own insights | DELETE | public | permissive | `auth.uid() = user_id` |  |
+| `contacts` | Users can view their own contacts | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contacts` | Users can insert their own contacts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `contacts` | Users can update their own contacts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contacts` | Users can delete their own contacts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `interactions` | Users can view their own interactions | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `interactions` | Users can insert their own interactions | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `interactions` | Users can update their own interactions | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `interactions` | Users can delete their own interactions | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `insights` | Users can view their own insights | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `insights` | Users can insert their own insights | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `insights` | Users can update their own insights | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `insights` | Users can delete their own insights | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `alerts` | Users can view their own alerts | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `alerts` | Users can insert their own alerts | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `alerts` | Users can update their own alerts | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `alerts` | Users can delete their own alerts | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `activities` | Users can view their own activities | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `activities` | Users can insert their own activities | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `push_subscriptions` | Users can create their own subscriptions | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `push_subscriptions` | Users can update their own subscriptions | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `push_subscriptions` | Users can delete their own subscriptions | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_usage_history` | Users can view their own trigger usage history | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_usage_history` | Users can insert their own trigger usage history | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `trigger_usage_history` | Users can update their own trigger usage history | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_usage_history` | Users can delete their own trigger usage history | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `favorite_templates` | Users can view their own favorites | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `favorite_templates` | Users can insert their own favorites | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `favorite_templates` | Users can delete their own favorites | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `vak_analysis_history` | Users can view their own VAK analysis | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `vak_analysis_history` | Users can insert their own VAK analysis | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `vak_analysis_history` | Users can delete their own VAK analysis | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `metaprogram_analysis` | Users can view their own metaprogram analysis | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `metaprogram_analysis` | Users can create their own metaprogram analysis | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `metaprogram_analysis` | Users can delete their own metaprogram analysis | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `compatibility_alerts` | Users can view their own compatibility alerts | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `compatibility_alerts` | Users can create their own compatibility alerts | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `compatibility_alerts` | Users can update their own compatibility alerts | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `compatibility_alerts` | Users can delete their own compatibility alerts | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `compatibility_settings` | Users can view their own compatibility settings | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `compatibility_settings` | Users can create their own compatibility settings | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `compatibility_settings` | Users can update their own compatibility settings | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `emotional_states_history` | Users can view their own emotional states history | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `emotional_states_history` | Users can create their own emotional states history | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `emotional_states_history` | Users can delete their own emotional states history | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `emotional_anchors` | Users can view their own emotional anchors | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `emotional_anchors` | Users can create their own emotional anchors | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `emotional_anchors` | Users can update their own emotional anchors | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `emotional_anchors` | Users can delete their own emotional anchors | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `client_values` | Users can view their own client values | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `client_values` | Users can create their own client values | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `client_values` | Users can update their own client values | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `client_values` | Users can delete their own client values | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `decision_criteria` | Users can view their own decision criteria | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `decision_criteria` | Users can create their own decision criteria | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `decision_criteria` | Users can update their own decision criteria | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `decision_criteria` | Users can delete their own decision criteria | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `hidden_objections` | Users can view their own hidden objections | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `hidden_objections` | Users can create their own hidden objections | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `hidden_objections` | Users can update their own hidden objections | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `hidden_objections` | Users can delete their own hidden objections | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `eq_analysis_history` | Users can view their own EQ analysis history | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `eq_analysis_history` | Users can create their own EQ analysis history | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `eq_analysis_history` | Users can delete their own EQ analysis history | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `cognitive_bias_history` | Users can view their own cognitive bias history | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `cognitive_bias_history` | Users can create their own cognitive bias history | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `cognitive_bias_history` | Users can delete their own cognitive bias history | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `stakeholder_alerts` | Users can view their own stakeholder alerts | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `stakeholder_alerts` | Users can create their own stakeholder alerts | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `stakeholder_alerts` | Users can update their own stakeholder alerts | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `stakeholder_alerts` | Users can delete their own stakeholder alerts | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `health_alert_settings` | Users can view their own health settings | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `health_alert_settings` | Users can create their own health settings | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `health_alert_settings` | Users can update their own health settings | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `health_alerts` | Users can view their own health alerts | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `health_alerts` | Users can create their own health alerts | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `health_alerts` | Users can update their own health alerts | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `health_alerts` | Users can delete their own health alerts | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `weekly_report_settings` | Users can view their own report settings | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `weekly_report_settings` | Users can create their own report settings | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `weekly_report_settings` | Users can update their own report settings | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `weekly_reports` | Users can view their own reports | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `weekly_reports` | Users can create their own reports | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `purchase_history` | Users can view their own purchase history | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `purchase_history` | Users can insert their own purchase history | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `purchase_history` | Users can update their own purchase history | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `purchase_history` | Users can delete their own purchase history | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `communication_preferences` | Users can view their own communication preferences | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `communication_preferences` | Users can insert their own communication preferences | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `communication_preferences` | Users can update their own communication preferences | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `communication_preferences` | Users can delete their own communication preferences | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `life_events` | Users can view their own life events | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `life_events` | Users can insert their own life events | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `life_events` | Users can update their own life events | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `life_events` | Users can delete their own life events | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `contact_time_analysis` | Users can view their own contact time analysis | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `contact_time_analysis` | Users can insert their own contact time analysis | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `contact_time_analysis` | Users can update their own contact time analysis | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `contact_time_analysis` | Users can delete their own contact time analysis | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `offer_suggestions` | Users can view their own offer suggestions | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `offer_suggestions` | Users can insert their own offer suggestions | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `offer_suggestions` | Users can update their own offer suggestions | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `offer_suggestions` | Users can delete their own offer suggestions | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `contact_cadence` | Users can view their own contact cadence | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `contact_cadence` | Users can create their own contact cadence | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `contact_cadence` | Users can update their own contact cadence | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `contact_cadence` | Users can delete their own contact cadence | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `contact_preferences` | Users can view their own contact preferences | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `contact_preferences` | Users can create their own contact preferences | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `contact_preferences` | Users can update their own contact preferences | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `contact_preferences` | Users can delete their own contact preferences | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `score_history` | Users can view their own score history | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `score_history` | Users can insert their own score history | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `score_history` | Users can delete their own score history | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `social_profiles` | Users can view their own social profiles | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `social_profiles` | Users can insert their own social profiles | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `social_profiles` | Users can update their own social profiles | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `social_profiles` | Users can delete their own social profiles | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `social_life_events` | Users can view their own social life events | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `social_life_events` | Users can insert their own social life events | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `social_life_events` | Users can update their own social life events | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `social_life_events` | Users can delete their own social life events | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `social_behavior_analysis` | Users can view their own social behavior analysis | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `social_behavior_analysis` | Users can insert their own social behavior analysis | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `social_behavior_analysis` | Users can update their own social behavior analysis | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `social_behavior_analysis` | Users can delete their own social behavior analysis | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `social_scraping_schedule` | Users can view their own scraping schedule | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `social_scraping_schedule` | Users can insert their own scraping schedule | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `social_scraping_schedule` | Users can update their own scraping schedule | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `social_scraping_schedule` | Users can delete their own scraping schedule | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `rfm_analysis` | Users can manage their own RFM analysis | ALL | public | permissive | `auth.uid() = user_id` |  |
-| `rfm_history` | Users can view their own RFM history | ALL | public | permissive | `auth.uid() = user_id` |  |
-| `rfm_segment_config` | Users can manage their RFM segment config | ALL | public | permissive | `auth.uid() = user_id` |  |
-| `rfm_metrics` | Users can view their RFM metrics | ALL | public | permissive | `auth.uid() = user_id` |  |
-| `disc_analysis_history` | Users can view their own DISC analysis history | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `disc_analysis_history` | Users can create their own DISC analysis | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `disc_analysis_history` | Users can delete their own DISC analysis | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `disc_communication_logs` | Users can view their own DISC communication logs | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `disc_communication_logs` | Users can create their own DISC communication logs | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `disc_communication_logs` | Users can update their own DISC communication logs | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_ab_tests` | Users can view their own AB tests | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_ab_tests` | Users can create their own AB tests | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `trigger_ab_tests` | Users can update their own AB tests | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_ab_tests` | Users can delete their own AB tests | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_intensity_history` | Users can view their own intensity history | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_intensity_history` | Users can create their own intensity history | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `trigger_intensity_history` | Users can update their own intensity history | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_intensity_history` | Users can delete their own intensity history | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_channel_effectiveness` | Users can view their own channel effectiveness | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_channel_effectiveness` | Users can create their own channel effectiveness | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `trigger_channel_effectiveness` | Users can update their own channel effectiveness | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_channel_effectiveness` | Users can delete their own channel effectiveness | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `trigger_bundles` | Users can view their own bundles | SELECT | public | permissive | `auth.uid() = user_id OR is_system_bundle = true` |  |
-| `trigger_bundles` | Users can create their own bundles | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `trigger_bundles` | Users can update their own bundles | UPDATE | public | permissive | `auth.uid() = user_id AND is_system_bundle = false` |  |
-| `trigger_bundles` | Users can delete their own bundles | DELETE | public | permissive | `auth.uid() = user_id AND is_system_bundle = false` |  |
-| `contact_relatives` | Users can view their own contact_relatives | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `contact_relatives` | Users can insert their own contact_relatives | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `contact_relatives` | Users can update their own contact_relatives | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `contact_relatives` | Users can delete their own contact_relatives | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `whatsapp_messages` | Users can manage their own whatsapp_messages | ALL | public | permissive | `auth.uid() = user_id` | `auth.uid() = user_id` |
-| `whatsapp_instances` | Users can manage their own whatsapp_instances | ALL | public | permissive | `auth.uid() = user_id` | `auth.uid() = user_id` |
-| `whatsapp_kpis` | Users can manage their own whatsapp_kpis | ALL | public | permissive | `auth.uid() = user_id` | `auth.uid() = user_id` |
-| `lux_intelligence` | Users can view their own lux intelligence | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `lux_intelligence` | Users can insert their own lux intelligence | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `lux_intelligence` | Users can update their own lux intelligence | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `lux_intelligence` | Users can delete their own lux intelligence | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `disc_analysis_history` | Users can update their own disc_analysis_history | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `cognitive_bias_history` | Users can update their own cognitive_bias_history | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `emotional_states_history` | Users can update their own emotional_states_history | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `eq_analysis_history` | Users can update their own eq_analysis_history | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `vak_analysis_history` | Users can update their own vak_analysis_history | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `score_history` | Users can update their own score_history | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `metaprogram_analysis` | Users can update their own metaprogram_analysis | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `disc_communication_logs` | Users can delete their own disc_communication_logs | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `health_alert_settings` | Users can delete their own health_alert_settings | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `compatibility_settings` | Users can delete their own compatibility_settings | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `weekly_report_settings` | Users can delete their own weekly_report_settings | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `activities` | Users can update their own activities | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `activities` | Users can delete their own activities | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `weekly_reports` | Users can update their own weekly_reports | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `weekly_reports` | Users can delete their own weekly_reports | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
+| `alerts` | Users can insert their own alerts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `alerts` | Users can update their own alerts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `alerts` | Users can delete their own alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `activities` | Users can view their own activities | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `activities` | Users can insert their own activities | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `push_subscriptions` | Users can create their own subscriptions | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `push_subscriptions` | Users can update their own subscriptions | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `push_subscriptions` | Users can delete their own subscriptions | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_usage_history` | Users can view their own trigger usage history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_usage_history` | Users can insert their own trigger usage history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `trigger_usage_history` | Users can update their own trigger usage history | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_usage_history` | Users can delete their own trigger usage history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `favorite_templates` | Users can view their own favorites | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `favorite_templates` | Users can insert their own favorites | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `favorite_templates` | Users can delete their own favorites | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `vak_analysis_history` | Users can view their own VAK analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `vak_analysis_history` | Users can insert their own VAK analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `vak_analysis_history` | Users can delete their own VAK analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `metaprogram_analysis` | Users can view their own metaprogram analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `metaprogram_analysis` | Users can create their own metaprogram analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `metaprogram_analysis` | Users can delete their own metaprogram analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_alerts` | Users can view their own compatibility alerts | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_alerts` | Users can create their own compatibility alerts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `compatibility_alerts` | Users can update their own compatibility alerts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_alerts` | Users can delete their own compatibility alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_settings` | Users can view their own compatibility settings | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_settings` | Users can create their own compatibility settings | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `compatibility_settings` | Users can update their own compatibility settings | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `emotional_states_history` | Users can view their own emotional states history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `emotional_states_history` | Users can create their own emotional states history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `emotional_states_history` | Users can delete their own emotional states history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `emotional_anchors` | Users can view their own emotional anchors | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `emotional_anchors` | Users can create their own emotional anchors | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `emotional_anchors` | Users can update their own emotional anchors | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `emotional_anchors` | Users can delete their own emotional anchors | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `client_values` | Users can view their own client values | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `client_values` | Users can create their own client values | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `client_values` | Users can update their own client values | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `client_values` | Users can delete their own client values | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `decision_criteria` | Users can view their own decision criteria | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `decision_criteria` | Users can create their own decision criteria | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `decision_criteria` | Users can update their own decision criteria | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `decision_criteria` | Users can delete their own decision criteria | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `hidden_objections` | Users can view their own hidden objections | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `hidden_objections` | Users can create their own hidden objections | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `hidden_objections` | Users can update their own hidden objections | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `hidden_objections` | Users can delete their own hidden objections | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `eq_analysis_history` | Users can view their own EQ analysis history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `eq_analysis_history` | Users can create their own EQ analysis history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `eq_analysis_history` | Users can delete their own EQ analysis history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `cognitive_bias_history` | Users can view their own cognitive bias history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `cognitive_bias_history` | Users can create their own cognitive bias history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `cognitive_bias_history` | Users can delete their own cognitive bias history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `stakeholder_alerts` | Users can view their own stakeholder alerts | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `stakeholder_alerts` | Users can create their own stakeholder alerts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `stakeholder_alerts` | Users can update their own stakeholder alerts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `stakeholder_alerts` | Users can delete their own stakeholder alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `health_alert_settings` | Users can view their own health settings | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `health_alert_settings` | Users can create their own health settings | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `health_alert_settings` | Users can update their own health settings | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `health_alerts` | Users can view their own health alerts | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `health_alerts` | Users can create their own health alerts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `health_alerts` | Users can update their own health alerts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `health_alerts` | Users can delete their own health alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_report_settings` | Users can view their own report settings | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_report_settings` | Users can create their own report settings | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `weekly_report_settings` | Users can update their own report settings | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_reports` | Users can view their own reports | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_reports` | Users can create their own reports | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `purchase_history` | Users can view their own purchase history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `purchase_history` | Users can insert their own purchase history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `purchase_history` | Users can update their own purchase history | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `purchase_history` | Users can delete their own purchase history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `communication_preferences` | Users can view their own communication preferences | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `communication_preferences` | Users can insert their own communication preferences | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `communication_preferences` | Users can update their own communication preferences | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `communication_preferences` | Users can delete their own communication preferences | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `life_events` | Users can view their own life events | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `life_events` | Users can insert their own life events | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `life_events` | Users can update their own life events | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `life_events` | Users can delete their own life events | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_time_analysis` | Users can view their own contact time analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_time_analysis` | Users can insert their own contact time analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `contact_time_analysis` | Users can update their own contact time analysis | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_time_analysis` | Users can delete their own contact time analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `offer_suggestions` | Users can view their own offer suggestions | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `offer_suggestions` | Users can insert their own offer suggestions | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `offer_suggestions` | Users can update their own offer suggestions | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `offer_suggestions` | Users can delete their own offer suggestions | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_cadence` | Users can view their own contact cadence | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_cadence` | Users can create their own contact cadence | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `contact_cadence` | Users can update their own contact cadence | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_cadence` | Users can delete their own contact cadence | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_preferences` | Users can view their own contact preferences | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_preferences` | Users can create their own contact preferences | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `contact_preferences` | Users can update their own contact preferences | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_preferences` | Users can delete their own contact preferences | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `score_history` | Users can view their own score history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `score_history` | Users can insert their own score history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `score_history` | Users can delete their own score history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_profiles` | Users can view their own social profiles | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_profiles` | Users can insert their own social profiles | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `social_profiles` | Users can update their own social profiles | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_profiles` | Users can delete their own social profiles | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_life_events` | Users can view their own social life events | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_life_events` | Users can insert their own social life events | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `social_life_events` | Users can update their own social life events | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_life_events` | Users can delete their own social life events | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_behavior_analysis` | Users can view their own social behavior analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_behavior_analysis` | Users can insert their own social behavior analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `social_behavior_analysis` | Users can update their own social behavior analysis | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_behavior_analysis` | Users can delete their own social behavior analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_scraping_schedule` | Users can view their own scraping schedule | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_scraping_schedule` | Users can insert their own scraping schedule | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `social_scraping_schedule` | Users can update their own scraping schedule | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `social_scraping_schedule` | Users can delete their own scraping schedule | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `rfm_analysis` | Users can manage their own RFM analysis | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `rfm_history` | Users can view their own RFM history | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `rfm_segment_config` | Users can manage their RFM segment config | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `rfm_metrics` | Users can view their RFM metrics | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_analysis_history` | Users can view their own DISC analysis history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_analysis_history` | Users can create their own DISC analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `disc_analysis_history` | Users can delete their own DISC analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_communication_logs` | Users can view their own DISC communication logs | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_communication_logs` | Users can create their own DISC communication logs | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `disc_communication_logs` | Users can update their own DISC communication logs | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_ab_tests` | Users can view their own AB tests | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_ab_tests` | Users can create their own AB tests | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `trigger_ab_tests` | Users can update their own AB tests | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_ab_tests` | Users can delete their own AB tests | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_intensity_history` | Users can view their own intensity history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_intensity_history` | Users can create their own intensity history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `trigger_intensity_history` | Users can update their own intensity history | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_intensity_history` | Users can delete their own intensity history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_channel_effectiveness` | Users can view their own channel effectiveness | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_channel_effectiveness` | Users can create their own channel effectiveness | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `trigger_channel_effectiveness` | Users can update their own channel effectiveness | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_channel_effectiveness` | Users can delete their own channel effectiveness | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_bundles` | Users can view their own bundles | SELECT | authenticated | permissive | `(((select auth.uid()) = user_id) OR (is_system_bundle = true))` |  |
+| `trigger_bundles` | Users can create their own bundles | INSERT | authenticated | permissive |  | `(((select auth.uid()) = user_id) AND (COALESCE(is_system_bundle, false) = false))` |
+| `trigger_bundles` | Users can update their own bundles | UPDATE | authenticated | permissive | `(((select auth.uid()) = user_id) AND (is_system_bundle = false))` |  |
+| `trigger_bundles` | Users can delete their own bundles | DELETE | authenticated | permissive | `(((select auth.uid()) = user_id) AND (is_system_bundle = false))` |  |
+| `contact_relatives` | Users can view their own contact_relatives | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_relatives` | Users can insert their own contact_relatives | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `contact_relatives` | Users can update their own contact_relatives | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_relatives` | Users can delete their own contact_relatives | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `whatsapp_messages` | Users can manage their own whatsapp_messages | ALL | public | permissive | `((select auth.uid()) = user_id)` | `((select auth.uid()) = user_id)` |
+| `whatsapp_instances` | Users can manage their own whatsapp_instances | ALL | public | permissive | `((select auth.uid()) = user_id)` | `((select auth.uid()) = user_id)` |
+| `whatsapp_kpis` | Users can manage their own whatsapp_kpis | ALL | public | permissive | `((select auth.uid()) = user_id)` | `((select auth.uid()) = user_id)` |
+| `lux_intelligence` | Users can view their own lux intelligence | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `lux_intelligence` | Users can insert their own lux intelligence | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `lux_intelligence` | Users can update their own lux intelligence | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `lux_intelligence` | Users can delete their own lux intelligence | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_analysis_history` | Users can update their own disc_analysis_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `cognitive_bias_history` | Users can update their own cognitive_bias_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `emotional_states_history` | Users can update their own emotional_states_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `eq_analysis_history` | Users can update their own eq_analysis_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `vak_analysis_history` | Users can update their own vak_analysis_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `score_history` | Users can update their own score_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `metaprogram_analysis` | Users can update their own metaprogram_analysis | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_communication_logs` | Users can delete their own disc_communication_logs | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `health_alert_settings` | Users can delete their own health_alert_settings | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_settings` | Users can delete their own compatibility_settings | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_report_settings` | Users can delete their own weekly_report_settings | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `activities` | Users can update their own activities | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `activities` | Users can delete their own activities | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_reports` | Users can update their own weekly_reports | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_reports` | Users can delete their own weekly_reports | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
 | `disc_profile_config` | Authenticated users can view DISC profile configs | SELECT | authenticated | permissive | `true` |  |
-| `automation_rules` | Users can view their own automation rules | SELECT | authenticated | permissive | `auth.uid() = user_id` |  |
-| `automation_rules` | Users can create their own automation rules | INSERT | authenticated | permissive |  | `auth.uid() = user_id` |
-| `automation_rules` | Users can update their own automation rules | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `automation_rules` | Users can delete their own automation rules | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `automation_logs` | Users can view their own automation logs | SELECT | authenticated | permissive | `auth.uid() = user_id` |  |
-| `automation_logs` | Users can create their own automation logs | INSERT | authenticated | permissive |  | `auth.uid() = user_id` |
-| `automation_logs` | Users can delete their own automation logs | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `deals` | Users can view own deals | SELECT | public | permissive | `auth.uid() = user_id` |  |
-| `deals` | Users can create own deals | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `deals` | Users can update own deals | UPDATE | public | permissive | `auth.uid() = user_id` |  |
-| `deals` | Users can delete own deals | DELETE | public | permissive | `auth.uid() = user_id` |  |
-| `automation_logs` | Users can only update own automation logs | UPDATE | authenticated | permissive | `auth.uid() = user_id` | `auth.uid() = user_id` |
-| `query_telemetry` | Users can view their own telemetry | SELECT | authenticated | permissive | `auth.uid() = user_id` |  |
-| `query_telemetry` | Users can insert their own telemetry | INSERT | authenticated | permissive |  | `auth.uid() = user_id` |
-| `query_telemetry` | Users can delete their own telemetry | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `user_roles` | Users can view their own roles | SELECT | authenticated | permissive | `auth.uid() = user_id` |  |
+| `automation_rules` | Users can view their own automation rules | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `automation_rules` | Users can create their own automation rules | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `automation_rules` | Users can update their own automation rules | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `automation_rules` | Users can delete their own automation rules | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `automation_logs` | Users can view their own automation logs | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `automation_logs` | Users can create their own automation logs | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `automation_logs` | Users can delete their own automation logs | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `automation_logs` | Users can only update own automation logs | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` | `((select auth.uid()) = user_id)` |
+| `query_telemetry` | Users can view their own telemetry | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `query_telemetry` | Users can insert their own telemetry | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `query_telemetry` | Users can delete their own telemetry | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `user_roles` | Users can view their own roles | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
 | `storage.objects` | Anyone can view company logos | SELECT | public | permissive | `bucket_id = 'company-logos'` |  |
 | `storage.objects` | Users can upload logos to their folder | INSERT | authenticated | permissive |  | `bucket_id = 'company-logos' AND (storage.foldername(name))[1] = auth.uid()::text` |
 | `storage.objects` | Users can update logos in their folder | UPDATE | authenticated | permissive | `bucket_id = 'company-logos' AND (storage.foldername(name))[1] = auth.uid()::text` | `bucket_id = 'company-logos' AND (storage.foldername(name))[1] = auth.uid()::text` |
 | `storage.objects` | Users can delete logos in their folder | DELETE | authenticated | permissive | `bucket_id = 'company-logos' AND (storage.foldername(name))[1] = auth.uid()::text` |  |
-| `user_roles` | Admins can view all roles | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `user_roles` | Admins can insert roles | INSERT | authenticated | permissive |  | `public.has_role(auth.uid(), 'admin')` |
-| `user_roles` | Admins can update roles | UPDATE | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `user_roles` | Admins can delete roles | DELETE | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `push_subscriptions` | Users can view own subscriptions limited | SELECT | authenticated | permissive | `auth.uid() = user_id` |  |
-| `disc_conversion_metrics` | Users can view their own DISC conversion metrics | SELECT | authenticated | permissive | `auth.uid() = user_id` |  |
-| `disc_conversion_metrics` | Users can insert their own DISC conversion metrics | INSERT | authenticated | permissive |  | `auth.uid() = user_id` |
-| `disc_conversion_metrics` | Users can update their own DISC conversion metrics | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `disc_conversion_metrics` | Users can delete their own DISC conversion metrics | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
+| `user_roles` | Admins can view all roles | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `user_roles` | Admins can insert roles | INSERT | authenticated | permissive |  | `has_role((select auth.uid()), 'admin'::app_role)` |
+| `user_roles` | Admins can update roles | UPDATE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `user_roles` | Admins can delete roles | DELETE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `push_subscriptions` | Users can view own subscriptions limited | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_conversion_metrics` | Users can view their own DISC conversion metrics | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_conversion_metrics` | Users can insert their own DISC conversion metrics | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `disc_conversion_metrics` | Users can update their own DISC conversion metrics | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_conversion_metrics` | Users can delete their own DISC conversion metrics | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
 | `storage.objects` | Contact avatars are publicly accessible | SELECT | public | permissive | `bucket_id = 'contact-avatars'` |  |
 | `storage.objects` | Users can upload contact avatars | INSERT | authenticated | permissive |  | `bucket_id = 'contact-avatars' AND (auth.uid())::text = (storage.foldername(name))[1]` |
 | `storage.objects` | Users can update contact avatars | UPDATE | authenticated | permissive | `bucket_id = 'contact-avatars' AND (auth.uid())::text = (storage.foldername(name))[1]` |  |
 | `storage.objects` | Users can delete contact avatars | DELETE | authenticated | permissive | `bucket_id = 'contact-avatars' AND (auth.uid())::text = (storage.foldername(name))[1]` |  |
 | `realtime.messages` | Users can only access their own realtime channels | ALL | authenticated | permissive | `realtime.topic() LIKE ((auth.uid())::text \|\| ':%')` | `realtime.topic() LIKE ((auth.uid())::text \|\| ':%')` |
-| `schema_drift_alerts` | Admins can view schema drift alerts | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `schema_drift_alerts` | Admins can update schema drift alerts | UPDATE | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `schema_drift_alerts` | Users can insert their own schema drift alerts | INSERT | authenticated | permissive |  | `auth.uid() = user_id` |
-| `lux_webhook_config` | Admins can view lux_webhook_config | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `lux_webhook_config` | Admins can insert lux_webhook_config | INSERT | authenticated | permissive |  | `public.has_role(auth.uid(), 'admin')` |
-| `lux_webhook_config` | Admins can update lux_webhook_config | UPDATE | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `lux_webhook_config` | Admins can delete lux_webhook_config | DELETE | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `secret_rotation_log` | Admins can view secret rotation logs | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `secret_rotation_log` | Admins can insert secret rotation logs | INSERT | authenticated | permissive |  | `public.has_role(auth.uid(), 'admin')` |
-| `secret_rotation_log` | Admins can delete secret rotation logs | DELETE | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `sales_team_members` | Users can view their own team members | SELECT | authenticated | permissive | `auth.uid() = user_id` |  |
-| `sales_team_members` | Admins can view all team members | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `sales_team_members` | Users can insert their own team members | INSERT | authenticated | permissive |  | `auth.uid() = user_id` |
-| `sales_team_members` | Users can update their own team members | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `sales_team_members` | Users can delete their own team members | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `lead_routing_rules` | Users can view their own routing rules | SELECT | authenticated | permissive | `auth.uid() = user_id` |  |
-| `lead_routing_rules` | Admins can view all routing rules | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| `lead_routing_rules` | Users can insert their own routing rules | INSERT | authenticated | permissive |  | `auth.uid() = user_id` |
-| `lead_routing_rules` | Users can update their own routing rules | UPDATE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `lead_routing_rules` | Users can delete their own routing rules | DELETE | authenticated | permissive | `auth.uid() = user_id` |  |
-| `lead_assignments` | Users can view their own assignments | SELECT | authenticated | permissive | `auth.uid() = user_id` |  |
-| `lead_assignments` | Admins can view all assignments | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
-| … +517 linhas — lista completa em `context.json` | | | | | | |
+| `schema_drift_alerts` | Admins can view schema drift alerts | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `schema_drift_alerts` | Admins can update schema drift alerts | UPDATE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `schema_drift_alerts` | Users can insert their own schema drift alerts | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `lux_webhook_config` | Admins can view lux_webhook_config | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `lux_webhook_config` | Admins can insert lux_webhook_config | INSERT | authenticated | permissive |  | `has_role((select auth.uid()), 'admin'::app_role)` |
+| `lux_webhook_config` | Admins can update lux_webhook_config | UPDATE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `lux_webhook_config` | Admins can delete lux_webhook_config | DELETE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `secret_rotation_log` | Admins can view secret rotation logs | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `secret_rotation_log` | Admins can insert secret rotation logs | INSERT | authenticated | permissive |  | `has_role((select auth.uid()), 'admin'::app_role)` |
+| `secret_rotation_log` | Admins can delete secret rotation logs | DELETE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `sales_team_members` | Users can view their own team members | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `sales_team_members` | Admins can view all team members | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `sales_team_members` | Users can insert their own team members | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `sales_team_members` | Users can update their own team members | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `sales_team_members` | Users can delete their own team members | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_routing_rules` | Users can view their own routing rules | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_routing_rules` | Admins can view all routing rules | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `lead_routing_rules` | Users can insert their own routing rules | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `lead_routing_rules` | Users can update their own routing rules | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_routing_rules` | Users can delete their own routing rules | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_assignments` | Users can view their own assignments | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_assignments` | Admins can view all assignments | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `lead_assignments` | Users can insert their own assignments | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `lead_assignments` | Users can update their own assignments | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_assignments` | Users can delete their own assignments | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `handoff_requests` | Users can view their own handoff requests | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `handoff_requests` | Admins can view all handoff requests | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `handoff_requests` | Users can insert their own handoff requests | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `handoff_requests` | Users can update their own handoff requests | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `handoff_requests` | Users can delete their own handoff requests | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `redistribution_log` | Users can view their own redistribution logs | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `redistribution_log` | Admins can view all redistribution logs | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
+| `redistribution_log` | Users can insert their own redistribution logs | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
+| `lead_scores` | Users can view their own lead scores | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_scores` | Users can insert their own lead scores | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `lead_scores` | Users can update their own lead scores | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_scores` | Users can delete their own lead scores | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_score_history` | Users can view their own score history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `lead_score_history` | Users can insert their own score history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `lead_score_config` | Users can view their own config | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| … +527 linhas — lista completa em `context.json` | | | | | | |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -617,7 +617,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `compatibility_alerts` | `compatibility_score` | obrigatório |
 | `compatibility_alerts` | `threshold` | obrigatório |
 | `compatibility_alerts` | `alert_type` | default 'below_threshold' |
-| … +2211 linhas — lista completa em `context.json` | | |
+| … +2310 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -625,11 +625,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 |---|---|---|---|---|
 | update_communication_preferences_updated_at | BEFORE UPDATE | `communication_preferences` | `update_updated_at_column` |  |
 | update_disc_conversion_metrics_updated_at | BEFORE UPDATE | `disc_conversion_metrics` | `update_updated_at_column` |  |
-| tg_intent_signals_enqueue_score | AFTER INSERT | `intent_signals` | `trigger_lead_score_recompute` |  |
-| tg_lead_score_rules_updated | BEFORE UPDATE | `lead_score_rules` | `update_updated_at_column` |  |
-| tg_lead_score_thresholds_updated | BEFORE UPDATE | `lead_score_thresholds` | `update_updated_at_column` |  |
-| tg_lead_scores_audit | AFTER INSERT OR DELETE OR UPDATE | `lead_scores` | `audit_trigger_fn` |  |
-| tg_lead_scores_updated | BEFORE UPDATE | `lead_scores` | `update_updated_at_column` |  |
 | update_life_events_updated_at | BEFORE UPDATE | `life_events` | `update_updated_at_column` |  |
 | update_lux_intelligence_updated_at | BEFORE UPDATE | `lux_intelligence` | `update_updated_at_column` |  |
 | trg_mprl_touch | BEFORE UPDATE | `migration_password_reset_log` | `tg_mprl_touch_updated_at` |  |
@@ -693,6 +688,11 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | audit_intent_signals | AFTER INSERT OR UPDATE OR DELETE | `intent_signals` | `audit_trigger_fn` |  |
 | update_intent_scores_updated_at | BEFORE UPDATE | `intent_scores` | `update_updated_at_column` |  |
 | update_intent_pixels_updated_at | BEFORE UPDATE | `intent_tracking_pixels` | `update_updated_at_column` |  |
+| tg_lead_scores_audit | AFTER INSERT OR UPDATE OR DELETE | `lead_scores` | `audit_trigger_fn` |  |
+| tg_lead_scores_updated | BEFORE UPDATE | `lead_scores` | `update_updated_at_column` |  |
+| tg_lead_score_rules_updated | BEFORE UPDATE | `lead_score_rules` | `update_updated_at_column` |  |
+| tg_lead_score_thresholds_updated | BEFORE UPDATE | `lead_score_thresholds` | `update_updated_at_column` |  |
+| tg_intent_signals_enqueue_score | AFTER INSERT | `intent_signals` | `trigger_lead_score_recompute` |  |
 | trg_win_loss_reasons_updated | BEFORE UPDATE | `win_loss_reasons` | `update_updated_at_column` |  |
 | trg_competitors_updated | BEFORE UPDATE | `competitors` | `update_updated_at_column` |  |
 | trg_win_loss_records_updated | BEFORE UPDATE | `win_loss_records` | `update_updated_at_column` |  |
@@ -814,14 +814,15 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | trg_notify_admins_critical_behavioral | AFTER INSERT | `system_alerts` | `notify_admins_on_critical_behavioral_alert` |  |
 | system_config_touch | BEFORE UPDATE | `system_config` | `touch_system_config` |  |
 | update_data_retention_policies_updated_at | BEFORE UPDATE | `data_retention_policies` | `update_updated_at_column` |  |
+| trg_customer_purchases_after_insert | AFTER INSERT | `customer_purchases` | `trg_after_purchase` |  |
+| trg_valida_dominio_signup | BEFORE INSERT | `auth.users` | `fn_valida_dominio_signup` |  |
 | trg_rpc_plan_changed | BEFORE INSERT | `rpc_plan_snapshots` | `set_rpc_plan_changed` |  |
+| a_singu_sync_legacy_company_name | BEFORE INSERT OR UPDATE | `companies` | `singu_sync_legacy_company_name` |  |
 | sequence_enrollment_write_guard | BEFORE INSERT OR UPDATE | `sequence_enrollments` | `guard_sequence_enrollment_write` |  |
 | sequence_enrollment_counter | AFTER INSERT OR DELETE | `sequence_enrollments` | `refresh_sequence_enrollment_count` |  |
 | sequence_status_send_guard | BEFORE UPDATE OF STATUS | `sequences` | `guard_sequence_status_while_send` |  |
 | sequence_email_reservation_settle | AFTER UPDATE | `sequence_enrollments` | `settle_sequence_email_reservation` |  |
 | contact_sequence_archive_guard | BEFORE UPDATE OR DELETE | `contacts` | `guard_contact_sequence_archive` |  |
-| relationship_update | AFTER UPDATE | `rls_report_compat.interactions` | `record_update` |  |
-| deal_update | AFTER UPDATE | `rls_report_compat.deals` | `record_update` |  |
 
 Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banco):
 
@@ -893,6 +894,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `rodizio_segmentar_carteira` | This function is reserved for the service role | `supabase/migrations/20260924181919_rodizio_bloco2_motor.sql` |
 | `encerrar_vinculo_sdr_closer` | This function is reserved for the service role | `supabase/migrations/20260924214837_t215_hotfix_vincular_encerrar_sdr_closer_is_ativo.sql` |
 | `vincular_sdr_closer` | This function is reserved for the service role | `supabase/migrations/20260924214837_t215_hotfix_vincular_encerrar_sdr_closer_is_ativo.sql` |
+| `fn_valida_dominio_signup` | Cadastro não autorizado para este e-mail. Fale com o administrador do Singu. | `supabase/migrations/20260925102411_t219_restringe_signup_por_dominio.sql` |
 | `enroll_contact_in_workflow` | Forbidden | `supabase/migrations/20261006130000_frontend_rpcs_authenticated.sql` |
 | `get_marketing_funnel_stats` | Forbidden | `supabase/migrations/20261006130000_frontend_rpcs_authenticated.sql` |
 | `get_score_explicability` | Contact not found | `supabase/migrations/20261006130000_frontend_rpcs_authenticated.sql` |
@@ -972,6 +974,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `resume_sequence_email` | Proprietário divergente ou contato excluído | `supabase/migrations/20261012234200_resume_paused_sequence_email.sql` |
 | `resume_sequence_email` | Pausa alterada ou indisponível para retomada de email | `supabase/migrations/20261012234200_resume_paused_sequence_email.sql` |
 | `resume_sequence_email` | Etapa de email divergente | `supabase/migrations/20261012234200_resume_paused_sequence_email.sql` |
+| `dashboard_normalize_contact_phone` | Número de telefone inválido | `supabase/migrations/20261013033427_dashboard_source_contract.sql` |
 | `merge_records_atomically` | Autenticação obrigatória | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
 | `merge_records_atomically` | Entidade ou identificadores inválidos | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
 | `merge_records_atomically` | Substituições devem ser um objeto | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
@@ -1043,7 +1046,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `cs_accounts` | `lifecycle_stage` | `adopting`, `at_risk`, `churned`, `mature`, `onboarding` | `onboarding` |
 | `cs_qbrs` | `status` | `cancelled`, `completed`, `no_show`, `scheduled` | `scheduled` |
 | `cs_renewals` | `status` | `churned`, `downgraded`, `expanded`, `in_negotiation`, `renewed`, `upcoming` | `upcoming` |
-| `csat_surveys` | `status` | `answered`, `expired`, `pending`, `sent` | `pending` |
+| `csat_surveys` | `status` | `answered`, `ces`, `csat`, `custom`, `expired`, `nps`, `pending`, `sent` | `pending` |
 | `deal_forecasts` | `stage` | **livre (sem enum/CHECK)** |  |
 | `deal_room_milestones` | `status` | `blocked`, `done`, `in_progress`, `pending` | `pending` |
 | `deal_rooms` | `status` | `active`, `lost`, `paused`, `won` | `active` |
@@ -1108,6 +1111,9 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `tasks` | `status` | `cancelled`, `completed`, `in_progress`, `pending` | `pending` |
 | `ai_gateway_metrics` | `status` | `error`, `rate_limited`, `success`, `timeout` |  |
 | `ai_gateway_metrics` | `http_status` | **livre (sem enum/CHECK)** |  |
+| `rodizio_distribuicao_staging` | `status` | `APLICADO`, `APROVADO`, `RASCUNHO`, `REJEITADO` | `RASCUNHO` |
+| `cidades` | `estado_ibge` | **livre (sem enum/CHECK)** |  |
+| `company_addresses` | `estado` | **livre (sem enum/CHECK)** |  |
 | `sales` | `status` | `cancelled`, `completed`, `discovery`, `lead`, `negotiation`, `pending`, `proposal`, `qualification` | `pending` |
 | `_dormant.inactivity_alerts` | `status` | **livre (sem enum/CHECK)** | `active` |
 | `sequence_email_reservations` | `current_step` | **livre (sem enum/CHECK)** |  |
@@ -1434,6 +1440,12 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | passo_outcome | `respondeu_positivo`, `respondeu_neutro`, `nao_respondeu`, `nao_atendeu`, `pulou` | banco |
 | validation_kind | `email`, `phone` | banco |
 | validation_queue_status | `pending`, `processing`, `done`, `error` | banco |
+| email_type | `corporativo`, `pessoal`, `financeiro`, `nfe`, `marketing`, `comercial`, `compras` | banco |
+| phone_type | `celular_corporativo`, `fixo_comercial`, `celular_pessoal`, `invalido` | banco |
+| company_status | `ativo`, `inativo`, `suspenso` | banco |
+| salesperson_role | `sdr`, `closer`, `hybrid` | banco |
+| activity_type | `call`, `email`, `meeting`, `linkedin`, `whatsapp`, `other` | banco |
+| activity_outcome | `connected`, `no_answer`, `scheduled`, `voicemail`, `busy`, `callback`, `not_interested`, `qualified` | banco |
 | EvidenceKind | preference \| hobby \| tone | `src/components/contacts/EvidenceDrillDownSheet.tsx` |
 | PeriodFilter | 7d \| 30d \| 90d | `src/components/dashboard/charts/ChartDataUtils.ts` |
 | EmailBlockType | heading \| text \| button \| image \| divider \| spacer | `src/components/email-builder/types.ts` |
@@ -2257,11 +2269,19 @@ _nenhum item encontrado_
 | `v_entities` | `SELECT 'company'::public.entity_type AS entity_type, c.id, COALESCE(c.name, c.nome_fantasia, c.razao_social) AS display_name, c.email, c.phone, c.created_at, c.updated_at FROM public.companies c UNION ALL SELECT 'contact'::public.entity_type, p.id, TRIM(BOTH ' ' FROM CONCAT_WS(' ', p.first_name, p.l …` |
 | `v_life_events_audit` | `SELECT h.id, h.life_event_id, h.contact_id, h.user_id, COALESCE(p.first_name \|\| ' ' \|\| p.last_name, 'Sistema') as user_name, h.event_type, h.title, h.event_date, h.recurring, h.reminder_days_before, h.change_type, h.reason, h.changed_at FROM public.life_events_history h LEFT JOIN public.profiles p O …` |
 | `vw_contacts_nlp` | `SELECT c.id as contact_id, c.first_name, c.last_name, c.vak_dominant, c.motivation_direction, c.working_style, c.user_id FROM public.contacts c` |
+| `mv_daily_kpis` | `SELECT * FROM reporting.mv_daily_kpis` |
+| `mv_daily_stats` | `SELECT * FROM reporting.mv_daily_stats` |
+| `users_public` | `SELECT id, name, email, departamento, is_active, is_vendedor FROM public.users` |
+| `vw_rodizio_carga_closers` | `SELECT u.id AS closer_id, u.name AS closer_nome, u.is_active, u.ordem_rodizio, u.capacidade_max, u.afastado_ate, count(c.id) FILTER (WHERE COALESCE(crs.segmento, 'NAO_ATIVADO'::text) = 'ATIVO'::text) AS total_ativo, count(c.id) FILTER (WHERE COALESCE(crs.segmento, 'NAO_ATIVADO'::text) = 'NAO_ATIVADO …` |
+| `vw_rodizio_carga_sdrs` | `SELECT u.id AS sdr_id, u.name AS sdr_nome, u.is_active, u.ordem_rodizio, u.capacidade_max, u.afastado_ate, count(c.id) FILTER (WHERE COALESCE(crs.segmento, 'NAO_ATIVADO'::text) = 'NAO_ATIVADO'::text) AS total_nao_ativado, count(c.id) AS total_carteira FROM users u LEFT JOIN customers c ON c.sdr_id = …` |
+| `vw_rodizio_execucoes` | `SELECT e.id, e.tipo, e.modo, e.iniciado_em, e.finalizado_em, e.total_elegiveis, e.total_rotacionados, e.executado_por_id, u.name AS executado_por_nome, e.revertida_por_execucao_id, EXISTS (SELECT 1 FROM public.rodizio_execucoes r2 WHERE r2.revertida_por_execucao_id = e.id) AS foi_revertida, e.parame …` |
+| `vw_rodizio_bloqueios` | `SELECT s.customer_id, c.company_id, co.nome_crm AS company_nome, c.vendedor_id, c.vendedor_nome, s.bloqueado_ate, s.bloqueio_motivo, s.bloqueado_por_id, ub.name AS bloqueado_por_nome, s.bloqueio_aprovado_por_id, ua.name AS aprovado_por_nome, CASE WHEN s.bloqueado_ate IS NULL THEN 'NENHUM' WHEN s.blo …` |
+| `vw_rodizio_kpis` | `SELECT u.id AS closer_id, u.name AS closer_nome, count(c.id) FILTER (WHERE COALESCE(crs.segmento, 'NAO_ATIVADO'::text) = 'ATIVO'::text) AS total_ativo, count(c.id) FILTER (WHERE COALESCE(crs.segmento, 'NAO_ATIVADO'::text) = 'NAO_ATIVADO'::text) AS total_nao_ativado, count(c.id) FILTER (WHERE COALESC …` |
+| `vw_singu_data_health` | `WITH metrics AS ( SELECT (SELECT count(*) FROM public.companies WHERE user_id IS NOT NULL)::numeric / NULLIF((SELECT count(*) FROM public.companies), 0)::numeric * 100 AS pct_companies_uid, (SELECT count(*) FROM public.contacts WHERE user_id IS NOT NULL AND deleted_at IS NULL)::numeric / NULLIF((SEL …` |
 | `vw_active_alerts` | `SELECT ia.id, ia.alert_type, ia.contact_id, COALESCE(c.full_name, (c.first_name \|\| ' ') \|\| c.last_name) AS contact_name, ia.company_id, COALESCE(co.nome_crm, co.razao_social) AS company_name, ia.days_inactive, ia.last_interaction_date, ia.severity, ia.risk_score, ia.recommended_actions, ia.urgency_r …` |
 | `vw_contacts_sem_apelido` | `SELECT ct.id AS contact_id, ct.full_name, ct.first_name, ct.nome_tratamento, ct.apelido, ct.cargo, (SELECT ce.email FROM public.contact_emails ce WHERE ce.contact_id = ct.id AND ce.is_primary = true LIMIT 1) AS email, (SELECT cp.numero_normalizado FROM public.contact_phones cp WHERE cp.contact_id = …` |
 | `vw_pending_followups` | `SELECT i.id AS interaction_id, i.contact_id, COALESCE(c.full_name, (c.first_name \|\| ' ') \|\| c.last_name) AS contact_name, (SELECT ce.email FROM public.contact_emails ce WHERE ce.contact_id = c.id AND ce.is_primary = true LIMIT 1) AS contact_email, COALESCE(co.nome_crm, co.razao_social) AS company_na …` |
 | `vw_interacoes_sem_apelido` | `SELECT i.id AS interaction_id, i.contact_id, (c.first_name \|\| ' ') \|\| COALESCE(c.last_name, '') AS full_name, NULL::text AS nome_tratamento, i.company_id, co.nome_crm AS empresa, i.channel AS canal, i.data_interacao, i.created_by, i.usuario_responsavel_id AS vendedor, i.user_id FROM public.interacti …` |
-| `vw_singu_data_health` | `WITH metrics AS ( SELECT (SELECT count(*) FROM public.companies WHERE user_id IS NOT NULL)::numeric / NULLIF((SELECT count(*) FROM public.companies), 0)::numeric * 100 AS pct_companies_uid, (SELECT count(*) FROM public.contacts WHERE user_id IS NOT NULL AND deleted_at IS NULL)::numeric / NULLIF((SEL …` |
 
 ### G.3 Funções de cálculo/decisão no código
 
@@ -3045,10 +3065,6 @@ _nenhum item encontrado_
   ```
   return ` <!DOCTYPE html> <html> <head> <style> body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; } .container { max-width: 600px; margin: 0 auto; padding: 20px; } .header { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 30px; border-radius: 12px 12px 0 0; } .content { background: #f8fafc; padding: 30px; border-radius: 0 0 12px 12px; } .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; } …
   ```
-- **applyEdits(sql, edits)** — `tests/rls/prepare-sql.mjs`
-  ```
-  let result = ''; let offset = 0; for (const { start, end, text } of edits.sort((a, b) => a.start - b.start)) { result += sql.slice(offset, start) + text; offset = end; } return result + sql.slice(offset);
-  ```
 
 ### G.4 Percentuais e multiplicadores no código
 
@@ -3252,8 +3268,6 @@ _nenhum item encontrado_
 | `// ─── Health score (0-100) ─── coverage 40% + balance (1-gini) 40% + conversion 20%` | `supabase/functions/territory-optimization/index.ts` |
 | `else if (avgCompanies > 0 && companies < avgCompanies * 0.5 && isAssigned) status = "overserved";` | `supabase/functions/territory-optimization/index.ts` |
 | `return avgCompanies > 0 && c < avgCompanies * 0.5 && (t.assigned_to \|\| assignedTerritoryIds.has(t.id));` | `supabase/functions/territory-optimization/index.ts` |
-| `http_req_duration: ['p(95)<2000'], // 95% < 2s` | `tests/load/external-data.js` |
-| `http_req_failed: ['rate<0.01'], // <1% errors` | `tests/load/external-data.js` |
 
 ## H. Parâmetros de negócio (constantes, prazos, limites)
 
@@ -3730,7 +3744,7 @@ _nenhum item encontrado_
 | `const in60Minutes = addMinutes(now, 60);` | `src/hooks/usePreContactBriefing.ts` |
 | `gcTime: 5 * 60 * 1000,` | `src/hooks/usePreContactBriefing.ts` |
 | `refetchInterval: 5 * 60 * 1000,` | `src/hooks/usePreContactBriefing.ts` |
-| … +245 linhas — lista completa em `context.json` | |
+| … +208 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -4046,51 +4060,111 @@ _nenhum item encontrado_
 | ) {     targetUrl =  | `public/sw-push.js` |
 | :       return [         { action:  | `public/sw-push.js` |
 | :     case  | `public/sw-push.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/apply-all.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/apply-functions.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/apply-migrations.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/apply-missing.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/apply-remaining.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/apply-rls.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/apply-triggers-views.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/chunk-apply.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/fix-enums.js` |
-| SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro | `scripts/retry-failed.js` |
+| ${flag} exige um caminho | `scripts/audit-ausentes.mjs` |
+| ${join(raiz, exigido)} não existe (use --raiz) | `scripts/audit-ausentes.mjs` |
+| nenhuma tabela reconhecida em src/integrations/supabase/types.ts (o formato mudou?) | `scripts/audit-ausentes.mjs` |
+| ${join(raiz, exigido)} não existe (use --raiz) | `scripts/diff-tables.mjs` |
+| --raiz exige um caminho | `scripts/diff-tables.mjs` |
+| nenhuma tabela reconhecida em src/integrations/supabase/types.ts (o formato mudou?) | `scripts/diff-tables.mjs` |
+| não consegui resolver ${host} (${e.code ?? e.message}) | `scripts/gen-supabase-types.mjs` |
 | ${msg}: esperado ${JSON.stringify(b)} obtido ${JSON.stringify(a)} | `scripts/ai-context/cenarios.mjs` |
-| --entrada exige o caminho do arquivo com a resposta do banco.sql | `scripts/inventario/gerar-banco.mjs` |
+| não é um objeto JSON | `scripts/ai-context/gerar.mjs` |
+| SQL de cenário falhou: ${r.stderr \|\| r.erro} | `scripts/hardening/_pg-teste.mjs` |
+| ${flag} exige o caminho de um arquivo | `scripts/inventario/gerar-banco.mjs` |
+| --functions: o arquivo nao e JSON | `scripts/inventario/gerar-banco.mjs` |
+| Management API ${caminho} nao devolveu JSON | `scripts/inventario/gerar-banco.mjs` |
 | Management API ${caminho} respondeu HTTP ${res.status} | `scripts/inventario/gerar-banco.mjs` |
+| SUPABASE_API_URL so aceita 127.0.0.1/localhost (e para teste). | `scripts/inventario/gerar-banco.mjs` |
 | SUPABASE_PROJECT_REF=${ref} nao e o banco oficial (${PROJETO_OFICIAL}). | `scripts/inventario/gerar-banco.mjs` |
+| a lista de edge functions publicadas nao e uma lista de { slug, ... } | `scripts/inventario/gerar-banco.mjs` |
 | a resposta nao parece ser do banco oficial: ${comuns} tabelas em comum com o manifesto  | `scripts/inventario/gerar-banco.mjs` |
 | a resposta nao parece ser do banco oficial: ledger com ${registros} registros e maior versao ${max};  | `scripts/inventario/gerar-banco.mjs` |
 | a resposta nao traz resumo.ledger_versao_max/ledger_registros; rode o banco.sql atual. | `scripts/inventario/gerar-banco.mjs` |
 | a saida tem algo com cara de credencial; nada foi gravado. Revise banco.sql. | `scripts/inventario/gerar-banco.mjs` |
+| entrada fora do formato do banco.sql atual: ${ruins.join( | `scripts/inventario/gerar-banco.mjs` |
 | entrada sem as chaves: ${faltando.join( | `scripts/inventario/gerar-banco.mjs` |
 | entrada sem tabelas | `scripts/inventario/gerar-banco.mjs` |
 | format_version ${dado.format_version} desconhecido (esperado 1) | `scripts/inventario/gerar-banco.mjs` |
+| nao consegui ler o arquivo de ${flag} (${arquivo}): ${e.code ?? e.message} | `scripts/inventario/gerar-banco.mjs` |
 | sem --entrada e sem SUPABASE_ACCESS_TOKEN: nada para ler (veja o cabecalho do script). | `scripts/inventario/gerar-banco.mjs` |
 | sem supabase/schema-manifest.json e sem migrations em supabase/migrations/  | `scripts/inventario/gerar-banco.mjs` |
+| ${FDIR} não existe: rode a partir do repositório (ou confira INVENTARIO_RAIZ). | `scripts/inventario/gerar-repo.mjs` |
+| --saida exige o caminho de uma pasta | `scripts/inventario/gerar-repo.mjs` |
 | ripgrep (rg) falhou com exit ${status}; o inventário não foi gerado. | `scripts/inventario/gerar-repo.mjs` |
 | ripgrep (rg) não encontrado; o inventário não pode ser gerado com segurança. | `scripts/inventario/gerar-repo.mjs` |
-| delete ${table}: ${error.message} | `scripts/migration/cdc/replay.ts` |
-| upsert ${table}: ${error.message} | `scripts/migration/cdc/replay.ts` |
+| dividirSql espera uma string | `scripts/lib/sql-split.mjs` |
+| enum ${nome} sem valores | `scripts/lib/sql-split.mjs` |
+| nome de enum inválido: ${nome} | `scripts/lib/sql-split.mjs` |
+| Bucket not found | `scripts/migration/_mock_supabase.ts` |
+| invalid_grant | `scripts/migration/_mock_supabase.ts` |
+| banco de teste precisa do prefixo g7_ | `scripts/migration/_pg_teste.ts` |
+| psql falhou em ${db}: ${r.err} | `scripts/migration/_pg_teste.ts` |
+| gravar ${TAB} (user ${l.user_id}, status ${l.status}): ${error.message} | `scripts/migration/reset-passwords.ts` |
+| ler ${TAB}: ${error.message} (rodou sql/create-reset-log.sql no destino?) | `scripts/migration/reset-passwords.ts` |
+| listUsers página ${page}: ${error.message} | `scripts/migration/reset-passwords.ts` |
+| LSN inválido:  | `scripts/migration/cdc/order-guard.ts` |
+| ${e.origem}: ${err instanceof SyntaxError ?  | `scripts/migration/cdc/replay.ts` |
+| ${u.origem}: LSN inválido  | `scripts/migration/cdc/replay.ts` |
+| DELETE em ${m.tabela} sem chave (REPLICA IDENTITY ausente) — recusado para não apagar a tabela inteira | `scripts/migration/cdc/replay.ts` |
+| TRUNCATE em ${schema}.${tabela} não é reproduzível via API — trate manualmente e remova a linha | `scripts/migration/cdc/replay.ts` |
+| ação desconhecida  | `scripts/migration/cdc/replay.ts` |
+| falha ao aplicar ${m.acao} em ${m.tabela} (lsn ${u.lsn}): ${(err as Error).message} | `scripts/migration/cdc/replay.ts` |
+| gravar checkpoint ${lsn}: ${error.message} | `scripts/migration/cdc/replay.ts` |
+| ler checkpoint: ${error.message} (rodou cdc/checkpoint.sql no destino?) | `scripts/migration/cdc/replay.ts` |
+| linha não é objeto JSON | `scripts/migration/cdc/replay.ts` |
+| mudança sem LSN fora de transação (drene com include-lsn=true) | `scripts/migration/cdc/replay.ts` |
+| mudança sem schema/table | `scripts/migration/cdc/replay.ts` |
+| transação sem LSN (drene com include-lsn=true) | `scripts/migration/cdc/replay.ts` |
+| transação v1 sem lsn/nextlsn (drene com include-lsn=true) | `scripts/migration/cdc/replay.ts` |
+| ${tabela}: ${error.message} | `scripts/migration/compliance/lgpd-snapshot.ts` |
+| ${tabela}: paginação não avançou (id repetido) | `scripts/migration/compliance/lgpd-snapshot.ts` |
 | HTTP ${r.status} | `scripts/migration/cutover/smoke-tests.ts` |
-| HTTP ${r.status}: ${await r.text()} | `scripts/migration/cutover/smoke-tests.ts` |
+| HTTP ${r.status}: ${corpo.slice(0, 120)} | `scripts/migration/cutover/smoke-tests.ts` |
+| HTTP 200 com corpo vazio | `scripts/migration/cutover/smoke-tests.ts` |
+| resposta não é lista | `scripts/migration/cutover/smoke-tests.ts` |
 | sem access_token | `scripts/migration/cutover/smoke-tests.ts` |
+| sem sessão (login falhou) | `scripts/migration/cutover/smoke-tests.ts` |
 | ::text]))),   CONSTRAINT activities_type_check CHECK ((type = ANY (ARRAY[ | `scripts/migration/ddl/02_tables.sql` |
 | ::text]))),   CONSTRAINT win_loss_insights_severity_check CHECK ((severity = ANY (ARRAY[ | `scripts/migration/ddl/02_tables.sql` |
 | ,        | `scripts/migration/ddl/08_functions.sql` |
 | ,       NEW.id::text,       notif_title,       NEW.message,       jsonb_build_object(          | `scripts/migration/ddl/08_functions.sql` |
-| Conexão, arquivos e nomes de tabelas válidos são obrigatórios | `scripts/migration/dr/create-drill-backup.mjs` |
 | Protocolo inválido | `scripts/migration/dr/create-drill-backup.mjs` |
 | login ${r.status} | `scripts/migration/monitoring/synthetic-checks.ts` |
+| login sem access_token | `scripts/migration/monitoring/synthetic-checks.ts` |
 | HTTP ${res.status} | `scripts/migration/storage/_lib.ts` |
-| list ${bucket}/${prefix} HTTP ${res.status}: ${await res.text()} | `scripts/migration/storage/_lib.ts` |
-| listBuckets falhou: HTTP ${res.status} ${await res.text()} | `scripts/migration/storage/_lib.ts` |
-| ETag mismatch em ${bucket}/${key}: local=${local} remoto=${etag} | `scripts/migration/storage/copy-objects.ts` |
+| list ${bucket}/${prefix} HTTP ${res.status}: ${redact(await res.text())} | `scripts/migration/storage/_lib.ts` |
+| list ${bucket}/${prefix}: resposta inesperada (não é lista) | `scripts/migration/storage/_lib.ts` |
+| list ${bucket}/${prefix}: servidor ignorou offset=${offset} (página repetida) — abortando para não entrar em loop | `scripts/migration/storage/_lib.ts` |
+| listBuckets falhou: HTTP ${res.status} ${redact(await res.text())} | `scripts/migration/storage/_lib.ts` |
+| listBuckets: resposta inesperada (não é lista) | `scripts/migration/storage/_lib.ts` |
+| timeout em ${rotulo} | `scripts/migration/storage/_lib.ts` |
+| list falhou | `scripts/migration/storage/_lib_test.ts` |
+| INFO da origem falhou: HTTP ${r.status} | `scripts/migration/storage/copy-large.ts` |
+| INFO da origem não trouxe tamanho válido | `scripts/migration/storage/copy-large.ts` |
+| chunk ${start}-${end} falhou: HTTP ${r.status} (esperado 206 Partial Content) | `scripts/migration/storage/copy-large.ts` |
+| chunk ${start}-${end} veio com ${pedaco.length} bytes | `scripts/migration/storage/copy-large.ts` |
+| upload destino falhou: HTTP ${upR.status} ${redact((await upR.text()).slice(0, 300))} | `scripts/migration/storage/copy-large.ts` |
+| verificação pós-upload falhou: destino HTTP ${d.status} com ${d.size} bytes (esperado ${origem.size}) — checkpoint mantido | `scripts/migration/storage/copy-large.ts` |
 | GET ${bucket}/${key} HTTP ${src.status} | `scripts/migration/storage/copy-objects.ts` |
-| PUT ${bucket}/${key} HTTP ${put.status}: ${await put.text()} | `scripts/migration/storage/copy-objects.ts` |
-| ${table}: ${error.message} | `scripts/migration/verify/dual-write-diverge.ts` |
-| sign ${r.status} | `scripts/migration/verify/storage-bytes.ts` |
+| PUT ${bucket}/${key} HTTP ${put.status}: ${redact((await put.text()).slice(0, 300))} | `scripts/migration/storage/copy-objects.ts` |
+| conteúdo baixado de ${bucket}/${key} não bate com o ETag da origem (md5=${md5Local} etag=${etagOrigem}) | `scripts/migration/storage/copy-objects.ts` |
+| download truncado de ${bucket}/${key}: origem diz ${size} bytes, vieram ${baixados} | `scripts/migration/storage/copy-objects.ts` |
+| verificação pós-upload de ${bucket}/${key}: ETag ${d.etag} ≠ MD5 ${md5Local} | `scripts/migration/storage/copy-objects.ts` |
+| verificação pós-upload de ${bucket}/${key}: HEAD HTTP ${d.status} | `scripts/migration/storage/copy-objects.ts` |
+| verificação pós-upload de ${bucket}/${key}: destino tem ${d.size} bytes, enviados ${baixados} | `scripts/migration/storage/copy-objects.ts` |
+| não deveria dormir | `scripts/migration/storage/copy-objects_test.ts` |
+| HTTP ${res.status}: ${redact((await res.text()).slice(0, 300))} | `scripts/migration/storage/create-buckets.ts` |
+| ${tabela}: ${error.message} | `scripts/migration/verify/dual-write-diverge.ts` |
+| ${tabela}: mais de ${maxLinhas} linhas na janela — reduza WINDOW_MIN | `scripts/migration/verify/dual-write-diverge.ts` |
+| destino: ${e instanceof Error ? e.message : e} | `scripts/migration/verify/storage-bytes.ts` |
+| download HTTP ${r.status} | `scripts/migration/verify/storage-bytes.ts` |
+| origem: ${e instanceof Error ? e.message : e} | `scripts/migration/verify/storage-bytes.ts` |
+| storage list falhou: HTTP ${res.status} | `scripts/migration/verify/storage-public-guard.ts` |
+| storage list: resposta inesperada (não é lista) | `scripts/migration/verify/storage-public-guard.ts` |
+| baseline ${ARQ} sem  | `scripts/rls-matrix/check-rls-baseline.mjs` |
+| baseline:  | `scripts/rls-matrix/check-rls-baseline.mjs` |
+| baseline: ${tabela}.${perfil} = ${JSON.stringify(n)} (esperado inteiro >= -1) | `scripts/rls-matrix/check-rls-baseline.mjs` |
+| nao consegui ler o baseline ${ARQ}: ${e.message} | `scripts/rls-matrix/check-rls-baseline.mjs` |
 | O teste offline não permite consultas ao banco | `scripts/supabase_snapshot/test_snapshot.py` |
 | banco indisponível na fixture | `scripts/supabase_snapshot/test_snapshot.py` |
 | catálogo indisponível na fixture | `scripts/supabase_snapshot/test_snapshot.py` |
@@ -4282,67 +4356,7 @@ _nenhum item encontrado_
 | Não foi possível copiar | `src/components/lux/CompanyIntelligence.tsx` |
 | Complete as 3 etapas para gerar o script | `src/components/neuromarketing/PainClaimGainBuilder.tsx` |
 | Não foi possível copiar | `src/components/neuromarketing/PainClaimGainBuilder.tsx` |
-| Não foi possível copiar | `src/components/nlp/ChunkingNavigator.tsx` |
-| Digite uma mensagem para analisar | `src/components/nlp/CommunicationCoherencePanel.tsx` |
-| Não foi possível copiar | `src/components/nlp/CommunicationCoherencePanel.tsx` |
-| Não foi possível copiar | `src/components/nlp/CopywritingSalesTools.tsx` |
-| Não foi possível copiar | `src/components/nlp/MiltonianCalibration.tsx` |
-| Erro ao carregar histórico de evolução | `src/components/nlp/NLPEvolutionTimeline.tsx` |
-| Não foi dessa vez | `src/components/nlp/NLPTrainingMode.tsx` |
-|  className= | `src/components/nlp/SleightOfMouthPanel.tsx` |
-| Erro ao atualizar status da análise | `src/components/nlp/SleightOfMouthPanel.tsx` |
-| Não autenticado | `src/components/nlp/SleightOfMouthPanel.tsx` |
-| Não foi possível copiar | `src/components/nlp/SleightOfMouthPanel.tsx` |
-| Não foi possível copiar | `src/components/nlp/StateElicitationToolkit.tsx` |
-| Não foi possível copiar | `src/components/nlp/SwishPatternGenerator.tsx` |
-| Não foi possível copiar | `src/components/nlp/UnifiedScriptGenerator.tsx` |
-| Erro ao gerar scripts com IA. | `src/components/nlp/copywriting/CopywritingAiGeneratorTab.tsx` |
-| Não foi possível copiar | `src/components/nlp/copywriting/CopywritingAiGeneratorTab.tsx` |
-| Erro ao gerar contorno de objeção. | `src/components/nlp/copywriting/CopywritingObjectionTab.tsx` |
-| Não foi possível copiar | `src/components/nlp/copywriting/CopywritingObjectionTab.tsx` |
-| Não foi possível copiar o link | `src/components/nps/SendSurveyDialog.tsx` |
-| E-mail da conta indisponível para concluir o cadastro. | `src/components/onboarding/OnboardingWizard.tsx` |
-| Erro ao salvar configurações. Tente novamente. | `src/components/onboarding/OnboardingWizard.tsx` |
-| Nenhum contato válido encontrado no arquivo | `src/components/onboarding/steps/ImportStep.tsx` |
-| Erro ao criar deal | `src/components/pipeline/CreateDealWidget.tsx` |
-| Informe o título do deal | `src/components/pipeline/CreateDealWidget.tsx` |
-| Erro ao atualizar deal | `src/components/pipeline/DealDetailDrawer.tsx` |
-| Erro ao atualizar status | `src/components/pipeline/DealDetailDrawer.tsx` |
-| Erro ao carregar empresas e contatos | `src/components/pipeline/DealDetailDrawer.tsx` |
-| Erro ao excluir deal | `src/components/pipeline/DealDetailDrawer.tsx` |
-| Erro ao carregar empresas e contatos | `src/components/pipeline/DealDialog.tsx` |
-| Erro ao criar deal. Verifique os campos e tente novamente. | `src/components/pipeline/DealDialog.tsx` |
-| Não foi possível copiar | `src/components/playbooks/PlaybookSectionRenderer.tsx` |
-| Não foi possível copiar | `src/components/proactive-intelligence/ProactiveIntelligencePanel.tsx` |
-| ; import { Button } from  | `src/components/revops/RevOpsAlertList.tsx` |
-| Limite de 10 presets atingido | `src/components/search/SearchPresetsMenu.tsx` |
-| Imagem muito grande. Máximo ${MAX_IMAGE_SIZE_MB}MB. | `src/components/search/VisualSearchButton.tsx` |
-| Selecione um arquivo de imagem. | `src/components/search/VisualSearchButton.tsx` |
-|  className= | `src/components/security/TwoFactorSetup.tsx` |
-|  className= | `src/components/sequences/SequenceEnrollDialog.tsx` |
-|  className= | `src/components/sequences/SequenceManualSteps.tsx` |
-|  className= | `src/components/sequences/SequencePausedEmails.tsx` |
-| Erro ao renovar sessão | `src/components/session/SessionExpiryHandler.tsx` |
-| ; import {   Tooltip,   TooltipContent,   TooltipProvider,   TooltipTrigger, } from  | `src/components/settings/ProntidaoDefaultsSection.tsx` |
-| Erro ao alterar configurações de push | `src/components/settings/TourPreferencesPanel.tsx` |
-| Erro ao ativar push notifications | `src/components/settings/TourPreferencesPanel.tsx` |
-| Notificações bloqueadas. Altere nas configurações do navegador. | `src/components/settings/TourPreferencesPanel.tsx` |
-| Permissão para notificações negada | `src/components/settings/TourPreferencesPanel.tsx` |
-| Não foi possível copiar | `src/components/support/CannedResponsesPanel.tsx` |
-| useTheme must be used within a ThemeProvider | `src/components/theme/ThemeProvider.tsx` |
-| Não foi possível carregar seu perfil de comunicação | `src/components/triggers/CommunicationTrainingMode.tsx` |
-| Resposta incorreta. Veja a explicação. | `src/components/triggers/CommunicationTrainingMode.tsx` |
-| Erro ao salvar configurações | `src/components/triggers/CompatibilityAlertSettings.tsx` |
-| Erro ao dispensar alerta | `src/components/triggers/CompatibilityAlertsList.tsx` |
-| Erro ao dispensar alertas | `src/components/triggers/CompatibilityAlertsList.tsx` |
-| Não foi possível carregar seu perfil de compatibilidade | `src/components/triggers/CompatibilityScore.tsx` |
-| Erro ao salvar perfil | `src/components/triggers/SalespersonProfileSettings.tsx` |
-| Não foi possível copiar | `src/components/triggers/SmartTemplateSuggestions.tsx` |
-| Erro ao salvar configurações | `src/components/triggers/TemplateNotificationSettings.tsx` |
-| Erro ao verificar templates | `src/components/triggers/TemplateNotificationSettings.tsx` |
-| Não foi possível ativar notificações push. Verifique as permissões do navegador. | `src/components/triggers/TemplateNotificationSettings.tsx` |
-| Selecione pelo menos um perfil DISC | `src/components/triggers/TemplateNotificationSettings.tsx` |
-| … +706 linhas — lista completa em `context.json` | |
+| … +752 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4372,10 +4386,8 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20260513143442_29ae388a-6dff-4a07-b25c-8d2b70aec893.sql` |
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
-| `admin` | `tests/rls/contact_relations_owner_scope.sql` |
-| `admin` | `tests/rls/psychographic_matrix.sql` |
 
-## K. Testes como especificação (2644 testes em 199 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (2969 testes em 222 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4406,41 +4418,58 @@ _nenhum item encontrado_
 | `src/data/__tests__/carnegieEncouragementFaceSaving.test.ts` | 34 | ENCOURAGEMENT_TEMPLATES — Data Integrity · has 7+ templates · each template has required fields · has unique IDs … |
 | `src/data/__tests__/metaprogramTemplates.test.ts` | 30 | Metaprogram Templates · has at least 5 templates · all templates have unique IDs · all templates have valid category … |
 | `src/components/interactions/insights/__tests__/SentimentDistributionChart.a11y.test.tsx` | 29 | SentimentDistributionChart — acessibilidade da legenda · renderiza um botão acessível por bucket clicável com aria-label e aria-pressed · destaca o bucket ativo com aria-pressed=true e sufixo (selecionado) no aria-label · Enter dispara onSelectBucket no item focado … |
+| `scripts/lib/supabase-mgmt.test.mjs` | 28 | config: padrões seguros e ref canônico igual ao do AGENTS.md · config: ref, URL e números vêm do ambiente e são validados · config: token com caractere inválido é recusado sem aparecer na mensagem · args: o padrão é simulação; --apply é explícito … |
 | `src/data/__tests__/triggerConflictsSynergiesMatrix.test.ts` | 25 | Trigger Conflicts Matrix: Data · has at least 40 conflicts · all conflicts have valid severity levels · all conflicts have reason and resolution … |
 | `src/test/telemetry/telemetry-charts.test.ts` | 25 | computeTimelineData · should return empty for empty rows · should bucket by 10-minute intervals for 1h filter · should bucket by 10-minute intervals for 6h filter … |
 | `src/data/__tests__/triggersAdvancedExtended.test.ts` | 24 | Advanced Mental Triggers · has at least 5 triggers · all triggers have matching id and key · all triggers have required fields … |
+| `scripts/check-edge-cors.test.mjs` | 23 | check-edge-cors: passes when no wildcard is present · check-edge-cors: fails when wildcard is present and function is NOT allowlisted · check-edge-cors: passes when wildcard function IS in the allowlist · check-edge-cors: comments and blank lines in allowlist are ignored … |
+| `scripts/apply-falhas.test.mjs` | 22 | 429 (com Retry-After) e 500/502/503 são repetidos com backoff e a execução termina bem · 5xx persistente: desiste após as retentativas, aborta, não envia o resto e sai 1 · timeout: requisição pendurada é abortada e repetida; a instrução acaba aplicada · timeout permanente: aborta com mensagem de timeout e sai 1 … |
+| `scripts/sql-raiz.test.mjs` | 21 | SQL da raiz: verificações estáticas · nenhum UUID real gravado e cabeçalho com propósito, uso e risco · scripts que alteram o banco: transação, ensaio por padrão e sem CASCADE · recreate_data_health_view.sql traz a MESMA definição da migration vigente … |
 | `src/__tests__/architecture-compliance.test.ts` | 21 | File Size Limits · no component file exceeds ${MAX_COMPONENT_LINES} lines · refactored CommunicationTrainingMode is under 250 lines · training subcomponents exist … |
 | `src/data/__tests__/nlpAdvancedCopywritingAdvanced.test.ts` | 21 | NLP Advanced - Emotional States · has at least 10 emotional states · keywords and info keys match · all states have at least 5 keywords … |
 | `src/types/__tests__/rfm.test.ts` | 21 | determineRFMSegment · classifica R=5 F=5 M=5 como champions · classifica R=4 F=4 M=4 como champions (limiar) · classifica alta frequência+monetário mas recência média como loyal_customers … |
 | `src/data/__tests__/carnegieExtended.test.ts` | 20 | Carnegie Yes-Ladder Templates · has at least 3 templates · all templates have unique IDs · all templates have at least 2 steps … |
+| `scripts/hardening/hardening.test.mjs` | 19 | hardening: checks de catálogo · banco limpo: todos passam, com cabeçalho e linha final padronizados · objetos legítimos que a versão antiga acusava não geram achado · somente leitura: todos rodam com default_transaction_read_only=on … |
+| `scripts/inventario/gerar-banco.test.mjs` | 19 | extrairInventario: aceita psql, objeto, linhas da API, resposta e envelope do MCP · extrairInventario: entradas degeneradas dão erro claro (nunca TypeError) · contarUsoNoCodigo: conta src e edges, ignora testes, storage.from e rpc; nomes hostis não poluem · versoesDoRepo, edgesNoRepo e edgesExternasCatalogadas leem só o que vale … |
+| `scripts/inventario/mudou-conteudo.test.mjs` | 18 | PADRAO cobre os cinco arquivos do inventário · carimbos de data e telemetria rolante não contam como mudança · texto dos alertas: porcentagem e horas rolam sem contar; entrar/sair da lista conta · mudança de verdade conta … |
 | `src/components/interactions/__tests__/SortChips.test.tsx` | 18 | SortChips · renderiza os 4 chips · chip ativo recebe aria-pressed=true · click em chip inativo chama onChange … |
 | `src/hooks/__tests__/canonical-communication-contracts.test.tsx` | 18 | Contratos canônicos da comunicação WhatsApp · consulta mensagens e transcrições reais e normaliza os aliases virtuais · rejeita metadados de duração incompatíveis · não converte erro da consulta de transcrições em lista vazia … |
 | `src/hooks/__tests__/contact-cache-concurrency.test.tsx` | 17 | Confirmações de contato não regridem com respostas concorrentes · descarta refetch anterior à gravação da ficha · descarta SELECT paginado anterior à gravação da lista · falha de A preserva confirmação posterior de B e o contrato paginado … |
 | `src/lib/__tests__/sanitize.test.ts` | 17 | Sanitize Lib · sanitizeHtml · should keep allowed tags · should remove dangerous tags and attributes … |
+| `scripts/check-bundle-size.test.mjs` | 16 | aprova build dentro do budget e marca o entry do index.html · falha quando o entry passa de 350 KB gzip · falha quando um chunk comum passa de 500 KB gzip · entry com nome fora do padrão (app-*.js) recebe o limite de entry … |
 | `src/__tests__/performance-and-a11y.test.ts` | 16 | Performance Optimizations · CompanyListItem uses React.memo · CompaniesTableView uses React.memo · ContactsTableView uses React.memo … |
 | `src/__tests__/integration/auth-flow.test.ts` | 16 | should handle parallel refresh session requests (race condition simulation) · Auth Flow Integration · Session Management · should retrieve existing session on init … |
 | `src/hooks/__tests__/canonical-conversation-contracts.test.tsx` | 16 | Análises de conversa usam JSON validado, sem cast de compatibilidade · normaliza os campos JSON e preserva nulabilidade e sugestões reais · preserva a ausência legítima de análise · propaga JSON incompatível: %j … |
 | `src/hooks/__tests__/canonical-side-effect-contracts.test.tsx` | 16 | Operações secundárias não geram sucesso quando falham · a leitura de destinatários existentes não é tratada como lista vazia · expõe erro da consulta de campanhas · a inscrição não anuncia sucesso se a contagem falhar … |
+| `scripts/gen-supabase-types.test.mjs` | 15 | jsonSchemaToTs: mapeia os tipos do PostgREST para TypeScript válido · chaveTs: identificador fica cru, o resto vai entre aspas · gerarTypes: tabelas x views, nulabilidade, ordem estável e sem carimbo de data · gerarTypes: OpenAPI vazio ou torto é recusado (não grava types vazio) … |
 | `src/__tests__/integration/resilience-patterns.test.ts` | 15 | Circuit Breaker Pattern · should open after threshold failures · Rate Limiter Pattern · should allow requests within limit … |
 | `src/data/__tests__/triggerBundles.test.ts` | 15 | Trigger Bundles Integrity · has at least 5 bundles · all bundles have unique IDs · has name in PT and EN … |
 | `src/hooks/useSocialInsights.test.tsx` | 15 | Histórico social sem dados fabricados · retorna vazio somente quando a consulta confirma ausência: %j · propaga uma rejeição de transporte sem gerar registros · não repete automaticamente consultas rejeitadas, mesmo com retry global … |
+| `scripts/apply-cli.test.mjs` | 14 | ${script}: importar não executa nada e expõe main/definicao · ${script}: cabeçalho documenta que o padrão é simulação e que aplicar exige --apply · ${script}: --help sai 0, explica as flags e não chama a API (mesmo sem token) · ${script}: sem flags (e com --dry-run) só simula — nenhuma requisição, mesmo com token no ambiente … |
+| `scripts/audit-ausentes.test.mjs` | 14 | chamadasFrom: aspas, crase,  · chamadasFrom: o exemplo é a linha de CADA ocorrência, inclusive a última linha sem \\n · tabelasDoTypes e funcoesDoTypes leem o formato do supabase gen types · chamadasRpc pega rpc com e sem argumentos … |
+| `scripts/lib/sql-split.test.mjs` | 14 | divisor: ${nome} · divisor: ${CASOS.length} casos declarados (dezenas, por exigência) · divisor: informa a linha (base 1) em que cada instrução começa · divisor: ${nome} sem fechamento lança ErroSqlMalformado com a linha … |
 | `src/components/interactions/__tests__/ActiveFiltersBar.onAfterRemove.test.tsx` | 14 | ActiveFiltersBar — contrato onAfterRemove · chip de busca: chama onAfterRemove uma única vez e setFilter( · chip de direção (inbound): uma única chamada e seta direcao=all · chip de pessoa: uma única chamada e limpa contact … |
 | `src/contexts/NavigationStackContext.test.tsx` | 14 | Histórico e retorno de navegação · percorre os índices reais do navegador sem apagar o avançar · usa uma visita anterior filtrada da seção, mesmo após visitar outra rota · prioriza o retorno contextual quando a seção é apenas um fallback … |
 | `src/data/__tests__/discAdvancedData.test.ts` | 14 | DISC Advanced Data Integrity · has exactly 4 DISC profiles · includes D, I, S, C · Profile %s … |
 | `src/hooks/__tests__/company-contracts.test.ts` | 14 | contrato canônico de empresas · produz aliases reais exclusivamente de colunas e relações canônicas · escolhe relação primária deterministicamente sem depender da ordem do payload · usa nome fantasia/razão social e mantém fallback de localização do nome … |
+| `tests/rls/prepare-sql.node-test.mjs` | 14 | preserva BEGIN/COMMIT em funções e comentários, removendo só o wrapper externo · preserva blocos DO, dollar tags Unicode e transações dentro de strings · preserva comentários aninhados e aspas duplicadas/escapadas · remove wrapper BEGIN/ROLLBACK da fixture mesmo na mesma linha … |
+| `scripts/rls-matrix/check-rls-baseline.test.mjs` | 13 | aprova quando o que cada perfil enxerga bate com o baseline · reprova: ${nome} · exposição menor: aprova, avisa e --update fixa o novo patamar · --update com piora grava, mas deixa a regressão aceita escrita no stderr … |
 | `src/data/__tests__/sleightOfMouth.test.ts` | 13 | Sleight of Mouth Patterns · has exactly 14 patterns (Robert Dilts) · all patterns have matching id and key · all patterns have required string fields … |
 | `src/data/__tests__/vakTemplates.test.ts` | 13 | VAK Adapted Templates · has at least 5 templates · all templates have unique IDs · all templates have base title … |
 | `src/hooks/__tests__/canonical-next-action-contract.test.tsx` | 13 | Contrato real da próxima melhor ação · confirma pelo ID persistido enviado pelo produtor e mantém o escopo do contato · envia contactId e recupera o ID persistido quando o produtor não retorna ID · rejeita resposta incompatível sem anunciar sucesso: %j … |
 | `src/test/providers.test.ts` | 13 | Provider Hierarchy Guard · validateProviderOrder · deve aceitar a ordem correta sem violações · deve detectar AuthProvider sem BrowserRouter acima … |
+| `scripts/check-backend-linter-baseline.test.mjs` | 12 | o teto do script é o documentado em linter-baseline.md · no teto: aprova e mostra a comparação · acima do teto: exit 1 com a contagem no stderr · abaixo do teto: aprova e avisa para apertar o ratchet … |
+| `scripts/lint-providers.test.mjs` | 12 | o repositório atual passa e o lint realmente encontra os providers · as dependências do lint são as mesmas de src/lib/providerGuard.ts · aprova a ordem certa num App.tsx só · reprova ${nome} … |
 | `src/data/__tests__/triggerTemplatesVAK.test.ts` | 12 | VAK Trigger Templates · has at least 20 templates · all templates have unique IDs · all templates have required fields … |
 | `src/hooks/__tests__/contact-contracts.test.ts` | 12 | contrato canônico de contatos · normaliza arrays legados e preserva a versão real · rejeita JSON de array inválido: %s · respeita arrays canônicos vazios em vez de ressuscitar aliases legados … |
 | `src/lib/externalData.contract.test.ts` | 12 | escrita versionada distingue conflito de versão de transação abortada · permite nova tentativa com a mesma versão após %s · preserva metadados do CONCURRENT_EDIT estruturado · preserva o marcador legado sem JSON … |
 | `src/lib/__tests__/validation-schemas.test.ts` | 12 | Validation Schemas Excellence · emailSchema · should validate a valid email · should normalize email to lowercase and trimmed … |
+| `scripts/hardening/hardening-cluster.test.mjs` | 11 | hardening: veredito coerente com a configuração do servidor de teste · check-replication-config acusa exatamente as configurações divergentes · check-client-tls acusa servidor com ssl desligado · hardening: cluster descartável com TLS e replicação lógica … |
+| `scripts/migration/sql/sql.test.mjs` | 11 | create-reset-log: cria tudo, é idempotente (2ª e 3ª execução sem erro) e preserva os dados · create-reset-log: UNIQUE(user_id), CHECK de status, updated_at automático e RLS (só admin lê; authenticated não escreve) · create-reset-log: é atômico — sem has_role() falha e NÃO deixa tabela pela metade · mark-must-reset: marca só quem tem login por senha, preserva metadados e não aborta com valor estranho (antes:  … |
 | `src/components/interactions/__tests__/SentimentQuickFilter.a11y.test.tsx` | 11 | SentimentQuickFilter — acessibilidade · expõe role=radiogroup com aria-label descritivo · todos os chips têm role=radio com aria-checked refletindo o estado · roving tabindex: somente o item ativo é alcançável por Tab … |
 | `src/hooks/useMFAGuard.test.tsx` | 11 | MFA administrativo · permite configurar MFA em AAL1 e preserva a URL sem mostrar a administração · não monta a tela protegida durante o carregamento do guard ou da confirmação MFA · aguarda a consulta de papel antes de mostrar qualquer conteúdo protegido … |
 | `src/hooks/__tests__/canonical-hook-contracts.test.tsx` | 11 | Contratos canônicos dos históricos de interação · preserva registros legados com tipo, canal e data nulos sem fabricar uma data · produz os aliases de domínio a partir dos campos reais da RPC · normaliza o retorno distinto da RPC de histórico unificado … |
 | `src/hooks/__tests__/canonical-mutation-contracts.test.tsx` | 11 | Mesclagem valida overrides antes de qualquer operação · rejeita valores incompatíveis com o campo canônico · não permite sobrescrever a coluna gerada full_name · envia overrides validados à transação de mesclagem e auditoria … |
-| `scripts/check-edge-cors.test.mjs` | 10 | check-edge-cors: passes when no wildcard is present · check-edge-cors: fails when wildcard is present and function is NOT allowlisted · check-edge-cors: passes when wildcard function IS in the allowlist · check-edge-cors: comments and blank lines in allowlist are ignored … |
 | `src/components/interactions/__tests__/IncrementalLoadStickyBar.test.tsx` | 10 | IncrementalLoadStickyBar · não renderiza quando total=0 · exibe estado de  · usa singular  … |
 | `src/components/navigation/__tests__/ScrollToTopButton.test.tsx` | 10 | ScrollToTopButton · não fica visível com scrollY=0 (default threshold) · fica visível quando scrollY > 400 (default) · respeita threshold customizado … |
 | `src/components/security/TwoFactorSetup.test.tsx` | 10 | Configuração e confirmação MFA · solicita código para um fator já cadastrado em uma sessão AAL1 · oferece confirmação explícita na recuperação mesmo que o SDK ainda retorne AAL2 · retoma configuração interrompida e não libera acesso com código inválido … |
@@ -4457,6 +4486,9 @@ _nenhum item encontrado_
 | `tests/e2e/hubs-smoke.spec.ts` | 9 | Hubs — smoke E2E (Rodada 50/10) · /abm redireciona anônimo para /auth · /abm/campanhas redireciona anônimo para /auth · /intent redireciona anônimo para /auth … |
 | `tests/e2e/navigation.spec.ts` | 9 | Autenticação e Navegação E2E · deve redirecionar usuário não autenticado para /auth · deve alternar entre Login e Cadastro no formulário · deve validar campos obrigatórios no login … |
 | `scripts/check-publish-gates.test.mjs` | 8 | RLS falha com ${scenario}, preservando baseline${update ?  · RLS aprova coleta completa e distingue negação SQL de JWT inválido · RLS continua detectando aumento de exposição · RLS permite atualizar baseline somente após coleta completa … |
+| `scripts/check-supabase-project-ref.test.mjs` | 8 | AGENTS.md declara o projeto Supabase canônico · supabase/config.toml aponta para o projeto canônico · supabase/.temp/linked-project.json aponta para o projeto canônico · a CSP do vite.config.ts permite conexão ao projeto canônico … |
+| `scripts/inventario/banco.test.mjs` | 8 | banco.sql roda limpo em transação só-leitura e imprime UMA linha com UM JSON · resumo: contagens batem com a fixture · tabelas: RLS, policies, triggers, linhas, partição e citação no banco · nomes com caractere de regex/Markdown: consulta não cai e a citação é exata … |
+| `scripts/inventario/gerar-repo.test.mjs` | 8 | edges.json: linhas, segredos lidos e quem chama cada função · tabelas-uso.json: conta .from() em src e edges e confere o types.ts · nomes hostis no stdin (começando com -, com regex, __proto__) não quebram nem viram opção do rg · repositório mínimo (sem src, e2e, migrations, workflows, types.ts) funciona … |
 | `src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx` | 8 | Registro da próxima ação com contrato de contato · registra %s no contato, sem inventar empresa · não anuncia sucesso sem a confirmação correta: %j · preserva o resumo quando o banco rejeita a chamada … |
 | `src/components/interactions/__tests__/DateRangePopover.shortcut.test.tsx` | 8 | DateRangePopover · atalho Alt+D · chama applyDateRange(undefined, undefined) quando há datas aplicadas · aceita Alt+D em maiúsculas (case-insensitive) · é no-op silencioso quando não há datas aplicadas … |
 | `src/components/interactions/__tests__/DensityChips.test.tsx` | 8 | DensityChips · renderiza dois botões com aria-pressed correto (comfortable ativo) · renderiza com aria-pressed refletindo compact quando ativo · expõe role= … |
@@ -4466,6 +4498,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/canonical-related-recovery-contracts.test.tsx` | 8 | Uploads privados compensam falhas posteriores · remove o mesmo objeto após falhar no %s · preserva a falha original e alerta quando a remoção também falha · Relações não enviam a carteira inteira na URL … |
 | `src/lib/externalData.delete-audit.test.ts` | 8 | Auditoria única após exclusão confirmada · grava somente um evento para %s com contexto do dono · preserva o sucesso se a auditoria lançar uma exceção · não registra exclusão se a mutação falhar … |
 | `src/pages/mapa/relationshipScores.contract.test.ts` | 8 | Score real de empresa no mapa · usa a medição mais recente e mantém score zero e ausência de score · não consulta a tabela global quando não há empresas autorizadas · pagina o histórico sem truncar empresas ainda não encontradas … |
+| `scripts/apply-e2e.test.mjs` | 7 | ${script}: banco vazio → aplica tudo; reexecução é idempotente (mesmo banco, saída 0, zero falha) · o SQL impresso por --sql, executado pelo psql (divisor independente), dá o mesmo banco que --apply · fix-enums → retry-failed → apply-missing → apply-remaining reconstroem o banco; cada passo é idempotente · instrução inválida de verdade num lote: as vizinhas entram, a culpada é nomeada, saída 1 — e o resultado é estável … |
 | `src/components/campaigns/__tests__/CampaignDetailDrawer.test.tsx` | 7 | CampaignDetailDrawer · returns null when no campaign provided · renders campaign name, subject and computed metric percentages · shows the send CTA only for drafts and triggers mutation on click … |
 | `src/components/interactions/__tests__/InfiniteScrollSentinel.density.test.tsx` | 7 | InfiniteScrollSentinel — densidade ambiente · usa  · lê  · DensityProvider tem prioridade sobre localStorage … |
 | `src/data/__tests__/cognitiveBiasesData.test.ts` | 7 | Cognitive Biases Data Integrity · has at least 4 bias categories · all categories have required fields · all category colors are valid tailwind classes … |
@@ -4487,7 +4520,9 @@ _nenhum item encontrado_
 | `src/lib/__tests__/rpcChurn.test.ts` | 6 | parseChurnWindow · aceita janelas válidas · cai no default para valores inválidos, nulos ou maliciosos · churnToCsv … |
 | `src/pages/MapaEmpresas.batch.test.tsx` | 6 | geolocalização do mapa · limita o trabalho automático, conserva as empresas mapeadas e exige continuação manual · cancela a requisição em andamento ao sair do mapa · atualiza inclusões, exclusões e coordenadas no refetch sem iniciar outro lote … |
 | `e2e/gap-modules-smoke.spec.ts` | 5 | Gap modules smoke (Rodada 28/10) · carrega ${label} (${path}) sem runtime error · Ask CRM: abre chat flutuante e envia pergunta · Landing page pública (Rodada 28/10) … |
+| `scripts/apply-ddl-real.test.mjs` | 5 | apply-all.js = aplicação de referência (mesmos objetos, mesmas falhas) e reexecução idempotente · chunk-apply.js chega ao mesmo banco que o apply-all.js com muito menos requisições · o SQL de  · apply-migrations.js: arquivo com instrução inválida não entra pela metade; saída coerente; estável ao repetir … |
 | `scripts/check-rls-profiles.test.mjs` | 5 | RLS rejeita JWT ${jwt ?  · RLS exige também os perfis declarados nos metadados · RLS não ignora perfil desconhecido no baseline · RLS permite coleta anônima quando somente esse perfil é exigido … |
+| `scripts/migration/ddl/ddl.test.mjs` | 5 | 99_apply_all.sql: inclui 00–11 uma vez cada, na ordem que respeita as dependências, com \\ir; 12 fica de fora · dependências que justificam a ordem existem de fato no dump · fixture supabase-stubs.sql é idempotente · dump COMO ESTÁ: os únicos erros são os defeitos conhecidos do gerador e suas cascatas … |
 | `src/components/contact-detail/SoftDeletePanel.test.tsx` | 5 | confirmação da lixeira sem depender de realtime · fecha o diálogo e invalida somente a ficha correta após arquivamento confirmado · invalida a ficha após restauração confirmada · mantém o diálogo e não anuncia sucesso com resposta inválida: %j … |
 | `src/components/interactions/__tests__/DateRangePopover.clear.integration.test.tsx` | 5 | DateRangePopover › Limpar período (integração com URL/hook) · remove  · remove apenas  · remove apenas  … |
 | `src/components/interactions/__tests__/ViewModeChips.test.tsx` | 5 | ViewModeChips · renderiza 3 chips · chip ativo tem aria-pressed=true · click chama onChange com a key correta … |
@@ -4507,7 +4542,6 @@ _nenhum item encontrado_
 | `tests/e2e/contacts.spec.ts` | 5 | Contatos CRUD & Filtros E2E · deve criar um novo contato e aparecer na lista · deve navegar para ficha 360 e validar rapport e histórico familiar · deve validar fluxo de aprovação de sugestões IA … |
 | `e2e/contacts-rapport.spec.ts` | 4 | Contacts Rapport & Intelligence · CRUD de contatos com Hobbies e Interesses · Filtro por Hobbies e Interesses · Ficha 360: Edição Inline de Família e Histórico |
 | `e2e/smoke.spec.ts` | 4 | SINGU Smoke Tests · jornada A: dashboard → criar contato · jornada B: pipeline → mover deal · jornada C: inbox → completar tarefa → desfazer |
-| `scripts/check-supabase-project-ref.test.mjs` | 4 | AGENTS.md declara o projeto Supabase canônico · supabase/config.toml aponta para o projeto canônico · supabase/.temp/linked-project.json aponta para o projeto canônico · a CSP do vite.config.ts permite conexão ao projeto canônico |
 | `src/components/analytics/DataHealthWidget.contract.test.tsx` | 4 | Contrato agregado da saúde dos dados · converte a escala de 0 a 10 e mostra os totais reais sem inventar tabelas · distingue pontuação ausente de zero real · distingue ausência de métricas de falha na consulta |
 | `src/components/contact-detail/__tests__/LifeEventsTab.test.tsx` | 4 | LifeEventsTab · renders correctly and shows the title · displays the gap checklist tab · displays the audit trail tab |
 | `src/components/crm/NextBestAction.contract.test.tsx` | 4 | Contrato canônico de conclusão de próxima ação · preserva o tipo permitido %s e informa canal e direção · registra %s como nota sem violar a constraint de tipo · não anuncia conclusão quando a gravação da interação falha |
@@ -4550,7 +4584,8 @@ _nenhum item encontrado_
 | `tests/integration/auth-external-data.test.ts` | 3 | Integration: Auth + External Data · should include auth token in external data calls · should handle concurrent edit errors (409) correctly |
 | `tests/integration/rate-limit.test.ts` | 3 | Integration: Edge Function Rate Limiting · should block requests exceeding the limit · should reset after the window expires |
 | `tests/security/xss-sanitization.test.ts` | 3 | Security: XSS Sanitization · should sanitize malicious HTML scripts · should sanitize javascript: links |
-| `scripts/check-deploy-timeout.test.mjs` | 2 | Prazo real dos health checks · Publicação com curl real e resposta local em ${seconds}s |
+| `scripts/check-deploy-timeout.test.mjs` | 2 | Prazo real dos health checks · Publicação com curl real e resposta local em ${seconds}s${TEMPO_REAL ?  |
+| `scripts/lib/mgmt-mock.test.mjs` | 2 | mock sem banco: 201 [], 401 com token errado, 404 em rota desconhecida, falha injetada · mock com banco: linhas tipadas, erro 400 com SQLSTATE e lote atômico como na API real |
 | `src/components/admin/conexoes/WebhookReplayButton.test.tsx` | 2 | WebhookReplayButton · envia replay administrativo autenticado sem expor o segredo HMAC |
 | `src/components/admin/conexoes/webhookSnippetBuilders.test.ts` | 2 | buildPythonWebhookSnippet · carrega booleanos e nulos como JSON antes de serializar |
 | `src/components/analytics/BehaviorAlertsPanel.contract.test.tsx` | 2 | recuperação da detecção de alertas · informa a falha, libera o botão e permite repetir a consulta |
@@ -4948,6 +4983,3 @@ _nenhum item encontrado_
 | FROM interactions WHERE company_id = p_company_id ORDER BY data_interacao DESC LIMIT 10) i | `supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql` |
 | FROM interactions WHERE company_id = p_company_id ORDER BY data_interacao DESC LIMIT 10) i | `supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql` |
 | ) DESC LIMIT p_limit; | `supabase/migrations/20261012120000_live_rpc_relations_contract.sql` |
-| Executar somente em clone local descartável: AUT03_ISOLATED=1 PGDATABASE=aut03_... node este-arquivo. | `tests/rls/contact-relation-concurrency.mjs` |
-| Em REPEATABLE READ, um snapshot antigo deve falhar fechado com erro de serialização. | `tests/rls/contact-relation-concurrency.mjs` |
-| Transações multioperação ainda podem deadlockar: a vítima deve reverter integralmente. | `tests/rls/contact-relation-concurrency.mjs` |

@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1fecfa69f5` · branch `main` · 2026-11-09 21:14 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2143482397` · branch `main` · 2026-11-10 00:59 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -8,7 +8,10 @@
 | Termo | Significado / valores | Tamanho | Origem |
 |---|---|---|---|
 | `_dormant.inactivity_alerts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 22 colunas | migration |
+| `_fk_orphans` | _(sem COMMENT ON TABLE — significado não documentado)_ | 4 colunas | migration |
 | `_migration_cdc_checkpoint` | _(sem COMMENT ON TABLE — significado não documentado)_ | 2 colunas | migration |
+| `_migration_schema_snapshot` | _(sem COMMENT ON TABLE — significado não documentado)_ | 3 colunas | migration |
+| `_seq_gap_report` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
 | `abm_account_plans` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
 | `abm_accounts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
 | `abm_buying_committee` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
@@ -39,12 +42,16 @@
 | `campaign_recipients` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `canned_responses` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `churn_risk_scores` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
+| `cidades` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
 | `city_whitelist` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
 | `client_values` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
 | `coaching_scorecards` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `cognitive_bias_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
 | `communication_preferences` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
-| `companies` | _(sem COMMENT ON TABLE — significado não documentado)_ | 30 colunas | migration |
+| `companies` | _(sem COMMENT ON TABLE — significado não documentado)_ | 29 colunas | migration |
+| `company_addresses` | _(sem COMMENT ON TABLE — significado não documentado)_ | 24 colunas | migration |
+| `company_emails` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
+| `company_phones` | _(sem COMMENT ON TABLE — significado não documentado)_ | 16 colunas | migration |
 | `compatibility_alerts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
 | `compatibility_settings` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `competitors` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
@@ -60,14 +67,14 @@
 | `contact_cadence` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
 | `contact_cadence_audit` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `contact_decision_making` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
-| `contact_emails` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
+| `contact_emails` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
 | `contact_family_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | migration |
 | `contact_influence` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `contact_metaprograms` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
-| `contact_next_actions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 16 colunas | migration |
+| `contact_next_actions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 18 colunas | migration |
 | `contact_objection_scripts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `contact_personality` | _(sem COMMENT ON TABLE — significado não documentado)_ | 21 colunas | migration |
-| `contact_phones` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
+| `contact_phones` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
 | `contact_predictive_roadmap` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `contact_preferences` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
 | `contact_preferences_audit` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
@@ -75,10 +82,9 @@
 | `contact_relatives` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
 | `contact_relatives_audit` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `contact_report_overrides` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
-| `contact_social_media` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `contact_time_analysis` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `contact_time_analysis_audit` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
-| `contacts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 39 colunas | migration |
+| `contacts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 38 colunas | migration |
 | `conversation_analyses` | _(sem COMMENT ON TABLE — significado não documentado)_ | 23 colunas | migration |
 | `conversation_topics_catalog` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
 | `conversational_search_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
@@ -99,6 +105,10 @@
 | `csat_surveys` | _(sem COMMENT ON TABLE — significado não documentado)_ | 16 colunas | migration |
 | `custom_field_values` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
 | `custom_fields` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
+| `customer_ownership_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 2 colunas | migration |
+| `customer_purchases` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
+| `customer_rotation_state` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
+| `customer_sdr_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 2 colunas | migration |
 | `data_retention_policies` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
 | `deal_forecasts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 21 colunas | migration |
 | `deal_room_activities` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
@@ -107,7 +117,7 @@
 | `deal_room_milestones` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
 | `deal_room_stakeholders` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
 | `deal_rooms` | _(sem COMMENT ON TABLE — significado não documentado)_ | 19 colunas | migration |
-| `deals` | _(sem COMMENT ON TABLE — significado não documentado)_ | 17 colunas | migration |
+| `deals` | _(sem COMMENT ON TABLE — significado não documentado)_ | 18 colunas | migration |
 | `decision_criteria` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
 | `device_login_notifications` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
 | `disc_analysis_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 23 colunas | migration |
@@ -119,7 +129,7 @@
 | `document_templates` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
 | `document_views` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `documents` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
-| `email_campaigns` | _(sem COMMENT ON TABLE — significado não documentado)_ | 17 colunas | migration |
+| `email_campaigns` | _(sem COMMENT ON TABLE — significado não documentado)_ | 19 colunas | migration |
 | `email_finder_results` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
 | `email_thread_summaries` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
 | `email_verifications` | _(sem COMMENT ON TABLE — significado não documentado)_ | 17 colunas | migration |
@@ -128,6 +138,7 @@
 | `entity_relationships` | Relacionamentos polimórficos entre Empresa/Pessoa com papel (comprador, gerente, proprietário, ...). | 14 colunas | migration |
 | `eq_analysis_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 16 colunas | migration |
 | `error_logs` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
+| `estados` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
 | `favorite_templates` | _(sem COMMENT ON TABLE — significado não documentado)_ | 4 colunas | migration |
 | `feature_flags` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
 | `ficha360_conversation_summaries` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
@@ -153,7 +164,7 @@
 | `intent_signals` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
 | `intent_tracking_pixels` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
 | `interaction_summaries` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
-| `interactions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 23 colunas | migration |
+| `interactions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 24 colunas | migration |
 | `interactions_audit` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `ip_whitelist` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
 | `knowledge_base_articles` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
@@ -204,7 +215,7 @@
 | `pipeline_stages` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
 | `pipelines` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
 | `playbook_usage_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
-| `profiles` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
+| `profiles` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
 | `proximo_passo_feedback` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `psychographic_audit_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `purchase_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
@@ -220,11 +231,8 @@
 | `rfm_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
 | `rfm_metrics` | _(sem COMMENT ON TABLE — significado não documentado)_ | 22 colunas | migration |
 | `rfm_segment_config` | _(sem COMMENT ON TABLE — significado não documentado)_ | 18 colunas | migration |
-| `rls_report_compat.audit_events` | _(sem COMMENT ON TABLE — significado não documentado)_ | 1 colunas | migration |
-| `rls_report_compat.companies` | _(sem COMMENT ON TABLE — significado não documentado)_ | 1 colunas | migration |
-| `rls_report_compat.contacts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 3 colunas | migration |
-| `rls_report_compat.deals` | _(sem COMMENT ON TABLE — significado não documentado)_ | 2 colunas | migration |
-| `rls_report_compat.interactions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 2 colunas | migration |
+| `rodizio_distribuicao_staging` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
+| `rodizio_execucoes` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
 | `role_permissions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 4 colunas | migration |
 | `rpc_perf_samples` | _(sem COMMENT ON TABLE — significado não documentado)_ | 4 colunas | migration |
 | `rpc_plan_snapshots` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
@@ -274,6 +282,7 @@
 | `user_known_devices` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `user_roles` | _(sem COMMENT ON TABLE — significado não documentado)_ | 3 colunas | migration |
 | `user_ui_preferences` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
+| `users` | _(sem COMMENT ON TABLE — significado não documentado)_ | 1 colunas | migration |
 | `vak_analysis_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
 | `validation_queue` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
 | `visit_checkins` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
@@ -296,18 +305,9 @@
 | `passo_outcome` (enum) | respondeu_positivo, respondeu_neutro, nao_respondeu, nao_atendeu, pulou |  | banco |
 | `validation_kind` (enum) | email, phone |  | banco |
 | `validation_queue_status` (enum) | pending, processing, done, error |  | banco |
-| `EvidenceKind` (TS) | preference \| hobby \| tone |  | `src/components/contacts/EvidenceDrillDownSheet.tsx` |
-| `PeriodFilter` (TS) | 7d \| 30d \| 90d |  | `src/components/dashboard/charts/ChartDataUtils.ts` |
-| `EmailBlockType` (TS) | heading \| text \| button \| image \| divider \| spacer |  | `src/components/email-builder/types.ts` |
-| `EmailBlockAlign` (TS) | left \| center \| right |  | `src/components/email-builder/types.ts` |
-| `WhyScoreDirection` (TS) | positive \| negative \| neutral |  | `src/components/intelligence/WhyScoreDrawer.tsx` |
-| `ScoreBand` (TS) | low \| mid \| high |  | `src/components/intelligence/WhyScoreDrawer.tsx` |
-| `ExplanationFeedbackValue` (TS) | makes_sense \| does_not_make_sense |  | `src/components/intelligence/WhyScoreDrawer.tsx` |
-| `DensityMode` (TS) | comfortable \| compact |  | `src/components/interactions/DensityChips.tsx` |
-| `DirecaoValue` (TS) | all \| inbound \| outbound |  | `src/components/interactions/DirecaoQuickFilter.tsx` |
-| `ViewMode` (TS) | list \| by-contact \| by-company |  | `src/components/interactions/ViewModeChips.tsx` |
-| `EvolutionDirection` (TS) | up \| stable \| down |  | `src/components/interactions/insights/EvolutionStatsCard.tsx` |
-| … +216 linhas — lista completa em `context.json` | | | |
+| `email_type` (enum) | corporativo, pessoal, financeiro, nfe, marketing, comercial, compras |  | banco |
+| `phone_type` (enum) | celular_corporativo, fixo_comercial, celular_pessoal, invalido |  | banco |
+| … +231 linhas — lista completa em `context.json` | | | |
 
 ## Dados de referência (seed — planos, categorias, perfis fixos)
 
@@ -321,7 +321,6 @@ _nenhum item encontrado_
 |---|---|---|
 | status | valor `verified` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/admin/RequireAdmin.tsx`<br>`compara:src/components/security/MFAEnrollmentBanner.tsx`<br>`compara:src/hooks/use2FA.ts`<br>`compara:src/hooks/useMFAGuard.ts` |
 | status | valor `queued` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/admin/conexoes/IncomingWebhookLogsDialog.tsx` |
-| status | valor `ativo` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/company-detail/CompanyProfileCard.tsx` |
 | status | valor `ganho` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/contact-detail/commercial-tab/DealsCard.tsx`<br>`compara:src/hooks/useDealsAtRisk.ts` |
 | status | valor `reprocessing` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/crm/CRMAutomationAuditLog.tsx`<br>`escreve:src/components/crm/CRMAutomationAuditLog.tsx` |
 | status | valor `presented` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/crm/commercial/OfferSuggestionsElite.tsx`<br>`escreve:src/components/crm/commercial/OfferSuggestionsElite.tsx` |
@@ -333,7 +332,6 @@ _nenhum item encontrado_
 | status | valor `online` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/micro-interactions/StatusIndicators.tsx`<br>`compara:src/components/pwa/NetworkComponents.tsx`<br>`escreve:src/components/micro-interactions/StatusIndicators.tsx` |
 | status | valor `used` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/nlp/SleightOfMouthPanel.tsx`<br>`escreve:src/components/nlp/SleightOfMouthPanel.tsx` |
 | status | valor `offline` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/pwa/NetworkComponents.tsx` |
-| status | valor `connected` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/whatsapp/WhatsAppDashboard.tsx` |
 | status | valor `unverified` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/use2FA.ts` |
 | status | valor `overdue` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:src/hooks/useContactCadence.ts` |
 | status | valor `on_track` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useContactCadence.ts` |
@@ -390,62 +388,22 @@ _nenhum item encontrado_
 | status | valor `fechado` para `relationship_stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/nlp/NLPConversionMetrics.tsx` |
 | status | valor `cliente` para `relationship_stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/nlp/NLPConversionMetrics.tsx` |
 | status | valor `text-primary` para `next_step` usado no código não existe em nenhum enum do banco/TS | `escreve:src/components/conversation-intel/KeyMomentsTimeline.tsx` |
-| coluna | coluna `email` usada no código não existe no schema de `profiles` |  |
+| coluna | coluna `cargo` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `full_name` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `lead_score` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `metaprogram_profile` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `objection_patterns` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `status` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `avg_latency_ms` usada no código não existe no schema de `system_health_snapshots` |  |
 | coluna | coluna `captured_at` usada no código não existe no schema de `system_health_snapshots` |  |
-| coluna | coluna `avatar_url` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `behavior` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `birthday` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `cargo` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `company_id` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `created_at` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `deleted_at` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `email` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `family_info` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `first_name` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `full_name` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `hobbies` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `instagram` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `interests` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `last_interaction_at` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `last_name` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `lead_score` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `linkedin` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `metaprogram_profile` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `notes` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `objection_patterns` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `phone` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `relationship_stage` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `role` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `role_title` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `sentiment` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `tags` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `twitter` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `user_id` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `vak_profile` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `whatsapp` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `annual_revenue` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `challenges` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `city` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `cnpj` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `deleted_at` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `employee_count` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `extra_data_rf` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `financial_health` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `industry` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `intent_score` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `logo_url` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `name` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `nome_crm` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `nome_fantasia` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `notes` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `ramo_atividade` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `razao_social` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `state` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `status` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `user_id` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `version` usada no código não existe no schema de `companies` |  |
-| coluna | coluna `website` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `difference_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `general_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `proactive_score` usada no código não existe no schema de `metaprogram_analysis` |  |
@@ -453,29 +411,14 @@ _nenhum item encontrado_
 | coluna | coluna `sameness_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `specific_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `user_feedback` usada no código não existe no schema de `metaprogram_analysis` |  |
-| coluna | coluna `audio_url` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `channel` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `company_id` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `contact_id` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `content` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `data_interacao` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `direction` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `duracao_segundos` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `duration_seconds` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `emotion_analysis` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `follow_up_date` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `follow_up_required` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `initiated_by` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `metadata` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `outcome` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `response_time` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `resumo` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `sentiment` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `tipo` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `title` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `transcription` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `type` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `user_id` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `language_complexity_score` usada no código não existe no schema de `neuro_behavioral_history` |  |
 | coluna | coluna `response_synchronicity` usada no código não existe no schema de `neuro_behavioral_history` |  |
 | coluna | coluna `analysis_source` usada no código não existe no schema de `vak_analysis_history` |  |
@@ -504,6 +447,7 @@ _nenhum item encontrado_
 | coluna | coluna `completion_notes` usada no código não existe no schema de `contact_next_actions` |  |
 | coluna | coluna `contextual_tone` usada no código não existe no schema de `contact_next_actions` |  |
 | coluna | coluna `was_successful` usada no código não existe no schema de `contact_next_actions` |  |
+| coluna | coluna `id` usada no código não existe no schema de `users` |  |
 | coluna | coluna `branch_on_no_step` usada no código não existe no schema de `sequence_steps` |  |
 | coluna | coluna `branch_on_yes_step` usada no código não existe no schema de `sequence_steps` |  |
 | coluna | coluna `condition_wait_hours` usada no código não existe no schema de `sequence_steps` |  |
@@ -519,46 +463,50 @@ _nenhum item encontrado_
 | coluna | coluna `metadata` usada no código não existe no schema de `competitors` |  |
 | coluna | coluna `claim_expires_at` usada no código não existe no schema de `notification_logs` |  |
 | coluna | coluna `claim_token` usada no código não existe no schema de `notification_logs` |  |
-| coluna | coluna `company_id` usada no código não existe no schema de `deals` |  |
 | coluna | coluna `stage` usada no código não existe no schema de `deals` |  |
-| coluna | coluna `title` usada no código não existe no schema de `deals` |  |
-| coluna | coluna `user_id` usada no código não existe no schema de `deals` |  |
+| tabela | tabela `__proto__` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `a` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
-| tabela | tabela `company_addresses` usada no código não existe nas migrations/types do repo | `src/hooks/useBIAdvanced.ts`<br>`src/hooks/useConversationalSearch.ts`<br>`src/pages/MapaEmpresas.tsx` |
-| tabela | tabela `company_emails` usada no código não existe nas migrations/types do repo | `src/hooks/useDedupEngine.ts` |
-| tabela | tabela `company_phones` usada no código não existe nas migrations/types do repo | `src/hooks/useDedupEngine.ts` |
+| tabela | tabela `alfa` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
+| tabela | tabela `anexos` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
+| tabela | tabela `com_rls` usada no código não existe nas migrations/types do repo | `scripts/inventario/banco.test.mjs`<br>`scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `config_regras_negocio` usada no código não existe nas migrations/types do repo | `src/hooks/useRodizioEquipe.ts` |
 | tabela | tabela `connector_log` usada no código não existe nas migrations/types do repo | `supabase/functions/evolution-bitrix-connector/index.ts` |
+| tabela | tabela `constructor` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
+| tabela | tabela `contact_fone` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
+| tabela | tabela `contacts_extra` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-repo.test.mjs` |
 | tabela | tabela `customer_health_scores` usada no código não existe nas migrations/types do repo | `src/pages/mapa/relationshipScores.ts` |
 | tabela | tabela `dashboard_table` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
 | tabela | tabela `email_logs` usada no código não existe nas migrations/types do repo | `supabase/functions/health-aggregate/index.ts`<br>`supabase/functions/system-health/index.ts` |
-| tabela | tabela `emails` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
-| tabela | tabela `fantasma` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
+| tabela | tabela `emails` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs`<br>`scripts/inventario/gerar-repo.test.mjs` |
+| tabela | tabela `fantasma` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs`<br>`scripts/audit-ausentes.test.mjs` |
 | tabela | tabela `fixture_table` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
 | tabela | tabela `ghost_table` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
+| tabela | tabela `grande` usada no código não existe nas migrations/types do repo | `scripts/inventario/banco.test.mjs` |
 | tabela | tabela `logs` usada no código não existe nas migrations/types do repo | `supabase/functions/_shared/best-effort-write_test.ts` |
+| tabela | tabela `nao_conta_js` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
 | tabela | tabela `oauth_tokens` usada no código não existe nas migrations/types do repo | `supabase/functions/evolution-bitrix-connector/index.ts` |
+| tabela | tabela `orfa` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `payments` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
-| tabela | tabela `rodizio_distribuicao_staging` usada no código não existe nas migrations/types do repo | `src/hooks/useRodizioOndas.ts` |
 | tabela | tabela `runtime_table` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
 | tabela | tabela `so_teste` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
-| tabela | tabela `t` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
+| tabela | tabela `t` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs`<br>`scripts/check-edge-cors.test.mjs` |
 | tabela | tabela `t1` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
-| tabela | tabela `tabela` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.mjs`<br>`scripts/inventario/gerar-repo.mjs` |
+| tabela | tabela `tabela` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.mjs`<br>`scripts/inventario/gerar-banco.mjs`<br>`scripts/inventario/gerar-repo.mjs` |
+| tabela | tabela `toString` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `tools_runtime` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
 | tabela | tabela `tx` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
-| tabela | tabela `users` usada no código não existe nas migrations/types do repo | `src/hooks/useRodizioEquipe.ts`<br>`supabase/migrations/20260924181401_t206_fase1_users_public_view.sql` |
-| tabela | tabela `vw_rodizio_bloqueios` usada no código não existe nas migrations/types do repo | `src/hooks/useRodizioBloqueios.ts` |
-| tabela | tabela `vw_rodizio_carga_closers` usada no código não existe nas migrations/types do repo | `src/hooks/useRodizioEquipe.ts` |
-| tabela | tabela `vw_rodizio_carga_sdrs` usada no código não existe nas migrations/types do repo | `src/hooks/useRodizioEquipe.ts` |
-| tabela | tabela `vw_rodizio_execucoes` usada no código não existe nas migrations/types do repo | `src/hooks/useRodizioOndas.ts` |
-| tabela | tabela `vw_rodizio_kpis` usada no código não existe nas migrations/types do repo | `src/hooks/useRoutingMetrics.ts` |
-| tabela | tabela `x` usada no código não existe nas migrations/types do repo | `scripts/diff-tables.mjs` |
+| tabela | tabela `x` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.mjs`<br>`scripts/audit-ausentes.test.mjs`<br>`scripts/diff-tables.mjs` |
+| tabela | tabela `zeta` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
+| rls | `company_addresses`: acessada do front (3 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useBIAdvanced.ts`<br>`src/hooks/useConversationalSearch.ts`<br>`src/pages/MapaEmpresas.tsx` |
+| rls | `company_emails`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useDedupEngine.ts` |
+| rls | `company_phones`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useDedupEngine.ts` |
 | rls | `crm_automation_logs`: front faz UPDATE mas nenhuma política RLS permite UPDATE → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
 | rls | `crm_automation_reprocess_queue`: front faz INSERT mas nenhuma política RLS permite INSERT → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
-| rls | `crm_consent_audit_logs`: front faz SELECT mas nenhuma política RLS permite SELECT → vai falhar/retornar vazio para usuários | `src/components/crm/consent/ConsentAuditLog.tsx` |
 | rls | `incoming_webhook_nonces`: RLS ligado sem nenhuma política → só service_role acessa |  |
+| rls | `rodizio_distribuicao_staging`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useRodizioOndas.ts` |
+| rls | `users`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useRodizioEquipe.ts` |
 | edge | edge function `dashboard-edge` invocada mas não existe em supabase/functions/ | `scripts/ai-context/gerar.unit.mjs` |
+| edge | edge function `envia-email` invocada mas não existe em supabase/functions/ | `scripts/inventario/gerar-repo.test.mjs` |
 | edge | edge function `fixture-edge` invocada mas não existe em supabase/functions/ | `scripts/ai-context/gerar.unit.mjs` |
 | edge | edge function `ghost-edge` invocada mas não existe em supabase/functions/ | `scripts/ai-context/gerar.unit.mjs` |
 | edge | edge function `inexistente` invocada mas não existe em supabase/functions/ | `scripts/ai-context/cenarios.mjs` |
@@ -579,12 +527,19 @@ _nenhum item encontrado_
 | rpc | RPC `is_admin` chamada mas não definida nas migrations/types | `scripts/ai-context/gerar.unit.mjs` |
 | rpc | RPC `nome` chamada mas não definida nas migrations/types | `scripts/supabase_snapshot/snapshot.py` |
 | rpc | RPC `r1` chamada mas não definida nas migrations/types | `scripts/ai-context/cenarios.mjs` |
+| rpc | RPC `rpc_fantasma` chamada mas não definida nas migrations/types | `scripts/audit-ausentes.test.mjs` |
 | rpc | RPC `runtime_rpc` chamada mas não definida nas migrations/types | `scripts/ai-context/gerar.unit.mjs` |
+| rpc | RPC `sem_args` chamada mas não definida nas migrations/types | `scripts/audit-ausentes.test.mjs` |
+| rpc | RPC `sobrecarga` chamada mas não definida nas migrations/types | `scripts/audit-ausentes.test.mjs` |
+| rpc | RPC `soma` chamada mas não definida nas migrations/types | `scripts/audit-ausentes.test.mjs` |
 | rpc | RPC `tools_rpc` chamada mas não definida nas migrations/types | `scripts/ai-context/gerar.unit.mjs` |
-| rpc | RPC `x` chamada mas não definida nas migrations/types | `scripts/diff-tables.mjs` |
+| rpc | RPC `x` chamada mas não definida nas migrations/types | `scripts/audit-ausentes.test.mjs`<br>`scripts/diff-tables.mjs` |
+| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/audit-ausentes.mjs` |
+| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/audit-ausentes.test.mjs` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/inventario/gerar-banco.mjs` |
-| dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/cdc/replay.ts` |
-| dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/compliance/lgpd-snapshot.ts` |
+| dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/reset-passwords.ts` |
+| dinâmico | 5 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/cdc/replay.ts` |
+| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/compliance/lgpd-snapshot.ts` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/verify/dual-write-diverge.ts` |
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/regras_negocio/generate.py` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/components/data-export/AdvancedDataExporter.tsx` |
@@ -642,7 +597,7 @@ _nenhum item encontrado_
 - `cs_accounts.lifecycle_stage` tem valores ['adopting', 'at_risk', 'churned', 'mature', 'onboarding'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `cs_qbrs.status` tem valores ['cancelled', 'completed', 'no_show', 'scheduled'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `cs_renewals.status` tem valores ['churned', 'downgraded', 'expanded', 'in_negotiation', 'renewed', 'upcoming'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- `csat_surveys.status` tem valores ['answered', 'expired', 'pending', 'sent'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `csat_surveys.status` tem valores ['answered', 'ces', 'csat', 'custom', 'expired', 'nps', 'pending', 'sent'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `deal_forecasts.stage` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `deal_room_milestones.status` tem valores ['blocked', 'done', 'in_progress', 'pending'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `deal_rooms.status` tem valores ['active', 'lost', 'paused', 'won'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
@@ -707,11 +662,14 @@ _nenhum item encontrado_
 - `tasks.status` tem valores ['cancelled', 'completed', 'in_progress', 'pending'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `ai_gateway_metrics.status` tem valores ['error', 'rate_limited', 'success', 'timeout'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `ai_gateway_metrics.http_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `rodizio_distribuicao_staging.status` tem valores ['APLICADO', 'APROVADO', 'RASCUNHO', 'REJEITADO'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `cidades.estado_ibge` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `company_addresses.estado` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `sales.status` tem valores ['cancelled', 'completed', 'discovery', 'lead', 'negotiation', 'pending', 'proposal', 'qualification'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `_dormant.inactivity_alerts.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `sequence_email_reservations.current_step` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `sequence_email_reservations.step_order` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- 279/282 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs` …
+- 288/291 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

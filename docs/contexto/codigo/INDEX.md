@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `1fecfa69f5d6ce8ea22d580ea75c067f1bc7fe66` (2026-11-09T18:03:59-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `21434823975d6f895d40222c952959d1cdf7d41c` (2026-11-09T21:00:59-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2027), SQL (646), Markdown (150), Shell (70), JavaScript (43), JSON (14), YAML (13), Python (10)
+- linguagens: TypeScript (2044), SQL (651), Markdown (150), Shell (133), JavaScript (68), Python (19), JSON (14), YAML (13)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,11 +34,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 2996 |
-| arquivos_codigo | 2079 |
-| linhas_codigo | 389366 |
+| arquivos_total | 3115 |
+| arquivos_codigo | 2130 |
+| linhas_codigo | 400836 |
 | rotas | 114 |
-| rotas_http_backend | 12 |
+| rotas_http_backend | 11 |
 | vistas_por_id | 0 |
 | itens_menu | 56 |
 | modulos | 141 |
@@ -48,22 +48,22 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | tabelas | 418 |
 | migrations | 479 |
 | cron_jobs | 20 |
-| testes | 214 |
+| testes | 241 |
 | workflows | 7 |
-| scripts | 213 |
+| scripts | 238 |
 | docs_md | 150 |
 
 ## Onde ficam as coisas
-- telas: src/components (1), src/pages (1)
+- telas: src/pages (113)
 - componentes: src/components (908), src/pages (140), src/app (4)
 - hooks: src/hooks (377), src/components (20), src/stores (5)
 - servicos_logica: src/lib (72), src/data (46), src/domain (8)
-- testes: co-localizado (*.test) (91), co-localizado (__tests__) (89), tests/ (22)
+- testes: co-localizado (*.test) (113), co-localizado (__tests__) (89), tests/ (22)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
-- scripts: scripts/migration (159), scripts/hardening (9), scripts/inventario (4)
+- scripts: scripts/migration (177), scripts/hardening (10), scripts/inventario (4)
 - docs: docs (39), (raiz) (16)
-- nomenclatura: {"componentes":"PascalCase (93%)","hooks":"use + PascalCase","servicos":"camelCase (92%)","edge_functions":"kebab-case (99%)","tabelas":"snake_case (90%)"}
+- nomenclatura: {"componentes":"PascalCase (93%)","hooks":"use + PascalCase","servicos":"camelCase (89%)","edge_functions":"kebab-case (99%)","tabelas":"snake_case (90%)"}
 - instruções para agentes no repo: AGENTS.md, CLAUDE.md
 
 ## Módulos (menu → domínio)
@@ -110,7 +110,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/search | 0 | 0 | 12 | 13 | 5 | 7 |
 | components/security | 0 | 0 | 9 | 8 | 0 | 5 |
 | components/sequences | 0 | 0 | 7 | 8 | 1 | 8 |
-| components/skeletons | 9 | 13 | 5 | 0 | 0 | 0 |
+| components/skeletons | 0 | 0 | 5 | 0 | 0 | 0 |
 | components/stakeholders | 0 | 0 | 10 | 6 | 0 | 3 |
 | components/triggers | 0 | 0 | 33 | 12 | 1 | 10 |
 | components/ui | 0 | 0 | 72 | 10 | 0 | 2 |
@@ -120,127 +120,128 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 0 | 0 | 375 | 629 | 53 | 206 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 68 | 16 | 2 | 13 |
-| pages | 2 | 1 | 105 | 615 | 66 | 222 |
-| pages/admin | 0 | 0 | 9 | 323 | 26 | 96 |
+| pages | 45 | 105 | 105 | 615 | 66 | 222 |
+| pages/admin | 4 | 7 | 9 | 323 | 26 | 96 |
+| pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
 | types | 0 | 0 | 20 | 0 | 0 | 0 |
 
 ## Rotas (url → arquivo)
 - `/` [tela] → src/pages/Index.tsx (protegida)
-- `/*` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/abm` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/abm/:id` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/abm/campanhas` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/audit-trail` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/behavioral-regen-audit` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/component-gallery` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/conexoes` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/conexoes/logs` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/docs` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/email-diagnostics` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/error-budget` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/error-logs` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/feature-flags` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/field-mapping` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/insight-feedback` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/knowledge-export` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/lux-config` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/permissions` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/role-permissions` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/roles` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/schema-drift` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/secrets-management` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/seguranca` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/telemetria` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/admin/voice-diagnostics` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/analytics` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/assistente` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/auth` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/automacoes` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/bi` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/cadastro` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/calendario` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/campanhas` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/configuracoes` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/contatos` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/contatos/:id` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/contatos/:id/ficha-360` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/conversation-intelligence` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/conversation-intelligence/setup` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/crm/copywriting` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/customer-success` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/customer-success/account/:id` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/deal-rooms` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/deal-rooms/:id` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/deduplicacao` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/design-system` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/documentos` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/dr/:token` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/empresas` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/empresas/:companyId/analytics` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/empresas/:id` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/enrichment` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/erp` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/f/:slug` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/forecasting` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/forecasting/setup` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/historico` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/inbox` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/insights` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/intelligence` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/intelligence/auditoria` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/intelligence/relacionamento/auditoria` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/intent` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/intent/setup` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/interacoes` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/knowledge-base` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/landing-pages` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/lead-scoring` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/lead-scoring/automations` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/lead-scoring/config` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/lm/:slug` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/lp/:slug` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/mapa-empresas` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/marketing` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/marketing/forms/:id` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/marketing/lead-magnets/:id` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/metas` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/network` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/nlp-analytics` [tela] → src/components/skeletons/PageSkeletons.tsx (protegida)
-- `/notificacoes` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/notificacoes/configuracoes` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/nps` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/nurturing` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/onboarding` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/perfis-comportamentais` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/performance` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/pipeline` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/playbooks` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/playbooks/:id` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/playbooks/battle-cards/:id` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/relatorio/:id` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/relatorios-customizaveis` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/report-builder` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/reset-password` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/revops` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/rodizio` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/seguranca` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/sequencias` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/signature/:token` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/sms-marketing` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/sso/callback` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/status` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/suporte` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/survey/:token` [tela] → **ARQUIVO NÃO RESOLVIDO**
-- `/tarefas` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/territorios` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/territory-optimization` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
+- `/*` [tela] → src/pages/NotFound.tsx
+- `/abm` [tela] → src/pages/ABM.tsx (protegida)
+- `/abm/:id` [tela] → src/pages/ABMAccountDetail.tsx (protegida)
+- `/abm/campanhas` [tela] → src/pages/ABMCampaigns.tsx (protegida)
+- `/admin` [tela] → src/pages/AdminDashboard.tsx (protegida)
+- `/admin/audit-trail` [tela] → src/pages/AdminAuditTrail.tsx (protegida)
+- `/admin/behavioral-regen-audit` [tela] → src/pages/admin/BehavioralRegenAudit.tsx (protegida)
+- `/admin/component-gallery` [tela] → src/pages/admin/ComponentGallery.tsx (protegida)
+- `/admin/conexoes` [tela] → src/pages/AdminConexoes.tsx (protegida)
+- `/admin/conexoes/logs` [tela] → src/pages/AdminConexoesLogs.tsx (protegida)
+- `/admin/docs` [tela] → src/pages/DocsPage.tsx (protegida)
+- `/admin/email-diagnostics` [tela] → src/pages/AdminEmailDiagnostics.tsx (protegida)
+- `/admin/error-budget` [tela] → src/pages/admin/ErrorBudget.tsx (protegida)
+- `/admin/error-logs` [tela] → src/pages/admin/ErrorLogs.tsx (protegida)
+- `/admin/feature-flags` [tela] → src/pages/admin/FeatureFlagsPage.tsx (protegida)
+- `/admin/field-mapping` [tela] → src/pages/AdminFieldMapping.tsx (protegida)
+- `/admin/insight-feedback` [tela] → src/pages/admin/InsightFeedbackAnalytics.tsx (protegida)
+- `/admin/knowledge-export` [tela] → src/pages/AdminKnowledgeExport.tsx (protegida)
+- `/admin/lux-config` [tela] → src/pages/AdminLuxConfig.tsx (protegida)
+- `/admin/permissions` [tela] → src/pages/PermissionsPage.tsx (protegida)
+- `/admin/role-permissions` [tela] → src/pages/RolePermissionsPage.tsx (protegida)
+- `/admin/roles` [tela] → src/pages/RolesPage.tsx (protegida)
+- `/admin/schema-drift` [tela] → src/pages/AdminSchemaDrift.tsx (protegida)
+- `/admin/secrets-management` [tela] → src/pages/AdminSecretsManagement.tsx (protegida)
+- `/admin/seguranca` [tela] → src/pages/admin/AdminSegurancaPage.tsx (protegida)
+- `/admin/telemetria` [tela] → src/pages/AdminTelemetria.tsx (protegida)
+- `/admin/voice-diagnostics` [tela] → src/pages/AdminVoiceDiagnostics.tsx (protegida)
+- `/analytics` [tela] → src/pages/Analytics.tsx (protegida)
+- `/assistente` [tela] → src/pages/Assistente.tsx (protegida)
+- `/auth` [tela] → src/pages/Auth.tsx
+- `/automacoes` [tela] → src/pages/Automacoes.tsx (protegida)
+- `/bi` [tela] → src/pages/BIAvancado.tsx (protegida)
+- `/cadastro` [tela] → src/pages/Cadastro.tsx (protegida)
+- `/calendario` [tela] → src/pages/Calendario.tsx (protegida)
+- `/campanhas` [tela] → src/pages/Campanhas.tsx (protegida)
+- `/configuracoes` [tela] → src/pages/Configuracoes.tsx (protegida)
+- `/contatos` [tela] → src/pages/Contatos.tsx (protegida)
+- `/contatos/:id` [tela] → src/pages/ContatoDetalhe.tsx (protegida)
+- `/contatos/:id/ficha-360` [tela] → src/pages/Ficha360.tsx (protegida)
+- `/conversation-intelligence` [tela] → src/pages/ConversationIntelligence.tsx (protegida)
+- `/conversation-intelligence/setup` [tela] → src/pages/ConversationIntelligenceSetup.tsx (protegida)
+- `/crm/copywriting` [tela] → src/pages/crm/CopywritingEnterprise.tsx (protegida)
+- `/customer-success` [tela] → src/pages/CustomerSuccess.tsx (protegida)
+- `/customer-success/account/:id` [tela] → src/pages/CustomerSuccessAccount.tsx (protegida)
+- `/deal-rooms` [tela] → src/pages/DealRooms.tsx (protegida)
+- `/deal-rooms/:id` [tela] → src/pages/DealRoomDetail.tsx (protegida)
+- `/deduplicacao` [tela] → src/pages/Deduplicacao.tsx (protegida)
+- `/design-system` [tela] → src/pages/DesignSystem.tsx
+- `/documentos` [tela] → src/pages/Documentos.tsx (protegida)
+- `/dr/:token` [tela] → src/pages/PublicDealRoom.tsx
+- `/empresas` [tela] → src/pages/Empresas.tsx (protegida)
+- `/empresas/:companyId/analytics` [tela] → src/pages/CompanyProfileAnalytics.tsx (protegida)
+- `/empresas/:id` [tela] → src/pages/EmpresaDetalhe.tsx (protegida)
+- `/enrichment` [tela] → src/pages/Enrichment.tsx (protegida)
+- `/erp` [tela] → src/pages/ErpViewer.tsx (protegida)
+- `/f/:slug` [tela] → src/pages/PublicForm.tsx
+- `/forecasting` [tela] → src/pages/Forecasting.tsx (protegida)
+- `/forecasting/setup` [tela] → src/pages/ForecastingSetup.tsx (protegida)
+- `/historico` [tela] → src/pages/Historico.tsx (protegida)
+- `/inbox` [tela] → src/pages/Inbox.tsx (protegida)
+- `/insights` [tela] → src/pages/Insights.tsx (protegida)
+- `/intelligence` [tela] → src/pages/Intelligence.tsx (protegida)
+- `/intelligence/auditoria` [tela] → src/pages/RecommendationAudit.tsx (protegida)
+- `/intelligence/relacionamento/auditoria` [tela] → src/pages/CRMRelationshipAuditPage.tsx (protegida)
+- `/intent` [tela] → src/pages/Intent.tsx (protegida)
+- `/intent/setup` [tela] → src/pages/IntentSetup.tsx (protegida)
+- `/interacoes` [tela] → src/pages/Interacoes.tsx (protegida)
+- `/knowledge-base` [tela] → src/pages/KnowledgeBase.tsx (protegida)
+- `/landing-pages` [tela] → src/pages/LandingPages.tsx (protegida)
+- `/lead-scoring` [tela] → src/pages/LeadScoring.tsx (protegida)
+- `/lead-scoring/automations` [tela] → src/pages/LeadScoringAutomations.tsx (protegida)
+- `/lead-scoring/config` [tela] → src/pages/LeadScoringConfig.tsx (protegida)
+- `/lm/:slug` [tela] → src/pages/PublicLeadMagnet.tsx
+- `/lp/:slug` [tela] → src/pages/PublicLandingPage.tsx
+- `/mapa-empresas` [tela] → src/pages/MapaEmpresas.tsx (protegida)
+- `/marketing` [tela] → src/pages/MarketingHub.tsx (protegida)
+- `/marketing/forms/:id` [tela] → src/pages/MarketingFormDetail.tsx (protegida)
+- `/marketing/lead-magnets/:id` [tela] → src/pages/MarketingMagnetDetail.tsx (protegida)
+- `/metas` [tela] → src/pages/Metas.tsx (protegida)
+- `/network` [tela] → src/pages/Network.tsx (protegida)
+- `/nlp-analytics` [tela] → src/pages/NLPAnalytics.tsx (protegida)
+- `/notificacoes` [tela] → src/pages/Notificacoes.tsx (protegida)
+- `/notificacoes/configuracoes` [tela] → src/pages/NotificacoesConfig.tsx (protegida)
+- `/nps` [tela] → src/pages/NPS.tsx (protegida)
+- `/nurturing` [tela] → src/pages/Nurturing.tsx (protegida)
+- `/onboarding` [tela] → src/pages/Onboarding.tsx (protegida)
+- `/perfis-comportamentais` [tela] → src/pages/PerfisComportamentais.tsx (protegida)
+- `/performance` [tela] → src/pages/Performance.tsx (protegida)
+- `/pipeline` [tela] → src/pages/Pipeline.tsx (protegida)
+- `/playbooks` [tela] → src/pages/Playbooks.tsx (protegida)
+- `/playbooks/:id` [tela] → src/pages/PlaybookDetail.tsx (protegida)
+- `/playbooks/battle-cards/:id` [tela] → src/pages/BattleCardDetail.tsx (protegida)
+- `/relatorio/:id` [tela] → src/pages/RelatorioContato.tsx (protegida)
+- `/relatorios-customizaveis` [tela] → src/pages/CustomReports.tsx (protegida)
+- `/report-builder` [tela] → src/pages/ReportBuilder.tsx (protegida)
+- `/reset-password` [tela] → src/pages/ResetPassword.tsx
+- `/revops` [tela] → src/pages/RevOps.tsx (protegida)
+- `/rodizio` [tela] → src/pages/Rodizio.tsx (protegida)
+- `/seguranca` [tela] → src/pages/Security.tsx (protegida)
+- `/sequencias` [tela] → src/pages/Sequencias.tsx (protegida)
+- `/signature/:token` [tela] → src/pages/PublicSignaturePage.tsx
+- `/sms-marketing` [tela] → src/pages/SmsMarketing.tsx (protegida)
+- `/sso/callback` [tela] → src/pages/SSOCallbackPage.tsx
+- `/status` [tela] → src/pages/StatusPage.tsx
+- `/suporte` [tela] → src/pages/Suporte.tsx (protegida)
+- `/survey/:token` [tela] → src/pages/PublicSurvey.tsx
+- `/tarefas` [tela] → src/pages/Tarefas.tsx (protegida)
+- `/territorios` [tela] → src/pages/Territorios.tsx (protegida)
+- `/territory-optimization` [tela] → src/pages/TerritoryOptimization.tsx (protegida)
 - `/whatsapp` [redirect] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/whatsapp/importar` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/win-loss` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
-- `/win-loss/setup` [tela] → **ARQUIVO NÃO RESOLVIDO** (protegida)
+- `/whatsapp/importar` [tela] → src/pages/WhatsAppImport.tsx (protegida)
+- `/win-loss` [tela] → src/pages/WinLoss.tsx (protegida)
+- `/win-loss/setup` [tela] → src/pages/WinLossSetup.tsx (protegida)
 
 ## Rotas HTTP de backend
 - `GET /{t}` → scripts/ai-context/cenarios.mjs
@@ -250,7 +251,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `POST /b` → scripts/ai-context/cenarios.mjs
 - `DELETE /c` → scripts/ai-context/cenarios.mjs
 - `PUT /d` → scripts/ai-context/cenarios.mjs
-- `GET /items` → scripts/ai-context/gerar.unit.mjs
 - `GET /u` → scripts/ai-context/cenarios.mjs
 - `GET /users` → scripts/ai-context/cenarios.mjs
 - `POST /users/:id` → scripts/ai-context/cenarios.mjs
@@ -393,18 +393,18 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 
 ## Integrações externas
 - SDKs: ElevenLabs, Supabase, react-query, zod
-- hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, api.elevenlabs.io, wa.me, example.invalid, test.supabase.co, api.firecrawl.dev, singu-v2.vercel.app, cdnjs.cloudflare.com, dialogue-diamond.lovable.app, fixture.invalid, instagram.com, provider.example.test, supabase.example.test
+- hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, api.elevenlabs.io, wa.me, x.supabase.co, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.supabase.com, singu-v2.vercel.app, cdnjs.cloudflare.com, dialogue-diamond.lovable.app, exemplo.invalid
 - webhooks recebidos: nenhum
 - env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, N8N_LUX_WEBHOOK_URL, TWILIO_API_KEY
 
 ## Permissões / papéis
-- papéis no código: user (38), system (32), status (30), alert (24), group (18), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), admin (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), agent (1), authenticated (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), sup (1), tab (1), tablist (1)
+- papéis no código: user (38), system (32), status (30), alert (24), group (18), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), admin (1), agent (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), sup (1), tab (1), tablist (1)
 - enums de papel: app_role: admin|moderator|user; entity_relationship_role: buyer|manager|owner|decision_maker|influencer|user|sponsor|partner|supplier|subsidiary|parent|employee_of|other; salesperson_role: sdr|closer|hybrid
 - guards: src/app/lazyPages.tsx, src/components/auth/MFAGuard.tsx, src/hooks/useAuth.tsx · rotas protegidas: 102 · públicas: /*, /auth, /design-system, /dr/:token, /f/:slug, /lm/:slug, /lp/:slug, /reset-password, /signature/:token, /sso/callback, /status, /survey/:token
-- feature flags: FEATURE_X, nova-tela, novo-inbox
+- feature flags: FEATURE_X, nova-tela
 
 ## Alertas (baseline.json → alertas)
-- rotas_sem_arquivo: 99 — ex.: /*, /abm, /abm/:id
+- rotas_sem_arquivo: 0
 - componentes_ambiguos: 0
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
 - edges_orfas: 34 — ex.: attribution-calculator, audit-analytics, auto-rebatch-behavioral
@@ -415,15 +415,15 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rpcs_sem_definicao: 3 — ex.: get_territories, get_territory_performance, increment_workflow_completed
 - componentes_orfaos: 44 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/admin/SystemHealthWidget.tsx
 - componentes_com_nome_duplicado: 106 — ex.: ABM, ABMAccountDetail, ABMCampaigns
-- scripts_orfaos: 23 — ex.: scripts/hardening/check-client-tls.sql, scripts/hardening/check-extensions-hardening.sql, scripts/hardening/check-indexes-duplicated.sql
+- scripts_orfaos: 25 — ex.: scripts/_pgdocs_catalogo.py, scripts/_pgteste.py, scripts/hardening/check-client-tls.sql
 - env_usadas_nao_declaradas: 3 — ex.: DEV, PROD, VITE_APP_VERSION
 - ciclos_de_import: 5
-- possiveis_segredos_no_codigo: 4 — ex.: scripts/ai-context/cenarios.mjs:102, supabase/functions/_shared/auth_test.ts:61, supabase/functions/_shared/auth_test.ts:68
+- possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 18989 nós · 31043 arestas · 2027 comunidades · grafo do commit `1fecfa69`
-- comunidades maiores: ref_hooks (428), ref_lib (255), vitest (245), useAuth (237), framer-motion (235), ref_types (232), 📖 Dicionário de Dados — SINGU CRM (232), _shared/auth.ts (231), react-router-dom (215), react (214), ref_components (202), date-fns (194)
-- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), jsonError() (supabase/functions/_shared/auth.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), uniq() (scripts/ai-context/gerar.mjs), readText() (scripts/ai-context/gerar.mjs), md_table() (scripts/regras_negocio/generate.py), function() (scripts/supabase_snapshot/test_snapshot.py), getContactBehavior() (src/lib/contact-utils.ts)
+- 20213 nós · 33723 arestas · 2062 comunidades · grafo do commit `21434823`
+- comunidades maiores: ref_components (302), _shared/auth.ts (276), ref_lib (271), ref_types (267), useAuth (256), framer-motion (237), react-router-dom (212), ref_hooks (209), react (205), date-fns (187), withAuth (184), 📖 Dicionário de Dados — SINGU CRM (177)
+- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), jsonError() (supabase/functions/_shared/auth.ts), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py), header() (scripts/regras_negocio/generate.py), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -535,6 +535,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-09 `21434823` chore(scripts): endurece e cobre com testes todos os scripts de scripts/ (#186)
 - 2026-11-09 `1fecfa69` fix(push): um único service worker com os handlers de push (A-007) (#184)
 - 2026-11-09 `ecfcdf07` fix(config): alinha o project_id do config.toml ao projeto Supabase canônico e trava divergência (#183)
 - 2026-11-09 `36fc1e23` build(deps): bump actions/download-artifact from 7.0.0 to 8.0.2 (#181)
@@ -549,7 +550,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-08 `4ba71804` fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)
 - 2026-11-08 `33752b40` feat(db): agenda retenção de 7 dias no histórico do pg_cron
 - 2026-11-08 `3570870d` chore(inventario): cataloga as 43 edge functions de outro sistema
-- 2026-11-08 `79380cd7` feat(inventario): liga a conferência deployada × versionada das edge functions
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

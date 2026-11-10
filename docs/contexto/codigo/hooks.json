@@ -3036,7 +3036,7 @@
     "src/pages/Interacoes.tsx",
     "src/pages/contatos/ContatosContent.tsx"
    ],
-   "coberto_por_testes": 13
+   "coberto_por_testes": 12
   },
   {
    "arquivo": "src/hooks/useContactsCompletoView.ts",

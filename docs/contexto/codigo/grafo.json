@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1867,
- "arestas": 8251,
+ "nos": 1891,
+ "arestas": 8310,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -109,11 +109,11 @@
    "importado_por": 47
   },
   {
-   "arquivo": "src/hooks/useContacts.ts",
-   "importado_por": 40
+   "arquivo": "src/components/ui/separator.tsx",
+   "importado_por": 39
   },
   {
-   "arquivo": "src/components/ui/separator.tsx",
+   "arquivo": "src/hooks/useContacts.ts",
    "importado_por": 39
   },
   {

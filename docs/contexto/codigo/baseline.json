@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "1fecfa69f5d6ce8ea22d580ea75c067f1bc7fe66",
+  "commit": "21434823975d6f895d40222c952959d1cdf7d41c",
   "branch": "main",
-  "data_commit": "2026-11-09T18:03:59-03:00",
+  "data_commit": "2026-11-09T21:00:59-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "21434823",
+    "data": "2026-11-09",
+    "assunto": "chore(scripts): endurece e cobre com testes todos os scripts de scripts/ (#186)"
+   },
    {
     "sha": "1fecfa69",
     "data": "2026-11-09",
@@ -126,15 +131,14 @@
     "sha": "d8475aa3",
     "data": "2026-11-07",
     "assunto": "fix: qualifica digest() com schema extensions no schema-freeze-guard (#166)"
-   },
-   {
-    "sha": "f665f675",
-    "data": "2026-11-06",
-    "assunto": "fix(ci): remove script injection no step de validação do título da PR (#162)"
    }
   ],
-  "arquivos_mudados_7d": 100,
+  "arquivos_mudados_7d": 411,
   "pastas_mais_mudadas_30d": [
+   {
+    "pasta": "scripts/migration/verify",
+    "mudancas": 182
+   },
    {
     "pasta": "CHANGELOG.md",
     "mudancas": 42
@@ -156,6 +160,10 @@
     "mudancas": 15
    },
    {
+    "pasta": "scripts/migration/storage",
+    "mudancas": 12
+   },
+   {
     "pasta": "supabase/functions/external-data",
     "mudancas": 11
    },
@@ -172,28 +180,20 @@
     "mudancas": 9
    },
    {
+    "pasta": "scripts/migration/cdc",
+    "mudancas": 8
+   },
+   {
+    "pasta": "scripts/migration/functions",
+    "mudancas": 8
+   },
+   {
     "pasta": "src/components/pipeline",
     "mudancas": 8
    },
    {
     "pasta": "src/components/sequences",
     "mudancas": 8
-   },
-   {
-    "pasta": "package.json",
-    "mudancas": 7
-   },
-   {
-    "pasta": "src/components/analytics",
-    "mudancas": 7
-   },
-   {
-    "pasta": "RELATORIO_CI.md",
-    "mudancas": 6
-   },
-   {
-    "pasta": "docs/qa/security-definer-audit.md",
-    "mudancas": 6
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -286,15 +286,15 @@
     "mudancas": 4
    },
    {
-    "arquivo": "src/hooks/useContacts.test.tsx",
+    "arquivo": "scripts/inventario/gerar-banco.mjs",
     "mudancas": 4
    },
    {
-    "arquivo": "src/hooks/useRodizioOndas.ts",
+    "arquivo": "scripts/migration/functions/secrets.template.env",
     "mudancas": 4
    },
    {
-    "arquivo": "src/pages/ContatoDetalhe.tsx",
+    "arquivo": "scripts/rls-matrix/check-rls-baseline.mjs",
     "mudancas": 4
    }
   ],
@@ -305,7 +305,7 @@
    },
    {
     "autor": "adm01-debug",
-    "commits": 37
+    "commits": 38
    },
    {
     "autor": "dependabot[bot]",
@@ -318,11 +318,11 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 2996,
-  "arquivos_codigo": 2079,
-  "linhas_codigo": 389366,
+  "arquivos_total": 3115,
+  "arquivos_codigo": 2130,
+  "linhas_codigo": 400836,
   "rotas": 114,
-  "rotas_http_backend": 12,
+  "rotas_http_backend": 11,
   "vistas_por_id": 0,
   "itens_menu": 56,
   "modulos": 141,
@@ -332,9 +332,9 @@
   "tabelas": 418,
   "migrations": 479,
   "cron_jobs": 20,
-  "testes": 214,
+  "testes": 241,
   "workflows": 7,
-  "scripts": 213,
+  "scripts": 238,
   "docs_md": 150
  },
  "por_pasta": {
@@ -378,69 +378,113 @@
    "arquivos": 1,
    "linhas": 233
   },
-  "scripts/ai-context": {
-   "arquivos": 3,
-   "linhas": 1458
-  },
-  "scripts/apply-all.js": {
+  "scripts/_pgdocs.py": {
    "arquivos": 1,
-   "linhas": 307
+   "linhas": 333
   },
-  "scripts/apply-functions.js": {
+  "scripts/_pgdocs_catalogo.py": {
+   "arquivos": 1,
+   "linhas": 202
+  },
+  "scripts/_pgteste.py": {
    "arquivos": 1,
    "linhas": 116
   },
+  "scripts/_sqlseguro.py": {
+   "arquivos": 1,
+   "linhas": 189
+  },
+  "scripts/ai-context": {
+   "arquivos": 3,
+   "linhas": 1674
+  },
+  "scripts/apply-all.js": {
+   "arquivos": 1,
+   "linhas": 28
+  },
+  "scripts/apply-cli.test.mjs": {
+   "arquivos": 1,
+   "linhas": 171
+  },
+  "scripts/apply-ddl-real.test.mjs": {
+   "arquivos": 1,
+   "linhas": 162
+  },
+  "scripts/apply-e2e.test.mjs": {
+   "arquivos": 1,
+   "linhas": 176
+  },
+  "scripts/apply-falhas.test.mjs": {
+   "arquivos": 1,
+   "linhas": 202
+  },
+  "scripts/apply-functions.js": {
+   "arquivos": 1,
+   "linhas": 26
+  },
   "scripts/apply-migrations.js": {
    "arquivos": 1,
-   "linhas": 86
+   "linhas": 28
   },
   "scripts/apply-missing.js": {
    "arquivos": 1,
-   "linhas": 130
+   "linhas": 53
   },
   "scripts/apply-remaining.js": {
    "arquivos": 1,
-   "linhas": 139
+   "linhas": 28
   },
   "scripts/apply-rls.js": {
    "arquivos": 1,
-   "linhas": 123
+   "linhas": 26
   },
   "scripts/apply-triggers-views.js": {
    "arquivos": 1,
-   "linhas": 119
+   "linhas": 26
   },
   "scripts/audit-ausentes.mjs": {
    "arquivos": 1,
-   "linhas": 86
+   "linhas": 154
+  },
+  "scripts/audit-ausentes.test.mjs": {
+   "arquivos": 1,
+   "linhas": 215
   },
   "scripts/check-backend-linter-baseline.mjs": {
    "arquivos": 1,
-   "linhas": 39
+   "linhas": 70
+  },
+  "scripts/check-backend-linter-baseline.test.mjs": {
+   "arquivos": 1,
+   "linhas": 112
   },
   "scripts/check-bundle-size.mjs": {
    "arquivos": 1,
-   "linhas": 75
+   "linhas": 122
+  },
+  "scripts/check-bundle-size.test.mjs": {
+   "arquivos": 1,
+   "linhas": 162
   },
   "scripts/check-deploy-timeout.test.mjs": {
    "arquivos": 1,
-   "linhas": 81
+   "linhas": 114
   },
   "scripts/check-edge-cors.mjs": {
    "arquivos": 1,
-   "linhas": 50
+   "linhas": 221
   },
   "scripts/check-edge-cors.test.mjs": {
    "arquivos": 1,
-   "linhas": 120
+   "linhas": 291
   },
   "scripts/check-edge-imports.mjs": {
    "arquivos": 1,
-   "linhas": 42
+   "linhas": 116
   },
   "scripts/check-publish-gates.test.mjs": {
    "arquivos": 1,
-   "linhas": 165
+   "linhas": 173
   },
   "scripts/check-rls-profiles.test.mjs": {
    "arquivos": 1,
@@ -448,71 +492,99 @@
   },
   "scripts/check-supabase-project-ref.test.mjs": {
    "arquivos": 1,
-   "linhas": 32
+   "linhas": 100
   },
   "scripts/chunk-apply.js": {
    "arquivos": 1,
-   "linhas": 248
+   "linhas": 28
   },
   "scripts/diff-tables.mjs": {
    "arquivos": 1,
-   "linhas": 65
+   "linhas": 114
   },
   "scripts/fix-enums.js": {
    "arquivos": 1,
-   "linhas": 90
+   "linhas": 60
   },
   "scripts/gen-supabase-types.mjs": {
    "arquivos": 1,
-   "linhas": 153
+   "linhas": 223
+  },
+  "scripts/gen-supabase-types.test.mjs": {
+   "arquivos": 1,
+   "linhas": 254
   },
   "scripts/generate_data_dictionary.py": {
    "arquivos": 1,
-   "linhas": 18
+   "linhas": 68
   },
   "scripts/generate_er_diagram.py": {
    "arquivos": 1,
-   "linhas": 34
+   "linhas": 99
   },
   "scripts/generate_real_dict.py": {
    "arquivos": 1,
-   "linhas": 35
+   "linhas": 80
   },
   "scripts/generate_real_er.py": {
    "arquivos": 1,
-   "linhas": 27
+   "linhas": 120
+  },
+  "scripts/hardening": {
+   "arquivos": 3,
+   "linhas": 532
   },
   "scripts/inventario": {
-   "arquivos": 3,
-   "linhas": 527
+   "arquivos": 7,
+   "linhas": 1641
+  },
+  "scripts/lib": {
+   "arquivos": 5,
+   "linhas": 1418
   },
   "scripts/lint-providers.cjs": {
    "arquivos": 1,
-   "linhas": 73
+   "linhas": 185
+  },
+  "scripts/lint-providers.test.mjs": {
+   "arquivos": 1,
+   "linhas": 162
   },
   "scripts/migration": {
-   "arquivos": 19,
-   "linhas": 1577
+   "arquivos": 39,
+   "linhas": 5114
   },
   "scripts/regras_negocio": {
-   "arquivos": 3,
-   "linhas": 2539
+   "arquivos": 5,
+   "linhas": 3166
   },
   "scripts/retry-failed.js": {
    "arquivos": 1,
-   "linhas": 71
+   "linhas": 41
   },
   "scripts/rls-matrix": {
-   "arquivos": 1,
-   "linhas": 110
+   "arquivos": 2,
+   "linhas": 394
   },
   "scripts/run_explain_analyze.py": {
    "arquivos": 1,
-   "linhas": 41
+   "linhas": 220
+  },
+  "scripts/sql-raiz.test.mjs": {
+   "arquivos": 1,
+   "linhas": 290
   },
   "scripts/supabase_snapshot": {
    "arquivos": 2,
-   "linhas": 2692
+   "linhas": 2788
+  },
+  "scripts/test_generate_docs.py": {
+   "arquivos": 1,
+   "linhas": 369
+  },
+  "scripts/test_run_explain_analyze.py": {
+   "arquivos": 1,
+   "linhas": 282
   },
   "src/App.tsx": {
    "arquivos": 1,
@@ -650,23 +722,23 @@
   },
   {
    "arquivo": "scripts/regras_negocio/generate.py",
-   "linhas": 2138
+   "linhas": 2266
   },
   {
    "arquivo": "scripts/supabase_snapshot/snapshot.py",
-   "linhas": 1814
+   "linhas": 1910
   },
   {
    "arquivo": "src/components/interactions/insights/ObjectionExamplesModal.tsx",
    "linhas": 973
   },
   {
-   "arquivo": "src/components/interactions/InteracoesPresetsMenu.tsx",
-   "linhas": 927
+   "arquivo": "scripts/ai-context/gerar.mjs",
+   "linhas": 969
   },
   {
-   "arquivo": "scripts/ai-context/gerar.mjs",
-   "linhas": 924
+   "arquivo": "src/components/interactions/InteracoesPresetsMenu.tsx",
+   "linhas": 927
   },
   {
    "arquivo": "src/data/discAdvancedData.ts",
@@ -747,7 +819,7 @@
  ],
  "qualidade": {
   "any": 27,
-  "console_log": 224,
+  "console_log": 161,
   "ts_ignore": 2,
   "eslint_disable": 1,
   "todos": 8,
@@ -762,13 +834,13 @@
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
-   "linha": 188,
+   "linha": 203,
    "tipo": "TODO",
    "texto": "|FIXME|HACK|XXX)\\b[:\\s-]*([^\\n]{0,100})/.exec(line); if (m) todos.push({ linha: ln, tipo: m[1], text"
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
-   "linha": 222,
+   "linha": 237,
    "tipo": "TODO",
    "texto": "|FIXME|HACK|XXX)\\b[:\\s-]*([^\\n]{0,100})/.exec(l); return m ? { linha: i + 1, tipo: m[1], texto: m[2]"
   },
@@ -798,113 +870,13 @@
   },
   {
    "arquivo": "scripts/regras_negocio/generate.py",
-   "linha": 570,
+   "linha": 618,
    "tipo": "TODO",
    "texto": "\", \"http\", \"import\")) and \"://\" not in c:"
   }
  ],
  "alertas": {
-  "rotas_sem_arquivo": [
-   "/*",
-   "/abm",
-   "/abm/:id",
-   "/abm/campanhas",
-   "/admin",
-   "/admin/audit-trail",
-   "/admin/behavioral-regen-audit",
-   "/admin/component-gallery",
-   "/admin/conexoes",
-   "/admin/conexoes/logs",
-   "/admin/docs",
-   "/admin/email-diagnostics",
-   "/admin/error-budget",
-   "/admin/error-logs",
-   "/admin/feature-flags",
-   "/admin/field-mapping",
-   "/admin/insight-feedback",
-   "/admin/knowledge-export",
-   "/admin/lux-config",
-   "/admin/permissions",
-   "/admin/role-permissions",
-   "/admin/roles",
-   "/admin/schema-drift",
-   "/admin/secrets-management",
-   "/admin/seguranca",
-   "/admin/telemetria",
-   "/admin/voice-diagnostics",
-   "/assistente",
-   "/auth",
-   "/automacoes",
-   "/bi",
-   "/cadastro",
-   "/campanhas",
-   "/conversation-intelligence",
-   "/conversation-intelligence/setup",
-   "/crm/copywriting",
-   "/customer-success",
-   "/customer-success/account/:id",
-   "/deal-rooms",
-   "/deal-rooms/:id",
-   "/deduplicacao",
-   "/design-system",
-   "/documentos",
-   "/dr/:token",
-   "/enrichment",
-   "/erp",
-   "/f/:slug",
-   "/forecasting",
-   "/forecasting/setup",
-   "/historico",
-   "/inbox",
-   "/intelligence",
-   "/intelligence/auditoria",
-   "/intelligence/relacionamento/auditoria",
-   "/intent",
-   "/intent/setup",
-   "/knowledge-base",
-   "/landing-pages",
-   "/lead-scoring",
-   "/lead-scoring/automations",
-   "/lead-scoring/config",
-   "/lm/:slug",
-   "/lp/:slug",
-   "/mapa-empresas",
-   "/marketing",
-   "/marketing/forms/:id",
-   "/marketing/lead-magnets/:id",
-   "/metas",
-   "/notificacoes",
-   "/notificacoes/configuracoes",
-   "/nps",
-   "/nurturing",
-   "/onboarding",
-   "/perfis-comportamentais",
-   "/performance",
-   "/pipeline",
-   "/playbooks",
-   "/playbooks/:id",
-   "/playbooks/battle-cards/:id",
-   "/relatorio/:id",
-   "/relatorios-customizaveis",
-   "/report-builder",
-   "/reset-password",
-   "/revops",
-   "/rodizio",
-   "/seguranca",
-   "/sequencias",
-   "/signature/:token",
-   "/sms-marketing",
-   "/sso/callback",
-   "/status",
-   "/suporte",
-   "/survey/:token",
-   "/tarefas",
-   "/territorios",
-   "/territory-optimization",
-   "/whatsapp/importar",
-   "/win-loss",
-   "/win-loss/setup"
-  ],
+  "rotas_sem_arquivo": [],
   "componentes_ambiguos": [],
   "menu_sem_destino": [
    "1º Contato -> primeiro_contato",
@@ -1218,6 +1190,8 @@
    "WhatsNewModal"
   ],
   "scripts_orfaos": [
+   "scripts/_pgdocs_catalogo.py",
+   "scripts/_pgteste.py",
    "scripts/hardening/check-client-tls.sql",
    "scripts/hardening/check-extensions-hardening.sql",
    "scripts/hardening/check-indexes-duplicated.sql",
@@ -1226,21 +1200,21 @@
    "scripts/hardening/check-publication-without-pk.sql",
    "scripts/hardening/check-replication-config.sql",
    "scripts/hardening/check-security-definer-search-path.sql",
-   "scripts/hardening/check-tables-without-pk.sql",
-   "scripts/migration/verify/cron-timezone-audit.sql",
-   "scripts/migration/verify/extensions-parity.sql",
-   "scripts/migration/verify/extensions-versions.sh",
-   "scripts/migration/verify/grants-parity.sh",
-   "scripts/migration/verify/logical-publication-guard.sql",
-   "scripts/migration/verify/mv-refresh-audit.sql",
-   "scripts/migration/verify/planner-stats-freshness.sh",
-   "scripts/migration/verify/query-plan-regression.sql",
-   "scripts/migration/verify/replication-lag-guard.sql",
-   "scripts/migration/verify/sequences-gap-check.sql",
-   "scripts/migration/verify/storage-public-guard.ts",
-   "scripts/migration/verify/toast-storage-audit.sql",
-   "scripts/migration/verify/triggers-parity.sh",
-   "scripts/migration/verify/tz-locale-parity.sh"
+   "scripts/migration/cdc/order-guard_test.ts",
+   "scripts/migration/cdc/replay_test.ts",
+   "scripts/migration/compliance/lgpd-snapshot_test.ts",
+   "scripts/migration/cutover/smoke-tests_test.ts",
+   "scripts/migration/monitoring/synthetic-checks_test.ts",
+   "scripts/migration/reset-passwords_test.ts",
+   "scripts/migration/storage/_lib_test.ts",
+   "scripts/migration/storage/copy-large_test.ts",
+   "scripts/migration/storage/copy-objects_test.ts",
+   "scripts/migration/storage/create-buckets_test.ts",
+   "scripts/migration/storage/verify-counts_test.ts",
+   "scripts/migration/verify/dual-write-diverge_test.ts",
+   "scripts/migration/verify/rls-parity_test.ts",
+   "scripts/migration/verify/row-diff_test.ts",
+   "scripts/migration/verify/storage-bytes_test.ts"
   ],
   "env_usadas_nao_declaradas": [
    "DEV",
@@ -1250,9 +1224,15 @@
   "ciclos_de_import": 5,
   "possiveis_segredos_no_codigo": [
    "scripts/ai-context/cenarios.mjs:102",
+   "scripts/ai-context/gerar.unit.mjs:40",
+   "scripts/ai-context/gerar.unit.mjs:41",
+   "scripts/ai-context/gerar.unit.mjs:42",
+   "scripts/inventario/banco.test.mjs:40",
+   "scripts/inventario/gerar-banco.test.mjs:273",
    "supabase/functions/_shared/auth_test.ts:61",
    "supabase/functions/_shared/auth_test.ts:68",
-   "supabase/functions/_shared/auth_test.ts:69"
+   "supabase/functions/_shared/auth_test.ts:69",
+   "scripts/regras_negocio/test_generate_fatos.py:200"
   ]
  },
  "erros_do_gerador": []

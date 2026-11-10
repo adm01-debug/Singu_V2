@@ -1923,6 +1923,16 @@
  ],
  "buckets": [
   {
+   "nome": "avatars",
+   "criado_em_sql": false,
+   "usado_em": 1
+  },
+  {
+   "nome": "bucket_x",
+   "criado_em_sql": false,
+   "usado_em": 1
+  },
+  {
    "nome": "company-logos",
    "criado_em_sql": true,
    "usado_em": 0
@@ -1946,6 +1956,11 @@
    "nome": "interaction-audios",
    "criado_em_sql": true,
    "usado_em": 0
+  },
+  {
+   "nome": "orfa",
+   "criado_em_sql": false,
+   "usado_em": 1
   },
   {
    "nome": "whatsapp-audio",
@@ -2028,7 +2043,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -2165,7 +2180,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -2353,7 +2368,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -2568,7 +2583,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -2721,7 +2736,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -2877,7 +2892,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -3028,7 +3043,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -3059,7 +3074,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -3079,7 +3094,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -3155,7 +3170,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -3193,7 +3208,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -3207,7 +3222,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -3321,7 +3336,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -3352,7 +3367,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -3395,7 +3410,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
    "colunas_types": {
@@ -4095,7 +4110,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -4128,7 +4143,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509115734_ef006f0a-d94e-43d2-9b73-a1760e17b259.sql",
    "colunas_types": {
@@ -4201,7 +4216,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -4239,7 +4254,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -4265,7 +4280,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509115357_40a94b7c-1a20-49cd-b0a7-53f4d35ab3af.sql",
    "colunas_types": {
@@ -4331,7 +4346,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -4352,7 +4367,7 @@
    ],
    "fks": [
     "company_id->companies",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260522202232_758fea13-f74f-474c-80f0-ad05dfcdceca.sql",
    "colunas_types": {
@@ -4454,7 +4469,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -4485,7 +4500,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -4534,7 +4549,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
    "colunas_types": {
@@ -4660,7 +4675,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -4703,7 +4718,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260425112649_c82c364c-c465-4a9a-b57c-08ce2baa2e9f.sql",
    "colunas_types": {
@@ -5758,7 +5773,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "vote": {
      "tipo": "smallint",
@@ -5819,7 +5834,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260712222427_ee56845c-c59a-4009-9501-0aebddd7412c.sql",
    "colunas_types": {
@@ -5866,7 +5881,7 @@
     },
     "contact_id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
      "ref": "contacts"
@@ -6043,7 +6058,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -6309,7 +6324,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -6325,7 +6340,7 @@
    "fks": [
     "company_id->companies",
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509170538_45b95e4b-470c-4067-af3c-7502d9b60532.sql",
    "colunas_types": {
@@ -6601,7 +6616,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -6615,7 +6630,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416110447_2588d10f-f092-4372-b34f-5ba45fbeb833.sql",
    "colunas_types": {
@@ -7101,7 +7116,7 @@
     },
     "ibge_code": {
      "tipo": "integer",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
      "ref": null
@@ -7225,7 +7240,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -7249,7 +7264,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -7263,7 +7278,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -8183,7 +8198,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -8466,7 +8481,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "vak_dominant": {
      "tipo": "text",
@@ -8586,7 +8601,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
    "colunas_types": {
@@ -8822,7 +8837,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -9092,7 +9107,7 @@
      "ref": null
     },
     "email_type": {
-     "tipo": "public",
+     "tipo": "email_type",
      "nn": false,
      "pk": false,
      "default": "'corporativo'",
@@ -9107,7 +9122,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -9241,7 +9256,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -9289,7 +9304,7 @@
      "ref": null
     },
     "phone_type": {
-     "tipo": "public",
+     "tipo": "phone_type",
      "nn": false,
      "pk": false,
      "default": "'fixo_comercial'",
@@ -9769,7 +9784,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -10322,7 +10337,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -10629,7 +10644,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -10790,7 +10805,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -10849,7 +10864,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -10881,7 +10896,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260512132827_7f60209b-d5d6-49bb-80d5-117e8298aea5.sql",
    "colunas_types": {
@@ -10953,7 +10968,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -10991,7 +11006,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -11006,7 +11021,7 @@
    "indices": [],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260511211501_21bdb968-dc70-4e04-9c18-4a69e9551cca.sql",
    "colunas_types": {
@@ -11635,7 +11650,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -11852,7 +11867,7 @@
      "ref": null
     },
     "email_type": {
-     "tipo": "public",
+     "tipo": "email_type",
      "nn": false,
      "pk": false,
      "default": "'corporativo'",
@@ -11867,7 +11882,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -11950,7 +11965,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "contact_id": {
      "tipo": "uuid",
@@ -11968,7 +11983,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -12016,7 +12031,7 @@
     }
    ],
    "fks": [
-    "changed_by->auth",
+    "changed_by->auth.users",
     "contact_id->contacts"
    ],
    "criada_em": "20260509152256_96488346-886a-44cc-90bb-48df5bc85660.sql",
@@ -12368,7 +12383,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -12919,7 +12934,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -12974,7 +12989,7 @@
      "ref": null
     },
     "phone_type": {
-     "tipo": "public",
+     "tipo": "phone_type",
      "nn": false,
      "pk": false,
      "default": "'fixo_comercial'",
@@ -13362,7 +13377,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -13883,7 +13898,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -14134,7 +14149,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -14317,7 +14332,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -14509,7 +14524,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "vak_dominant": {
      "tipo": "text",
@@ -14639,7 +14654,7 @@
    "fks": [
     "company_id->companies",
     "duplicate_of->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
    "colunas_types": {
@@ -15235,7 +15250,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -15278,7 +15293,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260417194749_5cd8905d-b137-47f4-8a00-ad3764f982c3.sql",
    "colunas_types": {
@@ -15350,7 +15365,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -15402,7 +15417,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -15417,7 +15432,7 @@
    "indices": [],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509172946_b942797e-e913-40cd-8d27-9adb110a2adf.sql",
    "colunas_types": {
@@ -15481,7 +15496,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -15512,7 +15527,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -15527,7 +15542,7 @@
    "indices": [],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509174220_bc03af22-cc70-44a5-9149-dbfcbc31a350.sql",
    "colunas_types": {
@@ -15672,7 +15687,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -15717,7 +15732,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "version": {
      "tipo": "integer",
@@ -15738,7 +15753,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509174220_bc03af22-cc70-44a5-9149-dbfcbc31a350.sql",
    "colunas_types": {
@@ -15834,7 +15849,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -15866,7 +15881,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260512110025_ab2fa5f9-a65d-4656-801d-8133e7c82653.sql",
    "colunas_types": {
@@ -15909,7 +15924,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -15947,7 +15962,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -15962,7 +15977,7 @@
    "indices": [],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509174220_bc03af22-cc70-44a5-9149-dbfcbc31a350.sql",
    "colunas_types": {
@@ -16010,7 +16025,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -16195,7 +16210,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -16210,7 +16225,7 @@
    "indices": [],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509180917_b4306156-1d1c-4efd-b41f-571c86e0d338.sql",
    "colunas_types": {
@@ -16246,7 +16261,7 @@
     },
     "name": {
      "tipo": "text",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
      "ref": null
@@ -17235,7 +17250,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -17288,7 +17303,7 @@
     "contact_id->contacts",
     "interaction_id->interactions",
     "ticket_id->support_tickets",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416105623_ee42e946-9c48-4f1c-9a43-b2c2c2fdcfa8.sql",
    "colunas_types": {
@@ -17370,7 +17385,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "value": {
      "tipo": "text",
@@ -17398,7 +17413,7 @@
    "indices": [],
    "fks": [
     "custom_field_id->custom_fields",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416104818_95605e2c-6ea2-4fb3-a68a-6940936df0d9.sql",
    "colunas_types": {
@@ -17508,7 +17523,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -17528,7 +17543,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416104818_95605e2c-6ea2-4fb3-a68a-6940936df0d9.sql",
    "colunas_types": {
@@ -17722,7 +17737,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -17873,7 +17888,7 @@
     },
     "customer_id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
      "ref": "customers"
@@ -18232,7 +18247,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -18625,7 +18640,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -18736,7 +18751,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -18833,7 +18848,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -18974,7 +18989,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -19122,7 +19137,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -19318,7 +19333,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -19604,7 +19619,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "valor": {
      "tipo": "numeric",
@@ -19665,7 +19680,7 @@
     "contact_id->contacts",
     "pipeline_id->pipelines",
     "stage_id->pipeline_stages",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260512184042_fccf5358-81d7-4eae-9083-d92055f150d1.sql",
    "colunas_types": {
@@ -19870,7 +19885,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -19901,7 +19916,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -19916,7 +19931,7 @@
    "indices": [],
    "fks": [
     "device_id->user_known_devices",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -20229,7 +20244,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -21637,7 +21652,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "version": {
      "tipo": "integer",
@@ -21658,7 +21673,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416105042_5b9c5d2b-01c4-4835-9445-d798c67a0f5f.sql",
    "colunas_types": {
@@ -21894,7 +21909,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -21908,7 +21923,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416105859_9f65dcc0-4b5c-473d-8e4d-344970052c9b.sql",
    "colunas_types": {
@@ -22844,7 +22859,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "ended_at": {
      "tipo": "date",
@@ -22861,7 +22876,7 @@
      "ref": null
     },
     "from_type": {
-     "tipo": "public",
+     "tipo": "entity_type",
      "nn": true,
      "pk": false,
      "default": null,
@@ -22869,7 +22884,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -22896,7 +22911,7 @@
      "ref": null
     },
     "role": {
-     "tipo": "public",
+     "tipo": "entity_relationship_role",
      "nn": true,
      "pk": false,
      "default": null,
@@ -22917,7 +22932,7 @@
      "ref": null
     },
     "to_type": {
-     "tipo": "public",
+     "tipo": "entity_type",
      "nn": true,
      "pk": false,
      "default": null,
@@ -22981,7 +22996,7 @@
     }
    ],
    "fks": [
-    "created_by->auth"
+    "created_by->auth.users"
    ],
    "criada_em": "20260712215719_930fd99a-437f-423c-a6ce-9a3c5c065106.sql",
    "colunas_types": {
@@ -23253,7 +23268,7 @@
      "ref": null
     },
     "severity": {
-     "tipo": "public",
+     "tipo": "error_severity",
      "nn": true,
      "pk": false,
      "default": "'error'",
@@ -23285,7 +23300,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -23322,7 +23337,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260507194929_8a897147-414a-4dff-ad62-bf627f7d8dad.sql",
    "colunas_types": {
@@ -23357,7 +23372,7 @@
     },
     "ibge_code": {
      "tipo": "integer",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
      "ref": null
@@ -23545,7 +23560,7 @@
     },
     "name": {
      "tipo": "text",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
      "ref": null
@@ -23647,7 +23662,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -23831,7 +23846,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -23870,7 +23885,7 @@
    "indices": [],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509115357_40a94b7c-1a20-49cd-b0a7-53f4d35ab3af.sql",
    "colunas_types": {
@@ -23956,7 +23971,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -23971,7 +23986,7 @@
    "indices": [],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509123119_8d1dd77f-3e2d-412e-8e20-0eff30420cbc.sql",
    "colunas_types": {
@@ -24904,7 +24919,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -24921,7 +24936,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -24935,7 +24950,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -26352,7 +26367,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -26376,7 +26391,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -26415,7 +26430,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
    "colunas_types": {
@@ -26970,7 +26985,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -27022,7 +27037,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -27045,7 +27060,7 @@
     "company_id->companies",
     "contact_id->contacts",
     "last_interaction_id->interactions",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260512132827_7f60209b-d5d6-49bb-80d5-117e8298aea5.sql",
    "colunas_types": {
@@ -27190,7 +27205,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -27270,7 +27285,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -27341,7 +27356,7 @@
    "fks": [
     "company_id->companies",
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
    "colunas_types": {
@@ -27483,7 +27498,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -27568,7 +27583,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -27606,7 +27621,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -27620,7 +27635,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -27725,7 +27740,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "views_count": {
      "tipo": "integer",
@@ -27746,7 +27761,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416110201_c1adf6d7-f6b3-43f6-b96c-cb2ce89a4afd.sql",
    "colunas_types": {
@@ -27816,7 +27831,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -27999,7 +28014,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -29444,7 +29459,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -29606,7 +29621,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -30392,7 +30407,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -30423,7 +30438,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -30449,7 +30464,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -30583,7 +30598,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -30752,7 +30767,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -30999,7 +31014,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "views": {
      "tipo": "integer",
@@ -31032,7 +31047,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260512175533_60e5a2d8-6ef2-428b-8a15-4a3c550f2003.sql",
    "colunas_types": {
@@ -31130,7 +31145,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -31150,7 +31165,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260512175533_60e5a2d8-6ef2-428b-8a15-4a3c550f2003.sql",
    "colunas_types": {
@@ -31207,7 +31222,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -31687,7 +31702,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -31730,7 +31745,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260111014845_9ce8adb5-376f-4e58-aa9e-da013720eb79.sql",
    "colunas_types": {
@@ -32266,7 +32281,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -32439,7 +32454,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -32470,7 +32485,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -32492,7 +32507,7 @@
    "fks": [
     "contact_id->contacts",
     "interaction_id->interactions",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260511200945_d86acef4-cdef-4e40-8420-4610dffa9a89.sql",
    "colunas_types": {
@@ -32556,7 +32571,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -32580,7 +32595,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -32601,7 +32616,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260512104213_27c60b18-b251-47bd-8606-97b9a5d50223.sql",
    "colunas_types": {
@@ -32689,10 +32704,10 @@
     },
     "user_id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "weekend_silence": {
      "tipo": "boolean",
@@ -32725,7 +32740,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260417195323_b84a83b6-e3b8-4d98-be74-9c37a1bdfc21.sql",
    "colunas_types": {
@@ -32770,7 +32785,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -32815,7 +32830,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -32887,7 +32902,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260720000023_create_phantom_tables.sql",
    "colunas_types": {
@@ -33013,7 +33028,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "workflow_id": {
      "tipo": "uuid",
@@ -33035,7 +33050,7 @@
    "indices": [],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth",
+    "user_id->auth.users",
     "workflow_id->nurturing_workflows"
    ],
    "criada_em": "20260416110653_39ecceba-43ea-409e-8b70-b83376e9e57f.sql",
@@ -33313,7 +33328,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -33327,7 +33342,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416110653_39ecceba-43ea-409e-8b70-b83376e9e57f.sql",
    "colunas_types": {
@@ -33725,7 +33740,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "created_at": {
      "tipo": "timestamptz",
@@ -33743,7 +33758,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -33774,7 +33789,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -33794,8 +33809,8 @@
    ],
    "indices": [],
    "fks": [
-    "approved_by->auth",
-    "user_id->auth"
+    "approved_by->auth.users",
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -34017,7 +34032,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -34538,7 +34553,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -34570,7 +34585,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260512184042_fccf5358-81d7-4eae-9083-d92055f150d1.sql",
    "colunas_types": {
@@ -34868,10 +34883,10 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "last_name": {
      "tipo": "text",
@@ -34952,7 +34967,7 @@
    ],
    "fks": [
     "bitrix_user_id->users",
-    "id->auth"
+    "id->auth.users"
    ],
    "criada_em": "20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
    "colunas_types": {
@@ -35086,7 +35101,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -35099,7 +35114,7 @@
      "ref": null
     },
     "outcome": {
-     "tipo": "public",
+     "tipo": "passo_outcome",
      "nn": true,
      "pk": false,
      "default": null,
@@ -35117,7 +35132,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -35154,7 +35169,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260421141000_65788b86-514c-4614-95b8-c7fd0d6726c9.sql",
    "colunas_types": {
@@ -35192,7 +35207,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "changed_fields": {
      "tipo": "text[]",
@@ -35217,7 +35232,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -35248,7 +35263,7 @@
    ],
    "indices": [],
    "fks": [
-    "changed_by->auth",
+    "changed_by->auth.users",
     "contact_id->contacts"
    ],
    "criada_em": "20260512151247_371fdb19-5fa5-459c-87d3-7bbac407fd35.sql",
@@ -35633,7 +35648,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -36025,7 +36040,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -36172,7 +36187,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -37604,7 +37619,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -37713,7 +37728,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -37811,7 +37826,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -37885,7 +37900,7 @@
     },
     "id": {
      "tipo": "bigserial",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
      "ref": null
@@ -37950,7 +37965,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -38099,11 +38114,11 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -38161,7 +38176,7 @@
     }
    ],
    "fks": [
-    "deleted_by->auth",
+    "deleted_by->auth.users",
     "salesperson_id->salespeople"
    ],
    "criada_em": "20261012040000_legacy_sales_owner_scope.sql",
@@ -38193,7 +38208,7 @@
   "sales_activities": {
    "colunas": {
     "activity_type": {
-     "tipo": "public",
+     "tipo": "activity_type",
      "nn": true,
      "pk": false,
      "default": null,
@@ -38232,7 +38247,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "duration_minutes": {
      "tipo": "integer",
@@ -38243,7 +38258,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -38256,7 +38271,7 @@
      "ref": null
     },
     "outcome": {
-     "tipo": "public",
+     "tipo": "activity_outcome",
      "nn": true,
      "pk": false,
      "default": null,
@@ -38299,7 +38314,7 @@
     }
    ],
    "fks": [
-    "deleted_by->auth",
+    "deleted_by->auth.users",
     "sale_id->sales",
     "salesperson_id->salespeople"
    ],
@@ -38774,7 +38789,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "role": {
      "tipo": "text",
@@ -38885,7 +38900,7 @@
    ],
    "fks": [
     "manager_id->sales_team_members",
-    "profile_user_id->auth"
+    "profile_user_id->auth.users"
    ],
    "criada_em": "20260415233816_bf8ddb84-c73e-4d23-a2b0-c3c0f8fdfcc8.sql",
    "colunas_types": {
@@ -38980,7 +38995,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -39000,7 +39015,7 @@
      "ref": null
     },
     "role": {
-     "tipo": "public",
+     "tipo": "salesperson_role",
      "nn": true,
      "pk": false,
      "default": "'hybrid'",
@@ -39147,7 +39162,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -39665,7 +39680,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -40055,7 +40070,7 @@
    "colunas": {
     "contact_id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": null,
      "ref": "contacts"
@@ -40114,7 +40129,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -40131,7 +40146,7 @@
     "contact_id->contacts",
     "enrollment_id->sequence_enrollments",
     "step_id->sequence_steps",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20261013033433_sequence_write_fences.sql",
    "usada_no_front": 0,
@@ -40181,7 +40196,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -40268,7 +40283,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -40301,7 +40316,7 @@
    "fks": [
     "contact_id->contacts",
     "sequence_id->sequences",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416010854_953141e5-cb6c-41fc-b6f3-4d6cd22f434d.sql",
    "colunas_types": {
@@ -40380,7 +40395,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -40534,7 +40549,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -40737,7 +40752,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -40873,7 +40888,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -40946,7 +40961,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -40966,7 +40981,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416010854_953141e5-cb6c-41fc-b6f3-4d6cd22f434d.sql",
    "colunas_types": {
@@ -41236,7 +41251,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -41288,7 +41303,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -41336,7 +41351,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260417195323_b84a83b6-e3b8-4d98-be74-9c37a1bdfc21.sql",
    "colunas_types": {
@@ -41451,7 +41466,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -41581,7 +41596,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -41762,7 +41777,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -41870,7 +41885,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -42252,7 +42267,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -42279,7 +42294,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql",
    "colunas_types": {
@@ -42328,7 +42343,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -42366,7 +42381,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -42415,7 +42430,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260720000023_create_phantom_tables.sql",
    "usada_no_front": 1,
@@ -43079,7 +43094,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -43628,7 +43643,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -43678,7 +43693,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260511171829_49dbb797-809f-41c0-a69c-83762df523ee.sql",
    "colunas_types": {
@@ -43728,7 +43743,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -44134,7 +44149,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -44151,7 +44166,7 @@
     "assigned_to->sales_team_members",
     "company_id->companies",
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416105216_a793748a-fb4a-4903-b69e-2e220cf9070a.sql",
    "colunas_types": {
@@ -44248,7 +44263,7 @@
      "nn": false,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "alert_type": {
      "tipo": "text",
@@ -44273,7 +44288,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -44363,7 +44378,7 @@
     }
    ],
    "fks": [
-    "acknowledged_by->auth"
+    "acknowledged_by->auth.users"
    ],
    "criada_em": "20260420211439_86dd2e38-5985-4465-9f0a-bb770155a426.sql",
    "colunas_types": {
@@ -44619,7 +44634,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -44657,7 +44672,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -44730,7 +44745,7 @@
    ],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260720000023_create_phantom_tables.sql",
    "colunas_types": {
@@ -44856,7 +44871,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -44871,7 +44886,7 @@
    "indices": [],
    "fks": [
     "ticket_id->support_tickets",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416105216_a793748a-fb4a-4903-b69e-2e220cf9070a.sql",
    "colunas_types": {
@@ -45278,25 +45293,25 @@
     {
      "nome": "Users can create their own bundles",
      "comando": "insert",
-     "para": "public",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {
      "nome": "Users can delete their own bundles",
      "comando": "delete",
-     "para": "public",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {
      "nome": "Users can update their own bundles",
      "comando": "update",
-     "para": "public",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {
      "nome": "Users can view their own bundles",
      "comando": "select",
-     "para": "public",
+     "para": "authenticated",
      "tipo": "permissive"
     }
    ],
@@ -46041,7 +46056,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -46072,7 +46087,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -46086,7 +46101,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -46135,7 +46150,7 @@
    "colunas": {
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -46152,7 +46167,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -46190,7 +46205,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260323155106_4e591bd9-2acd-4735-a4f7-2f6008e560f8.sql",
    "colunas_types": {
@@ -46224,7 +46239,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -46255,7 +46270,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -46293,7 +46308,7 @@
     }
    ],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260422165633_c28b4fde-cb8f-4e41-b247-bdb2e17199de.sql",
    "colunas_types": {
@@ -46708,13 +46723,13 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
     },
     "kind": {
-     "tipo": "public",
+     "tipo": "validation_kind",
      "nn": true,
      "pk": false,
      "default": null,
@@ -46742,7 +46757,7 @@
      "ref": null
     },
     "status": {
-     "tipo": "public",
+     "tipo": "validation_queue_status",
      "nn": true,
      "pk": false,
      "default": "'pending'",
@@ -46922,7 +46937,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     },
     "visit_type": {
      "tipo": "text",
@@ -46945,7 +46960,7 @@
    "fks": [
     "company_id->companies",
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416110334_13a365f2-2ff1-4015-af55-f845f5c3171d.sql",
    "colunas_types": {
@@ -47009,7 +47024,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -47054,7 +47069,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -47068,7 +47083,7 @@
    ],
    "indices": [],
    "fks": [
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
    "colunas_types": {
@@ -47497,7 +47512,7 @@
      "nn": true,
      "pk": false,
      "default": null,
-     "ref": "auth"
+     "ref": "auth.users"
     }
    },
    "rls": true,
@@ -47518,7 +47533,7 @@
    "indices": [],
    "fks": [
     "contact_id->contacts",
-    "user_id->auth"
+    "user_id->auth.users"
    ],
    "criada_em": "20260509120024_229eca8e-97fb-4c6a-8a2a-bdc7070c4592.sql",
    "colunas_types": {
@@ -47583,7 +47598,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -47726,7 +47741,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -47893,7 +47908,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -48149,7 +48164,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -48365,7 +48380,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -48500,7 +48515,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null
@@ -48621,7 +48636,7 @@
     },
     "id": {
      "tipo": "uuid",
-     "nn": false,
+     "nn": true,
      "pk": true,
      "default": "gen_random_uuid()",
      "ref": null

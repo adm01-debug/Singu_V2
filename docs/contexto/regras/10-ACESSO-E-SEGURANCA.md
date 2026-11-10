@@ -1,15 +1,15 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1fecfa69f5` · branch `main` · 2026-11-09 21:14 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2143482397` · branch `main` · 2026-11-10 00:59 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
 
-`admin`, `assistant`, `buyer`, `champion`, `contact`, `decision_maker`, `default`, `denied`, `employee_of`, `granted`, `influencer`, `manager`, `moderator`, `other`, `owner`, `parent`, `partner`, `role`, `sponsor`, `subsidiary`, `supplier`, `user`
+`admin`, `assistant`, `buyer`, `champion`, `closer`, `contact`, `decision_maker`, `default`, `denied`, `employee_of`, `granted`, `hybrid`, `influencer`, `manager`, `moderator`, `other`, `owner`, `parent`, `partner`, `role`, `sdr`, `sponsor`, `subsidiary`, `supplier`, `user`
 
 - Tabelas de perfil/permissão: `permissions`, `role_permissions`, `sales_team_members`, `user_roles`
 - Colunas de perfil: `ai_chat_messages.role` (TEXT NOT NULL CHECK (role IN ('user', 'assistant', 'system'))), `contacts.role` (TEXT CHECK (role IN ('owner', 'manager', 'buyer', 'contact', 'decision_maker', 'influencer')) DEFAULT 'contact'), `entity_relationships.role` (public.entity_relationship_role NOT NULL), `role_permissions.role` (app_role NOT NULL), `sales_team_members.role` (TEXT NOT NULL DEFAULT 'sdr' CHECK (role IN ('sdr', 'closer', 'manager'))), `user_roles.role` (app_role NOT NULL), `salespeople.role` (public.salesperson_role NOT NULL DEFAULT 'hybrid')
-- Claims do JWT usados em políticas/funções: `aal`, `role`
+- Claims do JWT usados em políticas/funções: `aal`
 - Funções usadas dentro de políticas RLS (a regra real está no corpo delas — veja `06`): `has_role`
 
 ## Matriz tabela × operação → quem pode (derivada das políticas RLS)
@@ -17,317 +17,347 @@
 | Tabela | RLS | SELECT | INSERT | UPDATE | DELETE |
 |---|---|---|---|---|---|
 | `_dormant.inactivity_alerts` | enabled | authenticated: (contact_id IS NOT NULL OR company_id IS NOT NULL) AND (contact_id IS NULL OR EXISTS (SELECT 1 FROM public.contacts c WHERE c | — | — | — |
+| `_fk_orphans` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `_migration_cdc_checkpoint` | enabled | service_role: true | service_role: true | service_role: true | service_role: true |
-| `abm_account_plans` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `abm_accounts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `abm_buying_committee` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `abm_campaigns` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `abm_whitespace_opportunities` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `access_blocked_log` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: false | — | — |
-| `access_security_settings` | enabled | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() |
-| `activities` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `ai_chat_messages` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `ai_chat_threads` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
+| `_migration_schema_snapshot` | enabled | — | — | — | — |
+| `_seq_gap_report` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `abm_account_plans` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: auth.uid() = user_id |
+| `abm_accounts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `abm_buying_committee` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `abm_campaigns` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `abm_whitespace_opportunities` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `access_blocked_log` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: false | — | — |
+| `access_security_settings` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `activities` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `ai_chat_messages` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `ai_chat_threads` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `ai_gateway_metrics` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role)<br>service_role: true | service_role: true | service_role: true | service_role: true |
-| `ai_recommendation_audit_logs` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | — |
-| `ai_recommendation_audit_logs_v2` | enabled | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) |
-| `ai_recommendation_logs` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | — |
-| `ai_tone_preferences` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `alerts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `applied_objection_responses` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `attribution_models_cache` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `attribution_touchpoints` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `audit_log` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | — | — |
-| `automation_logs` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `automation_rules` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `battle_cards` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `behavioral_insight_feedback` | enabled | authenticated: auth.uid() = user_id<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `behavioral_profile_regen_queue` | enabled | authenticated: auth.uid() = user_id<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | — |
-| `brain_dominance_analysis` | enabled | public: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = brain_dominance_analysis.contact_id AND c.user_id = auth.uid() ) | authenticated: EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = brain_dominance_analysis.contact_id AND c.user_id = auth.uid()) OR publi | public: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = brain_dominance_analysis.contact_id AND c.user_id = auth.uid() ) | — |
-| `call_logs` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `campaign_recipients` | enabled | public: EXISTS (SELECT 1 FROM public.email_campaigns ec WHERE ec.id = campaign_recipients.campaign_id AND ec.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.email_campaigns ec WHERE ec.id = campaign_recipients.campaign_id AND ec.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.email_campaigns ec WHERE ec.id = campaign_recipients.campaign_id AND ec.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.email_campaigns ec WHERE ec.id = campaign_recipients.campaign_id AND ec.user_id = auth.uid()) |
-| `canned_responses` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `churn_risk_scores` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `city_whitelist` | enabled | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() |
-| `client_values` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `coaching_scorecards` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `cognitive_bias_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | public: auth.uid() = user_id |
-| `communication_preferences` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `companies` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `compatibility_alerts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `compatibility_settings` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id |
+| `ai_recommendation_audit_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
+| `ai_recommendation_audit_logs_v2` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `ai_recommendation_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
+| `ai_tone_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `alerts` | enabled | public: auth.uid() = user_id | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `applied_objection_responses` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: auth.uid() = user_id | authenticated: ((select auth.uid()) = user_id) |
+| `attribution_models_cache` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `attribution_touchpoints` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `audit_log` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | — | — |
+| `automation_logs` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `automation_rules` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `battle_cards` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `behavioral_insight_feedback` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `behavioral_profile_regen_queue` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — |
+| `brain_dominance_analysis` | enabled | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = brain_dominance_analysis.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = brain_dominance_analysis.contact_id) AND (c.user_id = (select auth.uid())) | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = brain_dominance_analysis.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = brain_dominance_analysis.contact_id AND c.user_id = auth.uid() ) |
+| `call_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `campaign_recipients` | enabled | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) |
+| `canned_responses` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `churn_risk_scores` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `cidades` | enabled | authenticated: true | — | — | — |
+| `city_whitelist` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `client_values` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `coaching_scorecards` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `cognitive_bias_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `communication_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `companies` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) |
+| `company_addresses` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `company_emails` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `company_phones` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `compatibility_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `compatibility_settings` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
 | `competitors` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `connection_anomalies` | enabled | public: public.has_role(auth.uid(), 'admin') | service_role: true | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') |
-| `connection_configs` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
-| `connection_quotas` | enabled | public: public.has_role(auth.uid(), 'admin')<br>authenticated: EXISTS ( SELECT 1 FROM public.incoming_webhooks w WHERE w.id = connection_quotas.webhook_id AND w.created_by = auth.uid() ) | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') |
-| `connection_test_logs` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | — | — |
-| `contact_analytical_profile_versions` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | — | — |
-| `contact_analytical_profiles` | enabled | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `contact_automation_settings` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `contact_behavior` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = auth.uid())))) OR has_role(a<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = auth.uid())))) OR has_role(a<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = auth.uid())))) OR has_role(a<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = auth.uid())))) OR has_role(a<br>authenticated: true |
-| `contact_business_context` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = auth.uid())))) OR ha<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = auth.uid())))) OR ha<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = auth.uid())))) OR ha<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = auth.uid())))) OR ha<br>authenticated: true |
-| `contact_cadence` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `contact_cadence_audit` | enabled | public: auth.uid() = user_id | — | — | — |
-| `contact_decision_making` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = auth.uid())))) OR has<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = auth.uid())))) OR has<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = auth.uid())))) OR has<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = auth.uid())))) OR has<br>authenticated: true |
+| `connection_anomalies` | enabled | public: has_role((select auth.uid()), 'admin'::app_role) | service_role: true | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) |
+| `connection_configs` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `connection_quotas` | enabled | public: has_role((select auth.uid()), 'admin'::app_role)<br>authenticated: (EXISTS ( SELECT 1 FROM incoming_webhooks w WHERE ((w.id = connection_quotas.webhook_id) AND (w.created_by = (select auth.uid | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) |
+| `connection_test_logs` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — | — |
+| `contact_analytical_profile_versions` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | — | — |
+| `contact_analytical_profiles` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `contact_automation_settings` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `contact_behavior` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = (select auth.uid()))))) OR h<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = (select auth.uid()))))) OR h<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = (select auth.uid()))))) OR h<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_behavior.contact_id) AND (c.user_id = (select auth.uid()))))) OR h<br>authenticated: true |
+| `contact_business_context` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = (select auth.uid()))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = (select auth.uid()))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = (select auth.uid()))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_business_context.contact_id) AND (c.user_id = (select auth.uid()))<br>authenticated: true |
+| `contact_cadence` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `contact_cadence_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `contact_decision_making` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid())))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid())))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid())))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid())))<br>authenticated: true |
 | `contact_emails` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
-| `contact_family_history` | enabled | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: auth.uid() = user_id | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: auth.uid() = user_id | — | — |
-| `contact_influence` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = auth.uid())))) OR has_role(<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = auth.uid())))) OR has_role(<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = auth.uid())))) OR has_role(<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = auth.uid())))) OR has_role(<br>authenticated: true |
-| `contact_metaprograms` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = auth.uid())))) OR has_ro<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = auth.uid())))) OR has_ro<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = auth.uid())))) OR has_ro<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = auth.uid())))) OR has_ro<br>authenticated: true |
-| `contact_next_actions` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `contact_objection_scripts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | — |
-| `contact_personality` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_rol<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_rol<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_rol<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_rol<br>authenticated: true |
-| `contact_phones` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
-| `contact_predictive_roadmap` | enabled | public: auth.uid() = user_id<br>public: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = public.contact_predictive_roadmap.contact_id AND (c.user_id = auth.uid() OR au<br>public: auth.jwt() ->> 'role' = 'service_role' | public: auth.uid() = user_id<br>public: auth.jwt() ->> 'role' = 'service_role' | public: auth.uid() = user_id<br>public: auth.jwt() ->> 'role' = 'service_role' | public: auth.jwt() ->> 'role' = 'service_role' |
-| `contact_preferences` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `contact_preferences_audit` | enabled | public: auth.uid() = user_id | — | — | — |
-| `contact_rapport_strategy` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = auth.uid())))) OR ha<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = auth.uid())))) OR ha<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = auth.uid())))) OR ha<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = auth.uid())))) OR ha<br>authenticated: true |
-| `contact_relatives` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `contact_relatives_audit` | enabled | public: auth.uid() = user_id | — | — | — |
-| `contact_report_overrides` | enabled | public: auth.uid() IS NOT NULL | public: auth.uid() IS NOT NULL | public: auth.uid() IS NOT NULL | — |
-| `contact_social_media` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
-| `contact_time_analysis` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `contact_time_analysis_audit` | enabled | public: auth.uid() = user_id | — | — | — |
-| `contacts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `conversation_analyses` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `conversation_topics_catalog` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `conversational_search_cache` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `crm_alerts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `crm_automation_logs` | enabled | public: auth.uid() = user_id | — | — | — |
-| `crm_automation_reprocess_queue` | enabled | public: auth.uid() IN (SELECT user_id FROM public.crm_automation_logs WHERE id = log_id) | — | — | — |
-| `crm_cadence_rules` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `crm_consent_audit_logs` | enabled | — | public: (auth.uid() = user_id) | — | — |
-| `crm_metric_overrides` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `crm_objection_intelligence` | enabled | public: auth.role() = 'authenticated'<br>public: auth.role() = 'authenticated'<br>public: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = public.crm_objection_intelligence.contact_id AND (c.user_id = auth.uid() OR au<br>public: auth.jwt() ->> 'role' = 'service_role'<br>public: auth.role() = 'authenticated' | public: auth.role() = 'authenticated'<br>public: auth.jwt() ->> 'role' = 'service_role'<br>public: auth.role() = 'authenticated' | public: auth.role() = 'authenticated'<br>public: auth.jwt() ->> 'role' = 'service_role'<br>public: auth.role() = 'authenticated' | public: auth.role() = 'authenticated'<br>public: auth.jwt() ->> 'role' = 'service_role'<br>public: auth.role() = 'authenticated' |
-| `crm_relationship_audit_logs` | enabled | public: auth.uid() = user_id | — | — | — |
+| `contact_family_history` | enabled | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | — | — |
+| `contact_influence` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR <br>authenticated: true |
+| `contact_metaprograms` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) <br>authenticated: true |
+| `contact_next_actions` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `contact_objection_scripts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
+| `contact_personality` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_rol<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) O<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) O<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) O<br>authenticated: true |
+| `contact_phones` | não encontrado | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del |
+| `contact_predictive_roadmap` | enabled | public: ((select auth.uid()) = user_id)<br>public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_predictive_roadmap.contact_id) AND ((c.user_id = (select auth.uid())) OR (<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) |
+| `contact_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `contact_preferences_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `contact_rapport_strategy` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))<br>authenticated: true |
+| `contact_relatives` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `contact_relatives_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `contact_report_overrides` | enabled | public: ((select auth.uid()) IS NOT NULL) | public: ((select auth.uid()) IS NOT NULL) | public: ((select auth.uid()) IS NOT NULL) | — |
+| `contact_time_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `contact_time_analysis_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `contacts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `conversation_analyses` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `conversation_topics_catalog` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `conversational_search_cache` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `crm_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `crm_automation_logs` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `crm_automation_reprocess_queue` | enabled | public: ((select auth.uid()) IN ( SELECT crm_automation_logs.user_id FROM crm_automation_logs WHERE (crm_automation_logs.id = crm_automation | — | — | — |
+| `crm_cadence_rules` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `crm_consent_audit_logs` | enabled | public: auth.uid() = user_id | public: ((select auth.uid()) = user_id) | — | — |
+| `crm_metric_overrides` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `crm_objection_intelligence` | enabled | public: ((select auth.role()) = 'authenticated'::text)<br>public: ((select auth.role()) = 'authenticated'::text)<br>public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = crm_objection_intelligence.contact_id) AND ((c.user_id = (select auth.uid())) OR (<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text)<br>public: ((select auth.role()) = 'authenticated'::text) | public: ((select auth.role()) = 'authenticated'::text)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text)<br>public: ((select auth.role()) = 'authenticated'::text) | public: ((select auth.role()) = 'authenticated'::text)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text)<br>public: ((select auth.role()) = 'authenticated'::text) | public: ((select auth.role()) = 'authenticated'::text)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text)<br>public: ((select auth.role()) = 'authenticated'::text) |
+| `crm_relationship_audit_logs` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
 | `cron_secrets` | enabled | service_role: true | service_role: true | service_role: true | service_role: true |
-| `cs_accounts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `cs_health_signals` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `cs_nps_responses` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `cs_qbrs` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `cs_renewals` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `csat_surveys` | enabled | public: auth.uid() = user_id<br>anon, authenticated: public_token IS NOT NULL AND (expires_at IS NULL OR expires_at > now())<br>anon, authenticated: public_token IS NOT NULL | public: auth.uid() = user_id | public: auth.uid() = user_id<br>anon, authenticated: public_token IS NOT NULL AND status = 'sent' AND (expires_at IS NULL OR expires_at > now())<br>anon: public_token IS NOT NULL AND status = 'pending' | public: auth.uid() = user_id |
-| `custom_field_values` | enabled | public: auth.uid() = user_id<br>authenticated: user_id IS NULL OR user_id = (SELECT auth.uid()) | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `custom_fields` | enabled | public: auth.uid() = user_id<br>authenticated: user_id IS NULL OR user_id = (SELECT auth.uid()) | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
+| `cs_accounts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `cs_health_signals` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `cs_nps_responses` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `cs_qbrs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `cs_renewals` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `csat_surveys` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: public_token IS NOT NULL AND (expires_at IS NULL OR expires_at > now())<br>anon, authenticated: public_token IS NOT NULL<br>authenticated: (SELECT auth.uid()) = user_id | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id | public: ((select auth.uid()) = user_id)<br>anon, authenticated: public_token IS NOT NULL AND status = 'sent' AND (expires_at IS NULL OR expires_at > now())<br>anon: public_token IS NOT NULL AND status = 'pending'<br>authenticated: (SELECT auth.uid()) = user_id | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id |
+| `custom_field_values` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: user_id IS NULL OR user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `custom_fields` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: user_id IS NULL OR user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `customer_ownership_history` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `customer_purchases` | enabled | — | — | — | — |
+| `customer_rotation_state` | enabled | — | — | — | — |
+| `customer_sdr_history` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `data_retention_policies` | enabled | authenticated: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin')<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin')<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin')<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin')<br>service_role: true |
-| `deal_forecasts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `deal_room_activities` | enabled | public: auth.uid() = user_id<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: auth.uid() = user_id<br>anon, authenticated: actor_side = 'buyer' AND activity_type = 'view' AND EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND  | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `deal_room_comments` | enabled | public: auth.uid() = user_id<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `deal_room_documents` | enabled | public: auth.uid() = user_id<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `deal_room_milestones` | enabled | public: auth.uid() = user_id<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `deal_room_stakeholders` | enabled | public: auth.uid() = user_id<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `deal_rooms` | enabled | public: auth.uid() = user_id<br>anon, authenticated: share_enabled = true | public: auth.uid() = user_id | public: auth.uid() = user_id<br>anon, authenticated: share_enabled = true | public: auth.uid() = user_id |
-| `deals` | enabled | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id |
-| `decision_criteria` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `device_login_notifications` | enabled | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() |
-| `disc_analysis_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | public: auth.uid() = user_id |
-| `disc_analysis_history_audit` | enabled | public: auth.uid() = user_id | — | — | — |
-| `disc_communication_logs` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `disc_conversion_metrics` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
+| `deal_forecasts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `deal_room_activities` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id)<br>anon, authenticated: actor_side = 'buyer' AND activity_type = 'view' AND EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND  | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `deal_room_comments` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `deal_room_documents` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `deal_room_milestones` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `deal_room_stakeholders` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `deal_rooms` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: share_enabled = true | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>anon, authenticated: share_enabled = true | public: ((select auth.uid()) = user_id) |
+| `deals` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
+| `decision_criteria` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `device_login_notifications` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `disc_analysis_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `disc_analysis_history_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `disc_communication_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `disc_conversion_metrics` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
 | `disc_profile_config` | enabled | authenticated: true | — | — | — |
-| `document_signatures` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `document_templates` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `document_views` | enabled | public: EXISTS ( SELECT 1 FROM public.document_signatures s WHERE s.id = document_views.signature_id AND s.user_id = auth.uid() ) | authenticated: false | — | — |
-| `documents` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `email_campaigns` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `email_finder_results` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `email_thread_summaries` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `email_verifications` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `emotional_anchors` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `emotional_states_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | public: auth.uid() = user_id |
-| `entity_relationships` | enabled | authenticated: created_by = auth.uid() | authenticated: auth.uid() IS NOT NULL | authenticated: created_by = auth.uid() OR public.has_role(auth.uid(), 'admin') | authenticated: created_by = auth.uid() OR public.has_role(auth.uid(), 'admin') |
-| `eq_analysis_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | public: auth.uid() = user_id |
-| `error_logs` | enabled | public: public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() IS NOT NULL | — | authenticated: public.has_role(auth.uid(), 'admin') |
-| `favorite_templates` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | public: auth.uid() = user_id |
-| `feature_flags` | enabled | authenticated: true | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
-| `ficha360_conversation_summaries` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | public: auth.uid() = user_id |
-| `follow_up_approvals` | enabled | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id |
-| `follow_up_approvals_v2` | enabled | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id |
-| `forecast_categories_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | — |
-| `forecast_periods` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `forecast_quota_settings` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | — |
-| `forecast_snapshots` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | public: auth.uid() = user_id |
-| `form_submissions` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: EXISTS (SELECT 1 FROM public.forms f WHERE f.id = form_id AND f.is_published = true AND f.user_id = form_submissions.user_id) | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `forms` | enabled | public: auth.uid() = user_id<br>public: is_published = true<br>anon, authenticated: is_published = true | public: auth.uid() = user_id | public: auth.uid() = user_id<br>anon, authenticated: is_published = true | public: auth.uid() = user_id |
-| `geo_allowed_countries` | enabled | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() |
-| `handoff_requests` | enabled | authenticated: auth.uid() = user_id<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `health_alert_settings` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `health_alerts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `hidden_objections` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `incoming_webhook_dlq` | enabled | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') |
-| `incoming_webhook_logs` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: false | — | — |
+| `document_signatures` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `document_templates` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `document_views` | enabled | public: (EXISTS ( SELECT 1 FROM document_signatures s WHERE ((s.id = document_views.signature_id) AND (s.user_id = (select auth.uid()))))) | authenticated: false | — | — |
+| `documents` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `email_campaigns` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `email_finder_results` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `email_thread_summaries` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `email_verifications` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `emotional_anchors` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `emotional_states_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `entity_relationships` | enabled | authenticated: created_by = auth.uid() | authenticated: ((select auth.uid()) IS NOT NULL) | authenticated: ((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role)) | authenticated: ((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role)) |
+| `eq_analysis_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `error_logs` | enabled | public: has_role((select auth.uid()), 'admin'::app_role) | authenticated: auth.uid() IS NOT NULL AND user_id = auth.uid() | — | authenticated: public.has_role(auth.uid(), 'admin') |
+| `estados` | enabled | authenticated: true | — | — | — |
+| `favorite_templates` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
+| `feature_flags` | enabled | authenticated: true | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `ficha360_conversation_summaries` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
+| `follow_up_approvals` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) |
+| `follow_up_approvals_v2` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) |
+| `forecast_categories_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
+| `forecast_periods` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `forecast_quota_settings` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
+| `forecast_snapshots` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
+| `form_submissions` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: EXISTS (SELECT 1 FROM public.forms f WHERE f.id = form_id AND f.is_published = true AND f.user_id = form_submissions.user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `forms` | enabled | public: ((select auth.uid()) = user_id)<br>public: is_published = true<br>anon, authenticated: is_published = true | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>anon, authenticated: is_published = true | public: ((select auth.uid()) = user_id) |
+| `geo_allowed_countries` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `handoff_requests` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `health_alert_settings` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `health_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `hidden_objections` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `incoming_webhook_dlq` | enabled | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) |
+| `incoming_webhook_logs` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: false | — | — |
 | `incoming_webhook_nonces` | enabled | — | — | — | — |
-| `incoming_webhooks` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
-| `insights` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `intent_scores` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `intent_signals` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `intent_tracking_pixels` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `interaction_summaries` | enabled | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `interactions` | enabled | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id |
-| `interactions_audit` | enabled | public: auth.uid() = user_id | — | — | — |
-| `ip_whitelist` | enabled | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() |
-| `knowledge_base_articles` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `landing_page_submissions` | enabled | authenticated: auth.uid() = user_id | anon, authenticated: EXISTS (SELECT 1 FROM public.landing_pages lp WHERE lp.id = landing_page_id AND lp.is_published = true AND lp.user_id = | — | — |
-| `landing_pages` | enabled | authenticated: auth.uid() = user_id<br>anon, authenticated: is_published = true<br>anon, authenticated: is_published = true | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `lead_assignments` | enabled | authenticated: auth.uid() = user_id<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `lead_magnet_downloads` | enabled | public: auth.uid() = user_id | public: EXISTS (SELECT 1 FROM public.lead_magnets m WHERE m.id = magnet_id AND m.is_published = true AND m.user_id = lead_magnet_downloads.u | — | — |
-| `lead_magnets` | enabled | public: auth.uid() = user_id<br>public: is_published = true | public: auth.uid() = user_id | public: auth.uid() = user_id<br>anon, authenticated: is_published = true | public: auth.uid() = user_id |
-| `lead_routing_rules` | enabled | authenticated: auth.uid() = user_id<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `lead_score_config` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | — |
-| `lead_score_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | — |
-| `lead_score_recompute_queue` | enabled | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) | — | — |
-| `lead_score_rules` | enabled | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) |
-| `lead_score_threshold_automations` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `lead_score_threshold_log` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | — |
-| `lead_score_thresholds` | enabled | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) | public: (auth.uid() = user_id) |
-| `lead_scores` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `life_events` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `life_events_history` | enabled | authenticated: auth.uid() = user_id | — | — | — |
-| `login_attempts` | enabled | authenticated: user_id = auth.uid()<br>authenticated: public.has_role(auth.uid(), 'admin') | service_role: true | — | — |
-| `lux_intelligence` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `lux_webhook_config` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
-| `marketing_campaign_stats` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | — |
-| `marketing_roi_data` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | — |
-| `mcp_tool_calls` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | service_role: true | — | — |
-| `meeting_summaries` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `metaprogram_analysis` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | public: auth.uid() = user_id |
+| `incoming_webhooks` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `insights` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `intent_scores` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `intent_signals` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `intent_tracking_pixels` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `interaction_summaries` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `interactions` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) |
+| `interactions_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `ip_whitelist` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `knowledge_base_articles` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `landing_page_submissions` | enabled | authenticated: ((select auth.uid()) = user_id) | anon, authenticated: EXISTS (SELECT 1 FROM public.landing_pages lp WHERE lp.id = landing_page_id AND lp.is_published = true AND lp.user_id = | — | — |
+| `landing_pages` | enabled | authenticated: ((select auth.uid()) = user_id)<br>anon, authenticated: is_published = true<br>anon, authenticated: is_published = true | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `lead_assignments` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `lead_magnet_downloads` | enabled | public: ((select auth.uid()) = user_id) | public: EXISTS (SELECT 1 FROM public.lead_magnets m WHERE m.id = magnet_id AND m.is_published = true AND m.user_id = lead_magnet_downloads.u | — | — |
+| `lead_magnets` | enabled | public: ((select auth.uid()) = user_id)<br>public: is_published = true | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>anon, authenticated: is_published = true | public: ((select auth.uid()) = user_id) |
+| `lead_routing_rules` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `lead_score_config` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
+| `lead_score_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
+| `lead_score_recompute_queue` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
+| `lead_score_rules` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `lead_score_threshold_automations` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `lead_score_threshold_log` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
+| `lead_score_thresholds` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `lead_scores` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `life_events` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `life_events_history` | enabled | authenticated: ((select auth.uid()) = user_id) | — | — | — |
+| `login_attempts` | enabled | authenticated: (user_id = (select auth.uid()))<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | service_role: true | — | — |
+| `lux_intelligence` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `lux_webhook_config` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `marketing_campaign_stats` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
+| `marketing_roi_data` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
+| `mcp_tool_calls` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | service_role: true | — | — |
+| `meeting_summaries` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `metaprogram_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `migration_password_reset_log` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | — | — | — |
-| `mql_classifications` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `mql_criteria` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `neuro_behavioral_history` | enabled | public: EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid()) | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid())))) | — | — |
-| `neuro_pnl_sessions` | enabled | public: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = neuro_pnl_sessions.contact_id AND c.user_id = auth.uid() ) | authenticated: EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = neuro_pnl_sessions.contact_id AND c.user_id = auth.uid()) OR public.has_ | public: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = neuro_pnl_sessions.contact_id AND c.user_id = auth.uid() ) | — |
-| `nlp_feedback` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | — |
-| `notification_logs` | enabled | public: auth.uid() = user_id | — | — | — |
-| `notification_preferences` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | — |
+| `mql_classifications` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `mql_criteria` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `neuro_behavioral_history` | enabled | public: EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid()) | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid()))))) | — | — |
+| `neuro_pnl_sessions` | enabled | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_pnl_sessions.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_pnl_sessions.contact_id) AND (c.user_id = (select auth.uid()))))) OR | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_pnl_sessions.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = neuro_pnl_sessions.contact_id AND c.user_id = auth.uid() ) |
+| `nlp_feedback` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
+| `notification_logs` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `notification_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
 | `notifications` | enabled | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id |
-| `nurturing_enrollments` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `nurturing_executions` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `nurturing_workflows` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `objection_example_feedback` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `offer_suggestions` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
+| `nurturing_enrollments` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `nurturing_executions` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `nurturing_workflows` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `objection_example_feedback` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `offer_suggestions` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `ops_backup.acl_snapshot` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
-| `password_reset_requests` | enabled | authenticated: user_id = auth.uid()<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
-| `people_intelligence_events` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | public: auth.uid() = user_id |
-| `permissions` | enabled | authenticated: true<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
-| `phone_validations` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `pipeline_stage_transitions` | enabled | authenticated: true<br>public: auth.uid() IS NOT NULL<br>public: public.has_role(auth.uid(), 'admin')<br>public: true | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') |
+| `password_reset_requests` | enabled | authenticated: (user_id = (select auth.uid()))<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `people_intelligence_events` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
+| `permissions` | enabled | authenticated: true<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `phone_validations` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `pipeline_stage_transitions` | enabled | public: true<br>authenticated: true | — | — | — |
 | `pipeline_stages` | enabled | public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid())<br>public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid()) |
 | `pipelines` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `playbook_usage_log` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | — |
-| `profiles` | enabled | public: auth.uid() = id | public: auth.uid() = id | public: auth.uid() = id | — |
-| `proximo_passo_feedback` | enabled | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | — | authenticated: user_id = auth.uid() |
-| `psychographic_audit_log` | enabled | authenticated: EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = psychographic_audit_log.contact_id AND c.user_id = auth.uid()) OR public | — | — | — |
-| `purchase_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `push_subscriptions` | enabled | authenticated: auth.uid() = user_id<br>public: auth.uid() = user_id<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>authenticated: user_id = (SELECT auth.uid()) |
-| `query_telemetry` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | — | authenticated: auth.uid() = user_id<br>authenticated: public.has_role(auth.uid(), 'admin') |
-| `redistribution_log` | enabled | authenticated: auth.uid() = user_id<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = user_id | — | — |
-| `reframing_analysis` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | — |
-| `reframing_analysis_audit` | enabled | public: auth.uid() = user_id | — | — | — |
-| `revops_alerts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `revops_benchmarks` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `revops_snapshots` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | public: auth.uid() = user_id |
-| `rfm_analysis` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `rfm_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `rfm_metrics` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `rfm_segment_config` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `rls_report_compat.audit_events` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
-| `rls_report_compat.companies` | não encontrado | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `rls_report_compat.contacts` | não encontrado | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `rls_report_compat.deals` | não encontrado | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id |
-| `rls_report_compat.interactions` | não encontrado | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id |
-| `role_permissions` | enabled | authenticated: true<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
+| `playbook_usage_log` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
+| `profiles` | enabled | public: ((select auth.uid()) = id) | public: ((select auth.uid()) = id) | public: ((select auth.uid()) = id) | authenticated: id = auth.uid() |
+| `proximo_passo_feedback` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | — | authenticated: (user_id = (select auth.uid())) |
+| `psychographic_audit_log` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = psychographic_audit_log.contact_id) AND (c.user_id = (select auth.uid()))) | — | — | — |
+| `purchase_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `push_subscriptions` | enabled | authenticated: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid()) |
+| `query_telemetry` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | — | authenticated: ((select auth.uid()) = user_id)<br>authenticated: public.has_role(auth.uid(), 'admin') |
+| `redistribution_log` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | — | — |
+| `reframing_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
+| `reframing_analysis_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `revops_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `revops_benchmarks` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `revops_snapshots` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
+| `rfm_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `rfm_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `rfm_metrics` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `rfm_segment_config` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `rodizio_distribuicao_staging` | enabled | — | — | — | — |
+| `rodizio_execucoes` | enabled | — | — | — | — |
+| `role_permissions` | enabled | authenticated: true<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
 | `rpc_perf_samples` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | — | — | — |
 | `rpc_plan_snapshots` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role)<br>service_role: true | service_role: true | service_role: true | service_role: true |
 | `sales` | não encontrado | authenticated: EXISTS ( SELECT 1 FROM public.salespeople sp WHERE sp.id = sales.salesperson_id AND sp.auth_user_id = (SELECT auth.uid()) ) | sem RLS | sem RLS | sem RLS |
 | `sales_activities` | não encontrado | authenticated: EXISTS ( SELECT 1 FROM public.salespeople sp WHERE sp.id = sales_activities.salesperson_id AND sp.auth_user_id = (SELECT auth | sem RLS | sem RLS | sem RLS |
-| `sales_playbooks` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `sales_team_members` | enabled | authenticated: auth.uid() = user_id<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
+| `sales_playbooks` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `sales_team_members` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
 | `salespeople` | não encontrado | authenticated: auth_user_id = (SELECT auth.uid()) | sem RLS | sem RLS | sem RLS |
-| `schema_drift_alerts` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = user_id | authenticated: public.has_role(auth.uid(), 'admin') | — |
-| `score_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | public: auth.uid() = user_id |
-| `search_products_cache` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `secret_rotation_log` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | — | authenticated: public.has_role(auth.uid(), 'admin') |
-| `semantic_search_cache` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: (auth.uid() = user_id) | public: auth.uid() = user_id |
-| `sentiment_annotations` | enabled | authenticated: auth.uid() = created_by OR EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = sentiment_annotations.contact_id AND c.user_i | authenticated: auth.uid() = created_by | authenticated: auth.uid() = created_by OR public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = created_by OR public.has_role(auth.uid(), 'admin') |
+| `schema_drift_alerts` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — |
+| `score_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `search_products_cache` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `secret_rotation_log` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `semantic_search_cache` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `sentiment_annotations` | enabled | authenticated: (((select auth.uid()) = created_by) OR (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = sentiment_annotations.contact_id) AN | authenticated: ((select auth.uid()) = created_by) | authenticated: (((select auth.uid()) = created_by) OR has_role((select auth.uid()), 'admin'::app_role)) | authenticated: (((select auth.uid()) = created_by) OR has_role((select auth.uid()), 'admin'::app_role)) |
 | `sequence_email_reservations` | enabled | authenticated: user_id = (SELECT auth.uid()) OR ( (SELECT public.has_role(auth.uid(), 'admin'::public.app_role)) AND (SELECT auth.jwt()->>'a | — | — | — |
-| `sequence_enrollments` | enabled | authenticated: user_id = auth.uid()<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX | authenticated: user_id = auth.uid()<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX | authenticated: user_id = auth.uid()<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX | authenticated: user_id = auth.uid()<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX |
-| `sequence_events` | enabled | public: auth.uid() = user_id<br>public: auth.jwt() ->> 'role' = 'service_role' | public: auth.uid() = user_id<br>public: auth.jwt() ->> 'role' = 'service_role' | public: auth.jwt() ->> 'role' = 'service_role' | public: auth.jwt() ->> 'role' = 'service_role' |
-| `sequence_send_log` | enabled | public: auth.uid() = user_id<br>public: auth.jwt() ->> 'role' = 'service_role' | public: auth.jwt() ->> 'role' = 'service_role' | public: auth.jwt() ->> 'role' = 'service_role' | public: auth.jwt() ->> 'role' = 'service_role' |
-| `sequence_steps` | enabled | authenticated: EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) | authenticated: EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) | authenticated: EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) | authenticated: EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) |
-| `sequences` | enabled | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() |
-| `smart_notifications` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `sms_campaign_recipients` | enabled | public: EXISTS (SELECT 1 FROM public.sms_campaigns c WHERE c.id = campaign_id AND c.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.sms_campaigns c WHERE c.id = campaign_id AND c.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.sms_campaigns c WHERE c.id = campaign_id AND c.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.sms_campaigns c WHERE c.id = campaign_id AND c.user_id = auth.uid()) |
-| `sms_campaigns` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `sms_opt_outs` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `sms_templates` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `social_behavior_analysis` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `social_consent_audit` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | — |
+| `sequence_enrollments` | enabled | authenticated: (user_id = (select auth.uid()))<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX | authenticated: (user_id = (select auth.uid()))<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX | authenticated: (user_id = (select auth.uid()))<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX | authenticated: (user_id = (select auth.uid()))<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX |
+| `sequence_events` | enabled | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) |
+| `sequence_send_log` | enabled | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) |
+| `sequence_steps` | enabled | authenticated: (EXISTS ( SELECT 1 FROM sequences s WHERE ((s.id = sequence_steps.sequence_id) AND (s.user_id = (select auth.uid()))))) | authenticated: (EXISTS ( SELECT 1 FROM sequences s WHERE ((s.id = sequence_steps.sequence_id) AND (s.user_id = (select auth.uid()))))) | authenticated: (EXISTS ( SELECT 1 FROM sequences s WHERE ((s.id = sequence_steps.sequence_id) AND (s.user_id = (select auth.uid()))))) | authenticated: (EXISTS ( SELECT 1 FROM sequences s WHERE ((s.id = sequence_steps.sequence_id) AND (s.user_id = (select auth.uid()))))) |
+| `sequences` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `smart_notifications` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `sms_campaign_recipients` | enabled | public: (EXISTS ( SELECT 1 FROM sms_campaigns c WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = (select auth.uid()))))) | public: (EXISTS ( SELECT 1 FROM sms_campaigns c WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = (select auth.uid()))))) | public: (EXISTS ( SELECT 1 FROM sms_campaigns c WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = (select auth.uid()))))) | public: (EXISTS ( SELECT 1 FROM sms_campaigns c WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = (select auth.uid()))))) |
+| `sms_campaigns` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `sms_opt_outs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `sms_templates` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `social_behavior_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `social_consent_audit` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
 | `social_insights` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `social_life_events` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `social_profiles` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `social_scraping_schedule` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `social_sync_queue` | enabled | authenticated: EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = social_sync_queue.contact_id AND c.user_id = auth.uid()) OR public.has_r | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid() ) | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid() ) | — |
-| `stakeholder_alerts` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `suggested_life_events` | enabled | service_role: true<br>authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') | service_role: true<br>authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') | service_role: true<br>authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') | service_role: true<br>authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') |
-| `suggested_rapport_intel` | enabled | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: auth.uid() = user_id | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: auth.uid() = user_id | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `support_tickets` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `system_alerts` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | — | authenticated: public.has_role(auth.uid(), 'admin') | — |
-| `system_config` | enabled | authenticated: true<br>authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
-| `system_health_snapshots` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | — | — |
+| `social_life_events` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `social_profiles` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `social_scraping_schedule` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `social_sync_queue` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = social_sync_queue.contact_id) AND (c.user_id = (select auth.uid()))))) OR  | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid() ) | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid() ) | — |
+| `stakeholder_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `suggested_life_events` | enabled | service_role: true<br>authenticated: (((select auth.uid()) = user_id) OR has_role((select auth.uid()), 'admin'::app_role)) | service_role: true<br>authenticated: (((select auth.uid()) = user_id) OR has_role((select auth.uid()), 'admin'::app_role)) | service_role: true<br>authenticated: (((select auth.uid()) = user_id) OR has_role((select auth.uid()), 'admin'::app_role)) | service_role: true<br>authenticated: (((select auth.uid()) = user_id) OR has_role((select auth.uid()), 'admin'::app_role)) |
+| `suggested_rapport_intel` | enabled | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `support_tickets` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `system_alerts` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — |
+| `system_config` | enabled | authenticated: true<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `system_health_snapshots` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — | — |
 | `tasks` | enabled | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id |
-| `ticket_comments` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `trigger_ab_tests` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `trigger_bundles` | enabled | public: auth.uid() = user_id OR is_system_bundle = true | public: auth.uid() = user_id | public: auth.uid() = user_id AND is_system_bundle = false | public: auth.uid() = user_id AND is_system_bundle = false |
-| `trigger_channel_effectiveness` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `trigger_intensity_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `trigger_usage_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `user_known_devices` | enabled | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() |
-| `user_roles` | enabled | authenticated: auth.uid() = user_id<br>authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
-| `user_ui_preferences` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `vak_analysis_history` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | public: auth.uid() = user_id |
-| `validation_queue` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | — |
-| `visit_checkins` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `webauthn_credentials` | enabled | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() | authenticated: user_id = auth.uid() |
-| `weekly_report_settings` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `weekly_reports` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id |
-| `whatsapp_ingestion_logs` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | — |
-| `whatsapp_instances` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `whatsapp_kpis` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `whatsapp_messages` | enabled | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id | public: (auth.uid() = user_id)<br>public: auth.uid() = user_id |
-| `whatsapp_messages_index` | enabled | authenticated: EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = whatsapp_messages_index.contact_id AND c.user_id = auth.uid()) OR public | authenticated: EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = whatsapp_messages_index.contact_id AND c.user_id = auth.uid()) OR public | — | — |
-| `whatsapp_transcriptions` | enabled | public: EXISTS ( SELECT 1 FROM public.whatsapp_messages m WHERE m.id = whatsapp_transcriptions.whatsapp_message_id AND m.user_id = auth.uid( | — | — | — |
-| `win_loss_insights` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | — | public: auth.uid() = user_id |
-| `win_loss_reasons` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `win_loss_records` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
+| `ticket_comments` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `trigger_ab_tests` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `trigger_bundles` | enabled | authenticated: (((select auth.uid()) = user_id) OR (is_system_bundle = true)) | authenticated: (((select auth.uid()) = user_id) AND (COALESCE(is_system_bundle, false) = false)) | authenticated: (((select auth.uid()) = user_id) AND (is_system_bundle = false)) | authenticated: (((select auth.uid()) = user_id) AND (is_system_bundle = false)) |
+| `trigger_channel_effectiveness` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `trigger_intensity_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `trigger_usage_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `user_known_devices` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `user_roles` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `user_ui_preferences` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `users` | não encontrado | authenticated: has_role(auth.uid(), 'admin'::app_role) | sem RLS | authenticated: has_role(auth.uid(), 'admin'::app_role) | sem RLS |
+| `vak_analysis_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `validation_queue` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
+| `visit_checkins` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `webauthn_credentials` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `weekly_report_settings` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `weekly_reports` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `whatsapp_ingestion_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
+| `whatsapp_instances` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `whatsapp_kpis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `whatsapp_messages` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) |
+| `whatsapp_messages_index` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = whatsapp_messages_index.contact_id) AND (c.user_id = (select auth.uid()))) | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = whatsapp_messages_index.contact_id) AND (c.user_id = (select auth.uid()))) | — | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = whatsapp_messages_index.contact_id AND c.user_id = auth.uid() ) |
+| `whatsapp_transcriptions` | enabled | public: (EXISTS ( SELECT 1 FROM whatsapp_messages m WHERE ((m.id = whatsapp_transcriptions.whatsapp_message_id) AND (m.user_id = (select aut | — | — | — |
+| `win_loss_insights` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
+| `win_loss_reasons` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `win_loss_records` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 262 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 283 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.unit.mjs`
+- `scripts/check_unified_comm.sql`
 - `scripts/gen-supabase-types.mjs`
+- `scripts/gen-supabase-types.test.mjs`
+- `scripts/hardening/_pg-teste.mjs`
 - `scripts/inventario/gerar-banco.mjs`
+- `scripts/lib/mgmt-mock.test.mjs`
+- `scripts/lib/sql-split.test.mjs`
 - `scripts/migration/cdc/checkpoint.sql`
 - `scripts/migration/cdc/replay.ts`
+- `scripts/migration/cdc/replay_test.ts`
 - `scripts/migration/compliance/lgpd-snapshot.ts`
+- `scripts/migration/compliance/lgpd-snapshot_test.ts`
 - `scripts/migration/ddl/05_grants.sql`
 - `scripts/migration/ddl/07_policies.sql`
 - `scripts/migration/ddl/08_functions.sql`
+- `scripts/migration/ddl/tests/supabase-stubs.sql`
 - `scripts/migration/reset-passwords.ts`
+- `scripts/migration/reset-passwords_test.ts`
 - `scripts/migration/sql/create-reset-log.sql`
+- `scripts/migration/sql/sql.test.mjs`
 - `scripts/migration/storage/_lib.ts`
+- `scripts/migration/storage/_lib_test.ts`
 - `scripts/migration/storage/copy-large.ts`
+- `scripts/migration/storage/copy-large_test.ts`
 - `scripts/migration/storage/copy-objects.ts`
+- `scripts/migration/storage/copy-objects_test.ts`
 - `scripts/migration/storage/create-buckets.ts`
+- `scripts/migration/storage/create-buckets_test.ts`
 - `scripts/migration/storage/list-buckets.ts`
 - `scripts/migration/storage/verify-counts.ts`
+- `scripts/migration/storage/verify-counts_test.ts`
+- `scripts/migration/tests/lib/fixture-roles.sql`
 - `scripts/migration/verify/dual-write-diverge.ts`
+- `scripts/migration/verify/dual-write-diverge_test.ts`
 - `scripts/migration/verify/grants-parity.sql`
-- `scripts/migration/verify/row-diff.ts`
 - `scripts/migration/verify/statement-timeout-audit.sql`
 - `scripts/migration/verify/storage-bytes.ts`
+- `scripts/migration/verify/storage-bytes_test.ts`
 - `scripts/migration/verify/storage-public-guard.ts`
+- `scripts/recreate_data_health_view.sql`
+- `scripts/recreate_unified_comm.sql`
 - `scripts/regras_negocio/generate.py`
+- `scripts/regras_negocio/test_generate_fatos.py`
+- `scripts/sql-raiz.test.mjs`
 - `scripts/supabase_snapshot/snapshot.py`
 - `src/components/admin/conexoes/ConnectionFormDialog.tsx`
 - `supabase/functions/_shared/aiGatewayLogger.ts`
@@ -432,28 +462,7 @@
 - `supabase/migrations/20260420120250_19397a25-edf3-4939-854a-9d4fdc534f65.sql`
 - `supabase/migrations/20260420122559_cbe81a51-13f5-42a6-8cd6-d892ca9f2028.sql`
 - `supabase/migrations/20260420131656_838cdcdc-3f02-4be8-8d54-f41f765252ea.sql`
-- `supabase/migrations/20260420161848_3c2ff3b2-701f-4b80-86e1-7f6e884e504a.sql`
-- `supabase/migrations/20260420164301_fd8e7656-6d01-4223-bd56-f51bdc6aabf4.sql`
-- `supabase/migrations/20260420211439_86dd2e38-5985-4465-9f0a-bb770155a426.sql`
-- `supabase/migrations/20260507194904_2c2619d2-100d-4166-8b79-ff93f6f0371d.sql`
-- `supabase/migrations/20260509113217_ad89ac31-a870-47d0-9f1b-3907f579c18f.sql`
-- `supabase/migrations/20260512105729_9e0ffd45-400f-45c7-b371-7437029a5de3.sql`
-- `supabase/migrations/20260512124918_c4be5da8-3ce2-4822-90dc-2194d3f8b75a.sql`
-- `supabase/migrations/20260711145839_f975d6cc-cb77-4466-b7f5-23fff3ca9f06.sql`
-- `supabase/migrations/20260711145934_2a6e17ce-fe99-4c3b-8753-396c60229448.sql`
-- `supabase/migrations/20260711152812_6c39e481-8892-4747-9d27-144b71b055e4.sql`
-- `supabase/migrations/20260711152838_4a2451e6-e015-477b-99fc-ea820078259a.sql`
-- `supabase/migrations/20260712214843_b232442d-1b58-4dc7-b610-25efd0eef9a7.sql`
-- `supabase/migrations/20260712215719_930fd99a-437f-423c-a6ce-9a3c5c065106.sql`
-- `supabase/migrations/20260712221610_4c6bd7d1-8599-4798-a055-a56e9e3f0f5c.sql`
-- `supabase/migrations/20260712221944_e2a7b947-777b-4eaf-8ea4-fe2e542d605e.sql`
-- `supabase/migrations/20260712222427_ee56845c-c59a-4009-9501-0aebddd7412c.sql`
-- `supabase/migrations/20260712223208_00845b35-c2fa-4378-b2e8-2649a03c4c92.sql`
-- `supabase/migrations/20260712230955_ef4a1bf7-bedb-45d4-af84-81111a75dfef.sql`
-- `supabase/migrations/20260713105030_f26185f4-df7c-4f97-b866-a909011939b3.sql`
-- `supabase/migrations/20260713124628_449b2996-71fd-45fe-bd67-a73e8f011a72.sql`
-- `supabase/migrations/20260715184735_158ce47d-f19e-4371-a652-b6fc4c158271.sql`
-- … +112 (lista completa em `context.json`)
+- … +133 (lista completa em `context.json`)
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -525,6 +534,7 @@
 - `ensure_audit_log_partition`
 - `evaluate_ai_gateway_alerts`
 - `evaluate_mql`
+- `fn_valida_dominio_signup`
 - `generate_daily_digest`
 - `generate_pre_contact_briefing`
 - `generate_rapport_suggestions`
@@ -707,34 +717,37 @@ Middleware matcher (Next.js): nenhum
 |---|---|---|---|
 | grant | PUBLIC, anon | execute | `submit_public_form`, `get_deal_room_by_token`, `record_buyer_view`, `buyer_add_comment`, `buyer_toggle_milestone`, `get_buyer_document_path`, `increment_form_view`, `increment_magnet_view`, `immutable_unaccent` |
 | grant | anon | execute | `get_deal_room_by_token`, `get_buyer_document_path`, `buyer_add_comment`, `buyer_toggle_milestone`, `record_buyer_view`, `submit_public_form`, `track_magnet_download`, `increment_form_view`, `increment_magnet_view`, `increment_landing_page_view` |
-| grant | anon | insert | `deal_room_activities`, `landing_page_submissions` |
-| grant | anon | select | `csat_surveys`, `document_signatures`, `forms`, `landing_page_submissions`, `landing_pages`, `deal_rooms`, `deal_room_milestones`, `deal_room_stakeholders`, `deal_room_documents`, `deal_room_comments`, `deal_room_activities`, `deal_room_comments`, `deal_room_documents`, `deal_room_milestones`, `deal_room_stakeholders` … +5 |
+| grant | anon | insert | `deal_room_activities`, `landing_page_submissions`, `landing_page_submissions` |
+| grant | anon | select | `csat_surveys`, `document_signatures`, `forms`, `landing_page_submissions`, `landing_pages`, `deal_rooms`, `deal_room_milestones`, `deal_room_stakeholders`, `deal_room_documents`, `deal_room_comments`, `deal_room_activities`, `deal_room_comments`, `deal_room_documents`, `deal_room_milestones`, `deal_room_stakeholders` … +6 |
 | grant | anon | select, insert | `deal_room_activities` |
 | grant | anon | select, update | `csat_surveys` |
 | grant | anon, authenticated | execute | `get_deal_room_by_token`, `record_buyer_view`, `buyer_toggle_milestone`, `buyer_add_comment`, `get_buyer_document_path`, `increment_magnet_view`, `track_magnet_download`, `increment_form_view`, `submit_public_form` |
 | grant | anon, authenticated | select | `csat_surveys_public`, `forms_public`, `landing_pages_public`, `document_signatures_public` |
 | grant | anon, authenticated, service_role | execute | `get_public_csat_survey`, `submit_public_csat_survey`, `increment_landing_page_view`, `get_public_csat_survey`, `submit_public_csat_survey` |
-| grant | authenticated | execute | `seed_deal_room`, `encrypt_connection_config`, `decrypt_connection_config`, `get_connection_metrics`, `compute_attribution`, `check_relationship_consistency`, `get_contact_behavior_gaps`, `validate_behavioral_consistency`, `get_contact_framework_gaps`, `get_contact_life_event_gaps`, `get_connection_metrics`, `seed_conversation_topics`, `compute_account_health`, `cs_renewal_pipeline`, `seed_forecast_period` … +33 |
-| grant | authenticated | select | `v_life_events_audit`, `slow_queries_audit`, `v_entities`, `behavioral_profile_regen_queue`, `contact_analytical_profile_versions`, `system_config`, `document_signatures_public`, `csat_surveys_public`, `data_retention_policies`, `ai_gateway_metrics`, `rpc_perf_samples`, `rpc_plan_snapshots`, `rpc_perf_samples`, `rpc_plan_snapshots`, `sequence_email_reservations` |
+| grant | authenticated | execute | `seed_deal_room`, `encrypt_connection_config`, `decrypt_connection_config`, `get_connection_metrics`, `compute_attribution`, `check_relationship_consistency`, `get_contact_behavior_gaps`, `validate_behavioral_consistency`, `get_contact_framework_gaps`, `get_contact_life_event_gaps`, `get_connection_metrics`, `seed_conversation_topics`, `compute_account_health`, `cs_renewal_pipeline`, `seed_forecast_period` … +35 |
+| grant | authenticated | select | `v_life_events_audit`, `slow_queries_audit`, `v_entities`, `behavioral_profile_regen_queue`, `contact_analytical_profile_versions`, `system_config`, `document_signatures_public`, `csat_surveys_public`, `mv_daily_kpis`, `mv_daily_stats`, `data_retention_policies`, `ai_gateway_metrics`, `rpc_perf_samples`, `rpc_plan_snapshots`, `users_public` … +7 |
 | grant | authenticated | select, insert | `audit_log`, `rfm_history` |
 | grant | authenticated | select, insert, update | `migration_password_reset_log` |
-| grant | authenticated | select, insert, update, delete | `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences`, `alerts` … +245 |
-| grant | authenticated, service_role | execute | `get_system_config_num`, `assert_self_user_id`, `assert_self_user_id`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access` … +15 |
-| grant | authenticated, service_role | select | `_dormant.inactivity_alerts` |
-| grant | service_role | all | `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences` … +261 |
-| grant | service_role | execute | `increment_webhook_quota`, `execute_readonly_query`, `cleanup_behavioral_regen_queue`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `auto_ack_stale_mtta_sla_breaches`, `check_mtta_auto_ack_heartbeat`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access` … +56 |
+| grant | authenticated | select, insert, update, delete | `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences`, `alerts` … +246 |
+| grant | authenticated, service_role | execute | `get_system_config_num`, `assert_self_user_id`, `assert_self_user_id`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access` … +17 |
+| grant | authenticated, service_role | select | `vw_rodizio_carga_closers`, `vw_rodizio_carga_sdrs`, `vw_rodizio_execucoes`, `vw_rodizio_bloqueios`, `vw_rodizio_kpis`, `vw_rodizio_execucoes`, `vw_singu_data_health`, `_dormant.inactivity_alerts` |
+| grant | service_role | all | `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences` … +263 |
+| grant | service_role | execute | `increment_webhook_quota`, `execute_readonly_query`, `cleanup_behavioral_regen_queue`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `auto_ack_stale_mtta_sla_breaches`, `check_mtta_auto_ack_heartbeat`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access` … +61 |
 | grant | service_role | select, insert, delete | `incoming_webhook_nonces` |
 | grant | service_role, authenticated | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition` |
-| revoke | PUBLIC | all | `get_connection_metrics`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `assert_self_user_id`, `assert_self_user_id`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `record_rpc_perf_sample`, `get_rpc_perf_stats`, `cleanup_rpc_perf_samples`, `get_top_slow_rpcs` … +10 |
+| revoke | PUBLIC | all | `_migration_schema_snapshot`, `get_connection_metrics`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `assert_self_user_id`, `assert_self_user_id`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `record_rpc_perf_sample`, `get_rpc_perf_stats`, `cleanup_rpc_perf_samples` … +11 |
 | revoke | PUBLIC | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `net` |
-| revoke | PUBLIC, anon | all | `auto_ack_stale_mtta_sla_breaches`, `get_system_config_num`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access`, `assert_violation_access` … +21 |
-| revoke | PUBLIC, anon | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition`, `get_ai_gateway_health` |
-| revoke | PUBLIC, anon, authenticated | all | `_connection_encryption_key`, `check_mtta_auto_ack_heartbeat`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access`, `assert_deal_access`, `assert_event_access`, `assert_goal_access`, `assert_interaction_access`, `assert_note_access`, `assert_notification_access`, `assert_opportunity_access`, `assert_proposal_access` … +67 |
-| revoke | PUBLIC, anon, authenticated | execute | `evaluate_ai_gateway_alerts` |
+| revoke | PUBLIC | select | `mv_daily_kpis`, `mv_daily_stats` |
+| revoke | PUBLIC, anon | all | `auto_ack_stale_mtta_sla_breaches`, `get_system_config_num`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access`, `assert_violation_access` … +29 |
+| revoke | PUBLIC, anon | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition`, `get_ai_gateway_health`, `has_role` |
+| revoke | PUBLIC, anon, authenticated | all | `_connection_encryption_key`, `check_mtta_auto_ack_heartbeat`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access`, `assert_deal_access`, `assert_event_access`, `assert_goal_access`, `assert_interaction_access`, `assert_note_access`, `assert_notification_access`, `assert_opportunity_access`, `assert_proposal_access` … +72 |
+| revoke | PUBLIC, anon, authenticated | execute | `evaluate_ai_gateway_alerts`, `set_updated_at`, `trg_normalizar_telefone`, `trg_normalizar_email`, `singu_sync_company_address`, `singu_sync_legacy_company_name` |
 | revoke | PUBLIC, anon, authenticated | truncate, references, trigger | `public` |
 | revoke | PUBLIC, anon, authenticated | update | `validation_queue`, `behavioral_profile_regen_queue` |
 | revoke | PUBLIC, anon, authenticated, service_role | all | `guard_contact_relation_write` |
 | revoke | PUBLIC, anon, service_role | all | `resume_sequence_email`, `merge_records_atomically`, `merge_records_atomically` |
+| revoke | PUBLIC, authenticated | all | `cron_secrets` |
+| revoke | PUBLIC, authenticated | insert, update, delete | `login_attempts` |
 | revoke | PUBLIC, authenticated, anon | execute | `public` |
 | revoke | anon | all | `public`, `assert_self_user_id`, `assert_self_user_id`, `get_contact_sidebar_by_phone`, `public`, `public`, `get_contact_sidebar_by_phone` |
 | revoke | anon | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `net`, `check_behavioral_regen_cron_staleness`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `enqueue_behavioral_profile_regen`, `get_behavioral_regen_cron_health`, `notify_admins_on_critical_behavioral_alert`, `simulate_behavioral_regen_alert`, `cleanup_cron_job_run_details` |
@@ -756,15 +769,19 @@ Middleware matcher (Next.js): nenhum
 
 | Tabela | Problema | Arquivos |
 |---|---|---|
+| `company_addresses` | acessada do front (3 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useBIAdvanced.ts`<br>`src/hooks/useConversationalSearch.ts`<br>`src/pages/MapaEmpresas.tsx` |
+| `company_emails` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useDedupEngine.ts` |
+| `company_phones` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useDedupEngine.ts` |
 | `crm_automation_logs` | front faz UPDATE mas nenhuma política RLS permite UPDATE → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
 | `crm_automation_reprocess_queue` | front faz INSERT mas nenhuma política RLS permite INSERT → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
-| `crm_consent_audit_logs` | front faz SELECT mas nenhuma política RLS permite SELECT → vai falhar/retornar vazio para usuários | `src/components/crm/consent/ConsentAuditLog.tsx` |
 | `incoming_webhook_nonces` | RLS ligado sem nenhuma política → só service_role acessa |  |
+| `rodizio_distribuicao_staging` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useRodizioOndas.ts` |
+| `users` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useRodizioEquipe.ts` |
 
 ## Multi-tenancy
 
-- Chave de tenant: **`company_id`** presente em 21 tabela(s): `ai_tone_preferences`, `call_logs`, `contacts`, `cs_accounts`, `deal_forecasts`, `deal_rooms`, `document_signatures`, `handoff_requests`, `intent_signals`, `interaction_summaries`, `interactions`, `lead_assignments`, `neuro_pnl_sessions`, `redistribution_log`, `rfm_analysis`, `stakeholder_alerts`, `support_tickets`, `visit_checkins`, `whatsapp_messages`, `deals`, `_dormant.inactivity_alerts`
-- Cobertura: 7% das tabelas. Abaixo de 60% — isolamento provavelmente por usuário (auth.uid()) ou misto; não flagado por tabela.
+- Chave de tenant: **`company_id`** presente em 25 tabela(s): `ai_tone_preferences`, `call_logs`, `contacts`, `cs_accounts`, `deal_forecasts`, `deal_rooms`, `document_signatures`, `handoff_requests`, `intent_signals`, `interaction_summaries`, `interactions`, `lead_assignments`, `neuro_pnl_sessions`, `redistribution_log`, `rfm_analysis`, `stakeholder_alerts`, `support_tickets`, `visit_checkins`, `whatsapp_messages`, `deals`, `customer_purchases`, `company_phones`, `company_emails`, `company_addresses`, `_dormant.inactivity_alerts`
+- Cobertura: 9% das tabelas. Abaixo de 60% — isolamento provavelmente por usuário (auth.uid()) ou misto; não flagado por tabela.
 
 ## Soft delete (registros 'apagados' continuam na tabela — filtre!)
 
@@ -775,7 +792,6 @@ Middleware matcher (Next.js): nenhum
 | `battle_cards` | `active` |
 | `city_whitelist` | `is_active` |
 | `coaching_scorecards` | `active` |
-| `companies` | `deleted_at` |
 | `competitors` | `active` |
 | `connection_configs` | `is_active` |
 | `contacts` | `deleted_at` |
@@ -801,7 +817,6 @@ Middleware matcher (Next.js): nenhum
 | `salespeople` | `is_active` |
 | `sales` | `deleted_at` |
 | `sales_activities` | `deleted_at` |
-| `contact_social_media` | `is_active` |
 
 ## Auditoria (colunas de rastreio)
 
@@ -1056,17 +1071,21 @@ Middleware matcher (Next.js): nenhum
 | `data_retention_policies` | `created_at`, `updated_at` |
 | `ai_gateway_metrics` | `created_at` |
 | `rpc_perf_samples` | `created_at` |
+| `customer_purchases` | `created_at` |
+| `customer_rotation_state` | `updated_at` |
 | `incoming_webhook_nonces` | `created_at` |
+| `estados` | `created_at` |
+| `cidades` | `created_at` |
+| `company_phones` | `created_at`, `updated_at` |
+| `company_emails` | `created_at`, `updated_at` |
+| `company_addresses` | `created_at`, `updated_at` |
 | `salespeople` | `created_at`, `updated_at` |
 | `sales` | `created_at`, `deleted_by`, `updated_at` |
 | `sales_activities` | `created_at`, `deleted_by` |
+| `contact_emails` | `created_at`, `updated_at` |
+| `contact_phones` | `created_at`, `updated_at` |
 | `_dormant.inactivity_alerts` | `created_at` |
 | `sequence_email_reservations` | `created_at` |
-| `contact_phones` | `created_at`, `updated_at` |
-| `contact_emails` | `created_at`, `updated_at` |
-| `contact_social_media` | `created_at`, `updated_at` |
-| `rls_report_compat.contacts` | `updated_at` |
-| `rls_report_compat.interactions` | `created_at` |
 
 ## Dados pessoais / sensíveis (LGPD — cuidado em logs, exports, prompts de IA)
 
@@ -1096,6 +1115,7 @@ Middleware matcher (Next.js): nenhum
 | `login_attempts` | `ip_address` |
 | `password_reset_requests` | `email` |
 | `profiles` | `phone` |
+| `profiles` | `email` |
 | `sales_team_members` | `email` |
 | `sms_campaign_recipients` | `phone` |
 | `sms_opt_outs` | `phone` |
@@ -1103,6 +1123,13 @@ Middleware matcher (Next.js): nenhum
 | `visit_checkins` | `latitude` |
 | `visit_checkins` | `longitude` |
 | `visit_checkins` | `address` |
+| `cidades` | `latitude` |
+| `cidades` | `longitude` |
+| `company_emails` | `email` |
+| `company_addresses` | `cep` |
+| `company_addresses` | `logradouro` |
+| `company_addresses` | `latitude` |
+| `company_addresses` | `longitude` |
 | `salespeople` | `email` |
 | `contact_emails` | `email` |
 
@@ -1150,6 +1177,10 @@ Middleware matcher (Next.js): nenhum
 | `sms_campaigns` | `cost_estimate_cents` | `integer` |
 | `system_health_snapshots` | `total_latency_ms` | `INTEGER` |
 | `trigger_bundles` | `total_uses` | `INTEGER` |
+| `deals` | `valor` | `numeric` |
 | `rpc_plan_snapshots` | `total_cost` | `numeric` |
+| `customer_purchases` | `valor` | `numeric(14,2)` |
+| `rodizio_execucoes` | `total_elegiveis` | `integer` |
+| `rodizio_execucoes` | `total_rotacionados` | `integer` |
 | `salespeople` | `commission_rate` | `numeric(5,2)` |
 | `sales` | `amount` | `numeric(12,2)` |

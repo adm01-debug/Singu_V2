@@ -5,17 +5,17 @@
   "vitest",
   "playwright"
  ],
- "total": 214,
+ "total": 241,
  "por_tipo": {
   "contrato": 38,
   "e2e": 12,
-  "pytest": 2,
-  "unit": 160
+  "pytest": 7,
+  "unit": 182
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 91
+   "arquivos": 113
   },
   {
    "padrao": "co-localizado (__tests__)",
@@ -26,12 +26,12 @@
    "arquivos": 22
   },
   {
-   "padrao": "e2e/",
-   "arquivos": 6
+   "padrao": "outro",
+   "arquivos": 9
   },
   {
-   "padrao": "outro",
-   "arquivos": 4
+   "padrao": "e2e/",
+   "arquivos": 6
   }
  ],
  "arquivos": [
@@ -80,30 +80,93 @@
   {
    "arquivo": "scripts/ai-context/gerar.unit.mjs",
    "tipo": "unit",
-   "linhas": 361,
+   "linhas": 532,
+   "testa": [],
+   "casos": 1
+  },
+  {
+   "arquivo": "scripts/apply-cli.test.mjs",
+   "tipo": "unit",
+   "linhas": 171,
    "testa": [
-    "src/hooks/useContacts.ts"
+    "scripts/apply-missing.js",
+    "scripts/fix-enums.js",
+    "scripts/lib/sql-split.mjs",
+    "scripts/lib/supabase-mgmt.mjs",
+    "scripts/retry-failed.js"
    ],
-   "casos": 18
+   "casos": 15
+  },
+  {
+   "arquivo": "scripts/apply-ddl-real.test.mjs",
+   "tipo": "unit",
+   "linhas": 162,
+   "testa": [
+    "scripts/apply-all.js",
+    "scripts/lib/supabase-mgmt.mjs"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "scripts/apply-e2e.test.mjs",
+   "tipo": "unit",
+   "linhas": 176,
+   "testa": [
+    "scripts/lib/supabase-mgmt.mjs"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "scripts/apply-falhas.test.mjs",
+   "tipo": "unit",
+   "linhas": 202,
+   "testa": [
+    "scripts/lib/supabase-mgmt.mjs"
+   ],
+   "casos": 24
+  },
+  {
+   "arquivo": "scripts/audit-ausentes.test.mjs",
+   "tipo": "unit",
+   "linhas": 215,
+   "testa": [
+    "scripts/audit-ausentes.mjs",
+    "scripts/diff-tables.mjs"
+   ],
+   "casos": 14
+  },
+  {
+   "arquivo": "scripts/check-backend-linter-baseline.test.mjs",
+   "tipo": "unit",
+   "linhas": 112,
+   "testa": [],
+   "casos": 13
+  },
+  {
+   "arquivo": "scripts/check-bundle-size.test.mjs",
+   "tipo": "unit",
+   "linhas": 162,
+   "testa": [],
+   "casos": 16
   },
   {
    "arquivo": "scripts/check-deploy-timeout.test.mjs",
    "tipo": "unit",
-   "linhas": 81,
+   "linhas": 114,
    "testa": [],
    "casos": 1
   },
   {
    "arquivo": "scripts/check-edge-cors.test.mjs",
    "tipo": "unit",
-   "linhas": 120,
+   "linhas": 291,
    "testa": [],
-   "casos": 10
+   "casos": 23
   },
   {
    "arquivo": "scripts/check-publish-gates.test.mjs",
    "tipo": "unit",
-   "linhas": 165,
+   "linhas": 173,
    "testa": [],
    "casos": 8
   },
@@ -117,9 +180,129 @@
   {
    "arquivo": "scripts/check-supabase-project-ref.test.mjs",
    "tipo": "unit",
-   "linhas": 32,
+   "linhas": 100,
+   "testa": [],
+   "casos": 8
+  },
+  {
+   "arquivo": "scripts/gen-supabase-types.test.mjs",
+   "tipo": "unit",
+   "linhas": 254,
+   "testa": [
+    "scripts/gen-supabase-types.mjs"
+   ],
+   "casos": 15
+  },
+  {
+   "arquivo": "scripts/hardening/hardening-cluster.test.mjs",
+   "tipo": "unit",
+   "linhas": 152,
+   "testa": [
+    "scripts/hardening/_pg-teste.mjs"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "scripts/hardening/hardening.test.mjs",
+   "tipo": "unit",
+   "linhas": 254,
+   "testa": [
+    "scripts/hardening/_pg-teste.mjs"
+   ],
+   "casos": 18
+  },
+  {
+   "arquivo": "scripts/inventario/banco.test.mjs",
+   "tipo": "unit",
+   "linhas": 223,
+   "testa": [],
+   "casos": 8
+  },
+  {
+   "arquivo": "scripts/inventario/gerar-banco.test.mjs",
+   "tipo": "unit",
+   "linhas": 401,
+   "testa": [
+    "scripts/inventario/gerar-banco.mjs"
+   ],
+   "casos": 20
+  },
+  {
+   "arquivo": "scripts/inventario/gerar-repo.test.mjs",
+   "tipo": "unit",
+   "linhas": 153,
+   "testa": [],
+   "casos": 8
+  },
+  {
+   "arquivo": "scripts/inventario/mudou-conteudo.test.mjs",
+   "tipo": "unit",
+   "linhas": 225,
+   "testa": [
+    "scripts/inventario/mudou-conteudo.mjs"
+   ],
+   "casos": 18
+  },
+  {
+   "arquivo": "scripts/lib/mgmt-mock.test.mjs",
+   "tipo": "unit",
+   "linhas": 369,
    "testa": [],
    "casos": 4
+  },
+  {
+   "arquivo": "scripts/lib/sql-split.test.mjs",
+   "tipo": "unit",
+   "linhas": 248,
+   "testa": [
+    "scripts/lib/sql-split.mjs"
+   ],
+   "casos": 16
+  },
+  {
+   "arquivo": "scripts/lib/supabase-mgmt.test.mjs",
+   "tipo": "unit",
+   "linhas": 283,
+   "testa": [
+    "scripts/lib/sql-split.mjs",
+    "scripts/lib/supabase-mgmt.mjs"
+   ],
+   "casos": 28
+  },
+  {
+   "arquivo": "scripts/lint-providers.test.mjs",
+   "tipo": "unit",
+   "linhas": 162,
+   "testa": [],
+   "casos": 12
+  },
+  {
+   "arquivo": "scripts/migration/ddl/ddl.test.mjs",
+   "tipo": "unit",
+   "linhas": 173,
+   "testa": [],
+   "casos": 11
+  },
+  {
+   "arquivo": "scripts/migration/sql/sql.test.mjs",
+   "tipo": "unit",
+   "linhas": 181,
+   "testa": [],
+   "casos": 11
+  },
+  {
+   "arquivo": "scripts/migration/tests/lib/sigrun.py",
+   "tipo": "pytest",
+   "linhas": 28,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "scripts/regras_negocio/test_generate_fatos.py",
+   "tipo": "pytest",
+   "linhas": 292,
+   "testa": [],
+   "casos": 0
   },
   {
    "arquivo": "scripts/regras_negocio/test_generate.py",
@@ -129,9 +312,46 @@
    "casos": 0
   },
   {
+   "arquivo": "scripts/regras_negocio/test_indice.py",
+   "tipo": "pytest",
+   "linhas": 185,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "scripts/rls-matrix/check-rls-baseline.test.mjs",
+   "tipo": "unit",
+   "linhas": 232,
+   "testa": [],
+   "casos": 13
+  },
+  {
+   "arquivo": "scripts/sql-raiz.test.mjs",
+   "tipo": "unit",
+   "linhas": 290,
+   "testa": [
+    "scripts/hardening/_pg-teste.mjs"
+   ],
+   "casos": 18
+  },
+  {
    "arquivo": "scripts/supabase_snapshot/test_snapshot.py",
    "tipo": "pytest",
    "linhas": 878,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "scripts/test_generate_docs.py",
+   "tipo": "pytest",
+   "linhas": 369,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "scripts/test_run_explain_analyze.py",
+   "tipo": "pytest",
+   "linhas": 282,
    "testa": [],
    "casos": 0
   },
@@ -1960,6 +2180,18 @@
   "supabase/tests/get_contact_sidebar_by_phone.sql"
  ],
  "cobertura_por_arquivo": {
+  "scripts/apply-all.js": 1,
+  "scripts/apply-missing.js": 1,
+  "scripts/audit-ausentes.mjs": 1,
+  "scripts/diff-tables.mjs": 1,
+  "scripts/fix-enums.js": 1,
+  "scripts/gen-supabase-types.mjs": 1,
+  "scripts/hardening/_pg-teste.mjs": 3,
+  "scripts/inventario/gerar-banco.mjs": 1,
+  "scripts/inventario/mudou-conteudo.mjs": 1,
+  "scripts/lib/sql-split.mjs": 3,
+  "scripts/lib/supabase-mgmt.mjs": 5,
+  "scripts/retry-failed.js": 1,
   "src/app/lazyPages.tsx": 1,
   "src/app/queryClient.ts": 1,
   "src/components/admin/RequireAdmin.tsx": 1,
@@ -2059,7 +2291,7 @@
   "src/hooks/useCompanyActions.ts": 1,
   "src/hooks/useContactDetail.ts": 6,
   "src/hooks/useContactSegmentation.ts": 1,
-  "src/hooks/useContacts.ts": 13,
+  "src/hooks/useContacts.ts": 12,
   "src/hooks/useConversationIntel.ts": 2,
   "src/hooks/useDailyKpis.ts": 1,
   "src/hooks/useDailySummary.ts": 1,
@@ -2134,8 +2366,113 @@
  },
  "sem_teste": {
   "telas": [
-   "src/components/skeletons/PageSkeletons.tsx",
-   "src/pages/Index.tsx"
+   "src/pages/ABM.tsx",
+   "src/pages/ABMAccountDetail.tsx",
+   "src/pages/ABMCampaigns.tsx",
+   "src/pages/AdminAuditTrail.tsx",
+   "src/pages/AdminConexoes.tsx",
+   "src/pages/AdminConexoesLogs.tsx",
+   "src/pages/AdminDashboard.tsx",
+   "src/pages/AdminEmailDiagnostics.tsx",
+   "src/pages/AdminFieldMapping.tsx",
+   "src/pages/AdminKnowledgeExport.tsx",
+   "src/pages/AdminLuxConfig.tsx",
+   "src/pages/AdminSchemaDrift.tsx",
+   "src/pages/AdminSecretsManagement.tsx",
+   "src/pages/AdminTelemetria.tsx",
+   "src/pages/AdminVoiceDiagnostics.tsx",
+   "src/pages/Analytics.tsx",
+   "src/pages/Assistente.tsx",
+   "src/pages/Auth.tsx",
+   "src/pages/Automacoes.tsx",
+   "src/pages/BIAvancado.tsx",
+   "src/pages/BattleCardDetail.tsx",
+   "src/pages/CRMRelationshipAuditPage.tsx",
+   "src/pages/Cadastro.tsx",
+   "src/pages/Calendario.tsx",
+   "src/pages/Campanhas.tsx",
+   "src/pages/CompanyProfileAnalytics.tsx",
+   "src/pages/Configuracoes.tsx",
+   "src/pages/ConversationIntelligence.tsx",
+   "src/pages/ConversationIntelligenceSetup.tsx",
+   "src/pages/CustomReports.tsx",
+   "src/pages/CustomerSuccess.tsx",
+   "src/pages/CustomerSuccessAccount.tsx",
+   "src/pages/DealRoomDetail.tsx",
+   "src/pages/DealRooms.tsx",
+   "src/pages/Deduplicacao.tsx",
+   "src/pages/DesignSystem.tsx",
+   "src/pages/DocsPage.tsx",
+   "src/pages/Documentos.tsx",
+   "src/pages/EmpresaDetalhe.tsx",
+   "src/pages/Enrichment.tsx",
+   "src/pages/ErpViewer.tsx",
+   "src/pages/Ficha360.tsx",
+   "src/pages/Forecasting.tsx",
+   "src/pages/ForecastingSetup.tsx",
+   "src/pages/Historico.tsx",
+   "src/pages/Inbox.tsx",
+   "src/pages/Index.tsx",
+   "src/pages/Insights.tsx",
+   "src/pages/Intelligence.tsx",
+   "src/pages/Intent.tsx",
+   "src/pages/IntentSetup.tsx",
+   "src/pages/Interacoes.tsx",
+   "src/pages/KnowledgeBase.tsx",
+   "src/pages/LandingPages.tsx",
+   "src/pages/LeadScoring.tsx",
+   "src/pages/LeadScoringAutomations.tsx",
+   "src/pages/LeadScoringConfig.tsx",
+   "src/pages/MarketingFormDetail.tsx",
+   "src/pages/MarketingHub.tsx",
+   "src/pages/MarketingMagnetDetail.tsx",
+   "src/pages/Metas.tsx",
+   "src/pages/NLPAnalytics.tsx",
+   "src/pages/Network.tsx",
+   "src/pages/NotFound.tsx",
+   "src/pages/Notificacoes.tsx",
+   "src/pages/NotificacoesConfig.tsx",
+   "src/pages/Nurturing.tsx",
+   "src/pages/Onboarding.tsx",
+   "src/pages/PerfisComportamentais.tsx",
+   "src/pages/Performance.tsx",
+   "src/pages/PermissionsPage.tsx",
+   "src/pages/Pipeline.tsx",
+   "src/pages/PlaybookDetail.tsx",
+   "src/pages/Playbooks.tsx",
+   "src/pages/PublicDealRoom.tsx",
+   "src/pages/PublicForm.tsx",
+   "src/pages/PublicLandingPage.tsx",
+   "src/pages/PublicLeadMagnet.tsx",
+   "src/pages/PublicSignaturePage.tsx",
+   "src/pages/RecommendationAudit.tsx",
+   "src/pages/RelatorioContato.tsx",
+   "src/pages/ReportBuilder.tsx",
+   "src/pages/ResetPassword.tsx",
+   "src/pages/RevOps.tsx",
+   "src/pages/Rodizio.tsx",
+   "src/pages/RolePermissionsPage.tsx",
+   "src/pages/RolesPage.tsx",
+   "src/pages/SSOCallbackPage.tsx",
+   "src/pages/Security.tsx",
+   "src/pages/Sequencias.tsx",
+   "src/pages/SmsMarketing.tsx",
+   "src/pages/StatusPage.tsx",
+   "src/pages/Suporte.tsx",
+   "src/pages/Tarefas.tsx",
+   "src/pages/Territorios.tsx",
+   "src/pages/TerritoryOptimization.tsx",
+   "src/pages/WhatsAppImport.tsx",
+   "src/pages/WinLoss.tsx",
+   "src/pages/WinLossSetup.tsx",
+   "src/pages/admin/AdminSegurancaPage.tsx",
+   "src/pages/admin/BehavioralRegenAudit.tsx",
+   "src/pages/admin/ComponentGallery.tsx",
+   "src/pages/admin/ErrorBudget.tsx",
+   "src/pages/admin/ErrorLogs.tsx",
+   "src/pages/admin/FeatureFlagsPage.tsx",
+   "src/pages/admin/InsightFeedbackAnalytics.tsx",
+   "src/pages/crm/CopywritingEnterprise.tsx"
   ],
   "hooks": [
    "scripts/ai-context/cenarios.mjs",

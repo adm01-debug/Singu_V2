@@ -32,7 +32,7 @@ BEGIN
       url := v_url,
       headers := jsonb_build_object(
         'Authorization', 'Bearer ' || v_token,
-        'Content-Type', 'application/json'
+        '[REDACTED]', 'application/json'
       )
     ) INTO v_request_id;
     

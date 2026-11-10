@@ -3,14 +3,14 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2027)",
-   "SQL (646)",
+   "TypeScript (2044)",
+   "SQL (651)",
    "Markdown (150)",
-   "Shell (70)",
-   "JavaScript (43)",
+   "Shell (133)",
+   "JavaScript (68)",
+   "Python (19)",
    "JSON (14)",
-   "YAML (13)",
-   "Python (10)"
+   "YAML (13)"
   ],
   "linguagem_principal": "TypeScript",
   "framework": "React",
@@ -742,6 +742,8 @@
    "GEN_TYPES",
    "PGDUMP",
    "PGDUMP_SCHEMAS",
+   "PGHOST",
+   "PGPASSWORD",
    "REPO_ROOT",
    "SNAPSHOT_DIR",
    "SNAPSHOT_EXCLUDE_SCHEMAS",
@@ -834,6 +836,10 @@
     "arquivos": 5
    },
    {
+    "host": "x.supabase.co",
+    "arquivos": 5
+   },
+   {
     "host": "example.invalid",
     "arquivos": 4
    },
@@ -842,7 +848,15 @@
     "arquivos": 4
    },
    {
+    "host": "api.exemplo.com",
+    "arquivos": 3
+   },
+   {
     "host": "api.firecrawl.dev",
+    "arquivos": 3
+   },
+   {
+    "host": "api.supabase.com",
     "arquivos": 3
    },
    {
@@ -855,6 +869,10 @@
    },
    {
     "host": "dialogue-diamond.lovable.app",
+    "arquivos": 2
+   },
+   {
+    "host": "exemplo.invalid",
     "arquivos": 2
    },
    {
@@ -878,15 +896,11 @@
     "arquivos": 2
    },
    {
-    "host": "x.supabase.co",
-    "arquivos": 2
-   },
-   {
-    "host": "api.bitrix24.com",
+    "host": "a.exemplo",
     "arquivos": 1
    },
    {
-    "host": "api.exemplo.com",
+    "host": "api.bitrix24.com",
     "arquivos": 1
    },
    {
@@ -898,15 +912,11 @@
     "arquivos": 1
    },
    {
-    "host": "api.resend.com",
-    "arquivos": 1
-   },
-   {
-    "host": "api.supabase.com",
-    "arquivos": 1
-   },
-   {
     "host": "api.x.com",
+    "arquivos": 1
+   },
+   {
+    "host": "app.exemplo.com",
     "arquivos": 1
    },
    {
@@ -918,7 +928,15 @@
     "arquivos": 1
    },
    {
+    "host": "b.exemplo",
+    "arquivos": 1
+   },
+   {
     "host": "connector-gateway.lovable.dev",
+    "arquivos": 1
+   },
+   {
+    "host": "destino.exemplo",
     "arquivos": 1
    },
    {
@@ -943,10 +961,6 @@
    },
    {
     "host": "externo.example",
-    "arquivos": 1
-   },
-   {
-    "host": "fixture.supabase.co",
     "arquivos": 1
    },
    {
@@ -1062,6 +1076,14 @@
     "arquivos": 1
    },
    {
+    "host": "x.dev",
+    "arquivos": 1
+   },
+   {
+    "host": "x.invalid",
+    "arquivos": 1
+   },
+   {
     "host": "xxx.supabase.co",
     "arquivos": 1
    }
@@ -1156,7 +1178,7 @@
     "ocorrencias": 3
    },
    {
-    "papel": "admin",
+    "papel": "authenticated",
     "ocorrencias": 2
    },
    {
@@ -1188,11 +1210,23 @@
     "ocorrencias": 2
    },
    {
+    "papel": "a",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "admin",
+    "ocorrencias": 1
+   },
+   {
     "papel": "agent",
     "ocorrencias": 1
    },
    {
-    "papel": "authenticated",
+    "papel": "anon",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "b",
     "ocorrencias": 1
    },
    {
@@ -1313,7 +1347,7 @@
   ]
  },
  "feature_flags": {
-  "total": 3,
+  "total": 2,
   "flags": [
    {
     "flag": "FEATURE_X",
@@ -1321,10 +1355,6 @@
    },
    {
     "flag": "nova-tela",
-    "arquivos": 1
-   },
-   {
-    "flag": "novo-inbox",
     "arquivos": 1
    }
   ],

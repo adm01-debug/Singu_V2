@@ -197246,7 +197246,7 @@
           "search_path=public, net"
         ],
         "definition": null,
-        "definition_sha": "85210bd3e59315d4",
+        "definition_sha": "117b94b34713ef01",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -215801,8 +215801,21 @@
       {
         "args": "p_company_id uuid, p_limit integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "scripts/check_unified_comm.sql",
+              "hits": 1
+            },
+            {
+              "file": "scripts/drop_unified_comm.sql",
+              "hits": 1
+            },
+            {
+              "file": "scripts/recreate_unified_comm.sql",
+              "hits": 3
+            }
+          ],
+          "code_total_files": 3,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -217789,8 +217802,12 @@
               "hits": 9
             },
             {
-              "file": "scripts/migration/sql/create-reset-log.sql",
+              "file": "scripts/migration/ddl/99_apply_all.sql",
               "hits": 1
+            },
+            {
+              "file": "scripts/migration/sql/create-reset-log.sql",
+              "hits": 2
             },
             {
               "file": "src/components/admin/RequireAdmin.tsx",
@@ -217895,13 +217912,9 @@
             {
               "file": "supabase/migrations/20260513143103_c834a03b-5b1e-41c7-a213-eea176782e00.sql",
               "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260513143442_29ae388a-6dff-4a07-b25c-8d2b70aec893.sql",
-              "hits": 2
             }
           ],
-          "code_total_files": 79,
+          "code_total_files": 80,
           "cron": [],
           "db": [
             "public.claim_behavioral_profile_retry",
@@ -218016,6 +218029,10 @@
               "hits": 59
             },
             {
+              "file": "scripts/migration/ddl/99_apply_all.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260317190144_a4e52de8-ce69-4a34-b2aa-3a81dd6305e1.sql",
               "hits": 18
             },
@@ -218040,7 +218057,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 8,
+          "code_total_files": 9,
           "cron": [],
           "db": [
             "public.search_companies_unaccent",
@@ -275668,7 +275685,7 @@
       {
         "name": "fn_cf_collect_sm_legacy_v2_async",
         "statements": 1,
-        "statements_sha": "f0e79cfd6b58c57f",
+        "statements_sha": "6ef0819d59c25675",
         "version": "20260607211026"
       },
       {

@@ -3,8 +3,7 @@
  "format_version": 2,
  "onde_ficam": {
   "telas": [
-   "src/components (1)",
-   "src/pages (1)"
+   "src/pages (113)"
   ],
   "componentes": [
    "src/components (908)",
@@ -22,15 +21,15 @@
    "src/domain (8)"
   ],
   "testes": [
-   "co-localizado (*.test) (91)",
+   "co-localizado (*.test) (113)",
    "co-localizado (__tests__) (89)",
    "tests/ (22)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
   "scripts": [
-   "scripts/migration (159)",
-   "scripts/hardening (9)",
+   "scripts/migration (177)",
+   "scripts/hardening (10)",
    "scripts/inventario (4)"
   ],
   "docs": [
@@ -41,7 +40,7 @@
  "nomenclatura": {
   "componentes": "PascalCase (93%)",
   "hooks": "use + PascalCase",
-  "servicos": "camelCase (92%)",
+  "servicos": "camelCase (89%)",
   "edge_functions": "kebab-case (99%)",
   "tabelas": "snake_case (90%)"
  },
@@ -58,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "chore(scripts): endurece e cobre com testes todos os scripts de scripts/ (#186)",
    "fix(push): um único service worker com os handlers de push (A-007) (#184)",
    "fix(config): alinha o project_id do config.toml ao projeto Supabase canônico e trava divergência (#183)",
    "build(deps): bump actions/download-artifact from 7.0.0 to 8.0.2 (#181)",
-   "build(deps): bump the minor-and-patch group with 6 updates (#182)",
-   "fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)"
+   "build(deps): bump the minor-and-patch group with 6 updates (#182)"
   ]
  },
  "pr_template": null,
