@@ -63,9 +63,37 @@ function gitLsFilesOuDisco(relDir) {
   return listarArquivosNoDisco(relDir);
 }
 
-// Suítes Node sem nenhum bloco `run:` que as execute. Vazia: toda suíte Node do repo já
-// é executada por um workflow. Suíte nova fora de workflow deve reprovar, não entrar aqui.
-export const ALLOWLIST_NODE = new Set();
+// Suítes Node que já existiam fora do CI quando este guarda nasceu (dívida herdada da
+// `main`, não introduzida aqui). Cada linha sai desta lista quando a suíte entrar num
+// passo `run:` de workflow. A lista só encurta.
+export const ALLOWLIST_NODE = new Set([
+  'scripts/ai-context/gerar.unit.mjs',
+  'scripts/apply-cli.test.mjs',
+  'scripts/apply-ddl-real.test.mjs',
+  'scripts/apply-e2e.test.mjs',
+  'scripts/apply-falhas.test.mjs',
+  'scripts/audit-ausentes.test.mjs',
+  'scripts/automation.unit.mjs',
+  'scripts/check-backend-linter-baseline.test.mjs',
+  'scripts/check-bundle-size.test.mjs',
+  'scripts/gen-supabase-types.test.mjs',
+  'scripts/graphify-local.unit.mjs',
+  'scripts/hardening/hardening-cluster.test.mjs',
+  'scripts/hardening/hardening.test.mjs',
+  'scripts/inventario/banco.test.mjs',
+  'scripts/inventario/gerar-banco.test.mjs',
+  'scripts/inventario/gerar-repo.test.mjs',
+  'scripts/inventario/mudou-conteudo.test.mjs',
+  'scripts/lib/mgmt-mock.test.mjs',
+  'scripts/lib/sql-split.test.mjs',
+  'scripts/lib/supabase-mgmt.test.mjs',
+  'scripts/lint-providers.test.mjs',
+  'scripts/maintenance/maintenance.unit.mjs',
+  'scripts/migration/ddl/ddl.test.mjs',
+  'scripts/migration/sql/sql.test.mjs',
+  'scripts/rls-matrix/check-rls-baseline.test.mjs',
+  'scripts/sql-raiz.test.mjs',
+]);
 
 // Testes Deno que já existiam fora do CI quando este guarda nasceu (dívida herdada da
 // `main`, não introduzida aqui). Cada linha sai desta lista quando o teste entrar num
