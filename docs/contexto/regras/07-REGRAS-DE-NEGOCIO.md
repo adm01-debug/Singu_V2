@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `357fd21e25` · branch `main` · 2026-11-10 19:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d42f417f17` · branch `main` · 2026-11-10 19:44 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4070,6 +4070,9 @@ _nenhum item encontrado_
 | não consegui resolver ${host} (${e.code ?? e.message}) | `scripts/gen-supabase-types.mjs` |
 | ${msg}: esperado ${JSON.stringify(b)} obtido ${JSON.stringify(a)} | `scripts/ai-context/cenarios.mjs` |
 | não é um objeto JSON | `scripts/ai-context/gerar.mjs` |
+| falha fixture | `scripts/automation-tests/dispatch.mjs` |
+| arquivo de terceiro | `scripts/automation-tests/snapshot.mjs` |
+| entrypoint original não deve executar | `scripts/automation-tests/snapshot.mjs` |
 | SQL de cenário falhou: ${r.stderr \|\| r.erro} | `scripts/hardening/_pg-teste.mjs` |
 | ${flag} exige o caminho de um arquivo | `scripts/inventario/gerar-banco.mjs` |
 | --functions: o arquivo nao e JSON | `scripts/inventario/gerar-banco.mjs` |
@@ -4096,6 +4099,12 @@ _nenhum item encontrado_
 | dividirSql espera uma string | `scripts/lib/sql-split.mjs` |
 | enum ${nome} sem valores | `scripts/lib/sql-split.mjs` |
 | nome de enum inválido: ${nome} | `scripts/lib/sql-split.mjs` |
+| failed | `scripts/maintenance/common.mjs` |
+| missing_dependencies | `scripts/maintenance/configuration.mjs` |
+| missing_dependencies | `scripts/maintenance/dependencies.mjs` |
+| skipped_busy | `scripts/maintenance/locking.mjs` |
+| blocked_network_sandbox | `scripts/maintenance/sandbox.mjs` |
+| pending_patch | `scripts/maintenance/session.mjs` |
 | Bucket not found | `scripts/migration/_mock_supabase.ts` |
 | invalid_grant | `scripts/migration/_mock_supabase.ts` |
 | banco de teste precisa do prefixo g7_ | `scripts/migration/_pg_teste.ts` |
@@ -4348,16 +4357,7 @@ _nenhum item encontrado_
 | Já existe uma visualização com esse nome | `src/components/interactions/SavedViewsMenu.tsx` |
 | Erro ao salvar anotação | `src/components/interactions/insights/AnnotationDialog.tsx` |
 | Erro ao excluir | `src/components/interactions/insights/AnnotationList.tsx` |
-| Não foi possível copiar o link | `src/components/interactions/insights/ObjectionExamplesModal.tsx` |
-| Não foi possível copiar | `src/components/interactions/insights/ObjectionsSpotlight.tsx` |
-| Não foi possível copiar | `src/components/interactions/insights/SuggestedResponseModal.tsx` |
-| Não foi possível salvar o rascunho | `src/components/interactions/insights/SuggestedResponseModal.tsx` |
-| Resposta vazia | `src/components/interactions/insights/SuggestedResponseModal.tsx` |
-| ${result.erros.length} cliente(s) com erro na simulação | `src/components/lead-routing/QuickDistributeWidget.tsx` |
-| Não foi possível copiar | `src/components/lux/CompanyIntelligence.tsx` |
-| Complete as 3 etapas para gerar o script | `src/components/neuromarketing/PainClaimGainBuilder.tsx` |
-| Não foi possível copiar | `src/components/neuromarketing/PainClaimGainBuilder.tsx` |
-| … +752 linhas — lista completa em `context.json` | |
+| … +761 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4389,7 +4389,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (2985 testes em 224 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3029 testes em 230 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4473,6 +4473,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/canonical-hook-contracts.test.tsx` | 11 | Contratos canônicos dos históricos de interação · preserva registros legados com tipo, canal e data nulos sem fabricar uma data · produz os aliases de domínio a partir dos campos reais da RPC · normaliza o retorno distinto da RPC de histórico unificado … |
 | `src/hooks/__tests__/canonical-mutation-contracts.test.tsx` | 11 | Mesclagem valida overrides antes de qualquer operação · rejeita valores incompatíveis com o campo canônico · não permite sobrescrever a coluna gerada full_name · envia overrides validados à transação de mesclagem e auditoria … |
 | `tests/integration/web-push-sender.test.ts` | 11 | allowlist de endpoint (anti-SSRF) · aceita %s · bloqueia %s · readVapidConfig … |
+| `scripts/maintenance/tests/transaction.mjs` | 10 | gate baseline falha sem criar branch ou tocar clone sujo · patch isolado é validado, commitado localmente e não duplicado · gate após patch falha sem commit nem branch restante · formatter fora do escopo é descartado antes de commit … |
 | `src/components/interactions/__tests__/IncrementalLoadStickyBar.test.tsx` | 10 | IncrementalLoadStickyBar · não renderiza quando total=0 · exibe estado de  · usa singular  … |
 | `src/components/navigation/__tests__/ScrollToTopButton.test.tsx` | 10 | ScrollToTopButton · não fica visível com scrollY=0 (default threshold) · fica visível quando scrollY > 400 (default) · respeita threshold customizado … |
 | `src/components/security/TwoFactorSetup.test.tsx` | 10 | Configuração e confirmação MFA · solicita código para um fator já cadastrado em uma sessão AAL1 · oferece confirmação explícita na recuperação mesmo que o SDK ainda retorne AAL2 · retoma configuração interrompida e não libera acesso com código inválido … |
@@ -4492,6 +4493,8 @@ _nenhum item encontrado_
 | `scripts/check-supabase-project-ref.test.mjs` | 8 | AGENTS.md declara o projeto Supabase canônico · supabase/config.toml aponta para o projeto canônico · supabase/.temp/linked-project.json aponta para o projeto canônico · a CSP do vite.config.ts permite conexão ao projeto canônico … |
 | `scripts/inventario/banco.test.mjs` | 8 | banco.sql roda limpo em transação só-leitura e imprime UMA linha com UM JSON · resumo: contagens batem com a fixture · tabelas: RLS, policies, triggers, linhas, partição e citação no banco · nomes com caractere de regex/Markdown: consulta não cai e a citação é exata … |
 | `scripts/inventario/gerar-repo.test.mjs` | 8 | edges.json: linhas, segredos lidos e quem chama cada função · tabelas-uso.json: conta .from() em src e edges e confere o types.ts · nomes hostis no stdin (começando com -, com regex, __proto__) não quebram nem viram opção do rg · repositório mínimo (sem src, e2e, migrations, workflows, types.ts) funciona … |
+| `scripts/maintenance/tests/configuration.mjs` | 8 | CLI e config desconhecidas falham fechadas · tsconfig vazio impede doctor saudável · TypeScript 7 sem API usa CLI isolada e valida o patch · TypeScript 7 com CLI sem arquivos bloqueia doctor … |
+| `scripts/maintenance/tests/locking.mjs` | 8 | trava atômica impede segundo executor · timeout mata grupo de subprocessos e distingue resultado · trava de pid morto é recuperada, trava recente sem dono fica bloqueante · namespace de rede impede acesso externo de todos os filhos … |
 | `src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx` | 8 | Registro da próxima ação com contrato de contato · registra %s no contato, sem inventar empresa · não anuncia sucesso sem a confirmação correta: %j · preserva o resumo quando o banco rejeita a chamada … |
 | `src/components/interactions/__tests__/DateRangePopover.shortcut.test.tsx` | 8 | DateRangePopover · atalho Alt+D · chama applyDateRange(undefined, undefined) quando há datas aplicadas · aceita Alt+D em maiúsculas (case-insensitive) · é no-op silencioso quando não há datas aplicadas … |
 | `src/components/interactions/__tests__/DensityChips.test.tsx` | 8 | DensityChips · renderiza dois botões com aria-pressed correto (comfortable ativo) · renderiza com aria-pressed refletindo compact quando ativo · expõe role= … |
@@ -4502,11 +4505,13 @@ _nenhum item encontrado_
 | `src/lib/externalData.delete-audit.test.ts` | 8 | Auditoria única após exclusão confirmada · grava somente um evento para %s com contexto do dono · preserva o sucesso se a auditoria lançar uma exceção · não registra exclusão se a mutação falhar … |
 | `src/pages/mapa/relationshipScores.contract.test.ts` | 8 | Score real de empresa no mapa · usa a medição mais recente e mantém score zero e ausência de score · não consulta a tabela global quando não há empresas autorizadas · pagina o histórico sem truncar empresas ainda não encontradas … |
 | `scripts/apply-e2e.test.mjs` | 7 | ${script}: banco vazio → aplica tudo; reexecução é idempotente (mesmo banco, saída 0, zero falha) · o SQL impresso por --sql, executado pelo psql (divisor independente), dá o mesmo banco que --apply · fix-enums → retry-failed → apply-missing → apply-remaining reconstroem o banco; cada passo é idempotente · instrução inválida de verdade num lote: as vizinhas entram, a culpada é nomeada, saída 1 — e o resultado é estável … |
+| `scripts/maintenance/tests/dependencies.mjs` | 7 | dependências divergentes da referência bloqueiam reutilização · dependência vendor por link idêntico é reutilizada sem instalar pacotes · vendor sujo e referência com vendor diferente bloqueiam antes dos gates · link instalado para outro vendor divergente e file externo são recusados … |
 | `src/components/campaigns/__tests__/CampaignDetailDrawer.test.tsx` | 7 | CampaignDetailDrawer · returns null when no campaign provided · renders campaign name, subject and computed metric percentages · shows the send CTA only for drafts and triggers mutation on click … |
 | `src/components/interactions/__tests__/InfiniteScrollSentinel.density.test.tsx` | 7 | InfiniteScrollSentinel — densidade ambiente · usa  · lê  · DensityProvider tem prioridade sobre localStorage … |
 | `src/data/__tests__/cognitiveBiasesData.test.ts` | 7 | Cognitive Biases Data Integrity · has at least 4 bias categories · all categories have required fields · all category colors are valid tailwind classes … |
 | `src/lib/errorReporting.unload.test.ts` | 7 | Envio final autenticado de erros · inicia o envio em segundo plano sem consultar a sessão nem repetir no fechamento · descarta erros anteriores ao login sem descartar os capturados após autenticar · descarta lote anônimo se o login acontece durante a consulta da sessão … |
 | `src/lib/insights/__tests__/pickTopPassages.test.ts` | 7 | pickTopPassages · retorna até MAX_TOTAL_CAP itens mesmo com totalCap maior · é determinística: mesma entrada → mesma saída · aplica round-robin entre fontes (distribui antes de aprofundar) … |
+| `scripts/maintenance/tests/hooks.mjs` | 6 | hook ${name} bloqueante impede commit validado · hooks versionados rodam offline sem .env/segredo e commit inclui escopo obrigatório · hook que altera e adiciona o patch é rejeitado depois do commit isolado · hook que remove o escopo da mensagem não produz commit validado … |
 | `src/components/interactions/__tests__/InfiniteScrollSentinel.test.tsx` | 6 | InfiniteScrollSentinel · não renderiza nada quando total=0 · exibe progressbar com aria-values e contador no estado hasMore · exibe estado final sem barra quando !hasMore … |
 | `src/components/sequences/SequencePausedEmails.test.tsx` | 6 | Retomada de email pausado · exige confirmação e envia a pausa e o progresso exibidos sem afirmar envio · mantém a pausa e a confirmação disponíveis após erro de persistência · expõe a falha da consulta e permite nova tentativa … |
 | `src/hooks/useCSATSurveys.contract.test.tsx` | 6 | Contrato de pesquisas CSAT · consulta apenas CSAT do dono e contato, mantendo a escala de satisfação · cria uma pesquisa pendente sem inventar nota ou entrega · rejeita a nota inválida %s antes de gravar … |
@@ -4525,6 +4530,7 @@ _nenhum item encontrado_
 | `e2e/gap-modules-smoke.spec.ts` | 5 | Gap modules smoke (Rodada 28/10) · carrega ${label} (${path}) sem runtime error · Ask CRM: abre chat flutuante e envia pergunta · Landing page pública (Rodada 28/10) … |
 | `scripts/apply-ddl-real.test.mjs` | 5 | apply-all.js = aplicação de referência (mesmos objetos, mesmas falhas) e reexecução idempotente · chunk-apply.js chega ao mesmo banco que o apply-all.js com muito menos requisições · o SQL de  · apply-migrations.js: arquivo com instrução inválida não entra pela metade; saída coerente; estável ao repetir … |
 | `scripts/check-rls-profiles.test.mjs` | 5 | RLS rejeita JWT ${jwt ?  · RLS exige também os perfis declarados nos metadados · RLS não ignora perfil desconhecido no baseline · RLS permite coleta anônima quando somente esse perfil é exigido … |
+| `scripts/maintenance/tests/formatting.mjs` | 5 | scan Prettier rejeita ${name} · generated e types.ts ficam fora de candidatos e alterações laterais são rejeitadas · formatter não pode mudar permissões ou remover arquivos rastreados · ESLint não aceita diretivas inline para regras fora da allowlist … |
 | `scripts/migration/ddl/ddl.test.mjs` | 5 | 99_apply_all.sql: inclui 00–11 uma vez cada, na ordem que respeita as dependências, com \\ir; 12 fica de fora · dependências que justificam a ordem existem de fato no dump · fixture supabase-stubs.sql é idempotente · dump COMO ESTÁ: os únicos erros são os defeitos conhecidos do gerador e suas cascatas … |
 | `src/components/contact-detail/SoftDeletePanel.test.tsx` | 5 | confirmação da lixeira sem depender de realtime · fecha o diálogo e invalida somente a ficha correta após arquivamento confirmado · invalida a ficha após restauração confirmada · mantém o diálogo e não anuncia sucesso com resposta inválida: %j … |
 | `src/components/interactions/__tests__/DateRangePopover.clear.integration.test.tsx` | 5 | DateRangePopover › Limpar período (integração com URL/hook) · remove  · remove apenas  · remove apenas  … |

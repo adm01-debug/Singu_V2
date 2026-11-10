@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `357fd21e257a50ab8088b5b13243513d7a81c2d1` (2026-11-10T16:41:53-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d42f417f17d23a5caf6c24fd35fb61cd833ca66d` (2026-11-10T16:41:58-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2047), SQL (651), Markdown (150), Shell (133), JavaScript (68), Python (19), JSON (14), YAML (13)
+- linguagens: TypeScript (2047), SQL (651), Markdown (152), Shell (134), JavaScript (118), Python (19), JSON (18), YAML (14)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3118 |
-| arquivos_codigo | 2133 |
-| linhas_codigo | 401109 |
+| arquivos_total | 3176 |
+| arquivos_codigo | 2183 |
+| linhas_codigo | 408433 |
 | rotas | 114 |
 | rotas_http_backend | 11 |
 | vistas_por_id | 0 |
@@ -48,10 +48,10 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | tabelas | 418 |
 | migrations | 479 |
 | cron_jobs | 20 |
-| testes | 243 |
-| workflows | 7 |
-| scripts | 238 |
-| docs_md | 150 |
+| testes | 253 |
+| workflows | 8 |
+| scripts | 279 |
+| docs_md | 152 |
 
 ## Onde ficam as coisas
 - telas: src/pages (113)
@@ -61,8 +61,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - testes: co-localizado (*.test) (114), co-localizado (__tests__) (89), tests/ (23)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
-- scripts: scripts/migration (177), scripts/hardening (10), scripts/inventario (4)
-- docs: docs (39), (raiz) (16)
+- scripts: scripts/migration (177), scripts/maintenance (15), scripts/hardening (10)
+- docs: docs (40), (raiz) (16)
 - nomenclatura: {"componentes":"PascalCase (93%)","hooks":"use + PascalCase","servicos":"camelCase (89%)","edge_functions":"kebab-case (99%)","tabelas":"snake_case (90%)"}
 - instruções para agentes no repo: AGENTS.md, CLAUDE.md
 
@@ -415,21 +415,21 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rpcs_sem_definicao: 3 — ex.: get_territories, get_territory_performance, increment_workflow_completed
 - componentes_orfaos: 44 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/admin/SystemHealthWidget.tsx
 - componentes_com_nome_duplicado: 106 — ex.: ABM, ABMAccountDetail, ABMCampaigns
-- scripts_orfaos: 25 — ex.: scripts/_pgdocs_catalogo.py, scripts/_pgteste.py, scripts/hardening/check-client-tls.sql
+- scripts_orfaos: 8 — ex.: scripts/hardening/check-client-tls.sql, scripts/hardening/check-extensions-hardening.sql, scripts/hardening/check-indexes-duplicated.sql
 - env_usadas_nao_declaradas: 4 — ex.: DEV, PROD, VITE_APP_VERSION
 - ciclos_de_import: 5
 - possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 20242 nós · 33769 arestas · 2141 comunidades · grafo do commit `357fd21e`
-- comunidades maiores: @tanstack/react-query (400), ref_hooks (394), react (382), ref_lib (283), framer-motion (252), ref_types (235), date-fns (210), _shared/auth.ts (209), ref_components (207), 📖 Dicionário de Dados — SINGU CRM (177), withAuth (166), ref_domain (138)
-- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), jsonError() (supabase/functions/_shared/auth.ts), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py), header() (scripts/regras_negocio/generate.py), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh)
+- 20463 nós · 34725 arestas · 2119 comunidades · grafo do commit `d42f417f`
+- comunidades maiores: react (399), ref_components (297), _shared/auth.ts (276), sonner (274), ref_lib (271), framer-motion (265), lucide-react (235), useAuth (231), react-router-dom (227), 📖 Dicionário de Dados — SINGU CRM (226), date-fns (197), withAuth (185)
+- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), mig_die() (scripts/migration/_lib.sh), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - CHANGELOG.md (46)
 - .github/workflows/ci.yml (18)
-- package.json (15)
+- package.json (16)
 - supabase/functions/external-data/index.ts (15)
 - package-lock.json (12)
 - docs/qa/security-definer-audit.md (10)
@@ -444,6 +444,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - scripts/rls-matrix/rls-baseline.json (5)
 
 ## Workflows
+- `automation-local.yml` — Automação local (pull_request, push, workflow_dispatch)
 - `ci.yml` — CI (pull_request, push)
 - `contexto.yml` — Contexto para agentes de IA (10 min) (push, schedule, workflow_dispatch; cron 3-59/10 * * * *)
 - `fix-jwt-proxies-externas.yml` — Fix JWT proxies externas (workflow_dispatch)
@@ -453,6 +454,10 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `rls-exposure-guard.yml` — RLS exposure guard (pull_request, push, schedule, workflow_dispatch; cron 0 6 * * 1)
 
 ## Scripts npm
+- `maintenance:doctor`: `sh scripts/maintenance/run.sh doctor --root .`
+- `maintenance:check`: `sh scripts/maintenance/run.sh check --root . --ref origin/main`
+- `maintenance:heal`: `sh scripts/maintenance/run.sh heal --root . --ref origin/main`
+- `test:maintenance`: `node --test scripts/maintenance/maintenance.unit.mjs`
 - `dev`: `vite`
 - `build`: `vite build`
 - `build:dev`: `vite build --mode development`
@@ -474,6 +479,15 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `contexto:regras`: `python3 scripts/regras_negocio/generate.py --repo . --out docs/contexto/regras --profile regras --schema-snapshot docs/contexto/supabase --index-path docs/contexto/00-INDEX.md --no-pointer`
 - `contexto:banco`: `python3 scripts/supabase_snapshot/snapshot.py`
 - `contexto:indice`: `python3 scripts/regras_negocio/indice.py --repo . --out docs/contexto/00-INDEX.md --remote adm01-debug/Singu_V2 --fonte "banco real=docs/contexto/supabase" --fonte "código=docs/contexto/codigo" --fonte "regras de negócio=docs/contexto/regras"`
+- `automation:doctor`: `node scripts/automation.mjs doctor`
+- `automation:test`: `node scripts/automation.mjs test`
+- `automation:check`: `node scripts/automation.mjs check --ref HEAD`
+- `automation:heal`: `node scripts/automation.mjs heal --ref origin/main`
+- `automation:nightly`: `node scripts/automation.mjs nightly --ref origin/main`
+- `automation:graph`: `node scripts/automation.mjs graph`
+- `automation:status`: `node scripts/automation.mjs graph status`
+- `automation:install-hooks`: `node scripts/automation.mjs install-hooks`
+- `automation:uninstall-hooks`: `node scripts/automation.mjs uninstall-hooks`
 
 ## Documentos (raiz e docs/)
 - `AGENTS.md` — AGENTS.md — Singu_V2 (74 linhas)
@@ -494,6 +508,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `audit_report.md` — 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM (88 linhas)
 - `docs/ARCHITECTURE.md` — SINGU CRM — Arquitetura Consolidada (123 linhas)
 - `docs/AUDIT_VALIDATION_23_10.md` — Rodada 23/10 — Validação Exaustiva dos Guards (11–22) (188 linhas)
+- `docs/AUTOMACAO_LOCAL.md` — Automação local — Singu_V2 (357 linhas)
 - `docs/CHANGELOG_1.0_1.5.md` — Histórico de versões 1.0.0 a 1.5.0 (73 linhas)
 - `docs/CHAOS_DRILL.md` — Chaos Drill Runbook (41 linhas)
 - `docs/COMPLETE_SYSTEM_ANALYSIS.md` — 📊 ANÁLISE COMPLETA DO SISTEMA RelateIQ CRM (899 linhas)
@@ -535,6 +550,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-10 `d42f417f` chore(automacao): integra testes grafo e manutenção com gatilhos locais (#187)
 - 2026-11-10 `357fd21e` fix(push): chave VAPID própria e sender que realmente entrega (#185)
 - 2026-11-10 `39789307` chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)
 - 2026-11-09 `21434823` chore(scripts): endurece e cobre com testes todos os scripts de scripts/ (#186)
@@ -549,7 +565,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-08 `11086727` fix(filas): confirma reservas e resultados da DLQ (#150)
 - 2026-11-08 `661cb412` fix(db): preserva o nome da empresa durante a mesclagem (#127)
 - 2026-11-08 `77475499` fix(contatos): atualiza a ficha e preserva aniversários locais (#125)
-- 2026-11-08 `4ba71804` fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -27,6 +27,58 @@
   "scripts/apply-triggers-views.js": [
    "scripts/lib/supabase-mgmt.mjs"
   ],
+  "scripts/automation-tests/dispatch.mjs": [
+   "scripts/automation-tests/fixture.mjs",
+   "scripts/automation.mjs"
+  ],
+  "scripts/automation-tests/hooks.mjs": [
+   "scripts/automation-tests/fixture.mjs",
+   "scripts/automation.mjs"
+  ],
+  "scripts/automation-tests/inventory.mjs": [
+   "scripts/automation-tests/fixture.mjs",
+   "scripts/automation.mjs"
+  ],
+  "scripts/automation-tests/snapshot.mjs": [
+   "scripts/automation-tests/fixture.mjs"
+  ],
+  "scripts/automation.mjs": [
+   "scripts/automation/common.mjs",
+   "scripts/automation/config.mjs",
+   "scripts/automation/dispatch.mjs",
+   "scripts/automation/hooks.mjs",
+   "scripts/automation/install.mjs",
+   "scripts/automation/inventory.mjs",
+   "scripts/automation/process.mjs"
+  ],
+  "scripts/automation/config.mjs": [
+   "scripts/automation/common.mjs"
+  ],
+  "scripts/automation/dispatch.mjs": [
+   "scripts/automation/common.mjs",
+   "scripts/automation/process.mjs"
+  ],
+  "scripts/automation/hooks.mjs": [
+   "scripts/automation/common.mjs",
+   "scripts/automation/dispatch.mjs",
+   "scripts/automation/inventory.mjs",
+   "scripts/automation/process.mjs"
+  ],
+  "scripts/automation/install.mjs": [
+   "scripts/automation/common.mjs",
+   "scripts/automation/process.mjs",
+   "scripts/automation/runtime-copy.mjs"
+  ],
+  "scripts/automation/inventory.mjs": [
+   "scripts/automation/common.mjs",
+   "scripts/automation/process.mjs"
+  ],
+  "scripts/automation/process.mjs": [
+   "scripts/automation/common.mjs"
+  ],
+  "scripts/automation/runtime-copy.mjs": [
+   "scripts/automation/common.mjs"
+  ],
   "scripts/chunk-apply.js": [
    "scripts/lib/supabase-mgmt.mjs"
   ],
@@ -37,8 +89,113 @@
    "scripts/lib/sql-split.mjs",
    "scripts/lib/supabase-mgmt.mjs"
   ],
+  "scripts/graphify-local-tests/fixture.mjs": [
+   "scripts/graphify-local.mjs"
+  ],
+  "scripts/graphify-local-tests/freshness.mjs": [
+   "scripts/graphify-local-tests/fixture.mjs",
+   "scripts/graphify-local.mjs"
+  ],
+  "scripts/graphify-local-tests/locking.mjs": [
+   "scripts/graphify-local-tests/fixture.mjs",
+   "scripts/graphify-local.mjs"
+  ],
+  "scripts/graphify-local-tests/safety.mjs": [
+   "scripts/graphify-local-tests/fixture.mjs",
+   "scripts/graphify-local.mjs"
+  ],
+  "scripts/graphify-local.mjs": [
+   "scripts/graphify-local/artifacts.mjs",
+   "scripts/graphify-local/build.mjs",
+   "scripts/graphify-local/common.mjs",
+   "scripts/graphify-local/config.mjs",
+   "scripts/graphify-local/locks.mjs",
+   "scripts/graphify-local/process.mjs",
+   "scripts/graphify-local/source.mjs"
+  ],
+  "scripts/graphify-local/artifacts.mjs": [
+   "scripts/graphify-local/common.mjs",
+   "scripts/graphify-local/process.mjs",
+   "scripts/graphify-local/source.mjs"
+  ],
+  "scripts/graphify-local/build.mjs": [
+   "scripts/graphify-local/artifacts.mjs",
+   "scripts/graphify-local/common.mjs",
+   "scripts/graphify-local/config.mjs",
+   "scripts/graphify-local/process.mjs",
+   "scripts/graphify-local/source.mjs"
+  ],
+  "scripts/graphify-local/config.mjs": [
+   "scripts/graphify-local/common.mjs",
+   "scripts/graphify-local/process.mjs"
+  ],
+  "scripts/graphify-local/locks.mjs": [
+   "scripts/graphify-local/common.mjs",
+   "scripts/graphify-local/process.mjs"
+  ],
+  "scripts/graphify-local/process.mjs": [
+   "scripts/graphify-local/common.mjs"
+  ],
+  "scripts/graphify-local/source.mjs": [
+   "scripts/graphify-local/common.mjs",
+   "scripts/graphify-local/process.mjs"
+  ],
   "scripts/lib/supabase-mgmt.mjs": [
    "scripts/lib/sql-split.mjs"
+  ],
+  "scripts/maintenance/changes.mjs": [
+   "scripts/maintenance/lib.mjs"
+  ],
+  "scripts/maintenance/commit.mjs": [
+   "scripts/maintenance/common.mjs",
+   "scripts/maintenance/process.mjs"
+  ],
+  "scripts/maintenance/configuration.mjs": [
+   "scripts/maintenance/common.mjs",
+   "scripts/maintenance/dependencies.mjs",
+   "scripts/maintenance/process.mjs"
+  ],
+  "scripts/maintenance/dependencies.mjs": [
+   "scripts/maintenance/common.mjs"
+  ],
+  "scripts/maintenance/fixes.mjs": [
+   "scripts/maintenance/lib.mjs",
+   "scripts/maintenance/sandbox.mjs"
+  ],
+  "scripts/maintenance/lib.mjs": [
+   "scripts/maintenance/commit.mjs",
+   "scripts/maintenance/common.mjs",
+   "scripts/maintenance/configuration.mjs",
+   "scripts/maintenance/dependencies.mjs",
+   "scripts/maintenance/locking.mjs",
+   "scripts/maintenance/process.mjs"
+  ],
+  "scripts/maintenance/locking.mjs": [
+   "scripts/maintenance/common.mjs"
+  ],
+  "scripts/maintenance/options.mjs": [
+   "scripts/maintenance/lib.mjs"
+  ],
+  "scripts/maintenance/process.mjs": [
+   "scripts/maintenance/common.mjs"
+  ],
+  "scripts/maintenance/run.mjs": [
+   "scripts/maintenance/changes.mjs",
+   "scripts/maintenance/fixes.mjs",
+   "scripts/maintenance/lib.mjs",
+   "scripts/maintenance/options.mjs",
+   "scripts/maintenance/sandbox.mjs",
+   "scripts/maintenance/session.mjs"
+  ],
+  "scripts/maintenance/sandbox.mjs": [
+   "scripts/maintenance/lib.mjs"
+  ],
+  "scripts/maintenance/session.mjs": [
+   "scripts/maintenance/lib.mjs",
+   "scripts/maintenance/options.mjs"
+  ],
+  "scripts/maintenance/typecheck.mjs": [
+   "scripts/maintenance/lib.mjs"
   ],
   "scripts/migration/cdc/order-guard_test.ts": [
    "scripts/migration/_mock_supabase.ts",

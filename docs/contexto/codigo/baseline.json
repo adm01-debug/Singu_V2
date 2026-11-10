@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "357fd21e257a50ab8088b5b13243513d7a81c2d1",
+  "commit": "d42f417f17d23a5caf6c24fd35fb61cd833ca66d",
   "branch": "main",
-  "data_commit": "2026-11-10T16:41:53-03:00",
+  "data_commit": "2026-11-10T16:41:58-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "d42f417f",
+    "data": "2026-11-10",
+    "assunto": "chore(automacao): integra testes grafo e manutenção com gatilhos locais (#187)"
+   },
    {
     "sha": "357fd21e",
     "data": "2026-11-10",
@@ -126,14 +131,9 @@
     "sha": "3e4b9701",
     "data": "2026-11-07",
     "assunto": "feat: teste de auditoria de cobertura RLS (check-rls-coverage.sql) (#168)"
-   },
-   {
-    "sha": "ab7efa8e",
-    "data": "2026-11-07",
-    "assunto": "feat: scripts de verificação de índices/perf e hardening (auditoria read-only) (#167)"
    }
   ],
-  "arquivos_mudados_7d": 419,
+  "arquivos_mudados_7d": 477,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -176,6 +176,10 @@
     "mudancas": 9
    },
    {
+    "pasta": "package.json",
+    "mudancas": 8
+   },
+   {
     "pasta": "scripts/migration/cdc",
     "mudancas": 8
    },
@@ -190,10 +194,6 @@
    {
     "pasta": "src/lib/externalData.ts",
     "mudancas": 8
-   },
-   {
-    "pasta": "package.json",
-    "mudancas": 7
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 15
+    "mudancas": 16
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 40
+    "commits": 41
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -318,9 +318,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3118,
-  "arquivos_codigo": 2133,
-  "linhas_codigo": 401109,
+  "arquivos_total": 3176,
+  "arquivos_codigo": 2183,
+  "linhas_codigo": 408433,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -332,10 +332,10 @@
   "tabelas": 418,
   "migrations": 479,
   "cron_jobs": 20,
-  "testes": 243,
-  "workflows": 7,
-  "scripts": 238,
-  "docs_md": 150
+  "testes": 253,
+  "workflows": 8,
+  "scripts": 279,
+  "docs_md": 152
  },
  "por_pasta": {
   "commitlint.config.cjs": {
@@ -450,6 +450,22 @@
    "arquivos": 1,
    "linhas": 215
   },
+  "scripts/automation": {
+   "arquivos": 8,
+   "linhas": 1207
+  },
+  "scripts/automation-tests": {
+   "arquivos": 5,
+   "linhas": 773
+  },
+  "scripts/automation.mjs": {
+   "arquivos": 1,
+   "linhas": 80
+  },
+  "scripts/automation.unit.mjs": {
+   "arquivos": 1,
+   "linhas": 5
+  },
   "scripts/check-backend-linter-baseline.mjs": {
    "arquivos": 1,
    "linhas": 70
@@ -530,6 +546,22 @@
    "arquivos": 1,
    "linhas": 120
   },
+  "scripts/graphify-local": {
+   "arquivos": 7,
+   "linhas": 1085
+  },
+  "scripts/graphify-local-tests": {
+   "arquivos": 4,
+   "linhas": 601
+  },
+  "scripts/graphify-local.mjs": {
+   "arquivos": 1,
+   "linhas": 277
+  },
+  "scripts/graphify-local.unit.mjs": {
+   "arquivos": 1,
+   "linhas": 4
+  },
   "scripts/hardening": {
    "arquivos": 3,
    "linhas": 532
@@ -549,6 +581,10 @@
   "scripts/lint-providers.test.mjs": {
    "arquivos": 1,
    "linhas": 162
+  },
+  "scripts/maintenance": {
+   "arquivos": 22,
+   "linhas": 3292
   },
   "scripts/migration": {
    "arquivos": 39,
@@ -819,7 +855,7 @@
  ],
  "qualidade": {
   "any": 27,
-  "console_log": 159,
+  "console_log": 171,
   "ts_ignore": 2,
   "eslint_disable": 1,
   "todos": 8,
@@ -1190,8 +1226,6 @@
    "WhatsNewModal"
   ],
   "scripts_orfaos": [
-   "scripts/_pgdocs_catalogo.py",
-   "scripts/_pgteste.py",
    "scripts/hardening/check-client-tls.sql",
    "scripts/hardening/check-extensions-hardening.sql",
    "scripts/hardening/check-indexes-duplicated.sql",
@@ -1199,22 +1233,7 @@
    "scripts/hardening/check-indexes-unused.sql",
    "scripts/hardening/check-publication-without-pk.sql",
    "scripts/hardening/check-replication-config.sql",
-   "scripts/hardening/check-security-definer-search-path.sql",
-   "scripts/migration/cdc/order-guard_test.ts",
-   "scripts/migration/cdc/replay_test.ts",
-   "scripts/migration/compliance/lgpd-snapshot_test.ts",
-   "scripts/migration/cutover/smoke-tests_test.ts",
-   "scripts/migration/monitoring/synthetic-checks_test.ts",
-   "scripts/migration/reset-passwords_test.ts",
-   "scripts/migration/storage/_lib_test.ts",
-   "scripts/migration/storage/copy-large_test.ts",
-   "scripts/migration/storage/copy-objects_test.ts",
-   "scripts/migration/storage/create-buckets_test.ts",
-   "scripts/migration/storage/verify-counts_test.ts",
-   "scripts/migration/verify/dual-write-diverge_test.ts",
-   "scripts/migration/verify/rls-parity_test.ts",
-   "scripts/migration/verify/row-diff_test.ts",
-   "scripts/migration/verify/storage-bytes_test.ts"
+   "scripts/hardening/check-security-definer-search-path.sql"
   ],
   "env_usadas_nao_declaradas": [
    "DEV",

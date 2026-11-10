@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 238,
+ "total": 279,
  "scripts": [
   {
    "arquivo": "scripts/_pgdocs.py",
@@ -19,7 +19,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/_pgteste.py",
@@ -28,7 +28,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/_sqlseguro.py",
@@ -143,6 +143,148 @@
    "arquivo": "scripts/audit-ausentes.mjs",
    "descricao": "scripts/audit-ausentes.mjs - versão definitiva Lista as tabelas/views que o código chama com `.from('x')` em src/ e que NÃO existem em",
    "linhas": 154,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation-tests/dispatch.mjs",
+   "descricao": null,
+   "linhas": 99,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation-tests/fixture.mjs",
+   "descricao": null,
+   "linhas": 182,
+   "env": [
+    "FIXTURE_GRAPH_EXIT"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation-tests/hooks.mjs",
+   "descricao": null,
+   "linhas": 284,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation-tests/inventory.mjs",
+   "descricao": null,
+   "linhas": 106,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation-tests/snapshot.mjs",
+   "descricao": null,
+   "linhas": 102,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation.mjs",
+   "descricao": null,
+   "linhas": 80,
+   "env": [],
+   "npm_scripts": [
+    "automation:doctor",
+    "automation:test",
+    "automation:check",
+    "automation:heal",
+    "automation:nightly",
+    "automation:graph",
+    "automation:status",
+    "automation:install-hooks",
+    "automation:uninstall-hooks"
+   ],
+   "workflows": [
+    "automation-local.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation/common.mjs",
+   "descricao": null,
+   "linhas": 121,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation/config.mjs",
+   "descricao": null,
+   "linhas": 205,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation/dispatch.mjs",
+   "descricao": null,
+   "linhas": 75,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation/hooks.mjs",
+   "descricao": null,
+   "linhas": 91,
+   "env": [
+    "REPO_AUTOMATION_CHAINING"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation/install.mjs",
+   "descricao": null,
+   "linhas": 290,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation/inventory.mjs",
+   "descricao": null,
+   "linhas": 256,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation/process.mjs",
+   "descricao": null,
+   "linhas": 133,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/automation/runtime-copy.mjs",
+   "descricao": null,
+   "linhas": 36,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -298,6 +440,120 @@
    "arquivo": "scripts/get_unified_def.sql",
    "descricao": null,
    "linhas": 34,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local-tests/fixture.mjs",
+   "descricao": null,
+   "linhas": 96,
+   "env": [
+    "GRAPHIFY_FIXTURE_SECRET"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local-tests/freshness.mjs",
+   "descricao": null,
+   "linhas": 159,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local-tests/locking.mjs",
+   "descricao": null,
+   "linhas": 106,
+   "env": [
+    "PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local-tests/safety.mjs",
+   "descricao": null,
+   "linhas": 240,
+   "env": [
+    "GRAPHIFY_FIXTURE_SECRET"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local.mjs",
+   "descricao": null,
+   "linhas": 277,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local/artifacts.mjs",
+   "descricao": null,
+   "linhas": 151,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local/build.mjs",
+   "descricao": null,
+   "linhas": 297,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local/common.mjs",
+   "descricao": null,
+   "linhas": 131,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local/config.mjs",
+   "descricao": null,
+   "linhas": 127,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local/locks.mjs",
+   "descricao": null,
+   "linhas": 129,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local/process.mjs",
+   "descricao": null,
+   "linhas": 161,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify-local/source.mjs",
+   "descricao": null,
+   "linhas": 89,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -475,6 +731,147 @@
    "orfao": false
   },
   {
+   "arquivo": "scripts/maintenance/changes.mjs",
+   "descricao": null,
+   "linhas": 93,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/commit.mjs",
+   "descricao": null,
+   "linhas": 119,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/common.mjs",
+   "descricao": null,
+   "linhas": 68,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/configuration.mjs",
+   "descricao": null,
+   "linhas": 249,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/dependencies.mjs",
+   "descricao": null,
+   "linhas": 278,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/fixes.mjs",
+   "descricao": null,
+   "linhas": 182,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/lib.mjs",
+   "descricao": null,
+   "linhas": 21,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/locking.mjs",
+   "descricao": null,
+   "linhas": 138,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/options.mjs",
+   "descricao": null,
+   "linhas": 54,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/process.mjs",
+   "descricao": "O processo pode já ter encerrado. */",
+   "linhas": 122,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/run.mjs",
+   "descricao": null,
+   "linhas": 384,
+   "env": [
+    "XDG_STATE_HOME"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/run.sh",
+   "descricao": null,
+   "linhas": 16,
+   "env": [],
+   "npm_scripts": [
+    "maintenance:doctor",
+    "maintenance:check",
+    "maintenance:heal"
+   ],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/sandbox.mjs",
+   "descricao": null,
+   "linhas": 121,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/session.mjs",
+   "descricao": null,
+   "linhas": 162,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/maintenance/typecheck.mjs",
+   "descricao": null,
+   "linhas": 110,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
    "arquivo": "scripts/migration/_lib.sh",
    "descricao": "shellcheck shell=bash ============================================================================",
    "linhas": 134,
@@ -589,7 +986,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/cdc/replay.ts",
@@ -612,7 +1009,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/chaos/inject.sh",
@@ -653,7 +1050,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/cutover/freeze-origin.sh",
@@ -680,7 +1077,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/dashboard.sh",
@@ -996,7 +1393,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/reset-passwords.sh",
@@ -1026,7 +1423,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/rollback.sh",
@@ -1089,7 +1486,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/storage/copy-large.ts",
@@ -1107,7 +1504,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/storage/copy-objects.ts",
@@ -1127,7 +1524,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/storage/create-buckets.ts",
@@ -1145,7 +1542,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/storage/list-buckets.ts",
@@ -1161,7 +1558,11 @@
    "descricao": "============================================================================ run.sh — wrapper do pipeline de Storage:",
    "linhas": 82,
    "env": [],
-   "npm_scripts": [],
+   "npm_scripts": [
+    "maintenance:doctor",
+    "maintenance:check",
+    "maintenance:heal"
+   ],
    "workflows": [],
    "orfao": false
   },
@@ -1183,7 +1584,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/table-order.sql",
@@ -1388,7 +1789,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/verify/duplicate-indexes.sql",
@@ -1851,7 +2252,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/verify/role-membership-parity.sql",
@@ -1894,7 +2295,7 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/verify/schema-freeze-guard.sql",
@@ -1988,7 +2389,7 @@
    ],
    "npm_scripts": [],
    "workflows": [],
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "scripts/migration/verify/storage-public-guard.ts",

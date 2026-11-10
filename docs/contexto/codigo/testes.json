@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 243,
+ "total": 253,
  "por_tipo": {
   "contrato": 38,
   "e2e": 12,
   "pytest": 7,
-  "unit": 184
+  "unit": 194
  },
  "onde_ficam": [
   {
@@ -27,7 +27,7 @@
   },
   {
    "padrao": "outro",
-   "arquivos": 9
+   "arquivos": 19
   },
   {
    "padrao": "e2e/",
@@ -136,6 +136,18 @@
    "casos": 14
   },
   {
+   "arquivo": "scripts/automation.unit.mjs",
+   "tipo": "unit",
+   "linhas": 5,
+   "testa": [
+    "scripts/automation-tests/dispatch.mjs",
+    "scripts/automation-tests/hooks.mjs",
+    "scripts/automation-tests/inventory.mjs",
+    "scripts/automation-tests/snapshot.mjs"
+   ],
+   "casos": 0
+  },
+  {
    "arquivo": "scripts/check-backend-linter-baseline.test.mjs",
    "tipo": "unit",
    "linhas": 112,
@@ -192,6 +204,17 @@
     "scripts/gen-supabase-types.mjs"
    ],
    "casos": 15
+  },
+  {
+   "arquivo": "scripts/graphify-local.unit.mjs",
+   "tipo": "unit",
+   "linhas": 4,
+   "testa": [
+    "scripts/graphify-local-tests/freshness.mjs",
+    "scripts/graphify-local-tests/locking.mjs",
+    "scripts/graphify-local-tests/safety.mjs"
+   ],
+   "casos": 0
   },
   {
    "arquivo": "scripts/hardening/hardening-cluster.test.mjs",
@@ -275,6 +298,83 @@
    "linhas": 162,
    "testa": [],
    "casos": 12
+  },
+  {
+   "arquivo": "scripts/maintenance/maintenance.unit.mjs",
+   "tipo": "unit",
+   "linhas": 7,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "scripts/maintenance/tests/configuration.mjs",
+   "tipo": "unit",
+   "linhas": 148,
+   "testa": [
+    "scripts/maintenance/lib.mjs",
+    "scripts/maintenance/run.mjs"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "scripts/maintenance/tests/dependencies.mjs",
+   "tipo": "unit",
+   "linhas": 132,
+   "testa": [
+    "scripts/maintenance/lib.mjs",
+    "scripts/maintenance/run.mjs"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "scripts/maintenance/tests/fixture.mjs",
+   "tipo": "unit",
+   "linhas": 211,
+   "testa": [
+    "scripts/maintenance/lib.mjs",
+    "scripts/maintenance/run.mjs"
+   ],
+   "casos": 0
+  },
+  {
+   "arquivo": "scripts/maintenance/tests/formatting.mjs",
+   "tipo": "unit",
+   "linhas": 171,
+   "testa": [
+    "scripts/maintenance/lib.mjs",
+    "scripts/maintenance/run.mjs"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "scripts/maintenance/tests/hooks.mjs",
+   "tipo": "unit",
+   "linhas": 155,
+   "testa": [
+    "scripts/maintenance/lib.mjs",
+    "scripts/maintenance/run.mjs"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "scripts/maintenance/tests/locking.mjs",
+   "tipo": "unit",
+   "linhas": 163,
+   "testa": [
+    "scripts/maintenance/lib.mjs",
+    "scripts/maintenance/run.mjs"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "scripts/maintenance/tests/transaction.mjs",
+   "tipo": "unit",
+   "linhas": 204,
+   "testa": [
+    "scripts/maintenance/lib.mjs",
+    "scripts/maintenance/run.mjs"
+   ],
+   "casos": 10
   },
   {
    "arquivo": "scripts/migration/ddl/ddl.test.mjs",
@@ -2201,14 +2301,23 @@
   "scripts/apply-all.js": 1,
   "scripts/apply-missing.js": 1,
   "scripts/audit-ausentes.mjs": 1,
+  "scripts/automation-tests/dispatch.mjs": 1,
+  "scripts/automation-tests/hooks.mjs": 1,
+  "scripts/automation-tests/inventory.mjs": 1,
+  "scripts/automation-tests/snapshot.mjs": 1,
   "scripts/diff-tables.mjs": 1,
   "scripts/fix-enums.js": 1,
   "scripts/gen-supabase-types.mjs": 1,
+  "scripts/graphify-local-tests/freshness.mjs": 1,
+  "scripts/graphify-local-tests/locking.mjs": 1,
+  "scripts/graphify-local-tests/safety.mjs": 1,
   "scripts/hardening/_pg-teste.mjs": 3,
   "scripts/inventario/gerar-banco.mjs": 1,
   "scripts/inventario/mudou-conteudo.mjs": 1,
   "scripts/lib/sql-split.mjs": 3,
   "scripts/lib/supabase-mgmt.mjs": 5,
+  "scripts/maintenance/lib.mjs": 7,
+  "scripts/maintenance/run.mjs": 7,
   "scripts/retry-failed.js": 1,
   "src/app/lazyPages.tsx": 1,
   "src/app/queryClient.ts": 1,

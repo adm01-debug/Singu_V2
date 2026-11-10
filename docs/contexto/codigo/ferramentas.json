@@ -5,12 +5,12 @@
   "linguagens": [
    "TypeScript (2047)",
    "SQL (651)",
-   "Markdown (150)",
-   "Shell (133)",
-   "JavaScript (68)",
+   "Markdown (152)",
+   "Shell (134)",
+   "JavaScript (118)",
    "Python (19)",
-   "JSON (14)",
-   "YAML (13)"
+   "JSON (18)",
+   "YAML (14)"
   ],
   "linguagem_principal": "TypeScript",
   "framework": "React",
@@ -46,6 +46,15 @@
   "nome": "vite_react_shadcn_ts",
   "versao": "0.0.0",
   "scripts": {
+   "automation:check": "node scripts/automation.mjs check --ref HEAD",
+   "automation:doctor": "node scripts/automation.mjs doctor",
+   "automation:graph": "node scripts/automation.mjs graph",
+   "automation:heal": "node scripts/automation.mjs heal --ref origin/main",
+   "automation:install-hooks": "node scripts/automation.mjs install-hooks",
+   "automation:nightly": "node scripts/automation.mjs nightly --ref origin/main",
+   "automation:status": "node scripts/automation.mjs graph status",
+   "automation:test": "node scripts/automation.mjs test",
+   "automation:uninstall-hooks": "node scripts/automation.mjs uninstall-hooks",
    "build": "vite build",
    "build:dev": "vite build --mode development",
    "check:edge-imports": "node scripts/check-edge-imports.mjs",
@@ -59,12 +68,16 @@
    "graphify:query": "graphify query",
    "graphify:update": "graphify update .",
    "lint": "eslint .",
+   "maintenance:check": "sh scripts/maintenance/run.sh check --root . --ref origin/main",
+   "maintenance:doctor": "sh scripts/maintenance/run.sh doctor --root .",
+   "maintenance:heal": "sh scripts/maintenance/run.sh heal --root . --ref origin/main",
    "pretest:e2e": "npm run build",
    "preview": "vite preview",
    "test": "vitest run",
    "test:coverage": "vitest run --coverage --reporter=default",
    "test:e2e": "playwright test",
    "test:e2e:ui": "playwright test --ui",
+   "test:maintenance": "node --test scripts/maintenance/maintenance.unit.mjs",
    "test:unit": "vitest run",
    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json"
   },
@@ -116,6 +129,34 @@
   "vitest.config.ts"
  ],
  "workflows": [
+  {
+   "arquivo": ".github/workflows/automation-local.yml",
+   "nome": "Automação local",
+   "gatilhos": [
+    "pull_request",
+    "push",
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "contracts"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [
+    "scripts/automation.mjs"
+   ],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node"
+   ]
+  },
   {
    "arquivo": ".github/workflows/ci.yml",
    "nome": "CI",
@@ -451,6 +492,11 @@
    "arquivo": "docs/AUDIT_VALIDATION_23_10.md",
    "titulo": "Rodada 23/10 — Validação Exaustiva dos Guards (11–22)",
    "linhas": 188
+  },
+  {
+   "arquivo": "docs/AUTOMACAO_LOCAL.md",
+   "titulo": "Automação local — Singu_V2",
+   "linhas": 357
   },
   {
    "arquivo": "docs/CHANGELOG_1.0_1.5.md",
@@ -1006,6 +1052,10 @@
     "arquivos": 1
    },
    {
+    "host": "maintenance.invalid",
+    "arquivos": 1
+   },
+   {
     "host": "maps.google.com",
     "arquivos": 1
    },
@@ -1039,6 +1089,14 @@
    },
    {
     "host": "placehold.co",
+    "arquivos": 1
+   },
+   {
+    "host": "production.invalid",
+    "arquivos": 1
+   },
+   {
+    "host": "production.supabase.co",
     "arquivos": 1
    },
    {
