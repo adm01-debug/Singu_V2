@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-10 18:49 UTC
+
+- **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_13`
+
 ## 2026-11-10 01:05 UTC
 
 - **functions** alterado (4): `public.fn_cf_collect_sm_legacy_dispatch(p_start_page integer, p_end_page integer)`, `public.get_unified_communication_history(p_company_id uuid, p_limit integer)`, `public.has_role(_user_id uuid, _role app_role)`, `public.immutable_unaccent(text)`
