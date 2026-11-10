@@ -1,3 +1,8 @@
+# docs:
+#   gatilho: push e pull_request que toquem monitoring/, docs/runbooks/, scripts/monitoring/ ou este workflow
+#   prova: regras do Prometheus (promtool) e config do Alertmanager (amtool) validas, todo alerta com runbook e nenhum segredo no exporter
+#   falha: PR vermelha no job correspondente (promtool, amtool, runbook-coverage ou secret-leak-scan)
+#   avisa: ninguem — o proprio check da PR e o aviso
 name: monitoring-lint
 on:
   push:

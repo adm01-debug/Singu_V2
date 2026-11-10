@@ -1,3 +1,8 @@
+# docs:
+#   gatilho: so manual (workflow_dispatch) — Actions, Fix JWT proxies externas, Run workflow
+#   prova: as 23 proxies externas deployadas sem codigo no repositorio ficam com verify_jwt = false fechado, e a conferencia final sai vazia
+#   falha: alguma proxy nao aceitou a mudanca; o job fica vermelho e o estado final lista quem sobrou
+#   avisa: ninguem — quem disparou le o resumo do run
 # Fecha verify_jwt = false nas 23 proxies externas deployadas em
 # pgxfvjmuubtbowutlide mas sem código neste repositório.
 # Pré-requisito: SUPABASE_ACCESS_TOKEN cadastrado nos secrets do repo.

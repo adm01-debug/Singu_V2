@@ -1,0 +1,68 @@
+# docs:
+#   gatilho: pull_request e push em main que toquem workflows, scripts/ci/, scripts/docs/, qualquer .md, src/ ou supabase/
+#   prova: docs/ci/README.md e a projecao exata dos blocos "# docs:" dos workflows, e nenhuma citacao arquivo:linha nova quebrada nos .md
+#   falha: PR vermelha nomeando o comando a rodar (render-workflow-docs.mjs ou verificar-citacoes.mjs)
+#   avisa: ninguem — o check da PR e o aviso
+# nao-e-bug:
+#   - catraca-citacoes: as 184 citacoes já quebradas em 2026-11-08 estao no baseline e nao reprovam ninguem; a lista so pode encolher
+name: Documentação sem drift
+
+# Dois jeitos de a documentacao mentir, os dois cobrados aqui e nenhum deles gerando arquivo:
+#   1. mexer num gatilho de workflow e nao atualizar docs/ci/README.md;
+#   2. mover codigo e deixar `arquivo:linha` apontando para o lugar errado num .md.
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/ci/**'
+      - 'scripts/docs/**'
+      - '**/*.md'
+      - 'src/**'
+      - 'supabase/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/ci/**'
+      - 'scripts/docs/**'
+      - '**/*.md'
+      - 'src/**'
+      - 'supabase/**'
+
+concurrency:
+  group: docs-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
+jobs:
+  sem-drift:
+    name: README de CI e citações dos .md
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Testes dos verificadores
+        run: node --test scripts/ci/render-workflow-docs.test.mjs scripts/docs/verificar-citacoes.test.mjs
+
+      - name: Conferir docs/ci/README.md
+        run: node scripts/ci/render-workflow-docs.mjs --check
+
+      - name: Conferir as citações arquivo:linha dos .md
+        run: node scripts/docs/verificar-citacoes.mjs
