@@ -39,7 +39,7 @@ Base exclusiva: `a2b73c7dee837f19aa756e6afe385eba837b5d54`. Árvore versionada l
 | ROT-16 | AINDA REPRODUZÍVEL | `src/components/command/GlobalCommandBar.tsx:66,76,86`; Contatos/Empresas/Interacoes não leem `new` | Consumir `?new=1` | Três ações abrem formulário |
 | ROT-17 | AINDA REPRODUZÍVEL | `src/components/layout/AppLayout.tsx:268`; `src/components/ask-crm/AskCrmChat.tsx:85` | Compartilhar abertura | Palette abre chat; IA adiada |
 | ROT-18 | AINDA REPRODUZÍVEL | `src/hooks/useKeyboardShortcutsEnhanced.ts:54-221` | Ouvintes dos 14 eventos | Cada atalho altera estado; Alt+Voltar já funciona |
-| ROT-19 | AINDA REPRODUZÍVEL | `src/components/features/WhatsNewModal.tsx:181`; `src/main.tsx:122` | Ouvintes novidades/update | Aviso visível e atualização consentida |
+| ROT-19 | AINDA REPRODUZÍVEL | `src/components/features/WhatsNewModal.tsx:181`; `src/main.tsx:64` | Ouvintes novidades/update | Aviso visível e atualização consentida |
 | PH-01 | AINDA REPRODUZÍVEL | `src/components/territory-optimization/TerritoryRecommendationCard.tsx:72-74` | Mutação de aplicação | Recomendação altera território autorizado |
 | PH-02 | AINDA REPRODUZÍVEL | `src/components/interactions/InteractionBatchActions.tsx:75` | Tag em lote | Seleção recebe tag persistida |
 | PH-03 | AINDA REPRODUZÍVEL | `src/pages/ReportBuilder.tsx:40-90` | Widgets/dados/layout persistente | Relatório útil, não ícones vazios |

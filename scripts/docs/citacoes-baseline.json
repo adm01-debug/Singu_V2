@@ -1,8 +1,9 @@
 {
   "fonte": "scripts/docs/verificar-citacoes.mjs --baseline",
   "o_que_e": "citacoes arquivo:linha que já estavam quebradas quando a catraca foi criada. A lista só pode encolher: quebra nova reprova. Corrigiu uma? rode --baseline e commite.",
-  "total": 184,
+  "total": 186,
   "quebras": [
+    "AGENTS.md -> docs/contexto/00-INDEX.md (arquivo nao existe)",
     "AUDITORIA_COMPLETA_SISTEMA.md -> src/lib/queryClient.ts (arquivo nao existe)",
     "ESTADO_ATUAL.md -> src/hooks/useLeadRoutingServer.ts:96 (arquivo nao existe)",
     "ESTADO_ATUAL.md -> src/sw.ts (arquivo nao existe)",
@@ -88,6 +89,7 @@
     "docs/QA_ANALYSIS_REPORT.md -> src/lib/undoable-action.ts (arquivo nao existe)",
     "docs/RUNBOOK.md -> docs/dr-drills/AAAA-MM-restore.md (arquivo nao existe)",
     "docs/RUNBOOK.md -> docs/postmortems/AAAA-MM-DD.md (arquivo nao existe)",
+    "docs/agentes/automacoes-estado-real.md -> docs/contexto/00-INDEX.md (arquivo nao existe)",
     "docs/agentes/contexto-ia.md -> docs/contexto/00-INDEX.md (arquivo nao existe)",
     "docs/agentes/contexto-ia.md -> docs/contexto/codigo/INDEX.md (arquivo nao existe)",
     "docs/agentes/contexto-ia.md -> docs/contexto/regras/07-REGRAS-DE-NEGOCIO.md (arquivo nao existe)",

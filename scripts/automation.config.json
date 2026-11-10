@@ -2953,7 +2953,80 @@
       "triggers": ["manual"],
       "callers": ["scripts/ci/check-test-inventory.mjs", "scripts/lib/seguranca-processo.test.mjs"]
     }
-
+,
+    {
+      "id": "legacy-daf8bc8da0b425f1",
+      "kind": "legacy",
+      "files": ["scripts/ci/render-workflow-docs.mjs"],
+      "manual": ["node","scripts/ci/render-workflow-docs.mjs"],
+      "triggers": ["manual"],
+      "reason": "Legado executado por workflow declarado: .github/workflows/docs-ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-4f5b12d094dd419e",
+      "kind": "legacy",
+      "files": ["scripts/ci/render-workflow-docs.test.mjs"],
+      "manual": ["node","--test","scripts/ci/render-workflow-docs.test.mjs"],
+      "triggers": ["manual"],
+      "reason": "Legado executado por workflow declarado: .github/workflows/docs-ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9ab55ce555cbe63e",
+      "kind": "legacy",
+      "files": ["scripts/docs/verificar-citacoes.mjs"],
+      "manual": ["node","scripts/docs/verificar-citacoes.mjs"],
+      "triggers": ["manual"],
+      "reason": "Legado executado por workflow declarado: .github/workflows/docs-ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c843faf8064ab432",
+      "kind": "legacy",
+      "files": ["scripts/docs/verificar-citacoes.test.mjs"],
+      "manual": ["node","--test","scripts/docs/verificar-citacoes.test.mjs"],
+      "triggers": ["manual"],
+      "reason": "Legado executado por workflow declarado: .github/workflows/docs-ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-054ec1b6af894a55",
+      "kind": "legacy",
+      "files": ["scripts/inventario/gerar-edge-tabela.mjs"],
+      "manual": ["node","scripts/inventario/gerar-edge-tabela.mjs"],
+      "triggers": ["manual"],
+      "reason": "Legado executado por workflow declarado: .github/workflows/inventario-estado-semanal.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-da7c211e8f57818d",
+      "kind": "legacy",
+      "files": ["scripts/inventario/gerar-edge-tabela.test.mjs"],
+      "manual": ["node","--test","scripts/inventario/gerar-edge-tabela.test.mjs"],
+      "triggers": ["manual"],
+      "reason": "Legado executado por workflow declarado: .github/workflows/inventario-estado-semanal.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c15149bfd68dd3f5",
+      "kind": "legacy",
+      "files": ["scripts/inventario/gerar-rotas.mjs"],
+      "manual": ["node","scripts/inventario/gerar-rotas.mjs"],
+      "triggers": ["manual"],
+      "reason": "Legado executado por workflow declarado: .github/workflows/inventario-estado-semanal.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-1c595f7e704fd3c4",
+      "kind": "legacy",
+      "files": ["scripts/inventario/gerar-rotas.test.mjs"],
+      "manual": ["node","--test","scripts/inventario/gerar-rotas.test.mjs"],
+      "triggers": ["manual"],
+      "reason": "Legado executado por workflow declarado: .github/workflows/inventario-estado-semanal.yml. O dispatcher não executa esta operação."
+    }
+,
+    {
+      "id": "module-51eded21b4439e5e",
+      "kind": "helper",
+      "files": ["scripts/inventario/chamadas-supabase.mjs"],
+      "manual": ["node","scripts/automation.mjs","test"],
+      "triggers": ["manual"],
+      "callers": ["scripts/inventario/gerar-edge-tabela.mjs","scripts/inventario/gerar-rotas.mjs"]
+    }
   ],
   "ci": [
     {
