@@ -40,7 +40,7 @@ As suites usam fixtures descartáveis e não executam os scripts operacionais do
 
 ## Registro exato dos demais scripts
 
-Os registros `legacy` abaixo preservam ferramentas anteriores e seus chamadores; não são incluídos automaticamente no novo pipeline. Referência literal indica onde o arquivo é citado, sem garantir que esse caminho rode nem autorização para executar operações contra serviços. Sem referência, o arquivo é mantido manual porque função, parâmetros e ambiente precisam de revisão antes de ativar qualquer gatilho. Scripts novos não cobertos por registro fazem `doctor --static` falhar; não existe registro genérico `scripts/**` para ocultá-los.
+Os registros `legacy` abaixo preservam ferramentas anteriores e seus chamadores; não são incluídos automaticamente no novo pipeline. Para arquivos TypeScript de apoio sem runner comprovado, o comando listado só valida o inventário; os chamadores originais continuam sendo a referência de execução. Referência literal indica onde o arquivo é citado, sem garantir que esse caminho rode nem autorização para executar operações contra serviços. Sem referência, o arquivo é mantido manual porque função, parâmetros e ambiente precisam de revisão antes de ativar qualquer gatilho. Scripts novos não cobertos por registro fazem `doctor --static` falhar; não existe registro genérico `scripts/**` para ocultá-los.
 
 | Arquivo exato | Invocação manual de inventário | Chamadores literais / justificativa |
 |---|---|---|
@@ -102,25 +102,25 @@ Os registros `legacy` abaixo preservam ferramentas anteriores e seus chamadores;
 | `scripts/lint-providers.cjs` | `node scripts/lint-providers.cjs` | scripts/lint-providers.test.mjs |
 | `scripts/lint-providers.test.mjs` | `node --test scripts/lint-providers.test.mjs` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/_lib.sh` | `sh scripts/migration/_lib.sh` | scripts/check-deploy-timeout.test.mjs, scripts/check-publish-gates.test.mjs, scripts/migration/auth/export-identities.sh, scripts/migration/auth/import-identities.sh |
-| `scripts/migration/_mock_supabase.ts` | `bun scripts/migration/_mock_supabase.ts` | scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay_test.ts, scripts/migration/compliance/lgpd-snapshot_test.ts, scripts/migration/cutover/smoke-tests_test.ts |
-| `scripts/migration/_pg_teste.ts` | `bun scripts/migration/_pg_teste.ts` | scripts/migration/cdc/order-guard_test.ts, scripts/migration/verify/rls-parity_test.ts, scripts/migration/verify/row-diff_test.ts |
+| `scripts/migration/_mock_supabase.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay_test.ts, scripts/migration/compliance/lgpd-snapshot_test.ts, scripts/migration/cutover/smoke-tests_test.ts |
+| `scripts/migration/_pg_teste.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/cdc/order-guard_test.ts, scripts/migration/verify/rls-parity_test.ts, scripts/migration/verify/row-diff_test.ts |
 | `scripts/migration/auth/export-identities.sh` | `sh scripts/migration/auth/export-identities.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/auth/import-identities.sh` | `sh scripts/migration/auth/import-identities.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/auth/rotate-jwt.sh` | `sh scripts/migration/auth/rotate-jwt.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/cdc/drain.sh` | `sh scripts/migration/cdc/drain.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/cdc/dry-run.sh` | `sh scripts/migration/cdc/dry-run.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/cdc/lag-watch.sh` | `sh scripts/migration/cdc/lag-watch.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/cdc/order-guard.ts` | `bun scripts/migration/cdc/order-guard.ts` | scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay.ts |
-| `scripts/migration/cdc/order-guard_test.ts` | `bun scripts/migration/cdc/order-guard_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/cdc/replay.ts` | `bun scripts/migration/cdc/replay.ts` | scripts/migration/cdc/replay_test.ts |
-| `scripts/migration/cdc/replay_test.ts` | `bun scripts/migration/cdc/replay_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/cdc/order-guard.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay.ts |
+| `scripts/migration/cdc/order-guard_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/cdc/replay.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/cdc/replay_test.ts |
+| `scripts/migration/cdc/replay_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/chaos/inject.sh` | `sh scripts/migration/chaos/inject.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/compare-counts.sh` | `sh scripts/migration/compare-counts.sh` | scripts/migration/import-data.sh |
-| `scripts/migration/compliance/lgpd-snapshot.ts` | `bun scripts/migration/compliance/lgpd-snapshot.ts` | scripts/migration/compliance/lgpd-snapshot_test.ts |
-| `scripts/migration/compliance/lgpd-snapshot_test.ts` | `bun scripts/migration/compliance/lgpd-snapshot_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/compliance/lgpd-snapshot.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/compliance/lgpd-snapshot_test.ts |
+| `scripts/migration/compliance/lgpd-snapshot_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/cutover/freeze-origin.sh` | `sh scripts/migration/cutover/freeze-origin.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/cutover/smoke-tests.ts` | `bun scripts/migration/cutover/smoke-tests.ts` | scripts/migration/cutover/smoke-tests_test.ts |
-| `scripts/migration/cutover/smoke-tests_test.ts` | `bun scripts/migration/cutover/smoke-tests_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/cutover/smoke-tests.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/cutover/smoke-tests_test.ts |
+| `scripts/migration/cutover/smoke-tests_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/dashboard.sh` | `sh scripts/migration/dashboard.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/ddl/ddl.test.mjs` | `node --test scripts/migration/ddl/ddl.test.mjs` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/ddl/verify-extensions.sh` | `sh scripts/migration/ddl/verify-extensions.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
@@ -139,47 +139,47 @@ Os registros `legacy` abaixo preservam ferramentas anteriores e seus chamadores;
 | `scripts/migration/import-data-parallel.sh` | `sh scripts/migration/import-data-parallel.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/import-data.sh` | `sh scripts/migration/import-data.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/monitoring/post-cutover-watch.sh` | `sh scripts/migration/monitoring/post-cutover-watch.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/monitoring/synthetic-checks.ts` | `bun scripts/migration/monitoring/synthetic-checks.ts` | scripts/migration/monitoring/synthetic-checks_test.ts |
-| `scripts/migration/monitoring/synthetic-checks_test.ts` | `bun scripts/migration/monitoring/synthetic-checks_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/monitoring/synthetic-checks.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/monitoring/synthetic-checks_test.ts |
+| `scripts/migration/monitoring/synthetic-checks_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/reset-passwords.sh` | `sh scripts/migration/reset-passwords.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/reset-passwords.ts` | `bun scripts/migration/reset-passwords.ts` | scripts/migration/reset-passwords_test.ts |
-| `scripts/migration/reset-passwords_test.ts` | `bun scripts/migration/reset-passwords_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/reset-passwords.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/reset-passwords_test.ts |
+| `scripts/migration/reset-passwords_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/rollback.sh` | `sh scripts/migration/rollback.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/rollback/full-restore.sh` | `sh scripts/migration/rollback/full-restore.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/sql/sql.test.mjs` | `node --test scripts/migration/sql/sql.test.mjs` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/storage/_lib.ts` | `bun scripts/migration/storage/_lib.ts` | scripts/migration/storage/_lib_test.ts, scripts/migration/storage/copy-large.ts, scripts/migration/storage/copy-large_test.ts, scripts/migration/storage/copy-objects.ts |
-| `scripts/migration/storage/_lib_test.ts` | `bun scripts/migration/storage/_lib_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/storage/copy-large.ts` | `bun scripts/migration/storage/copy-large.ts` | scripts/migration/storage/copy-large_test.ts |
-| `scripts/migration/storage/copy-large_test.ts` | `bun scripts/migration/storage/copy-large_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/storage/copy-objects.ts` | `bun scripts/migration/storage/copy-objects.ts` | scripts/migration/storage/copy-objects_test.ts |
-| `scripts/migration/storage/copy-objects_test.ts` | `bun scripts/migration/storage/copy-objects_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/storage/create-buckets.ts` | `bun scripts/migration/storage/create-buckets.ts` | scripts/migration/storage/create-buckets_test.ts |
-| `scripts/migration/storage/create-buckets_test.ts` | `bun scripts/migration/storage/create-buckets_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/storage/list-buckets.ts` | `bun scripts/migration/storage/list-buckets.ts` | scripts/migration/storage/create-buckets_test.ts |
+| `scripts/migration/storage/_lib.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/storage/_lib_test.ts, scripts/migration/storage/copy-large.ts, scripts/migration/storage/copy-large_test.ts, scripts/migration/storage/copy-objects.ts |
+| `scripts/migration/storage/_lib_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/storage/copy-large.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/storage/copy-large_test.ts |
+| `scripts/migration/storage/copy-large_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/storage/copy-objects.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/storage/copy-objects_test.ts |
+| `scripts/migration/storage/copy-objects_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/storage/create-buckets.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/storage/create-buckets_test.ts |
+| `scripts/migration/storage/create-buckets_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/storage/list-buckets.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/storage/create-buckets_test.ts |
 | `scripts/migration/storage/run.sh` | `sh scripts/migration/storage/run.sh` | scripts/migration/_lib.sh |
-| `scripts/migration/storage/verify-counts.ts` | `bun scripts/migration/storage/verify-counts.ts` | scripts/migration/storage/verify-counts_test.ts |
-| `scripts/migration/storage/verify-counts_test.ts` | `bun scripts/migration/storage/verify-counts_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/storage/verify-counts.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/storage/verify-counts_test.ts |
+| `scripts/migration/storage/verify-counts_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/tests/lib/sigrun.py` | `python3 scripts/migration/tests/lib/sigrun.py` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/unmark-must-reset.sh` | `sh scripts/migration/unmark-must-reset.sh` | scripts/migration/rollback.sh |
 | `scripts/migration/verify/connection-pool-exhaustion-canary.sh` | `sh scripts/migration/verify/connection-pool-exhaustion-canary.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/verify/dns-multi-region.sh` | `sh scripts/migration/verify/dns-multi-region.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/verify/dns-propagation.sh` | `sh scripts/migration/verify/dns-propagation.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/verify/dual-write-diverge.ts` | `bun scripts/migration/verify/dual-write-diverge.ts` | scripts/migration/verify/dual-write-diverge_test.ts |
-| `scripts/migration/verify/dual-write-diverge_test.ts` | `bun scripts/migration/verify/dual-write-diverge_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/verify/dual-write-diverge.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/verify/dual-write-diverge_test.ts |
+| `scripts/migration/verify/dual-write-diverge_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/verify/exporter/full-audit-exporter.sh` | `sh scripts/migration/verify/exporter/full-audit-exporter.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/verify/extensions-versions.sh` | `sh scripts/migration/verify/extensions-versions.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/verify/full-audit.sh` | `sh scripts/migration/verify/full-audit.sh` | scripts/migration/verify/exporter/full-audit-exporter.sh, scripts/monitoring/check-runbook-coverage.sh |
 | `scripts/migration/verify/grants-parity.sh` | `sh scripts/migration/verify/grants-parity.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/verify/pitr-window-verifier.sh` | `sh scripts/migration/verify/pitr-window-verifier.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/verify/planner-stats-freshness.sh` | `sh scripts/migration/verify/planner-stats-freshness.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/verify/rls-parity.ts` | `bun scripts/migration/verify/rls-parity.ts` | scripts/migration/verify/rls-parity_test.ts |
-| `scripts/migration/verify/rls-parity_test.ts` | `bun scripts/migration/verify/rls-parity_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/verify/row-diff-deep.ts` | `bun scripts/migration/verify/row-diff-deep.ts` | scripts/migration/verify/row-diff_test.ts |
-| `scripts/migration/verify/row-diff.ts` | `bun scripts/migration/verify/row-diff.ts` | scripts/migration/verify/row-diff-deep.ts, scripts/migration/verify/row-diff_test.ts |
-| `scripts/migration/verify/row-diff_test.ts` | `bun scripts/migration/verify/row-diff_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/verify/storage-bytes.ts` | `bun scripts/migration/verify/storage-bytes.ts` | scripts/migration/verify/storage-bytes_test.ts |
-| `scripts/migration/verify/storage-bytes_test.ts` | `bun scripts/migration/verify/storage-bytes_test.ts` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
-| `scripts/migration/verify/storage-public-guard.ts` | `bun scripts/migration/verify/storage-public-guard.ts` | scripts/migration/verify/storage-bytes_test.ts |
+| `scripts/migration/verify/rls-parity.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/verify/rls-parity_test.ts |
+| `scripts/migration/verify/rls-parity_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/verify/row-diff-deep.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/verify/row-diff_test.ts |
+| `scripts/migration/verify/row-diff.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/verify/row-diff-deep.ts, scripts/migration/verify/row-diff_test.ts |
+| `scripts/migration/verify/row-diff_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/verify/storage-bytes.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/verify/storage-bytes_test.ts |
+| `scripts/migration/verify/storage-bytes_test.ts` | `node scripts/automation.mjs doctor --static` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
+| `scripts/migration/verify/storage-public-guard.ts` | `node scripts/automation.mjs doctor --static` | scripts/migration/verify/storage-bytes_test.ts |
 | `scripts/migration/verify/tests/contrato-estatico.test.sh` | `sh scripts/migration/verify/tests/contrato-estatico.test.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/verify/tests/lib.sh` | `sh scripts/migration/verify/tests/lib.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |
 | `scripts/migration/verify/tests/run-all.sh` | `sh scripts/migration/verify/tests/run-all.sh` | Sem chamador literal; manter manual e revisar parâmetros/ambiente antes de executar. |

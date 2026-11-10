@@ -1015,13 +1015,15 @@
         "scripts/migration/_mock_supabase.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/_mock_supabase.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay_test.ts, scripts/migration/compliance/lgpd-snapshot_test.ts, scripts/migration/cutover/smoke-tests_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay_test.ts, scripts/migration/compliance/lgpd-snapshot_test.ts, scripts/migration/cutover/smoke-tests_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-5ce67167e83e876e",
@@ -1030,13 +1032,15 @@
         "scripts/migration/_pg_teste.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/_pg_teste.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/order-guard_test.ts, scripts/migration/verify/rls-parity_test.ts, scripts/migration/verify/row-diff_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/order-guard_test.ts, scripts/migration/verify/rls-parity_test.ts, scripts/migration/verify/row-diff_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-a59262a406fd4e47",
@@ -1135,13 +1139,15 @@
         "scripts/migration/cdc/order-guard.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/cdc/order-guard.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-ada5c98a286a1cfc",
@@ -1150,13 +1156,15 @@
         "scripts/migration/cdc/order-guard_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/cdc/order-guard_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-9cab1f663f53b922",
@@ -1165,13 +1173,15 @@
         "scripts/migration/cdc/replay.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/cdc/replay.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/replay_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/replay_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-230dc1766edbea7b",
@@ -1180,13 +1190,15 @@
         "scripts/migration/cdc/replay_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/cdc/replay_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-68953b114f2b0621",
@@ -1225,13 +1237,15 @@
         "scripts/migration/compliance/lgpd-snapshot.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/compliance/lgpd-snapshot.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/compliance/lgpd-snapshot_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/compliance/lgpd-snapshot_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-a0b9a8eb374c8927",
@@ -1240,13 +1254,15 @@
         "scripts/migration/compliance/lgpd-snapshot_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/compliance/lgpd-snapshot_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-0f8bc9e8a9c40238",
@@ -1270,13 +1286,15 @@
         "scripts/migration/cutover/smoke-tests.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/cutover/smoke-tests.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cutover/smoke-tests_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cutover/smoke-tests_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-c050492a96f91e3a",
@@ -1285,13 +1303,15 @@
         "scripts/migration/cutover/smoke-tests_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/cutover/smoke-tests_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-ae385fd1e68a4273",
@@ -1571,13 +1591,15 @@
         "scripts/migration/monitoring/synthetic-checks.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/monitoring/synthetic-checks.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/monitoring/synthetic-checks_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/monitoring/synthetic-checks_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-8fefe6f0d8123999",
@@ -1586,13 +1608,15 @@
         "scripts/migration/monitoring/synthetic-checks_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/monitoring/synthetic-checks_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-7df7b82ab19d5e65",
@@ -1616,13 +1640,15 @@
         "scripts/migration/reset-passwords.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/reset-passwords.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/reset-passwords_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/reset-passwords_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-d8d465cea6bb365a",
@@ -1631,13 +1657,15 @@
         "scripts/migration/reset-passwords_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/reset-passwords_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-cecf928fdc5a8b60",
@@ -1692,13 +1720,15 @@
         "scripts/migration/storage/_lib.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/_lib.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/_lib_test.ts, scripts/migration/storage/copy-large.ts, scripts/migration/storage/copy-large_test.ts, scripts/migration/storage/copy-objects.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/_lib_test.ts, scripts/migration/storage/copy-large.ts, scripts/migration/storage/copy-large_test.ts, scripts/migration/storage/copy-objects.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-b6abae3d51b6ece7",
@@ -1707,13 +1737,15 @@
         "scripts/migration/storage/_lib_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/_lib_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-25a15aff10f3e0a7",
@@ -1722,13 +1754,15 @@
         "scripts/migration/storage/copy-large.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/copy-large.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/copy-large_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/copy-large_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-937486d258214d41",
@@ -1737,13 +1771,15 @@
         "scripts/migration/storage/copy-large_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/copy-large_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-e90ebda7a2062633",
@@ -1752,13 +1788,15 @@
         "scripts/migration/storage/copy-objects.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/copy-objects.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/copy-objects_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/copy-objects_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-e73bf148685dc216",
@@ -1767,13 +1805,15 @@
         "scripts/migration/storage/copy-objects_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/copy-objects_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-cecd43f79f03c481",
@@ -1782,13 +1822,15 @@
         "scripts/migration/storage/create-buckets.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/create-buckets.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/create-buckets_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/create-buckets_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-e748002de1dbeb52",
@@ -1797,13 +1839,15 @@
         "scripts/migration/storage/create-buckets_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/create-buckets_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-2186fdc3fb54a8a1",
@@ -1812,13 +1856,15 @@
         "scripts/migration/storage/list-buckets.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/list-buckets.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/create-buckets_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/create-buckets_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-bf476d0ff81688c4",
@@ -1842,13 +1888,15 @@
         "scripts/migration/storage/verify-counts.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/verify-counts.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/verify-counts_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/verify-counts_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-73676ff59614056a",
@@ -1857,13 +1905,15 @@
         "scripts/migration/storage/verify-counts_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/storage/verify-counts_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-f59dc8cf52967948",
@@ -1947,13 +1997,15 @@
         "scripts/migration/verify/dual-write-diverge.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/dual-write-diverge.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/dual-write-diverge_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/dual-write-diverge_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-2e3165047cf4d462",
@@ -1962,13 +2014,15 @@
         "scripts/migration/verify/dual-write-diverge_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/dual-write-diverge_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-cdfc60b498da7953",
@@ -2067,13 +2121,15 @@
         "scripts/migration/verify/rls-parity.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/rls-parity.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/rls-parity_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/rls-parity_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-db5c88d08cfecd6b",
@@ -2082,13 +2138,15 @@
         "scripts/migration/verify/rls-parity_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/rls-parity_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-05a7ef9dc88a00cb",
@@ -2097,13 +2155,15 @@
         "scripts/migration/verify/row-diff-deep.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/row-diff-deep.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/row-diff_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/row-diff_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-9d1f35281c8f5564",
@@ -2112,13 +2172,15 @@
         "scripts/migration/verify/row-diff.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/row-diff.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/row-diff-deep.ts, scripts/migration/verify/row-diff_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/row-diff-deep.ts, scripts/migration/verify/row-diff_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-38a3cbdf5b8e517a",
@@ -2127,13 +2189,15 @@
         "scripts/migration/verify/row-diff_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/row-diff_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-091fb2d63035a8d4",
@@ -2142,13 +2206,15 @@
         "scripts/migration/verify/storage-bytes.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/storage-bytes.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/storage-bytes_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/storage-bytes_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-ff9030f96bc21bb0",
@@ -2157,13 +2223,15 @@
         "scripts/migration/verify/storage-bytes_test.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/storage-bytes_test.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-c754ab24a92a49c1",
@@ -2172,13 +2240,15 @@
         "scripts/migration/verify/storage-public-guard.ts"
       ],
       "manual": [
-        "bun",
-        "scripts/migration/verify/storage-public-guard.ts"
+        "node",
+        "scripts/automation.mjs",
+        "doctor",
+        "--static"
       ],
       "triggers": [
         "manual"
       ],
-      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/storage-bytes_test.ts. O dispatcher não executa esta operação."
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/storage-bytes_test.ts. O dispatcher não executa esta operação. Arquivo TypeScript de apoio: a invocação manual verifica somente o inventário; execução operacional usa o chamador original e seu runtime."
     },
     {
       "id": "legacy-b3492426abc8148f",
