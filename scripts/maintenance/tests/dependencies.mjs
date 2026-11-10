@@ -1,9 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdir, writeFile, rm, symlink } from "node:fs/promises";
+import {
+  mkdir,
+  writeFile,
+  rm,
+  symlink,
+  lstat,
+  rename,
+  readFile,
+} from "node:fs/promises";
 import path from "node:path";
 import { main } from "../run.mjs";
-import { git, dependencyFingerprint } from "../lib.mjs";
+import { git, dependencyFingerprint, readRegularDependency } from "../lib.mjs";
 import { fixture, isolated, vendorFixture, saveFixture } from "./fixture.mjs";
 
 test(
@@ -93,3 +101,31 @@ test(
     assert.match(result.report.message, /Dependências do clone mudaram/);
   },
 );
+
+test("leitura vendor rejeita symlink trocado após inspeção sem seguir seu alvo", async (t) => {
+  const f = await fixture(t),
+    file = path.join(f.root, "src/value.ts");
+  const expected = await lstat(file),
+    outside = path.join(f.dir, "outside.ts");
+  await writeFile(outside, "outside fixture");
+  await rm(file);
+  await symlink(outside, file);
+  await assert.rejects(
+    readRegularDependency(file, expected),
+    (e) => e.code === "missing_dependencies",
+  );
+  assert.equal(await readFile(outside, "utf8"), "outside fixture");
+});
+
+test("leitura vendor vincula validação e bytes ao mesmo inode", async (t) => {
+  const f = await fixture(t),
+    file = path.join(f.root, "src/value.ts");
+  const expected = await lstat(file),
+    replacement = path.join(f.dir, "replacement.ts");
+  await writeFile(replacement, "replacement fixture");
+  await rename(replacement, file);
+  await assert.rejects(
+    readRegularDependency(file, expected),
+    /substituído durante a inspeção/,
+  );
+});

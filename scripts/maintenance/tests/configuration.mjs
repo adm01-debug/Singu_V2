@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { main, parseArgs } from "../run.mjs";
-import { validateConfig } from "../lib.mjs";
+import { validateConfig, inspect } from "../lib.mjs";
 import { fixture, isolated, saveFixture, saveConfig } from "./fixture.mjs";
 
 test("CLI e config desconhecidas falham fechadas", () => {
@@ -23,7 +23,7 @@ test("tsconfig vazio impede doctor saudável", async (t) => {
   const result = await main(f.args("doctor"));
   assert.equal(result.exitCode, 1);
   assert.equal(result.report.status, "failed");
-  assert.match(result.report.message, /nenhum arquivo src/);
+  assert.match(result.report.message, /Projeto TypeScript vazio ou inválido/);
 });
 
 test(
@@ -127,3 +127,21 @@ test(
     assert.throws(() => validateConfig(invalidExclude), /sem globs/);
   },
 );
+
+test("API TypeScript rejeita cada projeto vazio mesmo com outro projeto válido", async (t) => {
+  const f = await fixture(t);
+  await writeFile(
+    path.join(f.root, "tsconfig.json"),
+    JSON.stringify({
+      files: [],
+      references: [{ path: "./tsconfig.app.json" }],
+    }),
+  );
+  await assert.rejects(
+    inspect(f.root, {
+      ...f.config,
+      tsconfigs: ["tsconfig.app.json", "tsconfig.json"],
+    }),
+    /Projeto TypeScript vazio ou inválido: tsconfig.json/,
+  );
+});

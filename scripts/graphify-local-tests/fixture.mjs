@@ -75,7 +75,11 @@ if(a[0]==='extract'){
   const options = {
     globalLock: path.join(dir, "fleet.lock"),
     fixtureOfflinePrefix: [],
-    resourceProbe: async () => ({ availableMb: 32768, load: 0, parallelism: 2 }),
+    resourceProbe: async () => ({
+      availableMb: 32768,
+      load: 0,
+      parallelism: 2,
+    }),
   };
   const args = (action, ...terms) => [
     action,

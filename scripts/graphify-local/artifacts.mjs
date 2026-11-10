@@ -48,26 +48,64 @@ export async function runtime(ctx) {
 }
 
 export async function validateGraph(file, partial = false) {
-  const descriptor = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+  const descriptor = await open(
+    file,
+    constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK,
+  );
   try {
     const info = await descriptor.stat({ bigint: true });
-    if (!info.isFile() || info.size > 512n * 1024n * 1024n) fail('Artefato do grafo não é arquivo regular ou excede512MB');
-    const bytes = await descriptor.readFile(), after = await descriptor.stat({ bigint: true });
-    if (BigInt(bytes.length) !== info.size || after.size !== info.size || after.mtimeNs !== info.mtimeNs || after.ctimeNs !== info.ctimeNs) fail('Artefato do grafo mudou durante a leitura');
-    const graph = JSON.parse(bytes.toString('utf8'));
-  if (!Array.isArray(graph.nodes) || !graph.nodes.length) fail('Grafo vazio ou inválido');
-  const ids = new Set(graph.nodes.map((n) => String(n.id)));
-  if (ids.size !== graph.nodes.length || graph.nodes.some((n) => !['string', 'number'].includes(typeof n.id) || String(n.id).length === 0 || typeof n.id === 'number' && !Number.isFinite(n.id))) fail('IDs do grafo inválidos ou duplicados');
-  const edges = graph.links || graph.edges;
-  if (!Array.isArray(edges)) fail('Relações do grafo inválidas');
-  let unresolvedImports = 0;
-  for (const edge of edges) {
-    if (ids.has(String(edge.source)) && ids.has(String(edge.target))) continue;
-    if (partial && ids.has(String(edge.source)) && ['imports', 'imports_from', 'dynamic_import', 're_exports'].includes(edge.relation)) { unresolvedImports++; continue; }
-    fail('Grafo contém relações sem origem/destino');
+    if (!info.isFile() || info.size > 512n * 1024n * 1024n)
+      fail("Artefato do grafo não é arquivo regular ou excede512MB");
+    const bytes = await descriptor.readFile(),
+      after = await descriptor.stat({ bigint: true });
+    if (
+      BigInt(bytes.length) !== info.size ||
+      after.size !== info.size ||
+      after.mtimeNs !== info.mtimeNs ||
+      after.ctimeNs !== info.ctimeNs
+    )
+      fail("Artefato do grafo mudou durante a leitura");
+    const graph = JSON.parse(bytes.toString("utf8"));
+    if (!Array.isArray(graph.nodes) || !graph.nodes.length)
+      fail("Grafo vazio ou inválido");
+    const ids = new Set(graph.nodes.map((n) => String(n.id)));
+    if (
+      ids.size !== graph.nodes.length ||
+      graph.nodes.some(
+        (n) =>
+          !["string", "number"].includes(typeof n.id) ||
+          String(n.id).length === 0 ||
+          (typeof n.id === "number" && !Number.isFinite(n.id)),
+      )
+    )
+      fail("IDs do grafo inválidos ou duplicados");
+    const edges = graph.links || graph.edges;
+    if (!Array.isArray(edges)) fail("Relações do grafo inválidas");
+    let unresolvedImports = 0;
+    for (const edge of edges) {
+      if (ids.has(String(edge.source)) && ids.has(String(edge.target)))
+        continue;
+      if (
+        partial &&
+        ids.has(String(edge.source)) &&
+        ["imports", "imports_from", "dynamic_import", "re_exports"].includes(
+          edge.relation,
+        )
+      ) {
+        unresolvedImports++;
+        continue;
+      }
+      fail("Grafo contém relações sem origem/destino");
+    }
+    return {
+      nodes: graph.nodes.length,
+      edges: edges.length,
+      unresolvedImports,
+      sha256: hash(bytes),
+    };
+  } finally {
+    await descriptor.close();
   }
-  return { nodes: graph.nodes.length, edges: edges.length, unresolvedImports, sha256: hash(bytes) };
-  } finally { await descriptor.close(); }
 }
 export async function status(ctx, currentFingerprint) {
   const runtimeInfo = await runtime(ctx);

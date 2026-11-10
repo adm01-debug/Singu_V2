@@ -1,3 +1,5 @@
+import { constants } from "node:fs";
+import { open } from "node:fs/promises";
 import { readFile, realpath, symlink, readdir, lstat } from "node:fs/promises";
 import path from "node:path";
 import { MaintenanceError, digest, exists, inside } from "./common.mjs";
@@ -10,6 +12,46 @@ export const locks = [
   "yarn.lock",
 ];
 
+export async function readRegularDependency(file, expected) {
+  let handle;
+  try {
+    handle = await open(
+      file,
+      constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK,
+    );
+  } catch {
+    throw new MaintenanceError(
+      "missing_dependencies",
+      "Arquivo de dependência local mudou ou não pode ser aberto com segurança",
+    );
+  }
+  try {
+    const before = await handle.stat();
+    if (
+      !before.isFile() ||
+      before.ino !== expected.ino ||
+      before.dev !== expected.dev
+    )
+      throw new MaintenanceError(
+        "missing_dependencies",
+        "Arquivo de dependência local foi substituído durante a inspeção",
+      );
+    const bytes = await handle.readFile();
+    const after = await handle.stat();
+    if (
+      before.size !== after.size ||
+      before.mtimeMs !== after.mtimeMs ||
+      before.ctimeMs !== after.ctimeMs
+    )
+      throw new MaintenanceError(
+        "missing_dependencies",
+        "Arquivo de dependência local mudou durante a leitura",
+      );
+    return { bytes, mode: before.mode };
+  } finally {
+    await handle.close();
+  }
+}
 export async function directoryHash(root) {
   const entries = [];
   async function visit(file, relative) {
@@ -31,9 +73,10 @@ export async function directoryHash(root) {
           relative ? `${relative}/${name}` : name,
         );
       }
-    } else if (info.isFile())
-      entries.push([relative, info.mode & 0o111, digest(await readFile(file))]);
-    else
+    } else if (info.isFile()) {
+      const content = await readRegularDependency(file, info);
+      entries.push([relative, content.mode & 0o111, digest(content.bytes)]);
+    } else
       throw new MaintenanceError(
         "missing_dependencies",
         "Entrada especial em dependência local não suportada",

@@ -191,6 +191,8 @@ export async function inspect(root, config) {
       );
       if (result.errors.length) fail(`tsconfig inválido: ${cfg}`);
       fileNames = result.fileNames;
+      if (!fileNames.length)
+        fail(`Projeto TypeScript vazio ou inválido: ${cfg}`);
     } else {
       const temporary = await mkdtemp(
         path.join(tmpdir(), "maintenance-ts-list-"),

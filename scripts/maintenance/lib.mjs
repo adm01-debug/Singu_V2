@@ -16,3 +16,5 @@ export {
   inspect,
 } from "./configuration.mjs";
 export { acquire } from "./locking.mjs";
+
+export { readRegularDependency } from "./dependencies.mjs";

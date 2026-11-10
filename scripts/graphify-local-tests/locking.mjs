@@ -3,7 +3,13 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
-import { acquire, acquireGlobal, run } from "../graphify-local.mjs";
+import {
+  acquire,
+  acquireGlobal,
+  run,
+  main,
+  assertResources,
+} from "../graphify-local.mjs";
 import { fixture } from "./fixture.mjs";
 
 test("trava local impede concorrência e recupera apenas dono comprovadamente morto", async (t) => {
@@ -65,4 +71,35 @@ test("lock global da manutenção impede extração e libera lock local", async 
   assert.equal(result.report.status, "busy");
   await release();
   assert.equal((await f.call("ensure")).exitCode, 0);
+});
+
+test("política de recursos usa amostra determinística e bloqueia memória/carga insuficientes", async (t) => {
+  assert.doesNotThrow(() =>
+    assertResources({ availableMb: 6144, load: 2, parallelism: 2 }, 6144),
+  );
+  for (const sample of [
+    { availableMb: 6143, load: 0, parallelism: 2 },
+    { availableMb: 8192, load: 2.01, parallelism: 2 },
+    { availableMb: NaN, load: 0, parallelism: 2 },
+  ])
+    assert.throws(
+      () => assertResources(sample, 6144),
+      (e) => e.status === "resources",
+    );
+  const f = await fixture(t);
+  const denied = await main(f.args("ensure"), {
+    ...f.options,
+    resourceProbe: async () => ({ availableMb: 0, load: 0, parallelism: 2 }),
+  });
+  assert.equal(denied.exitCode, 75);
+  assert.equal(denied.report.status, "resources");
+  await assert.rejects(readFile(f.graph), /ENOENT/);
+  assert.equal((await f.call("ensure")).exitCode, 0);
+  for (const key of ["resourceProbe", "fixtureOfflinePrefix"]) {
+    await writeFile(
+      f.configFile,
+      JSON.stringify({ ...f.config, [key]: { availableMb: 1e9 } }),
+    );
+    assert.equal((await f.call("ensure")).exitCode, 1);
+  }
 });

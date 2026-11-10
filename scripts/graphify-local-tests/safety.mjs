@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -7,6 +9,10 @@ import {
   rm,
   readdir,
   symlink,
+  open,
+  lstat,
+  rename,
+  truncate,
 } from "node:fs/promises";
 import path from "node:path";
 import { fingerprint, validateGraph } from "../graphify-local.mjs";
@@ -167,4 +173,67 @@ test("corpus de geração contém apenas arquivos permitidos e hashes grandes us
   const corpus = path.join(f.root, f.config.state, "runs", states[0], "corpus");
   await assert.rejects(readdir(corpus), /ENOENT/);
   assert.equal((await f.call("status")).report.status, "current");
+});
+
+for (const mode of ["symlink", "regular", "write"])
+  test(`descritor do grafo bloqueia troca concorrente: ${mode}`, async (t) => {
+    const f = await fixture(t);
+    await mkdir(path.dirname(f.graph), { recursive: true });
+    const original = JSON.stringify({ nodes: [{ id: "original" }], links: [] });
+    const replacement = JSON.stringify({
+      nodes: [{ id: "substituto" }, { id: "outro" }],
+      links: [],
+    });
+    await writeFile(f.graph, original);
+    const target = path.join(f.dir, "replacement.json");
+    await writeFile(target, replacement);
+    const originalStats = await lstat(f.graph, { bigint: true });
+    const probe = await open(f.graph, "r"),
+      prototype = Object.getPrototypeOf(probe);
+    await probe.close();
+    const stat = prototype.stat;
+    let swapped = false;
+    t.mock.method(prototype, "stat", async function (...args) {
+      const info = await Reflect.apply(stat, this, args);
+      if (
+        !swapped &&
+        info.ino === originalStats.ino &&
+        info.dev === originalStats.dev
+      ) {
+        swapped = true;
+        if (mode === "write") await writeFile(f.graph, replacement);
+        else {
+          await rename(f.graph, path.join(f.dir, "original.json"));
+          if (mode === "symlink") await symlink(target, f.graph);
+          else await rename(target, f.graph);
+        }
+      }
+      return info;
+    });
+    try {
+      const info = await validateGraph(f.graph);
+      assert.equal(info.nodes, 1);
+      assert.equal(
+        info.sha256,
+        createHash("sha256").update(original).digest("hex"),
+      );
+    } catch (error) {
+      assert.match(error.message, /mudou durante a leitura/);
+    }
+    assert.equal(swapped, true);
+    t.mock.restoreAll();
+    if (mode === "symlink")
+      await assert.rejects(validateGraph(f.graph), (e) => e.code === "ELOOP");
+  });
+
+test("grafo recusa diretório, FIFO e arquivo maior que512MB sem seguir caminhos", async (t) => {
+  const f = await fixture(t);
+  await assert.rejects(validateGraph(f.dir), /regular/);
+  const fifo = path.join(f.dir, "graph.fifo");
+  assert.equal(spawnSync("mkfifo", [fifo]).status, 0);
+  await assert.rejects(validateGraph(fifo), /regular/);
+  const large = path.join(f.dir, "large.json");
+  await writeFile(large, "");
+  await truncate(large, 512 * 1024 * 1024 + 1);
+  await assert.rejects(validateGraph(large), /512MB/);
 });
