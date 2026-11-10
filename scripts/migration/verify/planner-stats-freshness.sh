@@ -12,8 +12,13 @@ export LC_ALL=C
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# Variável já definida no ambiente vence o ../.env (dá para apontar para outro banco, ou
+# testar, sem editar o arquivo).
+_SRC_AMBIENTE="${SRC_DB_URL:-}"; _DEST_AMBIENTE="${DEST_DB_URL:-}"
 # shellcheck disable=SC1091
 [[ -f "$ROOT_DIR/.env" ]] && source "$ROOT_DIR/.env"
+[[ -n "$_SRC_AMBIENTE" ]]  && SRC_DB_URL="$_SRC_AMBIENTE"
+[[ -n "$_DEST_AMBIENTE" ]] && DEST_DB_URL="$_DEST_AMBIENTE"
 
 SKIP_ANALYZE="${SKIP_ANALYZE:-0}"
 case "${1:-}" in

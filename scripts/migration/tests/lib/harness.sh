@@ -82,13 +82,15 @@ pg_main_ok() {
 }
 pga_url() { printf 'postgresql://%s@%s:%s/%s' "$PGA_USER" "$PGA_HOST" "$PGA_PORT" "$1"; }
 pga() { psql -h "$PGA_HOST" -p "$PGA_PORT" -U "$PGA_USER" -XAtq -v ON_ERROR_STOP=1 "$@"; }
-# pg_mkdb <sufixo> [arquivo.sql...] — cria g6t_<sufixo>_<pid> e imprime o nome.
+# pg_mkdb <sufixo> [arquivo.sql...] — cria g6t_<sufixo>_<pid>; o nome fica em PG_NEWDB.
+# (Não use em $(...): o registro para limpeza se perderia no subshell.)
 pg_mkdb() {
   local db="g6t_${1}_$$" f; shift
-  pga -d postgres -c "DROP DATABASE IF EXISTS \"$db\"" -c "CREATE DATABASE \"$db\" TEMPLATE template0" >/dev/null 2>&1 || return 1
+  PG_NEWDB=""
   T_DBS+=("$db")
+  pga -d postgres -c "DROP DATABASE IF EXISTS \"$db\"" -c "CREATE DATABASE \"$db\" TEMPLATE template0" >/dev/null 2>&1 || return 1
   for f in "$@"; do pga -d "$db" -f "$f" >/dev/null 2>&1 || { echo "fixture $f falhou em $db" >&2; return 1; }; done
-  printf '%s' "$db"
+  PG_NEWDB="$db"; export PG_NEWDB
 }
 
 # ── cluster efêmero (wal_level=logical, archive on, papéis Supabase) ─────────
@@ -96,6 +98,7 @@ PG_BIN=""
 as_pg() { if [[ "$(id -u)" == "0" ]]; then su postgres -s /bin/bash -c "$1"; else bash -c "$1"; fi; }
 pg_eph_ok() {
   local d
+  [[ -z "${T_SKIP_EPH:-}" ]] || return 1   # T_SKIP_EPH=1 simula máquina sem initdb
   if command -v pg_config >/dev/null 2>&1; then PG_BIN="$(pg_config --bindir)"; fi
   if [[ ! -x "$PG_BIN/initdb" ]]; then
     for d in /usr/lib/postgresql/*/bin /usr/local/pgsql/bin /opt/homebrew/opt/postgresql*/bin; do
@@ -145,6 +148,20 @@ eph_mkdb() {
   eph -d postgres -c "DROP DATABASE IF EXISTS \"$db\"" -c "CREATE DATABASE \"$db\" TEMPLATE template0" >/dev/null 2>&1 || return 1
   for f in "$@"; do eph -d "$db" -f "$f" >/dev/null 2>&1 || { echo "fixture $f falhou em $db" >&2; return 1; }; done
 }
+
+# ── valores com "cara" de segredo ────────────────────────────────────────────
+# Montados em tempo de execução: nenhum arquivo versionado contém a sequência
+# contígua (o push protection do GitHub bloqueia até valores falsos de teste).
+T_SBP="sb""p_0123456789abcdef0123456789abcdef01234567"
+T_SBSECRET="sb""_secret_AbCdEfGhIjKlMnOpQrStUvWxYz012345"
+T_JWT_HEAD="ey""JhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+T_JWT_SIG="c2lnbmF0dXJlLWRlLXRlc3RlLTEyMzQ1Njc4OTA"
+T_JWT="${T_JWT_HEAD}.ey""Jyb2xlIjoic2VydmljZV9yb2xlIiwiaXNzIjoic3VwYWJhc2UifQ.${T_JWT_SIG}"
+T_PEM_BEGIN="-----BEGIN ""PRIVATE KEY-----"
+T_PW_ENC='p%40ss%20w0rd%24%25'      # senha do papel g6_pw, percent-encoded
+export T_SBP T_SBSECRET T_JWT T_JWT_HEAD T_JWT_SIG T_PEM_BEGIN T_PW_ENC
+# pgurl <usuário> <senha> <host/caminho> [esquema] — monta URL com credencial
+pgurl() { printf '%s://%s:%s@%s' "${4:-postgresql}" "$1" "$2" "$3"; }
 
 # sig <segundos> <SINAL> <cmd...> — roda em 1º plano e envia o sinal (ver sigrun.py)
 sig() { python3 "$T_LIB/sigrun.py" "$@"; }

@@ -10,6 +10,7 @@
 #
 # Variáveis de ambiente:
 #   DEST_DB_URL              (obrigatória) URL de conexão do destino; também lida de ../.env
+#                            (o que já estiver no ambiente vence o arquivo)
 #   PGCONNECT_TIMEOUT        default 10 (segundos)
 #   GUARD_STATEMENT_TIMEOUT  opcional (ex.: 60s) — statement_timeout aplicado a cada guard
 #
@@ -26,8 +27,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# Variável já definida no ambiente vence o ../.env (dá para apontar para outro banco, ou
+# testar, sem editar o arquivo).
+_SRC_AMBIENTE="${SRC_DB_URL:-}"; _DEST_AMBIENTE="${DEST_DB_URL:-}"
 # shellcheck disable=SC1091
 [[ -f "$ROOT_DIR/.env" ]] && source "$ROOT_DIR/.env"
+[[ -n "$_SRC_AMBIENTE" ]]  && SRC_DB_URL="$_SRC_AMBIENTE"
+[[ -n "$_DEST_AMBIENTE" ]] && DEST_DB_URL="$_DEST_AMBIENTE"
 
 log() { printf '\n[full-audit %s] === %s ===\n' "$(date -u +%H:%M:%S)" "$*"; }
 

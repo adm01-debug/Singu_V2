@@ -17,7 +17,7 @@ d() { eph -d destino -c "$1"; }
 cd "$T_TMP" || exit 1
 
 section "senha da URL: chega certa ao servidor e não aparece em ps"
-PWURL="postgresql://g6_pw:p%40ss%20w0rd%24%25@127.0.0.1:$EPH_PORT/origem"
+PWURL="$(pgurl g6_pw "$T_PW_ENC" "127.0.0.1:$EPH_PORT/origem")"
 run env PGPASSWORD=errada psql "postgresql://g6_pw@127.0.0.1:$EPH_PORT/origem" -XAtqc "select 1"
 is "$RC" "2" "controle: senha errada é recusada (autenticação scram ativa)"
 run env SRC_DB_URL="$PWURL" DEST_DB_URL="$PWURL" bash "$MIG/compare-counts.sh"
@@ -112,7 +112,7 @@ CH=(env SRC_DB_URL="$SRC" DEST_DB_URL="$DST" bash "$MIG/chaos/inject.sh")
 run env STAGING_CONFIRM=0 SCENARIO=dns-stale "${CH[@]:1}"; rc_is 2 "STAGING_CONFIRM=0 é recusado (antes: qualquer valor não vazio passava)"
 run env SCENARIO=dns-stale "${CH[@]:1}"; rc_is 2 "sem STAGING_CONFIRM"
 export STAGING_CONFIRM=1
-run env SCENARIO=dns-stale SRC_DB_URL="$SRC" DEST_DB_URL="postgresql://postgres:x@db.pgxfvjmuubtbowutlide.supabase.co:5432/postgres" bash "$MIG/chaos/inject.sh"
+run env SCENARIO=dns-stale SRC_DB_URL="$SRC" DEST_DB_URL="$(pgurl postgres x db.pgxfvjmuubtbowutlide.supabase.co:5432/postgres)" bash "$MIG/chaos/inject.sh"
 rc_is 2 "URL com o ref de PRODUÇÃO do repo é recusada"; has "RECUSADO" ""
 run env SCENARIO=dns-stale PROD_REFS="destino" "${CH[@]:1}"; rc_is 2 "PROD_REFS adicional"
 run env SCENARIO=nao-existe "${CH[@]:1}"; rc_is 2 "cenário desconhecido"

@@ -11,8 +11,13 @@ if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   sed -n '2,/^set -euo/p' "${BASH_SOURCE[0]}" | sed '$d; s/^# \{0,1\}//'; exit 0
 fi
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# Variável já definida no ambiente vence o ../.env (dá para apontar para outro banco, ou
+# testar, sem editar o arquivo).
+_SRC_AMBIENTE="${SRC_DB_URL:-}"; _DEST_AMBIENTE="${DEST_DB_URL:-}"
 # shellcheck disable=SC1091
 [[ -f "$ROOT_DIR/.env" ]] && source "$ROOT_DIR/.env"
+[[ -n "$_SRC_AMBIENTE" ]]  && SRC_DB_URL="$_SRC_AMBIENTE"
+[[ -n "$_DEST_AMBIENTE" ]] && DEST_DB_URL="$_DEST_AMBIENTE"
 
 SQL="$SCRIPT_DIR/grants-parity.sql"
 [[ -n "${SRC_DB_URL:-}" ]]  || { echo "✖ SRC_DB_URL obrigatório" >&2; exit 2; }
