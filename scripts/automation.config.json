@@ -1,0 +1,3796 @@
+{
+  "version": 1,
+  "name": "Singu_V2",
+  "entrypoint": "scripts/automation.mjs",
+  "testSuites": [
+    "scripts/automation.unit.mjs",
+    "scripts/maintenance/maintenance.unit.mjs",
+    "scripts/graphify-local.unit.mjs"
+  ],
+  "motor": [
+    "sh",
+    "scripts/maintenance/run.sh"
+  ],
+  "motorConfig": "scripts/maintenance/config.json",
+  "motorSource": "scripts/maintenance/run.sh",
+  "graph": [
+    "node",
+    "scripts/graphify-local.mjs"
+  ],
+  "graphConfig": "graphify.local.json",
+  "aliases": {
+    "automation:doctor": "node scripts/automation.mjs doctor",
+    "automation:test": "node scripts/automation.mjs test",
+    "automation:check": "node scripts/automation.mjs check --ref HEAD",
+    "automation:heal": "node scripts/automation.mjs heal --ref origin/main",
+    "automation:nightly": "node scripts/automation.mjs nightly --ref origin/main",
+    "automation:graph": "node scripts/automation.mjs graph",
+    "automation:status": "node scripts/automation.mjs graph status",
+    "automation:install-hooks": "node scripts/automation.mjs install-hooks",
+    "automation:uninstall-hooks": "node scripts/automation.mjs uninstall-hooks"
+  },
+  "registrations": [
+    {
+      "id": "core",
+      "kind": "tool",
+      "files": [
+        "scripts/automation.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/automation.mjs",
+        "doctor"
+      ],
+      "triggers": [
+        "manual",
+        "precommit",
+        "prepush",
+        "PR",
+        "pushmain",
+        "nightly"
+      ]
+    },
+    {
+      "id": "automation-suites",
+      "kind": "test",
+      "files": [
+        "scripts/automation.unit.mjs",
+        "scripts/maintenance/maintenance.unit.mjs",
+        "scripts/graphify-local.unit.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/automation.mjs",
+        "test"
+      ],
+      "triggers": [
+        "manual",
+        "precommit",
+        "prepush",
+        "PR",
+        "pushmain"
+      ]
+    },
+    {
+      "id": "motor-isolado",
+      "kind": "motor",
+      "files": [
+        "scripts/maintenance/run.sh",
+        "scripts/maintenance/run.mjs",
+        "scripts/maintenance/lib.mjs",
+        "scripts/maintenance/typecheck.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/automation.mjs",
+        "heal",
+        "--ref",
+        "origin/main"
+      ],
+      "triggers": [
+        "manual",
+        "nightly"
+      ]
+    },
+    {
+      "id": "graph-local",
+      "kind": "graph",
+      "files": [
+        "scripts/graphify-local.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/automation.mjs",
+        "graph",
+        "status"
+      ],
+      "triggers": [
+        "manual",
+        "precommit",
+        "postcommit",
+        "postmerge",
+        "postcheckout",
+        "nightly"
+      ]
+    },
+    {
+      "id": "legacy-057b3e7a0e2cff3e",
+      "kind": "legacy",
+      "files": [
+        "scripts/_pgdocs.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/_pgdocs.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-b764378907956917",
+      "kind": "legacy",
+      "files": [
+        "scripts/_pgdocs_catalogo.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/_pgdocs_catalogo.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-11f3da567b40a011",
+      "kind": "legacy",
+      "files": [
+        "scripts/_pgteste.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/_pgteste.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-19a315b6c4a6a564",
+      "kind": "legacy",
+      "files": [
+        "scripts/_sqlseguro.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/_sqlseguro.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-cac78e0a4578fcbb",
+      "kind": "legacy",
+      "files": [
+        "scripts/ai-context/cenarios.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/ai-context/cenarios.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-d7cb6b51ce58499f",
+      "kind": "legacy",
+      "files": [
+        "scripts/ai-context/gerar.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/ai-context/gerar.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: package.json:scripts, .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ac9e14a43aebfb27",
+      "kind": "legacy",
+      "files": [
+        "scripts/ai-context/gerar.unit.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/ai-context/gerar.unit.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: package.json:scripts, .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-877c2659ee99fcf6",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-all.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/apply-all.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/apply-ddl-real.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-33d0ecc70002117e",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-cli.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/apply-cli.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-0d439ea1f6dbbbac",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-ddl-real.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/apply-ddl-real.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-e457e2d47b865bbc",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-e2e.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/apply-e2e.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-5dd35c5d2b36ba42",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-falhas.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/apply-falhas.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-789b81a86f4ec96e",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-functions.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/apply-functions.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-23f31810388a0d84",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-migrations.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/apply-migrations.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-dff5b641082da24b",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-missing.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/apply-missing.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/apply-cli.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-93ef77aa2f5dd1c3",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-remaining.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/apply-remaining.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-28c3fd914501eccc",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-rls.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/apply-rls.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-1e86a1e3d851ecb4",
+      "kind": "legacy",
+      "files": [
+        "scripts/apply-triggers-views.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/apply-triggers-views.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-4e342d9de22d7ac9",
+      "kind": "legacy",
+      "files": [
+        "scripts/audit-ausentes.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/audit-ausentes.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/audit-ausentes.test.mjs, scripts/check-supabase-project-ref.test.mjs, scripts/diff-tables.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-370bf8069e6b82a3",
+      "kind": "legacy",
+      "files": [
+        "scripts/audit-ausentes.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/audit-ausentes.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-814d9c73c217c6ab",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-backend-linter-baseline.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/check-backend-linter-baseline.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/check-backend-linter-baseline.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-342c2f6ce1d00735",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-backend-linter-baseline.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/check-backend-linter-baseline.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-480db4ed32386e5a",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-bundle-size.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/check-bundle-size.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-d9c5f82ea0683e8e",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-bundle-size.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/check-bundle-size.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-47fbe98be2b65f3c",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-deploy-timeout.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/check-deploy-timeout.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-8a5a183f10bd875a",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-edge-cors.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/check-edge-cors.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2e3970c0a947e564",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-edge-cors.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/check-edge-cors.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-56739e655f521570",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-edge-imports.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/check-edge-imports.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: package.json:scripts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-51b9e18f22ee3e3f",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-publish-gates.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/check-publish-gates.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-3e62ea3faa5dc915",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-rls-profiles.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/check-rls-profiles.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-a9219e2282e3483e",
+      "kind": "legacy",
+      "files": [
+        "scripts/check-supabase-project-ref.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/check-supabase-project-ref.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/ci.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-751af991b32f29a6",
+      "kind": "legacy",
+      "files": [
+        "scripts/chunk-apply.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/chunk-apply.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ca7c7ae30803bd71",
+      "kind": "legacy",
+      "files": [
+        "scripts/diff-tables.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/diff-tables.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/audit-ausentes.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2e2c8c1039b4658f",
+      "kind": "legacy",
+      "files": [
+        "scripts/fix-enums.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/fix-enums.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/apply-cli.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-909e1bbd97ed4ee9",
+      "kind": "legacy",
+      "files": [
+        "scripts/gen-supabase-types.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/gen-supabase-types.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-819007c81602b54c",
+      "kind": "legacy",
+      "files": [
+        "scripts/gen-supabase-types.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/gen-supabase-types.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-4db2dedb3a46bd6d",
+      "kind": "legacy",
+      "files": [
+        "scripts/generate_data_dictionary.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/generate_data_dictionary.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/generate_real_dict.py, scripts/test_generate_docs.py. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-7a6fa5f20dbd6b21",
+      "kind": "legacy",
+      "files": [
+        "scripts/generate_er_diagram.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/generate_er_diagram.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/generate_real_er.py. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-96a7a7315b7a3876",
+      "kind": "legacy",
+      "files": [
+        "scripts/generate_real_dict.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/generate_real_dict.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/generate_data_dictionary.py, scripts/test_generate_docs.py. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-784a9f331a3e00b9",
+      "kind": "legacy",
+      "files": [
+        "scripts/generate_real_er.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/generate_real_er.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/generate_er_diagram.py. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ddb45f387cb5c054",
+      "kind": "legacy",
+      "files": [
+        "scripts/hardening/_pg-teste.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/hardening/_pg-teste.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/hardening/hardening-cluster.test.mjs, scripts/hardening/hardening.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-55a1fc1ded0cf8c5",
+      "kind": "legacy",
+      "files": [
+        "scripts/hardening/hardening-cluster.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/hardening/hardening-cluster.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-31d5b032f9a9e6c7",
+      "kind": "legacy",
+      "files": [
+        "scripts/hardening/hardening.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/hardening/hardening.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-aa57c3f4164095f7",
+      "kind": "legacy",
+      "files": [
+        "scripts/inventario/banco.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/inventario/banco.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-68cae5fc95bfe528",
+      "kind": "legacy",
+      "files": [
+        "scripts/inventario/gerar-banco.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/inventario/gerar-banco.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/inventario-estado-semanal.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-4df2059157fb975d",
+      "kind": "legacy",
+      "files": [
+        "scripts/inventario/gerar-banco.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/inventario/gerar-banco.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-56b5f90d4f8afc35",
+      "kind": "legacy",
+      "files": [
+        "scripts/inventario/gerar-repo.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/inventario/gerar-repo.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/inventario-estado-semanal.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-f0942b5817eb85e2",
+      "kind": "legacy",
+      "files": [
+        "scripts/inventario/gerar-repo.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/inventario/gerar-repo.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-fd1c962a8dd907cf",
+      "kind": "legacy",
+      "files": [
+        "scripts/inventario/mudou-conteudo.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/inventario/mudou-conteudo.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/inventario-estado-semanal.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-866723ab7636d680",
+      "kind": "legacy",
+      "files": [
+        "scripts/inventario/mudou-conteudo.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/inventario/mudou-conteudo.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c3c4a259a6618f23",
+      "kind": "legacy",
+      "files": [
+        "scripts/lib/mgmt-mock.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/lib/mgmt-mock.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/lib/sql-split.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-417434871d02b130",
+      "kind": "legacy",
+      "files": [
+        "scripts/lib/sql-split.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/lib/sql-split.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/apply-all.js, scripts/apply-functions.js, scripts/apply-migrations.js, scripts/apply-missing.js. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9ce6bec8bf372fc5",
+      "kind": "legacy",
+      "files": [
+        "scripts/lib/sql-split.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/lib/sql-split.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-89581bdad6dc9f57",
+      "kind": "legacy",
+      "files": [
+        "scripts/lib/supabase-mgmt.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/lib/supabase-mgmt.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/apply-all.js, scripts/apply-functions.js, scripts/apply-migrations.js, scripts/apply-missing.js. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ee40586f8a52f9dd",
+      "kind": "legacy",
+      "files": [
+        "scripts/lib/supabase-mgmt.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/lib/supabase-mgmt.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-6227a1c66c89a72b",
+      "kind": "legacy",
+      "files": [
+        "scripts/lint-providers.cjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/lint-providers.cjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/lint-providers.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-095db089f5e63993",
+      "kind": "legacy",
+      "files": [
+        "scripts/lint-providers.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/lint-providers.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-0ad330b693e24fd9",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/_lib.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/_lib.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/check-deploy-timeout.test.mjs, scripts/check-publish-gates.test.mjs, scripts/migration/auth/export-identities.sh, scripts/migration/auth/import-identities.sh. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-d7755a5ca3ad7a5a",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/_mock_supabase.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/_mock_supabase.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay_test.ts, scripts/migration/compliance/lgpd-snapshot_test.ts, scripts/migration/cutover/smoke-tests_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-5ce67167e83e876e",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/_pg_teste.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/_pg_teste.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/order-guard_test.ts, scripts/migration/verify/rls-parity_test.ts, scripts/migration/verify/row-diff_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-a59262a406fd4e47",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/auth/export-identities.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/auth/export-identities.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-298f29212807d62c",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/auth/import-identities.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/auth/import-identities.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c075f80966f7126a",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/auth/rotate-jwt.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/auth/rotate-jwt.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-3b9b753fadb511d8",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cdc/drain.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/cdc/drain.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-be2159df2b6fc378",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cdc/dry-run.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/cdc/dry-run.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-1663a0f43dca7792",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cdc/lag-watch.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/cdc/lag-watch.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9094a54d65771e05",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cdc/order-guard.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/cdc/order-guard.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/order-guard_test.ts, scripts/migration/cdc/replay.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ada5c98a286a1cfc",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cdc/order-guard_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/cdc/order-guard_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9cab1f663f53b922",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cdc/replay.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/cdc/replay.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cdc/replay_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-230dc1766edbea7b",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cdc/replay_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/cdc/replay_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-68953b114f2b0621",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/chaos/inject.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/chaos/inject.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-8ac32f88b518f1ee",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/compare-counts.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/compare-counts.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/import-data.sh. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-16756189cd7957cf",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/compliance/lgpd-snapshot.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/compliance/lgpd-snapshot.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/compliance/lgpd-snapshot_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-a0b9a8eb374c8927",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/compliance/lgpd-snapshot_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/compliance/lgpd-snapshot_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-0f8bc9e8a9c40238",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cutover/freeze-origin.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/cutover/freeze-origin.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-7a1ebb46f884e5ba",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cutover/smoke-tests.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/cutover/smoke-tests.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/cutover/smoke-tests_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c050492a96f91e3a",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/cutover/smoke-tests_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/cutover/smoke-tests_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ae385fd1e68a4273",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/dashboard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/dashboard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2888abcb27b104c3",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/ddl/ddl.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/migration/ddl/ddl.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-bf005ab307fae839",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/ddl/verify-extensions.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/ddl/verify-extensions.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-08a04e367f490298",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/dr/backup-encryption-check.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/dr/backup-encryption-check.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/restore-drill.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-3d6c4c669bfe8d3e",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/dr/create-drill-backup.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/migration/dr/create-drill-backup.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/restore-drill.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-d287f2f589eb25fa",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/dr/restore-drill.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/dr/restore-drill.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/restore-drill.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-28459e5078dfe9f5",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/dr/wal-archive-check.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/dr/wal-archive-check.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-54cb6aa89d37c4bb",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/export-data.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/export-data.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-62ab25cb394247a6",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/extract-ddl.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/extract-ddl.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-bd5ac3b82790b238",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/functions/deploy-all.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/functions/deploy-all.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-5da2ea112e325053",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/functions/preflight-secrets.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/functions/preflight-secrets.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-7727885f523643d4",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/functions/rewrite-cron-urls.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/functions/rewrite-cron-urls.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-13f96b7dfa846586",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/functions/secrets-leak-scan.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/functions/secrets-leak-scan.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-f65be883d87d7fe7",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/functions/set-secrets.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/functions/set-secrets.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-0af00cdfaa6e1dc3",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/functions/verify-deploy.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/functions/verify-deploy.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/check-deploy-timeout.test.mjs, scripts/check-publish-gates.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-56c229aafa6414ef",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/import-data-parallel.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/import-data-parallel.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-465094184bc8651f",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/import-data.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/import-data.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-449a1e8dd0cad431",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/monitoring/post-cutover-watch.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/monitoring/post-cutover-watch.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-5f89f4cc1a3be2fe",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/monitoring/synthetic-checks.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/monitoring/synthetic-checks.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/monitoring/synthetic-checks_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-8fefe6f0d8123999",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/monitoring/synthetic-checks_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/monitoring/synthetic-checks_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-7df7b82ab19d5e65",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/reset-passwords.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/reset-passwords.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-d7b7c80bdbd53680",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/reset-passwords.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/reset-passwords.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/reset-passwords_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-d8d465cea6bb365a",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/reset-passwords_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/reset-passwords_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-cecf928fdc5a8b60",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/rollback.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/rollback.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ce9aeb86306d2908",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/rollback/full-restore.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/rollback/full-restore.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c2883a2fe8b3f2c2",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/sql/sql.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/migration/sql/sql.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-650634a4f4f37d2e",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/_lib.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/_lib.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/_lib_test.ts, scripts/migration/storage/copy-large.ts, scripts/migration/storage/copy-large_test.ts, scripts/migration/storage/copy-objects.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-b6abae3d51b6ece7",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/_lib_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/_lib_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-25a15aff10f3e0a7",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/copy-large.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/copy-large.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/copy-large_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-937486d258214d41",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/copy-large_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/copy-large_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-e90ebda7a2062633",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/copy-objects.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/copy-objects.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/copy-objects_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-e73bf148685dc216",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/copy-objects_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/copy-objects_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-cecd43f79f03c481",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/create-buckets.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/create-buckets.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/create-buckets_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-e748002de1dbeb52",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/create-buckets_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/create-buckets_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2186fdc3fb54a8a1",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/list-buckets.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/list-buckets.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/create-buckets_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-bf476d0ff81688c4",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/run.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/storage/run.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/_lib.sh. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-b00b8d455f46c0ce",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/verify-counts.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/verify-counts.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/storage/verify-counts_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-73676ff59614056a",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/storage/verify-counts_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/storage/verify-counts_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-f59dc8cf52967948",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/tests/lib/sigrun.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/migration/tests/lib/sigrun.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-f2c3847b9c46c1b7",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/unmark-must-reset.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/unmark-must-reset.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/rollback.sh. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-7b209f24af8f57eb",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/connection-pool-exhaustion-canary.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/connection-pool-exhaustion-canary.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9a54bedba731d109",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/dns-multi-region.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/dns-multi-region.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2e60cdb3db2776ac",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/dns-propagation.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/dns-propagation.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-49fc6926dece2fbf",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/dual-write-diverge.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/dual-write-diverge.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/dual-write-diverge_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2e3165047cf4d462",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/dual-write-diverge_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/dual-write-diverge_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-cdfc60b498da7953",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/exporter/full-audit-exporter.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/exporter/full-audit-exporter.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-928b1100ec64eeba",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/extensions-versions.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/extensions-versions.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-fbf8b6ebf5dcf822",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/full-audit.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/full-audit.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/exporter/full-audit-exporter.sh, scripts/monitoring/check-runbook-coverage.sh. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-6594c283881eb184",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/grants-parity.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/grants-parity.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ae1ce36e1cc7e509",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/pitr-window-verifier.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/pitr-window-verifier.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-e7fa871a230f7d98",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/planner-stats-freshness.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/planner-stats-freshness.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-1650bc1f2273d91f",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/rls-parity.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/rls-parity.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/rls-parity_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-db5c88d08cfecd6b",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/rls-parity_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/rls-parity_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-05a7ef9dc88a00cb",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/row-diff-deep.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/row-diff-deep.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/row-diff_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9d1f35281c8f5564",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/row-diff.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/row-diff.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/row-diff-deep.ts, scripts/migration/verify/row-diff_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-38a3cbdf5b8e517a",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/row-diff_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/row-diff_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-091fb2d63035a8d4",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/storage-bytes.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/storage-bytes.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/storage-bytes_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ff9030f96bc21bb0",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/storage-bytes_test.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/storage-bytes_test.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c754ab24a92a49c1",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/storage-public-guard.ts"
+      ],
+      "manual": [
+        "bun",
+        "scripts/migration/verify/storage-public-guard.ts"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/migration/verify/storage-bytes_test.ts. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-b3492426abc8148f",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/contrato-estatico.test.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/contrato-estatico.test.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-690dcbed43214d41",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/lib.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/lib.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2a741b90f1f0d446",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/run-all.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/run-all.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-62aa6ad2d45183ba",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/00-contrato-estatico.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/00-contrato-estatico.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-5b0bfdb2d2fff3ff",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/01-table-without-pk.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/01-table-without-pk.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-d6b20aa68eb63e7d",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/04-idle-in-transaction-aborted.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/04-idle-in-transaction-aborted.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-8d8fe19d657b52f4",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/11-checksums-off.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/11-checksums-off.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-d73ff08b729c901c",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/14-secdef-public-search-path.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/14-secdef-public-search-path.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c14d2adc56e03d67",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/17-archive-off.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/17-archive-off.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9c6bc86fc438b318",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/21-replication-slot-idle.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/21-replication-slot-idle.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-f1d63b113e5bea15",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/24-ssl-off.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/24-ssl-off.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-949808a48ce18c18",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/25-autovacuum-throttle.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/25-autovacuum-throttle.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-1e62d6dfb13f06e4",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/25-collation-drift.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/25-collation-drift.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-a4e291172a9fc14f",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/25-heap-corruption.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/25-heap-corruption.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9123f6927e855b17",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/25-orphaned-lo.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/25-orphaned-lo.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-e1075be0e4e7d3f3",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/25-password-encryption.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/25-password-encryption.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-e2ebfd78ee5c702d",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/25-pitr-window.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/25-pitr-window.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-fbbc51a2b4ee7ffd",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/25-plan-cache-bloat.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/25-plan-cache-bloat.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-839160b1362d74b8",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/25-replica-identity.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/25-replica-identity.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-71947a137c52cea8",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/26-burn-rate-math.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/26-burn-rate-math.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-95a625274f04488c",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/26-cardinality-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/26-cardinality-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ace7c78b64d32d04",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/26-dead-man-math.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/26-dead-man-math.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-8c5ed702725046ee",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/26-exporter-parse.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/26-exporter-parse.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-8e974c26b3862ef7",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/26-runbook-coverage.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/26-runbook-coverage.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-bb785c2942f74c9f",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/26-silence-template.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/26-silence-template.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-6776b682717f02ec",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/30-invalid-indexes-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/30-invalid-indexes-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-f03143a18b4d8579",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/31-rls-coverage-sem-rls.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/31-rls-coverage-sem-rls.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c8967dfe1d0c210c",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/32-rls-coverage-sem-policy.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/32-rls-coverage-sem-policy.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ad1d7054359ef9ba",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/33-not-valid-constraints.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/33-not-valid-constraints.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-30314294be8ace03",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/34-security-definer-audit.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/34-security-definer-audit.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-87ae436ed11b5af8",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/35-function-volatility-audit.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/35-function-volatility-audit.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-a8364aef0e9714d9",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/36-access-exclusive-locks-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/36-access-exclusive-locks-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-31eb01c63dc42be9",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/37-long-running-tx-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/37-long-running-tx-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2f5c98f6e9e96104",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/38-lock-wait-duration-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/38-lock-wait-duration-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ab1e693dc7cf33d4",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/39-prepared-xacts-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/39-prepared-xacts-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-e4faf576d8dd5fa2",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/40-datfrozenxid-age-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/40-datfrozenxid-age-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-da1c0b1a68378eed",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/41-multixact-wraparound-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/41-multixact-wraparound-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-03c0391401af718b",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/42-relfrozenxid-table-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/42-relfrozenxid-table-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-53d00f2685a8f2c9",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/43-dead-tuple-ratio-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/43-dead-tuple-ratio-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-e2e48ce87bb2f93b",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/44-sequence-overflow-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/44-sequence-overflow-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-35f99de0077699c8",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/45-sequences-gap-check.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/45-sequences-gap-check.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-d7117f566299789f",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/46-fk-integrity.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/46-fk-integrity.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ee3bcdeda4f3500a",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/47-index-corruption-amcheck.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/47-index-corruption-amcheck.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ef58385e845fd76f",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/48-heap-corruption-scan.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/48-heap-corruption-scan.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-6d15bed743b7b827",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/49-collation-version-mismatch.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/49-collation-version-mismatch.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-45ada6d5e4c4929f",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/50-replication-slots-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/50-replication-slots-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-42904b65cd437c02",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/51-replication-lag-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/51-replication-lag-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ca0d0d80c72bc85e",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/52-subscription-lag-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/52-subscription-lag-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2fe23f7e8f304e3d",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/53-wal-sender-timeout-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/53-wal-sender-timeout-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-b8764c06ec370825",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/54-cron-job-failover-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/54-cron-job-failover-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9884ea182e82dd49",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/55-pg-stat-statements-reset-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/55-pg-stat-statements-reset-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-aed2c48323cef1b4",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/56-pgss-config-ausente.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/56-pgss-config-ausente.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-43425e11f872a4b0",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/57-pgss-config-carregado.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/57-pgss-config-carregado.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-1687c6dc1567b9f7",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/58-logical-publication-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/58-logical-publication-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ff07db04213e8adc",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/59-schema-freeze-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/59-schema-freeze-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-0f1802b2a3fb82bb",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/60-wal-level-replica.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/60-wal-level-replica.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-539cfe5ff612a30e",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/61-wal-level-logical-ok.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/61-wal-level-logical-ok.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-5cf614003fa72ebe",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/62-checksums-on.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/62-checksums-on.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-522b6fe9d535ed0b",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/63-archive-on.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/63-archive-on.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2771451e3a41a9e8",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/64-ssl-on.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/64-ssl-on.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-c1aa5794756141a0",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/65-ssl-conexao-sem-tls.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/65-ssl-conexao-sem-tls.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-948d792793237156",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/66-archive-falhando.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/66-archive-falhando.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-6eee6efa1e00ba76",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/70-fumaca-banco-vazio.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/70-fumaca-banco-vazio.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-2a9722f73bd6ad24",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/71-fumaca-banco-com-dados.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/71-fumaca-banco-com-dados.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-1f5a308a6e9398f8",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/72-fumaca-papel-sem-privilegio.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/72-fumaca-papel-sem-privilegio.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-648bed170fd6c5dd",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/73-fumaca-cluster-endurecido.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/73-fumaca-cluster-endurecido.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-6efd2fcffb65f2cc",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/74-duplicate-indexes.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/74-duplicate-indexes.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ee43afc1e0b817a7",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/75-sequences-audit.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/75-sequences-audit.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-1aeb1b65c7c328f4",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/76-logical-vs-physical-drift.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/76-logical-vs-physical-drift.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9c20dcf7b1cd9756",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/77-cron-audits.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/77-cron-audits.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-8d116a7b985e05ec",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/78-audits-com-achados.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/78-audits-com-achados.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-6ee14ed01b3061e5",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/80-full-audit-lista.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/80-full-audit-lista.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-95188a772224fd80",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/81-full-audit-ponta-a-ponta.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/81-full-audit-ponta-a-ponta.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-55415b4629736911",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/82-full-audit-endurecido.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/82-full-audit-endurecido.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-89d75860a2897351",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/83-full-audit-sem-conexao.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/83-full-audit-sem-conexao.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-69f1e9e8d766775d",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/86-exporter-falhas.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/86-exporter-falhas.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-3d1c051e41e2df51",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/87-exporter-ponta-a-ponta.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/87-exporter-ponta-a-ponta.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-caf888650a054687",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/88-wrappers-paridade.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/88-wrappers-paridade.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-79350ab76a2ce683",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/89-wrappers-canario-planner-timeline.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/89-wrappers-canario-planner-timeline.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-8a73b219ef250548",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/90-pitr-window-verifier.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/90-pitr-window-verifier.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-49916200a5f45d7f",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/91-pitr-window-verifier-endurecido.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/91-pitr-window-verifier-endurecido.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-8a4431871162fbbf",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/92-dns-scripts.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/92-dns-scripts.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-7fbfd13ca92e47c7",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/scenarios/93-contrato-estatico-detecta.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/scenarios/93-contrato-estatico-detecta.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-11c1b3461b634e95",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tests/valida-prom.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tests/valida-prom.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-10279b31e83a1a07",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/timeline-divergence-guard.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/timeline-divergence-guard.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-6b9e5e0cdf3f07ac",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/triggers-parity.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/triggers-parity.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-57550c1da905951d",
+      "kind": "legacy",
+      "files": [
+        "scripts/migration/verify/tz-locale-parity.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/migration/verify/tz-locale-parity.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-b91d5ed32c790200",
+      "kind": "legacy",
+      "files": [
+        "scripts/monitoring/ai-gateway-partitions-exporter.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/monitoring/ai-gateway-partitions-exporter.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/monitoring-lint.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-1e5722c3f0f1d4b7",
+      "kind": "legacy",
+      "files": [
+        "scripts/monitoring/check-runbook-coverage.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/monitoring/check-runbook-coverage.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/monitoring-lint.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-ecb8c419b0a30259",
+      "kind": "legacy",
+      "files": [
+        "scripts/monitoring/rpc-perf-exporter.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/monitoring/rpc-perf-exporter.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/monitoring-lint.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-5d9ad997b057b206",
+      "kind": "legacy",
+      "files": [
+        "scripts/monitoring/rpc-plan-exporter.sh"
+      ],
+      "manual": [
+        "sh",
+        "scripts/monitoring/rpc-plan-exporter.sh"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/monitoring-lint.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-6add96711eef222b",
+      "kind": "legacy",
+      "files": [
+        "scripts/regras_negocio/generate.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/regras_negocio/generate.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: package.json:scripts, .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-cb7e8f79aa5ae356",
+      "kind": "legacy",
+      "files": [
+        "scripts/regras_negocio/indice.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/regras_negocio/indice.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: package.json:scripts, .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-f24d5fbdddb2b362",
+      "kind": "legacy",
+      "files": [
+        "scripts/regras_negocio/test_generate.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/regras_negocio/test_generate.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-9b0f837686a4cb5c",
+      "kind": "legacy",
+      "files": [
+        "scripts/regras_negocio/test_generate_fatos.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/regras_negocio/test_generate_fatos.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-7b43a7da20c3011f",
+      "kind": "legacy",
+      "files": [
+        "scripts/regras_negocio/test_indice.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/regras_negocio/test_indice.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-dc8dd39d1ddb7e27",
+      "kind": "legacy",
+      "files": [
+        "scripts/retry-failed.js"
+      ],
+      "manual": [
+        "node",
+        "scripts/retry-failed.js"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/apply-cli.test.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-3f205eb912c74c76",
+      "kind": "legacy",
+      "files": [
+        "scripts/rls-matrix/check-rls-baseline.mjs"
+      ],
+      "manual": [
+        "node",
+        "scripts/rls-matrix/check-rls-baseline.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/rls-exposure-guard.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-47188417d3fd2bfb",
+      "kind": "legacy",
+      "files": [
+        "scripts/rls-matrix/check-rls-baseline.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/rls-matrix/check-rls-baseline.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/rls-exposure-guard.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-7a186e8b58388b7f",
+      "kind": "legacy",
+      "files": [
+        "scripts/run_explain_analyze.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/run_explain_analyze.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-71961db97da47255",
+      "kind": "legacy",
+      "files": [
+        "scripts/sql-raiz.test.mjs"
+      ],
+      "manual": [
+        "node",
+        "--test",
+        "scripts/sql-raiz.test.mjs"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: scripts/hardening/_pg-teste.mjs. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-fe3157cf160e24f3",
+      "kind": "legacy",
+      "files": [
+        "scripts/supabase_snapshot/snapshot.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/supabase_snapshot/snapshot.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: package.json:scripts, .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-5b3736bc4f83232f",
+      "kind": "legacy",
+      "files": [
+        "scripts/supabase_snapshot/test_snapshot.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/supabase_snapshot/test_snapshot.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado mantido no fluxo existente; referências literais: .github/workflows/contexto.yml. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-150f4dd81794da4f",
+      "kind": "legacy",
+      "files": [
+        "scripts/test_generate_docs.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/test_generate_docs.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-b9d05d001ae7710a",
+      "kind": "legacy",
+      "files": [
+        "scripts/test_run_explain_analyze.py"
+      ],
+      "manual": [
+        "python3",
+        "scripts/test_run_explain_analyze.py"
+      ],
+      "triggers": [
+        "manual"
+      ],
+      "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    }
+  ],
+  "ci": [
+    {
+      "file": ".github/workflows/automation-local.yml",
+      "events": [
+        "PR",
+        "pushmain"
+      ],
+      "command": "node scripts/automation.mjs test"
+    }
+  ],
+  "nightly": {
+    "command": [
+      "node",
+      "scripts/automation.mjs",
+      "nightly",
+      "--ref",
+      "origin/main"
+    ]
+  },
+  "timeoutMs": 900000,
+  "toolingPatterns": [
+    "scripts/**",
+    ".github/**",
+    ".husky/**",
+    "package.json",
+    "*lock*",
+    "graphify.local.json"
+  ],
+  "sourcePatterns": [
+    "src/**",
+    "tests/**",
+    "e2e/**",
+    "api/**",
+    "shared/**",
+    "supabase/functions/**"
+  ]
+}
