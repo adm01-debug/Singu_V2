@@ -14,3 +14,11 @@ verify/row-diff-out/
 verify/row-diff.sql
 auth/auth-identities.csv
 .env
+# logs e estado local gerados pelos scripts (contêm e-mails, dados e chaves de cron)
+logs/
+freeze-state/
+cdc/out/
+cdc/out-dryrun/
+cdc/dry-run-report-*.md
+dr/out/
+auth/.rotate-state.json.*

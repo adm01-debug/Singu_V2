@@ -186,7 +186,7 @@ log "✔ WAL capturado: $WAL_LINES linhas / $WAL_BYTES bytes"
 log "Fase 4 · Replay idempotente"
 
 REPLAY_LOG="$CDC_OUT_DIR/replay-$(date -u +%Y%m%dT%H%M%SZ).log"
-CDC_OUT_DIR="$CDC_OUT_DIR" \
+DRY_RUN=0 CDC_OUT_DIR="$CDC_OUT_DIR" \
 DEST_SUPABASE_URL="$DEST_SUPABASE_URL" \
 DEST_SERVICE_ROLE_KEY="$DEST_SERVICE_ROLE_KEY" \
   deno run --allow-env --allow-net --allow-read "$SCRIPT_DIR/replay.ts" \
@@ -195,7 +195,7 @@ DEST_SERVICE_ROLE_KEY="$DEST_SERVICE_ROLE_KEY" \
 # Segunda passada — DEVE ser 100% skipped (prova de idempotência)
 log "Fase 4.b · Replay #2 (deve ser 100% skipped)"
 REPLAY2_LOG="$CDC_OUT_DIR/replay2-$(date -u +%Y%m%dT%H%M%SZ).log"
-CDC_OUT_DIR="$CDC_OUT_DIR" \
+DRY_RUN=0 CDC_OUT_DIR="$CDC_OUT_DIR" \
 DEST_SUPABASE_URL="$DEST_SUPABASE_URL" \
 DEST_SERVICE_ROLE_KEY="$DEST_SERVICE_ROLE_KEY" \
   deno run --allow-env --allow-net --allow-read "$SCRIPT_DIR/replay.ts" \

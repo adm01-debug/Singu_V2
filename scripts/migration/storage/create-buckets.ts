@@ -72,7 +72,8 @@ export async function sincronizarBuckets(env: Env, fetchFn?: Fetch): Promise<Res
 if (import.meta.main) {
   try {
     const r = await sincronizarBuckets(loadEnv());
-    console.log(`\nResumo: criados=${r.created} atualizados=${r.updated} idênticos=${r.identical} falhas=${r.failed}${r.planned ? ` planejados(DRY_RUN)=${r.planned}` : ""}`);
+    const planejados = r.planned ? ` planejados(DRY_RUN)=${r.planned}` : "";
+    console.log(`\nResumo: criados=${r.created} atualizados=${r.updated} idênticos=${r.identical} falhas=${r.failed}${planejados}`);
     if (r.failed > 0) Deno.exit(1);
   } catch (e) {
     sairComErro(e);

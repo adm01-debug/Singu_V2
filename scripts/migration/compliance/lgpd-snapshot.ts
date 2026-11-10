@@ -30,7 +30,8 @@ export function canonico(v: unknown): string {
   if (Array.isArray(v)) return `[${v.map(canonico).join(",")}]`;
   if (v !== null && typeof v === "object") {
     const o = v as Record<string, unknown>;
-    return `{${Object.keys(o).filter((k) => o[k] !== undefined).sort().map((k) => `${JSON.stringify(k)}:${canonico(o[k])}`).join(",")}}`;
+    const pares = Object.keys(o).filter((k) => o[k] !== undefined).sort().map((k) => JSON.stringify(k) + ":" + canonico(o[k]));
+    return `{${pares.join(",")}}`;
   }
   return JSON.stringify(v);
 }
@@ -112,7 +113,8 @@ if (import.meta.main) {
   try {
     const agora = new Date();
     const manifesto = await montarManifesto(leitorSupabase(sb), DEST_URL, SECRET, agora);
-    const dir = (Deno.env.get("LGPD_OUT_DIR") || new URL("./", import.meta.url).pathname).replace(/\/+$/, "");
+    let dir = Deno.env.get("LGPD_OUT_DIR") || new URL("./", import.meta.url).pathname;
+    while (dir.length > 1 && dir.endsWith("/")) dir = dir.slice(0, -1);
     const path = `${dir}/lgpd-manifest-${agora.getTime()}.json`;
     await Deno.writeTextFile(path, JSON.stringify(manifesto, null, 2), { mode: 0o600, createNew: true });
     console.log(`\n✔ Manifesto: ${path}`);

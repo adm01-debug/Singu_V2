@@ -1,3 +1,8 @@
+# Prometheus alerting rules — performance e planos das RPCs admin.
+# Consome metricas emitidas por rpc-perf-exporter.sh e rpc-plan-exporter.sh.
+#
+# Instalar em: /etc/prometheus/rules/rpc_perf.yml
+# Validar:     promtool check rules rpc-perf-alerts.yml  (ver alerts.test.sh)
 groups:
   - name: rpc-performance
     interval: 30s
@@ -42,6 +47,7 @@ groups:
           description: |
             p99 atual: {{ $value }}ms. Impacto direto no tempo de carga do painel de
             observabilidade. Considerar redução da janela ou skip do heatmap.
+          runbook: "docs/runbooks/db-guards.md#ai-gateway-health-slow"
 
       - alert: RpcPerfDegradation
         expr: |
@@ -105,6 +111,7 @@ groups:
             Alternância frequente de plano indica estatísticas instáveis, parâmetros
             voláteis (plan flip-flop) ou autovacuum/ANALYZE insuficiente na tabela base.
           runbook: "docs/runbooks/db-guards.md#rpc-plan-churn"
+
       - alert: RpcPlanChurnWithLatency
         expr: (sum by (rpc) (rpc_plan_changed) >= 2) and on (rpc) (rpc_plan_p95_ms >= 800)
         for: 15m
@@ -121,3 +128,33 @@ groups:
             Ações típicas: ANALYZE na tabela base, ajustar n_distinct/statistics target
             ou fixar o plano via reescrita da query.
           runbook: "docs/runbooks/db-guards.md#rpc-plan-churn-with-latency"
+
+      # Os exporters publicam *_exporter_up 0 (arquivo completo, sem amostras) quando a
+      # consulta falha; o timestamp cobre o caso do cron parado.
+      - alert: RpcPerfExporterDown
+        expr: rpc_perf_exporter_up == 0 or (time() - rpc_perf_exporter_last_run_timestamp_seconds) > 600
+        for: 10m
+        labels:
+          severity: warning
+          service: rpc
+          component: exporter
+        annotations:
+          summary: "rpc-perf-exporter.sh falhando ou parado há 10min"
+          description: |
+            A consulta em public.rpc_perf_samples falhou (rpc_perf_exporter_up = 0) ou o
+            textfile não é atualizado há mais de 10min. Verificar cron, credenciais libpq
+            e permissão de leitura na tabela.
+
+      - alert: RpcPlanExporterDown
+        expr: rpc_plan_exporter_up == 0 or (time() - rpc_plan_exporter_last_run_timestamp_seconds) > 600
+        for: 10m
+        labels:
+          severity: warning
+          service: rpc
+          component: exporter
+        annotations:
+          summary: "rpc-plan-exporter.sh falhando ou parado há 10min"
+          description: |
+            A consulta em public.rpc_plan_snapshots falhou (rpc_plan_exporter_up = 0) ou o
+            textfile não é atualizado há mais de 10min.
+          runbook: "docs/runbooks/db-guards.md#rpc-plan-exporter-missing"

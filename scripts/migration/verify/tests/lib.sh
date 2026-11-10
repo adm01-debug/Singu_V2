@@ -138,6 +138,7 @@ declare -A _FUMACA_OK_SE=(
   [logical-publication-guard.sql]='publicacao singu_cdc nao existe'
   [pg-stat-statements-config.sql]='pg_stat_statements (NAO instalado|instalado mas NAO carregado)'
   [schema-freeze-guard.sql]='Nenhum snapshot|permission denied for schema public'
+  [pg-stat-statements-reset-guard.sql]='pg_stat_statements resetado ha'   # cluster recém-iniciado
 )
 
 # fumaca_sql [VAR=valor ...] — roda cada *.sql de verify/ com ON_ERROR_STOP=1. Devolve 1 se

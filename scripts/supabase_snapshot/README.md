@@ -160,3 +160,23 @@ espaços, `%` e palavras SQL no identificador; extensão ausente ou coleta desli
 permissão, view, prazo e resultado; auth independente; recuperação e preservação das demais métricas
 no JSON/Markdown. Ela não executa SQL nem consulta permissões do banco real.
 
+
+### Redação de segredos, trava e códigos de saída
+
+Todo texto vindo do banco passa por `scrub()`: JWT, `sb_secret_*`, `Bearer <token>` (inclusive
+`'Bearer ' || '<literal>'`), literal após nome que termina em `secret/token/key/password...` (JSON,
+`jsonb_build_object`, `:=`, `=>`, `DEFAULT`), `password=` de conninfo, `PASSWORD '...'`,
+`vault.create_secret/update_secret('<valor>')`, senha de DSN (sai `esquema://[REDACTED]@host`, formato que
+não dispara o guard do `contexto.yml`), opções de foreign server cujo nome contém `key/secret/token/password`
+e `rolconfig` com nome de segredo. Nomes de chave (`'webhook_secret'`) e `current_setting(...)` ficam.
+Mensagens de erro (libpq, `pg_dump`, CLI) têm a DSN e a senha mascaradas antes de ir para log/`errors.md`.
+
+Uma coleta por `SNAPSHOT_DIR` (trava no marcador); gravação por troca atômica. Saída: `0` coleta
+concluída (erros de seção vão para `errors.md`) · `1` banco inacessível ou inteiro indisponível, nada
+sobrescrito · `2` configuração inválida (variável, diretório, outra coleta em andamento).
+
+```bash
+python3 -m pytest scripts/supabase_snapshot -q            # offline (driver e rede substituídos)
+# ponta a ponta contra Postgres LOCAL (cria/apaga bancos g4_*; pula sem PGHOST ou sem psycopg):
+PGHOST=127.0.0.1 PGPORT=5432 PGUSER=postgres python3 -m unittest scripts/supabase_snapshot/test_snapshot_pg.py
+```

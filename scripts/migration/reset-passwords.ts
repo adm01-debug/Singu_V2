@@ -82,7 +82,8 @@ export function parseConfig(args: string[], get: (k: string) => string | undefin
     if (!Number.isInteger(v) || v < min) throw new ErroConfig(`${nome} inválido: esperado inteiro >= ${min}`);
     return v;
   };
-  const siteUrl = (get("TARGET_SITE_URL") ?? "").replace(/\/+$/, "");
+  let siteUrl = get("TARGET_SITE_URL") ?? "";
+  while (siteUrl.endsWith("/")) siteUrl = siteUrl.slice(0, -1);
   let u: URL;
   try { u = new URL(siteUrl); } catch { throw new ErroConfig("TARGET_SITE_URL ausente ou não é URL"); }
   if (u.protocol !== "https:" && !["localhost", "127.0.0.1"].includes(u.hostname)) throw new ErroConfig("TARGET_SITE_URL precisa ser https");
@@ -109,7 +110,10 @@ export function provedores(u: Usuario): string[] {
 /** Tira e-mails e links de mensagens de erro antes de logar/persistir. */
 export function sanitizar(msg: string | undefined, email: string): string | null {
   if (!msg) return null;
-  return msg.split(email).join("<email>").replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g, "<email>").replace(/https?:\/\/\S+/g, "<url>").slice(0, 300);
+  // palavra a palavra (linear): qualquer palavra com "@" vira <email> e com "://" vira <url>
+  const limpo = msg.split(email).join("<email>").slice(0, 2000).split(/(\s+)/)
+    .map((p) => (p.includes("@") ? "<email>" : p.includes("://") ? "<url>" : p));
+  return limpo.join("").slice(0, 300);
 }
 
 const recuperavel = (e: Extract<Envio, { ok: false }>) =>

@@ -10,9 +10,16 @@ export interface CheckResult { name: string; ok: boolean; durationMs: number; er
 export interface Config { appUrl: string; sbUrl: string; anon: string; email: string; password: string; sentry: string; intervalMs: number; timeoutMs: number; maxRuns: number }
 export class ErroConfig extends Error {}
 
+/** Remove barras finais sem regex (evita backtracking em entrada hostil). */
+function semBarraFinal(s: string): string {
+  let fim = s.length;
+  while (fim > 0 && s[fim - 1] === "/") fim--;
+  return s.slice(0, fim);
+}
+
 export function lerConfig(get: (k: string) => string | undefined): Config {
   const c = {
-    appUrl: get("APP_URL") ?? "", sbUrl: (get("DEST_SUPABASE_URL") ?? "").replace(/\/+$/, ""), anon: get("DEST_ANON_KEY") ?? "",
+    appUrl: get("APP_URL") ?? "", sbUrl: semBarraFinal(get("DEST_SUPABASE_URL") ?? ""), anon: get("DEST_ANON_KEY") ?? "",
     email: get("SYNTHETIC_EMAIL") ?? "", password: get("SYNTHETIC_PASSWORD") ?? "", sentry: get("SENTRY_DSN") ?? "",
   };
   if (!c.appUrl || !c.sbUrl || !c.anon || !c.email || !c.password) throw new ErroConfig("Variáveis obrigatórias ausentes.");

@@ -62,7 +62,14 @@ function urlBase(get: (k: string) => string | undefined, nome: string): string {
   let u: URL;
   try { u = new URL(v); } catch { throw new ErroConfig(`${nome} não é uma URL válida`); }
   if (u.protocol !== "https:" && u.protocol !== "http:") throw new ErroConfig(`${nome} precisa ser http(s)`);
-  return v.replace(/\/+$/, "");
+  return semBarraFinal(v);
+}
+
+/** Remove barras finais sem regex (evita backtracking em entrada hostil). */
+export function semBarraFinal(s: string): string {
+  let fim = s.length;
+  while (fim > 0 && s[fim - 1] === "/") fim--;
+  return s.slice(0, fim);
 }
 
 /** Versão pura de loadEnv (lança ErroConfig em vez de encerrar o processo). */

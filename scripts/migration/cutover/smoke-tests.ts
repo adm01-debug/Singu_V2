@@ -16,7 +16,8 @@ export interface Check { name: string; run: () => Promise<Resultado> }
 export class ErroConfig extends Error {}
 
 export function lerConfig(get: (k: string) => string | undefined): Config {
-  const supabaseUrl = (get("DEST_SUPABASE_URL") ?? "").replace(/\/+$/, "");
+  let supabaseUrl = get("DEST_SUPABASE_URL") ?? "";
+  while (supabaseUrl.endsWith("/")) supabaseUrl = supabaseUrl.slice(0, -1);
   const anonKey = get("DEST_ANON_KEY") ?? "";
   if (!supabaseUrl || !anonKey) throw new ErroConfig("Defina DEST_SUPABASE_URL e DEST_ANON_KEY");
   const email = get("TEST_EMAIL") || undefined, password = get("TEST_PASSWORD") || undefined;
@@ -118,6 +119,7 @@ if (import.meta.main) {
   let cfg: Config;
   try { cfg = lerConfig((k) => Deno.env.get(k)); } catch (e) { console.error((e as Error).message); Deno.exit(2); }
   const r = await executar(montarChecks(cfg));
-  console.log(`\n${r.passaram}/${r.passaram + r.falharam} passaram${r.pulados ? ` (${r.pulados} pulado(s))` : ""}.`);
+  const pulados = r.pulados ? ` (${r.pulados} pulado(s))` : "";
+  console.log(`\n${r.passaram}/${r.passaram + r.falharam} passaram${pulados}.`);
   Deno.exit(r.falharam ? 1 : 0);
 }

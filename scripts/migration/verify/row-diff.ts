@@ -33,7 +33,7 @@ export function parseTabelas(ddl: string): Tabela[] {
 
 /** Padrões de skip-tables.txt (um por linha, # comenta, glob com * e ?). */
 export function parseSkip(texto: string): RegExp[] {
-  return texto.split(/\r?\n/).map((l) => l.replace(/#.*$/, "").trim()).filter(Boolean)
+  return texto.split(/\r?\n/).map((l) => (l.includes("#") ? l.slice(0, l.indexOf("#")) : l).trim()).filter(Boolean)
     .map((g) => new RegExp("^" + g.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*").replace(/\?/g, ".") + "$"));
 }
 
@@ -127,6 +127,10 @@ export function comparar(src: Record<string, Amostra>, dst: Record<string, Amost
   return rel;
 }
 
+export function linhaResumo(t: string, r: ResultadoTabela): string {
+  const falha = r.falha ? ` — ${r.falha}` : "";
+  return `${t}: ok=${r.ok} missing=${r.missing} mismatch=${r.mismatch} extra=${r.extra}${falha}`;
+}
 export const tabelaOk = (r: ResultadoTabela) => r.falha === null && r.missing + r.mismatch + r.extra === 0;
 
 export interface Caminhos { base: URL; ddl: URL; skip: URL }
@@ -135,7 +139,7 @@ export function caminhos(): Caminhos {
   const dir = Deno.env.get("ROW_DIFF_BASE");
   const ddl = Deno.env.get("TABLES_DDL");
   return {
-    base: dir ? new URL(`file://${dir.replace(/\/+$/, "")}/`) : aqui,
+    base: dir ? new URL(`file://${dir}${dir.endsWith("/") ? "" : "/"}`) : aqui,
     ddl: ddl ? new URL(`file://${ddl}`) : new URL("../ddl/02_tables.sql", aqui),
     skip: new URL("../skip-tables.txt", aqui),
   };
@@ -179,7 +183,7 @@ if (import.meta.main) {
       for (const [t, r] of Object.entries(report)) {
         const ok = tabelaOk(r);
         if (!ok) hardFail = true;
-        console.log(`${ok ? "✔" : "✖"} ${t}: ok=${r.ok} missing=${r.missing} mismatch=${r.mismatch} extra=${r.extra}${r.falha ? ` — ${r.falha}` : ""}`);
+        console.log(`${ok ? "✔" : "✖"} ${linhaResumo(t, r)}`);
       }
       await Deno.writeTextFile(new URL("./report.json", outDir), JSON.stringify(report, null, 2));
       if (hardFail) { console.error("\n✖ Divergências detectadas."); Deno.exit(1); }
