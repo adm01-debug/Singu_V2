@@ -29,7 +29,9 @@ export async function execute(
           process.platform === "win32" ? child.pid : -child.pid,
           signal,
         );
-      } catch { /* Filho pode já ter terminado. */ }
+      } catch {
+        /* Filho pode já ter terminado. */
+      }
     };
     const finish = (code, message) => {
       if (finished) return;

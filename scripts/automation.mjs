@@ -23,7 +23,7 @@ export async function main(argv) {
   const ctx = { root: opts.root, config: opts.config, c };
   if (opts.action === "doctor") {
     const r = await doctor(ctx, opts.staticOnly);
-    console.log(JSON.stringify(r));
+    process.stdout.write(JSON.stringify(r) + "\n");
     return r.ok ? 0 : 1;
   }
   if (opts.action === "test") return (await runTests(ctx)).code;
@@ -43,13 +43,13 @@ export async function main(argv) {
         results[name] = { code: 1, error: e.message };
       }
     }
-    console.log(
+    process.stdout.write(
       JSON.stringify({
         status: Object.values(results).every((r) => r.code === 0)
           ? "completed"
           : "failed",
         results,
-      }),
+      }) + "\n",
     );
     return Object.values(results).every((r) => r.code === 0) ? 0 : 1;
   }
@@ -61,7 +61,7 @@ export async function main(argv) {
   const r = await (opts.action === "install-hooks"
     ? install(ctx)
     : uninstall(ctx));
-  console.log(JSON.stringify(r));
+  process.stdout.write(JSON.stringify(r) + "\n");
   return 0;
 }
 

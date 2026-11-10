@@ -375,7 +375,7 @@ if (
   import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
 ) {
   const result = await main();
-  console.log(JSON.stringify(result.report));
+  process.stdout.write(JSON.stringify(result.report) + "\n");
   process.exitCode = result.exitCode;
 }
 export { parseArgs } from "./options.mjs";

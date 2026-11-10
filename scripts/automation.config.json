@@ -82,6 +82,418 @@
       ]
     },
     {
+      "id": "module-a9c662473b041788",
+      "kind": "helper",
+      "files": ["scripts/automation-tests/dispatch.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation.unit.mjs"]
+    },
+    {
+      "id": "module-7a81b624b6d22abd",
+      "kind": "helper",
+      "files": ["scripts/automation-tests/fixture.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/automation-tests/dispatch.mjs",
+        "scripts/automation-tests/hooks.mjs",
+        "scripts/automation-tests/inventory.mjs",
+        "scripts/automation-tests/snapshot.mjs"
+      ]
+    },
+    {
+      "id": "module-9c92174dee793258",
+      "kind": "helper",
+      "files": ["scripts/automation-tests/hooks.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation.unit.mjs"]
+    },
+    {
+      "id": "module-c75dc14965fe065f",
+      "kind": "helper",
+      "files": ["scripts/automation-tests/inventory.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation.unit.mjs"]
+    },
+    {
+      "id": "module-cb80047bc29a2cf5",
+      "kind": "helper",
+      "files": ["scripts/automation-tests/snapshot.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation.unit.mjs"]
+    },
+    {
+      "id": "module-525e68009a2b064e",
+      "kind": "helper",
+      "files": ["scripts/automation/common.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/automation.mjs",
+        "scripts/automation/config.mjs",
+        "scripts/automation/dispatch.mjs",
+        "scripts/automation/hooks.mjs",
+        "scripts/automation/install.mjs",
+        "scripts/automation/inventory.mjs",
+        "scripts/automation/process.mjs",
+        "scripts/automation/runtime-copy.mjs"
+      ]
+    },
+    {
+      "id": "module-a319a7e6d996f0ee",
+      "kind": "helper",
+      "files": ["scripts/automation/config.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation.mjs"]
+    },
+    {
+      "id": "module-7a3ff47d42f20e88",
+      "kind": "helper",
+      "files": ["scripts/automation/dispatch.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation.mjs", "scripts/automation/hooks.mjs"]
+    },
+    {
+      "id": "module-6deedf632ddfd664",
+      "kind": "helper",
+      "files": ["scripts/automation/hooks.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation.mjs"]
+    },
+    {
+      "id": "module-67af44f0c80567c6",
+      "kind": "helper",
+      "files": ["scripts/automation/install.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation.mjs"]
+    },
+    {
+      "id": "module-61e13718fb9cb86f",
+      "kind": "helper",
+      "files": ["scripts/automation/inventory.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation.mjs", "scripts/automation/hooks.mjs"]
+    },
+    {
+      "id": "module-22da7cd89b14a6c6",
+      "kind": "helper",
+      "files": ["scripts/automation/process.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/automation.mjs",
+        "scripts/automation/dispatch.mjs",
+        "scripts/automation/hooks.mjs",
+        "scripts/automation/install.mjs",
+        "scripts/automation/inventory.mjs"
+      ]
+    },
+    {
+      "id": "module-b706fd1c5d9e5a65",
+      "kind": "helper",
+      "files": ["scripts/automation/runtime-copy.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/automation/install.mjs"]
+    },
+    {
+      "id": "module-0b44d5fe5ecd40d5",
+      "kind": "helper",
+      "files": ["scripts/graphify-local-tests/fixture.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/graphify-local-tests/freshness.mjs",
+        "scripts/graphify-local-tests/locking.mjs",
+        "scripts/graphify-local-tests/safety.mjs"
+      ]
+    },
+    {
+      "id": "module-17a92fdf9a18244c",
+      "kind": "helper",
+      "files": ["scripts/graphify-local-tests/freshness.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/graphify-local.unit.mjs"]
+    },
+    {
+      "id": "module-afeb6e55b0a5d822",
+      "kind": "helper",
+      "files": ["scripts/graphify-local-tests/locking.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/graphify-local.unit.mjs"]
+    },
+    {
+      "id": "module-4115e2be18db6836",
+      "kind": "helper",
+      "files": ["scripts/graphify-local-tests/safety.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/graphify-local.unit.mjs"]
+    },
+    {
+      "id": "module-9d95b93e8f39ba3f",
+      "kind": "helper",
+      "files": ["scripts/graphify-local/artifacts.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/graphify-local.mjs",
+        "scripts/graphify-local/build.mjs"
+      ]
+    },
+    {
+      "id": "module-e9747fab87c75c38",
+      "kind": "helper",
+      "files": ["scripts/graphify-local/build.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/graphify-local.mjs"]
+    },
+    {
+      "id": "module-eb4147926f847b6d",
+      "kind": "helper",
+      "files": ["scripts/graphify-local/common.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/graphify-local.mjs",
+        "scripts/graphify-local/artifacts.mjs",
+        "scripts/graphify-local/build.mjs",
+        "scripts/graphify-local/config.mjs",
+        "scripts/graphify-local/locks.mjs",
+        "scripts/graphify-local/process.mjs",
+        "scripts/graphify-local/source.mjs"
+      ]
+    },
+    {
+      "id": "module-f8f709b1740c9ff2",
+      "kind": "helper",
+      "files": ["scripts/graphify-local/config.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/graphify-local.mjs",
+        "scripts/graphify-local/build.mjs"
+      ]
+    },
+    {
+      "id": "module-6bca37811506a37f",
+      "kind": "helper",
+      "files": ["scripts/graphify-local/locks.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/graphify-local.mjs"]
+    },
+    {
+      "id": "module-f96ad9babad96b7d",
+      "kind": "helper",
+      "files": ["scripts/graphify-local/process.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/graphify-local.mjs",
+        "scripts/graphify-local/artifacts.mjs",
+        "scripts/graphify-local/build.mjs",
+        "scripts/graphify-local/config.mjs",
+        "scripts/graphify-local/locks.mjs",
+        "scripts/graphify-local/source.mjs"
+      ]
+    },
+    {
+      "id": "module-b2a0d98285744a0e",
+      "kind": "helper",
+      "files": ["scripts/graphify-local/source.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/graphify-local.mjs",
+        "scripts/graphify-local/artifacts.mjs",
+        "scripts/graphify-local/build.mjs"
+      ]
+    },
+    {
+      "id": "module-71eb00169a18b08f",
+      "kind": "helper",
+      "files": ["scripts/maintenance/changes.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/run.mjs"]
+    },
+    {
+      "id": "module-6530d26267b04f05",
+      "kind": "helper",
+      "files": ["scripts/maintenance/commit.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/lib.mjs"]
+    },
+    {
+      "id": "module-032e74def93ac4a1",
+      "kind": "helper",
+      "files": ["scripts/maintenance/common.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/maintenance/commit.mjs",
+        "scripts/maintenance/configuration.mjs",
+        "scripts/maintenance/dependencies.mjs",
+        "scripts/maintenance/lib.mjs",
+        "scripts/maintenance/locking.mjs",
+        "scripts/maintenance/process.mjs"
+      ]
+    },
+    {
+      "id": "module-815abe3b89f264a7",
+      "kind": "helper",
+      "files": ["scripts/maintenance/configuration.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/lib.mjs"]
+    },
+    {
+      "id": "module-a4da209283cd99b6",
+      "kind": "helper",
+      "files": ["scripts/maintenance/dependencies.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/maintenance/configuration.mjs",
+        "scripts/maintenance/lib.mjs"
+      ]
+    },
+    {
+      "id": "module-d2903ad362861327",
+      "kind": "helper",
+      "files": ["scripts/maintenance/fixes.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/run.mjs"]
+    },
+    {
+      "id": "module-0ecf993386fd7c06",
+      "kind": "helper",
+      "files": ["scripts/maintenance/locking.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/lib.mjs"]
+    },
+    {
+      "id": "module-597129a9989ad156",
+      "kind": "helper",
+      "files": ["scripts/maintenance/options.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/maintenance/run.mjs",
+        "scripts/maintenance/session.mjs"
+      ]
+    },
+    {
+      "id": "module-7ab2ee5f2ed8ee37",
+      "kind": "helper",
+      "files": ["scripts/maintenance/process.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/maintenance/commit.mjs",
+        "scripts/maintenance/configuration.mjs",
+        "scripts/maintenance/lib.mjs"
+      ]
+    },
+    {
+      "id": "module-307ea2245d91823a",
+      "kind": "helper",
+      "files": ["scripts/maintenance/sandbox.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/maintenance/fixes.mjs",
+        "scripts/maintenance/run.mjs"
+      ]
+    },
+    {
+      "id": "module-6a5a971cbbf2fa8f",
+      "kind": "helper",
+      "files": ["scripts/maintenance/session.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/run.mjs"]
+    },
+    {
+      "id": "module-d5a0bc047006a705",
+      "kind": "helper",
+      "files": ["scripts/maintenance/tests/configuration.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/maintenance.unit.mjs"]
+    },
+    {
+      "id": "module-9fb6961284309c10",
+      "kind": "helper",
+      "files": ["scripts/maintenance/tests/dependencies.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/maintenance.unit.mjs"]
+    },
+    {
+      "id": "module-9562fd0acf381388",
+      "kind": "helper",
+      "files": ["scripts/maintenance/tests/fixture.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": [
+        "scripts/maintenance/tests/configuration.mjs",
+        "scripts/maintenance/tests/dependencies.mjs",
+        "scripts/maintenance/tests/formatting.mjs",
+        "scripts/maintenance/tests/hooks.mjs",
+        "scripts/maintenance/tests/locking.mjs",
+        "scripts/maintenance/tests/transaction.mjs"
+      ]
+    },
+    {
+      "id": "module-4223276ec19cbda5",
+      "kind": "helper",
+      "files": ["scripts/maintenance/tests/formatting.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/maintenance.unit.mjs"]
+    },
+    {
+      "id": "module-39305fc9aa926de0",
+      "kind": "helper",
+      "files": ["scripts/maintenance/tests/hooks.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/maintenance.unit.mjs"]
+    },
+    {
+      "id": "module-a90201229ce814bd",
+      "kind": "helper",
+      "files": ["scripts/maintenance/tests/locking.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/maintenance.unit.mjs"]
+    },
+    {
+      "id": "module-71a6365b3b5182fe",
+      "kind": "helper",
+      "files": ["scripts/maintenance/tests/transaction.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual", "PR", "pushmain"],
+      "callers": ["scripts/maintenance/maintenance.unit.mjs"]
+    },
+    {
       "id": "legacy-057b3e7a0e2cff3e",
       "kind": "legacy",
       "files": ["scripts/_pgdocs.py"],
