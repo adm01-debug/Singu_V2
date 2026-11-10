@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `df708ff757` · branch `main` · 2026-11-10 22:28 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ae528d588e` · branch `main` · 2026-11-10 23:05 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -640,6 +640,7 @@ _nenhuma declarada em config.toml_
 
 | Rota | Guard | Roles | Arquivo |
 |---|---|---|---|
+| / | Protected |  | `scripts/inventario/gerar-rotas.test.mjs` |
 | / | Protected |  | `src/app/AppRoutes.tsx` |
 | /abm | Protected |  | `src/app/AppRoutes.tsx` |
 | /abm/:id | Protected |  | `src/app/AppRoutes.tsx` |
@@ -650,6 +651,8 @@ _nenhuma declarada em config.toml_
 | /bi | Protected |  | `src/app/AppRoutes.tsx` |
 | /cadastro | Protected |  | `src/app/AppRoutes.tsx` |
 | /campanhas | Protected |  | `src/app/AppRoutes.tsx` |
+| /contatos | Protected |  | `scripts/inventario/gerar-rotas.test.mjs` |
+| /contatos/:id | Protected |  | `scripts/inventario/gerar-rotas.test.mjs` |
 | /conversation-intelligence | Protected |  | `src/app/AppRoutes.tsx` |
 | /conversation-intelligence/setup | Protected |  | `src/app/AppRoutes.tsx` |
 | /crm/copywriting | Protected |  | `src/app/AppRoutes.tsx` |
@@ -695,6 +698,7 @@ _nenhuma declarada em config.toml_
 | /relatorios-customizaveis | Protected |  | `src/app/AppRoutes.tsx` |
 | /report-builder | Protected |  | `src/app/AppRoutes.tsx` |
 | /revops | Protected |  | `src/app/AppRoutes.tsx` |
+| /seguranca | Protected |  | `scripts/inventario/gerar-rotas.test.mjs` |
 | /seguranca | Protected |  | `src/app/AppRoutes.tsx` |
 | /sequencias | Protected |  | `src/app/AppRoutes.tsx` |
 | /sms-marketing | Protected |  | `src/app/AppRoutes.tsx` |
@@ -702,6 +706,7 @@ _nenhuma declarada em config.toml_
 | /tarefas | Protected |  | `src/app/AppRoutes.tsx` |
 | /territorios | Protected |  | `src/app/AppRoutes.tsx` |
 | /territory-optimization | Protected |  | `src/app/AppRoutes.tsx` |
+| /whatsapp | RequireAuth |  | `scripts/inventario/gerar-rotas.test.mjs` |
 | /whatsapp | RequireAuth |  | `src/app/AppRoutes.tsx` |
 | /whatsapp/importar | Protected |  | `src/app/AppRoutes.tsx` |
 | /win-loss | Protected |  | `src/app/AppRoutes.tsx` |

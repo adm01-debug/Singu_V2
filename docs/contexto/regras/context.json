@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "df708ff757360ef2b6e0c2e8269855c399d0d805",
+  "sha": "ae528d588e9f9bed904be945247509d1804cfccd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-10 22:28 UTC",
-  "files_total": 3303,
-  "code_files": 2852,
-  "code_lines": 406561
+  "generated_at": "2026-11-10 23:05 UTC",
+  "files_total": 3317,
+  "code_files": 2861,
+  "code_lines": 407964
  },
  "version": "1.3.2",
- "facts_hash": "e311221d68124973",
+ "facts_hash": "8fec8b513a28e1ee",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -183,6 +183,14 @@
     ]
    },
    {
+    "file": ".github/workflows/docs-ci.yml",
+    "name": "Documentação sem drift",
+    "triggers": [
+     "pull_request",
+     "push"
+    ]
+   },
+   {
     "file": ".github/workflows/estado-real.yml",
     "name": "Estado real do repositório",
     "triggers": [
@@ -246,7 +254,7 @@
    ".tsx": 1156,
    ".ts": 891,
    ".sql": 652,
-   ".mjs": 114,
+   ".mjs": 123,
    ".py": 19,
    ".js": 18,
    ".cjs": 3
@@ -64573,6 +64581,13 @@
     "component": "Index",
     "guard": "Protected",
     "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "path": "/",
+    "component": "Index",
+    "guard": "Protected",
+    "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
@@ -64630,6 +64645,13 @@
     "guard": "",
     "roles": [],
     "file": "scripts/ai-context/gerar.unit.mjs"
+   },
+   {
+    "path": "/admin",
+    "component": "Admin",
+    "guard": "",
+    "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
    },
    {
     "path": "/admin",
@@ -64832,6 +64854,13 @@
     "component": "LazyPage",
     "guard": "",
     "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "path": "/auth",
+    "component": "LazyPage",
+    "guard": "",
+    "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
@@ -64885,10 +64914,24 @@
    },
    {
     "path": "/contatos",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "path": "/contatos",
     "component": "Contatos",
     "guard": "",
     "roles": [],
     "file": "src/pages/Contatos.search.test.tsx"
+   },
+   {
+    "path": "/contatos/:id",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
    },
    {
     "path": "/contatos/:id",
@@ -65315,6 +65358,13 @@
     "component": "P",
     "guard": "Protected",
     "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "path": "/seguranca",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
@@ -65393,6 +65443,13 @@
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "path": "/whatsapp",
+    "component": "Navigate",
+    "guard": "RequireAuth",
+    "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
    },
    {
     "path": "/whatsapp",
@@ -65513,6 +65570,10 @@
    {
     "name": "useContacts",
     "file": "scripts/ai-context/gerar.unit.mjs"
+   },
+   {
+    "name": "useContatos",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
    },
    {
     "name": "useCelebration",
@@ -68194,6 +68255,34 @@
     "file": "scripts/ai-context/gerar.unit.mjs"
    },
    {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "RequireAuth",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
     "guard": "RequireAuth",
     "file": "src/app/AppRoutes.tsx"
    },
@@ -68604,14 +68693,15 @@
   },
   {
    "module": "scripts",
-   "files": 297,
-   "lines": 49482,
+   "files": 306,
+   "lines": 50885,
    "tables": [
     "__proto__",
     "a",
     "alfa",
     "anexos",
     "com_rls",
+    "companies",
     "constructor",
     "contact_fone",
     "contacts",
@@ -68624,14 +68714,18 @@
     "ghost_table",
     "grande",
     "nao_conta_js",
+    "nunca_conta",
+    "oculta",
     "orfa",
     "payments",
+    "profiles",
     "runtime_table",
     "so_teste",
     "system_alerts",
     "t",
     "t1",
     "tabela",
+    "tabela_de_teste",
     "toString",
     "tools_runtime",
     "tx",
@@ -71148,6 +71242,7 @@
    },
    "companies": {
     "select": [
+     "scripts/inventario/gerar-edge-tabela.test.mjs",
      "src/components/analytics/DISCAnalyticsPanel.tsx",
      "src/components/interactions/insights/ObjectionExamplesModal.tsx",
      "src/components/pipeline/DealDetailDrawer.tsx",
@@ -71492,7 +71587,9 @@
     "select": [
      "scripts/ai-context/gerar.unit.mjs",
      "scripts/audit-ausentes.test.mjs",
+     "scripts/inventario/gerar-edge-tabela.test.mjs",
      "scripts/inventario/gerar-repo.test.mjs",
+     "scripts/inventario/gerar-rotas.test.mjs",
      "scripts/regras_negocio/test_generate_fatos.py",
      "src/components/analytics/DISCAnalyticsPanel.tsx",
      "src/components/contact-detail/NextBestActionCard.tsx",
@@ -71585,10 +71682,13 @@
     ],
     "ref": [
      "scripts/audit-ausentes.test.mjs",
+     "scripts/inventario/gerar-edge-tabela.test.mjs",
      "scripts/inventario/gerar-repo.test.mjs",
+     "scripts/inventario/gerar-rotas.test.mjs",
      "src/components/onboarding/steps/ImportStep.tsx"
     ],
     "update": [
+     "scripts/inventario/gerar-edge-tabela.test.mjs",
      "src/components/contact-detail/ContactBehavioralTab.tsx",
      "src/components/contact-detail/MetricOverrideFlow.tsx",
      "src/hooks/useAIApprovals.ts",
@@ -72757,6 +72857,11 @@
      "supabase/functions/social-events-detector/index.ts"
     ]
    },
+   "nunca_conta": {
+    "select": [
+     "scripts/inventario/gerar-edge-tabela.test.mjs"
+    ]
+   },
    "nurturing_executions": {
     "select": [
      "src/hooks/useNurturingExecutions.ts",
@@ -72804,6 +72909,11 @@
     ],
     "upsert": [
      "src/hooks/useObjectionExampleFeedback.ts"
+    ]
+   },
+   "oculta": {
+    "select": [
+     "scripts/inventario/gerar-edge-tabela.test.mjs"
     ]
    },
    "offer_suggestions": {
@@ -72869,6 +72979,7 @@
    },
    "profiles": {
     "select": [
+     "scripts/inventario/gerar-edge-tabela.test.mjs",
      "src/components/admin/AdminQuickActions.tsx",
      "src/components/dashboard/WelcomeGreetingPopup.tsx",
      "src/components/triggers/CommunicationTrainingMode.tsx",
@@ -72887,6 +72998,9 @@
      "supabase/functions/system-health/index.ts",
      "supabase/functions/template-success-notifications/index.ts",
      "supabase/functions/weekly-digest/index.ts"
+    ],
+    "ref": [
+     "scripts/inventario/gerar-rotas.test.mjs"
     ],
     "upsert": [
      "src/components/onboarding/OnboardingWizard.tsx"
@@ -73408,6 +73522,11 @@
      "scripts/inventario/gerar-repo.mjs"
     ]
    },
+   "tabela_de_teste": {
+    "ref": [
+     "scripts/inventario/gerar-edge-tabela.test.mjs"
+    ]
+   },
    "tasks": {
     "insert": [
      "supabase/functions/nurturing-runner/index.ts"
@@ -73720,7 +73839,8 @@
     "ref": [
      "scripts/audit-ausentes.mjs",
      "scripts/audit-ausentes.test.mjs",
-     "scripts/diff-tables.mjs"
+     "scripts/diff-tables.mjs",
+     "scripts/inventario/gerar-edge-tabela.mjs"
     ],
     "select": [
      "scripts/audit-ausentes.test.mjs"
@@ -77216,6 +77336,8 @@
     "scripts/ai-context/gerar.unit.mjs"
    ],
    "has_role": [
+    "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "scripts/inventario/gerar-rotas.test.mjs",
     "src/components/admin/RequireAdmin.tsx",
     "src/hooks/useIsAdmin.ts",
     "src/hooks/useTeamDashboard.ts",
@@ -77277,6 +77399,9 @@
    ],
    "search_companies_unaccent": [
     "src/components/search/GlobalSearch.tsx"
+   ],
+   "search_contacts": [
+    "scripts/inventario/gerar-rotas.test.mjs"
    ],
    "search_contacts_unaccent": [
     "src/components/search/GlobalSearch.tsx"
@@ -77673,6 +77798,10 @@
    },
    {
     "file": "scripts/inventario/gerar-banco.mjs",
+    "count": 1
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.test.mjs",
     "count": 1
    },
    {
@@ -78124,7 +78253,9 @@
    "grande",
    "logs",
    "nao_conta_js",
+   "nunca_conta",
    "oauth_tokens",
+   "oculta",
    "orfa",
    "payments",
    "runtime_table",
@@ -78132,6 +78263,7 @@
    "t",
    "t1",
    "tabela",
+   "tabela_de_teste",
    "toString",
    "tools_runtime",
    "tx",
@@ -78192,38 +78324,6 @@
   ],
   "columns_unknown": [
    {
-    "table": "contacts",
-    "column": "cargo"
-   },
-   {
-    "table": "contacts",
-    "column": "full_name"
-   },
-   {
-    "table": "contacts",
-    "column": "lead_score"
-   },
-   {
-    "table": "contacts",
-    "column": "metaprogram_profile"
-   },
-   {
-    "table": "contacts",
-    "column": "objection_patterns"
-   },
-   {
-    "table": "contacts",
-    "column": "status"
-   },
-   {
-    "table": "system_health_snapshots",
-    "column": "avg_latency_ms"
-   },
-   {
-    "table": "system_health_snapshots",
-    "column": "captured_at"
-   },
-   {
     "table": "companies",
     "column": "deleted_at"
    },
@@ -78254,6 +78354,38 @@
    {
     "table": "companies",
     "column": "status"
+   },
+   {
+    "table": "contacts",
+    "column": "cargo"
+   },
+   {
+    "table": "contacts",
+    "column": "full_name"
+   },
+   {
+    "table": "contacts",
+    "column": "lead_score"
+   },
+   {
+    "table": "contacts",
+    "column": "metaprogram_profile"
+   },
+   {
+    "table": "contacts",
+    "column": "objection_patterns"
+   },
+   {
+    "table": "contacts",
+    "column": "status"
+   },
+   {
+    "table": "system_health_snapshots",
+    "column": "avg_latency_ms"
+   },
+   {
+    "table": "system_health_snapshots",
+    "column": "captured_at"
    },
    {
     "table": "metaprogram_analysis",
@@ -80945,6 +81077,10 @@
     "msg": "falta --${obrigatorio}"
    },
    {
+    "file": "scripts/ci/render-workflow-docs.mjs",
+    "msg": "${arquivo}: bloco "
+   },
+   {
     "file": "scripts/hardening/_pg-teste.mjs",
     "msg": "SQL de cenário falhou: ${r.stderr || r.erro}"
    },
@@ -81021,6 +81157,10 @@
     "msg": "sem supabase/schema-manifest.json e sem migrations em supabase/migrations/ "
    },
    {
+    "file": "scripts/inventario/gerar-edge-tabela.mjs",
+    "msg": "${DIR_FUNCOES_REL} nao existe neste repositorio."
+   },
+   {
     "file": "scripts/inventario/gerar-repo.mjs",
     "msg": "${FDIR} não existe: rode a partir do repositório (ou confira INVENTARIO_RAIZ)."
    },
@@ -81035,6 +81175,14 @@
    {
     "file": "scripts/inventario/gerar-repo.mjs",
     "msg": "ripgrep (rg) não encontrado; o inventário não pode ser gerado com segurança."
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.mjs",
+    "msg": "${FONTES.rotas}: nao achei o bloco <Routes>...</Routes>."
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.mjs",
+    "msg": "${FONTES.sidebar}: nao achei "
    },
    {
     "file": "scripts/lib/seguranca-processo.mjs",
@@ -118238,6 +118386,42 @@
     "name": "a ALLOWLIST_DENO só encurta: nenhum teste nela é executado por workflow"
    },
    {
+    "file": "scripts/ci/render-workflow-docs.test.mjs",
+    "name": "extrairDocs le os quatro campos e para na primeira linha que nao e comentario"
+   },
+   {
+    "file": "scripts/ci/render-workflow-docs.test.mjs",
+    "name": "extrairNaoEBug preserva aspas no meio da descricao"
+   },
+   {
+    "file": "scripts/ci/render-workflow-docs.test.mjs",
+    "name": "desencapar tira so o par de aspas que envolve todo o texto"
+   },
+   {
+    "file": "scripts/ci/render-workflow-docs.test.mjs",
+    "name": "nomeDe usa o name: do YAML e cai no nome do arquivo quando nao tem"
+   },
+   {
+    "file": "scripts/ci/render-workflow-docs.test.mjs",
+    "name": "bloco pela metade derruba a geracao, nomeando o campo que falta"
+   },
+   {
+    "file": "scripts/ci/render-workflow-docs.test.mjs",
+    "name": "workflow sem bloco nao derruba: entra na secao de lacuna declarada"
+   },
+   {
+    "file": "scripts/ci/render-workflow-docs.test.mjs",
+    "name": "o KPI entra nas colunas quando docs/ci/kpi.json existe"
+   },
+   {
+    "file": "scripts/ci/render-workflow-docs.test.mjs",
+    "name": "a saida e deterministica e nao depende da ordem de leitura do diretorio"
+   },
+   {
+    "file": "scripts/ci/render-workflow-docs.test.mjs",
+    "name": "sem secao de nao-e-bug quando nenhum workflow declara"
+   },
+   {
     "file": "scripts/ci/sla-code-scanning.test.mjs",
     "name": "nível vem de security_severity_level; sem ele, error conta como alto (o defeito de rule.severity)"
    },
@@ -118296,6 +118480,42 @@
    {
     "file": "scripts/ci/workflow-invariants.test.mjs",
     "name": "o ci.yml real do repositório passa em todos os invariantes"
+   },
+   {
+    "file": "scripts/docs/verificar-citacoes.test.mjs",
+    "name": "extrairCitacoes pega caminho, linha e range, e nao casa texto solto"
+   },
+   {
+    "file": "scripts/docs/verificar-citacoes.test.mjs",
+    "name": "extrairCitacoes nao repete a mesma citacao dentro do mesmo documento"
+   },
+   {
+    "file": "scripts/docs/verificar-citacoes.test.mjs",
+    "name": "listarDocs pega os .md da raiz e de docs/, e ignora gerado e dependencia"
+   },
+   {
+    "file": "scripts/docs/verificar-citacoes.test.mjs",
+    "name": "conferir separa arquivo inexistente de linha fora do arquivo"
+   },
+   {
+    "file": "scripts/docs/verificar-citacoes.test.mjs",
+    "name": "citacao sem linha so cobra a existencia do arquivo"
+   },
+   {
+    "file": "scripts/docs/verificar-citacoes.test.mjs",
+    "name": "o range e cobrado pelo maior numero"
+   },
+   {
+    "file": "scripts/docs/verificar-citacoes.test.mjs",
+    "name": "comparar devolve so a quebra que nao esta no baseline, e a que foi corrigida"
+   },
+   {
+    "file": "scripts/docs/verificar-citacoes.test.mjs",
+    "name": "novasQueTravariamBaseline bloqueia quebra nova, libera com --force ou sem introduzir nenhuma"
+   },
+   {
+    "file": "scripts/docs/verificar-citacoes.test.mjs",
+    "name": "o baseline e JSON estavel e carrega de volta igual"
    },
    {
     "file": "scripts/hardening/hardening-cluster.test.mjs",
@@ -118526,6 +118746,50 @@
     "name": "API: outro projeto e SUPABASE_API_URL fora do loopback são recusados antes de qualquer rede"
    },
    {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "constantesDeString pega const de modulo e ignora const dentro de funcao"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "constantesDeString nao deixa chave desbalanceada dentro de string cegar os consts seguintes"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "constantesDeString ignora chave dentro de template literal de uma linha"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "extrairChamadas separa tabela de bucket e aceita a URL direta"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "listarTs varre recursivo e deixa teste de fora"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "sharedImportados resolve o import relativo de _shared e ignora o resto"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "gerarEdgeTabela soma a funcao, o helper local e o _shared importado"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "pasta que comeca com _ ou . nao e edge function; funcao sem tabela e contada"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "o indice inverso lista toda funcao que toca a tabela"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "a saida e deterministica e sem carimbo de data"
+   },
+   {
+    "file": "scripts/inventario/gerar-edge-tabela.test.mjs",
+    "name": "repositorio sem supabase/functions falha alto em vez de gerar inventario vazio"
+   },
+   {
     "file": "scripts/inventario/gerar-repo.test.mjs",
     "name": "edges.json: linhas, segredos lidos e quem chama cada função"
    },
@@ -118556,6 +118820,38 @@
    {
     "file": "scripts/inventario/gerar-repo.test.mjs",
     "name": "no repositório real, gravando em tmp: bate com as edge functions e não toca em inventario/estado"
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.test.mjs",
+    "name": "extrairChamadas separa tabela, bucket, rpc e edge (inclusive por constante e por URL)"
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.test.mjs",
+    "name": "extrairChamadas nao resolve const declarada dentro de funcao"
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.test.mjs",
+    "name": "resolverImport: null para externo, caminho para alias @/ e undefined para local quebrado"
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.test.mjs",
+    "name": "lerUrls le path, componente, arquivo, acesso, parametro, skeleton e redirect"
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.test.mjs",
+    "name": "lerMenuSidebar casa cada item com a sua secao; lerMenuMobile le label/path"
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.test.mjs",
+    "name": "listarPaginas pega a raiz de src/pages e o que lazyPages declara, nao subcomponente"
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.test.mjs",
+    "name": "gerarRotas aponta os cinco tipos de problema e junta o fecho de imports"
+   },
+   {
+    "file": "scripts/inventario/gerar-rotas.test.mjs",
+    "name": "a saida e deterministica e termina em uma quebra de linha"
    },
    {
     "file": "scripts/inventario/mudou-conteudo.test.mjs",
@@ -164423,6 +164719,34 @@
     "file": "scripts/ai-context/gerar.unit.mjs"
    },
    {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "RequireAuth",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "guard": "Protected",
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
     "guard": "RequireAuth",
     "file": "src/app/AppRoutes.tsx"
    },
@@ -164749,6 +165073,13 @@
     "component": "Index",
     "guard": "Protected",
     "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "path": "/",
+    "component": "Index",
+    "guard": "Protected",
+    "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
@@ -164813,6 +165144,20 @@
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "path": "/contatos",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "path": "/contatos/:id",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
    },
    {
     "path": "/conversation-intelligence",
@@ -165134,6 +165479,13 @@
     "component": "P",
     "guard": "Protected",
     "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
+   },
+   {
+    "path": "/seguranca",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
@@ -165177,6 +165529,13 @@
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "path": "/whatsapp",
+    "component": "Navigate",
+    "guard": "RequireAuth",
+    "roles": [],
+    "file": "scripts/inventario/gerar-rotas.test.mjs"
    },
    {
     "path": "/whatsapp",
@@ -167258,46 +167617,6 @@
    },
    {
     "kind": "coluna",
-    "msg": "coluna `cargo` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `full_name` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `lead_score` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `metaprogram_profile` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `objection_patterns` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `status` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `avg_latency_ms` usada no código não existe no schema de `system_health_snapshots`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `captured_at` usada no código não existe no schema de `system_health_snapshots`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
     "msg": "coluna `deleted_at` usada no código não existe no schema de `companies`",
     "where": []
    },
@@ -167334,6 +167653,46 @@
    {
     "kind": "coluna",
     "msg": "coluna `status` usada no código não existe no schema de `companies`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `cargo` usada no código não existe no schema de `contacts`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `full_name` usada no código não existe no schema de `contacts`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `lead_score` usada no código não existe no schema de `contacts`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `metaprogram_profile` usada no código não existe no schema de `contacts`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `objection_patterns` usada no código não existe no schema de `contacts`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `status` usada no código não existe no schema de `contacts`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `avg_latency_ms` usada no código não existe no schema de `system_health_snapshots`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `captured_at` usada no código não existe no schema de `system_health_snapshots`",
     "where": []
    },
    {
@@ -167782,9 +168141,23 @@
    },
    {
     "kind": "tabela",
+    "msg": "tabela `nunca_conta` usada no código não existe nas migrations/types do repo",
+    "where": [
+     "scripts/inventario/gerar-edge-tabela.test.mjs"
+    ]
+   },
+   {
+    "kind": "tabela",
     "msg": "tabela `oauth_tokens` usada no código não existe nas migrations/types do repo",
     "where": [
      "supabase/functions/evolution-bitrix-connector/index.ts"
+    ]
+   },
+   {
+    "kind": "tabela",
+    "msg": "tabela `oculta` usada no código não existe nas migrations/types do repo",
+    "where": [
+     "scripts/inventario/gerar-edge-tabela.test.mjs"
     ]
    },
    {
@@ -167841,6 +168214,13 @@
    },
    {
     "kind": "tabela",
+    "msg": "tabela `tabela_de_teste` usada no código não existe nas migrations/types do repo",
+    "where": [
+     "scripts/inventario/gerar-edge-tabela.test.mjs"
+    ]
+   },
+   {
+    "kind": "tabela",
     "msg": "tabela `toString` usada no código não existe nas migrations/types do repo",
     "where": [
      "scripts/inventario/gerar-banco.test.mjs"
@@ -167866,7 +168246,8 @@
     "where": [
      "scripts/audit-ausentes.mjs",
      "scripts/audit-ausentes.test.mjs",
-     "scripts/diff-tables.mjs"
+     "scripts/diff-tables.mjs",
+     "scripts/inventario/gerar-edge-tabela.mjs"
     ]
    },
    {
@@ -168102,6 +168483,13 @@
    },
    {
     "kind": "rpc",
+    "msg": "RPC `search_contacts` chamada mas não definida nas migrations/types",
+    "where": [
+     "scripts/inventario/gerar-rotas.test.mjs"
+    ]
+   },
+   {
+    "kind": "rpc",
     "msg": "RPC `sem_args` chamada mas não definida nas migrations/types",
     "where": [
      "scripts/audit-ausentes.test.mjs"
@@ -168155,6 +168543,13 @@
     "msg": "1 chamada(s) `.from(variável)` — tabela só conhecida em runtime",
     "where": [
      "scripts/inventario/gerar-banco.mjs"
+    ]
+   },
+   {
+    "kind": "dinâmico",
+    "msg": "1 chamada(s) `.from(variável)` — tabela só conhecida em runtime",
+    "where": [
+     "scripts/inventario/gerar-rotas.test.mjs"
     ]
    },
    {
@@ -170735,6 +171130,46 @@
     "a ALLOWLIST_DENO só encurta: nenhum teste nela é executado por workflow"
    ]
   },
+  "scripts/ci/render-workflow-docs.mjs": {
+   "path": "scripts/ci/render-workflow-docs.mjs",
+   "lines": 193,
+   "exports": [
+    "const CAMPOS",
+    "function extrairDocs",
+    "const desencapar",
+    "function extrairNaoEBug",
+    "function nomeDe",
+    "function lerWorkflows",
+    "function renderizar"
+   ],
+   "errors": [
+    "${arquivo}: bloco "
+   ],
+   "params": [
+    {
+     "name": "SAIDA_REL",
+     "value": "'docs/ci/README.md'"
+    }
+   ],
+   "doc": "!/usr/bin/env node"
+  },
+  "scripts/ci/render-workflow-docs.test.mjs": {
+   "path": "scripts/ci/render-workflow-docs.test.mjs",
+   "lines": 91,
+   "is_test": true,
+   "doc": "Testes de scripts/ci/render-workflow-docs.mjs sobre workflows sinteticos em diretorio temporario. Rodar: node --test scripts/ci/render-workflow-docs.test.mjs",
+   "tests": [
+    "extrairDocs le os quatro campos e para na primeira linha que nao e comentario",
+    "extrairNaoEBug preserva aspas no meio da descricao",
+    "desencapar tira so o par de aspas que envolve todo o texto",
+    "nomeDe usa o name: do YAML e cai no nome do arquivo quando nao tem",
+    "bloco pela metade derruba a geracao, nomeando o campo que falta",
+    "workflow sem bloco nao derruba: entra na secao de lacuna declarada",
+    "o KPI entra nas colunas quando docs/ci/kpi.json existe",
+    "a saida e deterministica e nao depende da ordem de leitura do diretorio",
+    "sem secao de nao-e-bug quando nenhum workflow declara"
+   ]
+  },
   "scripts/ci/sla-code-scanning.mjs": {
    "path": "scripts/ci/sla-code-scanning.mjs",
    "lines": 97,
@@ -170823,6 +171258,51 @@
     "Avalia apenas o subconjunto booleano usado nos guards sob teste. Identificadores"
    ],
    "doc": "Leitores restritos ao formato em blocos dos workflows deste repositorio. Nao sao um parser YAML geral: formatos nao reconhecidos falham nos contratos. Isolar job/step evita que comentarios e passos vizinhos satisfaçam garantias."
+  },
+  "scripts/docs/verificar-citacoes.mjs": {
+   "path": "scripts/docs/verificar-citacoes.mjs",
+   "lines": 187,
+   "exports": [
+    "const BASELINE_REL",
+    "const CITACAO",
+    "function listarDocs",
+    "function extrairCitacoes",
+    "function conferir",
+    "const serializarBaseline",
+    "function comparar",
+    "function novasQueTravariamBaseline"
+   ],
+   "params": [
+    {
+     "name": "BASELINE_REL",
+     "value": "'scripts/docs/citacoes-baseline.json'"
+    }
+   ],
+   "doc": "!/usr/bin/env node",
+   "calc_fns": [
+    {
+     "name": "totalLinhas",
+     "params": "alvo",
+     "body": "if (!linhasDe.has(alvo)) { const abs = path.join(raiz, alvo); linhasDe.set(alvo, fs.existsSync(abs) && fs.statSync(abs).isFile() ? fs.readFileSync(abs, 'utf8').split('\\n').length : null); } return linhasDe.get(alvo);"
+    }
+   ]
+  },
+  "scripts/docs/verificar-citacoes.test.mjs": {
+   "path": "scripts/docs/verificar-citacoes.test.mjs",
+   "lines": 114,
+   "is_test": true,
+   "doc": "Testes de scripts/docs/verificar-citacoes.mjs sobre um repo sintetico em diretorio temporario. Rodar: node --test scripts/docs/verificar-citacoes.test.mjs",
+   "tests": [
+    "extrairCitacoes pega caminho, linha e range, e nao casa texto solto",
+    "extrairCitacoes nao repete a mesma citacao dentro do mesmo documento",
+    "listarDocs pega os .md da raiz e de docs/, e ignora gerado e dependencia",
+    "conferir separa arquivo inexistente de linha fora do arquivo",
+    "citacao sem linha so cobra a existencia do arquivo",
+    "o range e cobrado pelo maior numero",
+    "comparar devolve so a quebra que nao esta no baseline, e a que foi corrigida",
+    "novasQueTravariamBaseline bloqueia quebra nova, libera com --force ou sem introduzir nenhuma",
+    "o baseline e JSON estavel e carrega de volta igual"
+   ]
   },
   "scripts/graphify-local/artifacts.mjs": {
    "path": "scripts/graphify-local/artifacts.mjs",
@@ -171127,6 +171607,30 @@
     "banco só com os stubs (quase vazio) ainda devolve JSON válido; sem pg_cron a consulta falha sem imprimir nada"
    ]
   },
+  "scripts/inventario/chamadas-supabase.mjs": {
+   "path": "scripts/inventario/chamadas-supabase.mjs",
+   "lines": 68,
+   "exports": [
+    "function constantesDeString",
+    "function extrairChamadas"
+   ],
+   "params": [
+    {
+     "name": "NOME",
+     "value": "'literal'"
+    }
+   ],
+   "rule_comments": [
+    "para que o front e as edges sejam medidos pela mesma regra.",
+    "* Limite conhecido e de proposito: e leitura estatica de texto, nao compilador. Nome de tabela em",
+    "que nao atravessa linha — limite ja documentado da contagem por linha. */",
+    "que atravessa varias linhas — limite aceito, erra para o lado de nao resolver."
+   ],
+   "doc": "Extracao das chamadas ao Supabase num texto TypeScript/JavaScript: tabelas, buckets, RPCs e edge functions. Usado por gerar-rotas.mjs (front) e por gerar-edge-tabela.mjs (edge functions), para que o front e as edges sejam medidos pela mesma regra. Limite conhecido e de proposito: e leitura estatica …",
+   "side_effects": [
+    "invoke("
+   ]
+  },
   "scripts/inventario/gerar-banco.mjs": {
    "path": "scripts/inventario/gerar-banco.mjs",
    "lines": 401,
@@ -171278,6 +171782,124 @@
     "API: outro projeto e SUPABASE_API_URL fora do loopback são recusados antes de qualquer rede"
    ]
   },
+  "scripts/inventario/gerar-edge-tabela.mjs": {
+   "path": "scripts/inventario/gerar-edge-tabela.mjs",
+   "lines": 136,
+   "exports": [
+    "function listarTs",
+    "function sharedImportados",
+    "function gerarEdgeTabela",
+    "const serializar"
+   ],
+   "tables": [
+    {
+     "table": "x",
+     "op": "ref"
+    }
+   ],
+   "errors": [
+    "${DIR_FUNCOES_REL} nao existe neste repositorio."
+   ],
+   "params": [
+    {
+     "name": "DIR_FUNCOES_REL",
+     "value": "'supabase/functions'"
+    },
+    {
+     "name": "SAIDA_REL",
+     "value": "'inventario/estado/edge-tabela.json'"
+    }
+   ],
+   "doc": "!/usr/bin/env node",
+   "calc_fns": [
+    {
+     "name": "gerarEdgeTabela",
+     "params": "raiz = RAIZ_PADRAO",
+     "body": "const dirFuncoes = path.join(raiz, DIR_FUNCOES_REL); if (!fs.existsSync(dirFuncoes)) throw new Error(`${DIR_FUNCOES_REL} nao existe neste repositorio.`); const nomes = fs.readdirSync(dirFuncoes, { withFileTypes: true }) .filter((e) => e.isDirectory() && !e.name.startsWith('_') && !e.name.startsWith('.')) .map((e) => e.name).sort(); const funcoes = {}; for (const nome of nomes) { const arquivos = listarTs(path.join(dirFuncoes, nome)); const acumulado = { tabelas: [], buckets: [], rpcs: [], edges: …"
+    }
+   ]
+  },
+  "scripts/inventario/gerar-edge-tabela.test.mjs": {
+   "path": "scripts/inventario/gerar-edge-tabela.test.mjs",
+   "lines": 122,
+   "is_test": true,
+   "tables": [
+    {
+     "table": "profiles",
+     "op": "select"
+    },
+    {
+     "table": "tabela_de_teste",
+     "op": "ref"
+    },
+    {
+     "table": "contacts",
+     "op": "select"
+    },
+    {
+     "table": "companies",
+     "op": "select"
+    },
+    {
+     "table": "nunca_conta",
+     "op": "select"
+    },
+    {
+     "table": "contacts",
+     "op": "update"
+    },
+    {
+     "table": "oculta",
+     "op": "select"
+    },
+    {
+     "table": "contacts",
+     "op": "ref"
+    }
+   ],
+   "table_cols": {
+    "profiles": [
+     "id"
+    ],
+    "companies": [
+     "id"
+    ]
+   },
+   "rpc": [
+    "has_role"
+   ],
+   "params": [
+    {
+     "name": "BUCKET",
+     "value": "'anexos'"
+    },
+    {
+     "name": "TEXT",
+     "value": "'a { b'"
+    },
+    {
+     "name": "REAL",
+     "value": "'tabela_real'"
+    }
+   ],
+   "doc": "Testes de scripts/inventario/gerar-edge-tabela.mjs e do modulo de extracao compartilhado. Rodar: node --test scripts/inventario/gerar-edge-tabela.test.mjs",
+   "tests": [
+    "constantesDeString pega const de modulo e ignora const dentro de funcao",
+    "constantesDeString nao deixa chave desbalanceada dentro de string cegar os consts seguintes",
+    "constantesDeString ignora chave dentro de template literal de uma linha",
+    "extrairChamadas separa tabela de bucket e aceita a URL direta",
+    "listarTs varre recursivo e deixa teste de fora",
+    "sharedImportados resolve o import relativo de _shared e ignora o resto",
+    "gerarEdgeTabela soma a funcao, o helper local e o _shared importado",
+    "pasta que comeca com _ ou . nao e edge function; funcao sem tabela e contada",
+    "o indice inverso lista toda funcao que toca a tabela",
+    "a saida e deterministica e sem carimbo de data",
+    "repositorio sem supabase/functions falha alto em vez de gerar inventario vazio"
+   ],
+   "side_effects": [
+    "invoke("
+   ]
+  },
   "scripts/inventario/gerar-repo.mjs": {
    "path": "scripts/inventario/gerar-repo.mjs",
    "lines": 124,
@@ -171348,6 +171970,171 @@
     "falhas saem com 2 e ",
     "stdin por pipe lento não vira EAGAIN",
     "no repositório real, gravando em tmp: bate com as edge functions e não toca em inventario/estado"
+   ],
+   "side_effects": [
+    "invoke("
+   ]
+  },
+  "scripts/inventario/gerar-rotas.mjs": {
+   "path": "scripts/inventario/gerar-rotas.mjs",
+   "lines": 305,
+   "exports": [
+    "const FONTES",
+    "function resolverImport",
+    "function extrairImports",
+    "const MAX_SALTOS_COMPONENTE",
+    "function fechoDaPagina",
+    "function lerPaginas",
+    "function lerUrls",
+    "function lerMenuSidebar",
+    "function lerMenuMobile",
+    "function listarPaginas",
+    "function gerarRotas",
+    "const serializar"
+   ],
+   "errors": [
+    "${FONTES.rotas}: nao achei o bloco <Routes>...</Routes>.",
+    "${FONTES.sidebar}: nao achei "
+   ],
+   "params": [
+    {
+     "name": "SAIDA_REL",
+     "value": "'inventario/estado/rotas.json'"
+    },
+    {
+     "name": "MAX_SALTOS_COMPONENTE",
+     "value": "2"
+    }
+   ],
+   "guards": [
+    "Protected"
+   ],
+   "rule_comments": [
+    "* Fecho de imports a partir do arquivo da pagina. Segue sem limite a pasta da pagina e as"
+   ],
+   "doc": "!/usr/bin/env node",
+   "calc_fns": [
+    {
+     "name": "valido",
+     "params": "nome",
+     "body": "/\\.(tsx|ts)$/.test(nome) && !ehTeste(nome) && !/\\.d\\.ts$/.test(nome);"
+    },
+    {
+     "name": "gerarRotas",
+     "params": "raiz = RAIZ_PADRAO",
+     "body": "const urls = lerUrls(raiz); const sidebar = lerMenuSidebar(raiz); const mobile = lerMenuMobile(raiz); const porUrl = new Map(urls.map((u) => [u.caminho, u])); const rotas = urls.map((u) => ({ ...u, menu: [ ...sidebar.filter((i) => i.url === u.caminho).map((i) => ({ onde: 'sidebar', secao: i.secao, rotulo: i.rotulo })), ...mobile.filter((i) => i.url === u.caminho).map((i) => ({ onde: 'mobile', secao: null, rotulo: i.rotulo })), ], ...(u.arquivo ? fechoDaPagina(raiz, path.join(raiz, u.arquivo)) : …"
+    }
+   ]
+  },
+  "scripts/inventario/gerar-rotas.test.mjs": {
+   "path": "scripts/inventario/gerar-rotas.test.mjs",
+   "lines": 187,
+   "is_test": true,
+   "exports": [
+    "const Contatos",
+    "const Orfa",
+    "const Fantasma",
+    "const AppRoutes",
+    "function Contatos",
+    "const useContatos"
+   ],
+   "tables": [
+    {
+     "table": "profiles",
+     "op": "ref"
+    },
+    {
+     "table": "contacts",
+     "op": "select"
+    },
+    {
+     "table": "contacts",
+     "op": "ref"
+    }
+   ],
+   "dyn_from": 1,
+   "rpc": [
+    "has_role",
+    "search_contacts"
+   ],
+   "routes": [
+    {
+     "path": "/auth",
+     "component": "LazyPage",
+     "guard": "",
+     "roles": []
+    },
+    {
+     "path": "/",
+     "component": "Index",
+     "guard": "Protected",
+     "roles": []
+    },
+    {
+     "path": "/contatos/:id",
+     "component": "P",
+     "guard": "Protected",
+     "roles": []
+    },
+    {
+     "path": "/admin",
+     "component": "Admin",
+     "guard": "",
+     "roles": []
+    },
+    {
+     "path": "/seguranca",
+     "component": "P",
+     "guard": "Protected",
+     "roles": []
+    },
+    {
+     "path": "/whatsapp",
+     "component": "Navigate",
+     "guard": "RequireAuth",
+     "roles": []
+    },
+    {
+     "path": "/contatos",
+     "component": "P",
+     "guard": "Protected",
+     "roles": []
+    }
+   ],
+   "params": [
+    {
+     "name": "BUCKET",
+     "value": "'avatares'"
+    },
+    {
+     "name": "BUCKET",
+     "value": "'anexos'"
+    }
+   ],
+   "guards": [
+    "Protected",
+    "Protected",
+    "Protected",
+    "Protected",
+    "RequireAuth",
+    "Protected"
+   ],
+   "rule_comments": [
+    "* Monta um repo minimo com AppRoutes/lazyPages/AppSidebar/MobileBottomNav e duas paginas. */"
+   ],
+   "doc": "Testes de scripts/inventario/gerar-rotas.mjs sobre um repo sintetico em diretorio temporario. Rodar: node --test scripts/inventario/gerar-rotas.test.mjs",
+   "hooks": [
+    "useContatos"
+   ],
+   "tests": [
+    "extrairChamadas separa tabela, bucket, rpc e edge (inclusive por constante e por URL)",
+    "extrairChamadas nao resolve const declarada dentro de funcao",
+    "resolverImport: null para externo, caminho para alias @/ e undefined para local quebrado",
+    "lerUrls le path, componente, arquivo, acesso, parametro, skeleton e redirect",
+    "lerMenuSidebar casa cada item com a sua secao; lerMenuMobile le label/path",
+    "listarPaginas pega a raiz de src/pages e o que lazyPages declara, nao subcomponente",
+    "gerarRotas aponta os cinco tipos de problema e junta o fecho de imports",
+    "a saida e deterministica e termina em uma quebra de linha"
    ],
    "side_effects": [
     "invoke("
@@ -231470,10 +232257,41 @@
   }
  },
  "git": {
-  "sha": "df708ff757360ef2b6e0c2e8269855c399d0d805",
+  "sha": "ae528d588e9f9bed904be945247509d1804cfccd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "ae528d5",
+    "date": "2026-11-10",
+    "author": "adm01-debug",
+    "subject": "feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)",
+    "files": [
+     ".github/workflows/docs-ci.yml",
+     ".github/workflows/fix-jwt-proxies-externas.yml",
+     ".github/workflows/inventario-estado-semanal.yml",
+     ".github/workflows/monitoring-lint.yml",
+     ".github/workflows/restore-drill.yml",
+     ".github/workflows/rls-exposure-guard.yml",
+     "docs/ci/README.md",
+     "docs/lacunas/D_ui_rotas_componentes.md",
+     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_UX.md",
+     "inventario/estado/README.md",
+     "inventario/estado/edge-tabela.json",
+     "inventario/estado/rotas.json",
+     "scripts/automation.config.json",
+     "scripts/ci/render-workflow-docs.mjs",
+     "scripts/ci/render-workflow-docs.test.mjs",
+     "scripts/docs/citacoes-baseline.json",
+     "scripts/docs/verificar-citacoes.mjs",
+     "scripts/docs/verificar-citacoes.test.mjs",
+     "scripts/inventario/chamadas-supabase.mjs",
+     "scripts/inventario/gerar-edge-tabela.mjs",
+     "scripts/inventario/gerar-edge-tabela.test.mjs",
+     "scripts/inventario/gerar-rotas.mjs",
+     "scripts/inventario/gerar-rotas.test.mjs"
+    ]
+   },
    {
     "sha": "df708ff",
     "date": "2026-11-10",
@@ -232249,15 +233067,6 @@
     "files": [
      "scripts/migration/verify/schema-freeze-guard.sql"
     ]
-   },
-   {
-    "sha": "f665f67",
-    "date": "2026-11-06",
-    "author": "adm01-debug",
-    "subject": "fix(ci): remove script injection no step de validação do título da PR (#162)",
-    "files": [
-     ".github/workflows/ci.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -232270,12 +233079,20 @@
     4
    ],
    [
-    ".github/workflows/ci.yml",
+    "CHANGELOG.md",
     4
    ],
    [
-    "CHANGELOG.md",
-    4
+    ".github/workflows/inventario-estado-semanal.yml",
+    3
+   ],
+   [
+    "inventario/estado/README.md",
+    3
+   ],
+   [
+    "scripts/automation.config.json",
+    3
    ],
    [
     "AGENTS.md",
@@ -232290,7 +233107,11 @@
     3
    ],
    [
-    "scripts/automation.config.json",
+    ".github/workflows/ci.yml",
+    3
+   ],
+   [
+    ".github/workflows/fix-jwt-proxies-externas.yml",
     2
    ],
    [
@@ -232327,18 +233148,6 @@
    ],
    [
     "scripts/check-edge-cors.mjs",
-    2
-   ],
-   [
-    "scripts/check-publish-gates.test.mjs",
-    2
-   ],
-   [
-    "scripts/check-supabase-project-ref.test.mjs",
-    2
-   ],
-   [
-    "scripts/hardening/check-client-tls.sql",
     2
    ]
   ]

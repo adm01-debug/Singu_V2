@@ -1251,7 +1251,7 @@
     "src/components/crm/commercial/OfferSuggestionsElite.tsx",
     "src/components/crm/consent/ConsentAuditLog.tsx"
    ],
-   "coberto_por_testes": 2
+   "coberto_por_testes": 3
   },
   {
    "arquivo": "src/hooks/useAutomationRules.ts",

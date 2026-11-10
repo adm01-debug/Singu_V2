@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `df708ff757` · branch `main` · 2026-11-10 22:28 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ae528d588e` · branch `main` · 2026-11-10 23:05 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4081,6 +4081,7 @@ _nenhum item encontrado_
 | a lista de PRs abertas veio cheia (${dados.length} >= limite ${limite}); pode haver PR que não veio | `scripts/ci/branch-podaveis.mjs` |
 | argumento inválido: ${chave} | `scripts/ci/branch-podaveis.mjs` |
 | falta --${obrigatorio} | `scripts/ci/branch-podaveis.mjs` |
+| ${arquivo}: bloco  | `scripts/ci/render-workflow-docs.mjs` |
 | SQL de cenário falhou: ${r.stderr \|\| r.erro} | `scripts/hardening/_pg-teste.mjs` |
 | ${flag} exige o caminho de um arquivo | `scripts/inventario/gerar-banco.mjs` |
 | --functions: o arquivo nao e JSON | `scripts/inventario/gerar-banco.mjs` |
@@ -4100,10 +4101,13 @@ _nenhum item encontrado_
 | nao consegui ler o arquivo de ${flag} (${arquivo}): ${e.code ?? e.message} | `scripts/inventario/gerar-banco.mjs` |
 | sem --entrada e sem SUPABASE_ACCESS_TOKEN: nada para ler (veja o cabecalho do script). | `scripts/inventario/gerar-banco.mjs` |
 | sem supabase/schema-manifest.json e sem migrations em supabase/migrations/  | `scripts/inventario/gerar-banco.mjs` |
+| ${DIR_FUNCOES_REL} nao existe neste repositorio. | `scripts/inventario/gerar-edge-tabela.mjs` |
 | ${FDIR} não existe: rode a partir do repositório (ou confira INVENTARIO_RAIZ). | `scripts/inventario/gerar-repo.mjs` |
 | --saida exige o caminho de uma pasta | `scripts/inventario/gerar-repo.mjs` |
 | ripgrep (rg) falhou com exit ${status}; o inventário não foi gerado. | `scripts/inventario/gerar-repo.mjs` |
 | ripgrep (rg) não encontrado; o inventário não pode ser gerado com segurança. | `scripts/inventario/gerar-repo.mjs` |
+| ${FONTES.rotas}: nao achei o bloco <Routes>...</Routes>. | `scripts/inventario/gerar-rotas.mjs` |
+| ${FONTES.sidebar}: nao achei  | `scripts/inventario/gerar-rotas.mjs` |
 | caminho de  | `scripts/lib/seguranca-processo.mjs` |
 | comando nao encontrado no PATH:  | `scripts/lib/seguranca-processo.mjs` |
 | dividirSql espera uma string | `scripts/lib/sql-split.mjs` |
@@ -4355,11 +4359,7 @@ _nenhum item encontrado_
 | Nada para exportar. | `src/components/intelligence/CrossRefTab.tsx` |
 | Falha ao buscar entidades. | `src/components/intelligence/Entity360Tab.tsx` |
 | Não foi possível copiar | `src/components/intelligence/Entity360Tab.tsx` |
-| Falha ao copiar link. | `src/components/intelligence/GraphTab.tsx` |
-| Não foi possível capturar o grafo. | `src/components/intelligence/GraphTab.tsx` |
-| Informe o domínio | `src/components/intent/PixelSetupCard.tsx` |
-| Não foi possível copiar | `src/components/intent/PixelSetupCard.tsx` |
-| … +769 linhas — lista completa em `context.json` | |
+| … +773 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4391,7 +4391,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3109 testes em 237 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3146 testes em 241 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4474,6 +4474,7 @@ _nenhum item encontrado_
 | `src/lib/__tests__/validation-schemas.test.ts` | 12 | Validation Schemas Excellence · emailSchema · should validate a valid email · should normalize email to lowercase and trimmed … |
 | `scripts/ci/check-test-inventory.test.mjs` | 11 | padroesDeWorkflow le os blocos run (dobrado, literal e de uma linha) · caminho citado fora de run (nome da etapa, comentario) nao cobre a suite · casaPadrao trata * como um nivel de diretorio e ** como qualquer nivel · suite Node fora dos blocos run vira orfa — e a allowlist a absolve … |
 | `scripts/hardening/hardening-cluster.test.mjs` | 11 | hardening: veredito coerente com a configuração do servidor de teste · check-replication-config acusa exatamente as configurações divergentes · check-client-tls acusa servidor com ssl desligado · hardening: cluster descartável com TLS e replicação lógica … |
+| `scripts/inventario/gerar-edge-tabela.test.mjs` | 11 | constantesDeString pega const de modulo e ignora const dentro de funcao · constantesDeString nao deixa chave desbalanceada dentro de string cegar os consts seguintes · constantesDeString ignora chave dentro de template literal de uma linha · extrairChamadas separa tabela de bucket e aceita a URL direta … |
 | `scripts/migration/sql/sql.test.mjs` | 11 | create-reset-log: cria tudo, é idempotente (2ª e 3ª execução sem erro) e preserva os dados · create-reset-log: UNIQUE(user_id), CHECK de status, updated_at automático e RLS (só admin lê; authenticated não escreve) · create-reset-log: é atômico — sem has_role() falha e NÃO deixa tabela pela metade · mark-must-reset: marca só quem tem login por senha, preserva metadados e não aborta com valor estranho (antes:  … |
 | `src/components/interactions/__tests__/SentimentQuickFilter.a11y.test.tsx` | 11 | SentimentQuickFilter — acessibilidade · expõe role=radiogroup com aria-label descritivo · todos os chips têm role=radio com aria-checked refletindo o estado · roving tabindex: somente o item ativo é alcançável por Tab … |
 | `src/hooks/useMFAGuard.test.tsx` | 11 | MFA administrativo · permite configurar MFA em AAL1 e preserva a URL sem mostrar a administração · não monta a tela protegida durante o carregamento do guard ou da confirmação MFA · aguarda a consulta de papel antes de mostrar qualquer conteúdo protegido … |
@@ -4490,6 +4491,8 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/contact-detail-partial-failures.test.tsx` | 10 | Política real de repetição da ficha · não repete erro permanente na carga inicial sem cache · limita a três retries mesmo quando a falha transitória persiste · Mensagens seguras da ficha … |
 | `src/lib/externalData.read-audit.test.ts` | 10 | Auditoria de leitura · classifica leitura de %s como visualização de contato · não inventa criação de interação ao ler %s · registra o ID filtrado mesmo quando a seleção não retorna esse campo … |
 | `src/pages/mapa/geocoding.test.ts` | 10 | geocode · valida coordenadas e reutiliza apenas resultados válidos do cache · retorna null somente para busca válida sem resultados · propaga falhas HTTP e permite tentar novamente sem cache de falha … |
+| `scripts/ci/render-workflow-docs.test.mjs` | 9 | extrairDocs le os quatro campos e para na primeira linha que nao e comentario · extrairNaoEBug preserva aspas no meio da descricao · desencapar tira so o par de aspas que envolve todo o texto · nomeDe usa o name: do YAML e cai no nome do arquivo quando nao tem … |
+| `scripts/docs/verificar-citacoes.test.mjs` | 9 | extrairCitacoes pega caminho, linha e range, e nao casa texto solto · extrairCitacoes nao repete a mesma citacao dentro do mesmo documento · listarDocs pega os .md da raiz e de docs/, e ignora gerado e dependencia · conferir separa arquivo inexistente de linha fora do arquivo … |
 | `src/components/interactions/__tests__/PaginationBar.test.tsx` | 9 | PaginationBar · não renderiza quando total <= perPage · não renderiza quando total === 0 · botão Anterior desabilitado em page=1 … |
 | `src/lib/externalData.circuit-isolation.test.ts` | 9 | Isolamento dos circuitos canônico e externo · não abre o circuito de atividades por erro HTTP %i · compartilha a pausa entre tabelas e RPCs externas por falha de %s · preserva a pausa de HTTP %i nos circuitos externo e canônico … |
 | `src/lib/__tests__/behavioralAlertStats.test.ts` | 9 | computeAlertStats · retorna zeros quando não há alertas · separa reais de simulações e conta críticos · calcula MTTA médio apenas de alertas reais reconhecidos … |
@@ -4501,6 +4504,7 @@ _nenhum item encontrado_
 | `scripts/ci/sla-code-scanning.test.mjs` | 8 | nível vem de security_severity_level; sem ele, error conta como alto (o defeito de rule.severity) · high vence com 15 dias; medium só depois de 30 · relatório: sem violação diz isso; com violação lista em bloco · CLI: lê o JSON do stdin, sai 1 com violação e 0 sem … |
 | `scripts/inventario/banco.test.mjs` | 8 | banco.sql roda limpo em transação só-leitura e imprime UMA linha com UM JSON · resumo: contagens batem com a fixture · tabelas: RLS, policies, triggers, linhas, partição e citação no banco · nomes com caractere de regex/Markdown: consulta não cai e a citação é exata … |
 | `scripts/inventario/gerar-repo.test.mjs` | 8 | edges.json: linhas, segredos lidos e quem chama cada função · tabelas-uso.json: conta .from() em src e edges e confere o types.ts · nomes hostis no stdin (começando com -, com regex, __proto__) não quebram nem viram opção do rg · repositório mínimo (sem src, e2e, migrations, workflows, types.ts) funciona … |
+| `scripts/inventario/gerar-rotas.test.mjs` | 8 | extrairChamadas separa tabela, bucket, rpc e edge (inclusive por constante e por URL) · extrairChamadas nao resolve const declarada dentro de funcao · resolverImport: null para externo, caminho para alias @/ e undefined para local quebrado · lerUrls le path, componente, arquivo, acesso, parametro, skeleton e redirect … |
 | `scripts/maintenance/tests/configuration.mjs` | 8 | CLI e config desconhecidas falham fechadas · tsconfig vazio impede doctor saudável · TypeScript 7 sem API usa CLI isolada e valida o patch · TypeScript 7 com CLI sem arquivos bloqueia doctor … |
 | `scripts/maintenance/tests/locking.mjs` | 8 | trava atômica impede segundo executor · timeout mata grupo de subprocessos e distingue resultado · trava de pid morto é recuperada, trava recente sem dono fica bloqueante · namespace de rede impede acesso externo de todos os filhos … |
 | `src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx` | 8 | Registro da próxima ação com contrato de contato · registra %s no contato, sem inventar empresa · não anuncia sucesso sem a confirmação correta: %j · preserva o resumo quando o banco rejeita a chamada … |

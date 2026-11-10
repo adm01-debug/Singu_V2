@@ -21,7 +21,7 @@
    "src/domain (8)"
   ],
   "testes": [
-   "co-localizado (*.test) (121)",
+   "co-localizado (*.test) (125)",
    "co-localizado (__tests__) (89)",
    "tests/ (23)"
   ],
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)",
    "feat(ci): automações de auditoria do estado real portadas do Zapp Web V2 (#180)",
    "chore(automacao): integra testes grafo e manutenção com gatilhos locais (#187)",
    "fix(push): chave VAPID própria e sender que realmente entrega (#185)",
-   "chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)",
-   "chore(scripts): endurece e cobre com testes todos os scripts de scripts/ (#186)"
+   "chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)"
   ]
  },
  "pr_template": null,

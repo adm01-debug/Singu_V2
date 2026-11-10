@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "df708ff757360ef2b6e0c2e8269855c399d0d805",
+  "commit": "ae528d588e9f9bed904be945247509d1804cfccd",
   "branch": "main",
-  "data_commit": "2026-11-10T19:27:21-03:00",
+  "data_commit": "2026-11-10T20:05:11-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "ae528d58",
+    "data": "2026-11-10",
+    "assunto": "feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)"
+   },
    {
     "sha": "df708ff7",
     "data": "2026-11-10",
@@ -126,14 +131,9 @@
     "sha": "77990bc3",
     "data": "2026-11-08",
     "assunto": "feat(contexto): produtores autônomos que mantêm o estado real do repositório para agentes de IA (#169)"
-   },
-   {
-    "sha": "01fc3928",
-    "data": "2026-11-08",
-    "assunto": "fix(ci): corrige YAML fatal do CI, secret fantasma e portabilidade dos gate tests (#164)"
    }
   ],
-  "arquivos_mudados_7d": 498,
+  "arquivos_mudados_7d": 514,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -234,12 +234,12 @@
     "mudancas": 9
    },
    {
-    "arquivo": "supabase/tests/get_contact_sidebar_by_phone.sql",
+    "arquivo": ".github/workflows/rls-exposure-guard.yml",
     "mudancas": 7
    },
    {
-    "arquivo": ".github/workflows/rls-exposure-guard.yml",
-    "mudancas": 6
+    "arquivo": "supabase/tests/get_contact_sidebar_by_phone.sql",
+    "mudancas": 7
    },
    {
     "arquivo": "RELATORIO_CI.md",
@@ -274,6 +274,10 @@
     "mudancas": 5
    },
    {
+    "arquivo": ".github/workflows/restore-drill.yml",
+    "mudancas": 4
+   },
+   {
     "arquivo": "PENDENCIAS.md",
     "mudancas": 4
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "scripts/migration/functions/secrets.template.env",
     "mudancas": 4
-   },
-   {
-    "arquivo": "scripts/rls-matrix/check-rls-baseline.mjs",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 42
+    "commits": 43
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -318,9 +318,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3197,
-  "arquivos_codigo": 2199,
-  "linhas_codigo": 411214,
+  "arquivos_total": 3211,
+  "arquivos_codigo": 2208,
+  "linhas_codigo": 412617,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -332,10 +332,10 @@
   "tabelas": 418,
   "migrations": 480,
   "cron_jobs": 20,
-  "testes": 260,
-  "workflows": 10,
-  "scripts": 288,
-  "docs_md": 153
+  "testes": 264,
+  "workflows": 11,
+  "scripts": 293,
+  "docs_md": 154
  },
  "por_pasta": {
   "commitlint.config.cjs": {
@@ -515,12 +515,16 @@
    "linhas": 28
   },
   "scripts/ci": {
-   "arquivos": 14,
-   "linhas": 2512
+   "arquivos": 16,
+   "linhas": 2796
   },
   "scripts/diff-tables.mjs": {
    "arquivos": 1,
    "linhas": 114
+  },
+  "scripts/docs": {
+   "arquivos": 2,
+   "linhas": 301
   },
   "scripts/fix-enums.js": {
    "arquivos": 1,
@@ -571,8 +575,8 @@
    "linhas": 532
   },
   "scripts/inventario": {
-   "arquivos": 7,
-   "linhas": 1641
+   "arquivos": 12,
+   "linhas": 2459
   },
   "scripts/lib": {
    "arquivos": 7,
@@ -859,7 +863,7 @@
  ],
  "qualidade": {
   "any": 27,
-  "console_log": 177,
+  "console_log": 187,
   "ts_ignore": 2,
   "eslint_disable": 1,
   "todos": 8,

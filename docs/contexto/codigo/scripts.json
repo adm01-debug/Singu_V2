@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 288,
+ "total": 293,
  "scripts": [
   {
    "arquivo": "scripts/_pgdocs.py",
@@ -430,6 +430,17 @@
    "orfao": false
   },
   {
+   "arquivo": "scripts/ci/render-workflow-docs.mjs",
+   "descricao": "* Gera `docs/ci/README.md` a partir dos blocos `# docs:` e `# nao-e-bug:` de cada workflow.",
+   "linhas": 193,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "docs-ci.yml"
+   ],
+   "orfao": false
+  },
+  {
    "arquivo": "scripts/ci/sla-code-scanning.mjs",
    "descricao": "W83 — SLA dos alertas abertos de Code Scanning (usado pelo branch-hygiene-audit.yml). high/critical → 14 dias; medium/low → 30 dias. Violação → exit 1.",
    "linhas": 97,
@@ -469,6 +480,17 @@
    "env": [],
    "npm_scripts": [],
    "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/docs/verificar-citacoes.mjs",
+   "descricao": "* Toda citacao `arquivo:linha` da documentacao ainda existe?",
+   "linhas": 187,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "docs-ci.yml"
+   ],
    "orfao": false
   },
   {
@@ -770,6 +792,15 @@
    "orfao": false
   },
   {
+   "arquivo": "scripts/inventario/chamadas-supabase.mjs",
+   "descricao": "* Extracao das chamadas ao Supabase num texto TypeScript/JavaScript: tabelas, buckets, RPCs e",
+   "linhas": 68,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
    "arquivo": "scripts/inventario/gerar-banco.mjs",
    "descricao": "* Inventario do banco oficial -> inventario/estado/banco.json (fonte de consulta dos agentes).",
    "linhas": 401,
@@ -787,12 +818,34 @@
    "orfao": false
   },
   {
+   "arquivo": "scripts/inventario/gerar-edge-tabela.mjs",
+   "descricao": "* O que cada edge function toca -> inventario/estado/edge-tabela.json.",
+   "linhas": 136,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "inventario-estado-semanal.yml"
+   ],
+   "orfao": false
+  },
+  {
    "arquivo": "scripts/inventario/gerar-repo.mjs",
    "descricao": "Inventario gerado do lado do repositorio (sem acesso ao banco):  - edge functions: linhas, segredos lidos (Deno.env.get) e quem as invoca (src, migrations, outras edges, e2e, CI)",
    "linhas": 124,
    "env": [
     "INVENTARIO_RAIZ"
    ],
+   "npm_scripts": [],
+   "workflows": [
+    "inventario-estado-semanal.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/inventario/gerar-rotas.mjs",
+   "descricao": "* Inventario das rotas do front -> inventario/estado/rotas.json (fonte de consulta dos agentes).",
+   "linhas": 305,
+   "env": [],
    "npm_scripts": [],
    "workflows": [
     "inventario-estado-semanal.yml"

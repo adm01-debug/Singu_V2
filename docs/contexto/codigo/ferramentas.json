@@ -5,12 +5,12 @@
   "linguagens": [
    "TypeScript (2047)",
    "SQL (652)",
-   "Markdown (153)",
-   "JavaScript (134)",
+   "Markdown (154)",
+   "JavaScript (143)",
    "Shell (134)",
-   "JSON (19)",
+   "JSON (22)",
    "Python (19)",
-   "YAML (16)"
+   "YAML (17)"
   ],
   "linguagem_principal": "TypeScript",
   "framework": "React",
@@ -254,6 +254,34 @@
    ]
   },
   {
+   "arquivo": ".github/workflows/docs-ci.yml",
+   "nome": "Documentação sem drift",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "sem-drift"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [
+    "scripts/ci/render-workflow-docs.mjs",
+    "scripts/docs/verificar-citacoes.mjs"
+   ],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node"
+   ]
+  },
+  {
    "arquivo": ".github/workflows/estado-real.yml",
    "nome": "Estado real do repositório",
    "gatilhos": [
@@ -351,7 +379,9 @@
    ],
    "scripts_usados": [
     "scripts/inventario/gerar-banco.mjs",
+    "scripts/inventario/gerar-edge-tabela.mjs",
     "scripts/inventario/gerar-repo.mjs",
+    "scripts/inventario/gerar-rotas.mjs",
     "scripts/inventario/mudou-conteudo.mjs"
    ],
    "npm_scripts": [],
@@ -787,6 +817,10 @@
   {
    "pasta": "docs/runbooks",
    "arquivos_md": 2
+  },
+  {
+   "pasta": "docs/ci",
+   "arquivos_md": 1
   },
   {
    "pasta": "docs/perf",

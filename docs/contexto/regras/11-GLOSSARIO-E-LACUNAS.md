@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `df708ff757` · branch `main` · 2026-11-10 22:28 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ae528d588e` · branch `main` · 2026-11-10 23:05 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -388,14 +388,6 @@ _nenhum item encontrado_
 | status | valor `fechado` para `relationship_stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/nlp/NLPConversionMetrics.tsx` |
 | status | valor `cliente` para `relationship_stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/nlp/NLPConversionMetrics.tsx` |
 | status | valor `text-primary` para `next_step` usado no código não existe em nenhum enum do banco/TS | `escreve:src/components/conversation-intel/KeyMomentsTimeline.tsx` |
-| coluna | coluna `cargo` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `full_name` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `lead_score` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `metaprogram_profile` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `objection_patterns` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `status` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `avg_latency_ms` usada no código não existe no schema de `system_health_snapshots` |  |
-| coluna | coluna `captured_at` usada no código não existe no schema de `system_health_snapshots` |  |
 | coluna | coluna `deleted_at` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `extra_data_rf` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `intent_score` usada no código não existe no schema de `companies` |  |
@@ -404,6 +396,14 @@ _nenhum item encontrado_
 | coluna | coluna `ramo_atividade` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `razao_social` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `status` usada no código não existe no schema de `companies` |  |
+| coluna | coluna `cargo` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `full_name` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `lead_score` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `metaprogram_profile` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `objection_patterns` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `status` usada no código não existe no schema de `contacts` |  |
+| coluna | coluna `avg_latency_ms` usada no código não existe no schema de `system_health_snapshots` |  |
+| coluna | coluna `captured_at` usada no código não existe no schema de `system_health_snapshots` |  |
 | coluna | coluna `difference_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `general_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `proactive_score` usada no código não existe no schema de `metaprogram_analysis` |  |
@@ -484,7 +484,9 @@ _nenhum item encontrado_
 | tabela | tabela `grande` usada no código não existe nas migrations/types do repo | `scripts/inventario/banco.test.mjs` |
 | tabela | tabela `logs` usada no código não existe nas migrations/types do repo | `supabase/functions/_shared/best-effort-write_test.ts` |
 | tabela | tabela `nao_conta_js` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
+| tabela | tabela `nunca_conta` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-edge-tabela.test.mjs` |
 | tabela | tabela `oauth_tokens` usada no código não existe nas migrations/types do repo | `supabase/functions/evolution-bitrix-connector/index.ts` |
+| tabela | tabela `oculta` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-edge-tabela.test.mjs` |
 | tabela | tabela `orfa` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `payments` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
 | tabela | tabela `runtime_table` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
@@ -492,10 +494,11 @@ _nenhum item encontrado_
 | tabela | tabela `t` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs`<br>`scripts/check-edge-cors.test.mjs` |
 | tabela | tabela `t1` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
 | tabela | tabela `tabela` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.mjs`<br>`scripts/inventario/gerar-banco.mjs`<br>`scripts/inventario/gerar-repo.mjs` |
+| tabela | tabela `tabela_de_teste` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-edge-tabela.test.mjs` |
 | tabela | tabela `toString` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `tools_runtime` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
 | tabela | tabela `tx` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
-| tabela | tabela `x` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.mjs`<br>`scripts/audit-ausentes.test.mjs`<br>`scripts/diff-tables.mjs` |
+| tabela | tabela `x` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.mjs`<br>`scripts/audit-ausentes.test.mjs`<br>`scripts/diff-tables.mjs`<br>`scripts/inventario/gerar-edge-tabela.mjs` |
 | tabela | tabela `zeta` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
 | rls | `company_addresses`: acessada do front (3 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useBIAdvanced.ts`<br>`src/hooks/useConversationalSearch.ts`<br>`src/pages/MapaEmpresas.tsx` |
 | rls | `company_emails`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useDedupEngine.ts` |
@@ -529,6 +532,7 @@ _nenhum item encontrado_
 | rpc | RPC `r1` chamada mas não definida nas migrations/types | `scripts/ai-context/cenarios.mjs` |
 | rpc | RPC `rpc_fantasma` chamada mas não definida nas migrations/types | `scripts/audit-ausentes.test.mjs` |
 | rpc | RPC `runtime_rpc` chamada mas não definida nas migrations/types | `scripts/ai-context/gerar.unit.mjs` |
+| rpc | RPC `search_contacts` chamada mas não definida nas migrations/types | `scripts/inventario/gerar-rotas.test.mjs` |
 | rpc | RPC `sem_args` chamada mas não definida nas migrations/types | `scripts/audit-ausentes.test.mjs` |
 | rpc | RPC `sobrecarga` chamada mas não definida nas migrations/types | `scripts/audit-ausentes.test.mjs` |
 | rpc | RPC `soma` chamada mas não definida nas migrations/types | `scripts/audit-ausentes.test.mjs` |
@@ -537,6 +541,7 @@ _nenhum item encontrado_
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/audit-ausentes.mjs` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/audit-ausentes.test.mjs` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/inventario/gerar-banco.mjs` |
+| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/inventario/gerar-rotas.test.mjs` |
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/reset-passwords.ts` |
 | dinâmico | 5 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/cdc/replay.ts` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/compliance/lgpd-snapshot.ts` |

@@ -143,6 +143,12 @@
    "scripts/graphify-local/common.mjs",
    "scripts/graphify-local/process.mjs"
   ],
+  "scripts/inventario/gerar-edge-tabela.mjs": [
+   "scripts/inventario/chamadas-supabase.mjs"
+  ],
+  "scripts/inventario/gerar-rotas.mjs": [
+   "scripts/inventario/chamadas-supabase.mjs"
+  ],
   "scripts/lib/supabase-mgmt.mjs": [
    "scripts/lib/sql-split.mjs"
   ],
