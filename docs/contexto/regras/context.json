@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "21434823975d6f895d40222c952959d1cdf7d41c",
+  "sha": "39789307c54fa03a7044ac7d43705a37e9805cfd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-10 00:59 UTC",
+  "generated_at": "2026-11-10 18:57 UTC",
   "files_total": 3221,
   "code_files": 2782,
-  "code_lines": 395795
+  "code_lines": 395813
  },
  "version": "1.3.2",
- "facts_hash": "e74a3d192f1d5227",
+ "facts_hash": "93bfe9ce2930c080",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -68461,7 +68461,7 @@
   {
    "module": "(raiz)",
    "files": 9,
-   "lines": 569,
+   "lines": 588,
    "tables": [],
    "exports": [
     "eslint.config.js: tseslint",
@@ -68547,7 +68547,7 @@
   {
    "module": "scripts",
    "files": 231,
-   "lines": 39378,
+   "lines": 39377,
    "tables": [
     "__proto__",
     "a",
@@ -85033,6 +85033,10 @@
    {
     "file": "eslint.config.js",
     "text": "This override must appear AFTER the main config block so it wins."
+   },
+   {
+    "file": "eslint.config.js",
+    "text": "SonarJS sinaliza padrões intencionais desses scripts: MD5 apenas para checksum de"
    },
    {
     "file": "vitest.config.ts",
@@ -167700,12 +167704,13 @@
   },
   "eslint.config.js": {
    "path": "eslint.config.js",
-   "lines": 106,
+   "lines": 125,
    "exports": [
     "default tseslint"
    ],
    "rule_comments": [
-    "This override must appear AFTER the main config block so it wins."
+    "This override must appear AFTER the main config block so it wins.",
+    "SonarJS sinaliza padrões intencionais desses scripts: MD5 apenas para checksum de"
    ]
   },
   "playwright.config.ts": {
@@ -170801,7 +170806,7 @@
   },
   "scripts/migration/storage/verify-counts.ts": {
    "path": "scripts/migration/storage/verify-counts.ts",
-   "lines": 121,
+   "lines": 120,
    "exports": [
     "interface Report",
     "interface Diferenca",
@@ -229550,10 +229555,20 @@
   }
  },
  "git": {
-  "sha": "21434823975d6f895d40222c952959d1cdf7d41c",
+  "sha": "39789307c54fa03a7044ac7d43705a37e9805cfd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "3978930",
+    "date": "2026-11-10",
+    "author": "adm01-debug",
+    "subject": "chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)",
+    "files": [
+     "eslint.config.js",
+     "scripts/migration/storage/verify-counts.ts"
+    ]
+   },
    {
     "sha": "2143482",
     "date": "2026-11-09",
@@ -230240,16 +230255,6 @@
     "files": [
      ".github/workflows/ci.yml"
     ]
-   },
-   {
-    "sha": "cf83f3a",
-    "date": "2026-11-06",
-    "author": "adm01-debug",
-    "subject": "fix(ci): baseline SECURITY DEFINER 109 → 110 (guard_contact_relation_write) (#158)",
-    "files": [
-     "docs/qa/security-definer-audit.md",
-     "tests/rls/security_definer_hardening.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -230272,6 +230277,10 @@
    [
     "scripts/supabase_snapshot/snapshot.py",
     3
+   ],
+   [
+    "scripts/migration/storage/verify-counts.ts",
+    2
    ],
    [
     "scripts/ai-context/gerar.mjs",
@@ -230327,10 +230336,6 @@
    ],
    [
     "scripts/hardening/check-security-definer-search-path.sql",
-    2
-   ],
-   [
-    "scripts/hardening/check-tables-without-pk.sql",
     2
    ]
   ]

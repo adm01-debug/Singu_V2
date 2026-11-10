@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `21434823975d6f895d40222c952959d1cdf7d41c` (2026-11-09T21:00:59-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `39789307c54fa03a7044ac7d43705a37e9805cfd` (2026-11-10T15:55:51-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3115 |
 | arquivos_codigo | 2130 |
-| linhas_codigo | 400836 |
+| linhas_codigo | 400854 |
 | rotas | 114 |
 | rotas_http_backend | 11 |
 | vistas_por_id | 0 |
@@ -421,8 +421,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 20213 nós · 33723 arestas · 2062 comunidades · grafo do commit `21434823`
-- comunidades maiores: ref_components (302), _shared/auth.ts (276), ref_lib (271), ref_types (267), useAuth (256), framer-motion (237), react-router-dom (212), ref_hooks (209), react (205), date-fns (187), withAuth (184), 📖 Dicionário de Dados — SINGU CRM (177)
+- 20213 nós · 33723 arestas · 2089 comunidades · grafo do commit `39789307`
+- comunidades maiores: useAuth (293), _shared/auth.ts (259), ref_lib (248), framer-motion (237), react (222), ref_hooks (211), react-router-dom (209), date-fns (198), ref_types (185), lucide-react (185), ref_components (180), 📖 Dicionário de Dados — SINGU CRM (177)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), jsonError() (supabase/functions/_shared/auth.ts), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py), header() (scripts/regras_negocio/generate.py), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -535,6 +535,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-10 `39789307` chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)
 - 2026-11-09 `21434823` chore(scripts): endurece e cobre com testes todos os scripts de scripts/ (#186)
 - 2026-11-09 `1fecfa69` fix(push): um único service worker com os handlers de push (A-007) (#184)
 - 2026-11-09 `ecfcdf07` fix(config): alinha o project_id do config.toml ao projeto Supabase canônico e trava divergência (#183)
@@ -549,7 +550,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-08 `77475499` fix(contatos): atualiza a ficha e preserva aniversários locais (#125)
 - 2026-11-08 `4ba71804` fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)
 - 2026-11-08 `33752b40` feat(db): agenda retenção de 7 dias no histórico do pg_cron
-- 2026-11-08 `3570870d` chore(inventario): cataloga as 43 edge functions de outro sistema
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2143482397` · branch `main` · 2026-11-10 00:59 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `39789307c5` · branch `main` · 2026-11-10 18:57 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4766,6 +4766,7 @@ _nenhum item encontrado_
 | Comentário | Arquivo |
 |---|---|
 | This override must appear AFTER the main config block so it wins. | `eslint.config.js` |
+| SonarJS sinaliza padrões intencionais desses scripts: MD5 apenas para checksum de | `eslint.config.js` |
 | and must not run under vitest. Vitest unit/integration tests live in src/ and | `vitest.config.ts` |
 | • pushNotifications.ts must use navigator.serviceWorker.ready (the | `src/main.tsx` |
 | requires the user to re-grant Notification permission — browser policy | `src/main.tsx` |

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "21434823975d6f895d40222c952959d1cdf7d41c",
+  "commit": "39789307c54fa03a7044ac7d43705a37e9805cfd",
   "branch": "main",
-  "data_commit": "2026-11-09T21:00:59-03:00",
+  "data_commit": "2026-11-10T15:55:51-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "39789307",
+    "data": "2026-11-10",
+    "assunto": "chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)"
+   },
    {
     "sha": "21434823",
     "data": "2026-11-09",
@@ -126,14 +131,9 @@
     "sha": "f0aea23a",
     "data": "2026-11-07",
     "assunto": "fix: corrige cast inválido de active_pid no replication-slot-idle-guard (#165)"
-   },
-   {
-    "sha": "d8475aa3",
-    "data": "2026-11-07",
-    "assunto": "fix: qualifica digest() com schema extensions no schema-freeze-guard (#166)"
    }
   ],
-  "arquivos_mudados_7d": 411,
+  "arquivos_mudados_7d": 412,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -141,11 +141,11 @@
    },
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 42
+    "mudancas": 37
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 30
+    "mudancas": 29
    },
    {
     "pasta": "src/hooks/__tests__",
@@ -161,22 +161,18 @@
    },
    {
     "pasta": "scripts/migration/storage",
-    "mudancas": 12
-   },
-   {
-    "pasta": "supabase/functions/external-data",
-    "mudancas": 11
+    "mudancas": 13
    },
    {
     "pasta": "src/components/dashboard",
-    "mudancas": 10
-   },
-   {
-    "pasta": "src/lib/externalData.ts",
-    "mudancas": 10
+    "mudancas": 9
    },
    {
     "pasta": "src/pages/mapa",
+    "mudancas": 9
+   },
+   {
+    "pasta": "supabase/functions/external-data",
     "mudancas": 9
    },
    {
@@ -188,12 +184,16 @@
     "mudancas": 8
    },
    {
-    "pasta": "src/components/pipeline",
+    "pasta": "src/components/sequences",
     "mudancas": 8
    },
    {
-    "pasta": "src/components/sequences",
+    "pasta": "src/lib/externalData.ts",
     "mudancas": 8
+   },
+   {
+    "pasta": "package.json",
+    "mudancas": 7
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -300,12 +300,12 @@
   ],
   "autores_30d": [
    {
-    "autor": "devin-ai-integration[bot]",
-    "commits": 45
+    "autor": "adm01-debug",
+    "commits": 39
    },
    {
-    "autor": "adm01-debug",
-    "commits": 38
+    "autor": "devin-ai-integration[bot]",
+    "commits": 39
    },
    {
     "autor": "dependabot[bot]",
@@ -320,7 +320,7 @@
  "contagens": {
   "arquivos_total": 3115,
   "arquivos_codigo": 2130,
-  "linhas_codigo": 400836,
+  "linhas_codigo": 400854,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -364,7 +364,7 @@
   },
   "eslint.config.js": {
    "arquivos": 1,
-   "linhas": 106
+   "linhas": 125
   },
   "playwright.config.ts": {
    "arquivos": 1,
@@ -552,7 +552,7 @@
   },
   "scripts/migration": {
    "arquivos": 39,
-   "linhas": 5114
+   "linhas": 5113
   },
   "scripts/regras_negocio": {
    "arquivos": 5,

@@ -1168,7 +1168,7 @@
   {
    "arquivo": "scripts/migration/storage/verify-counts.ts",
    "descricao": "Compara ORIGEM × DESTINO objeto a objeto (nome, tamanho, ETag, content-type) e confirma por HEAD uma amostra. Somente leitura nos dois projetos.",
-   "linhas": 121,
+   "linhas": 120,
    "env": [
     "VERIFY_REPORT"
    ],
