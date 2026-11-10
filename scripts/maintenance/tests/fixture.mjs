@@ -1,4 +1,14 @@
-import { mkdtemp, mkdir, writeFile, rm, symlink } from "node:fs/promises";
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { run } from "../lib.mjs";
+import {
+  mkdtemp,
+  mkdir,
+  writeFile,
+  readFile,
+  rm,
+  symlink,
+} from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { networkPrefix } from "../run.mjs";
@@ -207,4 +217,54 @@ export async function fakeEslint(f) {
   f.config.fix.prettier = false;
   f.config.fix.eslintRules = ["semi"];
   await saveConfig(f);
+}
+
+export async function archiveFixture(t) {
+  const f = await fixture(t),
+    input = path.join(f.dir, "archive-input"),
+    pkg = path.join(input, "package");
+  await mkdir(pkg, { recursive: true });
+  await mkdir(path.join(f.root, "vendor"));
+  const metadata = { name: "local-tgz", version: "1.0.0", main: "index.cjs" };
+  await writeFile(path.join(pkg, "package.json"), JSON.stringify(metadata));
+  await writeFile(path.join(pkg, "index.cjs"), "module.exports=42;");
+  const relative = "vendor/local.tgz",
+    archive = path.join(f.root, relative);
+  const result = await run(
+    ["tar", "-czf", archive, "-C", input, "package"],
+    f.root,
+    5000,
+  );
+  assert.equal(result.code, 0, result.output);
+  const bytes = await readFile(archive),
+    integrity = "sha512-" + createHash("sha512").update(bytes).digest("base64");
+  await writeFile(
+    path.join(f.root, "package.json"),
+    JSON.stringify({
+      name: "fixture",
+      type: "module",
+      dependencies: { "local-tgz": "file:" + relative },
+    }),
+  );
+  await writeFile(
+    path.join(f.root, "package-lock.json"),
+    JSON.stringify({
+      packages: {
+        "node_modules/local-tgz": {
+          version: "1.0.0",
+          resolved: "file:" + relative,
+          integrity,
+        },
+      },
+    }),
+  );
+  const installed = path.join(f.root, "node_modules/local-tgz");
+  await mkdir(installed);
+  await writeFile(
+    path.join(installed, "package.json"),
+    JSON.stringify(metadata),
+  );
+  await writeFile(path.join(installed, "index.cjs"), "module.exports=42;");
+  await saveFixture(f);
+  return { ...f, archive, installed, relative };
 }

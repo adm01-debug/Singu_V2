@@ -152,3 +152,24 @@ test(
     assert.match(result.report.message, /Hook alterou a worktree/);
   },
 );
+
+test(
+  "hook nativo sem bit executável continua desativado durante heal",
+  isolated,
+  async (t) => {
+    const f = await fixture(t),
+      hooks = path.join(f.root, ".custom-hooks");
+    await mkdir(hooks);
+    await writeFile(path.join(hooks, "pre-commit"), "#!/bin/sh\nexit 37\n", {
+      mode: 0o600,
+    });
+    await git(f.root, ["config", "core.hooksPath", ".custom-hooks"]);
+    await saveFixture(f);
+    const result = await main(f.args());
+    assert.equal(
+      result.report.status,
+      "validated_patch",
+      JSON.stringify(result.report),
+    );
+  },
+);

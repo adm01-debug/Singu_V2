@@ -33,8 +33,14 @@ export function run(command, cwd, timeoutMs = 120000, options = {}) {
       shell: false,
       detached: true,
       env: safeEnv(options),
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: [options.input === undefined ? "ignore" : "pipe", "pipe", "pipe"],
     });
+    if (options.input !== undefined && child.stdin) {
+      child.stdin.on("error", () => {
+        /* O filho pode encerrar antes de consumir a entrada. */
+      });
+      child.stdin.end(options.input);
+    }
     if (child.pid) activeChildren.set(child.pid, child);
     let output = "",
       stdout = "",

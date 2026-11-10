@@ -1,4 +1,4 @@
-import { lstat } from 'node:fs/promises';
+import { lstat } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { mkdir, rm } from "node:fs/promises";
@@ -7,36 +7,60 @@ import { fail, json, atomic, GraphError, exists } from "./common.mjs";
 import { environment } from "./process.mjs";
 
 async function staleLockDirectory(directory) {
-  const info = await lstat(directory).catch(error => { if(error.code === 'ENOENT') return null; throw error; });
+  const info = await lstat(directory).catch((error) => {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  });
   if (!info) return true;
-  if (!info.isDirectory() || info.isSymbolicLink()) fail('Trava local não é diretório regular', 'busy');
+  if (!info.isDirectory() || info.isSymbolicLink())
+    fail("Trava local não é diretório regular", "busy");
   try {
-    const owner = await json(path.join(directory, 'owner.json'));
+    const owner = await json(path.join(directory, "owner.json"));
     if (Number.isSafeInteger(owner.pid) && owner.pid > 1) {
-      try { process.kill(owner.pid, 0); return false; } catch(error) { return error.code === 'ESRCH'; }
+      try {
+        process.kill(owner.pid, 0);
+        return false;
+      } catch (error) {
+        return error.code === "ESRCH";
+      }
     }
-  } catch(error) { if (!['ENOENT', 'SyntaxError'].includes(error.code || error.name)) throw error; }
+  } catch (error) {
+    if (!["ENOENT", "SyntaxError"].includes(error.code || error.name))
+      throw error;
+  }
   return Date.now() - info.mtimeMs > 300000;
 }
 export async function acquire(dir) {
   await mkdir(path.dirname(dir), { recursive: true, mode: 0o700 });
   const releaseProcess = await acquireGlobal(`${dir}.guard`);
-  const token = randomUUID(); let owned = false;
+  const token = randomUUID();
+  let owned = false;
   try {
-    for (const current of [`${dir}.recovery`, dir]) if (await exists(current)) {
-      if (!await staleLockDirectory(current)) fail('Trava com dono vivo ou criação recente', 'busy');
-      await rm(current, { recursive: true, force: true });
-    }
+    for (const current of [`${dir}.recovery`, dir])
+      if (await exists(current)) {
+        if (!(await staleLockDirectory(current)))
+          fail("Trava com dono vivo ou criação recente", "busy");
+        await rm(current, { recursive: true, force: true });
+      }
     await mkdir(dir, { mode: 0o700 });
-    await atomic(path.join(dir, 'owner.json'), { pid: process.pid, token, startedAt: new Date().toISOString() });
+    await atomic(path.join(dir, "owner.json"), {
+      pid: process.pid,
+      token,
+      startedAt: new Date().toISOString(),
+    });
     owned = true;
-  } finally { if (!owned) await releaseProcess(); }
+  } finally {
+    if (!owned) await releaseProcess();
+  }
   return async () => {
     try {
-      const owner = await json(path.join(dir, 'owner.json'));
-      if (owner.pid !== process.pid || owner.token !== token) fail('Dono da trava mudou');
+      const owner = await json(path.join(dir, "owner.json"));
+      if (owner.pid !== process.pid || owner.token !== token)
+        fail("Dono da trava mudou");
       await rm(dir, { recursive: true });
-    } finally { await releaseProcess(); }
+    } finally {
+      await releaseProcess();
+    }
   };
 }
 export async function acquireGlobal(file) {

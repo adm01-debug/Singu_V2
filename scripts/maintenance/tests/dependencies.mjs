@@ -12,7 +12,13 @@ import {
 import path from "node:path";
 import { main } from "../run.mjs";
 import { git, dependencyFingerprint, readRegularDependency } from "../lib.mjs";
-import { fixture, isolated, vendorFixture, saveFixture } from "./fixture.mjs";
+import {
+  fixture,
+  isolated,
+  vendorFixture,
+  saveFixture,
+  archiveFixture,
+} from "./fixture.mjs";
 
 test(
   "dependências divergentes da referência bloqueiam reutilização",
@@ -129,3 +135,75 @@ test("leitura vendor vincula validação e bytes ao mesmo inode", async (t) => {
     /substituído durante a inspeção/,
   );
 });
+
+test(
+  "tarball local versionado com integridade é reutilizado sem extração ou instalação",
+  isolated,
+  async (t) => {
+    const f = await archiveFixture(t),
+      fingerprint = await dependencyFingerprint(f.root);
+    assert.equal(typeof fingerprint.local[f.relative], "string");
+    assert.equal(fingerprint.archives[f.relative][0].version, "1.0.0");
+    const result = await main(f.args("check"));
+    assert.equal(
+      result.report.status,
+      "checked",
+      JSON.stringify(result.report),
+    );
+  },
+);
+
+test("bytes alterados de tarball local são recusados pelo lock antes dos gates", async (t) => {
+  const f = await archiveFixture(t);
+  await writeFile(f.archive, "modified bytes");
+  await assert.rejects(dependencyFingerprint(f.root), /Integridade do tarball/);
+});
+
+test("tarball local exige identidade instalada e não admite links externos", async (t) => {
+  const f = await archiveFixture(t);
+  await writeFile(
+    path.join(f.installed, "package.json"),
+    JSON.stringify({ name: "local-tgz", version: "2.0.0" }),
+  );
+  await assert.rejects(dependencyFingerprint(f.root), /Identidade instalada/);
+  await rm(f.installed, { recursive: true });
+  const outside = path.join(f.dir, "external-package");
+  await mkdir(outside);
+  await symlink(outside, f.installed);
+  await assert.rejects(dependencyFingerprint(f.root), /fora de node_modules/);
+});
+
+test("tarball substituído por symlink é recusado sem ler o destino externo", async (t) => {
+  const f = await archiveFixture(t),
+    outside = path.join(f.dir, "external-archive");
+  await writeFile(outside, "external fixture");
+  await rm(f.archive);
+  await symlink(outside, f.archive);
+  await assert.rejects(
+    dependencyFingerprint(f.root),
+    /diretório ou tarball regular/,
+  );
+});
+
+test(
+  "tarball em Bun lock com vírgulas finais usa integridade e manifesto sem extração",
+  isolated,
+  async (t) => {
+    const f = await archiveFixture(t);
+    const lock = JSON.parse(
+      await readFile(path.join(f.root, "package-lock.json"), "utf8"),
+    );
+    const integrity = lock.packages["node_modules/local-tgz"].integrity;
+    await rm(path.join(f.root, "package-lock.json"));
+    await writeFile(
+      path.join(f.root, "bun.lock"),
+      '{"lockfileVersion":1,"packages":{"local-tgz":["local-tgz@vendor/local.tgz",{},' +
+        JSON.stringify(integrity) +
+        ",],},}",
+    );
+    await saveFixture(f);
+    const fingerprint = await dependencyFingerprint(f.root);
+    assert.equal(fingerprint.archives[f.relative][0].version, "1.0.0");
+    assert.equal((await main(f.args("check"))).report.status, "checked");
+  },
+);

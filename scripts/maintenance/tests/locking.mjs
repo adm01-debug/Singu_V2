@@ -160,3 +160,15 @@ test("crash libera flock automaticamente e permite recuperar a trava de PID mort
   assert.equal(typeof release, "function");
   await release();
 });
+
+test("run transmite entrada binária apenas pelo pipe sem shell ou arquivos temporários", async () => {
+  const input = Buffer.from([0, 255, 128, 42]);
+  const result = await run(
+    [process.execPath, "-e", "process.stdin.pipe(process.stdout)"],
+    process.cwd(),
+    5000,
+    { input },
+  );
+  assert.equal(result.code, 0);
+  assert.equal(result.stdout, input.toString("utf8"));
+});

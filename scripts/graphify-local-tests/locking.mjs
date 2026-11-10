@@ -1,4 +1,4 @@
-import {once} from 'node:events';
+import { once } from "node:events";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { mkdir, writeFile, readFile, rm, utimes } from "node:fs/promises";
@@ -105,37 +105,82 @@ test("política de recursos usa amostra determinística e bloqueia memória/carg
   }
 });
 
-const KIT_MODULE = new URL('../graphify-local.mjs',import.meta.url).href;
+const KIT_MODULE = new URL("../graphify-local.mjs", import.meta.url).href;
 
-test('recovery antigo sem dono é removido sob flock e não bloqueia novas execuções', async(t)=>{
- const f=await fixture(t),lock=path.join(f.dir,'recovery.lock'),recovery=lock+'.recovery';
- await mkdir(recovery);await utimes(recovery,new Date(0),new Date(0));
- const first=await acquire(lock);await first();const second=await acquire(lock);await second();
- await assert.rejects(readFile(path.join(recovery,'owner.json')),/ENOENT/);
+test("recovery antigo sem dono é removido sob flock e não bloqueia novas execuções", async (t) => {
+  const f = await fixture(t),
+    lock = path.join(f.dir, "recovery.lock"),
+    recovery = lock + ".recovery";
+  await mkdir(recovery);
+  await utimes(recovery, new Date(0), new Date(0));
+  const first = await acquire(lock);
+  await first();
+  const second = await acquire(lock);
+  await second();
+  await assert.rejects(readFile(path.join(recovery, "owner.json")), /ENOENT/);
 });
 
-test('recovery com dono vivo é preservado e a tentativa libera seu flock', async(t)=>{
- const f=await fixture(t),lock=path.join(f.dir,'alive.lock'),recovery=lock+'.recovery';await mkdir(recovery);
- await writeFile(path.join(recovery,'owner.json'),JSON.stringify({pid:process.pid,token:'owner-fixture'}));
- await assert.rejects(acquire(lock),e=>e.status==='busy');
- assert.equal(JSON.parse(await readFile(path.join(recovery,'owner.json'),'utf8')).token,'owner-fixture');
- await rm(recovery,{recursive:true});const release=await acquire(lock);await release();
+test("recovery com dono vivo é preservado e a tentativa libera seu flock", async (t) => {
+  const f = await fixture(t),
+    lock = path.join(f.dir, "alive.lock"),
+    recovery = lock + ".recovery";
+  await mkdir(recovery);
+  await writeFile(
+    path.join(recovery, "owner.json"),
+    JSON.stringify({ pid: process.pid, token: "owner-fixture" }),
+  );
+  await assert.rejects(acquire(lock), (e) => e.status === "busy");
+  assert.equal(
+    JSON.parse(await readFile(path.join(recovery, "owner.json"), "utf8")).token,
+    "owner-fixture",
+  );
+  await rm(recovery, { recursive: true });
+  const release = await acquire(lock);
+  await release();
 });
 
-test('SIGKILL libera o guard do SO e duas aquisições seguintes recuperam a trava', async(t)=>{
- const f=await fixture(t),lock=path.join(f.dir,'crashed.lock');
- const child=spawn(process.execPath,['--input-type=module','-e',`import{acquire}from${JSON.stringify(KIT_MODULE)};await acquire(${JSON.stringify(lock)});process.stdout.write('ready\\n');setInterval(()=>{},1000);`],{stdio:['ignore','pipe','pipe']});
- t.after(()=>child.kill('SIGKILL'));await once(child.stdout,'data');child.kill('SIGKILL');await once(child,'close');
- let release;
- for(let attempt=0;attempt<100&&!release;attempt++){
-  try{release=await acquire(lock);}catch(error){if(error.status!=='busy')throw error;await new Promise(resolve=>setTimeout(resolve,10));}
- }
- assert.equal(typeof release,'function');await release();const again=await acquire(lock);await again();
+test("SIGKILL libera o guard do SO e duas aquisições seguintes recuperam a trava", async (t) => {
+  const f = await fixture(t),
+    lock = path.join(f.dir, "crashed.lock");
+  const child = spawn(
+    process.execPath,
+    [
+      "--input-type=module",
+      "-e",
+      `import{acquire}from${JSON.stringify(KIT_MODULE)};await acquire(${JSON.stringify(lock)});process.stdout.write('ready\\n');setInterval(()=>{},1000);`,
+    ],
+    { stdio: ["ignore", "pipe", "pipe"] },
+  );
+  t.after(() => child.kill("SIGKILL"));
+  await once(child.stdout, "data");
+  child.kill("SIGKILL");
+  await once(child, "close");
+  let release;
+  for (let attempt = 0; attempt < 100 && !release; attempt++) {
+    try {
+      release = await acquire(lock);
+    } catch (error) {
+      if (error.status !== "busy") throw error;
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+  }
+  assert.equal(typeof release, "function");
+  await release();
+  const again = await acquire(lock);
+  await again();
 });
 
-test('run preserva UTF8 dividido por stream e distingue stdout de stderr', async()=>{
- const code="process.stdout.write(Buffer.from([0xc3]));process.stderr.write(Buffer.from([0xc3]));setTimeout(()=>{process.stdout.write(Buffer.from([0xa7]));process.stderr.write(Buffer.from([0xa3]));},30)";
- const result=await run([process.execPath,'-e',code],process.cwd(),process.env,2000);
- assert.equal(result.code,0);assert.equal(result.stdout,'ç');assert.equal(result.stderr,'ã');assert.equal(result.output.includes('\ufffd'),false);
+test("run preserva UTF8 dividido por stream e distingue stdout de stderr", async () => {
+  const code =
+    "process.stdout.write(Buffer.from([0xc3]));process.stderr.write(Buffer.from([0xc3]));setTimeout(()=>{process.stdout.write(Buffer.from([0xa7]));process.stderr.write(Buffer.from([0xa3]));},30)";
+  const result = await run(
+    [process.execPath, "-e", code],
+    process.cwd(),
+    process.env,
+    2000,
+  );
+  assert.equal(result.code, 0);
+  assert.equal(result.stdout, "ç");
+  assert.equal(result.stderr, "ã");
+  assert.equal(result.output.includes("\ufffd"), false);
 });
-

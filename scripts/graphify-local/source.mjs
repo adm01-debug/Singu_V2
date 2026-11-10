@@ -1,4 +1,4 @@
-import { mkdir, copyFile, chmod, writeFile } from 'node:fs/promises';
+import { mkdir, copyFile, chmod, writeFile } from "node:fs/promises";
 import { lstat, realpath } from "node:fs/promises";
 import path from "node:path";
 import {
@@ -89,17 +89,34 @@ export async function fingerprint(root, config) {
 }
 
 export async function prepareFinanceSource(ctx, fp, job, execute) {
-  const root = path.join(job, 'finance-source'); await mkdir(root, { mode: 0o700 });
-  for (const file of ['scripts/graphify/run.py', 'scripts/graphify/config.json', ...Object.keys(fp.files)]) {
-    const target = path.join(root, file); await mkdir(path.dirname(target), { recursive: true, mode: 0o700 });
-    await copyFile(path.join(ctx.root, file), target); await chmod(target, 0o600);
-    if (await fileHash(target) !== (fp.files[file] || fp.metadata[file])) fail('Fonte do wrapper Finance mudou durante a cópia');
+  const root = path.join(job, "finance-source");
+  await mkdir(root, { mode: 0o700 });
+  for (const file of [
+    "scripts/graphify/run.py",
+    "scripts/graphify/config.json",
+    ...Object.keys(fp.files),
+  ]) {
+    const target = path.join(root, file);
+    await mkdir(path.dirname(target), { recursive: true, mode: 0o700 });
+    await copyFile(path.join(ctx.root, file), target);
+    await chmod(target, 0o600);
+    if ((await fileHash(target)) !== (fp.files[file] || fp.metadata[file]))
+      fail("Fonte do wrapper Finance mudou durante a cópia");
   }
-  const objects = await git(ctx.root, ['rev-parse', '--path-format=absolute', '--git-path', 'objects']);
-  if (/[\r\n]/.test(objects)) fail('Caminho Git não suportado');
-  await execute(['git', '-C', root, 'init', '--quiet']);
-  await writeFile(path.join(root, '.git/objects/info/alternates'), objects + '\n', { mode: 0o600 });
-  await execute(['git', '-C', root, 'update-ref', 'HEAD', fp.head]);
-  await execute(['git', '-C', root, 'read-tree', fp.head]);
+  const objects = await git(ctx.root, [
+    "rev-parse",
+    "--path-format=absolute",
+    "--git-path",
+    "objects",
+  ]);
+  if (/[\r\n]/.test(objects)) fail("Caminho Git não suportado");
+  await execute(["git", "-C", root, "init", "--quiet"]);
+  await writeFile(
+    path.join(root, ".git/objects/info/alternates"),
+    objects + "\n",
+    { mode: 0o600 },
+  );
+  await execute(["git", "-C", root, "update-ref", "HEAD", fp.head]);
+  await execute(["git", "-C", root, "read-tree", fp.head]);
   return root;
 }

@@ -1,4 +1,4 @@
-import { StringDecoder } from 'node:string_decoder';
+import { StringDecoder } from "node:string_decoder";
 import { spawn } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -9,29 +9,88 @@ export const active = new Set();
 
 export function run(command, cwd, env, timeoutMs = 120000) {
   return new Promise((resolve) => {
-    const child = spawn(command[0], command.slice(1), { cwd, env, shell: false, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
-    const stdoutDecoder = new StringDecoder('utf8'), stderrDecoder = new StringDecoder('utf8');
-    let stdout = '', stderr = '', received = 0;
-    let output = '', timedOut = false, overflow = false, canceled = false, settled = false, hard;
-    const kill = (signal) => { if (child.pid) try { process.kill(-child.pid, signal); } catch { /* processo encerrado */ } };
-    const finish = (code) => {
-      if (settled) return; settled = true;
-      const stdoutTail = stdoutDecoder.end(), stderrTail = stderrDecoder.end();
-      stdout += stdoutTail; stderr += stderrTail; output += stdoutTail + stderrTail; clearTimeout(timer); clearTimeout(hard); active.delete(cancel);
-      kill('SIGKILL'); child.stdout.destroy(); child.stderr.destroy();
-      resolve({ code: timedOut || overflow || canceled ? 1 : code ?? 1, output, stdout, stderr, timedOut, overflow, canceled });
+    const child = spawn(command[0], command.slice(1), {
+      cwd,
+      env,
+      shell: false,
+      detached: true,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    const stdoutDecoder = new StringDecoder("utf8"),
+      stderrDecoder = new StringDecoder("utf8");
+    let stdout = "",
+      stderr = "",
+      received = 0;
+    let output = "",
+      timedOut = false,
+      overflow = false,
+      canceled = false,
+      settled = false,
+      hard;
+    const kill = (signal) => {
+      if (child.pid)
+        try {
+          process.kill(-child.pid, signal);
+        } catch {
+          /* processo encerrado */
+        }
     };
-    const stop = () => { kill('SIGTERM'); hard ||= setTimeout(() => { kill('SIGKILL'); finish(1); }, 1000); };
-    const cancel = () => { canceled = true; stop(); }; active.add(cancel);
-    const timer = setTimeout(() => { timedOut = true; stop(); }, timeoutMs);
+    const finish = (code) => {
+      if (settled) return;
+      settled = true;
+      const stdoutTail = stdoutDecoder.end(),
+        stderrTail = stderrDecoder.end();
+      stdout += stdoutTail;
+      stderr += stderrTail;
+      output += stdoutTail + stderrTail;
+      clearTimeout(timer);
+      clearTimeout(hard);
+      active.delete(cancel);
+      kill("SIGKILL");
+      child.stdout.destroy();
+      child.stderr.destroy();
+      resolve({
+        code: timedOut || overflow || canceled ? 1 : (code ?? 1),
+        output,
+        stdout,
+        stderr,
+        timedOut,
+        overflow,
+        canceled,
+      });
+    };
+    const stop = () => {
+      kill("SIGTERM");
+      hard ||= setTimeout(() => {
+        kill("SIGKILL");
+        finish(1);
+      }, 1000);
+    };
+    const cancel = () => {
+      canceled = true;
+      stop();
+    };
+    active.add(cancel);
+    const timer = setTimeout(() => {
+      timedOut = true;
+      stop();
+    }, timeoutMs);
     const collect = (chunk, errorStream) => {
       received += chunk.length;
-      if (received > 4 * 1024 * 1024) { overflow = true; stop(); return; }
+      if (received > 4 * 1024 * 1024) {
+        overflow = true;
+        stop();
+        return;
+      }
       const value = (errorStream ? stderrDecoder : stdoutDecoder).write(chunk);
-      output += value; if (errorStream) stderr += value; else stdout += value;
+      output += value;
+      if (errorStream) stderr += value;
+      else stdout += value;
     };
-    child.stdout.on('data', chunk => collect(chunk, false)); child.stderr.on('data', chunk => collect(chunk, true));
-    child.once('error', () => finish(1)); child.once('close', finish);
+    child.stdout.on("data", (chunk) => collect(chunk, false));
+    child.stderr.on("data", (chunk) => collect(chunk, true));
+    child.once("error", () => finish(1));
+    child.once("close", finish);
   });
 }
 export function environment(extra = {}) {

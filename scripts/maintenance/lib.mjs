@@ -4,6 +4,7 @@ export {
   digest,
   exists,
   safeEnv,
+  readRegularDependency,
   writeJson,
 } from "./common.mjs";
 export { stopChildren, run, checked, git } from "./process.mjs";
@@ -16,5 +17,3 @@ export {
   inspect,
 } from "./configuration.mjs";
 export { acquire } from "./locking.mjs";
-
-export { readRegularDependency } from "./dependencies.mjs";

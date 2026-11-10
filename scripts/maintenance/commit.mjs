@@ -1,4 +1,5 @@
-import { mkdir, writeFile, rm } from "node:fs/promises";
+import { constants } from "node:fs";
+import { mkdir, writeFile, rm, access } from "node:fs/promises";
 import path from "node:path";
 import { fail, exists, inside } from "./common.mjs";
 import { run, git } from "./process.mjs";
@@ -97,6 +98,14 @@ export async function commitWithHooks(
           name,
         );
       if (!(await exists(script))) continue;
+      if (!husky) {
+        try {
+          await access(script, constants.X_OK);
+        } catch (error) {
+          if (["EACCES", "ENOENT"].includes(error.code)) continue;
+          throw error;
+        }
+      }
       const invocation = husky ? `sh -e ${quote(script)}` : quote(script);
       await writeFile(
         path.join(directory, name),
