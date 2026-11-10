@@ -105,7 +105,7 @@ test("adoção inicial exige bytes, corpus, commit, pin e escopo iguais", async 
     info = await validateGraph(f.graph);
   const initial = path.join(
     f.root,
-    "graphify-out/graphify-local-initial-provenance.json",
+    f.config.output + "/graphify-local-initial-provenance.json",
   );
   await writeFile(
     initial,

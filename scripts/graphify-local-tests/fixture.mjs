@@ -57,7 +57,7 @@ if(a[0]==='extract'){
     pin: "0.9.97",
     pythonVersion: "3.11",
     state: ".tools/graphify/state",
-    output: "graphify-out",
+    output: ".tools/graphify/output",
     adapter: "generic",
     scope: ["."],
     partial: false,
@@ -90,6 +90,6 @@ if(a[0]==='extract'){
     root,
   ];
   const call = (action, ...terms) => main(args(action, ...terms), options);
-  const graph = path.join(root, "graphify-out/graph.json");
+  const graph = path.join(root, config.output, "graph.json");
   return { dir, root, env, config, configFile, options, args, call, graph };
 }

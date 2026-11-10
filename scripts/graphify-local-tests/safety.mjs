@@ -92,7 +92,7 @@ test("saída rastreada é preservada e exige fluxo versionado", async (t) => {
     f.graph,
     JSON.stringify({ nodes: [{ id: "old" }], links: [] }),
   );
-  git(f.root, "add", "-f", "graphify-out/graph.json");
+  git(f.root, "add", "-f", path.relative(f.root, f.graph));
   git(f.root, "commit", "-m", "tracked graph");
   const result = await f.call("ensure");
   assert.equal(result.exitCode, 1);

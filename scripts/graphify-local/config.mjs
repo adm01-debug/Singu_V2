@@ -27,6 +27,7 @@ export function validateConfig(c) {
     !/^\d+\.\d+\.\d+$/.test(c.pin || "")
   )
     fail("Configuração Graphify inválida");
+  if (typeof c.output === 'string' && (c.output === 'graphify-out' || c.output.startsWith('graphify-out/'))) fail('Output local não pode sobrescrever o grafo canônico graphify-out');
   for (const key of ["environment", "state", "output"])
     if (!safeRelative(c[key]))
       fail("Caminho da configuração deve ser relativo e confinado");
