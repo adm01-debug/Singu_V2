@@ -1,3 +1,11 @@
+import {
+  constants,
+  openSync,
+  closeSync,
+  fstatSync,
+  readSync,
+  writeSync,
+} from "node:fs";
 import { cacheRuntime } from "./runtime-copy.mjs";
 import {
   existsSync,
@@ -6,7 +14,6 @@ import {
   readFileSync,
   realpathSync,
   rmSync,
-  writeFileSync,
   chmodSync,
 } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
@@ -21,6 +28,85 @@ import {
   atomic,
 } from "./common.mjs";
 import { git, locate } from "./process.mjs";
+
+function excludeIdentity(path, fd) {
+  const opened = fstatSync(fd),
+    current = lstatSync(path);
+  if (
+    !opened.isFile() ||
+    opened.nlink !== 1 ||
+    current.isSymbolicLink() ||
+    current.dev !== opened.dev ||
+    current.ino !== opened.ino
+  )
+    throw fail("info/exclude mudou de identidade; alteração recusada");
+}
+function excludeFlags(append) {
+  if (typeof constants.O_NOFOLLOW !== "number")
+    throw fail("O_NOFOLLOW indisponível; alteração de info/exclude bloqueada");
+  return (
+    constants.O_RDWR |
+    constants.O_NOFOLLOW |
+    constants.O_NONBLOCK |
+    (append ? constants.O_APPEND | constants.O_CREAT : 0)
+  );
+}
+export function appendExclude(path, beforeAppend = () => {}) {
+  mkdirSync(dirname(path), { recursive: true });
+  const fd = openSync(path, excludeFlags(true), 0o600);
+  try {
+    excludeIdentity(path, fd);
+    const contents = readFileSync(fd, "utf8");
+    const addition = contents.includes("/.tools/repo-automation/")
+      ? ""
+      : `${contents.endsWith("\n") || !contents ? "" : "\n"}# repo-automation local bridge\n/.tools/repo-automation/\n`;
+    beforeAppend(addition);
+    excludeIdentity(path, fd);
+    if (addition) {
+      const data = Buffer.from(addition);
+      if (writeSync(fd, data, 0, data.length, null) !== data.length)
+        throw fail("append incompleto em info/exclude");
+      excludeIdentity(path, fd);
+    }
+    return addition;
+  } finally {
+    closeSync(fd);
+  }
+}
+export function removeExclude(path, addition) {
+  if (!addition) return false;
+  let fd;
+  try {
+    fd = openSync(path, excludeFlags(false));
+  } catch (error) {
+    if (error.code === "ENOENT") return false;
+    throw error;
+  }
+  try {
+    excludeIdentity(path, fd);
+    const contents = readFileSync(fd),
+      block = Buffer.from(addition),
+      offset = contents.indexOf(block);
+    if (offset < 0) return false;
+    excludeIdentity(path, fd);
+    const current = Buffer.alloc(block.length);
+    if (
+      readSync(fd, current, 0, current.length, offset) !== block.length ||
+      !current.equals(block)
+    )
+      throw fail("bloco próprio de info/exclude mudou; remoção recusada");
+    // Não trunque: um append concorrente deve sobreviver à reversão.
+    const blank = Buffer.from(
+      block.map((byte) => (byte === 10 || byte === 13 ? byte : 32)),
+    );
+    if (writeSync(fd, blank, 0, blank.length, offset) !== blank.length)
+      throw fail("remoção incompleta de bloco próprio");
+    excludeIdentity(path, fd);
+    return true;
+  } finally {
+    closeSync(fd);
+  }
+}
 
 export async function install(ctx) {
   const { root, c, config } = ctx;
@@ -83,10 +169,6 @@ export async function install(ctx) {
         await git(root, ["rev-parse", "--git-path", "info/exclude"])
       ).stdout.trim(),
     );
-    const oldExclude = existsSync(exclude) ? readFileSync(exclude, "utf8") : "";
-    const addition = oldExclude.includes("/.tools/repo-automation/")
-      ? ""
-      : `${oldExclude.endsWith("\n") || !oldExclude ? "" : "\n"}# repo-automation local bridge\n/.tools/repo-automation/\n`;
     state = {
       version: 1,
       id: randomUUID(),
@@ -102,15 +184,14 @@ export async function install(ctx) {
         ),
       ),
       exclude,
-      addition,
+      addition: "",
     };
     mkdirSync(base, { recursive: true, mode: 0o700 });
     chmodSync(base, 0o700);
-    atomic(stateFile, JSON.stringify(state, null, 2));
-    if (addition) {
-      mkdirSync(dirname(exclude), { recursive: true });
-      writeFileSync(exclude, oldExclude + addition);
-    }
+    appendExclude(exclude, (addition) => {
+      state.addition = addition;
+      atomic(stateFile, JSON.stringify(state, null, 2));
+    });
   }
   mkdirSync(hooks, { recursive: true });
   const script = locate(root, c, config, c.entrypoint);
@@ -179,6 +260,7 @@ export async function uninstall(ctx) {
         "arquivo da ponte alterado por terceiro; desinstalação recusada",
       );
   }
+  removeExclude(state.exclude, state.addition);
   await git(
     ctx.root,
     ["config", "--local", "--unset-all", "core.hooksPath"],
@@ -192,11 +274,6 @@ export async function uninstall(ctx) {
       "core.hooksPath",
       value,
     ]);
-  if (state.addition && existsSync(state.exclude)) {
-    const contents = readFileSync(state.exclude, "utf8");
-    if (contents.includes(state.addition))
-      writeFileSync(state.exclude, contents.replace(state.addition, ""));
-  }
   // Remove somente os arquivos conhecidos criados por esta instalação.
   for (const event of EVENTS) rmSync(join(expected, event), { force: true });
   for (const file of [

@@ -75,3 +75,5 @@ if (process.argv[1] && resolve(process.argv[1]) === SELF) {
 }
 export { parseArgs, validateConfig } from "./automation/config.mjs";
 export { execute } from "./automation/process.mjs";
+
+export { appendExclude, removeExclude } from "./automation/install.mjs";
