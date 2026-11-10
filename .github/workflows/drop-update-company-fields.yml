@@ -1,6 +1,9 @@
 ﻿name: Drop update_company_fields (infra one-off)
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/drop-update-company-fields.yml'
 jobs:
   drop:
     runs-on: ubuntu-latest
