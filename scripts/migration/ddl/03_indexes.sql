@@ -380,3 +380,19 @@ CREATE INDEX idx_win_loss_reasons_user ON public.win_loss_reasons USING btree (u
 CREATE INDEX idx_win_loss_records_competitor ON public.win_loss_records USING btree (competitor_id);
 CREATE INDEX idx_win_loss_records_primary_reason ON public.win_loss_records USING btree (primary_reason_id);
 CREATE INDEX idx_win_loss_records_user_outcome ON public.win_loss_records USING btree (user_id, outcome, recorded_at DESC);
+
+-- Índices de partição anexados ao índice do pai (CREATE INDEX ... ON ONLY deixa o pai INVALID até todas as partições serem anexadas)
+ALTER INDEX public.idx_audit_log_entity ATTACH PARTITION public.audit_log_2026_07_entity_type_entity_id_idx;
+ALTER INDEX public.idx_audit_log_user ATTACH PARTITION public.audit_log_2026_07_user_id_created_at_idx;
+ALTER INDEX public.idx_audit_log_entity ATTACH PARTITION public.audit_log_2026_08_entity_type_entity_id_idx;
+ALTER INDEX public.idx_audit_log_user ATTACH PARTITION public.audit_log_2026_08_user_id_created_at_idx;
+ALTER INDEX public.idx_audit_log_entity ATTACH PARTITION public.audit_log_2026_09_entity_type_entity_id_idx;
+ALTER INDEX public.idx_audit_log_user ATTACH PARTITION public.audit_log_2026_09_user_id_created_at_idx;
+ALTER INDEX public.idx_audit_log_entity ATTACH PARTITION public.audit_log_2026_10_entity_type_entity_id_idx;
+ALTER INDEX public.idx_audit_log_user ATTACH PARTITION public.audit_log_2026_10_user_id_created_at_idx;
+ALTER INDEX public.idx_audit_log_entity ATTACH PARTITION public.audit_log_2026_11_entity_type_entity_id_idx;
+ALTER INDEX public.idx_audit_log_user ATTACH PARTITION public.audit_log_2026_11_user_id_created_at_idx;
+ALTER INDEX public.idx_audit_log_entity ATTACH PARTITION public.audit_log_2026_12_entity_type_entity_id_idx;
+ALTER INDEX public.idx_audit_log_user ATTACH PARTITION public.audit_log_2026_12_user_id_created_at_idx;
+ALTER INDEX public.idx_audit_log_entity ATTACH PARTITION public.audit_log_default_entity_type_entity_id_idx;
+ALTER INDEX public.idx_audit_log_user ATTACH PARTITION public.audit_log_default_user_id_created_at_idx;

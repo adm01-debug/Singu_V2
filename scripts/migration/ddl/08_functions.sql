@@ -2771,7 +2771,7 @@ CREATE OR REPLACE FUNCTION public.search_companies_semantic(p_user_id uuid, p_qu
  RETURNS TABLE(id uuid, name text, industry text, city text, state text, similarity real)
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO 'public', 'extensions', 'pg_temp'
 AS $function$
   WITH q AS (SELECT public.immutable_unaccent(lower(p_query)) AS qn)
   SELECT
@@ -2835,7 +2835,7 @@ CREATE OR REPLACE FUNCTION public.search_contacts_semantic(p_user_id uuid, p_que
  RETURNS TABLE(id uuid, first_name text, last_name text, email text, phone text, role_title text, company_id uuid, similarity real)
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO 'public', 'extensions', 'pg_temp'
 AS $function$
   WITH q AS (SELECT public.immutable_unaccent(lower(p_query)) AS qn)
   SELECT
@@ -2880,7 +2880,7 @@ CREATE OR REPLACE FUNCTION public.search_interactions_semantic(p_user_id uuid, p
  RETURNS TABLE(id uuid, title text, type text, created_at timestamp with time zone, contact_id uuid, similarity real)
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO 'public', 'extensions', 'pg_temp'
 AS $function$
   WITH q AS (SELECT public.immutable_unaccent(lower(p_query)) AS qn)
   SELECT
@@ -2922,7 +2922,7 @@ CREATE OR REPLACE FUNCTION public.search_products_semantic(p_user_id uuid, p_que
  RETURNS TABLE(id uuid, external_id text, name text, description text, category text, tags text[], image_url text, price numeric, metadata jsonb, similarity real)
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO 'public', 'extensions', 'pg_temp'
 AS $function$
   SELECT
     p.id,
