@@ -1,5 +1,8 @@
 # Edge functions autorizadas a usar `Access-Control-Allow-Origin: *`.
 # Requer justificativa via ADR. Padrão: preferir scopedCorsHeaders().
-_shared
-# connection-tester: endpoint diagnóstico público de webhooks/CORS; wildcard é intencional.
-connection-tester
+# Uma função por linha (nome da pasta em supabase/functions/). Entrada sem wildcard
+# correspondente no código faz o check falhar: allowlist morto vira carta branca.
+#
+# Vazio de propósito (2026-11-09): `_shared` e `connection-tester` saíram porque nenhuma das
+# duas usa wildcard hoje — ambas respondem com scopedCorsHeaders() — e `_shared` liberado
+# deixaria passar um `*` em _shared/auth.ts, que vale para todas as funções.

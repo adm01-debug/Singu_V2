@@ -5,12 +5,18 @@
  * Imprime `true` ou `false` (usado pelo inventario-estado-semanal.yml para decidir se abre PR).
  *
  * Uso: node scripts/inventario/mudou-conteudo.mjs [arquivo...]   (padrao: banco, rotas e edges)
+ *
+ * Os caminhos sao relativos a raiz do repositorio (a pasta acima de scripts/, ou INVENTARIO_RAIZ
+ * em teste), nao ao diretorio atual. O stdout tem SO `true`/`false`. Exit 0 = respondeu;
+ * exit 2 = nao deu para comparar (git ausente, fora de repositorio, sem HEAD, arquivo ilegivel):
+ * nesse caso nada sai no stdout, para o workflow falhar em vez de decidir no escuro.
  */
 import fs from 'node:fs';
+import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
-export const PADRAO = ['inventario/estado/banco.json', 'inventario/estado/edges.json', 'inventario/estado/tabelas-uso.json'];
+export const PADRAO = ['inventario/estado/banco.json', 'inventario/estado/edge-tabela.json', 'inventario/estado/edges.json', 'inventario/estado/rotas.json', 'inventario/estado/tabelas-uso.json'];
 const CARIMBOS = new Set(['medido_em', 'gerado_em']);
 // Telemetria viva do cron/WhatsApp: muda quase toda semana so pela janela rolante de 7 dias, sem
 // mudanca estrutural nenhuma (achado da revisao de 2026-11-02 em scripts/inventario/gerar-banco.mjs:
@@ -73,11 +79,35 @@ export function mudou(arquivos, lerAntes, lerDepois) {
   return arquivos.some((f) => semCarimbos(lerAntes(f)) !== semCarimbos(lerDepois(f)));
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const arquivos = process.argv.length > 2 ? process.argv.slice(2) : PADRAO;
+/** Leitores do HEAD e do disco, ambos a partir de `raiz`. Erro de git que nao seja "nao existe no HEAD" sobe. */
+export function leitores(raiz) {
+  // 256 MB: com o padrao de 1 MB do execFileSync um JSON maior estourava ENOBUFS, era lido como
+  // "arquivo novo" e a resposta virava `true` para sempre.
+  const git = (args, stdio = ['ignore', 'pipe', 'pipe']) => execFileSync('git', args, { cwd: raiz, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024, stdio });
+  try { git(['rev-parse', '--verify', '--quiet', 'HEAD^{commit}']); } catch (e) {
+    throw new Error(e.code === 'ENOENT' ? 'git nao encontrado' : `${raiz} nao e um repositorio git com HEAD`);
+  }
+  const relativo = (f) => path.relative(raiz, path.resolve(raiz, f)).split(path.sep).join('/');
   const lerAntes = (f) => {
-    try { return execFileSync('git', ['show', `HEAD:${f}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch { return null; }
+    try { git(['cat-file', '-e', `HEAD:${relativo(f)}`], 'ignore'); } catch { return null; } // nao existe no HEAD
+    return git(['show', `HEAD:${relativo(f)}`]);
   };
-  const lerDepois = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : null);
-  console.log(String(mudou(arquivos, lerAntes, lerDepois)));
+  const lerDepois = (f) => (fs.existsSync(path.resolve(raiz, f)) ? fs.readFileSync(path.resolve(raiz, f), 'utf8') : null);
+  return { lerAntes, lerDepois };
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const args = process.argv.slice(2);
+  if (args.includes('--help') || args.includes('-h')) {
+    console.log('Uso: node scripts/inventario/mudou-conteudo.mjs [arquivo...]\nImprime true/false: o inventario mudou alem dos carimbos de data e da telemetria?');
+    process.exit(0);
+  }
+  const raiz = path.resolve(process.env.INVENTARIO_RAIZ?.trim() || path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..'));
+  try {
+    const { lerAntes, lerDepois } = leitores(raiz);
+    console.log(String(mudou(args.length ? args : PADRAO, lerAntes, lerDepois)));
+  } catch (erro) {
+    console.error(`ERRO: ${erro.message}`);
+    process.exit(2);
+  }
 }

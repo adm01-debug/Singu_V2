@@ -1,4 +1,10 @@
 -- temp-file-usage-audit.sql — Rodada 21/10
+-- Proposito: uso de arquivos temporarios por database e GUCs de memoria relacionados.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== temp-file-usage-audit =='
 SELECT datname, temp_files, pg_size_pretty(temp_bytes) AS temp_size, stats_reset
   FROM pg_stat_database

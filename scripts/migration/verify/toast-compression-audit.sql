@@ -1,6 +1,11 @@
 -- toast-compression-audit.sql — Rodada 19/10
 -- Detecta colunas TEXT/JSONB/BYTEA com storage PLAIN/MAIN (sem TOAST-out),
 -- causando bloat silencioso e degradacao de VACUUM em tabelas quentes.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== toast-compression-audit =='
 SELECT n.nspname AS schema,
        c.relname AS table,

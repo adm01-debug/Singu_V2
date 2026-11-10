@@ -1,5 +1,10 @@
 -- publication-tables-coverage.sql — Rodada 17/10
 -- Detecta tabelas public fora da publicacao logica de CDC.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== publication-tables-coverage =='
 WITH pub AS (
   SELECT schemaname, tablename FROM pg_publication_tables

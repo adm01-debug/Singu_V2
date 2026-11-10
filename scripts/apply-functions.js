@@ -1,115 +1,25 @@
-// apply-functions.js — aplica functions e triggers usando split por newline-ponto-vírgula-newline
-import { readFileSync } from 'node:fs';
-import https from 'node:https';
+// apply-functions.js — aplica functions (08), triggers (09) e views (10) em lotes de 3 instruções por requisição.
+// Lote recusado é reenviado instrução a instrução para isolar a culpada. Pré-requisito: tabelas já aplicadas.
+//
+// ATENÇÃO: escreve DDL no projeto Supabase de PRODUÇÃO (ref canônico do AGENTS.md) pela Management API.
+// O padrão é SIMULAÇÃO: nada é enviado, o script só mostra o que faria. Aplicar de verdade exige --apply.
+//   node scripts/apply-functions.js                    simula (não precisa de token)
+//   node scripts/apply-functions.js --sql              simula e imprime o SQL completo que seria enviado
+//   SUPABASE_ACCESS_TOKEN=... node scripts/apply-functions.js --apply
+// Reexecutar é seguro: cada instrução é enviada em forma idempotente (ver scripts/lib/sql-split.mjs).
+// Ambiente: SUPABASE_ACCESS_TOKEN (só com --apply; nunca aparece em log), SUPABASE_PROJECT_REF,
+// SUPABASE_MGMT_API_URL, timeout/retentativas (ver scripts/lib/supabase-mgmt.mjs).
+// Saída: 0 ok · 1 alguma instrução/requisição falhou · 2 uso/configuração/SQL malformado · 130 interrompido.
+import { ehCli, etapasDeArquivos, principal, rodarComoCli } from './lib/supabase-mgmt.mjs';
 
-const PAT = process.env.SUPABASE_ACCESS_TOKEN;
-if (!PAT) throw new Error('SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro');
-const REF = 'pgxfvjmuubtbowutlide';
-const CHUNK = 3; // Functions are large — batch small
+export const ARQUIVOS = ['08_functions.sql', '09_triggers.sql', '10_views.sql'];
 
-function mgmt(sql) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({ query: sql });
-    const req = https.request({
-      hostname: 'api.supabase.com', port: 443,
-      path: `/v1/projects/${REF}/database/query`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${PAT}`,
-        'apikey': PAT,
-        'Content-Length': Buffer.byteLength(body),
-      },
-      timeout: 55000,
-    }, (res) => {
-      let d = '';
-      res.on('data', c => d += c);
-      res.on('end', () => resolve({ status: res.statusCode, body: d }));
-    });
-    req.on('error', reject);
-    req.on('timeout', () => { req.destroy(); reject(new Error('TIMEOUT')); });
-    req.write(body);
-    req.end();
-  });
-}
+export const definicao = {
+  nome: 'apply-functions.js',
+  descricao: 'aplica functions (08), triggers (09) e views (10) em lotes de 3 instruções por requisição.',
+  montarEtapas: ({ args }) => etapasDeArquivos(args.dirDdl, ARQUIVOS, { lote: 3 }),
+};
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+export const main = (argv, env, io) => principal(definicao, argv, env, io);
 
-// Postgres function files use: ...END;\n$function$\n;\n next statement
-// So '\n;\n' is the safe delimiter between statements
-function splitFunctions(sql) {
-  const raw = sql.split('\n;\n');
-  return raw.filter(p => {
-    const t = p.trim();
-    return t && !t.startsWith('--') && !t.startsWith('/*');
-  }).map(p => p.trim() + ';');
-}
-
-async function runChunks(stmts, label) {
-  let ok = 0, skip = 0, err = 0;
-  for (let i = 0; i < stmts.length; i += CHUNK) {
-    const chunk = stmts.slice(i, i + CHUNK);
-    const sql = chunk.join('\n');
-    process.stdout.write(`  ${i+1}–${Math.min(i+CHUNK, stmts.length)}/${stmts.length}... `);
-
-    let success = false;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        const r = await mgmt(sql);
-        if (r.status >= 200 && r.status < 300) {
-          ok += chunk.length; success = true; console.log('OK'); break;
-        } else {
-          let msg = r.body.slice(0, 400);
-          try { msg = JSON.parse(r.body).message ?? msg; } catch (_) {}
-          if (msg.includes('already exists') || msg.includes('duplicate') ||
-              msg.includes('does not exist')) {
-            skip += chunk.length; success = true; console.log('SKIP'); break;
-          }
-          if (r.status === 502 || r.status === 503 || r.status === 504) {
-            if (attempt < 2) { await sleep(1000); continue; }
-          }
-          err += chunk.length; success = true; console.log(`ERR ${r.status}: ${msg.slice(0, 60)}`); break;
-        }
-      } catch (e) {
-        if (e.message === 'TIMEOUT' && attempt < 2) { await sleep(1500); continue; }
-        err += chunk.length; success = true; console.log(`NET: ${e.message}`); break;
-      }
-    }
-    if (!success) { err += chunk.length; console.log('MAX_RETRY'); }
-    if (i + CHUNK < stmts.length) await sleep(200);
-  }
-  console.log(`  -> ${ok} OK, ${skip} SKIP, ${err} ERR`);
-  return { ok, skip, err };
-}
-
-async function main() {
-  // Count functions
-  const fnSql = readFileSync('scripts/migration/ddl/08_functions.sql', 'utf8');
-  const fns = splitFunctions(fnSql);
-  console.log(`Functions: ${fns.length}`);
-
-  // Count triggers
-  const trSql = readFileSync('scripts/migration/ddl/09_triggers.sql', 'utf8');
-  const trs = splitFunctions(trSql);
-  console.log(`Triggers: ${trs.length}`);
-
-  // Count views
-  const vwSql = readFileSync('scripts/migration/ddl/10_views.sql', 'utf8');
-  const vws = splitFunctions(vwSql);
-  console.log(`Views: ${vws.length}\n`);
-
-  console.log('[FUNCTIONS]');
-  await runChunks(fns, 'FUNCTIONS');
-
-  await sleep(500);
-
-  console.log('\n[TRIGGERS]');
-  await runChunks(trs, 'TRIGGERS');
-
-  await sleep(500);
-
-  console.log('\n[VIEWS]');
-  await runChunks(vws, 'VIEWS');
-}
-
-main().catch(e => { console.error('Fatal:', e.message); process.exit(1); });
+if (ehCli(import.meta.url)) await rodarComoCli(main);

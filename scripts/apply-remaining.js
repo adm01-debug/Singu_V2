@@ -1,138 +1,27 @@
-// apply-remaining.js — aplica indexes, FKs, grants, RLS, functions, triggers, views
-import { readFileSync } from 'node:fs';
-import https from 'node:https';
+// apply-remaining.js — aplica o que vem depois das tabelas: índices, FKs, grants, functions, RLS, policies, triggers e views.
+// Lotes de 8 instruções por requisição; lote recusado é reenviado instrução a instrução para isolar a culpada.
+// Ordem: a de 99_apply_all.sql (functions antes de RLS/policies, que chamam has_role e afins).
+//
+// ATENÇÃO: escreve DDL no projeto Supabase de PRODUÇÃO (ref canônico do AGENTS.md) pela Management API.
+// O padrão é SIMULAÇÃO: nada é enviado, o script só mostra o que faria. Aplicar de verdade exige --apply.
+//   node scripts/apply-remaining.js                    simula (não precisa de token)
+//   node scripts/apply-remaining.js --sql              simula e imprime o SQL completo que seria enviado
+//   SUPABASE_ACCESS_TOKEN=... node scripts/apply-remaining.js --apply
+// Reexecutar é seguro: cada instrução é enviada em forma idempotente (ver scripts/lib/sql-split.mjs).
+// Ambiente: SUPABASE_ACCESS_TOKEN (só com --apply; nunca aparece em log), SUPABASE_PROJECT_REF,
+// SUPABASE_MGMT_API_URL, timeout/retentativas (ver scripts/lib/supabase-mgmt.mjs).
+// Saída: 0 ok · 1 alguma instrução/requisição falhou · 2 uso/configuração/SQL malformado · 130 interrompido.
+import { ehCli, etapasDeArquivos, principal, rodarComoCli } from './lib/supabase-mgmt.mjs';
 
-const PAT = process.env.SUPABASE_ACCESS_TOKEN;
-if (!PAT) throw new Error('SUPABASE_ACCESS_TOKEN obrigatório; forneça pelo ambiente seguro');
-const REF = 'pgxfvjmuubtbowutlide';
-const CHUNK = 8; // small batches to stay under 60s
+export const ARQUIVOS = ['03_indexes.sql', '04_foreign_keys.sql', '05_grants.sql', '08_functions.sql', '06_rls_enable.sql', '07_policies.sql',
+  '09_triggers.sql', '10_views.sql'];
 
-function mgmt(sql) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({ query: sql });
-    const req = https.request({
-      hostname: 'api.supabase.com', port: 443,
-      path: `/v1/projects/${REF}/database/query`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${PAT}`,
-        'apikey': PAT,
-        'Content-Length': Buffer.byteLength(body),
-      },
-      timeout: 55000,
-    }, (res) => {
-      let d = '';
-      res.on('data', c => d += c);
-      res.on('end', () => resolve({ status: res.statusCode, body: d }));
-    });
-    req.on('error', reject);
-    req.on('timeout', () => { req.destroy(); reject(new Error('TIMEOUT')); });
-    req.write(body);
-    req.end();
-  });
-}
+export const definicao = {
+  nome: 'apply-remaining.js',
+  descricao: 'aplica o que vem depois das tabelas: índices, FKs, grants, functions, RLS, policies, triggers e views.',
+  montarEtapas: ({ args }) => etapasDeArquivos(args.dirDdl, ARQUIVOS, { lote: 8 }),
+};
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+export const main = (argv, env, io) => principal(definicao, argv, env, io);
 
-function splitStmts(sql) {
-  const stmts = [];
-  let buf = '', depth = 0, inStr = false, esc = false;
-  for (let i = 0; i < sql.length; i++) {
-    const c = sql[i];
-    if (esc) { buf += c; esc = false; continue; }
-    if (c === '\\') { buf += c; esc = true; continue; }
-    if (!inStr && c === "'") { inStr = true; buf += c; continue; }
-    if (inStr && c === "'") { inStr = false; buf += c; continue; }
-    if (!inStr && c === '$' && sql[i+1] === '$') {
-      const j = sql.indexOf('$$', i+2);
-      if (j !== -1) { buf += sql.slice(i, j+2); i = j+1; continue; }
-    }
-    if (!inStr) {
-      if (c === '(') { depth++; buf += c; continue; }
-      if (c === ')') { depth--; buf += c; continue; }
-      if (c === ';' && depth === 0) {
-        const s = buf.trim();
-        if (s && !s.startsWith('--')) stmts.push(s);
-        buf = '';
-        continue;
-      }
-    }
-    buf += c;
-  }
-  if (buf.trim()) stmts.push(buf.trim());
-  return stmts;
-}
-
-function clean(stmt) {
-  return stmt
-    .replace(/CREATE INDEX CONCURRENTLY IF NOT EXISTS/g, 'CREATE INDEX IF NOT EXISTS')
-    .replace(/CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS/g, 'CREATE UNIQUE INDEX IF NOT EXISTS')
-    .replace(/CREATE INDEX CONCURRENTLY/g, 'CREATE INDEX')
-    .replace(/CREATE UNIQUE INDEX CONCURRENTLY/g, 'CREATE UNIQUE INDEX')
-    .replace(/CREATE TABLE IF NOT EXISTS \w+ \([\s]*\)/g, m => m); // keep table stubs
-}
-
-async function runChunks(stmts, label) {
-  let ok = 0, skip = 0, err = 0;
-  const cleaned = stmts.map(clean);
-  for (let i = 0; i < cleaned.length; i += CHUNK) {
-    const chunk = cleaned.slice(i, i + CHUNK);
-    const sql = chunk.join(';\n') + ';';
-    process.stdout.write(`  ${i+1}–${Math.min(i+CHUNK, cleaned.length)}/${cleaned.length}... `);
-    try {
-      const r = await mgmt(sql);
-      if (r.status >= 200 && r.status < 300) {
-        ok += chunk.length;
-        console.log('OK');
-      } else {
-        let msg = r.body.slice(0, 300);
-        try { msg = JSON.parse(r.body).message ?? msg; } catch (_) {}
-        if (msg.includes('already exists') || msg.includes('duplicate') ||
-            msg.includes('does not exist') || msg.includes('not found')) {
-          skip += chunk.length;
-          console.log('SKIP');
-        } else {
-          err += chunk.length;
-          console.log(`ERR ${msg.slice(0, 80)}`);
-        }
-      }
-    } catch (e) {
-      console.log(`NET: ${e.message}`);
-      err += chunk.length;
-    }
-    if (i + CHUNK < cleaned.length) await sleep(200);
-  }
-  console.log(`  -> ${ok} OK, ${skip} pulados, ${err} erros`);
-}
-
-async function main() {
-  const files = [
-    { f: 'scripts/migration/ddl/03_indexes.sql',       l: 'INDEXES' },
-    { f: 'scripts/migration/ddl/04_foreign_keys.sql',   l: 'FOREIGN KEYS' },
-    { f: 'scripts/migration/ddl/05_grants.sql',         l: 'GRANTS' },
-    { f: 'scripts/migration/ddl/06_rls_enable.sql',      l: 'RLS ENABLE' },
-    { f: 'scripts/migration/ddl/07_policies.sql',       l: 'RLS POLICIES' },
-    { f: 'scripts/migration/ddl/08_functions.sql',       l: 'FUNCTIONS' },
-    { f: 'scripts/migration/ddl/09_triggers.sql',       l: 'TRIGGERS' },
-    { f: 'scripts/migration/ddl/10_views.sql',          l: 'VIEWS' },
-  ];
-
-  for (const { f, l } of files) {
-    console.log(`\n[${l}]`);
-    let raw;
-    try { raw = readFileSync(f, 'utf8'); } catch { console.log('  não encontrado'); continue; }
-    const stmts = splitStmts(raw);
-    console.log(`  ${stmts.length} statements`);
-    if (stmts.length === 0) continue;
-    await runChunks(stmts, l);
-    await sleep(500);
-  }
-
-  const count = await mgmt(
-    "SELECT count(*)::int as t FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'"
-  );
-  console.log(`\nFinal: ${JSON.parse(count.body)[0].t} tabelas`);
-}
-
-main().catch(e => { console.error('Fatal:', e.message); process.exit(1); });
+if (ehCli(import.meta.url)) await rodarComoCli(main);

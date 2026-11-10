@@ -3,6 +3,11 @@
 -- Cada index desnecessario onera INSERT/UPDATE/DELETE e autovacuum.
 -- Rodar apos >=7 dias de trafego real. Falso positivo em indices UNIQUE
 -- ou de constraint (que ainda sao necessarios mesmo com idx_scan=0).
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== unused-indexes =='
 WITH candidates AS (
   SELECT s.schemaname, s.relname AS table_name, s.indexrelname AS index_name,

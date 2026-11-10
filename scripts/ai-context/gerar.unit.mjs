@@ -358,3 +358,174 @@ supabase.rpc('dashboard_rpc'); supabase.functions.invoke('dashboard-edge');`);
   assert.deepEqual(orphan.chamada_pelo_front, []);
   assert.deepEqual(orphan.chamada_por_edges, []);
 });
+
+// ---------------------------------------------------------------------------------------------
+// Regressões de fatos errados e de robustez (repositório mínimo próprio, sem a fixture grande).
+// ---------------------------------------------------------------------------------------------
+const spawnGerador = (args, cwd) => { try { return { status: 0, stdout: execFileSync(process.execPath, [GERADOR, ...args], { cwd, stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8' }), stderr: '' }; } catch (e) { return { status: e.status, stdout: String(e.stdout || ''), stderr: String(e.stderr || '') }; } };
+function miniRepo(t, files) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ctx-ia mini ç-')); // espaço e acento no caminho de propósito
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  w(dir, 'package.json', JSON.stringify({ name: 'mini', version: '1.0.0', dependencies: { react: '18', 'react-router-dom': '6' } }));
+  w(dir, 'tsconfig.json', JSON.stringify({ compilerOptions: { paths: { '@/*': ['./src/*'] } } }));
+  for (const [rel, text] of Object.entries(files)) w(dir, rel, text);
+  return { dir, run: (...args) => spawnGerador(['--quiet', ...args], dir), read: (name, out = 'inventario/ia') => JSON.parse(fs.readFileSync(path.join(dir, out, name), 'utf8')) };
+}
+const ROTAS_NAMESPACE = {
+  'src/app/lazyPages.tsx': "import { lazy } from 'react';\nexport const Analytics = lazy(() => import('@/pages/Analytics'));\nexport const Auth = lazy(() => import('@/pages/Auth'));\nexport const AdminDocs = lazy(() => import('@/pages/AdminDocs'));\n",
+  'src/pages/Analytics.tsx': 'export default function Analytics() { return <div/>; }\n',
+  'src/pages/Auth.tsx': 'export default function Auth() { return <div/>; }\n',
+  'src/pages/AdminDocs.tsx': 'export default function AdminDocs() { return <div/>; }\n',
+  'src/components/PageSkeletons.tsx': 'export const AnalyticsPageSkeleton = () => <div/>;\n',
+  'src/app/AppRoutes.tsx': `import { Routes, Route } from 'react-router-dom';
+import * as P from './lazyPages';
+import { AnalyticsPageSkeleton } from '@/components/PageSkeletons';
+const Protected = ({ children }) => children; const LazyPage = ({ children }) => children; const Admin = ({ children }) => children;
+export const AppRoutes = () => (<Routes>
+  <Route path="/auth" element={<LazyPage><P.Auth /></LazyPage>} />
+  <Route path="/analytics" element={<Protected fallback={<AnalyticsPageSkeleton />}><P.Analytics /></Protected>} />
+  <Route path="/admin/docs" element={<Admin><P.AdminDocs /></Admin>} />
+  <Route path="/publico/admin-docs" element={<LazyPage><P.AdminDocs /></LazyPage>} />
+</Routes>);
+`,
+};
+
+test('rotas: <P.Pagina /> (import * as P) resolve o arquivo da página, nunca o skeleton do fallback', (t) => {
+  const repo = miniRepo(t, ROTAS_NAMESPACE);
+  assert.equal(repo.run().status, 0);
+  const urls = Object.fromEntries(repo.read('rotas.json').urls.map((u) => [u.caminho, u]));
+  assert.deepEqual([urls['/analytics'].componente, urls['/analytics'].arquivo], ['Analytics', 'src/pages/Analytics.tsx']);
+  assert.deepEqual([urls['/auth'].componente, urls['/auth'].arquivo], ['Auth', 'src/pages/Auth.tsx']);
+  assert.equal(urls['/analytics'].lazy, true);
+  assert.ok(!repo.read('rotas.json').urls.some((u) => u.componente === 'P' || /Skeleton/.test(u.componente || '')));
+});
+
+test('rotas: protegida vem do wrapper, não do nome da própria página (Auth, Admin*)', (t) => {
+  const repo = miniRepo(t, ROTAS_NAMESPACE);
+  repo.run();
+  const urls = Object.fromEntries(repo.read('rotas.json').urls.map((u) => [u.caminho, u.protegida]));
+  assert.deepEqual(urls, { '/auth': false, '/analytics': true, '/admin/docs': true, '/publico/admin-docs': false });
+});
+
+test('banco: tipo e FK qualificados por schema, PK implica NOT NULL', (t) => {
+  const repo = miniRepo(t, { 'supabase/migrations/20260101000000_a.sql': `CREATE TYPE public.sev AS ENUM ('a','b');
+CREATE TABLE public.t (id uuid PRIMARY KEY, user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE, sev public.sev NOT NULL DEFAULT 'a',
+  outro uuid REFERENCES public.t(id), "Quoted" text, CONSTRAINT fk_x FOREIGN KEY (outro) REFERENCES "auth"."users"(id));
+ALTER TABLE public.t ADD CONSTRAINT fk2 FOREIGN KEY (outro) REFERENCES storage.objects(id);` });
+  repo.run();
+  const tabela = repo.read('banco.json').tabelas.t;
+  assert.equal(tabela.colunas.sev.tipo, 'sev'); // antes: "public"
+  assert.equal(tabela.colunas.user_id.ref, 'auth.users'); // antes: "auth"
+  assert.equal(tabela.colunas.outro.ref, 't');
+  assert.deepEqual(tabela.fks, ['outro->auth.users', 'outro->storage.objects', 'outro->t', 'user_id->auth.users']);
+  assert.equal(tabela.colunas.id.nn, true);
+  assert.ok(tabela.colunas.Quoted);
+});
+
+test('banco: ALTER POLICY (TO / RENAME) e DDL de bloco DO na ordem do arquivo', (t) => {
+  const repo = miniRepo(t, {
+    'supabase/migrations/20260101000000_a.sql': `CREATE TABLE public.t (id uuid PRIMARY KEY, user_id uuid);
+ALTER TABLE public.t ENABLE ROW LEVEL SECURITY;
+DO $$ BEGIN DROP POLICY IF EXISTS p ON public.t; END $$;
+CREATE POLICY p ON public.t FOR SELECT USING (true);
+CREATE POLICY q ON public.t FOR INSERT WITH CHECK (true);
+CREATE POLICY r ON public.t FOR DELETE USING (true);
+DO $do$ BEGIN DROP POLICY r ON public.t; EXCEPTION WHEN undefined_object THEN NULL; END $do$;`,
+    'supabase/migrations/20260102000000_b.sql': `ALTER POLICY q ON public.t TO authenticated, service_role WITH CHECK (user_id = auth.uid());
+ALTER POLICY p ON public.t RENAME TO "p 2";
+ALTER POLICY inexistente ON public.t TO anon;
+ALTER POLICY q ON public.nao_existe TO anon;`,
+  });
+  repo.run();
+  const banco = repo.read('banco.json');
+  assert.deepEqual(banco.tabelas.t.policies.map((p) => [p.nome, p.comando, p.para]), [['p 2', 'select', 'public'], ['q', 'insert', 'authenticated, service_role']]);
+  assert.equal(banco.tabelas.nao_existe, undefined); // ALTER POLICY não inventa tabela
+  assert.deepEqual(repo.read('manifest.json').erros, []);
+});
+
+test('saída determinística: duas execuções iguais, sem caminho absoluto nem arquivo temporário', (t) => {
+  const repo = miniRepo(t, { ...ROTAS_NAMESPACE, 'supabase/migrations/1_a.sql': 'CREATE TABLE public.t (id int);' });
+  const snapshot = () => Object.fromEntries(fs.readdirSync(path.join(repo.dir, 'saida')).sort().map((f) => [f, fs.readFileSync(path.join(repo.dir, 'saida', f), 'utf8')]));
+  assert.equal(repo.run('--out', 'saida').status, 0);
+  const primeira = snapshot();
+  assert.equal(spawnGerador(['--quiet', '--root', repo.dir, '--out', 'saida'], os.tmpdir()).status, 0); // cwd diferente da raiz
+  const segunda = snapshot();
+  assert.deepEqual(Object.keys(segunda), Object.keys(primeira));
+  for (const [nome, texto] of Object.entries(segunda)) {
+    assert.ok(!/\.tmp$/.test(nome), `temporário esquecido: ${nome}`);
+    assert.ok(!texto.includes(repo.dir), `${nome} contém caminho absoluto`);
+    if (nome !== 'manifest.json') assert.equal(texto, primeira[nome], `${nome} mudou entre execuções idênticas`);
+  }
+  const semData = (s) => s.replace(/"gerado_em": "[^"]+"/, '');
+  assert.equal(semData(segunda['manifest.json']), semData(primeira['manifest.json']));
+});
+
+test('argumentos: --help não gera nada; flag desconhecida, --out vazio e --root inexistente saem com 2', (t) => {
+  const repo = miniRepo(t, {});
+  const ajuda = spawnGerador(['--help'], repo.dir);
+  assert.equal(ajuda.status, 0);
+  assert.match(ajuda.stdout, /Uso: node scripts\/ai-context\/gerar\.mjs/);
+  for (const args of [['--bogus'], ['--out'], ['--out', ''], ['--out', '--quiet'], ['--root', path.join(repo.dir, 'nao-existe')]]) {
+    const r = spawnGerador(args, repo.dir);
+    assert.equal(r.status, 2, `args ${JSON.stringify(args)}`);
+    assert.match(r.stderr, /\[contexto-ia\]/);
+    assert.doesNotMatch(r.stderr, /\n\s+at /); // sem stack trace
+  }
+  assert.ok(!fs.existsSync(path.join(repo.dir, 'inventario')), 'nenhuma saída no default silencioso');
+  assert.ok(!fs.existsSync(path.join(repo.dir, 'nao-existe')), '--root inexistente não é criado');
+});
+
+test('falhas: saída cujo pai é arquivo sai com 2; config inválida vira erro no manifest; repo vazio gera tudo', (t) => {
+  const repo = miniRepo(t, { 'arquivo.txt': 'x' });
+  const paiArquivo = repo.run('--out', 'arquivo.txt/sub');
+  assert.equal(paiArquivo.status, 2);
+  assert.match(paiArquivo.stderr, /não foi possível criar a pasta de saída/);
+  assert.equal(repo.run('--out', 'a/b/c/nova').status, 0); // diretório inexistente é criado
+  assert.deepEqual(repo.read('manifest.json', 'a/b/c/nova').erros, []);
+  assert.equal(repo.read('banco.json', 'a/b/c/nova').migrations, 0); // repo sem migrations
+  for (const invalido of ['{oops', '[1]', 'null']) {
+    w(repo.dir, 'ai-context.config.json', invalido);
+    assert.equal(repo.run().status, 0);
+    assert.deepEqual(repo.read('manifest.json').erros.map((e) => e.secao), ['config'], `config ${invalido}`);
+  }
+});
+
+test('entrada hostil: SQL não-UTF8, $$ com ; e comentários, arquivo enorme e execuções concorrentes', async (t) => {
+  const repo = miniRepo(t, {});
+  fs.mkdirSync(path.join(repo.dir, 'supabase/migrations'), { recursive: true });
+  fs.writeFileSync(path.join(repo.dir, 'supabase/migrations/1_bin.sql'), Buffer.concat([Buffer.from('CREATE TABLE public.t'), Buffer.from([0xe7, 0xff]), Buffer.from(' (id int);\nCREATE TABLE public.ok (id int);\n')]));
+  w(repo.dir, 'supabase/migrations/2_fn.sql', `/* bloco ; com create table falsa1 (id int); */
+-- create table falsa2 (id int);
+CREATE FUNCTION public.f() RETURNS text LANGUAGE plpgsql AS $fn$ BEGIN RETURN 'a;b -- c $$ d'; END $fn$;
+CREATE TABLE public.depois (id int, nota text DEFAULT 'x;y');`);
+  w(repo.dir, 'supabase/migrations/3_grande.sql', `CREATE TABLE public.grande (id int);\nINSERT INTO public.grande VALUES ${Array.from({ length: 150000 }, (_, i) => `(${i})`).join(',')};\nCREATE TABLE public.fim (id int);\n`);
+  const inicio = Date.now();
+  const resultados = await Promise.all([1, 2, 3].map(() => new Promise((resolve) => { import('node:child_process').then(({ execFile }) => execFile(process.execPath, [GERADOR, '--quiet'], { cwd: repo.dir }, (err) => resolve(err ? err.code : 0))); })));
+  assert.deepEqual(resultados, [0, 0, 0]);
+  assert.ok(Date.now() - inicio < 60000, 'arquivo grande não pode travar o gerador');
+  const banco = repo.read('banco.json');
+  assert.deepEqual(Object.keys(banco.tabelas).sort(), ['depois', 'fim', 'grande', 'ok']);
+  assert.deepEqual(banco.funcoes, ['f']);
+  assert.equal(banco.tabelas.depois.colunas.nota.default, "'x;y'");
+  const saida = fs.readdirSync(path.join(repo.dir, 'inventario/ia'));
+  assert.ok(!saida.some((f) => f.endsWith('.tmp')), 'temporário esquecido após concorrência');
+  for (const f of saida.filter((x) => x.endsWith('.json'))) JSON.parse(fs.readFileSync(path.join(repo.dir, 'inventario/ia', f), 'utf8')); // nenhum JSON pela metade
+});
+
+test('segredos do repo (script npm, default de coluna, JWT em cron, DSN) não são replicados na saída', (t) => {
+  const repo = miniRepo(t, {
+    'supabase/migrations/1_a.sql': `select cron.schedule('job-nome', '* * * * *', $$ select net.http_post('https://x.supabase.co/functions/v1/fx', headers := '{"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIn0.CANARIOsig1234567890"}'::jsonb) $$);
+create table public.t (id int, k text default 'sk_live_CANARIOdefault123456', dsn text default 'postgresql://app:CANARIOsenha@db.interno:5432/app');`,
+    'src/a.ts': "export const a = 1; const KEY = 'ghp_CANARIOsrc12345678901234567890';\n",
+  });
+  w(repo.dir, 'package.json', JSON.stringify({ name: 'x', scripts: { deploy: 'curl -H "Authorization: Bearer CANARIOscriptTOKEN123456" https://x' } }));
+  assert.equal(repo.run().status, 0);
+  const out = path.join(repo.dir, 'inventario/ia');
+  for (const f of fs.readdirSync(out)) assert.doesNotMatch(fs.readFileSync(path.join(out, f), 'utf8'), /CANARIO/, f);
+  assert.match(repo.read('ferramentas.json').scripts_npm?.deploy ?? JSON.stringify(repo.read('ferramentas.json')), /Bearer \[REDACTED\]/);
+  assert.equal(repo.read('banco.json').tabelas.t.colunas.dsn.default, "'postgresql://[REDACTED]@db.interno:5432/app'");
+  assert.deepEqual(repo.read('banco.json').cron_jobs.map((c) => c.nome), ['job-nome']); // nome de job não é segredo
+  const manifest = repo.read('manifest.json'); // hash confere com o que foi gravado (já redigido)
+  const crypto = { sha: (s) => execFileSync(process.execPath, ['-e', "process.stdout.write(require('crypto').createHash('sha256').update(require('fs').readFileSync(process.argv[1])).digest('hex').slice(0,16))", s], { encoding: 'utf8' }) };
+  assert.equal(manifest.arquivos['banco.json'], crypto.sha(path.join(out, 'banco.json')));
+});

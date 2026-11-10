@@ -1,7 +1,15 @@
 -- function-search-path-reset-audit.sql — Rodada 19/10
--- Functions SECURITY DEFINER sem SET search_path fixo sao vetor de escalonamento.
+-- Proposito: falha se ha function SECURITY DEFINER em public sem search_path seguro
+--            (vetor de escalonamento de privilegio por hijack de objetos).
 -- Rodada 23/10 (F2): tambem falha se search_path fixo comeca por schema
 -- gravavel por outros (ex: 'public'), permitindo hijack de objetos.
+-- Classe   : GUARD FATAL
+-- Limiar   : qualquer SECDEF em public cujo search_path nao seja vazio ('' — gravado
+--            em proconfig como search_path="") nem comece por pg_catalog.
+-- Variaveis: nenhuma
+-- Saida    : 0 = ok; 3 = condicao ruim (RAISE EXCEPTION sob ON_ERROR_STOP).
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== function-search-path-reset-audit =='
 WITH sd AS (
   SELECT n.nspname, p.proname, p.proconfig,
@@ -16,7 +24,7 @@ WITH sd AS (
 SELECT nspname, proname, sp,
        CASE
          WHEN sp IS NULL                          THEN 'missing'
-         WHEN sp = ''''''                         THEN 'ok-empty'
+         WHEN sp IN ('""', '''''', '')            THEN 'ok-empty'
          WHEN sp ILIKE 'pg_catalog%'              THEN 'ok'
          ELSE 'insecure-prefix'
        END AS status
@@ -33,7 +41,7 @@ BEGIN
      WHERE n.nspname='public' AND p.prosecdef=true
   ) x
   WHERE sp IS NULL
-     OR (sp <> '''''' AND sp NOT ILIKE 'pg_catalog%');
+     OR (sp NOT IN ('""', '''''', '') AND sp NOT ILIKE 'pg_catalog%');
   IF v_count > 0 THEN
     RAISE EXCEPTION 'FATAL: % functions SECDEF sem search_path seguro (vazio ou pg_catalog first).', v_count;
   END IF;

@@ -1,4 +1,10 @@
 -- hot-standby-feedback-audit.sql — Rodada 20/10
+-- Proposito: config de hot standby e lag das replicas conectadas.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== hot-standby-feedback-audit =='
 SELECT name, setting, context
   FROM pg_settings

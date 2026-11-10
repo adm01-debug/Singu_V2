@@ -1,4 +1,8 @@
 -- not-valid-constraints.sql — Detecta constraints NOT VALID esquecidas.
+-- Classe   : GUARD FATAL
+-- Limiar   : qualquer constraint de tabela public com convalidated = false.
+-- Variaveis: nenhuma
+-- Saida    : 0 = ok; 3 = condicao ruim (RAISE EXCEPTION sob ON_ERROR_STOP).
 \set ON_ERROR_STOP on
 \pset pager off
 

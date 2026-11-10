@@ -1,4 +1,10 @@
 -- autovacuum-worker-saturation.sql — Rodada 20/10
+-- Proposito: mostra workers de autovacuum ativos x autovacuum_max_workers.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== autovacuum-worker-saturation =='
 SELECT setting::int AS max_workers
   FROM pg_settings WHERE name='autovacuum_max_workers';

@@ -47,12 +47,18 @@ import shutil
 import subprocess
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from decimal import Decimal
 from typing import Any, Callable
 
 import psycopg
 from psycopg.rows import dict_row
+
+try:
+    import fcntl
+except ImportError:  # Windows: sem trava de diretório
+    fcntl = None  # type: ignore[assignment]
 
 # --------------------------------------------------------------------------- #
 # Config
@@ -117,7 +123,7 @@ API_ROLES = ("anon", "authenticated", "service_role", "PUBLIC")
 MGMT_API = "https://api.supabase.com/v1"
 REDACT_RE = re.compile(
     r"(secret|password|passwd|token|private_key|api_key|apikey|smtp_pass|client_secret|"
-    r"signing_key|service_key|anon_key|service_role|jwt|credential|encryption_key|connection_string|dsn)",
+    r"signing_key|service_key|anon_key|access_key|service_role|jwt|credential|encryption_key|connection_string|dsn)",
     re.I,
 )
 
@@ -178,8 +184,34 @@ def prepare_output_directory() -> None:
     (OUT / OUTPUT_MARKER).write_text(OUTPUT_MARKER_CONTENT, encoding="utf-8")
 
 
+def mask_secrets(text: str) -> str:
+    """Erro do libpq/pg_dump/CLI pode ecoar a DSN inteira ou a senha; nada disso vai para log ou arquivo."""
+    secrets = {DB_URL, ACCESS_TOKEN, os.environ.get("PGPASSWORD", "")}
+    try:
+        secrets.add(urllib.parse.unquote(urllib.parse.urlsplit(DB_URL).password or ""))
+        secrets.add(urllib.parse.urlsplit(DB_URL).password or "")
+    except ValueError:
+        pass
+    for secret in sorted((x for x in secrets if len(x) >= 4), key=len, reverse=True):
+        text = text.replace(secret, "[REDACTED]")
+    return scrub(text)
+
+
+def lock_output_directory():
+    """Uma coleta por SNAPSHOT_DIR: duas ao mesmo tempo apagam os arquivos uma da outra."""
+    if fcntl is None:
+        return None
+    handle = open(OUT / OUTPUT_MARKER, "a", encoding="utf-8")  # noqa: SIM115 -- a trava vive enquanto o handle estiver aberto
+    try:
+        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        handle.close()
+        raise ValueError(f"outra coleta já está usando {OUT}; aguarde ela terminar. Nada foi alterado.") from None
+    return handle
+
+
 def record_error(section: str, err: Exception | str) -> None:
-    text = str(err).strip().splitlines()[0] if str(err).strip() else repr(err)
+    text = mask_secrets(str(err).strip().splitlines()[0] if str(err).strip() else repr(err))
     ERRORS.append({"section": section, "error": text[:500]})
     log(f"ERRO em {section}: {text[:300]}")
 
@@ -271,18 +303,35 @@ def uslug(text: str, scope: str = "") -> str:
 
 
 def write(path: pathlib.Path, content: str) -> None:
+    """Grava em temporário e troca: interrupção no meio não deixa snapshot.json/manifest.json truncado."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(content if content.endswith("\n") else content + "\n", encoding="utf-8")
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    try:
+        temporary.write_text(content if content.endswith("\n") else content + "\n", encoding="utf-8")
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def redact(obj: Any) -> Any:
     if isinstance(obj, dict):
-        return {k: ("[REDACTED]" if REDACT_RE.search(str(k)) else redact(v)) for k, v in obj.items()}
+        # bool/número/None não carregam segredo: `jwt_exp`, `password_min_length` e
+        # `refresh_token_rotation_enabled` são configuração que o resumo de auth.md mostra.
+        return {k: ("[REDACTED]" if REDACT_RE.search(str(k)) and not isinstance(v, (bool, int, float, type(None))) else redact(v))
+                for k, v in obj.items()}
     if isinstance(obj, list):
         return [redact(v) for v in obj]
     if isinstance(obj, str):
         return scrub(obj)
     return obj
+
+
+def redact_settings(settings: list[str] | None) -> list[str] | None:
+    """`nome=valor` de rolconfig/proconfig: o valor some quando o NOME indica segredo (app.settings.jwt_secret=...)."""
+    if not settings:
+        return settings
+    return [f"{name}=[REDACTED]" if sep and REDACT_RE.search(name) else item
+            for item in settings for name, sep, _ in [str(item).partition("=")]]
 
 
 def excluded_sql(alias: str = "n.nspname", extra: set[str] | None = None) -> str:
@@ -301,19 +350,45 @@ def group(rows, keyfn):
 # Database introspection
 # --------------------------------------------------------------------------- #
 
-SCRUB_RULES: list[tuple[re.Pattern, str]] = [
+_SECRET_WORDS = (r"(?:apikey|api[_-]?key|authorization|token|secret|password|passwd|pwd|senha|service_role_key|"
+                 r"service_key|anon_key|access_key|private_key|credential)")
+# Nome de chave não é segredo: `ARRAY['token','password','webhook_secret']`, `jsonb_build_object('token', v.token, 'expires_at', ...)`.
+_KEY_NAME_RE = re.compile(r"(?i)(?:[a-z]+(?:_[a-z]+)+|" + _SECRET_WORDS + ")")
+
+
+def _redact_literal(match: re.Match) -> str:
+    return match.group(0) if _KEY_NAME_RE.fullmatch(match.group(3)) else match.group(1) + "[REDACTED]"
+
+
+SCRUB_RULES: list[tuple[re.Pattern, Any]] = [
     # JWT (3 partes) — anon/service_role keys do Supabase
     (re.compile(r"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{5,}"), "[REDACTED_JWT]"),
     # chaves novas do Supabase
     (re.compile(r"sb_(?:secret|publishable)_[A-Za-z0-9_-]{8,}"), "[REDACTED_KEY]"),
     # Authorization: Bearer <token>  /  apikey: <token>
     (re.compile(r"(?i)(bearer\s+)[A-Za-z0-9._~+/=-]{16,}"), r"\1[REDACTED]"),
+    # 'Bearer ' || '<token literal>' (header montado por concatenação; `|| current_setting(...)` fica intacto)
+    (re.compile(r"(?i)(bearer\s*'\s*\|\|\s*')[^']{8,}(')"), r"\1[REDACTED]\2"),
     # valor precisa parecer token: >= 16 chars, sem espaço, com pelo menos um dígito (evita redigir prosa)
-    (re.compile(r"""(?i)((?:apikey|api_key|x-api-key|authorization|token|secret|password|passwd|service_role_key|anon_key)\s*["']?\s*[:=]\s*["']?)(?=[^"'\s,;)}]*\d)[^"'\s,;)}]{16,}"""), r"\1[REDACTED]"),
+    (re.compile(r"""(?i)((?:apikey|api_key|x-api-key|authorization|token|secret|password|passwd|service_role_key|anon_key)\s*["']?\s*(?::=|=>|[:=])\s*["']?)(?=[^"'\s,;)}]*\d)[^"'\s,;)}]{16,}"""), r"\1[REDACTED]"),
+    # literal entre aspas logo após um nome que TERMINA em palavra de segredo: `"x-cron-secret": "..."`,
+    # `jsonb_build_object('apikey', '...')`, `service_key text := '...'`, `api_key text DEFAULT '...'`.
+    # Sem exigir dígito (segredo só com letras existe); >= 8 chars sem espaço para não redigir prosa.
+    (re.compile(r"(?i)(" + _SECRET_WORDS + r"""["']?(?:\s+\w+){0,2}?\s*(?::=|=>|[:=,]|\bdefault\b)\s*E?(["']))(?!\[REDACTED)([^"'\s]{8,})(?=\2)"""), _redact_literal),
+    # senha entre aspas: qualquer tamanho
+    (re.compile(r"""(?i)((?:password|passwd|pwd|senha)["']?\s*(?::=|=>|[:=,])\s*E?(["']))(?!\[REDACTED)([^"'\s]+)(?=\2)"""), _redact_literal),
+    # conninfo do libpq sem aspas: `host=... password=valor`
+    (re.compile(r"""(?i)\b((?:password|passwd|pwd)=)(?!\[REDACTED)[^\s'"&;,)]+"""), r"\1[REDACTED]"),
     # PASSWORD 'x' em DDL de role
     (re.compile(r"(?i)(password\s+)'[^']*'"), r"\1'[REDACTED]'"),
-    # DSN com senha
-    (re.compile(r"(\w+://[^/\s:@]+:)[^@\s]+(@)"), r"\1[REDACTED]\2"),
+    # valor gravado no Vault por migration: vault.create_secret('<valor>', ...) / vault.update_secret(id, '<valor>')
+    (re.compile(r"(?i)(vault\.create_secret\s*\(\s*(?:new_secret\s*(?::=|=>)\s*)?E?')(?:[^']|'')*(')"), r"\1[REDACTED]\2"),
+    (re.compile(r"(?i)(vault\.update_secret\s*\(\s*[^,()]+,\s*(?:new_secret\s*(?::=|=>)\s*)?E?')(?:[^']|'')*(')"), r"\1[REDACTED]\2"),
+    # DSN com senha. Usuário e senha saem juntos: `esquema://usuario:[REDACTED]@` casava com o guard
+    # "nenhum segredo na saída" do contexto.yml (`postgres://[^ ]*:[^ @]+@`) e abortava a publicação.
+    # O esquema tem início e tamanho limitados: `\w+://` reavaliava a palavra inteira a cada posição
+    # (quadrático) e um blob hex/base64 de 2 MB numa migration travava a coleta até o timeout do job.
+    (re.compile(r"(?<![A-Za-z0-9+.-])([A-Za-z][A-Za-z0-9+.-]{0,30}://)[^/\s:@]+:[^@\s]+@"), r"\1[REDACTED]@"),
     # chaves de provedores comuns
     (re.compile(r"\b(?:sk-[A-Za-z0-9_-]{20,}|sk_live_[A-Za-z0-9]{10,}|sk_test_[A-Za-z0-9]{10,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,})\b"), "[REDACTED_KEY]"),
 ]
@@ -661,12 +736,15 @@ def get_grants(conn):
 
 @section("roles")
 def get_roles(conn):
-    return q(conn, """
+    roles = q(conn, """
         SELECT r.rolname AS name, r.rolsuper AS superuser, r.rolinherit AS inherit, r.rolcreaterole AS create_role,
                r.rolcreatedb AS create_db, r.rolcanlogin AS login, r.rolbypassrls AS bypass_rls, r.rolconnlimit AS conn_limit,
                r.rolconfig AS config,
                ARRAY(SELECT b.rolname FROM pg_auth_members m JOIN pg_roles b ON b.oid = m.roleid WHERE m.member = r.oid ORDER BY 1) AS member_of
         FROM pg_roles r WHERE r.rolname NOT LIKE 'pg\\_%' ORDER BY 1""")
+    for role in roles:
+        role["config"] = redact_settings(role["config"])
+    return roles
 
 
 @section("realtime")
@@ -733,7 +811,8 @@ def get_vault(conn):
 def get_foreign(conn):
     return q(conn, """
         SELECT s.srvname AS name, w.fdwname AS wrapper,
-               ARRAY(SELECT regexp_replace(o, '^(password|secret|token|key|api_key|service_key)=.*', '\\1=[REDACTED]', 'i')
+               -- nome CONTÉM a palavra (aws_secret_access_key, api_key_id...), não só é igual a ela
+               ARRAY(SELECT regexp_replace(o, '^([^=]*(password|passwd|pwd|secret|token|key|credential)[^=]*)=.*', '\\1=[REDACTED]', 'i')
                      FROM unnest(s.srvoptions) o) AS options
         FROM pg_foreign_server s JOIN pg_foreign_data_wrapper w ON w.oid = s.srvfdw ORDER BY 1""")
 
@@ -1702,7 +1781,7 @@ def render_readme(snap: dict, api_: dict, caller_sources: dict[str, str] | None 
 
 def update_changelog(diff: list[tuple[str, str, list[str]]], previous_existed: bool) -> None:
     path = OUT / "CHANGELOG.md"
-    old = path.read_text(encoding="utf-8") if path.exists() else "# CHANGELOG do snapshot Supabase\n\nDiff semântico gerado a cada coleta em que algo mudou.\n"
+    old = path.read_text(encoding="utf-8", errors="replace") if path.exists() else "# CHANGELOG do snapshot Supabase\n\nDiff semântico gerado a cada coleta em que algo mudou.\n"
     if not diff and previous_existed:
         return
     stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
@@ -1733,21 +1812,33 @@ def main() -> int:
         return 2
     try:
         prepare_output_directory()
-    except ValueError as error:
+        lock = lock_output_directory()
+    except (ValueError, OSError) as error:  # OSError: sem permissão, pai é arquivo, disco cheio
         print(f"Configuração inválida: {error}", file=sys.stderr)
         return 2
+    try:
+        return collect_and_render()
+    finally:
+        if lock is not None:
+            lock.close()
 
+
+def collect_and_render() -> int:
     previous = None
     prev_path = OUT / "snapshot.json"
-    if prev_path.exists():
+    # Mesmo critério do diretório de saída: JSON válido com outro formato (lista, db não-objeto) não é "anterior".
+    if valid_previous_snapshot(prev_path):
         try:
             previous = json.loads(prev_path.read_text(encoding="utf-8"))
-            if previous.get("format_version") != FORMAT_VERSION:
-                previous = None
         except Exception:  # noqa: BLE001
             previous = None
 
-    db, stats = introspect_db((previous or {}).get("db"))
+    try:
+        db, stats = introspect_db((previous or {}).get("db"))
+    except (getattr(psycopg, "Error", OSError), OSError) as error:
+        # Conexão/DSN: o libpq ecoa a string de conexão em alguns erros; sem traceback e sem segredo.
+        print(f"Banco inacessível — nada foi sobrescrito: {mask_secrets(str(error).strip())}", file=sys.stderr)
+        return 1
     if all(v is None for v in db.values()):
         log("Banco inteiro indisponível — nada será sobrescrito.")
         return 1
@@ -1785,8 +1876,13 @@ def main() -> int:
         write(OUT / "types.ts", types_ts)
 
     new_fp = fingerprints(snap)
-    old_fp = fingerprints(previous) if previous else {}
-    diff = diff_fingerprints(old_fp, new_fp) if previous else []
+    try:
+        old_fp = fingerprints(previous) if previous else {}
+    except (KeyError, TypeError, AttributeError) as error:
+        # Linha anterior sem as chaves esperadas travava TODA coleta seguinte (o snapshot.json nunca era regravado).
+        record_error("changelog", f"snapshot anterior ilegível ({type(error).__name__}: {error}); diff desta coleta omitido")
+        old_fp = None
+    diff = diff_fingerprints(old_fp, new_fp) if previous and old_fp is not None else []
     update_changelog(diff, previous_existed=previous is not None)
     render_readme(snap, api_, caller_sources)
     slim = json.loads(dumps(snap))

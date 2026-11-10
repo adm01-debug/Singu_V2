@@ -1,0 +1,3 @@
+# Os cenários são carregados (source) pelo run-all.sh, que lê EXPECTED_EXIT, DOIS_LADOS e
+# CLUSTER e chama setup/run_guard/cleanup_scenario — para o shellcheck parecem não usados.
+disable=SC2034

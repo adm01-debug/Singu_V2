@@ -1,5 +1,10 @@
 -- role-membership-parity.sql — Rodada 17/10
 -- Snapshot canonico da hierarquia de roles para diff src vs dest.
+-- Classe   : SNAPSHOT (saida canonica para diff origem x destino; sem veredito)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== role-membership-parity =='
 SELECT r.rolname AS role,
        array_agg(m.rolname ORDER BY m.rolname) FILTER (WHERE m.rolname IS NOT NULL) AS members

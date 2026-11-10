@@ -1,5 +1,9 @@
 -- invalid-indexes-guard.sql — Falha se houver indice invalido em public.*
 -- (indisvalid=false / indisready=false). Planner ignora esses indices -> regressao silenciosa.
+-- Classe   : GUARD FATAL (chamado pelo CI: psql -v ON_ERROR_STOP=1 -f ...)
+-- Limiar   : qualquer indice de public com indisvalid/indisready/indislive = false.
+-- Variaveis: nenhuma
+-- Saida    : 0 = ok; 3 = condicao ruim (RAISE EXCEPTION sob ON_ERROR_STOP).
 \set ON_ERROR_STOP on
 \pset pager off
 

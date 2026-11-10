@@ -1,6 +1,13 @@
 -- collation-version-mismatch.sql — Rodada 25/10 (FATAL)
 -- Upgrade de glibc muda ordenacao de strings; indices btree ficam corrompidos
 -- silenciosamente ate REINDEX. Detecta drift entre versao registrada e atual.
+-- Classe   : GUARD FATAL
+-- Limiar   : qualquer database conectavel ou collation com versao gravada <> versao atual do SO.
+-- Variaveis: nenhuma
+-- Saida    : 0 = ok; 3 = condicao ruim (RAISE EXCEPTION sob ON_ERROR_STOP).
+-- Requer   : PG15+ (pg_database_collation_actual_version).
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== collation-version-mismatch =='
 SELECT datname, datcollate, datcollversion,
        pg_database_collation_actual_version(oid) AS actual_version

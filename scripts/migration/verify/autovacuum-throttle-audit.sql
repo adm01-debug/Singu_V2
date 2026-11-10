@@ -1,5 +1,11 @@
 -- autovacuum-throttle-audit.sql — Rodada 25/10 (WARN)
 -- cost_delay > 20ms estrangula autovacuum em bancos com writes altos.
+-- Limiar   : autovacuum_vacuum_cost_delay > 20ms.
+-- Classe   : AUDIT (RAISE WARNING no achado; nunca falha)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== autovacuum-throttle-audit =='
 SELECT name, setting, unit FROM pg_settings
  WHERE name IN ('autovacuum_vacuum_cost_delay','autovacuum_vacuum_cost_limit',

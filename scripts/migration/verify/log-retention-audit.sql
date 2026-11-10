@@ -1,4 +1,7 @@
 -- log-retention-audit.sql — Valida politica de retencao de logs (LGPD).
+-- Classe   : AUDIT (RAISE WARNING no achado; nunca falha)
+-- Variaveis: nenhuma
+-- Saida    : 0.
 \set ON_ERROR_STOP on
 \pset pager off
 

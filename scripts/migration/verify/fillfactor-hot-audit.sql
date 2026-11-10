@@ -1,4 +1,10 @@
 -- fillfactor-hot-audit.sql — Rodada 21/10
+-- Proposito: fillfactor das tabelas de public com mais de 100MB (candidatas a HOT update).
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== fillfactor-hot-audit =='
 SELECT n.nspname, c.relname,
        COALESCE((SELECT option_value FROM pg_options_to_table(c.reloptions)

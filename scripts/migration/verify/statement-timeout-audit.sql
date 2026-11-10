@@ -1,6 +1,11 @@
 -- statement-timeout-audit.sql — Rodada 17/10
 -- Timeouts por role: statement, idle_in_transaction, lock. Roles publicas
 -- sem timeout expoem o banco a queries longas que exaurem pool.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== statement-timeout-audit =='
 SELECT r.rolname,
        COALESCE((SELECT option_value FROM pg_options_to_table(r.rolconfig)

@@ -19,8 +19,18 @@ import { execFileSync } from 'node:child_process';
 
 const FORMAT_VERSION = 2;
 const args = process.argv.slice(2);
+// Argumentos validados antes de qualquer trabalho: `--help` executava a geração inteira no cwd, `--out` sem
+// valor (variável vazia no shell) caía calado em inventario/ia e `--root` inexistente gerava um contexto vazio.
+const USO = 'Uso: node scripts/ai-context/gerar.mjs [--root <dir>] [--out <dir>] [--quiet]';
+const sairComErro = (msg) => { console.error(`[contexto-ia] ${msg}\n${USO}`); process.exit(2); };
+if (args.includes('--help') || args.includes('-h')) { console.log(USO); process.exit(0); }
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === '--root' || args[i] === '--out') { if (!args[i + 1] || args[i + 1].startsWith('--')) sairComErro(`${args[i]} exige um valor`); i++; }
+  else if (args[i] !== '--quiet') sairComErro(`argumento desconhecido: ${args[i]}`);
+}
 const argOf = (k, d) => { const i = args.indexOf(k); return i >= 0 && args[i + 1] ? args[i + 1] : d; };
 const ROOT = path.resolve(argOf('--root', process.env.AI_CONTEXT_ROOT || process.cwd()));
+if (!fs.existsSync(ROOT) || !fs.statSync(ROOT).isDirectory()) sairComErro(`--root não é um diretório: ${ROOT}`);
 const QUIET = args.includes('--quiet');
 const log = (...m) => { if (!QUIET) console.log('[contexto-ia]', ...m); };
 const ERROS = [];
@@ -29,7 +39,12 @@ const secao = (nome, fn, fallback) => { try { return fn(); } catch (e) { ERROS.p
 // ---------- util ----------
 const rel = (p) => path.relative(ROOT, p).split(path.sep).join('/');
 const abs = (p) => path.join(ROOT, p);
-const CFG = (() => { try { return JSON.parse(fs.readFileSync(abs('ai-context.config.json'), 'utf8')); } catch { return {}; } })();
+const CFG = (() => {
+  let raw; try { raw = fs.readFileSync(abs('ai-context.config.json'), 'utf8'); } catch { return {}; } // sem config: padrões
+  // config quebrada não some calada: os padrões valem, mas o erro vai para manifest.json → erros
+  try { const cfg = JSON.parse(raw.replace(/^\uFEFF/, '')); if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) throw new Error('não é um objeto JSON'); return cfg; }
+  catch (e) { ERROS.push({ secao: 'config', erro: `ai-context.config.json inválido (${e.message}); usando os padrões` }); log(`ERRO: ai-context.config.json inválido (${e.message}); usando os padrões`); return {}; }
+})();
 const OUT = path.resolve(ROOT, argOf('--out', process.env.AI_CONTEXT_DIR || CFG.out || 'inventario/ia'));
 const OUT_REL = rel(OUT);
 const MAX_FILE_BYTES = (CFG.maxFileMB || 8) * 1024 * 1024;
@@ -307,9 +322,9 @@ secao('rotas-jsx', () => {
       const p = /\bpath=["']([^"']*)["']/.exec(attrs) || /\bpath:\s*["']([^"']*)["']/.exec(attrs); const isIndex = /\bindex\b/.test(attrs);
       const parent = stack.length ? stack[stack.length - 1] : null;
       const full = p ? joinPath(parent, p[1]) : isIndex ? parent || '/' : parent;
-      const tags = [...attrs.matchAll(/<([A-Z]\w*)/g)].map((x) => x[1]);
+      const tags = [...attrs.matchAll(/<(?:[A-Z]\w*\.)?([A-Z]\w*)/g)].map((x) => x[1]); // <P.Pagina /> conta como Pagina (import * as P)
       const props = [...attrs.matchAll(/\w+=\{\s*([A-Z]\w*)\s*\}/g)].map((x) => x[1]);
-      const GENERIC = /^(Navigate|Redirect|Suspense|Fragment|Outlet|LazyPage|Lazy\w*|Loadable|ErrorBoundary|\w*Boundary|\w*Provider|\w*Layout|\w*Route|\w*Guard|Protected\w*|Private\w*|Require\w*|Auth\w*)$/;
+      const GENERIC = /^(Navigate|Redirect|Suspense|Fragment|Outlet|LazyPage|Lazy\w*|Loadable|ErrorBoundary|\w*Boundary|\w*Provider|\w*Layout|\w*Route|\w*Guard|Protected\w*|Private\w*|Require\w*|Auth\w*|\w*Skeleton|\w*Loading|\w*Fallback)$/;
       // candidato: prop Component={X} > tag mais interna > demais; prefere o que resolve por lazy/import (strict), depois busca global
       const ordem = uniq([...props, ...tags.slice().reverse()]).sort((a, b) => (props.includes(b) ? 1 : 0) - (props.includes(a) ? 1 : 0) || tags.lastIndexOf(b) - tags.lastIndexOf(a));
       let comp = null, file = null;
@@ -318,7 +333,7 @@ secao('rotas-jsx', () => {
       if (!comp) { const inner = tags[tags.length - 1]; if (inner && !/^(Navigate|Redirect)$/.test(inner)) { comp = inner; file = componentFile(inner, rf); } }
       const redir = /<(?:Navigate|Redirect)\b[^>]*\bto=["']([^"']+)["']/.exec(attrs);
       const paiProtegido = parent ? !!rotas.find((r) => r.caminho === parent && r.definida_em === rf && r.protegida) : false;
-      if (p || isIndex) rotas.push(mk({ caminho: full, componente: comp, arquivo: file, protegida: tags.some((w) => /Protected|Private|Auth|Guard|Require|Admin/i.test(w)) || paiProtegido, wrappers: tags.filter((t) => t !== comp), pai: parent, indice: isIndex, definida_em: rf, lazy: comp ? lazyMap.has(comp) : false, tipo: redir && !comp ? 'redirect' : 'tela', redireciona: redir ? redir[1] : null }));
+      if (p || isIndex) rotas.push(mk({ caminho: full, componente: comp, arquivo: file, protegida: tags.some((w) => w !== comp && /Protected|Private|Auth|Guard|Require|Admin/i.test(w)) || paiProtegido, wrappers: tags.filter((t) => t !== comp), pai: parent, indice: isIndex, definida_em: rf, lazy: comp ? lazyMap.has(comp) : false, tipo: redir && !comp ? 'redirect' : 'tela', redireciona: redir ? redir[1] : null }));
       if (!self) stack.push(full);
     }
     const scanObjs = (text, parent, depth) => {
@@ -442,19 +457,33 @@ const migDir = ['supabase/migrations', 'migrations', 'db/migrations', 'database/
 const tname = (name) => { const n = name.replace(/"/g, ''); return /^public\./i.test(n) ? n.slice(7) : n; };
 const T = (name) => { const n = tname(name); if (!banco.tabelas[n]) banco.tabelas[n] = { colunas: {}, rls: false, policies: [], indices: [], fks: [], criada_em: null }; return banco.tabelas[n]; };
 const splitStatements = (text) => { const out = []; let cur = '', q = null; for (let i = 0; i < text.length; i++) { const ch = text[i]; if (q) { cur += ch; if (ch === q) { if (text[i + 1] === q) { cur += q; i++; } else q = null; } continue; } if (ch === "'" || ch === '"') { q = ch; cur += ch; continue; } if (ch === ';') { out.push(cur); cur = ''; continue; } cur += ch; } out.push(cur); return out; };
+// Tira comentários SQL respeitando literais: `'a -- b'` e `'/* x */'` são texto, não comentário. A regex antiga
+// cortava a linha no `--` de dentro da string, abria uma aspa sem par e engolia os statements seguintes.
+const stripSqlComments = (text) => {
+  let out = ''; const n = text.length;
+  for (let i = 0; i < n;) {
+    const ch = text[i];
+    if (ch === "'" || ch === '"') { let j = i + 1; while (j < n && (text[j] !== ch || text[j + 1] === ch)) j += text[j] === ch ? 2 : 1; out += text.slice(i, j + 1); i = j + 1; continue; }
+    if (ch === '-' && text[i + 1] === '-') { const j = text.indexOf('\n', i); i = j < 0 ? n : j; continue; }
+    if (ch === '/' && text[i + 1] === '*') { let depth = 1, j = i + 2; while (j < n && depth) { if (text[j] === '/' && text[j + 1] === '*') { depth++; j += 2; } else if (text[j] === '*' && text[j + 1] === '/') { depth--; j += 2; } else j++; } i = j; continue; }
+    out += ch; i++;
+  }
+  return out;
+};
 const parseCols = (body, table) => {
   let depth = 0, cur = ''; const parts = [];
   for (const ch of body) { if (ch === '(') depth++; if (ch === ')') depth--; if (ch === ',' && depth === 0) { parts.push(cur); cur = ''; } else cur += ch; }
   parts.push(cur);
   for (let p of parts) {
     p = p.trim().replace(/\s+/g, ' '); if (!p) continue;
-    const m = /^"?([a-zA-Z_]\w*)"?\s+((?:double\s+precision|character\s+varying|bit\s+varying|timestamp\s+with(?:out)?\s+time\s+zone|time\s+with(?:out)?\s+time\s+zone|[a-zA-Z_][\w[\]]*)(?:\s*\([^)]*\))?(?:\s+with(?:out)?\s+time\s+zone)?(?:\[\])?)(.*)$/i.exec(p);
+    const m = /^"?([a-zA-Z_]\w*)"?\s+((?:double\s+precision|character\s+varying|bit\s+varying|timestamp\s+with(?:out)?\s+time\s+zone|time\s+with(?:out)?\s+time\s+zone|(?:"?[a-zA-Z_]\w*"?\.)?"?[a-zA-Z_][\w[\]]*"?)(?:\s*\([^)]*\))?(?:\s+with(?:out)?\s+time\s+zone)?(?:\[\])?)(.*)$/i.exec(p);
     if (!m || /^(constraint|primary|foreign|unique|check|exclude|like|index|key)$/i.test(m[1])) {
-      const fk = /foreign key\s*\(\s*"?(\w+)"?\s*\)\s*references\s+"?(?:public\.)?"?(\w+)/i.exec(p); if (fk) table.fks.push({ coluna: fk[1], ref: fk[2] });
+      const fk = /foreign key\s*\(\s*"?(\w+)"?\s*\)\s*references\s+((?:"?\w+"?\.)?"?\w+"?)/i.exec(p); if (fk) table.fks.push({ coluna: fk[1], ref: tname(fk[2]) });
       continue;
     }
-    const rest = m[3] || ''; const ref = /references\s+"?(?:public\.)?"?(\w+)/i.exec(rest);
-    table.colunas[m[1]] = { tipo: m[2].toLowerCase(), nn: /not null/i.test(rest), pk: /primary key/i.test(rest), default: (/default\s+(.+?)(?:\s+(?:not null|null|references|check|unique|primary|generated)|$)/i.exec(rest) || [])[1] || null, ref: ref ? ref[1] : null };
+    const rest = m[3] || ''; const refM = /references\s+((?:"?\w+"?\.)?"?\w+"?)/i.exec(rest); const ref = refM ? [refM[0], tname(refM[1])] : null;
+    // tipo: `public.meu_enum` é o mesmo `meu_enum` dos enums; PRIMARY KEY implica NOT NULL
+    table.colunas[m[1]] = { tipo: tname(m[2].toLowerCase()), nn: /not null|primary key/i.test(rest), pk: /primary key/i.test(rest), default: (/default\s+(.+?)(?:\s+(?:not null|null|references|check|unique|primary|generated)|$)/i.exec(rest) || [])[1] || null, ref: ref ? ref[1] : null };
     if (ref) table.fks.push({ coluna: m[1], ref: ref[1] });
   }
 };
@@ -464,12 +493,16 @@ secao('banco-sql', () => {
   banco.migrations = sqlFiles.length; banco.fonte.push(migDir || '*.sql');
   const allSql = [];
   for (const f of sqlFiles) {
-    const sql = readText(f).replace(/--[^\n]*/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
-    const bodies = []; const sqlNoBody = sql.replace(/\$(\w*)\$[\s\S]*?\$\1\$/g, (m0) => { bodies.push(m0); return "''"; });
+    const sql = stripSqlComments(readText(f));
+    // pos = onde o corpo ficava no texto sem corpos: o DDL de um DO $$...$$ roda na ordem do arquivo
+    // (antes ia para o fim e `DO $$ DROP POLICY p $$; CREATE POLICY p` terminava sem a policy).
+    const bodies = []; let cut = 0; const sqlNoBody = sql.replace(/\$(\w*)\$[\s\S]*?\$\1\$/g, (m0, _tag, off) => { bodies.push({ texto: m0, pos: off - cut }); cut += m0.length - 2; return "''"; });
     allSql.push(sql.toLowerCase());
     // DO $$ ... $$ e corpos de função: statements literais (CREATE/DROP POLICY, ALTER TABLE) também valem; DDL dinâmico (EXECUTE format) é só sinalizado
-    const bodyStatements = bodies.flatMap((b) => { const inner = b.replace(/^\$\w*\$|\$\w*\$$/g, '').replace(/\$(\w*)\$[\s\S]*?\$\1\$/g, "''"); if (/\bexecute\s+(format|'|\$|[a-z_]+\s*\()/i.test(inner)) banco.ddl_dinamico++; return splitStatements(inner).map((x) => { const m0 = /\b(create|drop|alter)\s[\s\S]*$/i.exec(x); return m0 ? m0[0] : ''; }).filter(Boolean); });
-    for (const stRaw of [...splitStatements(sqlNoBody), ...bodyStatements]) {
+    const bodyStatementsOf = ({ texto: b }) => { const inner = b.replace(/^\$\w*\$|\$\w*\$$/g, '').replace(/\$(\w*)\$[\s\S]*?\$\1\$/g, "''"); if (/\bexecute\s+(format|'|\$|[a-z_]+\s*\()/i.test(inner)) banco.ddl_dinamico++; return splitStatements(inner).map((x) => { const m0 = /\b(create|drop|alter)\s[\s\S]*$/i.exec(x); return m0 ? m0[0] : ''; }).filter(Boolean); };
+    const ordered = []; let ini = 0;
+    for (const x of splitStatements(sqlNoBody)) { const fim = ini + x.length; ordered.push(x, ...bodies.filter((b) => b.pos >= ini && b.pos < fim).flatMap(bodyStatementsOf)); ini = fim + 1; }
+    for (const stRaw of ordered) {
       const st = stRaw.trim(); if (!st) continue; let m;
       if ((m = /^create\s+(?:unlogged\s+)?table\s+(?:if\s+not\s+exists\s+)?((?:"?\w+"?\.)?"?\w+"?)\s*\(/i.exec(st))) {
         let i = m[0].length, depth = 1, body = '';
@@ -484,7 +517,7 @@ secao('banco-sql', () => {
         for (const op of ops) {
           let x;
           if ((x = /^add\s+column\s+(?:if\s+not\s+exists\s+)?([\s\S]+)$/i.exec(op))) parseCols(x[1], t);
-          else if ((x = /^add\s+(?:constraint\s+\S+\s+)?foreign\s+key\s*\(\s*"?(\w+)"?\s*\)\s*references\s+"?(?:public\.)?"?(\w+)/i.exec(op))) t.fks.push({ coluna: x[1], ref: x[2] });
+          else if ((x = /^add\s+(?:constraint\s+\S+\s+)?foreign\s+key\s*\(\s*"?(\w+)"?\s*\)\s*references\s+((?:"?\w+"?\.)?"?\w+"?)/i.exec(op))) t.fks.push({ coluna: x[1], ref: tname(x[2]) });
           else if ((x = /^drop\s+column\s+(?:if\s+exists\s+)?"?(\w+)"?/i.exec(op))) delete t.colunas[x[1]];
           else if ((x = /^rename\s+column\s+"?(\w+)"?\s+to\s+"?(\w+)"?/i.exec(op)) && t.colunas[x[1]]) { t.colunas[x[2]] = t.colunas[x[1]]; delete t.colunas[x[1]]; }
           else if ((x = /^alter\s+column\s+"?(\w+)"?\s+(?:set\s+data\s+)?type\s+([\w\s()[\]]+?)(?:\s+using|$)/i.exec(op)) && t.colunas[x[1]]) t.colunas[x[1]].tipo = x[2].trim().toLowerCase();
@@ -499,6 +532,13 @@ secao('banco-sql', () => {
       if ((m = /^create\s+policy\s+("[^"]+"|\w+)\s+on\s+((?:"?\w+"?\.)?"?\w+"?)(?:\s+as\s+(permissive|restrictive))?(?:\s+for\s+(select|insert|update|delete|all))?(?:\s+to\s+([\w, ]+?))?\s+(?:using|with\s+check)/i.exec(st))) {
         const t = T(m[2]); const nome = m[1].replace(/"/g, ''); t.policies = t.policies.filter((p) => p.nome !== nome);
         t.policies.push({ nome, comando: (m[4] || 'all').toLowerCase(), para: (m[5] || 'public').trim(), tipo: (m[3] || 'permissive').toLowerCase() }); continue;
+      }
+      if ((m = /^alter\s+policy\s+("[^"]+"|\w+)\s+on\s+((?:"?\w+"?\.)?"?\w+"?)\s*([\s\S]*)$/i.exec(st))) {
+        // ALTER POLICY muda para quem a policy vale (TO) ou o nome; ignorar deixava `para: public` em policy já restrita
+        const pol = (banco.tabelas[tname(m[2])]?.policies || []).find((p) => p.nome === m[1].replace(/"/g, '')); let x;
+        if (pol && (x = /^rename\s+to\s+("[^"]+"|\w+)/i.exec(m[3]))) pol.nome = x[1].replace(/"/g, '');
+        else if (pol && (x = /^to\s+([\w, ]+?)\s*(?:using\b|with\s+check\b|$)/i.exec(m[3]))) pol.para = x[1].trim();
+        continue;
       }
       if ((m = /^drop\s+policy\s+(?:if\s+exists\s+)?("[^"]+"|\w+)\s+on\s+((?:"?\w+"?\.)?"?\w+"?)/i.exec(st))) { const t = T(m[2]); t.policies = t.policies.filter((p) => p.nome !== m[1].replace(/"/g, '')); continue; }
       if ((m = /^create\s+(unique\s+)?index\s+(?:concurrently\s+)?(?:if\s+not\s+exists\s+)?("?\w+"?)\s+on\s+(?:only\s+)?((?:"?\w+"?\.)?"?\w+"?)\s*(?:using\s+\w+\s*)?\(([^)]+)\)/i.exec(st))) {
@@ -521,7 +561,7 @@ secao('banco-sql', () => {
       if ((m = /cron\.schedule\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/i.exec(st))) { const ex = banco.cron.findIndex((cj) => cj.nome === m[1]); const job = { nome: m[1], agenda: m[2], migration: path.posix.basename(f) }; if (ex >= 0) banco.cron[ex] = job; else banco.cron.push(job); continue; }
       if ((m = /cron\.unschedule\s*\(\s*'([^']+)'/i.exec(st))) { banco.cron = banco.cron.filter((cj) => cj.nome !== m[1]); continue; }
     }
-    for (const b of bodies) { let m; const re = /cron\.schedule\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/gi; while ((m = re.exec(b))) if (!banco.cron.some((cj) => cj.nome === m[1])) banco.cron.push({ nome: m[1], agenda: m[2], migration: path.posix.basename(f) }); }
+    for (const { texto: b } of bodies) { let m; const re = /cron\.schedule\s*\(\s*'([^']+)'\s*,\s*'([^']+)'/gi; while ((m = re.exec(b))) if (!banco.cron.some((cj) => cj.nome === m[1])) banco.cron.push({ nome: m[1], agenda: m[2], migration: path.posix.basename(f) }); }
   }
   SQL_TEXT_LOWER = allSql.join('\n');
   for (const cj of banco.cron) { const m = new RegExp(`cron\\.schedule\\s*\\(\\s*'${cj.nome.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}'[\\s\\S]{0,600}?functions/v1/([\\w-]+)`, 'i').exec(SQL_TEXT_LOWER); if (m) cj.chama_edge = m[1]; }
@@ -802,7 +842,13 @@ const baseline = {
 };
 
 // ---------- escrita ----------
-fs.mkdirSync(OUT, { recursive: true });
+try { fs.mkdirSync(OUT, { recursive: true }); } catch (e) { sairComErro(`não foi possível criar a pasta de saída ${OUT}: ${e.message}`); }
+// troca atômica: interrupção ou duas execuções na mesma pasta nunca deixam um JSON pela metade
+// Última barreira antes de publicar: scripts npm, defaults de coluna e trechos de código são copiados como estão;
+// token/JWT/senha de DSN que esteja no repo não deve ser replicado na branch gerada.
+const SEGREDO_RE = /eyJ[\w-]{20,}\.[\w-]{10,}(?:\.[\w-]+)?|\b(?:sk_live_|sk_test_|rk_live_|ghp_|github_pat_|sb_secret_|whsec_|xox[baprs]-)[\w-]{10,}|\b((?:postgres(?:ql)?|mysql|mongodb(?:\+srv)?|rediss?|amqps?):\/\/)[^\s:@/'"\\]+:[^\s@'"\\]+@|\b(Bearer\s+)[A-Za-z0-9._~+/=-]{16,}/g;
+const semSegredo = (txt) => txt.replace(SEGREDO_RE, (m0, dsn, bearer) => (dsn ? `${dsn}[REDACTED]@` : bearer ? `${bearer}[REDACTED]` : '[REDACTED]'));
+const escrever = (nome, bruto) => { const txt = semSegredo(bruto); const tmp = path.join(OUT, `.${nome}.${process.pid}.tmp`); try { fs.writeFileSync(tmp, txt); fs.renameSync(tmp, path.join(OUT, nome)); } finally { fs.rmSync(tmp, { force: true }); } return txt; };
 const AVISO = 'GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.';
 const c = baseline.contagens;
 const files = {
@@ -823,7 +869,7 @@ const files = {
   'baseline.json': { aviso: AVISO, format_version: FORMAT_VERSION, ...baseline },
 };
 const hashes = {};
-for (const [name, data] of Object.entries(files)) { const txt = JSON.stringify(data, null, 1) + '\n'; fs.writeFileSync(path.join(OUT, name), txt); hashes[name] = sha(txt); }
+for (const [name, data] of Object.entries(files)) { const txt = JSON.stringify(data, null, 1) + '\n'; hashes[name] = sha(escrever(name, txt)); }
 const li = (arr, f = (x) => x) => (arr.length ? arr.map((x) => `- ${f(x)}`).join('\n') : '- (nenhum)');
 const kv = (o) => Object.entries(o || {}).map(([k, v]) => `- ${k}: ${Array.isArray(v) ? v.join(', ') || 'n/d' : v && typeof v === 'object' ? JSON.stringify(v) : v ?? 'n/d'}`).join('\n');
 const indexMd = `# Contexto do projeto para agentes de IA
@@ -916,8 +962,7 @@ ${li((gitInfo.ultimos_commits || []).slice(0, 15), (x) => `${x.data} \`${x.sha}\
 ${Object.keys(files).map((f) => `- \`${OUT_REL}/${f}\``).join('\n')}
 - \`${OUT_REL}/manifest.json\` (commit, data, hashes, erros — único arquivo com data/hora)
 `;
-fs.writeFileSync(path.join(OUT, 'INDEX.md'), indexMd);
-hashes['INDEX.md'] = sha(indexMd);
-fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify({ aviso: AVISO, format_version: FORMAT_VERSION, gerado_em: new Date().toISOString(), commit: gitInfo.commit || null, branch: gitInfo.branch || null, gerador: 'scripts/ai-context/gerar.mjs', node: process.version, arquivos: sortObj(hashes), contagens: c, erros: ERROS }, null, 1) + '\n');
+hashes['INDEX.md'] = sha(escrever('INDEX.md', indexMd));
+escrever('manifest.json', JSON.stringify({ aviso: AVISO, format_version: FORMAT_VERSION, gerado_em: new Date().toISOString(), commit: gitInfo.commit || null, branch: gitInfo.branch || null, gerador: 'scripts/ai-context/gerar.mjs', node: process.version, arquivos: sortObj(hashes), contagens: c, erros: ERROS }, null, 1) + '\n');
 log(`escrito em ${OUT_REL}/ (${Object.keys(files).length + 2} arquivos)${ERROS.length ? `; ${ERROS.length} erro(s) de seção` : ''}`);
 log(`rotas=${c.rotas} http=${c.rotas_http_backend} vistas=${c.vistas_por_id} menu=${c.itens_menu} modulos=${c.modulos} hooks=${c.hooks} edges=${c.edge_functions} tabelas=${c.tabelas} cron=${c.cron_jobs} testes=${c.testes}`);

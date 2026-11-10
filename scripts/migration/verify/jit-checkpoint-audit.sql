@@ -1,5 +1,10 @@
 -- jit-checkpoint-audit.sql — Rodada 17/10
 -- JIT mal configurado adiciona 50-200ms em OLTP; checkpoint curto = IO storm.
+-- Classe   : AUDIT (informativo; nunca falha por achado)
+-- Variaveis: nenhuma
+-- Saida    : 0.
+\set ON_ERROR_STOP on
+\pset pager off
 \echo '== jit-checkpoint-audit =='
 SELECT name, setting, unit, source, boot_val
   FROM pg_settings

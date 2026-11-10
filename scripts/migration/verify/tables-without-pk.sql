@@ -1,4 +1,8 @@
 -- tables-without-pk.sql — Detecta tabelas sem PRIMARY KEY.
+-- Classe   : GUARD FATAL
+-- Limiar   : qualquer tabela comum (relkind r) de public sem PRIMARY KEY.
+-- Variaveis: nenhuma
+-- Saida    : 0 = ok; 3 = condicao ruim (RAISE EXCEPTION sob ON_ERROR_STOP).
 \set ON_ERROR_STOP on
 \pset pager off
 
