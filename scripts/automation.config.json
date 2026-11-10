@@ -2824,7 +2824,136 @@
       "manual": ["python3", "scripts/test_run_explain_analyze.py"],
       "triggers": ["manual"],
       "reason": "Legado sem chamador literal no inventário; execução manual controlada após revisar parâmetros e ambiente. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-259c5170002bd553",
+      "kind": "legacy",
+      "files": ["scripts/ci/actions-kpi.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Métricas de ações do CI usadas pelo .github/workflows/higiene-semanal.yml (job auditoria)."
+    },
+    {
+      "id": "legacy-4d732e9f0aca014f",
+      "kind": "legacy",
+      "files": ["scripts/ci/actions-kpi.test.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Testes das métricas de ações; roda no .github/workflows/higiene-semanal.yml."
+    },
+    {
+      "id": "legacy-97d33c5e85986064",
+      "kind": "legacy",
+      "files": ["scripts/ci/branch-podaveis.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Valida nomes de branch permitidos no .github/workflows/higiene-semanal.yml (job auditoria)."
+    },
+    {
+      "id": "legacy-d4652e4611d7b963",
+      "kind": "legacy",
+      "files": ["scripts/ci/branch-podaveis.test.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Testes da validação de branch; roda no .github/workflows/higiene-semanal.yml."
+    },
+    {
+      "id": "legacy-d212cddcc855441b",
+      "kind": "legacy",
+      "files": ["scripts/ci/bump-toolchain.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Bump da toolchain usado pelo .github/workflows/higiene-semanal.yml (job auditoria)."
+    },
+    {
+      "id": "legacy-1f919dabfab0935c",
+      "kind": "legacy",
+      "files": ["scripts/ci/check-claude-md-integrity.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Guarda integridade do AGENTS.md/CLAUDE.md no .github/workflows/estado-real.yml."
+    },
+    {
+      "id": "legacy-12832229e4b63d33",
+      "kind": "legacy",
+      "files": ["scripts/ci/check-claude-md-integrity.test.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Testes da guarda de integridade; roda no .github/workflows/estado-real.yml."
+    },
+    {
+      "id": "legacy-e2f489c547f8ab78",
+      "kind": "legacy",
+      "files": ["scripts/ci/check-test-inventory.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Inventário de testes no .github/workflows/estado-real.yml (guardas de estado real)."
+    },
+    {
+      "id": "legacy-9881533c76a219e3",
+      "kind": "legacy",
+      "files": ["scripts/ci/check-test-inventory.test.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Testes do inventário; roda no .github/workflows/estado-real.yml."
+    },
+    {
+      "id": "legacy-3b79016d3da3f544",
+      "kind": "legacy",
+      "files": ["scripts/ci/sla-code-scanning.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Escaneamento de SLA no .github/workflows/higiene-semanal.yml (job auditoria)."
+    },
+    {
+      "id": "legacy-c880972a765b303d",
+      "kind": "legacy",
+      "files": ["scripts/ci/sla-code-scanning.test.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Testes do scan de SLA; roda no .github/workflows/higiene-semanal.yml."
+    },
+    {
+      "id": "legacy-afda74b971b2e9ca",
+      "kind": "legacy",
+      "files": ["scripts/ci/workflow-invariants.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Invariantes de workflows checados no .github/workflows/estado-real.yml (guardas)."
+    },
+    {
+      "id": "legacy-44de44458faa4d2e",
+      "kind": "legacy",
+      "files": ["scripts/ci/workflow-invariants.test.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Testes dos invariantes; roda no .github/workflows/estado-real.yml."
+    },
+    {
+      "id": "legacy-58a9179ae5c392d1",
+      "kind": "legacy",
+      "files": ["scripts/lib/seguranca-processo.test.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "reason": "Testes do helper de segurança de processo usado no .github/workflows/estado-real.yml."
+    },
+    {
+      "id": "module-72a5bef04c6f97df",
+      "kind": "helper",
+      "files": ["scripts/ci/workflow-test-support.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "callers": ["scripts/ci/branch-podaveis.test.mjs", "scripts/ci/actions-kpi.test.mjs", "scripts/ci/sla-code-scanning.test.mjs"]
+    },
+    {
+      "id": "module-4475d882534646e0",
+      "kind": "helper",
+      "files": ["scripts/lib/seguranca-processo.mjs"],
+      "manual": ["node", "scripts/automation.mjs", "test"],
+      "triggers": ["manual"],
+      "callers": ["scripts/ci/check-test-inventory.mjs", "scripts/lib/seguranca-processo.test.mjs"]
     }
+
   ],
   "ci": [
     {
