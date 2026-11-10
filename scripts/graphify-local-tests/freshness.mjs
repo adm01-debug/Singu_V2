@@ -156,3 +156,17 @@ test("config relativo resolve em root mesmo com cwd diferente", async (t) => {
   );
   assert.equal(r.exitCode, 0);
 });
+test('fingerprint e consultas preservam nomes e conteúdo acentuados', async(t)=>{
+ const f=await fixture(t);await writeFile(path.join(f.root,'src/ação.ts'),'export const ação="João";\n');
+ const info=await fingerprint(f.root,f.config);assert.ok(info.files['src/ação.ts']);assert.equal(Object.keys(info.files).some(name=>name.includes('\ufffd')),false);
+ await writeFile(path.join(f.root,'src/value.ts'),'export const value="coração";\n');
+ const result=await f.call('query','coração');assert.equal(result.exitCode,0,JSON.stringify(result.report));assert.match(result.report.output,/coração/);assert.equal(result.report.output.includes('\ufffd'),false);
+});
+
+test('output isolado preserva grafo canônico e configuração não pode direcionar escrita a ele', async(t)=>{
+ const f=await fixture(t),canonical=path.join(f.root,'graphify-out/graph.json');await mkdir(path.dirname(canonical));
+ const before=JSON.stringify({nodes:[{id:'canonical-enriched'}],links:[]});await writeFile(canonical,before);
+ assert.equal((await f.call('ensure')).exitCode,0);assert.equal(await readFile(canonical,'utf8'),before);assert.notEqual(f.graph,canonical);
+ await writeFile(f.configFile,JSON.stringify({...f.config,output:'graphify-out'}));
+ const result=await f.call('ensure');assert.equal(result.exitCode,1);assert.match(result.report.message,/canônico/);assert.equal(await readFile(canonical,'utf8'),before);
+});
