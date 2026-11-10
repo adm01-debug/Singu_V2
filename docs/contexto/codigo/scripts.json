@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 279,
+ "total": 288,
  "scripts": [
   {
    "arquivo": "scripts/_pgdocs.py",
@@ -182,7 +182,9 @@
    "descricao": null,
    "linhas": 106,
    "env": [],
-   "npm_scripts": [],
+   "npm_scripts": [
+    "estado:testes"
+   ],
    "workflows": [],
    "orfao": false
   },
@@ -268,7 +270,9 @@
    "descricao": null,
    "linhas": 256,
    "env": [],
-   "npm_scripts": [],
+   "npm_scripts": [
+    "estado:testes"
+   ],
    "workflows": [],
    "orfao": false
   },
@@ -348,6 +352,111 @@
    "arquivo": "scripts/chunk-apply.js",
    "descricao": "chunk-apply.js — aplica todos os DDL (01 a 11) em lotes de 40 instruções por requisição. Mais rápido que o apply-all.js. Cada lote roda numa transação; se o banco recusar o lote, ele é reenviado instr",
    "linhas": 28,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/actions-kpi.mjs",
+   "descricao": "E79: KPI de uso do GitHub Actions, para o branch-hygiene-audit semanal. Medido antes de escrever (03/10/2026): a API devolve `run_started_at` e",
+   "linhas": 259,
+   "env": [
+    "GH_TOKEN",
+    "GITHUB_API_URL",
+    "GITHUB_REPOSITORY",
+    "GITHUB_STEP_SUMMARY",
+    "GITHUB_TOKEN",
+    "JANELA_DIAS"
+   ],
+   "npm_scripts": [],
+   "workflows": [
+    "higiene-semanal.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/branch-podaveis.mjs",
+   "descricao": "W98 — comando pronto de poda de branches (usado pelo branch-hygiene-audit.yml). O plano oferecia duas saídas: apagar sozinho ou só gerar o comando. Apagar é",
+   "linhas": 193,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "higiene-semanal.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/bump-toolchain.mjs",
+   "descricao": "* W40: Verifica se há versão mais nova das ferramentas em .github/toolchain.json.",
+   "linhas": 164,
+   "env": [
+    "GH_TOKEN",
+    "GITHUB_STEP_SUMMARY",
+    "GITHUB_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [
+    "higiene-semanal.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-claude-md-integrity.mjs",
+   "descricao": "* GA02: garante que as instrucoes para agentes nao foram apagadas ou esvaziadas por outra sessao.",
+   "linhas": 199,
+   "env": [
+    "CLAUDE_MD_BASE"
+   ],
+   "npm_scripts": [
+    "estado:instrucoes"
+   ],
+   "workflows": [
+    "estado-real.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-test-inventory.mjs",
+   "descricao": "Inventário de testes: todo teste que existe no disco tem de ser executado por algum workflow. Sem este guarda um teste nasce (ou é tirado do CI) e ninguém percebe — foi",
+   "linhas": 272,
+   "env": [],
+   "npm_scripts": [
+    "estado:testes"
+   ],
+   "workflows": [
+    "estado-real.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/sla-code-scanning.mjs",
+   "descricao": "W83 — SLA dos alertas abertos de Code Scanning (usado pelo branch-hygiene-audit.yml). high/critical → 14 dias; medium/low → 30 dias. Violação → exit 1.",
+   "linhas": 97,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "higiene-semanal.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/workflow-invariants.mjs",
+   "descricao": "* scripts/ci/workflow-invariants.mjs — invariantes estáticos do ci.yml",
+   "linhas": 220,
+   "env": [],
+   "npm_scripts": [
+    "estado:workflows"
+   ],
+   "workflows": [
+    "estado-real.yml"
+   ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/workflow-test-support.mjs",
+   "descricao": "Leitores restritos ao formato em blocos dos workflows deste repositorio. Nao sao um parser YAML geral: formatos nao reconhecidos falham nos contratos.",
+   "linhas": 134,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -701,6 +810,17 @@
    "workflows": [
     "inventario-estado-semanal.yml"
    ],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/lib/seguranca-processo.mjs",
+   "descricao": "* Utilidades compartilhadas pelos scripts de auditoria/CI.",
+   "linhas": 110,
+   "env": [
+    "PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
    "orfao": false
   },
   {

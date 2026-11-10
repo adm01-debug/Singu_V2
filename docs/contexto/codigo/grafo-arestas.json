@@ -82,6 +82,9 @@
   "scripts/chunk-apply.js": [
    "scripts/lib/supabase-mgmt.mjs"
   ],
+  "scripts/ci/check-test-inventory.mjs": [
+   "scripts/lib/seguranca-processo.mjs"
+  ],
   "scripts/diff-tables.mjs": [
    "scripts/audit-ausentes.mjs"
   ],

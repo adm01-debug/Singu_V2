@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d42f417f17d23a5caf6c24fd35fb61cd833ca66d` (2026-11-10T16:41:58-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `df708ff757360ef2b6e0c2e8269855c399d0d805` (2026-11-10T19:27:21-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2047), SQL (651), Markdown (152), Shell (134), JavaScript (118), Python (19), JSON (18), YAML (14)
+- linguagens: TypeScript (2047), SQL (652), Markdown (153), JavaScript (134), Shell (134), JSON (19), Python (19), YAML (16)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3176 |
-| arquivos_codigo | 2183 |
-| linhas_codigo | 408433 |
+| arquivos_total | 3197 |
+| arquivos_codigo | 2199 |
+| linhas_codigo | 411214 |
 | rotas | 114 |
 | rotas_http_backend | 11 |
 | vistas_por_id | 0 |
@@ -46,19 +46,19 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 408 |
 | edge_functions | 108 |
 | tabelas | 418 |
-| migrations | 479 |
+| migrations | 480 |
 | cron_jobs | 20 |
-| testes | 253 |
-| workflows | 8 |
-| scripts | 279 |
-| docs_md | 152 |
+| testes | 260 |
+| workflows | 10 |
+| scripts | 288 |
+| docs_md | 153 |
 
 ## Onde ficam as coisas
 - telas: src/pages (113)
 - componentes: src/components (908), src/pages (140), src/app (4)
 - hooks: src/hooks (377), src/components (20), src/stores (5)
 - servicos_logica: src/lib (72), src/data (46), src/domain (8)
-- testes: co-localizado (*.test) (114), co-localizado (__tests__) (89), tests/ (23)
+- testes: co-localizado (*.test) (121), co-localizado (__tests__) (89), tests/ (23)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/migration (177), scripts/maintenance (15), scripts/hardening (10)
@@ -421,33 +421,35 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 20463 nós · 34725 arestas · 2119 comunidades · grafo do commit `d42f417f`
-- comunidades maiores: react (399), ref_components (297), _shared/auth.ts (276), sonner (274), ref_lib (271), framer-motion (265), lucide-react (235), useAuth (231), react-router-dom (227), 📖 Dicionário de Dados — SINGU CRM (226), date-fns (197), withAuth (185)
+- 20619 nós · 35062 arestas · 2111 comunidades · grafo do commit `df708ff7`
+- comunidades maiores: ref_components (310), ref_lib (284), framer-motion (281), _shared/auth.ts (277), sonner (239), ref_hooks (233), 📖 Dicionário de Dados — SINGU CRM (226), date-fns (225), react-router-dom (225), useAuth (211), react (206), lucide-react (169)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), mig_die() (scripts/migration/_lib.sh), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - CHANGELOG.md (46)
 - .github/workflows/ci.yml (18)
-- package.json (16)
+- package.json (17)
 - supabase/functions/external-data/index.ts (15)
 - package-lock.json (12)
 - docs/qa/security-definer-audit.md (10)
 - src/lib/externalData.ts (10)
+- tests/rls/security_definer_hardening.sql (10)
 - src/hooks/useContacts.ts (9)
-- tests/rls/security_definer_hardening.sql (9)
 - supabase/tests/get_contact_sidebar_by_phone.sql (7)
 - .github/workflows/rls-exposure-guard.yml (6)
 - RELATORIO_CI.md (6)
+- AGENTS.md (5)
 - ESTADO_ATUAL.md (5)
 - docs/qa/functions-authenticated-allowlist.md (5)
-- scripts/rls-matrix/rls-baseline.json (5)
 
 ## Workflows
 - `automation-local.yml` — Automação local (pull_request, push, workflow_dispatch)
 - `ci.yml` — CI (pull_request, push)
 - `contexto.yml` — Contexto para agentes de IA (10 min) (push, schedule, workflow_dispatch; cron 3-59/10 * * * *)
+- `estado-real.yml` — Estado real do repositório (pull_request, push, workflow_dispatch)
 - `fix-jwt-proxies-externas.yml` — Fix JWT proxies externas (workflow_dispatch)
+- `higiene-semanal.yml` — Higiene semanal do repositório (schedule, workflow_dispatch; cron 41 8 * * 1)
 - `inventario-estado-semanal.yml` — Inventário do estado real (semanal) (schedule, workflow_dispatch; cron 23 10 * * 1)
 - `monitoring-lint.yml` — monitoring-lint (pull_request, push)
 - `restore-drill.yml` — Teste de restauração lógica (pull_request, workflow_dispatch)
@@ -478,6 +480,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `contexto:ia:test`: `node --test scripts/ai-context/gerar.unit.mjs`
 - `contexto:regras`: `python3 scripts/regras_negocio/generate.py --repo . --out docs/contexto/regras --profile regras --schema-snapshot docs/contexto/supabase --index-path docs/contexto/00-INDEX.md --no-pointer`
 - `contexto:banco`: `python3 scripts/supabase_snapshot/snapshot.py`
+- `estado:testes`: `node scripts/ci/check-test-inventory.mjs`
+- `estado:workflows`: `node scripts/ci/workflow-invariants.mjs`
+- `estado:instrucoes`: `node scripts/ci/check-claude-md-integrity.mjs`
 - `contexto:indice`: `python3 scripts/regras_negocio/indice.py --repo . --out docs/contexto/00-INDEX.md --remote adm01-debug/Singu_V2 --fonte "banco real=docs/contexto/supabase" --fonte "código=docs/contexto/codigo" --fonte "regras de negócio=docs/contexto/regras"`
 - `automation:doctor`: `node scripts/automation.mjs doctor`
 - `automation:test`: `node scripts/automation.mjs test`
@@ -490,7 +495,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `automation:uninstall-hooks`: `node scripts/automation.mjs uninstall-hooks`
 
 ## Documentos (raiz e docs/)
-- `AGENTS.md` — AGENTS.md — Singu_V2 (74 linhas)
+- `AGENTS.md` — AGENTS.md — Singu_V2 (75 linhas)
 - `ARCHITECTURE.md` — Arquitetura do SINGU CRM (150 linhas)
 - `AUDITORIA_COMPLETA_SISTEMA.md` — AUDITORIA COMPLETA DO SISTEMA SINGU CRM v2 (425 linhas)
 - `AUDITORIA_SISTEMA.md` — 🔍 AUDITORIA EXAUSTIVA — SINGU CRM (307 linhas)
@@ -546,10 +551,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/postmortem-example.md` — Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data) (99 linhas)
 - `docs/postmortem-template.md` — Post-Mortem — {Título do Incidente} (96 linhas)
 - `docs/ux_improvement_strategy.md` (73 linhas)
-- subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (4), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/perf (1)
+- subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (5), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/perf (1)
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-10 `df708ff7` feat(ci): automações de auditoria do estado real portadas do Zapp Web V2 (#180)
 - 2026-11-10 `d42f417f` chore(automacao): integra testes grafo e manutenção com gatilhos locais (#187)
 - 2026-11-10 `357fd21e` fix(push): chave VAPID própria e sender que realmente entrega (#185)
 - 2026-11-10 `39789307` chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)
@@ -564,7 +570,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-08 `edf5b517` fix(ficha): registra interações pelo contrato de contato (#153)
 - 2026-11-08 `11086727` fix(filas): confirma reservas e resultados da DLQ (#150)
 - 2026-11-08 `661cb412` fix(db): preserva o nome da empresa durante a mesclagem (#127)
-- 2026-11-08 `77475499` fix(contatos): atualiza a ficha e preserva aniversários locais (#125)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

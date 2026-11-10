@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d42f417f17d23a5caf6c24fd35fb61cd833ca66d",
+  "sha": "df708ff757360ef2b6e0c2e8269855c399d0d805",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-10 19:44 UTC",
-  "files_total": 3282,
-  "code_files": 2835,
-  "code_lines": 403392
+  "generated_at": "2026-11-10 22:28 UTC",
+  "files_total": 3303,
+  "code_files": 2852,
+  "code_lines": 406561
  },
  "version": "1.3.2",
- "facts_hash": "aa59f83f6c750657",
+ "facts_hash": "e311221d68124973",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -127,6 +127,9 @@
    "contexto:ia:test": "node --test scripts/ai-context/gerar.unit.mjs",
    "contexto:regras": "python3 scripts/regras_negocio/generate.py --repo . --out docs/contexto/regras --profile regras --schema-snapshot docs/contexto/supabase --index-path docs/contexto/00-INDEX.md --no-pointer",
    "contexto:banco": "python3 scripts/supabase_snapshot/snapshot.py",
+   "estado:testes": "node scripts/ci/check-test-inventory.mjs",
+   "estado:workflows": "node scripts/ci/workflow-invariants.mjs",
+   "estado:instrucoes": "node scripts/ci/check-claude-md-integrity.mjs",
    "contexto:indice": "python3 scripts/regras_negocio/indice.py --repo . --out docs/contexto/00-INDEX.md --remote adm01-debug/Singu_V2 --fonte \"banco real=docs/contexto/supabase\" --fonte \"código=docs/contexto/codigo\" --fonte \"regras de negócio=docs/contexto/regras\"",
    "automation:doctor": "node scripts/automation.mjs doctor",
    "automation:test": "node scripts/automation.mjs test",
@@ -180,9 +183,26 @@
     ]
    },
    {
+    "file": ".github/workflows/estado-real.yml",
+    "name": "Estado real do repositório",
+    "triggers": [
+     "pull_request",
+     "push",
+     "workflow_dispatch"
+    ]
+   },
+   {
     "file": ".github/workflows/fix-jwt-proxies-externas.yml",
     "name": "Fix JWT proxies externas",
     "triggers": [
+     "workflow_dispatch"
+    ]
+   },
+   {
+    "file": ".github/workflows/higiene-semanal.yml",
+    "name": "Higiene semanal do repositório",
+    "triggers": [
+     "schedule",
      "workflow_dispatch"
     ]
    },
@@ -225,8 +245,8 @@
   "languages": {
    ".tsx": 1156,
    ".ts": 891,
-   ".sql": 651,
-   ".mjs": 98,
+   ".sql": 652,
+   ".mjs": 114,
    ".py": 19,
    ".js": 18,
    ".cjs": 3
@@ -41200,7 +41220,7 @@
     "args": "p_entity text, p_primary_id uuid, p_secondary_id uuid, p_field_overrides jsonb DEFAULT '{}'::jsonb",
     "returns": "jsonb",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql",
     "security_definer": true,
     "search_path": true,
     "body": "DECLARE v_owner uuid := auth.uid(); v_primary record; v_secondary record; v_field text; v_type text; v_filter text; v_assignments text := ''; v_columns text := ''; v_relation record; v_scope record; v_scope_count integer; v_other_owner boolean; v_parent uuid; v_parent_owner uuid; v_ancestors uuid[]; v_count integer; v_moved integer := 0; v_moved_by_table jsonb := '{}'::jsonb; BEGIN IF auth.role() IS DISTINCT FROM 'authenticated' OR v_owner IS NULL THEN RAISE EXCEPTION 'Autenticação obrigatória' USING ERRCODE = '42501'; END IF; IF p_entity IS NULL OR p_entity NOT IN ('contacts', 'companies') OR p_primary_id IS NULL OR p_secondary_id IS NULL OR p_primary_id = p_secondary_id THEN RAISE EXCEPTIO …",
@@ -41208,13 +41228,13 @@
      "Autenticação obrigatória",
      "Entidade ou identificadores inválidos",
      "Substituições devem ser um objeto",
+     "Override de nome_crm deve ser texto não vazio",
+     "Override de first_name deve ser texto não vazio",
      "Registros inexistentes ou pertencentes a outro usuário",
      "Registro principal excluído",
      "Registro secundário indisponível",
      "Empresa da substituição indisponível",
-     "Campo não permitido: %",
-     "Campo não encontrado: %",
-     "Nome principal obrigatório"
+     "Campo não permitido: %"
     ],
     "tables": [
      "audit_log",
@@ -48861,7 +48881,8 @@
    "supabase/migrations/20261028224000_contact_quick_interaction.sql",
    "supabase/migrations/20261029120000_drop_update_company_fields.sql",
    "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
-   "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql"
+   "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
+   "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -58685,86 +58706,6 @@
     "src": "supabase/migrations/20261013033427_dashboard_source_contract.sql"
    },
    {
-    "function": "merge_records_atomically",
-    "msg": "Autenticação obrigatória",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Entidade ou identificadores inválidos",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Substituições devem ser um objeto",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Registros inexistentes ou pertencentes a outro usuário",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Registro principal excluído",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Registro secundário indisponível",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Empresa da substituição indisponível",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Campo não permitido: %",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Campo não encontrado: %",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Nome principal obrigatório",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Vínculo indireto de outro proprietário: %.%",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Vínculo polimórfico sem proprietário: %.%",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Vínculo de outro proprietário: %.%",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Mesclagem criaria relação circular: %",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Ancestral de outro proprietário",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Relação pertence a outro usuário",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
     "function": "enroll_sequence_contact",
     "msg": "Autenticação obrigatória",
     "src": "supabase/migrations/20261013033432_live_sequence_contact.sql"
@@ -58903,6 +58844,96 @@
     "function": "cleanup_cron_job_run_details",
     "msg": "retencao minima de 1 dia (recebido: %)",
     "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Autenticação obrigatória",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Entidade ou identificadores inválidos",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Substituições devem ser um objeto",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Override de nome_crm deve ser texto não vazio",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Override de first_name deve ser texto não vazio",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Registros inexistentes ou pertencentes a outro usuário",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Registro principal excluído",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Registro secundário indisponível",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Empresa da substituição indisponível",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Campo não permitido: %",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Campo não encontrado: %",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Nome principal obrigatório",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Vínculo indireto de outro proprietário: %.%",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Vínculo polimórfico sem proprietário: %.%",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Vínculo de outro proprietário: %.%",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Mesclagem criaria relação circular: %",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Ancestral de outro proprietário",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Relação pertence a outro usuário",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
    }
   ],
   "seed": [],
@@ -65463,6 +65494,11 @@
    },
    {
     "kind": "GitHub Actions cron",
+    "detail": "41 8 * * 1",
+    "file": ".github/workflows/higiene-semanal.yml"
+   },
+   {
+    "kind": "GitHub Actions cron",
     "detail": "23 10 * * 1",
     "file": ".github/workflows/inventario-estado-semanal.yml"
    },
@@ -68568,8 +68604,8 @@
   },
   {
    "module": "scripts",
-   "files": 281,
-   "lines": 46701,
+   "files": 297,
+   "lines": 49482,
    "tables": [
     "__proto__",
     "a",
@@ -68641,8 +68677,8 @@
     "process.mjs: execute, git, approved, locate",
     "runtime-copy.mjs: cacheRuntime",
     "fixture.mjs: kit, text, fixture",
-    "artifacts.mjs: runtime, validateGraph, status",
-    "build.mjs: generate, adoptInitial"
+    "actions-kpi.mjs: duracaoMinutos, runsNaJanela, agregar, paginaTemMais, maisLentos, tabela",
+    "branch-podaveis.mjs: DIAS_MINIMOS, SEMPRE_FORA, motivoNomeInseguro, nomeVisivel, selecionarPodaveis, relatorio"
    ],
    "docs": [
     "_pgdocs_catalogo.py: Leitura do catálogo (pg_catalog) e utilitários Mermaid compartilhados pelos geradores de docs. Usa pg_catalog (não information_schema) para enxergar todos os objetos mesmo com role restrita. A sessão fixa `search_path = pg_catalog`: tipos e defaults fora do pg_catalog saem SEMPRE com o schema (ex.: …",
@@ -68657,6 +68693,7 @@
     "@lib/y",
     "@supabase/supabase-js",
     "@tanstack/react-query",
+    "child_process",
     "crypto",
     "drizzle-orm",
     "express",
@@ -68676,8 +68713,7 @@
     "node:https",
     "node:module",
     "node:net",
-    "node:os",
-    "node:path"
+    "node:os"
    ],
    "imports_modules": [
     "_shared",
@@ -68765,14 +68801,14 @@
     "scripts/automation-tests/hooks.mjs",
     "scripts/automation-tests/inventory.mjs",
     "scripts/automation-tests/snapshot.mjs",
-    "scripts/graphify-local/artifacts.mjs",
-    "scripts/graphify-local/build.mjs",
-    "scripts/graphify-local/common.mjs",
-    "scripts/graphify-local/config.mjs",
-    "scripts/graphify-local/locks.mjs",
-    "scripts/graphify-local/process.mjs",
-    "scripts/graphify-local/source.mjs",
-    "scripts/graphify-local-tests/fixture.mjs"
+    "scripts/ci/actions-kpi.mjs",
+    "scripts/ci/actions-kpi.test.mjs",
+    "scripts/ci/branch-podaveis.mjs",
+    "scripts/ci/branch-podaveis.test.mjs",
+    "scripts/ci/bump-toolchain.mjs",
+    "scripts/ci/check-claude-md-integrity.mjs",
+    "scripts/ci/check-claude-md-integrity.test.mjs",
+    "scripts/ci/check-test-inventory.mjs"
    ]
   },
   {
@@ -70522,8 +70558,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 479,
-   "lines": 42365,
+   "files": 480,
+   "lines": 42754,
    "tables": [
     "users"
    ],
@@ -70631,7 +70667,7 @@
   {
    "module": "tests",
    "files": 71,
-   "lines": 6450,
+   "lines": 6449,
    "tables": [],
    "exports": [
     "ask-crm.js: options, function",
@@ -76278,6 +76314,9 @@
     "playwright.config.ts",
     "scripts/check-bundle-size.mjs"
    ],
+   "CLAUDE_MD_BASE": [
+    "scripts/ci/check-claude-md-integrity.mjs"
+   ],
    "CLI_EXIT": [
     "scripts/check-publish-gates.test.mjs"
    ],
@@ -76445,6 +76484,24 @@
    "GEN_TYPES_TIMEOUT_MS": [
     "scripts/gen-supabase-types.mjs"
    ],
+   "GH_TOKEN": [
+    "scripts/ci/actions-kpi.mjs",
+    "scripts/ci/bump-toolchain.mjs"
+   ],
+   "GITHUB_API_URL": [
+    "scripts/ci/actions-kpi.mjs"
+   ],
+   "GITHUB_REPOSITORY": [
+    "scripts/ci/actions-kpi.mjs"
+   ],
+   "GITHUB_STEP_SUMMARY": [
+    "scripts/ci/actions-kpi.mjs",
+    "scripts/ci/bump-toolchain.mjs"
+   ],
+   "GITHUB_TOKEN": [
+    "scripts/ci/actions-kpi.mjs",
+    "scripts/ci/bump-toolchain.mjs"
+   ],
    "GRAPHIFY_FIXTURE_": [
     "scripts/graphify-local-tests/safety.mjs"
    ],
@@ -76476,6 +76533,9 @@
     "scripts/inventario/gerar-banco.mjs",
     "scripts/inventario/gerar-repo.mjs",
     "scripts/inventario/mudou-conteudo.mjs"
+   ],
+   "JANELA_DIAS": [
+    "scripts/ci/actions-kpi.mjs"
    ],
    "LATENCY_SECONDS": [
     "scripts/check-publish-gates.test.mjs"
@@ -76561,6 +76621,8 @@
     "scripts/check-publish-gates.test.mjs",
     "scripts/graphify-local-tests/locking.mjs",
     "scripts/lib/mgmt-mock.test.mjs",
+    "scripts/lib/seguranca-processo.mjs",
+    "scripts/lib/seguranca-processo.test.mjs",
     "scripts/migration/verify/storage-bytes_test.ts"
    ],
    "PGDATABASE": [
@@ -80859,6 +80921,30 @@
     "msg": "entrypoint original não deve executar"
    },
    {
+    "file": "scripts/ci/actions-kpi.mjs",
+    "msg": "${metodo} ${caminho} -> ${r.status}"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.mjs",
+    "msg": "PR sem headRefName"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.mjs",
+    "msg": "a lista de PRs abertas não é um array"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.mjs",
+    "msg": "a lista de PRs abertas veio cheia (${dados.length} >= limite ${limite}); pode haver PR que não veio"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.mjs",
+    "msg": "argumento inválido: ${chave}"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.mjs",
+    "msg": "falta --${obrigatorio}"
+   },
+   {
     "file": "scripts/hardening/_pg-teste.mjs",
     "msg": "SQL de cenário falhou: ${r.stderr || r.erro}"
    },
@@ -80949,6 +81035,14 @@
    {
     "file": "scripts/inventario/gerar-repo.mjs",
     "msg": "ripgrep (rg) não encontrado; o inventário não pode ser gerado com segurança."
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.mjs",
+    "msg": "caminho de "
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.mjs",
+    "msg": "comando nao encontrado no PATH: "
    },
    {
     "file": "scripts/lib/sql-split.mjs",
@@ -117936,6 +118030,274 @@
     "name": "ranking real: colunas estáveis, comentário inicial tolerado, utilitário com segredo fora, banco atual só"
    },
    {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "E79: agregar conta runs, cancelados, falhas e minutos por workflow"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "E79: a janela corta run velho — o KPI e dos ultimos N dias, nao de sempre"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "E79: duracao vem dos carimbos e nunca e negativa"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "E79: os 5 jobs mais lentos saem ordenados e limitados"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "E79: a tabela traz as colunas pedidas e o total"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "E79: o workflow semanal chama o KPI com as permissoes que ele precisa"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "#365: paginaTemMais continua enquanto a pagina esta cheia e dentro da janela"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "#365: coletarRuns busca a pagina seguinte em vez de parar em 100"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "#365: coletarRuns nao pagina para fora da janela"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "#365: coletarJobs consulta os jobs de cada run e herda o nome do workflow"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "#365: coletarJobs pagina um run com mais de 100 jobs"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "#365: o corpo do KPI publica o ranking real dos jobs, nao um ranking vazio"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "REGRESSÃO: job ainda em execução (sem completed_at) aparece com o tempo já decorrido, não 0"
+   },
+   {
+    "file": "scripts/ci/actions-kpi.test.mjs",
+    "name": "REGRESSÃO: nome de workflow com "
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "branch patch-equivalente, antiga e sem PR é elegível e vira comando"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "branch com PR aberta fica fora do comando"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "branch recente (7 dias ou menos) fica fora; o corte é estritamente maior que 7 dias"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "epoch ausente, zero ou inválido não prova idade: fica fora"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "main nunca entra, mesmo antiga e sem PR"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "branch protegida nunca entra"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "nome com caractere estranho é recusado (não vai ao comando) e aparece codificado"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "nomes comuns do repositório passam na lista segura"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "lerEquivalentes: TSV com epoch; linha sem tab vira epoch inválido"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "caminho feliz pelos arquivos"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "lista de PRs ilegível ou de erro: nenhum comando gerado"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "lista de PRs cheia até o limite: pode faltar PR, nenhum comando gerado"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "arquivo de protegidas ausente (API falhou): nenhum comando gerado"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "CLI: sempre exit 0; aviso ::warning:: quando não gera comando"
+   },
+   {
+    "file": "scripts/ci/branch-podaveis.test.mjs",
+    "name": "o workflow chama o script e nunca executa a poda"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "passa sem alteração nenhuma no working tree"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "reprova quando AGENTS.md é apagado"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "reprova quando uma seção obrigatória desaparece (título alterado)"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "reprova quando o conjunto (AGENTS.md + docs/agentes/) encolhe mais de 30%"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "reprova quando um arquivo vigiado some, mesmo com o conjunto quase intacto"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "reprova quando um arquivo vigiado encolhe abaixo de 50%, mesmo sem sumir"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "REGRESSÃO: reprova quando o corpo de uma seção obrigatória é apagado mas o título fica"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "não reprova quando o corpo de uma seção encolhe mas fica em pelo menos 50%"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "não reprova quando um arquivo vigiado só cresce (sem falso-positivo de crescimento)"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "secoesPorTitulo: título com texto extra na mesma linha é a chave completa"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "REGRESSÃO: base explícita que não resolve (fetch falhou) avisa visivelmente, não passa em silêncio"
+   },
+   {
+    "file": "scripts/ci/check-claude-md-integrity.test.mjs",
+    "name": "base ausente (sem CLAUDE_MD_BASE) cai pra HEAD sem aviso — comportamento local normal"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "padroesDeWorkflow le os blocos run (dobrado, literal e de uma linha)"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "caminho citado fora de run (nome da etapa, comentario) nao cobre a suite"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "casaPadrao trata * como um nivel de diretorio e ** como qualquer nivel"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "suite Node fora dos blocos run vira orfa — e a allowlist a absolve"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "agregador coberto alcança imports estáticos, inclusive transitivos, mas não comentários"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "a arvore atual nao tem suite Node fora dos workflows nem da ALLOWLIST_NODE"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "a ALLOWLIST_NODE nao guarda entrada morta"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "importar o verificador nao roda o inventario (o teste importa as funcoes)"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "a árvore atual não tem teste Deno fora dos workflows nem da ALLOWLIST_DENO"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "a ALLOWLIST_DENO não guarda entrada morta"
+   },
+   {
+    "file": "scripts/ci/check-test-inventory.test.mjs",
+    "name": "a ALLOWLIST_DENO só encurta: nenhum teste nela é executado por workflow"
+   },
+   {
+    "file": "scripts/ci/sla-code-scanning.test.mjs",
+    "name": "nível vem de security_severity_level; sem ele, error conta como alto (o defeito de rule.severity)"
+   },
+   {
+    "file": "scripts/ci/sla-code-scanning.test.mjs",
+    "name": "high vence com 15 dias; medium só depois de 30"
+   },
+   {
+    "file": "scripts/ci/sla-code-scanning.test.mjs",
+    "name": "relatório: sem violação diz isso; com violação lista em bloco"
+   },
+   {
+    "file": "scripts/ci/sla-code-scanning.test.mjs",
+    "name": "CLI: lê o JSON do stdin, sai 1 com violação e 0 sem"
+   },
+   {
+    "file": "scripts/ci/sla-code-scanning.test.mjs",
+    "name": "CLI: resposta que não é lista (erro de permissão) ou JSON inválido avisa e não bloqueia"
+   },
+   {
+    "file": "scripts/ci/sla-code-scanning.test.mjs",
+    "name": "o workflow passa os alertas pelo stdin e não tem mais Node inline"
+   },
+   {
+    "file": "scripts/ci/sla-code-scanning.test.mjs",
+    "name": "REGRESSÃO: created_at inválido ou ausente conta como violação (fail-closed), não "
+   },
+   {
+    "file": "scripts/ci/sla-code-scanning.test.mjs",
+    "name": "REGRESSÃO: backtick em rule.id não rompe o fence "
+   },
+   {
+    "file": "scripts/ci/workflow-invariants.test.mjs",
+    "name": "passa quando test:coverage aparece uma vez e nenhum job usa always()"
+   },
+   {
+    "file": "scripts/ci/workflow-invariants.test.mjs",
+    "name": "R3: reprova test:coverage duplicado em dois passos"
+   },
+   {
+    "file": "scripts/ci/workflow-invariants.test.mjs",
+    "name": "R5: reprova always() no nível do job de required check"
+   },
+   {
+    "file": "scripts/ci/workflow-invariants.test.mjs",
+    "name": "R5: reprova quando o required check desaparece do ci.yml"
+   },
+   {
+    "file": "scripts/ci/workflow-invariants.test.mjs",
+    "name": "W46: reprova upload do artefato dist sem if: guard"
+   },
+   {
+    "file": "scripts/ci/workflow-invariants.test.mjs",
+    "name": "W46: aceita upload do artefato dist com if: guard"
+   },
+   {
+    "file": "scripts/ci/workflow-invariants.test.mjs",
+    "name": "o ci.yml real do repositório passa em todos os invariantes"
+   },
+   {
     "file": "scripts/hardening/hardening-cluster.test.mjs",
     "name": "hardening: veredito coerente com a configuração do servidor de teste"
    },
@@ -118274,6 +118636,58 @@
    {
     "file": "scripts/lib/mgmt-mock.test.mjs",
     "name": "mock com banco: linhas tipadas, erro 400 com SQLSTATE e lote atômico como na API real"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "resolverExecutavel devolve caminho absoluto existente igual ao do shell"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "resolverExecutavel lanca para comando inexistente"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "estaDentro aceita a raiz e subpastas"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "estaDentro recusa "
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "resolverCaminhoPermitido aceita caminho do repositorio e do tmpdir"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "resolverCaminhoPermitido recusa "
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "resolverCaminhoPermitido respeita o array de raizes explicito do chamador"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "resolverCaminhoPermitido recusa arquivo existente acessado por symlink que escapa da raiz"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "resolverCaminhoPermitido recusa alvo inexistente sob diretorio symlink que escapa da raiz"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "RAIZ_REPO aponta para o pacote do repositorio e esta entre as raizes permitidas"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "REGRESSÃO: resolverCaminhoPermitido recusa entrada não-string com erro fail-closed, não TypeError nativo"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "REGRESSÃO: resolverCaminhoPermitido recusa string vazia em vez de resolver para cwd()"
+   },
+   {
+    "file": "scripts/lib/seguranca-processo.test.mjs",
+    "name": "REGRESSÃO: resolverExecutavel ignora diretório com o mesmo nome do comando no PATH"
    },
    {
     "file": "scripts/lib/sql-split.test.mjs",
@@ -144446,7 +144860,7 @@
     "args": "p_entity text, p_primary_id uuid, p_secondary_id uuid, p_field_overrides jsonb DEFAULT '{}'::jsonb",
     "returns": "jsonb",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql",
     "security_definer": true,
     "search_path": true,
     "body": "DECLARE v_owner uuid := auth.uid(); v_primary record; v_secondary record; v_field text; v_type text; v_filter text; v_assignments text := ''; v_columns text := ''; v_relation record; v_scope record; v_scope_count integer; v_other_owner boolean; v_parent uuid; v_parent_owner uuid; v_ancestors uuid[]; v_count integer; v_moved integer := 0; v_moved_by_table jsonb := '{}'::jsonb; BEGIN IF auth.role() IS DISTINCT FROM 'authenticated' OR v_owner IS NULL THEN RAISE EXCEPTION 'Autenticação obrigatória' USING ERRCODE = '42501'; END IF; IF p_entity IS NULL OR p_entity NOT IN ('contacts', 'companies') OR p_primary_id IS NULL OR p_secondary_id IS NULL OR p_primary_id = p_secondary_id THEN RAISE EXCEPTIO …",
@@ -144454,13 +144868,13 @@
      "Autenticação obrigatória",
      "Entidade ou identificadores inválidos",
      "Substituições devem ser um objeto",
+     "Override de nome_crm deve ser texto não vazio",
+     "Override de first_name deve ser texto não vazio",
      "Registros inexistentes ou pertencentes a outro usuário",
      "Registro principal excluído",
      "Registro secundário indisponível",
      "Empresa da substituição indisponível",
-     "Campo não permitido: %",
-     "Campo não encontrado: %",
-     "Nome principal obrigatório"
+     "Campo não permitido: %"
     ],
     "tables": [
      "audit_log",
@@ -145504,86 +145918,6 @@
     "src": "supabase/migrations/20261013033427_dashboard_source_contract.sql"
    },
    {
-    "function": "merge_records_atomically",
-    "msg": "Autenticação obrigatória",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Entidade ou identificadores inválidos",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Substituições devem ser um objeto",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Registros inexistentes ou pertencentes a outro usuário",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Registro principal excluído",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Registro secundário indisponível",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Empresa da substituição indisponível",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Campo não permitido: %",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Campo não encontrado: %",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Nome principal obrigatório",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Vínculo indireto de outro proprietário: %.%",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Vínculo polimórfico sem proprietário: %.%",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Vínculo de outro proprietário: %.%",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Mesclagem criaria relação circular: %",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Ancestral de outro proprietário",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
-    "function": "merge_records_atomically",
-    "msg": "Relação pertence a outro usuário",
-    "src": "supabase/migrations/20261013033431_merge_records_atomically.sql"
-   },
-   {
     "function": "enroll_sequence_contact",
     "msg": "Autenticação obrigatória",
     "src": "supabase/migrations/20261013033432_live_sequence_contact.sql"
@@ -145722,6 +146056,96 @@
     "function": "cleanup_cron_job_run_details",
     "msg": "retencao minima de 1 dia (recebido: %)",
     "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Autenticação obrigatória",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Entidade ou identificadores inválidos",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Substituições devem ser um objeto",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Override de nome_crm deve ser texto não vazio",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Override de first_name deve ser texto não vazio",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Registros inexistentes ou pertencentes a outro usuário",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Registro principal excluído",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Registro secundário indisponível",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Empresa da substituição indisponível",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Campo não permitido: %",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Campo não encontrado: %",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Nome principal obrigatório",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Vínculo indireto de outro proprietário: %.%",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Vínculo polimórfico sem proprietário: %.%",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Vínculo de outro proprietário: %.%",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Mesclagem criaria relação circular: %",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Ancestral de outro proprietário",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   },
+   {
+    "function": "merge_records_atomically",
+    "msg": "Relação pertence a outro usuário",
+    "src": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
    }
   ],
   "db_generated": [
@@ -170053,6 +170477,353 @@
     "entrypoint original não deve executar"
    ]
   },
+  "scripts/ci/actions-kpi.mjs": {
+   "path": "scripts/ci/actions-kpi.mjs",
+   "lines": 259,
+   "exports": [
+    "function duracaoMinutos",
+    "function runsNaJanela",
+    "function agregar",
+    "function paginaTemMais",
+    "function maisLentos",
+    "function tabela",
+    "function tabelaLentos",
+    "function corpoDoKpi",
+    "function coletarRuns",
+    "function coletarJobs",
+    "function publicarIssue"
+   ],
+   "env": [
+    "GH_TOKEN",
+    "GITHUB_API_URL",
+    "GITHUB_REPOSITORY",
+    "GITHUB_STEP_SUMMARY",
+    "GITHUB_TOKEN",
+    "JANELA_DIAS"
+   ],
+   "errors": [
+    "${metodo} ${caminho} -> ${r.status}"
+   ],
+   "params": [
+    {
+     "name": "UM_DIA",
+     "value": "24"
+    },
+    {
+     "name": "POR_PAGINA",
+     "value": "100"
+    }
+   ],
+   "doc": "!/usr/bin/env node E79: KPI de uso do GitHub Actions, para o branch-hygiene-audit semanal. Medido antes de escrever (03/10/2026): a API devolve `run_started_at` e `updated_at` por run, e o `/timing` devolve `billable: {}` em repositorio publico -- por isso a duracao sai da diferenca entre os dois ca …",
+   "temporal": [
+    "const UM_DIA = 24 * 60 * 60 * 1000;"
+   ]
+  },
+  "scripts/ci/actions-kpi.test.mjs": {
+   "path": "scripts/ci/actions-kpi.test.mjs",
+   "lines": 217,
+   "is_test": true,
+   "tests": [
+    "E79: agregar conta runs, cancelados, falhas e minutos por workflow",
+    "E79: a janela corta run velho — o KPI e dos ultimos N dias, nao de sempre",
+    "E79: duracao vem dos carimbos e nunca e negativa",
+    "E79: os 5 jobs mais lentos saem ordenados e limitados",
+    "E79: a tabela traz as colunas pedidas e o total",
+    "E79: o workflow semanal chama o KPI com as permissoes que ele precisa",
+    "#365: paginaTemMais continua enquanto a pagina esta cheia e dentro da janela",
+    "#365: coletarRuns busca a pagina seguinte em vez de parar em 100",
+    "#365: coletarRuns nao pagina para fora da janela",
+    "#365: coletarJobs consulta os jobs de cada run e herda o nome do workflow",
+    "#365: coletarJobs pagina um run com mais de 100 jobs",
+    "#365: o corpo do KPI publica o ranking real dos jobs, nao um ranking vazio",
+    "REGRESSÃO: job ainda em execução (sem completed_at) aparece com o tempo já decorrido, não 0",
+    "REGRESSÃO: nome de workflow com "
+   ]
+  },
+  "scripts/ci/branch-podaveis.mjs": {
+   "path": "scripts/ci/branch-podaveis.mjs",
+   "lines": 193,
+   "exports": [
+    "const DIAS_MINIMOS",
+    "const SEMPRE_FORA",
+    "function motivoNomeInseguro",
+    "function nomeVisivel",
+    "function selecionarPodaveis",
+    "function relatorio",
+    "function relatorioIndisponivel",
+    "function lerEquivalentes",
+    "function lerPrsAbertas",
+    "function lerProtegidas",
+    "function executar"
+   ],
+   "errors": [
+    "PR sem headRefName",
+    "a lista de PRs abertas não é um array",
+    "a lista de PRs abertas veio cheia (${dados.length} >= limite ${limite}); pode haver PR que não veio",
+    "argumento inválido: ${chave}",
+    "falta --${obrigatorio}"
+   ],
+   "params": [
+    {
+     "name": "DIAS_MINIMOS",
+     "value": "7"
+    }
+   ],
+   "rule_comments": [
+    "pronto, um por linha, com a regra explicada.",
+    "// Regra de elegibilidade (todas ao mesmo tempo):",
+    "se a lista de PRs vier cheia até o limite (pode haver mais PRs que não vieram),",
+    "--protegidas <txt> [--limite-prs N]",
+    "## Comando pronto para poda (W98)', '', REGRA, ''];",
+    "## Comando pronto para poda (W98)\\n\\n${REGRA}\\n\\nComando não gerado: ${motivo}. `"
+   ],
+   "doc": "!/usr/bin/env node W98 — comando pronto de poda de branches (usado pelo branch-hygiene-audit.yml). O plano oferecia duas saídas: apagar sozinho ou só gerar o comando. Apagar é decisão do dono, então este script NUNCA apaga nada: ele escreve no relatório (e, por ele, na issue [branch-hygiene]) um blo …"
+  },
+  "scripts/ci/branch-podaveis.test.mjs": {
+   "path": "scripts/ci/branch-podaveis.test.mjs",
+   "lines": 181,
+   "is_test": true,
+   "rule_comments": [
+    "relatório. Os testes cobrem a regra (elegível, com PR, recente, main, protegida),"
+   ],
+   "doc": "W98 — comando pronto de poda (scripts/ci/branch-podaveis.mjs). O script nunca apaga nada: só escreve o bloco `git push origin --delete` no relatório. Os testes cobrem a regra (elegível, com PR, recente, main, protegida), a recusa de nome perigoso e a falha fechada quando falta informação.",
+   "tests": [
+    "branch patch-equivalente, antiga e sem PR é elegível e vira comando",
+    "branch com PR aberta fica fora do comando",
+    "branch recente (7 dias ou menos) fica fora; o corte é estritamente maior que 7 dias",
+    "epoch ausente, zero ou inválido não prova idade: fica fora",
+    "main nunca entra, mesmo antiga e sem PR",
+    "branch protegida nunca entra",
+    "nome com caractere estranho é recusado (não vai ao comando) e aparece codificado",
+    "nomes comuns do repositório passam na lista segura",
+    "lerEquivalentes: TSV com epoch; linha sem tab vira epoch inválido",
+    "caminho feliz pelos arquivos",
+    "lista de PRs ilegível ou de erro: nenhum comando gerado",
+    "lista de PRs cheia até o limite: pode faltar PR, nenhum comando gerado",
+    "arquivo de protegidas ausente (API falhou): nenhum comando gerado",
+    "CLI: sempre exit 0; aviso ::warning:: quando não gera comando",
+    "o workflow chama o script e nunca executa a poda"
+   ]
+  },
+  "scripts/ci/bump-toolchain.mjs": {
+   "path": "scripts/ci/bump-toolchain.mjs",
+   "lines": 164,
+   "env": [
+    "GH_TOKEN",
+    "GITHUB_STEP_SUMMARY",
+    "GITHUB_TOKEN"
+   ],
+   "doc": "!/usr/bin/env node",
+   "calc_fns": [
+    {
+     "name": "maisNova",
+     "params": "local, remota",
+     "body": "const lp = semver(local).split('.').map((x) => parseInt(x, 10) || 0); const rp = semver(remota).split('.').map((x) => parseInt(x, 10) || 0); for (let i = 0; i < Math.max(lp.length, rp.length); i++) { const l = lp[i] ?? 0; const r = rp[i] ?? 0; if (r > l) return true; if (l > r) return false; } return false;"
+    }
+   ]
+  },
+  "scripts/ci/check-claude-md-integrity.mjs": {
+   "path": "scripts/ci/check-claude-md-integrity.mjs",
+   "lines": 199,
+   "exports": [
+    "function secoesPorTitulo"
+   ],
+   "env": [
+    "CLAUDE_MD_BASE"
+   ],
+   "params": [
+    {
+     "name": "AGENTS",
+     "value": "'AGENTS.md'"
+    },
+    {
+     "name": "DOCS_DIR",
+     "value": "'docs/agentes'"
+    },
+    {
+     "name": "SHRINK_THRESHOLD",
+     "value": "0.30"
+    },
+    {
+     "name": "FILE_SHRINK_THRESHOLD",
+     "value": "0.50"
+    }
+   ],
+   "rule_comments": [
+    "100)}% vs ${BASE} (atual: ${agora} bytes, base: ${naBase} bytes); limite por arquivo e ${Math.round(FILE_SHRINK_THRESHOLD * 100)}%.`);",
+    "100)}% vs ${BASE} (atual: ${atualBytes} bytes, base: ${baseBytes} bytes); limite por secao e ${Math.round(FILE_SHRINK_THRESHOLD * 100)}%. Possivel wipe que preserva titulos e apaga corpo.`);"
+   ],
+   "doc": "!/usr/bin/env node",
+   "percents": [
+    "* AGENTS.md + CLAUDE.md + docs/agentes/*.md nao encolheu >30% em bytes vs a base, cada arquivo",
+    "* o CORPO de cada secao obrigatoria de AGENTS.md continua com >=50% do tamanho que tinha na base",
+    "* vigiado (AGENTS.md e cada docs/agentes/*.md que exista na base) continua existindo com >=50% do",
+    "// com >= 50% do tamanho de la. CLAUDE.md fica de fora: e so `@AGENTS.md` por design."
+   ]
+  },
+  "scripts/ci/check-claude-md-integrity.test.mjs": {
+   "path": "scripts/ci/check-claude-md-integrity.test.mjs",
+   "lines": 215,
+   "is_test": true,
+   "params": [
+    {
+     "name": "DOC_REFERENCIA",
+     "value": "'y'"
+    }
+   ],
+   "doc": "Testes do guarda anti-wipe das instruções para agentes (scripts/ci/check-claude-md-integrity.mjs). O script lê o cwd diretamente e roda `git show <BASE>:<caminho>` contra a ref em CLAUDE_MD_BASE, então cada caso monta um repositório git descartável: commita um estado base, altera o working tree (sem …",
+   "tests": [
+    "passa sem alteração nenhuma no working tree",
+    "reprova quando AGENTS.md é apagado",
+    "reprova quando uma seção obrigatória desaparece (título alterado)",
+    "reprova quando o conjunto (AGENTS.md + docs/agentes/) encolhe mais de 30%",
+    "reprova quando um arquivo vigiado some, mesmo com o conjunto quase intacto",
+    "reprova quando um arquivo vigiado encolhe abaixo de 50%, mesmo sem sumir",
+    "REGRESSÃO: reprova quando o corpo de uma seção obrigatória é apagado mas o título fica",
+    "não reprova quando o corpo de uma seção encolhe mas fica em pelo menos 50%",
+    "não reprova quando um arquivo vigiado só cresce (sem falso-positivo de crescimento)",
+    "secoesPorTitulo: título com texto extra na mesma linha é a chave completa",
+    "REGRESSÃO: base explícita que não resolve (fetch falhou) avisa visivelmente, não passa em silêncio",
+    "base ausente (sem CLAUDE_MD_BASE) cai pra HEAD sem aviso — comportamento local normal"
+   ]
+  },
+  "scripts/ci/check-test-inventory.mjs": {
+   "path": "scripts/ci/check-test-inventory.mjs",
+   "lines": 272,
+   "exports": [
+    "const RAIZ",
+    "const ALLOWLIST_NODE",
+    "const ALLOWLIST_DENO",
+    "function testesDenoNoDisco",
+    "function testesDenoOrfaos",
+    "function padroesDeWorkflow",
+    "function casaPadrao",
+    "function orfaosNode",
+    "function suitesCobertasPorImport",
+    "function suitesNodeNoDisco",
+    "function padroesDosWorkflows",
+    "function suitesNodeOrfas",
+    "function orfaosDoInventario"
+   ],
+   "rule_comments": [
+    "regra, com fechamento transitivo por import estático (agregador cobre o importado).",
+    "preflight local dizia OK e o mesmo commit falhava apenas no checkout limpo do CI."
+   ],
+   "doc": "!/usr/bin/env node Inventário de testes: todo teste que existe no disco tem de ser executado por algum workflow. Sem este guarda um teste nasce (ou é tirado do CI) e ninguém percebe — foi exatamente o que aconteceu aqui: 15 suítes Deno de supabase/functions/ existiam no repo e nenhum passo de CI as …",
+   "side_effects": [
+    "notify"
+   ]
+  },
+  "scripts/ci/check-test-inventory.test.mjs": {
+   "path": "scripts/ci/check-test-inventory.test.mjs",
+   "lines": 160,
+   "is_test": true,
+   "rule_comments": [
+    "Mesma regra dos testes Node, para `supabase/functions/**/*_test.ts`: ou um bloco"
+   ],
+   "tests": [
+    "padroesDeWorkflow le os blocos run (dobrado, literal e de uma linha)",
+    "caminho citado fora de run (nome da etapa, comentario) nao cobre a suite",
+    "casaPadrao trata * como um nivel de diretorio e ** como qualquer nivel",
+    "suite Node fora dos blocos run vira orfa — e a allowlist a absolve",
+    "agregador coberto alcança imports estáticos, inclusive transitivos, mas não comentários",
+    "a arvore atual nao tem suite Node fora dos workflows nem da ALLOWLIST_NODE",
+    "a ALLOWLIST_NODE nao guarda entrada morta",
+    "importar o verificador nao roda o inventario (o teste importa as funcoes)",
+    "a árvore atual não tem teste Deno fora dos workflows nem da ALLOWLIST_DENO",
+    "a ALLOWLIST_DENO não guarda entrada morta",
+    "a ALLOWLIST_DENO só encurta: nenhum teste nela é executado por workflow"
+   ]
+  },
+  "scripts/ci/sla-code-scanning.mjs": {
+   "path": "scripts/ci/sla-code-scanning.mjs",
+   "lines": 97,
+   "exports": [
+    "const SLA_DIAS",
+    "function nivel",
+    "function avaliarSla",
+    "function relatorio"
+   ],
+   "rule_comments": [
+    "JSON se perdia; e a severidade vinha de `rule.severity` (error/warning/note),",
+    "seguranca; regras sem ele (qualidade) usam rule.severity: error conta como alto.",
+    "Achado de auditoria adversarial: rule.id e location.path vem do alerta (quem tem permissao de",
+    "escrita em code scanning controla a regra) e iam crus pra dentro do fence ``` de relatorio() --",
+    "Achado de auditoria adversarial: created_at ausente/invalido virava NaN e `NaN > prazo` e'",
+    "dentro do prazo conta como violacao, nao como \"limpo\".",
+    "${a.number}: ${regra} em ${local}`);",
+    "${a.number}: ${regra} em ${local}`);",
+    "## ⚠️ Code Scanning — SLA (W83)\\n\\nNão foi possível consultar os alertas (permissão ou API).\\n');"
+   ],
+   "doc": "!/usr/bin/env node W83 — SLA dos alertas abertos de Code Scanning (usado pelo branch-hygiene-audit.yml). high/critical → 14 dias; medium/low → 30 dias. Violação → exit 1. Saiu do YAML em 15/10/2026: inline no workflow, o heredoc do Node estava menos indentado que o `run: |` e o arquivo inteiro virou …"
+  },
+  "scripts/ci/sla-code-scanning.test.mjs": {
+   "path": "scripts/ci/sla-code-scanning.test.mjs",
+   "lines": 93,
+   "is_test": true,
+   "tests": [
+    "nível vem de security_severity_level; sem ele, error conta como alto (o defeito de rule.severity)",
+    "high vence com 15 dias; medium só depois de 30",
+    "relatório: sem violação diz isso; com violação lista em bloco",
+    "CLI: lê o JSON do stdin, sai 1 com violação e 0 sem",
+    "CLI: resposta que não é lista (erro de permissão) ou JSON inválido avisa e não bloqueia",
+    "o workflow passa os alertas pelo stdin e não tem mais Node inline",
+    "REGRESSÃO: created_at inválido ou ausente conta como violação (fail-closed), não ",
+    "REGRESSÃO: backtick em rule.id não rompe o fence "
+   ]
+  },
+  "scripts/ci/workflow-invariants.mjs": {
+   "path": "scripts/ci/workflow-invariants.mjs",
+   "lines": 220,
+   "rule_comments": [
+    "* R3: npm run test:coverage deve aparecer em no máximo 1 job do ci.yml",
+    "* R5: nenhum job de required-check pode ter `if: always()` no nível do job —",
+    "* W46: upload-artifact para `dist` deve ter um `if:` guard (não pode subir",
+    "R3: test:coverage deve aparecer em no máximo 1 job",
+    "R5: nenhum job que compõe os required checks deste workflow pode ter",
+    "que entre nos required checks precisa ser acrescentado aqui.",
+    "W46: upload-artifact para `dist` deve ter um `if:` guard"
+   ],
+   "doc": "!/usr/bin/env node"
+  },
+  "scripts/ci/workflow-invariants.test.mjs": {
+   "path": "scripts/ci/workflow-invariants.test.mjs",
+   "lines": 108,
+   "is_test": true,
+   "doc": "Testes do verificador de invariantes do ci.yml (scripts/ci/workflow-invariants.mjs). O script lê `.github/workflows/ci.yml` relativo ao cwd, então cada caso monta um repositório falso em diretório temporário com um ci.yml sintético e confere o veredito. O último caso roda contra o ci.yml REAL: o gua …",
+   "tests": [
+    "passa quando test:coverage aparece uma vez e nenhum job usa always()",
+    "R3: reprova test:coverage duplicado em dois passos",
+    "R5: reprova always() no nível do job de required check",
+    "R5: reprova quando o required check desaparece do ci.yml",
+    "W46: reprova upload do artefato dist sem if: guard",
+    "W46: aceita upload do artefato dist com if: guard",
+    "o ci.yml real do repositório passa em todos os invariantes"
+   ]
+  },
+  "scripts/ci/workflow-test-support.mjs": {
+   "path": "scripts/ci/workflow-test-support.mjs",
+   "lines": 134,
+   "exports": [
+    "function jobsOf",
+    "function jobOf",
+    "function stepsOf",
+    "function valueOf",
+    "const nestedValue",
+    "const permission",
+    "const runOf",
+    "const scriptOf",
+    "const shellCode",
+    "const conditionOf",
+    "function onlyStep",
+    "function assertBlocking",
+    "function conditionAllows"
+   ],
+   "rule_comments": [
+    "Avalia apenas o subconjunto booleano usado nos guards sob teste. Identificadores"
+   ],
+   "doc": "Leitores restritos ao formato em blocos dos workflows deste repositorio. Nao sao um parser YAML geral: formatos nao reconhecidos falham nos contratos. Isolar job/step evita que comentarios e passos vizinhos satisfaçam garantias."
+  },
   "scripts/graphify-local/artifacts.mjs": {
    "path": "scripts/graphify-local/artifacts.mjs",
    "lines": 151,
@@ -170669,6 +171440,55 @@
     "mock com banco: linhas tipadas, erro 400 com SQLSTATE e lote atômico como na API real"
    ],
    "uses_service_role": true
+  },
+  "scripts/lib/seguranca-processo.mjs": {
+   "path": "scripts/lib/seguranca-processo.mjs",
+   "lines": 110,
+   "exports": [
+    "const RAIZ_REPO",
+    "const RAIZES_PERMITIDAS",
+    "function resolverExecutavel",
+    "function estaDentro",
+    "function resolverCaminhoPermitido"
+   ],
+   "env": [
+    "PATH"
+   ],
+   "errors": [
+    "caminho de ",
+    "comando nao encontrado no PATH: "
+   ],
+   "rule_comments": [
+    "processo filho. A regra `javascript:S4036` e puramente sintatica: dispara",
+    "fazendo `git init` passar onde ele deve ser bloqueado).",
+    "inexistentes. Assim `tmp/link-para-fora/novo.json` nao passa apenas porque"
+   ]
+  },
+  "scripts/lib/seguranca-processo.test.mjs": {
+   "path": "scripts/lib/seguranca-processo.test.mjs",
+   "lines": 159,
+   "is_test": true,
+   "env": [
+    "PATH"
+   ],
+   "rule_comments": [
+    "E o MESMO binario que o shell resolveria: nao pode pegar outro shim do PATH."
+   ],
+   "tests": [
+    "resolverExecutavel devolve caminho absoluto existente igual ao do shell",
+    "resolverExecutavel lanca para comando inexistente",
+    "estaDentro aceita a raiz e subpastas",
+    "estaDentro recusa ",
+    "resolverCaminhoPermitido aceita caminho do repositorio e do tmpdir",
+    "resolverCaminhoPermitido recusa ",
+    "resolverCaminhoPermitido respeita o array de raizes explicito do chamador",
+    "resolverCaminhoPermitido recusa arquivo existente acessado por symlink que escapa da raiz",
+    "resolverCaminhoPermitido recusa alvo inexistente sob diretorio symlink que escapa da raiz",
+    "RAIZ_REPO aponta para o pacote do repositorio e esta entre as raizes permitidas",
+    "REGRESSÃO: resolverCaminhoPermitido recusa entrada não-string com erro fail-closed, não TypeError nativo",
+    "REGRESSÃO: resolverCaminhoPermitido recusa string vazia em vez de resolver para cwd()",
+    "REGRESSÃO: resolverExecutavel ignora diretório com o mesmo nome do comando no PATH"
+   ]
   },
   "scripts/lib/sql-split.mjs": {
    "path": "scripts/lib/sql-split.mjs",
@@ -229973,6 +230793,10 @@
    "path": "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
    "lines": 21
   },
+  "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql": {
+   "path": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql",
+   "lines": 389
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -230380,7 +231204,7 @@
   },
   "tests/rls/merge_company_name_override.sql": {
    "path": "tests/rls/merge_company_name_override.sql",
-   "lines": 103,
+   "lines": 102,
    "is_test": true
   },
   "tests/rls/merge_records_atomic.sql": {
@@ -230646,10 +231470,44 @@
   }
  },
  "git": {
-  "sha": "d42f417f17d23a5caf6c24fd35fb61cd833ca66d",
+  "sha": "df708ff757360ef2b6e0c2e8269855c399d0d805",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "df708ff",
+    "date": "2026-11-10",
+    "author": "adm01-debug",
+    "subject": "feat(ci): automações de auditoria do estado real portadas do Zapp Web V2 (#180)",
+    "files": [
+     ".github/toolchain.json",
+     ".github/workflows/estado-real.yml",
+     ".github/workflows/higiene-semanal.yml",
+     "AGENTS.md",
+     "docs/agentes/automacoes-estado-real.md",
+     "package.json",
+     "scripts/automation.config.json",
+     "scripts/ci/actions-kpi.mjs",
+     "scripts/ci/actions-kpi.test.mjs",
+     "scripts/ci/branch-podaveis.mjs",
+     "scripts/ci/branch-podaveis.test.mjs",
+     "scripts/ci/bump-toolchain.mjs",
+     "scripts/ci/check-claude-md-integrity.mjs",
+     "scripts/ci/check-claude-md-integrity.test.mjs",
+     "scripts/ci/check-test-inventory.mjs",
+     "scripts/ci/check-test-inventory.test.mjs",
+     "scripts/ci/sla-code-scanning.mjs",
+     "scripts/ci/sla-code-scanning.test.mjs",
+     "scripts/ci/workflow-invariants.mjs",
+     "scripts/ci/workflow-invariants.test.mjs",
+     "scripts/ci/workflow-test-support.mjs",
+     "scripts/lib/seguranca-processo.mjs",
+     "scripts/lib/seguranca-processo.test.mjs",
+     "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql",
+     "tests/rls/merge_company_name_override.sql",
+     "tests/rls/security_definer_hardening.sql"
+    ]
+   },
    {
     "sha": "d42f417",
     "date": "2026-11-10",
@@ -231400,19 +232258,13 @@
     "files": [
      ".github/workflows/ci.yml"
     ]
-   },
-   {
-    "sha": "d00de59",
-    "date": "2026-11-06",
-    "author": "adm01-debug",
-    "subject": "fix(ci): corrige corrupção de texto nos workflows restore-drill e rls-exposure-guard (#161)",
-    "files": [
-     ".github/workflows/restore-drill.yml",
-     ".github/workflows/rls-exposure-guard.yml"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "package.json",
+    4
+   ],
    [
     "scripts/inventario/gerar-banco.mjs",
     4
@@ -231426,7 +232278,7 @@
     4
    ],
    [
-    "package.json",
+    "AGENTS.md",
     3
    ],
    [
@@ -231436,6 +232288,18 @@
    [
     "scripts/supabase_snapshot/snapshot.py",
     3
+   ],
+   [
+    "scripts/automation.config.json",
+    2
+   ],
+   [
+    "tests/rls/merge_company_name_override.sql",
+    2
+   ],
+   [
+    "tests/rls/security_definer_hardening.sql",
+    2
    ],
    [
     ".gitignore",
@@ -231475,22 +232339,6 @@
    ],
    [
     "scripts/hardening/check-client-tls.sql",
-    2
-   ],
-   [
-    "scripts/hardening/check-extensions-hardening.sql",
-    2
-   ],
-   [
-    "scripts/hardening/check-indexes-duplicated.sql",
-    2
-   ],
-   [
-    "scripts/hardening/check-indexes-overlapped.sql",
-    2
-   ],
-   [
-    "scripts/hardening/check-indexes-unused.sql",
     2
    ]
   ]

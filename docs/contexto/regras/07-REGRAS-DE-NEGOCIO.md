@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d42f417f17` · branch `main` · 2026-11-10 19:44 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `df708ff757` · branch `main` · 2026-11-10 22:28 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -975,22 +975,6 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `resume_sequence_email` | Pausa alterada ou indisponível para retomada de email | `supabase/migrations/20261012234200_resume_paused_sequence_email.sql` |
 | `resume_sequence_email` | Etapa de email divergente | `supabase/migrations/20261012234200_resume_paused_sequence_email.sql` |
 | `dashboard_normalize_contact_phone` | Número de telefone inválido | `supabase/migrations/20261013033427_dashboard_source_contract.sql` |
-| `merge_records_atomically` | Autenticação obrigatória | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Entidade ou identificadores inválidos | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Substituições devem ser um objeto | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Registros inexistentes ou pertencentes a outro usuário | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Registro principal excluído | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Registro secundário indisponível | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Empresa da substituição indisponível | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Campo não permitido: % | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Campo não encontrado: % | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Nome principal obrigatório | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Vínculo indireto de outro proprietário: %.% | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Vínculo polimórfico sem proprietário: %.% | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Vínculo de outro proprietário: %.% | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Mesclagem criaria relação circular: % | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Ancestral de outro proprietário | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
-| `merge_records_atomically` | Relação pertence a outro usuário | `supabase/migrations/20261013033431_merge_records_atomically.sql` |
 | `enroll_sequence_contact` | Autenticação obrigatória | `supabase/migrations/20261013033432_live_sequence_contact.sql` |
 | `enroll_sequence_contact` | Sequência ou contato indisponível | `supabase/migrations/20261013033432_live_sequence_contact.sql` |
 | `enroll_sequence_contact` | Sequência ou contato indisponível | `supabase/migrations/20261013033432_live_sequence_contact.sql` |
@@ -1019,6 +1003,24 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `create_quick_interaction` | Invalid interaction | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
 | `create_quick_interaction` | Contact unavailable | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
 | `cleanup_cron_job_run_details` | retencao minima de 1 dia (recebido: %) | `supabase/migrations/20261108190000_cron_job_run_details_retention.sql` |
+| `merge_records_atomically` | Autenticação obrigatória | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Entidade ou identificadores inválidos | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Substituições devem ser um objeto | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Override de nome_crm deve ser texto não vazio | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Override de first_name deve ser texto não vazio | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Registros inexistentes ou pertencentes a outro usuário | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Registro principal excluído | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Registro secundário indisponível | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Empresa da substituição indisponível | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Campo não permitido: % | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Campo não encontrado: % | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Nome principal obrigatório | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Vínculo indireto de outro proprietário: %.% | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Vínculo polimórfico sem proprietário: %.% | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Vínculo de outro proprietário: %.% | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Mesclagem criaria relação circular: % | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Ancestral de outro proprietário | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `merge_records_atomically` | Relação pertence a outro usuário | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
 
 ## E. Estados, máquinas de estado e transições
 
@@ -4073,6 +4075,12 @@ _nenhum item encontrado_
 | falha fixture | `scripts/automation-tests/dispatch.mjs` |
 | arquivo de terceiro | `scripts/automation-tests/snapshot.mjs` |
 | entrypoint original não deve executar | `scripts/automation-tests/snapshot.mjs` |
+| ${metodo} ${caminho} -> ${r.status} | `scripts/ci/actions-kpi.mjs` |
+| PR sem headRefName | `scripts/ci/branch-podaveis.mjs` |
+| a lista de PRs abertas não é um array | `scripts/ci/branch-podaveis.mjs` |
+| a lista de PRs abertas veio cheia (${dados.length} >= limite ${limite}); pode haver PR que não veio | `scripts/ci/branch-podaveis.mjs` |
+| argumento inválido: ${chave} | `scripts/ci/branch-podaveis.mjs` |
+| falta --${obrigatorio} | `scripts/ci/branch-podaveis.mjs` |
 | SQL de cenário falhou: ${r.stderr \|\| r.erro} | `scripts/hardening/_pg-teste.mjs` |
 | ${flag} exige o caminho de um arquivo | `scripts/inventario/gerar-banco.mjs` |
 | --functions: o arquivo nao e JSON | `scripts/inventario/gerar-banco.mjs` |
@@ -4096,6 +4104,8 @@ _nenhum item encontrado_
 | --saida exige o caminho de uma pasta | `scripts/inventario/gerar-repo.mjs` |
 | ripgrep (rg) falhou com exit ${status}; o inventário não foi gerado. | `scripts/inventario/gerar-repo.mjs` |
 | ripgrep (rg) não encontrado; o inventário não pode ser gerado com segurança. | `scripts/inventario/gerar-repo.mjs` |
+| caminho de  | `scripts/lib/seguranca-processo.mjs` |
+| comando nao encontrado no PATH:  | `scripts/lib/seguranca-processo.mjs` |
 | dividirSql espera uma string | `scripts/lib/sql-split.mjs` |
 | enum ${nome} sem valores | `scripts/lib/sql-split.mjs` |
 | nome de enum inválido: ${nome} | `scripts/lib/sql-split.mjs` |
@@ -4349,15 +4359,7 @@ _nenhum item encontrado_
 | Não foi possível capturar o grafo. | `src/components/intelligence/GraphTab.tsx` |
 | Informe o domínio | `src/components/intent/PixelSetupCard.tsx` |
 | Não foi possível copiar | `src/components/intent/PixelSetupCard.tsx` |
-| Nenhuma busca importada | `src/components/interactions/ImportPresetsDialog.tsx` |
-| Selecione ao menos uma busca | `src/components/interactions/ImportPresetsDialog.tsx` |
-| Falha ao copiar link | `src/components/interactions/InteracoesPresetsMenu.tsx` |
-| Limite de 10 presets atingido | `src/components/interactions/InteracoesPresetsMenu.tsx` |
-| Dê um nome para a visualização | `src/components/interactions/SavedViewsMenu.tsx` |
-| Já existe uma visualização com esse nome | `src/components/interactions/SavedViewsMenu.tsx` |
-| Erro ao salvar anotação | `src/components/interactions/insights/AnnotationDialog.tsx` |
-| Erro ao excluir | `src/components/interactions/insights/AnnotationList.tsx` |
-| … +761 linhas — lista completa em `context.json` | |
+| … +769 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4389,7 +4391,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3029 testes em 230 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3109 testes em 237 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4444,17 +4446,20 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/canonical-conversation-contracts.test.tsx` | 16 | Análises de conversa usam JSON validado, sem cast de compatibilidade · normaliza os campos JSON e preserva nulabilidade e sugestões reais · preserva a ausência legítima de análise · propaga JSON incompatível: %j … |
 | `src/hooks/__tests__/canonical-side-effect-contracts.test.tsx` | 16 | Operações secundárias não geram sucesso quando falham · a leitura de destinatários existentes não é tratada como lista vazia · expõe erro da consulta de campanhas · a inscrição não anuncia sucesso se a contagem falhar … |
 | `scripts/gen-supabase-types.test.mjs` | 15 | jsonSchemaToTs: mapeia os tipos do PostgREST para TypeScript válido · chaveTs: identificador fica cru, o resto vai entre aspas · gerarTypes: tabelas x views, nulabilidade, ordem estável e sem carimbo de data · gerarTypes: OpenAPI vazio ou torto é recusado (não grava types vazio) … |
+| `scripts/ci/branch-podaveis.test.mjs` | 15 | branch patch-equivalente, antiga e sem PR é elegível e vira comando · branch com PR aberta fica fora do comando · branch recente (7 dias ou menos) fica fora; o corte é estritamente maior que 7 dias · epoch ausente, zero ou inválido não prova idade: fica fora … |
 | `src/__tests__/integration/resilience-patterns.test.ts` | 15 | Circuit Breaker Pattern · should open after threshold failures · Rate Limiter Pattern · should allow requests within limit … |
 | `src/data/__tests__/triggerBundles.test.ts` | 15 | Trigger Bundles Integrity · has at least 5 bundles · all bundles have unique IDs · has name in PT and EN … |
 | `src/hooks/useSocialInsights.test.tsx` | 15 | Histórico social sem dados fabricados · retorna vazio somente quando a consulta confirma ausência: %j · propaga uma rejeição de transporte sem gerar registros · não repete automaticamente consultas rejeitadas, mesmo com retry global … |
 | `scripts/apply-cli.test.mjs` | 14 | ${script}: importar não executa nada e expõe main/definicao · ${script}: cabeçalho documenta que o padrão é simulação e que aplicar exige --apply · ${script}: --help sai 0, explica as flags e não chama a API (mesmo sem token) · ${script}: sem flags (e com --dry-run) só simula — nenhuma requisição, mesmo com token no ambiente … |
 | `scripts/audit-ausentes.test.mjs` | 14 | chamadasFrom: aspas, crase,  · chamadasFrom: o exemplo é a linha de CADA ocorrência, inclusive a última linha sem \\n · tabelasDoTypes e funcoesDoTypes leem o formato do supabase gen types · chamadasRpc pega rpc com e sem argumentos … |
+| `scripts/ci/actions-kpi.test.mjs` | 14 | E79: agregar conta runs, cancelados, falhas e minutos por workflow · E79: a janela corta run velho — o KPI e dos ultimos N dias, nao de sempre · E79: duracao vem dos carimbos e nunca e negativa · E79: os 5 jobs mais lentos saem ordenados e limitados … |
 | `scripts/lib/sql-split.test.mjs` | 14 | divisor: ${nome} · divisor: ${CASOS.length} casos declarados (dezenas, por exigência) · divisor: informa a linha (base 1) em que cada instrução começa · divisor: ${nome} sem fechamento lança ErroSqlMalformado com a linha … |
 | `src/components/interactions/__tests__/ActiveFiltersBar.onAfterRemove.test.tsx` | 14 | ActiveFiltersBar — contrato onAfterRemove · chip de busca: chama onAfterRemove uma única vez e setFilter( · chip de direção (inbound): uma única chamada e seta direcao=all · chip de pessoa: uma única chamada e limpa contact … |
 | `src/contexts/NavigationStackContext.test.tsx` | 14 | Histórico e retorno de navegação · percorre os índices reais do navegador sem apagar o avançar · usa uma visita anterior filtrada da seção, mesmo após visitar outra rota · prioriza o retorno contextual quando a seção é apenas um fallback … |
 | `src/data/__tests__/discAdvancedData.test.ts` | 14 | DISC Advanced Data Integrity · has exactly 4 DISC profiles · includes D, I, S, C · Profile %s … |
 | `src/hooks/__tests__/company-contracts.test.ts` | 14 | contrato canônico de empresas · produz aliases reais exclusivamente de colunas e relações canônicas · escolhe relação primária deterministicamente sem depender da ordem do payload · usa nome fantasia/razão social e mantém fallback de localização do nome … |
 | `tests/rls/prepare-sql.node-test.mjs` | 14 | preserva BEGIN/COMMIT em funções e comentários, removendo só o wrapper externo · preserva blocos DO, dollar tags Unicode e transações dentro de strings · preserva comentários aninhados e aspas duplicadas/escapadas · remove wrapper BEGIN/ROLLBACK da fixture mesmo na mesma linha … |
+| `scripts/lib/seguranca-processo.test.mjs` | 13 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/rls-matrix/check-rls-baseline.test.mjs` | 13 | aprova quando o que cada perfil enxerga bate com o baseline · reprova: ${nome} · exposição menor: aprova, avisa e --update fixa o novo patamar · --update com piora grava, mas deixa a regressão aceita escrita no stderr … |
 | `src/data/__tests__/sleightOfMouth.test.ts` | 13 | Sleight of Mouth Patterns · has exactly 14 patterns (Robert Dilts) · all patterns have matching id and key · all patterns have required string fields … |
 | `src/data/__tests__/vakTemplates.test.ts` | 13 | VAK Adapted Templates · has at least 5 templates · all templates have unique IDs · all templates have base title … |
@@ -4462,10 +4467,12 @@ _nenhum item encontrado_
 | `src/test/providers.test.ts` | 13 | Provider Hierarchy Guard · validateProviderOrder · deve aceitar a ordem correta sem violações · deve detectar AuthProvider sem BrowserRouter acima … |
 | `scripts/check-backend-linter-baseline.test.mjs` | 12 | o teto do script é o documentado em linter-baseline.md · no teto: aprova e mostra a comparação · acima do teto: exit 1 com a contagem no stderr · abaixo do teto: aprova e avisa para apertar o ratchet … |
 | `scripts/lint-providers.test.mjs` | 12 | o repositório atual passa e o lint realmente encontra os providers · as dependências do lint são as mesmas de src/lib/providerGuard.ts · aprova a ordem certa num App.tsx só · reprova ${nome} … |
+| `scripts/ci/check-claude-md-integrity.test.mjs` | 12 | passa sem alteração nenhuma no working tree · reprova quando AGENTS.md é apagado · reprova quando uma seção obrigatória desaparece (título alterado) · reprova quando o conjunto (AGENTS.md + docs/agentes/) encolhe mais de 30% … |
 | `src/data/__tests__/triggerTemplatesVAK.test.ts` | 12 | VAK Trigger Templates · has at least 20 templates · all templates have unique IDs · all templates have required fields … |
 | `src/hooks/__tests__/contact-contracts.test.ts` | 12 | contrato canônico de contatos · normaliza arrays legados e preserva a versão real · rejeita JSON de array inválido: %s · respeita arrays canônicos vazios em vez de ressuscitar aliases legados … |
 | `src/lib/externalData.contract.test.ts` | 12 | escrita versionada distingue conflito de versão de transação abortada · permite nova tentativa com a mesma versão após %s · preserva metadados do CONCURRENT_EDIT estruturado · preserva o marcador legado sem JSON … |
 | `src/lib/__tests__/validation-schemas.test.ts` | 12 | Validation Schemas Excellence · emailSchema · should validate a valid email · should normalize email to lowercase and trimmed … |
+| `scripts/ci/check-test-inventory.test.mjs` | 11 | padroesDeWorkflow le os blocos run (dobrado, literal e de uma linha) · caminho citado fora de run (nome da etapa, comentario) nao cobre a suite · casaPadrao trata * como um nivel de diretorio e ** como qualquer nivel · suite Node fora dos blocos run vira orfa — e a allowlist a absolve … |
 | `scripts/hardening/hardening-cluster.test.mjs` | 11 | hardening: veredito coerente com a configuração do servidor de teste · check-replication-config acusa exatamente as configurações divergentes · check-client-tls acusa servidor com ssl desligado · hardening: cluster descartável com TLS e replicação lógica … |
 | `scripts/migration/sql/sql.test.mjs` | 11 | create-reset-log: cria tudo, é idempotente (2ª e 3ª execução sem erro) e preserva os dados · create-reset-log: UNIQUE(user_id), CHECK de status, updated_at automático e RLS (só admin lê; authenticated não escreve) · create-reset-log: é atômico — sem has_role() falha e NÃO deixa tabela pela metade · mark-must-reset: marca só quem tem login por senha, preserva metadados e não aborta com valor estranho (antes:  … |
 | `src/components/interactions/__tests__/SentimentQuickFilter.a11y.test.tsx` | 11 | SentimentQuickFilter — acessibilidade · expõe role=radiogroup com aria-label descritivo · todos os chips têm role=radio com aria-checked refletindo o estado · roving tabindex: somente o item ativo é alcançável por Tab … |
@@ -4491,6 +4498,7 @@ _nenhum item encontrado_
 | `tests/e2e/navigation.spec.ts` | 9 | Autenticação e Navegação E2E · deve redirecionar usuário não autenticado para /auth · deve alternar entre Login e Cadastro no formulário · deve validar campos obrigatórios no login … |
 | `scripts/check-publish-gates.test.mjs` | 8 | RLS falha com ${scenario}, preservando baseline${update ?  · RLS aprova coleta completa e distingue negação SQL de JWT inválido · RLS continua detectando aumento de exposição · RLS permite atualizar baseline somente após coleta completa … |
 | `scripts/check-supabase-project-ref.test.mjs` | 8 | AGENTS.md declara o projeto Supabase canônico · supabase/config.toml aponta para o projeto canônico · supabase/.temp/linked-project.json aponta para o projeto canônico · a CSP do vite.config.ts permite conexão ao projeto canônico … |
+| `scripts/ci/sla-code-scanning.test.mjs` | 8 | nível vem de security_severity_level; sem ele, error conta como alto (o defeito de rule.severity) · high vence com 15 dias; medium só depois de 30 · relatório: sem violação diz isso; com violação lista em bloco · CLI: lê o JSON do stdin, sai 1 com violação e 0 sem … |
 | `scripts/inventario/banco.test.mjs` | 8 | banco.sql roda limpo em transação só-leitura e imprime UMA linha com UM JSON · resumo: contagens batem com a fixture · tabelas: RLS, policies, triggers, linhas, partição e citação no banco · nomes com caractere de regex/Markdown: consulta não cai e a citação é exata … |
 | `scripts/inventario/gerar-repo.test.mjs` | 8 | edges.json: linhas, segredos lidos e quem chama cada função · tabelas-uso.json: conta .from() em src e edges e confere o types.ts · nomes hostis no stdin (começando com -, com regex, __proto__) não quebram nem viram opção do rg · repositório mínimo (sem src, e2e, migrations, workflows, types.ts) funciona … |
 | `scripts/maintenance/tests/configuration.mjs` | 8 | CLI e config desconhecidas falham fechadas · tsconfig vazio impede doctor saudável · TypeScript 7 sem API usa CLI isolada e valida o patch · TypeScript 7 com CLI sem arquivos bloqueia doctor … |
@@ -4505,6 +4513,7 @@ _nenhum item encontrado_
 | `src/lib/externalData.delete-audit.test.ts` | 8 | Auditoria única após exclusão confirmada · grava somente um evento para %s com contexto do dono · preserva o sucesso se a auditoria lançar uma exceção · não registra exclusão se a mutação falhar … |
 | `src/pages/mapa/relationshipScores.contract.test.ts` | 8 | Score real de empresa no mapa · usa a medição mais recente e mantém score zero e ausência de score · não consulta a tabela global quando não há empresas autorizadas · pagina o histórico sem truncar empresas ainda não encontradas … |
 | `scripts/apply-e2e.test.mjs` | 7 | ${script}: banco vazio → aplica tudo; reexecução é idempotente (mesmo banco, saída 0, zero falha) · o SQL impresso por --sql, executado pelo psql (divisor independente), dá o mesmo banco que --apply · fix-enums → retry-failed → apply-missing → apply-remaining reconstroem o banco; cada passo é idempotente · instrução inválida de verdade num lote: as vizinhas entram, a culpada é nomeada, saída 1 — e o resultado é estável … |
+| `scripts/ci/workflow-invariants.test.mjs` | 7 | passa quando test:coverage aparece uma vez e nenhum job usa always() · R3: reprova test:coverage duplicado em dois passos · R5: reprova always() no nível do job de required check · R5: reprova quando o required check desaparece do ci.yml … |
 | `scripts/maintenance/tests/dependencies.mjs` | 7 | dependências divergentes da referência bloqueiam reutilização · dependência vendor por link idêntico é reutilizada sem instalar pacotes · vendor sujo e referência com vendor diferente bloqueiam antes dos gates · link instalado para outro vendor divergente e file externo são recusados … |
 | `src/components/campaigns/__tests__/CampaignDetailDrawer.test.tsx` | 7 | CampaignDetailDrawer · returns null when no campaign provided · renders campaign name, subject and computed metric percentages · shows the send CTA only for drafts and triggers mutation on click … |
 | `src/components/interactions/__tests__/InfiniteScrollSentinel.density.test.tsx` | 7 | InfiniteScrollSentinel — densidade ambiente · usa  · lê  · DensityProvider tem prioridade sobre localStorage … |

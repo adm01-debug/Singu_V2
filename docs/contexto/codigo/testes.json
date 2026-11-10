@@ -5,17 +5,17 @@
   "vitest",
   "playwright"
  ],
- "total": 253,
+ "total": 260,
  "por_tipo": {
   "contrato": 38,
   "e2e": 12,
   "pytest": 7,
-  "unit": 194
+  "unit": 201
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 114
+   "arquivos": 121
   },
   {
    "padrao": "co-localizado (__tests__)",
@@ -197,6 +197,61 @@
    "casos": 8
   },
   {
+   "arquivo": "scripts/ci/actions-kpi.test.mjs",
+   "tipo": "unit",
+   "linhas": 217,
+   "testa": [
+    "scripts/ci/actions-kpi.mjs",
+    "scripts/ci/workflow-test-support.mjs"
+   ],
+   "casos": 15
+  },
+  {
+   "arquivo": "scripts/ci/branch-podaveis.test.mjs",
+   "tipo": "unit",
+   "linhas": 181,
+   "testa": [
+    "scripts/ci/branch-podaveis.mjs",
+    "scripts/ci/workflow-test-support.mjs"
+   ],
+   "casos": 16
+  },
+  {
+   "arquivo": "scripts/ci/check-claude-md-integrity.test.mjs",
+   "tipo": "unit",
+   "linhas": 215,
+   "testa": [
+    "scripts/ci/check-claude-md-integrity.mjs"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "scripts/ci/check-test-inventory.test.mjs",
+   "tipo": "unit",
+   "linhas": 160,
+   "testa": [
+    "scripts/ci/check-test-inventory.mjs"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "scripts/ci/sla-code-scanning.test.mjs",
+   "tipo": "unit",
+   "linhas": 93,
+   "testa": [
+    "scripts/ci/sla-code-scanning.mjs",
+    "scripts/ci/workflow-test-support.mjs"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "scripts/ci/workflow-invariants.test.mjs",
+   "tipo": "unit",
+   "linhas": 108,
+   "testa": [],
+   "casos": 7
+  },
+  {
    "arquivo": "scripts/gen-supabase-types.test.mjs",
    "tipo": "unit",
    "linhas": 254,
@@ -272,6 +327,15 @@
    "linhas": 369,
    "testa": [],
    "casos": 4
+  },
+  {
+   "arquivo": "scripts/lib/seguranca-processo.test.mjs",
+   "tipo": "unit",
+   "linhas": 159,
+   "testa": [
+    "scripts/lib/seguranca-processo.mjs"
+   ],
+   "casos": 13
   },
   {
    "arquivo": "scripts/lib/sql-split.test.mjs",
@@ -2305,6 +2369,12 @@
   "scripts/automation-tests/hooks.mjs": 1,
   "scripts/automation-tests/inventory.mjs": 1,
   "scripts/automation-tests/snapshot.mjs": 1,
+  "scripts/ci/actions-kpi.mjs": 1,
+  "scripts/ci/branch-podaveis.mjs": 1,
+  "scripts/ci/check-claude-md-integrity.mjs": 1,
+  "scripts/ci/check-test-inventory.mjs": 1,
+  "scripts/ci/sla-code-scanning.mjs": 1,
+  "scripts/ci/workflow-test-support.mjs": 3,
   "scripts/diff-tables.mjs": 1,
   "scripts/fix-enums.js": 1,
   "scripts/gen-supabase-types.mjs": 1,
@@ -2314,6 +2384,7 @@
   "scripts/hardening/_pg-teste.mjs": 3,
   "scripts/inventario/gerar-banco.mjs": 1,
   "scripts/inventario/mudou-conteudo.mjs": 1,
+  "scripts/lib/seguranca-processo.mjs": 1,
   "scripts/lib/sql-split.mjs": 3,
   "scripts/lib/supabase-mgmt.mjs": 5,
   "scripts/maintenance/lib.mjs": 7,

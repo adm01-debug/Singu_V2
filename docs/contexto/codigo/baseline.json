@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "d42f417f17d23a5caf6c24fd35fb61cd833ca66d",
+  "commit": "df708ff757360ef2b6e0c2e8269855c399d0d805",
   "branch": "main",
-  "data_commit": "2026-11-10T16:41:58-03:00",
+  "data_commit": "2026-11-10T19:27:21-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "df708ff7",
+    "data": "2026-11-10",
+    "assunto": "feat(ci): automações de auditoria do estado real portadas do Zapp Web V2 (#180)"
+   },
    {
     "sha": "d42f417f",
     "data": "2026-11-10",
@@ -126,14 +131,9 @@
     "sha": "01fc3928",
     "data": "2026-11-08",
     "assunto": "fix(ci): corrige YAML fatal do CI, secret fantasma e portabilidade dos gate tests (#164)"
-   },
-   {
-    "sha": "3e4b9701",
-    "data": "2026-11-07",
-    "assunto": "feat: teste de auditoria de cobertura RLS (check-rls-coverage.sql) (#168)"
    }
   ],
-  "arquivos_mudados_7d": 477,
+  "arquivos_mudados_7d": 498,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -141,35 +141,27 @@
    },
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 37
+    "mudancas": 36
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 30
-   },
-   {
-    "pasta": "src/hooks/__tests__",
-    "mudancas": 26
+    "mudancas": 29
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 15
-   },
-   {
-    "pasta": "src/components/contact-detail",
-    "mudancas": 15
+    "mudancas": 14
    },
    {
     "pasta": "scripts/migration/storage",
     "mudancas": 13
    },
    {
-    "pasta": "src/components/dashboard",
-    "mudancas": 9
+    "pasta": "src/components/contact-detail",
+    "mudancas": 13
    },
    {
-    "pasta": "src/pages/mapa",
-    "mudancas": 9
+    "pasta": "src/hooks/__tests__",
+    "mudancas": 11
    },
    {
     "pasta": "supabase/functions/external-data",
@@ -192,8 +184,16 @@
     "mudancas": 8
    },
    {
+    "pasta": "scripts/maintenance/tests",
+    "mudancas": 7
+   },
+   {
+    "pasta": "src/components/dashboard",
+    "mudancas": 7
+   },
+   {
     "pasta": "src/lib/externalData.ts",
-    "mudancas": 8
+    "mudancas": 7
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
@@ -226,11 +226,11 @@
     "mudancas": 10
    },
    {
-    "arquivo": "src/hooks/useContacts.ts",
-    "mudancas": 9
+    "arquivo": "tests/rls/security_definer_hardening.sql",
+    "mudancas": 10
    },
    {
-    "arquivo": "tests/rls/security_definer_hardening.sql",
+    "arquivo": "src/hooks/useContacts.ts",
     "mudancas": 9
    },
    {
@@ -244,6 +244,10 @@
    {
     "arquivo": "RELATORIO_CI.md",
     "mudancas": 6
+   },
+   {
+    "arquivo": "AGENTS.md",
+    "mudancas": 5
    },
    {
     "arquivo": "ESTADO_ATUAL.md",
@@ -268,10 +272,6 @@
    {
     "arquivo": "tests/rls/functions_authenticated_allowlist.sql",
     "mudancas": 5
-   },
-   {
-    "arquivo": "AGENTS.md",
-    "mudancas": 4
    },
    {
     "arquivo": "PENDENCIAS.md",
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 41
+    "commits": 42
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 39
+    "commits": 38
    },
    {
     "autor": "dependabot[bot]",
@@ -318,9 +318,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3176,
-  "arquivos_codigo": 2183,
-  "linhas_codigo": 408433,
+  "arquivos_total": 3197,
+  "arquivos_codigo": 2199,
+  "linhas_codigo": 411214,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -330,12 +330,12 @@
   "hooks": 408,
   "edge_functions": 108,
   "tabelas": 418,
-  "migrations": 479,
+  "migrations": 480,
   "cron_jobs": 20,
-  "testes": 253,
-  "workflows": 8,
-  "scripts": 279,
-  "docs_md": 152
+  "testes": 260,
+  "workflows": 10,
+  "scripts": 288,
+  "docs_md": 153
  },
  "por_pasta": {
   "commitlint.config.cjs": {
@@ -514,6 +514,10 @@
    "arquivos": 1,
    "linhas": 28
   },
+  "scripts/ci": {
+   "arquivos": 14,
+   "linhas": 2512
+  },
   "scripts/diff-tables.mjs": {
    "arquivos": 1,
    "linhas": 114
@@ -571,8 +575,8 @@
    "linhas": 1641
   },
   "scripts/lib": {
-   "arquivos": 5,
-   "linhas": 1418
+   "arquivos": 7,
+   "linhas": 1687
   },
   "scripts/lint-providers.cjs": {
    "arquivos": 1,
@@ -855,7 +859,7 @@
  ],
  "qualidade": {
   "any": 27,
-  "console_log": 171,
+  "console_log": 177,
   "ts_ignore": 2,
   "eslint_disable": 1,
   "todos": 8,

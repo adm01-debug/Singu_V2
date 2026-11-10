@@ -4,13 +4,13 @@
  "stack": {
   "linguagens": [
    "TypeScript (2047)",
-   "SQL (651)",
-   "Markdown (152)",
+   "SQL (652)",
+   "Markdown (153)",
+   "JavaScript (134)",
    "Shell (134)",
-   "JavaScript (118)",
+   "JSON (19)",
    "Python (19)",
-   "JSON (18)",
-   "YAML (14)"
+   "YAML (16)"
   ],
   "linguagem_principal": "TypeScript",
   "framework": "React",
@@ -64,6 +64,9 @@
    "contexto:indice": "python3 scripts/regras_negocio/indice.py --repo . --out docs/contexto/00-INDEX.md --remote adm01-debug/Singu_V2 --fonte \"banco real=docs/contexto/supabase\" --fonte \"código=docs/contexto/codigo\" --fonte \"regras de negócio=docs/contexto/regras\"",
    "contexto:regras": "python3 scripts/regras_negocio/generate.py --repo . --out docs/contexto/regras --profile regras --schema-snapshot docs/contexto/supabase --index-path docs/contexto/00-INDEX.md --no-pointer",
    "dev": "vite",
+   "estado:instrucoes": "node scripts/ci/check-claude-md-integrity.mjs",
+   "estado:testes": "node scripts/ci/check-test-inventory.mjs",
+   "estado:workflows": "node scripts/ci/workflow-invariants.mjs",
    "graphify:build": "graphify extract . --code-only && graphify cluster-only . --no-label",
    "graphify:query": "graphify query",
    "graphify:update": "graphify update .",
@@ -251,6 +254,36 @@
    ]
   },
   {
+   "arquivo": ".github/workflows/estado-real.yml",
+   "nome": "Estado real do repositório",
+   "gatilhos": [
+    "pull_request",
+    "push",
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "auditar"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [
+    "scripts/ci/check-claude-md-integrity.mjs",
+    "scripts/ci/check-test-inventory.mjs",
+    "scripts/ci/workflow-invariants.mjs"
+   ],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node"
+   ]
+  },
+  {
    "arquivo": ".github/workflows/fix-jwt-proxies-externas.yml",
    "nome": "Fix JWT proxies externas",
    "gatilhos": [
@@ -268,6 +301,36 @@
     "SUPABASE_ACCESS_TOKEN"
    ],
    "actions": []
+  },
+  {
+   "arquivo": ".github/workflows/higiene-semanal.yml",
+   "nome": "Higiene semanal do repositório",
+   "gatilhos": [
+    "schedule",
+    "workflow_dispatch"
+   ],
+   "crons": [
+    "41 8 * * 1"
+   ],
+   "branches": [],
+   "jobs": [
+    "auditar"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [
+    "scripts/ci/actions-kpi.mjs",
+    "scripts/ci/branch-podaveis.mjs",
+    "scripts/ci/bump-toolchain.mjs",
+    "scripts/ci/sla-code-scanning.mjs"
+   ],
+   "npm_scripts": [],
+   "secrets": [],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node"
+   ]
   },
   {
    "arquivo": ".github/workflows/inventario-estado-semanal.yml",
@@ -406,7 +469,7 @@
   {
    "arquivo": "AGENTS.md",
    "titulo": "AGENTS.md — Singu_V2",
-   "linhas": 74
+   "linhas": 75
   },
   {
    "arquivo": "ARCHITECTURE.md",
@@ -707,7 +770,7 @@
   },
   {
    "pasta": "docs/agentes",
-   "arquivos_md": 4
+   "arquivos_md": 5
   },
   {
    "pasta": "docs/contexto",
