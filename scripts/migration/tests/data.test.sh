@@ -7,11 +7,13 @@
 source "$(dirname "${BASH_SOURCE[0]}")/lib/harness.sh"
 pg_main_ok || skip_all "sem Postgres acessível em ${PGA_HOST}:${PGA_PORT:-5432/55432} (defina PGHOST/PGPORT/PGUSER)"
 
-ORI="$(pg_mkdb origem "$T_LIB/fixture-schema.sql" "$T_LIB/fixture-data.sql")" || { fail "não criei o banco de origem"; finish; }
-DES="$(pg_mkdb destino "$T_LIB/fixture-schema.sql")" || { fail "não criei o banco de destino"; finish; }
+pg_mkdb origem "$T_LIB/fixture-schema.sql" "$T_LIB/fixture-data.sql" || { fail "não criei o banco de origem"; finish; }
+ORI="$PG_NEWDB"
+pg_mkdb destino "$T_LIB/fixture-schema.sql" || { fail "não criei o banco de destino"; finish; }
+DES="$PG_NEWDB"
 # senha fictícia na URL (cluster em trust ignora): prova que ela não vaza em saída/arquivo
-SRC="postgresql://${PGA_USER}:SenhaSECRETA%40123@${PGA_HOST}:${PGA_PORT}/${ORI}"
-DST="postgresql://${PGA_USER}:SenhaSECRETA%40123@${PGA_HOST}:${PGA_PORT}/${DES}"
+SRC="$(pgurl "$PGA_USER" "SenhaSECRETA%40123" "${PGA_HOST}:${PGA_PORT}/${ORI}")"
+DST="$(pgurl "$PGA_USER" "SenhaSECRETA%40123" "${PGA_HOST}:${PGA_PORT}/${DES}")"
 TGT="${PGA_HOST}:${PGA_PORT}/${DES}"
 D="$T_TMP/dados com espaço"
 cnt() { pga -d "$1" -c "SELECT count(*) FROM $2"; }
