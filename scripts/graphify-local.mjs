@@ -61,6 +61,7 @@ export async function main(args = process.argv.slice(2), options = {}) {
       outputRoot: await confined(root, config.output, { ignored: true }),
       interrupted: () => interrupted,
       fixtureOfflinePrefix: options.fixtureOfflinePrefix,
+      resourceProbe: options.resourceProbe,
     };
     ctx.python = path.join(ctx.envRoot, "bin/python");
     ctx.binary = path.join(ctx.envRoot, "bin/graphify");
@@ -271,3 +272,5 @@ export { validateConfig } from "./graphify-local/config.mjs";
 export { fingerprint } from "./graphify-local/source.mjs";
 export { validateGraph } from "./graphify-local/artifacts.mjs";
 export { adoptInitial } from "./graphify-local/build.mjs";
+
+export { assertResources } from "./graphify-local/process.mjs";

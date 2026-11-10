@@ -133,12 +133,14 @@ export async function offline(ctx) {
   return prefix;
 }
 
+export function assertResources(sample, minAvailableMb) {
+  const { availableMb, load, parallelism } = sample;
+  if (![availableMb, load, parallelism].every(Number.isFinite) || availableMb < minAvailableMb || load < 0 || parallelism < 1 || load > parallelism) fail('Geração adiada por memória/carga', 'resources');
+}
+async function resourceProbe() {
+  const bytes = await readFile('/proc/meminfo', 'utf8');
+  return { availableMb: Number(/MemAvailable:\s+(\d+)/.exec(bytes)?.[1] || 0) / 1024, load: loadavg()[0], parallelism: availableParallelism() };
+}
 export async function resources(ctx) {
-  const bytes = await readFile("/proc/meminfo", "utf8"),
-    availableMb = Number(/MemAvailable:\s+(\d+)/.exec(bytes)?.[1] || 0) / 1024;
-  if (
-    availableMb < ctx.config.minAvailableMb ||
-    loadavg()[0] > availableParallelism()
-  )
-    fail("Geração adiada por memória/carga", "resources");
+  assertResources(await (ctx.resourceProbe || resourceProbe)(), ctx.config.minAvailableMb);
 }
