@@ -228998,41 +228998,6 @@
       {
         "args": "p_company_id uuid, p_data jsonb",
         "callers": {
-          "code": [
-            {
-              "file": "supabase/migrations/20261029120000_drop_update_company_fields.sql",
-              "hits": 1
-            }
-          ],
-          "code_total_files": 1,
-          "cron": [],
-          "db": [],
-          "triggers": [],
-          "views": []
-        },
-        "comment": null,
-        "config": [
-          "search_path=public, pg_catalog, pg_temp"
-        ],
-        "definition": null,
-        "definition_sha": "789def48c49304e6",
-        "execute_api_roles": "authenticated, service_role",
-        "execute_public": false,
-        "is_trigger_fn": false,
-        "kind": "function",
-        "language": "plpgsql",
-        "leakproof": false,
-        "name": "update_company_fields",
-        "owner": "postgres",
-        "returns": "jsonb",
-        "schema": "public",
-        "security_definer": true,
-        "strict": false,
-        "volatility": "volatile"
-      },
-      {
-        "args": "p_company_id uuid, p_data jsonb",
-        "callers": {
           "code": [],
           "code_total_files": 0,
           "cron": [],
