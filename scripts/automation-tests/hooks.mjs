@@ -167,3 +167,51 @@ test("não sobrescreve arquivos de terceiros na instalação nem na reversão", 
   assert.notEqual(f.cli("uninstall-hooks").status, 0);
   assert.equal(text(bridge), "#!/bin/sh\nexit 3\n");
 });
+
+test("commit mantém Git env no hook original e isola repositórios criados pelos testes", (t) => {
+  const f = fixture(t, {
+    originalHook:
+      'printf "%s|%s|%s" "$GIT_DIR" "$GIT_WORK_TREE" "$GIT_INDEX_FILE" > fixture-git-env.log\n',
+  });
+  f.write(
+    "scripts/smoke.unit.mjs",
+    `import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtempSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {spawnSync} from 'node:child_process';
+test('Git do filho usa somente seu próprio repositório',()=>{
+  for (const key of ['GIT_DIR','GIT_WORK_TREE','GIT_INDEX_FILE']) assert.equal(process.env[key],undefined,key);
+  const dir=mkdtempSync(join(tmpdir(),'automation-child-git-'));
+  try {
+    const init=spawnSync('git',['init','-q','-b','main'],{cwd:dir,encoding:'utf8'});
+    assert.equal(init.status,0,init.stderr);
+    const top=spawnSync('git',['rev-parse','--show-toplevel'],{cwd:dir,encoding:'utf8'});
+    assert.equal(top.status,0,top.stderr);assert.equal(top.stdout.trim(),dir);
+  } finally {rmSync(dir,{recursive:true,force:true});}
+});`,
+  );
+  f.git("add", "scripts/smoke.unit.mjs");
+  const env = {
+    ...process.env,
+    HUSKY: "0",
+    GIT_DIR: join(f.root, ".git"),
+    GIT_WORK_TREE: f.root,
+    GIT_INDEX_FILE: join(f.root, ".git/index"),
+  };
+  const baseline = f.run("git", ["commit", "-m", "fixture com Git filho"], {
+    env,
+  });
+  assert.equal(baseline.status, 0, baseline.stderr + baseline.stdout);
+  const originalEnvironment = text(join(f.root, "fixture-git-env.log"));
+  f.install();
+  f.write("src/source.txt", "commit seguro\n");
+  f.git("add", "src/source.txt");
+  const result = f.run("git", ["commit", "-m", "commit com env absoluto"], {
+    env,
+  });
+  assert.equal(result.status, 0, result.stderr + result.stdout);
+  assert.equal(f.git("show", "HEAD:src/source.txt"), "commit seguro");
+  assert.equal(text(join(f.root, "fixture-git-env.log")), originalEnvironment);
+});

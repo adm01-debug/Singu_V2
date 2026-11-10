@@ -1,4 +1,4 @@
-import { execute, locate } from "./process.mjs";
+import { execute, locate, git } from "./process.mjs";
 import { fail } from "./common.mjs";
 
 export async function runTests(ctx) {
@@ -6,6 +6,12 @@ export async function runTests(ctx) {
     locate(ctx.root, ctx.c, ctx.config, p),
   );
   const env = { ...process.env };
+  const localNames = (
+    await git(ctx.root, ["rev-parse", "--local-env-vars"])
+  ).stdout
+    .trim()
+    .split(/\s+/);
+  for (const name of localNames) if (name) delete env[name];
   delete env.NODE_TEST_CONTEXT;
   delete env.NODE_TEST_REPORTER;
   return execute(
