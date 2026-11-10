@@ -1,6 +1,6 @@
-import {readFile,mkdir,rename,readlink} from "node:fs/promises";
+import { readFile, mkdir, rename, readlink } from "node:fs/promises";
 import path from "node:path";
-import {MaintenanceError,fail,exists,run,git} from "./lib.mjs";
+import { MaintenanceError, fail, exists, run, git } from "./lib.mjs";
 
 export async function networkPrefix(root) {
   let host;

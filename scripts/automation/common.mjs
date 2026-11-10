@@ -1,10 +1,18 @@
-import {mkdirSync,readFileSync,readdirSync,renameSync,writeFileSync} from "node:fs";
-import {homedir} from "node:os";
-import {dirname,isAbsolute,join,sep} from "node:path";
-import {fileURLToPath} from "node:url";
-import {createHash,randomUUID} from "node:crypto";
+import {
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  renameSync,
+  writeFileSync,
+} from "node:fs";
+import { homedir } from "node:os";
+import { dirname, isAbsolute, join, sep } from "node:path";
+import { fileURLToPath } from "node:url";
+import { createHash, randomUUID } from "node:crypto";
 
-export const SELF = fileURLToPath(new URL("../automation.mjs", import.meta.url));
+export const SELF = fileURLToPath(
+  new URL("../automation.mjs", import.meta.url),
+);
 
 export const APPROVED = join(homedir(), ".local/share/repo-maintenance");
 
@@ -58,7 +66,8 @@ export const nonempty = (dir) =>
     (e) => !e.isDirectory() || nonempty(join(dir, e.name)),
   );
 
-export const fail = (message, code = 1) => Object.assign(new Error(message), { code });
+export const fail = (message, code = 1) =>
+  Object.assign(new Error(message), { code });
 
 export const within = (base, target) =>
   target === base || target.startsWith(base + sep);

@@ -1,6 +1,6 @@
-import {readFile,realpath,symlink,readdir,lstat} from "node:fs/promises";
+import { readFile, realpath, symlink, readdir, lstat } from "node:fs/promises";
 import path from "node:path";
-import {MaintenanceError,digest,exists,inside} from "./common.mjs";
+import { MaintenanceError, digest, exists, inside } from "./common.mjs";
 
 export const locks = [
   "bun.lock",

@@ -1,7 +1,15 @@
-import {lstat,realpath} from "node:fs/promises";
+import { lstat, realpath } from "node:fs/promises";
 import path from "node:path";
-import {extensions,ignoredParts,fileHash,digest,inside,secretPath,fail} from "./common.mjs";
-import {git} from "./process.mjs";
+import {
+  extensions,
+  ignoredParts,
+  fileHash,
+  digest,
+  inside,
+  secretPath,
+  fail,
+} from "./common.mjs";
+import { git } from "./process.mjs";
 
 export async function fingerprint(root, config) {
   const names = (

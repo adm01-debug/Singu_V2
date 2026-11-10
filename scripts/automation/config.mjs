@@ -1,5 +1,5 @@
-import {isAbsolute,resolve} from "node:path";
-import {fail,TRIGGERS,relativePath,command,onlyKeys} from "./common.mjs";
+import { isAbsolute, resolve } from "node:path";
+import { fail, TRIGGERS, relativePath, command, onlyKeys } from "./common.mjs";
 
 export function parseArgs(argv) {
   let root = process.cwd(),

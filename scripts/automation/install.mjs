@@ -1,9 +1,26 @@
-import {cacheRuntime} from './runtime-copy.mjs';
-import {existsSync,lstatSync,mkdirSync,readFileSync,realpathSync,rmSync,writeFileSync,chmodSync} from "node:fs";
-import {dirname,join,relative,resolve} from "node:path";
-import {randomUUID} from "node:crypto";
-import {EVENTS,digest,nonempty,fail,within,json,atomic} from "./common.mjs";
-import {git,locate} from "./process.mjs";
+import { cacheRuntime } from "./runtime-copy.mjs";
+import {
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  writeFileSync,
+  chmodSync,
+} from "node:fs";
+import { dirname, join, relative, resolve } from "node:path";
+import { randomUUID } from "node:crypto";
+import {
+  EVENTS,
+  digest,
+  nonempty,
+  fail,
+  within,
+  json,
+  atomic,
+} from "./common.mjs";
+import { git, locate } from "./process.mjs";
 
 export async function install(ctx) {
   const { root, c, config } = ctx;
@@ -185,7 +202,9 @@ export async function uninstall(ctx) {
   for (const file of [
     "runtime/automation.mjs",
     "runtime/automation.config.json",
-    ...Object.keys(state.files || {}).filter(file => file.startsWith("runtime/automation/")),
+    ...Object.keys(state.files || {}).filter((file) =>
+      file.startsWith("runtime/automation/"),
+    ),
   ])
     rmSync(join(dirname(expected), file), { force: true });
   rmSync(stateFile);

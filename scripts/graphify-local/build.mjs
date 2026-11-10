@@ -1,11 +1,28 @@
-import {randomUUID} from "node:crypto";
-import {writeFile,mkdir,lstat,rename,rm,copyFile,chmod,readdir} from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import {
+  writeFile,
+  mkdir,
+  lstat,
+  rename,
+  rm,
+  copyFile,
+  chmod,
+  readdir,
+} from "node:fs/promises";
 import path from "node:path";
-import {fileHash,digest,redact,fail,exists,json,atomic} from "./common.mjs";
-import {run,offline,resources} from "./process.mjs";
-import {confined} from "./config.mjs";
-import {fingerprint} from "./source.mjs";
-import {validateGraph} from "./artifacts.mjs";
+import {
+  fileHash,
+  digest,
+  redact,
+  fail,
+  exists,
+  json,
+  atomic,
+} from "./common.mjs";
+import { run, offline, resources } from "./process.mjs";
+import { confined } from "./config.mjs";
+import { fingerprint } from "./source.mjs";
+import { validateGraph } from "./artifacts.mjs";
 
 export async function generate(ctx, fp, expectedGraph) {
   await resources(ctx);

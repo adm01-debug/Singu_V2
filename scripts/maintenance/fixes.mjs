@@ -1,7 +1,7 @@
-import {readFile,writeFile} from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import {fail,git,tool} from "./lib.mjs";
-import {allowedSourceFiles} from "./sandbox.mjs";
+import { fail, git, tool } from "./lib.mjs";
+import { allowedSourceFiles } from "./sandbox.mjs";
 
 export const batches = (files, size = 16) =>
   Array.from({ length: Math.ceil(files.length / size) }, (_, i) =>
@@ -21,7 +21,14 @@ export function prettierCandidates(scan, expected) {
   return files;
 }
 
-export async function fixes(root, config, jobDir, execute, prefix = [], tracked) {
+export async function fixes(
+  root,
+  config,
+  jobDir,
+  execute,
+  prefix = [],
+  tracked,
+) {
   tracked ||= await allowedSourceFiles(root, config, prefix);
   const candidates = new Set();
   let prettierBin, eslintArgs;

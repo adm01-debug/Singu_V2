@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {writeFile,readFile} from "node:fs/promises";
+import { writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
-import {main} from "../run.mjs";
-import {git} from "../lib.mjs";
-import {fixture,isolated} from "./fixture.mjs";
+import { main } from "../run.mjs";
+import { git } from "../lib.mjs";
+import { fixture, isolated } from "./fixture.mjs";
 
 test(
   "gate baseline falha sem criar branch ou tocar clone sujo",

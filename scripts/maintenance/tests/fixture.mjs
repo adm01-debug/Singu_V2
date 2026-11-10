@@ -1,8 +1,8 @@
-import {mkdtemp,mkdir,writeFile,rm,symlink} from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile, rm, symlink } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import {networkPrefix} from "../run.mjs";
-import {git} from "../lib.mjs";
+import { networkPrefix } from "../run.mjs";
+import { git } from "../lib.mjs";
 
 export async function fixture(
   t,

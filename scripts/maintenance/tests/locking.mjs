@@ -1,13 +1,20 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {mkdtemp,mkdir,writeFile,readFile,rm,utimes} from "node:fs/promises";
-import {spawn} from "node:child_process";
-import {once} from "node:events";
+import {
+  mkdtemp,
+  mkdir,
+  writeFile,
+  readFile,
+  rm,
+  utimes,
+} from "node:fs/promises";
+import { spawn } from "node:child_process";
+import { once } from "node:events";
 import os from "node:os";
 import path from "node:path";
-import {networkPrefix} from "../run.mjs";
-import {run,acquire,exists} from "../lib.mjs";
-import {isolated} from "./fixture.mjs";
+import { networkPrefix } from "../run.mjs";
+import { run, acquire, exists } from "../lib.mjs";
+import { isolated } from "./fixture.mjs";
 
 test("trava atômica impede segundo executor", async (t) => {
   const d = await mkdtemp(path.join(os.tmpdir(), "maintenance-lock-"));

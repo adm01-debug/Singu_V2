@@ -1,8 +1,8 @@
-import {readFile,lstat} from "node:fs/promises";
+import { readFile, lstat } from "node:fs/promises";
 import path from "node:path";
-import {inside,fail,exists,hash,json} from "./common.mjs";
-import {checked} from "./process.mjs";
-import {fingerprint} from "./source.mjs";
+import { inside, fail, exists, hash, json } from "./common.mjs";
+import { checked } from "./process.mjs";
+import { fingerprint } from "./source.mjs";
 
 export async function runtime(ctx) {
   const python = path.join(ctx.envRoot, "bin/python"),

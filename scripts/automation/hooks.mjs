@@ -1,9 +1,9 @@
-import {existsSync,realpathSync,statSync} from "node:fs";
-import {dirname,isAbsolute,join,resolve} from "node:path";
-import {EVENTS,fail,within,json,pattern} from "./common.mjs";
-import {execute,git} from "./process.mjs";
-import {statePath,doctor} from "./inventory.mjs";
-import {runTests,graph} from "./dispatch.mjs";
+import { existsSync, realpathSync, statSync } from "node:fs";
+import { dirname, isAbsolute, join, resolve } from "node:path";
+import { EVENTS, fail, within, json, pattern } from "./common.mjs";
+import { execute, git } from "./process.mjs";
+import { statePath, doctor } from "./inventory.mjs";
+import { runTests, graph } from "./dispatch.mjs";
 
 export async function hook(ctx, args) {
   const event = args[0];

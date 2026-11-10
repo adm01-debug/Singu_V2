@@ -1,4 +1,4 @@
-import {fail} from "./lib.mjs";
+import { fail } from "./lib.mjs";
 
 export const exits = {
   healthy: 0,

@@ -1,7 +1,7 @@
-import {spawn} from "node:child_process";
-import {StringDecoder} from "node:string_decoder";
+import { spawn } from "node:child_process";
+import { StringDecoder } from "node:string_decoder";
 import path from "node:path";
-import {MaintenanceError,safeEnv,fail} from "./common.mjs";
+import { MaintenanceError, safeEnv, fail } from "./common.mjs";
 
 export const activeChildren = new Map();
 

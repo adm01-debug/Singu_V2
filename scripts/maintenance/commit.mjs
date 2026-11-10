@@ -1,7 +1,7 @@
-import {mkdir,writeFile,rm} from "node:fs/promises";
+import { mkdir, writeFile, rm } from "node:fs/promises";
 import path from "node:path";
-import {fail,exists,inside} from "./common.mjs";
-import {run,git} from "./process.mjs";
+import { fail, exists, inside } from "./common.mjs";
+import { run, git } from "./process.mjs";
 
 export async function commitWithHooks(
   source,

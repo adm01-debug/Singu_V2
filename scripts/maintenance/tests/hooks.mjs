@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {mkdir,writeFile,readFile} from "node:fs/promises";
+import { mkdir, writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
-import {main} from "../run.mjs";
-import {git,run,exists} from "../lib.mjs";
-import {fixture,isolated,saveFixture} from "./fixture.mjs";
+import { main } from "../run.mjs";
+import { git, run, exists } from "../lib.mjs";
+import { fixture, isolated, saveFixture } from "./fixture.mjs";
 
 for (const name of ["pre-commit", "commit-msg"])
   test(

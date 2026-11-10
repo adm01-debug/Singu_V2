@@ -1,7 +1,7 @@
-import {spawn} from "node:child_process";
-import {existsSync,lstatSync,realpathSync} from "node:fs";
-import {isAbsolute,resolve} from "node:path";
-import {fail,APPROVED,within,relativePath} from "./common.mjs";
+import { spawn } from "node:child_process";
+import { existsSync, lstatSync, realpathSync } from "node:fs";
+import { isAbsolute, resolve } from "node:path";
+import { fail, APPROVED, within, relativePath } from "./common.mjs";
 
 export async function execute(
   argv,
@@ -29,7 +29,7 @@ export async function execute(
           process.platform === "win32" ? child.pid : -child.pid,
           signal,
         );
-      } catch {}
+      } catch { /* Filho pode já ter terminado. */ }
     };
     const finish = (code, message) => {
       if (finished) return;

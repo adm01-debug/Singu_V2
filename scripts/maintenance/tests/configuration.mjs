@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {writeFile,readFile} from "node:fs/promises";
+import { writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
-import {main,parseArgs} from "../run.mjs";
-import {validateConfig} from "../lib.mjs";
-import {fixture,isolated,saveFixture,saveConfig} from "./fixture.mjs";
+import { main, parseArgs } from "../run.mjs";
+import { validateConfig } from "../lib.mjs";
+import { fixture, isolated, saveFixture, saveConfig } from "./fixture.mjs";
 
 test("CLI e config desconhecidas falham fechadas", () => {
   assert.throws(() => parseArgs(["heal", "--root", "/tmp/x"]), /--ref/);

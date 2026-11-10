@@ -1,9 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {mkdir,writeFile,readFile,rm,readdir,symlink} from "node:fs/promises";
+import {
+  mkdir,
+  writeFile,
+  readFile,
+  rm,
+  readdir,
+  symlink,
+} from "node:fs/promises";
 import path from "node:path";
-import {fingerprint,validateGraph} from "../graphify-local.mjs";
-import {fixture,git} from "./fixture.mjs";
+import { fingerprint, validateGraph } from "../graphify-local.mjs";
+import { fixture, git } from "./fixture.mjs";
 
 test("fingerprint ignora secrets/env, dependências, saídas e symlinks", async (t) => {
   const f = await fixture(t),

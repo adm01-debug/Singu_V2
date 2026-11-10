@@ -1,9 +1,18 @@
 import assert from "node:assert/strict";
-import {spawnSync} from "node:child_process";
-import {chmodSync,cpSync,readdirSync,mkdirSync,mkdtempSync,readFileSync,rmSync,writeFileSync} from "node:fs";
-import {tmpdir} from "node:os";
-import {dirname,join} from "node:path";
-import {fileURLToPath} from "node:url";
+import { spawnSync } from "node:child_process";
+import {
+  chmodSync,
+  cpSync,
+  readdirSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 export const kit = dirname(dirname(fileURLToPath(import.meta.url)));
 
@@ -58,7 +67,9 @@ if(process.argv[2]==='mark'){fs.mkdirSync('.tools/graph-state',{recursive:true})
 process.exit(Number(process.env.FIXTURE_GRAPH_EXIT||0));\n`,
   );
   write("scripts/automation.mjs", text(join(kit, "automation.mjs")));
-  cpSync(join(kit, "automation"), join(root, "scripts/automation"), { recursive: true });
+  cpSync(join(kit, "automation"), join(root, "scripts/automation"), {
+    recursive: true,
+  });
   write("graphify.local.json", "{}\n");
   const config = {
     version: 1,
@@ -126,8 +137,21 @@ process.exit(Number(process.env.FIXTURE_GRAPH_EXIT||0));\n`,
     },
     timeoutMs: 5000,
   };
-  const moduleFiles = readdirSync(join(kit, "automation")).filter(name => name.endsWith(".mjs")).map(name => "scripts/automation/" + name);
-  for (const file of moduleFiles) config.registrations.push({ id: "helper-" + file.split("/").at(-1), kind: "helper", files: [file], callers: ["scripts/automation.mjs", ...moduleFiles].filter(caller => caller !== file && text(join(root, caller)).includes(file.split("/").at(-1))), triggers: ["manual", "precommit", "PR", "pushmain"] });
+  const moduleFiles = readdirSync(join(kit, "automation"))
+    .filter((name) => name.endsWith(".mjs"))
+    .map((name) => "scripts/automation/" + name);
+  for (const file of moduleFiles)
+    config.registrations.push({
+      id: "helper-" + file.split("/").at(-1),
+      kind: "helper",
+      files: [file],
+      callers: ["scripts/automation.mjs", ...moduleFiles].filter(
+        (caller) =>
+          caller !== file &&
+          text(join(root, caller)).includes(file.split("/").at(-1)),
+      ),
+      triggers: ["manual", "precommit", "PR", "pushmain"],
+    });
   const save = () =>
     write("scripts/automation.config.json", JSON.stringify(config, null, 2));
   save();

@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {mkdir,writeFile,rm,symlink} from "node:fs/promises";
+import { mkdir, writeFile, rm, symlink } from "node:fs/promises";
 import path from "node:path";
-import {main} from "../run.mjs";
-import {git,dependencyFingerprint} from "../lib.mjs";
-import {fixture,isolated,vendorFixture,saveFixture} from "./fixture.mjs";
+import { main } from "../run.mjs";
+import { git, dependencyFingerprint } from "../lib.mjs";
+import { fixture, isolated, vendorFixture, saveFixture } from "./fixture.mjs";
 
 test(
   "dependências divergentes da referência bloqueiam reutilização",

@@ -1,7 +1,7 @@
-import {lstat} from "node:fs/promises";
+import { lstat } from "node:fs/promises";
 import path from "node:path";
-import {safeRelative,secretPath,fail,inside,exists} from "./common.mjs";
-import {run,environment} from "./process.mjs";
+import { safeRelative, secretPath, fail, inside, exists } from "./common.mjs";
+import { run, environment } from "./process.mjs";
 
 export function validateConfig(c) {
   const keys = [

@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-import {realpathSync} from "node:fs";
-import {resolve} from "node:path";
-import {fail,json,SELF} from "./automation/common.mjs";
-import {parseArgs,validateConfig} from "./automation/config.mjs";
-import {git} from "./automation/process.mjs";
-import {doctor} from "./automation/inventory.mjs";
-import {runTests,graph,motor} from "./automation/dispatch.mjs";
-import {install,uninstall} from "./automation/install.mjs";
-import {hook} from "./automation/hooks.mjs";
+import { realpathSync } from "node:fs";
+import { resolve } from "node:path";
+import { fail, json, SELF } from "./automation/common.mjs";
+import { parseArgs, validateConfig } from "./automation/config.mjs";
+import { git } from "./automation/process.mjs";
+import { doctor } from "./automation/inventory.mjs";
+import { runTests, graph, motor } from "./automation/dispatch.mjs";
+import { install, uninstall } from "./automation/install.mjs";
+import { hook } from "./automation/hooks.mjs";
 
 export async function main(argv) {
   const opts = parseArgs(argv);
@@ -73,5 +73,5 @@ if (process.argv[1] && resolve(process.argv[1]) === SELF) {
     process.exitCode = Number.isInteger(error.code) ? error.code : 1;
   }
 }
-export {parseArgs,validateConfig} from "./automation/config.mjs";
-export {execute} from "./automation/process.mjs";
+export { parseArgs, validateConfig } from "./automation/config.mjs";
+export { execute } from "./automation/process.mjs";

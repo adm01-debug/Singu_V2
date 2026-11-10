@@ -1,8 +1,8 @@
-import {spawn} from "node:child_process";
-import {randomUUID} from "node:crypto";
-import {mkdir,readFile,writeFile,stat,rm,open} from "node:fs/promises";
+import { spawn } from "node:child_process";
+import { randomUUID } from "node:crypto";
+import { mkdir, readFile, writeFile, stat, rm, open } from "node:fs/promises";
 import path from "node:path";
-import {MaintenanceError,safeEnv,fail,exists} from "./common.mjs";
+import { MaintenanceError, safeEnv, fail, exists } from "./common.mjs";
 
 export async function holdAdvisoryLock(file) {
   const handle = await open(file, "a", 0o600);

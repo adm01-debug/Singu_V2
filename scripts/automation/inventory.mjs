@@ -1,7 +1,7 @@
-import {existsSync,lstatSync,readFileSync,readdirSync} from "node:fs";
-import {basename,dirname,isAbsolute,join,resolve} from "node:path";
-import {git,approved,locate} from "./process.mjs";
-import {EVENTS,digest,fail,within,json,pattern} from "./common.mjs";
+import { existsSync, lstatSync, readFileSync, readdirSync } from "node:fs";
+import { basename, dirname, isAbsolute, join, resolve } from "node:path";
+import { git, approved, locate } from "./process.mjs";
+import { EVENTS, digest, fail, within, json, pattern } from "./common.mjs";
 
 export function scan(dir, prefix = "") {
   if (!existsSync(dir)) return [];

@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {existsSync} from "node:fs";
-import {join} from "node:path";
-import {execute} from "../automation.mjs";
-import {fixture,text} from "./fixture.mjs";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { execute } from "../automation.mjs";
+import { fixture, text } from "./fixture.mjs";
 
 test("test propaga falha real de node:test", (t) => {
   const f = fixture(t);

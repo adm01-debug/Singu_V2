@@ -1,5 +1,5 @@
-import {execute,locate} from "./process.mjs";
-import {fail} from "./common.mjs";
+import { execute, locate } from "./process.mjs";
+import { fail } from "./common.mjs";
 
 export async function runTests(ctx) {
   const files = ctx.c.testSuites.map((p) =>

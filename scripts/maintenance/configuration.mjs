@@ -1,10 +1,10 @@
-import {mkdtemp,rm} from "node:fs/promises";
-import {createRequire} from "node:module";
+import { mkdtemp, rm } from "node:fs/promises";
+import { createRequire } from "node:module";
 import path from "node:path";
-import {tmpdir} from "node:os";
-import {MaintenanceError,fail} from "./common.mjs";
-import {run} from "./process.mjs";
-import {dependencyFingerprint} from "./dependencies.mjs";
+import { tmpdir } from "node:os";
+import { MaintenanceError, fail } from "./common.mjs";
+import { run } from "./process.mjs";
+import { dependencyFingerprint } from "./dependencies.mjs";
 
 export const localRequire = (root) =>
   createRequire(path.join(root, "package.json"));
@@ -141,7 +141,7 @@ export function validateConfig(c) {
   if (
     f.exclude !== undefined &&
     (!Array.isArray(f.exclude) ||
-      !f.exclude.every((file) => relative(file) && !/[*?\[\]{}]/.test(file)))
+      !f.exclude.every((file) => relative(file) && !/[*?[\]{}]/.test(file)))
   )
     fail("Exclusões devem ser caminhos relativos explícitos, sem globs");
   const allowed = [

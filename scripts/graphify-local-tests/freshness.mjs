@@ -1,9 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {mkdir,writeFile,readFile,rm,readdir} from "node:fs/promises";
+import { mkdir, writeFile, readFile, rm, readdir } from "node:fs/promises";
 import path from "node:path";
-import {main,fingerprint,validateGraph,adoptInitial} from "../graphify-local.mjs";
-import {fixture} from "./fixture.mjs";
+import {
+  main,
+  fingerprint,
+  validateGraph,
+  adoptInitial,
+} from "../graphify-local.mjs";
+import { fixture } from "./fixture.mjs";
 
 test("mark é leve, aceita flags intercaladas e não importa runtime nem gera grafo", async (t) => {
   const f = await fixture(t);

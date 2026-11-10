@@ -1,9 +1,9 @@
-import {spawn} from "node:child_process";
-import {randomUUID} from "node:crypto";
-import {mkdir,rename,rm} from "node:fs/promises";
+import { spawn } from "node:child_process";
+import { randomUUID } from "node:crypto";
+import { mkdir, rename, rm } from "node:fs/promises";
 import path from "node:path";
-import {fail,json,atomic,GraphError} from "./common.mjs";
-import {environment} from "./process.mjs";
+import { fail, json, atomic, GraphError } from "./common.mjs";
+import { environment } from "./process.mjs";
 
 export async function acquire(dir) {
   await mkdir(path.dirname(dir), { recursive: true, mode: 0o700 });

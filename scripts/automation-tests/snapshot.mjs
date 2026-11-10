@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {cpSync,mkdirSync,writeFileSync} from "node:fs";
-import {dirname,join} from "node:path";
-import {fixture} from "./fixture.mjs";
+import { cpSync, mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fixture } from "./fixture.mjs";
 
 test("snapshot aprovado atende pré-merge sem afirmar source/CI integrados", (t) => {
   const f = fixture(t);
@@ -61,4 +61,41 @@ test("snapshot aprovado atende pré-merge sem afirmar source/CI integrados", (t)
   );
   assert.equal(blocked.status, 1);
   assert.match(blocked.stdout, /fora do runtime instalado aprovado/);
+});
+
+test("ponte sem entrypoint versionado carrega o cache modular completo", (t) => {
+  const f = fixture(t);
+  f.install();
+  f.write(
+    "scripts/automation.mjs",
+    'throw new Error("entrypoint original não deve executar");',
+  );
+  const cached = join(f.root, ".tools/repo-automation/runtime/automation.mjs");
+  const result = f.run(process.execPath, [
+    cached,
+    "--root",
+    f.root,
+    "--config",
+    join(f.root, "scripts/automation.config.json"),
+    "hook",
+    "reference-transaction",
+    "--",
+    "prepared",
+  ]);
+  assert.equal(result.status, 0, result.stderr + result.stdout);
+});
+
+test("hashes da ponte protegem helpers cached contra alteração de terceiro", (t) => {
+  const f = fixture(t);
+  f.install();
+  f.write(
+    ".tools/repo-automation/runtime/automation/common.mjs",
+    'throw new Error("arquivo de terceiro");',
+  );
+  const doctor = f.cli("doctor", "--static");
+  assert.notEqual(doctor.status, 0);
+  assert.match(doctor.stdout + doctor.stderr, /ponte divergente/);
+  const uninstall = f.cli("uninstall-hooks");
+  assert.notEqual(uninstall.status, 0);
+  assert.match(uninstall.stdout + uninstall.stderr, /terceiro/);
 });

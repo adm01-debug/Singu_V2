@@ -1,8 +1,8 @@
-import {spawn} from "node:child_process";
-import {readFile} from "node:fs/promises";
+import { spawn } from "node:child_process";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
-import {homedir,loadavg,availableParallelism} from "node:os";
-import {fail} from "./common.mjs";
+import { homedir, loadavg, availableParallelism } from "node:os";
+import { fail } from "./common.mjs";
 
 export const active = new Set();
 

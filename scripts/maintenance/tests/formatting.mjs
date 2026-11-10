@@ -1,10 +1,18 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {mkdir,writeFile} from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import {main} from "../run.mjs";
-import {git} from "../lib.mjs";
-import {fixture,isolated,formatter,saveFixture,saveConfig,genericFormatter,fakeEslint} from "./fixture.mjs";
+import { main } from "../run.mjs";
+import { git } from "../lib.mjs";
+import {
+  fixture,
+  isolated,
+  formatter,
+  saveFixture,
+  saveConfig,
+  genericFormatter,
+  fakeEslint,
+} from "./fixture.mjs";
 
 for (const [name, body] of [
   ["crash de inicialização", `throw new Error('formatter fixture failed');`],

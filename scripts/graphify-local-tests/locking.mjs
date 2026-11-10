@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {mkdir,writeFile,readFile} from "node:fs/promises";
+import { mkdir, writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
-import {spawnSync} from "node:child_process";
-import {acquire,acquireGlobal,run} from "../graphify-local.mjs";
-import {fixture} from "./fixture.mjs";
+import { spawnSync } from "node:child_process";
+import { acquire, acquireGlobal, run } from "../graphify-local.mjs";
+import { fixture } from "./fixture.mjs";
 
 test("trava local impede concorrência e recupera apenas dono comprovadamente morto", async (t) => {
   const f = await fixture(t),

@@ -1,17 +1,31 @@
 #!/usr/bin/env node
-import {readFile,writeFile,mkdir} from "node:fs/promises";
-import {homedir} from "node:os";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { homedir } from "node:os";
 import path from "node:path";
-import {fileURLToPath,pathToFileURL} from "node:url";
-import {randomUUID} from "node:crypto";
-import {MaintenanceError,fail,digest,run,git,validateConfig,inspect,acquire,reuseDependencies,dependencyFingerprint,writeJson,stopChildren,commitWithHooks} from "./lib.mjs";
-import {parseArgs,redact} from "./options.mjs";
-import {networkPrefix,quarantine,allowedSourceFiles} from "./sandbox.mjs";
-import {changed} from "./changes.mjs";
-import {fixes} from "./fixes.mjs";
-import {checkPending,createExecutor,finishRun} from "./session.mjs";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { randomUUID } from "node:crypto";
+import {
+  MaintenanceError,
+  fail,
+  digest,
+  run,
+  git,
+  validateConfig,
+  inspect,
+  acquire,
+  reuseDependencies,
+  dependencyFingerprint,
+  writeJson,
+  stopChildren,
+  commitWithHooks,
+} from "./lib.mjs";
+import { parseArgs, redact } from "./options.mjs";
+import { networkPrefix, quarantine, allowedSourceFiles } from "./sandbox.mjs";
+import { changed } from "./changes.mjs";
+import { fixes } from "./fixes.mjs";
+import { checkPending, createExecutor, finishRun } from "./session.mjs";
 
-export const originalGit = git;
+const originalGit = git;
 
 export async function main(args = process.argv.slice(2)) {
   let prefix = [];
@@ -31,7 +45,8 @@ export async function main(args = process.argv.slice(2)) {
   process.on("SIGINT", onSignal);
   const lifecycle = { keepBranch: false };
   let jobDir, source, stateDir, pendingFile, config;
-  const finish = () => finishRun({ lifecycle, source, jobDir, report, git, onSignal });
+  const finish = () =>
+    finishRun({ lifecycle, source, jobDir, report, git, onSignal });
   try {
     const options = parseArgs(args);
     report.action = options.action;
@@ -89,13 +104,39 @@ export async function main(args = process.argv.slice(2)) {
     ]);
     prefix = await networkPrefix(source);
     pendingFile = path.join(stateDir, "pending.json");
-    await checkPending({ pendingFile, report, options, source, config, git, prefix, stateDir });
+    await checkPending({
+      pendingFile,
+      report,
+      options,
+      source,
+      config,
+      git,
+      prefix,
+      stateDir,
+    });
     lifecycle.workspace = path.join(jobDir, "worktree");
-    await git(source, ["worktree", "add", "--detach", lifecycle.workspace, report.base]);
+    await git(source, [
+      "worktree",
+      "add",
+      "--detach",
+      lifecycle.workspace,
+      report.base,
+    ]);
     report.dependencies = await reuseDependencies(source, lifecycle.workspace);
-    const allowed = await allowedSourceFiles(lifecycle.workspace, config, prefix);
+    const allowed = await allowedSourceFiles(
+      lifecycle.workspace,
+      config,
+      prefix,
+    );
     const restore = await quarantine(lifecycle.workspace, jobDir, prefix);
-    const execute = createExecutor({ lifecycle, isInterrupted: () => interrupted, prefix, config, report, jobDir });
+    const execute = createExecutor({
+      lifecycle,
+      isInterrupted: () => interrupted,
+      prefix,
+      config,
+      report,
+      jobDir,
+    });
     try {
       report.isolatedDoctor = await inspect(lifecycle.workspace, config);
       report.doctor = { ...report.isolatedDoctor, scope: "reference" };
@@ -112,7 +153,9 @@ export async function main(args = process.argv.slice(2)) {
     } finally {
       await restore();
     }
-    if ((await changed(lifecycle.workspace, config, prefix, allowed)).files.length)
+    if (
+      (await changed(lifecycle.workspace, config, prefix, allowed)).files.length
+    )
       fail("Gate baseline alterou arquivos rastreados");
     if ((await dependencyFingerprint(source)).hash !== report.dependencies.hash)
       fail("Dependências do clone mudaram durante os gates baseline");
@@ -298,7 +341,9 @@ export async function main(args = process.argv.slice(2)) {
       fail(
         "Hook alterou a mensagem obrigatória do commit; resultado descartado",
       );
-    if ((await changed(lifecycle.workspace, config, prefix, allowed)).files.length)
+    if (
+      (await changed(lifecycle.workspace, config, prefix, allowed)).files.length
+    )
       fail("Hook alterou a worktree depois da validação");
     if ((await dependencyFingerprint(source)).hash !== report.dependencies.hash)
       fail("Dependências do clone mudaram durante os hooks");
@@ -333,7 +378,6 @@ if (
   console.log(JSON.stringify(result.report));
   process.exitCode = result.exitCode;
 }
-export {parseArgs} from "./options.mjs";
-export {networkPrefix,allowedSourceFiles} from "./sandbox.mjs";
-export {prettierCandidates} from "./fixes.mjs";
-export {checkPending,createExecutor,finishRun} from "./session.mjs";
+export { parseArgs } from "./options.mjs";
+export { networkPrefix, allowedSourceFiles } from "./sandbox.mjs";
+export { prettierCandidates } from "./fixes.mjs";

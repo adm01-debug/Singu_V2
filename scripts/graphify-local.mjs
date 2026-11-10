@@ -1,15 +1,29 @@
 #!/usr/bin/env node
-import {mkdir,realpath,rm} from "node:fs/promises";
+import { mkdir, realpath, rm } from "node:fs/promises";
 import path from "node:path";
-import {homedir} from "node:os";
-import {fileURLToPath} from "node:url";
-import {redact,GraphError,fail,exists,json,codes,atomic} from "./graphify-local/common.mjs";
-import {active,environment,checked,git,offline} from "./graphify-local/process.mjs";
-import {acquire,acquireGlobal} from "./graphify-local/locks.mjs";
-import {validateConfig,parse,confined} from "./graphify-local/config.mjs";
-import {fingerprint} from "./graphify-local/source.mjs";
-import {runtime,status} from "./graphify-local/artifacts.mjs";
-import {generate,adoptInitial} from "./graphify-local/build.mjs";
+import { homedir } from "node:os";
+import { fileURLToPath } from "node:url";
+import {
+  redact,
+  GraphError,
+  fail,
+  exists,
+  json,
+  codes,
+  atomic,
+} from "./graphify-local/common.mjs";
+import {
+  active,
+  environment,
+  checked,
+  git,
+  offline,
+} from "./graphify-local/process.mjs";
+import { acquire, acquireGlobal } from "./graphify-local/locks.mjs";
+import { validateConfig, parse, confined } from "./graphify-local/config.mjs";
+import { fingerprint } from "./graphify-local/source.mjs";
+import { runtime, status } from "./graphify-local/artifacts.mjs";
+import { generate, adoptInitial } from "./graphify-local/build.mjs";
 
 export async function main(args = process.argv.slice(2), options = {}) {
   let release, globalRelease, ctx;
@@ -250,10 +264,10 @@ if (
   console.log(JSON.stringify(result.report));
   process.exitCode = result.exitCode;
 }
-export {GraphError} from "./graphify-local/common.mjs";
-export {run} from "./graphify-local/process.mjs";
-export {acquire,acquireGlobal} from "./graphify-local/locks.mjs";
-export {validateConfig} from "./graphify-local/config.mjs";
-export {fingerprint} from "./graphify-local/source.mjs";
-export {validateGraph} from "./graphify-local/artifacts.mjs";
-export {adoptInitial} from "./graphify-local/build.mjs";
+export { GraphError } from "./graphify-local/common.mjs";
+export { run } from "./graphify-local/process.mjs";
+export { acquire, acquireGlobal } from "./graphify-local/locks.mjs";
+export { validateConfig } from "./graphify-local/config.mjs";
+export { fingerprint } from "./graphify-local/source.mjs";
+export { validateGraph } from "./graphify-local/artifacts.mjs";
+export { adoptInitial } from "./graphify-local/build.mjs";

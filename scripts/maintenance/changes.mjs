@@ -1,6 +1,6 @@
-import {lstat} from "node:fs/promises";
+import { lstat } from "node:fs/promises";
 import path from "node:path";
-import {fail,run,git} from "./lib.mjs";
+import { fail, run, git } from "./lib.mjs";
 
 export async function changed(root, config, prefix = [], allowed) {
   const staged = await run(

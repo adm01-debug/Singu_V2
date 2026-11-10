@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {existsSync} from "node:fs";
-import {join} from "node:path";
-import {parseArgs,validateConfig} from "../automation.mjs";
-import {fixture} from "./fixture.mjs";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { parseArgs, validateConfig } from "../automation.mjs";
+import { fixture } from "./fixture.mjs";
 
 test("doctor static verifica alias, arquivos, eventos e run real sem ativar Git", (t) => {
   const f = fixture(t);
