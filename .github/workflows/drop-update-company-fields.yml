@@ -1,0 +1,35 @@
+﻿name: Drop update_company_fields (infra one-off)
+on:
+  workflow_dispatch:
+jobs:
+  drop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PGHOST: ${{ secrets.PGHOST }}
+      PGPORT: ${{ secrets.PGPORT }}
+      PGUSER: ${{ secrets.PGUSER }}
+      PGPASSWORD: ${{ secrets.PGPASSWORD }}
+      PGDATABASE: ${{ secrets.PGDATABASE }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: DROP idempotente + paridade do inventario DEFINER
+        run: |
+          set -euo pipefail
+          for name in PGHOST PGPORT PGUSER PGPASSWORD PGDATABASE; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::Secret obrigatorio ausente: $name"
+              exit 1
+            fi
+          done
+          mkdir -m 700 "$RUNNER_TEMP/ssl"
+          curl --fail --silent --show-error --location --connect-timeout 15 --max-time 60 \
+            https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt \
+            --output "$RUNNER_TEMP/ssl/supabase-ca.crt"
+          export PGSSLROOTCERT="$RUNNER_TEMP/ssl/supabase-ca.crt"
+          export PGCONNECT_TIMEOUT=15
+          psql -X -v ON_ERROR_STOP=1 -d "postgresql://${PGUSER}@${PGHOST}:${PGPORT:-5432}/${PGDATABASE}?sslmode=verify-full" \
+            -f supabase/migrations/20261029120000_drop_update_company_fields.sql
+          echo "--- Inventario DEFINER apos DROP ---"
+          psql -X -t -A -d "postgresql://${PGUSER}@${PGHOST}:${PGPORT:-5432}/${PGDATABASE}?sslmode=verify-full" \
+            -c "SELECT count(*) FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.prokind='f' AND p.prosecdef AND NOT EXISTS (SELECT 1 FROM pg_depend d WHERE d.classid='pg_proc'::regclass AND d.objid=p.oid AND d.deptype='e');"
