@@ -32,7 +32,9 @@ export function readVapidConfig(get: (k: string) => string | undefined): VapidCo
   if (!B64URL.test(privateKey) || privateKey.length !== 43) return null;
   // o subject é um contato (mailto: ou https:) enviado aos serviços de push; sem VAPID_SUBJECT usa a URL do projeto (nada pessoal)
   const subject = (get('VAPID_SUBJECT') ?? get('SUPABASE_URL') ?? '').trim();
-  if (!/^(mailto:[^\s@]+@[^\s@]+|https:\/\/[^\s]+)$/.test(subject)) return null;
+  const semEspaco = subject.length > 0 && !/\s/.test(subject);
+  const mailto = subject.startsWith('mailto:') && subject.indexOf('@') > 7 && subject.indexOf('@') < subject.length - 1;
+  if (!semEspaco || !(mailto || subject.startsWith('https://'))) return null;
   return { publicKey, privateKey, subject };
 }
 

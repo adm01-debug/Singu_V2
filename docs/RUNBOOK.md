@@ -397,6 +397,13 @@ Frontend lê `useConnectionConfigs()` e oculta CTAs de módulos inativos. Hooks 
 
 ## 🔐 Segurança & Rotação de Secrets
 
+### Web Push (VAPID)
+- Secrets das edge functions (Cloud → Secrets): `VAPID_PUBLIC_KEY` (87 chars, base64url), `VAPID_PRIVATE_KEY` (43 chars) e, opcional, `VAPID_SUBJECT` (`mailto:` ou `https://`; padrão = `SUPABASE_URL`).
+- O front usa a MESMA chave pública (`VITE_VAPID_PUBLIC_KEY` no build ou o valor padrão em `src/lib/pushNotifications.ts`). Par diferente entre front e secrets = o serviço de push responde 401/403 e nada chega.
+- Sem os secrets, `send-push-notification` responde **503** e não apaga nenhuma assinatura.
+- Rotação: gerar par novo (`node -e` com `crypto.createECDH('prime256v1')`), trocar secrets e a chave pública do front no mesmo deploy. O app migra sozinho as assinaturas da chave antiga (cancela e reassina sem novo prompt) ao abrir.
+
+
 ### Inventário de secrets
 
 | Secret | Owner | Frequência | Procedimento |

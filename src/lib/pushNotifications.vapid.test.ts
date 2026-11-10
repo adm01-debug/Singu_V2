@@ -15,7 +15,7 @@ vi.mock('@/lib/logger', () => ({ logger: { warn: vi.fn(), info: vi.fn(), error: 
 
 const EXEMPLO = 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U';
 const root = resolve(__dirname, '../..');
-const b64u = (u: Uint8Array) => btoa(String.fromCharCode(...u)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const b64u = (u: Uint8Array) => btoa(String.fromCharCode(...u)).replace(/\+/g, '-').replace(/\//g, '_').replace(/={1,2}$/, '');
 const toBytes = (k: string) => Uint8Array.from(atob(k.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - (k.length % 4)) % 4)), (c) => c.charCodeAt(0));
 
 function pushEnv(opts: { existingKey?: string | null; permission?: string }) {
