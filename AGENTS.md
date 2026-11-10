@@ -68,6 +68,7 @@ Escrita no GitHub: MCP **`GITHUB - MCP - FOREVER`** (o padrão dá 403 em write;
 ## Ler quando
 
 - Mexer em migration, edge function ou CI vermelho → `docs/agentes/banco-edge-ci.md`.
+- Antes de buscar no repo: `git show origin/contexto:docs/contexto/00-INDEX.md` e `inventario/estado/`. As automações que mantêm isso vivo → `docs/agentes/automacoes-estado-real.md`.
 - Deploy, rollback, incidente → `docs/RUNBOOK.md`. Contrato de edge function → `docs/EDGE_FUNCTIONS_API.md`.
 - Arquitetura → `docs/adr/`. Segurança → `docs/SECURITY.md`. Checklists de PR, hotfix → `CONTRIBUTING.md`.
 - Texto-mestre integral → `docs/agentes/texto-mestre.md`. Histórico → `PENDENCIAS.md`, `ESTADO_ATUAL.md`, `HANDOFF.md`.

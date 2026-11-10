@@ -1,0 +1,181 @@
+# docs:
+#   gatilho: agendado (segunda 08:41 UTC) e dispatch
+#   prova: relatorio semanal com branches podaveis, PRs paradas, KPI de uso do Actions, SLA dos alertas de code scanning e toolchain desatualizada
+#   falha: SLA de alerta de seguranca vencido deixa o job vermelho; o resto e informativo
+#   avisa: issues `[branch-hygiene]` e `[kpi-actions]`, sempre as mesmas (atualizadas, nunca duplicadas)
+# nao-e-bug:
+#   - nada-apagado: o bloco `git push origin --delete` e so texto na issue; nenhum passo apaga branch
+#   - sem-comando: entrada indisponivel (lista de PRs ou de branches protegidas) faz o script recusar gerar comando, de proposito
+name: Higiene semanal do repositório
+
+# Somente leitura. Publica num lugar fixo (duas issues) em vez de gerar arquivo no repo:
+#   - branches remotas patch-equivalentes a main, com o comando de poda pronto para revisao;
+#   - branches sem commit ha mais de 30 dias e PRs abertas ha mais de 7 dias sem push;
+#   - KPI do proprio Actions (runs, cancelamentos, falhas, minutos e os 5 jobs mais lentos);
+#   - alertas abertos de code scanning fora do SLA (este sim reprova o job);
+#   - versao mais nova das ferramentas fixadas em .github/toolchain.json.
+
+on:
+  schedule:
+    - cron: '41 8 * * 1' # segunda 08:41 UTC (05:41 BRT): fora do minuto 0 e dos outros crons do repo
+  workflow_dispatch: {}
+
+concurrency:
+  group: higiene-semanal
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
+jobs:
+  auditar:
+    name: Relatório de higiene
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    # Escrita fica no JOB, nunca no nivel do workflow: o escopo do topo valeria para todos.
+    permissions:
+      contents: read         # git fetch/cherry na comparacao de branches
+      actions: read          # listar os runs do proprio repositorio (KPI)
+      pull-requests: read    # confirmar PRs abertas antes de sugerir poda
+      security-events: read  # alertas abertos de code scanning
+      issues: write          # criar/atualizar as issues [branch-hygiene] e [kpi-actions]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Versões da toolchain
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/ci/bump-toolchain.mjs
+
+      - name: KPI do GitHub Actions
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JANELA_DIAS: '7'
+        run: node scripts/ci/actions-kpi.mjs
+
+      - name: Gerar relatório de branches
+        id: relatorio
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          git fetch origin main --quiet
+
+          # $RUNNER_TEMP sobrevive entre passos; mktemp sozinho morreria com o shell do passo.
+          RELATORIO="$RUNNER_TEMP/branch-hygiene.md"
+          EQUIVALENTES="$RUNNER_TEMP/branch-equivalentes.tsv"
+          : > "$EQUIVALENTES"
+          {
+            echo "## Auditoria de branches — $(date -u +%Y-%m-%d)"
+            echo
+            echo "### Patch-equivalentes a \`main\` (candidatos a poda, 0 commits únicos)"
+            echo '```'
+            for ref in $(git branch -r --format='%(refname:short)' | grep -v '^origin/HEAD' | grep -v '^origin/main$' | grep -v '^origin$'); do
+              b="${ref#origin/}"
+              # O status do git cherry e validado ANTES de contar: branch impossivel de
+              # comparar nao pode entrar na lista de podaveis por causa de um `|| true`.
+              if ! cherry=$(git cherry origin/main "$ref"); then
+                echo "::error::git cherry falhou ao comparar origin/main com $ref; a equivalência de '$b' não pode ser decidida" >&2
+                exit 1
+              fi
+              n=$(printf '%s\n' "$cherry" | awk '/^\+/ { c += 1 } END { print c + 0 }')
+              if [ "$n" = "0" ]; then
+                echo "$b"
+                ts=$(git log -1 --format=%ct "$ref")
+                printf '%s\t%s\n' "$b" "$ts" >> "$EQUIVALENTES"
+              fi
+            done
+            echo '```'
+            echo
+            echo "### Sem commit há mais de 30 dias"
+            echo '```'
+            CUTOFF=$(date -u -d '30 days ago' +%s 2>/dev/null || date -u -v-30d +%s)
+            for ref in $(git branch -r --format='%(refname:short)' | grep -v '^origin/HEAD' | grep -v '^origin/main$' | grep -v '^origin$'); do
+              ts=$(git log -1 --format=%ct "$ref" 2>/dev/null || echo 0)
+              if [ "$ts" -lt "$CUTOFF" ] && [ "$ts" -gt 0 ]; then
+                echo "${ref#origin/} ($(date -u -d "@$ts" +%Y-%m-%d 2>/dev/null || date -u -r "$ts" +%Y-%m-%d))"
+              fi
+            done
+            echo '```'
+            echo
+            echo "### PRs abertas há mais de 7 dias sem push (updatedAt)"
+            echo '```'
+            # --limit explicito: o default do gh e 30 e o relatorio truncaria em silencio.
+            gh pr list --repo "$REPO" --state open --limit 100 --json number,title,updatedAt,url \
+              --jq '.[] | select((now - (.updatedAt | fromdateiso8601)) > (7*86400)) | "#\(.number) \(.title) — último movimento \(.updatedAt | split("T")[0]) — \(.url)"'
+            echo '```'
+          } > "$RELATORIO"
+
+          cat "$RELATORIO" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comando de poda para revisão (sem executar)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          LIMITE_PRS: '500'
+        run: |
+          RELATORIO="$RUNNER_TEMP/branch-hygiene.md"
+          PRS="$RUNNER_TEMP/prs-abertas.json"
+          PROTEGIDAS="$RUNNER_TEMP/branches-protegidas.txt"
+          # Entrada indisponivel ou lista de PRs cheia faz o script recusar comandos.
+          if ! gh pr list --repo "$REPO" --state open --limit "$LIMITE_PRS" --json headRefName > "$PRS"; then
+            echo '{"erro":"falha ao listar PRs abertas"}' > "$PRS"
+          fi
+          if ! gh api --paginate "repos/$REPO/branches?protected=true&per_page=100" --jq '.[].name' > "$PROTEGIDAS"; then
+            rm -f "$PROTEGIDAS"
+          fi
+          node scripts/ci/branch-podaveis.mjs \
+            --equivalentes "$RUNNER_TEMP/branch-equivalentes.tsv" \
+            --prs "$PRS" --protegidas "$PROTEGIDAS" --limite-prs "$LIMITE_PRS" \
+            | tee -a "$RELATORIO" "$GITHUB_STEP_SUMMARY"
+
+      - name: SLA dos alertas de code scanning
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          RELATORIO="$RUNNER_TEMP/branch-hygiene.md"
+          ARQUIVO="$RUNNER_TEMP/code-scanning-alerts.json"
+          if ! gh api --paginate --slurp "repos/$REPO/code-scanning/alerts?state=open&per_page=100" | jq 'add' > "$ARQUIVO"; then
+            echo '{"message":"falha ao consultar a API de code scanning"}' > "$ARQUIVO"
+          fi
+          node scripts/ci/sla-code-scanning.mjs < "$ARQUIVO" \
+            | tee -a "$RELATORIO" "$GITHUB_STEP_SUMMARY"
+
+      - name: Publicar na issue semanal [branch-hygiene]
+        # Publica mesmo com o SLA vermelho, sem esconder o exit 1 do passo anterior.
+        # Relatorio nao gerado (coleta falhou/cancelou) nao publica nada pela metade.
+        if: ${{ !cancelled() && steps.relatorio.outcome == 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          RELATORIO="$RUNNER_TEMP/branch-hygiene.md"
+          if [ ! -s "$RELATORIO" ]; then
+            echo "::error::relatório não foi gerado pelo passo anterior ($RELATORIO)"
+            exit 1
+          fi
+          TITULO='[branch-hygiene] Higiene de branches — relatório semanal'
+          EXISTENTE=$(gh issue list --repo "$REPO" --state open --limit 100 --json number,title \
+            --jq '[.[] | select(.title | startswith("[branch-hygiene]"))][0].number // empty')
+          if [ -n "$EXISTENTE" ]; then
+            gh issue edit "$EXISTENTE" --repo "$REPO" --body-file "$RELATORIO"
+            echo "issue atualizada: #$EXISTENTE"
+          else
+            gh issue create --repo "$REPO" --title "$TITULO" --body-file "$RELATORIO"
+            echo "issue criada"
+          fi
+          rm -f "$RELATORIO"

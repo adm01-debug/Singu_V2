@@ -1,0 +1,88 @@
+# docs:
+#   gatilho: pull_request e push em main que toquem workflows, scripts/, AGENTS.md, CLAUDE.md, docs/agentes/ ou supabase/functions/
+#   prova: todo teste do disco e executado por algum workflow, os invariantes do ci.yml valem, e as instrucoes para agentes nao foram esvaziadas
+#   falha: a PR fica vermelha nomeando o arquivo orfao, o invariante violado ou o arquivo de instrucoes que encolheu
+#   avisa: ninguem — o check da PR e o aviso
+# nao-e-bug:
+#   - allowlist-deno: os 15 testes Deno que ja estavam fora do CI em 2026-11-08 estao na ALLOWLIST_DENO de check-test-inventory.mjs e nao reprovam ninguem; a lista so pode encolher
+name: Estado real do repositório
+
+# Tres jeitos de o repositorio mentir sobre si mesmo, cobrados aqui:
+#   1. teste existe no disco e nenhum passo de CI o roda (foi o caso de 15 suites Deno);
+#   2. ci.yml ganha um always() no nivel do job ou duplica a suite de cobertura;
+#   3. uma sessao paralela apaga/esvazia AGENTS.md ou docs/agentes/*.md.
+# Nenhum passo escreve nada: todos leem o repositorio e falham.
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/**'
+      - 'supabase/functions/**'
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - 'docs/agentes/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/**'
+      - 'supabase/functions/**'
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - 'docs/agentes/**'
+  workflow_dispatch:
+
+concurrency:
+  group: estado-real-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
+jobs:
+  auditar:
+    name: Guardas de estado real
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          # A base da comparacao de tamanho das instrucoes e a propria main.
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Testes das automações de auditoria
+        run: |
+          node --test \
+            scripts/lib/seguranca-processo.test.mjs \
+            scripts/ci/actions-kpi.test.mjs \
+            scripts/ci/branch-podaveis.test.mjs \
+            scripts/ci/check-test-inventory.test.mjs \
+            scripts/ci/sla-code-scanning.test.mjs \
+            scripts/ci/workflow-invariants.test.mjs \
+            scripts/ci/check-claude-md-integrity.test.mjs \
+            scripts/check-edge-cors.test.mjs
+
+      - name: Inventário de testes (nenhum teste fora do CI)
+        run: node scripts/ci/check-test-inventory.mjs
+
+      - name: Invariantes do ci.yml
+        run: node scripts/ci/workflow-invariants.mjs
+
+      - name: Integridade das instruções para agentes
+        env:
+          CLAUDE_MD_BASE: origin/main
+        run: |
+          git fetch --quiet --depth=1 origin main || true
+          node scripts/ci/check-claude-md-integrity.mjs

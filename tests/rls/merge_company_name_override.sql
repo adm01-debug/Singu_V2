@@ -19,8 +19,7 @@ CREATE FUNCTION pg_temp.db01_snapshot(ids uuid[]) RETURNS jsonb LANGUAGE sql AS 
     'companies', (SELECT jsonb_agg(to_jsonb(c) ORDER BY c.id) FROM public.companies c WHERE c.id = ANY(ids)),
     'contacts', (SELECT jsonb_agg(to_jsonb(c) ORDER BY c.id) FROM public.contacts c WHERE c.company_id = ANY(ids)),
     'phones', (SELECT jsonb_agg(to_jsonb(p) ORDER BY p.id) FROM public.company_phones p WHERE p.company_id = ANY(ids)),
-    'emails', (SELECT jsonb_agg(to_jsonb(e) ORDER BY e.id) FROM public.company_emails e WHERE e.company_id = ANY(ids)),
-    'audit', (SELECT jsonb_agg(to_jsonb(a) ORDER BY a.id) FROM public.audit_log a WHERE a.entity_id = ANY(ids))
+    'emails', (SELECT jsonb_agg(to_jsonb(e) ORDER BY e.id) FROM public.company_emails e WHERE e.company_id = ANY(ids))
   );
 $$;
 
