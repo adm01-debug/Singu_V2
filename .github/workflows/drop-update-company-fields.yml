@@ -19,7 +19,7 @@ jobs:
       - name: DROP idempotente + paridade do inventario DEFINER
         run: |
           set -euo pipefail
-          for name in PGHOST PGPORT PGUSER PGPASSWORD PGDATABASE; do
+          for name in PGHOST PGUSER PGPASSWORD PGDATABASE; do
             if [[ -z "${!name}" ]]; then
               echo "::error::Secret obrigatorio ausente: $name"
               exit 1
@@ -36,3 +36,4 @@ jobs:
           echo "--- Inventario DEFINER apos DROP ---"
           psql -X -t -A -d "postgresql://${PGUSER}@${PGHOST}:${PGPORT:-5432}/${PGDATABASE}?sslmode=verify-full" \
             -c "SELECT count(*) FROM pg_proc p WHERE p.pronamespace='public'::regnamespace AND p.prokind='f' AND p.prosecdef AND NOT EXISTS (SELECT 1 FROM pg_depend d WHERE d.classid='pg_proc'::regclass AND d.objid=p.oid AND d.deptype='e');"
+
