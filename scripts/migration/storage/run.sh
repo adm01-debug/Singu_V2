@@ -34,7 +34,7 @@ while [[ $# -gt 0 ]]; do
     --dry-run) export DRY_RUN=1; shift;;
     --step) mig_opt_arg "$1" $#; STEP="$2"; shift 2;;
     --yes) MIG_YES=1; shift;;
-    -h|--help) mig_help "${BASH_SOURCE[0]}"; exit 0;;
+    -h|--help) mig_help "$SCRIPT_DIR/run.sh"; exit 0;;
     *) mig_die 2 "Flag desconhecida: $1 (veja --help)";;
   esac
 done

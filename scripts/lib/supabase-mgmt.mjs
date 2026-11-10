@@ -20,10 +20,10 @@ import { dividirSql, juntarInstrucoes, tornarIdempotente } from './sql-split.mjs
 export const REF_CANONICO = 'pgxfvjmuubtbowutlide';
 export const RAIZ_REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const DIR_DDL_PADRAO = join(RAIZ_REPO, 'scripts', 'migration', 'ddl');
-// Ordem obrigatória de scripts/migration/ddl/99_apply_all.sql (functions antes das policies; partições após tabelas).
+// Ordem obrigatória de scripts/migration/ddl/99_apply_all.sql (partições após tabelas; views e functions antes de índices/policies).
 export const ORDEM_DDL = ['00_extensions.sql', '01_schemas_and_enums.sql', '02_tables.sql', '11_partitions.sql',
-  '03_indexes.sql', '04_foreign_keys.sql', '05_grants.sql', '08_functions.sql', '06_rls_enable.sql',
-  '07_policies.sql', '09_triggers.sql', '10_views.sql'];
+  '10_views.sql', '08_functions.sql', '03_indexes.sql', '04_foreign_keys.sql', '05_grants.sql', '06_rls_enable.sql',
+  '07_policies.sql', '09_triggers.sql'];
 export const emOrdemCanonica = (arquivos) => [...arquivos].sort((a, b) => ORDEM_DDL.indexOf(a) - ORDEM_DDL.indexOf(b));
 export const SQL_CONTAR_TABELAS = "SELECT count(*)::int AS t FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'";
 

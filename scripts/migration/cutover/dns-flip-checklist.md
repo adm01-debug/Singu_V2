@@ -11,7 +11,10 @@
 
 ## Flip (T-0)
 
-- [ ] Freeze origem: `./cutover/freeze-origin.sh`
+- [ ] Ensaiar o freeze: `./cutover/freeze-origin.sh --dry-run` (mostra o que seria revogado/pausado).
+- [ ] Freeze origem: `./cutover/freeze-origin.sh` (pede confirmação; `--strict` bloqueia também
+      `service_role` e RPCs via API). O script só termina com sucesso depois de **conferir** que
+      ninguém mais consegue escrever; `./cutover/freeze-origin.sh --status` repete a conferência.
 - [ ] Migrar dados finais (delta).
 - [ ] Atualizar `.env` do projeto Lovable com URL e chaves do destino.
 - [ ] Republicar app (Lovable → Publish).
@@ -32,5 +35,6 @@
 ## Rollback DNS (se necessário)
 
 - [ ] Reverter A/CNAME para IPs antigos (salvos no pré-flip).
-- [ ] Rodar `freeze-state/<ts>/UNFREEZE.md` para reabrir origem.
+- [ ] Reabrir a origem: `./cutover/freeze-origin.sh --unfreeze` (restaura grants, privilégios padrão e
+      só os crons que estavam ativos; instruções manuais em `freeze-state/<ts>/UNFREEZE.md`).
 - [ ] Comunicar equipe: origem reativada, destino descartado.

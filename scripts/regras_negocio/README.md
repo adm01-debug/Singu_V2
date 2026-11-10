@@ -59,3 +59,20 @@ Prisma/tipos e a saída do perfil `regras`. Nenhum teste acessa banco ou API de 
 
 Origem e testes (430 cenários sintéticos + simulação git de 3 produtores na mesma branch): pacote
 `ai-context-sync` no Project "SCRIPTS | AUTÔNOMOS | REPOSITÓRIO".
+
+## O que conta como schema, limites conhecidos e códigos de saída
+
+- SQL de teste/fixture (`supabase/tests/`, `tests/`, `**/tests/`, `e2e/`) **não** é schema: cria tabelas e
+  policies falsas. DDL estático dentro de `DO $$ ... $$` (inclusive `EXECUTE '<sql fixo>'`) conta;
+  `ALTER POLICY` atualiza roles/USING/WITH CHECK/nome; `DROP TABLE` leva junto policies, triggers e índices.
+- **Não interpretado:** DDL dinâmico (`EXECUTE format(...)`, laços sobre `pg_policies`). Uma migration que
+  troca o `TO` de várias policies desse jeito não aparece aqui — `roles` pode sair `public` onde o banco
+  já tem `authenticated`. O estado real é o da fonte **banco real** (`docs/contexto/supabase/policies.md`).
+- **Não lido:** `src/integrations/supabase/types.ts` acima de 600 KB (hoje ~2,3 MB) — a fonte de tabelas
+  "só no types" fica desligada neste repo.
+- Saída: `0` gerado ou nada mudou · `1` só com `--check` (docs desatualizados) · `2` erro (`--repo`
+  inexistente, saída sem permissão/E/S). Arquivos são trocados atomicamente; `manifest.json` é o último.
+
+```bash
+python3 -m pytest scripts/regras_negocio -q   # test_generate.py + test_generate_fatos.py + test_indice.py
+```

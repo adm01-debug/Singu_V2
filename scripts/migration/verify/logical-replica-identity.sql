@@ -6,13 +6,16 @@
 --            (FULL e USING INDEX sao aceitos.)
 -- Variaveis: nenhuma
 -- Saida    : 0 = ok; 3 = condicao ruim (RAISE EXCEPTION sob ON_ERROR_STOP).
+-- Nota     : o join e por nome (pg_namespace/pg_class), nao por ::regclass — o cast podia ser
+--            avaliado contra pg_toast e estourar "permission denied" para papel sem privilegio.
 \set ON_ERROR_STOP on
 \pset pager off
 \echo '== logical-replica-identity =='
 SELECT p.pubname, pt.schemaname, pt.tablename, c.relreplident
   FROM pg_publication_tables pt
   JOIN pg_publication p ON p.pubname = pt.pubname
-  JOIN pg_class c ON c.oid = (quote_ident(pt.schemaname)||'.'||quote_ident(pt.tablename))::regclass
+  JOIN pg_namespace n ON n.nspname = pt.schemaname
+  JOIN pg_class c ON c.relnamespace = n.oid AND c.relname = pt.tablename
   LEFT JOIN pg_index i ON i.indrelid = c.oid AND i.indisprimary
  WHERE c.relreplident = 'n'
     OR (c.relreplident = 'd' AND i.indexrelid IS NULL)
@@ -22,7 +25,8 @@ DECLARE v_bad int;
 BEGIN
   SELECT count(DISTINCT c.oid) INTO v_bad
     FROM pg_publication_tables pt
-    JOIN pg_class c ON c.oid = (quote_ident(pt.schemaname)||'.'||quote_ident(pt.tablename))::regclass
+    JOIN pg_namespace n ON n.nspname = pt.schemaname
+    JOIN pg_class c ON c.relnamespace = n.oid AND c.relname = pt.tablename
     LEFT JOIN pg_index i ON i.indrelid = c.oid AND i.indisprimary
    WHERE c.relreplident = 'n'
       OR (c.relreplident = 'd' AND i.indexrelid IS NULL);

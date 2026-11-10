@@ -16,8 +16,8 @@ const smoke = async (env: Record<string, string>) => executar(montarChecks(lerCo
 
 Deno.test("smoke lerConfig: obrigatórias, e-mail sem senha, timeout e tabela inválidos", () => {
   assert.throws(() => lerConfig(() => undefined), ErroConfig);
-  const b: Record<string, string> = { DEST_SUPABASE_URL: "http://x/", DEST_ANON_KEY: "k" };
-  assert.equal(lerConfig((k) => b[k]).supabaseUrl, "http://x");
+  const b: Record<string, string> = { DEST_SUPABASE_URL: "https://x/", DEST_ANON_KEY: "k" };
+  assert.equal(lerConfig((k) => b[k]).supabaseUrl, "https://x");
   assert.throws(() => lerConfig((k) => ({ ...b, TEST_EMAIL: "a@b" } as Record<string, string>)[k]), /juntos/);
   assert.throws(() => lerConfig((k) => ({ ...b, SMOKE_TIMEOUT_MS: "abc" } as Record<string, string>)[k]), ErroConfig);
   assert.throws(() => lerConfig((k) => ({ ...b, SMOKE_TABLE: "a;b" } as Record<string, string>)[k]), ErroConfig);
@@ -84,7 +84,7 @@ Deno.test("smoke processo: 0 saudável, 1 com falha (sem vazar senha), 2 sem env
     assert.equal(r.code, 0, r.out + r.err); assert.match(r.out, /5\/5 passaram \(1 pulado/);
     r = await rodar(SMOKE, { ...env, TEST_PASSWORD: "errada-SECRETA" });
     assert.equal(r.code, 1); assert.ok(!(r.out + r.err).includes("errada-SECRETA") && !(r.out + r.err).includes("teste@exemplo.com"));
-    const { TEST_EMAIL: _e, TEST_PASSWORD: _p, ...sem } = env;
+    const sem = Object.fromEntries(Object.entries(env).filter(([k]) => k !== "TEST_EMAIL" && k !== "TEST_PASSWORD"));
     r = await rodar(SMOKE, sem);
     assert.equal(r.code, 0); assert.match(r.out, /– Login com credenciais de teste \(pulado\)/);
     assert.equal((await rodar(SMOKE, {})).code, 2);

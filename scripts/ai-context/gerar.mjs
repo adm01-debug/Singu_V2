@@ -6,7 +6,7 @@
 //   scripts, workflows, git e baseline. Backends: Supabase (migrations/types/edges/config),
 //   Prisma, Drizzle, TypeORM, SQL solto.
 //
-// Uso: node scripts/ai-context/gerar.mjs [--root <dir>] [--out <dir>] [--quiet]
+// Uso: node scripts/ai-context/gerar.mjs [--root <dir>] [--out <dir>] [--quiet] [--help]   (saída 2 = argumento/E/S inválido)
 // Config opcional na raiz do repo: ai-context.config.json
 //   { "out": "inventario/ia", "skipDirs": [...], "srcDirs": [...], "menuFiles": [...],
 //     "routeFiles": [...], "aliases": { "@/": "src/" }, "typesFile": "...", "maxFileMB": 8, "publicacao": "texto do rodapé do INDEX.md" }

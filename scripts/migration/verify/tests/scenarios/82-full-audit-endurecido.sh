@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # full-audit.sh no cluster endurecido com dados saudáveis: ZERO FAIL e saída 0 — prova de que
-# a bateria FATAL inteira passa num banco bem configurado (sem falso-positivo).
+# a bateria FATAL inteira passa num banco bem configurado (sem falso-positivo). O único
+# WARN-FAIL tolerado é o do reset de pg_stat_statements (o sandbox acabou de subir).
 CLUSTER=endurecido
 EXPECTED_EXIT=0
 setup(){
@@ -12,5 +13,6 @@ run_guard(){
   DEST_DB_URL="$(db_url)" bash "$VERIFY_DIR/full-audit.sh" >"$SCN_TMP/audit.log" 2>&1; local rc=$?
   grep -E '=== (FAIL|WARN-FAIL): |ERROR' "$SCN_TMP/audit.log"
   [[ $rc -eq 0 ]] || { tail -3 "$SCN_TMP/audit.log"; return 1; }
-  nao_contem "$SCN_TMP/audit.log" '=== (FAIL|WARN-FAIL): '
+  nao_contem "$SCN_TMP/audit.log" '=== FAIL: ' || return 1
+  ! grep -E '=== WARN-FAIL: ' "$SCN_TMP/audit.log" | grep -qv 'pg-stat-statements-reset-guard.sql'
 }

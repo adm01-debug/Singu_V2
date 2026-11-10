@@ -7,6 +7,11 @@ EXPECTED_EXIT=nonzero
 DOIS_LADOS=1
 requires(){
   command -v pg_receivewal >/dev/null || { echo "pg_receivewal ausente"; return 1; }
+  # pg_receivewal não fala com servidor de versão major mais nova que a dele
+  local cli srv
+  cli="$(pg_receivewal --version | grep -oE '[0-9]+' | head -n 1)"
+  srv="$(( $(config server_version_num) / 10000 ))"
+  [[ "$cli" -ge "$srv" ]] || { echo "pg_receivewal $cli não conecta em servidor $srv"; return 1; }
   psql -X -q "replication=1 dbname=$PGDATABASE" -c "IDENTIFY_SYSTEM" >/dev/null 2>&1 \
     || { echo "conexão de replicação recusada (pg_hba/max_wal_senders)"; return 1; }
 }

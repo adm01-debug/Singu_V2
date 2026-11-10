@@ -46,7 +46,6 @@ export function amostrar<T>(itens: T[], n: number, rng: () => number = Math.rand
   const a = itens.slice();
   const k = Math.min(n, a.length);
   for (let i = 0; i < k; i++) {
-    // eslint-disable-next-line sonarjs/pseudo-random -- amostragem estatística de verificação, não requer CSPRNG (ADR-020)
     const j = i + Math.floor(rng() * (a.length - i));
     [a[i], a[j]] = [a[j], a[i]];
   }

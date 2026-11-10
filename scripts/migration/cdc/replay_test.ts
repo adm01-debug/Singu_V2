@@ -18,9 +18,24 @@ function memoria(lsns: string[] = []) {
   const ops: string[] = []; const linhas = new Map<string, Record<string, unknown>>();
   const d: Destino & { falharEm?: string } = {
     lsnsAplicados: () => Promise.resolve([...lsns]),
-    marcar: (l) => { if (d.falharEm === `marcar:${l}`) return Promise.reject(new Error("checkpoint fora")); lsns.push(l); ops.push(`ck:${l}`); return Promise.resolve(); },
-    upsert: (t, l) => { if (d.falharEm === `upsert:${l.id}`) return Promise.reject(new Error("503")); ops.push(`up:${t}:${paraFiltro(l.id)}`); linhas.set(`${t}:${paraFiltro(l.id)}`, { ...linhas.get(`${t}:${paraFiltro(l.id)}`), ...l }); return Promise.resolve(); },
-    atualizar: (t, ch, l) => { const k = `${t}:${paraFiltro(ch.id)}`; if (!linhas.has(k)) return Promise.resolve(0); const v = { ...linhas.get(k), ...l }; linhas.delete(k); linhas.set(`${t}:${paraFiltro(l.id)}`, v); ops.push(`mv:${k}`); return Promise.resolve(1); },
+    marcar: (l) => {
+      if (d.falharEm === `marcar:${l}`) return Promise.reject(new Error("checkpoint fora"));
+      lsns.push(l); ops.push(`ck:${l}`);
+      return Promise.resolve();
+    },
+    upsert: (t, l) => {
+      if (d.falharEm === `upsert:${l.id}`) return Promise.reject(new Error("503"));
+      const k = `${t}:${paraFiltro(l.id)}`;
+      ops.push(`up:${k}`); linhas.set(k, { ...linhas.get(k), ...l });
+      return Promise.resolve();
+    },
+    atualizar: (t, ch, l) => {
+      const k = `${t}:${paraFiltro(ch.id)}`;
+      if (!linhas.has(k)) return Promise.resolve(0);
+      const v = { ...linhas.get(k), ...l };
+      linhas.delete(k); linhas.set(`${t}:${paraFiltro(l.id)}`, v); ops.push(`mv:${k}`);
+      return Promise.resolve(1);
+    },
     remover: (t, ch) => { ops.push(`rm:${t}:${paraFiltro(ch.id)}`); linhas.delete(`${t}:${paraFiltro(ch.id)}`); return Promise.resolve(); },
   };
   return { d, ops, linhas, lsns };
@@ -112,7 +127,7 @@ Deno.test("DELETE sem chave é recusado; schema ≠ public é ignorado; UPDATE q
   await assert.rejects(reproduzir(de(tx("0/100", D("0/90", "t"))), m.d, quieto), /DELETE em t sem chave/);
   let r = await reproduzir(de(tx("0/200", I("0/190", "users", [col("id", 1)], "auth"), I("0/191", "t", [col("id", 1), col("v", "a")]))), m.d, quieto);
   assert.deepEqual({ mudancas: r.mudancas, ignoradas: r.ignoradas }, { mudancas: 1, ignoradas: 1 });
-  r = await reproduzir(de(tx("0/300", U("0/290", "t", [col("id", 9), col("v", "b")], [col("id", 1)]))), m.d, quieto);
+  await reproduzir(de(tx("0/300", U("0/290", "t", [col("id", 9), col("v", "b")], [col("id", 1)]))), m.d, quieto);
   assert.deepEqual([...m.linhas.keys()], ["t:9"]);
   const d = memoria();
   r = await reproduzir(de(tx("0/100", I("0/90", "t", [col("id", 1)]))), d.d, { dryRun: true, ...quieto });

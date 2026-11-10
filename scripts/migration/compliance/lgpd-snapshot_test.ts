@@ -40,7 +40,7 @@ Deno.test("manifesto: sem PII, assinatura cobre tudo; qualquer adulteração inv
   assert.equal(await verificarManifesto({ ...m, destination: "https://outro" }, SEGREDO), false);
   assert.equal(await verificarManifesto({ ...m, tables: m.tables.map((t, i) => (i ? t : { ...t, count: 999 })) }, SEGREDO), false);
   assert.equal(await verificarManifesto({ ...m, signature: undefined }, SEGREDO), false);
-  const { signature: _s, ...corpo } = m;
+  const corpo = { version: m.version, generated_at: m.generated_at, destination: m.destination, tables: m.tables, aggregate_hash: m.aggregate_hash };
   assert.equal(await assinar(SEGREDO, corpo), m.signature);
 });
 Deno.test("tabela que não pôde ser lida: erro (antes: count=null e hash de '[]' num manifesto 'válido')", async () => {

@@ -27,6 +27,11 @@ export interface OpcoesCopia {
 export interface ResultadoCopia { bytes: number; skipped: boolean; dry?: boolean; aviso?: string }
 export interface Totais { ok: number; skipped: number; fail: number; bytes: number; avisos: number }
 
+export function resumo(t: Totais): string {
+  const avisos = t.avisos ? ` AVISOS=${t.avisos}` : "";
+  return `OK=${t.ok} SKIP=${t.skipped} FAIL=${t.fail} BYTES=${fmtBytes(t.bytes)}${avisos}`;
+}
+
 /** Decide se o objeto já está replicado no destino (retomada). Função pura. */
 export function jaReplicado(srcSize: number | undefined, srcEtag: string, dest: InfoDestino): boolean {
   if (!dest.ok || srcSize === undefined || dest.size !== srcSize) return false;
@@ -90,6 +95,7 @@ export async function copiarObjeto(env: Env, bucket: string, obj: StorageObject,
 
   // Baixa calculando MD5 em stream. Objeto grande (ou de tamanho desconhecido) vai
   // para arquivo temporário: memória limitada e corpo reabrível a cada retry do upload.
+  // eslint-disable-next-line sonarjs/hashing -- MD5 é o ETag do Storage (checagem de integridade), não uso criptográfico
   const md5 = createHash("md5");
   let baixados = 0;
   const contador = new TransformStream<Uint8Array, Uint8Array>({
@@ -172,7 +178,7 @@ export async function copiarTudo(env: Env, op: OpcoesCopia = {}): Promise<Totais
       }
     }, env.CONCURRENCY);
     for (const k of Object.keys(total) as (keyof Totais)[]) total[k] += t[k];
-    console.log(`  bucket ${b.id}: OK=${t.ok} SKIP=${t.skipped} FAIL=${t.fail} BYTES=${fmtBytes(t.bytes)}${t.avisos ? ` AVISOS=${t.avisos}` : ""}`);
+    console.log(`  bucket ${b.id}: ${resumo(t)}`);
   }
   return total;
 }
@@ -197,7 +203,7 @@ if (import.meta.main) {
     } finally {
       logFile.close();
     }
-    console.log(`\nTOTAL: OK=${total.ok} SKIP=${total.skipped} FAIL=${total.fail} BYTES=${fmtBytes(total.bytes)}${total.avisos ? ` AVISOS=${total.avisos}` : ""}`);
+    console.log(`\nTOTAL: ${resumo(total)}`);
     console.log(`Log: ${logPath}`);
     if (total.fail > 0) Deno.exit(1);
   } catch (e) {
