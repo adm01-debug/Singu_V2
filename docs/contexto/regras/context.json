@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "39789307c54fa03a7044ac7d43705a37e9805cfd",
+  "sha": "357fd21e257a50ab8088b5b13243513d7a81c2d1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-10 18:57 UTC",
-  "files_total": 3221,
-  "code_files": 2782,
-  "code_lines": 395813
+  "generated_at": "2026-11-10 19:42 UTC",
+  "files_total": 3224,
+  "code_files": 2785,
+  "code_lines": 396068
  },
  "version": "1.3.2",
- "facts_hash": "93bfe9ce2930c080",
+ "facts_hash": "15b29cf7155f4244",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -202,7 +202,7 @@
   "package_manager": "bun",
   "languages": {
    ".tsx": 1156,
-   ".ts": 888,
+   ".ts": 891,
    ".sql": 651,
    ".mjs": 48,
    ".py": 19,
@@ -68532,7 +68532,7 @@
   {
    "module": "public",
    "files": 1,
-   "lines": 233,
+   "lines": 226,
    "tables": [],
    "exports": [],
    "docs": [
@@ -69300,7 +69300,7 @@
   {
    "module": "src/hooks",
    "files": 434,
-   "lines": 56834,
+   "lines": 56840,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -69698,8 +69698,8 @@
   },
   {
    "module": "src/lib",
-   "files": 99,
-   "lines": 8812,
+   "files": 100,
+   "lines": 8939,
    "tables": [
     "activities",
     "crm_relationship_audit_logs",
@@ -69846,6 +69846,7 @@
     "src/lib/proximoPassoDefaults.ts",
     "src/lib/pushNotifications.sw.test.ts",
     "src/lib/pushNotifications.ts",
+    "src/lib/pushNotifications.vapid.test.ts",
     "src/lib/queryErrorReporter.ts",
     "src/lib/rateLimiter.ts",
     "src/lib/requestId.ts",
@@ -69862,8 +69863,7 @@
     "src/lib/sorting-utils.ts",
     "src/lib/suggestPresetName.ts",
     "src/lib/supabaseInvoke.ts",
-    "src/lib/systemHealth.test.ts",
-    "src/lib/systemHealth.ts"
+    "src/lib/systemHealth.test.ts"
    ]
   },
   {
@@ -70225,8 +70225,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 170,
-   "lines": 26319,
+   "files": 171,
+   "lines": 26385,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -70371,6 +70371,7 @@
     "lead-score-contract.ts: StoredLeadGrade, DisplayLeadGrade, storedLeadGrade, displayLeadGrade, scorePayloads, LeadScorePersistence",
     "notification-delivery.ts: sendTrackedNotification",
     "pagination.ts: fetchAllPages",
+    "push.ts: PUSH_HOST_SUFFIXES, isAllowedPushEndpoint, VapidConfig, readVapidConfig, PushPayload, buildPayload",
     "rate-limit.ts: rateLimit",
     "safe-http.ts: HttpTransport, isPublicAddress, resolveDestination, safeFetch",
     "search-filter.ts: SearchFilterInputError, buildSearchFilter",
@@ -70408,6 +70409,7 @@
     "npm:ipaddr.js@2.5.0",
     "npm:libphonenumber-js@1.11.7",
     "npm:react@18.3.1",
+    "npm:web-push@3.6.7",
     "npm:zod@3.23.8"
    ],
    "imports_modules": [
@@ -70434,6 +70436,7 @@
     "supabase/functions/_shared/notification-delivery_test.ts",
     "supabase/functions/_shared/pagination.ts",
     "supabase/functions/_shared/pagination_test.ts",
+    "supabase/functions/_shared/push.ts",
     "supabase/functions/_shared/rate-limit.ts",
     "supabase/functions/_shared/rate-limit_test.ts",
     "supabase/functions/_shared/safe-http.ts",
@@ -70492,8 +70495,7 @@
     "supabase/functions/detect-new-device/index.ts",
     "supabase/functions/disc-analyzer/index.ts",
     "supabase/functions/dual-write-proxy/index.ts",
-    "supabase/functions/elevenlabs-scribe-token/index.ts",
-    "supabase/functions/elevenlabs-tts/index.ts"
+    "supabase/functions/elevenlabs-scribe-token/index.ts"
    ]
   },
   {
@@ -70606,8 +70608,8 @@
   },
   {
    "module": "tests",
-   "files": 70,
-   "lines": 6387,
+   "files": 71,
+   "lines": 6450,
    "tables": [],
    "exports": [
     "ask-crm.js: options, function",
@@ -70617,6 +70619,7 @@
     "prepare-sql.mjs: prepareSql"
    ],
    "docs": [
+    "web-push-sender.test.ts: eslint-disable sonarjs/no-clear-text-protocols -- as URLs http/ftp são casos NEGATIVOS da allowlist de endpoint",
     "pool-saturation.js: Connection Pool Saturation Simulator — k6. Ramp 0→500 VUs em 60s durante janela de cutover simulada. Valida que o pgbouncer/supavisor não colapsa e que p99 fica < 500ms. Uso: k6 run -e BASE_URL=$DEST_SUPABASE_URL -e ANON_KEY=$SUPABASE_ANON_KEY tests/load/pool-saturation.js",
     "contact-relation-concurrency.mjs: Executar somente em clone local descartável: AUT03_ISOLATED=1 PGDATABASE=aut03_... node este-arquivo."
    ],
@@ -70651,6 +70654,7 @@
     "tests/e2e/navigation.spec.ts",
     "tests/integration/auth-external-data.test.ts",
     "tests/integration/rate-limit.test.ts",
+    "tests/integration/web-push-sender.test.ts",
     "tests/load/ask-crm.js",
     "tests/load/external-data.js",
     "tests/load/incoming-webhook.js",
@@ -72869,7 +72873,8 @@
      "src/lib/pushNotifications.ts"
     ],
     "delete": [
-     "src/lib/pushNotifications.ts"
+     "src/lib/pushNotifications.ts",
+     "supabase/functions/send-push-notification/index.ts"
     ],
     "select": [
      "supabase/functions/send-push-notification/index.ts",
@@ -76952,6 +76957,9 @@
     "supabase/functions/health/index.test.ts",
     "supabase/functions/voice-agent/index.test.ts",
     "supabase/functions/voice-to-text/index.test.ts"
+   ],
+   "VITE_VAPID_PUBLIC_KEY": [
+    "src/lib/pushNotifications.ts"
    ]
   },
   "rpc": {
@@ -80714,6 +80722,11 @@
     "file": "supabase/functions/_shared/lead-score-contract.ts",
     "name": "DisplayLeadGrade",
     "values": "A | B | C | D"
+   },
+   {
+    "file": "supabase/functions/_shared/push.ts",
+    "name": "PushOutcome",
+    "values": "sent | gone | rejected | error | blocked"
    },
    {
     "file": "supabase/functions/external-data/database.ts",
@@ -84993,6 +85006,10 @@
     "value": "owner"
    },
    {
+    "file": "src/lib/pushNotifications.ts",
+    "value": "granted"
+   },
+   {
     "file": "src/pages/Assistente.tsx",
     "value": "user"
    },
@@ -85517,6 +85534,14 @@
    {
     "file": "src/lib/logger.ts",
     "text": "Em prod, persistimos apenas se for aviso importante ou erro"
+   },
+   {
+    "file": "src/lib/pushNotifications.ts",
+    "text": "dá InvalidStateError. Cancela e refaz com a chave atual; a permissão já concedida é mantida (sem novo prompt)."
+   },
+   {
+    "file": "src/lib/pushNotifications.ts",
+    "text": "* Migra em silêncio quem já tem permissão e uma assinatura criada com outra chave VAPID. Barato: só olha a assinatura local."
    },
    {
     "file": "src/lib/searchPresetTransport.ts",
@@ -99792,6 +99817,18 @@
    {
     "file": "public/sw-push.js",
     "field": "type",
+    "value": "window",
+    "kind": "escreve"
+   },
+   {
+    "file": "public/sw-push.js",
+    "field": "type",
+    "value": "PUSH_SUBSCRIPTION_CHANGED",
+    "kind": "escreve"
+   },
+   {
+    "file": "public/sw-push.js",
+    "field": "type",
     "value": "health_alert",
     "kind": "compara"
    },
@@ -105788,6 +105825,12 @@
     "field": "type",
     "value": "stakeholder_alert",
     "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useNotifications.ts",
+    "field": "type",
+    "value": "PUSH_SUBSCRIPTION_CHANGED",
+    "kind": "compara"
    },
    {
     "file": "src/hooks/useNpsSurveys.ts",
@@ -126398,6 +126441,26 @@
     "name": "em dev registra /sw-push.js direto"
    },
    {
+    "file": "src/lib/pushNotifications.vapid.test.ts",
+    "name": "VAPID próprio"
+   },
+   {
+    "file": "src/lib/pushNotifications.vapid.test.ts",
+    "name": "o código não carrega mais a chave de exemplo da web-push"
+   },
+   {
+    "file": "src/lib/pushNotifications.vapid.test.ts",
+    "name": "assinatura feita com a chave de exemplo: cancela, reassina com a chave atual, grava a nova e SÓ então apaga a velha"
+   },
+   {
+    "file": "src/lib/pushNotifications.vapid.test.ts",
+    "name": "assinatura já com a chave atual não é tocada; navegador que não informa a chave também não"
+   },
+   {
+    "file": "src/lib/pushNotifications.vapid.test.ts",
+    "name": "ensureCurrentPushSubscription migra quem tem permissão e chave antiga; sem permissão não faz nada (sem prompt)"
+   },
+   {
     "file": "src/lib/resilientFetch.test.ts",
     "name": "resilientFetch"
    },
@@ -128782,6 +128845,50 @@
     "name": "should reset after the window expires"
    },
    {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "allowlist de endpoint (anti-SSRF)"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "aceita %s"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "bloqueia %s"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "readVapidConfig"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "lê o par e usa a URL do projeto como subject quando não há VAPID_SUBJECT"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "VAPID_SUBJECT mailto: tem prioridade"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "deliver"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "sent: envia com TTL, urgency e vapidDetails"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "blocked: endpoint fora da allowlist NÃO chama o serviço"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "status %s -> %s (só 404/410 permitem apagar a assinatura)"
+   },
+   {
+    "file": "tests/integration/web-push-sender.test.ts",
+    "name": "buildPayload mantém o contrato lido por public/sw-push.js"
+   },
+   {
     "file": "tests/rls/prepare-sql.node-test.mjs",
     "name": "preserva BEGIN/COMMIT em funções e comentários, removendo só o wrapper externo"
    },
@@ -129292,6 +129399,18 @@
    {
     "file": "src/pages/admin/BehavioralRegenAudit.tsx",
     "call": "invoke("
+   },
+   {
+    "file": "supabase/functions/_shared/push.ts",
+    "call": "fcm."
+   },
+   {
+    "file": "supabase/functions/_shared/push.ts",
+    "call": "notify"
+   },
+   {
+    "file": "supabase/functions/_shared/push.ts",
+    "call": "sendNotification"
    },
    {
     "file": "supabase/functions/check-health-alerts/index.ts",
@@ -147743,6 +147862,10 @@
    "usage": {
     "type": {
      "window": [
+      "escreve:public/sw-push.js"
+     ],
+     "PUSH_SUBSCRIPTION_CHANGED": [
+      "compara:src/hooks/useNotifications.ts",
       "escreve:public/sw-push.js"
      ],
      "health_alert": [
@@ -167904,7 +168027,7 @@
   },
   "public/sw-push.js": {
    "path": "public/sw-push.js",
-   "lines": 233,
+   "lines": 226,
    "errors": [
     ") {\n    targetUrl = ",
     ":\n      return [\n        { action: ",
@@ -167914,6 +168037,16 @@
     {
      "field": "type",
      "value": "window",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "window",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "PUSH_SUBSCRIPTION_CHANGED",
      "kind": "escreve"
     },
     {
@@ -202284,7 +202417,7 @@
   },
   "src/hooks/useNotifications.ts": {
    "path": "src/hooks/useNotifications.ts",
-   "lines": 374,
+   "lines": 380,
    "exports": [
     "const useNotifications"
    ],
@@ -202353,6 +202486,11 @@
      "field": "type",
      "value": "stakeholder_alert",
      "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "PUSH_SUBSCRIPTION_CHANGED",
+     "kind": "compara"
     }
    ],
    "role_checks": [
@@ -210114,10 +210252,11 @@
   },
   "src/lib/pushNotifications.ts": {
    "path": "src/lib/pushNotifications.ts",
-   "lines": 177,
+   "lines": 213,
    "exports": [
     "function registerServiceWorker",
     "function subscribeToPush",
+    "function ensureCurrentPushSubscription",
     "function unsubscribeFromPush",
     "function getSubscriptionStatus",
     "function isPushSupported"
@@ -210139,7 +210278,8 @@
     ]
    },
    "env": [
-    "PROD"
+    "PROD",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "errors": [
     "User not authenticated"
@@ -210149,6 +210289,29 @@
      "name": "SW_READY_TIMEOUT_MS",
      "value": "10"
     }
+   ],
+   "role_checks": [
+    "granted"
+   ],
+   "rule_comments": [
+    "dá InvalidStateError. Cancela e refaz com a chave atual; a permissão já concedida é mantida (sem novo prompt).",
+    "* Migra em silêncio quem já tem permissão e uma assinatura criada com outra chave VAPID. Barato: só olha a assinatura local."
+   ]
+  },
+  "src/lib/pushNotifications.vapid.test.ts": {
+   "path": "src/lib/pushNotifications.vapid.test.ts",
+   "lines": 91,
+   "is_test": true,
+   "doc": "Chave VAPID própria + migração de assinaturas feitas com a chave de exemplo da biblioteca web-push.",
+   "tests": [
+    "VAPID próprio",
+    "o código não carrega mais a chave de exemplo da web-push",
+    "assinatura feita com a chave de exemplo: cancela, reassina com a chave atual, grava a nova e SÓ então apaga a velha",
+    "assinatura já com a chave atual não é tocada; navegador que não informa a chave também não",
+    "ensureCurrentPushSubscription migra quem tem permissão e chave antiga; sem permissão não faz nada (sem prompt)"
+   ],
+   "side_effects": [
+    "fcm."
    ]
   },
   "src/lib/queryErrorReporter.ts": {
@@ -216622,6 +216785,34 @@
   "supabase/functions/_shared/pagination_test.ts": {
    "path": "supabase/functions/_shared/pagination_test.ts",
    "lines": 36
+  },
+  "supabase/functions/_shared/push.ts": {
+   "path": "supabase/functions/_shared/push.ts",
+   "lines": 101,
+   "exports": [
+    "const PUSH_HOST_SUFFIXES",
+    "function isAllowedPushEndpoint",
+    "interface VapidConfig",
+    "function readVapidConfig",
+    "interface PushPayload",
+    "function buildPayload",
+    "interface PushSubscriptionRow",
+    "interface WebPushLike",
+    "type PushOutcome",
+    "function deliver"
+   ],
+   "enums": [
+    {
+     "name": "PushOutcome",
+     "values": "sent | gone | rejected | error | blocked"
+    }
+   ],
+   "doc": "Web Push (RFC 8030 / 8291 / 8292) — lógica PURA (sem APIs do Deno), para poder ser testada no vitest. A criptografia aes128gcm e a assinatura VAPID são feitas pela biblioteca `web-push` (injetada em `deliver`).",
+   "side_effects": [
+    "fcm.",
+    "notify",
+    "sendNotification"
+   ]
   },
   "supabase/functions/_shared/rate-limit.ts": {
    "path": "supabase/functions/_shared/rate-limit.ts",
@@ -224117,15 +224308,20 @@
   },
   "supabase/functions/send-push-notification/index.ts": {
    "path": "supabase/functions/send-push-notification/index.ts",
-   "lines": 143,
+   "lines": 108,
    "tables": [
     {
      "table": "push_subscriptions",
      "op": "select"
+    },
+    {
+     "table": "push_subscriptions",
+     "op": "delete"
     }
    ],
    "table_cols": {
     "push_subscriptions": [
+     "endpoint",
      "user_id"
     ]
    },
@@ -229083,6 +229279,40 @@
     "should reset after the window expires"
    ]
   },
+  "tests/integration/web-push-sender.test.ts": {
+   "path": "tests/integration/web-push-sender.test.ts",
+   "lines": 63,
+   "is_test": true,
+   "params": [
+    {
+     "name": "PUB",
+     "value": "'B'"
+    },
+    {
+     "name": "PRIV",
+     "value": "'a'"
+    }
+   ],
+   "doc": "eslint-disable sonarjs/no-clear-text-protocols -- as URLs http/ftp são casos NEGATIVOS da allowlist de endpoint",
+   "tests": [
+    "allowlist de endpoint (anti-SSRF)",
+    "aceita %s",
+    "bloqueia %s",
+    "readVapidConfig",
+    "lê o par e usa a URL do projeto como subject quando não há VAPID_SUBJECT",
+    "VAPID_SUBJECT mailto: tem prioridade",
+    "deliver",
+    "sent: envia com TTL, urgency e vapidDetails",
+    "blocked: endpoint fora da allowlist NÃO chama o serviço",
+    "status %s -> %s (só 404/410 permitem apagar a assinatura)",
+    "buildPayload mantém o contrato lido por public/sw-push.js"
+   ],
+   "side_effects": [
+    "fcm.",
+    "notify",
+    "sendNotification"
+   ]
+  },
   "tests/load/ask-crm.js": {
    "path": "tests/load/ask-crm.js",
    "lines": 47,
@@ -229555,10 +229785,26 @@
   }
  },
  "git": {
-  "sha": "39789307c54fa03a7044ac7d43705a37e9805cfd",
+  "sha": "357fd21e257a50ab8088b5b13243513d7a81c2d1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "357fd21",
+    "date": "2026-11-10",
+    "author": "adm01-debug",
+    "subject": "fix(push): chave VAPID própria e sender que realmente entrega (#185)",
+    "files": [
+     "docs/RUNBOOK.md",
+     "public/sw-push.js",
+     "src/hooks/useNotifications.ts",
+     "src/lib/pushNotifications.ts",
+     "src/lib/pushNotifications.vapid.test.ts",
+     "supabase/functions/_shared/push.ts",
+     "supabase/functions/send-push-notification/index.ts",
+     "tests/integration/web-push-sender.test.ts"
+    ]
+   },
    {
     "sha": "3978930",
     "date": "2026-11-10",
@@ -230246,24 +230492,15 @@
      ".github/workflows/restore-drill.yml",
      ".github/workflows/rls-exposure-guard.yml"
     ]
-   },
-   {
-    "sha": "92d9466",
-    "date": "2026-11-06",
-    "author": "adm01-debug",
-    "subject": "chore: sobe actions/checkout para v5 no ci.yml (#159)",
-    "files": [
-     ".github/workflows/ci.yml"
-    ]
    }
   ],
   "hot_files": [
    [
-    ".github/workflows/ci.yml",
-    5
+    "scripts/inventario/gerar-banco.mjs",
+    4
    ],
    [
-    "scripts/inventario/gerar-banco.mjs",
+    ".github/workflows/ci.yml",
     4
    ],
    [
@@ -230277,6 +230514,10 @@
    [
     "scripts/supabase_snapshot/snapshot.py",
     3
+   ],
+   [
+    "src/lib/pushNotifications.ts",
+    2
    ],
    [
     "scripts/migration/storage/verify-counts.ts",
@@ -230332,10 +230573,6 @@
    ],
    [
     "scripts/hardening/check-replication-config.sql",
-    2
-   ],
-   [
-    "scripts/hardening/check-security-definer-search-path.sql",
     2
    ]
   ]

@@ -5,17 +5,17 @@
   "vitest",
   "playwright"
  ],
- "total": 241,
+ "total": 243,
  "por_tipo": {
   "contrato": 38,
   "e2e": 12,
   "pytest": 7,
-  "unit": 182
+  "unit": 184
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 113
+   "arquivos": 114
   },
   {
    "padrao": "co-localizado (__tests__)",
@@ -23,7 +23,7 @@
   },
   {
    "padrao": "tests/",
-   "arquivos": 22
+   "arquivos": 23
   },
   {
    "padrao": "outro",
@@ -1786,6 +1786,15 @@
    "casos": 5
   },
   {
+   "arquivo": "src/lib/pushNotifications.vapid.test.ts",
+   "tipo": "unit",
+   "linhas": 91,
+   "testa": [
+    "src/lib/pushNotifications.ts"
+   ],
+   "casos": 4
+  },
+  {
    "arquivo": "src/lib/resilientFetch.test.ts",
    "tipo": "unit",
    "linhas": 40,
@@ -2103,6 +2112,15 @@
    "casos": 2
   },
   {
+   "arquivo": "tests/integration/web-push-sender.test.ts",
+   "tipo": "unit",
+   "linhas": 63,
+   "testa": [
+    "supabase/functions/_shared/push.ts"
+   ],
+   "casos": 9
+  },
+  {
    "arquivo": "tests/load/ask-crm.js",
    "tipo": "unit",
    "linhas": 47,
@@ -2338,7 +2356,7 @@
   "src/lib/logger.ts": 2,
   "src/lib/navigationLabels.ts": 1,
   "src/lib/providerGuard.ts": 2,
-  "src/lib/pushNotifications.ts": 1,
+  "src/lib/pushNotifications.ts": 2,
   "src/lib/resilientFetch.ts": 1,
   "src/lib/rpcChurn.ts": 1,
   "src/lib/rpcPlanDiff.ts": 1,
@@ -2360,6 +2378,7 @@
   "src/types/rfm.ts": 1,
   "src/types/vak.ts": 1,
   "supabase/functions/_shared/lead-score-contract.ts": 1,
+  "supabase/functions/_shared/push.ts": 1,
   "supabase/functions/_shared/rate-limit.ts": 2,
   "supabase/functions/_shared/search-filter.ts": 2,
   "supabase/functions/_shared/tenant-guard.ts": 1

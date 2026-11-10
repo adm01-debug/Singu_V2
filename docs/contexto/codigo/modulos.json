@@ -1043,7 +1043,8 @@
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PROJECT_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -1577,7 +1578,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -2520,7 +2522,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -5727,7 +5730,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -6691,7 +6695,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -8034,7 +8039,8 @@
     "DEV",
     "PROD",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -8192,7 +8198,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -8518,7 +8525,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -9291,7 +9299,7 @@
    "modulo": "hooks",
    "arquivos": 375,
    "testes": 23,
-   "linhas": 50064,
+   "linhas": 50070,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -10881,7 +10889,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -11611,8 +11620,8 @@
   {
    "modulo": "lib",
    "arquivos": 68,
-   "testes": 17,
-   "linhas": 6567,
+   "testes": 18,
+   "linhas": 6603,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -11666,7 +11675,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -13025,7 +13035,8 @@
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PROJECT_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -13731,7 +13742,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [
@@ -14061,7 +14073,8 @@
     "PROD",
     "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
-    "VITE_SUPABASE_URL"
+    "VITE_SUPABASE_URL",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "flags": [],
    "papeis": [

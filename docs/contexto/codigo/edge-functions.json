@@ -26,6 +26,7 @@
   "supabase/functions/_shared/notification-delivery_test.ts",
   "supabase/functions/_shared/pagination.ts",
   "supabase/functions/_shared/pagination_test.ts",
+  "supabase/functions/_shared/push.ts",
   "supabase/functions/_shared/rate-limit.ts",
   "supabase/functions/_shared/rate-limit_test.ts",
   "supabase/functions/_shared/safe-http.ts",
@@ -2988,7 +2989,7 @@
    "nome": "send-push-notification",
    "entrada": "supabase/functions/send-push-notification/index.ts",
    "arquivos": 1,
-   "linhas": 143,
+   "linhas": 108,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [
@@ -3004,7 +3005,7 @@
    "hosts_externos": [],
    "usa_shared": [
     "auth.ts",
-    "fetch-utils.ts",
+    "push.ts",
     "rate-limit.ts",
     "validate.ts"
    ],

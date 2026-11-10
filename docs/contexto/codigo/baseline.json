@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "39789307c54fa03a7044ac7d43705a37e9805cfd",
+  "commit": "357fd21e257a50ab8088b5b13243513d7a81c2d1",
   "branch": "main",
-  "data_commit": "2026-11-10T15:55:51-03:00",
+  "data_commit": "2026-11-10T16:41:53-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "357fd21e",
+    "data": "2026-11-10",
+    "assunto": "fix(push): chave VAPID própria e sender que realmente entrega (#185)"
+   },
    {
     "sha": "39789307",
     "data": "2026-11-10",
@@ -126,14 +131,9 @@
     "sha": "ab7efa8e",
     "data": "2026-11-07",
     "assunto": "feat: scripts de verificação de índices/perf e hardening (auditoria read-only) (#167)"
-   },
-   {
-    "sha": "f0aea23a",
-    "data": "2026-11-07",
-    "assunto": "fix: corrige cast inválido de active_pid no replication-slot-idle-guard (#165)"
    }
   ],
-  "arquivos_mudados_7d": 412,
+  "arquivos_mudados_7d": 419,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 29
+    "mudancas": 30
    },
    {
     "pasta": "src/hooks/__tests__",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 39
+    "commits": 40
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -318,9 +318,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3115,
-  "arquivos_codigo": 2130,
-  "linhas_codigo": 400854,
+  "arquivos_total": 3118,
+  "arquivos_codigo": 2133,
+  "linhas_codigo": 401109,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -332,7 +332,7 @@
   "tabelas": 418,
   "migrations": 479,
   "cron_jobs": 20,
-  "testes": 241,
+  "testes": 243,
   "workflows": 7,
   "scripts": 238,
   "docs_md": 150
@@ -376,7 +376,7 @@
   },
   "public/sw-push.js": {
    "arquivos": 1,
-   "linhas": 233
+   "linhas": 226
   },
   "scripts/_pgdocs.py": {
    "arquivos": 1,
@@ -620,15 +620,15 @@
   },
   "src/hooks": {
    "arquivos": 434,
-   "linhas": 56834
+   "linhas": 56840
   },
   "src/integrations": {
    "arquivos": 3,
    "linhas": 69375
   },
   "src/lib": {
-   "arquivos": 99,
-   "linhas": 8812
+   "arquivos": 100,
+   "linhas": 8939
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -655,8 +655,8 @@
    "linhas": 5967
   },
   "supabase/functions": {
-   "arquivos": 170,
-   "linhas": 26319
+   "arquivos": 171,
+   "linhas": 26385
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -683,8 +683,8 @@
    "linhas": 297
   },
   "tests/integration": {
-   "arquivos": 2,
-   "linhas": 91
+   "arquivos": 3,
+   "linhas": 154
   },
   "tests/load": {
    "arquivos": 4,
@@ -819,7 +819,7 @@
  ],
  "qualidade": {
   "any": 27,
-  "console_log": 161,
+  "console_log": 159,
   "ts_ignore": 2,
   "eslint_disable": 1,
   "todos": 8,
@@ -1219,7 +1219,8 @@
   "env_usadas_nao_declaradas": [
    "DEV",
    "PROD",
-   "VITE_APP_VERSION"
+   "VITE_APP_VERSION",
+   "VITE_VAPID_PUBLIC_KEY"
   ],
   "ciclos_de_import": 5,
   "possiveis_segredos_no_codigo": [

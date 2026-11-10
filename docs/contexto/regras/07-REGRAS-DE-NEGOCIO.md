@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `39789307c5` · branch `main` · 2026-11-10 18:57 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `357fd21e25` · branch `main` · 2026-11-10 19:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1150,6 +1150,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `ISTP` | escreve | `src/types/mbti.ts` |
 | `type` | `NUMERIC` | escreve | `src/pages/AdminFieldMapping.tsx` |
 | `type` | `PHONE` | escreve | `supabase/functions/evolution-bitrix-connector/index.ts` |
+| `type` | `PUSH_SUBSCRIPTION_CHANGED` | compara, escreve | `public/sw-push.js`<br>`src/hooks/useNotifications.ts` |
 | `type` | `RELATIVE` | escreve | `src/hooks/useEntity360.ts` |
 | `type` | `REMOVE_TOAST` | compara, escreve | `src/hooks/use-toast.ts` |
 | `type` | `SKIP_WAITING` | compara | `public/sw-push.js` |
@@ -1426,8 +1427,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `completed` | compara, escreve | `src/components/company-detail/CompanyCommercialTab.tsx`<br>`src/components/contact-detail/commercial-tab/TasksCard.tsx`<br>`src/components/gamification/UserGoalsWidget.tsx`<br>`src/components/lux/LuxHistoryTimeline.tsx`<br>`src/components/lux/LuxIntelligencePanel.tsx`<br>… +9 |
 | `status` | `connected` | compara | `src/components/whatsapp/WhatsAppDashboard.tsx` |
 | `status` | `critical` | compara | `src/components/admin/MttaAutoAckHeartbeatCard.tsx`<br>`src/hooks/useClientHealth.ts`<br>`src/hooks/usePortfolioHealth.ts` |
-| `status` | `declined` | compara, escreve | `src/hooks/useDocumentTemplates.ts`<br>`src/pages/PublicSignaturePage.tsx`<br>`supabase/functions/submit-signature/index.ts` |
-| … +173 linhas — lista completa em `context.json` | | | |
+| … +174 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -1672,6 +1672,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | AiGatewayStatus | success \| error \| rate_limited \| timeout | `supabase/functions/_shared/aiGatewayLogger.ts` |
 | StoredLeadGrade | cold \| warm \| hot \| on_fire | `supabase/functions/_shared/lead-score-contract.ts` |
 | DisplayLeadGrade | A \| B \| C \| D | `supabase/functions/_shared/lead-score-contract.ts` |
+| PushOutcome | sent \| gone \| rejected \| error \| blocked | `supabase/functions/_shared/push.ts` |
 | UserScopedUnavailableReason | missing_env \| invalid_url \| origin_mismatch | `supabase/functions/external-data/database.ts` |
 
 ## F. Validações de entrada
@@ -4377,6 +4378,7 @@ _nenhum item encontrado_
 | `granted` | `src/hooks/useStakeholderAlerts.ts` |
 | `decision_maker` | `src/hooks/useYourDay.ts` |
 | `owner` | `src/hooks/useYourDay.ts` |
+| `granted` | `src/lib/pushNotifications.ts` |
 | `user` | `src/pages/Assistente.tsx` |
 | `denied` | `src/pages/Notificacoes.tsx` |
 | `champion` | `supabase/functions/abm-account-scorer/index.ts` |
@@ -4387,7 +4389,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (2969 testes em 222 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (2985 testes em 224 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4470,6 +4472,7 @@ _nenhum item encontrado_
 | `src/hooks/useMFAGuard.test.tsx` | 11 | MFA administrativo · permite configurar MFA em AAL1 e preserva a URL sem mostrar a administração · não monta a tela protegida durante o carregamento do guard ou da confirmação MFA · aguarda a consulta de papel antes de mostrar qualquer conteúdo protegido … |
 | `src/hooks/__tests__/canonical-hook-contracts.test.tsx` | 11 | Contratos canônicos dos históricos de interação · preserva registros legados com tipo, canal e data nulos sem fabricar uma data · produz os aliases de domínio a partir dos campos reais da RPC · normaliza o retorno distinto da RPC de histórico unificado … |
 | `src/hooks/__tests__/canonical-mutation-contracts.test.tsx` | 11 | Mesclagem valida overrides antes de qualquer operação · rejeita valores incompatíveis com o campo canônico · não permite sobrescrever a coluna gerada full_name · envia overrides validados à transação de mesclagem e auditoria … |
+| `tests/integration/web-push-sender.test.ts` | 11 | allowlist de endpoint (anti-SSRF) · aceita %s · bloqueia %s · readVapidConfig … |
 | `src/components/interactions/__tests__/IncrementalLoadStickyBar.test.tsx` | 10 | IncrementalLoadStickyBar · não renderiza quando total=0 · exibe estado de  · usa singular  … |
 | `src/components/navigation/__tests__/ScrollToTopButton.test.tsx` | 10 | ScrollToTopButton · não fica visível com scrollY=0 (default threshold) · fica visível quando scrollY > 400 (default) · respeita threshold customizado … |
 | `src/components/security/TwoFactorSetup.test.tsx` | 10 | Configuração e confirmação MFA · solicita código para um fator já cadastrado em uma sessão AAL1 · oferece confirmação explícita na recuperação mesmo que o SDK ainda retorne AAL2 · retoma configuração interrompida e não libera acesso com código inválido … |
@@ -4534,6 +4537,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/dedup-relations.contract.test.ts` | 5 | Origem da deduplicação · exclui registros arquivados da consulta de %s · Relações da deduplicação · divide IDs em lotes, pagina relações e encontra o primário após a primeira página … |
 | `src/lib/externalData.canonical-rpc.test.ts` | 5 | RPC RFM no banco canônico · envia um lote maior que 128 KiB em uma única chamada autenticada ao banco · propaga a recusa do banco sem confirmar persistência · não envia a chave pública como autenticação de usuário … |
 | `src/lib/externalSearchFilter.contract.test.ts` | 5 | Busca composta pelo proxy externo · preserva a busca legada por frase inteira · exige todas as palavras, aceitando partes distribuídas entre nome e sobrenome · preserva nomes compostos e normaliza espaços, tabulação e quebra de linha … |
+| `src/lib/pushNotifications.vapid.test.ts` | 5 | VAPID próprio · o código não carrega mais a chave de exemplo da web-push · assinatura feita com a chave de exemplo: cancela, reassina com a chave atual, grava a nova e SÓ então apaga a velha · assinatura já com a chave atual não é tocada; navegador que não informa a chave também não … |
 | `src/lib/__tests__/leadScoreContract.test.ts` | 5 | persistência canônica da pontuação de leads · traduz %s e preserva leitura de %s · persiste inteiros, timestamps e factors sem aliases inexistentes · rejeita categoria e pontuação inválidas antes de gravar … |
 | `src/lib/__tests__/rpcPlanDiff.test.ts` | 5 | rpcPlanDiff · lineariza a árvore com caminhos estáveis · tolera payloads inválidos · detecta regressão de Index Scan para Seq Scan … |
 | `src/pages/Empresas.errors.test.tsx` | 5 | erros de consulta na carteira de empresas · permite limpar uma pesquisa que falhou sem registros em cache · distingue erro sem dados de carteira vazia e permite recuperar a consulta · preserva empresas confirmadas e avisa sobre falha na atualização … |
@@ -4727,6 +4731,9 @@ _nenhum item encontrado_
 | `invoke(` | `src/pages/ResetPassword.tsx` |
 | `invoke(` | `src/pages/StatusPage.tsx` |
 | `invoke(` | `src/pages/admin/BehavioralRegenAudit.tsx` |
+| `fcm.` | `supabase/functions/_shared/push.ts` |
+| `notify` | `supabase/functions/_shared/push.ts` |
+| `sendNotification` | `supabase/functions/_shared/push.ts` |
 | `invoke(` | `supabase/functions/check-health-alerts/index.ts` |
 | `notify_on_critical` | `supabase/functions/check-health-alerts/index.ts` |
 | `notify_on_warning` | `supabase/functions/check-health-alerts/index.ts` |
@@ -4887,6 +4894,8 @@ _nenhum item encontrado_
 | Patterns that identify internal technical error messages that must not reach users. | `src/lib/errorMessages.ts` |
 | * Validação de magic bytes para garantir a integridade dos arquivos enviados. | `src/lib/fileValidation.ts` |
 | Em prod, persistimos apenas se for aviso importante ou erro | `src/lib/logger.ts` |
+| dá InvalidStateError. Cancela e refaz com a chave atual; a permissão já concedida é mantida (sem novo prompt). | `src/lib/pushNotifications.ts` |
+| * Migra em silêncio quem já tem permissão e uma assinatura criada com outra chave VAPID. Barato: só olha a assinatura local. | `src/lib/pushNotifications.ts` |
 | porque `existing` deve ser todos os presets já salvos. | `src/lib/searchPresetTransport.ts` |
 | @param length Comprimento mínimo 32 caracteres | `src/lib/secretRotation.ts` |
 | * Limite total de passagens retornadas. Sempre clampado em [1, MAX_TOTAL_CAP]. */ | `src/lib/insights/pickTopPassages.ts` |

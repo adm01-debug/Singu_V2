@@ -3628,6 +3628,7 @@
    "arquivo": "src/lib/pushNotifications.ts",
    "camada": "lib",
    "exports": [
+    "ensureCurrentPushSubscription",
     "getSubscriptionStatus",
     "isPushSupported",
     "registerServiceWorker",
@@ -3635,14 +3636,15 @@
     "unsubscribeFromPush"
    ],
    "export_default": null,
-   "linhas": 177,
+   "linhas": 213,
    "tabelas": [
     "push_subscriptions"
    ],
    "rpcs": [],
    "edges": [],
    "env": [
-    "PROD"
+    "PROD",
+    "VITE_VAPID_PUBLIC_KEY"
    ],
    "externos": [],
    "zod_schemas": 0,
@@ -3654,7 +3656,7 @@
     "components/triggers",
     "hooks"
    ],
-   "coberto_por_testes": 1,
+   "coberto_por_testes": 2,
    "orfao": false
   },
   {

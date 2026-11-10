@@ -3,7 +3,7 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2044)",
+   "TypeScript (2047)",
    "SQL (651)",
    "Markdown (150)",
    "Shell (133)",
@@ -585,7 +585,7 @@
   {
    "arquivo": "docs/RUNBOOK.md",
    "titulo": "SINGU CRM — Runbook Operacional",
-   "linhas": 686
+   "linhas": 693
   },
   {
    "arquivo": "docs/SECURITY.md",
@@ -697,7 +697,8 @@
    "VITE_APP_VERSION",
    "VITE_SUPABASE_PROJECT_ID",
    "VITE_SUPABASE_PUBLISHABLE_KEY",
-   "VITE_SUPABASE_URL"
+   "VITE_SUPABASE_URL",
+   "VITE_VAPID_PUBLIC_KEY"
   ],
   "usadas_nas_edges": [
    "BITRIX_APPLICATION_TOKEN",
@@ -756,7 +757,8 @@
   "usadas_mas_nao_declaradas": [
    "DEV",
    "PROD",
-   "VITE_APP_VERSION"
+   "VITE_APP_VERSION",
+   "VITE_VAPID_PUBLIC_KEY"
   ],
   "secrets_em_workflows": [
    "PGDATABASE",
@@ -828,15 +830,15 @@
     "arquivos": 6
    },
    {
+    "host": "x.supabase.co",
+    "arquivos": 6
+   },
+   {
     "host": "api.elevenlabs.io",
     "arquivos": 5
    },
    {
     "host": "wa.me",
-    "arquivos": 5
-   },
-   {
-    "host": "x.supabase.co",
     "arquivos": 5
    },
    {
@@ -872,7 +874,15 @@
     "arquivos": 2
    },
    {
+    "host": "evil.com",
+    "arquivos": 2
+   },
+   {
     "host": "exemplo.invalid",
+    "arquivos": 2
+   },
+   {
+    "host": "fcm.googleapis.com",
     "arquivos": 2
    },
    {
@@ -948,10 +958,6 @@
     "arquivos": 1
    },
    {
-    "host": "evil.com",
-    "arquivos": 1
-   },
-   {
     "host": "example.supabase.co",
     "arquivos": 1
    },
@@ -961,6 +967,10 @@
    },
    {
     "host": "externo.example",
+    "arquivos": 1
+   },
+   {
+    "host": "fcm.googleapis.com.evil.com",
     "arquivos": 1
    },
    {
@@ -1016,6 +1026,14 @@
     "arquivos": 1
    },
    {
+    "host": "p.co",
+    "arquivos": 1
+   },
+   {
+    "host": "p.supabase.co",
+    "arquivos": 1
+   },
+   {
     "host": "pgxfvjmuubtbowutlide.supabase.co",
     "arquivos": 1
    },
@@ -1053,6 +1071,18 @@
    },
    {
     "host": "twitter.com",
+    "arquivos": 1
+   },
+   {
+    "host": "updates.push.services.mozilla.com",
+    "arquivos": 1
+   },
+   {
+    "host": "web.push.apple.com",
+    "arquivos": 1
+   },
+   {
+    "host": "wns2-par02p.notify.windows.com",
     "arquivos": 1
    },
    {

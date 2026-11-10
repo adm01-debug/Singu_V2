@@ -7199,7 +7199,7 @@
    "hooks_exportados": [
     "useNotifications"
    ],
-   "linhas": 374,
+   "linhas": 380,
    "dominio": "hooks",
    "tabelas": [
     "contacts",
