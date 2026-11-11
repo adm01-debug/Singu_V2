@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `1764764ecb9350b068494dd7b6f1c9b3b61de0dd` (2026-11-11T14:24:41-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `b73e889cab1b7bddeebe796b53f5927de8f16e80` (2026-11-11T14:51:07-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -421,7 +421,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 20704 nós · 35253 arestas · 2065 comunidades · grafo do commit `1764764e`
+- 20704 nós · 35253 arestas · 2065 comunidades · grafo do commit `b73e889c`
 - comunidades maiores: ref_components (324), lucide-react (321), vitest (321), ref_types (304), _shared/auth.ts (269), useAuth (266), ref_hooks (257), ref_lib (256), react-router-dom (244), framer-motion (236), react (232), 📖 Dicionário de Dados — SINGU CRM (226)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), mig_die() (scripts/migration/_lib.sh), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -556,6 +556,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-11 `b73e889c` chore: inventario do estado real [auto] (#191)
 - 2026-11-11 `1764764e` fix(baseline): redefine gate DEFINER de 109 para 110 apos retencao aplicada em prod (#193)
 - 2026-11-11 `01962748` docs: baseline DEFINER 111->109 apos DROP de update_company_fields (#190)
 - 2026-11-10 `ae528d58` feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)
@@ -570,7 +571,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-09 `f5438f28` build(deps): bump the minor-and-patch group with 6 updates (#182)
 - 2026-11-08 `b7f73b43` fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)
 - 2026-11-08 `9836e3ae` feat(segurança): workflow para fechar verify_jwt nas 23 proxies externas (#176)
-- 2026-11-08 `ac006d96` chore: instruções enxutas para agentes (#163)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

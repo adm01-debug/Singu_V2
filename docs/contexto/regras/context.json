@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "1764764ecb9350b068494dd7b6f1c9b3b61de0dd",
+  "sha": "b73e889cab1b7bddeebe796b53f5927de8f16e80",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-11 17:48 UTC",
+  "generated_at": "2026-11-11 18:20 UTC",
   "files_total": 3317,
   "code_files": 2861,
   "code_lines": 407964
@@ -232257,10 +232257,22 @@
   }
  },
  "git": {
-  "sha": "1764764ecb9350b068494dd7b6f1c9b3b61de0dd",
+  "sha": "b73e889cab1b7bddeebe796b53f5927de8f16e80",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "b73e889",
+    "date": "2026-11-11",
+    "author": "adm01-debug",
+    "subject": "chore: inventario do estado real [auto] (#191)",
+    "files": [
+     "inventario/estado/banco.json",
+     "inventario/estado/edge-tabela.json",
+     "inventario/estado/edges.json",
+     "inventario/estado/tabelas-uso.json"
+    ]
+   },
    {
     "sha": "1764764",
     "date": "2026-11-11",
@@ -233051,23 +233063,6 @@
     "files": [
      "supabase/tests/check-rls-coverage.sql"
     ]
-   },
-   {
-    "sha": "ab7efa8",
-    "date": "2026-11-07",
-    "author": "adm01-debug",
-    "subject": "feat: scripts de verificação de índices/perf e hardening (auditoria read-only) (#167)",
-    "files": [
-     "scripts/hardening/check-client-tls.sql",
-     "scripts/hardening/check-extensions-hardening.sql",
-     "scripts/hardening/check-indexes-duplicated.sql",
-     "scripts/hardening/check-indexes-overlapped.sql",
-     "scripts/hardening/check-indexes-unused.sql",
-     "scripts/hardening/check-publication-without-pk.sql",
-     "scripts/hardening/check-replication-config.sql",
-     "scripts/hardening/check-security-definer-search-path.sql",
-     "scripts/hardening/check-tables-without-pk.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -233082,6 +233077,10 @@
    [
     "CHANGELOG.md",
     4
+   ],
+   [
+    "inventario/estado/banco.json",
+    3
    ],
    [
     "docs/qa/security-definer-audit.md",
@@ -233120,6 +233119,18 @@
     3
    ],
    [
+    "inventario/estado/edge-tabela.json",
+    2
+   ],
+   [
+    "inventario/estado/edges.json",
+    2
+   ],
+   [
+    "inventario/estado/tabelas-uso.json",
+    2
+   ],
+   [
     ".github/workflows/fix-jwt-proxies-externas.yml",
     2
    ],
@@ -233133,22 +233144,6 @@
    ],
    [
     "src/lib/pushNotifications.ts",
-    2
-   ],
-   [
-    "scripts/migration/storage/verify-counts.ts",
-    2
-   ],
-   [
-    "scripts/ai-context/gerar.mjs",
-    2
-   ],
-   [
-    "scripts/ai-context/gerar.unit.mjs",
-    2
-   ],
-   [
-    "scripts/check-deploy-timeout.test.mjs",
     2
    ]
   ]
