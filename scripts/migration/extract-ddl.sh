@@ -210,6 +210,20 @@ echo "▶ 03_indexes.sql"
         SELECT 1 FROM pg_constraint co WHERE co.conindid = i.indexrelid
       )
     ORDER BY t.relname, c.relname;"
+  # Índice de tabela particionada sai como CREATE INDEX ... ON ONLY (pai INVALID até todas as
+  # partições serem anexadas): sem estas linhas o pai fica INVALID no destino.
+  "${PSQL[@]}" -c "
+    SELECT format('ALTER INDEX public.%I ATTACH PARTITION public.%I;', pi.relname, ci.relname)
+    FROM pg_inherits inh
+    JOIN pg_class ci      ON ci.oid = inh.inhrelid  AND ci.relkind = 'i'
+    JOIN pg_class pi      ON pi.oid = inh.inhparent AND pi.relkind = 'I'
+    JOIN pg_index xi      ON xi.indexrelid = ci.oid
+    JOIN pg_class tc      ON tc.oid = xi.indrelid
+    JOIN pg_namespace n   ON n.oid = tc.relnamespace
+    WHERE n.nspname = 'public'
+      AND NOT xi.indisprimary AND NOT xi.indisunique
+      AND NOT EXISTS (SELECT 1 FROM pg_constraint co WHERE co.conindid = ci.oid)
+    ORDER BY tc.relname, pi.relname, ci.relname;"
 } > "$OUT_DIR/03_indexes.sql"
 
 # ── 04 foreign keys ────────────────────────────────────────────────────────
@@ -230,7 +244,7 @@ echo "▶ 04_foreign_keys.sql"
 # ── 05 grants ──────────────────────────────────────────────────────────────
 echo "▶ 05_grants.sql"
 {
-  banner "GRANTS (authenticated + service_role; anon apenas se houver policy anon)"
+  banner "GRANTS (tabelas: authenticated + service_role, anon só com policy anon; funções: EXECUTE como na origem)"
   "${PSQL[@]}" -c "
     WITH t AS (
       SELECT c.relname
@@ -258,6 +272,30 @@ echo "▶ 05_grants.sql"
     FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
     WHERE n.nspname='public' AND c.relkind='S'
     ORDER BY c.relname;"
+  echo ""
+  # EXECUTE das funções (mesmo conjunto de 08_functions.sql). Sem isto o destino herda o padrão do
+  # Postgres — EXECUTE para PUBLIC — e toda SECURITY DEFINER fica chamável por anon. O estado da
+  # origem (pg_proc.proacl; NULL = padrão do dono) é replicado: zera as roles da API e concede de volta.
+  echo "-- EXECUTE das funções de public (espelha pg_proc.proacl da origem)"
+  "${PSQL[@]}" -c "
+    SELECT 'REVOKE ALL ON ROUTINE ' || f.sig || ' FROM PUBLIC, anon, authenticated, service_role;'
+           || COALESCE(chr(10) || 'GRANT EXECUTE ON ROUTINE ' || f.sig || ' TO ' || f.grantees || ';', '')
+    FROM (
+      SELECT 'public.' || quote_ident(p.proname) || '(' || oidvectortypes(p.proargtypes) || ')' AS sig,
+             (SELECT string_agg(CASE a.grantee WHEN 0 THEN 'PUBLIC' ELSE quote_ident(r.rolname) END, ', '
+                                ORDER BY a.grantee <> 0, r.rolname)
+              FROM aclexplode(COALESCE(p.proacl, acldefault('f', p.proowner))) a
+              LEFT JOIN pg_roles r ON r.oid = a.grantee
+              WHERE a.privilege_type = 'EXECUTE'
+                AND (a.grantee = 0 OR r.rolname IN ('anon', 'authenticated', 'service_role'))) AS grantees
+      FROM pg_proc p
+      JOIN pg_namespace n ON n.oid = p.pronamespace
+      LEFT JOIN pg_depend d ON d.objid = p.oid AND d.deptype = 'e'
+      WHERE n.nspname = 'public'
+        AND d.objid IS NULL
+        AND p.prokind IN ('f','p')
+    ) f
+    ORDER BY f.sig;"
 } > "$OUT_DIR/05_grants.sql"
 
 # ── 06 RLS enable ──────────────────────────────────────────────────────────
@@ -337,6 +375,24 @@ echo "▶ 10_views.sql"
     FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
     WHERE n.nspname='public' AND c.relkind='m'
     ORDER BY c.oid;"
+  # Comentários de views/materialized views e de suas colunas (o tipo do objeto vem de relkind:
+  # COMMENT ON TABLE em view dá 42809). Ficam aqui, depois do CREATE VIEW.
+  "${PSQL[@]}" -c "
+    SELECT format('COMMENT ON %s public.%I IS %L;',
+                  CASE c.relkind WHEN 'm' THEN 'MATERIALIZED VIEW' ELSE 'VIEW' END, c.relname, de.description)
+    FROM pg_description de
+    JOIN pg_class c     ON c.oid = de.objoid AND de.classoid = 'pg_class'::regclass AND de.objsubid = 0
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE n.nspname = 'public' AND c.relkind IN ('v','m')
+    ORDER BY c.oid;"
+  "${PSQL[@]}" -c "
+    SELECT format('COMMENT ON COLUMN public.%I.%I IS %L;', c.relname, a.attname, de.description)
+    FROM pg_description de
+    JOIN pg_class c     ON c.oid = de.objoid AND de.classoid = 'pg_class'::regclass AND de.objsubid > 0
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    JOIN pg_attribute a ON a.attrelid = c.oid AND a.attnum = de.objsubid
+    WHERE n.nspname = 'public' AND c.relkind IN ('v','m')
+    ORDER BY c.oid, a.attnum;"
 } > "$OUT_DIR/10_views.sql"
 
 # ── 11 partitions (audit_log_YYYY_MM, etc.) ───────────────────────────────
@@ -380,24 +436,63 @@ cat > "$OUT_DIR/99_apply_all.sql" <<'SQL'
 -- ============================================================================
 -- APPLY ALL — ordem obrigatória de aplicação no destino.
 -- Uso: psql "$TARGET_DB_URL" -v ON_ERROR_STOP=1 -f 99_apply_all.sql
+--      (pode ser chamado de qualquer diretório: os \ir são relativos a este arquivo)
+--
+-- NÃO É IDEMPOTENTE: os arquivos 01–11 são dump (CREATE TYPE/TABLE/POLICY sem
+-- IF NOT EXISTS) para um projeto Supabase NOVO E VAZIO. Rodar duas vezes no mesmo
+-- banco para no primeiro "already exists" — recrie o projeto destino antes de repetir.
+--
+-- Ordem: 00 → 01 → 02 → 11 → 10 → 08 → 03 → 04 → 05 → 06 → 07 → 09
+--   10 antes de 08: search_contacts_by_nlp() RETURNS SETOF vw_contacts_nlp (tipo da view);
+--                   as views só usam tabelas e funções nativas.
+--   08 antes de 03: 4 índices GIN usam public.immutable_unaccent().
+--   08 antes de 07: policies chamam public.has_role() e afins.
+--   08 antes de 05: 05_grants.sql termina com REVOKE/GRANT EXECUTE de cada função de public
+--                   (sem isso toda SECURITY DEFINER fica executável por PUBLIC/anon).
+--   check_function_bodies=off em 08 (como o pg_dump faz): há função SQL que referencia
+--   objeto criado depois / fora do search_path dela; o corpo é validado só na chamada.
 -- ============================================================================
-\echo '── 00 extensions'          \i 00_extensions.sql
-\echo '── 01 schemas + enums'     \i 01_schemas_and_enums.sql
-\echo '── 02 tables'              \i 02_tables.sql
-\echo '── 11 partitions'          \i 11_partitions.sql
-\echo '── 03 indexes'             \i 03_indexes.sql
-\echo '── 04 foreign keys'        \i 04_foreign_keys.sql
-\echo '── 05 grants'              \i 05_grants.sql
-\echo '── 08 functions (antes de policies porque policies chamam has_role)'
-\i 08_functions.sql
-\echo '── 06 RLS enable'          \i 06_rls_enable.sql
-\echo '── 07 policies'            \i 07_policies.sql
-\echo '── 09 triggers'            \i 09_triggers.sql
-\echo '── 10 views'               \i 10_views.sql
+\echo '── 00 extensions'
+\ir 00_extensions.sql
+\echo '── 01 schemas + enums'
+\ir 01_schemas_and_enums.sql
+\echo '── 02 tables (sem FKs)'
+\ir 02_tables.sql
+\echo '── 11 partitions'
+\ir 11_partitions.sql
+\echo '── 10 views (antes das functions: há função que retorna SETOF de view)'
+\ir 10_views.sql
+\echo '── 08 functions (antes de índices e policies: ambos chamam funções de public)'
+SET check_function_bodies = off;
+\ir 08_functions.sql
+RESET check_function_bodies;
+\echo '── 03 indexes'
+\ir 03_indexes.sql
+\echo '── 04 foreign keys'
+\ir 04_foreign_keys.sql
+\echo '── 05 grants'
+\ir 05_grants.sql
 \echo ''
-\echo '⚠ 12_cron_jobs.sql deve ser aplicado SEPARADAMENTE após as edge functions'
-\echo '  estarem publicadas no destino. Rode manualmente:'
-\echo '     psql "$TARGET_DB_URL" -f 12_cron_jobs.sql'
+\echo '⏸ PONTO DE PAUSA RECOMENDADO PARA MIGRAÇÃO DE DADOS'
+\echo '   Se o destino for receber dados via scripts/migration/import-data.sh:'
+\echo '     1. deixe rodar até 05_grants.sql (functions e views já foram criadas acima)'
+\echo '     2. INTERROMPA antes de 06_rls_enable.sql'
+\echo '     3. rode export-data.sh na origem e import-data.sh no destino'
+\echo '     4. rode 06/07/09 manualmente'
+\echo '     5. bash scripts/migration/compare-counts.sh'
+\echo '   Ver docs/MIGRATION_DATA.md.'
+\echo ''
+\echo '── 06 RLS enable'
+\ir 06_rls_enable.sql
+\echo '── 07 policies'
+\ir 07_policies.sql
+\echo '── 09 triggers'
+\ir 09_triggers.sql
+\echo ''
+\echo '⚠ 12_cron_jobs.sql deve ser aplicado SEPARADAMENTE, após:'
+\echo '   (1) edge functions publicadas no destino'
+\echo '   (2) extensão pg_cron habilitada'
+\echo '   psql "$TARGET_DB_URL" -f 12_cron_jobs.sql'
 SQL
 
 # ── Publica: só agora os arquivos de saída são substituídos ────────────────
