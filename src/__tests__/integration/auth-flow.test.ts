@@ -7,28 +7,28 @@
       };
 
       // We mock a slight delay to simulate network/processing time
-      mockRefreshSession.mockImplementation(() => 
+      mockRefreshSession.mockImplementation(() =>
         new Promise(resolve => setTimeout(() => resolve({ data: { session: mockSession }, error: null }), 10))
       );
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
-      
+
       // Fire 3 parallel requests
       const results = await Promise.all([
         supabase.auth.refreshSession(),
         supabase.auth.refreshSession(),
         supabase.auth.refreshSession()
       ]);
-      
+
       // All should eventually resolve with the same session (Supabase client handles this internally, but we test the expectation)
       results.forEach(res => {
         expect(res.data.session?.access_token).toBe('refreshed-token');
         expect(res.error).toBeNull();
       });
-      
+
       // In a real Supabase JS client, it actually deduplicates concurrent refresh calls.
       // Our mock just proves the app code can handle the parallel resolution.
-      expect(mockRefreshSession).toHaveBeenCalledTimes(3); 
+      expect(mockRefreshSession).toHaveBeenCalledTimes(3);
     });
 /**
  * Integration tests — Auth Flow
@@ -79,10 +79,10 @@ describe('Auth Flow Integration', () => {
       };
 
       mockGetSession.mockResolvedValue({ data: { session: mockSession }, error: null });
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
       const result = await supabase.auth.getSession();
-      
+
       expect(result.data.session).toBeDefined();
       expect(result.data.session?.user.id).toBe('user-123');
       expect(result.error).toBeNull();
@@ -90,10 +90,10 @@ describe('Auth Flow Integration', () => {
 
     it('should return null session when not authenticated', async () => {
       mockGetSession.mockResolvedValue({ data: { session: null }, error: null });
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
       const result = await supabase.auth.getSession();
-      
+
       expect(result.data.session).toBeNull();
     });
 
@@ -102,10 +102,10 @@ describe('Auth Flow Integration', () => {
         data: { session: null },
         error: { message: 'Network error', status: 500 },
       });
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
       const result = await supabase.auth.getSession();
-      
+
       expect(result.error).toBeDefined();
       expect(result.error?.message).toBe('Network error');
     });
@@ -118,13 +118,13 @@ describe('Auth Flow Integration', () => {
         data: { user: mockUser, session: { access_token: 'new-token' } },
         error: null,
       });
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
       const result = await supabase.auth.signInWithPassword({
         email: 'test@example.com',
         password: 'SecurePass123!',
       });
-      
+
       expect(result.data.user?.id).toBe('user-123');
       expect(result.error).toBeNull();
     });
@@ -134,13 +134,13 @@ describe('Auth Flow Integration', () => {
         data: { user: null, session: null },
         error: { message: 'Invalid login credentials', status: 400 },
       });
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
       const result = await supabase.auth.signInWithPassword({
         email: 'wrong@example.com',
         password: 'bad-password',
       });
-      
+
       expect(result.data.user).toBeNull();
       expect(result.error?.message).toContain('Invalid login credentials');
     });
@@ -149,10 +149,10 @@ describe('Auth Flow Integration', () => {
   describe('Sign Out Flow', () => {
     it('should clear session on sign out', async () => {
       mockSignOut.mockResolvedValue({ error: null });
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
       const result = await supabase.auth.signOut();
-      
+
       expect(result.error).toBeNull();
       expect(mockSignOut).toHaveBeenCalled();
     });
@@ -170,10 +170,10 @@ describe('Auth Flow Integration', () => {
         },
         error: null,
       });
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
       const result = await supabase.auth.refreshSession();
-      
+
       expect(result.data.session?.access_token).toBe('refreshed-token');
       expect(result.error).toBeNull();
     });
@@ -183,10 +183,10 @@ describe('Auth Flow Integration', () => {
         data: { session: null },
         error: { message: 'Token expired', status: 401 },
       });
-      
+
       const { supabase } = await import('@/integrations/supabase/client');
       const result = await supabase.auth.refreshSession();
-      
+
       expect(result.data.session).toBeNull();
       expect(result.error?.status).toBe(401);
     });
@@ -197,7 +197,7 @@ describe('Auth Flow Integration', () => {
       const callback = vi.fn();
       const { supabase } = await import('@/integrations/supabase/client');
       const { data } = supabase.auth.onAuthStateChange(callback);
-      
+
       expect(data.subscription).toBeDefined();
       expect(data.subscription.unsubscribe).toBeDefined();
       expect(mockOnAuthStateChange).toHaveBeenCalledWith(callback);
