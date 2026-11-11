@@ -186214,6 +186214,15 @@
           "jobname": "capture-degraded-rpc-plans",
           "schedule": "*/15 * * * *",
           "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": " SELECT public.cleanup_cron_job_run_details(7); ",
+          "database": "postgres",
+          "jobid": 858,
+          "jobname": "cleanup_cron_job_run_details_daily",
+          "schedule": "37 4 * * *",
+          "username": "postgres"
         }
       ]
     },
@@ -191553,6 +191562,43 @@
         "name": "cleanup_behavioral_regen_queue",
         "owner": "postgres",
         "returns": "TABLE(deleted_success integer, parked_dead_letter integer, retention_days integer, max_attempts integer)",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "_dias integer",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [
+            "858:cleanup_cron_job_run_details_daily"
+          ],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": "Apaga execucoes do pg_cron com mais de _dias (default 7) de cron.job_run_details. Agendada em cleanup_cron_job_run_details_daily.",
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "895605def3603734",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "cleanup_cron_job_run_details",
+        "owner": "postgres",
+        "returns": "bigint",
         "schema": "public",
         "security_definer": true,
         "strict": false,

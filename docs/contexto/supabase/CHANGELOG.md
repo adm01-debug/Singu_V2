@@ -2,6 +2,11 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-11 13:55 UTC
+
+- **cron jobs** adicionado (1): `858:cleanup_cron_job_run_details_daily`
+- **functions** adicionado (1): `public.cleanup_cron_job_run_details(_dias integer)`
+
 ## 2026-11-11 01:16 UTC
 
 - **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_14`

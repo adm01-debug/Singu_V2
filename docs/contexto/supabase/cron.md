@@ -24,3 +24,4 @@ Horários em UTC. Execuções recentes em `cron-runs.md`.
 | 291 | ai-gateway-metrics-drop-old | `0 4 * * 0` | sim | postgres | postgres | `SELECT public.drop_old_ai_gateway_metrics_partitions(90);` |
 | 292 | cleanup_rpc_perf_samples_daily | `30 3 * * *` | sim | postgres | postgres | `SELECT public.cleanup_rpc_perf_samples();` |
 | 293 | capture-degraded-rpc-plans | `*/15 * * * *` | sim | postgres | postgres | `SELECT public.capture_degraded_rpc_plans();` |
+| 858 | cleanup_cron_job_run_details_daily | `37 4 * * *` | sim | postgres | postgres | ` SELECT public.cleanup_cron_job_run_details(7); ` |
