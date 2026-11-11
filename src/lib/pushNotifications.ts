@@ -4,7 +4,7 @@ import { logger } from "@/lib/logger";
 // Chave VAPID PÚBLICA do projeto (é pública por definição). A privada vive só no secret VAPID_PRIVATE_KEY das edge functions.
 // A chave que existia aqui era o EXEMPLO público da biblioteca web-push (a privada correspondente é pública): quem a usasse
 // podia enviar push em nome do app. Pode ser sobrescrita no build por VITE_VAPID_PUBLIC_KEY.
-const VAPID_PUBLIC_KEY: string = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined)?.trim() || 'BAJKcL3nMj8dessmzBsyQskJAd3_7wsX4KstjX7Tk3XwA97DikYGgjodxpw9SoZr_fl1yGjbDu7Wg9OpLJUodTI';
+const VAPID_PUBLIC_KEY: string = (import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined)?.trim() || 'BMDBjwD-dcEXU9-8Vrtv8xEnZE_Kb4Fga3USqiCjuIXwSOkOcBYb6n0qCFQ0Yhb7tY5HDfwN4f9CM2SltnkwcNA';
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
