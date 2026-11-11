@@ -99,7 +99,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -138,7 +138,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -172,7 +172,7 @@
    "tabelas": [],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "buckets": [],
    "chama_edges": [],
@@ -204,7 +204,7 @@
    "tabelas": [],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "buckets": [],
    "chama_edges": [],
@@ -237,7 +237,7 @@
    "tabelas": [],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "buckets": [],
    "chama_edges": [],
@@ -274,7 +274,7 @@
     "execute_readonly_query"
    ],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -648,7 +648,7 @@
    "rpcs": [],
    "env": [
     "CRON_SECRET",
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -762,7 +762,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -797,7 +797,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -832,7 +832,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -967,7 +967,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -1035,7 +1035,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -1139,7 +1139,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -1337,7 +1337,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -1664,7 +1664,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -1732,7 +1732,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -1770,7 +1770,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -1876,7 +1876,7 @@
     "save_behavioral_profile_if_fresh"
    ],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
@@ -1916,7 +1916,7 @@
    "tabelas": [],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "buckets": [],
    "chama_edges": [],
@@ -2461,7 +2461,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -2535,7 +2535,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -2609,7 +2609,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -2645,7 +2645,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -2712,7 +2712,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -2962,7 +2962,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -3194,7 +3194,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -3235,7 +3235,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -3384,7 +3384,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -3539,9 +3539,9 @@
     "get_territory_performance"
    ],
    "env": [
+    "DEEPSEEK_API_KEY",
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
     "EXTERNAL_SUPABASE_URL",
-    "LOVABLE_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -3644,7 +3644,7 @@
     "search_products_semantic"
    ],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -3677,7 +3677,7 @@
    "tabelas": [],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "buckets": [],
    "chama_edges": [],
@@ -3710,8 +3710,8 @@
    "tabelas": [],
    "rpcs": [],
    "env": [
-    "ELEVENLABS_API_KEY",
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY",
+    "ELEVENLABS_API_KEY"
    ],
    "buckets": [],
    "chama_edges": [],
@@ -3747,7 +3747,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -3860,7 +3860,7 @@
    ],
    "rpcs": [],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2f9e3fe3cf` · branch `main` · 2026-11-11 19:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ae084d5a95` · branch `main` · 2026-11-11 23:14 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1226,6 +1226,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `delay_tactic` | escreve | `src/hooks/useAdvancedTriggers.ts` |
 | `type` | `deleted` | escreve | `src/hooks/useInteractions.ts` |
 | `type` | `direct_judgment` | escreve | `src/types/carnegie-extended.ts` |
+| `type` | `disabled` | escreve | `supabase/functions/_shared/fetch-utils.ts` |
 | `type` | `disc` | escreve | `src/components/nlp/CommunicationCoherencePanel.tsx`<br>`src/components/nlp/NLPRealtimeCoach.tsx` |
 | `type` | `divider` | compara, escreve | `src/components/email-builder/EmailBuilder.tsx`<br>`src/components/email-builder/types.ts`<br>`src/lib/emailBuilderRenderer.ts`<br>`src/pages/PublicLandingPage.tsx` |
 | `type` | `ebook` | escreve | `src/hooks/useLeadMagnets.ts`<br>`src/pages/MarketingHub.tsx` |
@@ -1428,8 +1429,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `completed` | compara, escreve | `src/components/company-detail/CompanyCommercialTab.tsx`<br>`src/components/contact-detail/commercial-tab/TasksCard.tsx`<br>`src/components/gamification/UserGoalsWidget.tsx`<br>`src/components/lux/LuxHistoryTimeline.tsx`<br>`src/components/lux/LuxIntelligencePanel.tsx`<br>… +9 |
 | `status` | `connected` | compara | `src/components/whatsapp/WhatsAppDashboard.tsx` |
-| `status` | `critical` | compara | `src/components/admin/MttaAutoAckHeartbeatCard.tsx`<br>`src/hooks/useClientHealth.ts`<br>`src/hooks/usePortfolioHealth.ts` |
-| … +174 linhas — lista completa em `context.json` | | | |
+| … +175 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -3062,7 +3062,7 @@ _nenhum item encontrado_
   ```
 - **generateAiRecommendations(payload: { territories: TerritoryRow[]; performance: TerritoryPerformanceRow[]; underserved: TerritoryRow[]; overserved:)** — `supabase/functions/territory-optimization/index.ts`
   ```
-  const apiKey = Deno.env.get("LOVABLE_API_KEY"); if (!apiKey) { console.warn("[territory-optimization] LOVABLE_API_KEY missing — heuristic only"); return []; } const summary = { total_territories: payload.territories.length, coverage_pct: Math.round(payload.coverage * 100), gini: Number(payload.giniIndex.toFixed(2)), territories: payload.territories.slice(0, 25).map((t) => ({ id: t.id, name: t.name, state: t.state, assigned_to_name: t.assigned_to_name, companies: t.company_count ?? 0, contacts: t …
+  const apiKey = Deno.env.get("DEEPSEEK_API_KEY"); if (!apiKey) { console.warn("[territory-optimization] DEEPSEEK_API_KEY missing — heuristic only"); return []; } const summary = { total_territories: payload.territories.length, coverage_pct: Math.round(payload.coverage * 100), gini: Number(payload.giniIndex.toFixed(2)), territories: payload.territories.slice(0, 25).map((t) => ({ id: t.id, name: t.name, state: t.state, assigned_to_name: t.assigned_to_name, companies: t.company_count ?? 0, contacts: …
   ```
 - **generateEmailHtml(digest: WeeklyDigestData)** — `supabase/functions/weekly-digest/index.ts`
   ```

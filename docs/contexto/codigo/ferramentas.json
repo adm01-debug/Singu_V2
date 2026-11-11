@@ -850,6 +850,8 @@
    "BITRIX_PORTAL_URL",
    "BITRIX_WEBHOOK_URL",
    "CRON_SECRET",
+   "DEEPSEEK_API_KEY",
+   "DEEPSEEK_MODEL",
    "DUAL_WRITE_TABLES",
    "ELEVENLABS_API_KEY",
    "ENRICHLAYER_API_KEY",
@@ -1009,6 +1011,14 @@
     "arquivos": 3
    },
    {
+    "host": "api.deepseek.com",
+    "arquivos": 2
+   },
+   {
+    "host": "api.lovable.dev",
+    "arquivos": 2
+   },
+   {
     "host": "cdnjs.cloudflare.com",
     "arquivos": 2
    },
@@ -1054,10 +1064,6 @@
    },
    {
     "host": "api.bitrix24.com",
-    "arquivos": 1
-   },
-   {
-    "host": "api.lovable.dev",
     "arquivos": 1
    },
    {
@@ -1279,6 +1285,7 @@
    "BITRIX_CLIENT_SECRET",
    "BITRIX_WEBHOOK_URL",
    "CRON_SECRET",
+   "DEEPSEEK_API_KEY",
    "ELEVENLABS_API_KEY",
    "ENRICHLAYER_API_KEY",
    "EVOLUTION_API_KEY",

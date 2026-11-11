@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `2f9e3fe3cffa30aaa8ae0a44ef4073d56c6e5a4a` (2026-11-11T18:30:43Z).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `ae084d5a953cac4058b87fba1c3ec93c4caf0fc3` (2026-11-11T22:49:49Z).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3211 |
 | arquivos_codigo | 2208 |
-| linhas_codigo | 412617 |
+| linhas_codigo | 412644 |
 | rotas | 114 |
 | rotas_http_backend | 11 |
 | vistas_por_id | 0 |
@@ -393,9 +393,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 
 ## Integrações externas
 - SDKs: ElevenLabs, Supabase, react-query, zod
-- hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, x.supabase.co, api.elevenlabs.io, wa.me, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.supabase.com, singu-v2.vercel.app, cdnjs.cloudflare.com, dialogue-diamond.lovable.app, evil.com
+- hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, x.supabase.co, api.elevenlabs.io, wa.me, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.supabase.com, singu-v2.vercel.app, api.deepseek.com, api.lovable.dev, cdnjs.cloudflare.com
 - webhooks recebidos: nenhum
-- env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, N8N_LUX_WEBHOOK_URL, TWILIO_API_KEY
+- env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, DEEPSEEK_API_KEY, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, N8N_LUX_WEBHOOK_URL, TWILIO_API_KEY
 
 ## Permissões / papéis
 - papéis no código: user (38), system (32), status (30), alert (24), group (18), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), admin (1), agent (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), sup (1), tab (1), tablist (1)
@@ -421,8 +421,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 20704 nós · 35253 arestas · 2065 comunidades · grafo do commit `2f9e3fe3`
-- comunidades maiores: ref_components (324), lucide-react (321), vitest (321), ref_types (304), _shared/auth.ts (269), useAuth (266), ref_hooks (257), ref_lib (256), react-router-dom (244), framer-motion (236), react (232), 📖 Dicionário de Dados — SINGU CRM (226)
+- 20707 nós · 35257 arestas · 2100 comunidades · grafo do commit `ae084d5a`
+- comunidades maiores: _shared/auth.ts (287), ref_hooks (276), ref_types (272), framer-motion (260), ref_lib (258), react-router-dom (244), useAuth (229), 📖 Dicionário de Dados — SINGU CRM (226), ref_components (225), lucide-react (221), react (216), date-fns (191)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), mig_die() (scripts/migration/_lib.sh), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -556,6 +556,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-11 `ae084d5a` chore: inventario do estado real [auto] (#198)
+- 2026-11-11 `97eced48` feat: troca a IA do gateway Lovable pelo DeepSeek (#197)
 - 2026-11-11 `2f9e3fe3` chore: inventario do estado real [auto] (#194)
 - 2026-11-11 `b73e889c` chore: inventario do estado real [auto] (#191)
 - 2026-11-11 `1764764e` fix(baseline): redefine gate DEFINER de 109 para 110 apos retencao aplicada em prod (#193)
@@ -569,8 +571,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-09 `1fecfa69` fix(push): um único service worker com os handlers de push (A-007) (#184)
 - 2026-11-09 `ecfcdf07` fix(config): alinha o project_id do config.toml ao projeto Supabase canônico e trava divergência (#183)
 - 2026-11-09 `36fc1e23` build(deps): bump actions/download-artifact from 7.0.0 to 8.0.2 (#181)
-- 2026-11-09 `f5438f28` build(deps): bump the minor-and-patch group with 6 updates (#182)
-- 2026-11-08 `b7f73b43` fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

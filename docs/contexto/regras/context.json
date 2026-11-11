@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "2f9e3fe3cffa30aaa8ae0a44ef4073d56c6e5a4a",
+  "sha": "ae084d5a953cac4058b87fba1c3ec93c4caf0fc3",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-11 19:48 UTC",
+  "generated_at": "2026-11-11 23:14 UTC",
   "files_total": 3317,
   "code_files": 2861,
-  "code_lines": 407964
+  "code_lines": 407991
  },
  "version": "1.3.2",
- "facts_hash": "8fec8b513a28e1ee",
+ "facts_hash": "aa18abe47667a582",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -61740,7 +61740,7 @@
      "abm_whitespace_opportunities"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -61748,7 +61748,7 @@
     "invokes": [],
     "doc": "",
     "errors": [
-     "LOVABLE_API_KEY not configured",
+     "DEEPSEEK_API_KEY not configured",
      "Lovable AI error: ${response.status}",
      "ai_gateway_rate_limited",
      "insufficient_credits"
@@ -61771,7 +61771,7 @@
      "contacts"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -61792,7 +61792,7 @@
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [],
     "env": [
-     "LOVABLE_API_KEY"
+     "DEEPSEEK_API_KEY"
     ],
     "external": [],
     "invokes": [],
@@ -61811,13 +61811,13 @@
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [],
     "env": [
-     "LOVABLE_API_KEY"
+     "DEEPSEEK_API_KEY"
     ],
     "external": [],
     "invokes": [],
     "doc": "",
     "errors": [
-     "LOVABLE_API_KEY not configured"
+     "DEEPSEEK_API_KEY not configured"
     ],
     "side_effects": [],
     "webhook_events": [],
@@ -61832,14 +61832,14 @@
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [],
     "env": [
-     "LOVABLE_API_KEY"
+     "DEEPSEEK_API_KEY"
     ],
     "external": [],
     "invokes": [],
     "doc": "",
     "errors": [
      "AI gateway error: ${response.status}",
-     "LOVABLE_API_KEY is not configured",
+     "DEEPSEEK_API_KEY is not configured",
      "No tool call response received"
     ],
     "side_effects": [],
@@ -61857,7 +61857,7 @@
      "user_roles"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -61865,7 +61865,7 @@
     "invokes": [],
     "doc": "",
     "errors": [
-     "LOVABLE_API_KEY is not configured",
+     "DEEPSEEK_API_KEY is not configured",
      "No JSON in response"
     ],
     "side_effects": [],
@@ -62138,7 +62138,7 @@
     ],
     "env": [
      "CRON_SECRET",
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -62220,7 +62220,7 @@
      "suggested_life_events"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -62243,7 +62243,7 @@
      "conversation_analyses"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -62266,7 +62266,7 @@
      "conversational_search_cache"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -62274,7 +62274,7 @@
     "invokes": [],
     "doc": "",
     "errors": [
-     "LOVABLE_API_KEY não configurada"
+     "DEEPSEEK_API_KEY não configurada"
     ],
     "side_effects": [],
     "webhook_events": [],
@@ -62362,7 +62362,7 @@
      "deal_rooms"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -62407,7 +62407,7 @@
      "interactions"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
@@ -62416,7 +62416,7 @@
     "doc": "",
     "errors": [
      "AI Gateway error: ${response.status}",
-     "LOVABLE_API_KEY is not configured",
+     "DEEPSEEK_API_KEY is not configured",
      "No tool call in response"
     ],
     "side_effects": [],
@@ -62483,7 +62483,7 @@
      "disc_communication_logs"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -62622,7 +62622,7 @@
      "interactions"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
@@ -62868,7 +62868,7 @@
      "ficha360_conversation_summaries"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -62911,7 +62911,7 @@
      "forecast_quota_settings"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -62937,7 +62937,7 @@
      "forecast_periods"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -63010,7 +63010,7 @@
      "whatsapp_messages"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
@@ -63032,13 +63032,13 @@
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [],
     "env": [
-     "LOVABLE_API_KEY"
+     "DEEPSEEK_API_KEY"
     ],
     "external": [],
     "invokes": [],
     "doc": "",
     "errors": [
-     "LOVABLE_API_KEY is not configured"
+     "DEEPSEEK_API_KEY is not configured"
     ],
     "side_effects": [],
     "webhook_events": [],
@@ -63424,7 +63424,7 @@
      "meeting_summaries"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
@@ -63476,7 +63476,7 @@
      "whatsapp_messages"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -63528,7 +63528,7 @@
      "interactions"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
@@ -63553,7 +63553,7 @@
      "crm_objection_intelligence"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -63602,7 +63602,7 @@
      "sales_playbooks"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
@@ -63612,8 +63612,8 @@
     "errors": [
      "AI não retornou estrutura esperada",
      "Créditos de IA esgotados. Adicione em Settings > Workspace > Usage.",
+     "DEEPSEEK_API_KEY missing",
      "Falha na geração via IA",
-     "LOVABLE_API_KEY missing",
      "Rate limit excedido. Tente em alguns segundos.",
      "unauthorized"
     ],
@@ -63785,7 +63785,7 @@
      "semantic_search_cache"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
@@ -63967,7 +63967,7 @@
      "life_events"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -63994,7 +63994,7 @@
      "social_profiles"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
@@ -64003,7 +64003,7 @@
     "doc": "",
     "errors": [
      "AI gateway error: ${response.status}",
-     "LOVABLE_API_KEY is not configured"
+     "DEEPSEEK_API_KEY is not configured"
     ],
     "side_effects": [],
     "webhook_events": [],
@@ -64100,7 +64100,7 @@
      "interactions"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -64108,7 +64108,7 @@
     "invokes": [],
     "doc": "",
     "errors": [
-     "LOVABLE_API_KEY is not configured",
+     "DEEPSEEK_API_KEY is not configured",
      "O gateway não retornou uma sugestão válida"
     ],
     "side_effects": [],
@@ -64214,9 +64214,9 @@
      "sales_team_members"
     ],
     "env": [
+     "DEEPSEEK_API_KEY",
      "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
      "EXTERNAL_SUPABASE_URL",
-     "LOVABLE_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -64289,7 +64289,7 @@
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
@@ -64300,7 +64300,7 @@
      "AI did not return structured output",
      "AI gateway error ${resp.status}: ${t}",
      "Créditos esgotados. Adicione créditos no workspace.",
-     "LOVABLE_API_KEY not configured",
+     "DEEPSEEK_API_KEY not configured",
      "Rate limit exceeded. Tente novamente em instantes."
     ],
     "side_effects": [],
@@ -64316,13 +64316,13 @@
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [],
     "env": [
-     "LOVABLE_API_KEY"
+     "DEEPSEEK_API_KEY"
     ],
     "external": [],
     "invokes": [],
     "doc": "",
     "errors": [
-     "LOVABLE_API_KEY is not configured"
+     "DEEPSEEK_API_KEY is not configured"
     ],
     "side_effects": [],
     "webhook_events": [],
@@ -64337,8 +64337,8 @@
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [],
     "env": [
-     "ELEVENLABS_API_KEY",
-     "LOVABLE_API_KEY"
+     "DEEPSEEK_API_KEY",
+     "ELEVENLABS_API_KEY"
     ],
     "external": [],
     "invokes": [],
@@ -64360,7 +64360,7 @@
      "whatsapp_messages"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -64369,7 +64369,7 @@
     "doc": "",
     "errors": [
      "AI Gateway error: ${response.status}",
-     "LOVABLE_API_KEY is not configured"
+     "DEEPSEEK_API_KEY is not configured"
     ],
     "side_effects": [],
     "webhook_events": [],
@@ -64440,7 +64440,7 @@
      "win_loss_records"
     ],
     "env": [
-     "LOVABLE_API_KEY",
+     "DEEPSEEK_API_KEY",
      "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
@@ -70378,7 +70378,7 @@
   {
    "module": "supabase/functions",
    "files": 171,
-   "lines": 26385,
+   "lines": 26412,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -76463,6 +76463,45 @@
    "DB_URL": [
     "scripts/ai-context/gerar.unit.mjs"
    ],
+   "DEEPSEEK_API_KEY": [
+    "supabase/functions/abm-whitespace-analyzer/index.ts",
+    "supabase/functions/ai-assistant/index.ts",
+    "supabase/functions/ai-email-refine/index.ts",
+    "supabase/functions/ai-suggest-mapping/index.ts",
+    "supabase/functions/ai-writing-assistant/index.ts",
+    "supabase/functions/ask-crm/index.ts",
+    "supabase/functions/connection-anomaly-detector/index.ts",
+    "supabase/functions/conversation-analyzer/index.ts",
+    "supabase/functions/conversation-coaching-digest/index.ts",
+    "supabase/functions/conversational-search/index.ts",
+    "supabase/functions/deal-room-health/index.ts",
+    "supabase/functions/demand-forecast/index.ts",
+    "supabase/functions/disc-analyzer/index.ts",
+    "supabase/functions/email-thread-summary/index.ts",
+    "supabase/functions/ficha360-conversation-summary/index.ts",
+    "supabase/functions/forecast-analyzer/index.ts",
+    "supabase/functions/forecast-narrative/index.ts",
+    "supabase/functions/generate-behavioral-profile/index.ts",
+    "supabase/functions/generate-insights/index.ts",
+    "supabase/functions/meeting-summary/index.ts",
+    "supabase/functions/next-best-action/index.ts",
+    "supabase/functions/objection-context-summary/index.ts",
+    "supabase/functions/objection-handler/index.ts",
+    "supabase/functions/playbook-generator/index.ts",
+    "supabase/functions/semantic-search/index.ts",
+    "supabase/functions/smart-reminders/index.ts",
+    "supabase/functions/social-behavior-analyzer/index.ts",
+    "supabase/functions/suggest-next-action/index.ts",
+    "supabase/functions/territory-optimization/index.ts",
+    "supabase/functions/visual-search/index.ts",
+    "supabase/functions/voice-agent/index.ts",
+    "supabase/functions/voice-ai-health/index.ts",
+    "supabase/functions/voice-to-text/index.ts",
+    "supabase/functions/win-loss-analyzer/index.ts"
+   ],
+   "DEEPSEEK_MODEL": [
+    "supabase/functions/_shared/fetch-utils.ts"
+   ],
    "DEPLOY_TIMEOUT_TEMPO_REAL": [
     "scripts/check-deploy-timeout.test.mjs"
    ],
@@ -76675,41 +76714,7 @@
     "scripts/migration/compliance/lgpd-snapshot.ts"
    ],
    "LOVABLE_API_KEY": [
-    "supabase/functions/abm-whitespace-analyzer/index.ts",
-    "supabase/functions/ai-assistant/index.ts",
-    "supabase/functions/ai-email-refine/index.ts",
-    "supabase/functions/ai-suggest-mapping/index.ts",
-    "supabase/functions/ai-writing-assistant/index.ts",
-    "supabase/functions/ask-crm/index.ts",
-    "supabase/functions/connection-anomaly-detector/index.ts",
-    "supabase/functions/conversation-analyzer/index.ts",
-    "supabase/functions/conversation-coaching-digest/index.ts",
-    "supabase/functions/conversational-search/index.ts",
-    "supabase/functions/deal-room-health/index.ts",
-    "supabase/functions/demand-forecast/index.ts",
-    "supabase/functions/disc-analyzer/index.ts",
-    "supabase/functions/email-thread-summary/index.ts",
-    "supabase/functions/ficha360-conversation-summary/index.ts",
-    "supabase/functions/forecast-analyzer/index.ts",
-    "supabase/functions/forecast-narrative/index.ts",
-    "supabase/functions/generate-behavioral-profile/index.ts",
-    "supabase/functions/generate-insights/index.ts",
-    "supabase/functions/meeting-summary/index.ts",
-    "supabase/functions/next-best-action/index.ts",
-    "supabase/functions/objection-context-summary/index.ts",
-    "supabase/functions/objection-handler/index.ts",
-    "supabase/functions/playbook-generator/index.ts",
-    "supabase/functions/semantic-search/index.ts",
-    "supabase/functions/send-sms-campaign/index.ts",
-    "supabase/functions/smart-reminders/index.ts",
-    "supabase/functions/social-behavior-analyzer/index.ts",
-    "supabase/functions/suggest-next-action/index.ts",
-    "supabase/functions/territory-optimization/index.ts",
-    "supabase/functions/visual-search/index.ts",
-    "supabase/functions/voice-agent/index.ts",
-    "supabase/functions/voice-ai-health/index.ts",
-    "supabase/functions/voice-to-text/index.ts",
-    "supabase/functions/win-loss-analyzer/index.ts"
+    "supabase/functions/send-sms-campaign/index.ts"
    ],
    "MAINTENANCE_TEST_": [
     "scripts/maintenance/tests/hooks.mjs",
@@ -84798,7 +84803,7 @@
    },
    {
     "file": "supabase/functions/abm-whitespace-analyzer/index.ts",
-    "msg": "LOVABLE_API_KEY not configured"
+    "msg": "DEEPSEEK_API_KEY not configured"
    },
    {
     "file": "supabase/functions/abm-whitespace-analyzer/index.ts",
@@ -84814,7 +84819,7 @@
    },
    {
     "file": "supabase/functions/ai-suggest-mapping/index.ts",
-    "msg": "LOVABLE_API_KEY not configured"
+    "msg": "DEEPSEEK_API_KEY not configured"
    },
    {
     "file": "supabase/functions/ai-writing-assistant/index.ts",
@@ -84822,7 +84827,7 @@
    },
    {
     "file": "supabase/functions/ai-writing-assistant/index.ts",
-    "msg": "LOVABLE_API_KEY is not configured"
+    "msg": "DEEPSEEK_API_KEY is not configured"
    },
    {
     "file": "supabase/functions/ai-writing-assistant/index.ts",
@@ -84830,7 +84835,7 @@
    },
    {
     "file": "supabase/functions/ask-crm/index.ts",
-    "msg": "LOVABLE_API_KEY is not configured"
+    "msg": "DEEPSEEK_API_KEY is not configured"
    },
    {
     "file": "supabase/functions/ask-crm/index.ts",
@@ -84890,7 +84895,7 @@
    },
    {
     "file": "supabase/functions/conversational-search/index.ts",
-    "msg": "LOVABLE_API_KEY não configurada"
+    "msg": "DEEPSEEK_API_KEY não configurada"
    },
    {
     "file": "supabase/functions/deal-room-buyer-view/index.ts",
@@ -84902,7 +84907,7 @@
    },
    {
     "file": "supabase/functions/demand-forecast/index.ts",
-    "msg": "LOVABLE_API_KEY is not configured"
+    "msg": "DEEPSEEK_API_KEY is not configured"
    },
    {
     "file": "supabase/functions/demand-forecast/index.ts",
@@ -85002,7 +85007,7 @@
    },
    {
     "file": "supabase/functions/generate-insights/index.ts",
-    "msg": "LOVABLE_API_KEY is not configured"
+    "msg": "DEEPSEEK_API_KEY is not configured"
    },
    {
     "file": "supabase/functions/intent-pixel-snippet/index.ts",
@@ -85066,11 +85071,11 @@
    },
    {
     "file": "supabase/functions/playbook-generator/index.ts",
-    "msg": "Falha na geração via IA"
+    "msg": "DEEPSEEK_API_KEY missing"
    },
    {
     "file": "supabase/functions/playbook-generator/index.ts",
-    "msg": "LOVABLE_API_KEY missing"
+    "msg": "Falha na geração via IA"
    },
    {
     "file": "supabase/functions/playbook-generator/index.ts",
@@ -85190,7 +85195,7 @@
    },
    {
     "file": "supabase/functions/social-behavior-analyzer/index.ts",
-    "msg": "LOVABLE_API_KEY is not configured"
+    "msg": "DEEPSEEK_API_KEY is not configured"
    },
    {
     "file": "supabase/functions/social-events-detector/index.ts",
@@ -85202,7 +85207,7 @@
    },
    {
     "file": "supabase/functions/suggest-next-action/index.ts",
-    "msg": "LOVABLE_API_KEY is not configured"
+    "msg": "DEEPSEEK_API_KEY is not configured"
    },
    {
     "file": "supabase/functions/suggest-next-action/index.ts",
@@ -85238,7 +85243,7 @@
    },
    {
     "file": "supabase/functions/visual-search/index.ts",
-    "msg": "LOVABLE_API_KEY not configured"
+    "msg": "DEEPSEEK_API_KEY not configured"
    },
    {
     "file": "supabase/functions/visual-search/index.ts",
@@ -85246,7 +85251,7 @@
    },
    {
     "file": "supabase/functions/voice-agent/index.ts",
-    "msg": "LOVABLE_API_KEY is not configured"
+    "msg": "DEEPSEEK_API_KEY is not configured"
    },
    {
     "file": "supabase/functions/voice-to-text/index.ts",
@@ -85254,7 +85259,7 @@
    },
    {
     "file": "supabase/functions/voice-to-text/index.ts",
-    "msg": "LOVABLE_API_KEY is not configured"
+    "msg": "DEEPSEEK_API_KEY is not configured"
    },
    {
     "file": "supabase/functions/win-loss-analyzer/index.ts",
@@ -108571,6 +108576,12 @@
    },
    {
     "file": "supabase/functions/_shared/fetch-utils.ts",
+    "field": "type",
+    "value": "disabled",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/fetch-utils.ts",
     "field": "status",
     "value": "success",
     "kind": "escreve"
@@ -114539,7 +114550,7 @@
     "file": "supabase/functions/territory-optimization/index.ts",
     "name": "generateAiRecommendations",
     "params": "payload: { territories: TerritoryRow[]; performance: TerritoryPerformanceRow[]; underserved: TerritoryRow[]; overserved:",
-    "body": "const apiKey = Deno.env.get(\"LOVABLE_API_KEY\"); if (!apiKey) { console.warn(\"[territory-optimization] LOVABLE_API_KEY missing — heuristic only\"); return []; } const summary = { total_territories: payload.territories.length, coverage_pct: Math.round(payload.coverage * 100), gini: Number(payload.giniIndex.toFixed(2)), territories: payload.territories.slice(0, 25).map((t) => ({ id: t.id, name: t.name, state: t.state, assigned_to_name: t.assigned_to_name, companies: t.company_count ?? 0, contacts: t …"
+    "body": "const apiKey = Deno.env.get(\"DEEPSEEK_API_KEY\"); if (!apiKey) { console.warn(\"[territory-optimization] DEEPSEEK_API_KEY missing — heuristic only\"); return []; } const summary = { total_territories: payload.territories.length, coverage_pct: Math.round(payload.coverage * 100), gini: Number(payload.giniIndex.toFixed(2)), territories: payload.territories.slice(0, 25).map((t) => ({ id: t.id, name: t.name, state: t.state, assigned_to_name: t.assigned_to_name, companies: t.company_count ?? 0, contacts: …"
    },
    {
     "file": "supabase/functions/weekly-digest/index.ts",
@@ -150008,6 +150019,9 @@
      ],
      "skepticism": [
       "escreve:src/types/triggers-advanced.ts"
+     ],
+     "disabled": [
+      "escreve:supabase/functions/_shared/fetch-utils.ts"
      ],
      "AAAA": [
       "compara:supabase/functions/_shared/safe-http_test.ts"
@@ -219021,7 +219035,7 @@
   },
   "supabase/functions/_shared/fetch-utils.ts": {
    "path": "supabase/functions/_shared/fetch-utils.ts",
-   "lines": 177,
+   "lines": 204,
    "exports": [
     "const AI_TIMEOUT_MS",
     "const SCRAPE_TIMEOUT_MS",
@@ -219029,10 +219043,12 @@
     "const HEALTH_TIMEOUT_MS",
     "function fetchWithTimeout",
     "function fetchAI",
+    "const DEEPSEEK_CHAT_URL",
     "function fetchScrape",
     "function fetchAPI"
    ],
    "env": [
+    "DEEPSEEK_MODEL",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -219055,6 +219071,11 @@
     }
    ],
    "status_values": [
+    {
+     "field": "type",
+     "value": "disabled",
+     "kind": "escreve"
+    },
     {
      "field": "status",
      "value": "success",
@@ -219961,12 +219982,12 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
    "errors": [
-    "LOVABLE_API_KEY not configured",
+    "DEEPSEEK_API_KEY not configured",
     "Lovable AI error: ${response.status}",
     "ai_gateway_rate_limited",
     "insufficient_credits"
@@ -220115,7 +220136,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -220154,7 +220175,7 @@
    "path": "supabase/functions/ai-email-refine/index.ts",
    "lines": 109,
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "zod": [
     {
@@ -220187,10 +220208,10 @@
    "path": "supabase/functions/ai-suggest-mapping/index.ts",
    "lines": 167,
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "errors": [
-    "LOVABLE_API_KEY not configured"
+    "DEEPSEEK_API_KEY not configured"
    ],
    "zod": [
     {
@@ -220218,11 +220239,11 @@
    "path": "supabase/functions/ai-writing-assistant/index.ts",
    "lines": 328,
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "errors": [
     "AI gateway error: ${response.status}",
-    "LOVABLE_API_KEY is not configured",
+    "DEEPSEEK_API_KEY is not configured",
     "No tool call response received"
    ],
    "zod": [
@@ -220324,12 +220345,12 @@
     "execute_readonly_query"
    ],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
    "errors": [
-    "LOVABLE_API_KEY is not configured",
+    "DEEPSEEK_API_KEY is not configured",
     "No JSON in response"
    ],
    "zod": [
@@ -221082,7 +221103,7 @@
    },
    "env": [
     "CRON_SECRET",
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -221309,7 +221330,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -221708,7 +221729,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -221756,12 +221777,12 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
    "errors": [
-    "LOVABLE_API_KEY não configurada"
+    "DEEPSEEK_API_KEY não configurada"
    ],
    "zod": [
     {
@@ -222106,7 +222127,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -222230,13 +222251,13 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
    "errors": [
     "AI Gateway error: ${response.status}",
-    "LOVABLE_API_KEY is not configured",
+    "DEEPSEEK_API_KEY is not configured",
     "No tool call in response"
    ],
    "status_values": [
@@ -222441,7 +222462,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -222628,7 +222649,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -223610,7 +223631,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -223787,7 +223808,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -223906,7 +223927,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -224062,7 +224083,7 @@
     "save_behavioral_profile_if_fresh"
    ],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
@@ -224209,10 +224230,10 @@
    "path": "supabase/functions/generate-insights/index.ts",
    "lines": 149,
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "errors": [
-    "LOVABLE_API_KEY is not configured"
+    "DEEPSEEK_API_KEY is not configured"
    ],
    "zod": [
     {
@@ -225575,7 +225596,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -225724,7 +225745,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -225939,7 +225960,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -226022,7 +226043,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -226148,15 +226169,15 @@
     }
    ],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
    "errors": [
     "AI não retornou estrutura esperada",
     "Créditos de IA esgotados. Adicione em Settings > Workspace > Usage.",
+    "DEEPSEEK_API_KEY missing",
     "Falha na geração via IA",
-    "LOVABLE_API_KEY missing",
     "Rate limit excedido. Tente em alguns segundos.",
     "unauthorized"
    ],
@@ -226717,7 +226738,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -227489,7 +227510,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -227634,13 +227655,13 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
    "errors": [
     "AI gateway error: ${response.status}",
-    "LOVABLE_API_KEY is not configured"
+    "DEEPSEEK_API_KEY is not configured"
    ],
    "zod": [
     {
@@ -227910,12 +227931,12 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
    "errors": [
-    "LOVABLE_API_KEY is not configured",
+    "DEEPSEEK_API_KEY is not configured",
     "O gateway não retornou uma sugestão válida"
    ],
    "zod": [
@@ -228321,9 +228342,9 @@
     "get_territory_performance"
    ],
    "env": [
+    "DEEPSEEK_API_KEY",
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
     "EXTERNAL_SUPABASE_URL",
-    "LOVABLE_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -228408,7 +228429,7 @@
     {
      "name": "generateAiRecommendations",
      "params": "payload: { territories: TerritoryRow[]; performance: TerritoryPerformanceRow[]; underserved: TerritoryRow[]; overserved:",
-     "body": "const apiKey = Deno.env.get(\"LOVABLE_API_KEY\"); if (!apiKey) { console.warn(\"[territory-optimization] LOVABLE_API_KEY missing — heuristic only\"); return []; } const summary = { total_territories: payload.territories.length, coverage_pct: Math.round(payload.coverage * 100), gini: Number(payload.giniIndex.toFixed(2)), territories: payload.territories.slice(0, 25).map((t) => ({ id: t.id, name: t.name, state: t.state, assigned_to_name: t.assigned_to_name, companies: t.company_count ?? 0, contacts: t …"
+     "body": "const apiKey = Deno.env.get(\"DEEPSEEK_API_KEY\"); if (!apiKey) { console.warn(\"[territory-optimization] DEEPSEEK_API_KEY missing — heuristic only\"); return []; } const summary = { total_territories: payload.territories.length, coverage_pct: Math.round(payload.coverage * 100), gini: Number(payload.giniIndex.toFixed(2)), territories: payload.territories.slice(0, 25).map((t) => ({ id: t.id, name: t.name, state: t.state, assigned_to_name: t.assigned_to_name, companies: t.company_count ?? 0, contacts: …"
     }
    ],
    "percents": [
@@ -228538,7 +228559,7 @@
     "search_products_semantic"
    ],
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -228546,7 +228567,7 @@
     "AI did not return structured output",
     "AI gateway error ${resp.status}: ${t}",
     "Créditos esgotados. Adicione créditos no workspace.",
-    "LOVABLE_API_KEY not configured",
+    "DEEPSEEK_API_KEY not configured",
     "Rate limit exceeded. Tente novamente em instantes."
    ],
    "status_values": [
@@ -228645,10 +228666,10 @@
    "path": "supabase/functions/voice-agent/index.ts",
    "lines": 190,
    "env": [
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY"
    ],
    "errors": [
-    "LOVABLE_API_KEY is not configured"
+    "DEEPSEEK_API_KEY is not configured"
    ],
    "status_values": [
     {
@@ -228787,8 +228808,8 @@
    "path": "supabase/functions/voice-ai-health/index.ts",
    "lines": 166,
    "env": [
-    "ELEVENLABS_API_KEY",
-    "LOVABLE_API_KEY"
+    "DEEPSEEK_API_KEY",
+    "ELEVENLABS_API_KEY"
    ],
    "status_values": [
     {
@@ -228905,13 +228926,13 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
    "errors": [
     "AI Gateway error: ${response.status}",
-    "LOVABLE_API_KEY is not configured"
+    "DEEPSEEK_API_KEY is not configured"
    ],
    "zod": [
     {
@@ -229151,7 +229172,7 @@
     ]
    },
    "env": [
-    "LOVABLE_API_KEY",
+    "DEEPSEEK_API_KEY",
     "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
@@ -232257,10 +232278,67 @@
   }
  },
  "git": {
-  "sha": "2f9e3fe3cffa30aaa8ae0a44ef4073d56c6e5a4a",
+  "sha": "ae084d5a953cac4058b87fba1c3ec93c4caf0fc3",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "ae084d5",
+    "date": "2026-11-11",
+    "author": "github-actions[bot]",
+    "subject": "chore: inventario do estado real [auto] (#198)",
+    "files": [
+     "inventario/estado/banco.json",
+     "inventario/estado/edges.json",
+     "inventario/estado/tabelas-uso.json"
+    ]
+   },
+   {
+    "sha": "97eced4",
+    "date": "2026-11-11",
+    "author": "adm01-debug",
+    "subject": "feat: troca a IA do gateway Lovable pelo DeepSeek (#197)",
+    "files": [
+     "supabase/functions/_shared/behavioral-generation-mock.ts",
+     "supabase/functions/_shared/edge-test-harness.ts",
+     "supabase/functions/_shared/fetch-utils.ts",
+     "supabase/functions/_shared/validation-contract_test.ts",
+     "supabase/functions/abm-whitespace-analyzer/index.ts",
+     "supabase/functions/ai-assistant/index.ts",
+     "supabase/functions/ai-email-refine/index.ts",
+     "supabase/functions/ai-suggest-mapping/index.ts",
+     "supabase/functions/ai-writing-assistant/index.ts",
+     "supabase/functions/ask-crm/index.ts",
+     "supabase/functions/connection-anomaly-detector/index.ts",
+     "supabase/functions/conversation-analyzer/index.ts",
+     "supabase/functions/conversation-coaching-digest/index.ts",
+     "supabase/functions/conversational-search/index.ts",
+     "supabase/functions/deal-room-health/index.ts",
+     "supabase/functions/demand-forecast/index.ts",
+     "supabase/functions/disc-analyzer/index.ts",
+     "supabase/functions/email-thread-summary/index.ts",
+     "supabase/functions/ficha360-conversation-summary/index.ts",
+     "supabase/functions/forecast-analyzer/index.ts",
+     "supabase/functions/forecast-narrative/index.ts",
+     "supabase/functions/generate-behavioral-profile/index.ts",
+     "supabase/functions/generate-insights/index.ts",
+     "supabase/functions/meeting-summary/index.ts",
+     "supabase/functions/next-best-action/index.ts",
+     "supabase/functions/objection-context-summary/index.ts",
+     "supabase/functions/objection-handler/index.ts",
+     "supabase/functions/playbook-generator/index.ts",
+     "supabase/functions/semantic-search/index.ts",
+     "supabase/functions/smart-reminders/index.ts",
+     "supabase/functions/social-behavior-analyzer/index.ts",
+     "supabase/functions/suggest-next-action/index.ts",
+     "supabase/functions/territory-optimization/index.ts",
+     "supabase/functions/visual-search/index.ts",
+     "supabase/functions/voice-agent/index.ts",
+     "supabase/functions/voice-ai-health/index.ts",
+     "supabase/functions/voice-to-text/index.ts",
+     "supabase/functions/win-loss-analyzer/index.ts"
+    ]
+   },
    {
     "sha": "2f9e3fe",
     "date": "2026-11-11",
@@ -233023,57 +233101,19 @@
      "scripts/inventario/gerar-repo.mjs",
      "scripts/inventario/mudou-conteudo.mjs"
     ]
-   },
-   {
-    "sha": "77990bc",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "feat(contexto): produtores autônomos que mantêm o estado real do repositório para agentes de IA (#169)",
-    "files": [
-     ".github/workflows/contexto.yml",
-     ".gitignore",
-     "README.md",
-     "ai-context.config.json",
-     "docs/agentes/contexto-ia.md",
-     "docs/contexto/regras/manual/README.md",
-     "docs/contexto/regras/manual/TEMPLATE-regras-de-negocio.md",
-     "package.json",
-     "scripts/ai-context/README.md",
-     "scripts/ai-context/cenarios.mjs",
-     "scripts/ai-context/gerar.mjs",
-     "scripts/ai-context/gerar.unit.mjs",
-     "scripts/regras_negocio/README.md",
-     "scripts/regras_negocio/generate.py",
-     "scripts/regras_negocio/indice.py",
-     "scripts/regras_negocio/test_generate.py",
-     "scripts/supabase_snapshot/README.md",
-     "scripts/supabase_snapshot/requirements.txt",
-     "scripts/supabase_snapshot/snapshot.py",
-     "scripts/supabase_snapshot/test_snapshot.py"
-    ]
-   },
-   {
-    "sha": "01fc392",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(ci): corrige YAML fatal do CI, secret fantasma e portabilidade dos gate tests (#164)",
-    "files": [
-     ".gitattributes",
-     ".github/workflows/ci.yml",
-     "scripts/check-deploy-timeout.test.mjs",
-     "scripts/check-edge-cors.mjs",
-     "scripts/check-publish-gates.test.mjs",
-     "scripts/check-rls-profiles.test.mjs"
-    ]
    }
   ],
   "hot_files": [
    [
     "inventario/estado/banco.json",
+    5
+   ],
+   [
+    "inventario/estado/edges.json",
     4
    ],
    [
-    "package.json",
+    "inventario/estado/tabelas-uso.json",
     4
    ],
    [
@@ -233083,14 +233123,6 @@
    [
     "CHANGELOG.md",
     4
-   ],
-   [
-    "inventario/estado/edges.json",
-    3
-   ],
-   [
-    "inventario/estado/tabelas-uso.json",
-    3
    ],
    [
     "docs/qa/security-definer-audit.md",
@@ -233117,15 +233149,11 @@
     3
    ],
    [
+    "package.json",
+    3
+   ],
+   [
     "scripts/inventario/banco.sql",
-    3
-   ],
-   [
-    "scripts/supabase_snapshot/snapshot.py",
-    3
-   ],
-   [
-    ".github/workflows/ci.yml",
     3
    ],
    [
@@ -233141,11 +233169,19 @@
     2
    ],
    [
-    ".gitignore",
+    "src/lib/pushNotifications.ts",
     2
    ],
    [
-    "src/lib/pushNotifications.ts",
+    "scripts/migration/storage/verify-counts.ts",
+    2
+   ],
+   [
+    "scripts/check-supabase-project-ref.test.mjs",
+    2
+   ],
+   [
+    "scripts/inventario/gerar-repo.mjs",
     2
    ]
   ]
