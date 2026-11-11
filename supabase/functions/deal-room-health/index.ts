@@ -7,7 +7,7 @@ import { z } from "npm:zod@3.23.8";
 
 const bodySchema = z.object({ room_id: z.string().uuid() });
 
-const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY")!;
+const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY")!;
 const limiter = rateLimit({ windowMs: 60_000, max: 10, message: "Muitas análises. Aguarde antes de tentar novamente." });
 
 Deno.serve(async (req) => {

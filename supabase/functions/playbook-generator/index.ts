@@ -77,8 +77,8 @@ Deno.serve(async (req) => {
     }
     const { scenario, industry, persona, product_context, prompt, save } = parsed.data;
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
+    const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
+    if (!LOVABLE_API_KEY) throw new Error("DEEPSEEK_API_KEY missing");
 
     const systemPrompt = `Você é um especialista em metodologias de vendas B2B (SPIN, MEDDIC, Challenger, Sandler). Gere playbooks práticos, acionáveis e em português brasileiro. Evite jargão genérico — use exemplos concretos. Estruture o playbook com 4-7 seções claras.`;
 

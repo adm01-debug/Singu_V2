@@ -334,7 +334,7 @@ Deno.serve(async (req) => {
     let aiInsights = null;
     if (action === 'analyze') {
       const decayReminders = reminders.filter(r => r.type === 'decay');
-      const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+      const LOVABLE_API_KEY = Deno.env.get('DEEPSEEK_API_KEY');
       if (LOVABLE_API_KEY && decayReminders.length > 0) {
         try {
           const lines = decayReminders.slice(0, 5).map(r =>

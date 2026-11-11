@@ -168,8 +168,8 @@ Deno.serve(async (req) => {
       .flatMap((k) => Array.from(banned[k]).map((l) => `- ${k}: "${l}"`))
       .join('\n');
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) return jsonWithCors({ error: 'LOVABLE_API_KEY ausente' }, 500);
+    const LOVABLE_API_KEY = Deno.env.get('DEEPSEEK_API_KEY');
+    if (!LOVABLE_API_KEY) return jsonWithCors({ error: 'DEEPSEEK_API_KEY ausente' }, 500);
 
     const model = 'google/gemini-2.5-flash';
     const aiResp = await fetchAI('https://ai.gateway.lovable.dev/v1/chat/completions', {

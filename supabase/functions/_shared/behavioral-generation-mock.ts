@@ -1,7 +1,7 @@
 const originalFetch = globalThis.fetch;
 globalThis.fetch = (input, init) => {
   const url = new URL(input instanceof Request ? input.url : String(input));
-  if (url.hostname === 'ai.gateway.lovable.dev') {
+  if (url.hostname === 'api.deepseek.com') {
     return Promise.resolve(Response.json({
       choices: [{ message: { tool_calls: [{ function: { arguments: JSON.stringify({
         summary: 'Análise confirmada', tone: 'direto', communication_style: 'direto',

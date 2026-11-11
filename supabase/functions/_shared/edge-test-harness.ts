@@ -26,7 +26,7 @@ export async function withHandler(
     globalThis.fetch = (input, init) => {
       const url = new URL(input instanceof Request ? input.url : String(input));
       if (url.origin === ${JSON.stringify(base)}) return originalFetch(input, init);
-      if (${mockAI} && url.href === "https://ai.gateway.lovable.dev/v1/chat/completions") {
+      if (${mockAI} && url.href === "https://api.deepseek.com/chat/completions") {
         return Promise.resolve(Response.json({ choices: [{ message: { content: "{inválido}" } }] }));
       }
       return Promise.reject(new Error("Acesso externo proibido no teste: " + url.origin));
@@ -41,7 +41,7 @@ export async function withHandler(
       SUPABASE_ANON_KEY: "anon-teste", SUPABASE_SERVICE_ROLE_KEY: "servico-teste",
       CRON_SECRET: "cron-teste", EVOLUTION_API_SECRET: "evolution-teste", LUX_WEBHOOK_SECRET: "lux-teste",
       ...extraEnv?.(base),
-      ...(mockAI ? { LOVABLE_API_KEY: "ia-simulada" } : {}),
+      ...(mockAI ? { DEEPSEEK_API_KEY: "ia-simulada" } : {}),
     },
     stdin: "piped", stdout: "piped", stderr: "piped",
   }).spawn();

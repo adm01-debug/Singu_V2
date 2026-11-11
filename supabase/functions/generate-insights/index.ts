@@ -30,10 +30,10 @@ Deno.serve(async (req) => {
   if (authResult instanceof Response) return authResult;
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
     if (!LOVABLE_API_KEY) {
       log.error("lovable_key_missing");
-      throw new Error("LOVABLE_API_KEY is not configured");
+      throw new Error("DEEPSEEK_API_KEY is not configured");
     }
 
     const { body: rawBody, error: bodyError } = await guardBody(req, 512 * 1024); // 512 KB — arrays of CRM records

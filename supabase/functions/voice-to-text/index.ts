@@ -85,9 +85,9 @@ Deno.serve(async (req) => {
       return jsonError('Audio content could not be retrieved', 400, req);
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    const LOVABLE_API_KEY = Deno.env.get('DEEPSEEK_API_KEY');
     if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
+      throw new Error('DEEPSEEK_API_KEY is not configured');
     }
 
     const response = await fetchAI('https://ai.gateway.lovable.dev/v1/chat/completions', {

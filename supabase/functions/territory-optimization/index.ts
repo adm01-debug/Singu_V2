@@ -82,9 +82,9 @@ async function generateAiRecommendations(payload: {
   giniIndex: number;
   coverage: number;
 }): Promise<Recommendation[]> {
-  const apiKey = Deno.env.get("LOVABLE_API_KEY");
+  const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
   if (!apiKey) {
-    console.warn("[territory-optimization] LOVABLE_API_KEY missing — heuristic only");
+    console.warn("[territory-optimization] DEEPSEEK_API_KEY missing — heuristic only");
     return [];
   }
 

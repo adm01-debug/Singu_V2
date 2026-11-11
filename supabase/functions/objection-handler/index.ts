@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
     const personality = contact.contact_personality?.[0] || {};
 
     // 2. AI Intelligence for Objection Handling
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
     const systemPrompt = `Você é um mestre em Negociação, Neurovendas e Psicologia Comportamental de elite.
 Sua especialidade é contornar objeções usando o perfil comportamental e sensorial do cliente.
 
@@ -76,7 +76,7 @@ Gere um script que:
 2. Requadre o problema para focar em benefício ou custo de oportunidade.
 3. CTA clara e de baixo atrito.`;
 
-    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY não configurada", 500, req);
+    if (!LOVABLE_API_KEY) return jsonError("DEEPSEEK_API_KEY não configurada", 500, req);
 
     const response = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

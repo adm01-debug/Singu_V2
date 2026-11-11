@@ -153,8 +153,8 @@ Deno.serve(async (req) => {
     }
   }
 
-  const apiKey = Deno.env.get("LOVABLE_API_KEY");
-  if (!apiKey) return jsonError("IA indisponível (LOVABLE_API_KEY ausente).", 503, req);
+  const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
+  if (!apiKey) return jsonError("IA indisponível (DEEPSEEK_API_KEY ausente).", 503, req);
 
   // Trunca conteúdo por interação
   const trimmed = interactions.slice(0, 200).map((i) => ({

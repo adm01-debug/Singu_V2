@@ -34,7 +34,7 @@ async function hashQuery(text: string): Promise<string> {
 }
 
 async function expandQueryWithAI(query: string): Promise<string[]> {
-  const apiKey = Deno.env.get("LOVABLE_API_KEY");
+  const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
   if (!apiKey) return [query];
 
   try {

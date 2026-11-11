@@ -66,8 +66,8 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY missing", 500, req);
+    const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
+    if (!LOVABLE_API_KEY) return jsonError("DEEPSEEK_API_KEY missing", 500, req);
 
     // Buscar webhooks ativos — scope by user when called via JWT (not cron)
     let webhookQuery = supabase

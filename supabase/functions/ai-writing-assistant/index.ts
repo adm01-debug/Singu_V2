@@ -133,9 +133,9 @@ Deno.serve(async (req) => {
     }
      const { contact, recentInteractions, messageType, customContext, tone, framework, storyArc } = parsed.data;
     
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      throw new Error("DEEPSEEK_API_KEY is not configured");
     }
 
     const discStyle = contact.discProfile ? DISC_COMMUNICATION_STYLES[contact.discProfile] : null;

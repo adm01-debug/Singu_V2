@@ -35,8 +35,8 @@ Deno.serve(async (req) => {
     const bestCase = (forecasts ?? []).filter(f => f.category === "best_case").reduce((s, f) => s + Number(f.forecasted_amount), 0);
     const atRisk = (forecasts ?? []).filter(f => f.health_score < 40).slice(0, 10);
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY not configured", 500, req);
+    const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
+    if (!LOVABLE_API_KEY) return jsonError("DEEPSEEK_API_KEY not configured", 500, req);
 
     const prompt = `Gere uma narrativa executiva (2-3 parágrafos curtos) sobre o forecast atual:
 

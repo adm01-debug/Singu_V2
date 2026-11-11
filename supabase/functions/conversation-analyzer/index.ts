@@ -72,7 +72,7 @@ Deno.serve(async (req) => {
     key: t.topic_key, label: t.label, category: t.category, keywords: t.keywords,
   }));
 
-  const apiKey = Deno.env.get("LOVABLE_API_KEY");
+  const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
   if (!apiKey) return jsonError("AI gateway misconfigured", 500, req);
 
   const systemPrompt = `Você é um analista sênior de Conversation Intelligence para vendas B2B.
