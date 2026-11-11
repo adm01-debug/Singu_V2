@@ -1,5 +1,12 @@
 {
-  "alertas": [],
+  "alertas": [
+    {
+      "detalhe": [
+        "cleanup_cron_job_run_details_daily"
+      ],
+      "tipo": "cron_sem_execucao"
+    }
+  ],
   "cron": {
     "config": {
       "cron.max_running_jobs": "32",
@@ -7,10 +14,10 @@
       "max_worker_processes": "6"
     },
     "historico": {
-      "bytes": 7356416,
-      "linhas": 37537,
+      "bytes": 7520256,
+      "linhas": 38358,
       "mais_antigo": "2026-11-01T17:43:00Z",
-      "mais_de_7_dias": 10772
+      "mais_de_7_dias": 11593
     },
     "horas_paradas_7d": [],
     "jobs": [
@@ -90,6 +97,22 @@
         "falhas_24h": 0,
         "falhas_7d": 0,
         "nome": "capture-degraded-rpc-plans",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "37 4 * * *",
+        "ativo": true,
+        "chama": [
+          "public.cleanup_cron_job_run_details"
+        ],
+        "duracao_max_s_7d": null,
+        "execucoes_24h": 0,
+        "execucoes_7d": 0,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "cleanup_cron_job_run_details_daily",
         "startup_timeout_7d": 0,
         "taxa_falha_7d_pct": 0,
         "ultima_falha": null
@@ -330,11 +353,11 @@
   },
   "fonte": "scripts/inventario/banco.sql + GET /functions + .from() em src/ e supabase/functions/ (scripts/inventario/gerar-banco.mjs)",
   "format_version": 1,
-  "medido_em": "2026-11-11T13:18:58Z",
+  "medido_em": "2026-11-11T18:29:50Z",
   "resumo": {
-    "cron_ativos": 20,
-    "cron_jobs": 20,
-    "funcoes_public": 1380,
+    "cron_ativos": 21,
+    "cron_jobs": 21,
+    "funcoes_public": 1381,
     "ledger_registros": 679,
     "ledger_versao_max": "20261109010329",
     "max_connections": 60,
@@ -342,7 +365,7 @@
     "postgres": "17.6",
     "tabelas_public": 406,
     "tabelas_sem_rls": 0,
-    "tamanho_bytes": 3137285267,
+    "tamanho_bytes": 3139144851,
     "triggers_public": 435,
     "views_public": 139
   },
@@ -812,7 +835,7 @@
       }
     },
     {
-      "bytes": 1691934720,
+      "bytes": 1693736960,
       "citada_no_banco": true,
       "linhas": 400965,
       "linhas_exatas": false,
@@ -860,7 +883,7 @@
       }
     },
     {
-      "bytes": 106496,
+      "bytes": 98304,
       "citada_no_banco": true,
       "linhas": 50,
       "linhas_exatas": true,
@@ -1484,7 +1507,7 @@
       }
     },
     {
-      "bytes": 28483584,
+      "bytes": 28491776,
       "citada_no_banco": true,
       "linhas": 56923,
       "linhas_exatas": true,
@@ -1852,7 +1875,7 @@
       }
     },
     {
-      "bytes": 49152,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -2508,7 +2531,7 @@
       }
     },
     {
-      "bytes": 98304,
+      "bytes": 90112,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -2524,7 +2547,7 @@
       }
     },
     {
-      "bytes": 98304,
+      "bytes": 106496,
       "citada_no_banco": true,
       "linhas": 9,
       "linhas_exatas": true,
@@ -2924,7 +2947,7 @@
       }
     },
     {
-      "bytes": 81920,
+      "bytes": 90112,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -3308,9 +3331,9 @@
       }
     },
     {
-      "bytes": 10919936,
+      "bytes": 10985472,
       "citada_no_banco": false,
-      "linhas": 13278,
+      "linhas": 13388,
       "linhas_exatas": true,
       "nome": "error_logs",
       "particao_de": null,
@@ -3868,7 +3891,7 @@
       }
     },
     {
-      "bytes": 253952,
+      "bytes": 237568,
       "citada_no_banco": true,
       "linhas": 21,
       "linhas_exatas": true,
@@ -4044,7 +4067,7 @@
       }
     },
     {
-      "bytes": 81920,
+      "bytes": 98304,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4076,7 +4099,7 @@
       }
     },
     {
-      "bytes": 65536,
+      "bytes": 57344,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4508,7 +4531,7 @@
       }
     },
     {
-      "bytes": 98304,
+      "bytes": 73728,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4684,7 +4707,7 @@
       }
     },
     {
-      "bytes": 114688,
+      "bytes": 131072,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -5100,7 +5123,7 @@
       }
     },
     {
-      "bytes": 147456,
+      "bytes": 139264,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -5228,7 +5251,7 @@
       }
     },
     {
-      "bytes": 278528,
+      "bytes": 188416,
       "citada_no_banco": true,
       "linhas": 5,
       "linhas_exatas": true,
@@ -5660,7 +5683,7 @@
       }
     },
     {
-      "bytes": 114688,
+      "bytes": 131072,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -5676,7 +5699,7 @@
       }
     },
     {
-      "bytes": 114688,
+      "bytes": 90112,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -5692,7 +5715,7 @@
       }
     },
     {
-      "bytes": 65536,
+      "bytes": 57344,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -6204,7 +6227,7 @@
       }
     },
     {
-      "bytes": 98304,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
