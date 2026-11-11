@@ -84,9 +84,9 @@ async function checkElevenLabsTTS(): Promise<ServiceCheck> {
 
 async function checkGeminiNLU(): Promise<ServiceCheck> {
   const start = Date.now();
-  const key = Deno.env.get("LOVABLE_API_KEY");
+  const key = Deno.env.get("DEEPSEEK_API_KEY");
   if (!key) {
-    return { service: "gemini_nlu", status: "error", latency_ms: 0, error: "LOVABLE_API_KEY not configured" };
+    return { service: "gemini_nlu", status: "error", latency_ms: 0, error: "DEEPSEEK_API_KEY not configured" };
   }
 
   try {

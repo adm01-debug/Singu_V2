@@ -15,7 +15,7 @@ async function startHandler(name: string, handler: (req: Request) => Response | 
       SUPABASE_ANON_KEY: "anon-teste",
       SUPABASE_SERVICE_ROLE_KEY: "servico-teste",
       CRON_SECRET: "cron-teste",
-      ...(mockAI ? { LOVABLE_API_KEY: "ia-simulada" } : {}),
+      ...(mockAI ? { DEEPSEEK_API_KEY: "ia-simulada" } : {}),
     },
     clearEnv: true,
     stdout: "piped",

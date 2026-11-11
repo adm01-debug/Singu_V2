@@ -19,8 +19,8 @@ async function analyzeImageWithAI(imageDataUrl: string): Promise<{
   category: string | null;
   dominant_colors: string[];
 }> {
-  const apiKey = Deno.env.get("LOVABLE_API_KEY");
-  if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
+  const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
+  if (!apiKey) throw new Error("DEEPSEEK_API_KEY not configured");
 
   const resp = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",

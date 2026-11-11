@@ -58,8 +58,8 @@ Deno.serve(async (req) => {
   }
 
   const { original, subject, instruction, tone } = parsed.data;
-  const apiKey = Deno.env.get('LOVABLE_API_KEY');
-  if (!apiKey) return jsonError('LOVABLE_API_KEY não configurada', 500, req);
+  const apiKey = Deno.env.get('DEEPSEEK_API_KEY');
+  if (!apiKey) return jsonError('DEEPSEEK_API_KEY não configurada', 500, req);
 
   try {
     const response = await fetchAI('https://ai.gateway.lovable.dev/v1/chat/completions', {

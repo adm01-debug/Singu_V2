@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
      const recentWhatsApp = whatsappRes.data || [];
 
     // 2. Call AI Gateway for Intelligent Suggestion
-    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+    const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
     if (!apiKey) return jsonError("AI Gateway misconfigured", 500, req);
 
     const systemPrompt = `Você é um Estrategista de Vendas e Customer Success de elite.

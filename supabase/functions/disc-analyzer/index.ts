@@ -143,9 +143,9 @@ Deno.serve(async (req) => {
     }
     const { texts, contactId, interactionId } = parsed.data;
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
     if (!LOVABLE_API_KEY) {
-      return jsonError("LOVABLE_API_KEY não configurada", 500, req);
+      return jsonError("DEEPSEEK_API_KEY não configurada", 500, req);
     }
 
     const combinedText = texts.join("\n\n---\n\n");

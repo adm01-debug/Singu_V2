@@ -120,7 +120,7 @@ Deno.serve(async (req) => {
     return jsonError("Conteúdo insuficiente para resumir", 400, req);
   }
 
-  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+  const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
   if (!LOVABLE_API_KEY) return jsonError("API key não configurada", 500, req);
 
   const prompt = `Você é um assistente CRM. Analise esta thread de emails (${interactions.length} mensagens) e gere resumo estruturado em JSON.

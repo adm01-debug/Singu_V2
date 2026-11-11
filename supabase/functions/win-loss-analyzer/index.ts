@@ -113,10 +113,10 @@ Deno.serve(async (req) => {
     };
 
     // Build prompt
-    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+    const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
     if (!apiKey) {
       return new Response(
-        JSON.stringify({ aggregate, insights: [], warning: "LOVABLE_API_KEY not configured" }),
+        JSON.stringify({ aggregate, insights: [], warning: "DEEPSEEK_API_KEY not configured" }),
         { headers: { ...scopedCorsHeaders(req), "Content-Type": "application/json" } },
       );
     }

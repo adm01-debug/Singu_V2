@@ -16,8 +16,8 @@ interface AIOpportunity {
 }
 
 async function callLovableAI(account: Record<string, unknown>, committee: unknown[], traceId: string): Promise<AIOpportunity[]> {
-  const apiKey = Deno.env.get("LOVABLE_API_KEY");
-  if (!apiKey) throw new Error("LOVABLE_API_KEY not configured");
+  const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
+  if (!apiKey) throw new Error("DEEPSEEK_API_KEY not configured");
 
   const prompt = `Analise a conta ABM e gere 3-5 oportunidades de whitespace (cross-sell, up-sell, expansão, renovação).
 

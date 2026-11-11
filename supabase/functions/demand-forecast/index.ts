@@ -50,8 +50,8 @@ Deno.serve(async (req) => {
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([month, data]) => ({ month, ...data }));
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
+    const LOVABLE_API_KEY = Deno.env.get('DEEPSEEK_API_KEY');
+    if (!LOVABLE_API_KEY) throw new Error('DEEPSEEK_API_KEY is not configured');
 
     const prompt = `Analise os dados mensais de interações comerciais abaixo e gere uma previsão de demanda para os próximos 3 meses.
 

@@ -87,8 +87,8 @@ Deno.serve(async (req) => {
     };
     const inactivityDays = settings?.inactivity_threshold_days ?? 14;
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) return jsonError("LOVABLE_API_KEY not configured", 500, req);
+    const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
+    if (!LOVABLE_API_KEY) return jsonError("DEEPSEEK_API_KEY not configured", 500, req);
 
     const enriched = deals.map(d => {
       const { score, risks } = calcHealthScore(d, weights, inactivityDays);

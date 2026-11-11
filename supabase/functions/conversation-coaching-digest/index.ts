@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
     period_days: days,
   };
 
-  const apiKey = Deno.env.get("LOVABLE_API_KEY");
+  const apiKey = Deno.env.get("DEEPSEEK_API_KEY");
   if (!apiKey) return jsonOk({ ok: true, stats, narrative: "IA indisponível." }, req);
 
   const aiResp = await fetchAI("https://ai.gateway.lovable.dev/v1/chat/completions", {

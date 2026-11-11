@@ -44,6 +44,7 @@ export async function fetchAI(
   opts: RequestInit = {},
   meta: { functionName?: string } = {},
 ): Promise<Response> {
+  [url, opts] = routeToDeepSeek(url, opts);
   const started = performance.now();
   const functionName = meta.functionName ?? detectFunctionName();
   const model = extractModelFromInit(opts);
@@ -93,6 +94,32 @@ export async function fetchAI(
 }
 
 // ---------- internal helpers ----------
+
+/** Provedor de IA: o gateway do Lovable (só existe no Lovable Cloud) foi trocado pelo DeepSeek.
+ *  Chamadas ao endereço antigo seguem para a API do DeepSeek (compatível com OpenAI) com o modelo
+ *  DEEPSEEK_MODEL (padrão deepseek-flash) e o modo "thinking" desligado — com ele ligado o DeepSeek
+ *  recusa `tool_choice` forçando uma função, que várias funções usam. */
+export const DEEPSEEK_CHAT_URL = 'https://api.deepseek.com/chat/completions';
+const LOVABLE_AI_URLS = new Set([
+  'https://ai.gateway.lovable.dev/v1/chat/completions',
+  'https://api.lovable.dev/v1/chat/completions',
+]);
+
+function routeToDeepSeek(url: FetchTarget, opts: RequestInit): [FetchTarget, RequestInit] {
+  if (typeof url !== 'string' || !LOVABLE_AI_URLS.has(url)) return [url, opts];
+  let body = opts.body;
+  if (typeof body === 'string') {
+    try {
+      const parsed = JSON.parse(body);
+      parsed.model = Deno.env.get('DEEPSEEK_MODEL') || 'deepseek-flash';
+      parsed.thinking ??= { type: 'disabled' };
+      body = JSON.stringify(parsed);
+    } catch {
+      // corpo não-JSON: envia como veio
+    }
+  }
+  return [DEEPSEEK_CHAT_URL, { ...opts, body }];
+}
 
 function detectFunctionName(): string {
   try {
