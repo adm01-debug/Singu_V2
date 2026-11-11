@@ -1,12 +1,5 @@
 {
-  "alertas": [
-    {
-      "detalhe": [
-        "665595 linhas com mais de 7 dias"
-      ],
-      "tipo": "historico_cron_sem_limpeza"
-    }
-  ],
+  "alertas": [],
   "cron": {
     "config": {
       "cron.max_running_jobs": "32",
@@ -14,10 +7,10 @@
       "max_worker_processes": "6"
     },
     "historico": {
-      "bytes": 141688832,
-      "linhas": 692360,
-      "mais_antigo": "2026-04-08T20:15:00Z",
-      "mais_de_7_dias": 665595
+      "bytes": 7356416,
+      "linhas": 37537,
+      "mais_antigo": "2026-11-01T17:43:00Z",
+      "mais_de_7_dias": 10772
     },
     "horas_paradas_7d": [],
     "jobs": [
@@ -27,7 +20,7 @@
         "chama": [
           "public.evaluate_ai_gateway_alerts"
         ],
-        "duracao_max_s_7d": 0,
+        "duracao_max_s_7d": 1,
         "execucoes_24h": 288,
         "execucoes_7d": 2016,
         "falhas_24h": 0,
@@ -44,7 +37,7 @@
           "public.drop_old_ai_gateway_metrics_partitions"
         ],
         "duracao_max_s_7d": 0,
-        "execucoes_24h": 1,
+        "execucoes_24h": 0,
         "execucoes_7d": 1,
         "falhas_24h": 0,
         "falhas_7d": 0,
@@ -200,7 +193,7 @@
         "ativo": true,
         "chama": [],
         "duracao_max_s_7d": 0,
-        "execucoes_24h": 1,
+        "execucoes_24h": 0,
         "execucoes_7d": 1,
         "falhas_24h": 0,
         "falhas_7d": 0,
@@ -213,7 +206,7 @@
         "agenda": "*/30 * * * *",
         "ativo": true,
         "chama": [],
-        "duracao_max_s_7d": 0,
+        "duracao_max_s_7d": 1,
         "execucoes_24h": 48,
         "execucoes_7d": 336,
         "falhas_24h": 0,
@@ -269,7 +262,7 @@
         "agenda": "* * * * *",
         "ativo": true,
         "chama": [],
-        "duracao_max_s_7d": 0,
+        "duracao_max_s_7d": 1,
         "execucoes_24h": 1440,
         "execucoes_7d": 10080,
         "falhas_24h": 0,
@@ -283,7 +276,7 @@
         "agenda": "* * * * *",
         "ativo": true,
         "chama": [],
-        "duracao_max_s_7d": 31,
+        "duracao_max_s_7d": 33,
         "execucoes_24h": 1440,
         "execucoes_7d": 10080,
         "falhas_24h": 0,
@@ -324,6 +317,12 @@
     ]
   },
   "edge_functions": {
+    "externas": {
+      "catalogadas": 43,
+      "catalogadas_sem_deploy": null,
+      "no_ar": null,
+      "sem_jwt": null
+    },
     "no_repo": 108,
     "no_repo_sem_deploy": null,
     "publicadas": null,
@@ -331,20 +330,20 @@
   },
   "fonte": "scripts/inventario/banco.sql + GET /functions + .from() em src/ e supabase/functions/ (scripts/inventario/gerar-banco.mjs)",
   "format_version": 1,
-  "medido_em": "2026-11-08T15:43:18Z",
+  "medido_em": "2026-11-11T13:18:58Z",
   "resumo": {
     "cron_ativos": 20,
     "cron_jobs": 20,
-    "funcoes_public": 1381,
-    "ledger_registros": 677,
-    "ledger_versao_max": "20261022203935",
+    "funcoes_public": 1380,
+    "ledger_registros": 679,
+    "ledger_versao_max": "20261109010329",
     "max_connections": 60,
     "policies": 1477,
     "postgres": "17.6",
     "tabelas_public": 406,
     "tabelas_sem_rls": 0,
-    "tamanho_bytes": 3249278099,
-    "triggers_public": 436,
+    "tamanho_bytes": 3137285267,
+    "triggers_public": 435,
     "views_public": 139
   },
   "tabelas": [
@@ -477,7 +476,7 @@
       }
     },
     {
-      "bytes": 9666560,
+      "bytes": 9707520,
       "citada_no_banco": true,
       "linhas": 8441,
       "linhas_exatas": true,
@@ -813,7 +812,7 @@
       }
     },
     {
-      "bytes": 1672249344,
+      "bytes": 1691934720,
       "citada_no_banco": true,
       "linhas": 400965,
       "linhas_exatas": false,
@@ -861,7 +860,7 @@
       }
     },
     {
-      "bytes": 98304,
+      "bytes": 106496,
       "citada_no_banco": true,
       "linhas": 50,
       "linhas_exatas": true,
@@ -1421,7 +1420,7 @@
       }
     },
     {
-      "bytes": 929718272,
+      "bytes": 929726464,
       "citada_no_banco": true,
       "linhas": 57475,
       "linhas_exatas": true,
@@ -1485,7 +1484,7 @@
       }
     },
     {
-      "bytes": 28393472,
+      "bytes": 28483584,
       "citada_no_banco": true,
       "linhas": 56923,
       "linhas_exatas": true,
@@ -1885,7 +1884,7 @@
       }
     },
     {
-      "bytes": 1310720,
+      "bytes": 1490944,
       "citada_no_banco": true,
       "linhas": 3070,
       "linhas_exatas": true,
@@ -2013,7 +2012,7 @@
       }
     },
     {
-      "bytes": 1114112,
+      "bytes": 1204224,
       "citada_no_banco": true,
       "linhas": 3141,
       "linhas_exatas": true,
@@ -2022,7 +2021,7 @@
       "policies": 6,
       "rls": true,
       "rls_forcado": false,
-      "triggers": 4,
+      "triggers": 3,
       "uso_no_codigo": {
         "edges": 0,
         "src": 0
@@ -2925,7 +2924,7 @@
       }
     },
     {
-      "bytes": 49152,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -3309,9 +3308,9 @@
       }
     },
     {
-      "bytes": 9183232,
+      "bytes": 10919936,
       "citada_no_banco": false,
-      "linhas": 11777,
+      "linhas": 13278,
       "linhas_exatas": true,
       "nome": "error_logs",
       "particao_de": null,
@@ -3688,7 +3687,7 @@
       "rls_forcado": false,
       "triggers": 1,
       "uso_no_codigo": {
-        "edges": 7,
+        "edges": 4,
         "src": 1
       }
     },
@@ -3853,7 +3852,7 @@
       }
     },
     {
-      "bytes": 8126464,
+      "bytes": 8151040,
       "citada_no_banco": true,
       "linhas": 10461,
       "linhas_exatas": true,
@@ -3869,7 +3868,7 @@
       }
     },
     {
-      "bytes": 221184,
+      "bytes": 253952,
       "citada_no_banco": true,
       "linhas": 21,
       "linhas_exatas": true,
@@ -4093,7 +4092,7 @@
       }
     },
     {
-      "bytes": 49152,
+      "bytes": 65536,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4125,7 +4124,7 @@
       }
     },
     {
-      "bytes": 98304,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4381,7 +4380,7 @@
       }
     },
     {
-      "bytes": 114688,
+      "bytes": 98304,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4509,7 +4508,7 @@
       }
     },
     {
-      "bytes": 81920,
+      "bytes": 98304,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4813,7 +4812,7 @@
       }
     },
     {
-      "bytes": 147456,
+      "bytes": 131072,
       "citada_no_banco": true,
       "linhas": 19,
       "linhas_exatas": true,
@@ -4904,7 +4903,7 @@
       "rls_forcado": false,
       "triggers": 2,
       "uso_no_codigo": {
-        "edges": 2,
+        "edges": 3,
         "src": 2
       }
     },
@@ -5183,7 +5182,7 @@
     {
       "bytes": 49152,
       "citada_no_banco": true,
-      "linhas": 6,
+      "linhas": 7,
       "linhas_exatas": true,
       "nome": "rodizio_execucoes",
       "particao_de": null,
@@ -5229,9 +5228,9 @@
       }
     },
     {
-      "bytes": 212992,
+      "bytes": 278528,
       "citada_no_banco": true,
-      "linhas": 6,
+      "linhas": 5,
       "linhas_exatas": true,
       "nome": "rpc_plan_snapshots",
       "particao_de": null,
@@ -5661,7 +5660,7 @@
       }
     },
     {
-      "bytes": 106496,
+      "bytes": 114688,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -5677,7 +5676,7 @@
       }
     },
     {
-      "bytes": 98304,
+      "bytes": 114688,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -6205,7 +6204,7 @@
       }
     },
     {
-      "bytes": 81920,
+      "bytes": 98304,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
