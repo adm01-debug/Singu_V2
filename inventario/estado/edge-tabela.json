@@ -1379,12 +1379,11 @@
       "arquivos": 1,
       "compartilhados": [
         "supabase/functions/_shared/auth.ts",
-        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/push.ts",
         "supabase/functions/_shared/rate-limit.ts",
         "supabase/functions/_shared/validate.ts"
       ],
       "tabelas": [
-        "ai_gateway_metrics",
         "push_subscriptions"
       ],
       "rpcs": [],
@@ -1871,7 +1870,6 @@
       "process-behavioral-regen-queue",
       "retry-behavioral-profile",
       "semantic-search",
-      "send-push-notification",
       "send-sms-campaign",
       "smart-notify",
       "smart-reminders",
