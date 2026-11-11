@@ -2,9 +2,9 @@
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 111 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-08)
+## Baseline atual — 109 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-10)
 
-A migration `20261108190000_cron_job_run_details_retention.sql` acrescenta `cleanup_cron_job_run_details(_dias integer)` (DEFINER de manutenção; EXECUTE revogado explicitamente de PUBLIC, `anon` e `authenticated` — somente `service_role` pode chamar; agendada pelo pg_cron diariamente às 04:37 UTC), passando de 110 para 111. Total verificado no gate de 2026-11-08.
+Total verificado no gate de 2026-11-10: 109 DEFINERs. A função `update_company_fields(uuid, jsonb)` — criada direto no banco, sem arquivo no repositório, e removida pela migration `20261029120000_drop_update_company_fields.sql` — não faz parte da baseline (comentário da própria migration: "devolve o inventário DEFINER à baseline de 109"). A migration `20261108190000_cron_job_run_details_retention.sql` acrescenta `cleanup_cron_job_run_details(_dias integer)` (DEFINER de manutenção; EXECUTE revogado explicitamente de PUBLIC, `anon` e `authenticated` — somente `service_role` pode chamar; agendada pelo pg_cron diariamente às 04:37 UTC).
 
 | Função | Escopo e proteção |
 |---|---|
