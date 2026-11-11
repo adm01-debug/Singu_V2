@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "b73e889cab1b7bddeebe796b53f5927de8f16e80",
+  "commit": "2f9e3fe3cffa30aaa8ae0a44ef4073d56c6e5a4a",
   "branch": "main",
-  "data_commit": "2026-11-11T14:51:07-03:00",
+  "data_commit": "2026-11-11T18:30:43Z",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "2f9e3fe3",
+    "data": "2026-11-11",
+    "assunto": "chore: inventario do estado real [auto] (#194)"
+   },
    {
     "sha": "b73e889c",
     "data": "2026-11-11",
@@ -126,11 +131,6 @@
     "sha": "79380cd7",
     "data": "2026-11-08",
     "assunto": "feat(inventario): liga a conferência deployada × versionada das edge functions"
-   },
-   {
-    "sha": "d664a7bb",
-    "data": "2026-11-08",
-    "assunto": "fix(snapshot): coleta de grants por coluna sai do information_schema (#172)"
    }
   ],
   "arquivos_mudados_7d": 514,
@@ -141,19 +141,19 @@
    },
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 27
+    "mudancas": 24
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 23
-   },
-   {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 14
+    "mudancas": 19
    },
    {
     "pasta": "scripts/migration/storage",
     "mudancas": 13
+   },
+   {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 12
    },
    {
     "pasta": "src/components/contact-detail",
@@ -180,15 +180,15 @@
     "mudancas": 8
    },
    {
-    "pasta": "supabase/functions/external-data",
-    "mudancas": 8
-   },
-   {
     "pasta": "scripts/maintenance/tests",
     "mudancas": 7
    },
    {
     "pasta": "src/components/dashboard",
+    "mudancas": 7
+   },
+   {
+    "pasta": "supabase/functions/external-data",
     "mudancas": 7
    },
    {
@@ -290,11 +290,11 @@
     "mudancas": 4
    },
    {
-    "arquivo": "scripts/inventario/gerar-banco.mjs",
+    "arquivo": "inventario/estado/banco.json",
     "mudancas": 4
    },
    {
-    "arquivo": "scripts/migration/functions/secrets.template.env",
+    "arquivo": "scripts/inventario/gerar-banco.mjs",
     "mudancas": 4
    }
   ],
@@ -305,7 +305,7 @@
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 29
+    "commits": 26
    },
    {
     "autor": "dependabot[bot]",
@@ -314,6 +314,10 @@
    {
     "autor": "Joaquim Promo Brindes",
     "commits": 2
+   },
+   {
+    "autor": "github-actions[bot]",
+    "commits": 1
    }
   ]
  },

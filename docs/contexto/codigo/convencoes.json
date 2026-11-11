@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "chore: inventario do estado real [auto] (#194)",
    "chore: inventario do estado real [auto] (#191)",
    "fix(baseline): redefine gate DEFINER de 109 para 110 apos retencao aplicada em prod (#193)",
    "docs: baseline DEFINER 111->109 apos DROP de update_company_fields (#190)",
-   "feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)",
-   "feat(ci): automações de auditoria do estado real portadas do Zapp Web V2 (#180)"
+   "feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)"
   ]
  },
  "pr_template": null,

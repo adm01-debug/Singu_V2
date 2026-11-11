@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "b73e889cab1b7bddeebe796b53f5927de8f16e80",
+  "sha": "2f9e3fe3cffa30aaa8ae0a44ef4073d56c6e5a4a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-11 18:20 UTC",
+  "generated_at": "2026-11-11 19:48 UTC",
   "files_total": 3317,
   "code_files": 2861,
   "code_lines": 407964
@@ -232257,10 +232257,21 @@
   }
  },
  "git": {
-  "sha": "b73e889cab1b7bddeebe796b53f5927de8f16e80",
+  "sha": "2f9e3fe3cffa30aaa8ae0a44ef4073d56c6e5a4a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "2f9e3fe",
+    "date": "2026-11-11",
+    "author": "github-actions[bot]",
+    "subject": "chore: inventario do estado real [auto] (#194)",
+    "files": [
+     "inventario/estado/banco.json",
+     "inventario/estado/edges.json",
+     "inventario/estado/tabelas-uso.json"
+    ]
+   },
    {
     "sha": "b73e889",
     "date": "2026-11-11",
@@ -233054,18 +233065,13 @@
      "scripts/check-publish-gates.test.mjs",
      "scripts/check-rls-profiles.test.mjs"
     ]
-   },
-   {
-    "sha": "3e4b970",
-    "date": "2026-11-07",
-    "author": "adm01-debug",
-    "subject": "feat: teste de auditoria de cobertura RLS (check-rls-coverage.sql) (#168)",
-    "files": [
-     "supabase/tests/check-rls-coverage.sql"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "inventario/estado/banco.json",
+    4
+   ],
    [
     "package.json",
     4
@@ -233079,7 +233085,11 @@
     4
    ],
    [
-    "inventario/estado/banco.json",
+    "inventario/estado/edges.json",
+    3
+   ],
+   [
+    "inventario/estado/tabelas-uso.json",
     3
    ],
    [
@@ -233120,14 +233130,6 @@
    ],
    [
     "inventario/estado/edge-tabela.json",
-    2
-   ],
-   [
-    "inventario/estado/edges.json",
-    2
-   ],
-   [
-    "inventario/estado/tabelas-uso.json",
     2
    ],
    [
