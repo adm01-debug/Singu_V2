@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "ae528d588e9f9bed904be945247509d1804cfccd",
+  "sha": "019627488a774e74e9f675112fe975b067b23958",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-10 23:05 UTC",
+  "generated_at": "2026-11-11 12:58 UTC",
   "files_total": 3317,
   "code_files": 2861,
   "code_lines": 407964
@@ -232257,10 +232257,19 @@
   }
  },
  "git": {
-  "sha": "ae528d588e9f9bed904be945247509d1804cfccd",
+  "sha": "019627488a774e74e9f675112fe975b067b23958",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "0196274",
+    "date": "2026-11-11",
+    "author": "adm01-debug",
+    "subject": "docs: baseline DEFINER 111->109 apos DROP de update_company_fields (#190)",
+    "files": [
+     "docs/qa/security-definer-audit.md"
+    ]
+   },
    {
     "sha": "ae528d5",
     "date": "2026-11-10",
@@ -233058,15 +233067,6 @@
     "files": [
      "scripts/migration/verify/replication-slot-idle-guard.sql"
     ]
-   },
-   {
-    "sha": "d8475aa",
-    "date": "2026-11-07",
-    "author": "adm01-debug",
-    "subject": "fix: qualifica digest() com schema extensions no schema-freeze-guard (#166)",
-    "files": [
-     "scripts/migration/verify/schema-freeze-guard.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -233111,6 +233111,10 @@
     3
    ],
    [
+    "docs/qa/security-definer-audit.md",
+    2
+   ],
+   [
     ".github/workflows/fix-jwt-proxies-externas.yml",
     2
    ],
@@ -233144,10 +233148,6 @@
    ],
    [
     "scripts/check-deploy-timeout.test.mjs",
-    2
-   ],
-   [
-    "scripts/check-edge-cors.mjs",
     2
    ]
   ]

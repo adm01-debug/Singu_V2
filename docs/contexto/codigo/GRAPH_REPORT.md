@@ -1,7 +1,7 @@
-# Graph Report - Singu_V2  (2026-11-10)
+# Graph Report - Singu_V2  (2026-11-11)
 
 ## Corpus Check
-- 3272 files · ~2,276,550 words
+- 3272 files · ~2,276,583 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 18 file(s) not represented in the graph (top: (none) 8, .example 3, .lock 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ae528d58`
+- Built from commit: `01962748`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -4001,7 +4001,7 @@ Nodes (10): 🔴 Críticos, 🟡 Funcionais / técnicos (planejados para próxim
 
 ### Community 579 - "Auditoria SECURITY DEFINER — Rodada 50/11"
 Cohesion: 0.20
-Nodes (9): Auditoria SECURITY DEFINER — Rodada 50/11, Baseline anterior — 104 DEFINERs, Baseline anterior — 109 DEFINERs, Baseline anterior — 110 DEFINERs, Baseline atual — 111 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-08), Cenários de gap prevenidos, DEFINERs expostos a `anon` — inspeção manual detalhada (4 críticos), Invariantes (+1 more)
+Nodes (9): Auditoria SECURITY DEFINER — Rodada 50/11, Baseline anterior — 104 DEFINERs, Baseline anterior — 109 DEFINERs, Baseline anterior — 110 DEFINERs, Baseline atual — 109 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-10), Cenários de gap prevenidos, DEFINERs expostos a `anon` — inspeção manual detalhada (4 críticos), Invariantes (+1 more)
 
 ### Community 580 - "Testes E2E (Playwright)"
 Cohesion: 0.29

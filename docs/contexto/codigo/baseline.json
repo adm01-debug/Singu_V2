@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "ae528d588e9f9bed904be945247509d1804cfccd",
+  "commit": "019627488a774e74e9f675112fe975b067b23958",
   "branch": "main",
-  "data_commit": "2026-11-10T20:05:11-03:00",
+  "data_commit": "2026-11-11T09:23:22-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "01962748",
+    "data": "2026-11-11",
+    "assunto": "docs: baseline DEFINER 111->109 apos DROP de update_company_fields (#190)"
+   },
    {
     "sha": "ae528d58",
     "data": "2026-11-10",
@@ -126,11 +131,6 @@
     "sha": "de99442c",
     "data": "2026-11-08",
     "assunto": "feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)"
-   },
-   {
-    "sha": "77990bc3",
-    "data": "2026-11-08",
-    "assunto": "feat(contexto): produtores autônomos que mantêm o estado real do repositório para agentes de IA (#169)"
    }
   ],
   "arquivos_mudados_7d": 514,
@@ -141,11 +141,11 @@
    },
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 36
+    "mudancas": 29
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 29
+    "mudancas": 23
    },
    {
     "pasta": ".github/workflows/ci.yml",
@@ -157,15 +157,11 @@
    },
    {
     "pasta": "src/components/contact-detail",
-    "mudancas": 13
+    "mudancas": 10
    },
    {
     "pasta": "src/hooks/__tests__",
-    "mudancas": 11
-   },
-   {
-    "pasta": "supabase/functions/external-data",
-    "mudancas": 9
+    "mudancas": 10
    },
    {
     "pasta": "package.json",
@@ -184,6 +180,10 @@
     "mudancas": 8
    },
    {
+    "pasta": "supabase/functions/external-data",
+    "mudancas": 8
+   },
+   {
     "pasta": "scripts/maintenance/tests",
     "mudancas": 7
    },
@@ -192,8 +192,8 @@
     "mudancas": 7
    },
    {
-    "pasta": "src/lib/externalData.ts",
-    "mudancas": 7
+    "pasta": "RELATORIO_CI.md",
+    "mudancas": 6
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -219,7 +219,7 @@
    },
    {
     "arquivo": "docs/qa/security-definer-audit.md",
-    "mudancas": 10
+    "mudancas": 11
    },
    {
     "arquivo": "src/lib/externalData.ts",
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 43
+    "commits": 42
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 38
+    "commits": 31
    },
    {
     "autor": "dependabot[bot]",

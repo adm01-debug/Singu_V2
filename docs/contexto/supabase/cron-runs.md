@@ -16,9 +16,9 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-11 12:45:00 | succeeded | 0.09 | 1 row |
 | 2026-11-11 12:30:00 | succeeded | 0.14 | 1 row |
 | 2026-11-11 12:15:00 | succeeded | 0.10 | 1 row |
-| 2026-11-11 12:00:00 | succeeded | 0.10 | 1 row |
 
 
 ## 3 · zapp-embed-pending-messages
@@ -68,27 +68,27 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-11 12:34:00 | succeeded | 0.01 | 1 row |
-| 2026-11-11 12:33:00 | succeeded | 0.02 | 1 row |
-| 2026-11-11 12:32:00 | succeeded | 0.04 | 1 row |
+| 2026-11-11 12:58:00 | succeeded | 0.06 | 1 row |
+| 2026-11-11 12:57:00 | succeeded | 0.01 | 1 row |
+| 2026-11-11 12:56:00 | succeeded | 0.01 | 1 row |
 
 
 ## 10 · zapp-reconcile-nlp-30s
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-11 12:34:00 | succeeded | 30.04 | 1 row |
-| 2026-11-11 12:33:00 | succeeded | 30.03 | 1 row |
-| 2026-11-11 12:32:00 | succeeded | 30.04 | 1 row |
+| 2026-11-11 12:58:00 | succeeded | 30.04 | 1 row |
+| 2026-11-11 12:57:00 | succeeded | 30.04 | 1 row |
+| 2026-11-11 12:56:00 | succeeded | 30.04 | 1 row |
 
 
 ## 11 · zapp-gc-zombie-messages
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-11 12:45:00 | succeeded | 0.06 | 1 row |
 | 2026-11-11 12:30:00 | succeeded | 0.07 | 1 row |
 | 2026-11-11 12:15:00 | succeeded | 0.03 | 1 row |
-| 2026-11-11 12:00:00 | succeeded | 0.07 | 1 row |
 
 
 ## 12 · singu-rodizio-segmentar
@@ -127,18 +127,18 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-11 12:30:00 | succeeded | 0.10 | 1 row |
-| 2026-11-11 12:25:00 | succeeded | 0.06 | 1 row |
-| 2026-11-11 12:20:00 | succeeded | 0.06 | 1 row |
+| 2026-11-11 12:55:00 | succeeded | 0.04 | 1 row |
+| 2026-11-11 12:50:00 | succeeded | 0.00 | 1 row |
+| 2026-11-11 12:45:00 | succeeded | 0.17 | 1 row |
 
 
 ## 289 · auto_resolve_ai_gateway_alerts
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-11 12:32:00 | succeeded | 0.01 | 1 row |
-| 2026-11-11 12:27:00 | succeeded | 0.04 | 1 row |
-| 2026-11-11 12:22:00 | succeeded | 0.02 | 1 row |
+| 2026-11-11 12:57:00 | succeeded | 0.02 | 1 row |
+| 2026-11-11 12:52:00 | succeeded | 0.02 | 1 row |
+| 2026-11-11 12:47:00 | succeeded | 0.02 | 1 row |
 
 
 ## 290 · ai-gateway-metrics-ensure-partition
@@ -170,6 +170,6 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-11 12:45:00 | succeeded | 0.12 | 1 row |
 | 2026-11-11 12:30:00 | succeeded | 0.22 | 1 row |
 | 2026-11-11 12:15:00 | succeeded | 0.11 | 1 row |
-| 2026-11-11 12:00:00 | succeeded | 0.22 | 1 row |

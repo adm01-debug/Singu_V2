@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "docs: baseline DEFINER 111->109 apos DROP de update_company_fields (#190)",
    "feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)",
    "feat(ci): automações de auditoria do estado real portadas do Zapp Web V2 (#180)",
    "chore(automacao): integra testes grafo e manutenção com gatilhos locais (#187)",
-   "fix(push): chave VAPID própria e sender que realmente entrega (#185)",
-   "chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)"
+   "fix(push): chave VAPID própria e sender que realmente entrega (#185)"
   ]
  },
  "pr_template": null,
