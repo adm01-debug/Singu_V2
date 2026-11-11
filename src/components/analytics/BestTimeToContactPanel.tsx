@@ -97,8 +97,8 @@ export function BestTimeToContactPanel({ contactId, compact = false }: BestTimeT
                   transition={{ delay: index * 0.1 }}
                   className={cn(
                     "p-3 rounded-lg text-center border",
-                    index === 0 
-                      ? "bg-primary/10 border-primary/30" 
+                    index === 0
+                      ? "bg-primary/10 border-primary/30"
                       : "bg-secondary/50 border-border"
                   )}
                 >
@@ -133,7 +133,7 @@ export function BestTimeToContactPanel({ contactId, compact = false }: BestTimeT
                   transition={{ delay: index * 0.1 }}
                   className="flex items-center gap-3"
                 >
-                  <Badge 
+                  <Badge
                     variant={index === 0 ? "default" : "outline"}
                     className="w-16 justify-center"
                   >
@@ -180,9 +180,9 @@ export function BestTimeToContactPanel({ contactId, compact = false }: BestTimeT
                   </div>
                   <div className="mt-2 flex items-center gap-2">
                     <span className="text-xs text-muted-foreground">Positivas:</span>
-                    <Progress 
-                      value={slot.positiveRate * 100} 
-                      className="flex-1 h-1.5" 
+                    <Progress
+                      value={slot.positiveRate * 100}
+                      className="flex-1 h-1.5"
                     />
                     <span className="text-xs font-medium">
                       {Math.round(slot.positiveRate * 100)}%

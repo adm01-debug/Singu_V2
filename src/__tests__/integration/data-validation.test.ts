@@ -7,10 +7,10 @@ import DOMPurify from 'dompurify';
 
 // Test validation patterns used across the app
 describe('Data Validation Integration', () => {
-  
+
   describe('CNPJ Validation', () => {
     const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
-    
+
     it('accepts valid formatted CNPJ', () => {
       expect(cnpjRegex.test('11.222.333/0001-81')).toBe(true);
     });
@@ -103,7 +103,7 @@ describe('Data Validation Integration', () => {
       const quantity = 3;
       const totalCents = priceInCents * quantity;
       const totalReais = totalCents / 100;
-      
+
       // eslint-disable-next-line sonarjs/no-floating-point-equality -- comparação intencional em fixture de teste
       expect(totalReais).toBe(59.97);
     });
@@ -112,7 +112,7 @@ describe('Data Validation Integration', () => {
       const value = 1000;
       const discount = 15; // 15%
       const discounted = value - (value * discount / 100);
-      
+
       expect(discounted).toBe(850);
     });
 
@@ -132,14 +132,14 @@ describe('Data Validation Integration', () => {
     it('creates dates in ISO format', () => {
       const date = new Date('2024-06-15T10:30:00Z');
       const iso = date.toISOString();
-      
+
       expect(iso).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
     });
 
     it('handles timezone-aware comparisons', () => {
       const utcDate = new Date('2024-06-15T00:00:00Z');
       const brDate = new Date('2024-06-14T21:00:00-03:00'); // Same moment in BRT
-      
+
       expect(utcDate.getTime()).toBe(brDate.getTime());
     });
   });
@@ -147,7 +147,7 @@ describe('Data Validation Integration', () => {
   describe('Null/Undefined Coalescing', () => {
     it('handles null values with nullish coalescing', () => {
       const getValue = (v: string | null | undefined): string => v ?? 'default';
-      
+
       expect(getValue('value')).toBe('value');
       expect(getValue(null)).toBe('default');
       expect(getValue(undefined)).toBe('default');
@@ -156,7 +156,7 @@ describe('Data Validation Integration', () => {
 
     it('handles nested optional access', () => {
       const obj: { a?: { b?: { c?: number } } } = {};
-      
+
       expect(obj.a?.b?.c ?? 0).toBe(0);
       expect(obj?.a?.b?.c).toBeUndefined();
     });

@@ -16,7 +16,7 @@ import { useToast } from '@/hooks/use-toast';
    { value: '4Ps', label: '4Ps (Promessa/Prova)' },
    { value: 'Storytelling', label: 'Storytelling' },
  ] as const;
- 
+
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Contact } from '@/hooks/useContacts';
 
