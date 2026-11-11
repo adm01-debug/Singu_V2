@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "019627488a774e74e9f675112fe975b067b23958",
+  "sha": "1764764ecb9350b068494dd7b6f1c9b3b61de0dd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-11 12:58 UTC",
+  "generated_at": "2026-11-11 17:48 UTC",
   "files_total": 3317,
   "code_files": 2861,
   "code_lines": 407964
@@ -232257,10 +232257,20 @@
   }
  },
  "git": {
-  "sha": "019627488a774e74e9f675112fe975b067b23958",
+  "sha": "1764764ecb9350b068494dd7b6f1c9b3b61de0dd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "1764764",
+    "date": "2026-11-11",
+    "author": "adm01-debug",
+    "subject": "fix(baseline): redefine gate DEFINER de 109 para 110 apos retencao aplicada em prod (#193)",
+    "files": [
+     "docs/qa/security-definer-audit.md",
+     "tests/rls/security_definer_hardening.sql"
+    ]
+   },
    {
     "sha": "0196274",
     "date": "2026-11-11",
@@ -233058,15 +233068,6 @@
      "scripts/hardening/check-security-definer-search-path.sql",
      "scripts/hardening/check-tables-without-pk.sql"
     ]
-   },
-   {
-    "sha": "f0aea23",
-    "date": "2026-11-07",
-    "author": "adm01-debug",
-    "subject": "fix: corrige cast inválido de active_pid no replication-slot-idle-guard (#165)",
-    "files": [
-     "scripts/migration/verify/replication-slot-idle-guard.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -233081,6 +233082,14 @@
    [
     "CHANGELOG.md",
     4
+   ],
+   [
+    "docs/qa/security-definer-audit.md",
+    3
+   ],
+   [
+    "tests/rls/security_definer_hardening.sql",
+    3
    ],
    [
     ".github/workflows/inventario-estado-semanal.yml",
@@ -233111,19 +233120,11 @@
     3
    ],
    [
-    "docs/qa/security-definer-audit.md",
-    2
-   ],
-   [
     ".github/workflows/fix-jwt-proxies-externas.yml",
     2
    ],
    [
     "tests/rls/merge_company_name_override.sql",
-    2
-   ],
-   [
-    "tests/rls/security_definer_hardening.sql",
     2
    ],
    [

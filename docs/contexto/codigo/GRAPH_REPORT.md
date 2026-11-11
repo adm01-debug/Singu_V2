@@ -1,7 +1,7 @@
 # Graph Report - Singu_V2  (2026-11-11)
 
 ## Corpus Check
-- 3272 files · ~2,276,583 words
+- 3272 files · ~2,276,611 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 18 file(s) not represented in the graph (top: (none) 8, .example 3, .lock 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `01962748`
+- Built from commit: `1764764e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -593,7 +593,7 @@
 - 🛡️ Hardening Phase 2 — BD Físico pgxfvjmuubtbowutlide
 - Load Testing — k6
 - NLPAnalysisCard.tsx
-- Auditoria SECURITY DEFINER — Rodada 50/11
+- Auditoria SECURITY DEFINER — Rodada 01/11
 - Testes E2E (Playwright)
 - 5. 🧬 Módulo PNL/NLP Enterprise
 - Singu_V2 — Regras da Casa (Hermes) — suplemento
@@ -3999,9 +3999,9 @@ Nodes (7): Boas práticas, Cenários, Execução, Interpretação de resultados,
 Cohesion: 0.17
 Nodes (10): 🔴 Críticos, 🟡 Funcionais / técnicos (planejados para próxima rodada), Ondas de execução, 🔵 Polimento (backlog), QA Findings — Rodada 27/10, MetaprogramProfile, NLPAnalysisCard(), Props (+2 more)
 
-### Community 579 - "Auditoria SECURITY DEFINER — Rodada 50/11"
+### Community 579 - "Auditoria SECURITY DEFINER — Rodada 01/11"
 Cohesion: 0.20
-Nodes (9): Auditoria SECURITY DEFINER — Rodada 50/11, Baseline anterior — 104 DEFINERs, Baseline anterior — 109 DEFINERs, Baseline anterior — 110 DEFINERs, Baseline atual — 109 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-10), Cenários de gap prevenidos, DEFINERs expostos a `anon` — inspeção manual detalhada (4 críticos), Invariantes (+1 more)
+Nodes (9): Auditoria SECURITY DEFINER — Rodada 01/11, Baseline anterior (06/11) — 110 DEFINERs, Baseline anterior — 104 DEFINERs, Baseline anterior (10/11) — 109 DEFINERs, Baseline atual — 110 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-11), Cenários de gap prevenidos, DEFINERs expostos a `anon` — inspeção manual detalhada (4 críticos), Invariantes (+1 more)
 
 ### Community 580 - "Testes E2E (Playwright)"
 Cohesion: 0.29

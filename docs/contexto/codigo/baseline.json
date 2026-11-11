@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "019627488a774e74e9f675112fe975b067b23958",
+  "commit": "1764764ecb9350b068494dd7b6f1c9b3b61de0dd",
   "branch": "main",
-  "data_commit": "2026-11-11T09:23:22-03:00",
+  "data_commit": "2026-11-11T14:24:41-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "1764764e",
+    "data": "2026-11-11",
+    "assunto": "fix(baseline): redefine gate DEFINER de 109 para 110 apos retencao aplicada em prod (#193)"
+   },
    {
     "sha": "01962748",
     "data": "2026-11-11",
@@ -126,11 +131,6 @@
     "sha": "c3cc11d3",
     "data": "2026-11-08",
     "assunto": "fix(inventario): não alerta partição cujo pai define o acesso (#171)"
-   },
-   {
-    "sha": "de99442c",
-    "data": "2026-11-08",
-    "assunto": "feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)"
    }
   ],
   "arquivos_mudados_7d": 514,
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 29
+    "mudancas": 27
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -214,19 +214,19 @@
     "mudancas": 15
    },
    {
+    "arquivo": "docs/qa/security-definer-audit.md",
+    "mudancas": 12
+   },
+   {
     "arquivo": "package-lock.json",
     "mudancas": 12
    },
    {
-    "arquivo": "docs/qa/security-definer-audit.md",
+    "arquivo": "tests/rls/security_definer_hardening.sql",
     "mudancas": 11
    },
    {
     "arquivo": "src/lib/externalData.ts",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "tests/rls/security_definer_hardening.sql",
     "mudancas": 10
    },
    {
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 42
+    "commits": 43
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 31
+    "commits": 29
    },
    {
     "autor": "dependabot[bot]",
