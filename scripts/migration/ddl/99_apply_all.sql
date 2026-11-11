@@ -12,6 +12,8 @@
 --                   as views só usam tabelas e funções nativas.
 --   08 antes de 03: 4 índices GIN usam public.immutable_unaccent().
 --   08 antes de 07: policies chamam public.has_role() e afins.
+--   08 antes de 05: 05_grants.sql termina com REVOKE/GRANT EXECUTE de cada função de public
+--                   (sem isso toda SECURITY DEFINER fica executável por PUBLIC/anon).
 --   check_function_bodies=off em 08 (como o pg_dump faz): há função SQL que referencia
 --   objeto criado depois / fora do search_path dela; o corpo é validado só na chamada.
 -- ============================================================================
