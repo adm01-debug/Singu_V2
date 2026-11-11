@@ -1,0 +1,42 @@
+name: Aplicar retencao cron.job_run_details (infra one-off)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/cron-run-details-retention.yml'
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PGHOST: ${{ secrets.PGHOST }}
+      PGPORT: ${{ secrets.PGPORT }}
+      PGUSER: ${{ secrets.PGUSER }}
+      PGPASSWORD: ${{ secrets.PGPASSWORD }}
+      PGDATABASE: ${{ secrets.PGDATABASE }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Aplicar migration de retencao + verificar job agendado
+        run: |
+          set -euo pipefail
+          for name in PGHOST PGUSER PGPASSWORD PGDATABASE; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::Secret obrigatorio ausente: $name"
+              exit 1
+            fi
+          done
+          mkdir -m 700 "$RUNNER_TEMP/ssl"
+          curl --fail --silent --show-error --location --connect-timeout 15 --max-time 60 \
+            https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt \
+            --output "$RUNNER_TEMP/ssl/supabase-ca.crt"
+          export PGSSLROOTCERT="$RUNNER_TEMP/ssl/supabase-ca.crt"
+          export PGCONNECT_TIMEOUT=15
+          URL="postgresql://${PGUSER}@${PGHOST}:${PGPORT:-5432}/${PGDATABASE}?sslmode=verify-full"
+          psql -X -v ON_ERROR_STOP=1 -d "$URL" \
+            -f supabase/migrations/20261108190000_cron_job_run_details_retention.sql
+          echo "--- Job de retencao agendado (cron.job) ---"
+          psql -X -t -A -d "$URL" \
+            -c "SELECT jobid || '|' || jobname || '|' || schedule || '|' || active FROM cron.job WHERE jobname = 'cleanup_cron_job_run_details_daily';"
+          echo "--- Funcao de retencao (prosecdef + search_path) ---"
+          psql -X -t -A -d "$URL" \
+            -c "SELECT p.oid || '|' || p.proname || '|' || p.prosecdef || '|' || p.proconfig FROM pg_proc p WHERE p.proname = 'cleanup_cron_job_run_details';"
