@@ -1,10 +1,10 @@
-# Auditoria SECURITY DEFINER — Rodada 50/11
+# Auditoria SECURITY DEFINER — Rodada 01/11
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 109 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-10)
+## Baseline atual — 110 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-11)
 
-Total verificado no gate de 2026-11-10: 109 DEFINERs. A função `update_company_fields(uuid, jsonb)` — criada direto no banco, sem arquivo no repositório, e removida pela migration `20261029120000_drop_update_company_fields.sql` — não faz parte da baseline (comentário da própria migration: "devolve o inventário DEFINER à baseline de 109"). A migration `20261108190000_cron_job_run_details_retention.sql` acrescenta `cleanup_cron_job_run_details(_dias integer)` (DEFINER de manutenção; EXECUTE revogado explicitamente de PUBLIC, `anon` e `authenticated` — somente `service_role` pode chamar; agendada pelo pg_cron diariamente às 04:37 UTC).
+Total verificado no gate de 2026-11-11: 110 DEFINERs. A função `update_company_fields(uuid, jsonb)` — criada direto no banco, sem arquivo no repositório, e removida pela migration `20261029120000_drop_update_company_fields.sql` — não faz parte da baseline (comentário da própria migration: "devolve o inventário DEFINER à baseline de 109"). A migration `20261108190000_cron_job_run_details_retention.sql` acrescenta `cleanup_cron_job_run_details(_dias integer)` (DEFINER de manutenção; EXECUTE revogado explicitamente de PUBLIC, `anon` e `authenticated` — somente `service_role` pode chamar; agendada pelo pg_cron diariamente às 04:37 UTC). A função foi aplicada de fato no banco em 2026-11-11 (subindo a baseline de 109 para 110; antes estava registrada no ledger mas ausente do banco).
 
 | Função | Escopo e proteção |
 |---|---|
@@ -18,12 +18,12 @@ Total verificado no gate de 2026-11-10: 109 DEFINERs. A função `update_company
 
 Todas as funções acima fixam `search_path` e revogam EXECUTE de roles não autorizados. A lista pública não muda. As verificações de função extra, grant ausente, `search_path` e exposição insegura a anon permanecem integrais.
 
-### Baseline anterior — 110 DEFINERs
+### Baseline anterior (06/11) — 110 DEFINERs
 
 Medido no banco canônico com as migrations pendentes até `20261027220000` aplicadas em transação revertida.
 A migration `20261027220000_serialize_contact_relation_writes.sql` acrescenta `guard_contact_relation_write()` (DEFINER trigger; EXECUTE revogado de PUBLIC, anon, authenticated e service_role — somente postgres/supabase_admin chamam via trigger), passando de 109 para 110. Total verificado no gate de 2026-11-06.
 
-### Baseline anterior — 109 DEFINERs
+### Baseline anterior (10/11) — 109 DEFINERs
 
 Medido no banco canônico com as migrations pendentes até `20261013033435` aplicadas em transação revertida.
 A migration `20261013033431_merge_records_atomically.sql` acrescentou uma RPC central DEFINER e transformou quatro aliases legados INVOKER em DEFINER, passando de 104 para 109.
