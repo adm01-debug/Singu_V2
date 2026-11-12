@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "4add6bd441996a4213c0be8ed5875e827eca86cc",
+  "sha": "047b2833fe180a443ac17716ac1bc1f45ff883cb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 02:35 UTC",
-  "files_total": 3320,
-  "code_files": 2864,
-  "code_lines": 408294
+  "generated_at": "2026-11-12 03:08 UTC",
+  "files_total": 3322,
+  "code_files": 2866,
+  "code_lines": 408347
  },
  "version": "1.3.2",
- "facts_hash": "87f956cd2c463f25",
+ "facts_hash": "2bbcf755220fedc9",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -252,8 +252,8 @@
   "package_manager": "bun",
   "languages": {
    ".tsx": 1156,
-   ".ts": 892,
-   ".sql": 654,
+   ".ts": 893,
+   ".sql": 655,
    ".mjs": 123,
    ".py": 19,
    ".js": 18,
@@ -48905,7 +48905,8 @@
    "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
    "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql",
    "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
-   "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
+   "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
+   "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -64450,7 +64451,7 @@
     "errors": [],
     "side_effects": [],
     "webhook_events": [],
-    "idempotency": false
+    "idempotency": true
    },
    {
     "name": "whatsapp-import",
@@ -70428,8 +70429,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 172,
-   "lines": 26482,
+   "files": 173,
+   "lines": 26531,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -70576,6 +70577,7 @@
     "pagination.ts: fetchAllPages",
     "push.ts: PUSH_HOST_SUFFIXES, isAllowedPushEndpoint, VapidConfig, readVapidConfig, PushPayload, buildPayload",
     "rate-limit.ts: rateLimit",
+    "resend.ts: ResendEmail, sendResendEmail",
     "safe-http.ts: HttpTransport, isPublicAddress, resolveDestination, safeFetch",
     "search-filter.ts: SearchFilterInputError, buildSearchFilter",
     "select-projection.ts: isAllowedSelectProjection",
@@ -70642,6 +70644,7 @@
     "supabase/functions/_shared/push.ts",
     "supabase/functions/_shared/rate-limit.ts",
     "supabase/functions/_shared/rate-limit_test.ts",
+    "supabase/functions/_shared/resend.ts",
     "supabase/functions/_shared/safe-http.ts",
     "supabase/functions/_shared/safe-http_test.ts",
     "supabase/functions/_shared/sdk-runtime-contract_test.ts",
@@ -70697,14 +70700,13 @@
     "supabase/functions/detect-churn-risk/index.ts",
     "supabase/functions/detect-new-device/index.ts",
     "supabase/functions/disc-analyzer/index.ts",
-    "supabase/functions/dual-write-proxy/index.ts",
-    "supabase/functions/elevenlabs-scribe-token/index.ts"
+    "supabase/functions/dual-write-proxy/index.ts"
    ]
   },
   {
    "module": "supabase/migrations",
-   "files": 482,
-   "lines": 42987,
+   "files": 483,
+   "lines": 42991,
    "tables": [
     "users"
    ],
@@ -76868,9 +76870,11 @@
    "RESEND_API_KEY": [
     "scripts/ai-context/gerar.unit.mjs",
     "scripts/inventario/gerar-repo.test.mjs",
+    "supabase/functions/_shared/resend.ts",
     "supabase/functions/send-transactional-email/index.ts"
    ],
    "RESEND_FROM": [
+    "supabase/functions/_shared/resend.ts",
     "supabase/functions/send-transactional-email/index.ts"
    ],
    "RLS_ALLOW_EXTRA": [
@@ -219443,6 +219447,19 @@
    ],
    "doc": "Edge-case tests for the in-memory sliding-window rate limiter. Run with: deno test supabase/functions/_shared/rate-limit_test.ts"
   },
+  "supabase/functions/_shared/resend.ts": {
+   "path": "supabase/functions/_shared/resend.ts",
+   "lines": 31,
+   "exports": [
+    "interface ResendEmail",
+    "function sendResendEmail"
+   ],
+   "env": [
+    "RESEND_API_KEY",
+    "RESEND_FROM"
+   ],
+   "doc": "Envio pela API do Resend. `idempotencyKey` faz o Resend devolver o mesmo envio por 24 h em vez de mandar outro e-mail (retentativas e execuções repetidas não duplicam)."
+  },
   "supabase/functions/_shared/safe-http.ts": {
    "path": "supabase/functions/_shared/safe-http.ts",
    "lines": 153,
@@ -229124,7 +229141,7 @@
   },
   "supabase/functions/weekly-digest/index.ts": {
    "path": "supabase/functions/weekly-digest/index.ts",
-   "lines": 290,
+   "lines": 308,
    "tables": [
     {
      "table": "weekly_report_settings",
@@ -231770,6 +231787,10 @@
    "lines": 38,
    "uses_service_role": true
   },
+  "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql": {
+   "path": "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql",
+   "lines": 4
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -232443,10 +232464,21 @@
   }
  },
  "git": {
-  "sha": "4add6bd441996a4213c0be8ed5875e827eca86cc",
+  "sha": "047b2833fe180a443ac17716ac1bc1f45ff883cb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "047b283",
+    "date": "2026-11-11",
+    "author": "adm01-debug",
+    "subject": "feat: digest semanal enviado por e-mail via Resend no horário de Brasília (#201)",
+    "files": [
+     "supabase/functions/_shared/resend.ts",
+     "supabase/functions/weekly-digest/index.ts",
+     "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql"
+    ]
+   },
    {
     "sha": "4add6bd",
     "date": "2026-11-11",
@@ -233248,15 +233280,6 @@
      ".github/workflows/inventario-estado-semanal.yml",
      "inventario/estado/README.md"
     ]
-   },
-   {
-    "sha": "d664a7b",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(snapshot): coleta de grants por coluna sai do information_schema (#172)",
-    "files": [
-     "scripts/supabase_snapshot/snapshot.py"
-    ]
    }
   ],
   "hot_files": [
@@ -233337,7 +233360,7 @@
     2
    ],
    [
-    "scripts/supabase_snapshot/snapshot.py",
+    ".github/workflows/ci.yml",
     2
    ]
   ]

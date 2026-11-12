@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "4add6bd441996a4213c0be8ed5875e827eca86cc",
+  "commit": "047b2833fe180a443ac17716ac1bc1f45ff883cb",
   "branch": "main",
-  "data_commit": "2026-11-12T01:45:13Z",
+  "data_commit": "2026-11-12T02:18:53Z",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "047b2833",
+    "data": "2026-11-12",
+    "assunto": "feat: digest semanal enviado por e-mail via Resend no horário de Brasília (#201)"
+   },
    {
     "sha": "4add6bd4",
     "data": "2026-11-12",
@@ -126,14 +131,9 @@
     "sha": "661cb412",
     "data": "2026-11-08",
     "assunto": "fix(db): preserva o nome da empresa durante a mesclagem (#127)"
-   },
-   {
-    "sha": "77475499",
-    "data": "2026-11-08",
-    "assunto": "fix(contatos): atualiza a ficha e preserva aniversários locais (#125)"
    }
   ],
-  "arquivos_mudados_7d": 555,
+  "arquivos_mudados_7d": 558,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 18
+    "mudancas": 19
    },
    {
     "pasta": "scripts/migration/storage",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 47
+    "commits": 48
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,9 +322,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3214,
-  "arquivos_codigo": 2209,
-  "linhas_codigo": 412714,
+  "arquivos_total": 3216,
+  "arquivos_codigo": 2210,
+  "linhas_codigo": 412763,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -334,7 +334,7 @@
   "hooks": 408,
   "edge_functions": 109,
   "tabelas": 418,
-  "migrations": 482,
+  "migrations": 483,
   "cron_jobs": 34,
   "testes": 264,
   "workflows": 11,
@@ -703,8 +703,8 @@
    "linhas": 5967
   },
   "supabase/functions": {
-   "arquivos": 172,
-   "linhas": 26482
+   "arquivos": 173,
+   "linhas": 26531
   },
   "tailwind.config.ts": {
    "arquivos": 1,

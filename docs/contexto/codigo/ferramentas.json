@@ -3,8 +3,8 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2048)",
-   "SQL (654)",
+   "TypeScript (2049)",
+   "SQL (655)",
    "Markdown (154)",
    "JavaScript (143)",
    "Shell (134)",
@@ -1021,6 +1021,10 @@
     "arquivos": 2
    },
    {
+    "host": "api.resend.com",
+    "arquivos": 2
+   },
+   {
     "host": "cdnjs.cloudflare.com",
     "arquivos": 2
    },
@@ -1070,10 +1074,6 @@
    },
    {
     "host": "api.pwnedpasswords.com",
-    "arquivos": 1
-   },
-   {
-    "host": "api.resend.com",
     "arquivos": 1
    },
    {

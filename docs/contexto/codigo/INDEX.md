@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `4add6bd441996a4213c0be8ed5875e827eca86cc` (2026-11-12T01:45:13Z).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `047b2833fe180a443ac17716ac1bc1f45ff883cb` (2026-11-12T02:18:53Z).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2048), SQL (654), Markdown (154), JavaScript (143), Shell (134), JSON (22), Python (19), YAML (17)
+- linguagens: TypeScript (2049), SQL (655), Markdown (154), JavaScript (143), Shell (134), JSON (22), Python (19), YAML (17)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3214 |
-| arquivos_codigo | 2209 |
-| linhas_codigo | 412714 |
+| arquivos_total | 3216 |
+| arquivos_codigo | 2210 |
+| linhas_codigo | 412763 |
 | rotas | 114 |
 | rotas_http_backend | 11 |
 | vistas_por_id | 0 |
@@ -46,7 +46,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 408 |
 | edge_functions | 109 |
 | tabelas | 418 |
-| migrations | 482 |
+| migrations | 483 |
 | cron_jobs | 34 |
 | testes | 264 |
 | workflows | 11 |
@@ -408,7 +408,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 
 ## Integrações externas
 - SDKs: ElevenLabs, Supabase, react-query, zod
-- hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, x.supabase.co, api.elevenlabs.io, wa.me, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.supabase.com, singu-v2.vercel.app, api.deepseek.com, api.lovable.dev, cdnjs.cloudflare.com
+- hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, x.supabase.co, api.elevenlabs.io, wa.me, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.supabase.com, singu-v2.vercel.app, api.deepseek.com, api.lovable.dev, api.resend.com
 - webhooks recebidos: nenhum
 - env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, DEEPSEEK_API_KEY, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, N8N_LUX_WEBHOOK_URL, RESEND_API_KEY, RESEND_FROM, TWILIO_API_KEY
 
@@ -436,8 +436,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 20712 nós · 35270 arestas · 2091 comunidades · grafo do commit `4add6bd4`
-- comunidades maiores: _shared/auth.ts (297), ref_hooks (273), ref_types (263), useAuth (247), ref_lib (243), react-router-dom (236), 📖 Dicionário de Dados — SINGU CRM (226), react (221), framer-motion (217), ref_components (215), date-fns (205), lucide-react (174)
+- 20718 nós · 35281 arestas · 2105 comunidades · grafo do commit `047b2833`
+- comunidades maiores: ref_lib (307), _shared/auth.ts (278), useAuth (273), framer-motion (256), @tanstack/react-query (240), react (239), lucide-react (226), 📖 Dicionário de Dados — SINGU CRM (226), react-router-dom (226), ref_hooks (200), withAuth (194), ref_components (191)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), mig_die() (scripts/migration/_lib.sh), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -571,6 +571,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-12 `047b2833` feat: digest semanal enviado por e-mail via Resend no horário de Brasília (#201)
 - 2026-11-12 `4add6bd4` feat: agenda 14 edge functions periódicas via pg_cron (#196)
 - 2026-11-11 `48ab3ac2` feat: cria send-transactional-email com Resend para as sequências (#200)
 - 2026-11-11 `ae084d5a` chore: inventario do estado real [auto] (#198)
@@ -585,7 +586,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-10 `357fd21e` fix(push): chave VAPID própria e sender que realmente entrega (#185)
 - 2026-11-10 `39789307` chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)
 - 2026-11-09 `21434823` chore(scripts): endurece e cobre com testes todos os scripts de scripts/ (#186)
-- 2026-11-09 `1fecfa69` fix(push): um único service worker com os handlers de push (A-007) (#184)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

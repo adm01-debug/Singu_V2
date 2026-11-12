@@ -11206,6 +11206,9 @@
   "supabase/functions/_shared/rate-limit_test.ts": [
    "supabase/functions/_shared/rate-limit.ts"
   ],
+  "supabase/functions/_shared/resend.ts": [
+   "supabase/functions/_shared/fetch-utils.ts"
+  ],
   "supabase/functions/_shared/safe-http_test.ts": [
    "supabase/functions/_shared/safe-http.ts"
   ],
@@ -11815,6 +11818,7 @@
   ],
   "supabase/functions/weekly-digest/index.ts": [
    "supabase/functions/_shared/auth.ts",
+   "supabase/functions/_shared/resend.ts",
    "supabase/functions/_shared/validate.ts"
   ],
   "supabase/functions/whatsapp-import/index.ts": [

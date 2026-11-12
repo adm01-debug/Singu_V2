@@ -29,6 +29,7 @@
   "supabase/functions/_shared/push.ts",
   "supabase/functions/_shared/rate-limit.ts",
   "supabase/functions/_shared/rate-limit_test.ts",
+  "supabase/functions/_shared/resend.ts",
   "supabase/functions/_shared/safe-http.ts",
   "supabase/functions/_shared/safe-http_test.ts",
   "supabase/functions/_shared/sdk-runtime-contract_test.ts",
@@ -3806,7 +3807,7 @@
    "nome": "weekly-digest",
    "entrada": "supabase/functions/weekly-digest/index.ts",
    "arquivos": 1,
-   "linhas": 290,
+   "linhas": 308,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -3828,6 +3829,7 @@
    "hosts_externos": [],
    "usa_shared": [
     "auth.ts",
+    "resend.ts",
     "validate.ts"
    ],
    "chamada_pelo_front": [
