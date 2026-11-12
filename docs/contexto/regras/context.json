@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "a817b7e811c7467ba7e39731b47ac786b5a19d7e",
+  "sha": "ddd1f61c0a607f27de0e6f8e63e01f4c1dbbf618",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 11:05 UTC",
+  "generated_at": "2026-11-12 11:22 UTC",
   "files_total": 3322,
   "code_files": 2866,
-  "code_lines": 408358
+  "code_lines": 408383
  },
  "version": "1.3.2",
- "facts_hash": "4c4928f160e26bb7",
+ "facts_hash": "4e307ae066d0a985",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -64449,7 +64449,9 @@
     "invokes": [],
     "doc": "",
     "errors": [],
-    "side_effects": [],
+    "side_effects": [
+     "sendEmail"
+    ],
     "webhook_events": [],
     "idempotency": true
    },
@@ -70430,7 +70432,7 @@
   {
    "module": "supabase/functions",
    "files": 173,
-   "lines": 26542,
+   "lines": 26567,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -86247,6 +86249,10 @@
    {
     "file": "supabase/functions/template-success-notifications/index.ts",
     "text": "🔒 Cron secret validation"
+   },
+   {
+    "file": "supabase/functions/weekly-digest/index.ts",
+    "text": "* Pela tela, e-mail só quando o usuário pede o teste; chave única por clique (o limite é 3/min). */"
    },
    {
     "file": "supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql",
@@ -113370,6 +113376,12 @@
     "kind": "escreve"
    },
    {
+    "file": "supabase/functions/weekly-digest/index.ts",
+    "field": "type",
+    "value": "boolean",
+    "kind": "escreve"
+   },
+   {
     "file": "supabase/functions/whatsapp-import/index.ts",
     "field": "status",
     "value": "error",
@@ -130542,6 +130554,10 @@
    {
     "file": "supabase/functions/sync-social-interests/index.ts",
     "call": "invoke("
+   },
+   {
+    "file": "supabase/functions/weekly-digest/index.ts",
+    "call": "sendEmail"
    },
    {
     "file": "supabase/migrations/20260111181309_0d3ec51c-0121-4afe-a635-9223c46d26aa.sql",
@@ -149990,7 +150006,8 @@
       "escreve:supabase/functions/demand-forecast/index.ts",
       "escreve:supabase/functions/generate-behavioral-profile/index.ts",
       "escreve:supabase/functions/lead-scorer/index.ts",
-      "escreve:supabase/functions/template-success-notifications/index.ts"
+      "escreve:supabase/functions/template-success-notifications/index.ts",
+      "escreve:supabase/functions/weekly-digest/index.ts"
      ],
      "UUID": [
       "escreve:src/pages/AdminFieldMapping.tsx"
@@ -229141,7 +229158,7 @@
   },
   "supabase/functions/weekly-digest/index.ts": {
    "path": "supabase/functions/weekly-digest/index.ts",
-   "lines": 319,
+   "lines": 344,
    "tables": [
     {
      "table": "weekly_report_settings",
@@ -229222,7 +229239,15 @@
      "field": "type",
      "value": "string",
      "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "boolean",
+     "kind": "escreve"
     }
+   ],
+   "rule_comments": [
+    "* Pela tela, e-mail só quando o usuário pede o teste; chave única por clique (o limite é 3/min). */"
    ],
    "calc_fns": [
     {
@@ -229230,6 +229255,9 @@
      "params": "digest: WeeklyDigestData",
      "body": "return ` <!DOCTYPE html> <html> <head> <style> body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; } .container { max-width: 600px; margin: 0 auto; padding: 20px; } .header { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 30px; border-radius: 12px 12px 0 0; } .content { background: #f8fafc; padding: 30px; border-radius: 0 0 12px 12px; } .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; } …"
     }
+   ],
+   "side_effects": [
+    "sendEmail"
    ],
    "pagination": [
     "100"
@@ -232464,10 +232492,19 @@
   }
  },
  "git": {
-  "sha": "a817b7e811c7467ba7e39731b47ac786b5a19d7e",
+  "sha": "ddd1f61c0a607f27de0e6f8e63e01f4c1dbbf618",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "ddd1f61",
+    "date": "2026-11-12",
+    "author": "adm01-debug",
+    "subject": "fix: botões gerar relatório e e-mail de teste do resumo semanal voltam a funcionar (#203)",
+    "files": [
+     "supabase/functions/weekly-digest/index.ts"
+    ]
+   },
    {
     "sha": "a817b7e",
     "date": "2026-11-12",
@@ -233265,23 +233302,16 @@
     "files": [
      "scripts/rls-matrix/check-rls-baseline.mjs"
     ]
-   },
-   {
-    "sha": "33752b4",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "feat(db): agenda retenção de 7 dias no histórico do pg_cron",
-    "files": [
-     "docs/qa/security-definer-audit.md",
-     "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
-     "tests/rls/security_definer_hardening.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "CHANGELOG.md",
     4
+   ],
+   [
+    "supabase/functions/weekly-digest/index.ts",
+    3
    ],
    [
     "src/lib/pushNotifications.ts",
@@ -233300,14 +233330,6 @@
     3
    ],
    [
-    "docs/qa/security-definer-audit.md",
-    3
-   ],
-   [
-    "tests/rls/security_definer_hardening.sql",
-    3
-   ],
-   [
     "scripts/automation.config.json",
     3
    ],
@@ -233320,11 +233342,15 @@
     3
    ],
    [
-    "supabase/functions/weekly-digest/index.ts",
+    "inventario/estado/edge-tabela.json",
     2
    ],
    [
-    "inventario/estado/edge-tabela.json",
+    "docs/qa/security-definer-audit.md",
+    2
+   ],
+   [
+    "tests/rls/security_definer_hardening.sql",
     2
    ],
    [

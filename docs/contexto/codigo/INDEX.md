@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `a817b7e811c7467ba7e39731b47ac786b5a19d7e` (2026-11-12T08:02:21-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `ddd1f61c0a607f27de0e6f8e63e01f4c1dbbf618` (2026-11-12T08:12:02-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3216 |
 | arquivos_codigo | 2210 |
-| linhas_codigo | 412774 |
+| linhas_codigo | 412799 |
 | rotas | 114 |
 | rotas_http_backend | 11 |
 | vistas_por_id | 0 |
@@ -436,9 +436,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 20718 nós · 35281 arestas · 2105 comunidades · grafo do commit `a817b7e8`
-- comunidades maiores: ref_lib (307), _shared/auth.ts (278), useAuth (273), framer-motion (256), @tanstack/react-query (240), react (239), lucide-react (226), 📖 Dicionário de Dados — SINGU CRM (226), react-router-dom (226), ref_hooks (200), withAuth (194), ref_components (191)
-- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), mig_die() (scripts/migration/_lib.sh), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py)
+- 20722 nós · 35292 arestas · 2105 comunidades · grafo do commit `ddd1f61c`
+- comunidades maiores: ref_components (302), ref_types (283), useAuth (269), ref_lib (243), framer-motion (234), 📖 Dicionário de Dados — SINGU CRM (226), react-router-dom (222), lucide-react (209), date-fns (201), ref_hooks (200), react (194), _shared/auth.ts (192)
+- símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), mig_die() (scripts/migration/_lib.sh), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -571,6 +571,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-12 `ddd1f61c` fix: botões gerar relatório e e-mail de teste do resumo semanal voltam a funcionar (#203)
 - 2026-11-12 `a817b7e8` fix(push): alinha chave VAPID publica do front com o par dos secrets (#199)
 - 2026-11-12 `cd6478ec` fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)
 - 2026-11-12 `047b2833` feat: digest semanal enviado por e-mail via Resend no horário de Brasília (#201)
@@ -585,7 +586,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-10 `ae528d58` feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)
 - 2026-11-10 `df708ff7` feat(ci): automações de auditoria do estado real portadas do Zapp Web V2 (#180)
 - 2026-11-10 `d42f417f` chore(automacao): integra testes grafo e manutenção com gatilhos locais (#187)
-- 2026-11-10 `357fd21e` fix(push): chave VAPID própria e sender que realmente entrega (#185)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "nos": 1948,
- "arestas": 8403,
+ "arestas": 8404,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -86,7 +86,7 @@
   },
   {
    "arquivo": "supabase/functions/_shared/rate-limit.ts",
-   "importado_por": 88
+   "importado_por": 89
   },
   {
    "arquivo": "src/components/ui/dialog.tsx",

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a817b7e811` · branch `main` · 2026-11-12 11:05 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ddd1f61c0a` · branch `main` · 2026-11-12 11:22 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1181,7 +1181,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `birthday` | compara, escreve | `public/sw-push.js`<br>`src/components/contact-detail/life-events/LifeEventsGapChecklist.tsx`<br>`src/components/contact-detail/life-events/LifeEventsTimeline.tsx`<br>`src/components/dashboard/important-dates/EventCard.tsx`<br>`src/hooks/useImportantDates.ts`<br>… +5 |
 | `type` | `birthday-wished` | escreve | `src/components/smart-reminders/SmartRemindersPanel.tsx` |
 | `type` | `blocker` | compara | `src/components/analytics/churn/ChurnHelpers.tsx` |
-| `type` | `boolean` | compara, escreve | `src/lib/reports/reportEngine.ts`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/conversation-analyzer/index.ts`<br>`supabase/functions/conversational-search/index.ts`<br>… +5 |
+| `type` | `boolean` | compara, escreve | `src/lib/reports/reportEngine.ts`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/conversation-analyzer/index.ts`<br>`supabase/functions/conversational-search/index.ts`<br>… +6 |
 | `type` | `brain` | compara, escreve | `src/components/neuromarketing/NeuroABTracker.tsx`<br>`src/components/neuromarketing/NeuroTooltipSystem.tsx` |
 | `type` | `brain_shift` | escreve | `src/components/neuromarketing/NeuroAlerts.tsx` |
 | `type` | `breakthrough` | escreve | `src/data/carnegieProgressCelebration.ts` |
@@ -4765,6 +4765,7 @@ _nenhum item encontrado_
 | `notify` | `supabase/functions/smart-notify/notification_state_test.ts` |
 | `invoke(` | `supabase/functions/smart-notify/provider_config_test.ts` |
 | `invoke(` | `supabase/functions/sync-social-interests/index.ts` |
+| `sendEmail` | `supabase/functions/weekly-digest/index.ts` |
 | `notify_on_critical` | `supabase/migrations/20260111181309_0d3ec51c-0121-4afe-a635-9223c46d26aa.sql` |
 | `notify_on_warning` | `supabase/migrations/20260111181309_0d3ec51c-0121-4afe-a635-9223c46d26aa.sql` |
 | `notify_new_device` | `supabase/migrations/20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql` |
@@ -4992,6 +4993,7 @@ _nenhum item encontrado_
 | 🔒 Cron secret validation | `supabase/functions/social-events-detector/index.ts` |
 | 🔮 Roadmap Prediction Logic (Only if high confidence) | `supabase/functions/suggest-next-action/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/template-success-notifications/index.ts` |
+| * Pela tela, e-mail só quando o usuário pede o teste; chave única por clique (o limite é 3/min). */ | `supabase/functions/weekly-digest/index.ts` |
 | INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
 | FROM public.deal_room_activities WHERE room_id = _room.id ORDER BY created_at DESC LIMIT 50) a | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
 | INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |

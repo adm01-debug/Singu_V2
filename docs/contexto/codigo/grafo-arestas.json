@@ -11818,6 +11818,7 @@
   ],
   "supabase/functions/weekly-digest/index.ts": [
    "supabase/functions/_shared/auth.ts",
+   "supabase/functions/_shared/rate-limit.ts",
    "supabase/functions/_shared/resend.ts",
    "supabase/functions/_shared/validate.ts"
   ],

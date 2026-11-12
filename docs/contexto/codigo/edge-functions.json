@@ -3807,7 +3807,7 @@
    "nome": "weekly-digest",
    "entrada": "supabase/functions/weekly-digest/index.ts",
    "arquivos": 1,
-   "linhas": 319,
+   "linhas": 344,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -3829,6 +3829,7 @@
    "hosts_externos": [],
    "usa_shared": [
     "auth.ts",
+    "rate-limit.ts",
     "resend.ts",
     "validate.ts"
    ],
