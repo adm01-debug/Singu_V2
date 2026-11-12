@@ -5,7 +5,7 @@
   "linguagens": [
    "TypeScript (2052)",
    "SQL (655)",
-   "Markdown (154)",
+   "Markdown (155)",
    "JavaScript (143)",
    "Shell (134)",
    "JSON (22)",
@@ -505,6 +505,11 @@
    "arquivo": "ARCHITECTURE.md",
    "titulo": "Arquitetura do SINGU CRM",
    "linhas": 150
+  },
+  {
+   "arquivo": "AUDITORIA.md",
+   "titulo": "Auditoria técnica total — SINGU CRM",
+   "linhas": 209
   },
   {
    "arquivo": "AUDITORIA_COMPLETA_SISTEMA.md",

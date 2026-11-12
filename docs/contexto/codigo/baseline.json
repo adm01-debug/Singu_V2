@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "ba89bc04a8785c42b514768e9a9cedf91a729a36",
+  "commit": "0adf3118f032b8ec69751e9637ae39dd886cd281",
   "branch": "main",
-  "data_commit": "2026-11-12T12:53:35-03:00",
+  "data_commit": "2026-11-12T16:55:27-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "0adf3118",
+    "data": "2026-11-12",
+    "assunto": "docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)"
+   },
    {
     "sha": "ba89bc04",
     "data": "2026-11-12",
@@ -126,14 +131,9 @@
     "sha": "39789307",
     "data": "2026-11-10",
     "assunto": "chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)"
-   },
-   {
-    "sha": "21434823",
-    "data": "2026-11-09",
-    "assunto": "chore(scripts): endurece e cobre com testes todos os scripts de scripts/ (#186)"
    }
   ],
-  "arquivos_mudados_7d": 592,
+  "arquivos_mudados_7d": 594,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 55
+    "commits": 56
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -318,7 +318,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3219,
+  "arquivos_total": 3221,
   "arquivos_codigo": 2213,
   "linhas_codigo": 413496,
   "rotas": 114,
@@ -335,7 +335,7 @@
   "testes": 266,
   "workflows": 11,
   "scripts": 293,
-  "docs_md": 154
+  "docs_md": 155
  },
  "por_pasta": {
   "commitlint.config.cjs": {

@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "ba89bc04a8785c42b514768e9a9cedf91a729a36",
+  "sha": "0adf3118f032b8ec69751e9637ae39dd886cd281",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 19:17 UTC",
-  "files_total": 3325,
+  "generated_at": "2026-11-12 21:41 UTC",
+  "files_total": 3326,
   "code_files": 2869,
   "code_lines": 409080
  },
@@ -232688,10 +232688,21 @@
   }
  },
  "git": {
-  "sha": "ba89bc04a8785c42b514768e9a9cedf91a729a36",
+  "sha": "0adf3118f032b8ec69751e9637ae39dd886cd281",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "0adf311",
+    "date": "2026-11-12",
+    "author": "adm01-debug",
+    "subject": "docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)",
+    "files": [
+     "AUDITORIA.md",
+     "scripts/docs/citacoes-baseline.json",
+     "visita.pdf"
+    ]
+   },
    {
     "sha": "ba89bc0",
     "date": "2026-11-12",
@@ -233500,15 +233511,6 @@
      "package-lock.json",
      "package.json"
     ]
-   },
-   {
-    "sha": "b7f73b4",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)",
-    "files": [
-     "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -233527,6 +233529,10 @@
    [
     "inventario/estado/edge-tabela.json",
     4
+   ],
+   [
+    "scripts/docs/citacoes-baseline.json",
+    3
    ],
    [
     "supabase/functions/weekly-digest/index.ts",
@@ -233561,10 +233567,6 @@
     2
    ],
    [
-    "scripts/docs/citacoes-baseline.json",
-    2
-   ],
-   [
     "supabase/functions/_shared/edge-test-harness.ts",
     2
    ],
@@ -233589,7 +233591,7 @@
     2
    ],
    [
-    "supabase/functions/evolution-webhook/payload.ts",
+    "AUDITORIA.md",
     1
    ]
   ]
