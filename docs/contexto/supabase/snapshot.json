@@ -186347,7 +186347,7 @@
           "database": "postgres",
           "jobid": 2457,
           "jobname": "singu-edge-weekly-digest",
-          "schedule": "23 11 * * 1",
+          "schedule": "23 * * * *",
           "username": "postgres"
         },
         {
@@ -188787,9 +188787,13 @@
             {
               "file": "supabase/migrations/20260924144037_t203_fase1_fix_public_grant_gap_secdef_internal.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [
             "2459:mtta-sla-breach-auto-ack-hourly"
           ],
@@ -191213,9 +191217,13 @@
             {
               "file": "supabase/migrations/20260509173046_0804c068-faa0-46de-939b-bd5006dc2ba9.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [
             "2458:check-contact-health-daily"
           ],
@@ -191363,9 +191371,13 @@
             {
               "file": "supabase/migrations/20260924144037_t203_fase1_fix_public_grant_gap_secdef_internal.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [
             "2460:mtta-auto-ack-heartbeat-watchdog"
           ],
@@ -192005,9 +192017,13 @@
             {
               "file": "supabase/migrations/20260924144037_t203_fase1_fix_public_grant_gap_secdef_internal.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [
             "2461:cleanup-simulated-alerts-weekly"
           ],
@@ -276971,6 +276987,11 @@
         "name": "reagenda_rotinas_sql_e_rpc_nurturing",
         "statements": null,
         "version": "20261111233000"
+      },
+      {
+        "name": "weekly_digest_cron_horario",
+        "statements": null,
+        "version": "20261112001000"
       }
     ],
     "policies": [

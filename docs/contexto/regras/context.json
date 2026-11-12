@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "48ab3ac2579741fd1816be7394151218f1251ebf",
+  "sha": "4add6bd441996a4213c0be8ed5875e827eca86cc",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 01:58 UTC",
-  "files_total": 3318,
-  "code_files": 2862,
-  "code_lines": 408061
+  "generated_at": "2026-11-12 02:35 UTC",
+  "files_total": 3320,
+  "code_files": 2864,
+  "code_lines": 408294
  },
  "version": "1.3.2",
- "facts_hash": "3d3c2f47a61903ed",
+ "facts_hash": "87f956cd2c463f25",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -253,7 +253,7 @@
   "languages": {
    ".tsx": 1156,
    ".ts": 892,
-   ".sql": 652,
+   ".sql": 654,
    ".mjs": 123,
    ".py": 19,
    ".js": 18,
@@ -41455,6 +41455,19 @@
     "tables": [
      "cron"
     ]
+   },
+   "increment_workflow_completed": {
+    "args": "_id uuid",
+    "returns": "void",
+    "lang": "sql",
+    "src": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
+    "security_definer": false,
+    "search_path": true,
+    "body": "UPDATE public.nurturing_workflows SET completed_count = coalesce(completed_count, 0) + 1, updated_at = now() WHERE id = _id;",
+    "raises": [],
+    "tables": [
+     "nurturing_workflows"
+    ]
    }
   },
   "enums": {
@@ -48890,7 +48903,9 @@
    "supabase/migrations/20261029120000_drop_update_company_fields.sql",
    "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
    "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
-   "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql"
+   "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql",
+   "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
+   "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -57975,6 +57990,22 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "increment_workflow_completed",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "increment_workflow_completed",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
    }
   ],
   "raises": [
@@ -70672,8 +70703,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 480,
-   "lines": 42754,
+   "files": 482,
+   "lines": 42987,
    "tables": [
     "users"
    ],
@@ -86300,6 +86331,10 @@
    {
     "file": "supabase/migrations/20261012120000_live_rpc_relations_contract.sql",
     "text": ") DESC LIMIT p_limit;"
+   },
+   {
+    "file": "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
+    "text": "pgxfvjmuubtbowutlide.supabase.co/functions/v1/validation-queue-worker',"
    }
   ],
   "db_constraints": [
@@ -130587,6 +130622,10 @@
    {
     "file": "supabase/migrations/20261012010000_notification_delivery_claims.sql",
     "call": "notify"
+   },
+   {
+    "file": "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
+    "call": "notify"
    }
   ],
   "db_policies": [
@@ -145446,6 +145485,19 @@
     "tables": [
      "cron"
     ]
+   },
+   "increment_workflow_completed": {
+    "args": "_id uuid",
+    "returns": "void",
+    "lang": "sql",
+    "src": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
+    "security_definer": false,
+    "search_path": true,
+    "body": "UPDATE public.nurturing_workflows SET completed_count = coalesce(completed_count, 0) + 1, updated_at = now() WHERE id = _id;",
+    "raises": [],
+    "tables": [
+     "nurturing_workflows"
+    ]
    }
   },
   "db_enums": {
@@ -155784,6 +155836,7 @@
    "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql",
    "supabase/migrations/20261029120000_drop_update_company_fields.sql",
    "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
+   "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -164771,6 +164824,22 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261108190000_cron_job_run_details_retention.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "increment_workflow_completed",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "increment_workflow_completed",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
    }
   ],
   "guards": [
@@ -168505,13 +168574,6 @@
     "msg": "RPC `ghost_rpc` chamada mas não definida nas migrations/types",
     "where": [
      "scripts/ai-context/gerar.unit.mjs"
-    ]
-   },
-   {
-    "kind": "rpc",
-    "msg": "RPC `increment_workflow_completed` chamada mas não definida nas migrations/types",
-    "where": [
-     "supabase/functions/nurturing-runner/index.ts"
     ]
    },
    {
@@ -231693,6 +231755,21 @@
    "path": "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql",
    "lines": 389
   },
+  "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql": {
+   "path": "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
+   "lines": 195,
+   "rule_comments": [
+    "pgxfvjmuubtbowutlide.supabase.co/functions/v1/validation-queue-worker',"
+   ],
+   "side_effects": [
+    "notify"
+   ]
+  },
+  "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql": {
+   "path": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
+   "lines": 38,
+   "uses_service_role": true
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -232366,10 +232443,20 @@
   }
  },
  "git": {
-  "sha": "48ab3ac2579741fd1816be7394151218f1251ebf",
+  "sha": "4add6bd441996a4213c0be8ed5875e827eca86cc",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "4add6bd",
+    "date": "2026-11-11",
+    "author": "adm01-debug",
+    "subject": "feat: agenda 14 edge functions periódicas via pg_cron (#196)",
+    "files": [
+     "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
+     "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
+    ]
+   },
    {
     "sha": "48ab3ac",
     "date": "2026-11-11",
@@ -233170,27 +233257,16 @@
     "files": [
      "scripts/supabase_snapshot/snapshot.py"
     ]
-   },
-   {
-    "sha": "c3cc11d",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(inventario): não alerta partição cujo pai define o acesso (#171)",
-    "files": [
-     "inventario/estado/banco.json",
-     "scripts/inventario/banco.sql",
-     "scripts/inventario/gerar-banco.mjs"
-    ]
    }
   ],
   "hot_files": [
    [
-    "inventario/estado/banco.json",
+    "CHANGELOG.md",
     4
    ],
    [
-    "CHANGELOG.md",
-    4
+    "inventario/estado/banco.json",
+    3
    ],
    [
     "inventario/estado/edges.json",
@@ -233218,10 +233294,6 @@
    ],
    [
     "package.json",
-    3
-   ],
-   [
-    "scripts/inventario/gerar-banco.mjs",
     3
    ],
    [
@@ -233257,11 +233329,15 @@
     2
    ],
    [
-    "scripts/inventario/banco.sql",
+    "scripts/inventario/gerar-banco.mjs",
     2
    ],
    [
     "scripts/rls-matrix/check-rls-baseline.mjs",
+    2
+   ],
+   [
+    "scripts/supabase_snapshot/snapshot.py",
     2
    ]
   ]

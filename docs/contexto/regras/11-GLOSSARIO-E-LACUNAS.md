@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `48ab3ac257` · branch `main` · 2026-11-12 01:58 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4add6bd441` · branch `main` · 2026-11-12 02:35 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -526,7 +526,6 @@ _nenhum item encontrado_
 | rpc | RPC `get_territories` chamada mas não definida nas migrations/types | `supabase/functions/territory-optimization/index.ts` |
 | rpc | RPC `get_territory_performance` chamada mas não definida nas migrations/types | `supabase/functions/territory-optimization/index.ts` |
 | rpc | RPC `ghost_rpc` chamada mas não definida nas migrations/types | `scripts/ai-context/gerar.unit.mjs` |
-| rpc | RPC `increment_workflow_completed` chamada mas não definida nas migrations/types | `supabase/functions/nurturing-runner/index.ts` |
 | rpc | RPC `is_admin` chamada mas não definida nas migrations/types | `scripts/ai-context/gerar.unit.mjs` |
 | rpc | RPC `nome` chamada mas não definida nas migrations/types | `scripts/supabase_snapshot/snapshot.py` |
 | rpc | RPC `r1` chamada mas não definida nas migrations/types | `scripts/ai-context/cenarios.mjs` |

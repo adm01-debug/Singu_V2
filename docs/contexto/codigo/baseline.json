@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "48ab3ac2579741fd1816be7394151218f1251ebf",
+  "commit": "4add6bd441996a4213c0be8ed5875e827eca86cc",
   "branch": "main",
-  "data_commit": "2026-11-11T20:56:47-03:00",
+  "data_commit": "2026-11-12T01:45:13Z",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "4add6bd4",
+    "data": "2026-11-12",
+    "assunto": "feat: agenda 14 edge functions periódicas via pg_cron (#196)"
+   },
    {
     "sha": "48ab3ac2",
     "data": "2026-11-11",
@@ -126,26 +131,21 @@
     "sha": "77475499",
     "data": "2026-11-08",
     "assunto": "fix(contatos): atualiza a ficha e preserva aniversários locais (#125)"
-   },
-   {
-    "sha": "4ba71804",
-    "data": "2026-11-08",
-    "assunto": "fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)"
    }
   ],
-  "arquivos_mudados_7d": 553,
+  "arquivos_mudados_7d": 555,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
     "mudancas": 182
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 22
+    "pasta": "CHANGELOG.md",
+    "mudancas": 20
    },
    {
-    "pasta": "CHANGELOG.md",
-    "mudancas": 21
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 18
    },
    {
     "pasta": "scripts/migration/storage",
@@ -153,7 +153,7 @@
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 11
+    "mudancas": 10
    },
    {
     "pasta": "src/components/contact-detail",
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 46
+    "commits": 47
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 23
+    "commits": 22
    },
    {
     "autor": "dependabot[bot]",
@@ -322,7 +322,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3212,
+  "arquivos_total": 3214,
   "arquivos_codigo": 2209,
   "linhas_codigo": 412714,
   "rotas": 114,
@@ -334,8 +334,8 @@
   "hooks": 408,
   "edge_functions": 109,
   "tabelas": 418,
-  "migrations": 480,
-  "cron_jobs": 20,
+  "migrations": 482,
+  "cron_jobs": 34,
   "testes": 264,
   "workflows": 11,
   "scripts": 293,
@@ -940,11 +940,8 @@
    "auto-rebatch-behavioral",
    "auto-regen-behavioral-profiles",
    "bitrix24-webhook",
-   "check-notifications",
-   "client-notifications",
    "conversation-coaching-digest",
    "crm-automation-monitor",
-   "cs-health-recalc",
    "detect-new-device",
    "dual-write-proxy",
    "email-verifier",
@@ -953,12 +950,9 @@
    "evolution-bitrix-connector",
    "evolution-webhook",
    "firecrawl-scrape",
-   "forecast-snapshot-cron",
    "get-signature",
    "health-aggregate",
-   "lead-score-cron",
    "mcp-server",
-   "mql-evaluator",
    "objection-context-summary",
    "phone-validator",
    "process-behavioral-regen-queue",
@@ -1081,8 +1075,7 @@
   ],
   "rpcs_sem_definicao": [
    "get_territories",
-   "get_territory_performance",
-   "increment_workflow_completed"
+   "get_territory_performance"
   ],
   "componentes_orfaos": [
    "src/components/admin/AccessSecurityManager.tsx",

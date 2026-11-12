@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 480,
+ "migrations": 482,
  "seeds": [],
  "avisos": [
   "131 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -319,6 +319,7 @@
   "increment_playbook_usage",
   "increment_version_column",
   "increment_webhook_quota",
+  "increment_workflow_completed",
   "log_activity",
   "log_behavioral_change",
   "log_contact_relationship_changes",
@@ -1851,7 +1852,7 @@
   {
    "nome": "check-contact-health-daily",
    "agenda": "0 0 * * *",
-   "migration": "20260509173046_0804c068-faa0-46de-939b-bd5006dc2ba9.sql"
+   "migration": "20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
   },
   {
    "nome": "cleanup_cron_job_run_details_daily",
@@ -1866,27 +1867,111 @@
   {
    "nome": "cleanup-simulated-alerts-weekly",
    "agenda": "0 3 * * 0",
-   "migration": "20260713124628_449b2996-71fd-45fe-bd67-a73e8f011a72.sql"
+   "migration": "20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
   },
   {
    "nome": "mtta-auto-ack-heartbeat-watchdog",
    "agenda": "*/30 * * * *",
-   "migration": "20260717142132_7f20a3a3-be27-43dd-9546-4993978d4377.sql"
+   "migration": "20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
   },
   {
    "nome": "mtta-sla-breach-auto-ack-hourly",
    "agenda": "7 * * * *",
-   "migration": "20260715184735_158ce47d-f19e-4371-a652-b6fc4c158271.sql"
+   "migration": "20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
   },
   {
    "nome": "revalidate-stale-emails",
    "agenda": "0 4 * * *",
-   "migration": "20260417120721_823eaa43-3b8a-4ea7-a046-ad763d7c5f03.sql"
+   "migration": "20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
   },
   {
    "nome": "revalidate-stale-phones",
    "agenda": "30 4 * * *",
    "migration": "20260417120721_823eaa43-3b8a-4ea7-a046-ad763d7c5f03.sql"
+  },
+  {
+   "nome": "singu-edge-check-health-alerts",
+   "agenda": "17 * * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "check-health-alerts"
+  },
+  {
+   "nome": "singu-edge-check-notifications",
+   "agenda": "7 * * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "check-notifications"
+  },
+  {
+   "nome": "singu-edge-client-notifications",
+   "agenda": "3 11 * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "client-notifications"
+  },
+  {
+   "nome": "singu-edge-cs-health-recalc",
+   "agenda": "40 5 * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "cs-health-recalc"
+  },
+  {
+   "nome": "singu-edge-forecast-snapshot-cron",
+   "agenda": "10 6 * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "forecast-snapshot-cron"
+  },
+  {
+   "nome": "singu-edge-lead-score-cron",
+   "agenda": "20 5 * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "lead-score-cron"
+  },
+  {
+   "nome": "singu-edge-mql-evaluator",
+   "agenda": "27 * * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "mql-evaluator"
+  },
+  {
+   "nome": "singu-edge-nurturing-runner",
+   "agenda": "4-59/15 * * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "nurturing-runner"
+  },
+  {
+   "nome": "singu-edge-process-webhook-dlq",
+   "agenda": "1-59/5 * * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "process-webhook-dlq"
+  },
+  {
+   "nome": "singu-edge-revops-snapshot-builder",
+   "agenda": "0 4 * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "revops-snapshot-builder"
+  },
+  {
+   "nome": "singu-edge-sequence-processor",
+   "agenda": "2-59/5 * * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "sequence-processor"
+  },
+  {
+   "nome": "singu-edge-template-success-notifications",
+   "agenda": "13 12 * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "template-success-notifications"
+  },
+  {
+   "nome": "singu-edge-validation-queue-worker",
+   "agenda": "*/5 * * * *",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "validation-queue-worker"
+  },
+  {
+   "nome": "singu-edge-weekly-digest",
+   "agenda": "23 11 * * 1",
+   "migration": "20261111210500_agenda_edge_functions_cron.sql",
+   "chama_edge": "weekly-digest"
   },
   {
    "nome": "singu-rodizio-bloqueios",
@@ -49106,7 +49191,7 @@
   },
   {
    "nome": "increment_workflow_completed",
-   "definida": false,
+   "definida": true,
    "usada_em": 1
   },
   {

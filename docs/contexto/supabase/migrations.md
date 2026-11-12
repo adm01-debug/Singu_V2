@@ -685,3 +685,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261109010329 | [fix_merge_nome_crm_override](migrations/20261109010329_fix_merge_nome_crm_override.sql) | 1 |
 | 20261111210500 | [agenda_edge_functions_cron](migrations/20261111210500_agenda_edge_functions_cron.sql) | 0 |
 | 20261111233000 | [reagenda_rotinas_sql_e_rpc_nurturing](migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql) | 0 |
+| 20261112001000 | [weekly_digest_cron_horario](migrations/20261112001000_weekly_digest_cron_horario.sql) | 0 |

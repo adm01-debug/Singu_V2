@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat: agenda 14 edge functions periódicas via pg_cron (#196)",
    "feat: cria send-transactional-email com Resend para as sequências (#200)",
    "chore: inventario do estado real [auto] (#198)",
    "feat: troca a IA do gateway Lovable pelo DeepSeek (#197)",
-   "chore: inventario do estado real [auto] (#194)",
-   "chore: inventario do estado real [auto] (#191)"
+   "chore: inventario do estado real [auto] (#194)"
   ]
  },
  "pr_template": null,

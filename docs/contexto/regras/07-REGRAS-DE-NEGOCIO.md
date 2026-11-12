@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `48ab3ac257` · branch `main` · 2026-11-12 01:58 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4add6bd441` · branch `main` · 2026-11-12 02:35 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4786,6 +4786,7 @@ _nenhum item encontrado_
 | `notify_critical_next_action` | `supabase/migrations/20260924143556_t202_fase1_revoke_secdef_triggers_and_internal_functions.sql` |
 | `notify_webhook_errors` | `supabase/migrations/20260924143556_t202_fase1_revoke_secdef_triggers_and_internal_functions.sql` |
 | `notify` | `supabase/migrations/20261012010000_notification_delivery_claims.sql` |
+| `notify` | `supabase/migrations/20261111210500_agenda_edge_functions_cron.sql` |
 
 ## N. Regras citadas em comentários do código
 
@@ -5013,3 +5014,4 @@ _nenhum item encontrado_
 | FROM interactions WHERE company_id = p_company_id ORDER BY data_interacao DESC LIMIT 10) i | `supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql` |
 | FROM interactions WHERE company_id = p_company_id ORDER BY data_interacao DESC LIMIT 10) i | `supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql` |
 | ) DESC LIMIT p_limit; | `supabase/migrations/20261012120000_live_rpc_relations_contract.sql` |
+| pgxfvjmuubtbowutlide.supabase.co/functions/v1/validation-queue-worker', | `supabase/migrations/20261111210500_agenda_edge_functions_cron.sql` |
