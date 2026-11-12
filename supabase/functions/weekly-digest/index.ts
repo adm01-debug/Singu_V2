@@ -190,9 +190,11 @@ Deno.serve(async (req) => {
         };
 
         digests.push(digestData);
-        const emailed = await emailDigest(digestData, now);
-        reportRows.push({ user_id: userId, report_data: digestData, sent_via: [emailed ? 'email' : 'system'] });
-        if (emailed) successUserIds.push(userId);
+        const channel = await deliverDigest(digestData, settings.email_address, now);
+        if (channel) {
+          reportRows.push({ user_id: userId, report_data: digestData, sent_via: [channel] });
+          successUserIds.push(userId);
+        }
       } catch (userErr) {
         console.error(`weekly-digest error for user ${userId}:`, userErr);
       }
@@ -223,22 +225,31 @@ Deno.serve(async (req) => {
   }
 });
 
-/** Hora de envio (Brasília) bate com a hora atual e não houve envio nas últimas 20 h. */
+/** Já passou da hora de envio (Brasília) no dia escolhido e não houve envio nas últimas 20 h.
+ *  `>=` em vez de `===`: se o envio falhar, as execuções das horas seguintes do mesmo dia tentam de novo. */
 function isDueNow(s: { send_time?: string | null; last_sent_at?: string | null }, now: Date, currentHour: number): boolean {
   if (s.last_sent_at && now.getTime() - new Date(s.last_sent_at).getTime() < 20 * 3_600_000) return false;
   const settingHour = s.send_time ? parseInt(s.send_time.split(':')[0], 10) : 9;
-  return settingHour === currentHour;
+  return currentHour >= settingHour;
 }
 
-async function emailDigest(digest: WeeklyDigestData, now: Date): Promise<boolean> {
-  const sent = await sendResendEmail({
-    to: digest.email,
-    subject: `Seu resumo semanal do Singu – ${now.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`,
-    html: generateEmailHtml(digest),
-    idempotencyKey: `weekly-digest-${digest.userId}-${now.toISOString().slice(0, 10)}`,
-  });
-  if (!sent.ok) console.error(`weekly-digest e-mail não enviado para ${digest.userId}:`, sent.error);
-  return sent.ok;
+/** Canal usado ('email' | 'system') ou null quando o e-mail falhou — aí nada é gravado e a próxima
+ *  execução do mesmo dia tenta de novo com a mesma Idempotency-Key. Sem endereço configurado = só no app. */
+async function deliverDigest(digest: WeeklyDigestData, configuredEmail: string | null | undefined, now: Date): Promise<'email' | 'system' | null> {
+  if (!configuredEmail) return 'system';
+  try {
+    const sent = await sendResendEmail({
+      to: configuredEmail,
+      subject: `Seu resumo semanal do Singu – ${now.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`,
+      html: generateEmailHtml(digest),
+      idempotencyKey: `weekly-digest-${digest.userId}-${now.toISOString().slice(0, 10)}`,
+    });
+    if (sent.ok) return 'email';
+    console.error(`weekly-digest e-mail não enviado para ${digest.userId}:`, sent.error);
+  } catch (err) {
+    console.error(`weekly-digest falha de rede no e-mail para ${digest.userId}:`, err);
+  }
+  return null;
 }
 
 function generateEmailHtml(digest: WeeklyDigestData): string {
