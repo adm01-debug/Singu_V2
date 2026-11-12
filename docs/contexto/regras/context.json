@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ddd1f61c0a607f27de0e6f8e63e01f4c1dbbf618",
+  "sha": "47e97ccbdca69d242671c46e2cffe2acb65b8e18",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 11:22 UTC",
+  "generated_at": "2026-11-12 11:53 UTC",
   "files_total": 3322,
   "code_files": 2866,
-  "code_lines": 408383
+  "code_lines": 408396
  },
  "version": "1.3.2",
- "facts_hash": "4e307ae066d0a985",
+ "facts_hash": "ef24146e73c48134",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -69022,7 +69022,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 589,
+   "lines": 590,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -69059,7 +69059,7 @@
   {
    "module": "src/components",
    "files": 984,
-   "lines": 148027,
+   "lines": 148039,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -175849,7 +175849,7 @@
   },
   "src/app/composeProviders.tsx": {
    "path": "src/app/composeProviders.tsx",
-   "lines": 23,
+   "lines": 24,
    "exports": [
     "type ProviderEntry",
     "function composeProviders"
@@ -176091,14 +176091,14 @@
   },
   "src/components/admin/AiGatewayErrorHeatmap.tsx": {
    "path": "src/components/admin/AiGatewayErrorHeatmap.tsx",
-   "lines": 91,
+   "lines": 92,
    "exports": [
     "function AiGatewayErrorHeatmap"
    ]
   },
   "src/components/admin/AiGatewayHealthCard.tsx": {
    "path": "src/components/admin/AiGatewayHealthCard.tsx",
-   "lines": 254,
+   "lines": 255,
    "exports": [
     "function AiGatewayHealthCard"
    ],
@@ -176108,7 +176108,7 @@
   },
   "src/components/admin/AiGatewayPartitionsCard.tsx": {
    "path": "src/components/admin/AiGatewayPartitionsCard.tsx",
-   "lines": 91,
+   "lines": 92,
    "exports": [
     "function AiGatewayPartitionsCard"
    ],
@@ -176128,7 +176128,7 @@
   },
   "src/components/admin/BehavioralRegenAlertBanner.tsx": {
    "path": "src/components/admin/BehavioralRegenAlertBanner.tsx",
-   "lines": 172,
+   "lines": 173,
    "exports": [
     "function BehavioralRegenAlertBanner"
    ],
@@ -176165,7 +176165,7 @@
   },
   "src/components/admin/BehavioralRegenAlertsStats.tsx": {
    "path": "src/components/admin/BehavioralRegenAlertsStats.tsx",
-   "lines": 146,
+   "lines": 147,
    "exports": [
     "function BehavioralRegenAlertsStats"
    ],
@@ -176193,7 +176193,7 @@
   },
   "src/components/admin/BehavioralRegenAlertsTrend.tsx": {
    "path": "src/components/admin/BehavioralRegenAlertsTrend.tsx",
-   "lines": 144,
+   "lines": 145,
    "exports": [
     "function BehavioralRegenAlertsTrend"
    ],
@@ -176220,7 +176220,7 @@
   },
   "src/components/admin/BehavioralRegenCronHealth.tsx": {
    "path": "src/components/admin/BehavioralRegenCronHealth.tsx",
-   "lines": 169,
+   "lines": 170,
    "exports": [
     "function BehavioralRegenCronHealth"
    ],
@@ -176245,14 +176245,14 @@
   },
   "src/components/admin/InsightFeedbackTrendChart.tsx": {
    "path": "src/components/admin/InsightFeedbackTrendChart.tsx",
-   "lines": 104,
+   "lines": 105,
    "exports": [
     "function InsightFeedbackTrendChart"
    ]
   },
   "src/components/admin/MttaAutoAckHeartbeatCard.tsx": {
    "path": "src/components/admin/MttaAutoAckHeartbeatCard.tsx",
-   "lines": 111,
+   "lines": 112,
    "exports": [
     "function MttaAutoAckHeartbeatCard"
    ],
@@ -176304,7 +176304,7 @@
   },
   "src/components/admin/MttaSlaBreachHistoryCard.tsx": {
    "path": "src/components/admin/MttaSlaBreachHistoryCard.tsx",
-   "lines": 141,
+   "lines": 142,
    "exports": [
     "function MttaSlaBreachHistoryCard"
    ],
@@ -176340,7 +176340,7 @@
   },
   "src/components/admin/MttaSlaThresholdEditor.tsx": {
    "path": "src/components/admin/MttaSlaThresholdEditor.tsx",
-   "lines": 87,
+   "lines": 88,
    "exports": [
     "function MttaSlaThresholdEditor"
    ],
@@ -176418,7 +176418,7 @@
   },
   "src/components/admin/RpcPerfCard.tsx": {
    "path": "src/components/admin/RpcPerfCard.tsx",
-   "lines": 153,
+   "lines": 154,
    "exports": [
     "function RpcPerfCard"
    ],
@@ -232492,10 +232492,50 @@
   }
  },
  "git": {
-  "sha": "ddd1f61c0a607f27de0e6f8e63e01f4c1dbbf618",
+  "sha": "47e97ccbdca69d242671c46e2cffe2acb65b8e18",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "47e97cc",
+    "date": "2026-11-12",
+    "author": "adm01-debug",
+    "subject": "style(manutencao): aplica correcoes locais verificadas (#195)",
+    "files": [
+     "src/__tests__/design-system-audit.test.ts",
+     "src/__tests__/integration/auth-flow.test.ts",
+     "src/__tests__/integration/data-validation.test.ts",
+     "src/app/composeProviders.tsx",
+     "src/components/admin/AiGatewayErrorHeatmap.tsx",
+     "src/components/admin/AiGatewayHealthCard.tsx",
+     "src/components/admin/AiGatewayPartitionsCard.tsx",
+     "src/components/admin/BehavioralRegenAlertBanner.tsx",
+     "src/components/admin/BehavioralRegenAlertsStats.tsx",
+     "src/components/admin/BehavioralRegenAlertsTrend.tsx",
+     "src/components/admin/BehavioralRegenCronHealth.tsx",
+     "src/components/admin/InsightFeedbackTrendChart.tsx",
+     "src/components/admin/MttaAutoAckHeartbeatCard.tsx",
+     "src/components/admin/MttaSlaBreachHistoryCard.tsx",
+     "src/components/admin/MttaSlaThresholdEditor.tsx",
+     "src/components/admin/RpcPerfCard.tsx",
+     "src/components/ai/AIMessageGenerator.tsx",
+     "src/components/analytics/AnalyticsShared.tsx",
+     "src/components/analytics/BehaviorAlertsPanel.tsx",
+     "src/components/analytics/BestTimeToContactPanel.tsx"
+    ]
+   },
+   {
+    "sha": "a28f210",
+    "date": "2026-11-12",
+    "author": "adm01-debug",
+    "subject": "chore: inventario do estado real [auto] (#204)",
+    "files": [
+     "inventario/estado/banco.json",
+     "inventario/estado/edge-tabela.json",
+     "inventario/estado/edges.json",
+     "inventario/estado/tabelas-uso.json"
+    ]
+   },
    {
     "sha": "ddd1f61",
     "date": "2026-11-12",
@@ -233267,47 +233307,24 @@
      "supabase/migrations/20261013033435_guard_company_merge_name.sql",
      "tests/rls/merge_company_name_override.sql"
     ]
-   },
-   {
-    "sha": "7747549",
-    "date": "2026-11-08",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(contatos): atualiza a ficha e preserva aniversários locais (#125)",
-    "files": [
-     "CHANGELOG.md",
-     "src/components/contact-detail/ContactDetailHeader.test.tsx",
-     "src/components/contact-detail/ContactDetailHeader.tsx",
-     "src/components/contact-detail/ContactIntelligenceStrip.tsx",
-     "src/components/contact-detail/SoftDeletePanel.test.tsx",
-     "src/components/contact-detail/SoftDeletePanel.tsx",
-     "src/hooks/useContactDetail.presence.test.tsx",
-     "src/hooks/useContactDetail.sections.test.tsx",
-     "src/hooks/useContacts.cache.test.tsx",
-     "src/hooks/useImportantDates.midnight.test.tsx",
-     "src/hooks/useImportantDates.ts",
-     "src/hooks/useLocalDay.ts",
-     "src/hooks/useProactiveIntelligence.test.tsx",
-     "src/hooks/useProactiveIntelligence.ts",
-     "src/hooks/useRestoreEntity.test.tsx",
-     "src/hooks/useRestoreEntity.ts",
-     "src/lib/proactiveIntelligence.ts",
-     "src/pages/Contatos.tsx"
-    ]
-   },
-   {
-    "sha": "4ba7180",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)",
-    "files": [
-     "scripts/rls-matrix/check-rls-baseline.mjs"
-    ]
    }
   ],
   "hot_files": [
    [
-    "CHANGELOG.md",
+    "inventario/estado/banco.json",
     4
+   ],
+   [
+    "inventario/estado/edges.json",
+    4
+   ],
+   [
+    "inventario/estado/tabelas-uso.json",
+    4
+   ],
+   [
+    "inventario/estado/edge-tabela.json",
+    3
    ],
    [
     "supabase/functions/weekly-digest/index.ts",
@@ -233315,18 +233332,6 @@
    ],
    [
     "src/lib/pushNotifications.ts",
-    3
-   ],
-   [
-    "inventario/estado/banco.json",
-    3
-   ],
-   [
-    "inventario/estado/edges.json",
-    3
-   ],
-   [
-    "inventario/estado/tabelas-uso.json",
     3
    ],
    [
@@ -233342,8 +233347,8 @@
     3
    ],
    [
-    "inventario/estado/edge-tabela.json",
-    2
+    "CHANGELOG.md",
+    3
    ],
    [
     "docs/qa/security-definer-audit.md",
@@ -233370,19 +233375,19 @@
     2
    ],
    [
-    "scripts/rls-matrix/check-rls-baseline.mjs",
-    2
-   ],
-   [
     ".github/workflows/ci.yml",
     2
    ],
    [
-    "supabase/functions/_shared/resend.ts",
+    "src/__tests__/design-system-audit.test.ts",
     1
    ],
    [
-    "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql",
+    "src/__tests__/integration/auth-flow.test.ts",
+    1
+   ],
+   [
+    "src/__tests__/integration/data-validation.test.ts",
     1
    ]
   ]

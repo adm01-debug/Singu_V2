@@ -827,7 +827,7 @@
     "AiGatewayErrorHeatmap"
    ],
    "export_default": null,
-   "linhas": 91,
+   "linhas": 92,
    "dominio": "components/admin",
    "hooks_locais": [],
    "tabelas": [],
@@ -841,7 +841,7 @@
     "AiGatewayHealthCard"
    ],
    "export_default": null,
-   "linhas": 254,
+   "linhas": 255,
    "dominio": "components/admin",
    "hooks_locais": [
     "useAiGatewayHealth"
@@ -857,7 +857,7 @@
     "AiGatewayPartitionsCard"
    ],
    "export_default": null,
-   "linhas": 91,
+   "linhas": 92,
    "dominio": "components/admin",
    "hooks_locais": [
     "useAiGatewayPartitionStats"
@@ -887,7 +887,7 @@
     "BehavioralRegenAlertBanner"
    ],
    "export_default": null,
-   "linhas": 172,
+   "linhas": 173,
    "dominio": "components/admin",
    "hooks_locais": [
     "useAuth"
@@ -905,7 +905,7 @@
     "BehavioralRegenAlertsStats"
    ],
    "export_default": null,
-   "linhas": 146,
+   "linhas": 147,
    "dominio": "components/admin",
    "hooks_locais": [
     "useMttaSlaBreachSnapshot",
@@ -924,7 +924,7 @@
     "BehavioralRegenAlertsTrend"
    ],
    "export_default": null,
-   "linhas": 144,
+   "linhas": 145,
    "dominio": "components/admin",
    "hooks_locais": [],
    "tabelas": [
@@ -940,7 +940,7 @@
     "BehavioralRegenCronHealth"
    ],
    "export_default": null,
-   "linhas": 169,
+   "linhas": 170,
    "dominio": "components/admin",
    "hooks_locais": [],
    "tabelas": [],
@@ -1177,7 +1177,7 @@
     "InsightFeedbackTrendChart"
    ],
    "export_default": null,
-   "linhas": 104,
+   "linhas": 105,
    "dominio": "components/admin",
    "hooks_locais": [],
    "tabelas": [],
@@ -1191,7 +1191,7 @@
     "MttaAutoAckHeartbeatCard"
    ],
    "export_default": null,
-   "linhas": 111,
+   "linhas": 112,
    "dominio": "components/admin",
    "hooks_locais": [],
    "tabelas": [
@@ -1207,7 +1207,7 @@
     "MttaSlaBreachHistoryCard"
    ],
    "export_default": null,
-   "linhas": 141,
+   "linhas": 142,
    "dominio": "components/admin",
    "hooks_locais": [],
    "tabelas": [
@@ -1223,7 +1223,7 @@
     "MttaSlaThresholdEditor"
    ],
    "export_default": null,
-   "linhas": 87,
+   "linhas": 88,
    "dominio": "components/admin",
    "hooks_locais": [
     "useActionToast",
@@ -1275,7 +1275,7 @@
     "RpcPerfCard"
    ],
    "export_default": null,
-   "linhas": 153,
+   "linhas": 154,
    "dominio": "components/admin",
    "hooks_locais": [
     "useRpcPerfStats",

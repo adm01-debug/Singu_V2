@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "ddd1f61c0a607f27de0e6f8e63e01f4c1dbbf618",
+  "commit": "47e97ccbdca69d242671c46e2cffe2acb65b8e18",
   "branch": "main",
-  "data_commit": "2026-11-12T08:12:02-03:00",
+  "data_commit": "2026-11-12T08:36:21-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "47e97ccb",
+    "data": "2026-11-12",
+    "assunto": "style(manutencao): aplica correcoes locais verificadas (#195)"
+   },
+   {
+    "sha": "a28f2106",
+    "data": "2026-11-12",
+    "assunto": "chore: inventario do estado real [auto] (#204)"
+   },
    {
     "sha": "ddd1f61c",
     "data": "2026-11-12",
@@ -121,19 +131,9 @@
     "sha": "b7f73b43",
     "data": "2026-11-08",
     "assunto": "fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)"
-   },
-   {
-    "sha": "9836e3ae",
-    "data": "2026-11-08",
-    "assunto": "feat(segurança): workflow para fechar verify_jwt nas 23 proxies externas (#176)"
-   },
-   {
-    "sha": "ac006d96",
-    "data": "2026-11-08",
-    "assunto": "chore: instruções enxutas para agentes (#163)"
    }
   ],
-  "arquivos_mudados_7d": 558,
+  "arquivos_mudados_7d": 578,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -150,6 +150,10 @@
    {
     "pasta": "scripts/migration/storage",
     "mudancas": 13
+   },
+   {
+    "pasta": "src/components/admin",
+    "mudancas": 12
    },
    {
     "pasta": ".github/workflows/ci.yml",
@@ -184,16 +188,12 @@
     "mudancas": 6
    },
    {
+    "pasta": "inventario/estado/banco.json",
+    "mudancas": 6
+   },
+   {
     "pasta": "supabase/functions/evolution-webhook",
     "mudancas": 6
-   },
-   {
-    "pasta": "supabase/functions/external-data",
-    "mudancas": 6
-   },
-   {
-    "pasta": "docs/qa/security-definer-audit.md",
-    "mudancas": 5
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -246,6 +246,10 @@
     "mudancas": 6
    },
    {
+    "arquivo": "inventario/estado/banco.json",
+    "mudancas": 6
+   },
+   {
     "arquivo": "AGENTS.md",
     "mudancas": 5
    },
@@ -258,7 +262,11 @@
     "mudancas": 5
    },
    {
-    "arquivo": "inventario/estado/banco.json",
+    "arquivo": "inventario/estado/edges.json",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "inventario/estado/tabelas-uso.json",
     "mudancas": 5
    },
    {
@@ -288,20 +296,12 @@
    {
     "arquivo": "README.md",
     "mudancas": 4
-   },
-   {
-    "arquivo": "docs/GET_CONTACT_SIDEBAR_BY_PHONE.md",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "inventario/estado/edges.json",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 51
+    "commits": 53
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3216,
   "arquivos_codigo": 2210,
-  "linhas_codigo": 412799,
+  "linhas_codigo": 412812,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -644,11 +644,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 589
+   "linhas": 590
   },
   "src/components": {
    "arquivos": 984,
-   "linhas": 148027
+   "linhas": 148039
   },
   "src/config": {
    "arquivos": 1,

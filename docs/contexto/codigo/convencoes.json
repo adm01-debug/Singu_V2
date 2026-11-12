@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "style(manutencao): aplica correcoes locais verificadas (#195)",
+   "chore: inventario do estado real [auto] (#204)",
    "fix: botões gerar relatório e e-mail de teste do resumo semanal voltam a funcionar (#203)",
    "fix(push): alinha chave VAPID publica do front com o par dos secrets (#199)",
-   "fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)",
-   "feat: digest semanal enviado por e-mail via Resend no horário de Brasília (#201)",
-   "feat: agenda 14 edge functions periódicas via pg_cron (#196)"
+   "fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)"
   ]
  },
  "pr_template": null,
