@@ -4,12 +4,12 @@
  "stack": {
   "linguagens": [
    "TypeScript (2052)",
-   "SQL (655)",
+   "SQL (656)",
    "Markdown (155)",
+   "Shell (147)",
    "JavaScript (143)",
-   "Shell (134)",
    "JSON (22)",
-   "Python (19)",
+   "Python (21)",
    "YAML (17)"
   ],
   "linguagem_principal": "TypeScript",
@@ -893,14 +893,18 @@
    "ANTHROPIC_API_KEY",
    "CODE_SCAN_DIRS",
    "GEN_TYPES",
+   "PATH",
    "PGDUMP",
    "PGDUMP_SCHEMAS",
    "PGHOST",
    "PGPASSWORD",
+   "PGPORT",
+   "PGUSER",
    "REPO_ROOT",
    "SNAPSHOT_DIR",
    "SNAPSHOT_EXCLUDE_SCHEMAS",
    "SNAPSHOT_INCLUDE_SCHEMAS",
+   "SNAPSHOT_TEST_ALLOW_REMOTE",
    "SUPABASE_ACCESS_TOKEN",
    "SUPABASE_DB_URL",
    "SUPABASE_PROJECT_REF",
@@ -1083,10 +1087,6 @@
    },
    {
     "host": "api.pwnedpasswords.com",
-    "arquivos": 1
-   },
-   {
-    "host": "api.x.com",
     "arquivos": 1
    },
    {
@@ -1419,14 +1419,6 @@
     "ocorrencias": 1
    },
    {
-    "papel": "admin",
-    "ocorrencias": 1
-   },
-   {
-    "papel": "agent",
-    "ocorrencias": 1
-   },
-   {
     "papel": "anon",
     "ocorrencias": 1
    },
@@ -1464,10 +1456,6 @@
    },
    {
     "papel": "progressbar",
-    "ocorrencias": 1
-   },
-   {
-    "papel": "sup",
     "ocorrencias": 1
    },
    {
@@ -1552,17 +1540,8 @@
   ]
  },
  "feature_flags": {
-  "total": 2,
-  "flags": [
-   {
-    "flag": "FEATURE_X",
-    "arquivos": 1
-   },
-   {
-    "flag": "nova-tela",
-    "arquivos": 1
-   }
-  ],
+  "total": 0,
+  "flags": [],
   "tabelas_de_flag": [
    "access_security_settings",
    "compatibility_settings",

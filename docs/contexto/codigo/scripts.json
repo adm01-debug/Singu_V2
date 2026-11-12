@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 293,
+ "total": 296,
  "scripts": [
   {
    "arquivo": "scripts/_pgdocs.py",
@@ -42,7 +42,7 @@
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
    "descricao": "Simulação de cenários do gerador: monta centenas de repositórios sintéticos (variantes de SQL, rotas, menus, edges, workflows, monorepo, Python, arquivos corrompidos, fuzz) e confere:",
-   "linhas": 173,
+   "linhas": 182,
    "env": [
     "A",
     "K",
@@ -1056,7 +1056,7 @@
   {
    "arquivo": "scripts/migration/_mock_supabase.ts",
    "descricao": "_mock_supabase.ts — servidor HTTP local (127.0.0.1) que imita o mínimo de Storage, PostgREST e Auth do Supabase. SOMENTE PARA TESTES (*_test.ts):",
-   "linhas": 297,
+   "linhas": 298,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1095,8 +1095,8 @@
   },
   {
    "arquivo": "scripts/migration/auth/rotate-jwt.sh",
-   "descricao": "Signing Key Rotation — fluxo dual-key com overlap de 24h. Não invalida sessões existentes de imediato: novas emissões usam a nova chave,",
-   "linhas": 68,
+   "descricao": "============================================================================ rotate-jwt.sh — guia e TRAVA de segurança da rotação de chave de assinatura",
+   "linhas": 174,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1164,7 +1164,7 @@
   {
    "arquivo": "scripts/migration/cdc/replay.ts",
    "descricao": "Replay idempotente e EM ORDEM do WAL capturado pelo wal2json (format-version=2, como cdc/drain.sh grava; format-version=1 em uma linha também é aceito) no destino.",
-   "linhas": 254,
+   "linhas": 255,
    "env": [
     "CDC_OUT_DIR",
     "DEST_SERVICE_ROLE_KEY",
@@ -1178,7 +1178,7 @@
   {
    "arquivo": "scripts/migration/cdc/replay_test.ts",
    "descricao": "Testes de cdc/replay.ts — wal2json v2 (formato que cdc/drain.sh grava) contra PostgREST falso.",
-   "linhas": 178,
+   "linhas": 193,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1205,7 +1205,7 @@
   {
    "arquivo": "scripts/migration/compliance/lgpd-snapshot.ts",
    "descricao": "LGPD Snapshot Manifest — contagem + hash de TODAS as linhas (id e carimbos de tempo, sem nenhum dado pessoal) das tabelas com dados de titulares, com assinatura HMAC-SHA256.",
-   "linhas": 126,
+   "linhas": 128,
    "env": [
     "DEST_SERVICE_ROLE_KEY",
     "DEST_SUPABASE_URL",
@@ -1237,7 +1237,7 @@
   {
    "arquivo": "scripts/migration/cutover/smoke-tests.ts",
    "descricao": "Smoke tests E2E pós-cutover contra o novo Supabase (somente leitura + 1 login de teste). Uso: deno run --allow-env --allow-net cutover/smoke-tests.ts",
-   "linhas": 124,
+   "linhas": 126,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1282,7 +1282,7 @@
   {
    "arquivo": "scripts/migration/ddl/02_tables.sql",
    "descricao": null,
-   "linhas": 4791,
+   "linhas": 4790,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1291,7 +1291,7 @@
   {
    "arquivo": "scripts/migration/ddl/03_indexes.sql",
    "descricao": null,
-   "linhas": 383,
+   "linhas": 399,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1354,7 +1354,7 @@
   {
    "arquivo": "scripts/migration/ddl/10_views.sql",
    "descricao": null,
-   "linhas": 151,
+   "linhas": 154,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1381,7 +1381,7 @@
   {
    "arquivo": "scripts/migration/ddl/99_apply_all.sql",
    "descricao": null,
-   "linhas": 59,
+   "linhas": 61,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1461,7 +1461,7 @@
   {
    "arquivo": "scripts/migration/extract-ddl.sh",
    "descricao": "============================================================================ extract-ddl.sh — Extrai o schema completo do banco de origem (Lovable Cloud)",
-   "linhas": 382,
+   "linhas": 527,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1553,7 +1553,7 @@
   {
    "arquivo": "scripts/migration/monitoring/synthetic-checks.ts",
    "descricao": "synthetic-checks.ts — Jornadas sintéticas contra o app pós-cutover (somente leitura + login). Uso: deno run --allow-env --allow-net monitoring/synthetic-checks.ts",
-   "linhas": 117,
+   "linhas": 124,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1571,7 +1571,7 @@
   {
    "arquivo": "scripts/migration/reset-passwords.sh",
    "descricao": "============================================================================ reset-passwords.sh",
-   "linhas": 69,
+   "linhas": 77,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1580,7 +1580,7 @@
   {
    "arquivo": "scripts/migration/reset-passwords.ts",
    "descricao": "============================================================================ reset-passwords.ts (Deno)",
-   "linhas": 232,
+   "linhas": 236,
    "env": [
     "TARGET_SERVICE_ROLE_KEY",
     "TARGET_SUPABASE_URL"
@@ -1592,7 +1592,7 @@
   {
    "arquivo": "scripts/migration/reset-passwords_test.ts",
    "descricao": "Testes de reset-passwords.ts — Auth admin + PostgREST falsos. Nenhum e-mail real é enviado. * Portas em memória: registra envios, log e sonos. */",
-   "linhas": 149,
+   "linhas": 155,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1646,7 +1646,7 @@
   {
    "arquivo": "scripts/migration/storage/_lib.ts",
    "descricao": "Utilitários compartilhados pelos scripts de migração de Storage. Deno 2. Sem dependências externas (só built-ins do Deno).",
-   "linhas": 327,
+   "linhas": 334,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1655,7 +1655,7 @@
   {
    "arquivo": "scripts/migration/storage/_lib_test.ts",
    "descricao": "Testes de storage/_lib.ts — rodar: deno test --no-lock --node-modules-dir=none -A scripts/migration/storage/_lib_test.ts",
-   "linhas": 151,
+   "linhas": 160,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1664,7 +1664,7 @@
   {
    "arquivo": "scripts/migration/storage/copy-large.ts",
    "descricao": "Storage Large-Object Handler — objetos > 100MB com download em pedaços (Range), retomável, usando arquivo parcial em disco (memória constante, nunca o objeto inteiro em RAM).",
-   "linhas": 133,
+   "linhas": 136,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -1682,7 +1682,7 @@
   {
    "arquivo": "scripts/migration/storage/copy-objects.ts",
    "descricao": "Copia objetos ORIGEM → DESTINO com upsert, retry, retomada e verificação. Uso: deno run --allow-env --allow-net --allow-write --allow-read storage/copy-objects.ts",
-   "linhas": 207,
+   "linhas": 212,
    "env": [
     "STORAGE_COPY_LOG"
    ],
@@ -1702,7 +1702,7 @@
   {
    "arquivo": "scripts/migration/storage/create-buckets.ts",
    "descricao": "Cria/atualiza buckets no DESTINO a partir da configuração da ORIGEM. Idempotente. Uso: deno run --allow-env --allow-net storage/create-buckets.ts",
-   "linhas": 81,
+   "linhas": 82,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -2057,7 +2057,7 @@
   {
    "arquivo": "scripts/migration/verify/full-audit.sh",
    "descricao": "full-audit.sh — Orquestrador da bateria de guards/audits SQL no destino. Uso:",
-   "linhas": 195,
+   "linhas": 201,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -2084,7 +2084,7 @@
   {
    "arquivo": "scripts/migration/verify/grants-parity.sh",
    "descricao": "Wrapper: diff canônico de GRANTs em public.* entre origem e destino. Uso: SRC_DB_URL=... DEST_DB_URL=... [OUT_DIR=<dir>] ./verify/grants-parity.sh",
-   "linhas": 50,
+   "linhas": 55,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -2183,7 +2183,7 @@
   {
    "arquivo": "scripts/migration/verify/logical-replica-identity.sql",
    "descricao": null,
-   "linhas": 34,
+   "linhas": 38,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -2309,7 +2309,7 @@
   {
    "arquivo": "scripts/migration/verify/planner-stats-freshness.sh",
    "descricao": "planner-stats-freshness.sh — ANALYZE + verifica frescor de estatisticas do planner. Sem ANALYZE, planner usa defaults -> seq scan em vez de index.",
-   "linhas": 71,
+   "linhas": 76,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -2450,7 +2450,7 @@
   {
    "arquivo": "scripts/migration/verify/row-diff.ts",
    "descricao": "Amostra N linhas por tabela e compara hash origem×destino (+ contagem total). Passo 1 (gera SQL):  deno run --allow-env --allow-read --allow-write verify/row-diff.ts",
-   "linhas": 201,
+   "linhas": 205,
    "env": [
     "INCLUDE_SKIPPED",
     "ONLY_TABLE",
@@ -2567,7 +2567,7 @@
   {
    "arquivo": "scripts/migration/verify/storage-public-guard.ts",
    "descricao": "storage-public-guard.ts — Falha se buckets públicos não estão no allowlist. Uso: node --experimental-strip-types verify/storage-public-guard.ts   (ou: deno run -A …)",
-   "linhas": 67,
+   "linhas": 69,
    "env": [
     "DEST_SERVICE_ROLE_KEY",
     "DEST_SUPABASE_URL",
@@ -2654,7 +2654,7 @@
   {
    "arquivo": "scripts/migration/verify/triggers-parity.sh",
    "descricao": "Wrapper: diff canônico de triggers + hash de functions entre origem e destino. Uso: SRC_DB_URL=... DEST_DB_URL=... [OUT_DIR=<dir>] ./verify/triggers-parity.sh",
-   "linhas": 50,
+   "linhas": 55,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -2717,7 +2717,16 @@
   {
    "arquivo": "scripts/monitoring/ai-gateway-partitions-exporter.sh",
    "descricao": "ai-gateway-partitions-exporter.sh — Rodada 59/10 Emite metricas Prometheus (textfile collector) sobre as particoes de",
-   "linhas": 142,
+   "linhas": 180,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/monitoring/alerts.test.sh",
+   "descricao": "alerts.test.sh — valida ai-gateway-partitions-alerts.yml e rpc-perf-alerts.yml.   1. Estrutura (sem ferramenta externa): todo alerta tem expr, severity, summary e",
+   "linhas": 327,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -2725,8 +2734,8 @@
   },
   {
    "arquivo": "scripts/monitoring/check-runbook-coverage.sh",
-   "descricao": "check-runbook-coverage.sh — Rodada 26/10",
-   "linhas": 43,
+   "descricao": "check-runbook-coverage.sh — Rodada 26/10 Garante que todo alerta aponta para uma seção que EXISTE no runbook.",
+   "linhas": 123,
    "env": [],
    "npm_scripts": [],
    "workflows": [
@@ -2735,9 +2744,27 @@
    "orfao": false
   },
   {
+   "arquivo": "scripts/monitoring/check-runbook-coverage.test.sh",
+   "descricao": "check-runbook-coverage.test.sh — prova os dois lados do check-runbook-coverage.sh em árvores de mentira (RUNBOOK_COVERAGE_ROOT) e confere o repositório real.",
+   "linhas": 106,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/monitoring/exporters.test.sh",
+   "descricao": "exporters.test.sh — testa rpc-perf-exporter.sh, rpc-plan-exporter.sh e ai-gateway-partitions-exporter.sh contra um Postgres real, num banco descartável.",
+   "linhas": 191,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
    "arquivo": "scripts/monitoring/rpc-perf-exporter.sh",
-   "descricao": "rpc-perf-exporter.sh — Prometheus textfile collector for RPC performance samples. Emits per-RPC latency histograms (p50/p95/p99) and sample counts over a",
-   "linhas": 48,
+   "descricao": "rpc-perf-exporter.sh — Prometheus textfile collector for RPC performance samples. Emits per-RPC latency percentiles (p50/p95/p99/max, as gauges with a `quantile` label)",
+   "linhas": 111,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
@@ -2746,7 +2773,7 @@
   {
    "arquivo": "scripts/monitoring/rpc-plan-exporter.sh",
    "descricao": "rpc-plan-exporter.sh — Prometheus textfile collector para regressões de plano. Rodada 65/10. Exporta, por RPC monitorada, quantas mudanças estruturais de",
-   "linhas": 59,
+   "linhas": 126,
    "env": [],
    "npm_scripts": [],
    "workflows": [],

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "0adf3118f032b8ec69751e9637ae39dd886cd281",
+  "sha": "6a57e0290ce09e7c9b9c0fa4134eccde4bccb2d0",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 21:41 UTC",
-  "files_total": 3326,
-  "code_files": 2869,
-  "code_lines": 409080
+  "generated_at": "2026-11-12 22:59 UTC",
+  "files_total": 3342,
+  "code_files": 2872,
+  "code_lines": 409744
  },
  "version": "1.3.2",
- "facts_hash": "93cff2520ac89f03",
+ "facts_hash": "261dc96a6775eb0a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -253,9 +253,9 @@
   "languages": {
    ".tsx": 1158,
    ".ts": 894,
-   ".sql": 655,
+   ".sql": 656,
    ".mjs": 123,
-   ".py": 19,
+   ".py": 21,
    ".js": 18,
    ".cjs": 3
   },
@@ -58979,7 +58979,6 @@
   "seed": [],
   "comments": {
    "table:entity_relationships": "Relacionamentos polimórficos entre Empresa/Pessoa com papel (comprador, gerente, proprietário, ...).",
-   "table:v_entities": "Visão unificada de Empresas e Pessoas como Entidades.",
    "column:offer_suggestions.metadata": "Armazena detalhes do match social, incluindo sources, keywords e social_insight_ids vinculados.",
    "column:profiles.nlp_profile": "Stores the salesperson NLP profile including VAK, DISC and Metaprograms for compatibility scoring",
    "table:score_history": "Historical record of all calculated scores for contacts",
@@ -64900,6 +64899,13 @@
     "component": "LazyPage",
     "guard": "",
     "roles": [],
+    "file": "scripts/ai-context/cenarios.mjs"
+   },
+   {
+    "path": "/auth",
+    "component": "LazyPage",
+    "guard": "",
+    "roles": [],
     "file": "scripts/ai-context/gerar.unit.mjs"
    },
    {
@@ -65475,6 +65481,13 @@
     "guard": "",
     "roles": [],
     "file": "src/pages/PublicSurvey.test.tsx"
+   },
+   {
+    "path": "/t",
+    "component": "Guard",
+    "guard": "",
+    "roles": [],
+    "file": "scripts/ai-context/cenarios.mjs"
    },
    {
     "path": "/tarefas",
@@ -68300,6 +68313,10 @@
     "file": "scripts/ai-context/cenarios.mjs"
    },
    {
+    "guard": "Protected",
+    "file": "scripts/ai-context/cenarios.mjs"
+   },
+   {
     "guard": "ProtectedRoute",
     "file": "scripts/ai-context/gerar.unit.mjs"
    },
@@ -68746,8 +68763,8 @@
   },
   {
    "module": "scripts",
-   "files": 306,
-   "lines": 50885,
+   "files": 309,
+   "lines": 51549,
    "tables": [
     "__proto__",
     "a",
@@ -76800,7 +76817,8 @@
     "scripts/lib/mgmt-mock.test.mjs",
     "scripts/lib/seguranca-processo.mjs",
     "scripts/lib/seguranca-processo.test.mjs",
-    "scripts/migration/verify/storage-bytes_test.ts"
+    "scripts/migration/verify/storage-bytes_test.ts",
+    "scripts/supabase_snapshot/test_snapshot_pg.py"
    ],
    "PGDATABASE": [
     "scripts/migration/dr/create-drill-backup.mjs",
@@ -76820,6 +76838,7 @@
     "scripts/migration/_pg_teste.ts",
     "scripts/migration/ddl/ddl.test.mjs",
     "scripts/migration/sql/sql.test.mjs",
+    "scripts/supabase_snapshot/test_snapshot_pg.py",
     "tests/rls/contact-relation-concurrency.mjs"
    ],
    "PGPASSWORD": [
@@ -76832,7 +76851,8 @@
     "scripts/lib/mgmt-mock.test.mjs",
     "scripts/migration/_pg_teste.ts",
     "scripts/migration/ddl/ddl.test.mjs",
-    "scripts/migration/sql/sql.test.mjs"
+    "scripts/migration/sql/sql.test.mjs",
+    "scripts/supabase_snapshot/test_snapshot_pg.py"
    ],
    "PGSSLMODE": [
     "scripts/migration/dr/create-drill-backup.mjs"
@@ -76842,7 +76862,8 @@
     "scripts/migration/_pg_teste.ts",
     "scripts/migration/ddl/ddl.test.mjs",
     "scripts/migration/dr/create-drill-backup.mjs",
-    "scripts/migration/sql/sql.test.mjs"
+    "scripts/migration/sql/sql.test.mjs",
+    "scripts/supabase_snapshot/test_snapshot_pg.py"
    ],
    "PROD": [
     "src/lib/pushNotifications.ts",
@@ -76914,6 +76935,9 @@
    ],
    "SNAPSHOT_INCLUDE_SCHEMAS": [
     "scripts/supabase_snapshot/snapshot.py"
+   ],
+   "SNAPSHOT_TEST_ALLOW_REMOTE": [
+    "scripts/supabase_snapshot/test_snapshot_pg.py"
    ],
    "SOURCE_COUNTS_FILE": [
     "scripts/migration/dr/create-drill-backup.mjs"
@@ -119208,7 +119232,7 @@
    },
    {
     "file": "scripts/lib/supabase-mgmt.test.mjs",
-    "name": "ordem canônica espelha os \\\\i de 99_apply_all.sql"
+    "name": "ordem canônica espelha os \\\\ir de 99_apply_all.sql"
    },
    {
     "file": "scripts/lib/supabase-mgmt.test.mjs",
@@ -155737,6 +155761,7 @@
    "scripts/migration/ddl/05_grants.sql",
    "scripts/migration/ddl/07_policies.sql",
    "scripts/migration/ddl/08_functions.sql",
+   "scripts/migration/ddl/tests/migrations-preamble.sql",
    "scripts/migration/ddl/tests/supabase-stubs.sql",
    "scripts/migration/reset-passwords.ts",
    "scripts/migration/reset-passwords_test.ts",
@@ -155767,6 +155792,8 @@
    "scripts/regras_negocio/test_generate_fatos.py",
    "scripts/sql-raiz.test.mjs",
    "scripts/supabase_snapshot/snapshot.py",
+   "scripts/supabase_snapshot/test_snapshot_pg.py",
+   "scripts/supabase_snapshot/test_snapshot_seguranca.py",
    "src/components/admin/conexoes/ConnectionFormDialog.tsx",
    "supabase/functions/_shared/aiGatewayLogger.ts",
    "supabase/functions/_shared/auth.ts",
@@ -164999,6 +165026,10 @@
     "file": "scripts/ai-context/cenarios.mjs"
    },
    {
+    "guard": "Protected",
+    "file": "scripts/ai-context/cenarios.mjs"
+   },
+   {
     "guard": "ProtectedRoute",
     "file": "scripts/ai-context/gerar.unit.mjs"
    },
@@ -170579,7 +170610,7 @@
   },
   "scripts/ai-context/cenarios.mjs": {
    "path": "scripts/ai-context/cenarios.mjs",
-   "lines": 173,
+   "lines": 182,
    "tables": [
     {
      "table": "t",
@@ -170763,6 +170794,18 @@
      "roles": []
     },
     {
+     "path": "/t",
+     "component": "Guard",
+     "guard": "",
+     "roles": []
+    },
+    {
+     "path": "/auth",
+     "component": "LazyPage",
+     "guard": "",
+     "roles": []
+    },
+    {
      "path": "/",
      "component": "A",
      "guard": "",
@@ -170821,6 +170864,7 @@
     "sup"
    ],
    "guards": [
+    "Protected",
     "Protected"
    ],
    "doc": "Simulação de cenários do gerador: monta centenas de repositórios sintéticos (variantes de SQL, rotas, menus, edges, workflows, monorepo, Python, arquivos corrompidos, fuzz) e confere: não trava, erros_do_gerador vazio, saída determinística e extração esperada. Rodar: node scripts/ai-context/cenarios …",
@@ -172662,7 +172706,7 @@
     "config: token com caractere inválido é recusado sem aparecer na mensagem",
     "args: o padrão é simulação; --apply é explícito",
     "args: combinações inválidas e flags desconhecidas são erro de uso",
-    "ordem canônica espelha os \\\\i de 99_apply_all.sql",
+    "ordem canônica espelha os \\\\ir de 99_apply_all.sql",
     "classificarErro: decide por SQLSTATE, não por palavra solta",
     "cliente: POST correto, sucesso devolve as linhas",
     "cliente: erro de SQL (400) não é repetido e traz SQLSTATE",
@@ -172979,7 +173023,7 @@
   },
   "scripts/migration/_mock_supabase.ts": {
    "path": "scripts/migration/_mock_supabase.ts",
-   "lines": 297,
+   "lines": 298,
    "exports": [
     "interface MockObjeto",
     "interface MockBucket",
@@ -173028,7 +173072,7 @@
   },
   "scripts/migration/reset-passwords.ts": {
    "path": "scripts/migration/reset-passwords.ts",
-   "lines": 232,
+   "lines": 236,
    "exports": [
     "interface Config",
     "interface Usuario",
@@ -173071,7 +173115,7 @@
   },
   "scripts/migration/reset-passwords_test.ts": {
    "path": "scripts/migration/reset-passwords_test.ts",
-   "lines": 149,
+   "lines": 155,
    "rule_comments": [
     "erro de digitação não pode virar \"execução real\""
    ],
@@ -173128,7 +173172,7 @@
   },
   "scripts/migration/cdc/replay.ts": {
    "path": "scripts/migration/cdc/replay.ts",
-   "lines": 254,
+   "lines": 255,
    "exports": [
     "interface Mudanca",
     "interface Unidade",
@@ -173180,13 +173224,13 @@
   },
   "scripts/migration/cdc/replay_test.ts": {
    "path": "scripts/migration/cdc/replay_test.ts",
-   "lines": 178,
+   "lines": 193,
    "doc": "Testes de cdc/replay.ts — wal2json v2 (formato que cdc/drain.sh grava) contra PostgREST falso.",
    "uses_service_role": true
   },
   "scripts/migration/compliance/lgpd-snapshot.ts": {
    "path": "scripts/migration/compliance/lgpd-snapshot.ts",
-   "lines": 126,
+   "lines": 128,
    "exports": [
     "const TABELAS",
     "interface Entry",
@@ -173234,7 +173278,7 @@
   },
   "scripts/migration/cutover/smoke-tests.ts": {
    "path": "scripts/migration/cutover/smoke-tests.ts",
-   "lines": 124,
+   "lines": 126,
    "exports": [
     "interface Config",
     "type Resultado",
@@ -173283,7 +173327,7 @@
   },
   "scripts/migration/ddl/02_tables.sql": {
    "path": "scripts/migration/ddl/02_tables.sql",
-   "lines": 4791,
+   "lines": 4790,
    "errors": [
     "::text]))),\n  CONSTRAINT activities_type_check CHECK ((type = ANY (ARRAY[",
     "::text]))),\n  CONSTRAINT win_loss_insights_severity_check CHECK ((severity = ANY (ARRAY["
@@ -173297,7 +173341,7 @@
   },
   "scripts/migration/ddl/03_indexes.sql": {
    "path": "scripts/migration/ddl/03_indexes.sql",
-   "lines": 383
+   "lines": 399
   },
   "scripts/migration/ddl/04_foreign_keys.sql": {
    "path": "scripts/migration/ddl/04_foreign_keys.sql",
@@ -173373,7 +173417,7 @@
   },
   "scripts/migration/ddl/10_views.sql": {
    "path": "scripts/migration/ddl/10_views.sql",
-   "lines": 151
+   "lines": 154
   },
   "scripts/migration/ddl/11_partitions.sql": {
    "path": "scripts/migration/ddl/11_partitions.sql",
@@ -173385,7 +173429,7 @@
   },
   "scripts/migration/ddl/99_apply_all.sql": {
    "path": "scripts/migration/ddl/99_apply_all.sql",
-   "lines": 59
+   "lines": 61
   },
   "scripts/migration/ddl/ddl.test.mjs": {
    "path": "scripts/migration/ddl/ddl.test.mjs",
@@ -173405,9 +173449,15 @@
     "com as correções mínimas dos defeitos: ON_ERROR_STOP=1 aplica do zero, de qualquer diretório, com RLS+policy em 100% de public"
    ]
   },
+  "scripts/migration/ddl/tests/migrations-preamble.sql": {
+   "path": "scripts/migration/ddl/tests/migrations-preamble.sql",
+   "lines": 31,
+   "is_test": true,
+   "uses_service_role": true
+  },
   "scripts/migration/ddl/tests/supabase-stubs.sql": {
    "path": "scripts/migration/ddl/tests/supabase-stubs.sql",
-   "lines": 153,
+   "lines": 154,
    "is_test": true,
    "uses_service_role": true
   },
@@ -173439,7 +173489,7 @@
   },
   "scripts/migration/monitoring/synthetic-checks.ts": {
    "path": "scripts/migration/monitoring/synthetic-checks.ts",
-   "lines": 117,
+   "lines": 124,
    "exports": [
     "interface CheckResult",
     "interface Config",
@@ -173516,7 +173566,7 @@
   },
   "scripts/migration/storage/_lib.ts": {
    "path": "scripts/migration/storage/_lib.ts",
-   "lines": 327,
+   "lines": 334,
    "exports": [
     "interface Env",
     "interface Bucket",
@@ -173525,6 +173575,7 @@
     "class ErroConfig",
     "const ajustes",
     "function intEnv",
+    "function semBarraFinal",
     "function parseEnv",
     "function loadEnv",
     "function sairComErro",
@@ -173561,7 +173612,7 @@
   },
   "scripts/migration/storage/_lib_test.ts": {
    "path": "scripts/migration/storage/_lib_test.ts",
-   "lines": 151,
+   "lines": 160,
    "errors": [
     "list falhou"
    ],
@@ -173570,7 +173621,7 @@
   },
   "scripts/migration/storage/copy-large.ts": {
    "path": "scripts/migration/storage/copy-large.ts",
-   "lines": 133,
+   "lines": 136,
    "exports": [
     "interface Ckpt",
     "interface OpcoesLarge",
@@ -173602,11 +173653,12 @@
   },
   "scripts/migration/storage/copy-objects.ts": {
    "path": "scripts/migration/storage/copy-objects.ts",
-   "lines": 207,
+   "lines": 212,
    "exports": [
     "interface OpcoesCopia",
     "interface ResultadoCopia",
     "interface Totais",
+    "function resumo",
     "function jaReplicado",
     "function criarLimitador",
     "function copiarObjeto",
@@ -173647,7 +173699,7 @@
   },
   "scripts/migration/storage/create-buckets.ts": {
    "path": "scripts/migration/storage/create-buckets.ts",
-   "lines": 81,
+   "lines": 82,
    "exports": [
     "type Acao",
     "interface Resumo",
@@ -173736,7 +173788,7 @@
   },
   "scripts/migration/tests/lib/sigrun.py": {
    "path": "scripts/migration/tests/lib/sigrun.py",
-   "lines": 28,
+   "lines": 32,
    "is_test": true,
    "exports": [
     "def child"
@@ -173954,7 +174006,7 @@
   },
   "scripts/migration/verify/logical-replica-identity.sql": {
    "path": "scripts/migration/verify/logical-replica-identity.sql",
-   "lines": 34
+   "lines": 38
   },
   "scripts/migration/verify/logical-vs-physical-drift.sql": {
    "path": "scripts/migration/verify/logical-vs-physical-drift.sql",
@@ -174113,7 +174165,7 @@
   },
   "scripts/migration/verify/row-diff.ts": {
    "path": "scripts/migration/verify/row-diff.ts",
-   "lines": 201,
+   "lines": 205,
    "exports": [
     "interface Tabela",
     "interface Amostra",
@@ -174126,6 +174178,7 @@
     "function gerarSql",
     "function parseSaida",
     "function comparar",
+    "function linhaResumo",
     "const tabelaOk",
     "interface Caminhos",
     "function caminhos",
@@ -174228,7 +174281,7 @@
   },
   "scripts/migration/verify/storage-public-guard.ts": {
    "path": "scripts/migration/verify/storage-public-guard.ts",
-   "lines": 67,
+   "lines": 69,
    "exports": [
     "interface BucketInfo",
     "function parseAllowlist",
@@ -174752,6 +174805,46 @@
     "Aceita somente um identificador SQL delimitado, não texto cru."
    ],
    "doc": "!/usr/bin/env python3"
+  },
+  "scripts/supabase_snapshot/test_snapshot_pg.py": {
+   "path": "scripts/supabase_snapshot/test_snapshot_pg.py",
+   "lines": 333,
+   "exports": [
+    "def admin",
+    "def available",
+    "class SnapshotAgainstPostgres"
+   ],
+   "env": [
+    "PATH",
+    "PGHOST",
+    "PGPORT",
+    "PGUSER",
+    "SNAPSHOT_TEST_ALLOW_REMOTE"
+   ],
+   "temporal": [
+    "INSERT INTO cron.job_run_details VALUES (1, 10, 'failed', now() - interval '1 hour', now(), 'ERROR: token=G4CANARY20abcdefghijklmnop rejeitado');",
+    "result = subprocess.run([sys.executable, str(SCRIPT)], env=env, capture_output=True, text=True, timeout=180, check=False, cwd=cls.work)",
+    "return psycopg.connect(host=HOST, port=PORT, user=USER, dbname=dbname, autocommit=True, connect_timeout=5)",
+    "self.assertIn(\"app.settings.jwt_secret=[REDACTED], statement_timeout=8s\", (self.first / \"roles.md\").read_text(encoding=\"utf-8\"))"
+   ],
+   "uses_service_role": true
+  },
+  "scripts/supabase_snapshot/test_snapshot_seguranca.py": {
+   "path": "scripts/supabase_snapshot/test_snapshot_seguranca.py",
+   "lines": 193,
+   "exports": [
+    "class ScrubTests",
+    "class FailureModeTests"
+   ],
+   "rule_comments": [
+    "redação não pode disparar o guard"
+   ],
+   "doc": "Redação de segredos e modos de falha do snapshot — offline (driver e rede substituídos por dublês). Cada caso de vazamento abaixo foi reproduzido contra um Postgres local com segredos plantados antes da correção (ver test_snapshot_pg.py para a prova de ponta a ponta).",
+   "temporal": [
+    "[\"app.settings.jwt_secret=[REDACTED]\", \"statement_timeout=8s\", \"search_path=public\", \"sem_igual\"])",
+    "self.assertEqual(snapshot.redact_settings([\"app.settings.jwt_secret=abc\", \"statement_timeout=8s\", \"search_path=public\", \"sem_igual\"]),"
+   ],
+   "uses_service_role": true
   },
   "src/App.tsx": {
    "path": "src/App.tsx",
@@ -232688,10 +232781,126 @@
   }
  },
  "git": {
-  "sha": "0adf3118f032b8ec69751e9637ae39dd886cd281",
+  "sha": "6a57e0290ce09e7c9b9c0fa4134eccde4bccb2d0",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "6a57e02",
+    "date": "2026-11-12",
+    "author": "adm01-debug",
+    "subject": "chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)",
+    "files": [
+     "docs/perf/explain-analyze.md",
+     "scripts/ai-context/README.md",
+     "scripts/ai-context/cenarios.mjs",
+     "scripts/ai-context/gerar.mjs",
+     "scripts/apply-cli.test.mjs",
+     "scripts/apply-e2e.test.mjs",
+     "scripts/automation.config.json",
+     "scripts/lib/supabase-mgmt.mjs",
+     "scripts/lib/supabase-mgmt.test.mjs",
+     "scripts/migration/.gitignore",
+     "scripts/migration/_mock_supabase.ts",
+     "scripts/migration/auth/export-identities.sh",
+     "scripts/migration/auth/import-identities.sh",
+     "scripts/migration/auth/rotate-jwt.sh",
+     "scripts/migration/cdc/README.md",
+     "scripts/migration/cdc/drain.sh",
+     "scripts/migration/cdc/dry-run.sh",
+     "scripts/migration/cdc/lag-watch.sh",
+     "scripts/migration/cdc/replay.ts",
+     "scripts/migration/cdc/replay_test.ts",
+     "scripts/migration/chaos/inject.sh",
+     "scripts/migration/compare-counts.sh",
+     "scripts/migration/compliance/lgpd-snapshot.ts",
+     "scripts/migration/compliance/lgpd-snapshot_test.ts",
+     "scripts/migration/cutover/dns-flip-checklist.md",
+     "scripts/migration/cutover/freeze-origin.sh",
+     "scripts/migration/cutover/smoke-tests.ts",
+     "scripts/migration/cutover/smoke-tests_test.ts",
+     "scripts/migration/dashboard.sh",
+     "scripts/migration/ddl/02_tables.sql",
+     "scripts/migration/ddl/03_indexes.sql",
+     "scripts/migration/ddl/08_functions.sql",
+     "scripts/migration/ddl/10_views.sql",
+     "scripts/migration/ddl/99_apply_all.sql",
+     "scripts/migration/ddl/tests/migrations-preamble.sql",
+     "scripts/migration/ddl/tests/supabase-stubs.sql",
+     "scripts/migration/ddl/verify-extensions.sh",
+     "scripts/migration/dr/backup-encryption-check.sh",
+     "scripts/migration/dr/restore-drill.sh",
+     "scripts/migration/dr/wal-archive-check.sh",
+     "scripts/migration/env.example",
+     "scripts/migration/export-data.sh",
+     "scripts/migration/extract-ddl.sh",
+     "scripts/migration/functions/deploy-all.sh",
+     "scripts/migration/functions/preflight-secrets.sh",
+     "scripts/migration/functions/rewrite-cron-urls.sh",
+     "scripts/migration/functions/secrets-leak-scan.sh",
+     "scripts/migration/functions/secrets.template.env",
+     "scripts/migration/functions/set-secrets.sh",
+     "scripts/migration/functions/verify-deploy.sh",
+     "scripts/migration/import-data-parallel.sh",
+     "scripts/migration/import-data.sh",
+     "scripts/migration/monitoring/post-cutover-watch.sh",
+     "scripts/migration/monitoring/synthetic-checks.ts",
+     "scripts/migration/monitoring/synthetic-checks_test.ts",
+     "scripts/migration/reset-passwords.sh",
+     "scripts/migration/reset-passwords.ts",
+     "scripts/migration/reset-passwords_test.ts",
+     "scripts/migration/rollback.sh",
+     "scripts/migration/rollback/full-restore.sh",
+     "scripts/migration/sql/sql.test.mjs",
+     "scripts/migration/storage/_lib.ts",
+     "scripts/migration/storage/_lib_test.ts",
+     "scripts/migration/storage/copy-large.ts",
+     "scripts/migration/storage/copy-objects.ts",
+     "scripts/migration/storage/create-buckets.ts",
+     "scripts/migration/storage/env.example",
+     "scripts/migration/storage/run.sh",
+     "scripts/migration/tests/cutover-cdc.test.sh",
+     "scripts/migration/tests/data.test.sh",
+     "scripts/migration/tests/dr.test.sh",
+     "scripts/migration/tests/functions.test.sh",
+     "scripts/migration/tests/lib.test.sh",
+     "scripts/migration/tests/lib/env-reads.sh",
+     "scripts/migration/tests/lib/harness.sh",
+     "scripts/migration/tests/lib/sigrun.py",
+     "scripts/migration/tests/run.sh",
+     "scripts/migration/tests/static.test.sh",
+     "scripts/migration/unmark-must-reset.sh",
+     "scripts/migration/verify/full-audit.sh",
+     "scripts/migration/verify/grants-parity.sh",
+     "scripts/migration/verify/logical-replica-identity.sql",
+     "scripts/migration/verify/planner-stats-freshness.sh",
+     "scripts/migration/verify/row-diff-deep.ts",
+     "scripts/migration/verify/row-diff.ts",
+     "scripts/migration/verify/storage-public-guard.ts",
+     "scripts/migration/verify/tests/README.md",
+     "scripts/migration/verify/tests/lib.sh",
+     "scripts/migration/verify/tests/scenarios/51-replication-lag-guard.sh",
+     "scripts/migration/verify/tests/scenarios/82-full-audit-endurecido.sh",
+     "scripts/migration/verify/tests/scenarios/83-full-audit-sem-conexao.sh",
+     "scripts/migration/verify/tests/scenarios/89-wrappers-canario-planner-timeline.sh",
+     "scripts/migration/verify/tests/scenarios/94-monitoring-tests.sh",
+     "scripts/migration/verify/tests/scenarios/README.md",
+     "scripts/migration/verify/triggers-parity.sh",
+     "scripts/monitoring/ai-gateway-partitions-alerts.yml",
+     "scripts/monitoring/ai-gateway-partitions-exporter.sh",
+     "scripts/monitoring/alerts.test.sh",
+     "scripts/monitoring/check-runbook-coverage.sh",
+     "scripts/monitoring/check-runbook-coverage.test.sh",
+     "scripts/monitoring/exporters.test.sh",
+     "scripts/monitoring/rpc-perf-alerts.yml",
+     "scripts/monitoring/rpc-perf-exporter.sh",
+     "scripts/monitoring/rpc-plan-exporter.sh",
+     "scripts/regras_negocio/README.md",
+     "scripts/supabase_snapshot/README.md",
+     "scripts/supabase_snapshot/test_snapshot_pg.py",
+     "scripts/supabase_snapshot/test_snapshot_seguranca.py"
+    ]
+   },
    {
     "sha": "0adf311",
     "date": "2026-11-12",
@@ -233501,16 +233710,6 @@
     "files": [
      ".github/workflows/contexto.yml"
     ]
-   },
-   {
-    "sha": "f5438f2",
-    "date": "2026-11-09",
-    "author": "dependabot[bot]",
-    "subject": "build(deps): bump the minor-and-patch group with 6 updates (#182)",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
    }
   ],
   "hot_files": [
@@ -233525,6 +233724,10 @@
    [
     "inventario/estado/tabelas-uso.json",
     5
+   ],
+   [
+    "scripts/automation.config.json",
+    4
    ],
    [
     "inventario/estado/edge-tabela.json",
@@ -233543,56 +233746,52 @@
     3
    ],
    [
-    "scripts/automation.config.json",
-    3
-   ],
-   [
-    "package.json",
-    3
-   ],
-   [
-    "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+    "scripts/ai-context/gerar.mjs",
     2
    ],
    [
-    "supabase/functions/evolution-webhook/messages.ts",
+    "scripts/apply-cli.test.mjs",
     2
    ],
    [
-    ".github/workflows/ci.yml",
+    "scripts/apply-e2e.test.mjs",
     2
    ],
    [
-    "CHANGELOG.md",
+    "scripts/lib/supabase-mgmt.mjs",
     2
    ],
    [
-    "supabase/functions/_shared/edge-test-harness.ts",
+    "scripts/lib/supabase-mgmt.test.mjs",
     2
    ],
    [
-    "docs/qa/security-definer-audit.md",
+    "scripts/migration/_mock_supabase.ts",
     2
    ],
    [
-    "tests/rls/security_definer_hardening.sql",
+    "scripts/migration/auth/export-identities.sh",
     2
    ],
    [
-    "AGENTS.md",
+    "scripts/migration/auth/import-identities.sh",
     2
    ],
    [
-    "scripts/migration/storage/verify-counts.ts",
+    "scripts/migration/cdc/drain.sh",
     2
    ],
    [
-    "scripts/check-supabase-project-ref.test.mjs",
+    "scripts/migration/cdc/dry-run.sh",
     2
    ],
    [
-    "AUDITORIA.md",
-    1
+    "scripts/migration/cdc/lag-watch.sh",
+    2
+   ],
+   [
+    "scripts/migration/cdc/replay.ts",
+    2
    ]
   ]
  }

@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)",
    "docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)",
    "fix(webhook): aceita timestamps textuais do Evolution e preserva época zero (#206)",
    "chore: inventario do estado real [auto] (#205)",
-   "fix(whatsapp): vincula eventos ao proprietário da instância (#151)",
-   "fix(cache): preserva carga inicial e revalida relações da ficha (#147)"
+   "fix(whatsapp): vincula eventos ao proprietário da instância (#151)"
   ]
  },
  "pr_template": null,

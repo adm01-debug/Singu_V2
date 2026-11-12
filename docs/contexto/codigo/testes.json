@@ -5,11 +5,11 @@
   "vitest",
   "playwright"
  ],
- "total": 266,
+ "total": 268,
  "por_tipo": {
   "contrato": 39,
   "e2e": 12,
-  "pytest": 7,
+  "pytest": 9,
   "unit": 206
  },
  "onde_ficam": [
@@ -27,7 +27,7 @@
   },
   {
    "padrao": "outro",
-   "arquivos": 19
+   "arquivos": 21
   },
   {
    "padrao": "e2e/",
@@ -497,7 +497,7 @@
   {
    "arquivo": "scripts/migration/tests/lib/sigrun.py",
    "tipo": "pytest",
-   "linhas": 28,
+   "linhas": 32,
    "testa": [],
    "casos": 0
   },
@@ -537,6 +537,20 @@
     "scripts/hardening/_pg-teste.mjs"
    ],
    "casos": 18
+  },
+  {
+   "arquivo": "scripts/supabase_snapshot/test_snapshot_pg.py",
+   "tipo": "pytest",
+   "linhas": 333,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "scripts/supabase_snapshot/test_snapshot_seguranca.py",
+   "tipo": "pytest",
+   "linhas": 193,
+   "testa": [],
+   "casos": 0
   },
   {
    "arquivo": "scripts/supabase_snapshot/test_snapshot.py",

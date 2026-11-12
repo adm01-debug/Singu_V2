@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0adf3118f0` · branch `main` · 2026-11-12 21:41 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6a57e0290c` · branch `main` · 2026-11-12 22:59 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -310,7 +310,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 285 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 288 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.unit.mjs`
@@ -329,6 +329,7 @@
 - `scripts/migration/ddl/05_grants.sql`
 - `scripts/migration/ddl/07_policies.sql`
 - `scripts/migration/ddl/08_functions.sql`
+- `scripts/migration/ddl/tests/migrations-preamble.sql`
 - `scripts/migration/ddl/tests/supabase-stubs.sql`
 - `scripts/migration/reset-passwords.ts`
 - `scripts/migration/reset-passwords_test.ts`
@@ -359,6 +360,8 @@
 - `scripts/regras_negocio/test_generate_fatos.py`
 - `scripts/sql-raiz.test.mjs`
 - `scripts/supabase_snapshot/snapshot.py`
+- `scripts/supabase_snapshot/test_snapshot_pg.py`
+- `scripts/supabase_snapshot/test_snapshot_seguranca.py`
 - `src/components/admin/conexoes/ConnectionFormDialog.tsx`
 - `supabase/functions/_shared/aiGatewayLogger.ts`
 - `supabase/functions/_shared/auth.ts`
@@ -459,10 +462,7 @@
 - `supabase/functions/voice-to-text/index.ts`
 - `supabase/functions/weekly-digest/index.ts`
 - `supabase/functions/whatsapp-import/index.ts`
-- `supabase/migrations/20260416224850_94abbf44-14e8-4a42-8402-1899595fe9c2.sql`
-- `supabase/migrations/20260420120250_19397a25-edf3-4939-854a-9d4fdc534f65.sql`
-- `supabase/migrations/20260420122559_cbe81a51-13f5-42a6-8cd6-d892ca9f2028.sql`
-- … +135 (lista completa em `context.json`)
+- … +138 (lista completa em `context.json`)
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 

@@ -11,27 +11,21 @@
     "useC",
     "useX"
    ],
-   "linhas": 173,
+   "linhas": 182,
    "dominio": null,
    "tabelas": [
-    "a",
     "fantasma",
     "so_teste",
     "t",
-    "t1",
     "tx"
    ],
    "rpcs": [
     "r1"
    ],
    "edges": [
-    "inexistente",
-    "other",
     "tick"
    ],
-   "hooks_internos": [
-    "useFeatureFlag"
-   ],
+   "hooks_internos": [],
    "canais_realtime": [],
    "usado_por": 0,
    "usado_por_arquivos": [],

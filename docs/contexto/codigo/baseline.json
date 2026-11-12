@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "0adf3118f032b8ec69751e9637ae39dd886cd281",
+  "commit": "6a57e0290ce09e7c9b9c0fa4134eccde4bccb2d0",
   "branch": "main",
-  "data_commit": "2026-11-12T16:55:27-03:00",
+  "data_commit": "2026-11-12T18:13:06-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "6a57e029",
+    "data": "2026-11-12",
+    "assunto": "chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)"
+   },
    {
     "sha": "0adf3118",
     "data": "2026-11-12",
@@ -126,30 +131,41 @@
     "sha": "357fd21e",
     "data": "2026-11-10",
     "assunto": "fix(push): chave VAPID própria e sender que realmente entrega (#185)"
-   },
-   {
-    "sha": "39789307",
-    "data": "2026-11-10",
-    "assunto": "chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)"
    }
   ],
-  "arquivos_mudados_7d": 594,
+  "arquivos_mudados_7d": 630,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
-    "mudancas": 182
+    "mudancas": 198
    },
    {
     "pasta": "supabase/functions/_shared",
     "mudancas": 21
    },
    {
+    "pasta": "scripts/migration/storage",
+    "mudancas": 20
+   },
+   {
     "pasta": "CHANGELOG.md",
     "mudancas": 17
    },
    {
-    "pasta": "scripts/migration/storage",
-    "mudancas": 13
+    "pasta": "scripts/migration/functions",
+    "mudancas": 15
+   },
+   {
+    "pasta": "scripts/migration/cdc",
+    "mudancas": 14
+   },
+   {
+    "pasta": "scripts/migration/tests",
+    "mudancas": 14
+   },
+   {
+    "pasta": "scripts/migration/ddl",
+    "mudancas": 12
    },
    {
     "pasta": "src/components/admin",
@@ -164,14 +180,6 @@
     "mudancas": 11
    },
    {
-    "pasta": "scripts/migration/cdc",
-    "mudancas": 8
-   },
-   {
-    "pasta": "scripts/migration/functions",
-    "mudancas": 8
-   },
-   {
     "pasta": "inventario/estado/banco.json",
     "mudancas": 7
    },
@@ -184,16 +192,8 @@
     "mudancas": 7
    },
    {
-    "pasta": "src/components/contact-detail",
+    "pasta": "scripts/migration/cutover",
     "mudancas": 7
-   },
-   {
-    "pasta": "src/hooks/__tests__",
-    "mudancas": 7
-   },
-   {
-    "pasta": "RELATORIO_CI.md",
-    "mudancas": 6
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -270,6 +270,10 @@
     "mudancas": 5
    },
    {
+    "arquivo": "scripts/migration/functions/secrets.template.env",
+    "mudancas": 5
+   },
+   {
     "arquivo": "scripts/rls-matrix/rls-baseline.json",
     "mudancas": 5
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "PENDENCIAS.md",
     "mudancas": 4
-   },
-   {
-    "arquivo": "README.md",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 56
+    "commits": 57
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -318,11 +318,11 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3221,
-  "arquivos_codigo": 2213,
-  "linhas_codigo": 413496,
+  "arquivos_total": 3237,
+  "arquivos_codigo": 2215,
+  "linhas_codigo": 414104,
   "rotas": 114,
-  "rotas_http_backend": 11,
+  "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 56,
   "modulos": 141,
@@ -332,9 +332,9 @@
   "tabelas": 418,
   "migrations": 483,
   "cron_jobs": 34,
-  "testes": 266,
+  "testes": 268,
   "workflows": 11,
-  "scripts": 293,
+  "scripts": 296,
   "docs_md": 155
  },
  "por_pasta": {
@@ -396,7 +396,7 @@
   },
   "scripts/ai-context": {
    "arquivos": 3,
-   "linhas": 1674
+   "linhas": 1683
   },
   "scripts/apply-all.js": {
    "arquivos": 1,
@@ -596,7 +596,7 @@
   },
   "scripts/migration": {
    "arquivos": 39,
-   "linhas": 5113
+   "linhas": 5186
   },
   "scripts/regras_negocio": {
    "arquivos": 5,
@@ -619,8 +619,8 @@
    "linhas": 290
   },
   "scripts/supabase_snapshot": {
-   "arquivos": 2,
-   "linhas": 2788
+   "arquivos": 4,
+   "linhas": 3314
   },
   "scripts/test_generate_docs.py": {
    "arquivos": 1,
@@ -1245,7 +1245,6 @@
   ],
   "ciclos_de_import": 5,
   "possiveis_segredos_no_codigo": [
-   "scripts/ai-context/cenarios.mjs:102",
    "scripts/ai-context/gerar.unit.mjs:40",
    "scripts/ai-context/gerar.unit.mjs:41",
    "scripts/ai-context/gerar.unit.mjs:42",
@@ -1254,7 +1253,11 @@
    "supabase/functions/_shared/auth_test.ts:61",
    "supabase/functions/_shared/auth_test.ts:68",
    "supabase/functions/_shared/auth_test.ts:69",
-   "scripts/regras_negocio/test_generate_fatos.py:200"
+   "scripts/regras_negocio/test_generate_fatos.py:200",
+   "scripts/supabase_snapshot/test_snapshot_pg.py:67",
+   "scripts/supabase_snapshot/test_snapshot_pg.py:68",
+   "scripts/supabase_snapshot/test_snapshot_pg.py:111",
+   "scripts/supabase_snapshot/test_snapshot_seguranca.py:44"
   ]
  },
  "erros_do_gerador": []
