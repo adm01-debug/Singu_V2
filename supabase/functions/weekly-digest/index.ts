@@ -1,6 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { sendResendEmail } from "../_shared/resend.ts";
-import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecret, authenticateRequest, jsonError } from "../_shared/auth.ts";
+import { rateLimit } from "../_shared/rate-limit.ts";
+
+const userLimiter = rateLimit({ windowMs: 60_000, max: 3 });
 import { validate } from "../_shared/validate.ts";
 
 interface WeeklyDigestData {
@@ -29,8 +32,9 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
-  const cronError = await requireCronSecret(req);
-  if (cronError) return cronError;
+  const caller = await authorizeCaller(req);
+  if (caller instanceof Response) return caller;
+  const authUserId = caller.userId;
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
   if (bodyError) return bodyError;
@@ -43,10 +47,13 @@ Deno.serve(async (req) => {
     const vwd = validate(rawBody ?? {}, {
       source: { type: 'string', maxLength: 20 },
       userId: { type: 'string', maxLength: 36 },
+      sendEmail: { type: 'boolean' },
     });
     if (!vwd.ok) return new Response(JSON.stringify({ error: vwd.error }), { status: 400, headers: { ...scopedCorsHeaders(req), 'Content-Type': 'application/json' } });
-    const { source, userId: specificUserId } = vwd.data as { source?: string; userId?: string };
-    const isCronJob = source === 'cron';
+    const { source, userId: bodyUserId, sendEmail } = vwd.data as { source?: string; userId?: string; sendEmail?: boolean };
+    const specificUserId = authUserId ?? bodyUserId;
+    const isCronJob = !authUserId && source === 'cron';
+    const manualEmailKey = testEmailKey(authUserId, sendEmail);
 
     console.log(`Starting weekly digest generation... Source: ${isCronJob ? 'cron' : 'manual'}`);
 
@@ -190,7 +197,7 @@ Deno.serve(async (req) => {
         };
 
         digests.push(digestData);
-        const channel = await deliverDigest(digestData, settings.email_address, now);
+        const channel = await deliverDigest(digestData, emailTarget(isCronJob, manualEmailKey, settings.email_address), now, manualEmailKey);
         if (channel) {
           reportRows.push({ user_id: userId, report_data: digestData, sent_via: [channel] });
           successUserIds.push(userId);
@@ -204,7 +211,7 @@ Deno.serve(async (req) => {
     const nowIso = now.toISOString();
     await Promise.all([
       reportRows.length > 0 ? supabase.from('weekly_reports').insert(reportRows) : Promise.resolve(),
-      successUserIds.length > 0
+      isCronJob && successUserIds.length > 0
         ? supabase.from('weekly_report_settings').update({ last_sent_at: nowIso }).in('user_id', successUserIds)
         : Promise.resolve(),
     ]);
@@ -225,6 +232,24 @@ Deno.serve(async (req) => {
   }
 });
 
+/** Agendamento (x-cron-secret) processa os elegíveis; usuário logado (tela de relatório) só o próprio, até 3x/min. */
+async function authorizeCaller(req: Request): Promise<{ userId: string | null } | Response> {
+  if (req.headers.has('x-cron-secret')) return (await requireCronSecret(req)) ?? { userId: null };
+  let userId: string;
+  try { userId = await authenticateRequest(req); } catch { return jsonError('Unauthorized', 401, req); }
+  return userLimiter.check(userId, req) ?? { userId };
+}
+
+/** Agendamento envia ao endereço configurado; pela tela, só quando o usuário pediu o e-mail de teste. */
+function emailTarget(isCronJob: boolean, manualEmailKey: string | null, address: string | null | undefined): string | null {
+  return isCronJob || manualEmailKey ? address ?? null : null;
+}
+
+/** Pela tela, e-mail só quando o usuário pede o teste; chave única por clique (o limite é 3/min). */
+function testEmailKey(authUserId: string | null, sendEmail?: boolean): string | null {
+  return authUserId && sendEmail ? `weekly-digest-teste-${authUserId}-${Date.now()}` : null;
+}
+
 /** Já passou da hora de envio (Brasília) no dia escolhido e não houve envio nas últimas 20 h.
  *  `>=` em vez de `===`: se o envio falhar, as execuções das horas seguintes do mesmo dia tentam de novo. */
 function isDueNow(s: { send_time?: string | null; last_sent_at?: string | null }, now: Date, currentHour: number): boolean {
@@ -235,14 +260,14 @@ function isDueNow(s: { send_time?: string | null; last_sent_at?: string | null }
 
 /** Canal usado ('email' | 'system') ou null quando o e-mail falhou — aí nada é gravado e a próxima
  *  execução do mesmo dia tenta de novo com a mesma Idempotency-Key. Sem endereço configurado = só no app. */
-async function deliverDigest(digest: WeeklyDigestData, configuredEmail: string | null | undefined, now: Date): Promise<'email' | 'system' | null> {
+async function deliverDigest(digest: WeeklyDigestData, configuredEmail: string | null | undefined, now: Date, idempotencyKey: string | null = null): Promise<'email' | 'system' | null> {
   if (!configuredEmail) return 'system';
   try {
     const sent = await sendResendEmail({
       to: configuredEmail,
       subject: `Seu resumo semanal do Singu – ${now.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`,
       html: generateEmailHtml(digest),
-      idempotencyKey: `weekly-digest-${digest.userId}-${now.toISOString().slice(0, 10)}`,
+      idempotencyKey: idempotencyKey ?? `weekly-digest-${digest.userId}-${now.toISOString().slice(0, 10)}`,
     });
     if (sent.ok) return 'email';
     console.error(`weekly-digest e-mail não enviado para ${digest.userId}:`, sent.error);
