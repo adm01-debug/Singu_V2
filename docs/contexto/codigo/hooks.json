@@ -7572,7 +7572,7 @@
     "useVelocityMetrics",
     "useWeightedForecast"
    ],
-   "linhas": 282,
+   "linhas": 284,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

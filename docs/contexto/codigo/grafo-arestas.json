@@ -8774,6 +8774,7 @@
   ],
   "src/hooks/usePipeline.ts": [
    "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/types.ts",
    "src/lib/externalData.ts"
   ],
   "src/hooks/usePlaybooks.ts": [

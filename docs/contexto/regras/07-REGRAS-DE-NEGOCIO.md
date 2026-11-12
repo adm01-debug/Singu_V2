@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `47e97ccbdc` · branch `main` · 2026-11-12 11:53 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `68a97f4dcd` · branch `main` · 2026-11-12 12:21 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4391,7 +4391,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3146 testes em 241 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3152 testes em 242 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4526,6 +4526,7 @@ _nenhum item encontrado_
 | `src/lib/insights/__tests__/pickTopPassages.test.ts` | 7 | pickTopPassages · retorna até MAX_TOTAL_CAP itens mesmo com totalCap maior · é determinística: mesma entrada → mesma saída · aplica round-robin entre fontes (distribui antes de aprofundar) … |
 | `scripts/maintenance/tests/hooks.mjs` | 6 | hook ${name} bloqueante impede commit validado · hooks versionados rodam offline sem .env/segredo e commit inclui escopo obrigatório · hook que altera e adiciona o patch é rejeitado depois do commit isolado · hook que remove o escopo da mensagem não produz commit validado … |
 | `src/components/interactions/__tests__/InfiniteScrollSentinel.test.tsx` | 6 | InfiniteScrollSentinel · não renderiza nada quando total=0 · exibe progressbar com aria-values e contador no estado hasMore · exibe estado final sem barra quando !hasMore … |
+| `src/components/pipeline/CreateDealWidget.contract.test.tsx` | 6 | Criação de oportunidade com o contrato da RPC · envia título e valor %s com os nomes canônicos · mantém os campos e não invalida dados quando o banco recusa a chamada · não anuncia criação sem identificador confirmado: %j … |
 | `src/components/sequences/SequencePausedEmails.test.tsx` | 6 | Retomada de email pausado · exige confirmação e envia a pausa e o progresso exibidos sem afirmar envio · mantém a pausa e a confirmação disponíveis após erro de persistência · expõe a falha da consulta e permite nova tentativa … |
 | `src/hooks/useCSATSurveys.contract.test.tsx` | 6 | Contrato de pesquisas CSAT · consulta apenas CSAT do dono e contato, mantendo a escala de satisfação · cria uma pesquisa pendente sem inventar nota ou entrega · rejeita a nota inválida %s antes de gravar … |
 | `src/hooks/useContacts.test.tsx` | 6 | useContacts CRUD & Pagination · should fetch first page of contacts (50 per page) · should fetch every page when the consumer requires the full dataset · should stop the full-dataset loading state when a later page fails … |

@@ -21,7 +21,7 @@
    "src/domain (8)"
   ],
   "testes": [
-   "co-localizado (*.test) (125)",
+   "co-localizado (*.test) (126)",
    "co-localizado (__tests__) (89)",
    "tests/ (23)"
   ],
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(oportunidades): alinha criação ao contrato da RPC (#152)",
    "style(manutencao): aplica correcoes locais verificadas (#195)",
    "chore: inventario do estado real [auto] (#204)",
    "fix: botões gerar relatório e e-mail de teste do resumo semanal voltam a funcionar (#203)",
-   "fix(push): alinha chave VAPID publica do front com o par dos secrets (#199)",
-   "fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)"
+   "fix(push): alinha chave VAPID publica do front com o par dos secrets (#199)"
   ]
  },
  "pr_template": null,

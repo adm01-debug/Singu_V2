@@ -7138,7 +7138,7 @@
   {
    "modulo": "components/pipeline",
    "arquivos": 9,
-   "testes": 2,
+   "testes": 3,
    "linhas": 1399,
    "itens_menu": [],
    "telas": [],
@@ -9299,7 +9299,7 @@
    "modulo": "hooks",
    "arquivos": 375,
    "testes": 23,
-   "linhas": 50070,
+   "linhas": 50072,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],

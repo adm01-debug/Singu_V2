@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "nos": 1948,
- "arestas": 8404,
+ "arestas": 8405,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -66,7 +66,7 @@
   },
   {
    "arquivo": "src/integrations/supabase/types.ts",
-   "importado_por": 109
+   "importado_por": 110
   },
   {
    "arquivo": "src/components/ui/progress.tsx",

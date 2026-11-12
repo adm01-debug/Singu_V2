@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "47e97ccbdca69d242671c46e2cffe2acb65b8e18",
+  "commit": "68a97f4dcd6032cbf64d57e603ce30cb485c1bda",
   "branch": "main",
-  "data_commit": "2026-11-12T08:36:21-03:00",
+  "data_commit": "2026-11-12T09:03:35-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "68a97f4d",
+    "data": "2026-11-12",
+    "assunto": "fix(oportunidades): alinha criação ao contrato da RPC (#152)"
+   },
    {
     "sha": "47e97ccb",
     "data": "2026-11-12",
@@ -126,26 +131,21 @@
     "sha": "f5438f28",
     "data": "2026-11-09",
     "assunto": "build(deps): bump the minor-and-patch group with 6 updates (#182)"
-   },
-   {
-    "sha": "b7f73b43",
-    "data": "2026-11-08",
-    "assunto": "fix(db): remove trigger duplicado e adiciona índices parciais em contact_phones (#178)"
    }
   ],
-  "arquivos_mudados_7d": 578,
+  "arquivos_mudados_7d": 581,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
     "mudancas": 182
    },
    {
-    "pasta": "supabase/functions/_shared",
+    "pasta": "CHANGELOG.md",
     "mudancas": 19
    },
    {
-    "pasta": "CHANGELOG.md",
-    "mudancas": 18
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 19
    },
    {
     "pasta": "scripts/migration/storage",
@@ -199,7 +199,7 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "CHANGELOG.md",
-    "mudancas": 46
+    "mudancas": 47
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -305,7 +305,7 @@
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 20
+    "commits": 21
    },
    {
     "autor": "dependabot[bot]",
@@ -322,9 +322,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3216,
-  "arquivos_codigo": 2210,
-  "linhas_codigo": 412812,
+  "arquivos_total": 3217,
+  "arquivos_codigo": 2211,
+  "linhas_codigo": 412921,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -336,7 +336,7 @@
   "tabelas": 418,
   "migrations": 483,
   "cron_jobs": 34,
-  "testes": 264,
+  "testes": 265,
   "workflows": 11,
   "scripts": 293,
   "docs_md": 154
@@ -647,8 +647,8 @@
    "linhas": 590
   },
   "src/components": {
-   "arquivos": 984,
-   "linhas": 148039
+   "arquivos": 985,
+   "linhas": 148146
   },
   "src/config": {
    "arquivos": 1,
@@ -668,7 +668,7 @@
   },
   "src/hooks": {
    "arquivos": 434,
-   "linhas": 56840
+   "linhas": 56842
   },
   "src/integrations": {
    "arquivos": 3,

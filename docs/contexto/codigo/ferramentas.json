@@ -3,7 +3,7 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2049)",
+   "TypeScript (2050)",
    "SQL (655)",
    "Markdown (154)",
    "JavaScript (143)",
@@ -519,7 +519,7 @@
   {
    "arquivo": "CHANGELOG.md",
    "titulo": "Changelog",
-   "linhas": 417
+   "linhas": 419
   },
   {
    "arquivo": "CLAUDE.md",
@@ -985,15 +985,15 @@
     "arquivos": 5
    },
    {
+    "host": "test.supabase.co",
+    "arquivos": 5
+   },
+   {
     "host": "wa.me",
     "arquivos": 5
    },
    {
     "host": "example.invalid",
-    "arquivos": 4
-   },
-   {
-    "host": "test.supabase.co",
     "arquivos": 4
    },
    {
