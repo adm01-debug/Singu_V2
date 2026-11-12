@@ -2756,7 +2756,7 @@
    "hooks_exportados": [
     "useContactDetail"
    ],
-   "linhas": 254,
+   "linhas": 260,
    "dominio": "hooks",
    "tabelas": [
     "alerts",
@@ -2790,7 +2790,7 @@
     "src/components/dashboard/StrategicNextStepsCard.tsx",
     "src/pages/ContatoDetalhe.tsx"
    ],
-   "coberto_por_testes": 6
+   "coberto_por_testes": 7
   },
   {
    "arquivo": "src/hooks/useContactEffectiveness.ts",
@@ -2990,7 +2990,7 @@
    "hooks_exportados": [
     "useContacts"
    ],
-   "linhas": 361,
+   "linhas": 376,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -3036,7 +3036,7 @@
     "src/pages/Interacoes.tsx",
     "src/pages/contatos/ContatosContent.tsx"
    ],
-   "coberto_por_testes": 12
+   "coberto_por_testes": 13
   },
   {
    "arquivo": "src/hooks/useContactsCompletoView.ts",

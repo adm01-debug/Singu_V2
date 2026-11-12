@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `68a97f4dcd` · branch `main` · 2026-11-12 12:21 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3e49b84412` · branch `main` · 2026-11-12 13:05 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4391,7 +4391,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3152 testes em 242 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3169 testes em 243 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4439,6 +4439,7 @@ _nenhum item encontrado_
 | `src/components/interactions/__tests__/SortChips.test.tsx` | 18 | SortChips · renderiza os 4 chips · chip ativo recebe aria-pressed=true · click em chip inativo chama onChange … |
 | `src/hooks/__tests__/canonical-communication-contracts.test.tsx` | 18 | Contratos canônicos da comunicação WhatsApp · consulta mensagens e transcrições reais e normaliza os aliases virtuais · rejeita metadados de duração incompatíveis · não converte erro da consulta de transcrições em lista vazia … |
 | `src/hooks/__tests__/contact-cache-concurrency.test.tsx` | 17 | Confirmações de contato não regridem com respostas concorrentes · descarta refetch anterior à gravação da ficha · descarta SELECT paginado anterior à gravação da lista · falha de A preserva confirmação posterior de B e o contrato paginado … |
+| `src/hooks/__tests__/contact-cache-revalidation.test.tsx` | 17 | Carga inicial e paginação reais do hook durante gravações · recarrega a primeira página completa quando a criação cancela a leitura inicial · mantém a leitura inicial enquanto o INSERT está pendente e quando ele falha · não duplica um contato já incluído na primeira leitura que terminou durante o INSERT … |
 | `src/lib/__tests__/sanitize.test.ts` | 17 | Sanitize Lib · sanitizeHtml · should keep allowed tags · should remove dangerous tags and attributes … |
 | `scripts/check-bundle-size.test.mjs` | 16 | aprova build dentro do budget e marca o entry do index.html · falha quando o entry passa de 350 KB gzip · falha quando um chunk comum passa de 500 KB gzip · entry com nome fora do padrão (app-*.js) recebe o limite de entry … |
 | `src/__tests__/performance-and-a11y.test.ts` | 16 | Performance Optimizations · CompanyListItem uses React.memo · CompaniesTableView uses React.memo · ContactsTableView uses React.memo … |

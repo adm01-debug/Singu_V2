@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 265,
+ "total": 266,
  "por_tipo": {
   "contrato": 39,
   "e2e": 12,
   "pytest": 7,
-  "unit": 205
+  "unit": 206
  },
  "onde_ficam": [
   {
@@ -19,7 +19,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 89
+   "arquivos": 90
   },
   {
    "padrao": "tests/",
@@ -1469,6 +1469,17 @@
    "casos": 16
   },
   {
+   "arquivo": "src/hooks/__tests__/contact-cache-revalidation.test.tsx",
+   "tipo": "unit",
+   "linhas": 324,
+   "testa": [
+    "src/hooks/useContactDetail.ts",
+    "src/hooks/useContacts.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 15
+  },
+  {
    "arquivo": "src/hooks/__tests__/contact-contracts.test.ts",
    "tipo": "contrato",
    "linhas": 128,
@@ -2542,9 +2553,9 @@
   "src/hooks/useCSATSurveys.ts": 2,
   "src/hooks/useCompanies.ts": 3,
   "src/hooks/useCompanyActions.ts": 1,
-  "src/hooks/useContactDetail.ts": 6,
+  "src/hooks/useContactDetail.ts": 7,
   "src/hooks/useContactSegmentation.ts": 1,
-  "src/hooks/useContacts.ts": 12,
+  "src/hooks/useContacts.ts": 13,
   "src/hooks/useConversationIntel.ts": 2,
   "src/hooks/useDailyKpis.ts": 1,
   "src/hooks/useDailySummary.ts": 1,
@@ -2584,7 +2595,7 @@
   "src/lib/circuitBreaker.ts": 4,
   "src/lib/contactBehaviorAudit.ts": 1,
   "src/lib/errorReporting.ts": 2,
-  "src/lib/externalData.ts": 22,
+  "src/lib/externalData.ts": 23,
   "src/lib/formatters.ts": 1,
   "src/lib/insights/extractExcerpts.ts": 1,
   "src/lib/insights/pickTopPassages.ts": 1,

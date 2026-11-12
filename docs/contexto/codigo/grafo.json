@@ -46,7 +46,7 @@
   },
   {
    "arquivo": "src/lib/externalData.ts",
-   "importado_por": 128
+   "importado_por": 129
   },
   {
    "arquivo": "src/components/ui/select.tsx",
@@ -109,11 +109,11 @@
    "importado_por": 47
   },
   {
-   "arquivo": "src/components/ui/separator.tsx",
-   "importado_por": 39
+   "arquivo": "src/hooks/useContacts.ts",
+   "importado_por": 40
   },
   {
-   "arquivo": "src/hooks/useContacts.ts",
+   "arquivo": "src/components/ui/separator.tsx",
    "importado_por": 39
   },
   {
