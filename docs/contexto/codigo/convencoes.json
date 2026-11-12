@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat: cria send-transactional-email com Resend para as sequências (#200)",
    "chore: inventario do estado real [auto] (#198)",
    "feat: troca a IA do gateway Lovable pelo DeepSeek (#197)",
    "chore: inventario do estado real [auto] (#194)",
-   "chore: inventario do estado real [auto] (#191)",
-   "fix(baseline): redefine gate DEFINER de 109 para 110 apos retencao aplicada em prod (#193)"
+   "chore: inventario do estado real [auto] (#191)"
   ]
  },
  "pr_template": null,

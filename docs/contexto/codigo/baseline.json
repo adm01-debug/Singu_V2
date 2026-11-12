@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "ae084d5a953cac4058b87fba1c3ec93c4caf0fc3",
+  "commit": "48ab3ac2579741fd1816be7394151218f1251ebf",
   "branch": "main",
-  "data_commit": "2026-11-11T22:49:49Z",
+  "data_commit": "2026-11-11T20:56:47-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "48ab3ac2",
+    "data": "2026-11-11",
+    "assunto": "feat: cria send-transactional-email com Resend para as sequências (#200)"
+   },
    {
     "sha": "ae084d5a",
     "data": "2026-11-11",
@@ -126,14 +131,9 @@
     "sha": "4ba71804",
     "data": "2026-11-08",
     "assunto": "fix(ci): retry rls-baseline em http 500 transitório (57014 lock contention)"
-   },
-   {
-    "sha": "33752b40",
-    "data": "2026-11-08",
-    "assunto": "feat(db): agenda retenção de 7 dias no histórico do pg_cron"
    }
   ],
-  "arquivos_mudados_7d": 552,
+  "arquivos_mudados_7d": 553,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -141,11 +141,11 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 23
+    "mudancas": 22
    },
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 22
+    "mudancas": 21
    },
    {
     "pasta": "scripts/migration/storage",
@@ -153,7 +153,7 @@
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 12
+    "mudancas": 11
    },
    {
     "pasta": "src/components/contact-detail",
@@ -176,10 +176,6 @@
     "mudancas": 8
    },
    {
-    "pasta": "src/components/sequences",
-    "mudancas": 8
-   },
-   {
     "pasta": "scripts/maintenance/tests",
     "mudancas": 7
    },
@@ -193,6 +189,10 @@
    },
    {
     "pasta": "RELATORIO_CI.md",
+    "mudancas": 6
+   },
+   {
+    "pasta": "package-lock.json",
     "mudancas": 6
    }
   ],
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 45
+    "commits": 46
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 24
+    "commits": 23
    },
    {
     "autor": "dependabot[bot]",
@@ -322,9 +322,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3211,
-  "arquivos_codigo": 2208,
-  "linhas_codigo": 412644,
+  "arquivos_total": 3212,
+  "arquivos_codigo": 2209,
+  "linhas_codigo": 412714,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -332,7 +332,7 @@
   "modulos": 141,
   "componentes": 1057,
   "hooks": 408,
-  "edge_functions": 108,
+  "edge_functions": 109,
   "tabelas": 418,
   "migrations": 480,
   "cron_jobs": 20,
@@ -703,8 +703,8 @@
    "linhas": 5967
   },
   "supabase/functions": {
-   "arquivos": 171,
-   "linhas": 26412
+   "arquivos": 172,
+   "linhas": 26482
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -963,6 +963,7 @@
    "phone-validator",
    "process-behavioral-regen-queue",
    "rfm-analyzer",
+   "send-transactional-email",
    "sequence-track",
    "submit-signature",
    "suggest-next-action",

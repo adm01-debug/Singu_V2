@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ae084d5a953cac4058b87fba1c3ec93c4caf0fc3",
+  "sha": "48ab3ac2579741fd1816be7394151218f1251ebf",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-11 23:14 UTC",
-  "files_total": 3317,
-  "code_files": 2861,
-  "code_lines": 407991
+  "generated_at": "2026-11-12 01:58 UTC",
+  "files_total": 3318,
+  "code_files": 2862,
+  "code_lines": 408061
  },
  "version": "1.3.2",
- "facts_hash": "aa18abe47667a582",
+ "facts_hash": "3d3c2f47a61903ed",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -252,7 +252,7 @@
   "package_manager": "bun",
   "languages": {
    ".tsx": 1156,
-   ".ts": 891,
+   ".ts": 892,
    ".sql": 652,
    ".mjs": 123,
    ".py": 19,
@@ -63853,6 +63853,26 @@
     "idempotency": false
    },
    {
+    "name": "send-transactional-email",
+    "file": "supabase/functions/send-transactional-email/index.ts",
+    "methods": [
+     "POST?"
+    ],
+    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "tables": [],
+    "env": [
+     "RESEND_API_KEY",
+     "RESEND_FROM"
+    ],
+    "external": [],
+    "invokes": [],
+    "doc": "Envio de e-mail transacional via Resend. Chamado só internamente (service role) pelo sequence-processor; responde { ok: true, messageId } apenas quando o Resend aceita o envio.",
+    "errors": [],
+    "side_effects": [],
+    "webhook_events": [],
+    "idempotency": true
+   },
+   {
     "name": "sequence-processor",
     "file": "supabase/functions/sequence-processor/index.ts",
     "methods": [
@@ -70377,8 +70397,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 171,
-   "lines": 26412,
+   "files": 172,
+   "lines": 26482,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -76816,7 +76836,11 @@
    ],
    "RESEND_API_KEY": [
     "scripts/ai-context/gerar.unit.mjs",
-    "scripts/inventario/gerar-repo.test.mjs"
+    "scripts/inventario/gerar-repo.test.mjs",
+    "supabase/functions/send-transactional-email/index.ts"
+   ],
+   "RESEND_FROM": [
+    "supabase/functions/send-transactional-email/index.ts"
    ],
    "RLS_ALLOW_EXTRA": [
     "scripts/migration/verify/rls-parity.ts"
@@ -86172,6 +86196,10 @@
    {
     "file": "supabase/functions/send-push-notification/index.ts",
     "text": "Service-role callers (crons) must specify userId"
+   },
+   {
+    "file": "supabase/functions/send-transactional-email/index.ts",
+    "text": "sequence-processor; responde { ok: true, messageId } apenas quando o Resend aceita o envio."
    },
    {
     "file": "supabase/functions/social-events-detector/index.ts",
@@ -112209,6 +112237,30 @@
     "field": "status",
     "value": "sending",
     "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/send-transactional-email/index.ts",
+    "field": "type",
+    "value": "string",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/send-transactional-email/index.ts",
+    "field": "type",
+    "value": "string",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/send-transactional-email/index.ts",
+    "field": "type",
+    "value": "string",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/send-transactional-email/index.ts",
+    "field": "type",
+    "value": "object",
+    "kind": "escreve"
    },
    {
     "file": "supabase/functions/sequence-processor/index.ts",
@@ -149940,6 +149992,7 @@
       "escreve:supabase/functions/semantic-search/index.ts",
       "escreve:supabase/functions/send-push-notification/index.ts",
       "escreve:supabase/functions/send-sms-campaign/index.ts",
+      "escreve:supabase/functions/send-transactional-email/index.ts",
       "escreve:supabase/functions/smart-reminders/index.ts",
       "escreve:supabase/functions/submit-signature/index.ts",
       "escreve:supabase/functions/suggest-next-action/index.ts",
@@ -150056,6 +150109,7 @@
       "escreve:supabase/functions/objection-handler/index.ts",
       "escreve:supabase/functions/playbook-generator/index.ts",
       "escreve:supabase/functions/semantic-search/index.ts",
+      "escreve:supabase/functions/send-transactional-email/index.ts",
       "escreve:supabase/functions/suggest-next-action/index.ts",
       "escreve:supabase/functions/territory-optimization/index.ts",
       "escreve:supabase/functions/visual-search/index.ts",
@@ -226991,6 +227045,40 @@
    ],
    "uses_service_role": true
   },
+  "supabase/functions/send-transactional-email/index.ts": {
+   "path": "supabase/functions/send-transactional-email/index.ts",
+   "lines": 70,
+   "env": [
+    "RESEND_API_KEY",
+    "RESEND_FROM"
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "string",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "string",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "string",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "object",
+     "kind": "escreve"
+    }
+   ],
+   "rule_comments": [
+    "sequence-processor; responde { ok: true, messageId } apenas quando o Resend aceita o envio."
+   ],
+   "doc": "Envio de e-mail transacional via Resend. Chamado só internamente (service role) pelo sequence-processor; responde { ok: true, messageId } apenas quando o Resend aceita o envio."
+  },
   "supabase/functions/sequence-processor/index.ts": {
    "path": "supabase/functions/sequence-processor/index.ts",
    "lines": 529,
@@ -232278,10 +232366,19 @@
   }
  },
  "git": {
-  "sha": "ae084d5a953cac4058b87fba1c3ec93c4caf0fc3",
+  "sha": "48ab3ac2579741fd1816be7394151218f1251ebf",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "48ab3ac",
+    "date": "2026-11-11",
+    "author": "adm01-debug",
+    "subject": "feat: cria send-transactional-email com Resend para as sequências (#200)",
+    "files": [
+     "supabase/functions/send-transactional-email/index.ts"
+    ]
+   },
    {
     "sha": "ae084d5",
     "date": "2026-11-11",
@@ -233084,40 +233181,11 @@
      "scripts/inventario/banco.sql",
      "scripts/inventario/gerar-banco.mjs"
     ]
-   },
-   {
-    "sha": "de99442",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "feat(inventario): inventário semanal do estado real do banco e das edges, com PR automática (#170)",
-    "files": [
-     ".github/workflows/inventario-estado-semanal.yml",
-     "inventario/estado/README.md",
-     "inventario/estado/banco.json",
-     "inventario/estado/edges.json",
-     "inventario/estado/tabelas-uso.json",
-     "scripts/inventario/banco.sql",
-     "scripts/inventario/gerar-banco.mjs",
-     "scripts/inventario/gerar-repo.mjs",
-     "scripts/inventario/mudou-conteudo.mjs"
-    ]
    }
   ],
   "hot_files": [
    [
     "inventario/estado/banco.json",
-    5
-   ],
-   [
-    "inventario/estado/edges.json",
-    4
-   ],
-   [
-    "inventario/estado/tabelas-uso.json",
-    4
-   ],
-   [
-    "scripts/inventario/gerar-banco.mjs",
     4
    ],
    [
@@ -233125,19 +233193,19 @@
     4
    ],
    [
+    "inventario/estado/edges.json",
+    3
+   ],
+   [
+    "inventario/estado/tabelas-uso.json",
+    3
+   ],
+   [
     "docs/qa/security-definer-audit.md",
     3
    ],
    [
     "tests/rls/security_definer_hardening.sql",
-    3
-   ],
-   [
-    ".github/workflows/inventario-estado-semanal.yml",
-    3
-   ],
-   [
-    "inventario/estado/README.md",
     3
    ],
    [
@@ -233153,7 +233221,7 @@
     3
    ],
    [
-    "scripts/inventario/banco.sql",
+    "scripts/inventario/gerar-banco.mjs",
     3
    ],
    [
@@ -233162,6 +233230,14 @@
    ],
    [
     ".github/workflows/fix-jwt-proxies-externas.yml",
+    2
+   ],
+   [
+    ".github/workflows/inventario-estado-semanal.yml",
+    2
+   ],
+   [
+    "inventario/estado/README.md",
     2
    ],
    [
@@ -233181,7 +233257,11 @@
     2
    ],
    [
-    "scripts/inventario/gerar-repo.mjs",
+    "scripts/inventario/banco.sql",
+    2
+   ],
+   [
+    "scripts/rls-matrix/check-rls-baseline.mjs",
     2
    ]
   ]

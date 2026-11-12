@@ -11707,6 +11707,11 @@
    "supabase/functions/_shared/fetch-utils.ts",
    "supabase/functions/_shared/validate.ts"
   ],
+  "supabase/functions/send-transactional-email/index.ts": [
+   "supabase/functions/_shared/auth.ts",
+   "supabase/functions/_shared/fetch-utils.ts",
+   "supabase/functions/_shared/validate.ts"
+  ],
   "supabase/functions/sequence-processor/index.ts": [
    "supabase/functions/_shared/auth.ts"
   ],

@@ -3164,6 +3164,7 @@
    "semantic-search",
    "send-push-notification",
    "send-sms-campaign",
+   "send-transactional-email",
    "sequence-processor",
    "sequence-track",
    "smart-notify",

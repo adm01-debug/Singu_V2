@@ -3,7 +3,7 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2047)",
+   "TypeScript (2048)",
    "SQL (652)",
    "Markdown (154)",
    "JavaScript (143)",
@@ -869,6 +869,8 @@
    "LEGACY_SUPABASE_URL",
    "LOVABLE_API_KEY",
    "N8N_LUX_WEBHOOK_URL",
+   "RESEND_API_KEY",
+   "RESEND_FROM",
    "SUPABASE_ANON_KEY",
    "SUPABASE_DB_URL",
    "SUPABASE_SERVICE_ROLE_KEY",
@@ -1068,6 +1070,10 @@
    },
    {
     "host": "api.pwnedpasswords.com",
+    "arquivos": 1
+   },
+   {
+    "host": "api.resend.com",
     "arquivos": 1
    },
    {
@@ -1296,6 +1302,8 @@
    "FIRECRAWL_API_KEY",
    "LOVABLE_API_KEY",
    "N8N_LUX_WEBHOOK_URL",
+   "RESEND_API_KEY",
+   "RESEND_FROM",
    "TWILIO_API_KEY"
   ],
   "webhooks_recebidos": [],

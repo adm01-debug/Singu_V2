@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ae084d5a95` · branch `main` · 2026-11-11 23:14 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `48ab3ac257` · branch `main` · 2026-11-12 01:58 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1311,7 +1311,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `note` | escreve | `src/components/dashboard/StrategicNextStepsCard.tsx`<br>`src/components/interactions/insights/SuggestedResponseModal.tsx`<br>`supabase/functions/_shared/validation-contract_test.ts` |
 | `type` | `number` | compara, escreve | `src/components/crm/marketing/components/BehavioralSegmentation.tsx`<br>`src/hooks/useContactSegmentation.ts`<br>`src/lib/reports/reportEngine.ts`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>… +11 |
 | `type` | `number_list` | escreve | `src/data/copywritingData.ts` |
-| `type` | `object` | compara, escreve | `supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/abm-whitespace-analyzer/index.ts`<br>`supabase/functions/ai-writing-assistant/index.ts`<br>`supabase/functions/connection-tester/index.ts`<br>… +18 |
+| `type` | `object` | compara, escreve | `supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/abm-whitespace-analyzer/index.ts`<br>`supabase/functions/ai-writing-assistant/index.ts`<br>`supabase/functions/connection-tester/index.ts`<br>… +19 |
 | `type` | `objection` | escreve | `src/components/crm/RelationshipKPIsDashboard.tsx`<br>`src/components/triggers/ProfileBasedSuggestions.tsx` |
 | `type` | `opening` | escreve | `src/components/triggers/ProfileBasedSuggestions.tsx`<br>`src/components/triggers/profile-based/generateCombinedMessage.ts` |
 | `type` | `opportunity` | escreve | `src/components/neuromarketing/NeuroAlerts.tsx` |
@@ -1364,7 +1364,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `step_completed` | escreve | `src/data/carnegieProgressCelebration.ts` |
 | `type` | `stimulus` | compara, escreve | `src/components/neuromarketing/NeuroABTracker.tsx`<br>`src/components/neuromarketing/NeuroTooltipSystem.tsx` |
 | `type` | `strategic` | compara | `src/components/neuromarketing/PainClaimGainBuilder.tsx` |
-| `type` | `string` | compara, escreve | `src/pages/CRMRelationshipAuditPage.tsx`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/abm-account-scorer/index.ts`<br>`supabase/functions/abm-whitespace-analyzer/index.ts`<br>… +44 |
+| `type` | `string` | compara, escreve | `src/pages/CRMRelationshipAuditPage.tsx`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/abm-account-scorer/index.ts`<br>`supabase/functions/abm-whitespace-analyzer/index.ts`<br>… +45 |
 | `type` | `subtle` | compara | `src/hooks/useSuccessCelebration.ts` |
 | `type` | `support` | compara, escreve | `src/data/carnegieEmpathyTemplates.ts`<br>`src/hooks/useCoalitionDetection.ts` |
 | `type` | `supporter` | compara | `src/components/analytics/churn/ChurnHelpers.tsx` |
@@ -4987,6 +4987,7 @@ _nenhum item encontrado_
 | ").eq("active", true).limit(100), | `supabase/functions/playbook-recommender/index.ts` |
 | ").eq("active", true).ilike("competitor_name", `%${escapedCompetitor}%`).limit(1).maybeSingle() | `supabase/functions/playbook-recommender/index.ts` |
 | Service-role callers (crons) must specify userId | `supabase/functions/send-push-notification/index.ts` |
+| sequence-processor; responde { ok: true, messageId } apenas quando o Resend aceita o envio. | `supabase/functions/send-transactional-email/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/social-events-detector/index.ts` |
 | 🔮 Roadmap Prediction Logic (Only if high confidence) | `supabase/functions/suggest-next-action/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/template-success-notifications/index.ts` |

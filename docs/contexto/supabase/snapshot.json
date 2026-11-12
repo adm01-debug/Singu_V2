@@ -186223,6 +186223,177 @@
           "jobname": "cleanup_cron_job_run_details_daily",
           "schedule": "37 4 * * *",
           "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/validation-queue-worker',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2444,
+          "jobname": "singu-edge-validation-queue-worker",
+          "schedule": "*/5 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/process-webhook-dlq',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2445,
+          "jobname": "singu-edge-process-webhook-dlq",
+          "schedule": "1-59/5 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/sequence-processor',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2446,
+          "jobname": "singu-edge-sequence-processor",
+          "schedule": "2-59/5 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/nurturing-runner',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2447,
+          "jobname": "singu-edge-nurturing-runner",
+          "schedule": "4-59/15 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/check-notifications',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2448,
+          "jobname": "singu-edge-check-notifications",
+          "schedule": "7 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/check-health-alerts',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2449,
+          "jobname": "singu-edge-check-health-alerts",
+          "schedule": "17 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/mql-evaluator',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2450,
+          "jobname": "singu-edge-mql-evaluator",
+          "schedule": "27 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/revops-snapshot-builder',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2451,
+          "jobname": "singu-edge-revops-snapshot-builder",
+          "schedule": "0 4 * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/lead-score-cron',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2452,
+          "jobname": "singu-edge-lead-score-cron",
+          "schedule": "20 5 * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/cs-health-recalc',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2453,
+          "jobname": "singu-edge-cs-health-recalc",
+          "schedule": "40 5 * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/forecast-snapshot-cron',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2454,
+          "jobname": "singu-edge-forecast-snapshot-cron",
+          "schedule": "10 6 * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/client-notifications',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2455,
+          "jobname": "singu-edge-client-notifications",
+          "schedule": "3 11 * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/template-success-notifications',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{\"checkAll\": true}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2456,
+          "jobname": "singu-edge-template-success-notifications",
+          "schedule": "13 12 * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  SELECT net.http_post(\n    url     := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/weekly-digest',\n    headers := jsonb_build_object(\n      'Content-Type', 'application/json',\n      'x-cron-secret', coalesce((SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'), '')\n    ),\n    body    := '{\"source\": \"cron\"}'::jsonb,\n    timeout_milliseconds := 60000\n  );\n",
+          "database": "postgres",
+          "jobid": 2457,
+          "jobname": "singu-edge-weekly-digest",
+          "schedule": "23 11 * * 1",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "SELECT public.check_contact_health_alerts()",
+          "database": "postgres",
+          "jobid": 2458,
+          "jobname": "check-contact-health-daily",
+          "schedule": "0 0 * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "SELECT public.auto_ack_stale_mtta_sla_breaches();",
+          "database": "postgres",
+          "jobid": 2459,
+          "jobname": "mtta-sla-breach-auto-ack-hourly",
+          "schedule": "7 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": " SELECT public.check_mtta_auto_ack_heartbeat(); ",
+          "database": "postgres",
+          "jobid": 2460,
+          "jobname": "mtta-auto-ack-heartbeat-watchdog",
+          "schedule": "*/30 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": " SELECT public.cleanup_simulated_alerts(); ",
+          "database": "postgres",
+          "jobid": 2461,
+          "jobname": "cleanup-simulated-alerts-weekly",
+          "schedule": "0 3 * * 0",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n  INSERT INTO public.validation_queue (user_id, contact_id, kind, value)\n  SELECT DISTINCT ev.user_id, ev.contact_id, 'email'::public.validation_kind, ev.email\n  FROM public.email_verifications ev\n  WHERE ev.verified_at < now() - INTERVAL '30 days'\n    AND NOT EXISTS (\n      SELECT 1 FROM public.validation_queue vq\n      WHERE vq.user_id = ev.user_id AND vq.value = ev.email AND vq.kind = 'email'\n        AND vq.status IN ('pending','processing')\n    )\n  LIMIT 500\n",
+          "database": "postgres",
+          "jobid": 2462,
+          "jobname": "revalidate-stale-emails",
+          "schedule": "0 4 * * *",
+          "username": "postgres"
         }
       ]
     },
@@ -188619,7 +188790,9 @@
             }
           ],
           "code_total_files": 3,
-          "cron": [],
+          "cron": [
+            "2459:mtta-sla-breach-auto-ack-hourly"
+          ],
           "db": [],
           "triggers": [],
           "views": []
@@ -191043,7 +191216,9 @@
             }
           ],
           "code_total_files": 1,
-          "cron": [],
+          "cron": [
+            "2458:check-contact-health-daily"
+          ],
           "db": [],
           "triggers": [],
           "views": []
@@ -191191,7 +191366,9 @@
             }
           ],
           "code_total_files": 3,
-          "cron": [],
+          "cron": [
+            "2460:mtta-auto-ack-heartbeat-watchdog"
+          ],
           "db": [],
           "triggers": [],
           "views": []
@@ -191831,7 +192008,9 @@
             }
           ],
           "code_total_files": 3,
-          "cron": [],
+          "cron": [
+            "2461:cleanup-simulated-alerts-weekly"
+          ],
           "db": [],
           "triggers": [],
           "views": []
@@ -218539,6 +218718,41 @@
         "returns": "jsonb",
         "schema": "public",
         "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "_id uuid",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/functions/nurturing-runner/index.ts",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definition": null,
+        "definition_sha": "5d938ad14ce006c3",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "sql",
+        "leakproof": false,
+        "name": "increment_workflow_completed",
+        "owner": "postgres",
+        "returns": "void",
+        "schema": "public",
+        "security_definer": false,
         "strict": false,
         "volatility": "volatile"
       },
@@ -276747,6 +276961,16 @@
         "statements": 1,
         "statements_sha": "a413394a9121e7c0",
         "version": "20261109010329"
+      },
+      {
+        "name": "agenda_edge_functions_cron",
+        "statements": null,
+        "version": "20261111210500"
+      },
+      {
+        "name": "reagenda_rotinas_sql_e_rpc_nurturing",
+        "statements": null,
+        "version": "20261111233000"
       }
     ],
     "policies": [
@@ -313608,6 +313832,11 @@
         "created_at": "2026-10-01T18:45:25.125225+00:00",
         "description": "Assinatura do escopo do Multiplix (F22) - gerado pelo Hermes",
         "name": "MULTIPLIX_SCOPE_HMAC_SECRET"
+      },
+      {
+        "created_at": "2026-11-12T01:44:04.806825+00:00",
+        "description": "x-cron-secret das rotinas agendadas do Singu (igual ao edge secret CRON_SECRET)",
+        "name": "singu_cron_secret"
       }
     ],
     "views": [

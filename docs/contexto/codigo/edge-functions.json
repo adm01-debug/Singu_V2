@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "pasta": "supabase/functions",
- "total": 108,
+ "total": 109,
  "verify_jwt_false": [],
  "shared": [
   "supabase/functions/_shared/aiGatewayLogger.ts",
@@ -3058,6 +3058,35 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "send-transactional-email",
+   "entrada": "supabase/functions/send-transactional-email/index.ts",
+   "arquivos": 1,
+   "linhas": 70,
+   "verify_jwt": true,
+   "metodos": [],
+   "tabelas": [],
+   "rpcs": [],
+   "env": [
+    "RESEND_API_KEY",
+    "RESEND_FROM"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [
+    "api.resend.com"
+   ],
+   "usa_shared": [
+    "auth.ts",
+    "fetch-utils.ts",
+    "validate.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
    "testes": 0
   },
   {

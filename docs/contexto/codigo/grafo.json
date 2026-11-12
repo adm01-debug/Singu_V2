@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1946,
- "arestas": 8398,
+ "nos": 1947,
+ "arestas": 8401,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -62,7 +62,7 @@
   },
   {
    "arquivo": "supabase/functions/_shared/auth.ts",
-   "importado_por": 112
+   "importado_por": 113
   },
   {
    "arquivo": "src/integrations/supabase/types.ts",
@@ -98,7 +98,7 @@
   },
   {
    "arquivo": "supabase/functions/_shared/fetch-utils.ts",
-   "importado_por": 53
+   "importado_por": 54
   },
   {
    "arquivo": "src/components/layout/AppLayout.tsx",
@@ -122,7 +122,7 @@
   },
   {
    "arquivo": "supabase/functions/_shared/validate.ts",
-   "importado_por": 35
+   "importado_por": 36
   },
   {
    "arquivo": "src/components/ui/popover.tsx",

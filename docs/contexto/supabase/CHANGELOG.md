@@ -2,6 +2,14 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-12 01:49 UTC
+
+- **cron jobs** adicionado (19): `2444:singu-edge-validation-queue-worker`, `2445:singu-edge-process-webhook-dlq`, `2446:singu-edge-sequence-processor`, `2447:singu-edge-nurturing-runner`, `2448:singu-edge-check-notifications`, `2449:singu-edge-check-health-alerts`, `2450:singu-edge-mql-evaluator`, `2451:singu-edge-revops-snapshot-builder`, `2452:singu-edge-lead-score-cron`, `2453:singu-edge-cs-health-recalc`, `2454:singu-edge-forecast-snapshot-cron`, `2455:singu-edge-client-notifications`, `2456:singu-edge-template-success-notifications`, `2457:singu-edge-weekly-digest`, `2458:check-contact-health-daily`, `2459:mtta-sla-breach-auto-ack-hourly`, `2460:mtta-auto-ack-heartbeat-watchdog`, `2461:cleanup-simulated-alerts-weekly`, `2462:revalidate-stale-emails`
+- **functions** adicionado (1): `public.increment_workflow_completed(_id uuid)`
+- **functions** alterado (4): `public.auto_ack_stale_mtta_sla_breaches()`, `public.check_contact_health_alerts()`, `public.check_mtta_auto_ack_heartbeat()`, `public.cleanup_simulated_alerts()`
+- **migrations** adicionado (2): `20261111210500_agenda_edge_functions_cron`, `20261111233000_reagenda_rotinas_sql_e_rpc_nurturing`
+- **vault secrets (nomes)** adicionado (1): `singu_cron_secret`
+
 ## 2026-11-12 00:58 UTC
 
 - **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_15`
