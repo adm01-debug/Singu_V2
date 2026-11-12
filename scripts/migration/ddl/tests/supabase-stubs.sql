@@ -18,7 +18,8 @@ BEGIN
                            'supabase_auth_admin','supabase_storage_admin','authenticator',
                            'dashboard_user'] LOOP
     BEGIN
-      EXECUTE format('CREATE ROLE %I NOLOGIN', r);
+      -- como no Supabase: service_role e supabase_admin ignoram RLS (só vale se a role for criada aqui)
+      EXECUTE format('CREATE ROLE %I NOLOGIN %s', r, CASE WHEN r IN ('service_role', 'supabase_admin') THEN 'BYPASSRLS' ELSE '' END);
     EXCEPTION WHEN duplicate_object OR unique_violation THEN NULL;
     END;
   END LOOP;

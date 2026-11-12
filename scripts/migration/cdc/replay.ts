@@ -169,7 +169,8 @@ export async function reproduzir(linhas: AsyncIterable<EntradaLinha>, destino: D
 
 /** Lê os *.json do diretório linha a linha (stream), ordenados pelo primeiro LSN de cada arquivo. */
 export async function* lerDiretorio(dir: string): AsyncGenerator<EntradaLinha> {
-  const base = dir.replace(/\/+$/, "");
+  let base = dir;
+  while (base.length > 1 && base.endsWith("/")) base = base.slice(0, -1);
   const arquivos: { nome: string; lsn: bigint }[] = [];
   for await (const e of Deno.readDir(base)) {
     if (!e.isFile || !e.name.endsWith(".json")) continue;

@@ -113,8 +113,8 @@ test('apply-migrations.js: um POST por arquivo, na ordem de 99_apply_all.sql', a
   const primeiras = mock.chamadas.filter((c) => c.sql !== SQL_CONTAR_TABELAS).map((c) => c.sql.split('\n')[0].slice(0, 80));
   assert.equal(primeiras.length, 12);
   assert.match(primeiras[0], /^CREATE EXTENSION/); assert.match(primeiras[2], /^CREATE TABLE IF NOT EXISTS public\.contas/);
-  assert.match(primeiras[3], /^CREATE TABLE IF NOT EXISTS public\.audit_log_2026_11 PARTITION/); assert.match(primeiras[7], /^CREATE OR REPLACE FUNCTION/);
-  assert.match(primeiras[8], /^ALTER TABLE public\.contas ENABLE ROW/); assert.match(primeiras[11], /^CREATE OR REPLACE VIEW/);
+  assert.match(primeiras[3], /^CREATE TABLE IF NOT EXISTS public\.audit_log_2026_11 PARTITION/); assert.match(primeiras[4], /^CREATE OR REPLACE VIEW/);
+  assert.match(primeiras[5], /^CREATE OR REPLACE FUNCTION/); assert.match(primeiras[9], /^ALTER TABLE public\.contas ENABLE ROW/);
 });
 
 test('functions vão antes de RLS/policies em todos os scripts que aplicam os dois', async () => {

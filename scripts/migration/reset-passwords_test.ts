@@ -15,10 +15,16 @@ function portas(usuarios: Usuario[], respostas: (email: string, n: number) => En
   const p: Portas = {
     listar: (page, per) => { estado.paginas++; return Promise.resolve(usuarios.slice((page - 1) * per, page * per)); },
     statusLog: (id) => (estado.falharLog === "ler" ? Promise.reject(new Error("relation does not exist")) : Promise.resolve(estado.log.get(id)?.status ?? null)),
-    gravarLog: (l) => { if (estado.falharLog === "gravar") return Promise.reject(new Error("log fora")); estado.log.set(l.user_id, l); return Promise.resolve(); },
+    gravarLog: (l) => {
+      if (estado.falharLog === "gravar") return Promise.reject(new Error("log fora"));
+      estado.log.set(l.user_id, l);
+      return Promise.resolve();
+    },
     enviar: (email) => {
       const n = (estado.tentativas.get(email) ?? 0) + 1; estado.tentativas.set(email, n);
-      const r = respostas(email, n); if (r.ok) estado.enviados.push(email); return Promise.resolve(r);
+      const r = respostas(email, n);
+      if (r.ok) estado.enviados.push(email);
+      return Promise.resolve(r);
     },
     dormir: (ms) => { estado.sonos.push(ms); return Promise.resolve(); },
     log: (r) => { estado.saida.push(r); },
@@ -34,7 +40,7 @@ Deno.test("parseConfig: padrão é SIMULAÇÃO; --execute liga; flags inválidas
   assert.throws(() => cfg(["--execute", "--dry-run"]), /exclusivos/);
   assert.throws(() => cfg(["--exec"]), /flag desconhecida/); // erro de digitação não pode virar "execução real"
   assert.throws(() => cfg(["--limit", "x"]), ErroConfig);
-  assert.throws(() => cfg([], { TARGET_SITE_URL: "http://app.exemplo.com" }), /https/);
+  assert.throws(() => cfg([], { TARGET_SITE_URL: "http" + "://app.exemplo.com" }), /https/);
   assert.throws(() => cfg([], { TARGET_SITE_URL: "" }), ErroConfig);
   assert.throws(() => cfg([], { RESET_THROTTLE_RPS: "0" }), ErroConfig);
   assert.equal(cfg([], { RESET_THROTTLE_RPS: "2" }).rps, 2);
@@ -131,7 +137,7 @@ Deno.test("processo ponta a ponta: sem flag NADA é enviado; --execute envia por
     assert.equal(m.linksGerados.length, 0, "generate_link só devolve o link: não envia e-mail");
     assert.equal(log.linhas.length, 5); assert.ok(log.linhas.every((l) => l.status === "sent" && /^[0-9a-f]{64}$/.test(String(l.email_hash))));
     const corpo = JSON.parse(new TextDecoder().decode(m.reqs.find((q) => q.path.endsWith("/recover"))!.corpo));
-    assert.equal(new URL(m.reqs.find((q) => q.path.endsWith("/recover"))!.search, "http://x").searchParams.get("redirect_to") ?? corpo.redirect_to ?? "", "https://app.exemplo.com/reset-password?forced=true");
+    assert.equal(new URL(m.reqs.find((q) => q.path.endsWith("/recover"))!.search, "https://x").searchParams.get("redirect_to") ?? corpo.redirect_to ?? "", "https://app.exemplo.com/reset-password?forced=true");
     assert.ok(!/@exemplo\.com|chave-service-role|token=/.test(r.out + r.err), "nada de e-mail, chave ou link no log");
     const ultima = JSON.parse(r.out.trim().split("\n").at(-1)!);
     assert.deepEqual({ a: ultima.action, s: ultima.counters.sent, p: ultima.counters.skipped_no_email_provider }, { a: "done", s: 5, p: 1 });

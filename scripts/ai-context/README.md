@@ -31,3 +31,11 @@ onde o contexto é publicado neste repo; env `AI_CONTEXT_PUBLICACAO` tem preced�
 - As relações são extraídas estaticamente: referência encontrada não prova execução; ausência de
   chamador no mapa não prova que uma edge não tenha consumidor externo. Marcadores `TODO` também são
   candidatos para revisão — texto em português sem pontuação pode ser ambíguo.
+- Argumentos: `--root <dir>`, `--out <dir>`, `--quiet`, `--help`. Flag desconhecida, `--out`/`--root` sem
+  valor, `--root` inexistente ou saída que não pode ser criada saem com código `2` sem gerar nada;
+  `ai-context.config.json` inválido usa os padrões e aparece em `manifest.json → erros` (seção `config`).
+- Rotas `<P.Pagina />` (`import * as P`) resolvem para o arquivo da página; `protegida` vem do wrapper,
+  não do nome da página; `*Skeleton`/`*Loading`/`*Fallback` nunca são a tela.
+- Banco: tipo e FK qualificados por schema (`public.meu_enum` → `meu_enum`, `auth.users`), `ALTER POLICY`
+  (`TO`/`RENAME`) e DDL de `DO $$...$$` na ordem do arquivo. DDL dinâmico continua só sinalizado em `avisos`.
+- Antes de gravar, JWT, chaves de provedor, `Bearer <token>` e senha de DSN copiados do repo viram `[REDACTED]`.

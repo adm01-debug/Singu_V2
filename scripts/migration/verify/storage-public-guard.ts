@@ -12,7 +12,7 @@ export interface BucketInfo { id?: string; name: string; public: boolean }
 
 /** Uma entrada por linha; ignora vazias, comentários de linha inteira e comentário após o nome. */
 export function parseAllowlist(texto: string): Set<string> {
-  return new Set(texto.split(/\r?\n/).map((l) => l.replace(/\s+#.*$/, "").trim()).filter((l) => l && !l.startsWith("#")));
+  return new Set(texto.split(/\r?\n/).map((l) => (l.includes("#") ? l.slice(0, l.indexOf("#")) : l).trim()).filter(Boolean));
 }
 
 /** Buckets públicos cujo id/nome não está no allowlist. Função pura. */
@@ -21,7 +21,9 @@ export function violacoes(buckets: BucketInfo[], allowlist: Set<string>): Bucket
 }
 
 export async function listarBuckets(url: string, chave: string, timeoutMs: number, fetchFn: typeof fetch = fetch): Promise<BucketInfo[]> {
-  const res = await fetchFn(`${url.replace(/\/+$/, "")}/storage/v1/bucket`, {
+  let base = url;
+  while (base.endsWith("/")) base = base.slice(0, -1);
+  const res = await fetchFn(`${base}/storage/v1/bucket`, {
     headers: { apikey: chave, authorization: `Bearer ${chave}` },
     signal: AbortSignal.timeout(timeoutMs),
   });

@@ -148,3 +148,6 @@ CREATE OR REPLACE VIEW public.vw_contacts_nlp WITH (security_invoker=on) AS
     working_style,
     user_id
    FROM contacts c;
+
+-- Comentários de views
+COMMENT ON VIEW public.v_entities IS 'Visão unificada de Empresas e Pessoas como Entidades.';

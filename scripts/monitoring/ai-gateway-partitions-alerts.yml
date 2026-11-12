@@ -7,8 +7,10 @@ groups:
   - name: ai_gateway_partitions
     interval: 1m
     rules:
+      # "or absent(...)": se o cron parar de vez a metrica some e a comparacao sozinha
+      # nao devolve nada (alerta nunca dispararia).
       - alert: AiGatewayPartitionExporterDown
-        expr: max_over_time(aigw_partitions_exporter_up[15m]) < 1
+        expr: max_over_time(aigw_partitions_exporter_up[15m]) < 1 or absent(aigw_partitions_exporter_up)
         for: 15m
         labels:
           severity: warning
@@ -47,8 +49,10 @@ groups:
           summary: "Existem particoes fora da janela de 90d que nao foram removidas"
           description: "Cron pg_cron ai-gateway-metrics-drop-old pode ter falhado. Rodar manualmente: SELECT public.drop_old_ai_gateway_metrics_partitions(90);"
 
+      # "or vector(0)": sem nenhuma particao a soma nao existe e "< 1" nunca seria verdadeiro.
+      # "and on() ...up == 1": nao duplica o alerta de exporter fora do ar.
       - alert: AiGatewayNoCurrentPartition
-        expr: sum(aigw_partition_is_current) < 1
+        expr: ((sum(aigw_partition_is_current) or vector(0)) < 1) and on() (max(aigw_partitions_exporter_up) == 1)
         for: 10m
         labels:
           severity: critical
@@ -56,3 +60,13 @@ groups:
         annotations:
           summary: "Nao ha particao cobrindo o mes atual"
           description: "INSERTs em ai_gateway_metrics irao falhar. Rodar SELECT public.ensure_ai_gateway_metrics_partition(CURRENT_DATE);"
+
+      - alert: AiGatewayPartitionExporterStale
+        expr: (time() - aigw_partitions_last_run_timestamp_seconds) > 1800
+        for: 5m
+        labels:
+          severity: warning
+          component: ai-gateway-metrics
+        annotations:
+          summary: "Exporter de particoes do AI Gateway nao roda ha mais de 30min"
+          description: "Ultima execucao ha {{ $value | humanizeDuration }} — o arquivo do textfile collector parou de ser atualizado em {{ $labels.instance }}."

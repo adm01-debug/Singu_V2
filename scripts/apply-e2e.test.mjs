@@ -47,7 +47,7 @@ for (const script of ['apply-all.js', 'chunk-apply.js', 'apply-migrations.js']) 
     assert.equal(r1.codigo, 0, r1.stdout + r1.stderr);
     assert.deepEqual(await retrato(banco), ESPERADO);
     assert.match(r1.stdout, /Tabelas em public antes: 0\n/); assert.match(r1.stdout, /Tabelas em public depois: 9 \(\+9\)\n/);
-    assert.match(r1.stdout, /\[repescagem 1\] 1 unidade/, 'o índice que depende de função de 08 entra na 2ª passada');
+    assert.doesNotMatch(r1.stdout, /\[repescagem/, 'com 08 antes de 03 (99_apply_all.sql), o índice que depende de função entra na 1ª passada');
     const [total, ok, , falharam, naoExec] = resumo(r1.stdout);
     assert.deepEqual([ok, falharam, naoExec], [total, 0, 0]);
     const r2 = await aplicar(script, banco);
@@ -70,7 +70,7 @@ test('o SQL impresso por --sql, executado pelo psql (divisor independente), dá 
   const psql = () => spawnSync('psql', ['-X', '-q', '-h', c.host, '-p', String(c.port), '-U', c.user, '-d', banco, '-f', arquivo], { encoding: 'utf8', env: { ...process.env, PGPASSWORD: c.password } });
   const erros = (r) => r.stderr.split('\n').filter((l) => /ERROR:/.test(l));
   const p1 = psql();
-  assert.deepEqual(erros(p1).map((l) => l.replace(/^.*ERROR: +/, '')), ['function public.sem_acento(text) does not exist'], 'só o índice fora de ordem falha na 1ª passada');
+  assert.deepEqual(erros(p1).map((l) => l.replace(/^.*ERROR: +/, '')), [], 'com 08 antes de 03 (99_apply_all.sql), nada falha na 1ª passada');
   assert.deepEqual(erros(psql()), [], '2ª passada limpa: o SQL gerado é idempotente');
   assert.deepEqual(await retrato(banco), ESPERADO);
 });

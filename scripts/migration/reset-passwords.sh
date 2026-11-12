@@ -9,7 +9,8 @@
 #   ./scripts/migration/reset-passwords.sh --dry-run    # simulação (nada é enviado)
 #   ./scripts/migration/reset-passwords.sh              # execução real (pede confirmação)
 #   ./scripts/migration/reset-passwords.sh --yes        # execução real sem pergunta
-#   (demais argumentos são repassados ao reset-passwords.ts)
+#   (demais argumentos, ex.: --limit N, são repassados ao reset-passwords.ts;
+#    o wrapper acrescenta --execute quando não é --dry-run)
 #
 # Ambiente (scripts/migration/env.migration ou .env; ambiente vence):
 #   TARGET_SUPABASE_URL      (ou DEST_SUPABASE_URL)
@@ -29,15 +30,20 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$SCRIPT_DIR/_lib.sh"
 MIG_TAG="reset-passwords"
 
-DRY_RUN=0; PASS=()
+DRY_RUN=0; EXECUTE=0; PASS=()
 for arg in "$@"; do
   case "$arg" in
     -h|--help) mig_help "${BASH_SOURCE[0]}"; exit 0 ;;
     --yes)     MIG_YES=1 ;;
     --dry-run) DRY_RUN=1; PASS+=("$arg") ;;
+    --execute) EXECUTE=1 ;;
     *)         PASS+=("$arg") ;;
   esac
 done
+if (( DRY_RUN && EXECUTE )); then mig_die 2 "--dry-run e --execute são exclusivos"; fi
+# O .ts é seguro por padrão (simula) e só envia com --execute; este wrapper mantém
+# o contrato do runbook: sem --dry-run = execução real (após confirmação).
+if (( DRY_RUN == 0 )); then PASS+=(--execute); fi
 
 mig_load_env "${SCRIPT_DIR}/env.migration" "${SCRIPT_DIR}/.env"
 mig_alias TARGET_SUPABASE_URL DEST_SUPABASE_URL
@@ -62,7 +68,9 @@ mig_log "[info] Iniciando disparo$( (( DRY_RUN )) && echo ' (dry-run)') em $HOST
 
 rc=0
 deno run --allow-env --allow-net "${SCRIPT_DIR}/reset-passwords.ts" "${PASS[@]}" | tee "${LOG_FILE}" || rc=$?
-if (( rc != 0 )); then
-  mig_die 1 "disparo terminou com erro (código $rc) — veja ${LOG_FILE}; é seguro rodar de novo (o .ts pula quem já recebeu)"
+if (( rc == 2 )); then
+  mig_die 1 "disparo concluído COM FALHAS de envio para parte dos usuários — veja ${LOG_FILE}; rode de novo (quem já recebeu é pulado)"
+elif (( rc != 0 )); then
+  mig_die 1 "disparo abortado (código $rc) — veja ${LOG_FILE}; é seguro rodar de novo (quem já recebeu é pulado)"
 fi
 mig_log "[info] Concluído. Consulte ${LOG_FILE} e a tabela migration_password_reset_log."

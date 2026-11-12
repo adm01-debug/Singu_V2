@@ -6,7 +6,7 @@
 // Passo 3: deno run --allow-env --allow-read --allow-write verify/row-diff-deep.ts --compare
 // Envs: SAMPLE_PCT (1), HEAD_N (100), TAIL_N (100) + as de row-diff.ts (ONLY_TABLE, TABLES_DDL, ROW_DIFF_BASE…).
 // Saída: 0 íntegro · 1 divergência · 2 configuração/entrada inválida.
-import { caminhos, carregarTabelas, comparar, ErroEntrada, gerarSql, inteiro, lerAmostras, sair, tabelaOk, type ResultadoTabela } from "./row-diff.ts";
+import { caminhos, carregarTabelas, comparar, ErroEntrada, gerarSql, inteiro, lerAmostras, linhaResumo, sair, tabelaOk, type ResultadoTabela } from "./row-diff.ts";
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
@@ -28,7 +28,7 @@ if (import.meta.main) {
       const rel = comparar(src, dst);
       const fail = Object.values(rel).filter((r) => !tabelaOk(r)).length;
       for (const [t, r] of Object.entries(rel)) {
-        if (!tabelaOk(r)) console.log(`✖ ${t}: missing=${r.missing} mismatch=${r.mismatch} extra=${r.extra}${r.falha ? ` — ${r.falha}` : ""}`);
+        if (!tabelaOk(r)) console.log(`✖ ${linhaResumo(t, r)}`);
       }
       const destino = new URL("./report.html", outDir);
       await Deno.writeTextFile(destino, relatorioHtml(rel, new Date().toISOString()));

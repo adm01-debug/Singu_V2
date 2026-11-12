@@ -3027,6 +3027,127 @@
       "triggers": ["manual"],
       "callers": ["scripts/inventario/gerar-edge-tabela.mjs","scripts/inventario/gerar-rotas.mjs"]
     }
+,
+    {
+      "id": "legacy-0b41f5fc809e44ff",
+      "kind": "legacy",
+      "files": ["scripts/migration/tests/cutover-cdc.test.sh"],
+      "manual": ["sh","scripts/migration/tests/cutover-cdc.test.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-05ed88f25bab132c",
+      "kind": "legacy",
+      "files": ["scripts/migration/tests/data.test.sh"],
+      "manual": ["sh","scripts/migration/tests/data.test.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-ab628b1cc9e73e4f",
+      "kind": "legacy",
+      "files": ["scripts/migration/tests/dr.test.sh"],
+      "manual": ["sh","scripts/migration/tests/dr.test.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-e0570df95c48127a",
+      "kind": "legacy",
+      "files": ["scripts/migration/tests/functions.test.sh"],
+      "manual": ["sh","scripts/migration/tests/functions.test.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-c7d782489b273910",
+      "kind": "legacy",
+      "files": ["scripts/migration/tests/lib/env-reads.sh"],
+      "manual": ["sh","scripts/migration/tests/lib/env-reads.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-773fbcecca27da23",
+      "kind": "legacy",
+      "files": ["scripts/migration/tests/lib/harness.sh"],
+      "manual": ["sh","scripts/migration/tests/lib/harness.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-9f61c5d6e4cf3ba3",
+      "kind": "legacy",
+      "files": ["scripts/migration/tests/lib.test.sh"],
+      "manual": ["sh","scripts/migration/tests/lib.test.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-2def39a704e89285",
+      "kind": "legacy",
+      "files": ["scripts/migration/tests/run.sh"],
+      "manual": ["sh","scripts/migration/tests/run.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-2665724eb23258bd",
+      "kind": "legacy",
+      "files": ["scripts/migration/tests/static.test.sh"],
+      "manual": ["sh","scripts/migration/tests/static.test.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-6af8b7d256172deb",
+      "kind": "legacy",
+      "files": ["scripts/migration/verify/tests/scenarios/94-monitoring-tests.sh"],
+      "manual": ["sh","scripts/migration/verify/tests/scenarios/94-monitoring-tests.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-dfb82da7e91a47cf",
+      "kind": "legacy",
+      "files": ["scripts/monitoring/alerts.test.sh"],
+      "manual": ["sh","scripts/monitoring/alerts.test.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-11d6358c43c02e9b",
+      "kind": "legacy",
+      "files": ["scripts/monitoring/check-runbook-coverage.test.sh"],
+      "manual": ["sh","scripts/monitoring/check-runbook-coverage.test.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-03b8586a645d6fde",
+      "kind": "legacy",
+      "files": ["scripts/monitoring/exporters.test.sh"],
+      "manual": ["sh","scripts/monitoring/exporters.test.sh"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-b0ab33ae027bffd4",
+      "kind": "legacy",
+      "files": ["scripts/supabase_snapshot/test_snapshot_pg.py"],
+      "manual": ["python3","scripts/supabase_snapshot/test_snapshot_pg.py"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    },
+    {
+      "id": "legacy-85e26bebc5efd2f6",
+      "kind": "legacy",
+      "files": ["scripts/supabase_snapshot/test_snapshot_seguranca.py"],
+      "manual": ["python3","scripts/supabase_snapshot/test_snapshot_seguranca.py"],
+      "triggers": ["manual"],
+      "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
+    }
   ],
   "ci": [
     {

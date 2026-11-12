@@ -3664,8 +3664,8 @@ CREATE TABLE public.rfm_analysis (
   recency_score integer NOT NULL,
   frequency_score integer NOT NULL,
   monetary_score integer NOT NULL,
-  rfm_score integer DEFAULT (((recency_score * 100) + (frequency_score * 10)) + monetary_score),
-  total_score integer DEFAULT ((recency_score + frequency_score) + monetary_score),
+  rfm_score integer GENERATED ALWAYS AS ((((recency_score * 100) + (frequency_score * 10)) + monetary_score)) STORED,
+  total_score integer GENERATED ALWAYS AS (((recency_score + frequency_score) + monetary_score)) STORED,
   days_since_last_purchase integer,
   days_since_last_interaction integer,
   total_purchases integer DEFAULT 0,
@@ -4336,7 +4336,7 @@ CREATE TABLE public.system_alerts (
   acknowledged_at timestamp with time zone,
   acknowledged_by uuid,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
-  is_simulated boolean DEFAULT COALESCE(((metadata ->> 'simulated'::text))::boolean, false),
+  is_simulated boolean GENERATED ALWAYS AS (COALESCE(((metadata ->> 'simulated'::text))::boolean, false)) STORED,
   CONSTRAINT system_alerts_pkey PRIMARY KEY (id),
   CONSTRAINT system_alerts_severity_check CHECK ((severity = ANY (ARRAY['warning'::text, 'high'::text, 'critical'::text])))
 );
@@ -4786,5 +4786,4 @@ CREATE TABLE public.win_loss_records (
 
 -- Comentários de tabelas e colunas
 COMMENT ON TABLE public.entity_relationships IS 'Relacionamentos polimórficos entre Empresa/Pessoa com papel (comprador, gerente, proprietário, ...).';
-COMMENT ON TABLE public.v_entities IS 'Visão unificada de Empresas e Pessoas como Entidades.';
 COMMENT ON COLUMN public.offer_suggestions.metadata IS 'Armazena detalhes do match social, incluindo sources, keywords e social_insight_ids vinculados.';

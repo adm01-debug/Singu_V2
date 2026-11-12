@@ -233,7 +233,8 @@ export class MockSupabase {
       const lim = Math.min(limite ?? this.maxRows, this.maxRows);
       linhas = linhas.slice(deslocamento, deslocamento + lim);
       if (selecao) linhas = linhas.map((l) => Object.fromEntries(selecao!.map((c) => [c, l[c] ?? null])));
-      const h = { "content-range": `${linhas.length ? `${deslocamento}-${deslocamento + linhas.length - 1}` : "*"}/${total}` };
+      const faixa = linhas.length ? `${deslocamento}-${deslocamento + linhas.length - 1}` : "*";
+      const h = { "content-range": `${faixa}/${total}` };
       return req.method === "HEAD" ? new Response(null, { headers: h }) : Response.json(linhas, { headers: h });
     }
     if (req.method === "DELETE") {

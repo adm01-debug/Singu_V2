@@ -70,10 +70,10 @@ test('args: combinações inválidas e flags desconhecidas são erro de uso', ()
   }
 });
 
-test('ordem canônica espelha os \\i de 99_apply_all.sql', () => {
-  const incluidos = [...readFileSync(join(DIR_DDL_PADRAO, '99_apply_all.sql'), 'utf8').matchAll(/^\\i (\S+)/gm)].map((m) => m[1]);
+test('ordem canônica espelha os \\ir de 99_apply_all.sql', () => {
+  const incluidos = [...readFileSync(join(DIR_DDL_PADRAO, '99_apply_all.sql'), 'utf8').matchAll(/^\\ir? (\S+)/gm)].map((m) => m[1]);
   assert.deepEqual(ORDEM_DDL, incluidos);
-  assert.deepEqual(emOrdemCanonica(['10_views.sql', '07_policies.sql', '08_functions.sql', '02_tables.sql']), ['02_tables.sql', '08_functions.sql', '07_policies.sql', '10_views.sql']);
+  assert.deepEqual(emOrdemCanonica(['10_views.sql', '07_policies.sql', '08_functions.sql', '02_tables.sql']), ['02_tables.sql', '10_views.sql', '08_functions.sql', '07_policies.sql']);
 });
 
 test('classificarErro: decide por SQLSTATE, não por palavra solta', () => {

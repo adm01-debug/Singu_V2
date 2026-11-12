@@ -2,7 +2,8 @@
 # connection-pool-exhaustion-canary.sh, planner-stats-freshness.sh e
 # timeline-divergence-guard.sh contra um banco real — os dois lados de cada um.
 EXPECTED_EXIT=0
-setup(){ sql "CREATE TABLE public.t(id int PRIMARY KEY); INSERT INTO public.t SELECT g FROM generate_series(1, 100) g;"; }
+# autovacuum desligado NA TABELA: senão um autoanalyze pode chegar antes do teste do --sem-analyze
+setup(){ sql "CREATE TABLE public.t(id int PRIMARY KEY) WITH (autovacuum_enabled = false); INSERT INTO public.t SELECT g FROM generate_series(1, 100) g;"; }
 run_guard(){
   export DEST_DB_URL SRC_DB_URL; DEST_DB_URL="$(db_url)"; SRC_DB_URL="$DEST_DB_URL"
   local c="$VERIFY_DIR/connection-pool-exhaustion-canary.sh" p="$VERIFY_DIR/planner-stats-freshness.sh" t="$VERIFY_DIR/timeline-divergence-guard.sh"

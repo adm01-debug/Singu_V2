@@ -13,7 +13,7 @@ async function cena() {
 }
 
 Deno.test("synthetic lerConfig: INTERVAL_MS=abc/negativo/1..999 são erro (antes: 'abc' virava laço sem pausa — 136 rodadas em 3 s)", () => {
-  const b: Record<string, string> = { APP_URL: "http://a", DEST_SUPABASE_URL: "http://b", DEST_ANON_KEY: "k", SYNTHETIC_EMAIL: "e", SYNTHETIC_PASSWORD: "p" };
+  const b: Record<string, string> = { APP_URL: "https://a", DEST_SUPABASE_URL: "https://b", DEST_ANON_KEY: "k", SYNTHETIC_EMAIL: "e", SYNTHETIC_PASSWORD: "p" };
   const com = (x: Record<string, string>) => lerSint((k) => ({ ...b, ...x } as Record<string, string>)[k]);
   assert.equal(com({}).intervalMs, 300000); assert.equal(com({ INTERVAL_MS: "0" }).intervalMs, 0);
   for (const v of ["abc", "-5", "500"]) assert.throws(() => com({ INTERVAL_MS: v }), ErroSint);

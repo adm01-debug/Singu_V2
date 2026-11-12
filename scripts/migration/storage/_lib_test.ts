@@ -88,6 +88,11 @@ Deno.test("retryFetch: fábrica de init é chamada a cada tentativa (corpo em st
   } finally { await m.parar(); }
 });
 
+async function consumir(it: AsyncIterable<unknown>): Promise<number> {
+  let n = 0;
+  for await (const item of it) if (item) n++;
+  return n;
+}
 Deno.test("iterObjects: 2.500 objetos, pastas aninhadas e servidor que limita a página em 100", async () => {
   const m = await MockSupabase.iniciar();
   try {
@@ -104,17 +109,17 @@ Deno.test("iterObjects: 2.500 objetos, pastas aninhadas e servidor que limita a 
 Deno.test("iterObjects: erro HTTP na listagem lança (não devolve lista parcial como se fosse tudo)", async () => {
   const m = await MockSupabase.iniciar();
   try {
-    await assert.rejects(async () => { for await (const _ of iterObjects(m.url, "k", "nao-existe")) { /* */ } }, /HTTP 404/);
+    await assert.rejects(consumir(iterObjects(m.url, "k", "nao-existe")), /HTTP 404/);
   } finally { await m.parar(); }
 });
 Deno.test("iterObjects: servidor que ignora offset é detectado (sem loop infinito)", async () => {
   const pagina = JSON.stringify([{ name: "a", id: "1", metadata: { size: 1 } }]);
   const falso = (() => Promise.resolve(new Response(pagina))) as typeof fetch;
-  await assert.rejects(async () => { for await (const _ of iterObjects("http://x.invalid", "k", "b", "", falso)) { /* */ } }, /ignorou offset/);
+  await assert.rejects(consumir(iterObjects("https://x.invalid", "k", "b", "", falso)), /ignorou offset/);
 });
 Deno.test("listBuckets: resposta que não é lista lança; filtrarBuckets rejeita ONLY_BUCKET inexistente", async () => {
   const falso = (() => Promise.resolve(Response.json({ error: "x" }))) as typeof fetch;
-  await assert.rejects(listBuckets("http://x.invalid", "k", falso), /não é lista/);
+  await assert.rejects(listBuckets("https://x.invalid", "k", falso), /não é lista/);
   const bs = [{ id: "a" }, { id: "b" }] as Bucket[];
   assert.deepEqual(filtrarBuckets(bs, "b").map((b) => b.id), ["b"]);
   assert.equal(filtrarBuckets(bs, "").length, 2);
@@ -140,7 +145,11 @@ Deno.test("runPool: concorrência inválida lança; erro do worker é relançado
   await assert.rejects(runPool(gerar(3), () => Promise.resolve(), NaN), ErroConfig);
   await assert.rejects(runPool(gerar(3), () => Promise.resolve(), 0), ErroConfig);
   let feitos = 0;
-  await assert.rejects(runPool(gerar(10), (i) => { if (i === 2) return Promise.reject(new Error("boom")); feitos++; return Promise.resolve(); }, 2), /boom/);
+  await assert.rejects(runPool(gerar(10), (i) => {
+    if (i === 2) return Promise.reject(new Error("boom"));
+    feitos++;
+    return Promise.resolve();
+  }, 2), /boom/);
   assert.ok(feitos >= 2 && feitos < 10);
   await runPool(gerar(0), () => Promise.reject(new Error("nunca")), 3);
 });

@@ -9,7 +9,7 @@
 // DRY_RUN=1: só informa o que faria. Saída: 0 ok · 1 falha · 2 configuração.
 // Limite conhecido: o upload ao destino é um único POST em stream (não usa TUS/resumable).
 import {
-  authHeaders, encodePath, ErroConfig, etagLimpo, headObjeto, intEnv, loadEnv, redact, retryFetch, sairComErro,
+  authHeaders, encodePath, ErroConfig, etagLimpo, headObjeto, intEnv, loadEnv, redact, retryFetch, sairComErro, semBarraFinal,
   type Env, type Fetch,
 } from "./_lib.ts";
 
@@ -38,7 +38,10 @@ export async function infoOrigem(env: Env, bucket: string, object: string, fetch
   const m = await r.json() as Record<string, unknown>;
   const size = Number(m.size);
   if (!Number.isInteger(size) || size < 0) throw new Error("INFO da origem não trouxe tamanho válido");
-  const txt = (...ks: string[]) => { for (const k of ks) if (typeof m[k] === "string") return m[k] as string; return ""; };
+  const txt = (...ks: string[]): string => {
+    const k = ks.find((x) => typeof m[x] === "string");
+    return k ? m[k] as string : "";
+  };
   return {
     size,
     contentType: txt("content_type", "contentType", "mimetype") || "application/octet-stream",
@@ -61,7 +64,7 @@ export async function copiarGrande(env: Env, op: OpcoesLarge): Promise<"copiado"
   }
 
   await Deno.mkdir(op.ckptDir, { recursive: true });
-  const base = `${op.ckptDir.replace(/\/+$/, "")}/${await nomeCkpt(bucket, object)}`;
+  const base = `${semBarraFinal(op.ckptDir)}/${await nomeCkpt(bucket, object)}`;
   const ckptFile = `${base}.json`;
   const partFile = `${base}.part`;
   let ckpt: Ckpt | null = null;

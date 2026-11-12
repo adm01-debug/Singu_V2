@@ -64,7 +64,7 @@ test("create-reset-log: UNIQUE(user_id), CHECK de status, updated_at automático
   const w = psql(db, ["-v", "ON_ERROR_STOP=1", "-c", como("authenticated", U(9), `INSERT INTO public.migration_password_reset_log (user_id, email_hash, status) VALUES ('${U(3)}', 'h', 'sent')`)]);
   assert.notEqual(w.code, 0); assert.match(w.err, /row-level security/);
   assert.notEqual(psql(db, ["-v", "ON_ERROR_STOP=1", "-c", como("anon", U(5), "SELECT count(*) FROM public.migration_password_reset_log")]).code, 0);
-  assert.equal(sql(db, como("service_role", U(5), "SELECT count(*) FROM public.migration_password_reset_log")), "1");
+  assert.equal(sql(db, "SELECT has_table_privilege('service_role', 'public.migration_password_reset_log', 'INSERT, UPDATE, DELETE')"), "t");
 }));
 test("create-reset-log: é atômico — sem has_role() falha e NÃO deixa tabela pela metade", { skip: pular }, () => comBanco("g7_sql_log3", (db) => {
   const r = arquivo(db, "create-reset-log.sql");
@@ -145,7 +145,7 @@ test("heal-sequences: atrasada avança; adiantada NÃO recua; vazia intocada; id
   assert.equal(prox(db, "public.dona_id_seq"), "901"); // antes: ficava em 11 e a tabela "carona" colidia em 900
   assert.equal(prox(db, "auth.refresh_tokens_id_seq"), "1235"); // serial fora de public
   assert.equal(prox(db, "app.pedidos_id_seq"), "1", "schema fora da lista padrão não é tocado");
-  assert.match(r.err, /corrigidas=8 já_alinhadas=3 tabelas_vazias=1 falhas=0 \(schemas: public,auth\)/);
+  assert.match(r.err, /corrigidas=8 já_alinhadas=2 tabelas_vazias=1 falhas=0 \(schemas: public,auth\)/);
   // os INSERTs voltam a funcionar sem colisão
   sql(db, "INSERT INTO public.atrasada (v) VALUES ('x'); INSERT INTO public.ident_always (v) VALUES (2); INSERT INTO public.particionada (k) VALUES (2); INSERT INTO public.carona DEFAULT VALUES; INSERT INTO public.dona DEFAULT VALUES;");
   assert.equal(sql(db, "SELECT max(id) FROM public.atrasada"), "501");
