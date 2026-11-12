@@ -1,7 +1,7 @@
 /**
  * SINGU Design System Audit Tests
  * Validates all P0 design improvements across the codebase
- * 
+ *
  * Categories:
  * 1. Semantic Token Compliance (no hardcoded colors in non-print components)
  * 2. Accessibility (aria-labels, roles, focus management)
@@ -41,15 +41,15 @@ const pageFiles = findTsxFiles(PAGES_DIR);
 const allFiles = [...componentFiles, ...pageFiles];
 
 // Filter out excluded files
-const auditableFiles = allFiles.filter(f => 
+const auditableFiles = allFiles.filter(f =>
   !EXCLUDED_FILES.some(ex => f.endsWith(ex))
 );
 
 describe('Design System Audit - Semantic Token Compliance', () => {
-  
+
   describe('text-white usage', () => {
     const allowedFiles = ['button.tsx']; // glass variant is intentional
-    const filesToCheck = auditableFiles.filter(f => 
+    const filesToCheck = auditableFiles.filter(f =>
       !allowedFiles.some(a => f.endsWith(a))
     );
 
@@ -88,7 +88,7 @@ describe('Design System Audit - Semantic Token Compliance', () => {
 });
 
 describe('Design System Audit - Accessibility', () => {
-  
+
   it('MobileHeader bell button has aria-label', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'layout/MobileHeader.tsx'), 'utf8'
@@ -121,7 +121,7 @@ describe('Design System Audit - Accessibility', () => {
 });
 
 describe('Design System Audit - iOS & Mobile UX', () => {
-  
+
   it('index.css has iOS auto-zoom prevention', () => {
     const content = fs.readFileSync(
       path.resolve(__dirname, '../index.css'), 'utf8'
@@ -139,7 +139,7 @@ describe('Design System Audit - iOS & Mobile UX', () => {
 });
 
 describe('Design System Audit - Gradient Token Usage', () => {
-  
+
   it('LuxButton uses bg-gradient-premium not hardcoded violet/fuchsia', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'lux/LuxButton.tsx'), 'utf8'
@@ -158,7 +158,7 @@ describe('Design System Audit - Gradient Token Usage', () => {
 });
 
 describe('Design System Audit - Status Color Tokens', () => {
-  
+
   it('PortfolioHealthDashboard uses semantic status colors', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'dashboard/PortfolioHealthDashboard.tsx'), 'utf8'
@@ -196,7 +196,7 @@ describe('Design System Audit - Status Color Tokens', () => {
 });
 
 describe('Design System Audit - Component Semantic Tokens', () => {
-  
+
   it('FloatingQuickActions uses semantic tokens', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'quick-actions/FloatingQuickActions.tsx'), 'utf8'
@@ -271,7 +271,7 @@ describe('Design System Audit - Component Semantic Tokens', () => {
 });
 
 describe('Design System Audit - Page Level Tokens', () => {
-  
+
   it('Auth page uses text-primary-foreground on branded panel', () => {
     const content = fs.readFileSync(
       path.resolve(PAGES_DIR, 'Auth.tsx'), 'utf8'
@@ -301,7 +301,7 @@ describe('Design System Audit - Page Level Tokens', () => {
 });
 
 describe('Design System Audit - NLP Components', () => {
-  
+
   it('SwishPatternGenerator uses bg-success not bg-lime-500', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'nlp/SwishPatternGenerator.tsx'), 'utf8'
@@ -321,7 +321,7 @@ describe('Design System Audit - NLP Components', () => {
 });
 
 describe('Design System Audit - Analytics Components', () => {
-  
+
   it.each([
     ['ChurnPredictionPanel', 'analytics/ChurnPredictionPanel.tsx'],
     ['AccountChurnPredictionPanel', 'analytics/AccountChurnPredictionPanel.tsx'],
@@ -342,7 +342,7 @@ describe('Design System Audit - Analytics Components', () => {
 });
 
 describe('Design System Audit - Onboarding Components', () => {
-  
+
   it.each([
     ['OnboardingWizard', 'onboarding/OnboardingWizard.tsx'],
     ['WelcomeStep', 'onboarding/steps/WelcomeStep.tsx'],
@@ -356,7 +356,7 @@ describe('Design System Audit - Onboarding Components', () => {
 });
 
 describe('Design System Audit - Neuromarketing Components', () => {
-  
+
   it('NeuroHeatmapCalendar uses bg-success not bg-green-500 text-white', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'neuromarketing/NeuroHeatmapCalendar.tsx'), 'utf8'
@@ -373,7 +373,7 @@ describe('Design System Audit - Neuromarketing Components', () => {
 });
 
 describe('Design System Audit - Layout Components', () => {
-  
+
   it('Sidebar uses text-primary-foreground on Zap icon', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'layout/AppSidebar.tsx'), 'utf8'
@@ -391,7 +391,7 @@ describe('Design System Audit - Layout Components', () => {
 });
 
 describe('Design System Audit - Stakeholder Components', () => {
-  
+
   it('StakeholderAlertsList uses bg-warning not bg-orange-500', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'stakeholders/StakeholderAlertsList.tsx'), 'utf8'
@@ -402,7 +402,7 @@ describe('Design System Audit - Stakeholder Components', () => {
 });
 
 describe('Design System Audit - CompanyCard', () => {
-  
+
   it('CompanyCardWithContext uses text-primary-foreground', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'company-card/CompanyCardWithContext.tsx'), 'utf8'
@@ -413,7 +413,7 @@ describe('Design System Audit - CompanyCard', () => {
 });
 
 describe('Design System Audit - WhatsNew & PWA', () => {
-  
+
   it('WhatsNewModal close button uses primary-foreground', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'features/WhatsNewModal.tsx'), 'utf8'
@@ -431,7 +431,7 @@ describe('Design System Audit - WhatsNew & PWA', () => {
 });
 
 describe('Design System Audit - Contact Detail', () => {
-  
+
   it('ContactDetailHeader uses text-primary-foreground for score', () => {
     const content = fs.readFileSync(
       path.resolve(COMPONENTS_DIR, 'contact-detail/ContactDetailHeader.tsx'), 'utf8'
@@ -442,7 +442,7 @@ describe('Design System Audit - Contact Detail', () => {
 });
 
 describe('Design System Audit - CSS Variables Integrity', () => {
-  
+
   it('index.css defines all required semantic tokens', () => {
     const content = fs.readFileSync(
       path.resolve(__dirname, '../index.css'), 'utf8'
@@ -461,7 +461,7 @@ describe('Design System Audit - CSS Variables Integrity', () => {
       '--popover', '--popover-foreground',
       '--border', '--input', '--ring',
     ];
-    
+
     for (const token of requiredTokens) {
       expect(content).toContain(token);
     }

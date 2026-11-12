@@ -59,16 +59,16 @@ interface BehaviorAlertsPanelProps {
 }
 
 export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProps) {
-  const { 
-    alerts, 
-    stats, 
-    loading, 
-    detectNewAlerts, 
-    dismissAlert, 
+  const {
+    alerts,
+    stats,
+    loading,
+    detectNewAlerts,
+    dismissAlert,
     markActionTaken,
-    ALERT_TYPE_CONFIG 
+    ALERT_TYPE_CONFIG
   } = useBehaviorAlerts();
-  
+
   const [filter, setFilter] = useState<AlertSeverity | 'all'>('all');
   const [detecting, setDetecting] = useState(false);
 
@@ -83,8 +83,8 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
     }
   };
 
-  const filteredAlerts = filter === 'all' 
-    ? alerts 
+  const filteredAlerts = filter === 'all'
+    ? alerts
     : alerts.filter(a => a.severity === filter);
 
   const displayedAlerts = compact ? filteredAlerts.slice(0, 3) : filteredAlerts;
@@ -130,7 +130,7 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
               </p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -157,10 +157,10 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            
-            <Button 
-              variant="ghost" 
-              size="sm" 
+
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={handleDetectNew}
               disabled={detecting}
               aria-label={detecting ? 'Detectando novos alertas' : 'Detectar novos alertas'}
@@ -206,9 +206,9 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
               >
                 <Bell className="w-12 h-12 mx-auto mb-2 opacity-50" />
                 <p>Nenhum alerta {filter !== 'all' ? `de severidade "${filter}"` : ''}</p>
-                <Button 
-                  variant="link" 
-                  size="sm" 
+                <Button
+                  variant="link"
+                  size="sm"
                   onClick={handleDetectNew}
                   className="mt-2"
                 >
@@ -220,7 +220,7 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
                 {displayedAlerts.map((alert, idx) => {
                   const Icon = ALERT_ICONS[alert.type] || Bell;
                   const config = ALERT_TYPE_CONFIG[alert.type];
-                  
+
                   return (
                     <motion.div
                       key={alert.id}
@@ -233,20 +233,20 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-start gap-3 flex-1">
                           <div className={`p-2 rounded-lg ${
-                            alert.type === 'positive_momentum' 
-                              ? 'bg-success/10' 
+                            alert.type === 'positive_momentum'
+                              ? 'bg-success/10'
                               : 'bg-warning/10'
                           }`}>
                             <Icon className={`w-4 h-4 ${
-                              alert.type === 'positive_momentum' 
-                                ? 'text-success' 
+                              alert.type === 'positive_momentum'
+                                ? 'text-success'
                                 : 'text-warning'
                             }`} />
                           </div>
-                          
+
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <Link 
+                              <Link
                                 to={`/contatos/${alert.contactId}`}
                                 className="font-medium hover:text-primary transition-colors"
                               >
@@ -256,24 +256,24 @@ export function BehaviorAlertsPanel({ compact = false }: BehaviorAlertsPanelProp
                                 {alert.severity}
                               </Badge>
                             </div>
-                            
+
                             <p className="text-sm font-medium mt-0.5">
                               {config?.icon} {alert.title}
                             </p>
-                            
+
                             <p className="text-xs text-muted-foreground mt-1">
                               {alert.description}
                             </p>
-                            
+
                             <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                               <span className="flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
-                                {formatDistanceToNow(new Date(alert.detectedAt), { 
-                                  locale: ptBR, 
-                                  addSuffix: true 
+                                {formatDistanceToNow(new Date(alert.detectedAt), {
+                                  locale: ptBR,
+                                  addSuffix: true
                                 })}
                               </span>
-                              
+
                               {alert.changePercent !== undefined && (
                                 <span className={
                                   alert.type === 'positive_momentum'

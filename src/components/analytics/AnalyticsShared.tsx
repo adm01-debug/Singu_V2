@@ -56,12 +56,12 @@ export const PieTooltip = forwardRef<HTMLDivElement, CustomTooltipProps>(
 );
 
 export const ComparisonBadge = ({ comparison, suffix = '' }: { comparison: PeriodComparison; suffix?: string }) => {
-  const Icon = comparison.changeType === 'positive' ? TrendingUp : 
+  const Icon = comparison.changeType === 'positive' ? TrendingUp :
                comparison.changeType === 'negative' ? TrendingDown : Minus;
-  const colorClass = comparison.changeType === 'positive' ? 'text-success bg-success/10' : 
-                     comparison.changeType === 'negative' ? 'text-destructive bg-destructive/10' : 
+  const colorClass = comparison.changeType === 'positive' ? 'text-success bg-success/10' :
+                     comparison.changeType === 'negative' ? 'text-destructive bg-destructive/10' :
                      'text-muted-foreground bg-muted';
-  
+
   return (
     <span className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium", colorClass)}>
       <Icon className="w-3 h-3" />
@@ -70,17 +70,17 @@ export const ComparisonBadge = ({ comparison, suffix = '' }: { comparison: Perio
   );
 };
 
-export const StatCard = ({ 
-  title, 
-  value, 
-  comparison, 
-  icon: Icon, 
-  iconColor 
-}: { 
-  title: string; 
-  value: string | number; 
-  comparison: PeriodComparison; 
-  icon: React.ElementType; 
+export const StatCard = ({
+  title,
+  value,
+  comparison,
+  icon: Icon,
+  iconColor
+}: {
+  title: string;
+  value: string | number;
+  comparison: PeriodComparison;
+  icon: React.ElementType;
   iconColor: string;
 }) => (
   <motion.div
