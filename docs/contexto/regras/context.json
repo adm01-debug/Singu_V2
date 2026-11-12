@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "cd6478ec116e4bf77e274604628cf4fa31782add",
+  "sha": "a817b7e811c7467ba7e39731b47ac786b5a19d7e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 03:45 UTC",
+  "generated_at": "2026-11-12 11:05 UTC",
   "files_total": 3322,
   "code_files": 2866,
   "code_lines": 408358
@@ -232464,10 +232464,19 @@
   }
  },
  "git": {
-  "sha": "cd6478ec116e4bf77e274604628cf4fa31782add",
+  "sha": "a817b7e811c7467ba7e39731b47ac786b5a19d7e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "a817b7e",
+    "date": "2026-11-12",
+    "author": "adm01-debug",
+    "subject": "fix(push): alinha chave VAPID publica do front com o par dos secrets (#199)",
+    "files": [
+     "src/lib/pushNotifications.ts"
+    ]
+   },
    {
     "sha": "cd6478e",
     "date": "2026-11-11",
@@ -233267,24 +233276,16 @@
      "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
      "tests/rls/security_definer_hardening.sql"
     ]
-   },
-   {
-    "sha": "3570870",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "chore(inventario): cataloga as 43 edge functions de outro sistema",
-    "files": [
-     "docs/agentes/contexto-ia.md",
-     "docs/agentes/edges-externas.md",
-     "scripts/inventario/edges-externas.txt",
-     "scripts/inventario/gerar-banco.mjs"
-    ]
    }
   ],
   "hot_files": [
    [
     "CHANGELOG.md",
     4
+   ],
+   [
+    "src/lib/pushNotifications.ts",
+    3
    ],
    [
     "inventario/estado/banco.json",
@@ -233335,19 +233336,11 @@
     2
    ],
    [
-    "src/lib/pushNotifications.ts",
-    2
-   ],
-   [
     "scripts/migration/storage/verify-counts.ts",
     2
    ],
    [
     "scripts/check-supabase-project-ref.test.mjs",
-    2
-   ],
-   [
-    "scripts/inventario/gerar-banco.mjs",
     2
    ],
    [
@@ -233360,6 +233353,10 @@
    ],
    [
     "supabase/functions/_shared/resend.ts",
+    1
+   ],
+   [
+    "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql",
     1
    ]
   ]

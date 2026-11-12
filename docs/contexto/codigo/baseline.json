@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "cd6478ec116e4bf77e274604628cf4fa31782add",
+  "commit": "a817b7e811c7467ba7e39731b47ac786b5a19d7e",
   "branch": "main",
-  "data_commit": "2026-11-12T02:49:53Z",
+  "data_commit": "2026-11-12T08:02:21-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "a817b7e8",
+    "data": "2026-11-12",
+    "assunto": "fix(push): alinha chave VAPID publica do front com o par dos secrets (#199)"
+   },
    {
     "sha": "cd6478ec",
     "data": "2026-11-12",
@@ -126,11 +131,6 @@
     "sha": "edf5b517",
     "data": "2026-11-08",
     "assunto": "fix(ficha): registra interações pelo contrato de contato (#153)"
-   },
-   {
-    "sha": "11086727",
-    "data": "2026-11-08",
-    "assunto": "fix(filas): confirma reservas e resultados da DLQ (#150)"
    }
   ],
   "arquivos_mudados_7d": 558,
@@ -140,12 +140,12 @@
     "mudancas": 182
    },
    {
-    "pasta": "CHANGELOG.md",
-    "mudancas": 20
-   },
-   {
     "pasta": "supabase/functions/_shared",
     "mudancas": 19
+   },
+   {
+    "pasta": "CHANGELOG.md",
+    "mudancas": 18
    },
    {
     "pasta": "scripts/migration/storage",
@@ -156,18 +156,6 @@
     "mudancas": 10
    },
    {
-    "pasta": "src/components/contact-detail",
-    "mudancas": 10
-   },
-   {
-    "pasta": "src/hooks/__tests__",
-    "mudancas": 10
-   },
-   {
-    "pasta": "package.json",
-    "mudancas": 8
-   },
-   {
     "pasta": "scripts/migration/cdc",
     "mudancas": 8
    },
@@ -176,15 +164,19 @@
     "mudancas": 8
    },
    {
+    "pasta": "src/hooks/__tests__",
+    "mudancas": 8
+   },
+   {
+    "pasta": "package.json",
+    "mudancas": 7
+   },
+   {
     "pasta": "scripts/maintenance/tests",
     "mudancas": 7
    },
    {
-    "pasta": "src/components/dashboard",
-    "mudancas": 7
-   },
-   {
-    "pasta": "supabase/functions/external-data",
+    "pasta": "src/components/contact-detail",
     "mudancas": 7
    },
    {
@@ -192,8 +184,16 @@
     "mudancas": 6
    },
    {
-    "pasta": "package-lock.json",
+    "pasta": "supabase/functions/evolution-webhook",
     "mudancas": 6
+   },
+   {
+    "pasta": "supabase/functions/external-data",
+    "mudancas": 6
+   },
+   {
+    "pasta": "docs/qa/security-definer-audit.md",
+    "mudancas": 5
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -301,15 +301,15 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 49
+    "commits": 50
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 22
+    "commits": 20
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 5
+    "commits": 4
    },
    {
     "autor": "Joaquim Promo Brindes",
