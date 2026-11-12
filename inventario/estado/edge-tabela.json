@@ -3,7 +3,7 @@
   "fonte": "scripts/inventario/gerar-edge-tabela.mjs (le supabase/functions/<funcao>/**/*.ts, sem teste, seguindo _shared/ uma vez)",
   "limites": "leitura estatica: nome de tabela em variavel nao constante, concatenacao e SQL cru ficam de fora; alcance nao prova execucao",
   "resumo": {
-    "funcoes": 108,
+    "funcoes": 109,
     "funcoes_sem_tabela": 5,
     "tabelas_distintas": 131,
     "rpcs_distintas": 25
@@ -1408,6 +1408,20 @@
       "buckets": [],
       "invoca_edges": []
     },
+    "send-transactional-email": {
+      "arquivos": 1,
+      "compartilhados": [
+        "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/fetch-utils.ts",
+        "supabase/functions/_shared/validate.ts"
+      ],
+      "tabelas": [
+        "ai_gateway_metrics"
+      ],
+      "rpcs": [],
+      "buckets": [],
+      "invoca_edges": []
+    },
     "sequence-processor": {
       "arquivos": 1,
       "compartilhados": [
@@ -1746,6 +1760,7 @@
       "arquivos": 1,
       "compartilhados": [
         "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/resend.ts",
         "supabase/functions/_shared/validate.ts"
       ],
       "tabelas": [
@@ -1871,6 +1886,7 @@
       "retry-behavioral-profile",
       "semantic-search",
       "send-sms-campaign",
+      "send-transactional-email",
       "smart-notify",
       "smart-reminders",
       "social-behavior-analyzer",
