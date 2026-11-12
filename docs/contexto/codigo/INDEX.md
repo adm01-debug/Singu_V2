@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `1e20172bfbd212f0c8876951565f3565d1bc2794` (2026-11-12T11:13:20-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `ba89bc04a8785c42b514768e9a9cedf91a729a36` (2026-11-12T12:53:35-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3219 |
 | arquivos_codigo | 2213 |
-| linhas_codigo | 413435 |
+| linhas_codigo | 413496 |
 | rotas | 114 |
 | rotas_http_backend | 11 |
 | vistas_por_id | 0 |
@@ -436,8 +436,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 20746 nós · 35330 arestas · 2075 comunidades · grafo do commit `1e20172b`
-- comunidades maiores: react (360), ref_components (297), useAuth (279), framer-motion (278), ref_hooks (253), lucide-react (253), ref_types (252), ref_lib (244), react-router-dom (230), 📖 Dicionário de Dados — SINGU CRM (228), _shared/auth.ts (228), date-fns (213)
+- 20746 nós · 35332 arestas · 2081 comunidades · grafo do commit `ba89bc04`
+- comunidades maiores: react (360), ref_components (297), _shared/auth.ts (287), useAuth (279), framer-motion (278), ref_hooks (253), lucide-react (253), ref_types (252), ref_lib (244), react-router-dom (230), 📖 Dicionário de Dados — SINGU CRM (228), date-fns (213)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), mig_die() (scripts/migration/_lib.sh), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -571,6 +571,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-12 `ba89bc04` fix(webhook): aceita timestamps textuais do Evolution e preserva época zero (#206)
 - 2026-11-12 `1e20172b` chore: inventario do estado real [auto] (#205)
 - 2026-11-12 `51a85ab6` fix(whatsapp): vincula eventos ao proprietário da instância (#151)
 - 2026-11-12 `3e49b844` fix(cache): preserva carga inicial e revalida relações da ficha (#147)
@@ -585,7 +586,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-11 `48ab3ac2` feat: cria send-transactional-email com Resend para as sequências (#200)
 - 2026-11-11 `ae084d5a` chore: inventario do estado real [auto] (#198)
 - 2026-11-11 `97eced48` feat: troca a IA do gateway Lovable pelo DeepSeek (#197)
-- 2026-11-11 `2f9e3fe3` chore: inventario do estado real [auto] (#194)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

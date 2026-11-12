@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(webhook): aceita timestamps textuais do Evolution e preserva época zero (#206)",
    "chore: inventario do estado real [auto] (#205)",
    "fix(whatsapp): vincula eventos ao proprietário da instância (#151)",
    "fix(cache): preserva carga inicial e revalida relações da ficha (#147)",
-   "fix(oportunidades): alinha criação ao contrato da RPC (#152)",
-   "style(manutencao): aplica correcoes locais verificadas (#195)"
+   "fix(oportunidades): alinha criação ao contrato da RPC (#152)"
   ]
  },
  "pr_template": null,

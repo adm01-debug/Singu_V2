@@ -4,19 +4,19 @@
  "presente": true,
  "como_gerar": "uvx --from \"graphifyy[sql]\" graphify update .  (ou: bun run graph:update); saída em graphify-out/ — graph.json e graph.html NÃO são versionados (dezenas de MB); use `graphify query/path/explain` localmente",
  "relatorio": null,
- "commit_do_grafo": "1e20172bfbd212f0c8876951565f3565d1bc2794",
+ "commit_do_grafo": "ba89bc04a8785c42b514768e9a9cedf91a729a36",
  "grafo_atual": true,
  "nos": 20746,
- "arestas": 35330,
- "comunidades_total": 2075,
+ "arestas": 35332,
+ "comunidades_total": 2081,
  "relacoes": {
   "calls": 3133,
   "cites": 11,
   "contains": 14728,
   "defines": 382,
   "dynamic_import": 293,
-  "imports": 2686,
-  "imports_from": 9355,
+  "imports": 2687,
+  "imports_from": 9356,
   "indexes": 811,
   "indirect_call": 237,
   "inherits": 30,
@@ -28,7 +28,7 @@
   "triggers": 410
  },
  "origem": {
-  "EXTRACTED": 33757,
+  "EXTRACTED": 33759,
   "INFERRED": 1573
  },
  "comunidades": [
@@ -64,6 +64,23 @@
     "@/components/analytics/ClosingScoreAlertsList",
     "@/components/analytics/ClosingScoreRanking",
     "@/components/analytics/DISCAnalyticsPanel"
+   ]
+  },
+  {
+   "id": 10,
+   "nome": "_shared/auth.ts",
+   "nos": 287,
+   "callables": 87,
+   "arquivos": 78,
+   "exemplos_arquivos": [
+    "docs/adr/007-scoped-cors.md",
+    "supabase/functions/_shared/auth.ts",
+    "supabase/functions/_shared/auth_test.ts",
+    "supabase/functions/_shared/behavioral-generation-mock.ts",
+    "supabase/functions/_shared/fetch-utils.ts",
+    "supabase/functions/_shared/rate-limit.ts",
+    "supabase/functions/_shared/validate.ts",
+    "supabase/functions/abm-whitespace-analyzer/index.ts"
    ]
   },
   {
@@ -196,23 +213,6 @@
    ]
   },
   {
-   "id": 10,
-   "nome": "_shared/auth.ts",
-   "nos": 228,
-   "callables": 64,
-   "arquivos": 68,
-   "exemplos_arquivos": [
-    "supabase/functions/_shared/auth.ts",
-    "supabase/functions/_shared/behavioral-generation-mock.ts",
-    "supabase/functions/_shared/best-effort-write.ts",
-    "supabase/functions/_shared/best-effort-write_test.ts",
-    "supabase/functions/_shared/rate-limit.ts",
-    "supabase/functions/_shared/rate-limit_test.ts",
-    "supabase/functions/_shared/validate.ts",
-    "supabase/functions/_shared/validate_test.ts"
-   ]
-  },
-  {
    "id": 4,
    "nome": "date-fns",
    "nos": 213,
@@ -232,9 +232,9 @@
   {
    "id": 30,
    "nome": "withAuth",
-   "nos": 186,
-   "callables": 32,
-   "arquivos": 51,
+   "nos": 177,
+   "callables": 30,
+   "arquivos": 47,
    "exemplos_arquivos": [
     ".lovable/memory/features/win-loss-intelligence.md",
     "AGENTS.md",
@@ -403,7 +403,24 @@
    ]
   },
   {
-   "id": 44,
+   "id": 32,
+   "nome": "external-data/index.ts",
+   "nos": 99,
+   "callables": 60,
+   "arquivos": 24,
+   "exemplos_arquivos": [
+    ".lovable/plan.md",
+    "CHANGELOG.md",
+    "docs/lacunas/C2_adrs_migracao_dr_operacao.md",
+    "src/lib/externalQueryOrder.contract.test.ts",
+    "src/lib/externalSearchFilter.contract.test.ts",
+    "src/lib/externalSearchFilter.limits.test.ts",
+    "src/lib/logger.ts",
+    "supabase/functions/_shared/auth.ts"
+   ]
+  },
+  {
+   "id": 61,
    "nome": "lazyPages.tsx",
    "nos": 97,
    "callables": 0,
@@ -434,23 +451,6 @@
     "src/hooks/useDashboardMappedData.ts",
     "src/hooks/useLeadScoring.ts",
     "src/hooks/useLuxWebhookConfig.ts"
-   ]
-  },
-  {
-   "id": 32,
-   "nome": "jsonError",
-   "nos": 95,
-   "callables": 41,
-   "arquivos": 26,
-   "exemplos_arquivos": [
-    "CHANGELOG.md",
-    "docs/adr/007-scoped-cors.md",
-    "docs/lacunas/C2_adrs_migracao_dr_operacao.md",
-    "src/lib/logger.ts",
-    "supabase/functions/_shared/auth.ts",
-    "supabase/functions/_shared/tracing.ts",
-    "supabase/functions/abm-account-scorer/index.ts",
-    "supabase/functions/abm-whitespace-analyzer/index.ts"
    ]
   },
   {
@@ -488,23 +488,6 @@
    ]
   },
   {
-   "id": 29,
-   "nome": "fetch-utils.ts",
-   "nos": 83,
-   "callables": 38,
-   "arquivos": 14,
-   "exemplos_arquivos": [
-    "docs/estado/02_INTELIGENCIA_IA.md",
-    "supabase/functions/_shared/fetch-utils.ts",
-    "supabase/functions/_shared/fetch-utils_test.ts",
-    "supabase/functions/abm-whitespace-analyzer/index.ts",
-    "supabase/functions/ai-email-refine/index.ts",
-    "supabase/functions/ai-writing-assistant/index.ts",
-    "supabase/functions/auto-regen-behavioral-profiles/index.ts",
-    "supabase/functions/email-thread-summary/index.ts"
-   ]
-  },
-  {
    "id": 116,
    "nome": "useContacts.ts",
    "nos": 83,
@@ -519,23 +502,6 @@
     "src/hooks/useContactDetail.sections.test.tsx",
     "src/hooks/useContactDetail.ts",
     "src/hooks/useContacts.cache.test.tsx"
-   ]
-  },
-  {
-   "id": 101,
-   "nome": "ref_https",
-   "nos": 82,
-   "callables": 38,
-   "arquivos": 29,
-   "exemplos_arquivos": [
-    "docs/lacunas/C2_adrs_migracao_dr_operacao.md",
-    "supabase/functions/_shared/aiGatewayLogger.ts",
-    "supabase/functions/_shared/edge-test-harness.ts",
-    "supabase/functions/_shared/edge-types-contract_test.ts",
-    "supabase/functions/_shared/email-verify.ts",
-    "supabase/functions/_shared/email-verify_test.ts",
-    "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
-    "supabase/functions/_shared/evolution-ownership-contract_test.ts"
    ]
   },
   {
@@ -566,7 +532,7 @@
    ]
   },
   {
-   "id": 61,
+   "id": 70,
    "nome": "gerar.mjs",
    "nos": 80,
    "callables": 15,
@@ -638,23 +604,6 @@
    ]
   },
   {
-   "id": 72,
-   "nome": "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado",
-   "nos": 69,
-   "callables": 5,
-   "arquivos": 18,
-   "exemplos_arquivos": [
-    ".lovable/memory/features/ai-conversational-assistant.md",
-    "PLANEJADO_NAO_EXECUTADO.md",
-    "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
-    "docs/lacunas/A_docs_raiz_e_memoria_lovable.md",
-    "docs/lacunas/B1_reverificacao_estado_01_04.md",
-    "docs/lacunas/B2_reverificacao_estado_05_10.md",
-    "docs/lacunas/C1_docs_produto_ux_qa.md",
-    "docs/lacunas/C2_adrs_migracao_dr_operacao.md"
-   ]
-  },
-  {
    "id": 166,
    "nome": "CreateTaskDialog.tsx",
    "nos": 69,
@@ -689,23 +638,6 @@
    ]
   },
   {
-   "id": 68,
-   "nome": "external-data/index.ts",
-   "nos": 68,
-   "callables": 40,
-   "arquivos": 17,
-   "exemplos_arquivos": [
-    "src/lib/externalQueryOrder.contract.test.ts",
-    "src/lib/externalSearchFilter.contract.test.ts",
-    "src/lib/externalSearchFilter.limits.test.ts",
-    "supabase/functions/_shared/auth.ts",
-    "supabase/functions/_shared/behavioral-retry-contract_test.ts",
-    "supabase/functions/_shared/search-filter.ts",
-    "supabase/functions/_shared/select-projection.ts",
-    "supabase/functions/_shared/select-projection_test.ts"
-   ]
-  },
-  {
    "id": 79,
    "nome": "externalData.ts",
    "nos": 68,
@@ -720,6 +652,23 @@
     "src/lib/externalData.circuit-isolation.test.ts",
     "src/lib/externalData.contract.test.ts",
     "src/lib/externalData.delete-audit.test.ts"
+   ]
+  },
+  {
+   "id": 44,
+   "nome": "bestEffortWrite",
+   "nos": 63,
+   "callables": 25,
+   "arquivos": 15,
+   "exemplos_arquivos": [
+    "supabase/functions/_shared/best-effort-write.ts",
+    "supabase/functions/_shared/best-effort-write_test.ts",
+    "supabase/functions/_shared/notification-delivery.ts",
+    "supabase/functions/_shared/notification-delivery_test.ts",
+    "supabase/functions/connection-introspect/index.ts",
+    "supabase/functions/email-finder/index.ts",
+    "supabase/functions/intent-tracker/index.ts",
+    "supabase/functions/lux-trigger/index.ts"
    ]
   },
   {
@@ -792,7 +741,7 @@
    "exemplos_arquivos": []
   },
   {
-   "id": 85,
+   "id": 72,
    "nome": "run.mjs",
    "nos": 60,
    "callables": 41,
@@ -806,6 +755,23 @@
     "scripts/maintenance/fixes.mjs",
     "scripts/maintenance/lib.mjs",
     "scripts/maintenance/locking.mjs"
+   ]
+  },
+  {
+   "id": 82,
+   "nome": "3. Riscos estruturais, por gravidade",
+   "nos": 60,
+   "callables": 2,
+   "arquivos": 9,
+   "exemplos_arquivos": [
+    "ESTADO_ATUAL.md",
+    "docs/estado/02_INTELIGENCIA_IA.md",
+    "docs/estado/04_REVOPS_VENDAS.md",
+    "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
+    "docs/estado/06_INTEGRACOES.md",
+    "docs/estado/07_DADOS_BACKEND.md",
+    "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md",
+    "src/integrations/supabase/types.ts"
    ]
   },
   {
@@ -853,19 +819,36 @@
    ]
   },
   {
-   "id": 36,
-   "nome": "evolution-webhook/index.ts",
+   "id": 84,
+   "nome": "connection-tester/index.ts",
    "nos": 54,
-   "callables": 15,
+   "callables": 25,
    "arquivos": 7,
    "exemplos_arquivos": [
-    "docs/auditoria/02_ACHADOS_EDGE_FUNCTIONS.md",
+    "docs/estado/06_INTEGRACOES.md",
+    "docs/lacunas/B2_reverificacao_estado_05_10.md",
+    "supabase/functions/_shared/fetch-utils.ts",
+    "supabase/functions/_shared/safe-http.ts",
     "supabase/functions/_shared/safe-http_test.ts",
-    "supabase/functions/evolution-webhook/events.ts",
-    "supabase/functions/evolution-webhook/helpers.ts",
-    "supabase/functions/evolution-webhook/index.ts",
-    "supabase/functions/evolution-webhook/messages.ts",
-    "supabase/functions/evolution-webhook/payload.ts"
+    "supabase/functions/connection-tester/index.ts",
+    "supabase/functions/social-events-detector/index.ts"
+   ]
+  },
+  {
+   "id": 85,
+   "nome": "ref_https",
+   "nos": 53,
+   "callables": 22,
+   "arquivos": 22,
+   "exemplos_arquivos": [
+    "supabase/functions/_shared/edge-test-harness.ts",
+    "supabase/functions/_shared/edge-types-contract_test.ts",
+    "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+    "supabase/functions/_shared/evolution-ownership-contract_test.ts",
+    "supabase/functions/_shared/lead-score-threshold-runner_test.ts",
+    "supabase/functions/_shared/rate-limit_test.ts",
+    "supabase/functions/_shared/select-projection.ts",
+    "supabase/functions/_shared/select-projection_test.ts"
    ]
   },
   {
@@ -982,6 +965,18 @@
    ]
   },
   {
+   "id": 144,
+   "nome": "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado",
+   "nos": 49,
+   "callables": 6,
+   "arquivos": 3,
+   "exemplos_arquivos": [
+    "docs/lacunas/C2_adrs_migracao_dr_operacao.md",
+    "supabase/functions/_shared/aiGatewayLogger.ts",
+    "supabase/functions/_shared/sdk-runtime-contract_test.ts"
+   ]
+  },
+  {
    "id": 73,
    "nome": "micro-interactions/index.ts",
    "nos": 48,
@@ -998,7 +993,7 @@
    ]
   },
   {
-   "id": 144,
+   "id": 155,
    "nome": "automation.mjs",
    "nos": 48,
    "callables": 35,
@@ -1049,20 +1044,7 @@
    ]
   },
   {
-   "id": 84,
-   "nome": "connection-tester/index.ts",
-   "nos": 47,
-   "callables": 20,
-   "arquivos": 4,
-   "exemplos_arquivos": [
-    "docs/estado/06_INTEGRACOES.md",
-    "supabase/functions/_shared/safe-http.ts",
-    "supabase/functions/_shared/safe-http_test.ts",
-    "supabase/functions/connection-tester/index.ts"
-   ]
-  },
-  {
-   "id": 155,
+   "id": 156,
    "nome": "mgmt-mock.test.mjs",
    "nos": 47,
    "callables": 29,
@@ -1116,7 +1098,7 @@
    ]
   },
   {
-   "id": 156,
+   "id": 185,
    "nome": ".metadata",
    "nos": 46,
    "callables": 35,
@@ -1127,7 +1109,7 @@
    ]
   },
   {
-   "id": 185,
+   "id": 189,
    "nome": "gerar-banco.mjs",
    "nos": 46,
    "callables": 24,
@@ -1176,7 +1158,7 @@
    ]
   },
   {
-   "id": 189,
+   "id": 192,
    "nome": "replay.ts",
    "nos": 44,
    "callables": 38,
@@ -1198,7 +1180,7 @@
    ]
   },
   {
-   "id": 192,
+   "id": 208,
    "nome": "gerar-rotas.mjs",
    "nos": 43,
    "callables": 27,
@@ -1223,6 +1205,16 @@
    "exemplos_arquivos": [
     "scripts/migration/storage/_lib_test.ts",
     "supabase/migrations/20261006140000_ai_gateway_observability.sql"
+   ]
+  },
+  {
+   "id": 66,
+   "nome": "copywriting.ts",
+   "nos": 42,
+   "callables": 41,
+   "arquivos": 1,
+   "exemplos_arquivos": [
+    "src/types/copywriting.ts"
    ]
   }
  ],
@@ -1484,7 +1476,7 @@
    "rotulo": "jsonError()",
    "arquivo": "supabase/functions/_shared/auth.ts",
    "grau": 82,
-   "comunidade": "jsonError"
+   "comunidade": "_shared/auth.ts"
   },
   {
    "id": "src_hooks_useauth",
@@ -1533,7 +1525,7 @@
    "rotulo": "fetch-utils.ts",
    "arquivo": "supabase/functions/_shared/fetch-utils.ts",
    "grau": 71,
-   "comunidade": "fetch-utils.ts"
+   "comunidade": "_shared/auth.ts"
   },
   {
    "id": "scripts_migration_ddl_04_foreign_keys_sql_auth_users",
@@ -1547,7 +1539,7 @@
    "rotulo": "jsonOk()",
    "arquivo": "supabase/functions/_shared/auth.ts",
    "grau": 68,
-   "comunidade": "jsonError"
+   "comunidade": "_shared/auth.ts"
   },
   {
    "id": "src_components_contact_detail_contactbehavioraltab",
@@ -1603,7 +1595,7 @@
    "rotulo": "fetchAI()",
    "arquivo": "supabase/functions/_shared/fetch-utils.ts",
    "grau": 51,
-   "comunidade": "fetch-utils.ts"
+   "comunidade": "_shared/auth.ts"
   },
   {
    "id": "src_hooks_usecompanies",
@@ -2060,7 +2052,7 @@
   ".lovable/memory/architecture/security/linter-baseline.md": "linter-baseline.md",
   ".lovable/memory/architecture/security/secret-rotation.md": "secret-rotation.md",
   ".lovable/memory/features/admin-dashboard-hub.md": "admin-dashboard-hub.md",
-  ".lovable/memory/features/ai-conversational-assistant.md": "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado",
+  ".lovable/memory/features/ai-conversational-assistant.md": "lacunas/README.md",
   ".lovable/memory/features/audit-trail-viewer.md": "audit-trail-viewer.md",
   ".lovable/memory/features/best-time-heatmap-global.md": "useBestTimeHeatmap.ts",
   ".lovable/memory/features/bulk-revalidation-flow.md": "useBulkRevalidate.ts",
@@ -2153,7 +2145,7 @@
   ".lovable/memory/migration/singu_source_triggers.md": "singu_source_triggers.md",
   ".lovable/memory/standards/accessibility-wcag-aa.md": "AriaLiveRegion.tsx",
   ".lovable/memory/technical/system-health-monitoring.md": "Fatia A — Documentos da raiz + memória Lovable (.lovable/plan.md + 98 arquivos de .lovable/memory) + .devin/.windsurf",
-  ".lovable/plan.md": "Plano — Estado atual: 10/10 sustentado",
+  ".lovable/plan.md": "external-data/index.ts",
   "@/components/achievements/Achievements": "gerar.unit.mjs",
   "@/components/admin/RequireAdmin": "lazyPages.tsx",
   "@/components/admin/SchemaDriftBanner": "lazyPages.tsx",
@@ -2375,7 +2367,7 @@
   "FUNCIONALIDADES_SISTEMA.md": "17. 🔔 Sistema de Alertas",
   "HANDOFF.md": "SINGU CRM — Handoff Document",
   "PENDENCIAS.md": "PENDENCIAS.md — Bloqueios e itens fora do escopo (Singu_V2)",
-  "PLANEJADO_NAO_EXECUTADO.md": "useCognitiveBiases.ts",
+  "PLANEJADO_NAO_EXECUTADO.md": "lacunas/README.md",
   "README.md": "SINGU CRM",
   "RELATORIO_CI.md": "RELATORIO_CI.md — Correção dos workflows com falha (Singu_V2)",
   "audit_report.md": "🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM",
@@ -2422,7 +2414,7 @@
   "docs/adr/004-auth-strategy.md": "withAuth",
   "docs/adr/005-ai-gateway-integration.md": "adr/README.md",
   "docs/adr/006-realtime-scoped-policies.md": "adr/README.md",
-  "docs/adr/007-scoped-cors.md": "jsonError",
+  "docs/adr/007-scoped-cors.md": "_shared/auth.ts",
   "docs/adr/008-structured-logger.md": "ADR-008: Logger Estruturado com Supressão em Produção",
   "docs/adr/009-rate-limiting-strategy.md": "ADR-009: Rate Limiting em Múltiplas Camadas",
   "docs/adr/010-excellence-sustained-rodada-g.md": "useWebVitals",
@@ -2470,20 +2462,20 @@
   "docs/estado/04_REVOPS_VENDAS.md": "ref_components",
   "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md": "withAuth",
   "docs/estado/06_INTEGRACOES.md": "WebhookSnippetsSheet",
-  "docs/estado/07_DADOS_BACKEND.md": "withAuth",
+  "docs/estado/07_DADOS_BACKEND.md": "Estado — Camada de Dados e Backend",
   "docs/estado/08_INFRA_CI_TESTES_DOCS.md": "Estado — Infraestrutura, CI, Testes e Documentação",
-  "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md": "Riscos residuais",
+  "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md": "lacunas/README.md",
   "docs/estado/10_VERIFICACAO_ADVERSARIAL_DADOS.md": "A2 — Statements sem `CREATE TABLE` correspondente",
   "docs/estado/11_VERIFICACAO_ADVERSARIAL_MARKETING.md": "Verificação adversarial — Marketing e Automação",
   "docs/estado/12_VALIDACAO_DA_AUDITORIA.md": "pushNotifications.ts",
-  "docs/lacunas/A_docs_raiz_e_memoria_lovable.md": "useWebVitals",
-  "docs/lacunas/B1_reverificacao_estado_01_04.md": "Tabela de evidências",
-  "docs/lacunas/B2_reverificacao_estado_05_10.md": "withAuth",
-  "docs/lacunas/C1_docs_produto_ux_qa.md": "replay.ts",
-  "docs/lacunas/C2_adrs_migracao_dr_operacao.md": "ref_https",
-  "docs/lacunas/D_ui_rotas_componentes.md": "framer-motion",
+  "docs/lacunas/A_docs_raiz_e_memoria_lovable.md": "lacunas/README.md",
+  "docs/lacunas/B1_reverificacao_estado_01_04.md": "lacunas/README.md",
+  "docs/lacunas/B2_reverificacao_estado_05_10.md": "lacunas/README.md",
+  "docs/lacunas/C1_docs_produto_ux_qa.md": "lacunas/README.md",
+  "docs/lacunas/C2_adrs_migracao_dr_operacao.md": "WebhookSnippetsSheet",
+  "docs/lacunas/D_ui_rotas_componentes.md": "lacunas/README.md",
   "docs/lacunas/E_contratos_front_backend.md": "react",
-  "docs/lacunas/F_edge_functions.md": "withAuth",
+  "docs/lacunas/F_edge_functions.md": "lacunas/README.md",
   "docs/lacunas/G_banco_de_dados.md": "MockSupabase",
   "docs/lacunas/H_ci_testes_deploy_infra.md": "react",
   "docs/lacunas/MATRIZ_RECONCILIADA_20261012.md": "MATRIZ_RECONCILIADA_20261012.md",
@@ -2492,7 +2484,7 @@
   "docs/lacunas/MATRIZ_RECONCILIADA_20261012_EDGE.md": "Como ler a matriz",
   "docs/lacunas/MATRIZ_RECONCILIADA_20261012_SEGURANCA.md": "MATRIZ_RECONCILIADA_20261012.md",
   "docs/lacunas/MATRIZ_RECONCILIADA_20261012_UX.md": "MATRIZ_RECONCILIADA_20261012.md",
-  "docs/lacunas/README.md": "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado",
+  "docs/lacunas/README.md": "lacunas/README.md",
   "docs/perf/explain-analyze.md": "⚡ EXPLAIN ANALYZE — Top Core Queries",
   "docs/postmortem-example.md": "Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data)",
   "docs/postmortem-template.md": "Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data)",
@@ -2527,7 +2519,7 @@
   "pg": "ref_node_child_process",
   "playwright.config.ts": "@playwright/test",
   "postcss.config.js": "postcss.config.js",
-  "public/sw-push.js": "withAuth",
+  "public/sw-push.js": "lacunas/README.md",
   "scripts/...": "ref_node_url",
   "scripts/_pgdocs.py": "_pgdocs.py",
   "scripts/_pgdocs_catalogo.py": "_pgdocs_catalogo.py",
@@ -3008,7 +3000,7 @@
   "src/components/abm/BuyingCommitteeBoard.tsx": "react",
   "src/components/abm/CreateAccountDialog.tsx": "react",
   "src/components/abm/WhitespaceOpportunities.tsx": "framer-motion",
-  "src/components/admin/AccessSecurityManager.tsx": "Riscos residuais",
+  "src/components/admin/AccessSecurityManager.tsx": "lacunas/README.md",
   "src/components/admin/AdminLayout.tsx": "AdminSidebar.tsx",
   "src/components/admin/AdminQuickActions.tsx": "react",
   "src/components/admin/AdminSidebar.tsx": "AdminSidebar.tsx",
@@ -3020,12 +3012,12 @@
   "src/components/admin/BehavioralRegenAlertsStats.tsx": "lucide-react",
   "src/components/admin/BehavioralRegenAlertsTrend.tsx": "BehavioralRegenAlertsTrend.tsx",
   "src/components/admin/BehavioralRegenCronHealth.tsx": "BehavioralRegenCronHealth.tsx",
-  "src/components/admin/EmailPipelineStatus.tsx": "Riscos residuais",
+  "src/components/admin/EmailPipelineStatus.tsx": "lacunas/README.md",
   "src/components/admin/InsightFeedbackTrendChart.tsx": "InsightFeedbackTrendChart.tsx",
   "src/components/admin/MttaAutoAckHeartbeatCard.tsx": "ref_integrations",
   "src/components/admin/MttaSlaBreachHistoryCard.tsx": "lucide-react",
   "src/components/admin/MttaSlaThresholdEditor.tsx": "ref_lib",
-  "src/components/admin/PasswordResetApproval.tsx": "Riscos residuais",
+  "src/components/admin/PasswordResetApproval.tsx": "lacunas/README.md",
   "src/components/admin/RequireAdmin.test.tsx": "vitest",
   "src/components/admin/RequireAdmin.tsx": "react-router-dom",
   "src/components/admin/RpcPerfCard.tsx": "RpcPerfCard.tsx",
@@ -3046,7 +3038,7 @@
   "src/components/admin/conexoes/IncomingWebhookLogsDialog.tsx": "IncomingWebhookCard.tsx",
   "src/components/admin/conexoes/McpInstructionsCard.tsx": "react",
   "src/components/admin/conexoes/SchemaDiscoveryCard.tsx": "date-fns",
-  "src/components/admin/conexoes/WebhookDlqPanel.tsx": "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado",
+  "src/components/admin/conexoes/WebhookDlqPanel.tsx": "withAuth",
   "src/components/admin/conexoes/WebhookQuotaBar.tsx": "IncomingWebhookCard.tsx",
   "src/components/admin/conexoes/WebhookReplayButton.test.tsx": "IncomingWebhookCard.tsx",
   "src/components/admin/conexoes/WebhookReplayButton.tsx": "IncomingWebhookCard.tsx",
@@ -3103,7 +3095,7 @@
   "src/components/analytics/disc-analytics/DISCAnalyticsSubComponents.tsx": "DISCAnalyticsPanel.tsx",
   "src/components/analytics/neuro-portfolio/NeuroPortfolioTabs.tsx": "ref_types",
   "src/components/analytics/rfm/RFMSubComponents.tsx": "recharts",
-  "src/components/ask-crm/AskCrmChat.tsx": "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado",
+  "src/components/ask-crm/AskCrmChat.tsx": "lacunas/README.md",
   "src/components/auth/ForgotPasswordForm.tsx": "react",
   "src/components/auth/MFAGuard.tsx": "withAuth",
   "src/components/automation/ActionConfigForm.tsx": "ref_hooks",
@@ -4283,7 +4275,7 @@
   "src/hooks/useFamilyHistory.ts": "useAuth",
   "src/hooks/useFavoriteTemplates.ts": "useRealtimeNotifications.ts",
   "src/hooks/useFeatureDiscovery.ts": "ref_hooks",
-  "src/hooks/useFeatureFlag.ts": "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado",
+  "src/hooks/useFeatureFlag.ts": "withAuth",
   "src/hooks/useFicha360.ts": "useFicha360.ts",
   "src/hooks/useFicha360ChannelCounts.ts": "useFicha360Filters.ts",
   "src/hooks/useFicha360ConversationSummary.ts": "ref_integrations",
@@ -4728,7 +4720,7 @@
   "src/pages/admin/FeatureFlagsPage.tsx": "react",
   "src/pages/admin/InsightFeedbackAnalytics.tsx": "InsightFeedbackAnalytics.tsx",
   "src/pages/admin/Observability.tsx": "recharts",
-  "src/pages/admin/TelemetryTable.tsx": "Riscos residuais",
+  "src/pages/admin/TelemetryTable.tsx": "lacunas/README.md",
   "src/pages/analytics/AnalyticsEngagementTab.tsx": "ref_components",
   "src/pages/analytics/AnalyticsSentimentTab.tsx": "ref_components",
   "src/pages/auth/AuthBranding.tsx": "framer-motion",
@@ -4800,46 +4792,46 @@
   "src/types/triggers.ts": "triggers-advanced.ts",
   "src/types/vak.ts": "behavior.ts",
   "src/vite-env.d.ts": "vite-env.d.ts",
-  "supabase/functions/_shared/aiGatewayLogger.ts": "ref_https",
+  "supabase/functions/_shared/aiGatewayLogger.ts": "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado",
   "supabase/functions/_shared/auth.ts": "_shared/auth.ts",
-  "supabase/functions/_shared/auth_test.ts": "sequence-processor/index.ts",
+  "supabase/functions/_shared/auth_test.ts": "_shared/auth.ts",
   "supabase/functions/_shared/behavioral-generation-mock.ts": "_shared/auth.ts",
-  "supabase/functions/_shared/behavioral-retry-contract_test.ts": "external-data/index.ts",
-  "supabase/functions/_shared/best-effort-write.ts": "_shared/auth.ts",
-  "supabase/functions/_shared/best-effort-write_test.ts": "_shared/auth.ts",
+  "supabase/functions/_shared/behavioral-retry-contract_test.ts": "behavioral-retry-contract_test.ts",
+  "supabase/functions/_shared/best-effort-write.ts": "bestEffortWrite",
+  "supabase/functions/_shared/best-effort-write_test.ts": "bestEffortWrite",
   "supabase/functions/_shared/edge-test-harness.ts": "ref_https",
   "supabase/functions/_shared/edge-types-contract_test.ts": "ref_https",
   "supabase/functions/_shared/email-templates/password-migration-reset.tsx": "password-migration-reset.tsx",
-  "supabase/functions/_shared/email-verify.ts": "ref_https",
-  "supabase/functions/_shared/email-verify_test.ts": "ref_https",
+  "supabase/functions/_shared/email-verify.ts": "phone-validator/index.ts",
+  "supabase/functions/_shared/email-verify_test.ts": "phone-validator/index.ts",
   "supabase/functions/_shared/evolution-dispatch-contract_test.ts": "ref_https",
   "supabase/functions/_shared/evolution-ownership-contract_test.ts": "ref_https",
-  "supabase/functions/_shared/fetch-utils.ts": "fetch-utils.ts",
-  "supabase/functions/_shared/fetch-utils_test.ts": "fetch-utils.ts",
+  "supabase/functions/_shared/fetch-utils.ts": "_shared/auth.ts",
+  "supabase/functions/_shared/fetch-utils_test.ts": "auto-regen-behavioral-profiles/index.ts",
   "supabase/functions/_shared/lead-score-contract.ts": "lead-scorer/index.ts",
   "supabase/functions/_shared/lead-score-threshold-runner_test.ts": "ref_https",
-  "supabase/functions/_shared/notification-delivery.ts": "ref_https",
-  "supabase/functions/_shared/notification-delivery_test.ts": "ref_https",
-  "supabase/functions/_shared/pagination.ts": "ref_https",
-  "supabase/functions/_shared/pagination_test.ts": "ref_https",
-  "supabase/functions/_shared/push.ts": "send-push-notification/index.ts",
+  "supabase/functions/_shared/notification-delivery.ts": "bestEffortWrite",
+  "supabase/functions/_shared/notification-delivery_test.ts": "bestEffortWrite",
+  "supabase/functions/_shared/pagination.ts": "audit-analytics/index.ts",
+  "supabase/functions/_shared/pagination_test.ts": "audit-analytics/index.ts",
+  "supabase/functions/_shared/push.ts": "push.ts",
   "supabase/functions/_shared/rate-limit.ts": "_shared/auth.ts",
-  "supabase/functions/_shared/rate-limit_test.ts": "_shared/auth.ts",
+  "supabase/functions/_shared/rate-limit_test.ts": "ref_https",
   "supabase/functions/_shared/resend.ts": "weekly-digest/index.ts",
   "supabase/functions/_shared/safe-http.ts": "connection-tester/index.ts",
-  "supabase/functions/_shared/safe-http_test.ts": "evolution-webhook/index.ts",
-  "supabase/functions/_shared/sdk-runtime-contract_test.ts": "ref_https",
+  "supabase/functions/_shared/safe-http_test.ts": "Achados",
+  "supabase/functions/_shared/sdk-runtime-contract_test.ts": "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado",
   "supabase/functions/_shared/search-filter.ts": "external-data/index.ts",
-  "supabase/functions/_shared/select-projection.ts": "external-data/index.ts",
-  "supabase/functions/_shared/select-projection_test.ts": "external-data/index.ts",
+  "supabase/functions/_shared/select-projection.ts": "ref_https",
+  "supabase/functions/_shared/select-projection_test.ts": "ref_https",
   "supabase/functions/_shared/sequence-contract_test.ts": "ref_https",
   "supabase/functions/_shared/tenant-guard.ts": "external-data/index.ts",
   "supabase/functions/_shared/tenant-guard_test.ts": "external-data/index.ts",
-  "supabase/functions/_shared/tracing.ts": "jsonError",
+  "supabase/functions/_shared/tracing.ts": "external-data/index.ts",
   "supabase/functions/_shared/validate.ts": "_shared/auth.ts",
-  "supabase/functions/_shared/validate_test.ts": "_shared/auth.ts",
+  "supabase/functions/_shared/validate_test.ts": "ref_https",
   "supabase/functions/_shared/validation-contract_test.ts": "ref_https",
-  "supabase/functions/_shared/validation-owner.ts": "sequence-processor/index.ts",
+  "supabase/functions/_shared/validation-owner.ts": "phone-validator/index.ts",
   "supabase/functions/_shared/version-guard.ts": "external-data/index.ts",
   "supabase/functions/_shared/version-guard_test.ts": "external-data/index.ts",
   "supabase/functions/_shared/webhook-dlq-contract_test.ts": "ref_https",
@@ -4847,32 +4839,32 @@
   "supabase/functions/_shared/webhook-signature_test.ts": "incoming-webhook/index.ts",
   "supabase/functions/_shared/write-error.ts": "external-data/index.ts",
   "supabase/functions/_shared/write-error_test.ts": "contact-detail-partial-failures.test.tsx",
-  "supabase/functions/abm-account-scorer/index.ts": "jsonError",
-  "supabase/functions/abm-whitespace-analyzer/index.ts": "jsonError",
-  "supabase/functions/ai-assistant/index.ts": "jsonError",
-  "supabase/functions/ai-email-refine/index.ts": "fetch-utils.ts",
-  "supabase/functions/ai-suggest-mapping/index.ts": "jsonError",
-  "supabase/functions/ai-writing-assistant/index.ts": "fetch-utils.ts",
-  "supabase/functions/ask-crm/index.ts": "jsonError",
-  "supabase/functions/attribution-calculator/index.ts": "jsonError",
-  "supabase/functions/audit-analytics/index.ts": "jsonError",
+  "supabase/functions/abm-account-scorer/index.ts": "external-data/index.ts",
+  "supabase/functions/abm-whitespace-analyzer/index.ts": "_shared/auth.ts",
+  "supabase/functions/ai-assistant/index.ts": "_shared/auth.ts",
+  "supabase/functions/ai-email-refine/index.ts": "_shared/auth.ts",
+  "supabase/functions/ai-suggest-mapping/index.ts": "flatten",
+  "supabase/functions/ai-writing-assistant/index.ts": "_shared/auth.ts",
+  "supabase/functions/ask-crm/index.ts": "_shared/auth.ts",
+  "supabase/functions/attribution-calculator/index.ts": "_shared/auth.ts",
+  "supabase/functions/audit-analytics/index.ts": "audit-analytics/index.ts",
   "supabase/functions/auto-rebatch-behavioral/index.ts": "weekly-digest/index.ts",
-  "supabase/functions/auto-regen-behavioral-profiles/index.ts": "fetch-utils.ts",
-  "supabase/functions/bitrix24-webhook/index.ts": "jsonError",
-  "supabase/functions/bulk-revalidate/index.ts": "_shared/auth.ts",
-  "supabase/functions/check-health-alerts/index.ts": "jsonError",
-  "supabase/functions/check-notifications/index.ts": "jsonError",
-  "supabase/functions/clear-must-reset-flag/index.ts": "_shared/auth.ts",
-  "supabase/functions/client-notifications/index.ts": "jsonError",
-  "supabase/functions/connection-anomaly-detector/index.ts": "jsonError",
-  "supabase/functions/connection-introspect/index.ts": "_shared/auth.ts",
+  "supabase/functions/auto-regen-behavioral-profiles/index.ts": "auto-regen-behavioral-profiles/index.ts",
+  "supabase/functions/bitrix24-webhook/index.ts": "_shared/auth.ts",
+  "supabase/functions/bulk-revalidate/index.ts": "bulk-revalidate/index.ts",
+  "supabase/functions/check-health-alerts/index.ts": "external-data/index.ts",
+  "supabase/functions/check-notifications/index.ts": "external-data/index.ts",
+  "supabase/functions/clear-must-reset-flag/index.ts": "clear-must-reset-flag/index.ts",
+  "supabase/functions/client-notifications/index.ts": "external-data/index.ts",
+  "supabase/functions/connection-anomaly-detector/index.ts": "external-data/index.ts",
+  "supabase/functions/connection-introspect/index.ts": "bestEffortWrite",
   "supabase/functions/connection-tester/index.ts": "connection-tester/index.ts",
   "supabase/functions/connection-tester/index_test.ts": "ref_https",
   "supabase/functions/conversation-analyzer/index.ts": "_shared/auth.ts",
   "supabase/functions/conversation-coaching-digest/index.ts": "_shared/auth.ts",
   "supabase/functions/conversational-search/index.ts": "_shared/auth.ts",
   "supabase/functions/crm-automation-monitor/index.ts": "_shared/auth.ts",
-  "supabase/functions/cs-health-recalc/index.ts": "jsonError",
+  "supabase/functions/cs-health-recalc/index.ts": "_shared/auth.ts",
   "supabase/functions/deal-room-buyer-view/index.ts": "_shared/auth.ts",
   "supabase/functions/deal-room-health/index.ts": "_shared/auth.ts",
   "supabase/functions/deal-room-share/index.ts": "_shared/auth.ts",
@@ -4880,17 +4872,17 @@
   "supabase/functions/detect-churn-risk/index.ts": "_shared/auth.ts",
   "supabase/functions/detect-new-device/index.ts": "_shared/auth.ts",
   "supabase/functions/disc-analyzer/index.ts": "_shared/auth.ts",
-  "supabase/functions/dual-write-proxy/index.ts": "jsonError",
-  "supabase/functions/elevenlabs-scribe-token/index.ts": "jsonError",
+  "supabase/functions/dual-write-proxy/index.ts": "_shared/auth.ts",
+  "supabase/functions/elevenlabs-scribe-token/index.ts": "_shared/auth.ts",
   "supabase/functions/elevenlabs-tts/index.ts": "_shared/auth.ts",
-  "supabase/functions/email-finder/index.ts": "_shared/auth.ts",
+  "supabase/functions/email-finder/index.ts": "bestEffortWrite",
   "supabase/functions/email-pipeline-health/index.ts": "weekly-digest/index.ts",
-  "supabase/functions/email-thread-summary/index.ts": "fetch-utils.ts",
-  "supabase/functions/email-verifier/index.ts": "_shared/auth.ts",
-  "supabase/functions/enrich-contacts/index.ts": "jsonError",
+  "supabase/functions/email-thread-summary/index.ts": "_shared/auth.ts",
+  "supabase/functions/email-verifier/index.ts": "phone-validator/index.ts",
+  "supabase/functions/enrich-contacts/index.ts": "_shared/auth.ts",
   "supabase/functions/enrichlayer-linkedin/index.ts": "_shared/auth.ts",
   "supabase/functions/error-budget/index.ts": "error-budget/index.ts",
-  "supabase/functions/evolution-api/index.ts": "jsonError",
+  "supabase/functions/evolution-api/index.ts": "_shared/auth.ts",
   "supabase/functions/evolution-bitrix-connector/index.ts": "evolution-bitrix-connector/index.ts",
   "supabase/functions/evolution-webhook/events.ts": "evolution-webhook/index.ts",
   "supabase/functions/evolution-webhook/helpers.ts": "evolution-webhook/index.ts",
@@ -4905,7 +4897,7 @@
   "supabase/functions/external-data/mutations.ts": "external-data/index.ts",
   "supabase/functions/external-data/optimistic-locking_test.ts": "headers",
   "supabase/functions/external-data/tables.ts": "external-data/index.ts",
-  "supabase/functions/ficha360-conversation-summary/index.ts": "fetch-utils.ts",
+  "supabase/functions/ficha360-conversation-summary/index.ts": "_shared/auth.ts",
   "supabase/functions/firecrawl-scrape/index.ts": "_shared/auth.ts",
   "supabase/functions/forecast-analyzer/index.ts": "_shared/auth.ts",
   "supabase/functions/forecast-narrative/index.ts": "_shared/auth.ts",
@@ -4913,7 +4905,7 @@
   "supabase/functions/form-submit-handler/index.ts": "_shared/auth.ts",
   "supabase/functions/generate-behavioral-profile/index.ts": "_shared/auth.ts",
   "supabase/functions/generate-insights/index.test.ts": "ref_https",
-  "supabase/functions/generate-insights/index.ts": "jsonError",
+  "supabase/functions/generate-insights/index.ts": "_shared/auth.ts",
   "supabase/functions/generate-offer-suggestions/index.ts": "_shared/auth.ts",
   "supabase/functions/get-signature/index.ts": "_shared/auth.ts",
   "supabase/functions/health-aggregate/index.ts": "health-aggregate/index.ts",
@@ -4922,46 +4914,46 @@
   "supabase/functions/incoming-webhook/index.ts": "incoming-webhook/index.ts",
   "supabase/functions/intent-aggregator/index.ts": "_shared/auth.ts",
   "supabase/functions/intent-pixel-snippet/index.ts": "_shared/auth.ts",
-  "supabase/functions/intent-tracker/index.ts": "_shared/auth.ts",
-  "supabase/functions/lead-score-cron/index.ts": "jsonError",
-  "supabase/functions/lead-score-threshold-runner/index.ts": "sequence-processor/index.ts",
+  "supabase/functions/intent-tracker/index.ts": "bestEffortWrite",
+  "supabase/functions/lead-score-cron/index.ts": "_shared/auth.ts",
+  "supabase/functions/lead-score-threshold-runner/index.ts": "_shared/auth.ts",
   "supabase/functions/lead-scorer/index.ts": "lead-scorer/index.ts",
-  "supabase/functions/lux-trigger/index.ts": "_shared/auth.ts",
-  "supabase/functions/lux-webhook/index.ts": "_shared/auth.ts",
-  "supabase/functions/mcp-server/index.ts": "_shared/auth.ts",
+  "supabase/functions/lux-trigger/index.ts": "bestEffortWrite",
+  "supabase/functions/lux-webhook/index.ts": "bestEffortWrite",
+  "supabase/functions/mcp-server/index.ts": "bestEffortWrite",
   "supabase/functions/meeting-summary/index.ts": "_shared/auth.ts",
   "supabase/functions/mql-evaluator/index.ts": "_shared/auth.ts",
   "supabase/functions/next-best-action/index.ts": "_shared/auth.ts",
-  "supabase/functions/nurturing-runner/index.ts": "_shared/auth.ts",
+  "supabase/functions/nurturing-runner/index.ts": "bestEffortWrite",
   "supabase/functions/objection-context-summary/index.ts": "_shared/auth.ts",
   "supabase/functions/objection-handler/index.ts": "_shared/auth.ts",
-  "supabase/functions/phone-validator/index.ts": "sequence-processor/index.ts",
+  "supabase/functions/phone-validator/index.ts": "phone-validator/index.ts",
   "supabase/functions/playbook-generator/index.ts": "_shared/auth.ts",
   "supabase/functions/playbook-recommender/index.ts": "_shared/auth.ts",
-  "supabase/functions/process-behavioral-regen-queue/index.ts": "fetch-utils.ts",
+  "supabase/functions/process-behavioral-regen-queue/index.ts": "auto-regen-behavioral-profiles/index.ts",
   "supabase/functions/process-webhook-dlq/index.ts": "_shared/auth.ts",
   "supabase/functions/retry-behavioral-profile/index.ts": "_shared/auth.ts",
-  "supabase/functions/revops-snapshot-builder/index.ts": "ref_https",
-  "supabase/functions/rfm-analyzer/index.ts": "sequence-processor/index.ts",
-  "supabase/functions/semantic-search/index.ts": "fetch-utils.ts",
-  "supabase/functions/send-push-notification/index.ts": "send-push-notification/index.ts",
+  "supabase/functions/revops-snapshot-builder/index.ts": "audit-analytics/index.ts",
+  "supabase/functions/rfm-analyzer/index.ts": "_shared/auth.ts",
+  "supabase/functions/semantic-search/index.ts": "bestEffortWrite",
+  "supabase/functions/send-push-notification/index.ts": "push.ts",
   "supabase/functions/send-sms-campaign/index.ts": "weekly-digest/index.ts",
-  "supabase/functions/send-transactional-email/index.ts": "jsonError",
+  "supabase/functions/send-transactional-email/index.ts": "_shared/auth.ts",
   "supabase/functions/sequence-processor/index.ts": "sequence-processor/index.ts",
   "supabase/functions/sequence-track/index.ts": "_shared/auth.ts",
-  "supabase/functions/smart-notify/index.ts": "ref_https",
-  "supabase/functions/smart-notify/notification_state_test.ts": "ref_https",
+  "supabase/functions/smart-notify/index.ts": "bestEffortWrite",
+  "supabase/functions/smart-notify/notification_state_test.ts": "bestEffortWrite",
   "supabase/functions/smart-notify/provider_config_test.ts": "ref_https",
   "supabase/functions/smart-reminders/index.ts": "_shared/auth.ts",
   "supabase/functions/social-behavior-analyzer/index.ts": "_shared/auth.ts",
-  "supabase/functions/social-events-detector/index.ts": "fetch-utils.ts",
-  "supabase/functions/social-profile-scraper/index.ts": "_shared/auth.ts",
+  "supabase/functions/social-events-detector/index.ts": "connection-tester/index.ts",
+  "supabase/functions/social-profile-scraper/index.ts": "bestEffortWrite",
   "supabase/functions/submit-signature/index.ts": "_shared/auth.ts",
   "supabase/functions/suggest-next-action/index.ts": "_shared/auth.ts",
   "supabase/functions/sync-social-interests/index.ts": "_shared/auth.ts",
   "supabase/functions/system-health/index.ts": "system-health/index.ts",
   "supabase/functions/template-success-notifications/index.ts": "weekly-digest/index.ts",
-  "supabase/functions/territory-optimization/index.ts": "fetch-utils.ts",
+  "supabase/functions/territory-optimization/index.ts": "_shared/auth.ts",
   "supabase/functions/validate-access/index.ts": "_shared/auth.ts",
   "supabase/functions/validation-queue-worker/index.ts": "_shared/auth.ts",
   "supabase/functions/visual-search/index.ts": "_shared/auth.ts",
@@ -5474,7 +5466,7 @@
   "tests/e2e/navigation.spec.ts": "@playwright/test",
   "tests/integration/auth-external-data.test.ts": "externalData.ts",
   "tests/integration/rate-limit.test.ts": "_shared/auth.ts",
-  "tests/integration/web-push-sender.test.ts": "send-push-notification/index.ts",
+  "tests/integration/web-push-sender.test.ts": "push.ts",
   "tests/load/ask-crm.js": "pool-saturation.js",
   "tests/load/external-data.js": "pool-saturation.js",
   "tests/load/incoming-webhook.js": "pool-saturation.js",

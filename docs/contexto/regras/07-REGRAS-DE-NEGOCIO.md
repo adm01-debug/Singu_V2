@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1e20172bfb` · branch `main` · 2026-11-12 16:27 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ba89bc04a8` · branch `main` · 2026-11-12 19:17 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2091,7 +2091,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```
 - **messageUpsertData** (`supabase/functions/evolution-webhook/payload.ts`, z.object):
   ```ts
-  { key: messageKey.nullish(), pushName: text, status: text, messageTimestamp: z.number().nullish(), messageType: text, participant: text, instanceId: text, message: z.object({ conversation: text, extendedTextMessage: z.object({ text }).passthrough().nullish(), imageMessage: z.object({ caption: text }).passthrough().nullish(), videoMessage: z.object({ caption: text }).passthrough().nullish(), audioMessage: object.nullish(), documentMessage: z.object({ fileName: text }).passthrough().nullish(), stickerMessage: object.nullish(), locationMessage: z.object({ degreesLatitude: z.union([z.number(), z.string()]).nullish(), degreesLongitude: z.union([z.number(), z.string()]).nullish(), }).passthrough().nullish(), contactMessage: z.object({ displayName: text }).passthrough().nullish(), reactionMessage …
+  { key: messageKey.nullish(), pushName: text, status: text, messageTimestamp: z.union([ z.number(), z.string().trim().min(1).transform(value => Number(value)), ]).pipe(z.number().finite()).nullish(), messageType: text, participant: text, instanceId: text, message: z.object({ conversation: text, extendedTextMessage: z.object({ text }).passthrough().nullish(), imageMessage: z.object({ caption: text }).passthrough().nullish(), videoMessage: z.object({ caption: text }).passthrough().nullish(), audioMessage: object.nullish(), documentMessage: z.object({ fileName: text }).passthrough().nullish(), stickerMessage: object.nullish(), locationMessage: z.object({ degreesLatitude: z.union([z.number(), z.string()]).nullish(), degreesLongitude: z.union([z.number(), z.string()]).nullish(), }).passthrough() …
   ```
 - **messageUpdateData** (`supabase/functions/evolution-webhook/payload.ts`, z.object):
   ```ts

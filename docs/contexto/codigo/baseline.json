@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "1e20172bfbd212f0c8876951565f3565d1bc2794",
+  "commit": "ba89bc04a8785c42b514768e9a9cedf91a729a36",
   "branch": "main",
-  "data_commit": "2026-11-12T11:13:20-03:00",
+  "data_commit": "2026-11-12T12:53:35-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "ba89bc04",
+    "data": "2026-11-12",
+    "assunto": "fix(webhook): aceita timestamps textuais do Evolution e preserva época zero (#206)"
+   },
    {
     "sha": "1e20172b",
     "data": "2026-11-12",
@@ -126,14 +131,9 @@
     "sha": "21434823",
     "data": "2026-11-09",
     "assunto": "chore(scripts): endurece e cobre com testes todos os scripts de scripts/ (#186)"
-   },
-   {
-    "sha": "1fecfa69",
-    "data": "2026-11-09",
-    "assunto": "fix(push): um único service worker com os handlers de push (A-007) (#184)"
    }
   ],
-  "arquivos_mudados_7d": 591,
+  "arquivos_mudados_7d": 592,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -141,11 +141,11 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 20
+    "mudancas": 21
    },
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 18
+    "mudancas": 17
    },
    {
     "pasta": "scripts/migration/storage",
@@ -156,12 +156,12 @@
     "mudancas": 12
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 11
+    "pasta": "supabase/functions/evolution-webhook",
+    "mudancas": 12
    },
    {
-    "pasta": "supabase/functions/evolution-webhook",
-    "mudancas": 10
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 11
    },
    {
     "pasta": "scripts/migration/cdc",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 54
+    "commits": 55
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -312,10 +312,6 @@
     "commits": 4
    },
    {
-    "autor": "Joaquim Promo Brindes",
-    "commits": 2
-   },
-   {
     "autor": "github-actions[bot]",
     "commits": 2
    }
@@ -324,7 +320,7 @@
  "contagens": {
   "arquivos_total": 3219,
   "arquivos_codigo": 2213,
-  "linhas_codigo": 413435,
+  "linhas_codigo": 413496,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -704,7 +700,7 @@
   },
   "supabase/functions": {
    "arquivos": 174,
-   "linhas": 26736
+   "linhas": 26797
   },
   "tailwind.config.ts": {
    "arquivos": 1,

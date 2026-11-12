@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "1e20172bfbd212f0c8876951565f3565d1bc2794",
+  "sha": "ba89bc04a8785c42b514768e9a9cedf91a729a36",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 16:27 UTC",
+  "generated_at": "2026-11-12 19:17 UTC",
   "files_total": 3325,
   "code_files": 2869,
-  "code_lines": 409019
+  "code_lines": 409080
  },
  "version": "1.3.2",
- "facts_hash": "7ecaa01c74d68960",
+ "facts_hash": "93cff2520ac89f03",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -70431,7 +70431,7 @@
   {
    "module": "supabase/functions",
    "files": 174,
-   "lines": 26736,
+   "lines": 26797,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -79555,7 +79555,7 @@
     "file": "supabase/functions/evolution-webhook/payload.ts",
     "name": "messageUpsertData",
     "kind": "object",
-    "body": "{ key: messageKey.nullish(), pushName: text, status: text, messageTimestamp: z.number().nullish(), messageType: text, participant: text, instanceId: text, message: z.object({ conversation: text, extendedTextMessage: z.object({ text }).passthrough().nullish(), imageMessage: z.object({ caption: text }).passthrough().nullish(), videoMessage: z.object({ caption: text }).passthrough().nullish(), audioMessage: object.nullish(), documentMessage: z.object({ fileName: text }).passthrough().nullish(), stickerMessage: object.nullish(), locationMessage: z.object({ degreesLatitude: z.union([z.number(), z.string()]).nullish(), degreesLongitude: z.union([z.number(), z.string()]).nullish(), }).passthrough().nullish(), contactMessage: z.object({ displayName: text }).passthrough().nullish(), reactionMessage …",
+    "body": "{ key: messageKey.nullish(), pushName: text, status: text, messageTimestamp: z.union([ z.number(), z.string().trim().min(1).transform(value => Number(value)), ]).pipe(z.number().finite()).nullish(), messageType: text, participant: text, instanceId: text, message: z.object({ conversation: text, extendedTextMessage: z.object({ text }).passthrough().nullish(), imageMessage: z.object({ caption: text }).passthrough().nullish(), videoMessage: z.object({ caption: text }).passthrough().nullish(), audioMessage: object.nullish(), documentMessage: z.object({ fileName: text }).passthrough().nullish(), stickerMessage: object.nullish(), locationMessage: z.object({ degreesLatitude: z.union([z.number(), z.string()]).nullish(), degreesLongitude: z.union([z.number(), z.string()]).nullish(), }).passthrough() …",
     "refines": [],
     "chain": []
    },
@@ -219240,7 +219240,7 @@
   },
   "supabase/functions/_shared/evolution-dispatch-contract_test.ts": {
    "path": "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
-   "lines": 153,
+   "lines": 211,
    "errors": [
     "Gravação indevida"
    ],
@@ -223717,7 +223717,7 @@
   },
   "supabase/functions/evolution-webhook/payload.ts": {
    "path": "supabase/functions/evolution-webhook/payload.ts",
-   "lines": 78,
+   "lines": 81,
    "exports": [
     "const messageUpsertData",
     "const messageUpdateData",
@@ -223759,7 +223759,7 @@
     {
      "name": "messageUpsertData",
      "kind": "object",
-     "body": "{ key: messageKey.nullish(), pushName: text, status: text, messageTimestamp: z.number().nullish(), messageType: text, participant: text, instanceId: text, message: z.object({ conversation: text, extendedTextMessage: z.object({ text }).passthrough().nullish(), imageMessage: z.object({ caption: text }).passthrough().nullish(), videoMessage: z.object({ caption: text }).passthrough().nullish(), audioMessage: object.nullish(), documentMessage: z.object({ fileName: text }).passthrough().nullish(), stickerMessage: object.nullish(), locationMessage: z.object({ degreesLatitude: z.union([z.number(), z.string()]).nullish(), degreesLongitude: z.union([z.number(), z.string()]).nullish(), }).passthrough().nullish(), contactMessage: z.object({ displayName: text }).passthrough().nullish(), reactionMessage …",
+     "body": "{ key: messageKey.nullish(), pushName: text, status: text, messageTimestamp: z.union([ z.number(), z.string().trim().min(1).transform(value => Number(value)), ]).pipe(z.number().finite()).nullish(), messageType: text, participant: text, instanceId: text, message: z.object({ conversation: text, extendedTextMessage: z.object({ text }).passthrough().nullish(), imageMessage: z.object({ caption: text }).passthrough().nullish(), videoMessage: z.object({ caption: text }).passthrough().nullish(), audioMessage: object.nullish(), documentMessage: z.object({ fileName: text }).passthrough().nullish(), stickerMessage: object.nullish(), locationMessage: z.object({ degreesLatitude: z.union([z.number(), z.string()]).nullish(), degreesLongitude: z.union([z.number(), z.string()]).nullish(), }).passthrough() …",
      "refines": [],
      "chain": []
     },
@@ -232688,10 +232688,21 @@
   }
  },
  "git": {
-  "sha": "1e20172bfbd212f0c8876951565f3565d1bc2794",
+  "sha": "ba89bc04a8785c42b514768e9a9cedf91a729a36",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "ba89bc0",
+    "date": "2026-11-12",
+    "author": "adm01-debug",
+    "subject": "fix(webhook): aceita timestamps textuais do Evolution e preserva época zero (#206)",
+    "files": [
+     "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+     "supabase/functions/evolution-webhook/messages.ts",
+     "supabase/functions/evolution-webhook/payload.ts"
+    ]
+   },
    {
     "sha": "1e20172",
     "date": "2026-11-12",
@@ -233498,15 +233509,6 @@
     "files": [
      "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql"
     ]
-   },
-   {
-    "sha": "9836e3a",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "feat(segurança): workflow para fechar verify_jwt nas 23 proxies externas (#176)",
-    "files": [
-     ".github/workflows/fix-jwt-proxies-externas.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -233543,6 +233545,14 @@
     3
    ],
    [
+    "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+    2
+   ],
+   [
+    "supabase/functions/evolution-webhook/messages.ts",
+    2
+   ],
+   [
     ".github/workflows/ci.yml",
     2
    ],
@@ -233567,10 +233577,6 @@
     2
    ],
    [
-    ".github/workflows/fix-jwt-proxies-externas.yml",
-    2
-   ],
-   [
     "AGENTS.md",
     2
    ],
@@ -233583,11 +233589,7 @@
     2
    ],
    [
-    "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md",
-    1
-   ],
-   [
-    "docs/lacunas/G_banco_de_dados.md",
+    "supabase/functions/evolution-webhook/payload.ts",
     1
    ]
   ]

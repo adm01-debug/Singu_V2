@@ -1565,7 +1565,7 @@
    "nome": "evolution-webhook",
    "entrada": "supabase/functions/evolution-webhook/index.ts",
    "arquivos": 5,
-   "linhas": 682,
+   "linhas": 685,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

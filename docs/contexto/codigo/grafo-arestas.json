@@ -11187,7 +11187,8 @@
    "supabase/functions/_shared/email-verify.ts"
   ],
   "supabase/functions/_shared/evolution-dispatch-contract_test.ts": [
-   "supabase/functions/_shared/edge-test-harness.ts"
+   "supabase/functions/_shared/edge-test-harness.ts",
+   "supabase/functions/evolution-webhook/payload.ts"
   ],
   "supabase/functions/_shared/evolution-ownership-contract_test.ts": [
    "supabase/functions/_shared/edge-test-harness.ts"
