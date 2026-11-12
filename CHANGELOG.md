@@ -1,4 +1,4 @@
-﻿# Changelog
+# Changelog
 
 Todas as mudanças notáveis do SINGU CRM são documentadas neste arquivo.
 
@@ -6,8 +6,14 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
+- A Inteligência Proativa distingue aniversários de hoje e amanhã pelo dia local. Editar um contato atualiza sua ficha sem recarregar a página, e o cabeçalho preserva a data de aniversário em fusos negativos.
+- A ficha preserva os dados carregados quando a atualização falha e oferece nova tentativa. As recomendações se atualizam na virada do dia e ao retomar uma aba suspensa.
+- O funil da ficha só confirma a mudança de estágio quando a gravação retorna o contato atualizado; falhas mantêm o estágio anterior e permitem tentar novamente.
+- A ficha deixa de oferecer dados e ações anteriores quando a consulta confirma que o contato não existe mais; falhas de consulta continuam preservando os dados para nova tentativa.
+- Falhas nas consultas da empresa, interações, insights ou alertas preservam a ficha anterior e oferecem nova tentativa. A restauração pelo desfazer omite o nome gerado pelo banco; mover para a lixeira e restaurar renovam o detalhe da conta correta e só anunciam sucesso com confirmação. O diálogo fecha após arquivamento confirmado, e a confirmação de exclusão informa a opção Desfazer.
+- O calendário de datas importantes também se atualiza à meia-noite local e ao retomar a aba, sem depender de alterações nos contatos ou nas interações.
 
-- Criar ou editar durante a carga inicial recarrega a lista completa sem páginas sintéticas nem contatos duplicados. A paginação respeita o total e o fim real das respostas, inclusive nos limites exatos após criações. Salvar a ficha revalida interações, insights e alertas, preservando a versão mais recente confirmada. Falhas de recarga mantêm a ficha visível com aviso e nova tentativa; ausência confirmada nas duas fontes limpa a ficha e suas relações, sem reabrir contatos excluídos.
+- Mesclagem de empresas rejeita nome substituto nulo, não textual ou em branco antes dos gatilhos de compatibilidade, preservando o nome original e a transação.
 
 - O webhook Evolution aceita timestamps numéricos enviados como texto, rejeita valores não finitos e preserva a época zero ao registrar a mensagem.
 
@@ -25,9 +31,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 - **Ficha de contato:** erros ao consultar empresa, interações, insights ou alertas preservam o último conjunto confirmado no cache e expõem a falha para nova tentativa, inclusive erros Supabase que não são instâncias de `Error`. A ficha só repete automaticamente falhas transitórias identificadas, incluindo indisponibilidade declarada pela fonte externa e gateways 520–524; erros permanentes de permissão, esquema e requisição aguardam tentativa manual. As mensagens usam o filtro existente, incluindo respostas de schema cache e Edge Functions, sem expor detalhes internos nem alterar os códigos usados pelo retry.
 - A ficha e a lista descartam leituras anteriores à gravação e respostas de escrita com versão inferior à já confirmada. Edições e exclusões mantêm os dados confirmados até a resposta do servidor, sem rollback integral que apague outra edição. Excluir/Desfazer atualiza a ficha exata do proprietário; restaurar exige identidade e estado ativo confirmados.
-
 - O CI verifica os tipos das 108 Edge Functions. Gravações auxiliares usam a rotina best-effort existente; os eventos Evolution têm validação explícita e contratos locais para o webhook, logger e proxy.
-
 - Correção do gate de segurança do CI: zod atualizado para a linha 4.x (vulnerabilidade alta GHSA-mrhx-c7xc-m3w5 só corrigida na 4.x) e serialize-javascript para ^7.1.3, alinhando `dependencies` e `overrides` (o conflito EOVERRIDE também derrubava o Dependabot). Compatibilidade do zod v4 aplicada em hooks e formulários sem mudança de comportamento; `@hookform/resolvers` atualizado para a versão compatível com zod v4.
 
 - O calendário compacto usa os nomes do modelo de contatos; aniversários e eventos contam dias de calendário, preservando a data local e os eventos de hoje.
@@ -76,6 +80,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Matriz reconciliada das auditorias e lacunas com estado por achado, evidências e próximos passos, organizada em cinco áreas e vinculada pelo índice.
 
 ### Fixed
+- Transferências de contato e gravações de emails, telefones, endereços e redes sociais aguardam o mesmo bloqueio no banco; o antigo proprietário é recusado quando a transferência termina primeiro. O proxy conserva o JWT do usuário nas escritas, não declara exclusão sem linha afetada e distingue conflitos transitórios (`WRITE_CONFLICT`) de versão obsoleta (`CONCURRENT_EDIT`), sem repetição automática nem contorno de permissões.
 - Emails e telefones relacionados exigem o dono do contato ativo para leitura e escrita de contas comuns, mesmo com policies permissivas antigas; administradores conservam o acesso global somente com MFA confirmado em AAL2. O proprietário também pode manter seus telefones nas instalações que antes permitiam apenas administradores.
 - Histórico novo invalida a reserva comportamental anterior e reinicia a espera, impedindo que a análise ou o erro de um worker antigo consumam o pedido posterior. A geração manual mantém as leituras sob o login do usuário e confirma perfil, histórico e fila pelo serviço após validar a propriedade, rejeitando trocas de proprietário durante a geração.
 - Validações enfileiradas gravam resultado e conclusão da tarefa na mesma transação, com recibo idempotente e token da reserva, evitando registros duplicados após perda da resposta. Gerações manuais concluem pedidos anteriores e preservam os criados após o início da análise; o worker e a reanálise aguardam o prazo completo da IA mais uma margem para persistência.
