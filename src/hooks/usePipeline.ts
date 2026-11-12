@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { callExternalRpc, queryExternalData } from '@/lib/externalData';
+import type { Database } from '@/integrations/supabase/types';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
 
@@ -262,12 +263,13 @@ export function useMoveDeal() {
 export function useCreateDeal() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (params: Record<string, unknown>) => {
-      const { data, error } = await callExternalRpc<{ id: string }>(
+    mutationFn: async (params: Database['public']['Functions']['create_deal']['Args']) => {
+      const { data, error } = await callExternalRpc<string>(
         'create_deal',
         params
       );
       if (error) throw error;
+      if (typeof data !== 'string' || !data) throw new Error('Não foi possível confirmar o negócio criado');
       return data;
     },
     onSuccess: () => {
