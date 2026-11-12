@@ -1,7 +1,7 @@
 {
   "fonte": "scripts/docs/verificar-citacoes.mjs --baseline",
   "o_que_e": "citacoes arquivo:linha que já estavam quebradas quando a catraca foi criada. A lista só pode encolher: quebra nova reprova. Corrigiu uma? rode --baseline e commite.",
-  "total": 186,
+  "total": 182,
   "quebras": [
     "AGENTS.md -> docs/contexto/00-INDEX.md (arquivo nao existe)",
     "AUDITORIA_COMPLETA_SISTEMA.md -> src/lib/queryClient.ts (arquivo nao existe)",
@@ -140,7 +140,6 @@
     "docs/estado/06_INTEGRACOES.md -> supabase/migrations/20260712223208_...sql:1-23 (arquivo nao existe)",
     "docs/estado/08_INFRA_CI_TESTES_DOCS.md -> supabase/functions/lead-routing/index.test.ts (arquivo nao existe)",
     "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md -> supabase/functions/auto-regen-behavioral-profiles/index.ts:227 (arquivo tem 169 linhas)",
-    "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md -> supabase/functions/evolution-webhook/index.ts:402 (arquivo tem 79 linhas)",
     "docs/estado/11_VERIFICACAO_ADVERSARIAL_MARKETING.md -> supabase/migrations/20260720000025_missing_user_fk_indexes.sql:52 (arquivo tem 50 linhas)",
     "docs/estado/12_VALIDACAO_DA_AUDITORIA.md -> src/sw.ts (arquivo nao existe)",
     "docs/lacunas/A_docs_raiz_e_memoria_lovable.md -> src/lib/graphPath.ts (arquivo nao existe)",
@@ -178,9 +177,6 @@
     "docs/lacunas/E_contratos_front_backend.md -> src/hooks/useSocialInsights.ts:56-80 (arquivo tem 60 linhas)",
     "docs/lacunas/F_edge_functions.md -> supabase/migrations/20260417120721_...sql:19 (arquivo nao existe)",
     "docs/lacunas/F_edge_functions.md -> supabase/migrations/20260713104851_...sql:28-31 (arquivo nao existe)",
-    "docs/lacunas/G_banco_de_dados.md -> supabase/functions/evolution-webhook/index.ts:320 (arquivo tem 79 linhas)",
-    "docs/lacunas/G_banco_de_dados.md -> supabase/functions/evolution-webhook/index.ts:338 (arquivo tem 79 linhas)",
-    "docs/lacunas/G_banco_de_dados.md -> supabase/functions/evolution-webhook/index.ts:358 (arquivo tem 79 linhas)",
     "docs/lacunas/G_banco_de_dados.md -> supabase/functions/external-data/index.ts:456-457 (arquivo tem 392 linhas)",
     "docs/lacunas/H_ci_testes_deploy_infra.md -> docs/adr/ADR-022-backend-linter-baseline-ratchet.md:83-84 (arquivo tem 44 linhas)",
     "docs/lacunas/H_ci_testes_deploy_infra.md -> docs/dr-drills/AAAA-MM-restore.md (arquivo nao existe)",
