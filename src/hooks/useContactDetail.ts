@@ -89,6 +89,9 @@ export function useContactDetail(contactId: string | undefined) {
 
       if (!contactData) return { contact: null, company: null, interactions: [], insights: [], alerts: [] };
 
+      const confirmed = queryClient.getQueryData<ContactDetailData>(queryKey)?.contact;
+      if (confirmed && confirmed.version > contactData.version) contactData = confirmed;
+
       // 2. Fetch company (depends on contactData.company_id — must be sequential)
       let companyData: Company | null = null;
       if (contactData.company_id) {
@@ -179,6 +182,9 @@ export function useContactDetail(contactId: string | undefined) {
         if (!prev?.contact || prev.contact.version > updatedContact.version) return prev;
         return { ...prev, contact: updatedContact };
       });
+      if (queryClient.getQueryData<ContactDetailData>(queryKey)?.contact) {
+        await queryClient.invalidateQueries({ queryKey, exact: true });
+      }
       toast({ title: 'Contato atualizado', description: 'As alterações foram salvas.' });
       return updatedContact;
     } catch (err) {
