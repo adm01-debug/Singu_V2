@@ -2,7 +2,14 @@
   "alertas": [
     {
       "detalhe": [
-        "cleanup_cron_job_run_details_daily"
+        "mtta-auto-ack-heartbeat-watchdog (5.3% em 7d)"
+      ],
+      "tipo": "cron_falhando"
+    },
+    {
+      "detalhe": [
+        "check-contact-health-daily",
+        "singu-edge-template-success-notifications"
       ],
       "tipo": "cron_sem_execucao"
     }
@@ -14,10 +21,10 @@
       "max_worker_processes": "6"
     },
     "historico": {
-      "bytes": 7667712,
-      "linhas": 39048,
-      "mais_antigo": "2026-11-01T17:43:00Z",
-      "mais_de_7_dias": 12283
+      "bytes": 8019968,
+      "linhas": 28253,
+      "mais_antigo": "2026-11-05T04:37:00Z",
+      "mais_de_7_dias": 1038
     },
     "horas_paradas_7d": [],
     "jobs": [
@@ -91,7 +98,7 @@
         "chama": [
           "public.capture_degraded_rpc_plans"
         ],
-        "duracao_max_s_7d": 0,
+        "duracao_max_s_7d": 1,
         "execucoes_24h": 96,
         "execucoes_7d": 672,
         "falhas_24h": 0,
@@ -102,14 +109,30 @@
         "ultima_falha": null
       },
       {
+        "agenda": "0 0 * * *",
+        "ativo": true,
+        "chama": [
+          "public.check_contact_health_alerts"
+        ],
+        "duracao_max_s_7d": null,
+        "execucoes_24h": 0,
+        "execucoes_7d": 0,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "check-contact-health-daily",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
         "agenda": "37 4 * * *",
         "ativo": true,
         "chama": [
           "public.cleanup_cron_job_run_details"
         ],
-        "duracao_max_s_7d": null,
-        "execucoes_24h": 0,
-        "execucoes_7d": 0,
+        "duracao_max_s_7d": 1,
+        "execucoes_24h": 1,
+        "execucoes_7d": 1,
         "falhas_24h": 0,
         "falhas_7d": 0,
         "nome": "cleanup_cron_job_run_details_daily",
@@ -129,6 +152,294 @@
         "falhas_24h": 0,
         "falhas_7d": 0,
         "nome": "cleanup_rpc_perf_samples_daily",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 3 * * 0",
+        "ativo": true,
+        "chama": [
+          "public.cleanup_simulated_alerts"
+        ],
+        "duracao_max_s_7d": null,
+        "execucoes_24h": 0,
+        "execucoes_7d": 0,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "cleanup-simulated-alerts-weekly",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "*/30 * * * *",
+        "ativo": true,
+        "chama": [
+          "public.check_mtta_auto_ack_heartbeat"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 19,
+        "execucoes_7d": 19,
+        "falhas_24h": 1,
+        "falhas_7d": 1,
+        "nome": "mtta-auto-ack-heartbeat-watchdog",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 5.3,
+        "ultima_falha": "2026-11-12T02:00:00Z"
+      },
+      {
+        "agenda": "7 * * * *",
+        "ativo": true,
+        "chama": [
+          "public.auto_ack_stale_mtta_sla_breaches"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 10,
+        "execucoes_7d": 10,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "mtta-sla-breach-auto-ack-hourly",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 4 * * *",
+        "ativo": true,
+        "chama": [
+          "public.validation_queue"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "revalidate-stale-emails",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "17 * * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 9,
+        "execucoes_7d": 9,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-check-health-alerts",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "7 * * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 10,
+        "execucoes_7d": 10,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-check-notifications",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "3 11 * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-client-notifications",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "40 5 * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-cs-health-recalc",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "10 6 * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-forecast-snapshot-cron",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "20 5 * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-lead-score-cron",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "27 * * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 9,
+        "execucoes_7d": 9,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-mql-evaluator",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "4-59/15 * * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 38,
+        "execucoes_7d": 38,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-nurturing-runner",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "1-59/5 * * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 113,
+        "execucoes_7d": 113,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-process-webhook-dlq",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "0 4 * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 1,
+        "execucoes_7d": 1,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-revops-snapshot-builder",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "2-59/5 * * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 113,
+        "execucoes_7d": 113,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-sequence-processor",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "13 12 * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": null,
+        "execucoes_24h": 0,
+        "execucoes_7d": 0,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-template-success-notifications",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "*/5 * * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 113,
+        "execucoes_7d": 113,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-validation-queue-worker",
+        "startup_timeout_7d": 0,
+        "taxa_falha_7d_pct": 0,
+        "ultima_falha": null
+      },
+      {
+        "agenda": "23 * * * *",
+        "ativo": true,
+        "chama": [
+          "net.http_post"
+        ],
+        "duracao_max_s_7d": 0,
+        "execucoes_24h": 9,
+        "execucoes_7d": 9,
+        "falhas_24h": 0,
+        "falhas_7d": 0,
+        "nome": "singu-edge-weekly-digest",
         "startup_timeout_7d": 0,
         "taxa_falha_7d_pct": 0,
         "ultima_falha": null
@@ -414,7 +725,7 @@
         "xbz-unified"
       ]
     },
-    "no_repo": 108,
+    "no_repo": 109,
     "no_repo_sem_deploy": [],
     "publicadas": [
       {
@@ -422,1076 +733,1083 @@
         "slug": "abm-account-scorer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:24Z",
         "slug": "abm-whitespace-analyzer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-04-11T14:32Z",
         "slug": "agent-card-generator",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:24Z",
         "slug": "ai-assistant",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T14:56Z",
         "slug": "ai-compliance",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:24Z",
         "slug": "ai-email-refine",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:24Z",
         "slug": "ai-suggest-mapping",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:24Z",
         "slug": "ai-writing-assistant",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:24Z",
         "slug": "ask-crm",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "attribution-calculator",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "audit-analytics",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "auto-rebatch-behavioral",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "auto-regen-behavioral-profiles",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-04-11T15:00Z",
         "slug": "autotrain-config-generator",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T15:27Z",
         "slug": "bigquery-cnpj-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T15:01Z",
         "slug": "bigquery-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-04-11T15:54Z",
         "slug": "bitrix-extract-companies",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T13:48Z",
         "slug": "bitrix24-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "bitrix24-webhook",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T15:51Z",
         "slug": "bling-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "bulk-revalidate",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "check-health-alerts",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "check-notifications",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "clear-must-reset-flag",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "client-notifications",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-04-11T15:28Z",
         "slug": "cloudflare-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T15:25Z",
         "slug": "comtele-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "connection-anomaly-detector",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "connection-introspect",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "connection-tester",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-04-11T14:37Z",
         "slug": "context-optimizer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "conversation-analyzer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "conversation-coaching-digest",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "conversational-search",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-04-11T15:53Z",
         "slug": "coop003-executor",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T15:54Z",
         "slug": "coop004-pacs-report",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T14:34Z",
         "slug": "cost-calculator",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "crm-automation-monitor",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "cs-health-recalc",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "deal-room-buyer-view",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "deal-room-health",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "deal-room-share",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "demand-forecast",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "detect-churn-risk",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:25Z",
         "slug": "detect-new-device",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "disc-analyzer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T14:36Z",
         "slug": "doc-layout-analyzer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "dual-write-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "elevenlabs-scribe-token",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "elevenlabs-tts",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "email-finder",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "email-pipeline-health",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "email-thread-summary",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "email-verifier",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "enrich-contacts",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "enrichlayer-linkedin",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "error-budget",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T14:34Z",
         "slug": "eval-engine-v2",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "evolution-api",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "evolution-bitrix-connector",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 19
+        "versao": 23
       },
       {
         "atualizada_em": "2026-04-11T13:49Z",
         "slug": "evolution-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "evolution-webhook",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T16:20Z",
         "slug": "external-data",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 43
+        "versao": 47
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "ficha360-conversation-summary",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "firecrawl-scrape",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "forecast-analyzer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "forecast-narrative",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "forecast-snapshot-cron",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "form-submit-handler",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T15:25Z",
         "slug": "fornecedores-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "generate-behavioral-profile",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 7
+        "versao": 11
       },
       {
         "atualizada_em": "2026-10-13T02:26Z",
         "slug": "generate-insights",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "generate-offer-suggestions",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "get-signature",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T14:31Z",
         "slug": "guardrails-ml",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 15
+        "versao": 19
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "health",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "health-aggregate",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-04-11T14:35Z",
         "slug": "health-monitor",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-04-11T14:56Z",
         "slug": "hf-space-tool",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T14:59Z",
         "slug": "hf-toolbox",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "incoming-webhook",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "intent-aggregator",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "intent-pixel-snippet",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "intent-tracker",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T15:04Z",
         "slug": "lalamove-uapi-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-04-11T15:06Z",
         "slug": "lalamove-unified",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T15:05Z",
         "slug": "lalamove-v3-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "lead-score-cron",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T16:20Z",
         "slug": "lead-score-threshold-runner",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "lead-scorer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-04-11T15:53Z",
         "slug": "leadcontact-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-04-11T15:48Z",
         "slug": "lusha-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "lux-trigger",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "lux-webhook",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T15:48Z",
         "slug": "mapbox-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-09-09T13:17Z",
         "slug": "mcp-query",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "mcp-server",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-04-11T14:59Z",
         "slug": "media-pipeline",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "meeting-summary",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "mql-evaluator",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "next-best-action",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-04-11T14:30Z",
         "slug": "nlp-pipeline",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 17
+        "versao": 21
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "nurturing-runner",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "objection-context-summary",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "objection-handler",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-04-11T15:50Z",
         "slug": "phantombuster-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "phone-validator",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-10-13T02:27Z",
         "slug": "playbook-generator",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "playbook-recommender",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "process-behavioral-regen-queue",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "process-webhook-dlq",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T14:56Z",
         "slug": "product-description-gen",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T14:33Z",
         "slug": "rag-embed-v2",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-04-11T14:33Z",
         "slug": "rag-rerank-v2",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "retry-behavioral-profile",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "revops-snapshot-builder",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "rfm-analyzer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T15:52Z",
         "slug": "rodonaves-unified",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "semantic-search",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "send-push-notification",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "send-sms-campaign",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
+      },
+      {
+        "atualizada_em": "2026-11-12T00:42Z",
+        "slug": "send-transactional-email",
+        "status": "ACTIVE",
+        "verify_jwt": true,
+        "versao": 2
       },
       {
         "atualizada_em": "2026-04-11T14:36Z",
         "slug": "sentence-similarity",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-10-13T16:20Z",
         "slug": "sequence-processor",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 7
+        "versao": 11
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "sequence-track",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T14:31Z",
         "slug": "smart-model-router",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 15
+        "versao": 19
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "smart-notify",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "smart-reminders",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 10
+        "versao": 14
       },
       {
         "atualizada_em": "2026-04-11T14:35Z",
         "slug": "smolagent-runtime-v2",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "social-behavior-analyzer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "social-events-detector",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "social-profile-scraper",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 6
+        "versao": 10
       },
       {
         "atualizada_em": "2026-04-11T15:24Z",
         "slug": "spot-unified",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "submit-signature",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "suggest-next-action",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "sync-social-interests",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-04-11T14:58Z",
         "slug": "synthetic-data-gen",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 13
+        "versao": 17
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "system-health",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "template-success-notifications",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "territory-optimization",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:28Z",
         "slug": "validate-access",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:29Z",
         "slug": "validation-queue-worker",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 7
+        "versao": 11
       },
       {
         "atualizada_em": "2026-10-13T02:29Z",
         "slug": "visual-search",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:29Z",
         "slug": "voice-agent",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:29Z",
         "slug": "voice-ai-health",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-10-13T02:29Z",
         "slug": "voice-to-text",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
-        "atualizada_em": "2026-10-13T02:29Z",
+        "atualizada_em": "2026-11-12T02:49Z",
         "slug": "weekly-digest",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 5
+        "versao": 11
       },
       {
         "atualizada_em": "2026-10-13T02:29Z",
         "slug": "whatsapp-import",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:29Z",
         "slug": "win-loss-analyzer",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 4
+        "versao": 8
       },
       {
         "atualizada_em": "2026-10-13T02:29Z",
         "slug": "win-loss-record-deal",
         "status": "ACTIVE",
         "verify_jwt": true,
-        "versao": 5
+        "versao": 9
       },
       {
         "atualizada_em": "2026-04-11T15:03Z",
         "slug": "xbz-api-proxy",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 14
+        "versao": 18
       },
       {
         "atualizada_em": "2026-04-11T15:07Z",
         "slug": "xbz-unified",
         "status": "ACTIVE",
         "verify_jwt": false,
-        "versao": 13
+        "versao": 17
       }
     ],
     "publicadas_sem_codigo_no_repo": []
   },
   "fonte": "scripts/inventario/banco.sql + GET /functions + .from() em src/ e supabase/functions/ (scripts/inventario/gerar-banco.mjs)",
   "format_version": 1,
-  "medido_em": "2026-11-11T22:48:53Z",
+  "medido_em": "2026-11-12T11:08:54Z",
   "resumo": {
-    "cron_ativos": 21,
-    "cron_jobs": 21,
-    "funcoes_public": 1381,
-    "ledger_registros": 679,
-    "ledger_versao_max": "20261109010329",
+    "cron_ativos": 40,
+    "cron_jobs": 40,
+    "funcoes_public": 1382,
+    "ledger_registros": 682,
+    "ledger_versao_max": "20261112001000",
     "max_connections": 60,
     "policies": 1477,
     "postgres": "17.6",
     "tabelas_public": 406,
     "tabelas_sem_rls": 0,
-    "tamanho_bytes": 3140054163,
+    "tamanho_bytes": 3145567379,
     "triggers_public": 435,
     "views_public": 139
   },
@@ -1625,7 +1943,7 @@
       }
     },
     {
-      "bytes": 9707520,
+      "bytes": 9732096,
       "citada_no_banco": true,
       "linhas": 8441,
       "linhas_exatas": true,
@@ -1961,7 +2279,7 @@
       }
     },
     {
-      "bytes": 1694482432,
+      "bytes": 1698848768,
       "citada_no_banco": true,
       "linhas": 400965,
       "linhas_exatas": false,
@@ -2985,7 +3303,7 @@
       }
     },
     {
-      "bytes": 73728,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -3001,7 +3319,7 @@
       }
     },
     {
-      "bytes": 40960,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -3033,7 +3351,7 @@
       }
     },
     {
-      "bytes": 1490944,
+      "bytes": 1499136,
       "citada_no_banco": true,
       "linhas": 3070,
       "linhas_exatas": true,
@@ -3161,7 +3479,7 @@
       }
     },
     {
-      "bytes": 1204224,
+      "bytes": 1212416,
       "citada_no_banco": true,
       "linhas": 3141,
       "linhas_exatas": true,
@@ -3369,7 +3687,7 @@
       }
     },
     {
-      "bytes": 73728,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -3417,7 +3735,7 @@
       }
     },
     {
-      "bytes": 16384,
+      "bytes": 32768,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -3641,7 +3959,7 @@
       }
     },
     {
-      "bytes": 73728,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4057,7 +4375,7 @@
       }
     },
     {
-      "bytes": 139264,
+      "bytes": 147456,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4073,7 +4391,7 @@
       }
     },
     {
-      "bytes": 40960,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4345,7 +4663,7 @@
       }
     },
     {
-      "bytes": 114688,
+      "bytes": 131072,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -4459,7 +4777,7 @@
     {
       "bytes": 10985472,
       "citada_no_banco": false,
-      "linhas": 13446,
+      "linhas": 13755,
       "linhas_exatas": true,
       "nome": "error_logs",
       "particao_de": null,
@@ -4761,9 +5079,9 @@
       }
     },
     {
-      "bytes": 32768,
+      "bytes": 573440,
       "citada_no_banco": true,
-      "linhas": 0,
+      "linhas": 1000,
       "linhas_exatas": true,
       "nome": "health_alerts",
       "particao_de": null,
@@ -5017,7 +5335,7 @@
       }
     },
     {
-      "bytes": 221184,
+      "bytes": 237568,
       "citada_no_banco": true,
       "linhas": 21,
       "linhas_exatas": true,
@@ -5193,7 +5511,7 @@
       }
     },
     {
-      "bytes": 98304,
+      "bytes": 81920,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -5241,7 +5559,7 @@
       }
     },
     {
-      "bytes": 65536,
+      "bytes": 49152,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -5273,7 +5591,7 @@
       }
     },
     {
-      "bytes": 81920,
+      "bytes": 73728,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -5705,7 +6023,7 @@
       }
     },
     {
-      "bytes": 114688,
+      "bytes": 131072,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -5833,7 +6151,7 @@
       }
     },
     {
-      "bytes": 131072,
+      "bytes": 114688,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -6377,7 +6695,7 @@
       }
     },
     {
-      "bytes": 212992,
+      "bytes": 188416,
       "citada_no_banco": true,
       "linhas": 5,
       "linhas_exatas": true,
@@ -6393,7 +6711,7 @@
       }
     },
     {
-      "bytes": 106496,
+      "bytes": 114688,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -6809,7 +7127,7 @@
       }
     },
     {
-      "bytes": 131072,
+      "bytes": 114688,
       "citada_no_banco": true,
       "linhas": 0,
       "linhas_exatas": true,
@@ -7353,9 +7671,9 @@
       }
     },
     {
-      "bytes": 81920,
+      "bytes": 106496,
       "citada_no_banco": true,
-      "linhas": 0,
+      "linhas": 10,
       "linhas_exatas": true,
       "nome": "system_health_snapshots",
       "particao_de": null,
