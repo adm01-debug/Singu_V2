@@ -713,7 +713,6 @@
       "tabelas": [
         "contacts",
         "interactions",
-        "profiles",
         "whatsapp_ingestion_logs",
         "whatsapp_instances",
         "whatsapp_messages"
@@ -1760,6 +1759,7 @@
       "arquivos": 1,
       "compartilhados": [
         "supabase/functions/_shared/auth.ts",
+        "supabase/functions/_shared/rate-limit.ts",
         "supabase/functions/_shared/resend.ts",
         "supabase/functions/_shared/validate.ts"
       ],
@@ -2244,7 +2244,6 @@
       "phone-validator"
     ],
     "profiles": [
-      "evolution-webhook",
       "health",
       "health-aggregate",
       "smart-notify",
