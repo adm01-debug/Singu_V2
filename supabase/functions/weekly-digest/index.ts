@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { sendResendEmail } from "../_shared/resend.ts";
 import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
 import { validate } from "../_shared/validate.ts";
 
@@ -50,8 +51,10 @@ Deno.serve(async (req) => {
     console.log(`Starting weekly digest generation... Source: ${isCronJob ? 'cron' : 'manual'}`);
 
     const now = new Date();
-    const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getUTCDay()];
-    const currentHour = now.getUTCHours();
+    // send_day/send_time são o horário de Brasília escolhido pelo usuário; o cron roda de hora em hora
+    const brt = new Date(now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+    const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][brt.getDay()];
+    const currentHour = brt.getHours();
 
     let settingsQuery = supabase.from('weekly_report_settings').select('*').eq('enabled', true);
     if (isCronJob) settingsQuery = settingsQuery.eq('send_day', currentDay);
@@ -64,11 +67,7 @@ Deno.serve(async (req) => {
     }
 
     const eligibleSettings = isCronJob
-      ? (reportSettings || []).filter(s => {
-          if (!s.send_time) return currentHour === 9;
-          const settingHour = parseInt(s.send_time.split(':')[0], 10);
-          return Math.abs(settingHour - currentHour) <= 1;
-        })
+      ? (reportSettings || []).filter(s => isDueNow(s, now, currentHour))
       : reportSettings || [];
 
     console.log(`Found ${eligibleSettings.length} users eligible for report generation`);
@@ -191,8 +190,9 @@ Deno.serve(async (req) => {
         };
 
         digests.push(digestData);
-        reportRows.push({ user_id: userId, report_data: digestData, sent_via: ['system'] });
-        successUserIds.push(userId);
+        const emailed = await emailDigest(digestData, now);
+        reportRows.push({ user_id: userId, report_data: digestData, sent_via: [emailed ? 'email' : 'system'] });
+        if (emailed) successUserIds.push(userId);
       } catch (userErr) {
         console.error(`weekly-digest error for user ${userId}:`, userErr);
       }
@@ -222,6 +222,24 @@ Deno.serve(async (req) => {
     );
   }
 });
+
+/** Hora de envio (Brasília) bate com a hora atual e não houve envio nas últimas 20 h. */
+function isDueNow(s: { send_time?: string | null; last_sent_at?: string | null }, now: Date, currentHour: number): boolean {
+  if (s.last_sent_at && now.getTime() - new Date(s.last_sent_at).getTime() < 20 * 3_600_000) return false;
+  const settingHour = s.send_time ? parseInt(s.send_time.split(':')[0], 10) : 9;
+  return settingHour === currentHour;
+}
+
+async function emailDigest(digest: WeeklyDigestData, now: Date): Promise<boolean> {
+  const sent = await sendResendEmail({
+    to: digest.email,
+    subject: `Seu resumo semanal do Singu – ${now.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`,
+    html: generateEmailHtml(digest),
+    idempotencyKey: `weekly-digest-${digest.userId}-${now.toISOString().slice(0, 10)}`,
+  });
+  if (!sent.ok) console.error(`weekly-digest e-mail não enviado para ${digest.userId}:`, sent.error);
+  return sent.ok;
+}
 
 function generateEmailHtml(digest: WeeklyDigestData): string {
   return `
