@@ -1,9 +1,17 @@
 {
   "fonte": "scripts/docs/verificar-citacoes.mjs --baseline",
   "o_que_e": "citacoes arquivo:linha que já estavam quebradas quando a catraca foi criada. A lista só pode encolher: quebra nova reprova. Corrigiu uma? rode --baseline e commite.",
-  "total": 182,
+  "total": 190,
   "quebras": [
     "AGENTS.md -> docs/contexto/00-INDEX.md (arquivo nao existe)",
+    "AUDITORIA.md -> src/main.tsx:103-123 (arquivo tem 97 linhas)",
+    "AUDITORIA.md -> src/sw.ts (arquivo nao existe)",
+    "AUDITORIA.md -> supabase/config.toml:3-4 (arquivo tem 2 linhas)",
+    "AUDITORIA.md -> supabase/functions/external-data/index.ts:464-478 (arquivo tem 392 linhas)",
+    "AUDITORIA.md -> supabase/functions/migrate-helper/index.ts (arquivo nao existe)",
+    "AUDITORIA.md -> supabase/functions/migrate-helper/index.ts:5-29 (arquivo nao existe)",
+    "AUDITORIA.md -> supabase/functions/send-push-notification/index.ts:72-119 (arquivo tem 108 linhas)",
+    "AUDITORIA.md -> supabase/migrations/20260512105729_ef6418c0-874e-4693-984f-b720410c6c2c.sql:10 (arquivo nao existe)",
     "AUDITORIA_COMPLETA_SISTEMA.md -> src/lib/queryClient.ts (arquivo nao existe)",
     "ESTADO_ATUAL.md -> src/hooks/useLeadRoutingServer.ts:96 (arquivo nao existe)",
     "ESTADO_ATUAL.md -> src/sw.ts (arquivo nao existe)",
