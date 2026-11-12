@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "51a85ab612d642ed800686cc9304fce7b4a0d016",
+  "sha": "1e20172bfbd212f0c8876951565f3565d1bc2794",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 14:47 UTC",
+  "generated_at": "2026-11-12 16:27 UTC",
   "files_total": 3325,
   "code_files": 2869,
   "code_lines": 409019
@@ -232688,10 +232688,22 @@
   }
  },
  "git": {
-  "sha": "51a85ab612d642ed800686cc9304fce7b4a0d016",
+  "sha": "1e20172bfbd212f0c8876951565f3565d1bc2794",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "1e20172",
+    "date": "2026-11-12",
+    "author": "adm01-debug",
+    "subject": "chore: inventario do estado real [auto] (#205)",
+    "files": [
+     "inventario/estado/banco.json",
+     "inventario/estado/edge-tabela.json",
+     "inventario/estado/edges.json",
+     "inventario/estado/tabelas-uso.json"
+    ]
+   },
    {
     "sha": "51a85ab",
     "date": "2026-11-12",
@@ -233495,36 +233507,24 @@
     "files": [
      ".github/workflows/fix-jwt-proxies-externas.yml"
     ]
-   },
-   {
-    "sha": "ac006d9",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "chore: instruções enxutas para agentes (#163)",
-    "files": [
-     "AGENTS.md",
-     "CLAUDE.md",
-     "docs/agentes/banco-edge-ci.md",
-     "docs/agentes/texto-mestre.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "inventario/estado/banco.json",
-    4
+    5
    ],
    [
     "inventario/estado/edges.json",
-    4
+    5
    ],
    [
     "inventario/estado/tabelas-uso.json",
-    4
+    5
    ],
    [
     "inventario/estado/edge-tabela.json",
-    3
+    4
    ],
    [
     "supabase/functions/weekly-digest/index.ts",
@@ -233536,10 +233536,6 @@
    ],
    [
     "scripts/automation.config.json",
-    3
-   ],
-   [
-    "AGENTS.md",
     3
    ],
    [
@@ -233572,6 +233568,10 @@
    ],
    [
     ".github/workflows/fix-jwt-proxies-externas.yml",
+    2
+   ],
+   [
+    "AGENTS.md",
     2
    ],
    [
