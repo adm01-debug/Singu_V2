@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "3e49b844128fb77bf2e8ba64b2438ca46d74abf3",
+  "commit": "51a85ab612d642ed800686cc9304fce7b4a0d016",
   "branch": "main",
-  "data_commit": "2026-11-12T09:45:24-03:00",
+  "data_commit": "2026-11-12T10:15:19-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "51a85ab6",
+    "data": "2026-11-12",
+    "assunto": "fix(whatsapp): vincula eventos ao proprietário da instância (#151)"
+   },
    {
     "sha": "3e49b844",
     "data": "2026-11-12",
@@ -126,25 +131,20 @@
     "sha": "ecfcdf07",
     "data": "2026-11-09",
     "assunto": "fix(config): alinha o project_id do config.toml ao projeto Supabase canônico e trava divergência (#183)"
-   },
-   {
-    "sha": "36fc1e23",
-    "data": "2026-11-09",
-    "assunto": "build(deps): bump actions/download-artifact from 7.0.0 to 8.0.2 (#181)"
    }
   ],
-  "arquivos_mudados_7d": 584,
+  "arquivos_mudados_7d": 591,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
     "mudancas": 182
    },
    {
-    "pasta": "CHANGELOG.md",
-    "mudancas": 19
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 23
    },
    {
-    "pasta": "supabase/functions/_shared",
+    "pasta": "CHANGELOG.md",
     "mudancas": 19
    },
    {
@@ -157,11 +157,11 @@
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 10
+    "mudancas": 11
    },
    {
-    "pasta": "src/hooks/__tests__",
-    "mudancas": 9
+    "pasta": "supabase/functions/evolution-webhook",
+    "mudancas": 10
    },
    {
     "pasta": "scripts/migration/cdc",
@@ -184,26 +184,26 @@
     "mudancas": 7
    },
    {
+    "pasta": "src/hooks/__tests__",
+    "mudancas": 7
+   },
+   {
     "pasta": "RELATORIO_CI.md",
     "mudancas": 6
    },
    {
     "pasta": "inventario/estado/banco.json",
     "mudancas": 6
-   },
-   {
-    "pasta": "supabase/functions/evolution-webhook",
-    "mudancas": 6
    }
   ],
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "CHANGELOG.md",
-    "mudancas": 47
+    "mudancas": 48
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 18
+    "mudancas": 19
    },
    {
     "arquivo": "package.json",
@@ -322,9 +322,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3218,
-  "arquivos_codigo": 2212,
-  "linhas_codigo": 413266,
+  "arquivos_total": 3219,
+  "arquivos_codigo": 2213,
+  "linhas_codigo": 413435,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -703,8 +703,8 @@
    "linhas": 5967
   },
   "supabase/functions": {
-   "arquivos": 173,
-   "linhas": 26567
+   "arquivos": 174,
+   "linhas": 26736
   },
   "tailwind.config.ts": {
    "arquivos": 1,

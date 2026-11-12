@@ -3,7 +3,7 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2051)",
+   "TypeScript (2052)",
    "SQL (655)",
    "Markdown (154)",
    "JavaScript (143)",
@@ -518,8 +518,8 @@
   },
   {
    "arquivo": "CHANGELOG.md",
-   "titulo": "Changelog",
-   "linhas": 419
+   "titulo": null,
+   "linhas": 420
   },
   {
    "arquivo": "CLAUDE.md",
@@ -1025,6 +1025,10 @@
     "arquivos": 2
    },
    {
+    "host": "avatar.invalid",
+    "arquivos": 2
+   },
+   {
     "host": "cdnjs.cloudflare.com",
     "arquivos": 2
    },
@@ -1086,10 +1090,6 @@
    },
    {
     "host": "app.singucrm.com",
-    "arquivos": 1
-   },
-   {
-    "host": "avatar.invalid",
     "arquivos": 1
    },
    {

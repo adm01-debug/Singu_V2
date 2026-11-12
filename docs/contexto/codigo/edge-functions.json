@@ -18,6 +18,7 @@
   "supabase/functions/_shared/email-verify.ts",
   "supabase/functions/_shared/email-verify_test.ts",
   "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+  "supabase/functions/_shared/evolution-ownership-contract_test.ts",
   "supabase/functions/_shared/fetch-utils.ts",
   "supabase/functions/_shared/fetch-utils_test.ts",
   "supabase/functions/_shared/lead-score-contract.ts",
@@ -1564,7 +1565,7 @@
    "nome": "evolution-webhook",
    "entrada": "supabase/functions/evolution-webhook/index.ts",
    "arquivos": 5,
-   "linhas": 694,
+   "linhas": 682,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -1572,7 +1573,6 @@
    "tabelas": [
     "contacts",
     "interactions",
-    "profiles",
     "whatsapp_ingestion_logs",
     "whatsapp_instances",
     "whatsapp_messages"

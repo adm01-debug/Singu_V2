@@ -11189,6 +11189,9 @@
   "supabase/functions/_shared/evolution-dispatch-contract_test.ts": [
    "supabase/functions/_shared/edge-test-harness.ts"
   ],
+  "supabase/functions/_shared/evolution-ownership-contract_test.ts": [
+   "supabase/functions/_shared/edge-test-harness.ts"
+  ],
   "supabase/functions/_shared/fetch-utils_test.ts": [
    "supabase/functions/_shared/fetch-utils.ts"
   ],

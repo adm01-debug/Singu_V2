@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3e49b84412` · branch `main` · 2026-11-12 13:05 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `51a85ab612` · branch `main` · 2026-11-12 14:47 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1409,7 +1409,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `PENDING` | compara | `supabase/functions/evolution-webhook/messages.ts` |
 | `status` | `PLAYED` | compara | `supabase/functions/evolution-webhook/messages.ts` |
 | `status` | `RASCUNHO` | compara, filtra | `src/components/lead-routing/tabs/RoutingRulesTab.tsx`<br>`src/hooks/useRodizioOndas.ts` |
-| `status` | `READ` | compara, escreve | `supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`supabase/functions/evolution-webhook/messages.ts` |
+| `status` | `READ` | compara, escreve | `supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`supabase/functions/_shared/evolution-ownership-contract_test.ts`<br>`supabase/functions/evolution-webhook/messages.ts` |
 | `status` | `abandoned` | escreve | `supabase/functions/_shared/edge-types-contract_test.ts`<br>`supabase/functions/_shared/webhook-dlq-contract_test.ts`<br>`supabase/functions/process-webhook-dlq/index.ts` |
 | `status` | `accepted` | compara, escreve | `src/components/contact-detail/LifeEventsTab.tsx`<br>`src/components/crm/commercial/OfferSuggestionsElite.tsx` |
 | `status` | `active` | compara, escreve, filtra | `src/components/sequences/SequenceCard.tsx`<br>`src/components/sequences/SequenceDetailDrawer.tsx`<br>`src/hooks/useNurturingExecutions.ts`<br>`src/hooks/useNurturingWorkflows.ts`<br>`src/hooks/useSequences.ts`<br>… +6 |
@@ -4042,6 +4042,7 @@ _nenhum item encontrado_
 | 10000 | `supabase/functions/error-budget/index.ts` |
 | 20 | `supabase/functions/error-budget/index.ts` |
 | 1 | `supabase/functions/evolution-webhook/helpers.ts` |
+| 2 | `supabase/functions/evolution-webhook/helpers.ts` |
 | 5000 | `supabase/functions/external-data/index.ts` |
 | 1 | `supabase/functions/ficha360-conversation-summary/index.ts` |
 | 50 | `supabase/functions/forecast-narrative/index.ts` |
@@ -4052,8 +4053,7 @@ _nenhum item encontrado_
 | 1 | `supabase/functions/health/index.ts` |
 | 1 | `supabase/functions/health-aggregate/index.ts` |
 | 5000 | `supabase/functions/intent-aggregator/index.ts` |
-| 5000 | `supabase/functions/lead-score-cron/index.ts` |
-| … +22 linhas — lista completa em `context.json` | |
+| … +23 linhas — lista completa em `context.json` | |
 
 ## I. Regras implícitas em mensagens de erro/validação
 
@@ -4359,7 +4359,7 @@ _nenhum item encontrado_
 | Nada para exportar. | `src/components/intelligence/CrossRefTab.tsx` |
 | Falha ao buscar entidades. | `src/components/intelligence/Entity360Tab.tsx` |
 | Não foi possível copiar | `src/components/intelligence/Entity360Tab.tsx` |
-| … +773 linhas — lista completa em `context.json` | |
+| … +777 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "3e49b844128fb77bf2e8ba64b2438ca46d74abf3",
+  "sha": "51a85ab612d642ed800686cc9304fce7b4a0d016",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 13:05 UTC",
-  "files_total": 3324,
-  "code_files": 2868,
-  "code_lines": 408850
+  "generated_at": "2026-11-12 14:47 UTC",
+  "files_total": 3325,
+  "code_files": 2869,
+  "code_lines": 409019
  },
  "version": "1.3.2",
- "facts_hash": "ca6849854bc2240f",
+ "facts_hash": "7ecaa01c74d68960",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -252,7 +252,7 @@
   "package_manager": "bun",
   "languages": {
    ".tsx": 1158,
-   ".ts": 893,
+   ".ts": 894,
    ".sql": 655,
    ".mjs": 123,
    ".py": 19,
@@ -62840,7 +62840,6 @@
     "tables": [
      "contacts",
      "interactions",
-     "profiles",
      "whatsapp_ingestion_logs",
      "whatsapp_instances",
      "whatsapp_messages"
@@ -70431,8 +70430,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 173,
-   "lines": 26567,
+   "files": 174,
+   "lines": 26736,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -70571,7 +70570,7 @@
     "aiGatewayLogger.ts: AiGatewayStatus, LogAiGatewayCallInput, logAiGatewayCall, withAiGatewayMetrics",
     "auth.ts: timingSafeStringEqual, corsHeaders, scopedCorsHeaders, authenticateRequest, jsonError, jsonConflict",
     "best-effort-write.ts: bestEffortWrite",
-    "edge-test-harness.ts: withHandler",
+    "edge-test-harness.ts: withHandler, withEvolutionHandler",
     "email-verify.ts: verifyEmail",
     "fetch-utils.ts: AI_TIMEOUT_MS, SCRAPE_TIMEOUT_MS, API_TIMEOUT_MS, HEALTH_TIMEOUT_MS, fetchWithTimeout, fetchAI",
     "lead-score-contract.ts: StoredLeadGrade, DisplayLeadGrade, storedLeadGrade, displayLeadGrade, scorePayloads, LeadScorePersistence",
@@ -70592,7 +70591,7 @@
     "write-error.ts: databaseWriteError",
     "password-migration-reset.tsx: PasswordMigrationResetEmail",
     "events.ts: handleConnectionUpdate, handleContactsUpsert, handlePresenceUpdate, handleCall",
-    "helpers.ts: SupabaseAdminClient, jsonResponse, findContactByPhone",
+    "helpers.ts: SupabaseAdminClient, jsonResponse, resolveInstanceOwner, findContactByPhone",
     "messages.ts: handleMessageUpsert, handleMessageUpdate, handleSendMessage",
     "payload.ts: messageUpsertData, messageUpdateData, connectionUpdateData, contactsUpsertData, presenceUpdateData, callData",
     "database.ts: getExternalClient, UserScopedUnavailableReason, userScopedUnavailableReason, getUserScopedClient, hasRelationAccess, getRelationIdForRecord",
@@ -70635,6 +70634,7 @@
     "supabase/functions/_shared/email-verify.ts",
     "supabase/functions/_shared/email-verify_test.ts",
     "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+    "supabase/functions/_shared/evolution-ownership-contract_test.ts",
     "supabase/functions/_shared/fetch-utils.ts",
     "supabase/functions/_shared/fetch-utils_test.ts",
     "supabase/functions/_shared/lead-score-contract.ts",
@@ -70701,8 +70701,7 @@
     "supabase/functions/demand-forecast/index.ts",
     "supabase/functions/detect-churn-risk/index.ts",
     "supabase/functions/detect-new-device/index.ts",
-    "supabase/functions/disc-analyzer/index.ts",
-    "supabase/functions/dual-write-proxy/index.ts"
+    "supabase/functions/disc-analyzer/index.ts"
    ]
   },
   {
@@ -73046,7 +73045,6 @@
      "src/hooks/useTemplateNotifications.ts",
      "src/pages/Configuracoes.tsx",
      "src/pages/Notificacoes.tsx",
-     "supabase/functions/evolution-webhook/helpers.ts",
      "supabase/functions/health-aggregate/index.ts",
      "supabase/functions/health/index.ts",
      "supabase/functions/smart-notify/index.ts",
@@ -73830,15 +73828,13 @@
      "supabase/functions/voice-to-text/index.ts",
      "supabase/functions/whatsapp-import/index.ts"
     ],
-    "upsert": [
-     "supabase/functions/evolution-webhook/messages.ts"
+    "insert": [
+     "supabase/functions/evolution-webhook/messages.ts",
+     "supabase/functions/whatsapp-import/index.ts"
     ],
     "update": [
      "supabase/functions/evolution-webhook/messages.ts",
      "supabase/functions/voice-to-text/index.ts"
-    ],
-    "insert": [
-     "supabase/functions/whatsapp-import/index.ts"
     ]
    },
    "whatsapp_messages_index": {
@@ -76358,6 +76354,7 @@
     "created_at",
     "from_me",
     "id",
+    "instance_name",
     "media_url",
     "message_id",
     "message_type",
@@ -85037,6 +85034,22 @@
    {
     "file": "supabase/functions/evolution-bitrix-connector/index.ts",
     "msg": "OAuth: ${result.error_description}"
+   },
+   {
+    "file": "supabase/functions/evolution-webhook/helpers.ts",
+    "msg": "Não foi possível confirmar o proprietário da instância"
+   },
+   {
+    "file": "supabase/functions/evolution-webhook/helpers.ts",
+    "msg": "Não foi possível consultar os contatos externos"
+   },
+   {
+    "file": "supabase/functions/evolution-webhook/helpers.ts",
+    "msg": "Não foi possível consultar os contatos locais"
+   },
+   {
+    "file": "supabase/functions/evolution-webhook/helpers.ts",
+    "msg": "Não foi possível criar o contato"
    },
    {
     "file": "supabase/functions/evolution-webhook/payload.ts",
@@ -108648,6 +108661,18 @@
     "kind": "compara"
    },
    {
+    "file": "supabase/functions/_shared/evolution-ownership-contract_test.ts",
+    "field": "status",
+    "value": "READ",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/evolution-ownership-contract_test.ts",
+    "field": "state",
+    "value": "open",
+    "kind": "escreve"
+   },
+   {
     "file": "supabase/functions/_shared/fetch-utils.ts",
     "field": "type",
     "value": "disabled",
@@ -110583,6 +110608,12 @@
     "file": "supabase/functions/evolution-webhook/helpers.ts",
     "field": "relationship_stage",
     "value": "unknown",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/evolution-webhook/index.ts",
+    "field": "status",
+    "value": "ignored",
     "kind": "escreve"
    },
    {
@@ -147948,6 +147979,10 @@
     "limit": "1"
    },
    {
+    "file": "supabase/functions/evolution-webhook/helpers.ts",
+    "limit": "2"
+   },
+   {
     "file": "supabase/functions/external-data/index.ts",
     "limit": "5000"
    },
@@ -150943,7 +150978,8 @@
      ],
      "READ": [
       "compara:supabase/functions/evolution-webhook/messages.ts",
-      "escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts"
+      "escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+      "escreve:supabase/functions/_shared/evolution-ownership-contract_test.ts"
      ],
      "101": [
       "compara:supabase/functions/_shared/safe-http.ts"
@@ -151061,7 +151097,8 @@
      "open": [
       "compara:supabase/functions/_shared/evolution-dispatch-contract_test.ts",
       "compara:supabase/functions/evolution-webhook/events.ts",
-      "escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts"
+      "escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+      "escreve:supabase/functions/_shared/evolution-ownership-contract_test.ts"
      ],
      "close": [
       "compara:supabase/functions/evolution-webhook/events.ts"
@@ -155736,6 +155773,7 @@
    "supabase/functions/_shared/auth_test.ts",
    "supabase/functions/_shared/behavioral-retry-contract_test.ts",
    "supabase/functions/_shared/edge-test-harness.ts",
+   "supabase/functions/_shared/evolution-ownership-contract_test.ts",
    "supabase/functions/_shared/fetch-utils.ts",
    "supabase/functions/_shared/lead-score-threshold-runner_test.ts",
    "supabase/functions/_shared/sdk-runtime-contract_test.ts",
@@ -167547,7 +167585,8 @@
     "msg": "valor `READ` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:supabase/functions/evolution-webhook/messages.ts",
-     "escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts"
+     "escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+     "escreve:supabase/functions/_shared/evolution-ownership-contract_test.ts"
     ]
    },
    {
@@ -219094,9 +219133,10 @@
   },
   "supabase/functions/_shared/edge-test-harness.ts": {
    "path": "supabase/functions/_shared/edge-test-harness.ts",
-   "lines": 85,
+   "lines": 100,
    "exports": [
-    "function withHandler"
+    "function withHandler",
+    "function withEvolutionHandler"
    ],
    "env": [
     "HOME"
@@ -219301,6 +219341,23 @@
      "kind": "compara"
     }
    ]
+  },
+  "supabase/functions/_shared/evolution-ownership-contract_test.ts": {
+   "path": "supabase/functions/_shared/evolution-ownership-contract_test.ts",
+   "lines": 166,
+   "status_values": [
+    {
+     "field": "status",
+     "value": "READ",
+     "kind": "escreve"
+    },
+    {
+     "field": "state",
+     "value": "open",
+     "kind": "escreve"
+    }
+   ],
+   "uses_service_role": true
   },
   "supabase/functions/_shared/fetch-utils.ts": {
    "path": "supabase/functions/_shared/fetch-utils.ts",
@@ -223322,7 +223379,7 @@
   },
   "supabase/functions/evolution-webhook/events.ts": {
    "path": "supabase/functions/evolution-webhook/events.ts",
-   "lines": 106,
+   "lines": 108,
    "exports": [
     "function handleConnectionUpdate",
     "function handleContactsUpsert",
@@ -223345,10 +223402,12 @@
    ],
    "table_cols": {
     "whatsapp_instances": [
-     "instance_name"
+     "instance_name",
+     "user_id"
     ],
     "contacts": [
-     "avatar_url"
+     "avatar_url",
+     "user_id"
     ]
    },
    "status_values": [
@@ -223404,31 +223463,24 @@
   },
   "supabase/functions/evolution-webhook/helpers.ts": {
    "path": "supabase/functions/evolution-webhook/helpers.ts",
-   "lines": 148,
+   "lines": 122,
    "exports": [
     "type SupabaseAdminClient",
     "function jsonResponse",
+    "function resolveInstanceOwner",
     "function findContactByPhone"
    ],
    "tables": [
-    {
-     "table": "contacts",
-     "op": "select"
-    },
-    {
-     "table": "contacts",
-     "op": "select"
-    },
     {
      "table": "whatsapp_instances",
      "op": "select"
     },
     {
-     "table": "profiles",
+     "table": "contacts",
      "op": "select"
     },
     {
-     "table": "profiles",
+     "table": "contacts",
      "op": "select"
     },
     {
@@ -223437,6 +223489,10 @@
     }
    ],
    "table_cols": {
+    "whatsapp_instances": [
+     "instance_name",
+     "user_id"
+    ],
     "contacts": [
      "cargo",
      "company_id",
@@ -223446,18 +223502,17 @@
      "phone",
      "user_id",
      "whatsapp"
-    ],
-    "whatsapp_instances": [
-     "instance_name",
-     "user_id"
-    ],
-    "profiles": [
-     "id"
     ]
    },
    "env": [
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
     "EXTERNAL_SUPABASE_URL"
+   ],
+   "errors": [
+    "Não foi possível confirmar o proprietário da instância",
+    "Não foi possível consultar os contatos externos",
+    "Não foi possível consultar os contatos locais",
+    "Não foi possível criar o contato"
    ],
    "status_values": [
     {
@@ -223467,18 +223522,24 @@
     }
    ],
    "pagination": [
-    "1"
+    "1",
+    "2"
    ],
    "uses_service_role": true
   },
   "supabase/functions/evolution-webhook/index.ts": {
    "path": "supabase/functions/evolution-webhook/index.ts",
-   "lines": 79,
+   "lines": 83,
    "env": [
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
    "status_values": [
+    {
+     "field": "status",
+     "value": "ignored",
+     "kind": "escreve"
+    },
     {
      "field": "status",
      "value": "ignored",
@@ -223497,7 +223558,7 @@
   },
   "supabase/functions/evolution-webhook/messages.ts": {
    "path": "supabase/functions/evolution-webhook/messages.ts",
-   "lines": 283,
+   "lines": 291,
    "exports": [
     "function handleMessageUpsert",
     "function handleMessageUpdate",
@@ -223506,15 +223567,15 @@
    "tables": [
     {
      "table": "whatsapp_messages",
-     "op": "select,upsert"
+     "op": "insert,select"
+    },
+    {
+     "table": "whatsapp_messages",
+     "op": "select,update"
     },
     {
      "table": "whatsapp_ingestion_logs",
      "op": "insert"
-    },
-    {
-     "table": "whatsapp_messages",
-     "op": "select"
     },
     {
      "table": "whatsapp_ingestion_logs",
@@ -223544,10 +223605,13 @@
    "table_cols": {
     "whatsapp_messages": [
      "id",
-     "message_id"
+     "instance_name",
+     "message_id",
+     "user_id"
     ],
     "contacts": [
-     "id"
+     "id",
+     "user_id"
     ]
    },
    "invokes": [
@@ -232624,10 +232688,31 @@
   }
  },
  "git": {
-  "sha": "3e49b844128fb77bf2e8ba64b2438ca46d74abf3",
+  "sha": "51a85ab612d642ed800686cc9304fce7b4a0d016",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "51a85ab",
+    "date": "2026-11-12",
+    "author": "devin-ai-integration[bot]",
+    "subject": "fix(whatsapp): vincula eventos ao proprietário da instância (#151)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "CHANGELOG.md",
+     "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md",
+     "docs/lacunas/G_banco_de_dados.md",
+     "scripts/docs/citacoes-baseline.json",
+     "supabase/functions/_shared/edge-test-harness.ts",
+     "supabase/functions/_shared/edge-types-contract_test.ts",
+     "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+     "supabase/functions/_shared/evolution-ownership-contract_test.ts",
+     "supabase/functions/evolution-webhook/events.ts",
+     "supabase/functions/evolution-webhook/helpers.ts",
+     "supabase/functions/evolution-webhook/index.ts",
+     "supabase/functions/evolution-webhook/messages.ts"
+    ]
+   },
    {
     "sha": "3e49b84",
     "date": "2026-11-12",
@@ -233422,20 +233507,6 @@
      "docs/agentes/banco-edge-ci.md",
      "docs/agentes/texto-mestre.md"
     ]
-   },
-   {
-    "sha": "edf5b51",
-    "date": "2026-11-08",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(ficha): registra interações pelo contrato de contato (#153)",
-    "files": [
-     "CHANGELOG.md",
-     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_CONTRATOS.md",
-     "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
-     "src/components/ficha-360/ProximaAcaoCTA.tsx",
-     "src/hooks/useInteractionsRpc.ts",
-     "supabase/migrations/20261028224000_contact_quick_interaction.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -233476,7 +233547,19 @@
     3
    ],
    [
+    ".github/workflows/ci.yml",
+    2
+   ],
+   [
     "CHANGELOG.md",
+    2
+   ],
+   [
+    "scripts/docs/citacoes-baseline.json",
+    2
+   ],
+   [
+    "supabase/functions/_shared/edge-test-harness.ts",
     2
    ],
    [
@@ -233500,23 +233583,11 @@
     2
    ],
    [
-    "src/hooks/__tests__/contact-cache-revalidation.test.tsx",
+    "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md",
     1
    ],
    [
-    "src/hooks/useContactDetail.ts",
-    1
-   ],
-   [
-    "src/hooks/useContacts.ts",
-    1
-   ],
-   [
-    "src/components/pipeline/CreateDealWidget.contract.test.tsx",
-    1
-   ],
-   [
-    "src/components/pipeline/CreateDealWidget.tsx",
+    "docs/lacunas/G_banco_de_dados.md",
     1
    ]
   ]

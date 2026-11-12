@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3e49b84412` · branch `main` · 2026-11-12 13:05 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `51a85ab612` · branch `main` · 2026-11-12 14:47 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -343,7 +343,7 @@ _nenhum item encontrado_
 | status | valor `ignored` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`escreve:supabase/functions/bitrix24-webhook/index.ts`<br>`escreve:supabase/functions/evolution-webhook/events.ts`<br>`escreve:supabase/functions/evolution-webhook/index.ts` |
 | status | valor `logged` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`escreve:supabase/functions/evolution-webhook/events.ts` |
 | status | valor `recebida` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts` |
-| status | valor `READ` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/evolution-webhook/messages.ts`<br>`escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts` |
+| status | valor `READ` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/evolution-webhook/messages.ts`<br>`escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`escreve:supabase/functions/_shared/evolution-ownership-contract_test.ts` |
 | status | valor `not_found` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/enrich-contacts/index.ts` |
 | status | valor `enriched` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/enrich-contacts/index.ts` |
 | status | valor `already_complete` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/enrich-contacts/index.ts` |

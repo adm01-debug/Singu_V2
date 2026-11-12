@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `3e49b844128fb77bf2e8ba64b2438ca46d74abf3` (2026-11-12T09:45:24-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `51a85ab612d642ed800686cc9304fce7b4a0d016` (2026-11-12T10:15:19-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2051), SQL (655), Markdown (154), JavaScript (143), Shell (134), JSON (22), Python (19), YAML (17)
+- linguagens: TypeScript (2052), SQL (655), Markdown (154), JavaScript (143), Shell (134), JSON (22), Python (19), YAML (17)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3218 |
-| arquivos_codigo | 2212 |
-| linhas_codigo | 413266 |
+| arquivos_total | 3219 |
+| arquivos_codigo | 2213 |
+| linhas_codigo | 413435 |
 | rotas | 114 |
 | rotas_http_backend | 11 |
 | vistas_por_id | 0 |
@@ -304,7 +304,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `error-budget` — tabelas: system_alerts, system_health_snapshots; chamada por 1 arquivo(s) do front
 - `evolution-api` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `evolution-bitrix-connector` — tabelas: connector_log, oauth_tokens; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `evolution-webhook` — tabelas: contacts, interactions, profiles, whatsapp_ingestion_logs, whatsapp_instances, whatsapp_messages; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `evolution-webhook` — tabelas: contacts, interactions, whatsapp_ingestion_logs, whatsapp_instances, whatsapp_messages; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `external-data` — tabelas: -; chamada por 3 arquivo(s) do front
 - `ficha360-conversation-summary` — tabelas: ficha360_conversation_summaries; chamada por 1 arquivo(s) do front
 - `firecrawl-scrape` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
@@ -436,14 +436,14 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 10 — ex.: scripts/ai-context/cenarios.mjs:102, scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41
 
 ## Grafo de código (graphify)
-- 20740 nós · 35319 arestas · 2106 comunidades · grafo do commit `3e49b844`
-- comunidades maiores: ref_hooks (312), sonner (284), ref_lib (275), _shared/auth.ts (271), vitest (252), react-router-dom (245), useAuth (237), lucide-react (237), framer-motion (237), 📖 Dicionário de Dados — SINGU CRM (228), react (227), date-fns (211)
+- 20746 nós · 35330 arestas · 2075 comunidades · grafo do commit `51a85ab6`
+- comunidades maiores: react (360), ref_components (297), useAuth (279), framer-motion (278), ref_hooks (253), lucide-react (253), ref_types (252), ref_lib (244), react-router-dom (230), 📖 Dicionário de Dados — SINGU CRM (228), _shared/auth.ts (228), date-fns (213)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), mig_die() (scripts/migration/_lib.sh), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), .iniciar() (scripts/migration/_mock_supabase.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), .write() (scripts/regras_negocio/test_generate_fatos.py)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
-- CHANGELOG.md (47)
-- .github/workflows/ci.yml (18)
+- CHANGELOG.md (48)
+- .github/workflows/ci.yml (19)
 - package.json (17)
 - supabase/functions/external-data/index.ts (15)
 - docs/qa/security-definer-audit.md (12)
@@ -515,7 +515,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `ARCHITECTURE.md` — Arquitetura do SINGU CRM (150 linhas)
 - `AUDITORIA_COMPLETA_SISTEMA.md` — AUDITORIA COMPLETA DO SISTEMA SINGU CRM v2 (425 linhas)
 - `AUDITORIA_SISTEMA.md` — 🔍 AUDITORIA EXAUSTIVA — SINGU CRM (307 linhas)
-- `CHANGELOG.md` — Changelog (419 linhas)
+- `CHANGELOG.md` (420 linhas)
 - `CLAUDE.md` (2 linhas)
 - `CONTRIBUTING.md` — Guia de Contribuição — SINGU CRM (179 linhas)
 - `ESTADO_ATUAL.md` — ESTADO ATUAL DO SISTEMA — SINGU CRM v2 (372 linhas)
@@ -571,6 +571,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-12 `51a85ab6` fix(whatsapp): vincula eventos ao proprietário da instância (#151)
 - 2026-11-12 `3e49b844` fix(cache): preserva carga inicial e revalida relações da ficha (#147)
 - 2026-11-12 `68a97f4d` fix(oportunidades): alinha criação ao contrato da RPC (#152)
 - 2026-11-12 `47e97ccb` style(manutencao): aplica correcoes locais verificadas (#195)
@@ -585,7 +586,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-11 `97eced48` feat: troca a IA do gateway Lovable pelo DeepSeek (#197)
 - 2026-11-11 `2f9e3fe3` chore: inventario do estado real [auto] (#194)
 - 2026-11-11 `b73e889c` chore: inventario do estado real [auto] (#191)
-- 2026-11-11 `1764764e` fix(baseline): redefine gate DEFINER de 109 para 110 apos retencao aplicada em prod (#193)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

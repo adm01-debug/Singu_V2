@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(whatsapp): vincula eventos ao proprietário da instância (#151)",
    "fix(cache): preserva carga inicial e revalida relações da ficha (#147)",
    "fix(oportunidades): alinha criação ao contrato da RPC (#152)",
    "style(manutencao): aplica correcoes locais verificadas (#195)",
-   "chore: inventario do estado real [auto] (#204)",
-   "fix: botões gerar relatório e e-mail de teste do resumo semanal voltam a funcionar (#203)"
+   "chore: inventario do estado real [auto] (#204)"
   ]
  },
  "pr_template": null,

@@ -35103,7 +35103,6 @@
    },
    "usada_no_front": 12,
    "usada_em_edges": [
-    "evolution-webhook",
     "health",
     "health-aggregate",
     "smart-notify",
