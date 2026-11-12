@@ -95,7 +95,6 @@ export async function copiarObjeto(env: Env, bucket: string, obj: StorageObject,
 
   // Baixa calculando MD5 em stream. Objeto grande (ou de tamanho desconhecido) vai
   // para arquivo temporário: memória limitada e corpo reabrível a cada retry do upload.
-  // eslint-disable-next-line sonarjs/hashing -- MD5 é o ETag do Storage (checagem de integridade), não uso criptográfico
   const md5 = createHash("md5");
   let baixados = 0;
   const contador = new TransformStream<Uint8Array, Uint8Array>({

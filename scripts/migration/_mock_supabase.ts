@@ -36,7 +36,6 @@ const enc = new TextEncoder();
 const dec = new TextDecoder();
 
 export function md5Hex(b: Uint8Array): string {
-  // eslint-disable-next-line sonarjs/hashing -- imita o ETag (MD5) do Storage em teste; não é uso criptográfico
   return createHash("md5").update(b).digest("hex");
 }
 
@@ -192,7 +191,6 @@ export class MockSupabase {
   }
 
   // ── PostgREST ────────────────────────────────────────────────────────────
-  // eslint-disable-next-line sonarjs/cognitive-complexity -- mock de teste: um único roteador PostgREST linear é mais fácil de conferir contra a API real do que vários pedaços
   private rest(req: Request, u: URL, corpo: Uint8Array): Response {
     const nome = decodeURIComponent(u.pathname.replace(/^\/rest\/v1\/?/, ""));
     if (!nome) return Response.json({ swagger: "2.0" });
