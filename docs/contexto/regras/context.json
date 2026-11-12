@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "047b2833fe180a443ac17716ac1bc1f45ff883cb",
+  "sha": "cd6478ec116e4bf77e274604628cf4fa31782add",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-12 03:08 UTC",
+  "generated_at": "2026-11-12 03:45 UTC",
   "files_total": 3322,
   "code_files": 2866,
-  "code_lines": 408347
+  "code_lines": 408358
  },
  "version": "1.3.2",
- "facts_hash": "2bbcf755220fedc9",
+ "facts_hash": "4c4928f160e26bb7",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -70430,7 +70430,7 @@
   {
    "module": "supabase/functions",
    "files": 173,
-   "lines": 26531,
+   "lines": 26542,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -229141,7 +229141,7 @@
   },
   "supabase/functions/weekly-digest/index.ts": {
    "path": "supabase/functions/weekly-digest/index.ts",
-   "lines": 308,
+   "lines": 319,
    "tables": [
     {
      "table": "weekly_report_settings",
@@ -232464,10 +232464,19 @@
   }
  },
  "git": {
-  "sha": "047b2833fe180a443ac17716ac1bc1f45ff883cb",
+  "sha": "cd6478ec116e4bf77e274604628cf4fa31782add",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "cd6478e",
+    "date": "2026-11-11",
+    "author": "adm01-debug",
+    "subject": "fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)",
+    "files": [
+     "supabase/functions/weekly-digest/index.ts"
+    ]
+   },
    {
     "sha": "047b283",
     "date": "2026-11-11",
@@ -233270,16 +233279,6 @@
      "scripts/inventario/edges-externas.txt",
      "scripts/inventario/gerar-banco.mjs"
     ]
-   },
-   {
-    "sha": "79380cd",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "feat(inventario): liga a conferência deployada × versionada das edge functions",
-    "files": [
-     ".github/workflows/inventario-estado-semanal.yml",
-     "inventario/estado/README.md"
-    ]
    }
   ],
   "hot_files": [
@@ -233320,19 +233319,15 @@
     3
    ],
    [
+    "supabase/functions/weekly-digest/index.ts",
+    2
+   ],
+   [
     "inventario/estado/edge-tabela.json",
     2
    ],
    [
     ".github/workflows/fix-jwt-proxies-externas.yml",
-    2
-   ],
-   [
-    ".github/workflows/inventario-estado-semanal.yml",
-    2
-   ],
-   [
-    "inventario/estado/README.md",
     2
    ],
    [
@@ -233362,6 +233357,10 @@
    [
     ".github/workflows/ci.yml",
     2
+   ],
+   [
+    "supabase/functions/_shared/resend.ts",
+    1
    ]
   ]
  }

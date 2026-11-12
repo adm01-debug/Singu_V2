@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "047b2833fe180a443ac17716ac1bc1f45ff883cb",
+  "commit": "cd6478ec116e4bf77e274604628cf4fa31782add",
   "branch": "main",
-  "data_commit": "2026-11-12T02:18:53Z",
+  "data_commit": "2026-11-12T02:49:53Z",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "cd6478ec",
+    "data": "2026-11-12",
+    "assunto": "fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)"
+   },
    {
     "sha": "047b2833",
     "data": "2026-11-12",
@@ -126,11 +131,6 @@
     "sha": "11086727",
     "data": "2026-11-08",
     "assunto": "fix(filas): confirma reservas e resultados da DLQ (#150)"
-   },
-   {
-    "sha": "661cb412",
-    "data": "2026-11-08",
-    "assunto": "fix(db): preserva o nome da empresa durante a mesclagem (#127)"
    }
   ],
   "arquivos_mudados_7d": 558,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 48
+    "commits": 49
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3216,
   "arquivos_codigo": 2210,
-  "linhas_codigo": 412763,
+  "linhas_codigo": 412774,
   "rotas": 114,
   "rotas_http_backend": 11,
   "vistas_por_id": 0,
@@ -704,7 +704,7 @@
   },
   "supabase/functions": {
    "arquivos": 173,
-   "linhas": 26531
+   "linhas": 26542
   },
   "tailwind.config.ts": {
    "arquivos": 1,

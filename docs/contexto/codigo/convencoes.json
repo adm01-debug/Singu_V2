@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)",
    "feat: digest semanal enviado por e-mail via Resend no horário de Brasília (#201)",
    "feat: agenda 14 edge functions periódicas via pg_cron (#196)",
    "feat: cria send-transactional-email com Resend para as sequências (#200)",
-   "chore: inventario do estado real [auto] (#198)",
-   "feat: troca a IA do gateway Lovable pelo DeepSeek (#197)"
+   "chore: inventario do estado real [auto] (#198)"
   ]
  },
  "pr_template": null,

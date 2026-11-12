@@ -3807,7 +3807,7 @@
    "nome": "weekly-digest",
    "entrada": "supabase/functions/weekly-digest/index.ts",
    "arquivos": 1,
-   "linhas": 308,
+   "linhas": 319,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
