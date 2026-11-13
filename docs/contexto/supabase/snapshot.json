@@ -191390,7 +191390,7 @@
           "search_path=public"
         ],
         "definition": null,
-        "definition_sha": "afeb0fda6c00e5f8",
+        "definition_sha": "029210da19a5e24e",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,

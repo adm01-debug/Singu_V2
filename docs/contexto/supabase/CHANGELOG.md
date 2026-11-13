@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-13 21:45 UTC
+
+- **functions** alterado (1): `public.check_mtta_auto_ack_heartbeat()`
+
 ## 2026-11-13 00:50 UTC
 
 - **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_16`

@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "5c7e2f395f7c4c5ba39a8945d4fdb8aa4356755d",
+  "sha": "b7233bb9a6758d5906556a377491c101c7bb86d5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-13 20:48 UTC",
+  "generated_at": "2026-11-13 21:48 UTC",
   "files_total": 3343,
   "code_files": 2872,
   "code_lines": 409744
@@ -232781,10 +232781,19 @@
   }
  },
  "git": {
-  "sha": "5c7e2f395f7c4c5ba39a8945d4fdb8aa4356755d",
+  "sha": "b7233bb9a6758d5906556a377491c101c7bb86d5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "b7233bb",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "5c7e2f3",
     "date": "2026-11-13",
@@ -233298,74 +233307,6 @@
      "tests/rls/merge_company_name_override.sql",
      "tests/rls/security_definer_hardening.sql"
     ]
-   },
-   {
-    "sha": "d42f417",
-    "date": "2026-11-10",
-    "author": "adm01-debug",
-    "subject": "chore(automacao): integra testes grafo e manutenção com gatilhos locais (#187)",
-    "files": [
-     ".github/workflows/automation-local.yml",
-     ".gitignore",
-     "docs/AUTOMACAO_LOCAL.md",
-     "graphify.local.json",
-     "package.json",
-     "scripts/automation-tests/dispatch.mjs",
-     "scripts/automation-tests/fixture.mjs",
-     "scripts/automation-tests/hooks.mjs",
-     "scripts/automation-tests/inventory.mjs",
-     "scripts/automation-tests/snapshot.mjs",
-     "scripts/automation.config.json",
-     "scripts/automation.mjs",
-     "scripts/automation.unit.mjs",
-     "scripts/automation/common.mjs",
-     "scripts/automation/config.mjs",
-     "scripts/automation/dispatch.mjs",
-     "scripts/automation/hooks.mjs",
-     "scripts/automation/install.mjs",
-     "scripts/automation/inventory.mjs",
-     "scripts/automation/process.mjs",
-     "scripts/automation/runtime-copy.mjs",
-     "scripts/graphify-local-tests/fixture.mjs",
-     "scripts/graphify-local-tests/freshness.mjs",
-     "scripts/graphify-local-tests/locking.mjs",
-     "scripts/graphify-local-tests/safety.mjs",
-     "scripts/graphify-local.mjs",
-     "scripts/graphify-local.unit.mjs",
-     "scripts/graphify-local/artifacts.mjs",
-     "scripts/graphify-local/build.mjs",
-     "scripts/graphify-local/common.mjs",
-     "scripts/graphify-local/config.mjs",
-     "scripts/graphify-local/locks.mjs",
-     "scripts/graphify-local/process.mjs",
-     "scripts/graphify-local/source.mjs",
-     "scripts/maintenance/README.md",
-     "scripts/maintenance/changes.mjs",
-     "scripts/maintenance/commit.mjs",
-     "scripts/maintenance/common.mjs",
-     "scripts/maintenance/config.example.json",
-     "scripts/maintenance/config.json",
-     "scripts/maintenance/configuration.mjs",
-     "scripts/maintenance/dependencies.mjs",
-     "scripts/maintenance/fixes.mjs",
-     "scripts/maintenance/lib.mjs",
-     "scripts/maintenance/locking.mjs",
-     "scripts/maintenance/maintenance.unit.mjs",
-     "scripts/maintenance/options.mjs",
-     "scripts/maintenance/process.mjs",
-     "scripts/maintenance/run.mjs",
-     "scripts/maintenance/run.sh",
-     "scripts/maintenance/sandbox.mjs",
-     "scripts/maintenance/session.mjs",
-     "scripts/maintenance/tests/configuration.mjs",
-     "scripts/maintenance/tests/dependencies.mjs",
-     "scripts/maintenance/tests/fixture.mjs",
-     "scripts/maintenance/tests/formatting.mjs",
-     "scripts/maintenance/tests/hooks.mjs",
-     "scripts/maintenance/tests/locking.mjs",
-     "scripts/maintenance/tests/transaction.mjs",
-     "scripts/maintenance/typecheck.mjs"
-    ]
    }
   ],
   "hot_files": [
@@ -233382,12 +233323,16 @@
     7
    ],
    [
-    "scripts/automation.config.json",
+    "inventario/estado/edge-tabela.json",
     4
    ],
    [
-    "inventario/estado/edge-tabela.json",
-    4
+    "docs/prod-readiness.md",
+    3
+   ],
+   [
+    "scripts/automation.config.json",
+    3
    ],
    [
     "scripts/docs/citacoes-baseline.json",
@@ -233396,18 +233341,6 @@
    [
     "supabase/functions/weekly-digest/index.ts",
     3
-   ],
-   [
-    "docs/prod-readiness.md",
-    2
-   ],
-   [
-    ".gitignore",
-    2
-   ],
-   [
-    "graphify.local.json",
-    2
    ],
    [
     ".github/workflows/inventario-estado-semanal.yml",
@@ -233438,8 +233371,12 @@
     2
    ],
    [
-    "package.json",
-    2
+    ".gitignore",
+    1
+   ],
+   [
+    "graphify.local.json",
+    1
    ],
    [
     "docs/perf/explain-analyze.md",
@@ -233447,6 +233384,10 @@
    ],
    [
     "scripts/ai-context/README.md",
+    1
+   ],
+   [
+    "scripts/ai-context/cenarios.mjs",
     1
    ]
   ]

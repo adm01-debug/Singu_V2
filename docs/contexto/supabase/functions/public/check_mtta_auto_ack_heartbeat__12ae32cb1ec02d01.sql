@@ -20,12 +20,10 @@ BEGIN
     age_min := EXTRACT(EPOCH FROM (now() - last_beat)) / 60;
   END IF;
 
-  -- Só alerta se sinal ausente OU >150min
   IF age_min IS NOT NULL AND age_min <= 150 THEN
     RETURN;
   END IF;
 
-  -- Dedup: já existe alerta aberto/recente (6h) do mesmo tipo?
   SELECT EXISTS (
     SELECT 1 FROM public.system_alerts
     WHERE alert_type = 'mtta_auto_ack_heartbeat_stale'
@@ -36,10 +34,12 @@ BEGIN
     RETURN;
   END IF;
 
-  INSERT INTO public.system_alerts (alert_type, severity, message, metadata)
+  INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, consumed_pct, message, metadata)
   VALUES (
     'mtta_auto_ack_heartbeat_stale',
     'critical',
+    150,
+    COALESCE(age_min, 150),
     CASE
       WHEN age_min IS NULL THEN 'Cron mtta-sla-breach-auto-ack-hourly sem heartbeat nas últimas 24h'
       ELSE format('Cron mtta-sla-breach-auto-ack-hourly travado há %s min (SLA 150min)', age_min)

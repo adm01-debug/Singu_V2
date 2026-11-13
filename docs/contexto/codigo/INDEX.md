@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `5c7e2f395f7c4c5ba39a8945d4fdb8aa4356755d` (2026-11-13T15:52:52-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `b7233bb9a6758d5906556a377491c101c7bb86d5` (2026-11-13T17:30:39-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -433,7 +433,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21143 nós · 35838 arestas · 2124 comunidades · grafo do commit `5c7e2f39`
+- 21143 nós · 35838 arestas · 2124 comunidades · grafo do commit `b7233bb9`
 - comunidades maiores: _shared/auth.ts (299), ref_lib (267), 02_tables.sql (259), useAuth (256), ref_types (248), react (238), 📖 Dicionário de Dados — SINGU CRM (227), framer-motion (217), react-router-dom (211), ref_hooks (200), date-fns (191), ref_components (180)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -564,12 +564,13 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/er-diagram.md` — 📊 Diagrama Entidade-Relacionamento (ER) (8 linhas)
 - `docs/postmortem-example.md` — Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data) (99 linhas)
 - `docs/postmortem-template.md` — Post-Mortem — {Título do Incidente} (96 linhas)
-- `docs/prod-readiness.md` — Prod Readiness ? Singu_V2 (315 linhas)
+- `docs/prod-readiness.md` — Prod Readiness ? Singu_V2 (316 linhas)
 - `docs/ux_improvement_strategy.md` (73 linhas)
 - subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (5), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/ci (1), docs/perf (1)
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-13 `b7233bb9` chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)
 - 2026-11-13 `5c7e2f39` docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)
 - 2026-11-13 `be23f3a8` chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)
 - 2026-11-13 `6e9097a3` fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-12 `3e49b844` fix(cache): preserva carga inicial e revalida relações da ficha (#147)
 - 2026-11-12 `68a97f4d` fix(oportunidades): alinha criação ao contrato da RPC (#152)
 - 2026-11-12 `47e97ccb` style(manutencao): aplica correcoes locais verificadas (#195)
-- 2026-11-12 `a28f2106` chore: inventario do estado real [auto] (#204)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
