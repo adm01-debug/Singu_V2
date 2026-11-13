@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "be23f3a86ceb780a12d1c9ba4cb08b86ea92d789",
+  "sha": "5c7e2f395f7c4c5ba39a8945d4fdb8aa4356755d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-13 17:10 UTC",
+  "generated_at": "2026-11-13 20:48 UTC",
   "files_total": 3343,
   "code_files": 2872,
   "code_lines": 409744
@@ -232781,10 +232781,19 @@
   }
  },
  "git": {
-  "sha": "be23f3a86ceb780a12d1c9ba4cb08b86ea92d789",
+  "sha": "5c7e2f395f7c4c5ba39a8945d4fdb8aa4356755d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "5c7e2f3",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "be23f3a",
     "date": "2026-11-13",
@@ -233357,22 +233366,6 @@
      "scripts/maintenance/tests/transaction.mjs",
      "scripts/maintenance/typecheck.mjs"
     ]
-   },
-   {
-    "sha": "357fd21",
-    "date": "2026-11-10",
-    "author": "adm01-debug",
-    "subject": "fix(push): chave VAPID própria e sender que realmente entrega (#185)",
-    "files": [
-     "docs/RUNBOOK.md",
-     "public/sw-push.js",
-     "src/hooks/useNotifications.ts",
-     "src/lib/pushNotifications.ts",
-     "src/lib/pushNotifications.vapid.test.ts",
-     "supabase/functions/_shared/push.ts",
-     "supabase/functions/send-push-notification/index.ts",
-     "tests/integration/web-push-sender.test.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -233405,6 +233398,10 @@
     3
    ],
    [
+    "docs/prod-readiness.md",
+    2
+   ],
+   [
     ".gitignore",
     2
    ],
@@ -233433,10 +233430,6 @@
     2
    ],
    [
-    "src/lib/pushNotifications.ts",
-    2
-   ],
-   [
     "docs/qa/security-definer-audit.md",
     2
    ],
@@ -233449,11 +233442,11 @@
     2
    ],
    [
-    "docs/prod-readiness.md",
+    "docs/perf/explain-analyze.md",
     1
    ],
    [
-    "docs/perf/explain-analyze.md",
+    "scripts/ai-context/README.md",
     1
    ]
   ]

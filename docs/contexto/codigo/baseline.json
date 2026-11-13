@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "be23f3a86ceb780a12d1c9ba4cb08b86ea92d789",
+  "commit": "5c7e2f395f7c4c5ba39a8945d4fdb8aa4356755d",
   "branch": "main",
-  "data_commit": "2026-11-13T13:28:21-03:00",
+  "data_commit": "2026-11-13T15:52:52-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "5c7e2f39",
+    "data": "2026-11-13",
+    "assunto": "docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)"
+   },
    {
     "sha": "be23f3a8",
     "data": "2026-11-13",
@@ -126,11 +131,6 @@
     "sha": "b73e889c",
     "data": "2026-11-11",
     "assunto": "chore: inventario do estado real [auto] (#191)"
-   },
-   {
-    "sha": "1764764e",
-    "data": "2026-11-11",
-    "assunto": "fix(baseline): redefine gate DEFINER de 109 para 110 apos retencao aplicada em prod (#193)"
    }
   ],
   "arquivos_mudados_7d": 631,

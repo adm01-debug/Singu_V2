@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)",
    "chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)",
    "fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)",
    "chore: inventario do estado real [auto] (#212)",
-   "fix(ci): pat do dono abre o pr do inventario semanal (#209)",
-   "chore: inventario do estado real [auto] (#210)"
+   "fix(ci): pat do dono abre o pr do inventario semanal (#209)"
   ]
  },
  "pr_template": null,
