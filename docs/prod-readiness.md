@@ -1,6 +1,6 @@
 # Prod Readiness ? Singu_V2
 
-> Documento vivo de prontid?o para produ??o. Linha de base de `main` (HEAD `5c7e2f39`, p?s-merge #214). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
+> Documento vivo de prontid?o para produ??o. Linha de base de `main` (HEAD `a8cca0e2`, p?s-merge #213). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
 
 ## 1. Qualidade t?cnica (build / typecheck / lint / testes)
 
@@ -25,7 +25,7 @@
 | Cron ativos | OK | 40 ativos; ?ltimos 3 dias todos succeeded (?nica falha isolada tratada na PR #213) |
 | Advisors de seguran?a | BLOQUEADO | endpoint REST `GET /v1/projects/{ref}/advisors` responde 404 ("Cannot GET"); sem via API para consultar painel ? verificar manualmente no dashboard Supabase |
 | Migration 20261027220000 (guard serialize_contact_relation_writes) | BLOQUEADO | DDL produ??o ? fun??o guard_contact_relation_write() e trigger N?O existem em prod (has_trigger=0 nas 4 tabelas contact_*); migration n?o registrada no schema_migrations; aplica??o depende de autoriza??o do dono |
-| Migration 20261113154000 (fix check_mtta_auto_ack_heartbeat) | BLOQUEADO | PR #213 aberta aguardando dono ? INSERT omitia threshold_pct/consumed_pct (NOT NULL) e o alerta quebrava; exige CREATE OR REPLACE em prod |
+| Migration 20261113154000 (fix check_mtta_auto_ack_heartbeat) | OK | aplicada em prod 13/11 21:09Z via Management API ? funcao agora insere threshold_pct=150/consumed_pct=COALESCE(age_min,150); REVOKE aplicado (grantees: service_role, postgres); execucao simulada OK |
 
 ## 3. Rotas (App) ? 114 rotas em src/app/AppRoutes.tsx
 
@@ -299,7 +299,7 @@
 
 ## 8. Corre??es desta sess?o
 
-- **PR #213** (aberta, aguardando dono ? DDL produ??o): migration `20261113154000` corrige `check_mtta_auto_ack_heartbeat` preenchendo `threshold_pct=150` e `consumed_pct=COALESCE(age_min,150)`. Evid?ncia: run cron 705476 (12/11 02:00Z) falhou com `null value in column "threshold_pct" ... violates not-null constraint`. CI p?blica do repo verde no mesmo commit (run 1324).
+- **PR #213** (MERGED 13/11 ~21:00Z, autoriza??o do dono): migration `20261113154000` aplicada em prod via Management API em 13/11 21:09Z. `check_mtta_auto_ack_heartbeat` agora preenche `threshold_pct=150` e `consumed_pct=COALESCE(age_min,150)`. Evid?ncia: pg_get_functiondef retorna INSERT com as colunas; grantees = service_role, postgres (REVOKE ok); execu??o simulada (BEGIN/ROLLBACK) retornou OK. Deploy prod success (sha a8cca0e2).
 - **Migration 20261027220000** ausente em prod (guard AUT-03 serialize_contact_relation_writes) ? BLOQUEADO, aguardando decis?o do dono (DDL produ??o).
 - **Advisors de seguran?a**: endpoint REST inexistente (404) ? sem via API; conferir no dashboard.
 
@@ -307,7 +307,7 @@
 
 | PR | O que | Por que n?o mergeei |
 |---|---|---|
-| [#213](https://github.com/adm01-debug/Singu_V2/pull/213) | DDL/migration produ??o ? fix check_mtta_auto_ack_heartbeat | Regra 8 (DDL/migration em banco de produ??o) |
+| ~~#216~~ | bump doc p?s-merge #215 | MERGED 20:30Z ? CI main verde (run 43502215939), deploy prod success |
 | ~~#214~~ | docs/prod-readiness.md (este invent?rio) | MERGED 16:28Z ? CI main verde (run 43463043781) |
 | ~~#215~~ | bump doc após merge #214 (CI verde + deploy prod) | MERGED 18:52Z — CI main verde (run 43486880411), deploy prod success |
 
