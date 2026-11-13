@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "0a83cb7825029b9e9943e03c166101e0d3131f60",
+  "sha": "3a76dceb9b32603b00a2233050b6d4ced575798e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-13 10:35 UTC",
+  "generated_at": "2026-11-13 12:09 UTC",
   "files_total": 3342,
   "code_files": 2872,
   "code_lines": 409744
@@ -232781,10 +232781,21 @@
   }
  },
  "git": {
-  "sha": "0a83cb7825029b9e9943e03c166101e0d3131f60",
+  "sha": "3a76dceb9b32603b00a2233050b6d4ced575798e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "3a76dce",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "chore: inventario do estado real [auto] (#212)",
+    "files": [
+     "inventario/estado/banco.json",
+     "inventario/estado/edges.json",
+     "inventario/estado/tabelas-uso.json"
+    ]
+   },
    {
     "sha": "0a83cb7",
     "date": "2026-11-13",
@@ -233697,32 +233708,20 @@
      "scripts/test_unified_comm.sql",
      "scripts/test_unified_comm2.sql"
     ]
-   },
-   {
-    "sha": "1fecfa6",
-    "date": "2026-11-09",
-    "author": "adm01-debug",
-    "subject": "fix(push): um único service worker com os handlers de push (A-007) (#184)",
-    "files": [
-     "src/lib/pushNotifications.sw.test.ts",
-     "src/lib/pushNotifications.ts",
-     "src/main.tsx",
-     "vite.config.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "inventario/estado/banco.json",
-    6
+    7
    ],
    [
     "inventario/estado/edges.json",
-    6
+    7
    ],
    [
     "inventario/estado/tabelas-uso.json",
-    6
+    7
    ],
    [
     "scripts/automation.config.json",
@@ -233738,10 +233737,6 @@
    ],
    [
     "supabase/functions/weekly-digest/index.ts",
-    3
-   ],
-   [
-    "src/lib/pushNotifications.ts",
     3
    ],
    [
@@ -233790,6 +233785,10 @@
    ],
    [
     "scripts/migration/cdc/lag-watch.sh",
+    2
+   ],
+   [
+    "scripts/migration/cdc/replay.ts",
     2
    ]
   ]
