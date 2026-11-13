@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b7233bb9a6` · branch `main` · 2026-11-13 21:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f8312ef243` · branch `main` · 2026-11-13 22:29 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -745,7 +745,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC | select | `mv_daily_kpis`, `mv_daily_stats` |
 | revoke | PUBLIC, anon | all | `auto_ack_stale_mtta_sla_breaches`, `get_system_config_num`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access`, `assert_violation_access` … +29 |
 | revoke | PUBLIC, anon | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition`, `get_ai_gateway_health`, `has_role` |
-| revoke | PUBLIC, anon, authenticated | all | `_connection_encryption_key`, `check_mtta_auto_ack_heartbeat`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access`, `assert_deal_access`, `assert_event_access`, `assert_goal_access`, `assert_interaction_access`, `assert_note_access`, `assert_notification_access`, `assert_opportunity_access`, `assert_proposal_access` … +73 |
+| revoke | PUBLIC, anon, authenticated | all | `_connection_encryption_key`, `check_mtta_auto_ack_heartbeat`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access`, `assert_deal_access`, `assert_event_access`, `assert_goal_access`, `assert_interaction_access`, `assert_note_access`, `assert_notification_access`, `assert_opportunity_access`, `assert_proposal_access` … +74 |
 | revoke | PUBLIC, anon, authenticated | execute | `evaluate_ai_gateway_alerts`, `set_updated_at`, `trg_normalizar_telefone`, `trg_normalizar_email`, `singu_sync_company_address`, `singu_sync_legacy_company_name` |
 | revoke | PUBLIC, anon, authenticated | truncate, references, trigger | `public` |
 | revoke | PUBLIC, anon, authenticated | update | `validation_queue`, `behavioral_profile_regen_queue` |

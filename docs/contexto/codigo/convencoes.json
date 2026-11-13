@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)",
+   "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)",
    "chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)",
    "docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)",
-   "chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)",
-   "fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)",
-   "chore: inventario do estado real [auto] (#212)"
+   "chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)"
   ]
  },
  "pr_template": null,

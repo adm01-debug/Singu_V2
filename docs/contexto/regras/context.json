@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "b7233bb9a6758d5906556a377491c101c7bb86d5",
+  "sha": "f8312ef24331df8f7120d505a9ea2d7e0d052274",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-13 21:48 UTC",
-  "files_total": 3343,
-  "code_files": 2872,
-  "code_lines": 409744
+  "generated_at": "2026-11-13 22:29 UTC",
+  "files_total": 3344,
+  "code_files": 2873,
+  "code_lines": 409809
  },
  "version": "1.3.2",
- "facts_hash": "261dc96a6775eb0a",
+ "facts_hash": "2f0f6c3f7009fd4b",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -253,7 +253,7 @@
   "languages": {
    ".tsx": 1158,
    ".ts": 894,
-   ".sql": 656,
+   ".sql": 657,
    ".mjs": 123,
    ".py": 21,
    ".js": 18,
@@ -36922,10 +36922,10 @@
     "args": "",
     "returns": "void",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20260717142132_7f20a3a3-be27-43dd-9546-4993978d4377.sql",
+    "src": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
     "security_definer": true,
     "search_path": true,
-    "body": "DECLARE last_beat TIMESTAMPTZ; age_min INT; recent_alert BOOLEAN; BEGIN SELECT MAX(timestamp) INTO last_beat FROM public.system_health_snapshots WHERE components->>'source' = 'cron_mtta_auto_ack' AND timestamp > now() - interval '24 hours'; IF last_beat IS NULL THEN age_min := NULL; ELSE age_min := EXTRACT(EPOCH FROM (now() - last_beat)) / 60; END IF; IF age_min IS NOT NULL AND age_min <= 150 THEN RETURN; END IF; SELECT EXISTS ( SELECT 1 FROM public.system_alerts WHERE alert_type = 'mtta_auto_ack_heartbeat_stale' AND created_at > now() - interval '6 hours' ) INTO recent_alert; IF recent_alert THEN RETURN; END IF; INSERT INTO public.system_alerts (alert_type, severity, message, metadata) VALU …",
+    "body": "DECLARE last_beat TIMESTAMPTZ; age_min INT; recent_alert BOOLEAN; BEGIN SELECT MAX(timestamp) INTO last_beat FROM public.system_health_snapshots WHERE components->>'source' = 'cron_mtta_auto_ack' AND timestamp > now() - interval '24 hours'; IF last_beat IS NULL THEN age_min := NULL; ELSE age_min := EXTRACT(EPOCH FROM (now() - last_beat)) / 60; END IF; IF age_min IS NOT NULL AND age_min <= 150 THEN RETURN; END IF; SELECT EXISTS ( SELECT 1 FROM public.system_alerts WHERE alert_type = 'mtta_auto_ack_heartbeat_stale' AND created_at > now() - interval '6 hours' ) INTO recent_alert; IF recent_alert THEN RETURN; END IF; INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, consumed …",
     "raises": [],
     "tables": [
      "last_beat",
@@ -48906,7 +48906,8 @@
    "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql",
    "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
    "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
-   "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql"
+   "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql",
+   "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -58007,6 +58008,14 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "check_mtta_auto_ack_heartbeat",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
    }
   ],
   "raises": [
@@ -70723,8 +70732,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 483,
-   "lines": 42991,
+   "files": 484,
+   "lines": 43056,
    "tables": [
     "users"
    ],
@@ -116749,6 +116758,14 @@
    {
     "file": "supabase/migrations/20261013033428_scoped_dashboard_views_error_log.sql",
     "line": "WHEN COALESCE(i.follow_up_date::timestamptz, i.data_followup) < now() - interval '7 days' THEN 1"
+   },
+   {
+    "file": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
+    "line": "AND created_at > now() - interval '6 hours'"
+   },
+   {
+    "file": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
+    "line": "AND timestamp > now() - interval '24 hours';"
    }
   ],
   "percents": [
@@ -141119,10 +141136,10 @@
     "args": "",
     "returns": "void",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20260717142132_7f20a3a3-be27-43dd-9546-4993978d4377.sql",
+    "src": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
     "security_definer": true,
     "search_path": true,
-    "body": "DECLARE last_beat TIMESTAMPTZ; age_min INT; recent_alert BOOLEAN; BEGIN SELECT MAX(timestamp) INTO last_beat FROM public.system_health_snapshots WHERE components->>'source' = 'cron_mtta_auto_ack' AND timestamp > now() - interval '24 hours'; IF last_beat IS NULL THEN age_min := NULL; ELSE age_min := EXTRACT(EPOCH FROM (now() - last_beat)) / 60; END IF; IF age_min IS NOT NULL AND age_min <= 150 THEN RETURN; END IF; SELECT EXISTS ( SELECT 1 FROM public.system_alerts WHERE alert_type = 'mtta_auto_ack_heartbeat_stale' AND created_at > now() - interval '6 hours' ) INTO recent_alert; IF recent_alert THEN RETURN; END IF; INSERT INTO public.system_alerts (alert_type, severity, message, metadata) VALU …",
+    "body": "DECLARE last_beat TIMESTAMPTZ; age_min INT; recent_alert BOOLEAN; BEGIN SELECT MAX(timestamp) INTO last_beat FROM public.system_health_snapshots WHERE components->>'source' = 'cron_mtta_auto_ack' AND timestamp > now() - interval '24 hours'; IF last_beat IS NULL THEN age_min := NULL; ELSE age_min := EXTRACT(EPOCH FROM (now() - last_beat)) / 60; END IF; IF age_min IS NOT NULL AND age_min <= 150 THEN RETURN; END IF; SELECT EXISTS ( SELECT 1 FROM public.system_alerts WHERE alert_type = 'mtta_auto_ack_heartbeat_stale' AND created_at > now() - interval '6 hours' ) INTO recent_alert; IF recent_alert THEN RETURN; END IF; INSERT INTO public.system_alerts (alert_type, severity, threshold_pct, consumed …",
     "raises": [],
     "tables": [
      "last_beat",
@@ -165018,6 +165035,14 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "check_mtta_auto_ack_heartbeat",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
    }
   ],
   "guards": [
@@ -232108,6 +232133,14 @@
    "path": "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql",
    "lines": 4
   },
+  "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql": {
+   "path": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
+   "lines": 65,
+   "temporal": [
+    "AND created_at > now() - interval '6 hours'",
+    "AND timestamp > now() - interval '24 hours';"
+   ]
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -232781,10 +232814,28 @@
   }
  },
  "git": {
-  "sha": "b7233bb9a6758d5906556a377491c101c7bb86d5",
+  "sha": "f8312ef24331df8f7120d505a9ea2d7e0d052274",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "f8312ef",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
+   {
+    "sha": "a8cca0e",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)",
+    "files": [
+     "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
+    ]
+   },
    {
     "sha": "b7233bb",
     "date": "2026-11-13",
@@ -233242,71 +233293,6 @@
     "files": [
      "docs/qa/security-definer-audit.md"
     ]
-   },
-   {
-    "sha": "ae528d5",
-    "date": "2026-11-10",
-    "author": "adm01-debug",
-    "subject": "feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)",
-    "files": [
-     ".github/workflows/docs-ci.yml",
-     ".github/workflows/fix-jwt-proxies-externas.yml",
-     ".github/workflows/inventario-estado-semanal.yml",
-     ".github/workflows/monitoring-lint.yml",
-     ".github/workflows/restore-drill.yml",
-     ".github/workflows/rls-exposure-guard.yml",
-     "docs/ci/README.md",
-     "docs/lacunas/D_ui_rotas_componentes.md",
-     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_UX.md",
-     "inventario/estado/README.md",
-     "inventario/estado/edge-tabela.json",
-     "inventario/estado/rotas.json",
-     "scripts/automation.config.json",
-     "scripts/ci/render-workflow-docs.mjs",
-     "scripts/ci/render-workflow-docs.test.mjs",
-     "scripts/docs/citacoes-baseline.json",
-     "scripts/docs/verificar-citacoes.mjs",
-     "scripts/docs/verificar-citacoes.test.mjs",
-     "scripts/inventario/chamadas-supabase.mjs",
-     "scripts/inventario/gerar-edge-tabela.mjs",
-     "scripts/inventario/gerar-edge-tabela.test.mjs",
-     "scripts/inventario/gerar-rotas.mjs",
-     "scripts/inventario/gerar-rotas.test.mjs"
-    ]
-   },
-   {
-    "sha": "df708ff",
-    "date": "2026-11-10",
-    "author": "adm01-debug",
-    "subject": "feat(ci): automações de auditoria do estado real portadas do Zapp Web V2 (#180)",
-    "files": [
-     ".github/toolchain.json",
-     ".github/workflows/estado-real.yml",
-     ".github/workflows/higiene-semanal.yml",
-     "AGENTS.md",
-     "docs/agentes/automacoes-estado-real.md",
-     "package.json",
-     "scripts/automation.config.json",
-     "scripts/ci/actions-kpi.mjs",
-     "scripts/ci/actions-kpi.test.mjs",
-     "scripts/ci/branch-podaveis.mjs",
-     "scripts/ci/branch-podaveis.test.mjs",
-     "scripts/ci/bump-toolchain.mjs",
-     "scripts/ci/check-claude-md-integrity.mjs",
-     "scripts/ci/check-claude-md-integrity.test.mjs",
-     "scripts/ci/check-test-inventory.mjs",
-     "scripts/ci/check-test-inventory.test.mjs",
-     "scripts/ci/sla-code-scanning.mjs",
-     "scripts/ci/sla-code-scanning.test.mjs",
-     "scripts/ci/workflow-invariants.mjs",
-     "scripts/ci/workflow-invariants.test.mjs",
-     "scripts/ci/workflow-test-support.mjs",
-     "scripts/lib/seguranca-processo.mjs",
-     "scripts/lib/seguranca-processo.test.mjs",
-     "supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql",
-     "tests/rls/merge_company_name_override.sql",
-     "tests/rls/security_definer_hardening.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -233323,19 +233309,11 @@
     7
    ],
    [
-    "inventario/estado/edge-tabela.json",
+    "docs/prod-readiness.md",
     4
    ],
    [
-    "docs/prod-readiness.md",
-    3
-   ],
-   [
-    "scripts/automation.config.json",
-    3
-   ],
-   [
-    "scripts/docs/citacoes-baseline.json",
+    "inventario/estado/edge-tabela.json",
     3
    ],
    [
@@ -233343,7 +233321,7 @@
     3
    ],
    [
-    ".github/workflows/inventario-estado-semanal.yml",
+    "scripts/docs/citacoes-baseline.json",
     2
    ],
    [
@@ -233367,8 +233345,8 @@
     2
    ],
    [
-    "tests/rls/security_definer_hardening.sql",
-    2
+    "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
+    1
    ],
    [
     ".gitignore",
@@ -233376,6 +233354,10 @@
    ],
    [
     "graphify.local.json",
+    1
+   ],
+   [
+    ".github/workflows/inventario-estado-semanal.yml",
     1
    ],
    [
@@ -233388,6 +233370,10 @@
    ],
    [
     "scripts/ai-context/cenarios.mjs",
+    1
+   ],
+   [
+    "scripts/ai-context/gerar.mjs",
     1
    ]
   ]

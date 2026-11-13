@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b7233bb9a6` · branch `main` · 2026-11-13 21:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f8312ef243` · branch `main` · 2026-11-13 22:29 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3747,7 +3747,7 @@ _nenhum item encontrado_
 | `const in60Minutes = addMinutes(now, 60);` | `src/hooks/usePreContactBriefing.ts` |
 | `gcTime: 5 * 60 * 1000,` | `src/hooks/usePreContactBriefing.ts` |
 | `refetchInterval: 5 * 60 * 1000,` | `src/hooks/usePreContactBriefing.ts` |
-| … +208 linhas — lista completa em `context.json` | |
+| … +210 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 

@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "b7233bb9a6758d5906556a377491c101c7bb86d5",
+  "commit": "f8312ef24331df8f7120d505a9ea2d7e0d052274",
   "branch": "main",
-  "data_commit": "2026-11-13T17:30:39-03:00",
+  "data_commit": "2026-11-13T18:52:49-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "f8312ef2",
+    "data": "2026-11-13",
+    "assunto": "chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)"
+   },
+   {
+    "sha": "a8cca0e2",
+    "data": "2026-11-13",
+    "assunto": "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)"
+   },
    {
     "sha": "b7233bb9",
     "data": "2026-11-13",
@@ -121,19 +131,9 @@
     "sha": "ae084d5a",
     "data": "2026-11-11",
     "assunto": "chore: inventario do estado real [auto] (#198)"
-   },
-   {
-    "sha": "97eced48",
-    "data": "2026-11-11",
-    "assunto": "feat: troca a IA do gateway Lovable pelo DeepSeek (#197)"
-   },
-   {
-    "sha": "2f9e3fe3",
-    "data": "2026-11-11",
-    "assunto": "chore: inventario do estado real [auto] (#194)"
    }
   ],
-  "arquivos_mudados_7d": 631,
+  "arquivos_mudados_7d": 632,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 63
+    "commits": 65
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -318,7 +318,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3238,
+  "arquivos_total": 3239,
   "arquivos_codigo": 2215,
   "linhas_codigo": 414104,
   "rotas": 114,
@@ -330,7 +330,7 @@
   "hooks": 408,
   "edge_functions": 109,
   "tabelas": 418,
-  "migrations": 483,
+  "migrations": 484,
   "cron_jobs": 34,
   "testes": 268,
   "workflows": 11,

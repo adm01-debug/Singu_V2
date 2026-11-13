@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `b7233bb9a6758d5906556a377491c101c7bb86d5` (2026-11-13T17:30:39-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `f8312ef24331df8f7120d505a9ea2d7e0d052274` (2026-11-13T18:52:49-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2052), SQL (656), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
+- linguagens: TypeScript (2052), SQL (657), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3238 |
+| arquivos_total | 3239 |
 | arquivos_codigo | 2215 |
 | linhas_codigo | 414104 |
 | rotas | 114 |
@@ -46,7 +46,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 408 |
 | edge_functions | 109 |
 | tabelas | 418 |
-| migrations | 483 |
+| migrations | 484 |
 | cron_jobs | 34 |
 | testes | 268 |
 | workflows | 11 |
@@ -433,8 +433,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21143 nós · 35838 arestas · 2124 comunidades · grafo do commit `b7233bb9`
-- comunidades maiores: _shared/auth.ts (299), ref_lib (267), 02_tables.sql (259), useAuth (256), ref_types (248), react (238), 📖 Dicionário de Dados — SINGU CRM (227), framer-motion (217), react-router-dom (211), ref_hooks (200), date-fns (191), ref_components (180)
+- 21147 nós · 35841 arestas · 2097 comunidades · grafo do commit `f8312ef2`
+- comunidades maiores: ref_components (328), _shared/auth.ts (308), ref_lib (278), ref_types (259), 02_tables.sql (259), useAuth (249), framer-motion (240), 📖 Dicionário de Dados — SINGU CRM (227), ref_hooks (220), react (211), react-router-dom (207), lucide-react (206)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -570,6 +570,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-13 `f8312ef2` chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)
+- 2026-11-13 `a8cca0e2` fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)
 - 2026-11-13 `b7233bb9` chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)
 - 2026-11-13 `5c7e2f39` docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)
 - 2026-11-13 `be23f3a8` chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)
@@ -583,8 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-12 `1e20172b` chore: inventario do estado real [auto] (#205)
 - 2026-11-12 `51a85ab6` fix(whatsapp): vincula eventos ao proprietário da instância (#151)
 - 2026-11-12 `3e49b844` fix(cache): preserva carga inicial e revalida relações da ficha (#147)
-- 2026-11-12 `68a97f4d` fix(oportunidades): alinha criação ao contrato da RPC (#152)
-- 2026-11-12 `47e97ccb` style(manutencao): aplica correcoes locais verificadas (#195)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
