@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `3a76dceb9b32603b00a2233050b6d4ced575798e` (2026-11-13T08:22:27-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `6e9097a35e2d9d8704cd1a5e76b9f15d0358640c` (2026-11-13T09:01:13-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -433,7 +433,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21132 nós · 35828 arestas · 2125 comunidades · grafo do commit `3a76dceb`
+- 21132 nós · 35828 arestas · 2125 comunidades · grafo do commit `6e9097a3`
 - comunidades maiores: framer-motion (309), ref_components (307), ref_lib (274), sonner (272), _shared/auth.ts (261), 02_tables.sql (259), react (238), useAuth (230), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (206), ref_hooks (200), lucide-react (184)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -569,6 +569,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-13 `6e9097a3` fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)
 - 2026-11-13 `3a76dceb` chore: inventario do estado real [auto] (#212)
 - 2026-11-13 `0a83cb78` fix(ci): pat do dono abre o pr do inventario semanal (#209)
 - 2026-11-12 `7aa30140` chore: inventario do estado real [auto] (#210)
@@ -583,7 +584,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-12 `a28f2106` chore: inventario do estado real [auto] (#204)
 - 2026-11-12 `ddd1f61c` fix: botões gerar relatório e e-mail de teste do resumo semanal voltam a funcionar (#203)
 - 2026-11-12 `a817b7e8` fix(push): alinha chave VAPID publica do front com o par dos secrets (#199)
-- 2026-11-12 `cd6478ec` fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

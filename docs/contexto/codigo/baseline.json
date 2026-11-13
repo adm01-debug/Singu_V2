@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "3a76dceb9b32603b00a2233050b6d4ced575798e",
+  "commit": "6e9097a35e2d9d8704cd1a5e76b9f15d0358640c",
   "branch": "main",
-  "data_commit": "2026-11-13T08:22:27-03:00",
+  "data_commit": "2026-11-13T09:01:13-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "6e9097a3",
+    "data": "2026-11-13",
+    "assunto": "fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)"
+   },
    {
     "sha": "3a76dceb",
     "data": "2026-11-13",
@@ -126,11 +131,6 @@
     "sha": "01962748",
     "data": "2026-11-11",
     "assunto": "docs: baseline DEFINER 111->109 apos DROP de update_company_fields (#190)"
-   },
-   {
-    "sha": "ae528d58",
-    "data": "2026-11-10",
-    "assunto": "feat(inventario): automações de estado real — rotas, edges, docs de CI e catraca de citações (#179)"
    }
   ],
   "arquivos_mudados_7d": 630,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 60
+    "commits": 61
    },
    {
     "autor": "devin-ai-integration[bot]",

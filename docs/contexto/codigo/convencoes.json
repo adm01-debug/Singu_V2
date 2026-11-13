@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)",
    "chore: inventario do estado real [auto] (#212)",
    "fix(ci): pat do dono abre o pr do inventario semanal (#209)",
    "chore: inventario do estado real [auto] (#210)",
-   "chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)",
-   "docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)"
+   "chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)"
   ]
  },
  "pr_template": null,
