@@ -1,6 +1,6 @@
 # Prod Readiness ? Singu_V2
 
-> Documento vivo de prontid?o para produ??o. Linha de base de `main` (HEAD `6e9097a`). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
+> Documento vivo de prontid?o para produ??o. Linha de base de `main` (HEAD `be23f3a`, p?s-merge #214). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
 
 ## 1. Qualidade t?cnica (build / typecheck / lint / testes)
 
@@ -263,7 +263,7 @@
 
 | Workflow | ?ltima execu??o no main | Status |
 |---|---|---|
-| CI (ci.yml) | 2026-11-13 12:01Z ? run 1324 | OK ? success |
+| CI (ci.yml) | 2026-11-13 16:28Z ? run 43463043781 | OK ? success (p?s-merge #214) |
 | Automa??o local | 2026-11-13 12:01Z | OK ? success |
 | Documenta??o sem drift | 2026-11-13 10:27Z | OK ? success |
 | Estado real | 2026-11-13 10:27Z | OK ? success |
@@ -308,6 +308,7 @@
 | PR | O que | Por que n?o mergeei |
 |---|---|---|
 | [#213](https://github.com/adm01-debug/Singu_V2/pull/213) | DDL/migration produ??o ? fix check_mtta_auto_ack_heartbeat | Regra 8 (DDL/migration em banco de produ??o) |
+| ~~#214~~ | docs/prod-readiness.md (este invent?rio) | MERGED 16:28Z ? CI main verde (run 43463043781) |
 
 ---
 _Gerado por sess?o autopilot ? valida??o com evid?ncia real (sa?da de comando, query Management API, runs GitHub Actions)._
