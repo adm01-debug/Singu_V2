@@ -386,6 +386,7 @@
    ],
    "npm_scripts": [],
    "secrets": [
+    "GH_AUTOMATION_TOKEN",
     "PGDATABASE",
     "PGHOST",
     "PGPASSWORD",
@@ -917,6 +918,7 @@
    "VITE_VAPID_PUBLIC_KEY"
   ],
   "secrets_em_workflows": [
+   "GH_AUTOMATION_TOKEN",
    "PGDATABASE",
    "PGHOST",
    "PGPASSWORD",

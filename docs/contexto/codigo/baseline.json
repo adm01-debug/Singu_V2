@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "7aa3014007247a2b1281971282e300ec56703931",
+  "commit": "0a83cb7825029b9e9943e03c166101e0d3131f60",
   "branch": "main",
-  "data_commit": "2026-11-12T19:39:50-03:00",
+  "data_commit": "2026-11-13T07:27:19-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "0a83cb78",
+    "data": "2026-11-13",
+    "assunto": "fix(ci): pat do dono abre o pr do inventario semanal (#209)"
+   },
    {
     "sha": "7aa30140",
     "data": "2026-11-12",
@@ -126,11 +131,6 @@
     "sha": "df708ff7",
     "data": "2026-11-10",
     "assunto": "feat(ci): automações de auditoria do estado real portadas do Zapp Web V2 (#180)"
-   },
-   {
-    "sha": "d42f417f",
-    "data": "2026-11-10",
-    "assunto": "chore(automacao): integra testes grafo e manutenção com gatilhos locais (#187)"
    }
   ],
   "arquivos_mudados_7d": 630,
@@ -290,18 +290,18 @@
     "mudancas": 5
    },
    {
-    "arquivo": ".github/workflows/restore-drill.yml",
+    "arquivo": ".github/workflows/inventario-estado-semanal.yml",
     "mudancas": 4
    },
    {
-    "arquivo": "PENDENCIAS.md",
+    "arquivo": ".github/workflows/restore-drill.yml",
     "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 58
+    "commits": 59
    },
    {
     "autor": "devin-ai-integration[bot]",

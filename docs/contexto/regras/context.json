@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "7aa3014007247a2b1281971282e300ec56703931",
+  "sha": "0a83cb7825029b9e9943e03c166101e0d3131f60",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-13 00:46 UTC",
+  "generated_at": "2026-11-13 10:35 UTC",
   "files_total": 3342,
   "code_files": 2872,
   "code_lines": 409744
@@ -232781,10 +232781,19 @@
   }
  },
  "git": {
-  "sha": "7aa3014007247a2b1281971282e300ec56703931",
+  "sha": "0a83cb7825029b9e9943e03c166101e0d3131f60",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "0a83cb7",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "fix(ci): pat do dono abre o pr do inventario semanal (#209)",
+    "files": [
+     ".github/workflows/inventario-estado-semanal.yml"
+    ]
+   },
    {
     "sha": "7aa3014",
     "date": "2026-11-12",
@@ -233700,18 +233709,6 @@
      "src/main.tsx",
      "vite.config.ts"
     ]
-   },
-   {
-    "sha": "ecfcdf0",
-    "date": "2026-11-09",
-    "author": "adm01-debug",
-    "subject": "fix(config): alinha o project_id do config.toml ao projeto Supabase canônico e trava divergência (#183)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "AGENTS.md",
-     "scripts/check-supabase-project-ref.test.mjs",
-     "supabase/config.toml"
-    ]
    }
   ],
   "hot_files": [
@@ -233746,6 +233743,10 @@
    [
     "src/lib/pushNotifications.ts",
     3
+   ],
+   [
+    ".github/workflows/inventario-estado-semanal.yml",
+    2
    ],
    [
     "scripts/ai-context/gerar.mjs",
@@ -233789,10 +233790,6 @@
    ],
    [
     "scripts/migration/cdc/lag-watch.sh",
-    2
-   ],
-   [
-    "scripts/migration/cdc/replay.ts",
     2
    ]
   ]
