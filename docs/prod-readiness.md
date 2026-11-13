@@ -1,6 +1,6 @@
 # Prod Readiness ? Singu_V2
 
-> Documento vivo de prontid?o para produ??o. Linha de base de `main` (HEAD `a8cca0e2`, p?s-merge #213). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
+> Documento vivo de prontidão para produção. Linha de base de `main` (HEAD `f8312ef`, pós-merge #219). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
 
 ## 1. Qualidade t?cnica (build / typecheck / lint / testes)
 
@@ -263,7 +263,7 @@
 
 | Workflow | ?ltima execu??o no main | Status |
 |---|---|---|
-| CI (ci.yml) | 2026-11-13 18:52Z — run 43486880411 | OK — success (pós-merge #215) |
+| CI (ci.yml) | 2026-11-13 22:52Z — run 43514562452 | OK — success (pós-merge #219, head f8312ef) |
 | Automa??o local | 2026-11-13 12:01Z | OK ? success |
 | Documenta??o sem drift | 2026-11-13 10:27Z | OK ? success |
 | Estado real | 2026-11-13 10:27Z | OK ? success |
@@ -300,6 +300,7 @@
 ## 8. Corre??es desta sess?o
 
 - **PR #213** (MERGED 13/11 ~21:00Z, autoriza??o do dono): migration `20261113154000` aplicada em prod via Management API em 13/11 21:09Z. `check_mtta_auto_ack_heartbeat` agora preenche `threshold_pct=150` e `consumed_pct=COALESCE(age_min,150)`. Evid?ncia: pg_get_functiondef retorna INSERT com as colunas; grantees = service_role, postgres (REVOKE ok); execu??o simulada (BEGIN/ROLLBACK) retornou OK. Deploy prod success (sha a8cca0e2).
+- **PR #219** (MERGED 13/11 21:52Z): bump do doc para o head pós-merge #213 (`a8cca0e2` → `f8312ef`). CI main verde (run 43514562452 success, 22:52Z), deploy prod success, site respondendo 200.
 - **Migration 20261027220000** ausente em prod (guard AUT-03 serialize_contact_relation_writes) ? BLOQUEADO, aguardando decis?o do dono (DDL produ??o).
 - **Advisors de seguran?a**: endpoint REST inexistente (404) ? sem via API; conferir no dashboard.
 
