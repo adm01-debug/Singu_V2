@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "6e9097a35e2d9d8704cd1a5e76b9f15d0358640c",
+  "sha": "be23f3a86ceb780a12d1c9ba4cb08b86ea92d789",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-13 12:48 UTC",
-  "files_total": 3342,
+  "generated_at": "2026-11-13 17:10 UTC",
+  "files_total": 3343,
   "code_files": 2872,
   "code_lines": 409744
  },
@@ -232781,10 +232781,19 @@
   }
  },
  "git": {
-  "sha": "6e9097a35e2d9d8704cd1a5e76b9f15d0358640c",
+  "sha": "be23f3a86ceb780a12d1c9ba4cb08b86ea92d789",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "be23f3a",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "6e9097a",
     "date": "2026-11-13",
@@ -233364,16 +233373,6 @@
      "supabase/functions/send-push-notification/index.ts",
      "tests/integration/web-push-sender.test.ts"
     ]
-   },
-   {
-    "sha": "3978930",
-    "date": "2026-11-10",
-    "author": "adm01-debug",
-    "subject": "chore(eslint): isenta tooling de migracao de regras sonarjs de runtime (#188)",
-    "files": [
-     "eslint.config.js",
-     "scripts/migration/storage/verify-counts.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -233450,11 +233449,11 @@
     2
    ],
    [
-    "docs/perf/explain-analyze.md",
+    "docs/prod-readiness.md",
     1
    ],
    [
-    "scripts/ai-context/README.md",
+    "docs/perf/explain-analyze.md",
     1
    ]
   ]

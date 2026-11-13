@@ -5,7 +5,7 @@
   "linguagens": [
    "TypeScript (2052)",
    "SQL (656)",
-   "Markdown (155)",
+   "Markdown (156)",
    "Shell (147)",
    "JavaScript (143)",
    "JSON (22)",
@@ -776,6 +776,11 @@
    "arquivo": "docs/postmortem-template.md",
    "titulo": "Post-Mortem — {Título do Incidente}",
    "linhas": 96
+  },
+  {
+   "arquivo": "docs/prod-readiness.md",
+   "titulo": "Prod Readiness ? Singu_V2",
+   "linhas": 314
   },
   {
    "arquivo": "docs/ux_improvement_strategy.md",
