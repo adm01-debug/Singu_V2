@@ -129,7 +129,7 @@ jobs:
         if: steps.mudou.outputs.valor == 'true'
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.GH_AUTOMATION_TOKEN }}
           base: main
           branch: automation/inventario-estado
           delete-branch: true
@@ -200,7 +200,7 @@ jobs:
         if: steps.pull-request.outputs.pull-request-number != ''
         continue-on-error: true
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_AUTOMATION_TOKEN }}
           PR_NUMBER: ${{ steps.pull-request.outputs.pull-request-number }}
         run: gh pr merge --auto --squash "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"
 
