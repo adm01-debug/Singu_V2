@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "6a57e0290ce09e7c9b9c0fa4134eccde4bccb2d0",
+  "commit": "7aa3014007247a2b1281971282e300ec56703931",
   "branch": "main",
-  "data_commit": "2026-11-12T18:13:06-03:00",
+  "data_commit": "2026-11-12T19:39:50-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "7aa30140",
+    "data": "2026-11-12",
+    "assunto": "chore: inventario do estado real [auto] (#210)"
+   },
    {
     "sha": "6a57e029",
     "data": "2026-11-12",
@@ -126,11 +131,6 @@
     "sha": "d42f417f",
     "data": "2026-11-10",
     "assunto": "chore(automacao): integra testes grafo e manutenção com gatilhos locais (#187)"
-   },
-   {
-    "sha": "357fd21e",
-    "data": "2026-11-10",
-    "assunto": "fix(push): chave VAPID própria e sender que realmente entrega (#185)"
    }
   ],
   "arquivos_mudados_7d": 630,
@@ -181,18 +181,18 @@
    },
    {
     "pasta": "inventario/estado/banco.json",
+    "mudancas": 8
+   },
+   {
+    "pasta": "inventario/estado/edges.json",
+    "mudancas": 7
+   },
+   {
+    "pasta": "inventario/estado/tabelas-uso.json",
     "mudancas": 7
    },
    {
     "pasta": "package.json",
-    "mudancas": 7
-   },
-   {
-    "pasta": "scripts/maintenance/tests",
-    "mudancas": 7
-   },
-   {
-    "pasta": "scripts/migration/cutover",
     "mudancas": 7
    }
   ],
@@ -234,11 +234,19 @@
     "mudancas": 10
    },
    {
+    "arquivo": "inventario/estado/banco.json",
+    "mudancas": 8
+   },
+   {
     "arquivo": ".github/workflows/rls-exposure-guard.yml",
     "mudancas": 7
    },
    {
-    "arquivo": "inventario/estado/banco.json",
+    "arquivo": "inventario/estado/edges.json",
+    "mudancas": 7
+   },
+   {
+    "arquivo": "inventario/estado/tabelas-uso.json",
     "mudancas": 7
    },
    {
@@ -247,14 +255,6 @@
    },
    {
     "arquivo": "RELATORIO_CI.md",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "inventario/estado/edges.json",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "inventario/estado/tabelas-uso.json",
     "mudancas": 6
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 57
+    "commits": 58
    },
    {
     "autor": "devin-ai-integration[bot]",
