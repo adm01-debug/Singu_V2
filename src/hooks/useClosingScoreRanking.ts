@@ -54,7 +54,7 @@ export function useClosingScoreRanking(probabilityFilter: ProbabilityFilter = 'a
         const score = c.relationship_score || 0;
         const probability = getScoreProbability(score);
         return {
-          contact: { id: c.id, first_name: c.first_name, last_name: c.last_name, avatar_url: c.avatar_url },
+          contact: { id: c.id, first_name: c.first_name ?? '', last_name: c.last_name ?? '', avatar_url: c.avatar_url },
           score,
           probability,
           trend: 'stable' as const,

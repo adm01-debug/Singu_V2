@@ -35,7 +35,7 @@ export function useSocialIntelligence(contactId: string) {
             // Em vez de salvar direto, criar sugestões pendentes para o usuário aprovar
             const suggestions = suggestedInterests.map(val => ({
               contact_id: contactId,
-              user_id: user?.id,
+              user_id: user!.id,
               type: 'interest' as const,
               value: val,
               source: 'linkedin', // Simplificado, poderia vir da análise

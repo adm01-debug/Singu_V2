@@ -104,7 +104,7 @@ export function useBehaviorAlerts() {
 
       if (error) throw error;
       const contactIds = [...new Set((existingAlerts ?? []).flatMap(alert => alert.contact_id ? [alert.contact_id] : []))];
-      const contactsById = new Map<string, { first_name: string; last_name: string }>();
+      const contactsById = new Map<string, { first_name: string | null; last_name: string | null }>();
       for (let offset = 0; offset < contactIds.length; offset += 100) {
         const { data: contacts, error: contactsError } = await supabase.from('contacts')
           .select('id, first_name, last_name').in('id', contactIds.slice(offset, offset + 100)).eq('user_id', user!.id);
