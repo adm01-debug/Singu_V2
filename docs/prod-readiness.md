@@ -1,6 +1,6 @@
 # Prod Readiness ? Singu_V2
 
-> Documento vivo de prontidão para produção. Linha de base de `main` (HEAD `8a4e6f2`, pós-merge #226). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
+> Documento vivo de prontidão para produção. Linha de base de `main` (HEAD `4e67de3`, pós-merge #227). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
 
 ## 1. Qualidade t?cnica (build / typecheck / lint / testes)
 
@@ -263,7 +263,7 @@
 
 | Workflow | ?ltima execu??o no main | Status |
 |---|---|---|
-| CI (ci.yml) | 2026-11-14 06:10Z — run 43557478465 | OK — success (pós-merge #226, head 8a4e6f2) |
+| CI (ci.yml) | 2026-11-14 06:40Z — run 43562195142 | OK — success (pós-merge #227, head 4e67de3) |
 | Automa??o local | 2026-11-13 12:01Z | OK ? success |
 | Documenta??o sem drift | 2026-11-13 10:27Z | OK ? success |
 | Estado real | 2026-11-13 10:27Z | OK ? success |
@@ -308,6 +308,7 @@
 - **PR #224** (MERGED 14/11 04:05Z): bump do doc para o head pós-merge #223 (`e0851f2d` → `48a9a50`). CI main verde (run 43549774866 success), deploy prod READY (dpl_8H5VgsGVXvS), site 200.
 - **PR #225** (MERGED 14/11 04:35Z): bump do doc para o head pós-merge #224 (`48a9a50` → `4d004ce`). CI main verde (run 43553873525 success), deploy prod READY (dpl_3Wyzpcy4YockY57W5rASchQJjHH7), site 200.
 - **PR #226** (MERGED 14/11 05:00Z): bump do doc para o head pós-merge #225 (`4d004ce` → `8a4e6f2`). CI main verde (run 43557478465 success), deploy prod READY (dpl_AXN3a6oEHPT), site 200.
+- **PR #227** (MERGED 14/11 06:40Z): bump do doc para o head pós-merge #226 (`8a4e6f2` → `4e67de3`). CI main verde (run 43562195142 success), deploy prod READY (dpl_D8ocqTjSoPi), site 200.
 
 - **Migration 20261027220000** ausente em prod (guard AUT-03 serialize_contact_relation_writes) ? BLOQUEADO, aguardando decis?o do dono (DDL produ??o).
 - **Advisors de seguran?a**: endpoint REST inexistente (404) ? sem via API; conferir no dashboard.
