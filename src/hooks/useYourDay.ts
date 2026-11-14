@@ -111,8 +111,8 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
         const overdueFollowUps: FollowUp[] = [];
         followUpInteractions.forEach(interaction => {
           if (!interaction.follow_up_date) return;
-          const followUpDate = parseISO(interaction.follow_up_date);
-          const contact = contactMap.get(interaction.contact_id) || null;
+          const followUpDate = parseISO(interaction.follow_up_date ?? '');
+          const contact = contactMap.get(interaction.contact_id ?? '') || null;
           const company = interaction.company_id ? companyMap.get(interaction.company_id) || null : null;
           const followUp: FollowUp = { interaction, contact, company };
           if (isToday(followUpDate)) todayFollowUps.push(followUp);

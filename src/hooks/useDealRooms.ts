@@ -234,6 +234,7 @@ export function useUpsertMilestone(roomId: string) {
       
       const payload: MilestoneInsert = {
         ...m,
+        owner_side: m.owner_side ?? undefined,
         room_id: roomId,
         user_id: user.id,
         title: m.title ?? "Sem título",
@@ -286,6 +287,10 @@ export function useUpsertStakeholder(roomId: string) {
       
       const payload: StakeholderInsert = {
         ...s,
+        contact_id: s.contact_id ?? undefined,
+        email: s.email ?? undefined,
+        role_title: s.role_title ?? undefined,
+        engagement_score: s.engagement_score ?? undefined,
         room_id: roomId,
         user_id: user.id,
         name: s.name ?? "Sem nome",

@@ -45,11 +45,11 @@ export function useProactiveIntelligence(
       );
       const lastInteraction = sortedInteractions[0];
       const daysSinceLastContact = lastInteraction
-        ? differenceInDays(new Date(), parseISO(lastInteraction.created_at))
+        ? differenceInDays(new Date(), parseISO(lastInteraction.created_at ?? ''))
         : 999;
       const totalInteractions = interactions.length;
       const recentInteractions = sortedInteractions.filter(i =>
-        differenceInDays(new Date(), parseISO(i.created_at)) <= 30
+        differenceInDays(new Date(), parseISO(i.created_at ?? '')) <= 30
       );
       const monthlyFrequency = recentInteractions.length;
 

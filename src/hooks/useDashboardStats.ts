@@ -223,7 +223,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       .sort((a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime())
       .slice(0, 50) // cap before heavy per-item processing
       .map(interaction => {
-        const contact = contactMap.get(interaction.contact_id);
+        const contact = contactMap.get(interaction.contact_id ?? '');
         const rawName = contact
           ? `${contact.first_name} ${contact.last_name}`.trim()
           : null;

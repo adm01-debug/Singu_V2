@@ -112,7 +112,7 @@ function Inbox() {
           subtitle: i.content?.slice(0, 90) ?? undefined,
           channel: channelFromInteractionType(i.type),
           priorityScore: 70,
-          occurredAt: i.created_at,
+          occurredAt: i.created_at ?? '',
           href: i.contact_id ? `/contatos/${i.contact_id}` : undefined,
           raw: i,
         });
@@ -124,7 +124,7 @@ function Inbox() {
           subtitle: i.content?.slice(0, 90) ?? undefined,
           channel: channelFromInteractionType(i.type),
           priorityScore: 80,
-          occurredAt: i.created_at,
+          occurredAt: i.created_at ?? '',
           href: i.contact_id ? `/contatos/${i.contact_id}` : undefined,
           raw: i,
         });

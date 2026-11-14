@@ -111,8 +111,8 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
         const existing = groupsMap.get(entityId);
          const event: TimelineEventItem = {
            id: it.id,
-           type: it.type,
-           title: it.title,
+           type: it.type ?? 'note',
+           title: it.title ?? 'Sem título',
            content: it.content,
            created_at: it.created_at ?? '',
            sentiment: it.sentiment,

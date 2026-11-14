@@ -37,9 +37,9 @@ export function useDashboardMappedData(
   const interactionsByContact = useMemo(() => {
     const map = new Map<string, DbInteraction[]>();
     for (const i of interactions) {
-      const list = map.get(i.contact_id);
+      const list = map.get(i.contact_id ?? '');
       if (list) list.push(i);
-      else map.set(i.contact_id, [i]);
+      else map.set(i.contact_id ?? '', [i]);
     }
     return map;
   }, [interactions]);
