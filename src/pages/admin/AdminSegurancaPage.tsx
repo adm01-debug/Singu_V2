@@ -42,7 +42,7 @@ export default function AdminSegurancaPage() {
                     <div>
                       <p className="text-sm font-medium">{r.email}</p>
                       <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-                        <Clock className="h-3 w-3" />{new Date(r.created_at).toLocaleString('pt-BR')}
+                        <Clock className="h-3 w-3" />{new Date(r.created_at ?? 0).toLocaleString('pt-BR')}
                       </p>
                     </div>
                     <div className="flex gap-2">
@@ -55,7 +55,7 @@ export default function AdminSegurancaPage() {
                   <div key={r.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                     <div>
                       <p className="text-sm">{r.email}</p>
-                      <p className="text-[10px] text-muted-foreground">{new Date(r.created_at).toLocaleString('pt-BR')}</p>
+                      <p className="text-[10px] text-muted-foreground">{new Date(r.created_at ?? 0).toLocaleString('pt-BR')}</p>
                     </div>
                     <Badge variant={r.status === 'approved' ? 'default' : 'destructive'} className="text-[10px] gap-1">
                       {r.status === 'approved' ? <CheckCircle className="h-3 w-3" /> : <XCircle className="h-3 w-3" />}

@@ -60,7 +60,7 @@ export function CompanyProfileCard({
   phones = [], emails = [], addresses = [], socialMedia = [],
 }: CompanyProfileCardProps) {
   const healthStatus = (company.financial_health as HealthStatus) || 'unknown';
-  const c = company as Record<string, unknown>;
+  const c = company as Record<string, string | number | boolean | null | undefined>;
 
   const primaryPhone = phones.find(p => p.is_primary) || phones[0];
   const primaryEmail = emails.find(e => e.is_primary) || emails[0];

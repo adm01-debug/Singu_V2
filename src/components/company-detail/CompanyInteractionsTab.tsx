@@ -153,8 +153,8 @@ export function CompanyInteractionsTab({ interactions, contacts = [] }: CompanyI
       {filtered.length > 0 ? (
         <div className="space-y-3">
           {filtered.map((interaction, index) => {
-            const Icon = interactionIcons[interaction.type] || MessageSquare;
-            const colorClass = interactionColors[interaction.type] || interactionColors.note;
+            const Icon = interactionIcons[interaction.type ?? 'note'] || MessageSquare;
+            const colorClass = interactionColors[interaction.type ?? 'note'] || interactionColors.note;
             const contact = interaction.contact_id ? contactById.get(interaction.contact_id) : null;
 
             return (
@@ -201,8 +201,8 @@ export function CompanyInteractionsTab({ interactions, contacts = [] }: CompanyI
                         )}
                       </div>
                       <div className="text-right text-xs text-muted-foreground">
-                        <p>{format(new Date(interaction.created_at), "d MMM", { locale: ptBR })}</p>
-                        <p>{format(new Date(interaction.created_at), "HH:mm")}</p>
+                        <p>{format(new Date(interaction.created_at ?? 0), "d MMM", { locale: ptBR })}</p>
+                        <p>{format(new Date(interaction.created_at ?? 0), "HH:mm")}</p>
                       </div>
                     </div>
                   </CardContent>

@@ -513,7 +513,7 @@ describe("TTS Edge Function — Input validation", () => {
     });
 
     it("handles null text", () => {
-      const text: string | null = null;
+      const text: string | null = Math.random() > 2 ? 'x' : null;
       const isValid = text && typeof text === "string" && text.trim().length > 0;
       expect(isValid).toBeFalsy();
     });

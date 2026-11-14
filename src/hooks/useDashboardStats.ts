@@ -84,20 +84,20 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
     const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const companiesThisMonth = companies.filter(c => 
-      new Date(c.created_at) >= thisMonthStart
+      new Date(c.created_at ?? 0) >= thisMonthStart
     ).length;
     
     const contactsThisMonth = contacts.filter(c => 
-      new Date(c.created_at) >= thisMonthStart
+      new Date(c.created_at ?? 0) >= thisMonthStart
     ).length;
 
     const thisWeekInteractions = interactions.filter(i => {
-      const date = new Date(i.created_at);
+      const date = new Date(i.created_at ?? 0);
       return date >= thisWeekStart && date <= thisWeekEnd;
     }).length;
 
     const lastWeekInteractions = interactions.filter(i => {
-      const date = new Date(i.created_at);
+      const date = new Date(i.created_at ?? 0);
       return date >= lastWeekStart && date <= lastWeekEnd;
     }).length;
 
@@ -109,7 +109,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       const wStart = subWeeks(thisWeekStart, w);
       const wEnd = subWeeks(thisWeekEnd, w);
       const count = interactions.filter(i => {
-        const d = new Date(i.created_at);
+        const d = new Date(i.created_at ?? 0);
         return d >= wStart && d <= wEnd;
       }).length;
       interactionSparkline.push(count);
@@ -145,10 +145,10 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       if (!i.contact_id) continue;
       interactionCountByContact.set(i.contact_id, (interactionCountByContact.get(i.contact_id) || 0) + 1);
       const current = latestInteractionByContact.get(i.contact_id);
-      if (!current || i.created_at > current) {
-        latestInteractionByContact.set(i.contact_id, i.created_at);
+      if (!current || (i.created_at ?? '') > current) {
+        latestInteractionByContact.set(i.contact_id, i.created_at ?? '');
         if (i.content || i.title) {
-          interactionSummariesByContact.set(i.contact_id, i.content || i.title);
+          interactionSummariesByContact.set(i.contact_id, i.content || i.title || '');
         }
       }
     }
@@ -192,8 +192,8 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         
         return {
           id: contact.id,
-          firstName: contact.first_name,
-          lastName: contact.last_name,
+          firstName: contact.first_name ?? '',
+          lastName: contact.last_name ?? '',
           avatar: contact.avatar_url || '',
           companyName: company?.nome_crm || contact.role_title || '',
           role: contact.role || 'contact',
@@ -220,10 +220,10 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
 
     const recentActivities = interactions
       .slice() // avoid mutating the memoized array from useInteractions
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .sort((a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime())
       .slice(0, 50) // cap before heavy per-item processing
       .map(interaction => {
-        const contact = contactMap.get(interaction.contact_id);
+        const contact = contactMap.get(interaction.contact_id ?? '');
         const rawName = contact
           ? `${contact.first_name} ${contact.last_name}`.trim()
           : null;
@@ -253,11 +253,11 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         }
         return {
           id: interaction.id,
-          contactId: interaction.contact_id,
+          contactId: interaction.contact_id ?? '',
           entityName: displayName,
           description: cleanDesc,
-          createdAt: new Date(interaction.created_at),
-          type: interaction.type,
+          createdAt: new Date(interaction.created_at ?? 0),
+          type: interaction.type ?? '',
         };
       })
       .filter(a => a.entityName !== 'Contato' && a.entityName !== 'Mensagem' && a.entityName !== 'Mensagem Enviada') // Remove unresolved generic entries

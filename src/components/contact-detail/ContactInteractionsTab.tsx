@@ -142,7 +142,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
       setShowForm(false);
       onInteractionAdded?.();
     } catch (err) {
-      logger.error(err);
+      logger.error(err instanceof Error ? err.message : String(err));
       toast.error('Erro ao registrar interação');
     } finally {
       setIsSubmitting(false);
@@ -198,7 +198,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
               <div className="absolute left-5 top-3 bottom-3 w-px bg-border" />
 
               {filteredInteractions.map((interaction, i) => {
-                const config = TYPE_CONFIG[interaction.type] || TYPE_CONFIG.note;
+                const config = TYPE_CONFIG[interaction.type ?? 'note'] || TYPE_CONFIG.note;
                 const Icon = config.icon;
                 const isExpanded = expandedId === interaction.id;
 
@@ -243,9 +243,9 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
                               )}
                             </div>
                             <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>{format(new Date(interaction.created_at), "dd/MM/yy 'às' HH:mm", { locale: ptBR })}</span>
+                              <span>{format(new Date(interaction.created_at ?? 0), "dd/MM/yy 'às' HH:mm", { locale: ptBR })}</span>
                               <span>·</span>
-                              <span>{formatDistanceToNow(new Date(interaction.created_at), { addSuffix: true, locale: ptBR })}</span>
+                              <span>{formatDistanceToNow(new Date(interaction.created_at ?? 0), { addSuffix: true, locale: ptBR })}</span>
                               {interaction.duration && (
                                 <>
                                   <span>·</span>
@@ -392,7 +392,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
                                 <span className="font-medium text-sm">{interaction.title}</span>
                                 {interaction.duration && <span className="text-[10px] text-muted-foreground">{Math.floor(interaction.duration / 60)}min {interaction.duration % 60}s</span>}
                               </div>
-                              <p className="text-xs text-muted-foreground mt-1">{format(new Date(interaction.created_at), "dd/MM/yy HH:mm", { locale: ptBR })}</p>
+                              <p className="text-xs text-muted-foreground mt-1">{format(new Date(interaction.created_at ?? 0), "dd/MM/yy HH:mm", { locale: ptBR })}</p>
                             </div>
                             <SentimentIndicator sentiment={((interaction.sentiment as import('@/types').SentimentType) || 'neutral')} size="sm" />
                           </div>

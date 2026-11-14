@@ -19,7 +19,7 @@ export function useRpcPlanChurnTimeline(rpcName: string | null, hours = 24, enab
     enabled,
     queryFn: async (): Promise<RpcPlanChurnTimelinePoint[]> => {
       const { data, error } = await supabase.rpc('get_rpc_plan_churn_timeline', {
-        _rpc_name: rpcName,
+        _rpc_name: rpcName ?? undefined,
         _hours: hours,
       });
       if (error) throw error;

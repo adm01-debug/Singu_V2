@@ -229,8 +229,8 @@ function ContactCardWithContextImpl({
                          {vakConfig.name}
                        </Badge>
                      )}
-                     {(contact.behavior as Record<string, unknown>)?.discProfile && (
-                       <DISCBadge profile={(contact.behavior as Record<string, unknown>).discProfile as DISCProfile} size="sm" showLabel={false} />
+                     {Boolean((contact.behavior as Record<string, unknown> | null)?.discProfile) && (
+                       <DISCBadge profile={((contact.behavior as Record<string, unknown>).discProfile ?? null) as DISCProfile | null} size="sm" showLabel={false} />
                      )}
                     {contact.role && (
                       <RoleBadge role={contact.role as 'contact' | 'owner' | 'manager' | 'buyer' | 'decision_maker' | 'influencer'} />
@@ -265,7 +265,7 @@ function ContactCardWithContextImpl({
                 {/* Footer: Stage + Time */}
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/20">
                   <RelationshipStageBadge stage={(contact.relationship_stage as RelationshipStage) || 'unknown'} />
-                  <TimeAgo date={contact.updated_at} />
+                  <TimeAgo date={contact.updated_at ?? ''} />
                 </div>
 
                 {/* Quick actions on hover */}
@@ -371,7 +371,7 @@ function ContactCardWithContextImpl({
 
                 {/* Time */}
                 <div className="hidden sm:block w-20 text-right shrink-0">
-                  <TimeAgo date={contact.updated_at} />
+                  <TimeAgo date={contact.updated_at ?? ''} />
                 </div>
 
                 <ContactDropdownActions

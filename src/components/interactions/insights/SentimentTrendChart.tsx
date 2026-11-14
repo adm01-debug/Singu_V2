@@ -720,7 +720,7 @@ function SentimentTrendChartImpl({ data, summary, contactId }: Props) {
                   isFront
                   shape={(props) => {
                     const { cx, cy } = props as { cx: number; cy: number };
-                    if (cx == null || cy == null) return null;
+                    if (cx == null || cy == null) return <g />;
                     const radius = 9;
                     const countSuffix = d.count > 1 ? ` (+${d.count - 1})` : "";
                     return (

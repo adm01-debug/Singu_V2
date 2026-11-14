@@ -129,10 +129,10 @@ export function DealDialog({ open, onOpenChange, initialStage = 'lead' }: Props)
         p_titulo:              values.titulo,
         p_valor:               values.valor,
         p_pipeline_stage:      values.pipeline_stage,
-        p_contact_id:          values.contact_id ?? null,
+        p_contact_id:          values.contact_id ?? undefined,
         p_previsao_fechamento: values.previsao_fechamento
           ? values.previsao_fechamento.toISOString().split('T')[0]
-          : null,
+          : undefined,
       });
       toast.success('Deal criado com sucesso!');
       onOpenChange(false);

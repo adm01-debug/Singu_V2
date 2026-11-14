@@ -170,14 +170,14 @@ export function useRelativeMutations(contactId: string | undefined) {
     mutationFn: async (data: {
       name: string;
       relationship_type: string;
-      age?: number;
-      birthday?: string;
-      phone?: string;
-      email?: string;
-      occupation?: string;
-      company?: string;
-      notes?: string;
-      is_decision_influencer?: boolean;
+      age?: number | null;
+      birthday?: string | null;
+      phone?: string | null;
+      email?: string | null;
+      occupation?: string | null;
+      company?: string | null;
+      notes?: string | null;
+      is_decision_influencer?: boolean | null;
     }) => {
       if (!user || !contactId) throw new Error('Missing user or contact');
       const { error } = await supabase.from('contact_relatives').insert({

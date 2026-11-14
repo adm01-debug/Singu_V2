@@ -83,22 +83,22 @@ export const ContactBehaviorExtended = ({ contactId }: ContactBehaviorExtendedPr
         </TabsList>
 
         <TabsContent value="disc">
-          <DISCSubTab contactId={contactId} data={behavior} />
+          <DISCSubTab contactId={contactId} data={behavior ?? undefined} />
         </TabsContent>
         <TabsContent value="motivations">
-          <MotivationsSubTab contactId={contactId} data={behavior} />
+          <MotivationsSubTab contactId={contactId} data={behavior ?? undefined} />
         </TabsContent>
         <TabsContent value="communication">
-          <CommunicationSubTab contactId={contactId} data={behavior} />
+          <CommunicationSubTab contactId={contactId} data={behavior ?? undefined} />
         </TabsContent>
         <TabsContent value="decision">
-          <DecisionMakingSubTab contactId={contactId} data={decision} />
+          <DecisionMakingSubTab contactId={contactId} data={decision ?? undefined} />
         </TabsContent>
         <TabsContent value="influence">
-          <InfluencePowerSubTab contactId={contactId} data={influence} />
+          <InfluencePowerSubTab contactId={contactId} data={influence ?? undefined} />
         </TabsContent>
         <TabsContent value="business">
-          <BusinessContextSubTab contactId={contactId} data={businessContext} />
+          <BusinessContextSubTab contactId={contactId} data={businessContext ?? undefined} />
         </TabsContent>
       </Tabs>
     </div>

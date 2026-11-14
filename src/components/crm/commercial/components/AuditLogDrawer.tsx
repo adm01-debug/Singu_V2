@@ -25,7 +25,7 @@ import type { Json } from '@/integrations/supabase/types';
 interface AuditLogEntry {
   id: string;
   change_type: string;
-  created_at: string;
+  created_at: string | null;
   changed_fields?: string[] | null;
   new_values?: Json;
   previous_values?: Json;
@@ -76,7 +76,7 @@ export function AuditLogDrawer({ logs }: Props) {
                       </Badge>
                       <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
                         <Clock className="h-3 w-3" />
-                        {format(new Date(log.created_at), "dd 'de' MMM, HH:mm", { locale: ptBR })}
+                        {format(new Date(log.created_at ?? new Date().toISOString()), "dd 'de' MMM, HH:mm", { locale: ptBR })}
                       </div>
                     </div>
 

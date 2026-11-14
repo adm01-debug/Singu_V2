@@ -53,13 +53,13 @@ export function RelationshipTimeline({ interactions, contact, className }: Relat
 
     // Add interactions
     interactions.forEach(interaction => {
-      const Icon = interactionIcons[interaction.type] || MessageSquare;
-      const color = interactionColors[interaction.type] || interactionColors.note;
+      const Icon = interactionIcons[interaction.type ?? 'note'] || MessageSquare;
+      const color = interactionColors[interaction.type ?? 'note'] || interactionColors.note;
       items.push({
         id: `int-${interaction.id}`,
-        date: new Date(interaction.created_at),
+        date: new Date(interaction.created_at ?? 0),
         type: 'interaction',
-        title: interaction.title,
+        title: interaction.title ?? '',
         description: interaction.content?.slice(0, 120) || undefined,
         icon: Icon,
         color,
@@ -74,7 +74,7 @@ export function RelationshipTimeline({ interactions, contact, className }: Relat
     // Add contact creation
     items.push({
       id: 'created',
-      date: new Date(contact.created_at),
+      date: new Date(contact.created_at ?? 0),
       type: 'life_event',
       title: 'Contato criado',
       description: 'Início do relacionamento',
@@ -176,10 +176,10 @@ export function RelationshipTimeline({ interactions, contact, className }: Relat
                               {event.description}
                             </p>
                           )}
-                          {event.metadata?.sentiment && (
+                          {Boolean(event.metadata?.sentiment) && (
                             <div className="mt-2 flex items-center gap-1.5">
-                              {sentimentBadge(event.metadata.sentiment as string)}
-                              {event.metadata.followUp && (
+                              {sentimentBadge(event.metadata?.sentiment as string)}
+                              {Boolean((event.metadata as Record<string, unknown> | undefined)?.followUp) && (
                                 <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-warning/10 text-warning border-warning/20">
                                   Follow-up
                                 </Badge>

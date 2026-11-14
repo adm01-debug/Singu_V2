@@ -17,7 +17,7 @@ import { generateCombinedMessage } from './profile-based/generateCombinedMessage
 
 interface ProfileBasedSuggestionsProps { contact: Contact; vakProfile: VAKProfile | null; metaprogramProfile: MetaprogramProfile | null; className?: string; }
 
-const DISC_DESCRIPTIONS: Record<DISCProfile, { name: string; icon: string; color: string }> = {
+const DISC_DESCRIPTIONS: Record<Exclude<DISCProfile, null>, { name: string; icon: string; color: string }> = {
   D: { name: 'Dominante', icon: '🔴', color: 'bg-destructive text-destructive border-destructive' },
   I: { name: 'Influente', icon: '🟡', color: 'bg-warning text-warning border-warning/30' },
   S: { name: 'Estável', icon: '🟢', color: 'bg-success text-success border-success/30' },
@@ -51,7 +51,7 @@ export function ProfileBasedSuggestions({ contact, vakProfile, metaprogramProfil
         let matchScore = 50;
         const matchReasons: string[] = [];
         matchScore += vakProfile.confidence * 0.3;
-        matchReasons.push(`Adaptado para perfil ${VAK_DESCRIPTIONS[vakProfile.primary].name} (${vakProfile.confidence.toFixed(0)}% confiança)`);
+        matchReasons.push(`Adaptado para perfil ${VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].name} (${vakProfile.confidence.toFixed(0)}% confiança)`);
         if (template.discProfile === null || template.discProfile === discProfile) {
           if (discProfile) { matchScore += 15; matchReasons.push(`Compatível com perfil DISC ${DISC_DESCRIPTIONS[discProfile].name}`); }
         }
@@ -83,7 +83,7 @@ export function ProfileBasedSuggestions({ contact, vakProfile, metaprogramProfil
         { id: 'combined-followup', title: 'Follow-up Personalizado', scenario: 'Retomar contato usando preferências do cliente', type: 'followup' as const },
       ].forEach(t => {
         const matchReasons: string[] = []; const tips: string[] = []; let matchScore = 80;
-        matchReasons.push(`Linguagem ${VAK_DESCRIPTIONS[vakProfile.primary].name} (VAK)`);
+        matchReasons.push(`Linguagem ${VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].name} (VAK)`);
         if (metaprogramProfile.motivationDirection !== 'balanced') { const motLabel = METAPROGRAM_LABELS.motivationDirection[metaprogramProfile.motivationDirection]; matchReasons.push(`Motivação ${motLabel.name}`); tips.push(motLabel.communicationTips[0]); }
         if (discProfile) matchReasons.push(`Perfil DISC ${DISC_DESCRIPTIONS[discProfile].name}`);
         matchScore += (vakProfile.confidence + metaprogramProfile.overallConfidence) * 0.1;
@@ -107,7 +107,7 @@ export function ProfileBasedSuggestions({ contact, vakProfile, metaprogramProfil
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-wrap gap-2">
-          {vakProfile?.primary && <Badge variant="outline" className={cn('text-xs', VAK_DESCRIPTIONS[vakProfile.primary].color)}>{React.createElement(VAK_DESCRIPTIONS[vakProfile.primary].icon, { className: 'w-3 h-3 mr-1' })}{VAK_DESCRIPTIONS[vakProfile.primary].name}</Badge>}
+          {vakProfile?.primary && <Badge variant="outline" className={cn('text-xs', VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].color)}>{React.createElement(VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].icon, { className: 'w-3 h-3 mr-1' })}{VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].name}</Badge>}
           {discProfile && <Badge variant="outline" className={cn('text-xs', DISC_DESCRIPTIONS[discProfile].color)}>{DISC_DESCRIPTIONS[discProfile].icon} {DISC_DESCRIPTIONS[discProfile].name}</Badge>}
           {metaprogramProfile && metaprogramProfile.motivationDirection !== 'balanced' && <Badge variant="outline" className={cn('text-xs', METAPROGRAM_LABELS.motivationDirection[metaprogramProfile.motivationDirection].color)}>{METAPROGRAM_LABELS.motivationDirection[metaprogramProfile.motivationDirection].icon} {METAPROGRAM_LABELS.motivationDirection[metaprogramProfile.motivationDirection].name}</Badge>}
         </div>

@@ -27,7 +27,7 @@ export function useApproachRecommendation({
 }: UseApproachRecommendationProps): ApproachRecommendation {
   return useMemo(() => {
     const discProfile = contact.behavior?.discProfile as DISCProfile | undefined;
-    const vakType = vakProfile?.primary;
+    const vakType = vakProfile?.primary ?? undefined;
 
     const confidenceFactors = [
       contact.behavior?.discConfidence || 50,

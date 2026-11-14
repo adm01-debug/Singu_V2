@@ -26,11 +26,11 @@ export interface LeadScoreRow {
 
 export interface LeadScoreHistoryRow {
   id: string;
-  contact_id: string;
-  total_score: number;
-  grade: string;
-  fit_score: number;
-  engagement_score: number;
+  contact_id: string | null;
+  total_score: number | null;
+  grade: LeadScoreGrade | null;
+  fit_score: number | null;
+  engagement_score: number | null;
   intent_score: number;
   relationship_score: number;
   breakdown: Record<string, unknown>;

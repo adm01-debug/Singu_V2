@@ -99,7 +99,7 @@ function StakeholderDialog({ editing, onSave }: { editing: DealRoomStakeholder |
           </div>
           <div>
             <Label>Influência</Label>
-            <Select value={form.influence} onValueChange={(v) => setForm({ ...form, influence: v })}>
+            <Select value={form.influence ?? undefined} onValueChange={(v) => setForm({ ...form, influence: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="champion">Champion</SelectItem>
@@ -113,7 +113,7 @@ function StakeholderDialog({ editing, onSave }: { editing: DealRoomStakeholder |
         </div>
         <div>
           <Label>Engajamento (0-100)</Label>
-          <Input type="number" min={0} max={100} value={form.engagement_score} onChange={(e) => setForm({ ...form, engagement_score: Number(e.target.value) })} />
+          <Input type="number" min={0} max={100} value={form.engagement_score ?? ''} onChange={(e) => setForm({ ...form, engagement_score: Number(e.target.value) })} />
         </div>
       </div>
       <DialogFooter><Button onClick={() => onSave(form)} disabled={!form.name}>Salvar</Button></DialogFooter>

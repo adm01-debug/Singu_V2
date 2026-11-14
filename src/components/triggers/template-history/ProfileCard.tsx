@@ -19,7 +19,7 @@ export function ProfileCard({ metrics, isExpanded, onToggle }: {
   isExpanded: boolean;
   onToggle: () => void;
 }) {
-  const config = DISC_CONFIG[metrics.profile];
+  const config = DISC_CONFIG[metrics.profile ?? 'D'];
 
   return (
     <motion.div layout className={cn('border rounded-xl overflow-hidden transition-shadow', isExpanded && 'shadow-md')}>

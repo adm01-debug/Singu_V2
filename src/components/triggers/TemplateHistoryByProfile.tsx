@@ -59,7 +59,7 @@ export function TemplateHistoryByProfile({ className }: TemplateHistoryByProfile
           <ScrollArea className="h-[500px] pr-4">
             {viewMode === 'by-profile' ? (
               <div className="space-y-3">
-                {(['D', 'I', 'S', 'C'] as DISCProfile[]).map((profile) => (
+                {(['D', 'I', 'S', 'C'] as const).map((profile) => (
                   <ProfileCard
                     key={profile}
                     metrics={profileMetrics[profile]}

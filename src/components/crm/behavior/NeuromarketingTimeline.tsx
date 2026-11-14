@@ -68,7 +68,7 @@ export function NeuromarketingTimeline({ contactId }: Props) {
      const compliance = dom.compliance || 0;
      
      return {
-       date: format(new Date(item.created_at), 'dd/MM', { locale: ptBR }),
+       date: format(new Date(item.created_at ?? 0), 'dd/MM', { locale: ptBR }),
        empathy: Number(item.empathy_score) || 0,
        dominance,
        influence,
@@ -186,7 +186,7 @@ export function NeuromarketingTimeline({ contactId }: Props) {
           <CardHeader className="pb-2">
             <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center justify-between">
               Recomendações Atuais de Neuromarketing
-              {latest && <Badge variant="outline" className="text-[10px]">Atualizado {format(new Date(latest.created_at), 'dd/MM/yy')}</Badge>}
+              {latest && <Badge variant="outline" className="text-[10px]">Atualizado {format(new Date(latest.created_at ?? 0), 'dd/MM/yy')}</Badge>}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -243,13 +243,13 @@ export function NeuromarketingTimeline({ contactId }: Props) {
             {interactions?.slice(0, 5).map((interaction) => (
               <div key={interaction.id} className="flex items-start gap-3 p-2 rounded-lg bg-muted/20 border border-border/50 text-xs">
                 <div className="mt-0.5">
-                  <SentimentIcon sentiment={interaction.sentiment} />
+                  <SentimentIcon sentiment={interaction.sentiment ?? ''} />
                 </div>
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-foreground">{interaction.title}</span>
                     <span className="text-[10px] text-muted-foreground">
-                      {format(new Date(interaction.created_at), 'dd MMM, HH:mm', { locale: ptBR })}
+                      {format(new Date(interaction.created_at ?? 0), 'dd MMM, HH:mm', { locale: ptBR })}
                     </span>
                   </div>
                   <p className="text-muted-foreground line-clamp-1">{interaction.content}</p>

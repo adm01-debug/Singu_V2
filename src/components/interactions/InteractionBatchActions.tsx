@@ -25,7 +25,7 @@
      const selected = interactions.filter(i => selectedIds.includes(i.id));
      const headers = ['Data', 'Título', 'Tipo', 'Sentimento', 'Conteúdo'];
      const rows = selected.map(i => [
-       new Date(i.created_at).toLocaleDateString(),
+       new Date(i.created_at ?? 0).toLocaleDateString(),
        i.title,
        i.type,
        i.sentiment || 'neutral',

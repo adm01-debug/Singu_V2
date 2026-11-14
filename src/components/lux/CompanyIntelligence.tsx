@@ -76,7 +76,7 @@ interface LuxAudienceData {
                 { key: 'capital_social', label: 'Capital Social' }, { key: 'porte', label: 'Porte' },
                 { key: 'natureza_juridica', label: 'Natureza Jurídica' }, { key: 'situacao_cadastral', label: 'Situação Cadastral' },
                 { key: 'cnae_principal', label: 'CNAE Principal' },
-              ].map(({ key, label }) => fiscal[key as keyof LuxFiscalData] && (
+              ].map(({ key, label }) => Boolean(fiscal[key as keyof LuxFiscalData]) && (
                 <div key={key} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
                   <span className="text-sm text-muted-foreground">{label}</span>
                   <div className="flex items-center gap-2">

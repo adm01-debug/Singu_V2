@@ -109,8 +109,8 @@ const NLPAnalytics = () => {
          hobbies: data.hobbies || [],
          interests: data.interests || [],
          lifeEvents: [],
-         createdAt: new Date(data.created_at),
-         updatedAt: new Date(data.updated_at)
+         createdAt: new Date(data.created_at ?? 0),
+         updatedAt: new Date(data.updated_at ?? 0)
        };
  
        return contact;

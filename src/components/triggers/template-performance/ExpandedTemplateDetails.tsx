@@ -10,15 +10,15 @@ interface TemplateDetailData {
   failureCount: number;
   lastUsed: string | null;
   totalUsages: number;
-  discPerformance: Record<DISCProfile, { usages: number; successRate: number }>;
+  discPerformance: Record<Exclude<DISCProfile, null>, { usages: number; successRate: number }>;
   templateText: string;
 }
 
-const discLabels: Record<DISCProfile, string> = {
+const discLabels: Record<Exclude<DISCProfile, null>, string> = {
   D: 'Dominante', I: 'Influente', S: 'Estável', C: 'Analítico',
 };
 
-const discColors: Record<DISCProfile, string> = {
+const discColors: Record<Exclude<DISCProfile, null>, string> = {
   D: 'bg-destructive text-destructive border-destructive',
   I: 'bg-warning text-warning border-warning',
   S: 'bg-success text-success border-success',
@@ -77,12 +77,12 @@ export function ExpandedTemplateDetails({ data }: { data: TemplateDetailData }) 
             Performance por Perfil DISC
           </p>
           <div className="flex flex-wrap gap-2">
-            {(['D', 'I', 'S', 'C'] as DISCProfile[]).map(disc => (
-              <Badge key={disc} variant="outline" className={cn('gap-1.5', discColors[disc])}>
+            {(['D', 'I', 'S', 'C'] as const).map(disc => (
+              <Badge key={disc} variant="outline" className={cn('gap-1.5', discColors[disc ?? 'D'])}>
                 <span className="font-bold">{disc}</span>
-                <span className="text-xs">{discLabels[disc]}</span>
+                <span className="text-xs">{discLabels[disc ?? 'D']}</span>
                 {data.totalUsages > 0 && (
-                  <span className="ml-1 text-xs opacity-70">{data.discPerformance[disc].successRate.toFixed(0)}%</span>
+                  <span className="ml-1 text-xs opacity-70">{data.discPerformance[disc ?? 'D'].successRate.toFixed(0)}%</span>
                 )}
               </Badge>
             ))}

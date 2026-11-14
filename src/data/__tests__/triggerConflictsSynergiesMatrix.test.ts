@@ -31,7 +31,7 @@ describe('Trigger Conflicts Matrix: Data', () => {
   it('all conflicts have reason and resolution', () => {
     for (const c of COMPLETE_TRIGGER_CONFLICTS) {
       expect(c.reason.length, `${c.trigger1}-${c.trigger2}: no reason`).toBeGreaterThan(10);
-      expect(c.resolution.length, `${c.trigger1}-${c.trigger2}: no resolution`).toBeGreaterThan(10);
+      expect(c.resolution!.length, `${c.trigger1}-${c.trigger2}: no resolution`).toBeGreaterThan(10);
     }
   });
 

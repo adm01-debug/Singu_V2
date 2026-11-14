@@ -84,8 +84,8 @@ export function useNetworkGraph() {
       const contactInteractions = new Map<string, number>();
 
       interactions?.forEach(interaction => {
-        const count = contactInteractions.get(interaction.contact_id) || 0;
-        contactInteractions.set(interaction.contact_id, count + 1);
+        const count = contactInteractions.get(interaction.contact_id ?? '') || 0;
+        contactInteractions.set(interaction.contact_id ?? '', count + 1);
       });
 
       // Build nodes

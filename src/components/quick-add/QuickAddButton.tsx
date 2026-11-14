@@ -89,7 +89,7 @@ export const QuickAddButton = React.forwardRef<HTMLDivElement, QuickAddButtonPro
   const handleCreateCompany = async (data: Omit<Tables<'companies'>, 'id' | 'created_at' | 'updated_at' | 'user_id'>) => {
     setIsSubmitting(true);
     try {
-      const result = await createCompany(data);
+      const result = await createCompany(data as Parameters<typeof createCompany>[0]);
       if (result) {
         handleCloseForm();
         fetchCompanies();
@@ -118,7 +118,7 @@ export const QuickAddButton = React.forwardRef<HTMLDivElement, QuickAddButtonPro
         return (
           <ContactForm
             companies={companies}
-            onSubmit={handleCreateContact}
+            onSubmit={async (d) => { await handleCreateContact(d as Parameters<typeof handleCreateContact>[0]); }}
             onCancel={handleCloseForm}
             isSubmitting={isSubmitting}
           />
@@ -126,7 +126,7 @@ export const QuickAddButton = React.forwardRef<HTMLDivElement, QuickAddButtonPro
       case 'company':
         return (
           <CompanyForm
-            onSubmit={handleCreateCompany}
+            onSubmit={async (d) => { await handleCreateCompany(d as Parameters<typeof handleCreateCompany>[0]); }}
             onCancel={handleCloseForm}
             isSubmitting={isSubmitting}
           />
@@ -135,7 +135,7 @@ export const QuickAddButton = React.forwardRef<HTMLDivElement, QuickAddButtonPro
         return (
           <InteractionForm
             contacts={contacts}
-            onSubmit={handleCreateInteraction}
+            onSubmit={async (d) => { await handleCreateInteraction(d as Parameters<typeof handleCreateInteraction>[0]); }}
             onCancel={handleCloseForm}
             isSubmitting={isSubmitting}
           />

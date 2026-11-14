@@ -54,7 +54,7 @@ const DISCAnalyticsPanel = () => {
       }
       const mappedContacts: ContactWithDISC[] = (contactsData || []).map(c => {
         const behavior = getContactBehavior(c);
-        return { id: c.id, firstName: c.first_name, lastName: c.last_name, avatar: c.avatar_url || undefined, discProfile: behavior?.discProfile as DISCProfile, discConfidence: behavior?.discConfidence, relationshipScore: c.relationship_score || 0, companyName: c.company_id ? companyNames.get(c.company_id) : undefined };
+        return { id: c.id, firstName: c.first_name ?? '', lastName: c.last_name ?? '', avatar: c.avatar_url || undefined, discProfile: behavior?.discProfile as DISCProfile, discConfidence: behavior?.discConfidence, relationshipScore: c.relationship_score || 0, companyName: c.company_id ? companyNames.get(c.company_id) : undefined };
       }).filter(c => c.discProfile);
       setContacts(mappedContacts);
 
@@ -93,7 +93,7 @@ const DISCAnalyticsPanel = () => {
   const statCards = [
     { icon: Users, label: 'Contatos perfilados', value: stats.totalProfiled, badge: 'Total', color: 'text-primary' },
     { icon: Target, label: 'Confiança média', value: `${stats.avgConfidence}%`, badge: `${stats.avgConfidence}%`, color: 'text-success' },
-    { icon: Award, label: 'Perfil predominante', value: DISC_PROFILES[stats.mostCommon || 'I']?.name, badge: null, color: DISC_COLORS[stats.mostCommon] },
+    { icon: Award, label: 'Perfil predominante', value: DISC_PROFILES[(stats.mostCommon ?? 'I')]?.name, badge: null, color: DISC_COLORS[stats.mostCommon ?? 'I'] },
     { icon: Activity, label: 'Análises recentes', value: stats.recentAnalyses, badge: '7 dias', color: 'text-secondary' },
   ];
 

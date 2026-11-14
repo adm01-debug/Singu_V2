@@ -18,7 +18,7 @@ beforeAll(() => {
 const mockSubmit = vi.fn().mockResolvedValue(undefined);
 const mockCancel = vi.fn();
 
-function renderForm(company?: Record<string, unknown>) {
+function renderForm(company?: Record<string, unknown> | null) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });

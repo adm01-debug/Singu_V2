@@ -72,7 +72,7 @@ export function useDealForecastConfidence(
       let recent = 0;
       let previous = 0;
       (data ?? []).forEach((r) => {
-        const t = new Date(r.created_at).getTime();
+        const t = new Date(r.created_at ?? 0).getTime();
         if (t >= cutoff) recent += 1;
         else previous += 1;
       });

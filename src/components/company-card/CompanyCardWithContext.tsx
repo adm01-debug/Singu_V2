@@ -167,7 +167,7 @@ function CompanyCardWithContextImpl({
                     <IntelligenceStrip company={company} />
                     <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/20">
                       <StatusDot status={company.status} isCustomer={company.is_customer} />
-                      <TimeAgo date={company.updated_at} />
+                      <TimeAgo date={company.updated_at ?? ''} />
                     </div>
                   </>
                 ) : (
@@ -221,7 +221,7 @@ function CompanyCardWithContextImpl({
                     <IntelligenceStrip company={company} />
                     <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/20">
                       <StatusDot status={company.status} isCustomer={company.is_customer} />
-                      <TimeAgo date={company.updated_at} />
+                      <TimeAgo date={company.updated_at ?? ''} />
                     </div>
                   </>
                 )}

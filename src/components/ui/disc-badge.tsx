@@ -69,7 +69,7 @@ interface DISCSelectorProps {
 }
 
 export function DISCSelector({ value, onChange, className }: DISCSelectorProps) {
-  const profiles: DISCProfile[] = ['D', 'I', 'S', 'C'];
+  const profiles = ['D', 'I', 'S', 'C'] as const;
 
   return (
     <div className={cn('grid grid-cols-2 gap-3', className)}>
@@ -126,7 +126,7 @@ const DISC_TYPICAL_SCORES: Record<Exclude<DISCProfile, null>, Record<Exclude<DIS
 };
 
 export function DISCChart({ profile, className }: DISCChartProps) {
-  const profiles: DISCProfile[] = ['D', 'I', 'S', 'C'];
+  const profiles = ['D', 'I', 'S', 'C'] as const;
 
   const getScore = (p: DISCProfile): number => {
     if (!profile || !p) return 25;

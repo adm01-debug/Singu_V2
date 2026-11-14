@@ -312,7 +312,7 @@ export function InteractionForm({
                   <Textarea 
                     placeholder="Descreva os detalhes da interação ou use o microfone para gravar..."
                     className="min-h-[120px]"
-                    {...field} 
+                    {...field} value={field.value ?? ''} 
                   />
                 </FormControl>
                 <FormDescription className="flex items-center gap-1 text-xs">

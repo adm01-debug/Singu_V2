@@ -47,7 +47,7 @@ export function CompetitorWinRateChart({ competitors }: Props) {
                   borderRadius: 6,
                   fontSize: 12,
                 }}
-                formatter={(v: number, _n, p: { payload: { rate: number } }) => [`${v} deals (${p.payload.rate.toFixed(1)}% win)`, '']}
+                formatter={(v: number, _n, p: { payload?: { rate: number } }) => [`${v} deals (${p.payload?.rate?.toFixed(1) ?? 0}% win)`, '']}
               />
               <Legend wrapperStyle={{ fontSize: 11 }} />
             </PieChart>

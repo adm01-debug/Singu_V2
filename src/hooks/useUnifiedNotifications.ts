@@ -59,7 +59,7 @@ export function useUnifiedNotifications() {
           title: a.title,
           description: a.description,
           href: a.action_url || (a.contact_id ? `/contatos/${a.contact_id}` : '/notificacoes'),
-          createdAt: a.created_at,
+          createdAt: a.created_at ?? '',
         });
       });
 

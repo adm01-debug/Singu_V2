@@ -112,16 +112,17 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         title: 'Interação registrada',
         description: 'A interação foi salva com sucesso.',
       });
-      logActivity({ type: 'created', entityType: 'interaction', entityId: data.id, entityName: data.title, description: `Interação: ${data.type}` });
+      logActivity({ type: 'created', entityType: 'interaction', entityId: data.id, entityName: data.title ?? '', description: `Interação: ${data.type ?? ''}` });
 
       // Trigger DISC auto-analysis if enabled and has content
       if (options?.triggerDISCAnalysis !== false && data.contact_id) {
+        const dContactId = data.contact_id;
         const fullText = [data.content, data.transcription].filter(Boolean).join('\n\n');
         if (fullText.length >= 100) {
           supabase.functions.invoke('disc-analyzer', {
             body: {
               texts: [fullText],
-              contactId: data.contact_id,
+              contactId: dContactId,
               interactionId: data.id,
               userId: user.id
             }
@@ -142,13 +143,13 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       // Trigger NLP auto-analysis if enabled and has content
       if (options?.triggerNLPAnalysis !== false && data.contact_id) {
         const fullText = [data.content, data.transcription].filter(Boolean).join('\n\n');
-        if (fullText.length >= 100) {
+        if (fullText.length >= 100 && data.contact_id) {
           triggerAnalysis(
             data.contact_id,
             data.id,
             data.content,
             data.transcription,
-            data.type,
+            data.type ?? '',
             true
           ).catch(err => {
             const msg = err instanceof Error ? err.message : 'Unknown error';
@@ -257,7 +258,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       if (error) throw error;
 
       const deleted = previous?.pages.flatMap(p => p.data).find(i => i.id === id);
-      logActivity({ type: 'deleted', entityType: 'interaction', entityId: id, entityName: deleted?.title, description: 'Interação excluída' });
+      logActivity({ type: 'deleted', entityType: 'interaction', entityId: id, entityName: deleted?.title ?? undefined, description: 'Interação excluída' });
       toast({
         title: 'Interação removida',
         description: 'A interação foi excluída com sucesso.',

@@ -52,8 +52,8 @@ import { logger } from '@/lib/logger';
 
 interface Contact {
   id: string;
-  first_name: string;
-  last_name: string;
+  first_name: string | null;
+  last_name: string | null;
   avatar_url?: string | null;
   relationship_score?: number | null;
   last_interaction_at?: string | null;
@@ -193,7 +193,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                     <Avatar className="h-10 w-10 border-2 border-background shadow-sm shrink-0">
                       <AvatarImage src={contact.avatar_url || ''} />
                       <AvatarFallback className="bg-primary/5 text-primary text-xs font-bold">
-                        {contact.first_name[0]}{contact.last_name[0]}
+                        {(contact.first_name ?? '?')[0]}{(contact.last_name ?? '?')[0]}
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
@@ -335,7 +335,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       const last = interactions[0];
       doc.setFontSize(12);
       doc.text(`Título: ${last.title}`, 14, finalY + 8);
-      doc.text(`Data: ${format(new Date(last.created_at), 'dd/MM/yyyy')}`, 14, finalY + 14);
+      doc.text(`Data: ${format(new Date(last.created_at ?? 0), 'dd/MM/yyyy')}`, 14, finalY + 14);
       
       const splitContent = doc.splitTextToSize(last.content || 'Sem conteúdo detalhado.', 180);
       doc.text(splitContent, 14, finalY + 22);
@@ -355,7 +355,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       doc.text('Nenhuma interação registrada.', 14, finalY + 8);
     }
 
-    doc.save(`recomendacao_${contact.first_name.toLowerCase()}.pdf`);
+    doc.save(`recomendacao_${(contact.first_name ?? '').toLowerCase()}.pdf`);
     
     toast({
       title: "PDF Gerado",
@@ -539,7 +539,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
                         {interactions[0].type === 'message' ? 'Mensagem' : 'Reunião'}
                       </Badge>
                       <span className="text-[10px] text-muted-foreground">
-                        {formatDistanceToNow(new Date(interactions[0].created_at), { addSuffix: true, locale: ptBR })}
+                        {formatDistanceToNow(new Date(interactions[0].created_at ?? 0), { addSuffix: true, locale: ptBR })}
                       </span>
                     </div>
                     

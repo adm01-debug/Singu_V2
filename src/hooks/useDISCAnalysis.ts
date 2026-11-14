@@ -180,8 +180,8 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
         detectedKeywords: data.detected_keywords as string[] || [],
         detectedPhrases: data.detected_phrases as string[] || [],
         behaviorIndicators: data.behavior_indicators as string[] || [],
-        analyzedText: data.analyzed_text,
-        profileSummary: data.profile_summary,
+        analyzedText: data.analyzed_text ?? undefined,
+        profileSummary: data.profile_summary ?? undefined,
         analyzedAt: new Date(data.analyzed_at),
         createdAt: new Date(data.created_at)
       };
@@ -282,9 +282,9 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
         detectedKeywords: d.detected_keywords as string[] || [],
         detectedPhrases: d.detected_phrases as string[] || [],
         behaviorIndicators: d.behavior_indicators as string[] || [],
-        analyzedText: d.analyzed_text,
-        analysisNotes: d.analysis_notes,
-        profileSummary: d.profile_summary,
+        analyzedText: d.analyzed_text ?? undefined,
+        analysisNotes: d.analysis_notes ?? undefined,
+        profileSummary: d.profile_summary ?? undefined,
         analyzedAt: new Date(d.analyzed_at),
         createdAt: new Date(d.created_at)
       }));
@@ -333,8 +333,8 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
         detectedKeywords: data.detected_keywords as string[] || [],
         detectedPhrases: data.detected_phrases as string[] || [],
         behaviorIndicators: data.behavior_indicators as string[] || [],
-        analyzedText: data.analyzed_text,
-        profileSummary: data.profile_summary,
+        analyzedText: data.analyzed_text ?? undefined,
+        profileSummary: data.profile_summary ?? undefined,
         analyzedAt: new Date(data.analyzed_at),
         createdAt: new Date(data.created_at)
       };
@@ -484,8 +484,8 @@ export function useDISCAnalysis(contactId?: string): UseDISCAnalysisReturn {
           detectedKeywords: d.detected_keywords as string[] || [],
           detectedPhrases: d.detected_phrases as string[] || [],
           behaviorIndicators: d.behavior_indicators as string[] || [],
-          analyzedText: d.analyzed_text,
-          profileSummary: d.profile_summary,
+          analyzedText: d.analyzed_text ?? undefined,
+          profileSummary: d.profile_summary ?? undefined,
           analyzedAt: new Date(d.analyzed_at),
           createdAt: new Date(d.created_at)
         })),

@@ -53,7 +53,7 @@ export default function PublicLeadMagnet() {
         utm_campaign: params.get('utm_campaign'),
       };
       const { data, error } = await supabase.rpc('track_magnet_download', {
-        _slug: slug, _email: email, _name: name || null, _utms: utms,
+        _slug: slug, _email: email, _name: name ?? undefined, _utms: utms,
       });
       if (error) throw error;
       const result = data as { external_url?: string; file_path?: string };

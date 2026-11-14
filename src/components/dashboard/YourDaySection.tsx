@@ -179,7 +179,7 @@ export function YourDaySection({ className }: YourDaySectionProps) {
                 <SectionHeader icon={AlertCircle} label="Atrasados" count={overdueFollowUps.length} colorClass="bg-destructive" />
                 <div className="space-y-1">
                   {overdueFollowUps.slice(0, 4).map((item, idx) => {
-                    const Icon = interactionTypeIcons[item.interaction.type] || MessageSquare;
+                    const Icon = interactionTypeIcons[item.interaction.type ?? 'noop'] || MessageSquare;
                     return (
                       <motion.div
                         key={item.interaction.id}
@@ -240,7 +240,7 @@ export function YourDaySection({ className }: YourDaySectionProps) {
                 <SectionHeader icon={Clock} label="Hoje" count={todayFollowUps.length} colorClass="bg-primary" />
                 <div className="space-y-1">
                   {todayFollowUps.slice(0, 4).map((item, idx) => {
-                    const Icon = interactionTypeIcons[item.interaction.type] || MessageSquare;
+                    const Icon = interactionTypeIcons[item.interaction.type ?? 'noop'] || MessageSquare;
                     return (
                       <motion.div
                         key={item.interaction.id}

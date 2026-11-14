@@ -54,14 +54,14 @@ const Interacoes = () => {
   const { triggerAnalysis } = useNLPAutoAnalysis();
 
   const contactMap = useMemo(() => {
-    const map = new Map<string, typeof contacts[0]>();
-    for (const c of contacts) { map.set(c.id, c); }
+    const map = new Map<string, { id: string; first_name: string; last_name: string; avatar_url: string | null; role_title: string | null }>();
+    for (const c of contacts) { map.set(c.id, { id: c.id, first_name: c.first_name ?? '', last_name: c.last_name ?? '', avatar_url: c.avatar_url, role_title: c.role_title }); }
     return map;
   }, [contacts]);
 
   const stats = useMemo(() => {
     const followUpCount = interactions.filter(i => i.follow_up_required).length;
-    const thisWeek = interactions.filter(i => { const d = new Date(i.created_at); return d >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); }).length;
+    const thisWeek = interactions.filter(i => { const d = new Date(i.created_at ?? 0); return d >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); }).length;
     return { total: interactions.length, followUp: followUpCount, thisWeek };
   }, [interactions]);
 
@@ -71,7 +71,7 @@ const Interacoes = () => {
     setIsSubmitting(false);
     if (result) {
       setIsFormOpen(false);
-      if (result.id && data.contact_id) triggerAnalysis(data.contact_id, result.id, data.content || null, null, data.type);
+      if (result.id && data.contact_id) triggerAnalysis(data.contact_id, result.id, data.content || null, null, data.type ?? 'note');
       const pos = event || { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
       celebration.trigger(pos, { variant: 'success', message: 'Interação criada!' });
     }

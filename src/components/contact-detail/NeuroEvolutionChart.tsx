@@ -27,8 +27,8 @@
        if (error) throw error;
        
        return data.map(entry => ({
-         date: format(new Date(entry.created_at), 'dd/MM', { locale: ptBR }),
-         fullDate: format(new Date(entry.created_at), "dd 'de' MMM", { locale: ptBR }),
+         date: format(new Date(entry.created_at ?? 0), 'dd/MM', { locale: ptBR }),
+         fullDate: format(new Date(entry.created_at ?? 0), "dd 'de' MMM", { locale: ptBR }),
         reptilian: (entry.dominance_data as { reptilian?: number } | null)?.reptilian || 0,
         limbic: (entry.dominance_data as { limbic?: number } | null)?.limbic || 0,
         neocortex: (entry.dominance_data as { neocortex?: number } | null)?.neocortex || 0,

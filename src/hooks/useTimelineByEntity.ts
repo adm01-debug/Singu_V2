@@ -111,10 +111,10 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
         const existing = groupsMap.get(entityId);
          const event: TimelineEventItem = {
            id: it.id,
-           type: it.type,
-           title: it.title,
+           type: it.type ?? 'note',
+           title: it.title ?? 'Sem título',
            content: it.content,
-           created_at: it.created_at,
+           created_at: it.created_at ?? '',
            sentiment: it.sentiment,
            follow_up_required: it.follow_up_required,
            transcription: it.transcription,
@@ -122,14 +122,14 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
          };
         if (existing) {
           existing.events.push(event);
-          if (it.created_at > existing.last_event_at) existing.last_event_at = it.created_at;
+          if ((it.created_at ?? '') > existing.last_event_at) existing.last_event_at = it.created_at ?? '';
         } else {
           groupsMap.set(entityId, {
             entity_id: entityId,
             entity_name: nameMap.get(entityId) || (groupBy === 'company' ? 'Empresa' : 'Contato'),
             entity_type: groupBy,
             events: [event],
-            last_event_at: it.created_at,
+            last_event_at: it.created_at ?? '',
           });
         }
       }

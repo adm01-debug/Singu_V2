@@ -54,7 +54,7 @@ export function IPRestrictionManager() {
             {ips.map(ip => (
               <div key={ip.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/40">
                 <div className="flex items-center gap-3">
-                  <Switch checked={ip.is_active} onCheckedChange={active => toggleIP({ id: ip.id, active })} />
+                  <Switch checked={ip.is_active ?? false} onCheckedChange={active => toggleIP({ id: ip.id, active })} />
                   <div>
                     {typeof ip.ip_address === 'string'
                       ? <IPDisplay ip={ip.ip_address} className="text-sm font-mono" />

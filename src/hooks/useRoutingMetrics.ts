@@ -24,7 +24,7 @@ export function useRoutingMetrics() {
         logger.error('Erro ao carregar KPIs do rodízio:', error);
         throw error;
       }
-      return data ?? [];
+      return (data ?? []) as RodizioKpi[];
     },
     enabled: !!user,
     staleTime: 60_000,

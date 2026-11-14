@@ -88,10 +88,10 @@ export function useUnifiedTimeline(contactId: string) {
       events.push({
         id: it.id,
         type,
-        subType: it.type,
+        subType: it.type ?? undefined,
         title: it.title || 'Sem título',
         content: it.content || it.transcription || undefined,
-        timestamp: it.created_at,
+        timestamp: it.created_at ?? '',
         metadata: {
           sentiment: it.sentiment,
           duration: it.duration,
@@ -156,7 +156,7 @@ export function useUnifiedTimeline(contactId: string) {
          type: 'neuro_update',
          title: 'Evolução de Neuromarketing',
          content: `Análise neurocomportamental registrada. Empatia: ${nh.empathy_score}/100.`,
-         timestamp: nh.created_at,
+         timestamp: nh.created_at ?? '',
          metadata: {
            dominance: nh.dominance_data,
            empathy: nh.empathy_score,
@@ -170,7 +170,7 @@ export function useUnifiedTimeline(contactId: string) {
         subType: alert.type,
         title: alert.type === 'at_risk' ? '⚠️ Risco de Churn Detectado' : '🔔 Lembrete de Follow-up',
         content: `${alert.message}\n\nAção sugerida: ${alert.suggested_action}`,
-        timestamp: alert.created_at,
+        timestamp: alert.created_at ?? '',
         metadata: {
           severity: alert.severity,
           is_resolved: alert.is_resolved,

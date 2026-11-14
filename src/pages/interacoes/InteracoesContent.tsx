@@ -126,7 +126,7 @@ interface Props {
       if (adv.company && i.company_id !== adv.company) return false;
       if (adv.direcao === 'inbound' && i.initiated_by !== 'them') return false;
       if (adv.direcao === 'outbound' && i.initiated_by !== 'us') return false;
-      const ts = new Date(i.created_at).getTime();
+      const ts = new Date(i.created_at ?? 0).getTime();
       if (deTs !== null && ts < deTs) return false;
       if (ateTs !== null && ts > ateTs) return false;
       if (q) {
@@ -178,7 +178,7 @@ interface Props {
   const advancedFiltered = useMemo(() => {
     return adv.canais.length === 0
       ? advancedFilteredWithoutCanais
-      : advancedFilteredWithoutCanais.filter(i => adv.canais.includes(i.type));
+      : advancedFilteredWithoutCanais.filter(i => adv.canais.includes(i.type ?? ''));
   }, [advancedFilteredWithoutCanais, adv.canais]);
 
   // Contagem por bucket de sentimento (ignora o próprio filtro de sentimento;
@@ -186,7 +186,7 @@ interface Props {
   const sentimentCounts = useMemo(() => {
     const base = adv.canais.length === 0
       ? baseWithoutCanaisAndSentimento
-      : baseWithoutCanaisAndSentimento.filter(i => adv.canais.includes(i.type));
+      : baseWithoutCanaisAndSentimento.filter(i => adv.canais.includes(i.type ?? ''));
     const acc: Record<'positive' | 'neutral' | 'negative' | 'mixed', number> = {
       positive: 0, neutral: 0, negative: 0, mixed: 0,
     };
@@ -244,14 +244,16 @@ interface Props {
 
   const sortedForView = useMemo(() => {
     const mapped = filteredAndSorted.map(i => {
-      const c = contactMap.get(i.contact_id);
-      const inferredCompanyId = i.company_id || contactToCompany.get(i.contact_id) || null;
+      const c = contactMap.get(i.contact_id ?? '');
+      const inferredCompanyId = i.company_id || contactToCompany.get(i.contact_id ?? '') || null;
       return {
         ...i,
+        type: i.type ?? 'note',
+        created_at: i.created_at ?? '',
         date: i.created_at,
         contact_name: c ? `${c.first_name ?? ''} ${c.last_name ?? ''}`.trim() : null,
         company_id: inferredCompanyId,
-        company_name: inferredCompanyId ? (companyMap.get(inferredCompanyId) ?? null) : null,
+        company_name: inferredCompanyId ? (companyMap.get(inferredCompanyId ?? '') ?? null) : null,
       };
     });
     return sortInteractions(mapped, adv.sort, debouncedQ, channelCounts);
@@ -635,8 +637,8 @@ interface Props {
               <div className={`absolute ${isCompact ? 'left-[19px]' : 'left-[27px]'} top-0 bottom-0 w-0.5 bg-border`} />
               <div className={isCompact ? 'space-y-2' : 'space-y-4'}>
                 {visibleInteractions.map((interaction, index) => {
-                  const contact = contactMap.get(interaction.contact_id);
-                  const Icon = interactionIcons[interaction.type] || MessageSquare;
+                  const contact = contactMap.get(interaction.contact_id ?? '');
+                  const Icon = interactionIcons[interaction.type ?? 'note'] || MessageSquare;
                   const tags = interaction.tags ?? [];
                   const visibleTags = isCompact ? tags.slice(0, 3) : tags;
                   const extraTags = isCompact ? Math.max(0, tags.length - 3) : 0;
@@ -651,7 +653,7 @@ interface Props {
                        className={`relative ${isCompact ? 'pl-12' : 'pl-16'} group cursor-pointer`}
                        onClick={() => isSelectionMode && handleToggleSelection(interaction.id)}
                      >
-                       <div className={`absolute ${isCompact ? 'left-3 top-3 w-7 h-7' : 'left-2 top-4 w-10 h-10'} rounded-full flex items-center justify-center ${interactionColors[interaction.type]} border-4 border-background z-10`}>
+                       <div className={`absolute ${isCompact ? 'left-3 top-3 w-7 h-7' : 'left-2 top-4 w-10 h-10'} rounded-full flex items-center justify-center ${interactionColors[interaction.type ?? 'note']} border-4 border-background z-10`}>
                          {isSelectionMode ? (
                            selectedIds.includes(interaction.id) 
                              ? <CheckSquare className="w-5 h-5 text-primary fill-primary-foreground" />
@@ -665,7 +667,7 @@ interface Props {
                         <div className={`flex items-start justify-between ${isCompact ? 'mb-1.5' : 'mb-3'}`}>
                           <div className="flex-1">
                             <div className={`flex items-center gap-2 ${isCompact ? 'mb-0.5' : 'mb-1'} flex-wrap`}>
-                              {!isCompact && <Badge variant="outline" className={`text-xs ${interactionColors[interaction.type].replace('bg-', 'border-').replace('/10', '/50')}`}>{interactionLabels[interaction.type]}</Badge>}
+                              {!isCompact && <Badge variant="outline" className={`text-xs ${interactionColors[interaction.type ?? 'note'].replace('bg-', 'border-').replace('/10', '/50')}`}>{interactionLabels[interaction.type ?? 'note']}</Badge>}
                               <SentimentIndicator sentiment={(interaction.sentiment as SentimentType) || 'neutral'} size="sm" />
                               {interaction.follow_up_required && <Badge variant="outline" className="text-xs text-warning border-warning bg-warning/10"><AlertCircle className="w-3 h-3 mr-1" />Follow-up</Badge>}
                               {interaction.initiated_by === 'them' && <Badge variant="secondary" className="text-xs">Recebido</Badge>}
@@ -674,8 +676,8 @@ interface Props {
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="text-right text-xs text-muted-foreground">
-                              {!isCompact && <div className="flex items-center gap-1 justify-end"><Calendar className="w-3 h-3" />{format(new Date(interaction.created_at), "d MMM 'às' HH:mm", { locale: ptBR })}</div>}
-                              <div>{formatDistanceToNow(new Date(interaction.created_at), { locale: ptBR, addSuffix: true })}</div>
+                              {!isCompact && <div className="flex items-center gap-1 justify-end"><Calendar className="w-3 h-3" />{format(new Date(interaction.created_at ?? 0), "d MMM 'às' HH:mm", { locale: ptBR })}</div>}
+                              <div>{formatDistanceToNow(new Date(interaction.created_at ?? 0), { locale: ptBR, addSuffix: true })}</div>
                             </div>
                             <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label="Mais opções" className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"><MoreVertical className="w-4 h-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => onSetEditingInteraction(interaction)}><Edit className="w-4 h-4 mr-2" />Editar</DropdownMenuItem><DropdownMenuItem onClick={() => onSetDeletingInteraction(interaction)} className="text-destructive"><Trash2 className="w-4 h-4 mr-2" />Excluir</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
                           </div>

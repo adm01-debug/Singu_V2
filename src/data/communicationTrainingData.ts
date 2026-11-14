@@ -48,7 +48,7 @@ export interface TrainingTip {
 // DISC Training Data (16 combinations)
 // ============================================
 
-export const DISC_TRAINING: Record<DISCProfile, Record<DISCProfile, TrainingTip>> = {
+export const DISC_TRAINING: Record<Exclude<DISCProfile, null>, Record<Exclude<DISCProfile, null>, TrainingTip>> = {
   D: {
     D: {
       title: 'D para D: Dois Dominantes',
@@ -207,17 +207,17 @@ export const VAK_TRAINING: Record<VAKType, Record<VAKType, TrainingTip>> = {
 // ============================================
 
 const getSituation = (disc: DISCProfile): string => {
-  const situations: Record<DISCProfile, string> = {
+  const situations: Record<Exclude<DISCProfile, null>, string> = {
     D: 'O cliente está com pressa e quer ir direto ao ponto. Ele pergunta: "Quanto tempo isso vai levar e qual é o resultado final?"',
     I: 'O cliente está animado e quer conversar sobre várias ideias. Ele diz: "Adorei a ideia! Imagina todas as possibilidades..."',
     S: 'O cliente está hesitante e preocupado com mudanças. Ele pergunta: "Como minha equipe vai se adaptar a isso?"',
     C: 'O cliente está analisando cada detalhe. Ele pergunta: "Qual é a metodologia exata e os dados que comprovam isso?"',
   };
-  return situations[disc];
+  return situations[disc ?? 'D'];
 };
 
 const getOptions = (clientDISC: DISCProfile, _sellerDISC: DISCProfile | null): TrainingScenario['options'] => {
-  const options: Record<DISCProfile, TrainingScenario['options']> = {
+  const options: Record<Exclude<DISCProfile, null>, TrainingScenario['options']> = {
     D: [
       { id: 'a', text: 'Vou te explicar em detalhes todo o processo primeiro...', isCorrect: false, explanation: 'Cliente D não quer detalhes primeiro. Ele quer resultados e velocidade.' },
       { id: 'b', text: 'Implementação em 2 semanas, ROI de 25% em 3 meses. Próximo passo?', isCorrect: true, explanation: 'Perfeito! Direto ao ponto com resultados e ação.' },
@@ -239,7 +239,7 @@ const getOptions = (clientDISC: DISCProfile, _sellerDISC: DISCProfile | null): T
       { id: 'c', text: 'Vamos fazer isso agora e ajustamos depois se precisar.', isCorrect: false, explanation: 'C precisa analisar antes. Não gosta de improvisação.' },
     ],
   };
-  return options[clientDISC];
+  return options[clientDISC ?? 'D'];
 };
 
 export const generateScenarios = (sellerDISC: DISCProfile | null): TrainingScenario[] => {
@@ -250,7 +250,7 @@ export const generateScenarios = (sellerDISC: DISCProfile | null): TrainingScena
     if (disc !== sellerDISC) {
       scenarios.push({
         id: `scenario-${disc}`,
-        title: `Cliente ${DISC_LABELS[disc].name}`,
+        title: `Cliente ${DISC_LABELS[disc ?? 'D'].name}`,
         description: `Como abordar um cliente com perfil ${disc}?`,
         clientProfile: {
           disc,

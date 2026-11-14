@@ -90,7 +90,7 @@ function ActivityHeatmap() {
   const heatmapData = useMemo(() => {
     const grid: number[][] = Array.from({ length: 7 }, () => Array(24).fill(0));
     interactions.forEach(i => {
-      const d = new Date(i.created_at);
+      const d = new Date(i.created_at ?? 0);
       grid[d.getDay()][d.getHours()]++;
     });
     return grid;
@@ -238,7 +238,7 @@ function InteractionsPerWeekChart() {
       weeks[key] = 0;
     }
     interactions.forEach(inter => {
-      const date = new Date(inter.created_at);
+      const date = new Date(inter.created_at ?? 0);
       const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
       const weekIdx = Math.floor(diffDays / 7);
       if (weekIdx >= 0 && weekIdx < 12) {

@@ -27,9 +27,9 @@ export default function PermissionsPage() {
   if (adminLoading || isLoading) return <Skeleton className="h-64 m-6" />;
   if (!isAdmin) return <p className="p-6 text-muted-foreground">Acesso restrito.</p>;
 
-  const grouped = permissions.reduce((acc, p) => {
-    if (!acc[p.module]) acc[p.module] = [];
-    acc[p.module].push(p);
+  const grouped = permissions.reduce((acc: Record<string, typeof permissions>, p) => {
+    if (!acc[p.module ?? 'outros']) acc[p.module ?? 'outros'] = [] as typeof permissions;
+    acc[p.module ?? 'outros'].push(p);
     return acc;
   }, {} as Record<string, typeof permissions>);
 

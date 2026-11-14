@@ -177,7 +177,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
             <div>
               <h1 className="text-2xl font-bold text-foreground">
                 {fullName}
-                {contactExt.apelido && (
+                {Boolean(contactExt.apelido) && (
                   <span className="ml-2 text-lg font-normal text-muted-foreground">
                     ({contactExt.apelido as string})
                   </span>
@@ -194,13 +194,13 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                 )}
               </h1>
               <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                {(contact.role_title || contactExt.cargo) && (
+                {Boolean(contact.role_title || contactExt.cargo) && (
                   <span className="flex items-center gap-1">
                     <Briefcase className="h-3.5 w-3.5" />
                     {contact.role_title || contactExt.cargo as string}
                   </span>
                 )}
-                {contactExt.departamento && (
+                {Boolean(contactExt.departamento) && (
                   <Badge variant="outline" className="text-xs">
                     {contactExt.departamento as string}
                   </Badge>
@@ -216,7 +216,7 @@ export function ContactDetailHeader({ contact, company, interactionCount, onEdit
                     {ROLE_CONFIG[contact.role]}
                   </Badge>
                 )}
-                {contactExt.source && (
+                {Boolean(contactExt.source) && (
                   <Badge variant="secondary" className="text-xs">
                     Fonte: {contactExt.source as string}
                   </Badge>

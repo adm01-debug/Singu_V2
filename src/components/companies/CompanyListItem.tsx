@@ -136,7 +136,7 @@ export const CompanyListItem = React.memo(function CompanyListItem({
           </span>
         )}
         <span className="tabular-nums">
-          {formatDistanceToNow(new Date(company.updated_at), { locale: ptBR, addSuffix: true })}
+          {formatDistanceToNow(new Date(company.updated_at ?? 0), { locale: ptBR, addSuffix: true })}
         </span>
       </div>
     </Link>

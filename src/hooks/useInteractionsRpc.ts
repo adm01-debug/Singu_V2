@@ -206,7 +206,7 @@ export function useUnifiedCommunicationHistory(entityId?: string, limit = 50, en
         if (!user?.id) throw new Error('Não autenticado');
         const { data, error } = await supabase.from('interactions')
           .select('id, company_id, contact_id, type, channel, resumo, content, data_interacao')
-          .eq('contact_id', entityId).eq('user_id', user.id)
+          .eq('contact_id', entityId ?? '').eq('user_id', user.id)
           .order('data_interacao', { ascending: false }).limit(limit);
         if (error) throw error;
         return (data ?? []).map((row): InteractionHistoryItem => ({

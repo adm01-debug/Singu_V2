@@ -69,7 +69,19 @@ export function CompatibilityAlertsList({
 
       if (signal?.cancelled) return;
       if (error) throw error;
-      setAlerts(data || []);
+      setAlerts((data ?? []).map(a => ({
+        id: a.id,
+        contact_id: a.contact_id ?? '',
+        compatibility_score: a.compatibility_score,
+        threshold: a.threshold ?? 0,
+        title: a.title,
+        description: a.description ?? null,
+        dismissed: !!a.dismissed,
+        created_at: a.created_at,
+        contact: a.contact
+          ? { first_name: a.contact.first_name ?? '', last_name: a.contact.last_name ?? '' }
+          : undefined,
+      })));
     } catch (err) {
       logger.error('Error fetching alerts:', err);
     } finally {
