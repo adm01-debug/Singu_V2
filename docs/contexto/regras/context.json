@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "4d004ceb3c9393d1886e13add0fcb101f007332a",
+  "sha": "8a4e6f2fe9bfca4a82bd7c412bae6308bd71c391",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 04:01 UTC",
+  "generated_at": "2026-11-14 05:04 UTC",
   "files_total": 3344,
   "code_files": 2873,
   "code_lines": 409809
@@ -232814,10 +232814,26 @@
   }
  },
  "git": {
-  "sha": "4d004ceb3c9393d1886e13add0fcb101f007332a",
+  "sha": "8a4e6f2fe9bfca4a82bd7c412bae6308bd71c391",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "8a4e6f2",
+    "date": "2026-11-14",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness pos-merge 225 (#226)",
+    "files": []
+   },
+   {
+    "sha": "8bc7489",
+    "date": "2026-11-14",
+    "author": "Copilot App",
+    "subject": "chore(docs): bump prod-readiness pos-merge 225",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "4d004ce",
     "date": "2026-11-14",
@@ -233223,32 +233239,12 @@
     "files": [
      "src/lib/pushNotifications.ts"
     ]
-   },
-   {
-    "sha": "cd6478e",
-    "date": "2026-11-11",
-    "author": "adm01-debug",
-    "subject": "fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)",
-    "files": [
-     "supabase/functions/weekly-digest/index.ts"
-    ]
-   },
-   {
-    "sha": "047b283",
-    "date": "2026-11-11",
-    "author": "adm01-debug",
-    "subject": "feat: digest semanal enviado por e-mail via Resend no horário de Brasília (#201)",
-    "files": [
-     "supabase/functions/_shared/resend.ts",
-     "supabase/functions/weekly-digest/index.ts",
-     "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    10
+    11
    ],
    [
     "inventario/estado/banco.json",
@@ -233261,10 +233257,6 @@
    [
     "inventario/estado/tabelas-uso.json",
     4
-   ],
-   [
-    "supabase/functions/weekly-digest/index.ts",
-    3
    ],
    [
     "scripts/docs/citacoes-baseline.json",
@@ -233324,6 +233316,10 @@
    ],
    [
     "scripts/apply-e2e.test.mjs",
+    1
+   ],
+   [
+    "scripts/automation.config.json",
     1
    ]
   ]

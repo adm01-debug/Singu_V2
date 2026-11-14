@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "4d004ceb3c9393d1886e13add0fcb101f007332a",
+  "commit": "8a4e6f2fe9bfca4a82bd7c412bae6308bd71c391",
   "branch": "main",
-  "data_commit": "2026-11-14T00:52:59-03:00",
+  "data_commit": "2026-11-14T01:36:13-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "8a4e6f2f",
+    "data": "2026-11-14",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 225 (#226)"
+   },
+   {
+    "sha": "8bc74893",
+    "data": "2026-11-14",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 225"
+   },
    {
     "sha": "4d004ceb",
     "data": "2026-11-14",
@@ -121,16 +131,6 @@
     "sha": "3e49b844",
     "data": "2026-11-12",
     "assunto": "fix(cache): preserva carga inicial e revalida relações da ficha (#147)"
-   },
-   {
-    "sha": "68a97f4d",
-    "data": "2026-11-12",
-    "assunto": "fix(oportunidades): alinha criação ao contrato da RPC (#152)"
-   },
-   {
-    "sha": "47e97ccb",
-    "data": "2026-11-12",
-    "assunto": "style(manutencao): aplica correcoes locais verificadas (#195)"
    }
   ],
   "arquivos_mudados_7d": 632,
@@ -181,7 +181,7 @@
    },
    {
     "pasta": "docs/prod-readiness.md",
-    "mudancas": 10
+    "mudancas": 11
    },
    {
     "pasta": "inventario/estado/banco.json",
@@ -222,12 +222,12 @@
     "mudancas": 12
    },
    {
-    "arquivo": "tests/rls/security_definer_hardening.sql",
+    "arquivo": "docs/prod-readiness.md",
     "mudancas": 11
    },
    {
-    "arquivo": "docs/prod-readiness.md",
-    "mudancas": 10
+    "arquivo": "tests/rls/security_definer_hardening.sql",
+    "mudancas": 11
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 71
+    "commits": 72
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -313,7 +313,7 @@
    },
    {
     "autor": "Copilot App",
-    "commits": 2
+    "commits": 3
    },
    {
     "autor": "github-actions[bot]",
