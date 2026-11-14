@@ -93,7 +93,7 @@ function calculatePower(contact: Contact): number {
 function calculateInterest(contact: Contact, interactions: Interaction[]): number {
   const contactInteractions = interactions.filter(i => i.contact_id === contact.id);
   const recentInteractions = contactInteractions.filter(i => {
-    const date = new Date(i.created_at);
+    const date = new Date(i.created_at ?? 0);
     const daysSince = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
     return daysSince <= 30;
   });
@@ -207,7 +207,7 @@ function calculateEngagement(contact: Contact, interactions: Interaction[]): num
   const lastInteraction = contactInteractions[0];
   let recencyScore = 1;
   if (lastInteraction) {
-    const daysSince = (Date.now() - new Date(lastInteraction.created_at).getTime()) / (1000 * 60 * 60 * 24);
+    const daysSince = (Date.now() - new Date(lastInteraction.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24);
     if (daysSince <= 7) recencyScore = 10;
     else if (daysSince <= 14) recencyScore = 8;
     else if (daysSince <= 30) recencyScore = 6;
@@ -217,7 +217,7 @@ function calculateEngagement(contact: Contact, interactions: Interaction[]): num
 
   // Frequency factor
   const recentCount = contactInteractions.filter(i => {
-    const daysSince = (Date.now() - new Date(i.created_at).getTime()) / (1000 * 60 * 60 * 24);
+    const daysSince = (Date.now() - new Date(i.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24);
     return daysSince <= 30;
   }).length;
 

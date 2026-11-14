@@ -30,7 +30,7 @@ export interface DealRiskResult {
 }
 
 interface SignalPayload {
-  recentSentiments: Array<{ sentiment: string | null; created_at: string }>;
+  recentSentiments: Array<{ sentiment: string | null; created_at: string | null }>;
   lastInboundAt: string | null;
 }
 

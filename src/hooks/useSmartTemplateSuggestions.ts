@@ -18,7 +18,7 @@ export interface TemplateSuccessData {
   successCount: number;
   successRate: number;
   avgRating: number;
-  discPerformance: Record<DISCProfile, { usages: number; successRate: number }>;
+  discPerformance: Record<Exclude<DISCProfile, null>, { usages: number; successRate: number }>;
 }
 
 export interface SmartSuggestion {

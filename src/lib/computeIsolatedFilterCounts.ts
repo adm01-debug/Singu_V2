@@ -114,14 +114,14 @@ export function computeIsolatedFilterCounts(
   if (filters.de instanceof Date && !Number.isNaN(filters.de.getTime())) {
     const deTs = new Date(filters.de).setHours(0, 0, 0, 0);
     let n = 0;
-    for (const i of interactions) if (new Date(i.created_at).getTime() >= deTs) n += 1;
+    for (const i of interactions) if (new Date(i.created_at ?? 0).getTime() >= deTs) n += 1;
     out.push({ key: 'de', label: 'Desde', count: n });
   }
 
   if (filters.ate instanceof Date && !Number.isNaN(filters.ate.getTime())) {
     const ateTs = new Date(filters.ate).setHours(23, 59, 59, 999);
     let n = 0;
-    for (const i of interactions) if (new Date(i.created_at).getTime() <= ateTs) n += 1;
+    for (const i of interactions) if (new Date(i.created_at ?? 0).getTime() <= ateTs) n += 1;
     out.push({ key: 'ate', label: 'Até', count: n });
   }
 

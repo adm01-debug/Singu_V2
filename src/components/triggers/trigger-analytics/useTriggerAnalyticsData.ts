@@ -78,14 +78,14 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
       ? ratedUsages.reduce((sum, u) => sum + (u.effectiveness_rating || 0), 0) / ratedUsages.length
       : 0;
 
-    const byDISC: Record<DISCProfile, { discProfile: DISCProfile; totalUsages: number; successRate: number; avgRating: number; topTriggers: Array<{ type: TriggerType; count: number; successRate: number; avgRating: number }> }> = {
+    const byDISC: Record<Exclude<DISCProfile, null>, { discProfile: DISCProfile; totalUsages: number; successRate: number; avgRating: number; topTriggers: Array<{ type: TriggerType; count: number; successRate: number; avgRating: number }> }> = {
       D: { discProfile: 'D', totalUsages: 0, successRate: 0, avgRating: 0, topTriggers: [] },
       I: { discProfile: 'I', totalUsages: 0, successRate: 0, avgRating: 0, topTriggers: [] },
       S: { discProfile: 'S', totalUsages: 0, successRate: 0, avgRating: 0, topTriggers: [] },
       C: { discProfile: 'C', totalUsages: 0, successRate: 0, avgRating: 0, topTriggers: [] },
     };
 
-    const discGroups: Record<DISCProfile, TriggerUsageWithContact[]> = { D: [], I: [], S: [], C: [] };
+    const discGroups: Record<Exclude<DISCProfile, null>, TriggerUsageWithContact[]> = { D: [], I: [], S: [], C: [] };
     usageData.forEach((u) => {
       if (u.contact_disc && discGroups[u.contact_disc]) discGroups[u.contact_disc].push(u);
     });

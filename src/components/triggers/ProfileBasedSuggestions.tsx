@@ -17,7 +17,7 @@ import { generateCombinedMessage } from './profile-based/generateCombinedMessage
 
 interface ProfileBasedSuggestionsProps { contact: Contact; vakProfile: VAKProfile | null; metaprogramProfile: MetaprogramProfile | null; className?: string; }
 
-const DISC_DESCRIPTIONS: Record<DISCProfile, { name: string; icon: string; color: string }> = {
+const DISC_DESCRIPTIONS: Record<Exclude<DISCProfile, null>, { name: string; icon: string; color: string }> = {
   D: { name: 'Dominante', icon: '🔴', color: 'bg-destructive text-destructive border-destructive' },
   I: { name: 'Influente', icon: '🟡', color: 'bg-warning text-warning border-warning/30' },
   S: { name: 'Estável', icon: '🟢', color: 'bg-success text-success border-success/30' },

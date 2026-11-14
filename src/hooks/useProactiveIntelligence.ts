@@ -41,7 +41,7 @@ export function useProactiveIntelligence(
 
       // Analyze interaction patterns
       const sortedInteractions = [...interactions].sort((a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime()
       );
       const lastInteraction = sortedInteractions[0];
       const daysSinceLastContact = lastInteraction

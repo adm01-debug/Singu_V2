@@ -26,7 +26,7 @@ export function PasswordResetApproval() {
           <div key={r.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30 text-sm">
             <div>
               <p className="font-medium">{r.email}</p>
-              <p className="text-[10px] text-muted-foreground">{new Date(r.created_at).toLocaleString('pt-BR')}</p>
+              <p className="text-[10px] text-muted-foreground">{new Date(r.created_at ?? 0).toLocaleString('pt-BR')}</p>
             </div>
             <div className="flex gap-1.5">
               <Button size="sm" variant="default" className="h-7 text-xs" onClick={() => approve(r.id)}>Aprovar</Button>

@@ -59,7 +59,7 @@ export function CompanyInteractionsModal({
   const sorted = useMemo(
     () =>
       [...interactions].sort(
-        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+        (a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime(),
       ),
     [interactions],
   );
@@ -134,7 +134,7 @@ export function CompanyInteractionsModal({
                         </p>
                       )}
                       <p className="text-[10px] text-muted-foreground mt-1 tabular-nums">
-                        {format(new Date(interaction.created_at), "dd MMM yyyy 'às' HH:mm", {
+                        {format(new Date(interaction.created_at ?? 0), "dd MMM yyyy 'às' HH:mm", {
                           locale: ptBR,
                         })}
                       </p>

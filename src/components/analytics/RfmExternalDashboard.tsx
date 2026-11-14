@@ -102,7 +102,7 @@ export const RfmExternalDashboard = React.memo(function RfmExternalDashboard() {
                   <YAxis type="category" dataKey="segment" width={120} tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
                   <Tooltip
                     contentStyle={{ background: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: 8 }}
-                    formatter={(v: number, _: unknown, entry: { payload: { percentage: number } }) => [`${v} (${entry.payload.percentage.toFixed(1)}%)`, 'Clientes']}
+                    formatter={(v: number, _: unknown, entry: { payload?: { percentage: number } }) => [`${v} (${entry.payload?.percentage?.toFixed(1) ?? 0}%)`, 'Clientes']}
                   />
                   <Bar dataKey="count" radius={[0, 4, 4, 0]}>
                     {segments.map((seg) => (

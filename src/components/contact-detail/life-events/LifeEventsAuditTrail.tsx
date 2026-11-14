@@ -79,7 +79,7 @@ export function LifeEventsAuditTrail({ contactId }: LifeEventsAuditTrailProps) {
                   </Badge>
                   <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {format(new Date(log.changed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+                    {format(new Date(log.changed_at ?? 0), "dd/MM/yyyy HH:mm", { locale: ptBR })}
                   </span>
                 </div>
                 

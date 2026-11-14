@@ -61,7 +61,7 @@ const Interacoes = () => {
 
   const stats = useMemo(() => {
     const followUpCount = interactions.filter(i => i.follow_up_required).length;
-    const thisWeek = interactions.filter(i => { const d = new Date(i.created_at); return d >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); }).length;
+    const thisWeek = interactions.filter(i => { const d = new Date(i.created_at ?? 0); return d >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); }).length;
     return { total: interactions.length, followUp: followUpCount, thisWeek };
   }, [interactions]);
 

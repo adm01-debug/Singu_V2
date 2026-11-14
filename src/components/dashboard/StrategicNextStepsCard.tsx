@@ -335,7 +335,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       const last = interactions[0];
       doc.setFontSize(12);
       doc.text(`Título: ${last.title}`, 14, finalY + 8);
-      doc.text(`Data: ${format(new Date(last.created_at), 'dd/MM/yyyy')}`, 14, finalY + 14);
+      doc.text(`Data: ${format(new Date(last.created_at ?? 0), 'dd/MM/yyyy')}`, 14, finalY + 14);
       
       const splitContent = doc.splitTextToSize(last.content || 'Sem conteúdo detalhado.', 180);
       doc.text(splitContent, 14, finalY + 22);
@@ -539,7 +539,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
                         {interactions[0].type === 'message' ? 'Mensagem' : 'Reunião'}
                       </Badge>
                       <span className="text-[10px] text-muted-foreground">
-                        {formatDistanceToNow(new Date(interactions[0].created_at), { addSuffix: true, locale: ptBR })}
+                        {formatDistanceToNow(new Date(interactions[0].created_at ?? 0), { addSuffix: true, locale: ptBR })}
                       </span>
                     </div>
                     

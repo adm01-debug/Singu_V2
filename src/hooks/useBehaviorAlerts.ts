@@ -181,7 +181,7 @@ export function useBehaviorAlerts() {
 
         // Check for communication gap (no interaction in 14+ days)
         const lastInteractionDate = contactInteractions.length > 0
-          ? new Date(Math.max(...contactInteractions.map(i => new Date(i.created_at).getTime())))
+          ? new Date(Math.max(...contactInteractions.map(i => new Date(i.created_at ?? 0).getTime())))
           : null;
 
         if (lastInteractionDate) {

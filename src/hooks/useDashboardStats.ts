@@ -84,20 +84,20 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
     const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const companiesThisMonth = companies.filter(c => 
-      new Date(c.created_at) >= thisMonthStart
+      new Date(c.created_at ?? 0) >= thisMonthStart
     ).length;
     
     const contactsThisMonth = contacts.filter(c => 
-      new Date(c.created_at) >= thisMonthStart
+      new Date(c.created_at ?? 0) >= thisMonthStart
     ).length;
 
     const thisWeekInteractions = interactions.filter(i => {
-      const date = new Date(i.created_at);
+      const date = new Date(i.created_at ?? 0);
       return date >= thisWeekStart && date <= thisWeekEnd;
     }).length;
 
     const lastWeekInteractions = interactions.filter(i => {
-      const date = new Date(i.created_at);
+      const date = new Date(i.created_at ?? 0);
       return date >= lastWeekStart && date <= lastWeekEnd;
     }).length;
 
@@ -109,7 +109,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       const wStart = subWeeks(thisWeekStart, w);
       const wEnd = subWeeks(thisWeekEnd, w);
       const count = interactions.filter(i => {
-        const d = new Date(i.created_at);
+        const d = new Date(i.created_at ?? 0);
         return d >= wStart && d <= wEnd;
       }).length;
       interactionSparkline.push(count);
@@ -220,7 +220,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
 
     const recentActivities = interactions
       .slice() // avoid mutating the memoized array from useInteractions
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .sort((a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime())
       .slice(0, 50) // cap before heavy per-item processing
       .map(interaction => {
         const contact = contactMap.get(interaction.contact_id);
@@ -256,7 +256,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
           contactId: interaction.contact_id,
           entityName: displayName,
           description: cleanDesc,
-          createdAt: new Date(interaction.created_at),
+          createdAt: new Date(interaction.created_at ?? 0),
           type: interaction.type,
         };
       })

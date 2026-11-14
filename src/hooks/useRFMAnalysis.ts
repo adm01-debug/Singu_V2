@@ -66,7 +66,7 @@ export function useRFMAnalysis(contactId?: string) {
           ...offer, id: offer.id ?? `${item.id}:offer:${index}`,
         })),
         communicationPriority: item.communication_priority as CommunicationPriority || 'medium',
-        analyzedAt: new Date(item.analyzed_at), createdAt: new Date(item.created_at), updatedAt: new Date(item.updated_at)
+        analyzedAt: new Date(item.analyzed_at), createdAt: new Date(item.created_at ?? 0), updatedAt: new Date(item.updated_at)
       })) as RFMAnalysis[];
     },
     enabled: !!user,
@@ -107,7 +107,7 @@ export function useRFMAnalysis(contactId?: string) {
       const contactMetrics: Map<string, PurchaseData> = new Map();
       contacts.forEach(contact => {
         const contactInteractions = interactions.filter(i => i.contact_id === contact.id);
-        const lastInteraction = contactInteractions.length > 0 ? new Date(Math.max(...contactInteractions.map(i => new Date(i.created_at).getTime()))) : null;
+        const lastInteraction = contactInteractions.length > 0 ? new Date(Math.max(...contactInteractions.map(i => new Date(i.created_at ?? 0).getTime()))) : null;
         contactMetrics.set(contact.id, { contactId: contact.id, totalPurchases: 0, totalValue: 0, lastPurchaseDate: lastInteraction, averageOrderValue: 0 });
       });
       (purchaseData || []).forEach(purchase => {
@@ -134,7 +134,7 @@ export function useRFMAnalysis(contactId?: string) {
         if (!contact) continue;
         const daysSinceLastPurchase = metrics.lastPurchaseDate ? differenceInDays(new Date(), metrics.lastPurchaseDate) : 999;
         const contactInts = interactions.filter(i => i.contact_id === cId);
-        const lastInt = contactInts.length > 0 ? new Date(Math.max(...contactInts.map(i => new Date(i.created_at).getTime()))) : null;
+        const lastInt = contactInts.length > 0 ? new Date(Math.max(...contactInts.map(i => new Date(i.created_at ?? 0).getTime()))) : null;
         const daysSinceLastInteraction = lastInt ? differenceInDays(new Date(), lastInt) : 999;
         const recencyScore = calculateRFMScore(daysSinceLastPurchase, recencyPercentiles, true);
         const frequencyScore = calculateRFMScore(metrics.totalPurchases, frequencyPercentiles);

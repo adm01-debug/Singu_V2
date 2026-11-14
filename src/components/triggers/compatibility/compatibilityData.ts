@@ -1,7 +1,7 @@
 import { DISCProfile } from '@/types';
 import { VAKType } from '@/types/vak';
 
-export const DISC_COMPATIBILITY: Record<DISCProfile, Record<DISCProfile, number>> = {
+export const DISC_COMPATIBILITY: Record<Exclude<DISCProfile, null>, Record<Exclude<DISCProfile, null>, number>> = {
   D: { D: 60, I: 85, S: 50, C: 70 },
   I: { D: 85, I: 70, S: 80, C: 55 },
   S: { D: 50, I: 80, S: 75, C: 85 },

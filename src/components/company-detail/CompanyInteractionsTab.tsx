@@ -201,8 +201,8 @@ export function CompanyInteractionsTab({ interactions, contacts = [] }: CompanyI
                         )}
                       </div>
                       <div className="text-right text-xs text-muted-foreground">
-                        <p>{format(new Date(interaction.created_at), "d MMM", { locale: ptBR })}</p>
-                        <p>{format(new Date(interaction.created_at), "HH:mm")}</p>
+                        <p>{format(new Date(interaction.created_at ?? 0), "d MMM", { locale: ptBR })}</p>
+                        <p>{format(new Date(interaction.created_at ?? 0), "HH:mm")}</p>
                       </div>
                     </div>
                   </CardContent>

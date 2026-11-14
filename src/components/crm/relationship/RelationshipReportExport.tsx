@@ -31,7 +31,7 @@ export function RelationshipReportExport({ contactId, contactName }: Props) {
       if (error) throw error;
 
       const exportData = interactions.map(i => ({
-        Data: format(new Date(i.created_at), 'dd/MM/yyyy HH:mm', { locale: ptBR }),
+        Data: format(new Date(i.created_at ?? 0), 'dd/MM/yyyy HH:mm', { locale: ptBR }),
         Titulo: i.title,
         Tipo: i.type,
         Conteudo: i.content || '',

@@ -135,7 +135,7 @@ export const InteractionCardMemo = memo(function InteractionCardMemo({
   const config = TYPE_CONFIG[interaction.type as keyof typeof TYPE_CONFIG] || TYPE_CONFIG.other;
   const Icon = config.icon;
 
-  const formattedDate = format(new Date(interaction.created_at), "d 'de' MMM 'às' HH:mm", {
+  const formattedDate = format(new Date(interaction.created_at ?? 0), "d 'de' MMM 'às' HH:mm", {
     locale: ptBR,
   });
 

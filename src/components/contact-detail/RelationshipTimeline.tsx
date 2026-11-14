@@ -57,7 +57,7 @@ export function RelationshipTimeline({ interactions, contact, className }: Relat
       const color = interactionColors[interaction.type] || interactionColors.note;
       items.push({
         id: `int-${interaction.id}`,
-        date: new Date(interaction.created_at),
+        date: new Date(interaction.created_at ?? 0),
         type: 'interaction',
         title: interaction.title,
         description: interaction.content?.slice(0, 120) || undefined,
@@ -74,7 +74,7 @@ export function RelationshipTimeline({ interactions, contact, className }: Relat
     // Add contact creation
     items.push({
       id: 'created',
-      date: new Date(contact.created_at),
+      date: new Date(contact.created_at ?? 0),
       type: 'life_event',
       title: 'Contato criado',
       description: 'Início do relacionamento',

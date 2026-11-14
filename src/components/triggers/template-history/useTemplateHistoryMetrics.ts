@@ -52,14 +52,14 @@ export function useTemplateHistoryMetrics() {
   }, [user]);
 
   const profileMetrics = useMemo(() => {
-    const metrics: Record<DISCProfile, ProfileMetrics> = {
+    const metrics: Record<Exclude<DISCProfile, null>, ProfileMetrics> = {
       D: { profile: 'D', totalUsages: 0, successCount: 0, successRate: 0, avgRating: 0, topTemplates: [], trend: 'stable', recentUsages: [] },
       I: { profile: 'I', totalUsages: 0, successCount: 0, successRate: 0, avgRating: 0, topTemplates: [], trend: 'stable', recentUsages: [] },
       S: { profile: 'S', totalUsages: 0, successCount: 0, successRate: 0, avgRating: 0, topTemplates: [], trend: 'stable', recentUsages: [] },
       C: { profile: 'C', totalUsages: 0, successCount: 0, successRate: 0, avgRating: 0, topTemplates: [], trend: 'stable', recentUsages: [] },
     };
 
-    const usagesByProfile: Record<DISCProfile, TriggerUsageEntry[]> = { D: [], I: [], S: [], C: [] };
+    const usagesByProfile: Record<Exclude<DISCProfile, null>, TriggerUsageEntry[]> = { D: [], I: [], S: [], C: [] };
     history.forEach((entry) => {
       const contactInfo = contactDISCMap.get(entry.contact_id);
       if (contactInfo) usagesByProfile[contactInfo.discProfile].push(entry);

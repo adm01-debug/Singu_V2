@@ -191,7 +191,7 @@ export function useRealtimeNotifications() {
           ...(alertsRes.data || []).map(a => ({ id: a.id, type: 'alert' as const, title: a.title, description: a.description || undefined, entityId: a.contact_id || undefined, entityType: 'contact', createdAt: a.created_at })),
           ...(insightsRes.data || []).map(i => ({ id: i.id, type: 'insight' as const, title: i.title, description: i.description || undefined, entityId: i.contact_id, entityType: 'contact', createdAt: i.created_at })),
           ...(healthRes.data || []).map(h => ({ id: h.id, type: 'health_alert' as const, title: h.title, description: h.description || undefined, entityId: h.contact_id, entityType: 'contact', createdAt: h.created_at })),
-        ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 50);
+        ].sort((a, b) => new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime()).slice(0, 50);
 
         setNotifications(allNotifications);
         setUnreadCount(allNotifications.length);

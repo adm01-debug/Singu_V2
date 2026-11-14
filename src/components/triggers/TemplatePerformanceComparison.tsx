@@ -33,14 +33,14 @@ const scenarioLabels: Record<PersuasionScenario | 'all', string> = {
   general: 'Geral',
 };
 
-const discLabels: Record<DISCProfile, string> = {
+const discLabels: Record<Exclude<DISCProfile, null>, string> = {
   D: 'Dominante',
   I: 'Influente',
   S: 'Estável',
   C: 'Analítico',
 };
 
-const discColors: Record<DISCProfile, string> = {
+const discColors: Record<Exclude<DISCProfile, null>, string> = {
   D: 'bg-destructive text-destructive border-destructive',
   I: 'bg-warning text-warning border-warning',
   S: 'bg-success text-success border-success',

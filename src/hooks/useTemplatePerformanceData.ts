@@ -13,7 +13,7 @@ export interface TemplatePerformanceData {
   successRate: number;
   avgRating: number;
   lastUsed: string | null;
-  discPerformance: Record<DISCProfile, { usages: number; successRate: number }>;
+  discPerformance: Record<Exclude<DISCProfile, null>, { usages: number; successRate: number }>;
   trend: 'up' | 'down' | 'stable';
 }
 
@@ -62,7 +62,7 @@ export function useTemplatePerformanceData(
         const discSuccess = discUsages.filter(u => u.result === 'success').length;
         acc[disc] = { usages: discUsages.length, successRate: discUsages.length > 0 ? (discSuccess / discUsages.length) * 100 : 0 };
         return acc;
-      }, {} as Record<DISCProfile, { usages: number; successRate: number }>);
+      }, {} as Record<Exclude<DISCProfile, null>, { usages: number; successRate: number }>);
 
       const sortedUsages = [...completedUsages].sort((a, b) => new Date(b.used_at).getTime() - new Date(a.used_at).getTime());
       const recentUsages = sortedUsages.slice(0, Math.ceil(sortedUsages.length / 2));

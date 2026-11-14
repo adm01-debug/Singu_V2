@@ -126,7 +126,7 @@ interface Props {
       if (adv.company && i.company_id !== adv.company) return false;
       if (adv.direcao === 'inbound' && i.initiated_by !== 'them') return false;
       if (adv.direcao === 'outbound' && i.initiated_by !== 'us') return false;
-      const ts = new Date(i.created_at).getTime();
+      const ts = new Date(i.created_at ?? 0).getTime();
       if (deTs !== null && ts < deTs) return false;
       if (ateTs !== null && ts > ateTs) return false;
       if (q) {
@@ -674,8 +674,8 @@ interface Props {
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="text-right text-xs text-muted-foreground">
-                              {!isCompact && <div className="flex items-center gap-1 justify-end"><Calendar className="w-3 h-3" />{format(new Date(interaction.created_at), "d MMM 'às' HH:mm", { locale: ptBR })}</div>}
-                              <div>{formatDistanceToNow(new Date(interaction.created_at), { locale: ptBR, addSuffix: true })}</div>
+                              {!isCompact && <div className="flex items-center gap-1 justify-end"><Calendar className="w-3 h-3" />{format(new Date(interaction.created_at ?? 0), "d MMM 'às' HH:mm", { locale: ptBR })}</div>}
+                              <div>{formatDistanceToNow(new Date(interaction.created_at ?? 0), { locale: ptBR, addSuffix: true })}</div>
                             </div>
                             <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label="Mais opções" className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"><MoreVertical className="w-4 h-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => onSetEditingInteraction(interaction)}><Edit className="w-4 h-4 mr-2" />Editar</DropdownMenuItem><DropdownMenuItem onClick={() => onSetDeletingInteraction(interaction)} className="text-destructive"><Trash2 className="w-4 h-4 mr-2" />Excluir</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
                           </div>

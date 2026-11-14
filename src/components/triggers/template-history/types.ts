@@ -33,7 +33,7 @@ export interface TemplateProfileMetrics {
   templateId: string;
   templateTitle: string;
   triggerType: string;
-  byProfile: Record<DISCProfile, {
+  byProfile: Record<Exclude<DISCProfile, null>, {
     usages: number;
     successCount: number;
     successRate: number;
@@ -46,7 +46,7 @@ export interface TemplateProfileMetrics {
   worstProfile: DISCProfile | null;
 }
 
-export const DISC_CONFIG: Record<DISCProfile, { label: string; color: string; bgColor: string; description: string }> = {
+export const DISC_CONFIG: Record<Exclude<DISCProfile, null>, { label: string; color: string; bgColor: string; description: string }> = {
   D: {
     label: 'Dominante',
     color: 'text-destructive',
