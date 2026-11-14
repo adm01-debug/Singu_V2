@@ -99,21 +99,7 @@ export const ALLOWLIST_NODE = new Set([
 // `main`, não introduzida aqui). Cada linha sai desta lista quando o teste entrar num
 // passo de CI. A lista só encurta.
 export const ALLOWLIST_DENO = new Set([
-  'supabase/functions/_shared/auth_test.ts',
-  'supabase/functions/_shared/best-effort-write_test.ts',
-  'supabase/functions/_shared/email-verify_test.ts',
-  'supabase/functions/_shared/fetch-utils_test.ts',
-  'supabase/functions/_shared/lead-score-threshold-runner_test.ts',
-  'supabase/functions/_shared/notification-delivery_test.ts',
-  'supabase/functions/_shared/pagination_test.ts',
-  'supabase/functions/_shared/rate-limit_test.ts',
-  'supabase/functions/_shared/validate_test.ts',
-  'supabase/functions/_shared/version-guard_test.ts',
-  'supabase/functions/_shared/webhook-signature_test.ts',
-  'supabase/functions/external-data/cloudflare-fallback_test.ts',
   'supabase/functions/external-data/optimistic-locking_test.ts',
-  'supabase/functions/smart-notify/notification_state_test.ts',
-  'supabase/functions/smart-notify/provider_config_test.ts',
 ]);
 
 // ── 1. Testes Deno: disco vs passos de workflow ───────────────────────────────
