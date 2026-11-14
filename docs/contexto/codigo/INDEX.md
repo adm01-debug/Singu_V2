@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e0851f2d7454ec4bdb69c5111378d88ef53e68df` (2026-11-13T23:21:43-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `48a9a50ccfbceb4f5aa4f59c31d491df8b5c6b28` (2026-11-14T00:05:21-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -433,7 +433,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21147 nós · 35841 arestas · 2097 comunidades · grafo do commit `e0851f2d`
+- 21147 nós · 35841 arestas · 2097 comunidades · grafo do commit `48a9a50c`
 - comunidades maiores: ref_components (328), _shared/auth.ts (308), ref_lib (278), ref_types (259), 02_tables.sql (259), useAuth (249), framer-motion (240), 📖 Dicionário de Dados — SINGU CRM (227), ref_hooks (220), react (211), react-router-dom (207), lucide-react (206)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -448,8 +448,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - tests/rls/security_definer_hardening.sql (11)
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
+- docs/prod-readiness.md (9)
 - inventario/estado/banco.json (9)
-- docs/prod-readiness.md (8)
 - inventario/estado/edges.json (8)
 - inventario/estado/tabelas-uso.json (8)
 - .github/workflows/rls-exposure-guard.yml (7)
@@ -564,12 +564,14 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/er-diagram.md` — 📊 Diagrama Entidade-Relacionamento (ER) (8 linhas)
 - `docs/postmortem-example.md` — Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data) (99 linhas)
 - `docs/postmortem-template.md` — Post-Mortem — {Título do Incidente} (96 linhas)
-- `docs/prod-readiness.md` — Prod Readiness ? Singu_V2 (321 linhas)
+- `docs/prod-readiness.md` — Prod Readiness ? Singu_V2 (322 linhas)
 - `docs/ux_improvement_strategy.md` (73 linhas)
 - subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (5), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/ci (1), docs/perf (1)
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-14 `48a9a50c` chore(docs): bump prod-readiness pos-merge 223 (#224)
+- 2026-11-13 `82deeda6` chore(docs): bump prod-readiness pos-merge 223
 - 2026-11-13 `e0851f2d` chore(docs): bump prod-readiness para o head pos-merge 222 (#223)
 - 2026-11-13 `31ec9931` chore(docs): bump prod-readiness para o head pos-merge 221 (#222)
 - 2026-11-13 `783135af` chore(docs): bump prod-readiness para o head pos-merge 220 (#221)
@@ -583,8 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-13 `3a76dceb` chore: inventario do estado real [auto] (#212)
 - 2026-11-13 `0a83cb78` fix(ci): pat do dono abre o pr do inventario semanal (#209)
 - 2026-11-12 `7aa30140` chore: inventario do estado real [auto] (#210)
-- 2026-11-12 `6a57e029` chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)
-- 2026-11-12 `0adf3118` docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "e0851f2d7454ec4bdb69c5111378d88ef53e68df",
+  "sha": "48a9a50ccfbceb4f5aa4f59c31d491df8b5c6b28",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 03:05 UTC",
+  "generated_at": "2026-11-14 03:33 UTC",
   "files_total": 3344,
   "code_files": 2873,
   "code_lines": 409809
@@ -232814,10 +232814,26 @@
   }
  },
  "git": {
-  "sha": "e0851f2d7454ec4bdb69c5111378d88ef53e68df",
+  "sha": "48a9a50ccfbceb4f5aa4f59c31d491df8b5c6b28",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "48a9a50",
+    "date": "2026-11-14",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness pos-merge 223 (#224)",
+    "files": []
+   },
+   {
+    "sha": "82deeda",
+    "date": "2026-11-13",
+    "author": "Copilot App",
+    "subject": "chore(docs): bump prod-readiness pos-merge 223",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "e0851f2",
     "date": "2026-11-13",
@@ -233230,81 +233246,24 @@
     "files": [
      "supabase/functions/send-transactional-email/index.ts"
     ]
-   },
-   {
-    "sha": "ae084d5",
-    "date": "2026-11-11",
-    "author": "github-actions[bot]",
-    "subject": "chore: inventario do estado real [auto] (#198)",
-    "files": [
-     "inventario/estado/banco.json",
-     "inventario/estado/edges.json",
-     "inventario/estado/tabelas-uso.json"
-    ]
-   },
-   {
-    "sha": "97eced4",
-    "date": "2026-11-11",
-    "author": "adm01-debug",
-    "subject": "feat: troca a IA do gateway Lovable pelo DeepSeek (#197)",
-    "files": [
-     "supabase/functions/_shared/behavioral-generation-mock.ts",
-     "supabase/functions/_shared/edge-test-harness.ts",
-     "supabase/functions/_shared/fetch-utils.ts",
-     "supabase/functions/_shared/validation-contract_test.ts",
-     "supabase/functions/abm-whitespace-analyzer/index.ts",
-     "supabase/functions/ai-assistant/index.ts",
-     "supabase/functions/ai-email-refine/index.ts",
-     "supabase/functions/ai-suggest-mapping/index.ts",
-     "supabase/functions/ai-writing-assistant/index.ts",
-     "supabase/functions/ask-crm/index.ts",
-     "supabase/functions/connection-anomaly-detector/index.ts",
-     "supabase/functions/conversation-analyzer/index.ts",
-     "supabase/functions/conversation-coaching-digest/index.ts",
-     "supabase/functions/conversational-search/index.ts",
-     "supabase/functions/deal-room-health/index.ts",
-     "supabase/functions/demand-forecast/index.ts",
-     "supabase/functions/disc-analyzer/index.ts",
-     "supabase/functions/email-thread-summary/index.ts",
-     "supabase/functions/ficha360-conversation-summary/index.ts",
-     "supabase/functions/forecast-analyzer/index.ts",
-     "supabase/functions/forecast-narrative/index.ts",
-     "supabase/functions/generate-behavioral-profile/index.ts",
-     "supabase/functions/generate-insights/index.ts",
-     "supabase/functions/meeting-summary/index.ts",
-     "supabase/functions/next-best-action/index.ts",
-     "supabase/functions/objection-context-summary/index.ts",
-     "supabase/functions/objection-handler/index.ts",
-     "supabase/functions/playbook-generator/index.ts",
-     "supabase/functions/semantic-search/index.ts",
-     "supabase/functions/smart-reminders/index.ts",
-     "supabase/functions/social-behavior-analyzer/index.ts",
-     "supabase/functions/suggest-next-action/index.ts",
-     "supabase/functions/territory-optimization/index.ts",
-     "supabase/functions/visual-search/index.ts",
-     "supabase/functions/voice-agent/index.ts",
-     "supabase/functions/voice-ai-health/index.ts",
-     "supabase/functions/voice-to-text/index.ts",
-     "supabase/functions/win-loss-analyzer/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    8
+    9
    ],
    [
     "inventario/estado/banco.json",
-    5
+    4
    ],
    [
     "inventario/estado/edges.json",
-    5
+    4
    ],
    [
     "inventario/estado/tabelas-uso.json",
-    5
+    4
    ],
    [
     "supabase/functions/weekly-digest/index.ts",
@@ -233328,10 +233287,6 @@
    ],
    [
     "CHANGELOG.md",
-    2
-   ],
-   [
-    "supabase/functions/_shared/edge-test-harness.ts",
     2
    ],
    [
@@ -233368,6 +233323,10 @@
    ],
    [
     "scripts/apply-cli.test.mjs",
+    1
+   ],
+   [
+    "scripts/apply-e2e.test.mjs",
     1
    ]
   ]

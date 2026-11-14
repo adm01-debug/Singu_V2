@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "e0851f2d7454ec4bdb69c5111378d88ef53e68df",
+  "commit": "48a9a50ccfbceb4f5aa4f59c31d491df8b5c6b28",
   "branch": "main",
-  "data_commit": "2026-11-13T23:21:43-03:00",
+  "data_commit": "2026-11-14T00:05:21-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "48a9a50c",
+    "data": "2026-11-14",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 223 (#224)"
+   },
+   {
+    "sha": "82deeda6",
+    "data": "2026-11-13",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 223"
+   },
    {
     "sha": "e0851f2d",
     "data": "2026-11-13",
@@ -121,16 +131,6 @@
     "sha": "ddd1f61c",
     "data": "2026-11-12",
     "assunto": "fix: botões gerar relatório e e-mail de teste do resumo semanal voltam a funcionar (#203)"
-   },
-   {
-    "sha": "a817b7e8",
-    "data": "2026-11-12",
-    "assunto": "fix(push): alinha chave VAPID publica do front com o par dos secrets (#199)"
-   },
-   {
-    "sha": "cd6478ec",
-    "data": "2026-11-12",
-    "assunto": "fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)"
    }
   ],
   "arquivos_mudados_7d": 632,
@@ -180,12 +180,12 @@
     "mudancas": 11
    },
    {
-    "pasta": "inventario/estado/banco.json",
+    "pasta": "docs/prod-readiness.md",
     "mudancas": 9
    },
    {
-    "pasta": "docs/prod-readiness.md",
-    "mudancas": 8
+    "pasta": "inventario/estado/banco.json",
+    "mudancas": 9
    },
    {
     "pasta": "inventario/estado/edges.json",
@@ -234,12 +234,12 @@
     "mudancas": 10
    },
    {
-    "arquivo": "inventario/estado/banco.json",
+    "arquivo": "docs/prod-readiness.md",
     "mudancas": 9
    },
    {
-    "arquivo": "docs/prod-readiness.md",
-    "mudancas": 8
+    "arquivo": "inventario/estado/banco.json",
+    "mudancas": 9
    },
    {
     "arquivo": "inventario/estado/edges.json",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 69
+    "commits": 70
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -314,6 +314,10 @@
    {
     "autor": "github-actions[bot]",
     "commits": 2
+   },
+   {
+    "autor": "Copilot App",
+    "commits": 1
    }
   ]
  },
