@@ -2,142 +2,146 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "03b943ae28192487cdb9034e8e4e6b6e420b0ef7",
+  "commit": "4f4b78271f0173571dbe7a049c0ff458ab40a334",
   "branch": "main",
-  "data_commit": "2026-11-14T04:00:39-03:00",
+  "data_commit": "2026-11-14T10:59:27-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
    {
-    "sha": "03b943a",
+    "sha": "4f4b7827",
+    "data": "2026-11-14",
+    "assunto": "fix: ativa strict mode no tsconfig.app e corrige tipos (#230)"
+   },
+   {
+    "sha": "03b943ae",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 228 (final) (#229)"
    },
    {
-    "sha": "2f70928",
+    "sha": "2f709284",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 227 (final) (#228)"
    },
    {
-    "sha": "4e67de3",
+    "sha": "4e67de36",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 226 (#227)"
    },
    {
-    "sha": "8d6aaa9",
+    "sha": "8d6aaa93",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 226"
    },
    {
-    "sha": "8a4e6f2",
+    "sha": "8a4e6f2f",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 225 (#226)"
    },
    {
-    "sha": "8bc7489",
+    "sha": "8bc74893",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 225"
    },
    {
-    "sha": "4d004ce",
+    "sha": "4d004ceb",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 224 (#225)"
    },
    {
-    "sha": "1864cd1",
+    "sha": "1864cd1b",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 224"
    },
    {
-    "sha": "48a9a50",
+    "sha": "48a9a50c",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 223 (#224)"
    },
    {
-    "sha": "82deeda",
+    "sha": "82deeda6",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness pos-merge 223"
    },
    {
-    "sha": "e0851f2",
+    "sha": "e0851f2d",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 222 (#223)"
    },
    {
-    "sha": "31ec993",
+    "sha": "31ec9931",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 221 (#222)"
    },
    {
-    "sha": "783135a",
+    "sha": "783135af",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 220 (#221)"
    },
    {
-    "sha": "63673dc",
+    "sha": "63673dcd",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 219 (#220)"
    },
    {
-    "sha": "f8312ef",
+    "sha": "f8312ef2",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)"
    },
    {
-    "sha": "a8cca0e",
+    "sha": "a8cca0e2",
     "data": "2026-11-13",
     "assunto": "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)"
    },
    {
-    "sha": "b7233bb",
+    "sha": "b7233bb9",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)"
    },
    {
-    "sha": "5c7e2f3",
+    "sha": "5c7e2f39",
     "data": "2026-11-13",
     "assunto": "docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)"
    },
    {
-    "sha": "be23f3a",
+    "sha": "be23f3a8",
     "data": "2026-11-13",
     "assunto": "chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)"
    },
    {
-    "sha": "6e9097a",
+    "sha": "6e9097a3",
     "data": "2026-11-13",
     "assunto": "fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)"
    },
    {
-    "sha": "3a76dce",
+    "sha": "3a76dceb",
     "data": "2026-11-13",
     "assunto": "chore: inventario do estado real [auto] (#212)"
    },
    {
-    "sha": "0a83cb7",
+    "sha": "0a83cb78",
     "data": "2026-11-13",
     "assunto": "fix(ci): pat do dono abre o pr do inventario semanal (#209)"
    },
    {
-    "sha": "7aa3014",
+    "sha": "7aa30140",
     "data": "2026-11-12",
     "assunto": "chore: inventario do estado real [auto] (#210)"
    },
    {
-    "sha": "6a57e02",
+    "sha": "6a57e029",
     "data": "2026-11-12",
     "assunto": "chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)"
-   },
-   {
-    "sha": "0adf311",
-    "data": "2026-11-12",
-    "assunto": "docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)"
    }
   ],
-  "arquivos_mudados_7d": 632,
+  "arquivos_mudados_7d": 804,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
     "mudancas": 198
+   },
+   {
+    "pasta": "src/components/contact-detail",
+    "mudancas": 21
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -146,6 +150,10 @@
    {
     "pasta": "scripts/migration/storage",
     "mudancas": 20
+   },
+   {
+    "pasta": "src/components/triggers",
+    "mudancas": 18
    },
    {
     "pasta": "CHANGELOG.md",
@@ -168,11 +176,11 @@
     "mudancas": 14
    },
    {
-    "pasta": "scripts/migration/ddl",
-    "mudancas": 12
+    "pasta": "src/components/admin",
+    "mudancas": 13
    },
    {
-    "pasta": "src/components/admin",
+    "pasta": "scripts/migration/ddl",
     "mudancas": 12
    },
    {
@@ -184,16 +192,8 @@
     "mudancas": 11
    },
    {
-    "pasta": "inventario/estado/banco.json",
-    "mudancas": 9
-   },
-   {
-    "pasta": "inventario/estado/edges.json",
-    "mudancas": 8
-   },
-   {
-    "pasta": "inventario/estado/tabelas-uso.json",
-    "mudancas": 8
+    "pasta": "src/components/crm",
+    "mudancas": 10
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -282,26 +282,26 @@
     "mudancas": 5
    },
    {
+    "arquivo": "src/pages/ContatoDetalhe.tsx",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "src/pages/Contatos.tsx",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "src/pages/Empresas.tsx",
+    "mudancas": 5
+   },
+   {
     "arquivo": "supabase/functions/evolution-bitrix-connector/index.ts",
     "mudancas": 5
-   },
-   {
-    "arquivo": "supabase/functions/incoming-webhook/index.ts",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "tests/rls/functions_authenticated_allowlist.sql",
-    "mudancas": 5
-   },
-   {
-    "arquivo": ".github/workflows/inventario-estado-semanal.yml",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 75
+    "commits": 76
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3239,
   "arquivos_codigo": 2215,
-  "linhas_codigo": 414104,
+  "linhas_codigo": 414146,
   "rotas": 114,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 985,
-   "linhas": 148146
+   "linhas": 148168
   },
   "src/config": {
    "arquivos": 1,
@@ -668,7 +668,7 @@
   },
   "src/hooks": {
    "arquivos": 435,
-   "linhas": 57187
+   "linhas": 57202
   },
   "src/integrations": {
    "arquivos": 3,
@@ -684,7 +684,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28472
+   "linhas": 28477
   },
   "src/store": {
    "arquivos": 1,
@@ -814,7 +814,7 @@
   },
   {
    "arquivo": "src/pages/interacoes/InteracoesContent.tsx",
-   "linhas": 737
+   "linhas": 739
   },
   {
    "arquivo": "src/data/triggersAdvancedData.ts",
@@ -862,7 +862,7 @@
   },
   {
    "arquivo": "src/hooks/useCompanies.ts",
-   "linhas": 599
+   "linhas": 600
   }
  ],
  "qualidade": {

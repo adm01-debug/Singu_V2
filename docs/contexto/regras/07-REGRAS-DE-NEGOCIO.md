@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `03b943ae28` · branch `main` · 2026-11-14 07:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4f4b78271f` · branch `main` · 2026-11-14 14:10 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2538,7 +2538,7 @@ _nenhum item encontrado_
   ```
 - **generateScenarios(sellerDISC: DISCProfile | null)** — `src/data/communicationTrainingData.ts`
   ```
-  const allDISC: DISCProfile[] = ['D', 'I', 'S', 'C']; const scenarios: TrainingScenario[] = []; allDISC.forEach((disc) => { if (disc !== sellerDISC) { scenarios.push({ id: `scenario-${disc}`, title: `Cliente ${DISC_LABELS[disc].name}`, description: `Como abordar um cliente com perfil ${disc}?`, clientProfile: { disc, vak: disc === 'D' ? 'V' : disc === 'I' ? 'A' : disc === 'S' ? 'K' : 'D', motivation: disc === 'D' || disc === 'I' ? 'toward' : 'away_from', }, situation: getSituation(disc), options: …
+  const allDISC: DISCProfile[] = ['D', 'I', 'S', 'C']; const scenarios: TrainingScenario[] = []; allDISC.forEach((disc) => { if (disc !== sellerDISC) { scenarios.push({ id: `scenario-${disc}`, title: `Cliente ${DISC_LABELS[disc ?? 'D'].name}`, description: `Como abordar um cliente com perfil ${disc}?`, clientProfile: { disc, vak: disc === 'D' ? 'V' : disc === 'I' ? 'A' : disc === 'S' ? 'K' : 'D', motivation: disc === 'D' || disc === 'I' ? 'toward' : 'away_from', }, situation: getSituation(disc), o …
   ```
 - **calculateBlendCode(dScore: number, iScore: number, sScore: number, cScore: number)** — `src/data/discAdvancedData.ts`
   ```
@@ -2738,7 +2738,7 @@ _nenhum item encontrado_
   ```
 - **calculateInterest(contact: Contact, interactions: Interaction[])** — `src/hooks/useStakeholderAnalysis.ts`
   ```
-  const contactInteractions = interactions.filter(i => i.contact_id === contact.id); const recentInteractions = contactInteractions.filter(i => { const date = new Date(i.created_at); const daysSince = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24); return daysSince <= 30; }); // Base interest from relationship score let interest = Math.round((contact.relationship_score || 50) / 10); // Boost for recent interactions interest += Math.min(3, recentInteractions.length); // Boost for positive se …
+  const contactInteractions = interactions.filter(i => i.contact_id === contact.id); const recentInteractions = contactInteractions.filter(i => { const date = new Date(i.created_at ?? 0); const daysSince = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24); return daysSince <= 30; }); // Base interest from relationship score let interest = Math.round((contact.relationship_score || 50) / 10); // Boost for recent interactions interest += Math.min(3, recentInteractions.length); // Boost for positi …
   ```
 - **calculateInfluence(contact: Contact, allContacts: Contact[])** — `src/hooks/useStakeholderAnalysis.ts`
   ```
@@ -2750,7 +2750,7 @@ _nenhum item encontrado_
   ```
 - **calculateEngagement(contact: Contact, interactions: Interaction[])** — `src/hooks/useStakeholderAnalysis.ts`
   ```
-  const contactInteractions = interactions.filter(i => i.contact_id === contact.id); // Recency factor const lastInteraction = contactInteractions[0]; let recencyScore = 1; if (lastInteraction) { const daysSince = (Date.now() - new Date(lastInteraction.created_at).getTime()) / (1000 * 60 * 60 * 24); if (daysSince <= 7) recencyScore = 10; else if (daysSince <= 14) recencyScore = 8; else if (daysSince <= 30) recencyScore = 6; else if (daysSince <= 60) recencyScore = 4; else recencyScore = 2; } // Fr …
+  const contactInteractions = interactions.filter(i => i.contact_id === contact.id); // Recency factor const lastInteraction = contactInteractions[0]; let recencyScore = 1; if (lastInteraction) { const daysSince = (Date.now() - new Date(lastInteraction.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24); if (daysSince <= 7) recencyScore = 10; else if (daysSince <= 14) recencyScore = 8; else if (daysSince <= 30) recencyScore = 6; else if (daysSince <= 60) recencyScore = 4; else recencyScore = 2; } …
   ```
 - **calculateRiskLevel(metrics: StakeholderMetrics, quadrant: StakeholderData['quadrant'])** — `src/hooks/useStakeholderAnalysis.ts`
   ```
@@ -3471,7 +3471,7 @@ _nenhum item encontrado_
 | `supabase.from('disc_analysis_history').select('*', { count: 'exact', head: true }).eq('user_id', user.id).gte('analyzed_at', new Date(Date.now() - 7 * 24 * 60 * …` | `src/components/analytics/DISCAnalyticsPanel.tsx` |
 | `setTimeout(() => setCopiedId(null), 2000);` | `src/components/bi/EmbeddableDashboards.tsx` |
 | `const handleCopy = (text: string, id: string) => { navigator.clipboard.writeText(text).then(() => { setCopiedText(id); setTimeout(() => setCopiedText(null), 200 …` | `src/components/briefing/PreContactBriefing.tsx` |
-| `const daysSince = Math.floor((Date.now() - new Date(c.updated_at).getTime()) / (1000 * 60 * 60 * 24));` | `src/components/companies/CompaniesStatsBar.tsx` |
+| `const daysSince = Math.floor((Date.now() - new Date(c.updated_at ?? 0).getTime()) / (1000 * 60 * 60 * 24));` | `src/components/companies/CompaniesStatsBar.tsx` |
 | `const daysSince = Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24));` | `src/components/company-card/company-card-parts/CompanyCardHelpers.tsx` |
 | `const daysSince = Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24));` | `src/components/contact-card/ContactCardWithContext.tsx` |
 | `gcTime: 10 * 60 * 1000,` | `src/components/contact-detail/ContactBehavioralTab.tsx` |
@@ -4359,7 +4359,7 @@ _nenhum item encontrado_
 | Nada para exportar. | `src/components/intelligence/CrossRefTab.tsx` |
 | Falha ao buscar entidades. | `src/components/intelligence/Entity360Tab.tsx` |
 | Não foi possível copiar | `src/components/intelligence/Entity360Tab.tsx` |
-| … +777 linhas — lista completa em `context.json` | |
+| … +778 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

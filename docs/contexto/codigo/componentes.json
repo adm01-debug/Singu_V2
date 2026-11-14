@@ -2055,7 +2055,7 @@
     "SegmentCard"
    ],
    "export_default": null,
-   "linhas": 391,
+   "linhas": 384,
    "dominio": "components/analytics",
    "hooks_locais": [],
    "tabelas": [],
@@ -3230,7 +3230,7 @@
     "FiscalDataCard"
    ],
    "export_default": null,
-   "linhas": 89,
+   "linhas": 100,
    "dominio": "components/company-detail",
    "hooks_locais": [],
    "tabelas": [],
@@ -3623,7 +3623,7 @@
     "PersonalitySubTab"
    ],
    "export_default": null,
-   "linhas": 311,
+   "linhas": 314,
    "dominio": "components/contact-detail",
    "hooks_locais": [
     "useContactBehavior"
@@ -12139,7 +12139,7 @@
     "PlaybookSuggestionDrawer"
    ],
    "export_default": null,
-   "linhas": 109,
+   "linhas": 113,
    "dominio": "components/playbooks",
    "hooks_locais": [
     "useLogPlaybookUsage",
@@ -13417,7 +13417,7 @@
     "CompatibilityAlertsList"
    ],
    "export_default": null,
-   "linhas": 263,
+   "linhas": 275,
    "dominio": "components/triggers",
    "hooks_locais": [
     "useAuth"
@@ -13602,7 +13602,7 @@
     "TemplateByProfileView"
    ],
    "export_default": null,
-   "linhas": 120,
+   "linhas": 119,
    "dominio": "components/triggers",
    "hooks_locais": [],
    "tabelas": [],
@@ -16628,7 +16628,7 @@
     "InteracoesContent"
    ],
    "export_default": null,
-   "linhas": 737,
+   "linhas": 739,
    "dominio": "pages/interacoes",
    "hooks_locais": [
     "useCompanies",
@@ -17331,7 +17331,7 @@
     "RolePermissionsPage"
    ],
    "export_default": "RolePermissionsPage",
-   "linhas": 67,
+   "linhas": 68,
    "dominio": "pages",
    "hooks_locais": [
     "useIsAdmin"
@@ -17520,7 +17520,7 @@
     "TaskDetailDrawer"
    ],
    "export_default": null,
-   "linhas": 356,
+   "linhas": 358,
    "dominio": "pages/tarefas",
    "hooks_locais": [
     "useAuth",

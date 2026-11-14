@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `03b943ae28192487cdb9034e8e4e6b6e420b0ef7` (2026-11-14T04:00:39-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `4f4b78271f0173571dbe7a049c0ff458ab40a334` (2026-11-14T10:59:27-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3239 |
 | arquivos_codigo | 2215 |
-| linhas_codigo | 414104 |
+| linhas_codigo | 414146 |
 | rotas | 114 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -433,8 +433,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21147 nós · 35841 arestas · 2097 comunidades · grafo do commit `03b943ae`
-- comunidades maiores: ref_components (328), _shared/auth.ts (308), ref_lib (278), ref_types (259), 02_tables.sql (259), useAuth (249), framer-motion (240), 📖 Dicionário de Dados — SINGU CRM (227), ref_hooks (220), react (211), react-router-dom (207), lucide-react (206)
+- 21147 nós · 35841 arestas · 2072 comunidades · grafo do commit `4f4b7827`
+- comunidades maiores: ref_hooks (407), vitest (329), _shared/auth.ts (305), ref_types (277), ref_lib (274), 02_tables.sql (259), useAuth (249), framer-motion (247), react-router-dom (233), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (219), ref_components (219)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -570,21 +570,21 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
-- 2026-11-14 `03b943a` chore(docs): bump prod-readiness pos-merge 228 (final) (#229)
-- 2026-11-14 `2f70928` chore(docs): bump prod-readiness pos-merge 227 (final) (#228)
-- 2026-11-14 `4e67de3` chore(docs): bump prod-readiness pos-merge 226 (#227)
-- 2026-11-14 `8d6aaa9` chore(docs): bump prod-readiness pos-merge 226
-- 2026-11-14 `8a4e6f2` chore(docs): bump prod-readiness pos-merge 225 (#226)
-- 2026-11-14 `8bc7489` chore(docs): bump prod-readiness pos-merge 225
-- 2026-11-14 `4d004ce` chore(docs): bump prod-readiness pos-merge 224 (#225)
-- 2026-11-14 `1864cd1` chore(docs): bump prod-readiness pos-merge 224
-- 2026-11-14 `48a9a50` chore(docs): bump prod-readiness pos-merge 223 (#224)
-- 2026-11-13 `82deeda` chore(docs): bump prod-readiness pos-merge 223
-- 2026-11-13 `e0851f2` chore(docs): bump prod-readiness para o head pos-merge 222 (#223)
-- 2026-11-13 `31ec993` chore(docs): bump prod-readiness para o head pos-merge 221 (#222)
-- 2026-11-13 `783135a` chore(docs): bump prod-readiness para o head pos-merge 220 (#221)
-- 2026-11-13 `63673dc` chore(docs): bump prod-readiness para o head pos-merge 219 (#220)
-- 2026-11-13 `f8312ef` chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)
+- 2026-11-14 `4f4b7827` fix: ativa strict mode no tsconfig.app e corrige tipos (#230)
+- 2026-11-14 `03b943ae` chore(docs): bump prod-readiness pos-merge 228 (final) (#229)
+- 2026-11-14 `2f709284` chore(docs): bump prod-readiness pos-merge 227 (final) (#228)
+- 2026-11-14 `4e67de36` chore(docs): bump prod-readiness pos-merge 226 (#227)
+- 2026-11-14 `8d6aaa93` chore(docs): bump prod-readiness pos-merge 226
+- 2026-11-14 `8a4e6f2f` chore(docs): bump prod-readiness pos-merge 225 (#226)
+- 2026-11-14 `8bc74893` chore(docs): bump prod-readiness pos-merge 225
+- 2026-11-14 `4d004ceb` chore(docs): bump prod-readiness pos-merge 224 (#225)
+- 2026-11-14 `1864cd1b` chore(docs): bump prod-readiness pos-merge 224
+- 2026-11-14 `48a9a50c` chore(docs): bump prod-readiness pos-merge 223 (#224)
+- 2026-11-13 `82deeda6` chore(docs): bump prod-readiness pos-merge 223
+- 2026-11-13 `e0851f2d` chore(docs): bump prod-readiness para o head pos-merge 222 (#223)
+- 2026-11-13 `31ec9931` chore(docs): bump prod-readiness para o head pos-merge 221 (#222)
+- 2026-11-13 `783135af` chore(docs): bump prod-readiness para o head pos-merge 220 (#221)
+- 2026-11-13 `63673dcd` chore(docs): bump prod-readiness para o head pos-merge 219 (#220)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

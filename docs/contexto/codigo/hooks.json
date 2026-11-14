@@ -548,7 +548,7 @@
    "hooks_exportados": [
     "useSocialSync"
    ],
-   "linhas": 124,
+   "linhas": 126,
    "dominio": "hooks/commercial",
    "tabelas": [
     "psychographic_audit_log",
@@ -2183,7 +2183,7 @@
    "hooks_exportados": [
     "useCompanies"
    ],
-   "linhas": 599,
+   "linhas": 600,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -3816,7 +3816,7 @@
     "useUpsertMilestone",
     "useUpsertStakeholder"
    ],
-   "linhas": 502,
+   "linhas": 508,
    "dominio": "hooks",
    "tabelas": [
     "deal_room_activities",
@@ -4244,7 +4244,7 @@
     "useDocumentSignatures",
     "useDocumentTemplates"
    ],
-   "linhas": 250,
+   "linhas": 251,
    "dominio": "hooks",
    "tabelas": [
     "document_signatures",
@@ -6134,7 +6134,7 @@
    "hooks_exportados": [
     "useInteractions"
    ],
-   "linhas": 293,
+   "linhas": 294,
    "dominio": "hooks",
    "tabelas": [
     "interactions"
@@ -7827,7 +7827,7 @@
    "hooks_exportados": [
     "usePurchasePatterns"
    ],
-   "linhas": 299,
+   "linhas": 301,
    "dominio": "hooks",
    "tabelas": [
     "purchase_history"
@@ -9550,7 +9550,7 @@
    "hooks_exportados": [
     "useTonePersistence"
    ],
-   "linhas": 72,
+   "linhas": 74,
    "dominio": "hooks",
    "tabelas": [
     "ai_tone_preferences"

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "03b943ae28192487cdb9034e8e4e6b6e420b0ef7",
+  "sha": "4f4b78271f0173571dbe7a049c0ff458ab40a334",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 07:13 UTC",
+  "generated_at": "2026-11-14 14:10 UTC",
   "files_total": 3344,
   "code_files": 2873,
-  "code_lines": 409809
+  "code_lines": 409851
  },
  "version": "1.3.2",
- "facts_hash": "2f0f6c3f7009fd4b",
+ "facts_hash": "fa9ef76a5c4ae909",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -69084,7 +69084,7 @@
   {
    "module": "src/components",
    "files": 985,
-   "lines": 148146,
+   "lines": 148168,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -69531,7 +69531,7 @@
   {
    "module": "src/hooks",
    "files": 435,
-   "lines": 57187,
+   "lines": 57202,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -70100,7 +70100,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28472,
+   "lines": 28477,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -74038,7 +74038,6 @@
     "user_id"
    ],
    "ai_tone_preferences": [
-    "company_id",
     "preferred_tone",
     "user_id"
    ],
@@ -84347,6 +84346,10 @@
    {
     "file": "src/hooks/useYourDay.ts",
     "msg": "Not authenticated"
+   },
+   {
+    "file": "src/hooks/commercial/useSocialSync.ts",
+    "msg": "Falha ao enfileirar sync social"
    },
    {
     "file": "src/hooks/commercial/useSocialSync.ts",
@@ -113931,7 +113934,7 @@
     "file": "src/data/communicationTrainingData.ts",
     "name": "generateScenarios",
     "params": "sellerDISC: DISCProfile | null",
-    "body": "const allDISC: DISCProfile[] = ['D', 'I', 'S', 'C']; const scenarios: TrainingScenario[] = []; allDISC.forEach((disc) => { if (disc !== sellerDISC) { scenarios.push({ id: `scenario-${disc}`, title: `Cliente ${DISC_LABELS[disc].name}`, description: `Como abordar um cliente com perfil ${disc}?`, clientProfile: { disc, vak: disc === 'D' ? 'V' : disc === 'I' ? 'A' : disc === 'S' ? 'K' : 'D', motivation: disc === 'D' || disc === 'I' ? 'toward' : 'away_from', }, situation: getSituation(disc), options: …"
+    "body": "const allDISC: DISCProfile[] = ['D', 'I', 'S', 'C']; const scenarios: TrainingScenario[] = []; allDISC.forEach((disc) => { if (disc !== sellerDISC) { scenarios.push({ id: `scenario-${disc}`, title: `Cliente ${DISC_LABELS[disc ?? 'D'].name}`, description: `Como abordar um cliente com perfil ${disc}?`, clientProfile: { disc, vak: disc === 'D' ? 'V' : disc === 'I' ? 'A' : disc === 'S' ? 'K' : 'D', motivation: disc === 'D' || disc === 'I' ? 'toward' : 'away_from', }, situation: getSituation(disc), o …"
    },
    {
     "file": "src/data/discAdvancedData.ts",
@@ -114231,7 +114234,7 @@
     "file": "src/hooks/useStakeholderAnalysis.ts",
     "name": "calculateInterest",
     "params": "contact: Contact, interactions: Interaction[]",
-    "body": "const contactInteractions = interactions.filter(i => i.contact_id === contact.id); const recentInteractions = contactInteractions.filter(i => { const date = new Date(i.created_at); const daysSince = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24); return daysSince <= 30; }); // Base interest from relationship score let interest = Math.round((contact.relationship_score || 50) / 10); // Boost for recent interactions interest += Math.min(3, recentInteractions.length); // Boost for positive se …"
+    "body": "const contactInteractions = interactions.filter(i => i.contact_id === contact.id); const recentInteractions = contactInteractions.filter(i => { const date = new Date(i.created_at ?? 0); const daysSince = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24); return daysSince <= 30; }); // Base interest from relationship score let interest = Math.round((contact.relationship_score || 50) / 10); // Boost for recent interactions interest += Math.min(3, recentInteractions.length); // Boost for positi …"
    },
    {
     "file": "src/hooks/useStakeholderAnalysis.ts",
@@ -114249,7 +114252,7 @@
     "file": "src/hooks/useStakeholderAnalysis.ts",
     "name": "calculateEngagement",
     "params": "contact: Contact, interactions: Interaction[]",
-    "body": "const contactInteractions = interactions.filter(i => i.contact_id === contact.id); // Recency factor const lastInteraction = contactInteractions[0]; let recencyScore = 1; if (lastInteraction) { const daysSince = (Date.now() - new Date(lastInteraction.created_at).getTime()) / (1000 * 60 * 60 * 24); if (daysSince <= 7) recencyScore = 10; else if (daysSince <= 14) recencyScore = 8; else if (daysSince <= 30) recencyScore = 6; else if (daysSince <= 60) recencyScore = 4; else recencyScore = 2; } // Fr …"
+    "body": "const contactInteractions = interactions.filter(i => i.contact_id === contact.id); // Recency factor const lastInteraction = contactInteractions[0]; let recencyScore = 1; if (lastInteraction) { const daysSince = (Date.now() - new Date(lastInteraction.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24); if (daysSince <= 7) recencyScore = 10; else if (daysSince <= 14) recencyScore = 8; else if (daysSince <= 30) recencyScore = 6; else if (daysSince <= 60) recencyScore = 4; else recencyScore = 2; } …"
    },
    {
     "file": "src/hooks/useStakeholderAnalysis.ts",
@@ -114825,7 +114828,7 @@
    },
    {
     "file": "src/components/companies/CompaniesStatsBar.tsx",
-    "line": "const daysSince = Math.floor((Date.now() - new Date(c.updated_at).getTime()) / (1000 * 60 * 60 * 24));"
+    "line": "const daysSince = Math.floor((Date.now() - new Date(c.updated_at ?? 0).getTime()) / (1000 * 60 * 60 * 24));"
    },
    {
     "file": "src/components/company-card/company-card-parts/CompanyCardHelpers.tsx",
@@ -116073,11 +116076,11 @@
    },
    {
     "file": "src/hooks/useStakeholderAnalysis.ts",
-    "line": "const daysSince = (Date.now() - new Date(i.created_at).getTime()) / (1000 * 60 * 60 * 24);"
+    "line": "const daysSince = (Date.now() - new Date(i.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24);"
    },
    {
     "file": "src/hooks/useStakeholderAnalysis.ts",
-    "line": "const daysSince = (Date.now() - new Date(lastInteraction.created_at).getTime()) / (1000 * 60 * 60 * 24);"
+    "line": "const daysSince = (Date.now() - new Date(lastInteraction.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24);"
    },
    {
     "file": "src/hooks/useTasks.ts",
@@ -116265,7 +116268,7 @@
    },
    {
     "file": "src/pages/Empresas.tsx",
-    "line": "if (interactions.length > 0) { const now = Date.now(); for (const i of interactions) { if (i.company_id) { const days = Math.floor((now - new Date(i.created_at) …"
+    "line": "if (interactions.length > 0) { const now = Date.now(); for (const i of interactions) { if (i.company_id) { const days = Math.floor((now - new Date(i.created_at …"
    },
    {
     "file": "src/pages/Historico.tsx",
@@ -116273,7 +116276,7 @@
    },
    {
     "file": "src/pages/Interacoes.tsx",
-    "line": "const thisWeek = interactions.filter(i => { const d = new Date(i.created_at); return d >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); }).length;"
+    "line": "const thisWeek = interactions.filter(i => { const d = new Date(i.created_at ?? 0); return d >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); }).length;"
    },
    {
     "file": "src/pages/MapaEmpresas.tsx",
@@ -177646,7 +177649,7 @@
   },
   "src/components/analytics/rfm/RFMSubComponents.tsx": {
    "path": "src/components/analytics/rfm/RFMSubComponents.tsx",
-   "lines": 391,
+   "lines": 384,
    "exports": [
     "const SEGMENT_ICONS",
     "const SEGMENT_COLORS",
@@ -178186,7 +178189,7 @@
     "function CompaniesStatsBar"
    ],
    "temporal": [
-    "const daysSince = Math.floor((Date.now() - new Date(c.updated_at).getTime()) / (1000 * 60 * 60 * 24));"
+    "const daysSince = Math.floor((Date.now() - new Date(c.updated_at ?? 0).getTime()) / (1000 * 60 * 60 * 24));"
    ]
   },
   "src/components/companies/CompaniesTableView.tsx": {
@@ -178531,7 +178534,7 @@
   },
   "src/components/company-detail/profile/FiscalDataCard.tsx": {
    "path": "src/components/company-detail/profile/FiscalDataCard.tsx",
-   "lines": 89,
+   "lines": 100,
    "exports": [
     "function FiscalDataCard"
    ]
@@ -179648,7 +179651,7 @@
   },
   "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx": {
    "path": "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx",
-   "lines": 311,
+   "lines": 314,
    "exports": [
     "function PersonalitySubTab"
    ]
@@ -188032,7 +188035,7 @@
   },
   "src/components/playbooks/PlaybookSuggestionDrawer.tsx": {
    "path": "src/components/playbooks/PlaybookSuggestionDrawer.tsx",
-   "lines": 109,
+   "lines": 113,
    "exports": [
     "function PlaybookSuggestionDrawer"
    ]
@@ -189602,7 +189605,7 @@
   },
   "src/components/triggers/CompatibilityAlertsList.tsx": {
    "path": "src/components/triggers/CompatibilityAlertsList.tsx",
-   "lines": 263,
+   "lines": 275,
    "exports": [
     "function CompatibilityAlertsList"
    ],
@@ -189882,7 +189885,7 @@
   },
   "src/components/triggers/template-history/TemplateByProfileView.tsx": {
    "path": "src/components/triggers/template-history/TemplateByProfileView.tsx",
-   "lines": 120,
+   "lines": 119,
    "exports": [
     "function TemplateByProfileView"
    ]
@@ -191593,7 +191596,7 @@
     {
      "name": "generateScenarios",
      "params": "sellerDISC: DISCProfile | null",
-     "body": "const allDISC: DISCProfile[] = ['D', 'I', 'S', 'C']; const scenarios: TrainingScenario[] = []; allDISC.forEach((disc) => { if (disc !== sellerDISC) { scenarios.push({ id: `scenario-${disc}`, title: `Cliente ${DISC_LABELS[disc].name}`, description: `Como abordar um cliente com perfil ${disc}?`, clientProfile: { disc, vak: disc === 'D' ? 'V' : disc === 'I' ? 'A' : disc === 'S' ? 'K' : 'D', motivation: disc === 'D' || disc === 'I' ? 'toward' : 'away_from', }, situation: getSituation(disc), options: …"
+     "body": "const allDISC: DISCProfile[] = ['D', 'I', 'S', 'C']; const scenarios: TrainingScenario[] = []; allDISC.forEach((disc) => { if (disc !== sellerDISC) { scenarios.push({ id: `scenario-${disc}`, title: `Cliente ${DISC_LABELS[disc ?? 'D'].name}`, description: `Como abordar um cliente com perfil ${disc}?`, clientProfile: { disc, vak: disc === 'D' ? 'V' : disc === 'I' ? 'A' : disc === 'S' ? 'K' : 'D', motivation: disc === 'D' || disc === 'I' ? 'toward' : 'away_from', }, situation: getSituation(disc), o …"
     }
    ]
   },
@@ -196515,7 +196518,7 @@
   },
   "src/hooks/useCompanies.ts": {
    "path": "src/hooks/useCompanies.ts",
-   "lines": 599,
+   "lines": 600,
    "exports": [
     "type Company",
     "type CompanyInsert",
@@ -197544,7 +197547,7 @@
     ],
     "companies": [
      "id",
-     "name",
+     "nome_crm",
      "user_id"
     ],
     "interactions": [
@@ -199787,7 +199790,7 @@
   },
   "src/hooks/useDealRooms.ts": {
    "path": "src/hooks/useDealRooms.ts",
-   "lines": 502,
+   "lines": 508,
    "exports": [
     "type DealRoomStatus",
     "type MilestoneStatus",
@@ -200390,7 +200393,7 @@
   },
   "src/hooks/useDocumentTemplates.ts": {
    "path": "src/hooks/useDocumentTemplates.ts",
-   "lines": 250,
+   "lines": 251,
    "exports": [
     "interface DocumentTemplate",
     "interface DocumentSignature",
@@ -203325,7 +203328,7 @@
   },
   "src/hooks/useInteractions.ts": {
    "path": "src/hooks/useInteractions.ts",
-   "lines": 293,
+   "lines": 294,
    "exports": [
     "type Interaction",
     "type InteractionInsert",
@@ -206523,7 +206526,7 @@
   },
   "src/hooks/usePurchasePatterns.ts": {
    "path": "src/hooks/usePurchasePatterns.ts",
-   "lines": 299,
+   "lines": 301,
    "exports": [
     "interface PurchasePattern",
     "interface CategoryPattern",
@@ -208958,7 +208961,7 @@
     {
      "name": "calculateInterest",
      "params": "contact: Contact, interactions: Interaction[]",
-     "body": "const contactInteractions = interactions.filter(i => i.contact_id === contact.id); const recentInteractions = contactInteractions.filter(i => { const date = new Date(i.created_at); const daysSince = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24); return daysSince <= 30; }); // Base interest from relationship score let interest = Math.round((contact.relationship_score || 50) / 10); // Boost for recent interactions interest += Math.min(3, recentInteractions.length); // Boost for positive se …"
+     "body": "const contactInteractions = interactions.filter(i => i.contact_id === contact.id); const recentInteractions = contactInteractions.filter(i => { const date = new Date(i.created_at ?? 0); const daysSince = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24); return daysSince <= 30; }); // Base interest from relationship score let interest = Math.round((contact.relationship_score || 50) / 10); // Boost for recent interactions interest += Math.min(3, recentInteractions.length); // Boost for positi …"
     },
     {
      "name": "calculateInfluence",
@@ -208973,7 +208976,7 @@
     {
      "name": "calculateEngagement",
      "params": "contact: Contact, interactions: Interaction[]",
-     "body": "const contactInteractions = interactions.filter(i => i.contact_id === contact.id); // Recency factor const lastInteraction = contactInteractions[0]; let recencyScore = 1; if (lastInteraction) { const daysSince = (Date.now() - new Date(lastInteraction.created_at).getTime()) / (1000 * 60 * 60 * 24); if (daysSince <= 7) recencyScore = 10; else if (daysSince <= 14) recencyScore = 8; else if (daysSince <= 30) recencyScore = 6; else if (daysSince <= 60) recencyScore = 4; else recencyScore = 2; } // Fr …"
+     "body": "const contactInteractions = interactions.filter(i => i.contact_id === contact.id); // Recency factor const lastInteraction = contactInteractions[0]; let recencyScore = 1; if (lastInteraction) { const daysSince = (Date.now() - new Date(lastInteraction.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24); if (daysSince <= 7) recencyScore = 10; else if (daysSince <= 14) recencyScore = 8; else if (daysSince <= 30) recencyScore = 6; else if (daysSince <= 60) recencyScore = 4; else recencyScore = 2; } …"
     },
     {
      "name": "calculateRiskLevel",
@@ -208993,8 +208996,8 @@
    ],
    "temporal": [
     "const daysSince = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);",
-    "const daysSince = (Date.now() - new Date(i.created_at).getTime()) / (1000 * 60 * 60 * 24);",
-    "const daysSince = (Date.now() - new Date(lastInteraction.created_at).getTime()) / (1000 * 60 * 60 * 24);"
+    "const daysSince = (Date.now() - new Date(i.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24);",
+    "const daysSince = (Date.now() - new Date(lastInteraction.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24);"
    ],
    "percents": [
     "support = Math.round((behavior.supportLevel - 5.5) * 0.9);"
@@ -209524,7 +209527,7 @@
   },
   "src/hooks/useTonePersistence.ts": {
    "path": "src/hooks/useTonePersistence.ts",
-   "lines": 72,
+   "lines": 74,
    "exports": [
     "type ToneType",
     "function useTonePersistence"
@@ -209541,7 +209544,6 @@
    ],
    "table_cols": {
     "ai_tone_preferences": [
-     "company_id",
      "preferred_tone",
      "user_id"
     ]
@@ -211629,7 +211631,7 @@
   },
   "src/hooks/commercial/useSocialSync.ts": {
    "path": "src/hooks/commercial/useSocialSync.ts",
-   "lines": 124,
+   "lines": 126,
    "exports": [
     "function useSocialSync"
    ],
@@ -211682,6 +211684,7 @@
     "sync-social-interests"
    ],
    "errors": [
+    "Falha ao enfileirar sync social",
     "Falha ao iniciar sincronização: ${parseApiError(error)}"
    ],
    "status_values": [
@@ -215285,7 +215288,7 @@
     "/empresas/"
    ],
    "temporal": [
-    "if (interactions.length > 0) { const now = Date.now(); for (const i of interactions) { if (i.company_id) { const days = Math.floor((now - new Date(i.created_at) …"
+    "if (interactions.length > 0) { const now = Date.now(); for (const i of interactions) { if (i.company_id) { const days = Math.floor((now - new Date(i.created_at …"
    ]
   },
   "src/pages/Enrichment.tsx": {
@@ -215509,7 +215512,7 @@
     "Nenhuma busca importada"
    ],
    "temporal": [
-    "const thisWeek = interactions.filter(i => { const d = new Date(i.created_at); return d >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); }).length;"
+    "const thisWeek = interactions.filter(i => { const d = new Date(i.created_at ?? 0); return d >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); }).length;"
    ]
   },
   "src/pages/KnowledgeBase.tsx": {
@@ -216444,7 +216447,7 @@
   },
   "src/pages/RolePermissionsPage.tsx": {
    "path": "src/pages/RolePermissionsPage.tsx",
-   "lines": 67,
+   "lines": 68,
    "exports": [
     "function RolePermissionsPage"
    ],
@@ -217148,7 +217151,7 @@
   },
   "src/pages/interacoes/InteracoesContent.tsx": {
    "path": "src/pages/interacoes/InteracoesContent.tsx",
-   "lines": 737,
+   "lines": 739,
    "rule_comments": [
     "(scrollIntoView usa block:'start' apenas no container, não move o caret)."
    ]
@@ -217464,7 +217467,7 @@
   },
   "src/pages/tarefas/TaskDetailDrawer.tsx": {
    "path": "src/pages/tarefas/TaskDetailDrawer.tsx",
-   "lines": 356,
+   "lines": 358,
    "exports": [
     "function TaskDetailDrawer"
    ],
@@ -232814,10 +232817,199 @@
   }
  },
  "git": {
-  "sha": "03b943ae28192487cdb9034e8e4e6b6e420b0ef7",
+  "sha": "4f4b78271f0173571dbe7a049c0ff458ab40a334",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "4f4b782",
+    "date": "2026-11-14",
+    "author": "adm01-debug",
+    "subject": "fix: ativa strict mode no tsconfig.app e corrige tipos (#230)",
+    "files": [
+     "src/components/admin/PasswordResetApproval.tsx",
+     "src/components/ai/AIEmailComposer.tsx",
+     "src/components/ai/AIMessageGenerator.tsx",
+     "src/components/analytics/AdvancedAnalyticsTab.tsx",
+     "src/components/analytics/ClosingScoreAlertsList.tsx",
+     "src/components/analytics/DISCAnalyticsPanel.tsx",
+     "src/components/analytics/RfmExternalDashboard.tsx",
+     "src/components/analytics/disc-analytics/DISCAnalyticsSubComponents.tsx",
+     "src/components/analytics/rfm/RFMSubComponents.tsx",
+     "src/components/briefing/PreContactBriefing.tsx",
+     "src/components/companies/CompaniesStatsBar.tsx",
+     "src/components/companies/CompaniesTableView.tsx",
+     "src/components/companies/CompanyListItem.tsx",
+     "src/components/company-card/CompanyCardWithContext.tsx",
+     "src/components/company-card/CompanyInteractionsModal.tsx",
+     "src/components/company-detail/AccountPlanWidget.tsx",
+     "src/components/company-detail/CompanyInteractionsTab.tsx",
+     "src/components/company-detail/CompanyProfileCard.tsx",
+     "src/components/company-detail/profile/BusinessInfoCard.tsx",
+     "src/components/company-detail/profile/FiscalDataCard.tsx",
+     "src/components/contact-card/ContactCardWithContext.tsx",
+     "src/components/contact-detail/ContactCommercialTab.tsx",
+     "src/components/contact-detail/ContactDetailHeader.tsx",
+     "src/components/contact-detail/ContactIntelligenceTab.tsx",
+     "src/components/contact-detail/ContactInteractionsTab.tsx",
+     "src/components/contact-detail/ContactOverviewTab.tsx",
+     "src/components/contact-detail/LifeEventsTab.tsx",
+     "src/components/contact-detail/MeetingMode.tsx",
+     "src/components/contact-detail/NeuroEvolutionChart.tsx",
+     "src/components/contact-detail/RelationshipTimeline.tsx",
+     "src/components/contact-detail/behavioral-tab/MetaprogramsSubTab.tsx",
+     "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx",
+     "src/components/contact-detail/behavioral-tab/RapportStrategySubTab.tsx",
+     "src/components/contact-detail/data-tab/ConsentAuditCard.tsx",
+     "src/components/contact-detail/life-events/LifeEventsAuditTrail.tsx",
+     "src/components/contacts/ContactsTableView.tsx",
+     "src/components/crm/CRMAutomationAuditLog.tsx",
+     "src/components/crm/CadenceRulesConfig.tsx",
+     "src/components/crm/ContactBehaviorExtended.tsx",
+     "src/components/crm/NextBestAction.tsx",
+     "src/components/crm/behavior/NeuromarketingTimeline.tsx",
+     "src/components/crm/behavior/PredictiveRoadmap.tsx",
+     "src/components/crm/commercial/components/AuditLogDrawer.tsx",
+     "src/components/crm/marketing/components/BehavioralSegmentation.tsx",
+     "src/components/crm/relationship/RelationshipReportExport.tsx",
+     "src/components/dashboard/DailyBriefingCard.tsx",
+     "src/components/dashboard/DashboardCharts.tsx",
+     "src/components/dashboard/StrategicNextStepsCard.tsx",
+     "src/components/dashboard/YourDaySection.tsx",
+     "src/components/dashboard/widgets/ChurnRiskReportWidget.tsx",
+     "src/components/data-export/AdvancedDataExporter.tsx",
+     "src/components/deal-rooms/StakeholderList.tsx",
+     "src/components/forms/InteractionForm.tsx",
+     "src/components/interactions/InteractionBatchActions.tsx",
+     "src/components/interactions/InteractionCardMemo.tsx",
+     "src/components/interactions/insights/SentimentTrendChart.tsx",
+     "src/components/lead-scoring/TopLeadsTable.tsx",
+     "src/components/lux/CompanyIntelligence.tsx",
+     "src/components/network/NetworkVisualization.tsx",
+     "src/components/nlp/NLPRealtimeCoach.tsx",
+     "src/components/nlp/TOTEModelMapper.tsx",
+     "src/components/nlp/UnifiedScriptGenerator.tsx",
+     "src/components/onboarding/steps/ImportStep.tsx",
+     "src/components/pipeline/DealDetailDrawer.tsx",
+     "src/components/pipeline/DealDialog.tsx",
+     "src/components/playbooks/PlaybookSuggestionDrawer.tsx",
+     "src/components/quick-add/QuickAddButton.tsx",
+     "src/components/security/IPRestrictionManager.tsx",
+     "src/components/sequences/SequenceFormDialog.tsx",
+     "src/components/stakeholders/StakeholderInfluenceNetwork.tsx",
+     "src/components/triggers/CommunicationTrainingMode.tsx",
+     "src/components/triggers/CompatibilityAlertsList.tsx",
+     "src/components/triggers/ProfileBasedSuggestions.tsx",
+     "src/components/triggers/SalespersonProfileSettings.tsx",
+     "src/components/triggers/TemplateHistoryByProfile.tsx",
+     "src/components/triggers/TemplatePerformanceComparison.tsx",
+     "src/components/triggers/compatibility/compatibilityData.ts",
+     "src/components/triggers/portfolio/portfolioTypes.ts",
+     "src/components/triggers/profile-based/generateCombinedMessage.ts",
+     "src/components/triggers/template-history/ProfileCard.tsx",
+     "src/components/triggers/template-history/TemplateByProfileView.tsx",
+     "src/components/triggers/template-history/types.ts",
+     "src/components/triggers/template-history/useTemplateHistoryMetrics.ts",
+     "src/components/triggers/template-performance/ExpandedTemplateDetails.tsx",
+     "src/components/triggers/training/TrainingProgressTab.tsx",
+     "src/components/triggers/training/TrainingTipsTab.tsx",
+     "src/components/triggers/trigger-analytics/TriggerAnalyticsTabs.tsx",
+     "src/components/triggers/trigger-analytics/useTriggerAnalyticsData.ts",
+     "src/components/ui/disc-badge.tsx",
+     "src/components/whatsapp/WhatsAppDashboard.tsx",
+     "src/components/win-loss/CompetitorWinRateChart.tsx",
+     "src/data/__tests__/communicationTrainingData.test.ts",
+     "src/data/__tests__/triggerConflicts.test.ts",
+     "src/data/__tests__/triggerConflictsSynergiesMatrix.test.ts",
+     "src/data/communicationTrainingData.ts",
+     "src/hooks/__tests__/company-contracts.test.ts",
+     "src/hooks/__tests__/contact-cache-revalidation.test.tsx",
+     "src/hooks/__tests__/contact-contracts.test.ts",
+     "src/hooks/commercial/useSocialSync.ts",
+     "src/hooks/useAccountChurnPrediction.ts",
+     "src/hooks/useAllowedIPs.ts",
+     "src/hooks/useApproachRecommendation.ts",
+     "src/hooks/useBIAdvanced.ts",
+     "src/hooks/useBehaviorAlerts.ts",
+     "src/hooks/useBehavioralProfilesList.ts",
+     "src/hooks/useBestTimeToContact.ts",
+     "src/hooks/useChurnPrediction.ts",
+     "src/hooks/useClosingScoreAlerts.ts",
+     "src/hooks/useClosingScoreRanking.ts",
+     "src/hooks/useCompanies.ts",
+     "src/hooks/useCompatibilityAlerts.ts",
+     "src/hooks/useContactCadence.ts",
+     "src/hooks/useContactRelationalData.ts",
+     "src/hooks/useDISCAnalysis.ts",
+     "src/hooks/useDISCConversionData.ts",
+     "src/hooks/useDashboardMappedData.ts",
+     "src/hooks/useDashboardStats.ts",
+     "src/hooks/useDealForecastConfidence.ts",
+     "src/hooks/useDealRooms.ts",
+     "src/hooks/useDealSlipRisk.ts",
+     "src/hooks/useDealsAtRisk.ts",
+     "src/hooks/useDocumentTemplates.ts",
+     "src/hooks/useEmotionalStates.ts",
+     "src/hooks/useFamilyHistory.ts",
+     "src/hooks/useInteractions.ts",
+     "src/hooks/useInteractionsRpc.ts",
+     "src/hooks/useLeadScoring.ts",
+     "src/hooks/useNLPAutoAnalysis.ts",
+     "src/hooks/useNetworkGraph.ts",
+     "src/hooks/useNotifications.ts",
+     "src/hooks/usePerformanceMetrics.ts",
+     "src/hooks/usePipeline.ts",
+     "src/hooks/usePortfolioCompatibility.ts",
+     "src/hooks/usePreContactBriefing.ts",
+     "src/hooks/useProactiveIntelligence.ts",
+     "src/hooks/usePurchasePatterns.ts",
+     "src/hooks/useRFMAnalysis.ts",
+     "src/hooks/useRealtimeNotifications.ts",
+     "src/hooks/useRodizioEquipe.ts",
+     "src/hooks/useRoutingMetrics.ts",
+     "src/hooks/useRpcPlanChurnTimeline.ts",
+     "src/hooks/useRpcPlanSnapshots.ts",
+     "src/hooks/useSmartTemplateSuggestions.ts",
+     "src/hooks/useSocialIntelligence.ts",
+     "src/hooks/useStakeholderAnalysis.ts",
+     "src/hooks/useTasks.ts",
+     "src/hooks/useTeamDashboard.ts",
+     "src/hooks/useTemplatePerformanceData.ts",
+     "src/hooks/useTimelineByEntity.ts",
+     "src/hooks/useTonePersistence.ts",
+     "src/hooks/useTriggerHistory.ts",
+     "src/hooks/useUnifiedHistory.ts",
+     "src/hooks/useUnifiedNotifications.ts",
+     "src/hooks/useUnifiedTimeline.ts",
+     "src/hooks/useVisitCheckins.ts",
+     "src/hooks/useYourDay.ts",
+     "src/hooks/voice/__tests__/voice-system-exhaustive.test.ts",
+     "src/lib/computeIsolatedFilterCounts.ts",
+     "src/main.tsx",
+     "src/pages/Calendario.tsx",
+     "src/pages/ContatoDetalhe.tsx",
+     "src/pages/Contatos.tsx",
+     "src/pages/Empresas.tsx",
+     "src/pages/Ficha360.tsx",
+     "src/pages/Inbox.tsx",
+     "src/pages/Interacoes.tsx",
+     "src/pages/NLPAnalytics.tsx",
+     "src/pages/PermissionsPage.tsx",
+     "src/pages/PublicLeadMagnet.tsx",
+     "src/pages/RelatorioContato.tsx",
+     "src/pages/RolePermissionsPage.tsx",
+     "src/pages/admin/AdminSegurancaPage.tsx",
+     "src/pages/calendario/CalendarioContent.tsx",
+     "src/pages/calendario/FollowUpDetailDialog.tsx",
+     "src/pages/empresas/EmpresasContent.tsx",
+     "src/pages/interacoes/InteracoesContent.tsx",
+     "src/pages/relatorio/ReportScriptsSection.tsx",
+     "src/pages/tarefas/TaskDetailDrawer.tsx",
+     "src/test/company-form-exhaustive.test.tsx",
+     "src/types/disc.ts",
+     "tsconfig.app.json"
+    ]
+   },
    {
     "sha": "03b943a",
     "date": "2026-11-14",
@@ -233203,18 +233395,6 @@
      "src/hooks/useContactDetail.ts",
      "src/hooks/useContacts.ts"
     ]
-   },
-   {
-    "sha": "68a97f4",
-    "date": "2026-11-12",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(oportunidades): alinha criação ao contrato da RPC (#152)",
-    "files": [
-     "CHANGELOG.md",
-     "src/components/pipeline/CreateDealWidget.contract.test.tsx",
-     "src/components/pipeline/CreateDealWidget.tsx",
-     "src/hooks/usePipeline.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -233235,6 +233415,10 @@
     3
    ],
    [
+    "src/hooks/__tests__/contact-cache-revalidation.test.tsx",
+    2
+   ],
+   [
     "scripts/docs/citacoes-baseline.json",
     2
    ],
@@ -233247,55 +233431,51 @@
     2
    ],
    [
-    "CHANGELOG.md",
-    2
-   ],
-   [
-    "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
+    "src/components/admin/PasswordResetApproval.tsx",
     1
    ],
    [
-    ".gitignore",
+    "src/components/ai/AIEmailComposer.tsx",
     1
    ],
    [
-    "graphify.local.json",
+    "src/components/ai/AIMessageGenerator.tsx",
     1
    ],
    [
-    ".github/workflows/inventario-estado-semanal.yml",
+    "src/components/analytics/AdvancedAnalyticsTab.tsx",
     1
    ],
    [
-    "docs/perf/explain-analyze.md",
+    "src/components/analytics/ClosingScoreAlertsList.tsx",
     1
    ],
    [
-    "scripts/ai-context/README.md",
+    "src/components/analytics/DISCAnalyticsPanel.tsx",
     1
    ],
    [
-    "scripts/ai-context/cenarios.mjs",
+    "src/components/analytics/RfmExternalDashboard.tsx",
     1
    ],
    [
-    "scripts/ai-context/gerar.mjs",
+    "src/components/analytics/disc-analytics/DISCAnalyticsSubComponents.tsx",
     1
    ],
    [
-    "scripts/apply-cli.test.mjs",
+    "src/components/analytics/rfm/RFMSubComponents.tsx",
     1
    ],
    [
-    "scripts/apply-e2e.test.mjs",
+    "src/components/briefing/PreContactBriefing.tsx",
     1
    ],
    [
-    "scripts/automation.config.json",
+    "src/components/companies/CompaniesStatsBar.tsx",
     1
    ],
    [
-    "scripts/lib/supabase-mgmt.mjs",
+    "src/components/companies/CompaniesTableView.tsx",
     1
    ]
   ]
