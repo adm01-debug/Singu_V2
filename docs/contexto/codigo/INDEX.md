@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `63673dcd44bfa708790c40fb644dfdc4dca90698` (2026-11-13T20:43:26-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `783135afe2d5e1d822ece0e317675ca2bae1f80a` (2026-11-13T21:36:46-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -433,7 +433,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21147 nós · 35841 arestas · 2097 comunidades · grafo do commit `63673dcd`
+- 21147 nós · 35841 arestas · 2097 comunidades · grafo do commit `783135af`
 - comunidades maiores: ref_components (328), _shared/auth.ts (308), ref_lib (278), ref_types (259), 02_tables.sql (259), useAuth (249), framer-motion (240), 📖 Dicionário de Dados — SINGU CRM (227), ref_hooks (220), react (211), react-router-dom (207), lucide-react (206)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -564,12 +564,13 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/er-diagram.md` — 📊 Diagrama Entidade-Relacionamento (ER) (8 linhas)
 - `docs/postmortem-example.md` — Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data) (99 linhas)
 - `docs/postmortem-template.md` — Post-Mortem — {Título do Incidente} (96 linhas)
-- `docs/prod-readiness.md` — Prod Readiness ? Singu_V2 (317 linhas)
+- `docs/prod-readiness.md` — Prod Readiness ? Singu_V2 (319 linhas)
 - `docs/ux_improvement_strategy.md` (73 linhas)
 - subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (5), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/ci (1), docs/perf (1)
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-13 `783135af` chore(docs): bump prod-readiness para o head pos-merge 220 (#221)
 - 2026-11-13 `63673dcd` chore(docs): bump prod-readiness para o head pos-merge 219 (#220)
 - 2026-11-13 `f8312ef2` chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)
 - 2026-11-13 `a8cca0e2` fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-12 `0adf3118` docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)
 - 2026-11-12 `ba89bc04` fix(webhook): aceita timestamps textuais do Evolution e preserva época zero (#206)
 - 2026-11-12 `1e20172b` chore: inventario do estado real [auto] (#205)
-- 2026-11-12 `51a85ab6` fix(whatsapp): vincula eventos ao proprietário da instância (#151)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

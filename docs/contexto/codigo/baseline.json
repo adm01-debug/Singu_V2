@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "63673dcd44bfa708790c40fb644dfdc4dca90698",
+  "commit": "783135afe2d5e1d822ece0e317675ca2bae1f80a",
   "branch": "main",
-  "data_commit": "2026-11-13T20:43:26-03:00",
+  "data_commit": "2026-11-13T21:36:46-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "783135af",
+    "data": "2026-11-13",
+    "assunto": "chore(docs): bump prod-readiness para o head pos-merge 220 (#221)"
+   },
    {
     "sha": "63673dcd",
     "data": "2026-11-13",
@@ -126,11 +131,6 @@
     "sha": "4add6bd4",
     "data": "2026-11-12",
     "assunto": "feat: agenda 14 edge functions periódicas via pg_cron (#196)"
-   },
-   {
-    "sha": "48ab3ac2",
-    "data": "2026-11-11",
-    "assunto": "feat: cria send-transactional-email com Resend para as sequências (#200)"
    }
   ],
   "arquivos_mudados_7d": 632,
@@ -258,15 +258,15 @@
     "mudancas": 6
    },
    {
+    "arquivo": "docs/prod-readiness.md",
+    "mudancas": 6
+   },
+   {
     "arquivo": "AGENTS.md",
     "mudancas": 5
    },
    {
     "arquivo": "ESTADO_ATUAL.md",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "docs/prod-readiness.md",
     "mudancas": 5
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 66
+    "commits": 67
    },
    {
     "autor": "devin-ai-integration[bot]",

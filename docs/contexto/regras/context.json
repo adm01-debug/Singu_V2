@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "63673dcd44bfa708790c40fb644dfdc4dca90698",
+  "sha": "783135afe2d5e1d822ece0e317675ca2bae1f80a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 00:19 UTC",
+  "generated_at": "2026-11-14 01:45 UTC",
   "files_total": 3344,
   "code_files": 2873,
   "code_lines": 409809
@@ -232814,10 +232814,19 @@
   }
  },
  "git": {
-  "sha": "63673dcd44bfa708790c40fb644dfdc4dca90698",
+  "sha": "783135afe2d5e1d822ece0e317675ca2bae1f80a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "783135a",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness para o head pos-merge 220 (#221)",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "63673dc",
     "date": "2026-11-13",
@@ -233283,16 +233292,6 @@
      "inventario/estado/edges.json",
      "inventario/estado/tabelas-uso.json"
     ]
-   },
-   {
-    "sha": "1764764",
-    "date": "2026-11-11",
-    "author": "adm01-debug",
-    "subject": "fix(baseline): redefine gate DEFINER de 109 para 110 apos retencao aplicada em prod (#193)",
-    "files": [
-     "docs/qa/security-definer-audit.md",
-     "tests/rls/security_definer_hardening.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -233310,7 +233309,7 @@
    ],
    [
     "docs/prod-readiness.md",
-    5
+    6
    ],
    [
     "inventario/estado/edge-tabela.json",
