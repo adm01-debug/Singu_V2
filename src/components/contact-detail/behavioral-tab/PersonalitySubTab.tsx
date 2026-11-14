@@ -80,12 +80,12 @@ export function PersonalitySubTab({ contactId }: Props) {
                         <TooltipContent><p className="text-[10px] max-w-[200px]">{field.desc}</p></TooltipContent>
                       </Tooltip>
                     </div>
-                    <span className="text-[10px] font-mono font-bold text-primary">{formData[field.key] || 0}%</span>
+                    <span className="text-[10px] font-mono font-bold text-primary">{(formData as Record<string, number | null>)[field.key] || 0}%</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Input 
                       type="range" min="0" max="100" 
-                      value={formData[field.key] || 0}
+                      value={(formData as Record<string, number | null>)[field.key] || 0}
                       onChange={(e) => setFormData({ ...formData, [field.key]: parseInt(e.target.value) })}
                       className="h-4 flex-1 accent-primary"
                     />

@@ -51,7 +51,7 @@ export function RapportStrategySubTab({ contactId }: Props) {
                     <channel.icon className={`h-3 w-3 ${channel.color}`} />
                     {channel.label}
                   </Label>
-                  <span className="font-mono">{formData[channel.key] || 0}%</span>
+                  <span className="font-mono">{(formData as Record<string, number | null>)[channel.key] || 0}%</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Input 

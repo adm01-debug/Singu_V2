@@ -54,8 +54,8 @@ export function AIMessageGenerator({ contact, companyName, discProfile }: AIMess
   const handleGenerate = async () => {
     await generateSuggestions({
       contact: {
-        firstName: contact.first_name,
-        lastName: contact.last_name,
+        firstName: contact.first_name ?? '',
+        lastName: contact.last_name ?? '',
         roleTitle: contact.role_title || undefined,
         companyName: companyName || undefined,
         discProfile: discProfile || undefined,

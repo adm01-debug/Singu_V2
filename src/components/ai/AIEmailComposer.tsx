@@ -117,8 +117,8 @@ export function AIEmailComposer() {
     }
     await generateSuggestions({
       contact: {
-        firstName: selectedContact.first_name,
-        lastName: selectedContact.last_name,
+        firstName: selectedContact.first_name ?? '',
+        lastName: selectedContact.last_name ?? '',
         roleTitle: selectedContact.role_title ?? undefined,
         hobbies: selectedContact.hobbies ?? undefined,
         interests: selectedContact.interests ?? undefined,
