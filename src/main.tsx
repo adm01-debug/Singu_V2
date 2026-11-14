@@ -64,13 +64,13 @@ if (import.meta.env.PROD) {
               window.dispatchEvent(new CustomEvent("pwa:update-available"));
             },
 
-            onRegistered(reg) {
+            onRegistered(reg: ServiceWorkerRegistration | undefined) {
               if (reg) {
                 logger.info("[PWA] SW registered — scope:", reg.scope);
               }
             },
 
-            onRegisterError(error) {
+            onRegisterError(error: unknown) {
               logger.error("[PWA] SW registration error:", error);
             },
           });

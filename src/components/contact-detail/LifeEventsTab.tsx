@@ -347,7 +347,7 @@ export function LifeEventsTab({ contactId }: LifeEventsTabProps) {
                 <div className="flex items-center space-x-2">
                   <Checkbox 
                     id="recurring" 
-                    checked={newEvent.recurring} 
+                    checked={Boolean(newEvent.recurring)} 
                     onCheckedChange={(checked) => setNewEvent({...newEvent, recurring: !!checked})}
                   />
                   <Label htmlFor="recurring" className="text-sm cursor-pointer">Recorrente anual</Label>

@@ -35,7 +35,7 @@ export const ChurnRiskReportWidget = React.memo(function ChurnRiskReportWidget()
               <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
                 <div className="min-w-0">
                   <p className="text-xs font-medium truncate">{name}</p>
-                  {item.reason && <p className="text-[10px] text-muted-foreground truncate">{String(item.reason)}</p>}
+                  {Boolean(item.reason) && <p className="text-[10px] text-muted-foreground truncate">{String(item.reason)}</p>}
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   {score != null && <span className={cn("text-xs font-bold tabular-nums", RISK_COLORS[risk])}>{score}%</span>}

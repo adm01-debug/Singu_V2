@@ -176,10 +176,10 @@ export function RelationshipTimeline({ interactions, contact, className }: Relat
                               {event.description}
                             </p>
                           )}
-                          {event.metadata?.sentiment && (
+                          {Boolean(event.metadata?.sentiment) && (
                             <div className="mt-2 flex items-center gap-1.5">
                               {sentimentBadge(event.metadata.sentiment as string)}
-                              {event.metadata.followUp && (
+                              {Boolean((event.metadata as Record<string, unknown> | undefined)?.followUp) && (
                                 <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-warning/10 text-warning border-warning/20">
                                   Follow-up
                                 </Badge>

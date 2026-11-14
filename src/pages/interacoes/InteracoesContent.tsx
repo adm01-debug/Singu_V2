@@ -244,7 +244,7 @@ interface Props {
 
   const sortedForView = useMemo(() => {
     const mapped = filteredAndSorted.map(i => {
-      const c = contactMap.get(i.contact_id);
+      const c = contactMap.get(i.contact_id ?? '');
       const inferredCompanyId = i.company_id || contactToCompany.get(i.contact_id ?? '') || null;
       return {
         ...i,

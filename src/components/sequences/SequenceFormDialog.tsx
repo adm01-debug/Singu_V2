@@ -73,7 +73,7 @@ export function SequenceFormDialog({ open, onOpenChange, onSubmit, loading }: Pr
 
   const addStep = () => setSteps(prev => [...prev, emptyStep()]);
   const removeStep = (idx: number) => setSteps(prev => prev.filter((_, i) => i !== idx));
-  const updateStep = (idx: number, field: keyof StepDraft, value: string | number) => {
+  const updateStep = (idx: number, field: keyof StepDraft, value: string | number | null) => {
     setSteps(prev => prev.map((s, i) => i === idx ? { ...s, [field]: value } : s));
   };
 

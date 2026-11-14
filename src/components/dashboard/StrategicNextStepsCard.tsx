@@ -52,8 +52,8 @@ import { logger } from '@/lib/logger';
 
 interface Contact {
   id: string;
-  first_name: string;
-  last_name: string;
+  first_name: string | null;
+  last_name: string | null;
   avatar_url?: string | null;
   relationship_score?: number | null;
   last_interaction_at?: string | null;
@@ -355,7 +355,7 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       doc.text('Nenhuma interação registrada.', 14, finalY + 8);
     }
 
-    doc.save(`recomendacao_${contact.first_name.toLowerCase()}.pdf`);
+    doc.save(`recomendacao_${(contact.first_name ?? '').toLowerCase()}.pdf`);
     
     toast({
       title: "PDF Gerado",

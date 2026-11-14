@@ -12,8 +12,8 @@ export const AccountPlanWidget = React.memo(function AccountPlanWidget({ company
   if (!data) return null;
 
   const plan = data as unknown as Record<string, string | number | boolean | null | undefined>;
-  const objectives = (plan.objectives as Array<Record<string, unknown>>) || [];
-  const strategies = (plan.strategies as string[]) || [];
+  const objectives = (plan.objectives as unknown as Array<Record<string, unknown>>) || [];
+  const strategies = (plan.strategies as unknown as string[]) || [];
 
   return (
     <Card>

@@ -79,7 +79,7 @@ export function RapportStrategySubTab({ contactId }: Props) {
             <div className="space-y-2">
               <Label className="text-xs uppercase text-muted-foreground">Velocidade (Pacing)</Label>
               <Select 
-                value={formData.pacing_speed} 
+                value={formData.pacing_speed ?? ''} 
                 onValueChange={(val) => setFormData({ ...formData, pacing_speed: val })}
               >
                 <SelectTrigger className="h-8 text-xs">

@@ -239,7 +239,7 @@ const ContatoDetalhe = () => {
                   </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <ContactOverviewTab
-                    contact={contact as unknown as { relationship_score?: number | null; relationship_stage?: string | null; created_at: string }}
+                    contact={contact}
                     company={company}
                     insights={insights}
                     alerts={alerts}
