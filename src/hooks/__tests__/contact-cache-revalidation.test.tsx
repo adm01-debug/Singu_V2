@@ -40,7 +40,7 @@ function deferred<T>() {
 const old = normalizeExternalContact({ id: 'contato-1', user_id: 'usuario-A', first_name: 'Antigo', version: 1 });
 const saved = { ...old, first_name: 'Salvo', version: 2 };
 const created = { ...old, id: 'contato-novo', first_name: 'Novo' };
-const response = (data = [old], count = data.length) => ({ data, count, error: null });
+const response = (data = [old], count?: number) => ({ data, count, error: null });
 const detail = () => ({ contact: old, company: null, interactions: [], insights: [], alerts: [] });
 const key = ['contact', old.user_id, old.id];
 const listKey = ['contacts', '__all__', old.user_id];
@@ -119,7 +119,7 @@ describe('Carga inicial e paginação reais do hook durante gravações', () => 
     let nextReads = 0;
     state.query.mockImplementation(({ range, countMethod }) => {
       if (range.from === 50 && ++nextReads === 1) return next.promise;
-      return Promise.resolve(response(rows.slice(range.from, range.to + 1), countMethod === 'exact' ? rows.length : null));
+      return Promise.resolve(response(rows.slice(range.from, range.to + 1), countMethod === 'exact' ? rows.length : undefined));
     });
     state.insert.mockImplementation(async () => {
       rows = [created, ...rows];
@@ -183,7 +183,7 @@ describe('Redistribuição das páginas carregadas após criação', () => {
     const first = Array.from({ length: 50 }, (_, i) => ({ ...old, id: `contato-${i}` }));
     const last = Array.from({ length: size }, (_, i) => ({ ...old, id: `final-${i}` }));
     state.query.mockImplementation(({ range }) => Promise.resolve(range.from === 0 ? response(first, 200)
-      : range.from === 50 ? response(last, null)
+      : range.from === 50 ? response(last, undefined)
       : { data: null, error: new Error('Consulta além do fim real') }));
     const { result } = renderHook(() => useContacts(undefined, { fetchAll: true }), { wrapper });
     await waitFor(() => expect(state.query.mock.calls.length).toBeGreaterThanOrEqual(2));
@@ -198,7 +198,7 @@ describe('Redistribuição das páginas carregadas após criação', () => {
   it.each([49, 51, 99, 100, 101])('preserva contagem e offsets num total inicial de %i contatos', async total => {
     let rows = Array.from({ length: total }, (_, i) => ({ ...old, id: `contato-${i}` }));
     state.query.mockImplementation(({ range, countMethod }) => Promise.resolve(
-      response(rows.slice(range.from, range.to + 1), countMethod === 'exact' ? rows.length : null),
+      response(rows.slice(range.from, range.to + 1), countMethod === 'exact' ? rows.length : undefined),
     ));
     state.insert.mockImplementation(async () => {
       rows = [created, ...rows];

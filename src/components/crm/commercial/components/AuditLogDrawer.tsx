@@ -76,7 +76,7 @@ export function AuditLogDrawer({ logs }: Props) {
                       </Badge>
                       <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
                         <Clock className="h-3 w-3" />
-                        {format(new Date(log.created_at), "dd 'de' MMM, HH:mm", { locale: ptBR })}
+                        {format(new Date(log.created_at ?? new Date().toISOString()), "dd 'de' MMM, HH:mm", { locale: ptBR })}
                       </div>
                     </div>
 

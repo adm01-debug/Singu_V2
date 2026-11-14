@@ -54,8 +54,8 @@ const Interacoes = () => {
   const { triggerAnalysis } = useNLPAutoAnalysis();
 
   const contactMap = useMemo(() => {
-    const map = new Map<string, { id: string; first_name: string | null; last_name: string | null; avatar_url: string | null; role_title: string | null }>();
-    for (const c of contacts) { map.set(c.id, { id: c.id, first_name: c.first_name, last_name: c.last_name, avatar_url: c.avatar_url, role_title: c.role_title }); }
+    const map = new Map<string, { id: string; first_name: string; last_name: string; avatar_url: string | null; role_title: string | null }>();
+    for (const c of contacts) { map.set(c.id, { id: c.id, first_name: c.first_name ?? '', last_name: c.last_name ?? '', avatar_url: c.avatar_url, role_title: c.role_title }); }
     return map;
   }, [contacts]);
 

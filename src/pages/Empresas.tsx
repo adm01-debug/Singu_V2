@@ -251,7 +251,7 @@ const Empresas = () => {
       />}
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden"><CompanyForm onSubmit={handleCreate} onCancel={() => setIsFormOpen(false)} isSubmitting={isSubmitting} /></DialogContent>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden"><CompanyForm onSubmit={async (d) => { await handleCreate(d as Parameters<typeof createCompany>[0]); }} onCancel={() => setIsFormOpen(false)} isSubmitting={isSubmitting} /></DialogContent>
       </Dialog>
       <Dialog open={!!editingCompany} onOpenChange={(open) => !open && setEditingCompany(null)}>
         <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden"><CompanyForm company={editingCompany} onSubmit={handleUpdate} onCancel={() => setEditingCompany(null)} isSubmitting={isSubmitting} /></DialogContent>

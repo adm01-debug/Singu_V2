@@ -229,7 +229,7 @@ function ContactCardWithContextImpl({
                          {vakConfig.name}
                        </Badge>
                      )}
-                     {(contact.behavior as Record<string, unknown> | null)?.discProfile && (
+                     {Boolean((contact.behavior as Record<string, unknown> | null)?.discProfile) && (
                        <DISCBadge profile={((contact.behavior as Record<string, unknown>).discProfile ?? null) as DISCProfile | null} size="sm" showLabel={false} />
                      )}
                     {contact.role && (

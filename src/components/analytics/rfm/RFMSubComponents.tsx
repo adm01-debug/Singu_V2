@@ -177,7 +177,7 @@ export function ContactRFMCard({ summary }: { summary: RFMContactSummary }) {
                       <TooltipTrigger>
                         <div className="text-center">
                           <div className="text-xs text-muted-foreground">{label}</div>
-                          <div className="font-bold">{rfm[key]}</div>
+                          <div className="font-bold">{String(rfm[key])}</div>
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>{tooltip}</TooltipContent>
