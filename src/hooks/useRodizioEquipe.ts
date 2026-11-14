@@ -40,8 +40,8 @@ export function useRodizioEquipe() {
       }
 
       return {
-        closers: closersRes.data ?? [],
-        sdrs: sdrsRes.data ?? [],
+        closers: (closersRes.data ?? []) as RodizioCloserCarga[],
+        sdrs: (sdrsRes.data ?? []) as RodizioSdrCarga[],
       };
     },
     enabled: !!user,

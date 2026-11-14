@@ -25,7 +25,7 @@ import type { Json } from '@/integrations/supabase/types';
 interface AuditLogEntry {
   id: string;
   change_type: string;
-  created_at: string;
+  created_at: string | null;
   changed_fields?: string[] | null;
   new_values?: Json;
   previous_values?: Json;

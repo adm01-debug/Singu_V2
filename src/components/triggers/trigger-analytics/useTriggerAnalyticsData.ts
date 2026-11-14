@@ -51,7 +51,7 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
         if (cancelled) return;
         setUsageData((usageHistory || []).map((usage) => ({
           id: usage.id,
-          trigger_type: usage.trigger_type,
+          trigger_type: usage.trigger_type ?? '',
           result: usage.result || 'pending',
           effectiveness_rating: usage.effectiveness_rating,
           used_at: usage.used_at,

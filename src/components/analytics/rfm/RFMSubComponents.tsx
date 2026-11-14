@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import type { RFMHistory } from '@/types/rfm';
+import type { RFMHistory, RFMContactSummary } from '@/types/rfm';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -142,14 +142,7 @@ export function PriorityBadge({ priority }: { priority: string }) {
   return <Badge className={`${cfg.color} border-0`}>{cfg.label}</Badge>;
 }
 
-interface ContactRFMSummary {
-  contactId: string;
-  contactName: string;
-  avatarUrl?: string;
-  rfmAnalysis: RFMAnalysis;
-}
-
-export function ContactRFMCard({ summary }: { summary: ContactRFMSummary }) {
+export function ContactRFMCard({ summary }: { summary: RFMContactSummary }) {
   const rfm = summary.rfmAnalysis;
   if (!rfm) return null;
   const segment = RFM_SEGMENTS[rfm.segment];

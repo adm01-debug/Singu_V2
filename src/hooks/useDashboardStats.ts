@@ -253,11 +253,11 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         }
         return {
           id: interaction.id,
-          contactId: interaction.contact_id,
+          contactId: interaction.contact_id ?? '',
           entityName: displayName,
           description: cleanDesc,
           createdAt: new Date(interaction.created_at ?? 0),
-          type: interaction.type,
+          type: interaction.type ?? '',
         };
       })
       .filter(a => a.entityName !== 'Contato' && a.entityName !== 'Mensagem' && a.entityName !== 'Mensagem Enviada') // Remove unresolved generic entries

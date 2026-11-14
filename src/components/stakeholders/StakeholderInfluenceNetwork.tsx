@@ -1,5 +1,5 @@
 import { useRef, useCallback, useState, useEffect, useMemo } from 'react';
-import ForceGraph2D, { ForceGraphMethods } from 'react-force-graph-2d';
+import ForceGraph2D, { ForceGraphMethods, NodeObject, LinkObject } from 'react-force-graph-2d';
 import { AnimatePresence } from 'framer-motion';
 import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ import { SelectedNodePanel } from './stakeholder-network/SelectedNodePanel';
 interface StakeholderInfluenceNetworkProps { stakeholders: StakeholderData[]; height?: number; className?: string; }
 
 export function StakeholderInfluenceNetwork({ stakeholders, height = 400, className }: StakeholderInfluenceNetworkProps) {
-  const graphRef = useRef<ForceGraphMethods>();
+  const graphRef = useRef<ForceGraphMethods<NodeObject<NetworkNode>, LinkObject<NetworkNode, NetworkLink>>>();
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 600, height });
   const [hoveredNode, setHoveredNode] = useState<NetworkNode | null>(null);
