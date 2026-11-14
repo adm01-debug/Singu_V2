@@ -33,8 +33,8 @@ export default function RolePermissionsPage() {
   if (!isAdmin) return <p className="p-6 text-muted-foreground">Acesso restrito.</p>;
 
   const grouped = (data ?? []).reduce((acc, r) => {
-    if (!acc[r.role]) acc[r.role] = [];
-    acc[r.role].push(r);
+    if (!acc[r.role ?? 'outros']) acc[r.role ?? 'outros'] = [];
+    acc[r.role ?? 'outros'].push(r);
     return acc;
   }, {} as Record<string, typeof data>);
 

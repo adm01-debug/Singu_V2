@@ -122,7 +122,7 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
          };
         if (existing) {
           existing.events.push(event);
-          if (it.created_at > existing.last_event_at) existing.last_event_at = it.created_at;
+          if ((it.created_at ?? '') > existing.last_event_at) existing.last_event_at = it.created_at ?? '';
         } else {
           groupsMap.set(entityId, {
             entity_id: entityId,

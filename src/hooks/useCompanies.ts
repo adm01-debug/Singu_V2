@@ -192,7 +192,7 @@ export function prepareCompanyRelations(input: CompanyUpdate & CompanyCompositeI
     else phones.push({ numero: input.phone, is_primary: true });
   }
   if (input.email) {
-    const existing = emails.find(email => email.email.toLowerCase() === input.email.trim().toLowerCase());
+    const existing = input.email ? emails.find(email => email.email.toLowerCase() === input.email.trim().toLowerCase()) : undefined;
     emails.forEach(email => { email.is_primary = false; });
     if (existing) existing.is_primary = true;
     else emails.push({ email: input.email.trim(), is_primary: true });

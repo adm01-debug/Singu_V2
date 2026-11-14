@@ -46,7 +46,7 @@ export function PersonalitySubTab({ contactId }: Props) {
   const enneagramTypes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   const handleEnneagramScore = (type: number, score: number) => {
-    const currentScores = typeof formData.enneagram_scores === 'object' ? { ...formData.enneagram_scores } : {};
+    const currentScores: Record<string, number> = typeof formData.enneagram_scores === 'object' ? { ...(formData.enneagram_scores as Record<string, number>) } : {};
     currentScores[type.toString()] = score;
     setFormData({ ...formData, enneagram_scores: currentScores });
   };

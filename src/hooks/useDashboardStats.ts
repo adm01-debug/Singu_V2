@@ -145,8 +145,8 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       if (!i.contact_id) continue;
       interactionCountByContact.set(i.contact_id, (interactionCountByContact.get(i.contact_id) || 0) + 1);
       const current = latestInteractionByContact.get(i.contact_id);
-      if (!current || i.created_at > current) {
-        latestInteractionByContact.set(i.contact_id, i.created_at);
+      if (!current || (i.created_at ?? '') > current) {
+        latestInteractionByContact.set(i.contact_id, i.created_at ?? '');
         if (i.content || i.title) {
           interactionSummariesByContact.set(i.contact_id, i.content || i.title);
         }

@@ -210,7 +210,7 @@ const Contatos = () => {
     for (const c of companies) { map.set(c.id, c.name); }
     return map;
   }, [companies]);
-  const lastInteractionMap = useMemo(() => { const map = new Map<string, string>(); for (const i of interactions) { const existing = map.get(i.contact_id); if (!existing || i.created_at > existing) map.set(i.contact_id, i.created_at); } return map; }, [interactions]);
+  const lastInteractionMap = useMemo(() => { const map = new Map<string, string>(); for (const i of interactions) { const existing = map.get(i.contact_id); if (!existing || (i.created_at ?? '') > existing) map.set(i.contact_id, i.created_at ?? ''); } return map; }, [interactions]);
   const getCompanyName = useCallback((companyId: string | null) => companyId ? companyNameMap.get(companyId) || null : null, [companyNameMap]);
   const getLastInteractionDate = useCallback((contactId: string): string | null => lastInteractionMap.get(contactId) || null, [lastInteractionMap]);
 

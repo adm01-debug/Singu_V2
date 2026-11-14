@@ -51,7 +51,7 @@ export function useDashboardMappedData(
       const contactInteractions = interactionsByContact.get(c.id) || [];
       const lastInteraction = contactInteractions.length > 0
         ? new Date(contactInteractions.reduce<string | null>((latest, i) =>
-            i.created_at > (latest ?? '') ? i.created_at : (latest ?? i.created_at), contactInteractions[0].created_at
+            (i.created_at ?? '') > (latest ?? '') ? (i.created_at ?? latest) : (latest ?? i.created_at ?? ''), contactInteractions[0].created_at
           ) ?? 0)
         : undefined;
 

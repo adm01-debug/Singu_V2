@@ -57,7 +57,7 @@ export function RapportStrategySubTab({ contactId }: Props) {
                   <Input 
                     type="range" 
                     min="0" max="100" 
-                    value={formData[channel.key] || 0}
+                    value={(formData as Record<string, number | null>)[channel.key] || 0}
                     onChange={(e) => setFormData({ ...formData, [channel.key]: parseInt(e.target.value) })}
                     className="h-4 flex-1 accent-primary"
                   />

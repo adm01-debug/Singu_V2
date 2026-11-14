@@ -35,7 +35,7 @@ export function useSocialIntelligence(contactId: string) {
             // Em vez de salvar direto, criar sugestões pendentes para o usuário aprovar
             const suggestions = suggestedInterests.map(val => ({
               contact_id: contactId,
-              user_id: user.id,
+              user_id: user?.id,
               type: 'interest' as const,
               value: val,
               source: 'linkedin', // Simplificado, poderia vir da análise
@@ -69,7 +69,7 @@ export function useSocialIntelligence(contactId: string) {
   const dismissMutation = useMutation({
     mutationFn: async (eventId: string) => {
       if (!user) throw new Error('Não autenticado');
-      const { error } = await supabase.from('social_life_events').update({ dismissed: true }).eq('user_id', user.id).eq('id', eventId);
+      const { error } = await supabase.from('social_life_events').update({ dismissed: true }).eq('user_id', user?.id ?? '').eq('id', eventId);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -112,7 +112,7 @@ export function useSocialIntelligence(contactId: string) {
        const [{ error: profileError }, { error: contactError }] = await Promise.all([
          supabase.from('contact_analytical_profiles').upsert({
            contact_id: contactId,
-           user_id: user.id,
+           user_id: user?.id,
            preferences,
            recurrent_topics: analysis.topics || [],
            communication_style: communicationStyle,
@@ -132,7 +132,7 @@ export function useSocialIntelligence(contactId: string) {
        // 5. Trigger offer regeneration (simulation/edge function call)
        try {
          await supabase.functions.invoke('generate-offer-suggestions', { 
-           body: { contactId, userId: user.id, enriched: true } 
+           body: { contactId, userId: user?.id, enriched: true } 
          });
        } catch {
          logger.warn('Failed to auto-trigger offer suggestions, but psychographics were updated');

@@ -147,7 +147,7 @@ describe('contrato canônico de empresas', () => {
       _emails: [{ id: 'email-1', email: 'novo@example.test' }],
     });
     expect(api.update).not.toHaveBeenCalled();
-    expect(client.getQueryData<InfiniteData<Page>>(queryKey).pages[0].companies[0]).toMatchObject({ city: 'Campinas', version: 4 });
+    expect(client.getQueryData<InfiniteData<Page>>(queryKey)!.pages[0].companies[0]!).toMatchObject({ city: 'Campinas', version: 4 });
   });
 
   it('não transforma falha de relação em sucesso e preserva rollback paginado', async () => {
