@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "31ec993165d36e0201d05df7b3e43ec59ee3c2fa",
+  "commit": "e0851f2d7454ec4bdb69c5111378d88ef53e68df",
   "branch": "main",
-  "data_commit": "2026-11-13T22:40:33-03:00",
+  "data_commit": "2026-11-13T23:21:43-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "e0851f2d",
+    "data": "2026-11-13",
+    "assunto": "chore(docs): bump prod-readiness para o head pos-merge 222 (#223)"
+   },
    {
     "sha": "31ec9931",
     "data": "2026-11-13",
@@ -126,11 +131,6 @@
     "sha": "cd6478ec",
     "data": "2026-11-12",
     "assunto": "fix: digest respeita opção só no app, não perde relatório em falha e retenta no mesmo dia (#202)"
-   },
-   {
-    "sha": "047b2833",
-    "data": "2026-11-12",
-    "assunto": "feat: digest semanal enviado por e-mail via Resend no horário de Brasília (#201)"
    }
   ],
   "arquivos_mudados_7d": 632,
@@ -184,16 +184,16 @@
     "mudancas": 9
    },
    {
+    "pasta": "docs/prod-readiness.md",
+    "mudancas": 8
+   },
+   {
     "pasta": "inventario/estado/edges.json",
     "mudancas": 8
    },
    {
     "pasta": "inventario/estado/tabelas-uso.json",
     "mudancas": 8
-   },
-   {
-    "pasta": "docs/prod-readiness.md",
-    "mudancas": 7
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -238,6 +238,10 @@
     "mudancas": 9
    },
    {
+    "arquivo": "docs/prod-readiness.md",
+    "mudancas": 8
+   },
+   {
     "arquivo": "inventario/estado/edges.json",
     "mudancas": 8
    },
@@ -247,10 +251,6 @@
    },
    {
     "arquivo": ".github/workflows/rls-exposure-guard.yml",
-    "mudancas": 7
-   },
-   {
-    "arquivo": "docs/prod-readiness.md",
     "mudancas": 7
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 68
+    "commits": 69
    },
    {
     "autor": "devin-ai-integration[bot]",

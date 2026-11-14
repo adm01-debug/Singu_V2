@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "31ec993165d36e0201d05df7b3e43ec59ee3c2fa",
+  "sha": "e0851f2d7454ec4bdb69c5111378d88ef53e68df",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 02:19 UTC",
+  "generated_at": "2026-11-14 03:05 UTC",
   "files_total": 3344,
   "code_files": 2873,
   "code_lines": 409809
@@ -232814,10 +232814,19 @@
   }
  },
  "git": {
-  "sha": "31ec993165d36e0201d05df7b3e43ec59ee3c2fa",
+  "sha": "e0851f2d7454ec4bdb69c5111378d88ef53e68df",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "e0851f2",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness para o head pos-merge 222 (#223)",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "31ec993",
     "date": "2026-11-13",
@@ -233278,35 +233287,24 @@
      "supabase/functions/voice-to-text/index.ts",
      "supabase/functions/win-loss-analyzer/index.ts"
     ]
-   },
-   {
-    "sha": "2f9e3fe",
-    "date": "2026-11-11",
-    "author": "github-actions[bot]",
-    "subject": "chore: inventario do estado real [auto] (#194)",
-    "files": [
-     "inventario/estado/banco.json",
-     "inventario/estado/edges.json",
-     "inventario/estado/tabelas-uso.json"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    7
+    8
    ],
    [
     "inventario/estado/banco.json",
-    6
+    5
    ],
    [
     "inventario/estado/edges.json",
-    6
+    5
    ],
    [
     "inventario/estado/tabelas-uso.json",
-    6
+    5
    ],
    [
     "supabase/functions/weekly-digest/index.ts",
