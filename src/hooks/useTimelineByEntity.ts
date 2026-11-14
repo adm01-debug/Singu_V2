@@ -114,7 +114,7 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
            type: it.type,
            title: it.title,
            content: it.content,
-           created_at: it.created_at,
+           created_at: it.created_at ?? '',
            sentiment: it.sentiment,
            follow_up_required: it.follow_up_required,
            transcription: it.transcription,
@@ -129,7 +129,7 @@ export function useTimelineByEntity(params: UseTimelineByEntityParams) {
             entity_name: nameMap.get(entityId) || (groupBy === 'company' ? 'Empresa' : 'Contato'),
             entity_type: groupBy,
             events: [event],
-            last_event_at: it.created_at,
+            last_event_at: it.created_at ?? '',
           });
         }
       }

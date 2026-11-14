@@ -178,7 +178,7 @@ interface Props {
   const advancedFiltered = useMemo(() => {
     return adv.canais.length === 0
       ? advancedFilteredWithoutCanais
-      : advancedFilteredWithoutCanais.filter(i => adv.canais.includes(i.type));
+      : advancedFilteredWithoutCanais.filter(i => adv.canais.includes(i.type ?? ''));
   }, [advancedFilteredWithoutCanais, adv.canais]);
 
   // Contagem por bucket de sentimento (ignora o próprio filtro de sentimento;
@@ -186,7 +186,7 @@ interface Props {
   const sentimentCounts = useMemo(() => {
     const base = adv.canais.length === 0
       ? baseWithoutCanaisAndSentimento
-      : baseWithoutCanaisAndSentimento.filter(i => adv.canais.includes(i.type));
+      : baseWithoutCanaisAndSentimento.filter(i => adv.canais.includes(i.type ?? ''));
     const acc: Record<'positive' | 'neutral' | 'negative' | 'mixed', number> = {
       positive: 0, neutral: 0, negative: 0, mixed: 0,
     };
@@ -245,13 +245,15 @@ interface Props {
   const sortedForView = useMemo(() => {
     const mapped = filteredAndSorted.map(i => {
       const c = contactMap.get(i.contact_id);
-      const inferredCompanyId = i.company_id || contactToCompany.get(i.contact_id) || null;
+      const inferredCompanyId = i.company_id || contactToCompany.get(i.contact_id ?? '') || null;
       return {
         ...i,
+        type: i.type ?? 'note',
+        created_at: i.created_at ?? '',
         date: i.created_at,
         contact_name: c ? `${c.first_name ?? ''} ${c.last_name ?? ''}`.trim() : null,
         company_id: inferredCompanyId,
-        company_name: inferredCompanyId ? (companyMap.get(inferredCompanyId) ?? null) : null,
+        company_name: inferredCompanyId ? (companyMap.get(inferredCompanyId ?? '') ?? null) : null,
       };
     });
     return sortInteractions(mapped, adv.sort, debouncedQ, channelCounts);
@@ -635,7 +637,7 @@ interface Props {
               <div className={`absolute ${isCompact ? 'left-[19px]' : 'left-[27px]'} top-0 bottom-0 w-0.5 bg-border`} />
               <div className={isCompact ? 'space-y-2' : 'space-y-4'}>
                 {visibleInteractions.map((interaction, index) => {
-                  const contact = contactMap.get(interaction.contact_id);
+                  const contact = contactMap.get(interaction.contact_id ?? '');
                   const Icon = interactionIcons[interaction.type ?? 'note'] || MessageSquare;
                   const tags = interaction.tags ?? [];
                   const visibleTags = isCompact ? tags.slice(0, 3) : tags;

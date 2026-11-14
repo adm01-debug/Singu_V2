@@ -11,14 +11,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface Contact {
   id: string;
-  first_name: string;
-  last_name: string;
-  updated_at: string;
+  first_name: string | null;
+  last_name: string | null;
+  updated_at: string | null;
 }
 
 interface Interaction {
   id: string;
-  created_at: string;
+  created_at: string | null;
   contact_id?: string | null;
 }
 
@@ -37,14 +37,14 @@ function todayKey(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-function isToday(iso: string): boolean {
-  return iso.slice(0, 10) === todayKey();
+function isToday(iso: string | null | undefined): boolean {
+  return (iso ?? '').slice(0, 10) === todayKey();
 }
 
-function isYesterday(iso: string): boolean {
+function isYesterday(iso: string | null | undefined): boolean {
   const d = new Date();
   d.setDate(d.getDate() - 1);
-  return iso.slice(0, 10) === d.toISOString().slice(0, 10);
+  return (iso ?? '').slice(0, 10) === d.toISOString().slice(0, 10);
 }
 
 function getGreeting() {
