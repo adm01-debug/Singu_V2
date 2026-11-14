@@ -175,8 +175,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
         <CardContent className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             {sliders.map((s) => {
-              const leftVal = formData[s.leftKey] || 0;
-              const rightVal = formData[s.rightKey] || 0;
+              const leftVal = (formData as Record<string, number | null>)[s.leftKey] || 0;
+              const rightVal = (formData as Record<string, number | null>)[s.rightKey] || 0;
               const total = leftVal + rightVal;
               const leftPct = total > 0 ? (leftVal / total) * 100 : 50;
 

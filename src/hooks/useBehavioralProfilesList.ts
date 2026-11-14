@@ -91,7 +91,7 @@ export function useBehavioralProfilesList(filters: BehavioralProfilesFilters) {
       }
       return rows.map((r) => ({
         id: r.id,
-        contact_id: z.string().parse(r.contact_id),
+        contact_id: z.string().parse(r.contact_id ?? ''),
         contact_name: contactsById.get(r.contact_id)?.full_name ?? null,
         contact_avatar: contactsById.get(r.contact_id)?.avatar_url ?? null,
         company_id: contactsById.get(r.contact_id)?.company_id ?? null,

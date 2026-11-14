@@ -236,7 +236,7 @@ export function PersonalitySubTab({ contactId }: Props) {
               <div className="space-y-2">
                 <Label className="text-[10px] uppercase font-bold text-muted-foreground">Primário</Label>
                 <Select 
-                  value={formData.temperament_primary} 
+                  value={formData.temperament_primary ?? undefined} 
                   onValueChange={(val) => setFormData({ ...formData, temperament_primary: val })}
                 >
                   <SelectTrigger className="h-9 border-success/20">
@@ -256,7 +256,7 @@ export function PersonalitySubTab({ contactId }: Props) {
               <div className="space-y-2">
                 <Label className="text-[10px] uppercase font-bold text-muted-foreground">Secundário</Label>
                 <Select 
-                  value={formData.temperament_secondary} 
+                  value={formData.temperament_secondary ?? undefined} 
                   onValueChange={(val) => setFormData({ ...formData, temperament_secondary: val })}
                 >
                   <SelectTrigger className="h-9 border-success/20">

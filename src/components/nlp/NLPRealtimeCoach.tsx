@@ -374,13 +374,13 @@ export function NLPRealtimeCoach({ content, contactId, onApplySuggestion }: Prop
               ))}
             </div>
 
-            {(detectedMeta?.scores?.toward > 0 || detectedMeta?.scores?.awayFrom > 0) && (
+            {((detectedMeta?.scores?.toward ?? 0) > 0 || (detectedMeta?.scores?.awayFrom ?? 0) > 0) && detectedMeta && (
               <div className="pt-2 border-t border-primary/10 flex flex-wrap gap-2">
                 <Badge variant="outline" className="text-[9px] font-normal text-muted-foreground bg-white/50">
-                  🎯 Motivação: {detectedMeta.scores.toward >= detectedMeta.scores.awayFrom ? 'Em direção a' : 'Afastar-se de'}
+                  🎯 Motivação: {(detectedMeta.scores.toward ?? 0) >= (detectedMeta.scores.awayFrom ?? 0) ? 'Em direção a' : 'Afastar-se de'}
                 </Badge>
                 <Badge variant="outline" className="text-[9px] font-normal text-muted-foreground bg-white/50">
-                  📊 Escopo: {detectedMeta.scores.general >= detectedMeta.scores.specific ? 'Global (Big Picture)' : 'Detalhado'}
+                  📊 Escopo: {(detectedMeta.scores.general ?? 0) >= (detectedMeta.scores.specific ?? 0) ? 'Global (Big Picture)' : 'Detalhado'}
                 </Badge>
               </div>
             )}

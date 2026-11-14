@@ -59,7 +59,7 @@ export function RelationshipTimeline({ interactions, contact, className }: Relat
         id: `int-${interaction.id}`,
         date: new Date(interaction.created_at ?? 0),
         type: 'interaction',
-        title: interaction.title,
+        title: interaction.title ?? '',
         description: interaction.content?.slice(0, 120) || undefined,
         icon: Icon,
         color,

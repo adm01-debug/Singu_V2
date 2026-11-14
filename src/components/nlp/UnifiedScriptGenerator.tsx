@@ -63,7 +63,7 @@ const UnifiedScriptGenerator: React.FC<UnifiedScriptGeneratorProps> = ({
   const powerWords = useMemo(() => {
     const vakWords = POWER_WORDS.vak[vakType] || [];
     const discWords = POWER_WORDS.disc[discProfile] || [];
-    const metaWords = POWER_WORDS.metaprograms[motivationDirection as 'toward' | 'away_from' | 'balanced'] || [];
+    const metaWords = POWER_WORDS.metaprograms[motivationDirection === 'balanced' ? 'toward' : motivationDirection] || [];
     
     return [...new Set([...vakWords.slice(0, 4), ...discWords.slice(0, 4), ...metaWords.slice(0, 4)])];
   }, [vakType, discProfile, motivationDirection]);
