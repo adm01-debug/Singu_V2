@@ -28,7 +28,7 @@ export interface LeadScoreHistoryRow {
   id: string;
   contact_id: string | null;
   total_score: number | null;
-  grade: DisplayLeadGrade | null;
+  grade: LeadScoreGrade | null;
   fit_score: number | null;
   engagement_score: number | null;
   intent_score: number;
