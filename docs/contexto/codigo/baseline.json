@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "783135afe2d5e1d822ece0e317675ca2bae1f80a",
+  "commit": "31ec993165d36e0201d05df7b3e43ec59ee3c2fa",
   "branch": "main",
-  "data_commit": "2026-11-13T21:36:46-03:00",
+  "data_commit": "2026-11-13T22:40:33-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "31ec9931",
+    "data": "2026-11-13",
+    "assunto": "chore(docs): bump prod-readiness para o head pos-merge 221 (#222)"
+   },
    {
     "sha": "783135af",
     "data": "2026-11-13",
@@ -126,11 +131,6 @@
     "sha": "047b2833",
     "data": "2026-11-12",
     "assunto": "feat: digest semanal enviado por e-mail via Resend no horário de Brasília (#201)"
-   },
-   {
-    "sha": "4add6bd4",
-    "data": "2026-11-12",
-    "assunto": "feat: agenda 14 edge functions periódicas via pg_cron (#196)"
    }
   ],
   "arquivos_mudados_7d": 632,
@@ -192,7 +192,7 @@
     "mudancas": 8
    },
    {
-    "pasta": "package.json",
+    "pasta": "docs/prod-readiness.md",
     "mudancas": 7
    }
   ],
@@ -250,15 +250,15 @@
     "mudancas": 7
    },
    {
+    "arquivo": "docs/prod-readiness.md",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/tests/get_contact_sidebar_by_phone.sql",
     "mudancas": 7
    },
    {
     "arquivo": "RELATORIO_CI.md",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "docs/prod-readiness.md",
     "mudancas": 6
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 67
+    "commits": 68
    },
    {
     "autor": "devin-ai-integration[bot]",

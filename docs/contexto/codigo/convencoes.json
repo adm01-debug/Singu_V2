@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "chore(docs): bump prod-readiness para o head pos-merge 221 (#222)",
    "chore(docs): bump prod-readiness para o head pos-merge 220 (#221)",
    "chore(docs): bump prod-readiness para o head pos-merge 219 (#220)",
    "chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)",
-   "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)",
-   "chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)"
+   "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)"
   ]
  },
  "pr_template": null,
