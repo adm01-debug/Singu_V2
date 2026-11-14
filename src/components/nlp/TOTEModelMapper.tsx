@@ -56,7 +56,7 @@ const TOTEModelMapper: React.FC<TOTEModelMapperProps> = ({
 
   // TOTE phases adapted to DISC profile
   const totePhases = useMemo((): Record<string, TOTEPhase> => {
-    const basePhases = {
+    const basePhases: Record<string, TOTEPhase> = {
       test1: {
         id: 'test1' as const,
         name: 'TEST 1 - Objetivo',
