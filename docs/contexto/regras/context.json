@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "2f709284f25d38f924f5fcca124200176d6552dc",
+  "sha": "03b943ae28192487cdb9034e8e4e6b6e420b0ef7",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 06:37 UTC",
+  "generated_at": "2026-11-14 07:13 UTC",
   "files_total": 3344,
   "code_files": 2873,
   "code_lines": 409809
@@ -232814,10 +232814,19 @@
   }
  },
  "git": {
-  "sha": "2f709284f25d38f924f5fcca124200176d6552dc",
+  "sha": "03b943ae28192487cdb9034e8e4e6b6e420b0ef7",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "03b943a",
+    "date": "2026-11-14",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness pos-merge 228 (final) (#229)",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "2f70928",
     "date": "2026-11-14",
@@ -233206,40 +233215,12 @@
      "src/components/pipeline/CreateDealWidget.tsx",
      "src/hooks/usePipeline.ts"
     ]
-   },
-   {
-    "sha": "47e97cc",
-    "date": "2026-11-12",
-    "author": "adm01-debug",
-    "subject": "style(manutencao): aplica correcoes locais verificadas (#195)",
-    "files": [
-     "src/__tests__/design-system-audit.test.ts",
-     "src/__tests__/integration/auth-flow.test.ts",
-     "src/__tests__/integration/data-validation.test.ts",
-     "src/app/composeProviders.tsx",
-     "src/components/admin/AiGatewayErrorHeatmap.tsx",
-     "src/components/admin/AiGatewayHealthCard.tsx",
-     "src/components/admin/AiGatewayPartitionsCard.tsx",
-     "src/components/admin/BehavioralRegenAlertBanner.tsx",
-     "src/components/admin/BehavioralRegenAlertsStats.tsx",
-     "src/components/admin/BehavioralRegenAlertsTrend.tsx",
-     "src/components/admin/BehavioralRegenCronHealth.tsx",
-     "src/components/admin/InsightFeedbackTrendChart.tsx",
-     "src/components/admin/MttaAutoAckHeartbeatCard.tsx",
-     "src/components/admin/MttaSlaBreachHistoryCard.tsx",
-     "src/components/admin/MttaSlaThresholdEditor.tsx",
-     "src/components/admin/RpcPerfCard.tsx",
-     "src/components/ai/AIMessageGenerator.tsx",
-     "src/components/analytics/AnalyticsShared.tsx",
-     "src/components/analytics/BehaviorAlertsPanel.tsx",
-     "src/components/analytics/BestTimeToContactPanel.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    13
+    14
    ],
    [
     "inventario/estado/banco.json",

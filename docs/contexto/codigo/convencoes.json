@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "chore(docs): bump prod-readiness pos-merge 228 (final) (#229)",
    "chore(docs): bump prod-readiness pos-merge 227 (final) (#228)",
    "chore(docs): bump prod-readiness pos-merge 226 (#227)",
    "chore(docs): bump prod-readiness pos-merge 226",
-   "chore(docs): bump prod-readiness pos-merge 225 (#226)",
-   "chore(docs): bump prod-readiness pos-merge 225"
+   "chore(docs): bump prod-readiness pos-merge 225 (#226)"
   ]
  },
  "pr_template": null,

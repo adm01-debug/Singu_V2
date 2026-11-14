@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "2f709284f25d38f924f5fcca124200176d6552dc",
+  "commit": "03b943ae28192487cdb9034e8e4e6b6e420b0ef7",
   "branch": "main",
-  "data_commit": "2026-11-14T03:20:19-03:00",
+  "data_commit": "2026-11-14T04:00:39-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "03b943a",
+    "data": "2026-11-14",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 228 (final) (#229)"
+   },
    {
     "sha": "2f70928",
     "data": "2026-11-14",
@@ -126,11 +131,6 @@
     "sha": "0adf311",
     "data": "2026-11-12",
     "assunto": "docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)"
-   },
-   {
-    "sha": "ba89bc0",
-    "data": "2026-11-12",
-    "assunto": "fix(webhook): aceita timestamps textuais do Evolution e preserva época zero (#206)"
    }
   ],
   "arquivos_mudados_7d": 632,
@@ -156,16 +156,16 @@
     "mudancas": 15
    },
    {
+    "pasta": "docs/prod-readiness.md",
+    "mudancas": 14
+   },
+   {
     "pasta": "scripts/migration/cdc",
     "mudancas": 14
    },
    {
     "pasta": "scripts/migration/tests",
     "mudancas": 14
-   },
-   {
-    "pasta": "docs/prod-readiness.md",
-    "mudancas": 13
    },
    {
     "pasta": "scripts/migration/ddl",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": "docs/prod-readiness.md",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "arquivo": "docs/qa/security-definer-audit.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 74
+    "commits": 75
    },
    {
     "autor": "devin-ai-integration[bot]",
