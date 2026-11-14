@@ -19,92 +19,91 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 
 | tabela | linhas (~) | total | heap | índices | linhas mortas (~) | seq scans (~) | idx scans (~) | último autovacuum |
 |---|---|---|---|---|---|---|---|---|
-| public.audit_log | ~434.2k | 1.6 GB | 600.2 MB | 38.4 MB | ~2.7k | ~5.1k | ~2.1k | 2026-11-13 |
-| public.companies | ~70.3k | 886.7 MB | 117.4 MB | 769.2 MB | ~220 | ~269.5k | ~35.7M | 2026-11-13 |
+| public.audit_log | ~434.2k | 1.6 GB | 600.2 MB | 38.4 MB | ~3k | ~5.1k | ~2.1k | 2026-11-13 |
+| public.companies | ~70.3k | 886.7 MB | 117.4 MB | 769.2 MB | ~280 | ~269.5k | ~35.7M | 2026-11-13 |
 | public.company_cnaes | ~287.5k | 61.3 MB | 28.5 MB | 32.8 MB | ~160 | ~150 | ~325.7k | 2026-10-19 |
-| public.company_addresses | ~98.5k | 47.0 MB | 27.0 MB | 19.9 MB | ~50 | ~1.6k | ~2.6M | 2026-11-13 |
-| public.customers | ~78.7k | 39.0 MB | 24.9 MB | 14.0 MB | ~820 | ~3.2k | ~7.3M | 2026-09-25 |
+| public.company_addresses | ~98.5k | 47.0 MB | 27.0 MB | 19.9 MB | ~70 | ~1.6k | ~2.6M | 2026-11-13 |
+| public.customers | ~78.7k | 39.0 MB | 24.9 MB | 14.0 MB | ~830 | ~3.2k | ~7.3M | 2026-09-25 |
 | public.company_social_media | ~99.1k | 32.3 MB | 18.0 MB | 14.3 MB | ~390 | ~170 | ~183.2k | 2026-03-21 |
-| public.company_phones | ~87.5k | 30.5 MB | 14.5 MB | 16.0 MB | ~750 | ~207.2k | ~16.3M | 2026-11-08 |
-| public.company_emails | ~57.1k | 27.2 MB | 9.5 MB | 17.7 MB | ~110 | ~380 | ~16.2M | 2026-11-13 |
-| public.customer_rotation_state | ~48.6k | 17.5 MB | 11.1 MB | 6.4 MB | ~30 | ~743.6k | ~7.9M | 2026-11-13 |
-| public.contacts | ~1.5k | 15.8 MB | 11.1 MB | 4.7 MB | 1 | ~10k | ~10.4M | 2026-11-14 |
-| public.company_rfm_scores | ~48.6k | 14.0 MB | 7.8 MB | 6.1 MB | ~3.2k | ~350 | ~166.6k |  |
-| public.error_logs | ~13.9k | 10.5 MB | 9.9 MB | 600.0 KB | ~50 | ~40 | ~10 | 2026-11-11 |
-| public.activities | ~7.9k | 9.3 MB | 8.4 MB | 896.0 KB | ~430 | ~16.9k | ~8.4k | 2026-11-12 |
-| public.interactions | ~9.9k | 7.9 MB | 4.0 MB | 3.8 MB | ~1.4k | ~32.5k | ~34.9M | 2026-10-22 |
+| public.company_phones | ~87.5k | 30.5 MB | 14.5 MB | 16.0 MB | ~760 | ~207.2k | ~16.3M | 2026-11-08 |
+| public.company_emails | ~57.1k | 27.2 MB | 9.5 MB | 17.7 MB | ~140 | ~380 | ~16.2M | 2026-11-13 |
+| public.customer_rotation_state | ~48.6k | 17.5 MB | 11.1 MB | 6.4 MB | 2 | ~743.6k | ~8M | 2026-11-14 |
+| public.contacts | ~1.5k | 15.8 MB | 11.1 MB | 4.7 MB | 6 | ~10k | ~10.5M | 2026-11-14 |
+| public.company_rfm_scores | ~48.6k | 14.0 MB | 7.8 MB | 6.1 MB | ~3.2k | ~350 | ~166.7k |  |
+| public.error_logs | ~13.9k | 10.5 MB | 9.9 MB | 600.0 KB | ~60 | ~40 | ~10 | 2026-11-11 |
+| public.activities | ~7.9k | 9.3 MB | 8.4 MB | 896.0 KB | ~460 | ~16.9k | ~8.5k | 2026-11-12 |
+| public.interactions | ~9.9k | 7.9 MB | 4.0 MB | 3.8 MB | ~1.4k | ~32.6k | ~34.9M | 2026-10-22 |
 | zapp_history.conversation_daily_summaries | 0 | 3.3 MB | 8.0 KB | 3.2 MB | 7 | ~530 | ~6.9k |  |
 | zapp_history.message_audio | 0 | 3.2 MB | 8.0 KB | 3.2 MB | 7 | ~420 | ~680 |  |
 | zapp_history.message_embeddings | 0 | 3.2 MB | 0 B | 3.2 MB | 0 | ~30 | ~510 |  |
-| public.contact_emails | ~3.1k | 1.5 MB | 552.0 KB | 920.0 KB | ~360 | ~180 | ~2.5M | 2026-11-12 |
-| public.staging_portal_sicoob | ~4.4k | 1.5 MB | 1.1 MB | 296.0 KB | 0 | ~790 | ~9.9k | 2026-03-22 |
-| public.contact_phones | ~3.1k | 1.2 MB | 480.0 KB | 744.0 KB | ~370 | ~6.5k | ~348.4k | 2026-11-08 |
-| zapp_history.messages | 0 | 1.2 MB | 0 B | 1.1 MB | 0 | ~650.3k | ~1.3M | 2026-04-10 |
+| public.contact_emails | ~3.1k | 1.5 MB | 552.0 KB | 920.0 KB | ~400 | ~180 | ~2.5M | 2026-11-12 |
+| public.staging_portal_sicoob | ~4.4k | 1.5 MB | 1.1 MB | 296.0 KB | 0 | ~800 | ~9.9k | 2026-03-22 |
+| public.contact_phones | ~3.1k | 1.2 MB | 480.0 KB | 744.0 KB | ~380 | ~6.5k | ~348.5k | 2026-11-08 |
+| zapp_history.messages | 0 | 1.2 MB | 0 B | 1.1 MB | 0 | ~650.4k | ~1.3M | 2026-04-10 |
 | public.cidades | ~5.6k | 1.1 MB | 720.0 KB | 344.0 KB | 0 | ~30 | ~33.4k |  |
-| public.health_alerts | ~2k | 1.0 MB | 808.0 KB | 216.0 KB | 0 | ~80 | ~23.1k | 2026-11-13 |
+| public.health_alerts | ~2k | 1.0 MB | 808.0 KB | 216.0 KB | 0 | ~80 | ~23.2k | 2026-11-13 |
 | public.sync_log | ~1.5k | 688.0 KB | 360.0 KB | 232.0 KB | 4 | ~30 | ~30 |  |
-| public.customer_events | ~40 | 608.0 KB | 24.0 KB | 544.0 KB | 3 | ~10.4k | ~5k | 2026-09-27 |
+| public.customer_events | ~40 | 608.0 KB | 24.0 KB | 544.0 KB | 3 | ~10.4k | ~5.1k | 2026-09-27 |
 | zapp_history.phone_to_contact | ~3k | 584.0 KB | 280.0 KB | 264.0 KB | ~220 | ~60 | ~4k | 2026-04-08 |
 | public.contact_social_media | ~1k | 552.0 KB | 312.0 KB | 200.0 KB | 4 | ~60 | ~7.9k | 2026-03-21 |
-| public.suppliers | ~750 | 552.0 KB | 152.0 KB | 360.0 KB | ~10 | ~500 | ~8.9M | 2026-03-31 |
+| public.suppliers | ~750 | 552.0 KB | 152.0 KB | 360.0 KB | ~10 | ~510 | ~9.1M | 2026-03-31 |
 | public.customer_purchases | 0 | 352.0 KB | 0 B | 328.0 KB | 0 | ~1.7M | ~2.7M | 2026-09-25 |
 | ops_backup.acl_snapshot | ~1.9k | 344.0 KB | 304.0 KB | 0 B | 0 | ~20 |  | 2026-10-06 |
 | public.grupos_economicos | ~1.3k | 336.0 KB | 136.0 KB | 160.0 KB | ~60 | ~200 | ~4.3k |  |
 | public.cnaes | ~1.3k | 280.0 KB | 184.0 KB | 56.0 KB | 2 | ~20 | ~589k |  |
-| public.interactions_audit | ~20 | 240.0 KB | 128.0 KB | 16.0 KB | ~50 | ~3.7k | ~10 | 2026-11-13 |
-| public.rpc_plan_snapshots | 5 | 240.0 KB | 96.0 KB | 48.0 KB | ~30 | ~4.1k | ~22.3k | 2026-11-13 |
-| public.deals | 3 | 160.0 KB | 8.0 KB | 112.0 KB | ~40 | ~110.5M | ~30 | 2026-11-13 |
+| public.rpc_plan_snapshots | 5 | 256.0 KB | 112.0 KB | 48.0 KB | ~40 | ~4.1k | ~22.4k | 2026-11-13 |
+| public.interactions_audit | ~20 | 216.0 KB | 96.0 KB | 16.0 KB | ~20 | ~3.8k | ~10 | 2026-11-14 |
+| public.deals | 3 | 160.0 KB | 8.0 KB | 112.0 KB | 3 | ~110.5M | ~30 | 2026-11-14 |
 | public.disc_profile_config | 4 | 160.0 KB | 48.0 KB | 32.0 KB | ~20 | ~320 | 0 |  |
 | public.disc_analysis_history | 0 | 144.0 KB | 8.0 KB | 112.0 KB | ~40 | ~5k | ~5.7k | 2026-11-13 |
-| public.rfm_analysis | 0 | 144.0 KB | 8.0 KB | 112.0 KB | ~40 | ~4.6k | ~1.4k | 2026-11-13 |
-| public.sales_activities | 5 | 144.0 KB | 8.0 KB | 96.0 KB | ~30 | ~1.6k | ~890 | 2026-11-13 |
-| public.tasks | 0 | 144.0 KB | 8.0 KB | 128.0 KB | ~10 | ~80 | ~4.8k |  |
-| public.carriers | ~110 | 136.0 KB | 32.0 KB | 64.0 KB | ~10 | ~520 | ~2.9k | 2026-03-31 |
+| public.rfm_analysis | 0 | 144.0 KB | 8.0 KB | 112.0 KB | ~50 | ~4.6k | ~1.4k | 2026-11-13 |
+| public.sales_activities | 5 | 144.0 KB | 8.0 KB | 96.0 KB | ~40 | ~1.7k | ~900 | 2026-11-13 |
+| public.tasks | 0 | 144.0 KB | 8.0 KB | 128.0 KB | ~10 | ~80 | ~4.9k |  |
+| public.carriers | ~110 | 136.0 KB | 32.0 KB | 64.0 KB | ~10 | ~520 | ~3k | 2026-03-31 |
 | zapp_history.conversations | 0 | 136.0 KB | 0 B | 112.0 KB | 0 | ~4.3k | ~1.3M | 2026-04-10 |
 | zapp_history.product_dictionary | ~100 | 136.0 KB | 24.0 KB | 80.0 KB | ~10 | ~260 | ~160 |  |
-| public.activity_feed | 1 | 128.0 KB | 8.0 KB | 80.0 KB | ~50 | ~5k | 0 | 2026-11-13 |
-| public.customer_ownership_history | ~10 | 128.0 KB | 8.0 KB | 80.0 KB | ~30 | ~17.3k | 0 | 2026-09-24 |
-| public.lead_score_history | 0 | 128.0 KB | 8.0 KB | 96.0 KB | ~40 | ~5.2k | ~1.7k | 2026-11-12 |
+| public.activity_feed | 1 | 128.0 KB | 8.0 KB | 80.0 KB | ~20 | ~5.1k | 0 | 2026-11-14 |
+| public.customer_ownership_history | ~10 | 128.0 KB | 8.0 KB | 80.0 KB | ~30 | ~17.4k | 0 | 2026-09-24 |
+| public.lead_score_history | 0 | 128.0 KB | 8.0 KB | 96.0 KB | ~40 | ~5.3k | ~1.7k | 2026-11-12 |
 | public.nurturing_executions | 0 | 128.0 KB | 8.0 KB | 80.0 KB | ~40 | ~2.5k | ~450 | 2026-11-12 |
-| public.phone_validations | 0 | 128.0 KB | 16.0 KB | 80.0 KB | ~30 | ~2.6k | ~4.2k | 2026-11-13 |
-| public.profiles | ~20 | 128.0 KB | 40.0 KB | 48.0 KB | 9 | ~8.4k | ~16.9k | 2026-11-13 |
-| public.email_logs | ~180 | 120.0 KB | 40.0 KB | 48.0 KB | 0 | ~51.8k | ~7.7k |  |
+| public.phone_validations | 0 | 128.0 KB | 16.0 KB | 80.0 KB | ~30 | ~2.6k | ~4.3k | 2026-11-13 |
+| public.profiles | ~20 | 128.0 KB | 40.0 KB | 48.0 KB | ~20 | ~8.4k | ~17k | 2026-11-13 |
+| public.email_logs | ~180 | 120.0 KB | 40.0 KB | 48.0 KB | 0 | ~51.8k | ~7.8k |  |
 | public.people_intelligence_events | ~10 | 120.0 KB | 16.0 KB | 64.0 KB | ~50 | ~2.7k | ~2.7k | 2026-11-12 |
-| public.system_alerts | 0 | 120.0 KB | 8.0 KB | 88.0 KB | 4 | ~6.9k | ~160 | 2026-11-14 |
-| public.alerts | 1 | 112.0 KB | 8.0 KB | 96.0 KB | ~20 | ~49.1k | 2 |  |
-| public.churn_predictions | 6 | 112.0 KB | 16.0 KB | 64.0 KB | ~20 | ~18.9k | ~10 |  |
-| public.company_stakeholder_map | ~10 | 112.0 KB | 8.0 KB | 96.0 KB | ~10 | ~26.1k | 0 |  |
+| public.system_alerts | 0 | 120.0 KB | 8.0 KB | 88.0 KB | ~10 | ~7k | ~160 | 2026-11-14 |
+| public.alerts | 1 | 112.0 KB | 8.0 KB | 96.0 KB | ~20 | ~49.3k | 2 |  |
+| public.churn_predictions | 6 | 112.0 KB | 16.0 KB | 64.0 KB | ~20 | ~19k | ~10 |  |
+| public.company_stakeholder_map | ~10 | 112.0 KB | 8.0 KB | 96.0 KB | ~10 | ~26.2k | 0 |  |
 | public.connector_log | 0 | 112.0 KB | 24.0 KB | 48.0 KB | ~30 | ~310 | ~580 | 2026-04-10 |
-| public.cs_accounts | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~20 | ~6.7k | ~80 | 2026-11-13 |
-| public.email_verifications | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~20 | ~2.7k | ~5k | 2026-11-13 |
+| public.cs_accounts | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~20 | ~6.8k | ~80 | 2026-11-13 |
+| public.email_verifications | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~20 | ~2.8k | ~5k | 2026-11-13 |
 | public.proposals | 1 | 112.0 KB | 8.0 KB | 96.0 KB | ~10 | ~4.5k | 2 |  |
-| public.sales | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~40 | ~1.9k | ~2.2k | 2026-11-12 |
-| public.sequence_send_log | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~30 | ~6.1k | ~170 | 2026-11-13 |
-| public.system_health_snapshots | ~30 | 112.0 KB | 24.0 KB | 48.0 KB | ~60 | ~130 | 3 | 2026-11-13 |
+| public.sales | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~50 | ~1.9k | ~2.2k | 2026-11-12 |
+| public.sequence_send_log | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~50 | ~6.2k | ~170 | 2026-11-13 |
+| public.system_health_snapshots | ~50 | 112.0 KB | 24.0 KB | 48.0 KB | 4 | ~130 | 3 | 2026-11-14 |
 | public.workspace_accounts | ~30 | 112.0 KB | 32.0 KB | 48.0 KB | ~30 | ~2.1k | ~270 |  |
 | zapp_history.message_links | 2 | 112.0 KB | 8.0 KB | 96.0 KB | ~10 | ~620 | ~890 |  |
 | zapp_history.message_media | 0 | 112.0 KB | 8.0 KB | 96.0 KB | 9 | ~630 | ~680 |  |
-| public.automation_rules | ~50 | 104.0 KB | 32.0 KB | 32.0 KB | ~40 | ~50 | ~3.5k | 2026-11-13 |
-| public.custom_fields | 9 | 104.0 KB | 16.0 KB | 48.0 KB | ~50 | ~2.8k | ~20 | 2026-11-11 |
+| public.automation_rules | ~50 | 104.0 KB | 32.0 KB | 32.0 KB | 0 | ~50 | ~3.5k | 2026-11-14 |
+| public.custom_fields | 9 | 104.0 KB | 16.0 KB | 48.0 KB | ~50 | ~2.9k | ~20 | 2026-11-11 |
 | public.whatsapp_messages | 0 | 104.0 KB | 0 B | 96.0 KB | 0 | ~100 | ~4.2k |  |
-| public.behavioral_profile_regen_queue | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~40 | ~25.6k | ~8.8k | 2026-11-13 |
-| public.contact_behavior | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~30 | ~4k | ~2.6k | 2026-11-13 |
-| public.custom_field_values | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~30 | ~4.8k | ~710 | 2026-11-13 |
+| public.contact_behavior | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~50 | ~4.1k | ~2.6k | 2026-11-13 |
+| public.custom_field_values | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~40 | ~4.8k | ~710 | 2026-11-13 |
 | public.customer_sdr_history | 5 | 96.0 KB | 8.0 KB | 80.0 KB | ~40 | ~18.1k | ~40 |  |
-| public.favorites | 1 | 96.0 KB | 8.0 KB | 48.0 KB | ~40 | ~5.1k | 5 | 2026-11-13 |
+| public.favorites | 1 | 96.0 KB | 8.0 KB | 48.0 KB | ~50 | ~5.1k | 5 | 2026-11-13 |
 | public.metaprogram_analysis | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~30 | ~3.2k | ~520 | 2026-11-13 |
-| public.mql_classifications | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~10 | ~3k | ~880 | 2026-11-13 |
-| public.notifications | 0 | 96.0 KB | 16.0 KB | 48.0 KB | ~50 | ~2.9k | ~190 | 2026-11-11 |
-| public.salespeople | ~10 | 96.0 KB | 8.0 KB | 48.0 KB | 0 | ~6.2k | ~4.9k | 2026-11-14 |
-| public.sequence_events | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~10 | ~7.7k | ~3.2k | 2026-11-13 |
-| public.sequence_steps | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~20 | ~10.5k | ~6.8k | 2026-11-13 |
-| public.vak_analysis_history | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~30 | ~3k | ~70 | 2026-11-12 |
-| public.validation_queue | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~20 | ~10.4k | ~790 | 2026-11-14 |
-| public.crm_relationship_audit_logs | 7 | 88.0 KB | 32.0 KB | 16.0 KB | ~40 | ~4.9k | ~10 | 2026-11-13 |
+| public.mql_classifications | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~10 | ~3.1k | ~880 | 2026-11-13 |
+| public.salespeople | ~10 | 96.0 KB | 8.0 KB | 48.0 KB | 8 | ~6.3k | ~4.9k | 2026-11-14 |
+| public.sequence_enrollments | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~10 | ~31.5k | ~24.9k | 2026-11-14 |
+| public.sequence_events | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~30 | ~7.8k | ~3.3k | 2026-11-13 |
+| public.sequence_steps | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~40 | ~10.6k | ~6.9k | 2026-11-13 |
+| public.vak_analysis_history | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~40 | ~3k | ~70 | 2026-11-12 |
+| public.validation_queue | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~20 | ~10.5k | ~790 | 2026-11-14 |
+| public.behavioral_profile_regen_queue | 0 | 88.0 KB | 0 B | 64.0 KB | 0 | ~25.8k | ~8.9k | 2026-11-14 |
+| public.crm_relationship_audit_logs | 7 | 88.0 KB | 32.0 KB | 16.0 KB | ~40 | ~4.9k | ~10 | 2026-11-14 |
 | public.daily_challenges | ~260 | 88.0 KB | 40.0 KB | 16.0 KB | ~10 | ~50 | ~260 |  |
-| public.disc_analysis_history_audit | 0 | 88.0 KB | 40.0 KB | 16.0 KB | ~40 | ~3.7k | 1 | 2026-11-13 |
+| public.disc_analysis_history_audit | 0 | 88.0 KB | 40.0 KB | 16.0 KB | ~40 | ~3.8k | 1 | 2026-11-13 |
 | public.sales_tasks | 0 | 88.0 KB | 0 B | 64.0 KB | 0 | ~110 | ~90 | 2026-06-16 |
-| public.sequence_enrollments | 0 | 88.0 KB | 0 B | 64.0 KB | 0 | ~31.2k | ~24.6k | 2026-11-14 |
 | public.supplier_homologations | 0 | 88.0 KB | 8.0 KB | 72.0 KB | ~20 | ~60 | ~30.3k |  |
 | public.trigger_bundles | 6 | 88.0 KB | 8.0 KB | 72.0 KB | 2 | ~70 | 0 |  |
 | _dormant.alertas_inativacao | 0 | 80.0 KB | 16.0 KB | 32.0 KB | ~40 | ~13.9k | 0 |  |
@@ -113,14 +112,15 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.carrier_homologations | 0 | 80.0 KB | 8.0 KB | 64.0 KB | ~20 | ~70 | ~5k |  |
 | public.carrier_scores | 0 | 80.0 KB | 8.0 KB | 64.0 KB | ~30 | ~100 | ~620 |  |
 | public.contact_addresses | ~20 | 80.0 KB | 8.0 KB | 64.0 KB | ~20 | ~7.2k | 8 |  |
-| public.contact_analytical_profile_versions | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~10 | ~5.2k | ~210 | 2026-11-13 |
-| public.contact_cadence | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~20 | ~3.9k | ~2.7k | 2026-11-13 |
-| public.conversation_topics_catalog | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~40 | ~40 | ~4.8k | 2026-11-13 |
+| public.contact_analytical_profile_versions | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~20 | ~5.2k | ~210 | 2026-11-13 |
+| public.contact_cadence | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~40 | ~3.9k | ~2.8k | 2026-11-13 |
+| public.csat_surveys | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~20 | ~23.7k | ~1.7k | 2026-11-14 |
 | public.deal_velocity_analysis | 1 | 80.0 KB | 8.0 KB | 64.0 KB | ~20 | ~18.9k | 0 |  |
 | public.forecast_periods | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~40 | ~740 | ~500 | 2026-11-12 |
-| public.health_alert_settings | ~20 | 80.0 KB | 8.0 KB | 32.0 KB | 9 | ~540 | ~2k | 2026-11-13 |
-| public.lead_score_recompute_queue | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~50 | ~5.6k | ~780 | 2026-11-13 |
-| public.lead_scores | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~20 | ~5.5k | ~1.8k | 2026-11-13 |
+| public.health_alert_settings | ~20 | 80.0 KB | 8.0 KB | 32.0 KB | ~20 | ~550 | ~2k | 2026-11-13 |
+| public.lead_score_recompute_queue | 0 | 80.0 KB | 8.0 KB | 48.0 KB | 5 | ~5.6k | ~780 | 2026-11-14 |
+| public.lead_scores | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~30 | ~5.5k | ~1.9k | 2026-11-13 |
+| public.notifications | 0 | 80.0 KB | 8.0 KB | 48.0 KB | 1 | ~2.9k | ~190 | 2026-11-14 |
 | public.relationship_score_history | 7 | 80.0 KB | 8.0 KB | 64.0 KB | 8 | ~29.7k | 4 |  |
 | public.reminders | 3 | 80.0 KB | 8.0 KB | 64.0 KB | 8 | ~2.1k | ~70 |  |
 | public.rfm_history | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~10 | ~2.9k | ~100 | 2026-11-13 |
@@ -128,28 +128,28 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.scheduled_visits | 3 | 80.0 KB | 8.0 KB | 64.0 KB | 3 | ~2.2k | 8 |  |
 | public.sdr_alert_history | ~90 | 80.0 KB | 32.0 KB | 16.0 KB | 0 | ~40 | ~90 |  |
 | public.sdr_closer_assignments | 4 | 80.0 KB | 8.0 KB | 64.0 KB | ~30 | ~90 | ~90 |  |
-| public.sequence_email_reservations | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~30 | ~7.9k | ~2.6k | 2026-11-13 |
+| public.sequence_email_reservations | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~40 | ~8k | ~2.6k | 2026-11-13 |
 | public.supplier_evaluations | 0 | 80.0 KB | 8.0 KB | 64.0 KB | ~20 | ~70 | ~60 |  |
 | public.trigger_types | ~20 | 80.0 KB | 16.0 KB | 32.0 KB | 1 | ~70 | 0 |  |
 | public.uapi_sessions | ~20 | 80.0 KB | 16.0 KB | 32.0 KB | 5 | ~590 | ~100 |  |
-| public.compatibility_settings | ~20 | 72.0 KB | 8.0 KB | 32.0 KB | 9 | ~760 | ~2k | 2026-11-13 |
-| public.csat_surveys | 0 | 72.0 KB | 0 B | 48.0 KB | 0 | ~23.5k | ~1.7k | 2026-11-14 |
+| public.compatibility_settings | ~20 | 72.0 KB | 8.0 KB | 32.0 KB | ~20 | ~770 | ~2k | 2026-11-13 |
+| public.contact_cadence_audit | 0 | 72.0 KB | 24.0 KB | 16.0 KB | ~40 | ~3.8k | 4 | 2026-11-13 |
+| public.conversation_topics_catalog | 0 | 72.0 KB | 0 B | 48.0 KB | 0 | ~40 | ~4.8k | 2026-11-14 |
 | public.disc_approach_recommendations | ~10 | 72.0 KB | 24.0 KB | 16.0 KB | ~10 | ~60 | 0 |  |
 | public.supplier_scores | 0 | 72.0 KB | 8.0 KB | 56.0 KB | ~40 | ~90 | ~1.8k |  |
-| public.user_roles | 1 | 72.0 KB | 8.0 KB | 32.0 KB | ~10 | ~71.5k | ~1M | 2026-11-13 |
+| public.user_roles | 1 | 72.0 KB | 8.0 KB | 32.0 KB | ~10 | ~72.1k | ~1M | 2026-11-13 |
 | zapp_history.async_request_log | 0 | 72.0 KB | 0 B | 48.0 KB | 0 | ~110 | ~20 | 2026-04-10 |
 | _dormant.pix_accounts | 0 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~30 | ~5.1k |  |
-| public.ai_recommendation_audit_logs_v2 | ~60 | 64.0 KB | 16.0 KB | 16.0 KB | 1 | ~3.8k | ~30 |  |
-| public.behavioral_insight_feedback | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~40 | ~5.6k | ~120 | 2026-11-13 |
-| public.contact_analytical_profiles | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~20 | ~8.2k | ~2.1k | 2026-11-13 |
-| public.contact_automation_settings | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~40 | ~5.2k | ~290 | 2026-11-13 |
-| public.contact_cadence_audit | 0 | 64.0 KB | 16.0 KB | 16.0 KB | ~20 | ~3.7k | 4 | 2026-11-13 |
+| public.ai_recommendation_audit_logs_v2 | ~60 | 64.0 KB | 16.0 KB | 16.0 KB | 1 | ~3.9k | ~30 |  |
+| public.behavioral_insight_feedback | 0 | 64.0 KB | 8.0 KB | 32.0 KB | 9 | ~5.6k | ~120 | 2026-11-14 |
+| public.contact_analytical_profiles | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~40 | ~8.3k | ~2.1k | 2026-11-13 |
+| public.contact_automation_settings | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~50 | ~5.2k | ~290 | 2026-11-13 |
 | public.coop_sistemas | 8 | 64.0 KB | 8.0 KB | 48.0 KB | ~20 | ~90 | 0 |  |
 | public.data_quality_audits | 0 | 64.0 KB | 16.0 KB | 16.0 KB | 0 | ~50 | 7 |  |
-| public.documents | 1 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~4.9k | 1 |  |
+| public.documents | 1 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~5k | 1 |  |
 | public.landing_pages | 0 | 64.0 KB | 8.0 KB | 48.0 KB | 1 | ~590 | ~2.1k |  |
-| public.lead_score_threshold_automations | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~20 | ~1.3k | ~150 | 2026-11-13 |
-| public.lead_score_threshold_log | 0 | 64.0 KB | 16.0 KB | 16.0 KB | ~40 | ~4.1k | 0 | 2026-11-11 |
+| public.lead_score_threshold_automations | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~30 | ~1.3k | ~150 | 2026-11-13 |
+| public.lead_score_threshold_log | 0 | 64.0 KB | 16.0 KB | 16.0 KB | ~50 | ~4.2k | 0 | 2026-11-11 |
 | public.mql_criteria | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~40 | ~780 | ~100 | 2026-11-12 |
 | public.notification_logs | 0 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~2.4k | ~20 |  |
 | public.nurturing_workflows | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~40 | ~2.3k | ~260 | 2026-11-12 |
@@ -157,57 +157,57 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.pipeline_stages | 8 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~130 | 0 |  |
 | public.quick_notes | 1 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~2.2k | 1 |  |
 | public.rfm_segment_config | ~10 | 64.0 KB | 8.0 KB | 48.0 KB | 2 | ~60 | 0 |  |
-| public.rodizio_distribuicao_staging | 0 | 64.0 KB | 8.0 KB | 32.0 KB | 3 | ~3k | ~1.2k | 2026-11-13 |
+| public.rodizio_distribuicao_staging | 0 | 64.0 KB | 8.0 KB | 32.0 KB | 9 | ~3k | ~1.2k | 2026-11-13 |
 | public.rpc_perf_samples | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~30 | ~16k | ~2k | 2026-11-12 |
 | public.sales_team_members | 0 | 64.0 KB | 8.0 KB | 48.0 KB | 3 | ~1k | ~50 |  |
-| public.sequences | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~20 | ~66.4k | ~300 | 2026-11-13 |
+| public.sequences | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~20 | ~67k | ~300 | 2026-11-14 |
 | public.user_goals | 6 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~140 | ~310 |  |
 | singu_migration._checklist | ~50 | 64.0 KB | 16.0 KB | 16.0 KB | 7 | ~50 | ~20 |  |
 | public.abm_accounts | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~60 | ~2.6k |  |
 | public.cadence_enrollments | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~50 | ~6k |  |
-| public.campaign_members | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~50 | ~7.6k |  |
+| public.campaign_members | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~50 | ~7.7k |  |
 | public.carrier_score_history | 0 | 56.0 KB | 8.0 KB | 40.0 KB | ~30 | ~80 | ~10 |  |
 | public.company_cadences | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~70 | ~2.3k |  |
 | public.deal_rooms | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~60 | ~3.6k |  |
-| public.document_signatures | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~3.4k | ~1.8k |  |
-| public.emotional_states_history | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~260 | ~4.5k |  |
+| public.document_signatures | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~3.4k | ~1.9k |  |
+| public.emotional_states_history | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~260 | ~4.6k |  |
 | public.entity_relationships | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~310 | 0 |  |
 | public.handoff_requests | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~3.3k | ~1.6k |  |
 | public.hidden_objections | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~260 | ~4.6k |  |
-| public.lead_assignments | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~810 | ~4.1k |  |
+| public.lead_assignments | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~820 | ~4.1k |  |
 | public.lead_routing_rules | 0 | 56.0 KB | 8.0 KB | 40.0 KB | 1 | ~50 | 1 |  |
 | public.meeting_summaries | 0 | 56.0 KB | 8.0 KB | 40.0 KB | 1 | ~3.3k | ~1.6k |  |
 | public.role_permissions | ~60 | 56.0 KB | 8.0 KB | 48.0 KB | 0 | ~310 | ~60 |  |
 | public.search_products_cache | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~50 | 0 |  |
 | public.supplier_score_history | 0 | 56.0 KB | 8.0 KB | 40.0 KB | ~40 | ~50 | 8 |  |
 | _dormant.disc_compatibility | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~30 | 0 |  |
-| _dormant.inactivity_alerts | 0 | 48.0 KB | 8.0 KB | 16.0 KB | 6 | ~14.7k | ~1.8k | 2026-11-13 |
+| _dormant.inactivity_alerts | 0 | 48.0 KB | 8.0 KB | 16.0 KB | ~10 | ~14.7k | ~1.8k | 2026-11-13 |
 | public.alert_rules | 6 | 48.0 KB | 8.0 KB | 32.0 KB | 3 | ~170 | 0 |  |
 | public.automations | 3 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~130 | 4 |  |
 | public.badges | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | ~40 | ~80 |  |
 | public.calendar_events | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~60 | ~6k |  |
 | public.carrier_qualification_config | 0 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~100 | ~60 |  |
 | public.churn_risk_factors | 4 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~100 | 0 |  |
-| public.churn_risk_scores | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~810 | ~13.1k |  |
+| public.churn_risk_scores | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~820 | ~13.2k |  |
 | public.closing_score_config | 5 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~100 | 0 |  |
-| public.competitive_losses | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~40 | ~2.5k |  |
+| public.competitive_losses | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~40 | ~2.6k |  |
 | public.config_regras_negocio | ~30 | 48.0 KB | 8.0 KB | 32.0 KB | ~20 | ~5.3M | ~60 |  |
 | public.contact_decision_making | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~50 | ~5.2k |  |
 | public.contact_influence | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~50 | ~5.3k |  |
-| public.contact_metaprograms | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~50 | ~5.2k |  |
-| public.contact_next_actions | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~50 | ~3.9k |  |
-| public.contact_personality | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~50 | ~5.1k |  |
+| public.contact_metaprograms | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~50 | ~5.3k |  |
+| public.contact_next_actions | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~50 | ~4k |  |
+| public.contact_personality | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~50 | ~5.2k |  |
 | public.contact_rapport_strategy | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 2 | ~50 | ~4k |  |
 | public.disc_communication_logs | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~260 | ~4.4k |  |
 | public.disc_templates | 5 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~70 | 0 |  |
 | public.eq_analysis_history | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~260 | ~9.5k |  |
 | public.geo_allowed_countries | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~30 | 4 |  |
-| public.inactivity_alerts | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~60 | ~7.7k |  |
+| public.inactivity_alerts | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~60 | ~7.8k |  |
 | public.interaction_templates | 4 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~70 | 7 |  |
 | public.knowledge_base_articles | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 1 | ~50 | 3 |  |
 | public.lead_sources | ~10 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | ~50 | 0 |  |
 | public.loss_reasons | 8 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | ~40 | 0 |  |
-| public.meetings | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~50 | ~5.9k |  |
+| public.meetings | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~50 | ~6k |  |
 | public.model_pricing_v2 | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | ~80 | ~20 |  |
 | public.offer_suggestions | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~60 | ~2.1k |  |
 | public.portfolio_settings | 0 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~50 | 4 |  |
@@ -227,35 +227,35 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.supplier_qualification_config | 0 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~110 | ~40 |  |
 | public.trigger_ab_tests | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~50 | ~1.9k |  |
 | public.trigger_channel_effectiveness | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~50 | ~1.9k |  |
-| public.user_ui_preferences | 0 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~40 | ~3.9k |  |
+| public.user_ui_preferences | 0 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~40 | ~4k |  |
 | public.win_loss_records | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~60 | 0 |  |
 | zapp_history.edge_function_templates | 0 | 48.0 KB | 8.0 KB | 16.0 KB | 0 | ~20 | ~20 |  |
 | zapp_history.location_dictionary | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | ~270 | ~40 |  |
 | zapp_history.whatsapp_connections | 1 | 48.0 KB | 8.0 KB | 32.0 KB | ~10 | ~680 | ~390 |  |
 | public.ai_chat_threads | 0 | 40.0 KB | 8.0 KB | 24.0 KB | 1 | ~50 | ~90 |  |
 | public.automation_logs | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~140 |  |
-| public.campaign_recipients | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~3.8k |  |
+| public.campaign_recipients | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~3.9k |  |
 | public.client_values | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~60 | ~4.2k |  |
 | public.cognitive_bias_history | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~260 | ~4.6k |  |
 | public.commissions | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~50 | ~70 |  |
 | public.conversational_search_cache | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~30 | 2 |  |
-| public.customer_surveys | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~7.5k |  |
+| public.customer_surveys | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~7.6k |  |
 | public.deal_competitors | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~10 |  |
-| public.decision_criteria | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~50 | ~4k |  |
-| public.economic_group_members | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~30 | ~2.1k |  |
+| public.decision_criteria | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~50 | ~4.1k |  |
+| public.economic_group_members | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~30 | ~2.2k |  |
 | public.email_campaigns | 0 | 40.0 KB | 8.0 KB | 24.0 KB | 1 | ~50 | 3 |  |
-| public.email_finder_results | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~50 | ~3.7k |  |
+| public.email_finder_results | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~50 | ~3.8k |  |
 | public.email_thread_summaries | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~50 | 0 |  |
 | public.emotional_anchors | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~4k |  |
 | public.estados | ~30 | 40.0 KB | 8.0 KB | 32.0 KB | 0 | ~50 | 0 |  |
-| public.form_submissions | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~3.7k |  |
+| public.form_submissions | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~3.8k |  |
 | public.forms | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~760 | ~1.2k |  |
-| public.insights | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~90 | ~23.4k |  |
-| public.lead_magnets | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~720 | ~810 |  |
-| public.nps_surveys | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~5k |  |
-| public.playbook_usage_log | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~1.3k | ~620 |  |
+| public.insights | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~90 | ~23.5k |  |
+| public.lead_magnets | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~720 | ~820 |  |
+| public.nps_surveys | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | ~5.1k |  |
+| public.playbook_usage_log | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~1.3k | ~630 |  |
 | public.semantic_search_cache | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~40 | 3 |  |
-| public.smart_notifications | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~2k | ~9.4k |  |
+| public.smart_notifications | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~2.1k | ~9.5k |  |
 | public.social_scraping_schedule | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~50 | ~1.9k |  |
 | public.stakeholder_alerts | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~1.5k | ~2.3k |  |
 | public.support_tickets | 0 | 40.0 KB | 8.0 KB | 24.0 KB | 1 | ~2.8k | ~1k |  |
@@ -281,18 +281,18 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.contact_notes | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~3.8k |  |
 | public.contact_objection_scripts | 0 | 32.0 KB | 8.0 KB | 16.0 KB | ~10 | ~4k | 2 |  |
 | public.contact_preferences | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~70 | ~4.3k |  |
-| public.contact_relatives | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~110 | ~4.4k |  |
-| public.conversation_analyses | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2.5k | ~1.2k |  |
+| public.contact_relatives | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~120 | ~4.4k |  |
+| public.conversation_analyses | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2.6k | ~1.3k |  |
 | public.crm_alerts | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 2 | ~3.9k | 0 |  |
 | public.crm_consent_audit_logs | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~3.8k |  |
 | public.crm_objection_intelligence | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~3.8k |  |
 | public.cs_health_signals | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~30 | ~800 |  |
-| public.cs_nps_responses | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2.6k | ~1.2k |  |
+| public.cs_nps_responses | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2.6k | ~1.3k |  |
 | public.customer_health_scores | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~30 | ~2.1k |  |
 | public.deal_items | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~10 |  |
 | public.deal_room_documents | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~30 | 0 |  |
 | public.deal_room_milestones | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | 0 |  |
-| public.deal_room_stakeholders | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2.5k | ~1.2k |  |
+| public.deal_room_stakeholders | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2.5k | ~1.3k |  |
 | public.disc_conversion_metrics | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~20 |  |
 | public.document_templates | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | 5 |  |
 | public.document_views | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | 4 |  |
@@ -301,10 +301,10 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.eq_assessment_questions | ~10 | 32.0 KB | 8.0 KB | 16.0 KB | 0 | ~40 | 0 |  |
 | public.follow_up_approvals | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 8 | ~3.8k | 8 |  |
 | public.forecast_snapshots | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~30 | 0 |  |
-| public.incoming_webhook_dlq | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~560 |  |
-| public.lead_magnet_downloads | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2.5k | ~1.2k |  |
+| public.incoming_webhook_dlq | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~570 |  |
+| public.lead_magnet_downloads | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2.5k | ~1.3k |  |
 | public.lead_score_rules | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | 0 |  |
-| public.life_events | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~110 | ~4.8k |  |
+| public.life_events | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~110 | ~4.9k |  |
 | public.lux_intelligence | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~5.1k |  |
 | public.lux_webhook_config | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | 4 |  |
 | public.neuro_behavioral_history | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~2k |  |
@@ -318,13 +318,13 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.sales_forecasts | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | 4 |  |
 | public.seller_daily_metrics | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | 2 |  |
 | public.sla_rules | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 0 | ~40 | 5 |  |
-| public.sla_violations | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2k | ~1k |  |
+| public.sla_violations | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~2.1k | ~1k |  |
 | public.sms_campaigns | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | 0 |  |
 | public.sms_opt_outs | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~1.3k | ~630 |  |
 | public.social_behavior_analysis | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~1.9k |  |
 | public.suggested_life_events | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~1.9k |  |
 | public.territory_assignments | 0 | 32.0 KB | 0 B | 32.0 KB | 0 | ~40 | 1 |  |
-| public.trigger_intensity_history | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~1.7k | ~630 |  |
+| public.trigger_intensity_history | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~1.7k | ~640 |  |
 | public.user_badges | 0 | 32.0 KB | 0 B | 32.0 KB | 0 | ~40 | 7 |  |
 | public.users | ~20 | 32.0 KB | 8.0 KB | 16.0 KB | ~20 | ~4.5M | ~330 |  |
 | public.vak_keywords | ~40 | 32.0 KB | 8.0 KB | 16.0 KB | 0 | ~40 | 0 |  |
@@ -417,7 +417,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.ai_tone_preferences | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~1.1k |  |
 | public.attribution_models_cache | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 6 |  |
 | public.brain_dominance_analysis | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~3.8k |  |
-| public.call_logs | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~5.6k | 0 |  |
+| public.call_logs | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~5.7k | 0 |  |
 | public.canned_responses | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~110 |  |
 | public.city_whitelist | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | ~20 |  |
 | public.clients | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~60 | ~40 |  |
@@ -425,17 +425,17 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.company_territories | 0 | 24.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~2.6k |  |
 | public.connection_quotas | 0 | 24.0 KB | 0 B | 24.0 KB | 0 | ~30 | 0 |  |
 | public.connection_test_logs | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | ~400 |  |
-| public.contact_business_context | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~3.8k |  |
+| public.contact_business_context | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~3.9k |  |
 | public.contact_family_history | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~300 | ~3.8k |  |
-| public.contact_predictive_roadmap | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~3.8k |  |
+| public.contact_predictive_roadmap | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~3.9k |  |
 | public.contact_report_overrides | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~3.7k |  |
 | public.contact_time_analysis | 0 | 24.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~4.2k |  |
 | public.crm_cadence_rules | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 1 |  |
-| public.deal_forecasts | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~5.7k | 0 |  |
+| public.deal_forecasts | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~5.8k | 0 |  |
 | public.deal_room_activities | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 0 |  |
 | public.deal_room_comments | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 0 |  |
 | public.device_login_notifications | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 6 |  |
-| public.economic_groups | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | ~2.1k |  |
+| public.economic_groups | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | ~2.2k |  |
 | public.favorite_templates | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | 4 |  |
 | public.forecast_categories_history | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 2 |  |
 | public.forecast_quota_settings | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | ~400 |  |
@@ -446,15 +446,15 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.intent_scores | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | ~2.5k |  |
 | public.intent_tracking_pixels | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~1.3k | 0 |  |
 | public.ip_whitelist | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | 2 |  |
-| public.landing_page_submissions | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2.5k | ~1.2k |  |
+| public.landing_page_submissions | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2.5k | ~1.3k |  |
 | public.lead_score_config | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | 1 |  |
 | public.lead_score_thresholds | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | 0 |  |
-| public.neuro_pnl_sessions | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2.2k | ~2.5k |  |
+| public.neuro_pnl_sessions | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2.3k | ~2.6k |  |
 | public.pipeline_stage_transitions | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~300 | ~400 |  |
 | public.proximo_passo_feedback | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 1 |  |
 | public.purchase_history | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2.1k | ~1k |  |
 | public.query_telemetry | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | 3 |  |
-| public.redistribution_log | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2k | ~1k |  |
+| public.redistribution_log | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2.1k | ~1k |  |
 | public.report_executions | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 2 |  |
 | public.revops_alerts | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | ~400 |  |
 | public.rfm_metrics | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 1 |  |
@@ -463,15 +463,15 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.schema_drift_alerts | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | 1 |  |
 | public.score_history | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~1.3k | ~710 |  |
 | public.secret_rotation_log | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~30 | 3 |  |
-| public.sentiment_annotations | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~1.2k |  |
+| public.sentiment_annotations | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | ~1.3k |  |
 | public.social_consent_audit | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | ~1.9k |  |
 | public.social_sync_queue | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2k | 0 |  |
-| public.suggested_rapport_intel | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~310 | ~2k |  |
+| public.suggested_rapport_intel | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~310 | ~2.1k |  |
 | public.territories | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~1.5k | 0 |  |
 | public.ticket_comments | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | 6 |  |
 | public.trigger_usage_history | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~1.3k | ~630 |  |
 | public.user_known_devices | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~50 | 2 |  |
-| public.visit_checkins | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2.7k | ~1k |  |
+| public.visit_checkins | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~2.8k | ~1k |  |
 | public.webhook_logs | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | 2 |  |
 | public.webhooks | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~40 | 2 |  |
 | public.weekly_report_settings | 0 | 24.0 KB | 0 B | 16.0 KB | 0 | ~90 | 2 |  |
@@ -614,36 +614,36 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.abm_whitespace_opportunities | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~50 | ~40 |  |
 | public.access_blocked_log | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~80 | ~170 |  |
 | public.ai_recommendation_audit_logs | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.8k | ~20 |  |
-| public.ai_recommendation_logs | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.7k | 7 |  |
+| public.ai_recommendation_logs | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.8k | 7 |  |
 | public.applied_objection_responses | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~40 | 6 |  |
 | public.asia_upload_mapping | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~40 | ~80 |  |
-| public.attribution_touchpoints | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~4.1k | 4 |  |
+| public.attribution_touchpoints | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~4.2k | 4 |  |
 | public.battle_cards | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~50 | 2 |  |
 | public.coaching_scorecards | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~40 | 0 |  |
-| public.contact_preferences_audit | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.7k | 2 |  |
-| public.contact_relatives_audit | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.7k | 2 |  |
-| public.contact_time_analysis_audit | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.7k | 3 |  |
+| public.contact_preferences_audit | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.8k | 2 |  |
+| public.contact_relatives_audit | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.8k | 2 |  |
+| public.contact_time_analysis_audit | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.8k | 3 |  |
 | public.crm_automation_logs | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.8k | 0 |  |
 | public.crm_automation_reprocess_queue | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~30 | 0 |  |
 | public.crm_metric_overrides | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.8k | 0 |  |
 | public.cron_secrets | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~30 | 0 |  |
 | public.cs_qbrs | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~50 | 0 |  |
-| public.cs_renewals | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~440 | 0 |  |
+| public.cs_renewals | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~450 | 0 |  |
 | public.feature_flags | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~300 | 1 |  |
-| public.ficha360_conversation_summaries | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.7k | 0 |  |
+| public.ficha360_conversation_summaries | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.8k | 0 |  |
 | public.follow_up_approvals_v2 | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~30 | 1 |  |
 | public.guardrail_ml_logs | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~60 | 1 |  |
 | public.incoming_webhook_logs | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~30 | 0 |  |
 | public.intent_signals | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~6.2k | 0 |  |
 | public.interaction_summaries | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~4.9k | 0 |  |
-| public.life_events_history | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.7k | 1 |  |
+| public.life_events_history | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~3.8k | 1 |  |
 | public.login_attempts | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~30 | 1 |  |
 | public.marketing_campaign_stats | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~4.9k | 0 |  |
 | public.marketing_roi_data | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~30 | 0 |  |
 | public.mcp_tool_calls | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~30 | 0 |  |
 | public.message_templates | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~40 | 4 |  |
 | public.nlp_extractions | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~60 | 1 |  |
-| public.nlp_feedback | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~2.3k | 0 |  |
+| public.nlp_feedback | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~2.4k | 0 |  |
 | public.notification_preferences | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~30 | 0 |  |
 | public.password_reset_requests | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~40 | 1 |  |
 | public.psychographic_audit_log | 0 | 16.0 KB | 0 B | 8.0 KB | 0 | ~2k | 0 |  |
@@ -706,14 +706,14 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 |---|---|---|---|---|
 | service_role | ~15.7M | ~320.2M | 20.34 | `WITH pgrst_source AS (UPDATE "public"."companies" SET "cnpj_normalizado_em" = "pgrst_body"."cnpj_normalizado_em" FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "cnpj_normalizado_em" FROM json_to_record(pgrs` |
 | service_role | ~15.8M | ~308.6M | 19.56 | `WITH pgrst_source AS (UPDATE "public"."companies" SET "address" = "pgrst_body"."address", "city" = "pgrst_body"."city", "email" = "pgrst_body"."email", "phone" = "pgrst_body"."phone", "state" = "pgrst_body"."state" FROM ` |
-| postgres | ~14.4k | ~15.4M | 1069.52 | `SELECT pg_advisory_xact_lock(hashtext($1))` |
-| postgres | ~629.1k | ~10.2M | 16.26 | `SELECT zapp_history.reconcile_nlp_responses()` |
+| postgres | ~14.5k | ~15.4M | 1062.57 | `SELECT pg_advisory_xact_lock(hashtext($1))` |
+| postgres | ~629.2k | ~10.2M | 16.26 | `SELECT zapp_history.reconcile_nlp_responses()` |
 | postgres | ~5.5k | ~6.4M | 1171.32 | `with f as ( -- CTE with sane arg_modes, arg_names, and arg_types. -- All three are always of the same length. -- All three include all args, including OUT and TABLE args. with functions as ( select *, -- proargmodes is n` |
 | service_role | ~4.1k | ~5.8M | 1427.54 | `WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_phones" FROM json_to_record(pgrst_payload.json_data) AS _("p_phones" text[]) LIMIT $4) pgrst_body , LAT` |
 | postgres | ~5.6k | ~4.9M | 877.68 | `SELECT tbl.schemaname, tbl.tablename, tbl.quoted_name, tbl.is_table, json_agg(a) as columns FROM ( SELECT n.nspname as schemaname, c.relname as tablename, (quote_ident(n.nspname) \|\| $1 \|\| quote_ident(c.relname)) as quote` |
 | service_role | ~13k | ~3.5M | 270.67 | `WITH pgrst_source AS ( SELECT "public"."companies".* FROM "public"."companies" WHERE "public"."companies"."is_customer" = $1 AND "public"."companies"."deleted_at" IS NULL ORDER BY "public"."companies"."razao_social" ASC ` |
 | postgres | ~120 | ~3.4M | 29461.80 | `SELECT string_agg( format($1, id, table_name, record_id, action, CASE WHEN old_data IS NULL THEN $2 ELSE quote_literal(old_data::text) \|\|$3 END, CASE WHEN new_data IS NULL THEN $4 ELSE quote_literal(new_data::text) \|\|$5 ` |
-| postgres | ~34.8k | ~2.6M | 75.10 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
+| postgres | ~34.9k | ~2.6M | 74.92 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
 | service_role | ~11.1k | ~2.3M | 210.80 | `WITH pgrst_source AS ( SELECT "public"."companies"."id", "public"."companies"."razao_social", "public"."companies"."nome_fantasia", "public"."companies"."ramo_atividade", "public"."companies"."cnpj", "public"."companies"` |
 | service_role | ~64M | ~2M | 0.03 | `select set_config('?', $1, true), set_config($2, $3, true), set_config('?', $4, true), set_config('?', $5, true), set_config('?', $6, true), set_config('?', $7, true)` |
 | postgres | ~5.1k | ~1.7M | 340.26 | `with policies as ( select pol.oid :: int8 as id, n.nspname as schema, c.relname as table, c.oid :: int8 as table_id, pol.polname as name, case when pol.polpermissive then $1::text else $2::text end as action, case when p` |
@@ -726,7 +726,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 |---|---|---|
 | authenticator | idle | 6 |
 | pgbouncer | idle | 1 |
-| postgres | active | 1 |
+| postgres | active | 2 |
 | postgres |  | 1 |
-| supabase_admin | idle | 2 |
+| supabase_admin | idle | 6 |
 | supabase_admin |  | 1 |

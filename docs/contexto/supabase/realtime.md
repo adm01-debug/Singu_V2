@@ -18,13 +18,13 @@
 | supabase_realtime | zapp_history.message_audio | full |
 | supabase_realtime | zapp_history.message_media | full |
 | supabase_realtime | zapp_history.messages | full |
-| supabase_realtime_messages_publication | realtime.messages_2026_11_10 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_11_11 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_11_12 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_11_13 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_11_14 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_11_15 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_11_16 |  |
+| supabase_realtime_messages_publication | realtime.messages_2026_11_17 |  |
 
 ## Broadcast / Presence (policies em realtime.messages)
 
