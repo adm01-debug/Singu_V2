@@ -196,7 +196,7 @@ export function prepareCompanyRelations(input: CompanyUpdate & CompanyCompositeI
     const existing = emails.find(email => email.email.toLowerCase() === emailInput.toLowerCase());
     emails.forEach(email => { email.is_primary = false; });
     if (existing) existing.is_primary = true;
-    else emails.push({ email: input.email.trim(), is_primary: true });
+    else emails.push({ email: emailInput, is_primary: true });
   }
   const basicAddress = {
     logradouro: input.address, cidade: input.city, estado: input.state,

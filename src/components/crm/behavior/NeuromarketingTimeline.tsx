@@ -243,7 +243,7 @@ export function NeuromarketingTimeline({ contactId }: Props) {
             {interactions?.slice(0, 5).map((interaction) => (
               <div key={interaction.id} className="flex items-start gap-3 p-2 rounded-lg bg-muted/20 border border-border/50 text-xs">
                 <div className="mt-0.5">
-                  <SentimentIcon sentiment={interaction.sentiment} />
+                  <SentimentIcon sentiment={interaction.sentiment ?? ''} />
                 </div>
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center justify-between">

@@ -128,9 +128,11 @@ export function usePurchasePatterns() {
         const categoryCounts = new Map<string, number>();
         
         contactPurchases.forEach(p => {
-          productCounts.set(p.product_name, (productCounts.get(p.product_name) || 0) + 1);
+          const productName = p.product_name ?? '';
+          productCounts.set(productName, (productCounts.get(productName) || 0) + 1);
           if (p.product_category) {
-            categoryCounts.set(p.product_category, (categoryCounts.get(p.product_category) || 0) + 1);
+            const category = p.product_category;
+            categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
           }
         });
 

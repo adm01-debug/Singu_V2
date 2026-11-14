@@ -66,7 +66,7 @@ export function PlaybookSuggestionDrawer({ open, onOpenChange, context }: Props)
               </div>
               {data.battle_card.summary && <p className="text-xs text-muted-foreground">{data.battle_card.summary}</p>}
               <Button asChild variant="outline" size="sm" className="w-full">
-                <Link to={`/playbooks/battle-cards/${data.battle_card.id}`} onClick={() => log.mutate({ battle_card_id: data.battle_card.id, action: "opened", contact_id: context.contact_id, deal_id: context.deal_id })}>
+                <Link to={`/playbooks/battle-cards/${data.battle_card.id}`} onClick={() => { const card = data.battle_card; if (!card) return; log.mutate({ battle_card_id: card.id, action: "opened", contact_id: context.contact_id, deal_id: context.deal_id }); }}>
                   Abrir Battle Card <ChevronRight className="size-4" />
                 </Link>
               </Button>

@@ -193,7 +193,7 @@ export function StrategicNextStepsCard({ contacts, className }: StrategicNextSte
                     <Avatar className="h-10 w-10 border-2 border-background shadow-sm shrink-0">
                       <AvatarImage src={contact.avatar_url || ''} />
                       <AvatarFallback className="bg-primary/5 text-primary text-xs font-bold">
-                        {contact.first_name[0]}{contact.last_name[0]}
+                        {(contact.first_name ?? '?')[0]}{(contact.last_name ?? '?')[0]}
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">

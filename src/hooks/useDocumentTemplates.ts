@@ -205,7 +205,8 @@ export function useDocumentSignatures() {
       if (error) throw error;
       if (!data) throw new Error("Falha ao registrar assinatura");
       if (tpl && input.template_id) {
-        void (async () => { try { await supabase.from('document_templates').update({ usage_count: (tpl.usage_count ?? 0) + 1 }).eq('user_id', user.id).eq('id', input.template_id); } catch (e) { logger.error('template usage_count update failed:', e); } })();
+        const templateId = input.template_id;
+        void (async () => { try { await supabase.from('document_templates').update({ usage_count: (tpl.usage_count ?? 0) + 1 }).eq('user_id', user.id).eq('id', templateId); } catch (e) { logger.error('template usage_count update failed:', e); } })();
       }
       return data as unknown as DocumentSignature;
     },
