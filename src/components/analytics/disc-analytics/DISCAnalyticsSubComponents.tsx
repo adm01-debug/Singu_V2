@@ -119,7 +119,7 @@ export function InsightsTab({ dashboardData }: { dashboardData: { compatibilityI
           <CardHeader><CardTitle className="text-lg flex items-center gap-2"><CheckCircle2 className="w-5 h-5 text-success" />Melhor Performance</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center gap-3"><DISCBadge profile={(dashboardData?.compatibilityInsights?.bestPerforming || 'I') as DISCProfile} size="lg" /><div><p className="font-medium">{DISC_PROFILES[(dashboardData?.compatibilityInsights?.bestPerforming || 'I') as DISCProfile]?.name}</p><p className="text-sm text-muted-foreground">Perfil com melhor taxa de conversão</p></div></div>
+              <div className="flex items-center gap-3"><DISCBadge profile={(dashboardData?.compatibilityInsights?.bestPerforming || 'I') as DISCProfile} size="lg" /><div><p className="font-medium">{DISC_PROFILES[(dashboardData?.compatibilityInsights?.bestPerforming ?? 'I') as Exclude<DISCProfile, null>]?.name}</p><p className="text-sm text-muted-foreground">Perfil com melhor taxa de conversão</p></div></div>
               <div className="p-3 bg-success/10 rounded-lg"><p className="text-sm text-success dark:text-success"><Lightbulb className="w-4 h-4 inline mr-1" />Priorize contatos com este perfil para maximizar resultados</p></div>
             </div>
           </CardContent>
@@ -128,7 +128,7 @@ export function InsightsTab({ dashboardData }: { dashboardData: { compatibilityI
           <CardHeader><CardTitle className="text-lg flex items-center gap-2"><AlertCircle className="w-5 h-5 text-warning" />Oportunidade de Melhoria</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center gap-3"><DISCBadge profile={(dashboardData?.compatibilityInsights?.needsImprovement || 'C') as DISCProfile} size="lg" /><div><p className="font-medium">{DISC_PROFILES[(dashboardData?.compatibilityInsights?.needsImprovement || 'C') as DISCProfile]?.name}</p><p className="text-sm text-muted-foreground">Perfil com maior potencial de crescimento</p></div></div>
+              <div className="flex items-center gap-3"><DISCBadge profile={(dashboardData?.compatibilityInsights?.needsImprovement || 'C') as DISCProfile} size="lg" /><div><p className="font-medium">{DISC_PROFILES[(dashboardData?.compatibilityInsights?.needsImprovement ?? 'C') as Exclude<DISCProfile, null>]?.name}</p><p className="text-sm text-muted-foreground">Perfil com maior potencial de crescimento</p></div></div>
               <div className="p-3 bg-warning/10 rounded-lg"><p className="text-sm text-warning dark:text-warning"><Lightbulb className="w-4 h-4 inline mr-1" />Estude as estratégias específicas para este perfil</p></div>
             </div>
           </CardContent>

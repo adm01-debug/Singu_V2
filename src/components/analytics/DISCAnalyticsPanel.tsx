@@ -93,7 +93,7 @@ const DISCAnalyticsPanel = () => {
   const statCards = [
     { icon: Users, label: 'Contatos perfilados', value: stats.totalProfiled, badge: 'Total', color: 'text-primary' },
     { icon: Target, label: 'Confiança média', value: `${stats.avgConfidence}%`, badge: `${stats.avgConfidence}%`, color: 'text-success' },
-    { icon: Award, label: 'Perfil predominante', value: DISC_PROFILES[stats.mostCommon || 'I']?.name, badge: null, color: DISC_COLORS[stats.mostCommon] },
+    { icon: Award, label: 'Perfil predominante', value: DISC_PROFILES[(stats.mostCommon ?? 'I')]?.name, badge: null, color: DISC_COLORS[stats.mostCommon ?? 'I'] },
     { icon: Activity, label: 'Análises recentes', value: stats.recentAnalyses, badge: '7 dias', color: 'text-secondary' },
   ];
 

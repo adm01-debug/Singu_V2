@@ -42,7 +42,7 @@ export function PreContactBriefing({ className, compact = false }: PreContactBri
           <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold flex items-center gap-2 text-primary"><Brain className="w-4 h-4" />Briefing Pré-Contato</CardTitle></CardHeader>
           <CardContent className="space-y-2">
             {upcomingBriefings.slice(0, 3).map((briefing) => {
-              const Icon = interactionTypeIcons[briefing.interaction.type] || Phone;
+              const Icon = interactionTypeIcons[briefing.interaction.type ?? 'call'] || Phone;
               return (
                 <motion.div key={briefing.interaction.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer group" onClick={() => showBriefingFor(briefing.interaction.id)}>
                   <Avatar className="h-8 w-8 border border-primary/20"><AvatarImage src={briefing.contact.avatar_url || ''} /><AvatarFallback className="bg-primary/10 text-primary text-xs">{briefing.contact.first_name?.[0]}{briefing.contact.last_name?.[0]}</AvatarFallback></Avatar>
@@ -60,7 +60,7 @@ export function PreContactBriefing({ className, compact = false }: PreContactBri
   // Active briefing
   if (activeBriefing) {
     const briefing = activeBriefing;
-    const Icon = interactionTypeIcons[briefing.interaction.type] || Phone;
+    const Icon = interactionTypeIcons[briefing.interaction.type ?? 'call'] || Phone;
     const VAKIcon = vakIcons[briefing.vakProfile.dominant] || Brain;
     const TrendIcon = briefing.emotionalProfile.trend === 'improving' ? TrendingUp : briefing.emotionalProfile.trend === 'declining' ? TrendingDown : Minus;
 
@@ -125,7 +125,7 @@ export function PreContactBriefing({ className, compact = false }: PreContactBri
         <CardHeader className="pb-2"><CardTitle className="text-sm font-semibold flex items-center gap-2 text-primary"><Brain className="w-4 h-4" />Briefings Próximos<Badge variant="secondary" className="ml-auto">{upcomingBriefings.length}</Badge></CardTitle></CardHeader>
         <CardContent className="space-y-2">
           {upcomingBriefings.map((briefing) => {
-            const Icon = interactionTypeIcons[briefing.interaction.type] || Phone;
+            const Icon = interactionTypeIcons[briefing.interaction.type ?? 'call'] || Phone;
             return (
               <motion.div key={briefing.interaction.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer group border border-transparent hover:border-primary/20" onClick={() => showBriefingFor(briefing.interaction.id)}>
                 <Avatar className="h-10 w-10 border border-primary/20"><AvatarImage src={briefing.contact.avatar_url || ''} /><AvatarFallback className="bg-primary/10 text-primary text-sm">{briefing.contact.first_name?.[0]}{briefing.contact.last_name?.[0]}</AvatarFallback></Avatar>

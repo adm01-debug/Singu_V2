@@ -91,7 +91,7 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
     });
 
     Object.entries(discGroups).forEach(([disc, usages]) => {
-      const d = disc as DISCProfile;
+      const d = disc as Exclude<DISCProfile, null>;
       const completed = usages.filter(u => u.result !== 'pending');
       const success = usages.filter(u => u.result === 'success').length;
       const rated = usages.filter(u => u.effectiveness_rating !== null);

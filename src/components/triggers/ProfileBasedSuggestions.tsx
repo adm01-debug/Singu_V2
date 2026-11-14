@@ -51,7 +51,7 @@ export function ProfileBasedSuggestions({ contact, vakProfile, metaprogramProfil
         let matchScore = 50;
         const matchReasons: string[] = [];
         matchScore += vakProfile.confidence * 0.3;
-        matchReasons.push(`Adaptado para perfil ${VAK_DESCRIPTIONS[vakProfile.primary].name} (${vakProfile.confidence.toFixed(0)}% confiança)`);
+        matchReasons.push(`Adaptado para perfil ${VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].name} (${vakProfile.confidence.toFixed(0)}% confiança)`);
         if (template.discProfile === null || template.discProfile === discProfile) {
           if (discProfile) { matchScore += 15; matchReasons.push(`Compatível com perfil DISC ${DISC_DESCRIPTIONS[discProfile].name}`); }
         }

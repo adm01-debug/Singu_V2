@@ -33,7 +33,7 @@ describe('DISC_TRAINING Matrix Completeness', () => {
     });
 
     describe.each(ALL_DISC)('→ Target %s', (target) => {
-      const tip = DISC_TRAINING[seller as DISCProfile][target as DISCProfile];
+      const tip = DISC_TRAINING[seller as Exclude<DISCProfile, null>][target as Exclude<DISCProfile, null>];
 
       it('has non-empty title', () => expect(tip.title.length).toBeGreaterThan(5));
       it('has non-empty description', () => expect(tip.description.length).toBeGreaterThan(10));

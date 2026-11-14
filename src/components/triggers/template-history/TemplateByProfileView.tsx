@@ -68,7 +68,7 @@ export function TemplateByProfileView({ templateMetrics }: { templateMetrics: Te
                     <div className="grid grid-cols-2 gap-3">
                       {(['D', 'I', 'S', 'C'] as DISCProfile[]).map((profile) => {
                         const data = tm.byProfile[profile];
-                        const config = DISC_CONFIG[profile];
+                        const config = DISC_CONFIG[profile ?? 'D'];
                         const isBest = tm.bestProfile === profile;
                         const isWorst = tm.worstProfile === profile;
 

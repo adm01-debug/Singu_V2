@@ -78,11 +78,11 @@ export function ExpandedTemplateDetails({ data }: { data: TemplateDetailData }) 
           </p>
           <div className="flex flex-wrap gap-2">
             {(['D', 'I', 'S', 'C'] as DISCProfile[]).map(disc => (
-              <Badge key={disc} variant="outline" className={cn('gap-1.5', discColors[disc])}>
+              <Badge key={disc} variant="outline" className={cn('gap-1.5', discColors[disc ?? 'D'])}>
                 <span className="font-bold">{disc}</span>
-                <span className="text-xs">{discLabels[disc]}</span>
+                <span className="text-xs">{discLabels[disc ?? 'D']}</span>
                 {data.totalUsages > 0 && (
-                  <span className="ml-1 text-xs opacity-70">{data.discPerformance[disc].successRate.toFixed(0)}%</span>
+                  <span className="ml-1 text-xs opacity-70">{data.discPerformance[disc ?? 'D'].successRate.toFixed(0)}%</span>
                 )}
               </Badge>
             ))}

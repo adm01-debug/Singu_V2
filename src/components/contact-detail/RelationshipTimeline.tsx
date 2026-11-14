@@ -53,8 +53,8 @@ export function RelationshipTimeline({ interactions, contact, className }: Relat
 
     // Add interactions
     interactions.forEach(interaction => {
-      const Icon = interactionIcons[interaction.type] || MessageSquare;
-      const color = interactionColors[interaction.type] || interactionColors.note;
+      const Icon = interactionIcons[interaction.type ?? 'note'] || MessageSquare;
+      const color = interactionColors[interaction.type ?? 'note'] || interactionColors.note;
       items.push({
         id: `int-${interaction.id}`,
         date: new Date(interaction.created_at ?? 0),

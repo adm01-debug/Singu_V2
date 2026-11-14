@@ -636,7 +636,7 @@ interface Props {
               <div className={isCompact ? 'space-y-2' : 'space-y-4'}>
                 {visibleInteractions.map((interaction, index) => {
                   const contact = contactMap.get(interaction.contact_id);
-                  const Icon = interactionIcons[interaction.type] || MessageSquare;
+                  const Icon = interactionIcons[interaction.type ?? 'note'] || MessageSquare;
                   const tags = interaction.tags ?? [];
                   const visibleTags = isCompact ? tags.slice(0, 3) : tags;
                   const extraTags = isCompact ? Math.max(0, tags.length - 3) : 0;
@@ -651,7 +651,7 @@ interface Props {
                        className={`relative ${isCompact ? 'pl-12' : 'pl-16'} group cursor-pointer`}
                        onClick={() => isSelectionMode && handleToggleSelection(interaction.id)}
                      >
-                       <div className={`absolute ${isCompact ? 'left-3 top-3 w-7 h-7' : 'left-2 top-4 w-10 h-10'} rounded-full flex items-center justify-center ${interactionColors[interaction.type]} border-4 border-background z-10`}>
+                       <div className={`absolute ${isCompact ? 'left-3 top-3 w-7 h-7' : 'left-2 top-4 w-10 h-10'} rounded-full flex items-center justify-center ${interactionColors[interaction.type ?? 'note']} border-4 border-background z-10`}>
                          {isSelectionMode ? (
                            selectedIds.includes(interaction.id) 
                              ? <CheckSquare className="w-5 h-5 text-primary fill-primary-foreground" />
@@ -665,7 +665,7 @@ interface Props {
                         <div className={`flex items-start justify-between ${isCompact ? 'mb-1.5' : 'mb-3'}`}>
                           <div className="flex-1">
                             <div className={`flex items-center gap-2 ${isCompact ? 'mb-0.5' : 'mb-1'} flex-wrap`}>
-                              {!isCompact && <Badge variant="outline" className={`text-xs ${interactionColors[interaction.type].replace('bg-', 'border-').replace('/10', '/50')}`}>{interactionLabels[interaction.type]}</Badge>}
+                              {!isCompact && <Badge variant="outline" className={`text-xs ${interactionColors[interaction.type ?? 'note'].replace('bg-', 'border-').replace('/10', '/50')}`}>{interactionLabels[interaction.type ?? 'note']}</Badge>}
                               <SentimentIndicator sentiment={(interaction.sentiment as SentimentType) || 'neutral'} size="sm" />
                               {interaction.follow_up_required && <Badge variant="outline" className="text-xs text-warning border-warning bg-warning/10"><AlertCircle className="w-3 h-3 mr-1" />Follow-up</Badge>}
                               {interaction.initiated_by === 'them' && <Badge variant="secondary" className="text-xs">Recebido</Badge>}

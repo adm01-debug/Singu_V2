@@ -100,8 +100,8 @@ export function CompanyInteractionsModal({
           ) : (
             <div className="space-y-2 py-2">
               {sorted.slice(0, 30).map((interaction, index) => {
-                const Icon = interactionIcons[interaction.type] || MessageSquare;
-                const colorClass = interactionColors[interaction.type] || interactionColors.note;
+                const Icon = interactionIcons[interaction.type ?? 'note'] || MessageSquare;
+                const colorClass = interactionColors[interaction.type ?? 'note'] || interactionColors.note;
                 return (
                   <motion.div
                     key={interaction.id}

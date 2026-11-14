@@ -15,7 +15,7 @@ export function generateCombinedMessage(
     D: { ver: 'analisar', mostrar: 'apresentar dados', claro: 'lógico', visualizar: 'calcular', perspectiva: 'análise' },
   };
 
-  const vak = vakWords[vakProfile.primary];
+  const vak = vakWords[vakProfile.primary ?? 'D'];
   const isToward = metaProfile.motivationDirection === 'toward';
   const isInternal = metaProfile.referenceFrame === 'internal';
   const isOptions = metaProfile.workingStyle === 'options';

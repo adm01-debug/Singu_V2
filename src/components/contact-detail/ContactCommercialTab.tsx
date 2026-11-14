@@ -156,7 +156,7 @@ export function ContactCommercialTab({ contactId }: Props) {
                   { label: 'Frequência', score: rfm.frequency_score, trend: rfm.frequency_trend },
                   { label: 'Monetário', score: rfm.monetary_score, trend: rfm.monetary_trend },
                 ].map(({ label, score, trend }) => {
-                  const TrendIcon = TREND_ICONS[trend] || Minus;
+                  const TrendIcon = TREND_ICONS[trend ?? 'stable'] || Minus;
                   return (
                     <div key={label} className="text-center">
                       <p className="text-xs text-muted-foreground">{label}</p>
