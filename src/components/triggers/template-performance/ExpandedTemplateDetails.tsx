@@ -77,7 +77,7 @@ export function ExpandedTemplateDetails({ data }: { data: TemplateDetailData }) 
             Performance por Perfil DISC
           </p>
           <div className="flex flex-wrap gap-2">
-            {(['D', 'I', 'S', 'C'] as DISCProfile[]).map(disc => (
+            {(['D', 'I', 'S', 'C'] as const).map(disc => (
               <Badge key={disc} variant="outline" className={cn('gap-1.5', discColors[disc ?? 'D'])}>
                 <span className="font-bold">{disc}</span>
                 <span className="text-xs">{discLabels[disc ?? 'D']}</span>

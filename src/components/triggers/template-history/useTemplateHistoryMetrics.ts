@@ -62,10 +62,10 @@ export function useTemplateHistoryMetrics() {
     const usagesByProfile: Record<Exclude<DISCProfile, null>, TriggerUsageEntry[]> = { D: [], I: [], S: [], C: [] };
     history.forEach((entry) => {
       const contactInfo = contactDISCMap.get(entry.contact_id);
-      if (contactInfo) usagesByProfile[contactInfo.discProfile].push(entry);
+      if (contactInfo) usagesByProfile[contactInfo.discProfile ?? 'D'].push(entry);
     });
 
-    (['D', 'I', 'S', 'C'] as DISCProfile[]).forEach((profile) => {
+    (['D', 'I', 'S', 'C'] as const).forEach((profile) => {
       const usages = usagesByProfile[profile];
       const completedUsages = usages.filter(u => u.result !== 'pending');
       const successUsages = completedUsages.filter(u => u.result === 'success');
@@ -123,7 +123,7 @@ export function useTemplateHistoryMetrics() {
         totalUsages: 0, overallSuccessRate: 0, bestProfile: null, worstProfile: null,
       };
       existing.totalUsages++;
-      const profileData = existing.byProfile[contactInfo.discProfile];
+      const profileData = existing.byProfile[contactInfo.discProfile ?? 'D'];
       profileData.usages++;
       if (entry.result === 'success') profileData.successCount++;
       templateMap.set(key, existing);
@@ -132,7 +132,7 @@ export function useTemplateHistoryMetrics() {
     const result: TemplateProfileMetrics[] = [];
     templateMap.forEach((tm) => {
       let totalSuccess = 0, totalCompleted = 0, bestRate = -1, worstRate = 101;
-      (['D', 'I', 'S', 'C'] as DISCProfile[]).forEach((profile) => {
+      (['D', 'I', 'S', 'C'] as const).forEach((profile) => {
         const data = tm.byProfile[profile];
         if (data.usages > 0) {
           data.successRate = (data.successCount / data.usages) * 100;

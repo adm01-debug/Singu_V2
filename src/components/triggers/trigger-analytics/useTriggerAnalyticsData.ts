@@ -153,7 +153,7 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
         ? (rated.reduce((sum, u) => sum + (u.effectiveness_rating || 0), 0) / rated.length) * 20
         : 0;
 
-      (['D', 'I', 'S', 'C'] as DISCProfile[]).forEach((disc) => {
+      (['D', 'I', 'S', 'C'] as const).forEach((disc) => {
 
         const discUsages = usages.filter(u => u.contact_disc === disc);
 

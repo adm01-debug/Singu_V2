@@ -198,7 +198,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
               <div className="absolute left-5 top-3 bottom-3 w-px bg-border" />
 
               {filteredInteractions.map((interaction, i) => {
-                const config = TYPE_CONFIG[interaction.type] || TYPE_CONFIG.note;
+                const config = TYPE_CONFIG[interaction.type ?? 'note'] || TYPE_CONFIG.note;
                 const Icon = config.icon;
                 const isExpanded = expandedId === interaction.id;
 

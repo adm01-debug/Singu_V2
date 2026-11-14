@@ -56,7 +56,7 @@ export function useTemplatePerformanceData(
         ? usages.sort((a, b) => new Date(b.used_at).getTime() - new Date(a.used_at).getTime())[0].used_at
         : null;
 
-      const discPerformance = (['D', 'I', 'S', 'C'] as DISCProfile[]).reduce((acc, disc) => {
+      const discPerformance = (['D', 'I', 'S', 'C'] as const).reduce((acc, disc) => {
         const discUsages = completedUsages;
 
         const discSuccess = discUsages.filter(u => u.result === 'success').length;

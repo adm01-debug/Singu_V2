@@ -13,7 +13,7 @@ import { VAKType } from '@/types/vak';
  * Tests refactored data module integrity after decomposition
  */
 
-const ALL_DISC: DISCProfile[] = ['D', 'I', 'S', 'C'];
+const ALL_DISC = ['D', 'I', 'S', 'C'] as const;
 const ALL_VAK: VAKType[] = ['V', 'A', 'K', 'D'];
 
 // ============================================

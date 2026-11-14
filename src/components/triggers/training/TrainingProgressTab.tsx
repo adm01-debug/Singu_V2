@@ -51,7 +51,7 @@ export function TrainingProgressTab({
           Domínio por Perfil
         </h4>
 
-        {(['D', 'I', 'S', 'C'] as DISCProfile[]).map((disc) => {
+        {(['D', 'I', 'S', 'C'] as const).map((disc) => {
           const isCompleted = completedScenarios.includes(`scenario-${disc}`);
           const isSameAsUser = disc === salespersonProfile?.discProfile;
 

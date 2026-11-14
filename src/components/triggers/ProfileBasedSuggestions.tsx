@@ -83,7 +83,7 @@ export function ProfileBasedSuggestions({ contact, vakProfile, metaprogramProfil
         { id: 'combined-followup', title: 'Follow-up Personalizado', scenario: 'Retomar contato usando preferências do cliente', type: 'followup' as const },
       ].forEach(t => {
         const matchReasons: string[] = []; const tips: string[] = []; let matchScore = 80;
-        matchReasons.push(`Linguagem ${VAK_DESCRIPTIONS[vakProfile.primary].name} (VAK)`);
+        matchReasons.push(`Linguagem ${VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].name} (VAK)`);
         if (metaprogramProfile.motivationDirection !== 'balanced') { const motLabel = METAPROGRAM_LABELS.motivationDirection[metaprogramProfile.motivationDirection]; matchReasons.push(`Motivação ${motLabel.name}`); tips.push(motLabel.communicationTips[0]); }
         if (discProfile) matchReasons.push(`Perfil DISC ${DISC_DESCRIPTIONS[discProfile].name}`);
         matchScore += (vakProfile.confidence + metaprogramProfile.overallConfidence) * 0.1;
@@ -107,7 +107,7 @@ export function ProfileBasedSuggestions({ contact, vakProfile, metaprogramProfil
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-wrap gap-2">
-          {vakProfile?.primary && <Badge variant="outline" className={cn('text-xs', VAK_DESCRIPTIONS[vakProfile.primary].color)}>{React.createElement(VAK_DESCRIPTIONS[vakProfile.primary].icon, { className: 'w-3 h-3 mr-1' })}{VAK_DESCRIPTIONS[vakProfile.primary].name}</Badge>}
+          {vakProfile?.primary && <Badge variant="outline" className={cn('text-xs', VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].color)}>{React.createElement(VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].icon, { className: 'w-3 h-3 mr-1' })}{VAK_DESCRIPTIONS[vakProfile.primary ?? 'D'].name}</Badge>}
           {discProfile && <Badge variant="outline" className={cn('text-xs', DISC_DESCRIPTIONS[discProfile].color)}>{DISC_DESCRIPTIONS[discProfile].icon} {DISC_DESCRIPTIONS[discProfile].name}</Badge>}
           {metaprogramProfile && metaprogramProfile.motivationDirection !== 'balanced' && <Badge variant="outline" className={cn('text-xs', METAPROGRAM_LABELS.motivationDirection[metaprogramProfile.motivationDirection].color)}>{METAPROGRAM_LABELS.motivationDirection[metaprogramProfile.motivationDirection].icon} {METAPROGRAM_LABELS.motivationDirection[metaprogramProfile.motivationDirection].name}</Badge>}
         </div>

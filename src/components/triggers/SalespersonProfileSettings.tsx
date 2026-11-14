@@ -195,7 +195,7 @@ export function SalespersonProfileSettings() {
             onValueChange={(value) => setProfile({ ...profile, discProfile: value as DISCProfile })}
             className="grid grid-cols-2 gap-3"
           >
-            {(['D', 'I', 'S', 'C'] as DISCProfile[]).map((type) => (
+            {(['D', 'I', 'S', 'C'] as const).map((type) => (
               <Label
                 key={type}
                 className={cn(

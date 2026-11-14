@@ -213,7 +213,7 @@ const getSituation = (disc: DISCProfile): string => {
     S: 'O cliente está hesitante e preocupado com mudanças. Ele pergunta: "Como minha equipe vai se adaptar a isso?"',
     C: 'O cliente está analisando cada detalhe. Ele pergunta: "Qual é a metodologia exata e os dados que comprovam isso?"',
   };
-  return situations[disc];
+  return situations[disc ?? 'D'];
 };
 
 const getOptions = (clientDISC: DISCProfile, _sellerDISC: DISCProfile | null): TrainingScenario['options'] => {
@@ -239,7 +239,7 @@ const getOptions = (clientDISC: DISCProfile, _sellerDISC: DISCProfile | null): T
       { id: 'c', text: 'Vamos fazer isso agora e ajustamos depois se precisar.', isCorrect: false, explanation: 'C precisa analisar antes. Não gosta de improvisação.' },
     ],
   };
-  return options[clientDISC];
+  return options[clientDISC ?? 'D'];
 };
 
 export const generateScenarios = (sellerDISC: DISCProfile | null): TrainingScenario[] => {
@@ -250,7 +250,7 @@ export const generateScenarios = (sellerDISC: DISCProfile | null): TrainingScena
     if (disc !== sellerDISC) {
       scenarios.push({
         id: `scenario-${disc}`,
-        title: `Cliente ${DISC_LABELS[disc].name}`,
+        title: `Cliente ${DISC_LABELS[disc ?? 'D'].name}`,
         description: `Como abordar um cliente com perfil ${disc}?`,
         clientProfile: {
           disc,
