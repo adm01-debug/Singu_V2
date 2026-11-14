@@ -202,7 +202,7 @@ export const useNotifications = () => {
 
       if (interactions && interactions.length > 0) {
         // Get contact names
-        const contactIds = [...new Set(interactions.map(i => i.contact_id))];
+        const contactIds = [...new Set(interactions.map(i => i.contact_id).filter((id): id is string => id !== null))];
         const { data: contacts } = await supabase
           .from('contacts')
           .select('id, first_name, last_name')
@@ -216,7 +216,7 @@ export const useNotifications = () => {
 
         // Show notification for each follow-up
         for (const interaction of interactions) {
-          const contactName = contactMap.get(interaction.contact_id) || 'Contato';
+          const contactName = contactMap.get(interaction.contact_id ?? '') || 'Contato';
           await showNotification(
             `📅 Follow-up: ${interaction.title}`,
             {

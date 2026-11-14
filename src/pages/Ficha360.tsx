@@ -519,8 +519,8 @@ const Ficha360 = () => {
                   <PerfilComportamentalCard profile={profile} />
                   <NLPAnalysisCard 
                     contactId={id!} 
-                    vakProfile={vakProfile} 
-                    metaprogramProfile={metaprogramProfile} 
+                    vakProfile={vakProfile as never} 
+                    metaprogramProfile={metaprogramProfile as never} 
                     reframings={latestReframings}
                     onRefetch={refetchNLP}
                   />

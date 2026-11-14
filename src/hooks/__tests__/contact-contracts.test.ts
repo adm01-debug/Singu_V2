@@ -84,7 +84,7 @@ describe('contrato canônico de contatos', () => {
     const input = { first_name: 'Ana', last_name: 'Silva', full_name: 'Gerado', email: 'ana@example.test' };
     await act(async () => { await result.current.createContact(input); });
     expect(api.insert).toHaveBeenCalledWith('contacts', { first_name: 'Ana', last_name: 'Silva', email: 'ana@example.test', user_id: raw.user_id });
-    const cached = client.getQueryData<InfiniteData<Page>>(queryKey);
+    const cached = client.getQueryData<InfiniteData<Page>>(queryKey)!;
     expect(cached.pages[0].items.map(contact => contact.id)).toEqual(['contato-2', 'contato-1']);
     expect(cached.pages[0].totalCount).toBe(2);
     const select = api.query.mock.calls[0][0].select as string;

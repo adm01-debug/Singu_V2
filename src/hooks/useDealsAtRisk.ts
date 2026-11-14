@@ -53,9 +53,9 @@ export function useDealsAtRisk(limit = 5) {
       type Row = { contact_id: string; sentiment: string | null; created_at: string; initiated_by: string | null };
       const byContact = new Map<string, Row[]>();
       (interactions ?? []).forEach((row) => {
-        const list = byContact.get(row.contact_id) ?? [];
+        const list = byContact.get(row.contact_id ?? '') ?? [];
         list.push(row as Row);
-        byContact.set(row.contact_id, list);
+        byContact.set(row.contact_id ?? '', list);
       });
 
       const isInbound = (by: string | null) => {

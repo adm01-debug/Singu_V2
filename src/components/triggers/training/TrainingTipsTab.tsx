@@ -35,7 +35,7 @@ export function TrainingTipsTab({ salespersonProfile, getDISCTip, getVAKTip }: T
             Perfil DISC do Cliente
           </Label>
           <div className="grid grid-cols-4 gap-2">
-            {(['D', 'I', 'S', 'C'] as DISCProfile[]).map((disc) => (
+            {(['D', 'I', 'S', 'C'] as const).map((disc) => (
               <Button
                 key={disc}
                 variant={selectedDISC === disc ? 'default' : 'outline'}

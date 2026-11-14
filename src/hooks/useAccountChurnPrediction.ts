@@ -156,10 +156,10 @@ export function useAccountChurnPrediction() {
 
       // ===== ENGAGEMENT ANALYSIS =====
       const last30Days = companyInteractions.filter(i =>
-        differenceInDays(new Date(), new Date(i.created_at)) <= 30
+        differenceInDays(new Date(), new Date(i.created_at ?? 0)) <= 30
       ).length;
       const previous30Days = companyInteractions.filter(i => {
-        const daysAgo = differenceInDays(new Date(), new Date(i.created_at));
+        const daysAgo = differenceInDays(new Date(), new Date(i.created_at ?? 0));
         return daysAgo > 30 && daysAgo <= 60;
       }).length;
 
@@ -195,7 +195,7 @@ export function useAccountChurnPrediction() {
 
       // ===== ALERT ANALYSIS =====
       const recentAlerts = companyAlerts.filter(a =>
-        differenceInDays(new Date(), new Date(a.created_at)) <= 30
+        differenceInDays(new Date(), new Date(a.created_at ?? 0)) <= 30
       );
       const criticalAlerts = recentAlerts.filter(a =>
         a.severity === 'critical' || a.severity === 'high'
@@ -227,7 +227,7 @@ export function useAccountChurnPrediction() {
 
       // ===== SENTIMENT ANALYSIS =====
       const recentSentiments = companyInteractions
-        .filter(i => differenceInDays(new Date(), new Date(i.created_at)) <= 60)
+        .filter(i => differenceInDays(new Date(), new Date(i.created_at ?? 0)) <= 60)
         .map(i => i.sentiment);
 
       const negativeSentiments = recentSentiments.filter(s => s === 'negative').length;
@@ -326,7 +326,7 @@ export function useAccountChurnPrediction() {
           stakeholderType,
 
           recentAlertCount: contactAlerts.filter(a =>
-            differenceInDays(new Date(), new Date(a.created_at)) <= 30
+            differenceInDays(new Date(), new Date(a.created_at ?? 0)) <= 30
           ).length
         };
       }).sort((a, b) => b.riskContribution - a.riskContribution);

@@ -25,7 +25,7 @@ export interface ChartContact {
 }
 
 export interface ChartInteraction {
-  created_at: string;
+  created_at: string | null;
   type?: string | null;
   [key: string]: unknown;
 }
@@ -49,7 +49,7 @@ export const ActivityChart = ({ period, interactions = [] }: ChartProps) => {
       const nextDay = new Date(day.getTime() + 24 * 60 * 60 * 1000);
       
       const dayInteractions = interactions.filter(int => {
-        const d = new Date(int.created_at);
+        const d = new Date(int.created_at ?? 0);
         return d >= day && d < nextDay;
       });
       

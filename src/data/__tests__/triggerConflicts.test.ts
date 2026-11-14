@@ -37,7 +37,7 @@ describe('Trigger Conflicts Matrix', () => {
 
   it('all conflicts have resolution', () => {
     for (const c of COMPLETE_TRIGGER_CONFLICTS) {
-      expect(c.resolution.length).toBeGreaterThan(10);
+      expect((c.resolution ?? '').length).toBeGreaterThan(10);
     }
   });
 

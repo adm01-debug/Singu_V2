@@ -37,7 +37,7 @@ export function useChurnPrediction() {
 
       // Factor 1: Days since last interaction
       const lastInteraction = contactInteractions.length > 0
-        ? new Date(Math.max(...contactInteractions.map(i => new Date(i.created_at).getTime())))
+        ? new Date(Math.max(...contactInteractions.map(i => new Date(i.created_at ?? 0).getTime())))
         : null;
       
       const daysSinceContact = lastInteraction 
@@ -64,10 +64,10 @@ export function useChurnPrediction() {
 
       // Factor 2: Interaction frequency trend
       const last30Days = contactInteractions.filter(i => 
-        differenceInDays(new Date(), new Date(i.created_at)) <= 30
+        differenceInDays(new Date(), new Date(i.created_at ?? 0)) <= 30
       ).length;
       const previous30Days = contactInteractions.filter(i => {
-        const daysAgo = differenceInDays(new Date(), new Date(i.created_at));
+        const daysAgo = differenceInDays(new Date(), new Date(i.created_at ?? 0));
         return daysAgo > 30 && daysAgo <= 60;
       }).length;
 
@@ -97,7 +97,7 @@ export function useChurnPrediction() {
 
       // Factor 3: Sentiment analysis
       const recentSentiments = contactInteractions
-        .filter(i => differenceInDays(new Date(), new Date(i.created_at)) <= 60)
+        .filter(i => differenceInDays(new Date(), new Date(i.created_at ?? 0)) <= 60)
         .map(i => i.sentiment);
       
       const negativeSentiments = recentSentiments.filter(s => s === 'negative').length;

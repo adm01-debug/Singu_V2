@@ -92,7 +92,7 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
         const contactIds = new Set<string>();
         followUpInteractions.forEach(i => {
           if (i.company_id) { companyIds.add(i.company_id); }
-          contactIds.add(i.contact_id);
+          contactIds.add(i.contact_id ?? '');
         });
         birthdayContacts.forEach(c => { if (c.company_id) companyIds.add(c.company_id); });
         attentionContacts.forEach(c => { if (c.company_id) companyIds.add(c.company_id); });
@@ -111,8 +111,8 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
         const overdueFollowUps: FollowUp[] = [];
         followUpInteractions.forEach(interaction => {
           if (!interaction.follow_up_date) return;
-          const followUpDate = parseISO(interaction.follow_up_date);
-          const contact = contactMap.get(interaction.contact_id) || null;
+          const followUpDate = parseISO(interaction.follow_up_date ?? '');
+          const contact = contactMap.get(interaction.contact_id ?? '') || null;
           const company = interaction.company_id ? companyMap.get(interaction.company_id) || null : null;
           const followUp: FollowUp = { interaction, contact, company };
           if (isToday(followUpDate)) todayFollowUps.push(followUp);
@@ -143,7 +143,7 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
 
         uniqueAttentionContacts.forEach(contact => {
           const company = contact.company_id ? companyMap.get(contact.company_id) || null : null;
-          const lastUpdate = contact.updated_at ? new Date(contact.updated_at) : new Date(contact.created_at);
+          const lastUpdate = contact.updated_at ? new Date(contact.updated_at ?? 0) : new Date(contact.created_at ?? 0);
           const daysSinceContact = Math.floor((today.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24));
 
           if ((contact.relationship_score || 0) < 30 && daysSinceContact > 14) {

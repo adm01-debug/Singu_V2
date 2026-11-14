@@ -32,7 +32,7 @@ export interface DISCAnalysisRecord {
   id: string;
   userId: string;
   contactId: string;
-  interactionId?: string;
+  interactionId?: string | null;
   
   // Scores
   dominanceScore: number;
@@ -72,7 +72,7 @@ export interface DISCAnalysisRecord {
 export interface DISCAnalysisRequest {
   contactId: string;
   texts: string[];
-  interactionId?: string;
+  interactionId?: string | null;
   existingProfile?: DISCFullProfile;
 }
 
@@ -110,7 +110,7 @@ export interface DISCConversionMetrics {
 export interface DISCCommunicationLog {
   id: string;
   contactId: string;
-  interactionId?: string;
+  interactionId?: string | null;
   contactDiscProfile: Exclude<DISCProfile, null>;
   approachAdapted: boolean;
   adaptationTipsShown: string[];

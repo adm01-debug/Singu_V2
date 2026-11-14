@@ -171,7 +171,7 @@ export function usePortfolioCompatibility() {
         else level = 'challenging';
 
         return {
-          id: c.id, firstName: c.first_name, lastName: c.last_name,
+          id: c.id, firstName: c.first_name ?? '', lastName: c.last_name ?? '',
           company: c.company_id ? companyNames.get(c.company_id) : undefined,
           discProfile, vakProfile, compatibilityScore, discScore, vakScore, metaprogramScore,
           level, opportunities, challenges, relationshipScore: c.relationship_score,

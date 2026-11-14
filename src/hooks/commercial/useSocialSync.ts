@@ -60,6 +60,8 @@ export function useSocialSync(contactId: string) {
 
       if (queueError) throw queueError;
 
+      if (!queueItem) throw new Error('Falha ao enfileirar sync social');
+
       // Retry logic for function invocation
       let funcError = null;
       let attempts = 0;

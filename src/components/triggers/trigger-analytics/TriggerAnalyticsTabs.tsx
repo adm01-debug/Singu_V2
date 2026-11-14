@@ -37,7 +37,7 @@ interface Props {
   activeTab: string;
   onTabChange: (v: string) => void;
   stats: {
-    byDISC: Record<DISCProfile, { discProfile: DISCProfile; totalUsages: number; successRate: number; avgRating: number; topTriggers: Array<{ type: string; count: number; successRate: number; avgRating: number }> }>;
+    byDISC: Record<Exclude<DISCProfile, null>, { discProfile: DISCProfile; totalUsages: number; successRate: number; avgRating: number; topTriggers: Array<{ type: string; count: number; successRate: number; avgRating: number }> }>;
     triggerStats: TriggerEffectiveness[];
   };
   discChartData: Array<Record<string, unknown>>;

@@ -46,16 +46,16 @@ export function PredictiveRoadmap({ contactId }: { contactId: string }) {
      return roadmapData.map((item: {
        forecast_month: string;
        predicted_need: string;
-       probability: number;
-       suggested_offering: string;
-       rationale: string;
+       probability: number | null;
+       suggested_offering: string | null;
+       rationale: string | null;
      }) => ({
        month: format(new Date(item.forecast_month), 'MMMM yyyy', { locale: ptBR }),
        title: item.predicted_need,
-       probability: item.probability,
-       risk: item.probability < 50 ? 'high' : item.probability < 75 ? 'medium' : 'low',
-       action: item.suggested_offering,
-       insight: item.rationale
+       probability: item.probability ?? 0,
+       risk: (item.probability ?? 0) < 50 ? 'high' : (item.probability ?? 0) < 75 ? 'medium' : 'low',
+       action: item.suggested_offering ?? '',
+       insight: item.rationale ?? ''
      }));
    }, [roadmapData]);
  

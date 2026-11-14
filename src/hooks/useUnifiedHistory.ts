@@ -43,7 +43,7 @@ function toItemFromWhatsapp(r: Pick<Tables<'whatsapp_messages'>, 'id' | 'message
     id: `wa:${r.id}`,
     source: 'whatsapp_messages',
     channel: 'whatsapp',
-    timestamp: r.timestamp || r.created_at,
+    timestamp: r.timestamp || r.created_at || '',
     direction: r.from_me === null ? 'unknown' : r.from_me ? 'outbound' : 'inbound',
     title: `WhatsApp · ${type}`,
     preview: type === 'audio' ? '🎙️ Áudio' : content.slice(0, 200),

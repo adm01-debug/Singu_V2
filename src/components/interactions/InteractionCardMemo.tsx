@@ -135,7 +135,7 @@ export const InteractionCardMemo = memo(function InteractionCardMemo({
   const config = TYPE_CONFIG[interaction.type as keyof typeof TYPE_CONFIG] || TYPE_CONFIG.other;
   const Icon = config.icon;
 
-  const formattedDate = format(new Date(interaction.created_at), "d 'de' MMM 'às' HH:mm", {
+  const formattedDate = format(new Date(interaction.created_at ?? 0), "d 'de' MMM 'às' HH:mm", {
     locale: ptBR,
   });
 
@@ -332,7 +332,7 @@ export const InteractionCardMemo = memo(function InteractionCardMemo({
                    </div>
                  )}
 
-                 {(interaction as { emotion_analysis?: unknown }).emotion_analysis && (
+                 {Boolean((interaction as { emotion_analysis?: unknown }).emotion_analysis) && (
                    <div className="ml-auto flex items-center gap-1 text-[10px] text-indigo-600/80 font-medium">
                      <Activity className="w-3 h-3" />
                      EQ Analisado

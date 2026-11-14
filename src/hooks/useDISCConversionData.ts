@@ -68,8 +68,8 @@ export function useDISCConversionData(period: ConversionPeriod) {
 
           const contactInteractions = (interactions || []).filter(i => i.contact_id === contact.id);
           if (contactInteractions.length >= 2) {
-            const firstDate = new Date(contactInteractions[0].created_at);
-            const lastDate = new Date(contactInteractions[contactInteractions.length - 1].created_at);
+            const firstDate = new Date(contactInteractions[0].created_at ?? 0);
+            const lastDate = new Date(contactInteractions[contactInteractions.length - 1].created_at ?? 0);
             const cycleDays = Math.round((lastDate.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24));
             if (cycleDays > 0) profileData[discProfile].totalCycleDays += cycleDays;
           }

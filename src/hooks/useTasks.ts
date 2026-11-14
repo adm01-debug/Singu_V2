@@ -33,7 +33,7 @@ export function usePendingTasks() {
     enabled: !!user,
     queryFn: async () => {
       try {
-        const { data, error } = await callExternalRpc<Task[]>('get_pending_tasks', { p_user_id: user.id });
+        const { data, error } = await callExternalRpc<Task[]>('get_pending_tasks', { p_user_id: user?.id ?? '' });
         if (error) {
           logger.warn('[Tasks] get_pending_tasks RPC failed, falling back to table query:', error);
           // Fallback: query tasks table directly

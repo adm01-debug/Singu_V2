@@ -101,8 +101,8 @@ export function CommunicationTrainingMode() {
 
   const getDISCTip = (targetDISC: DISCProfile) => {
     const sellerDISC = salespersonProfile?.discProfile;
-    if (!sellerDISC) return DISC_TRAINING.D[targetDISC];
-    return DISC_TRAINING[sellerDISC][targetDISC];
+    if (!sellerDISC) return DISC_TRAINING.D[targetDISC ?? 'D'];
+    return DISC_TRAINING[sellerDISC ?? 'D'][targetDISC ?? 'D'];
   };
 
   const getVAKTip = (targetVAK: VAKType) => {

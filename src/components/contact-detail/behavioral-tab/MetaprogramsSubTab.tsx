@@ -121,22 +121,22 @@ export function MetaprogramsSubTab({ contactId }: Props) {
             <div className="space-y-1">
               <p className="text-[10px] text-muted-foreground uppercase font-bold">Direção</p>
               <Badge variant="outline" className="text-[10px] bg-card">
-                {latestMeta.toward_score > latestMeta.away_from_score ? 'Toward' : 'Away-From'}
+                {(latestMeta.toward_score ?? 0) > (latestMeta.away_from_score ?? 0) ? 'Toward' : 'Away-From'}
               </Badge>
             </div>
             <div className="space-y-1">
               <p className="text-[10px] text-muted-foreground uppercase font-bold">Referência</p>
               <Badge variant="outline" className="text-[10px] bg-card">
-                {latestMeta.internal_score > latestMeta.external_score ? 'Interno' : 'Externo'}
+                {(latestMeta.internal_score ?? 0) > (latestMeta.external_score ?? 0) ? 'Interno' : 'Externo'}
               </Badge>
             </div>
             <div className="space-y-1">
               <p className="text-[10px] text-muted-foreground uppercase font-bold">Estilo</p>
               <Badge variant="outline" className="text-[10px] bg-card">
-                {latestMeta.options_score > latestMeta.procedures_score ? 'Opções' : 'Procedimentos'}
+                {(latestMeta.options_score ?? 0) > (latestMeta.procedures_score ?? 0) ? 'Opções' : 'Procedimentos'}
               </Badge>
             </div>
-            {latestMeta.toward_words?.length > 0 && (
+            {(latestMeta.toward_words?.length ?? 0) > 0 && (
               <div className="col-span-full mt-2">
                 <p className="text-[10px] text-muted-foreground uppercase font-bold mb-1">Palavras-chave detectadas</p>
                 <div className="flex flex-wrap gap-1">
@@ -175,8 +175,8 @@ export function MetaprogramsSubTab({ contactId }: Props) {
         <CardContent className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             {sliders.map((s) => {
-              const leftVal = formData[s.leftKey] || 0;
-              const rightVal = formData[s.rightKey] || 0;
+              const leftVal = (formData as Record<string, number | null>)[s.leftKey] || 0;
+              const rightVal = (formData as Record<string, number | null>)[s.rightKey] || 0;
               const total = leftVal + rightVal;
               const leftPct = total > 0 ? (leftVal / total) * 100 : 50;
 

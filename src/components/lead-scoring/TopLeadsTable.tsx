@@ -7,10 +7,10 @@ import type { LeadScoreRow } from '@/hooks/useLeadScoring';
 
 interface Contact {
   id: string;
-  first_name?: string;
-  last_name?: string;
-  email?: string;
-  role_title?: string;
+  first_name?: string | null;
+  last_name?: string | null;
+  email?: string | null;
+  role_title?: string | null;
 }
 
 type Row = LeadScoreRow & { contact: Contact | null };

@@ -51,13 +51,13 @@ export function RapportStrategySubTab({ contactId }: Props) {
                     <channel.icon className={`h-3 w-3 ${channel.color}`} />
                     {channel.label}
                   </Label>
-                  <span className="font-mono">{formData[channel.key] || 0}%</span>
+                  <span className="font-mono">{(formData as Record<string, number | null>)[channel.key] || 0}%</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Input 
                     type="range" 
                     min="0" max="100" 
-                    value={formData[channel.key] || 0}
+                    value={(formData as Record<string, number | null>)[channel.key] || 0}
                     onChange={(e) => setFormData({ ...formData, [channel.key]: parseInt(e.target.value) })}
                     className="h-4 flex-1 accent-primary"
                   />
@@ -79,7 +79,7 @@ export function RapportStrategySubTab({ contactId }: Props) {
             <div className="space-y-2">
               <Label className="text-xs uppercase text-muted-foreground">Velocidade (Pacing)</Label>
               <Select 
-                value={formData.pacing_speed} 
+                value={formData.pacing_speed ?? ''} 
                 onValueChange={(val) => setFormData({ ...formData, pacing_speed: val })}
               >
                 <SelectTrigger className="h-8 text-xs">

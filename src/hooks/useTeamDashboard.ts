@@ -58,7 +58,7 @@ export function useTeamDashboard() {
       for (const r of allContacts || []) contactCountMap.set(r.user_id, (contactCountMap.get(r.user_id) || 0) + 1);
 
       const interactionCountMap = new Map<string, number>();
-      for (const r of allInteractions || []) interactionCountMap.set(r.user_id, (interactionCountMap.get(r.user_id) || 0) + 1);
+      for (const r of allInteractions || []) interactionCountMap.set(r.user_id ?? '', (interactionCountMap.get(r.user_id ?? '') || 0) + 1);
 
       type DealRow = { user_id: string; value: number; stage: string };
       const dealsByUid = new Map<string, DealRow[]>();

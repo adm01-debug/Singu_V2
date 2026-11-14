@@ -532,7 +532,7 @@ const RelatorioContato = () => {
                     </div>
                     <div className="flex justify-between mb-1">
                       <span className="text-muted-foreground">Data:</span>
-                      <span className="font-medium">{format(new Date(log.created_at), "dd/MM/yyyy HH:mm")}</span>
+                      <span className="font-medium">{format(new Date(log.created_at ?? 0), "dd/MM/yyyy HH:mm")}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">IP de Registro:</span>
@@ -566,8 +566,8 @@ const RelatorioContato = () => {
               {(Array.isArray(latestDisc.behavior_indicators) 
                 ? latestDisc.behavior_indicators 
                 : []
-              ).map((indicator: string, i: number) => (
-                <li key={i} className="text-foreground">{indicator}</li>
+              ).map((indicator: unknown, i: number) => (
+                <li key={i} className="text-foreground">{String(indicator)}</li>
               ))}
             </ul>
           </section>

@@ -48,14 +48,14 @@ export function useClosingScoreAlerts() {
   });
 
   const dismissAlert = async (id: string) => {
-    const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('id', id);
+    const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user?.id ?? '').eq('id', id);
     if (error) logger.error('Error dismissing alert:', { error: error.message });
     refetch();
   };
 
   const dismissAllAlerts = async () => {
     if (!user) return;
-    const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user.id).eq('type', 'closing_score');
+    const { error } = await supabase.from('alerts').update({ dismissed: true }).eq('user_id', user?.id ?? '').eq('type', 'closing_score');
     if (error) logger.error('Error dismissing all alerts:', { error: error.message });
     refetch();
   };

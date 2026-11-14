@@ -114,8 +114,8 @@ export function CalendarioContent({ currentMonth, selectedDate, followUps, follo
                           onClick={() => onSelectFollowUp(followUp)}>
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-center gap-2">
-                              <div className={cn('p-2 rounded-lg', isOverdue ? 'bg-destructive/10 text-destructive' : 'bg-primary/10 text-primary')}>{interactionTypeIcons[followUp.type] || <MessageSquare className="w-4 h-4" />}</div>
-                              <div><p className="font-medium text-sm">{followUp.title}</p><p className="text-xs text-muted-foreground">{interactionTypeLabels[followUp.type] || followUp.type}</p></div>
+                              <div className={cn('p-2 rounded-lg', isOverdue ? 'bg-destructive/10 text-destructive' : 'bg-primary/10 text-primary')}>{interactionTypeIcons[followUp.type ?? 'other'] || <MessageSquare className="w-4 h-4" />}</div>
+                              <div><p className="font-medium text-sm">{followUp.title}</p><p className="text-xs text-muted-foreground">{interactionTypeLabels[followUp.type ?? 'other'] || followUp.type}</p></div>
                             </div>
                             {isOverdue && <Badge variant="destructive" className="text-xs">Atrasado</Badge>}
                           </div>

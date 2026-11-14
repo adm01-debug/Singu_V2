@@ -169,7 +169,7 @@ export function usePreContactBriefing(): PreContactBriefingData {
 
       if (upcomingInteractions.length === 0) return [];
 
-      const contactIds = [...new Set(upcomingInteractions.map(i => i.contact_id))];
+      const contactIds = [...new Set(upcomingInteractions.map(i => i.contact_id).filter((x): x is string => Boolean(x)))];
       const { data: contactsData, error: contactsError } = await supabase
         .from('contacts').select('*').eq('user_id', user!.id).in('id', contactIds)
         .limit(50);
@@ -198,7 +198,7 @@ export function usePreContactBriefing(): PreContactBriefingData {
       return upcomingInteractions
         .filter(interaction => !dismissedIds.has(interaction.id))
         .map(interaction => {
-          const contact = contactMap.get(interaction.contact_id);
+          const contact = interaction.contact_id ? contactMap.get(interaction.contact_id) : undefined;
           if (!contact) return null;
           const company = contact.company_id ? companyMap.get(contact.company_id) || null : null;
           const contactInteractions = recentInteractions.filter(i => i.contact_id === contact.id);
@@ -224,7 +224,7 @@ export function usePreContactBriefing(): PreContactBriefingData {
           const followUpDate = parseISO(interaction.follow_up_date!);
           const minutesUntil = Math.round((followUpDate.getTime() - now.getTime()) / 60000);
           const lastInteraction = contactInteractions[0];
-          const lastSummary = lastInteraction ? `${format(parseISO(lastInteraction.created_at), 'dd/MM')}: ${lastInteraction.title}` : null;
+          const lastSummary = lastInteraction ? `${format(parseISO(lastInteraction.created_at ?? ''), 'dd/MM')}: ${lastInteraction.title ?? ''}` : null;
 
           return {
             contact, company, interaction, vakProfile, discProfile, emotionalProfile,

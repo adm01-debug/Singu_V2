@@ -284,7 +284,7 @@ export const CompaniesTableView = React.memo(function CompaniesTableView({
                   <ActivityPulse days={lastInteractionMap.get(company.id) ?? null} />
                 </TableCell>
                 <TableCell className="text-xs text-muted-foreground tabular-nums">
-                  {formatDistanceToNow(new Date(company.updated_at), { locale: ptBR, addSuffix: true })}
+                  {formatDistanceToNow(new Date(company.updated_at ?? 0), { locale: ptBR, addSuffix: true })}
                 </TableCell>
               </TableRow>
             );

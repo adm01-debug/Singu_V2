@@ -151,7 +151,7 @@ export function ContactOverviewTab({ contact, company, insights, alerts, interac
         contact={{
           relationship_score: contact.relationship_score,
           relationship_stage: contact.relationship_stage,
-          created_at: contact.created_at
+          created_at: contact.created_at ?? ''
         }} 
       />
 

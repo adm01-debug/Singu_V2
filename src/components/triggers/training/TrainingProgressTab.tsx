@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { DISCProfile, DISC_LABELS } from '@/types';
+import { DISC_LABELS } from '@/types';
 import { SalespersonProfile, TrainingScenario } from '@/data/communicationTrainingData';
 
 interface TrainingProgressTabProps {
@@ -51,7 +51,7 @@ export function TrainingProgressTab({
           Domínio por Perfil
         </h4>
 
-        {(['D', 'I', 'S', 'C'] as DISCProfile[]).map((disc) => {
+        {(['D', 'I', 'S', 'C'] as const).map((disc) => {
           const isCompleted = completedScenarios.includes(`scenario-${disc}`);
           const isSameAsUser = disc === salespersonProfile?.discProfile;
 

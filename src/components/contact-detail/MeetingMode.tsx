@@ -352,7 +352,7 @@ export function MeetingMode({ contact, interactions, open, onClose }: MeetingMod
                             <p className="text-xs text-muted-foreground mt-1 line-clamp-3">{interaction.content}</p>
                           )}
                           <p className="text-[10px] text-muted-foreground mt-2">
-                            {new Date(interaction.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                            {new Date(interaction.created_at ?? 0).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                           </p>
                         </div>
                       ))}

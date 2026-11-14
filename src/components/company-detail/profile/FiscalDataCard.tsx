@@ -9,8 +9,19 @@ function formatCnpj(cnpj: string): string {
   return `${digits.slice(0,2)}.${digits.slice(2,5)}.${digits.slice(5,8)}/${digits.slice(8,12)}-${digits.slice(12)}`;
 }
 
+interface FiscalFields {
+  cnpj?: string | null;
+  razao_social?: string | null;
+  situacao_rf?: string | null;
+  natureza_juridica_desc?: string | null;
+  porte_rf?: string | null;
+  capital_social?: number | null;
+  data_fundacao?: string | null;
+  inscricao_estadual?: string | null;
+}
+
 interface FiscalDataCardProps {
-  data: Record<string, unknown>;
+  data: FiscalFields;
 }
 
 export function FiscalDataCard({ data }: FiscalDataCardProps) {

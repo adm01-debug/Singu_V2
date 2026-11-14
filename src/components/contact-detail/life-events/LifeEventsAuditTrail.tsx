@@ -74,17 +74,17 @@ export function LifeEventsAuditTrail({ contactId }: LifeEventsAuditTrailProps) {
               <div className="absolute left-[-5px] top-0 h-2.5 w-2.5 rounded-full bg-border" />
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <Badge variant="outline" className={`text-[9px] uppercase font-bold px-1.5 h-4 ${changeTypeColors[log.change_type]}`}>
+                  <Badge variant="outline" className={`text-[9px] uppercase font-bold px-1.5 h-4 ${changeTypeColors[log.change_type ?? 'UPDATE']}`}>
                     {log.change_type}
                   </Badge>
                   <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {format(new Date(log.changed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+                    {format(new Date(log.changed_at ?? 0), "dd/MM/yyyy HH:mm", { locale: ptBR })}
                   </span>
                 </div>
                 
                 <p className="text-xs font-medium">
-                  {log.title} <span className="text-muted-foreground font-normal text-[10px]">({eventTypeLabels[log.event_type] || log.event_type})</span>
+                  {log.title} <span className="text-muted-foreground font-normal text-[10px]">({eventTypeLabels[log.event_type ?? 'other'] || log.event_type})</span>
                 </p>
                 
                 {log.reason && (

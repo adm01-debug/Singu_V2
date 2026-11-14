@@ -195,7 +195,7 @@ export function SalespersonProfileSettings() {
             onValueChange={(value) => setProfile({ ...profile, discProfile: value as DISCProfile })}
             className="grid grid-cols-2 gap-3"
           >
-            {(['D', 'I', 'S', 'C'] as DISCProfile[]).map((type) => (
+            {(['D', 'I', 'S', 'C'] as const).map((type) => (
               <Label
                 key={type}
                 className={cn(
@@ -208,8 +208,8 @@ export function SalespersonProfileSettings() {
                 <RadioGroupItem value={type} className="sr-only" />
                 <span className="text-xl font-bold">{type}</span>
                 <div>
-                  <p className="font-medium text-sm">{DISC_LABELS[type].name}</p>
-                  <p className="text-xs text-muted-foreground">{DISC_LABELS[type].description?.slice(0, 40)}...</p>
+                  <p className="font-medium text-sm">{DISC_LABELS[type ?? 'D'].name}</p>
+                  <p className="text-xs text-muted-foreground">{DISC_LABELS[type ?? 'D'].description?.slice(0, 40)}...</p>
                 </div>
               </Label>
             ))}

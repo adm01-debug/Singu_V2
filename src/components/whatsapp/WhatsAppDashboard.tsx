@@ -57,7 +57,7 @@ export function WhatsAppDashboard({ contactId }: Props) {
                      <Badge variant="outline" className="text-[10px] uppercase font-bold">
                        {msg.message_type === 'audio' ? <><FileAudio className="h-3 w-3 mr-1 inline" /> Áudio</> : <><FileText className="h-3 w-3 mr-1 inline" /> Texto</>}
                      </Badge>
-                     <span className="text-[10px] text-muted-foreground">{format(new Date(msg.received_at), 'dd/MM HH:mm')}</span>
+                     <span className="text-[10px] text-muted-foreground">{format(new Date(msg.received_at ?? 0), 'dd/MM HH:mm')}</span>
                    </div>
                    
                    {msg.content && <p className="mb-2 italic text-muted-foreground">"{msg.content}"</p>}
@@ -224,7 +224,7 @@ export function WhatsAppDashboard({ contactId }: Props) {
                       {msg.from_me ? 'Você' : 'Contato'}
                     </span>
                     <span className="text-xs text-muted-foreground">
-                      {format(new Date(msg.created_at), 'dd/MM HH:mm')}
+                      {format(new Date(msg.created_at ?? 0), 'dd/MM HH:mm')}
                     </span>
                   </div>
                   {msg.content && (

@@ -40,7 +40,7 @@ export function useBestTimeToContact(contactId?: string) {
     }> = new Map();
 
     interactions.forEach(interaction => {
-      const date = new Date(interaction.created_at);
+      const date = new Date(interaction.created_at ?? 0);
       const hour = getHours(date);
       const dayOfWeek = getDay(date);
       const key = `${dayOfWeek}-${hour}`;
@@ -176,7 +176,7 @@ export function useBestTimeToContact(contactId?: string) {
     const dayPositive: number[] = new Array(7).fill(0);
 
     interactions.forEach(interaction => {
-      const date = new Date(interaction.created_at);
+      const date = new Date(interaction.created_at ?? 0);
       const hour = getHours(date);
       const day = getDay(date);
       

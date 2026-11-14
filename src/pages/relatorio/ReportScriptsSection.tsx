@@ -94,7 +94,7 @@ export function ReportScriptsSection({ interactions, contactName = "Cliente" }: 
                 <div className="flex justify-between items-start mb-1">
                   <span className="font-medium text-sm">{interaction.type || 'Interação'}</span>
                   <span className="text-xs text-muted-foreground">
-                    {format(new Date(interaction.created_at), "dd/MM/yyyy")}
+                    {format(new Date(interaction.created_at ?? 0), "dd/MM/yyyy")}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-2">{interaction.content}</p>

@@ -56,7 +56,7 @@ export function AdvancedDataExporter({ entityType, className }: AdvancedDataExpo
         content = JSON.stringify(data, null, 2); mimeType = 'application/json'; filename = `${entityType}_${timestamp}.json`;
       } else {
         const headers = selectedColumns.join(',');
-        const rows = data.map(row => selectedColumns.map(col => {
+        const rows = (data as unknown as Record<string, unknown>[]).map(row => selectedColumns.map(col => {
           const value = row[col];
           if (value === null || value === undefined) { return ''; }
           if (Array.isArray(value)) { return `"${value.join('; ')}"`; }

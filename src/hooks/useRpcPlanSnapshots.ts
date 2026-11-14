@@ -21,7 +21,7 @@ export function useRpcPlanSnapshots(rpcName?: string, limit = 10) {
     queryKey: ['rpc-plan-snapshots', rpcName ?? 'all', limit],
     queryFn: async (): Promise<RpcPlanSnapshotRow[]> => {
       const { data, error } = await supabase.rpc('get_rpc_plan_snapshots', {
-        _rpc_name: rpcName ?? null,
+        _rpc_name: rpcName ?? undefined,
         _limit: limit,
       });
       if (error) throw error;

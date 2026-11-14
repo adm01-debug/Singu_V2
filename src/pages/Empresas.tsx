@@ -58,7 +58,7 @@ const Empresas = () => {
     const contactCountMap = new Map<string, number>();
     const lastInteractionMap = new Map<string, number>();
     if (contacts.length > 0) for (const c of contacts) { if (c.company_id) contactCountMap.set(c.company_id, (contactCountMap.get(c.company_id) || 0) + 1); }
-    if (interactions.length > 0) { const now = Date.now(); for (const i of interactions) { if (i.company_id) { const days = Math.floor((now - new Date(i.created_at).getTime()) / (1000 * 60 * 60 * 24)); const current = lastInteractionMap.get(i.company_id); if (current === undefined || days < current) lastInteractionMap.set(i.company_id, days); } } }
+    if (interactions.length > 0) { const now = Date.now(); for (const i of interactions) { if (i.company_id) { const days = Math.floor((now - new Date(i.created_at ?? 0).getTime()) / (1000 * 60 * 60 * 24)); const current = lastInteractionMap.get(i.company_id); if (current === undefined || days < current) lastInteractionMap.set(i.company_id, days); } } }
     return { contactCountMap, lastInteractionMap };
   }, [contacts, interactions]);
 
@@ -251,7 +251,7 @@ const Empresas = () => {
       />}
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden"><CompanyForm onSubmit={handleCreate} onCancel={() => setIsFormOpen(false)} isSubmitting={isSubmitting} /></DialogContent>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden"><CompanyForm onSubmit={async (d) => { await handleCreate(d as Parameters<typeof createCompany>[0]); }} onCancel={() => setIsFormOpen(false)} isSubmitting={isSubmitting} /></DialogContent>
       </Dialog>
       <Dialog open={!!editingCompany} onOpenChange={(open) => !open && setEditingCompany(null)}>
         <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden"><CompanyForm company={editingCompany} onSubmit={handleUpdate} onCancel={() => setEditingCompany(null)} isSubmitting={isSubmitting} /></DialogContent>

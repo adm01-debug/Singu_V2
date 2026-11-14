@@ -13,10 +13,10 @@
    } = useContactSegmentation();
  
   const getMessageRecommendation = (contact: {
-    disc_primary?: string;
-    vak_primary?: string;
-    motivation_primary?: string;
-    relationship_stage?: string;
+    disc_primary?: string | null;
+    vak_primary?: string | null;
+    motivation_primary?: string | null;
+    relationship_stage?: string | null;
   }) => {
     const disc = contact.disc_primary;
     const vak = contact.vak_primary;

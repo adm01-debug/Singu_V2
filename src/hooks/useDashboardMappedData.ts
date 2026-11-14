@@ -37,9 +37,9 @@ export function useDashboardMappedData(
   const interactionsByContact = useMemo(() => {
     const map = new Map<string, DbInteraction[]>();
     for (const i of interactions) {
-      const list = map.get(i.contact_id);
+      const list = map.get(i.contact_id ?? '');
       if (list) list.push(i);
-      else map.set(i.contact_id, [i]);
+      else map.set(i.contact_id ?? '', [i]);
     }
     return map;
   }, [interactions]);
@@ -50,9 +50,9 @@ export function useDashboardMappedData(
       const company = c.company_id ? companyMap.get(c.company_id) : undefined;
       const contactInteractions = interactionsByContact.get(c.id) || [];
       const lastInteraction = contactInteractions.length > 0
-        ? new Date(contactInteractions.reduce((latest, i) =>
-            i.created_at > latest ? i.created_at : latest, contactInteractions[0].created_at
-          ))
+        ? new Date(contactInteractions.reduce<string | null>((latest, i) =>
+            (i.created_at ?? '') > (latest ?? '') ? (i.created_at ?? latest) : (latest ?? i.created_at ?? ''), contactInteractions[0].created_at
+          ) ?? 0)
         : undefined;
 
       return {
@@ -73,8 +73,8 @@ export function useDashboardMappedData(
         avatar: c.avatar_url || undefined,
         interactionCount: contactInteractions.length,
         lastInteraction,
-        createdAt: new Date(c.created_at),
-        updatedAt: new Date(c.updated_at),
+        createdAt: new Date(c.created_at ?? 0),
+        updatedAt: new Date(c.updated_at ?? 0),
         tags: c.tags || [],
         notes: c.notes || '',
         hobbies: c.hobbies || [],
@@ -121,7 +121,7 @@ export function useDashboardMappedData(
       duration: i.duration || undefined,
       responseTime: i.response_time || undefined,
       attachments: i.attachments || [],
-      createdAt: new Date(i.created_at),
+      createdAt: new Date(i.created_at ?? 0),
     } as Interaction));
   }, [interactions, enabled]);
 

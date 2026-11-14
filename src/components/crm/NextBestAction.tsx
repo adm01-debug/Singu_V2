@@ -149,7 +149,7 @@ export function NextBestAction({ contactId }: Props) {
           user_id: user.id,
           title: `Concluído: ${suggestion.title}`,
           content: `Ação sugerida pela IA concluída.\nFeedback: ${feedback}\nScript utilizado: ${script}`,
-          type: ['whatsapp', 'call', 'email', 'meeting', 'social'].includes(suggestion.action_type) ? suggestion.action_type : 'note',
+          type: ['whatsapp', 'call', 'email', 'meeting', 'social'].includes(suggestion.action_type ?? '') ? suggestion.action_type : 'note',
           channel: suggestion.action_type || 'other',
           direction: 'outbound',
           sentiment: 'positive'

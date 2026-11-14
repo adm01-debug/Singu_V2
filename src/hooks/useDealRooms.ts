@@ -234,6 +234,7 @@ export function useUpsertMilestone(roomId: string) {
       
       const payload: MilestoneInsert = {
         ...m,
+        owner_side: m.owner_side ?? undefined,
         room_id: roomId,
         user_id: user.id,
         title: m.title ?? "Sem título",
@@ -286,6 +287,11 @@ export function useUpsertStakeholder(roomId: string) {
       
       const payload: StakeholderInsert = {
         ...s,
+        contact_id: s.contact_id ?? undefined,
+        email: s.email ?? undefined,
+        role_title: s.role_title ?? undefined,
+        engagement_score: s.engagement_score ?? undefined,
+        influence: s.influence ?? undefined,
         room_id: roomId,
         user_id: user.id,
         name: s.name ?? "Sem nome",
@@ -485,12 +491,12 @@ export async function recordBuyerView(token: string, label?: string) {
 }
 
 export async function buyerToggleMilestone(token: string, milestone_id: string, done: boolean, label?: string) {
-  const { error } = await supabase.rpc("buyer_toggle_milestone", { _token: token, _milestone_id: milestone_id, _done: done, _label: label ?? null });
+  const { error } = await supabase.rpc("buyer_toggle_milestone", { _token: token, _milestone_id: milestone_id, _done: done, _label: label ?? undefined });
   if (error) throw error;
 }
 
 export async function buyerAddComment(token: string, body: string, label?: string) {
-  const { error } = await supabase.rpc("buyer_add_comment", { _token: token, _body: body, _label: label ?? null });
+  const { error } = await supabase.rpc("buyer_add_comment", { _token: token, _body: body, _label: label ?? undefined });
   if (error) throw error;
 }
 

@@ -185,7 +185,7 @@ export function ClosingScoreAlertsList({
                     </div>
 
                     <p className="text-xs text-muted-foreground mt-1">
-                      {formatDistanceToNow(new Date(alert.created_at), { 
+                      {formatDistanceToNow(new Date(alert.created_at ?? 0), { 
                         addSuffix: true, 
                         locale: ptBR 
                       })}

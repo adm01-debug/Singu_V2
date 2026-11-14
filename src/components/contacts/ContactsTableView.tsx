@@ -183,7 +183,7 @@ export const ContactsTableView = React.memo(function ContactsTableView({
                   })()}
                 </TableCell>
                 <TableCell className="text-xs text-muted-foreground tabular-nums">
-                  {formatDistanceToNow(new Date(contact.updated_at), { locale: ptBR, addSuffix: true })}
+                  {formatDistanceToNow(new Date(contact.updated_at ?? 0), { locale: ptBR, addSuffix: true })}
                 </TableCell>
 
               </TableRow>

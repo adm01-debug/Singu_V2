@@ -79,24 +79,24 @@ export function usePerformanceMetrics(): PerformanceMetrics {
     // Interactions metrics
     const totalInteractions = interactions.length;
     const interactionsToday = interactions.filter(i => i.created_at?.slice(0, 10) === todayStr).length;
-    const interactionsThisWeek = interactions.filter(i => new Date(i.created_at) >= startOfWeek).length;
-    const interactionsThisMonth = interactions.filter(i => new Date(i.created_at) >= startOfMonth).length;
+    const interactionsThisWeek = interactions.filter(i => new Date(i.created_at ?? 0) >= startOfWeek).length;
+    const interactionsThisMonth = interactions.filter(i => new Date(i.created_at ?? 0) >= startOfMonth).length;
     const lastWeekInteractions = interactions.filter(i => {
-      const d = new Date(i.created_at);
+      const d = new Date(i.created_at ?? 0);
       return d >= startOfLastWeek && d < startOfWeek;
     }).length;
 
     // Active days (unique days with interactions in last 30 days)
     const thirtyDaysAgo = new Date(now);
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    const recentInteractions = interactions.filter(i => new Date(i.created_at) >= thirtyDaysAgo);
+    const recentInteractions = interactions.filter(i => new Date(i.created_at ?? 0) >= thirtyDaysAgo);
     const uniqueDays = new Set(recentInteractions.map(i => i.created_at?.slice(0, 10)));
     const activeDays = uniqueDays.size;
     const avgInteractionsPerDay = activeDays > 0 ? Math.round((recentInteractions.length / 30) * 10) / 10 : 0;
 
     // Contacts & Companies this month
-    const contactsThisMonth = contacts.filter(c => new Date(c.created_at) >= startOfMonth).length;
-    const companiesThisMonth = companies.filter(c => new Date(c.created_at) >= startOfMonth).length;
+    const contactsThisMonth = contacts.filter(c => new Date(c.created_at ?? 0) >= startOfMonth).length;
+    const companiesThisMonth = companies.filter(c => new Date(c.created_at ?? 0) >= startOfMonth).length;
 
     // Follow-ups
     const withFollowUp = interactions.filter(i => i.follow_up_required);

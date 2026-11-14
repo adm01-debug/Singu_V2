@@ -247,14 +247,14 @@ const ContatoDetalhe = () => {
                   />
                   <SocialMediaIntelligenceCard 
                     contactId={contact.id} 
-                    linkedin={contact.linkedin}
-                    instagram={contact.instagram}
-                    twitter={contact.twitter}
+                    linkedin={contact.linkedin ?? ''}
+                    instagram={contact.instagram ?? ''}
+                    twitter={contact.twitter ?? ''}
                   />
                 </div>
                  <RelationshipTimeline
                    interactions={interactions}
-                   contact={contact}
+                   contact={contact as unknown as { relationship_score?: number | null; relationship_stage?: string | null; created_at: string }}
                  />
                 <BehavioralInsightsCard contactId={contact.id} />
                 <Suspense fallback={<Skeleton className="h-48 rounded-lg" />}>

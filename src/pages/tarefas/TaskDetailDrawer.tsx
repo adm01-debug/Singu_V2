@@ -122,6 +122,8 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
         taskId: task.id,
         updates: {
           ...values,
+          contact_id: values.contact_id ?? undefined,
+          company_id: values.company_id ?? undefined,
           due_date: values.due_date?.toISOString(),
         },
       });

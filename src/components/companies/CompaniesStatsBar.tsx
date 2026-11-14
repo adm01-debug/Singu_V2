@@ -22,7 +22,7 @@ export function CompaniesStatsBar({ companies, contactCountMap, className, total
       ? Array.from(contactCountMap.values()).reduce((sum, v) => sum + v, 0)
       : 0;
     const needsAttention = companies.filter(c => {
-      const daysSince = Math.floor((Date.now() - new Date(c.updated_at).getTime()) / (1000 * 60 * 60 * 24));
+      const daysSince = Math.floor((Date.now() - new Date(c.updated_at ?? 0).getTime()) / (1000 * 60 * 60 * 24));
       return daysSince > 30;
     }).length;
     const carriers = companies.filter(c => c.is_carrier).length;

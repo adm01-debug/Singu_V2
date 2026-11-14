@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import type { RFMHistory } from '@/types/rfm';
+import type { RFMHistory, RFMContactSummary } from '@/types/rfm';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -142,14 +142,7 @@ export function PriorityBadge({ priority }: { priority: string }) {
   return <Badge className={`${cfg.color} border-0`}>{cfg.label}</Badge>;
 }
 
-interface ContactRFMSummary {
-  contactId: string;
-  contactName: string;
-  avatarUrl?: string;
-  rfmAnalysis: RFMAnalysis;
-}
-
-export function ContactRFMCard({ summary }: { summary: ContactRFMSummary }) {
+export function ContactRFMCard({ summary }: { summary: RFMContactSummary }) {
   const rfm = summary.rfmAnalysis;
   if (!rfm) return null;
   const segment = RFM_SEGMENTS[rfm.segment];
@@ -176,7 +169,7 @@ export function ContactRFMCard({ summary }: { summary: ContactRFMSummary }) {
             </div>
             <div className="flex gap-2">
               {(['R', 'F', 'M'] as const).map((label, i) => {
-                const key = ['recencyScore', 'frequencyScore', 'monetaryScore'][i];
+                const key = ['recencyScore', 'frequencyScore', 'monetaryScore'][i] as keyof RFMAnalysis;
                 const tooltip = ['Recência', 'Frequência', 'Monetário'][i];
                 return (
                   <TooltipProvider key={label}>
@@ -184,7 +177,7 @@ export function ContactRFMCard({ summary }: { summary: ContactRFMSummary }) {
                       <TooltipTrigger>
                         <div className="text-center">
                           <div className="text-xs text-muted-foreground">{label}</div>
-                          <div className="font-bold">{rfm[key]}</div>
+                          <div className="font-bold">{String(rfm[key])}</div>
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>{tooltip}</TooltipContent>

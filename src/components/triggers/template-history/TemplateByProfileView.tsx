@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
-import { DISCProfile } from '@/types';
 import { MENTAL_TRIGGERS } from '@/types/triggers';
 import { TemplateProfileMetrics, DISC_CONFIG } from './types';
 
@@ -66,9 +65,9 @@ export function TemplateByProfileView({ templateMetrics }: { templateMetrics: Te
                       Performance por Perfil DISC
                     </h5>
                     <div className="grid grid-cols-2 gap-3">
-                      {(['D', 'I', 'S', 'C'] as DISCProfile[]).map((profile) => {
+                      {(['D', 'I', 'S', 'C'] as const).map((profile) => {
                         const data = tm.byProfile[profile];
-                        const config = DISC_CONFIG[profile];
+                        const config = DISC_CONFIG[profile ?? 'D'];
                         const isBest = tm.bestProfile === profile;
                         const isWorst = tm.worstProfile === profile;
 

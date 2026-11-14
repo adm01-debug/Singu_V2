@@ -92,7 +92,7 @@ import { DecisionCriteriaElite } from '@/components/crm/commercial/DecisionCrite
        <div className="grid gap-4 md:grid-cols-2">
          <EmotionalIntelligencePanel
            contact={{ id: contactId, firstName: contactName || 'Contato' } as unknown as Contact}
-           interactions={(interactions ?? []).map(i => ({ id: i.id, content: i.content ?? undefined, transcription: i.transcription ?? undefined, createdAt: i.created_at }))}
+           interactions={(interactions ?? []).map(i => ({ id: i.id, content: i.content ?? undefined, transcription: i.transcription ?? undefined, createdAt: i.created_at ?? undefined }))}
          />
       {/* Hidden Objections */}
       <Card className={cn(unresolvedObjections.length > 0 && 'border-accent/30 dark:border-accent/30')}>

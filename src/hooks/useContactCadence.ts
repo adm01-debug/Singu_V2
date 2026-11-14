@@ -81,9 +81,9 @@ export function useContactCadence() {
 
       // Fetch all companies in a single .in() query instead of N individual requests
       const { data: companiesData } = companyIds.length > 0
-        ? await supabase.from('companies').select('id, name').in('id', companyIds).eq('user_id', user.id).limit(500)
+        ? await supabase.from('companies').select('id, nome_crm').in('id', companyIds).eq('user_id', user?.id ?? '').limit(500)
         : { data: [] };
-      const companyMap = new Map((companiesData || []).map(c => [c.id, { name: c.name }]));
+      const companyMap = new Map((companiesData || []).map(c => [c.id, { nome_crm: c.nome_crm }]));
 
       const cadencesWithCompanies: ContactCadence[] = baseCadences.map((cadence) => ({
         ...cadence,

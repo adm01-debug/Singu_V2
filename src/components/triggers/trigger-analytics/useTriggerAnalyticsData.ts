@@ -51,7 +51,7 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
         if (cancelled) return;
         setUsageData((usageHistory || []).map((usage) => ({
           id: usage.id,
-          trigger_type: usage.trigger_type,
+          trigger_type: usage.trigger_type ?? '',
           result: usage.result || 'pending',
           effectiveness_rating: usage.effectiveness_rating,
           used_at: usage.used_at,
@@ -78,20 +78,20 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
       ? ratedUsages.reduce((sum, u) => sum + (u.effectiveness_rating || 0), 0) / ratedUsages.length
       : 0;
 
-    const byDISC: Record<DISCProfile, { discProfile: DISCProfile; totalUsages: number; successRate: number; avgRating: number; topTriggers: Array<{ type: TriggerType; count: number; successRate: number; avgRating: number }> }> = {
+    const byDISC: Record<Exclude<DISCProfile, null>, { discProfile: DISCProfile; totalUsages: number; successRate: number; avgRating: number; topTriggers: Array<{ type: TriggerType; count: number; successRate: number; avgRating: number }> }> = {
       D: { discProfile: 'D', totalUsages: 0, successRate: 0, avgRating: 0, topTriggers: [] },
       I: { discProfile: 'I', totalUsages: 0, successRate: 0, avgRating: 0, topTriggers: [] },
       S: { discProfile: 'S', totalUsages: 0, successRate: 0, avgRating: 0, topTriggers: [] },
       C: { discProfile: 'C', totalUsages: 0, successRate: 0, avgRating: 0, topTriggers: [] },
     };
 
-    const discGroups: Record<DISCProfile, TriggerUsageWithContact[]> = { D: [], I: [], S: [], C: [] };
+    const discGroups: Record<Exclude<DISCProfile, null>, TriggerUsageWithContact[]> = { D: [], I: [], S: [], C: [] };
     usageData.forEach((u) => {
       if (u.contact_disc && discGroups[u.contact_disc]) discGroups[u.contact_disc].push(u);
     });
 
     Object.entries(discGroups).forEach(([disc, usages]) => {
-      const d = disc as DISCProfile;
+      const d = disc as Exclude<DISCProfile, null>;
       const completed = usages.filter(u => u.result !== 'pending');
       const success = usages.filter(u => u.result === 'success').length;
       const rated = usages.filter(u => u.effectiveness_rating !== null);
@@ -153,7 +153,7 @@ export function useTriggerAnalyticsData(periodFilter: '30d' | '90d' | '365d' | '
         ? (rated.reduce((sum, u) => sum + (u.effectiveness_rating || 0), 0) / rated.length) * 20
         : 0;
 
-      (['D', 'I', 'S', 'C'] as DISCProfile[]).forEach((disc) => {
+      (['D', 'I', 'S', 'C'] as const).forEach((disc) => {
 
         const discUsages = usages.filter(u => u.contact_disc === disc);
 

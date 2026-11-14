@@ -166,7 +166,7 @@ export function useTriggerHistory(contactId?: string) {
           template_id: input.template_id || null,
           template_title: input.template_title || null,
           scenario: input.scenario || null,
-          channel: input.channel || null,
+          channel: input.channel || '',
           context: input.context || null,
           result: input.result || 'pending',
           notes: input.notes || null,

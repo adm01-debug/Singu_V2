@@ -43,7 +43,7 @@ export function ConsentAuditCard({ contactId }: { contactId: string }) {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 text-muted-foreground font-medium">
                     <Calendar className="h-3 w-3" />
-                    {format(new Date(log.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+                    {format(new Date(log.created_at ?? 0), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
                   </div>
                   <Badge variant="outline" className="text-[10px] capitalize">
                     {log.consent_type || 'Geral'}

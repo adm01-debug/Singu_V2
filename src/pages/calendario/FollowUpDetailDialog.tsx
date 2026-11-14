@@ -27,14 +27,14 @@ export function FollowUpDetailDialog({ followUp, onClose, onMarkCompleted }: Fol
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <span>{interactionTypeIconsMap[followUp.type] || '💬'}</span>
+            <span>{interactionTypeIconsMap[followUp.type ?? 'other'] || '💬'}</span>
             {followUp.title}
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <Badge variant="outline">{interactionTypeLabels[followUp.type] || followUp.type}</Badge>
+            <Badge variant="outline">{interactionTypeLabels[followUp.type ?? 'other'] || followUp.type}</Badge>
             {isOverdue && <Badge variant="destructive">Atrasado</Badge>}
           </div>
 

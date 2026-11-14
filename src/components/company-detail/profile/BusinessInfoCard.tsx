@@ -11,7 +11,7 @@ interface BusinessInfoCardProps {
 }
 
 export function BusinessInfoCard({ company }: BusinessInfoCardProps) {
-  const c = company as Record<string, unknown>;
+  const c = company as Record<string, string | number | boolean | null | undefined>;
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
