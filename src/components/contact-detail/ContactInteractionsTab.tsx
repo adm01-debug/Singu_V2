@@ -142,7 +142,7 @@ export function ContactInteractionsTab({ interactions, contact, companyId, onInt
       setShowForm(false);
       onInteractionAdded?.();
     } catch (err) {
-      logger.error(err);
+      logger.error(err instanceof Error ? err.message : String(err));
       toast.error('Erro ao registrar interação');
     } finally {
       setIsSubmitting(false);

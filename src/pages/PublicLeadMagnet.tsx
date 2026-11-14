@@ -42,7 +42,6 @@ export default function PublicLeadMagnet() {
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!slug) return;
-    const atIdx = email.indexOf('@');
     if (atIdx < 1 || atIdx === email.length - 1 || !email.slice(atIdx + 1).includes('.')) return;
     setSubmitting(true);
     try {

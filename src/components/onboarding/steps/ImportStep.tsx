@@ -108,7 +108,7 @@ const ImportStep = ({ onImport, onNext, onBack }: ImportStepProps) => {
           .from('contacts')
           .insert(
             batch.map(contact => ({
-              user_id: user?.id,
+              user_id: user!.id,
               first_name: contact.first_name,
               last_name: contact.last_name,
               email: contact.email || null,

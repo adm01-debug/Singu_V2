@@ -121,9 +121,9 @@ export function TaskDetailDrawer({ task, open, onOpenChange }: Props) {
       await updateTask.mutateAsync({
         taskId: task.id,
         updates: {
+          ...values,
           contact_id: values.contact_id ?? undefined,
           company_id: values.company_id ?? undefined,
-          ...values,
           due_date: values.due_date?.toISOString(),
         },
       });

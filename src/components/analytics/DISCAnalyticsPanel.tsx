@@ -54,7 +54,7 @@ const DISCAnalyticsPanel = () => {
       }
       const mappedContacts: ContactWithDISC[] = (contactsData || []).map(c => {
         const behavior = getContactBehavior(c);
-        return { id: c.id, firstName: c.first_name, lastName: c.last_name, avatar: c.avatar_url || undefined, discProfile: behavior?.discProfile as DISCProfile, discConfidence: behavior?.discConfidence, relationshipScore: c.relationship_score || 0, companyName: c.company_id ? companyNames.get(c.company_id) : undefined };
+        return { id: c.id, firstName: c.first_name ?? '', lastName: c.last_name ?? '', avatar: c.avatar_url || undefined, discProfile: behavior?.discProfile as DISCProfile, discConfidence: behavior?.discConfidence, relationshipScore: c.relationship_score || 0, companyName: c.company_id ? companyNames.get(c.company_id) : undefined };
       }).filter(c => c.discProfile);
       setContacts(mappedContacts);
 

@@ -176,7 +176,7 @@ export function ContactRFMCard({ summary }: { summary: ContactRFMSummary }) {
             </div>
             <div className="flex gap-2">
               {(['R', 'F', 'M'] as const).map((label, i) => {
-                const key = ['recencyScore', 'frequencyScore', 'monetaryScore'][i];
+                const key = ['recencyScore', 'frequencyScore', 'monetaryScore'][i] as keyof RFMAnalysis;
                 const tooltip = ['Recência', 'Frequência', 'Monetário'][i];
                 return (
                   <TooltipProvider key={label}>

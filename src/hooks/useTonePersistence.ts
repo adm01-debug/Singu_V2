@@ -17,11 +17,13 @@ export function useTonePersistence(companyId?: string) {
     queryFn: async () => {
       if (!user) return null;
 
-      const { data, error } = await supabase
+      let query = supabase
         .from('ai_tone_preferences')
         .select('preferred_tone')
-        .eq('user_id', user.id)
-        .eq('company_id', companyId ?? undefined)
+        .eq('user_id', user.id);
+      if (companyId) query = query.eq('company_id', companyId);
+
+      const { data, error } = await query
         .maybeSingle();
 
       if (error) {

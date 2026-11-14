@@ -134,7 +134,7 @@ export function useEmotionalStates() {
         return 0;
       });
 
-      const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+      const avgScore = scores.reduce((a: number, b) => a + b, 0) / scores.length;
       if (avgScore > 0.3) trend = 'improving';
       else if (avgScore < -0.3) trend = 'declining';
     }

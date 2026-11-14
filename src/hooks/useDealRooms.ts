@@ -291,6 +291,7 @@ export function useUpsertStakeholder(roomId: string) {
         email: s.email ?? undefined,
         role_title: s.role_title ?? undefined,
         engagement_score: s.engagement_score ?? undefined,
+        influence: s.influence ?? undefined,
         room_id: roomId,
         user_id: user.id,
         name: s.name ?? "Sem nome",

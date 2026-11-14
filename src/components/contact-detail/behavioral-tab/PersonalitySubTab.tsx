@@ -131,26 +131,29 @@ export function PersonalitySubTab({ contactId }: Props) {
             
             <div className="space-y-4 pt-2">
               <TooltipProvider>
-                {mbtiDimensions.map((dim) => (
+                {mbtiDimensions.map((dim) => {
+                  const value = Number(formData[dim.key] ?? 50);
+                  return (
                   <div key={dim.key} className="space-y-2">
                     <div className="flex justify-between items-center text-[10px] font-bold">
-                      <span className={formData[dim.key] < 50 ? "text-accent" : "text-muted-foreground"}>{dim.left}</span>
+                      <span className={value < 50 ? "text-accent" : "text-muted-foreground"}>{dim.left}</span>
                       <Tooltip>
                         <TooltipTrigger asChild><Info className="h-3 w-3 text-muted-foreground/30 cursor-help" /></TooltipTrigger>
                         <TooltipContent><p className="text-[10px]">{dim.desc}</p></TooltipContent>
                       </Tooltip>
-                      <span className={formData[dim.key] > 50 ? "text-accent" : "text-muted-foreground"}>{dim.right}</span>
+                      <span className={value > 50 ? "text-accent" : "text-muted-foreground"}>{dim.right}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Input 
                         type="range" min="0" max="100" 
-                        value={formData[dim.key] || 50}
+                        value={value}
                         onChange={(e) => setFormData({ ...formData, [dim.key]: parseInt(e.target.value) })}
                         className="h-4 flex-1 accent-accent"
                       />
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </TooltipProvider>
             </div>
           </CardContent>
@@ -201,7 +204,7 @@ export function PersonalitySubTab({ contactId }: Props) {
               <Label className="text-[10px] uppercase font-bold text-muted-foreground block mb-2">Scores por Eneatipo</Label>
               <div className="grid grid-cols-3 gap-x-4 gap-y-3">
                 {enneagramTypes.map((t) => {
-                  const score = formData.enneagram_scores?.[t.toString()] || 0;
+                  const score = formData.enneagram_scores?.[t.toString()] ?? 0;
                   return (
                     <div key={t} className="space-y-1">
                       <div className="flex justify-between items-center px-1">
