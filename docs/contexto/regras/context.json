@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "8a4e6f2fe9bfca4a82bd7c412bae6308bd71c391",
+  "sha": "4e67de36cd680c9a44c78f8180ca60bf83d3b00a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 05:04 UTC",
+  "generated_at": "2026-11-14 05:44 UTC",
   "files_total": 3344,
   "code_files": 2873,
   "code_lines": 409809
@@ -232814,10 +232814,26 @@
   }
  },
  "git": {
-  "sha": "8a4e6f2fe9bfca4a82bd7c412bae6308bd71c391",
+  "sha": "4e67de36cd680c9a44c78f8180ca60bf83d3b00a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "4e67de3",
+    "date": "2026-11-14",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness pos-merge 226 (#227)",
+    "files": []
+   },
+   {
+    "sha": "8d6aaa9",
+    "date": "2026-11-14",
+    "author": "Copilot App",
+    "subject": "chore(docs): bump prod-readiness pos-merge 226",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "8a4e6f2",
     "date": "2026-11-14",
@@ -233221,30 +233237,12 @@
      "inventario/estado/edges.json",
      "inventario/estado/tabelas-uso.json"
     ]
-   },
-   {
-    "sha": "ddd1f61",
-    "date": "2026-11-12",
-    "author": "adm01-debug",
-    "subject": "fix: botões gerar relatório e e-mail de teste do resumo semanal voltam a funcionar (#203)",
-    "files": [
-     "supabase/functions/weekly-digest/index.ts"
-    ]
-   },
-   {
-    "sha": "a817b7e",
-    "date": "2026-11-12",
-    "author": "adm01-debug",
-    "subject": "fix(push): alinha chave VAPID publica do front com o par dos secrets (#199)",
-    "files": [
-     "src/lib/pushNotifications.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    11
+    12
    ],
    [
     "inventario/estado/banco.json",

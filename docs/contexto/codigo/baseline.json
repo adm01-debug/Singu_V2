@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "8a4e6f2fe9bfca4a82bd7c412bae6308bd71c391",
+  "commit": "4e67de36cd680c9a44c78f8180ca60bf83d3b00a",
   "branch": "main",
-  "data_commit": "2026-11-14T01:36:13-03:00",
+  "data_commit": "2026-11-14T02:34:30-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "4e67de36",
+    "data": "2026-11-14",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 226 (#227)"
+   },
+   {
+    "sha": "8d6aaa93",
+    "data": "2026-11-14",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 226"
+   },
    {
     "sha": "8a4e6f2f",
     "data": "2026-11-14",
@@ -121,16 +131,6 @@
     "sha": "1e20172b",
     "data": "2026-11-12",
     "assunto": "chore: inventario do estado real [auto] (#205)"
-   },
-   {
-    "sha": "51a85ab6",
-    "data": "2026-11-12",
-    "assunto": "fix(whatsapp): vincula eventos ao proprietário da instância (#151)"
-   },
-   {
-    "sha": "3e49b844",
-    "data": "2026-11-12",
-    "assunto": "fix(cache): preserva carga inicial e revalida relações da ficha (#147)"
    }
   ],
   "arquivos_mudados_7d": 632,
@@ -164,6 +164,10 @@
     "mudancas": 14
    },
    {
+    "pasta": "docs/prod-readiness.md",
+    "mudancas": 12
+   },
+   {
     "pasta": "scripts/migration/ddl",
     "mudancas": 12
    },
@@ -177,10 +181,6 @@
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 11
-   },
-   {
-    "pasta": "docs/prod-readiness.md",
     "mudancas": 11
    },
    {
@@ -214,16 +214,16 @@
     "mudancas": 15
    },
    {
+    "arquivo": "docs/prod-readiness.md",
+    "mudancas": 12
+   },
+   {
     "arquivo": "docs/qa/security-definer-audit.md",
     "mudancas": 12
    },
    {
     "arquivo": "package-lock.json",
     "mudancas": 12
-   },
-   {
-    "arquivo": "docs/prod-readiness.md",
-    "mudancas": 11
    },
    {
     "arquivo": "tests/rls/security_definer_hardening.sql",
@@ -301,19 +301,19 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 72
+    "commits": 73
    },
    {
     "autor": "devin-ai-integration[bot]",
     "commits": 21
    },
    {
-    "autor": "dependabot[bot]",
+    "autor": "Copilot App",
     "commits": 4
    },
    {
-    "autor": "Copilot App",
-    "commits": 3
+    "autor": "dependabot[bot]",
+    "commits": 4
    },
    {
     "autor": "github-actions[bot]",

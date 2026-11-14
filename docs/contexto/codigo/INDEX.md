@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `8a4e6f2fe9bfca4a82bd7c412bae6308bd71c391` (2026-11-14T01:36:13-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `4e67de36cd680c9a44c78f8180ca60bf83d3b00a` (2026-11-14T02:34:30-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -433,7 +433,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21147 nós · 35841 arestas · 2097 comunidades · grafo do commit `8a4e6f2f`
+- 21147 nós · 35841 arestas · 2097 comunidades · grafo do commit `4e67de36`
 - comunidades maiores: ref_components (328), _shared/auth.ts (308), ref_lib (278), ref_types (259), 02_tables.sql (259), useAuth (249), framer-motion (240), 📖 Dicionário de Dados — SINGU CRM (227), ref_hooks (220), react (211), react-router-dom (207), lucide-react (206)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -443,9 +443,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - .github/workflows/ci.yml (19)
 - package.json (17)
 - supabase/functions/external-data/index.ts (15)
+- docs/prod-readiness.md (12)
 - docs/qa/security-definer-audit.md (12)
 - package-lock.json (12)
-- docs/prod-readiness.md (11)
 - tests/rls/security_definer_hardening.sql (11)
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
@@ -564,12 +564,14 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/er-diagram.md` — 📊 Diagrama Entidade-Relacionamento (ER) (8 linhas)
 - `docs/postmortem-example.md` — Post-Mortem — Indisponibilidade parcial do salvamento de contatos (external-data) (99 linhas)
 - `docs/postmortem-template.md` — Post-Mortem — {Título do Incidente} (96 linhas)
-- `docs/prod-readiness.md` — Prod Readiness ? Singu_V2 (324 linhas)
+- `docs/prod-readiness.md` — Prod Readiness ? Singu_V2 (325 linhas)
 - `docs/ux_improvement_strategy.md` (73 linhas)
 - subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (5), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/ci (1), docs/perf (1)
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-14 `4e67de36` chore(docs): bump prod-readiness pos-merge 226 (#227)
+- 2026-11-14 `8d6aaa93` chore(docs): bump prod-readiness pos-merge 226
 - 2026-11-14 `8a4e6f2f` chore(docs): bump prod-readiness pos-merge 225 (#226)
 - 2026-11-14 `8bc74893` chore(docs): bump prod-readiness pos-merge 225
 - 2026-11-14 `4d004ceb` chore(docs): bump prod-readiness pos-merge 224 (#225)
@@ -583,8 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-13 `f8312ef2` chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)
 - 2026-11-13 `a8cca0e2` fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)
 - 2026-11-13 `b7233bb9` chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)
-- 2026-11-13 `5c7e2f39` docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)
-- 2026-11-13 `be23f3a8` chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
