@@ -2,135 +2,135 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "4e67de36cd680c9a44c78f8180ca60bf83d3b00a",
+  "commit": "2f709284f25d38f924f5fcca124200176d6552dc",
   "branch": "main",
-  "data_commit": "2026-11-14T02:34:30-03:00",
+  "data_commit": "2026-11-14T03:20:19-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
    {
-    "sha": "4e67de36",
+    "sha": "2f70928",
+    "data": "2026-11-14",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 227 (final) (#228)"
+   },
+   {
+    "sha": "4e67de3",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 226 (#227)"
    },
    {
-    "sha": "8d6aaa93",
+    "sha": "8d6aaa9",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 226"
    },
    {
-    "sha": "8a4e6f2f",
+    "sha": "8a4e6f2",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 225 (#226)"
    },
    {
-    "sha": "8bc74893",
+    "sha": "8bc7489",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 225"
    },
    {
-    "sha": "4d004ceb",
+    "sha": "4d004ce",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 224 (#225)"
    },
    {
-    "sha": "1864cd1b",
+    "sha": "1864cd1",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 224"
    },
    {
-    "sha": "48a9a50c",
+    "sha": "48a9a50",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 223 (#224)"
    },
    {
-    "sha": "82deeda6",
+    "sha": "82deeda",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness pos-merge 223"
    },
    {
-    "sha": "e0851f2d",
+    "sha": "e0851f2",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 222 (#223)"
    },
    {
-    "sha": "31ec9931",
+    "sha": "31ec993",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 221 (#222)"
    },
    {
-    "sha": "783135af",
+    "sha": "783135a",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 220 (#221)"
    },
    {
-    "sha": "63673dcd",
+    "sha": "63673dc",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 219 (#220)"
    },
    {
-    "sha": "f8312ef2",
+    "sha": "f8312ef",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)"
    },
    {
-    "sha": "a8cca0e2",
+    "sha": "a8cca0e",
     "data": "2026-11-13",
     "assunto": "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)"
    },
    {
-    "sha": "b7233bb9",
+    "sha": "b7233bb",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)"
    },
    {
-    "sha": "5c7e2f39",
+    "sha": "5c7e2f3",
     "data": "2026-11-13",
     "assunto": "docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)"
    },
    {
-    "sha": "be23f3a8",
+    "sha": "be23f3a",
     "data": "2026-11-13",
     "assunto": "chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)"
    },
    {
-    "sha": "6e9097a3",
+    "sha": "6e9097a",
     "data": "2026-11-13",
     "assunto": "fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)"
    },
    {
-    "sha": "3a76dceb",
+    "sha": "3a76dce",
     "data": "2026-11-13",
     "assunto": "chore: inventario do estado real [auto] (#212)"
    },
    {
-    "sha": "0a83cb78",
+    "sha": "0a83cb7",
     "data": "2026-11-13",
     "assunto": "fix(ci): pat do dono abre o pr do inventario semanal (#209)"
    },
    {
-    "sha": "7aa30140",
+    "sha": "7aa3014",
     "data": "2026-11-12",
     "assunto": "chore: inventario do estado real [auto] (#210)"
    },
    {
-    "sha": "6a57e029",
+    "sha": "6a57e02",
     "data": "2026-11-12",
     "assunto": "chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)"
    },
    {
-    "sha": "0adf3118",
+    "sha": "0adf311",
     "data": "2026-11-12",
     "assunto": "docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)"
    },
    {
-    "sha": "ba89bc04",
+    "sha": "ba89bc0",
     "data": "2026-11-12",
     "assunto": "fix(webhook): aceita timestamps textuais do Evolution e preserva época zero (#206)"
-   },
-   {
-    "sha": "1e20172b",
-    "data": "2026-11-12",
-    "assunto": "chore: inventario do estado real [auto] (#205)"
    }
   ],
   "arquivos_mudados_7d": 632,
@@ -165,7 +165,7 @@
    },
    {
     "pasta": "docs/prod-readiness.md",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "pasta": "scripts/migration/ddl",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": "docs/prod-readiness.md",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "docs/qa/security-definer-audit.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 73
+    "commits": 74
    },
    {
     "autor": "devin-ai-integration[bot]",

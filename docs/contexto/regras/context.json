@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "4e67de36cd680c9a44c78f8180ca60bf83d3b00a",
+  "sha": "2f709284f25d38f924f5fcca124200176d6552dc",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 05:44 UTC",
+  "generated_at": "2026-11-14 06:37 UTC",
   "files_total": 3344,
   "code_files": 2873,
   "code_lines": 409809
@@ -232814,10 +232814,19 @@
   }
  },
  "git": {
-  "sha": "4e67de36cd680c9a44c78f8180ca60bf83d3b00a",
+  "sha": "2f709284f25d38f924f5fcca124200176d6552dc",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "2f70928",
+    "date": "2026-11-14",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness pos-merge 227 (final) (#228)",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "4e67de3",
     "date": "2026-11-14",
@@ -233225,36 +233234,24 @@
      "src/components/analytics/BehaviorAlertsPanel.tsx",
      "src/components/analytics/BestTimeToContactPanel.tsx"
     ]
-   },
-   {
-    "sha": "a28f210",
-    "date": "2026-11-12",
-    "author": "adm01-debug",
-    "subject": "chore: inventario do estado real [auto] (#204)",
-    "files": [
-     "inventario/estado/banco.json",
-     "inventario/estado/edge-tabela.json",
-     "inventario/estado/edges.json",
-     "inventario/estado/tabelas-uso.json"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    12
+    13
    ],
    [
     "inventario/estado/banco.json",
-    4
+    3
    ],
    [
     "inventario/estado/edges.json",
-    4
+    3
    ],
    [
     "inventario/estado/tabelas-uso.json",
-    4
+    3
    ],
    [
     "scripts/docs/citacoes-baseline.json",
@@ -233266,10 +233263,6 @@
    ],
    [
     "supabase/functions/evolution-webhook/messages.ts",
-    2
-   ],
-   [
-    "inventario/estado/edge-tabela.json",
     2
    ],
    [
@@ -233318,6 +233311,10 @@
    ],
    [
     "scripts/automation.config.json",
+    1
+   ],
+   [
+    "scripts/lib/supabase-mgmt.mjs",
     1
    ]
   ]
