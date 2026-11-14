@@ -566,8 +566,8 @@ const RelatorioContato = () => {
               {(Array.isArray(latestDisc.behavior_indicators) 
                 ? latestDisc.behavior_indicators 
                 : []
-              ).map((indicator: string, i: number) => (
-                <li key={i} className="text-foreground">{indicator}</li>
+              ).map((indicator: unknown, i: number) => (
+                <li key={i} className="text-foreground">{String(indicator)}</li>
               ))}
             </ul>
           </section>

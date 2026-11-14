@@ -124,7 +124,7 @@ export function CadenceRulesConfig() {
     onError: (e: Error) => toast.error(`Erro ao remover regra: ${parseApiError(e)}`),
   });
 
-  const handleOpenDialog = (rule?: { id?: string; relationship_stage?: string; frequency_days?: number; priority?: string; cadence_steps?: unknown }) => {
+  const handleOpenDialog = (rule?: { id?: string; relationship_stage?: string; frequency_days?: number; priority?: string | null; cadence_steps?: unknown }) => {
     if (rule) {
       setEditingRule({
         id: rule.id,

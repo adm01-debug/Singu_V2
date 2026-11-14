@@ -132,7 +132,7 @@ export function PersonalitySubTab({ contactId }: Props) {
             <div className="space-y-4 pt-2">
               <TooltipProvider>
                 {mbtiDimensions.map((dim) => {
-                  const value = Number(formData[dim.key] ?? 50);
+                  const value = Number((formData as Record<string, number | null>)[dim.key] ?? 50);
                   return (
                   <div key={dim.key} className="space-y-2">
                     <div className="flex justify-between items-center text-[10px] font-bold">
@@ -204,7 +204,7 @@ export function PersonalitySubTab({ contactId }: Props) {
               <Label className="text-[10px] uppercase font-bold text-muted-foreground block mb-2">Scores por Eneatipo</Label>
               <div className="grid grid-cols-3 gap-x-4 gap-y-3">
                 {enneagramTypes.map((t) => {
-                  const score = formData.enneagram_scores?.[t.toString()] ?? 0;
+                  const score = (formData.enneagram_scores as Record<string, number> | null)?.[t.toString()] ?? 0;
                   return (
                     <div key={t} className="space-y-1">
                       <div className="flex justify-between items-center px-1">
