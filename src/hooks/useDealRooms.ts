@@ -490,12 +490,12 @@ export async function recordBuyerView(token: string, label?: string) {
 }
 
 export async function buyerToggleMilestone(token: string, milestone_id: string, done: boolean, label?: string) {
-  const { error } = await supabase.rpc("buyer_toggle_milestone", { _token: token, _milestone_id: milestone_id, _done: done, _label: label ?? null });
+  const { error } = await supabase.rpc("buyer_toggle_milestone", { _token: token, _milestone_id: milestone_id, _done: done, _label: label ?? undefined });
   if (error) throw error;
 }
 
 export async function buyerAddComment(token: string, body: string, label?: string) {
-  const { error } = await supabase.rpc("buyer_add_comment", { _token: token, _body: body, _label: label ?? null });
+  const { error } = await supabase.rpc("buyer_add_comment", { _token: token, _body: body, _label: label ?? undefined });
   if (error) throw error;
 }
 

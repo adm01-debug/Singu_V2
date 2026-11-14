@@ -112,7 +112,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
         title: 'Interação registrada',
         description: 'A interação foi salva com sucesso.',
       });
-      logActivity({ type: 'created', entityType: 'interaction', entityId: data.id, entityName: data.title, description: `Interação: ${data.type}` });
+      logActivity({ type: 'created', entityType: 'interaction', entityId: data.id, entityName: data.title ?? '', description: `Interação: ${data.type ?? ''}` });
 
       // Trigger DISC auto-analysis if enabled and has content
       if (options?.triggerDISCAnalysis !== false && data.contact_id) {
@@ -149,7 +149,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
             data.id,
             data.content,
             data.transcription,
-            data.type,
+            data.type ?? '',
             true
           ).catch(err => {
             const msg = err instanceof Error ? err.message : 'Unknown error';
@@ -258,7 +258,7 @@ export function useInteractions(contactId?: string, companyId?: string, options?
       if (error) throw error;
 
       const deleted = previous?.pages.flatMap(p => p.data).find(i => i.id === id);
-      logActivity({ type: 'deleted', entityType: 'interaction', entityId: id, entityName: deleted?.title ?? null, description: 'Interação excluída' });
+      logActivity({ type: 'deleted', entityType: 'interaction', entityId: id, entityName: deleted?.title ?? undefined, description: 'Interação excluída' });
       toast({
         title: 'Interação removida',
         description: 'A interação foi excluída com sucesso.',

@@ -102,7 +102,7 @@ export function useDealsPipeline() {
           auditAccess: false,
         });
         if (error) throw error;
-        deals.push(...(data || []).filter(row => !['perdido', 'arquivado', 'lost'].includes(row.status))
+        deals.push(...(data || []).filter(row => !['perdido', 'arquivado', 'lost'].includes(row.status ?? ''))
           .map(({ company, contact, ...row }) => ({
           ...row,
           valor: row.valor ?? 0,

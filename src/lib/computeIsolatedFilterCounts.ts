@@ -103,7 +103,7 @@ export function computeIsolatedFilterCounts(
   if (canais.length > 0) {
     const set = new Set(canais);
     let n = 0;
-    for (const i of interactions) if (set.has(i.type)) n += 1;
+    for (const i of interactions) if (set.has(i.type ?? '')) n += 1;
     const label =
       canais.length === 1
         ? CHANNEL_LABELS[canais[0]] ?? canais[0]

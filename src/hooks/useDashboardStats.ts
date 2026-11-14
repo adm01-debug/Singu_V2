@@ -148,7 +148,7 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
       if (!current || (i.created_at ?? '') > current) {
         latestInteractionByContact.set(i.contact_id, i.created_at ?? '');
         if (i.content || i.title) {
-          interactionSummariesByContact.set(i.contact_id, i.content || i.title);
+          interactionSummariesByContact.set(i.contact_id, i.content || i.title || '');
         }
       }
     }
@@ -192,8 +192,8 @@ export function useDashboardStats({ contacts = [], companies = [], interactions 
         
         return {
           id: contact.id,
-          firstName: contact.first_name,
-          lastName: contact.last_name,
+          firstName: contact.first_name ?? '',
+          lastName: contact.last_name ?? '',
           avatar: contact.avatar_url || '',
           companyName: company?.nome_crm || contact.role_title || '',
           role: contact.role || 'contact',

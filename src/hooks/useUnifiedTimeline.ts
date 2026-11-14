@@ -88,7 +88,7 @@ export function useUnifiedTimeline(contactId: string) {
       events.push({
         id: it.id,
         type,
-        subType: it.type,
+        subType: it.type ?? undefined,
         title: it.title || 'Sem título',
         content: it.content || it.transcription || undefined,
         timestamp: it.created_at ?? '',

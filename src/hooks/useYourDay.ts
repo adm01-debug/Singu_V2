@@ -92,7 +92,7 @@ export function useYourDay(): YourDayData & { refresh: () => Promise<void> } {
         const contactIds = new Set<string>();
         followUpInteractions.forEach(i => {
           if (i.company_id) { companyIds.add(i.company_id); }
-          contactIds.add(i.contact_id);
+          contactIds.add(i.contact_id ?? '');
         });
         birthdayContacts.forEach(c => { if (c.company_id) companyIds.add(c.company_id); });
         attentionContacts.forEach(c => { if (c.company_id) companyIds.add(c.company_id); });

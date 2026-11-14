@@ -52,11 +52,11 @@ export function useProfitabilityByContact() {
 
       const interactionMap = new Map<string, { count: number; positive: number; negative: number }>();
       for (const i of interactions || []) {
-        const curr = interactionMap.get(i.contact_id) || { count: 0, positive: 0, negative: 0 };
+        const curr = interactionMap.get(i.contact_id ?? '') || { count: 0, positive: 0, negative: 0 };
         curr.count++;
         if (i.sentiment === 'positive' || i.sentiment === 'very_positive') curr.positive++;
         if (i.sentiment === 'negative' || i.sentiment === 'very_negative') curr.negative++;
-        interactionMap.set(i.contact_id, curr);
+        interactionMap.set(i.contact_id ?? '', curr);
       }
 
       return contacts.map(c => {

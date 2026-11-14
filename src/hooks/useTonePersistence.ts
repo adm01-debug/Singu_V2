@@ -21,7 +21,7 @@ export function useTonePersistence(companyId?: string) {
         .from('ai_tone_preferences')
         .select('preferred_tone')
         .eq('user_id', user.id)
-        .eq('company_id', companyId || null)
+        .eq('company_id', companyId ?? undefined)
         .maybeSingle();
 
       if (error) {

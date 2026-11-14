@@ -249,11 +249,11 @@ export function useNLPAutoAnalysis() {
       if (!interactions) return { analyzed: 0, total: 0 };
 
       const eligible = interactions.filter(i =>
-        shouldAnalyze(i.type, i.content, i.transcription)
+        shouldAnalyze(i.type ?? '', i.content, i.transcription)
       );
       await Promise.all(
         eligible.map(i =>
-          analyzeInteraction(contactId, i.id, i.content, i.transcription, i.type)
+          analyzeInteraction(contactId, i.id, i.content, i.transcription, i.type ?? '')
         )
       );
 
