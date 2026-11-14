@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "48a9a50ccfbceb4f5aa4f59c31d491df8b5c6b28",
+  "sha": "4d004ceb3c9393d1886e13add0fcb101f007332a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 03:33 UTC",
+  "generated_at": "2026-11-14 04:01 UTC",
   "files_total": 3344,
   "code_files": 2873,
   "code_lines": 409809
@@ -232814,10 +232814,26 @@
   }
  },
  "git": {
-  "sha": "48a9a50ccfbceb4f5aa4f59c31d491df8b5c6b28",
+  "sha": "4d004ceb3c9393d1886e13add0fcb101f007332a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "4d004ce",
+    "date": "2026-11-14",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness pos-merge 224 (#225)",
+    "files": []
+   },
+   {
+    "sha": "1864cd1",
+    "date": "2026-11-14",
+    "author": "Copilot App",
+    "subject": "chore(docs): bump prod-readiness pos-merge 224",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "48a9a50",
     "date": "2026-11-14",
@@ -233227,31 +233243,12 @@
      "supabase/functions/weekly-digest/index.ts",
      "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql"
     ]
-   },
-   {
-    "sha": "4add6bd",
-    "date": "2026-11-11",
-    "author": "adm01-debug",
-    "subject": "feat: agenda 14 edge functions periódicas via pg_cron (#196)",
-    "files": [
-     "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
-     "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql"
-    ]
-   },
-   {
-    "sha": "48ab3ac",
-    "date": "2026-11-11",
-    "author": "adm01-debug",
-    "subject": "feat: cria send-transactional-email com Resend para as sequências (#200)",
-    "files": [
-     "supabase/functions/send-transactional-email/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    9
+    10
    ],
    [
     "inventario/estado/banco.json",

@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "48a9a50ccfbceb4f5aa4f59c31d491df8b5c6b28",
+  "commit": "4d004ceb3c9393d1886e13add0fcb101f007332a",
   "branch": "main",
-  "data_commit": "2026-11-14T00:05:21-03:00",
+  "data_commit": "2026-11-14T00:52:59-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "4d004ceb",
+    "data": "2026-11-14",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 224 (#225)"
+   },
+   {
+    "sha": "1864cd1b",
+    "data": "2026-11-14",
+    "assunto": "chore(docs): bump prod-readiness pos-merge 224"
+   },
    {
     "sha": "48a9a50c",
     "data": "2026-11-14",
@@ -121,16 +131,6 @@
     "sha": "47e97ccb",
     "data": "2026-11-12",
     "assunto": "style(manutencao): aplica correcoes locais verificadas (#195)"
-   },
-   {
-    "sha": "a28f2106",
-    "data": "2026-11-12",
-    "assunto": "chore: inventario do estado real [auto] (#204)"
-   },
-   {
-    "sha": "ddd1f61c",
-    "data": "2026-11-12",
-    "assunto": "fix: botões gerar relatório e e-mail de teste do resumo semanal voltam a funcionar (#203)"
    }
   ],
   "arquivos_mudados_7d": 632,
@@ -181,7 +181,7 @@
    },
    {
     "pasta": "docs/prod-readiness.md",
-    "mudancas": 9
+    "mudancas": 10
    },
    {
     "pasta": "inventario/estado/banco.json",
@@ -226,16 +226,16 @@
     "mudancas": 11
    },
    {
+    "arquivo": "docs/prod-readiness.md",
+    "mudancas": 10
+   },
+   {
     "arquivo": "src/hooks/useContacts.ts",
     "mudancas": 10
    },
    {
     "arquivo": "src/lib/externalData.ts",
     "mudancas": 10
-   },
-   {
-    "arquivo": "docs/prod-readiness.md",
-    "mudancas": 9
    },
    {
     "arquivo": "inventario/estado/banco.json",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 70
+    "commits": 71
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -312,12 +312,12 @@
     "commits": 4
    },
    {
-    "autor": "github-actions[bot]",
+    "autor": "Copilot App",
     "commits": 2
    },
    {
-    "autor": "Copilot App",
-    "commits": 1
+    "autor": "github-actions[bot]",
+    "commits": 2
    }
   ]
  },
