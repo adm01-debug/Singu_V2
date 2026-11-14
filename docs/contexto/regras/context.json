@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "f8312ef24331df8f7120d505a9ea2d7e0d052274",
+  "sha": "63673dcd44bfa708790c40fb644dfdc4dca90698",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-13 22:29 UTC",
+  "generated_at": "2026-11-14 00:19 UTC",
   "files_total": 3344,
   "code_files": 2873,
   "code_lines": 409809
@@ -232814,10 +232814,19 @@
   }
  },
  "git": {
-  "sha": "f8312ef24331df8f7120d505a9ea2d7e0d052274",
+  "sha": "63673dcd44bfa708790c40fb644dfdc4dca90698",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "63673dc",
+    "date": "2026-11-13",
+    "author": "adm01-debug",
+    "subject": "chore(docs): bump prod-readiness para o head pos-merge 219 (#220)",
+    "files": [
+     "docs/prod-readiness.md"
+    ]
+   },
    {
     "sha": "f8312ef",
     "date": "2026-11-13",
@@ -233284,15 +233293,6 @@
      "docs/qa/security-definer-audit.md",
      "tests/rls/security_definer_hardening.sql"
     ]
-   },
-   {
-    "sha": "0196274",
-    "date": "2026-11-11",
-    "author": "adm01-debug",
-    "subject": "docs: baseline DEFINER 111->109 apos DROP de update_company_fields (#190)",
-    "files": [
-     "docs/qa/security-definer-audit.md"
-    ]
    }
   ],
   "hot_files": [
@@ -233310,7 +233310,7 @@
    ],
    [
     "docs/prod-readiness.md",
-    4
+    5
    ],
    [
     "inventario/estado/edge-tabela.json",
@@ -233338,10 +233338,6 @@
    ],
    [
     "supabase/functions/_shared/edge-test-harness.ts",
-    2
-   ],
-   [
-    "docs/qa/security-definer-audit.md",
     2
    ],
    [
@@ -233374,6 +233370,10 @@
    ],
    [
     "scripts/ai-context/gerar.mjs",
+    1
+   ],
+   [
+    "scripts/apply-cli.test.mjs",
     1
    ]
   ]
