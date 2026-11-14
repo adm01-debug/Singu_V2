@@ -1,6 +1,6 @@
 # Prod Readiness ? Singu_V2
 
-> Documento vivo de prontidão para produção. Linha de base de `main` (HEAD `63673dcd`, pós-merge #220). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
+> Documento vivo de prontidão para produção. Linha de base de `main` (HEAD `783135a`, pós-merge #221). Cada item tem status **OK** (com prova) ou **BLOQUEADO** (com erro exato). Zero itens "n?o verificado".
 
 ## 1. Qualidade t?cnica (build / typecheck / lint / testes)
 
@@ -263,7 +263,7 @@
 
 | Workflow | ?ltima execu??o no main | Status |
 |---|---|---|
-| CI (ci.yml) | 2026-11-13 23:30Z — run 43529226548 | OK — success (pós-merge #220, head 63673dcd) |
+| CI (ci.yml) | 2026-11-14 00:52Z — run 43535362930 | OK — success (pós-merge #221, head 783135af) |
 | Automa??o local | 2026-11-13 12:01Z | OK ? success |
 | Documenta??o sem drift | 2026-11-13 10:27Z | OK ? success |
 | Estado real | 2026-11-13 10:27Z | OK ? success |
@@ -301,7 +301,8 @@
 
 - **PR #213** (MERGED 13/11 ~21:00Z, autoriza??o do dono): migration `20261113154000` aplicada em prod via Management API em 13/11 21:09Z. `check_mtta_auto_ack_heartbeat` agora preenche `threshold_pct=150` e `consumed_pct=COALESCE(age_min,150)`. Evid?ncia: pg_get_functiondef retorna INSERT com as colunas; grantees = service_role, postgres (REVOKE ok); execu??o simulada (BEGIN/ROLLBACK) retornou OK. Deploy prod success (sha a8cca0e2).
 - **PR #219** (MERGED 13/11 21:52Z): bump do doc para o head pós-merge #213 (`a8cca0e2` → `f8312ef`). CI main verde (run 43514562452 success, 22:52Z), deploy prod success, site respondendo 200.
-- **PR #220** (MERGED 13/11 23:30Z): bump do doc para o head pós-merge #219 (`f8312ef` → `63673dcd`). CI main verde (run 43529226548 success), deploy prod READY, site 200.
+- **PR #220** (MERGED 13/11 23:30Z): bump do doc para o head pós-merge #219 (`f8312ef` → `63673dcd`). CI main verde (run 43529226548 success).
+- **PR #221** (MERGED 14/11 00:36Z): bump do doc para o head pós-merge #220 (`63673dcd` → `783135a`). CI main verde (run 43535362930 success), deploy prod READY (dpl_3oPR2Q3Rzh), site 200.
 
 - **Migration 20261027220000** ausente em prod (guard AUT-03 serialize_contact_relation_writes) ? BLOQUEADO, aguardando decis?o do dono (DDL produ??o).
 - **Advisors de seguran?a**: endpoint REST inexistente (404) ? sem via API; conferir no dashboard.
