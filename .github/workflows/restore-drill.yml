@@ -24,7 +24,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: '20'
           cache: npm
@@ -53,7 +53,7 @@ jobs:
           mkdir -p scripts/migration/dr/out
           printf '# Teste de restauração lógica\n\nExecução: %s\nCommit: %s\n' \
             "$GITHUB_RUN_ID" "$GITHUB_SHA" > scripts/migration/dr/out/restore-drill-workflow.md
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: '20'
           cache: npm
