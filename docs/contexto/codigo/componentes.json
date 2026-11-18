@@ -6531,7 +6531,7 @@
     "TopContactsCard"
    ],
    "export_default": null,
-   "linhas": 190,
+   "linhas": 191,
    "dominio": "components/dashboard",
    "hooks_locais": [],
    "tabelas": [],
@@ -8677,7 +8677,7 @@
     "BulkImportDialog"
    ],
    "export_default": null,
-   "linhas": 164,
+   "linhas": 176,
    "dominio": "components/import",
    "hooks_locais": [
     "useBulkImport"
@@ -12054,7 +12054,7 @@
     "PipelineFilterBar"
    ],
    "export_default": null,
-   "linhas": 54,
+   "linhas": 87,
    "dominio": "components/pipeline",
    "hooks_locais": [],
    "tabelas": [],
@@ -13847,7 +13847,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 542,
+   "usado_por": 543,
    "orfao": false
   },
   {
@@ -16007,7 +16007,7 @@
     "Contatos"
    ],
    "export_default": "Contatos",
-   "linhas": 412,
+   "linhas": 422,
    "dominio": "pages",
    "hooks_locais": [
     "useAccessibleToast",
@@ -16033,7 +16033,7 @@
     "ContatosContent"
    ],
    "export_default": null,
-   "linhas": 289,
+   "linhas": 290,
    "dominio": "pages/contatos",
    "hooks_locais": [
     "useIsAdmin"
@@ -17061,7 +17061,7 @@
     "Pipeline"
    ],
    "export_default": "Pipeline",
-   "linhas": 439,
+   "linhas": 461,
    "dominio": "pages",
    "hooks_locais": [
     "useDealForecastConfidence",

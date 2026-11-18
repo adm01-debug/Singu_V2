@@ -6200,6 +6200,8 @@
    "src/lib/utils.ts"
   ],
   "src/components/pipeline/PipelineFilterBar.tsx": [
+   "src/components/pipeline/pipelineFilters.ts",
+   "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/dropdown-menu.tsx",
    "src/components/ui/input.tsx"
@@ -10498,6 +10500,7 @@
    "src/components/pipeline/ForecastConfidencePanel.tsx",
    "src/components/pipeline/NLPProbabilityBadge.tsx",
    "src/components/pipeline/PipelineFilterBar.tsx",
+   "src/components/pipeline/pipelineFilters.ts",
    "src/components/seo/SEOHead.tsx",
    "src/components/skeletons/PageSkeletons.tsx",
    "src/components/ui/badge.tsx",

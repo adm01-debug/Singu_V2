@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `602a7f8dac` · branch `main` · 2026-11-18 17:58 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7dcac42534` · branch `main` · 2026-11-18 18:10 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3175,6 +3175,7 @@ _nenhum item encontrado_
 | `stageProb * 0.35 +` | `src/components/pipeline/ForecastConfidencePanel.tsx` |
 | `stagnation * 0.4 + sentimentScore * 0.25 + engagement * 0.25 + ageScore * 0.1;` | `src/components/pipeline/ForecastConfidencePanel.tsx` |
 | `velocityScore * 0.15,` | `src/components/pipeline/ForecastConfidencePanel.tsx` |
+| `/** probabilidade acima de 70% */` | `src/components/pipeline/pipelineFilters.ts` |
 | `transition: { delay: i * 0.05 },` | `src/components/quick-actions/FloatingQuickActions.tsx` |
 | `transition={{ delay: (actions.length - 1 - index) * 0.05 + 0.1 }}` | `src/components/quick-actions/FloatingQuickActions.tsx` |
 | `delay: (menuItems.length - 1 - index) * 0.03,` | `src/components/quick-add/QuickAddButton.tsx` |

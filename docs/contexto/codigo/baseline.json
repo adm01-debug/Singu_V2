@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "602a7f8dace0a8736d015778986ea63d7f7b680f",
+  "commit": "7dcac425348f53b846ca179f9e8ca96712e89793",
   "branch": "main",
-  "data_commit": "2026-11-18T14:57:28-03:00",
+  "data_commit": "2026-11-18T15:08:34-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "7dcac42",
+    "data": "2026-11-18",
+    "assunto": "fix(ui): filtros do Pipeline passam a filtrar e 3 botoes mortos ganham acao (#248)"
+   },
    {
     "sha": "602a7f8",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "1864cd1",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 224"
-   },
-   {
-    "sha": "48a9a50",
-    "data": "2026-11-14",
-    "assunto": "chore(docs): bump prod-readiness pos-merge 223 (#224)"
    }
   ],
-  "arquivos_mudados_7d": 402,
+  "arquivos_mudados_7d": 408,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -254,6 +254,10 @@
     "mudancas": 8
    },
    {
+    "arquivo": "src/pages/Contatos.tsx",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/tests/get_contact_sidebar_by_phone.sql",
     "mudancas": 7
    },
@@ -263,10 +267,6 @@
    },
    {
     "arquivo": "RELATORIO_CI.md",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "src/pages/Contatos.tsx",
     "mudancas": 6
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 87
+    "commits": 88
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,9 +322,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3242,
-  "arquivos_codigo": 2215,
-  "linhas_codigo": 414296,
+  "arquivos_total": 3243,
+  "arquivos_codigo": 2216,
+  "linhas_codigo": 414395,
   "rotas": 114,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -647,8 +647,8 @@
    "linhas": 590
   },
   "src/components": {
-   "arquivos": 985,
-   "linhas": 148187
+   "arquivos": 986,
+   "linhas": 148253
   },
   "src/config": {
    "arquivos": 1,
@@ -684,7 +684,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28586
+   "linhas": 28619
   },
   "src/store": {
    "arquivos": 1,

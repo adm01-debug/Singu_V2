@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1949,
- "arestas": 8417,
+ "nos": 1950,
+ "arestas": 8420,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -10,7 +10,7 @@
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 543
+   "importado_por": 544
   },
   {
    "arquivo": "src/components/ui/button.tsx",
