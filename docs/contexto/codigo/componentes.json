@@ -10090,7 +10090,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 314,
+   "linhas": 315,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",

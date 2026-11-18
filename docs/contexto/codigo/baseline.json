@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "22f664c18f37a01817f9c0df3cd62fc8b860c8e9",
+  "commit": "28bc93dc89e793d93ebc9e7331d3015476e6c333",
   "branch": "main",
-  "data_commit": "2026-11-18T17:47:10-03:00",
+  "data_commit": "2026-11-18T18:11:51-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "28bc93d",
+    "data": "2026-11-18",
+    "assunto": "feat(ui): entrada de Observabilidade no menu de administração (#257)"
+   },
    {
     "sha": "22f664c",
     "data": "2026-11-18",
@@ -126,11 +131,6 @@
     "sha": "ba42905",
     "data": "2026-11-18",
     "assunto": "fix(ci): remove BOM UTF-8 da migration do MTTA que quebra o Supabase Preview (#233)"
-   },
-   {
-    "sha": "0a7b484",
-    "data": "2026-11-14",
-    "assunto": "chore: contexto agendado de 10 min para 1x/hora (#234)"
    }
   ],
   "arquivos_mudados_7d": 444,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 97
+    "commits": 98
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,11 +324,11 @@
  "contagens": {
   "arquivos_total": 3251,
   "arquivos_codigo": 2223,
-  "linhas_codigo": 415514,
+  "linhas_codigo": 415515,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 64,
+  "itens_menu": 65,
   "modulos": 141,
   "componentes": 1060,
   "hooks": 411,
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 990,
-   "linhas": 148751
+   "linhas": 148752
   },
   "src/config": {
    "arquivos": 1,

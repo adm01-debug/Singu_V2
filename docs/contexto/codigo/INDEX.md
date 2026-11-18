@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `22f664c18f37a01817f9c0df3cd62fc8b860c8e9` (2026-11-18T17:47:10-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `28bc93dc89e793d93ebc9e7331d3015476e6c333` (2026-11-18T18:11:51-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,11 +36,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3251 |
 | arquivos_codigo | 2223 |
-| linhas_codigo | 415514 |
+| linhas_codigo | 415515 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
-| itens_menu | 64 |
+| itens_menu | 65 |
 | modulos | 141 |
 | componentes | 1060 |
 | hooks | 411 |
@@ -122,7 +122,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 68 | 16 | 2 | 13 |
 | pages | 51 | 105 | 105 | 630 | 67 | 225 |
-| pages/admin | 6 | 8 | 9 | 355 | 29 | 104 |
+| pages/admin | 7 | 8 | 9 | 355 | 29 | 104 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
@@ -435,7 +435,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21246 nós · 35980 arestas · 2081 comunidades · grafo do commit `22f664c1`
+- 21246 nós · 35980 arestas · 2081 comunidades · grafo do commit `28bc93dc`
 - comunidades maiores: lucide-react (348), vitest (343), ref_lib (300), _shared/auth.ts (283), ref_types (260), 02_tables.sql (259), framer-motion (242), useAuth (235), react (234), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (225), ref_hooks (213)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -572,6 +572,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `28bc93d` feat(ui): entrada de Observabilidade no menu de administração (#257)
 - 2026-11-18 `22f664c` feat(reports): os 12 widgets do Report Builder passam a mostrar dado real (#250)
 - 2026-11-18 `72976e7` fix(analytics): chama a RPC de agregação direto, sem passar pelo gateway (#256)
 - 2026-11-18 `217bbf0` feat(admin): termina e publica a página de Observabilidade (#254)
@@ -586,7 +587,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `775c89c` feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)
 - 2026-11-18 `f6ec6ec` fix(ui): telas deixam de mostrar "vazio" quando a consulta falhou (#244)
 - 2026-11-18 `a9fdfb7` fix(db): liga security_invoker nas 16 views que ignoravam o RLS (#243)
-- 2026-11-18 `682ad79` docs(pendencias): corrige o diagnostico errado do P7 e fecha P0 e P5 (#242)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

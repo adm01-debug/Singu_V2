@@ -5301,7 +5301,7 @@
    "modulo": "components/layout",
    "arquivos": 6,
    "testes": 1,
-   "linhas": 1402,
+   "linhas": 1403,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -13499,6 +13499,7 @@
     "Feature Flags",
     "Feedback de Insights",
     "Logs de erro",
+    "Observabilidade",
     "Segurança (admin)"
    ],
    "telas": [

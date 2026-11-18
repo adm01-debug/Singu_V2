@@ -5,7 +5,7 @@
   "urls": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 64,
+  "itens_menu": 65,
   "lazy": 220
  },
  "urls": [
@@ -47458,6 +47458,15 @@
    "papeis_nao_resolvidos": null,
    "definido_em": "src/components/layout/MobileSidebarDrawer.tsx",
    "resolve_para": "src/pages/NPS.tsx"
+  },
+  {
+   "rotulo": "Observabilidade",
+   "destino": "/admin/observabilidade",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/admin/Observability.tsx"
   },
   {
    "rotulo": "Papéis",

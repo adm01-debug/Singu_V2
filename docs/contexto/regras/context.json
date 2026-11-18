@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "22f664c18f37a01817f9c0df3cd62fc8b860c8e9",
+  "sha": "28bc93dc89e793d93ebc9e7331d3015476e6c333",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 20:47 UTC",
+  "generated_at": "2026-11-18 21:16 UTC",
   "files_total": 3356,
   "code_files": 2885,
-  "code_lines": 411517
+  "code_lines": 411518
  },
  "version": "1.3.2",
- "facts_hash": "9ef6595672d64ede",
+ "facts_hash": "2dee6030c09c1891",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -69202,7 +69202,7 @@
   {
    "module": "src/components",
    "files": 990,
-   "lines": 148751,
+   "lines": 148752,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -185936,7 +185936,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 314,
+   "lines": 315,
    "exports": [
     "const AppSidebar"
    ],
@@ -233724,10 +233724,19 @@
   }
  },
  "git": {
-  "sha": "22f664c18f37a01817f9c0df3cd62fc8b860c8e9",
+  "sha": "28bc93dc89e793d93ebc9e7331d3015476e6c333",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "28bc93d",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "feat(ui): entrada de Observabilidade no menu de administração (#257)",
+    "files": [
+     "src/components/layout/AppSidebar.tsx"
+    ]
+   },
    {
     "sha": "22f664c",
     "date": "2026-11-18",
@@ -234221,15 +234230,6 @@
     "author": "adm01-debug",
     "subject": "chore(docs): bump prod-readiness pos-merge 226 (#227)",
     "files": []
-   },
-   {
-    "sha": "8d6aaa9",
-    "date": "2026-11-14",
-    "author": "Copilot App",
-    "subject": "chore(docs): bump prod-readiness pos-merge 226",
-    "files": [
-     "docs/prod-readiness.md"
-    ]
    }
   ],
   "hot_files": [
@@ -234242,8 +234242,8 @@
     3
    ],
    [
-    "docs/prod-readiness.md",
-    3
+    "src/components/layout/AppSidebar.tsx",
+    2
    ],
    [
     "src/hooks/useActivityOverview.ts",
@@ -234271,6 +234271,10 @@
    ],
    [
     ".github/workflows/inventario-estado-semanal.yml",
+    2
+   ],
+   [
+    "docs/prod-readiness.md",
     2
    ],
    [
@@ -234307,10 +234311,6 @@
    ],
    [
     "src/components/admin/AuditAnalyticsPanel.tsx",
-    1
-   ],
-   [
-    "src/hooks/useAuditAnalytics.ts",
     1
    ]
   ]
