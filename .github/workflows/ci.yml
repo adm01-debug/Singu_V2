@@ -107,6 +107,13 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f scripts/migration/verify/invalid-indexes-guard.sql
 
       - name: Typecheck
+        # tsc --noEmit de src/ (1819 arquivos) sob "strict": true (ligado na #230)
+        # estoura o heap padrao do Node (~2 GB): o CI abortava com
+        # "FATAL ERROR: Ineffective mark-compacts near heap limit" e exit 134.
+        # Pico medido em 2026-11-18: 2611 MB de RSS, sem nenhum erro de tipo.
+        # ubuntu-latest tem 16 GB, entao 6 GB da folga de ~2,4x para o codigo crescer.
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
         run: npm run typecheck
 
       - name: Lint (ESLint)
