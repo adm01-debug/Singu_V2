@@ -70,6 +70,7 @@ import {
 } from '@/data/analyticsData';
 import { useActivityOverview, useTopRelationships, type PeriodoAtividade } from '@/hooks/useActivityOverview';
 import { CustomTooltip, StatCard } from '@/components/analytics/AnalyticsShared';
+import { DemoContactNotice } from '@/components/analytics/DemoContactNotice';
 
 const Analytics = () => {
   usePageTitle('Analytics');
@@ -283,6 +284,7 @@ const Analytics = () => {
               </DashboardErrorBoundary>
               <NLPTrainingMode />
               <NLPConversionMetrics />
+              <DemoContactNotice />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"><RapportRealtimeCoach /><MiltonianCalibration /></div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"><IncongruenceDetector /><PerceptualPositions /></div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"><TOTEModelMapper /><HierarchyOfCriteria /></div>
@@ -392,6 +394,7 @@ const Analytics = () => {
           </TabsContent>
 
           <TabsContent value="triggers" className="space-y-6">
+            <DemoContactNotice />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <TriggerAnalytics />
               <AdvancedTriggersPanel />
