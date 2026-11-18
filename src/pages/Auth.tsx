@@ -15,12 +15,13 @@ import { logger } from "@/lib/logger";
 import { checkRateLimit, recordFailedAttempt, recordSuccessfulAttempt, getRemainingAttempts, formatRetryTime } from '@/lib/rateLimiter';
 import { AuthBranding } from './auth/AuthBranding';
 import { parseApiError } from '@/lib/errorMessages';
+import { ForgotPasswordForm } from '@/components/auth/ForgotPasswordForm';
 
 const emailSchema = z.string().email('Email inválido');
 const passwordSchema = z.string().min(6, 'Senha deve ter no mínimo 6 caracteres');
 const nameSchema = z.string().min(2, 'Nome deve ter no mínimo 2 caracteres');
 
-type AuthMode = 'login' | 'signup';
+type AuthMode = 'login' | 'signup' | 'forgot';
 
 const Auth = () => {
   const [mode, setMode] = useState<AuthMode>('login');
@@ -131,10 +132,14 @@ const Auth = () => {
 
             <Card className="border-border/30 shadow-md backdrop-blur-sm">
               <CardHeader className="space-y-1 text-center">
-                <CardTitle className="text-2xl font-bold">{mode === 'login' ? 'Entrar' : 'Criar conta'}</CardTitle>
-                <CardDescription>{mode === 'login' ? 'Acesse sua conta para continuar' : 'Preencha os dados para começar'}</CardDescription>
+                <CardTitle className="text-2xl font-bold">{mode === 'forgot' ? 'Recuperar senha' : mode === 'login' ? 'Entrar' : 'Criar conta'}</CardTitle>
+                <CardDescription>{mode === 'forgot' ? 'Enviaremos um link para você definir uma nova senha' : mode === 'login' ? 'Acesse sua conta para continuar' : 'Preencha os dados para começar'}</CardDescription>
               </CardHeader>
               <CardContent>
+                {mode === 'forgot' ? (
+                  <ForgotPasswordForm onBack={() => { setMode('login'); setErrors({}); }} />
+                ) : (
+                <>
                 <form onSubmit={handleSubmit} noValidate className="space-y-4">
                   <AnimatePresence mode="wait">
                     {mode === 'signup' && (
@@ -175,6 +180,13 @@ const Auth = () => {
                       </button>
                     </div>
                     {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
+                    {mode === 'login' && (
+                      <div className="text-right">
+                        <button type="button" onClick={() => { setMode('forgot'); setErrors({}); }} className="text-xs text-primary hover:underline">
+                          Esqueci minha senha
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <Button type="submit" className="w-full bg-gradient-primary hover:opacity-90 transition-opacity shadow-glow" disabled={isLoading}>
@@ -217,6 +229,8 @@ const Auth = () => {
                     <button type="button" onClick={toggleMode} className="ml-1 text-primary font-medium hover:underline">{mode === 'login' ? 'Criar conta' : 'Entrar'}</button>
                   </p>
                 </div>
+                </>
+                )}
               </CardContent>
             </Card>
           </motion.div>

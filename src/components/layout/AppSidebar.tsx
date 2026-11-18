@@ -3,7 +3,7 @@ import { usePrefetch } from "@/components/navigation/PrefetchLink";
 import {
   LayoutDashboard, Building2, Users, MessageSquare, Lightbulb, Settings,
   Zap, LogOut, CalendarDays, Bell, ChevronDown, BarChart3, Share2,
-  Workflow, MapPin, PanelLeftClose, PanelLeft, Kanban, Trophy, CheckSquare, Globe, ListFilter, BrainCircuit, LifeBuoy, BookOpen, Copy, Shield, Star, Target, Gauge, Brain, Megaphone, Activity, Sparkles,
+  Workflow, MapPin, PanelLeftClose, PanelLeft, Kanban, Trophy, CheckSquare, Globe, ListFilter, BrainCircuit, LifeBuoy, BookOpen, Copy, Shield, Star, Target, Gauge, Brain, Megaphone, Activity, Sparkles, UserPlus, History, Bot, KeyRound, ShieldCheck, FileWarning,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useEffect, useState, useCallback, useMemo, memo } from "react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -29,6 +30,7 @@ const navSections = [
       { title: "Pipeline", url: "/pipeline", icon: Kanban },
       { title: "Conversas", url: "/interacoes", icon: MessageSquare },
       { title: "Calendário", url: "/calendario", icon: CalendarDays },
+      { title: "Cadastro", url: "/cadastro", icon: UserPlus },
     ],
   },
   {
@@ -45,6 +47,8 @@ const navSections = [
       { title: "BI Avançado", url: "/bi", icon: BrainCircuit },
       { title: "Suporte", url: "/suporte", icon: LifeBuoy },
       { title: "NPS & Satisfação", url: "/nps", icon: Star },
+      { title: "Histórico Unificado", url: "/historico", icon: History },
+      { title: "Perfis Comportamentais", url: "/perfis-comportamentais", icon: Brain },
     ],
   },
   {
@@ -64,6 +68,7 @@ const navSections = [
        { title: "Landing Pages", url: "/landing-pages", icon: Globe },
        { title: "Sequências", url: "/sequencias", icon: ListFilter },
        { title: "Documentos", url: "/documentos", icon: BookOpen },
+       { title: "Assistente IA", url: "/assistente", icon: Bot },
     ],
   },
   {
@@ -76,6 +81,18 @@ const navSections = [
     ],
   },
 ];
+
+// Rotas sob o guard <Admin> em AppRoutes.tsx; só aparecem para quem tem o papel.
+const adminSection = {
+  label: "Administração",
+  key: "admin",
+  items: [
+    { title: "Papéis", url: "/admin/roles", icon: KeyRound },
+    { title: "Permissões", url: "/admin/role-permissions", icon: ShieldCheck },
+    { title: "Segurança (admin)", url: "/admin/seguranca", icon: Shield },
+    { title: "Logs de erro", url: "/admin/error-logs", icon: FileWarning },
+  ],
+};
 
 const COLLAPSED_KEY_PREFIX = "nexus-sidebar-sections";
 
@@ -94,12 +111,14 @@ function AppSidebarInner() {
   const location = useLocation();
   const { prefetch } = usePrefetch();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
+  const visibleSections = useMemo(() => (isAdmin ? [...navSections, adminSection] : navSections), [isAdmin]);
   const collapsedKey = `${COLLAPSED_KEY_PREFIX}-${user?.id ?? 'anon'}`;
   const [sectionCollapsed, setSectionCollapsed] = useState<Record<string, boolean>>(() => getInitialCollapsed(user?.id));
 
   useEffect(() => {
     setSectionCollapsed(prev => {
-      for (const section of navSections) {
+      for (const section of visibleSections) {
         const hasActive = section.items.some(item =>
           item.url === "/" ? location.pathname === "/" : location.pathname.startsWith(item.url)
         );
@@ -168,7 +187,7 @@ function AppSidebarInner() {
 
       {/* ─── Navigation ─── */}
       <SidebarContent className="px-2" role="navigation" aria-label="Menu principal">
-        {navSections.map((section, sectionIdx) => {
+        {visibleSections.map((section, sectionIdx) => {
           const isCollapsedSection = sectionCollapsed[section.key] && !collapsed;
           return (
             <SidebarGroup key={section.key}>
