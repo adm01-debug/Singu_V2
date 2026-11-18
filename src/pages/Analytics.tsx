@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { TriggerAnalytics } from '@/components/triggers/TriggerAnalytics';
 import { AdvancedTriggersPanel } from '@/components/triggers/AdvancedTriggersPanel';
+import { TemplatePerformanceComparison } from '@/components/triggers/TemplatePerformanceComparison';
 import { ChurnPredictionPanel } from '@/components/analytics/ChurnPredictionPanel';
 import { BestTimeToContactPanel } from '@/components/analytics/BestTimeToContactPanel';
 import { DealVelocityPanel } from '@/components/analytics/DealVelocityPanel';
@@ -395,6 +396,7 @@ const Analytics = () => {
               <TriggerAnalytics />
               <AdvancedTriggersPanel />
             </div>
+            <TemplatePerformanceComparison />
           </TabsContent>
         </Tabs>
       </div>
