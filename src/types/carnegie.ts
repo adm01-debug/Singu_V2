@@ -149,11 +149,15 @@ export interface AppreciationSuggestion {
 // TALK RATIO ANALYZER
 // ============================================
 export interface TalkRatioAnalysis {
-  speakerRatio: number; // 0-100, percentage user spoke
-  listenerRatio: number; // 0-100, percentage user listened
-  idealRatio: number; // Target ratio (usually 30-40% speaking)
-  deviation: number; // How far from ideal
-  quality: 'excellent' | 'good' | 'needs_improvement' | 'poor';
+  // A analise recebe UM lado da conversa (o texto que o usuario cola), e
+  // proporcao de fala exige os dois lados com duracao. Por isso estes cinco
+  // campos sao `null`: antes vinham de `speakerRatio = isUserSpeaking ? 60 : 40`
+  // e `idealRatio = 35`, valores fixos no codigo que nao liam o texto.
+  speakerRatio: number | null; // 0-100, percentage user spoke
+  listenerRatio: number | null; // 0-100, percentage user listened
+  idealRatio: number | null; // Target ratio (usually 30-40% speaking)
+  deviation: number | null; // How far from ideal
+  quality: 'excellent' | 'good' | 'needs_improvement' | 'poor' | null;
   
   // Detailed metrics
   questionCount: number;
