@@ -18,6 +18,8 @@ interface NLPProbabilityBadgeProps {
 export const NLPProbabilityBadge = ({ deal }: NLPProbabilityBadgeProps) => {
   const { data: nlpData, isLoading } = useNLPClosingProbability(deal);
 
+  // Sem leitura comportamental para o contato, o hook devolve null e o badge
+  // simplesmente nao aparece, em vez de exibir numero inventado.
   if (isLoading || !nlpData) return null;
 
   const levelColors = {
@@ -46,7 +48,7 @@ export const NLPProbabilityBadge = ({ deal }: NLPProbabilityBadgeProps) => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold flex items-center gap-1">
-                <Brain className="h-3 w-3 text-primary" /> Probabilidade PNL
+                <Brain className="h-3 w-3 text-primary" /> Leitura comportamental
               </span>
               <span className="text-xs font-black">{nlpData.probability}%</span>
             </div>
