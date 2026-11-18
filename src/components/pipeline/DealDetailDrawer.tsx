@@ -34,6 +34,9 @@ import { toast } from 'sonner';
 import { Loader2, DollarSign, Trash2, Trophy, Frown } from 'lucide-react';
 import { updateExternalData, deleteExternalData } from '@/lib/externalData';
 import { useQueryClient } from '@tanstack/react-query';
+import { WinLossCaptureDialog } from '@/components/win-loss/WinLossCaptureDialog';
+import { PlaybookSuggestionDrawer } from '@/components/playbooks/PlaybookSuggestionDrawer';
+import { BookOpen } from 'lucide-react';
 
 const STAGES = [
   { id: 'lead', name: 'Novo Lead', probability: 10 },
@@ -66,6 +69,10 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [isSaving, setIsSaving] = useState(false);
+  // Captura do motivo de ganho/perda: abre depois que o status e gravado, para
+  // o vendedor registrar o porque enquanto a negociacao esta fresca.
+  const [winLossOutcome, setWinLossOutcome] = useState<'won' | 'lost' | null>(null);
+  const [playbooksOpen, setPlaybooksOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [companies, setCompanies] = useState<{ value: string; label: string }[]>([]);
   const [, setContacts] = useState<{ value: string; label: string }[]>([]);
@@ -182,7 +189,7 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       if (error) throw error;
       toast.success(status === 'won' ? 'Parabéns! Deal Ganho! 🏆' : 'Deal marcado como perdido.');
       invalidateDealQueries();
-      onOpenChange(false);
+      setWinLossOutcome(status);
     } catch {
       toast.error('Erro ao atualizar status');
     } finally {
@@ -293,6 +300,18 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
               </Button>
             </div>
 
+            {deal && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full gap-2 text-xs"
+                onClick={() => setPlaybooksOpen(true)}
+              >
+                <BookOpen className="h-3.5 w-3.5" /> Sugerir playbook para este deal
+              </Button>
+            )}
+
             <div className="flex justify-between items-center pt-6 border-t">
               <Button 
                 type="button" 
@@ -314,6 +333,32 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
           </form>
         </Form>
       </SheetContent>
+
+      {deal && (
+        <WinLossCaptureDialog
+          open={winLossOutcome !== null}
+          onOpenChange={aberto => {
+            if (aberto) return;
+            setWinLossOutcome(null);
+            onOpenChange(false);
+          }}
+          dealId={deal.id}
+          initialOutcome={winLossOutcome ?? 'won'}
+          dealValue={deal.valor}
+        />
+      )}
+
+      {deal && (
+        <PlaybookSuggestionDrawer
+          open={playbooksOpen}
+          onOpenChange={setPlaybooksOpen}
+          context={{
+            deal_id: deal.id,
+            contact_id: deal.contact_id ?? undefined,
+            current_stage: deal.pipeline_stage,
+          }}
+        />
+      )}
     </Sheet>
   );
 }
