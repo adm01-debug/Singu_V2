@@ -49,7 +49,6 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | disc_communication_logs_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX disc_communication_logs_pkey ON public.disc_communication_logs USING btree (id)` |
-| idx_disc_comm_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_disc_comm_contact ON public.disc_communication_logs USING btree (contact_id)` |
 | idx_disc_communication_logs_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_disc_communication_logs_contact ON public.disc_communication_logs USING btree (contact_id)` |
 | idx_disc_communication_logs_interaction_id | btree | interaction_id | não | sim |  | `CREATE INDEX idx_disc_communication_logs_interaction_id ON public.disc_communication_logs USING btree (interaction_id)` |
 | idx_disc_communication_logs_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_disc_communication_logs_user_id ON public.disc_communication_logs USING btree (user_id)` |

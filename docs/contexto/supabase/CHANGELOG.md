@@ -2,6 +2,13 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-18 12:36 UTC
+
+- **functions** adicionado (1): `public.__diag_multiplix()`
+- **functions** alterado (1): `public.multiplix_list_ufs()`
+- **indexes** removido (17): `public.idx_churn_risk_scores_user_id`, `public.idx_client_val_contact`, `public.idx_dec_crit_contact`, `public.idx_disc_analysis_contact`, `public.idx_disc_analysis_history_user_id`, `public.idx_disc_comm_contact`, `public.idx_document_signatures_user_id`, `public.idx_emo_anchors_contact`, `public.idx_emo_states_contact`, `public.idx_neuro_history_contact`, `public.idx_objections_contact`, `public.idx_offer_sug_contact`, `public.idx_whatsapp_messages_company`, `public.idx_whatsapp_messages_contact`, `public.legacy_sales_activities_sale_scope_idx`, `public.legacy_sales_activities_salesperson_scope_idx`, `public.legacy_sales_salesperson_scope_idx`
+- **migrations** adicionado (2): `20261118121105_remove_duplicate_indexes`, `20261118122016_multiplix_list_ufs_cast_text`
+
 ## 2026-11-14 01:13 UTC
 
 - **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_17`

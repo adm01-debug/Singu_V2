@@ -45,7 +45,6 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | emotional_states_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX emotional_states_history_pkey ON public.emotional_states_history USING btree (id)` |
-| idx_emo_states_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_emo_states_contact ON public.emotional_states_history USING btree (contact_id)` |
 | idx_emotional_states_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_emotional_states_contact ON public.emotional_states_history USING btree (contact_id)` |
 | idx_emotional_states_created | btree | created_at | não | sim |  | `CREATE INDEX idx_emotional_states_created ON public.emotional_states_history USING btree (created_at DESC)` |
 | idx_emotional_states_history_interaction_id | btree | interaction_id | não | sim |  | `CREATE INDEX idx_emotional_states_history_interaction_id ON public.emotional_states_history USING btree (interaction_id)` |

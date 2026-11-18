@@ -46,7 +46,6 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | emotional_anchors_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX emotional_anchors_pkey ON public.emotional_anchors USING btree (id)` |
-| idx_emo_anchors_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_emo_anchors_contact ON public.emotional_anchors USING btree (contact_id)` |
 | idx_emotional_anchors_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_emotional_anchors_contact ON public.emotional_anchors USING btree (contact_id)` |
 | idx_emotional_anchors_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_emotional_anchors_user_id ON public.emotional_anchors USING btree (user_id)` |
 

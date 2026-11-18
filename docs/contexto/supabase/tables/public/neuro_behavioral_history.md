@@ -40,7 +40,6 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| idx_neuro_history_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_neuro_history_contact ON public.neuro_behavioral_history USING btree (contact_id)` |
 | idx_neuro_history_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_neuro_history_contact_id ON public.neuro_behavioral_history USING btree (contact_id)` |
 | neuro_behavioral_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX neuro_behavioral_history_pkey ON public.neuro_behavioral_history USING btree (id)` |
 

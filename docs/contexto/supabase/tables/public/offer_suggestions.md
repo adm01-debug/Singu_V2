@@ -47,7 +47,6 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| idx_offer_sug_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_offer_sug_contact ON public.offer_suggestions USING btree (contact_id)` |
 | idx_offer_suggestions_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_offer_suggestions_contact ON public.offer_suggestions USING btree (contact_id)` |
 | idx_offer_suggestions_status | btree | status | não | sim |  | `CREATE INDEX idx_offer_suggestions_status ON public.offer_suggestions USING btree (status)` |
 | idx_offer_suggestions_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_offer_suggestions_user_id ON public.offer_suggestions USING btree (user_id)` |

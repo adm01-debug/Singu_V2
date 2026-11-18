@@ -47,7 +47,6 @@
 |---|---|---|---|---|---|---|
 | client_values_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX client_values_pkey ON public.client_values USING btree (id)` |
 | client_values_user_id_contact_id_category_value_name_key | btree | user_id, contact_id, category, value_name | sim | sim |  | `CREATE UNIQUE INDEX client_values_user_id_contact_id_category_value_name_key ON public.client_values USING btree (user_id, contact_id, category, value_name)` |
-| idx_client_val_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_client_val_contact ON public.client_values USING btree (contact_id)` |
 | idx_client_values_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_client_values_contact ON public.client_values USING btree (contact_id)` |
 
 

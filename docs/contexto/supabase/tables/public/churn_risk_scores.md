@@ -60,7 +60,6 @@
 | churn_risk_scores_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX churn_risk_scores_pkey ON public.churn_risk_scores USING btree (id)` |
 | idx_churn_risk_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_churn_risk_contact ON public.churn_risk_scores USING btree (contact_id)` |
 | idx_churn_risk_level | btree | risk_level | não | sim |  | `CREATE INDEX idx_churn_risk_level ON public.churn_risk_scores USING btree (risk_level)` |
-| idx_churn_risk_scores_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_churn_risk_scores_user_id ON public.churn_risk_scores USING btree (user_id)` |
 | idx_churn_risk_user | btree | user_id | não | sim |  | `CREATE INDEX idx_churn_risk_user ON public.churn_risk_scores USING btree (user_id)` |
 
 

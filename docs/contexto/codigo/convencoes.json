@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
-   "fix: ativa strict mode no tsconfig.app e corrige tipos (#230)",
-   "chore(docs): bump prod-readiness pos-merge 228 (final) (#229)",
-   "chore(docs): bump prod-readiness pos-merge 227 (final) (#228)",
-   "chore(docs): bump prod-readiness pos-merge 226 (#227)",
-   "chore(docs): bump prod-readiness pos-merge 226"
+   "fix(db): remove 18 indices exatamente duplicados (auditoria ao vivo) (#232)",
+   "build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)",
+   "build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)",
+   "chore(ci): roda os testes de edge function orfaos no pipeline (#231)",
+   "build(deps): bump the minor-and-patch group with 11 updates (#237)"
   ]
  },
  "pr_template": null,

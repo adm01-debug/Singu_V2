@@ -2,138 +2,138 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "4f4b78271f0173571dbe7a049c0ff458ab40a334",
+  "commit": "d136c198f17c76b7429e1421f50429b5a00f2a6f",
   "branch": "main",
-  "data_commit": "2026-11-14T10:59:27-03:00",
+  "data_commit": "2026-11-18T09:09:41-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
    {
-    "sha": "4f4b7827",
+    "sha": "d136c19",
+    "data": "2026-11-18",
+    "assunto": "fix(db): remove 18 indices exatamente duplicados (auditoria ao vivo) (#232)"
+   },
+   {
+    "sha": "986ffa4",
+    "data": "2026-11-18",
+    "assunto": "build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)"
+   },
+   {
+    "sha": "563e484",
+    "data": "2026-11-18",
+    "assunto": "build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)"
+   },
+   {
+    "sha": "c027a81",
+    "data": "2026-11-18",
+    "assunto": "chore(ci): roda os testes de edge function orfaos no pipeline (#231)"
+   },
+   {
+    "sha": "889a650",
+    "data": "2026-11-18",
+    "assunto": "build(deps): bump the minor-and-patch group with 11 updates (#237)"
+   },
+   {
+    "sha": "ba42905",
+    "data": "2026-11-18",
+    "assunto": "fix(ci): remove BOM UTF-8 da migration do MTTA que quebra o Supabase Preview (#233)"
+   },
+   {
+    "sha": "0a7b484",
+    "data": "2026-11-14",
+    "assunto": "chore: contexto agendado de 10 min para 1x/hora (#234)"
+   },
+   {
+    "sha": "4f4b782",
     "data": "2026-11-14",
     "assunto": "fix: ativa strict mode no tsconfig.app e corrige tipos (#230)"
    },
    {
-    "sha": "03b943ae",
+    "sha": "03b943a",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 228 (final) (#229)"
    },
    {
-    "sha": "2f709284",
+    "sha": "2f70928",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 227 (final) (#228)"
    },
    {
-    "sha": "4e67de36",
+    "sha": "4e67de3",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 226 (#227)"
    },
    {
-    "sha": "8d6aaa93",
+    "sha": "8d6aaa9",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 226"
    },
    {
-    "sha": "8a4e6f2f",
+    "sha": "8a4e6f2",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 225 (#226)"
    },
    {
-    "sha": "8bc74893",
+    "sha": "8bc7489",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 225"
    },
    {
-    "sha": "4d004ceb",
+    "sha": "4d004ce",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 224 (#225)"
    },
    {
-    "sha": "1864cd1b",
+    "sha": "1864cd1",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 224"
    },
    {
-    "sha": "48a9a50c",
+    "sha": "48a9a50",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 223 (#224)"
    },
    {
-    "sha": "82deeda6",
+    "sha": "82deeda",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness pos-merge 223"
    },
    {
-    "sha": "e0851f2d",
+    "sha": "e0851f2",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 222 (#223)"
    },
    {
-    "sha": "31ec9931",
+    "sha": "31ec993",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 221 (#222)"
    },
    {
-    "sha": "783135af",
+    "sha": "783135a",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 220 (#221)"
    },
    {
-    "sha": "63673dcd",
+    "sha": "63673dc",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 219 (#220)"
    },
    {
-    "sha": "f8312ef2",
+    "sha": "f8312ef",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)"
    },
    {
-    "sha": "a8cca0e2",
+    "sha": "a8cca0e",
     "data": "2026-11-13",
     "assunto": "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)"
    },
    {
-    "sha": "b7233bb9",
+    "sha": "b7233bb",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)"
-   },
-   {
-    "sha": "5c7e2f39",
-    "data": "2026-11-13",
-    "assunto": "docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)"
-   },
-   {
-    "sha": "be23f3a8",
-    "data": "2026-11-13",
-    "assunto": "chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)"
-   },
-   {
-    "sha": "6e9097a3",
-    "data": "2026-11-13",
-    "assunto": "fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)"
-   },
-   {
-    "sha": "3a76dceb",
-    "data": "2026-11-13",
-    "assunto": "chore: inventario do estado real [auto] (#212)"
-   },
-   {
-    "sha": "0a83cb78",
-    "data": "2026-11-13",
-    "assunto": "fix(ci): pat do dono abre o pr do inventario semanal (#209)"
-   },
-   {
-    "sha": "7aa30140",
-    "data": "2026-11-12",
-    "assunto": "chore: inventario do estado real [auto] (#210)"
-   },
-   {
-    "sha": "6a57e029",
-    "data": "2026-11-12",
-    "assunto": "chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)"
    }
   ],
-  "arquivos_mudados_7d": 804,
+  "arquivos_mudados_7d": 394,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -144,11 +144,11 @@
     "mudancas": 21
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 21
+    "pasta": "scripts/migration/storage",
+    "mudancas": 20
    },
    {
-    "pasta": "scripts/migration/storage",
+    "pasta": "supabase/functions/_shared",
     "mudancas": 20
    },
    {
@@ -157,7 +157,7 @@
    },
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 17
+    "mudancas": 15
    },
    {
     "pasta": "scripts/migration/functions",
@@ -176,6 +176,10 @@
     "mudancas": 14
    },
    {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 13
+   },
+   {
     "pasta": "src/components/admin",
     "mudancas": 13
    },
@@ -186,10 +190,6 @@
    {
     "pasta": "supabase/functions/evolution-webhook",
     "mudancas": 12
-   },
-   {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 11
    },
    {
     "pasta": "src/components/crm",
@@ -203,11 +203,11 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 19
+    "mudancas": 21
    },
    {
     "arquivo": "package.json",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
@@ -218,11 +218,11 @@
     "mudancas": 14
    },
    {
-    "arquivo": "docs/qa/security-definer-audit.md",
-    "mudancas": 12
+    "arquivo": "package-lock.json",
+    "mudancas": 13
    },
    {
-    "arquivo": "package-lock.json",
+    "arquivo": "docs/qa/security-definer-audit.md",
     "mudancas": 12
    },
    {
@@ -242,6 +242,10 @@
     "mudancas": 9
    },
    {
+    "arquivo": ".github/workflows/rls-exposure-guard.yml",
+    "mudancas": 8
+   },
+   {
     "arquivo": "inventario/estado/edges.json",
     "mudancas": 8
    },
@@ -250,23 +254,19 @@
     "mudancas": 8
    },
    {
-    "arquivo": ".github/workflows/rls-exposure-guard.yml",
+    "arquivo": "supabase/tests/get_contact_sidebar_by_phone.sql",
     "mudancas": 7
    },
    {
-    "arquivo": "supabase/tests/get_contact_sidebar_by_phone.sql",
-    "mudancas": 7
+    "arquivo": ".github/workflows/inventario-estado-semanal.yml",
+    "mudancas": 6
    },
    {
     "arquivo": "RELATORIO_CI.md",
     "mudancas": 6
    },
    {
-    "arquivo": "AGENTS.md",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "ESTADO_ATUAL.md",
+    "arquivo": ".github/workflows/restore-drill.yml",
     "mudancas": 5
    },
    {
@@ -301,18 +301,18 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 76
+    "commits": 79
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 21
-   },
-   {
-    "autor": "Copilot App",
-    "commits": 4
+    "commits": 19
    },
    {
     "autor": "dependabot[bot]",
+    "commits": 7
+   },
+   {
+    "autor": "Copilot App",
     "commits": 4
    },
    {
@@ -322,9 +322,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3239,
+  "arquivos_total": 3240,
   "arquivos_codigo": 2215,
-  "linhas_codigo": 414146,
+  "linhas_codigo": 414132,
   "rotas": 114,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -334,7 +334,7 @@
   "hooks": 408,
   "edge_functions": 109,
   "tabelas": 418,
-  "migrations": 484,
+  "migrations": 485,
   "cron_jobs": 34,
   "testes": 268,
   "workflows": 11,
@@ -520,7 +520,7 @@
   },
   "scripts/ci": {
    "arquivos": 16,
-   "linhas": 2796
+   "linhas": 2782
   },
   "scripts/diff-tables.mjs": {
    "arquivos": 1,

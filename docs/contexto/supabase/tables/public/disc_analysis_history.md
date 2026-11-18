@@ -62,12 +62,10 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | disc_analysis_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX disc_analysis_history_pkey ON public.disc_analysis_history USING btree (id)` |
-| idx_disc_analysis_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_disc_analysis_contact ON public.disc_analysis_history USING btree (contact_id)` |
 | idx_disc_analysis_history_analyzed_at | btree | analyzed_at | não | sim |  | `CREATE INDEX idx_disc_analysis_history_analyzed_at ON public.disc_analysis_history USING btree (analyzed_at DESC)` |
 | idx_disc_analysis_history_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_disc_analysis_history_contact ON public.disc_analysis_history USING btree (contact_id)` |
 | idx_disc_analysis_history_interaction_id | btree | interaction_id | não | sim |  | `CREATE INDEX idx_disc_analysis_history_interaction_id ON public.disc_analysis_history USING btree (interaction_id)` |
 | idx_disc_analysis_history_user | btree | user_id | não | sim |  | `CREATE INDEX idx_disc_analysis_history_user ON public.disc_analysis_history USING btree (user_id)` |
-| idx_disc_analysis_history_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_disc_analysis_history_user_id ON public.disc_analysis_history USING btree (user_id)` |
 
 
 ## Policies (RLS)

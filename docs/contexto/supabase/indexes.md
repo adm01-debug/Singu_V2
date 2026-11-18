@@ -476,7 +476,6 @@ Uso e tamanho em `stats.md`.
 | public.churn_risk_scores | churn_risk_scores_pkey | btree | id | sim | sim |  |
 | public.churn_risk_scores | idx_churn_risk_contact | btree | contact_id | não | sim |  |
 | public.churn_risk_scores | idx_churn_risk_level | btree | risk_level | não | sim |  |
-| public.churn_risk_scores | idx_churn_risk_scores_user_id | btree | user_id | não | sim |  |
 | public.churn_risk_scores | idx_churn_risk_user | btree | user_id | não | sim |  |
 | public.cidades | cidades_pkey | btree | ibge_code | sim | sim |  |
 | public.cidades | idx_cidades_estado_ibge | btree | estado_ibge | não | sim |  |
@@ -485,7 +484,6 @@ Uso e tamanho em `stats.md`.
 | public.city_whitelist | idx_city_whitelist_user_id | btree | user_id | não | sim |  |
 | public.client_values | client_values_pkey | btree | id | sim | sim |  |
 | public.client_values | client_values_user_id_contact_id_category_value_name_key | btree | user_id, contact_id, category, value_name | sim | sim |  |
-| public.client_values | idx_client_val_contact | btree | contact_id | não | sim |  |
 | public.client_values | idx_client_values_contact | btree | contact_id | não | sim |  |
 | public.clients | clients_pkey | btree | id | sim | sim |  |
 | public.clients | idx_clients_deleted_by | btree | deleted_by | não | sim |  |
@@ -829,22 +827,18 @@ Uso e tamanho em `stats.md`.
 | public.deals | idx_deals_status | btree | status | não | sim |  |
 | public.deals | idx_deals_user | btree | user_id | não | sim |  |
 | public.decision_criteria | decision_criteria_pkey | btree | id | sim | sim |  |
-| public.decision_criteria | idx_dec_crit_contact | btree | contact_id | não | sim |  |
 | public.decision_criteria | idx_decision_criteria_contact | btree | contact_id | não | sim |  |
 | public.decision_criteria | idx_decision_criteria_user_id | btree | user_id | não | sim |  |
 | public.device_login_notifications | device_login_notifications_pkey | btree | id | sim | sim |  |
 | public.device_login_notifications | idx_device_login_notifications_user_id | btree | user_id | não | sim |  |
 | public.disc_analysis_history | disc_analysis_history_pkey | btree | id | sim | sim |  |
-| public.disc_analysis_history | idx_disc_analysis_contact | btree | contact_id | não | sim |  |
 | public.disc_analysis_history | idx_disc_analysis_history_analyzed_at | btree | analyzed_at | não | sim |  |
 | public.disc_analysis_history | idx_disc_analysis_history_contact | btree | contact_id | não | sim |  |
 | public.disc_analysis_history | idx_disc_analysis_history_interaction_id | btree | interaction_id | não | sim |  |
 | public.disc_analysis_history | idx_disc_analysis_history_user | btree | user_id | não | sim |  |
-| public.disc_analysis_history | idx_disc_analysis_history_user_id | btree | user_id | não | sim |  |
 | public.disc_analysis_history_audit | disc_analysis_history_audit_pkey | btree | id | sim | sim |  |
 | public.disc_approach_recommendations | disc_approach_recommendations_pkey | btree | id | sim | sim |  |
 | public.disc_communication_logs | disc_communication_logs_pkey | btree | id | sim | sim |  |
-| public.disc_communication_logs | idx_disc_comm_contact | btree | contact_id | não | sim |  |
 | public.disc_communication_logs | idx_disc_communication_logs_contact | btree | contact_id | não | sim |  |
 | public.disc_communication_logs | idx_disc_communication_logs_interaction_id | btree | interaction_id | não | sim |  |
 | public.disc_communication_logs | idx_disc_communication_logs_user_id | btree | user_id | não | sim |  |
@@ -860,7 +854,6 @@ Uso e tamanho em `stats.md`.
 | public.document_signatures | idx_document_signatures_status | btree | user_id, status | não | sim |  |
 | public.document_signatures | idx_document_signatures_token | btree | signature_token | não | sim |  |
 | public.document_signatures | idx_document_signatures_user | btree | user_id | não | sim |  |
-| public.document_signatures | idx_document_signatures_user_id | btree | user_id | não | sim |  |
 | public.document_templates | document_templates_pkey | btree | id | sim | sim |  |
 | public.document_templates | idx_document_templates_user | btree | user_id | não | sim |  |
 | public.document_templates | idx_document_templates_user_id | btree | user_id | não | sim |  |
@@ -899,11 +892,9 @@ Uso e tamanho em `stats.md`.
 | public.email_verifications | idx_email_verif_verified_at | btree | verified_at | não | sim |  |
 | public.embedding_configs | embedding_configs_pkey | btree | id | sim | sim |  |
 | public.emotional_anchors | emotional_anchors_pkey | btree | id | sim | sim |  |
-| public.emotional_anchors | idx_emo_anchors_contact | btree | contact_id | não | sim |  |
 | public.emotional_anchors | idx_emotional_anchors_contact | btree | contact_id | não | sim |  |
 | public.emotional_anchors | idx_emotional_anchors_user_id | btree | user_id | não | sim |  |
 | public.emotional_states_history | emotional_states_history_pkey | btree | id | sim | sim |  |
-| public.emotional_states_history | idx_emo_states_contact | btree | contact_id | não | sim |  |
 | public.emotional_states_history | idx_emotional_states_contact | btree | contact_id | não | sim |  |
 | public.emotional_states_history | idx_emotional_states_created | btree | created_at | não | sim |  |
 | public.emotional_states_history | idx_emotional_states_history_interaction_id | btree | interaction_id | não | sim |  |
@@ -970,7 +961,6 @@ Uso e tamanho em `stats.md`.
 | public.hidden_objections | idx_hidden_objections_contact | btree | contact_id | não | sim |  |
 | public.hidden_objections | idx_hidden_objections_interaction_id | btree | interaction_id | não | sim |  |
 | public.hidden_objections | idx_hidden_objections_resolved | btree | resolved | não | sim |  |
-| public.hidden_objections | idx_objections_contact | btree | contact_id | não | sim |  |
 | public.hidden_objections | idx_objections_user | btree | user_id | não | sim |  |
 | public.import_jobs | idx_import_jobs_created_by | btree | created_by | não | sim |  |
 | public.import_jobs | import_jobs_pkey | btree | id | sim | sim |  |
@@ -1107,7 +1097,6 @@ Uso e tamanho em `stats.md`.
 | public.mql_classifications | mql_classifications_pkey | btree | id | sim | sim |  |
 | public.mql_criteria | idx_mqlc_user | btree | user_id | não | sim |  |
 | public.mql_criteria | mql_criteria_pkey | btree | id | sim | sim |  |
-| public.neuro_behavioral_history | idx_neuro_history_contact | btree | contact_id | não | sim |  |
 | public.neuro_behavioral_history | idx_neuro_history_contact_id | btree | contact_id | não | sim |  |
 | public.neuro_behavioral_history | neuro_behavioral_history_pkey | btree | id | sim | sim |  |
 | public.neuro_pnl_sessions | idx_neuro_pnl_contact_id | btree | contact_id | não | sim |  |
@@ -1139,7 +1128,6 @@ Uso e tamanho em `stats.md`.
 | public.objection_example_feedback | idx_objection_example_feedback_user_objection | btree | user_id, objection | não | sim |  |
 | public.objection_example_feedback | objection_example_feedback_pkey | btree | id | sim | sim |  |
 | public.objection_example_feedback | objection_example_feedback_unique | btree | user_id, objection, interaction_id | sim | sim |  |
-| public.offer_suggestions | idx_offer_sug_contact | btree | contact_id | não | sim |  |
 | public.offer_suggestions | idx_offer_suggestions_contact | btree | contact_id | não | sim |  |
 | public.offer_suggestions | idx_offer_suggestions_status | btree | status | não | sim |  |
 | public.offer_suggestions | idx_offer_suggestions_user_id | btree | user_id | não | sim |  |
@@ -1247,13 +1235,10 @@ Uso e tamanho em `stats.md`.
 | public.sales | idx_sales_created | btree | created_at | não | sim |  |
 | public.sales | idx_sales_deleted_by | btree | deleted_by | não | sim |  |
 | public.sales | idx_sales_salesperson_id | btree | salesperson_id | não | sim |  |
-| public.sales | legacy_sales_salesperson_scope_idx | btree | salesperson_id | não | sim |  |
 | public.sales | sales_pkey | btree | id | sim | sim |  |
 | public.sales_activities | idx_sales_activities_deleted_by | btree | deleted_by | não | sim |  |
 | public.sales_activities | idx_sales_activities_sale_id | btree | sale_id | não | sim |  |
 | public.sales_activities | idx_sales_activities_salesperson_id | btree | salesperson_id | não | sim |  |
-| public.sales_activities | legacy_sales_activities_sale_scope_idx | btree | sale_id | não | sim |  |
-| public.sales_activities | legacy_sales_activities_salesperson_scope_idx | btree | salesperson_id | não | sim |  |
 | public.sales_activities | sales_activities_pkey | btree | id | sim | sim |  |
 | public.sales_cadences | idx_sales_cadences_created_by | btree | created_by | não | sim |  |
 | public.sales_cadences | sales_cadences_pkey | btree | id | sim | sim |  |
@@ -1521,9 +1506,7 @@ Uso e tamanho em `stats.md`.
 | public.whatsapp_instances | whatsapp_instances_user_id_instance_name_key | btree | user_id, instance_name | sim | sim |  |
 | public.whatsapp_kpis | idx_whatsapp_kpis_user_id | btree | user_id | não | sim |  |
 | public.whatsapp_kpis | whatsapp_kpis_pkey | btree | id | sim | sim |  |
-| public.whatsapp_messages | idx_whatsapp_messages_company | btree | company_id | não | sim |  |
 | public.whatsapp_messages | idx_whatsapp_messages_company_id | btree | company_id | não | sim |  |
-| public.whatsapp_messages | idx_whatsapp_messages_contact | btree | contact_id | não | sim |  |
 | public.whatsapp_messages | idx_whatsapp_messages_contact_id | btree | contact_id | não | sim |  |
 | public.whatsapp_messages | idx_whatsapp_messages_instance | btree | instance_name | não | sim |  |
 | public.whatsapp_messages | idx_whatsapp_messages_msg_id | btree | message_id | não | sim |  |

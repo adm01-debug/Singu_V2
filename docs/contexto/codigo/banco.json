@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 484,
+ "migrations": 485,
  "seeds": [],
  "avisos": [
   "131 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -32275,11 +32275,6 @@
      "unico": false
     },
     {
-     "nome": "idx_neuro_history_contact",
-     "colunas": "contact_id",
-     "unico": false
-    },
-    {
      "nome": "idx_neuro_history_contact_id",
      "colunas": "contact_id",
      "unico": false
@@ -38252,13 +38247,7 @@
      "tipo": "permissive"
     }
    ],
-   "indices": [
-    {
-     "nome": "legacy_sales_salesperson_scope_idx",
-     "colunas": "salesperson_id",
-     "unico": false
-    }
-   ],
+   "indices": [],
    "fks": [
     "deleted_by->auth.users",
     "salesperson_id->salespeople"
@@ -38385,18 +38374,7 @@
      "tipo": "permissive"
     }
    ],
-   "indices": [
-    {
-     "nome": "legacy_sales_activities_sale_scope_idx",
-     "colunas": "sale_id",
-     "unico": false
-    },
-    {
-     "nome": "legacy_sales_activities_salesperson_scope_idx",
-     "colunas": "salesperson_id",
-     "unico": false
-    }
-   ],
+   "indices": [],
    "fks": [
     "deleted_by->auth.users",
     "sale_id->sales",
@@ -44624,11 +44602,6 @@
     }
    ],
    "indices": [
-    {
-     "nome": "idx_health_snapshots_timestamp_desc",
-     "colunas": "timestamp DESC",
-     "unico": false
-    },
     {
      "nome": "idx_system_health_snapshots_timestamp",
      "colunas": "timestamp DESC",

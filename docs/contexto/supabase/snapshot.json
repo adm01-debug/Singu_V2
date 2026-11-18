@@ -186474,6 +186474,34 @@
     "foreign_servers": [],
     "functions": [
       {
+        "args": "",
+        "callers": {
+          "code": [],
+          "code_total_files": 0,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": null,
+        "definition": null,
+        "definition_sha": "9f221343a8ad930c",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": true,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "__diag_multiplix",
+        "owner": "postgres",
+        "returns": "TABLE(fn text, veredito text)",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
         "args": "p_company_id uuid",
         "callers": {
           "code": [],
@@ -220688,12 +220716,12 @@
           "search_path=public"
         ],
         "definition": null,
-        "definition_sha": "a0f329a14971b339",
+        "definition_sha": "4935efe77538e0d3",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
-        "language": "sql",
+        "language": "plpgsql",
         "leakproof": false,
         "name": "multiplix_list_ufs",
         "owner": "postgres",
@@ -253652,20 +253680,6 @@
         "columns": [
           "user_id"
         ],
-        "definition": "CREATE INDEX idx_churn_risk_scores_user_id ON public.churn_risk_scores USING btree (user_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_churn_risk_scores_user_id",
-        "predicate": null,
-        "schema": "public",
-        "table": "churn_risk_scores"
-      },
-      {
-        "columns": [
-          "user_id"
-        ],
         "definition": "CREATE INDEX idx_churn_risk_user ON public.churn_risk_scores USING btree (user_id)",
         "is_primary": false,
         "is_unique": false,
@@ -253773,20 +253787,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "client_values_user_id_contact_id_category_value_name_key",
-        "predicate": null,
-        "schema": "public",
-        "table": "client_values"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_client_val_contact ON public.client_values USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_client_val_contact",
         "predicate": null,
         "schema": "public",
         "table": "client_values"
@@ -258659,20 +258659,6 @@
         "columns": [
           "contact_id"
         ],
-        "definition": "CREATE INDEX idx_dec_crit_contact ON public.decision_criteria USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_dec_crit_contact",
-        "predicate": null,
-        "schema": "public",
-        "table": "decision_criteria"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
         "definition": "CREATE INDEX idx_decision_criteria_contact ON public.decision_criteria USING btree (contact_id)",
         "is_primary": false,
         "is_unique": false,
@@ -258741,20 +258727,6 @@
       },
       {
         "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_disc_analysis_contact ON public.disc_analysis_history USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_disc_analysis_contact",
-        "predicate": null,
-        "schema": "public",
-        "table": "disc_analysis_history"
-      },
-      {
-        "columns": [
           "analyzed_at"
         ],
         "definition": "CREATE INDEX idx_disc_analysis_history_analyzed_at ON public.disc_analysis_history USING btree (analyzed_at DESC)",
@@ -258811,20 +258783,6 @@
       },
       {
         "columns": [
-          "user_id"
-        ],
-        "definition": "CREATE INDEX idx_disc_analysis_history_user_id ON public.disc_analysis_history USING btree (user_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_disc_analysis_history_user_id",
-        "predicate": null,
-        "schema": "public",
-        "table": "disc_analysis_history"
-      },
-      {
-        "columns": [
           "id"
         ],
         "definition": "CREATE UNIQUE INDEX disc_analysis_history_audit_pkey ON public.disc_analysis_history_audit USING btree (id)",
@@ -258861,20 +258819,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "disc_communication_logs_pkey",
-        "predicate": null,
-        "schema": "public",
-        "table": "disc_communication_logs"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_disc_comm_contact ON public.disc_communication_logs USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_disc_comm_contact",
         "predicate": null,
         "schema": "public",
         "table": "disc_communication_logs"
@@ -259089,20 +259033,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "idx_document_signatures_user",
-        "predicate": null,
-        "schema": "public",
-        "table": "document_signatures"
-      },
-      {
-        "columns": [
-          "user_id"
-        ],
-        "definition": "CREATE INDEX idx_document_signatures_user_id ON public.document_signatures USING btree (user_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_document_signatures_user_id",
         "predicate": null,
         "schema": "public",
         "table": "document_signatures"
@@ -259648,20 +259578,6 @@
         "columns": [
           "contact_id"
         ],
-        "definition": "CREATE INDEX idx_emo_anchors_contact ON public.emotional_anchors USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_emo_anchors_contact",
-        "predicate": null,
-        "schema": "public",
-        "table": "emotional_anchors"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
         "definition": "CREATE INDEX idx_emotional_anchors_contact ON public.emotional_anchors USING btree (contact_id)",
         "is_primary": false,
         "is_unique": false,
@@ -259696,20 +259612,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "emotional_states_history_pkey",
-        "predicate": null,
-        "schema": "public",
-        "table": "emotional_states_history"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_emo_states_contact ON public.emotional_states_history USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_emo_states_contact",
         "predicate": null,
         "schema": "public",
         "table": "emotional_states_history"
@@ -260653,20 +260555,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "idx_hidden_objections_resolved",
-        "predicate": null,
-        "schema": "public",
-        "table": "hidden_objections"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_objections_contact ON public.hidden_objections USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_objections_contact",
         "predicate": null,
         "schema": "public",
         "table": "hidden_objections"
@@ -262602,20 +262490,6 @@
         "columns": [
           "contact_id"
         ],
-        "definition": "CREATE INDEX idx_neuro_history_contact ON public.neuro_behavioral_history USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_neuro_history_contact",
-        "predicate": null,
-        "schema": "public",
-        "table": "neuro_behavioral_history"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
         "definition": "CREATE INDEX idx_neuro_history_contact_id ON public.neuro_behavioral_history USING btree (contact_id)",
         "is_primary": false,
         "is_unique": false,
@@ -263052,20 +262926,6 @@
         "predicate": null,
         "schema": "public",
         "table": "objection_example_feedback"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_offer_sug_contact ON public.offer_suggestions USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_offer_sug_contact",
-        "predicate": null,
-        "schema": "public",
-        "table": "offer_suggestions"
       },
       {
         "columns": [
@@ -264600,20 +264460,6 @@
       },
       {
         "columns": [
-          "salesperson_id"
-        ],
-        "definition": "CREATE INDEX legacy_sales_salesperson_scope_idx ON public.sales USING btree (salesperson_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "legacy_sales_salesperson_scope_idx",
-        "predicate": null,
-        "schema": "public",
-        "table": "sales"
-      },
-      {
-        "columns": [
           "id"
         ],
         "definition": "CREATE UNIQUE INDEX sales_pkey ON public.sales USING btree (id)",
@@ -264664,34 +264510,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "idx_sales_activities_salesperson_id",
-        "predicate": null,
-        "schema": "public",
-        "table": "sales_activities"
-      },
-      {
-        "columns": [
-          "sale_id"
-        ],
-        "definition": "CREATE INDEX legacy_sales_activities_sale_scope_idx ON public.sales_activities USING btree (sale_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "legacy_sales_activities_sale_scope_idx",
-        "predicate": null,
-        "schema": "public",
-        "table": "sales_activities"
-      },
-      {
-        "columns": [
-          "salesperson_id"
-        ],
-        "definition": "CREATE INDEX legacy_sales_activities_salesperson_scope_idx ON public.sales_activities USING btree (salesperson_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "legacy_sales_activities_salesperson_scope_idx",
         "predicate": null,
         "schema": "public",
         "table": "sales_activities"
@@ -268507,40 +268325,12 @@
         "columns": [
           "company_id"
         ],
-        "definition": "CREATE INDEX idx_whatsapp_messages_company ON public.whatsapp_messages USING btree (company_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_whatsapp_messages_company",
-        "predicate": null,
-        "schema": "public",
-        "table": "whatsapp_messages"
-      },
-      {
-        "columns": [
-          "company_id"
-        ],
         "definition": "CREATE INDEX idx_whatsapp_messages_company_id ON public.whatsapp_messages USING btree (company_id)",
         "is_primary": false,
         "is_unique": false,
         "is_valid": true,
         "method": "btree",
         "name": "idx_whatsapp_messages_company_id",
-        "predicate": null,
-        "schema": "public",
-        "table": "whatsapp_messages"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_whatsapp_messages_contact ON public.whatsapp_messages USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_whatsapp_messages_contact",
         "predicate": null,
         "schema": "public",
         "table": "whatsapp_messages"
@@ -276992,6 +276782,18 @@
         "name": "weekly_digest_cron_horario",
         "statements": null,
         "version": "20261112001000"
+      },
+      {
+        "name": "remove_duplicate_indexes",
+        "statements": 1,
+        "statements_sha": "c573160ba1780538",
+        "version": "20261118121105"
+      },
+      {
+        "name": "multiplix_list_ufs_cast_text",
+        "statements": 1,
+        "statements_sha": "e1d9ba7d303441dc",
+        "version": "20261118122016"
       }
     ],
     "policies": [

@@ -59,9 +59,7 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| idx_whatsapp_messages_company | btree | company_id | não | sim |  | `CREATE INDEX idx_whatsapp_messages_company ON public.whatsapp_messages USING btree (company_id)` |
 | idx_whatsapp_messages_company_id | btree | company_id | não | sim |  | `CREATE INDEX idx_whatsapp_messages_company_id ON public.whatsapp_messages USING btree (company_id)` |
-| idx_whatsapp_messages_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_whatsapp_messages_contact ON public.whatsapp_messages USING btree (contact_id)` |
 | idx_whatsapp_messages_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_whatsapp_messages_contact_id ON public.whatsapp_messages USING btree (contact_id)` |
 | idx_whatsapp_messages_instance | btree | instance_name | não | sim |  | `CREATE INDEX idx_whatsapp_messages_instance ON public.whatsapp_messages USING btree (instance_name)` |
 | idx_whatsapp_messages_msg_id | btree | message_id | não | sim |  | `CREATE INDEX idx_whatsapp_messages_msg_id ON public.whatsapp_messages USING btree (message_id)` |

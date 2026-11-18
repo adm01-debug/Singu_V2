@@ -75,7 +75,6 @@
 | idx_document_signatures_status | btree | user_id, status | não | sim |  | `CREATE INDEX idx_document_signatures_status ON public.document_signatures USING btree (user_id, status)` |
 | idx_document_signatures_token | btree | signature_token | não | sim |  | `CREATE INDEX idx_document_signatures_token ON public.document_signatures USING btree (signature_token)` |
 | idx_document_signatures_user | btree | user_id | não | sim |  | `CREATE INDEX idx_document_signatures_user ON public.document_signatures USING btree (user_id)` |
-| idx_document_signatures_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_document_signatures_user_id ON public.document_signatures USING btree (user_id)` |
 
 
 ## Policies (RLS)

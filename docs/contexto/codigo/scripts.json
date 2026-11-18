@@ -419,7 +419,7 @@
   {
    "arquivo": "scripts/ci/check-test-inventory.mjs",
    "descricao": "Inventário de testes: todo teste que existe no disco tem de ser executado por algum workflow. Sem este guarda um teste nasce (ou é tirado do CI) e ninguém percebe — foi",
-   "linhas": 272,
+   "linhas": 258,
    "env": [],
    "npm_scripts": [
     "estado:testes"

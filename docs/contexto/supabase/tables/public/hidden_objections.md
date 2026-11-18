@@ -54,7 +54,6 @@
 | idx_hidden_objections_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_hidden_objections_contact ON public.hidden_objections USING btree (contact_id)` |
 | idx_hidden_objections_interaction_id | btree | interaction_id | não | sim |  | `CREATE INDEX idx_hidden_objections_interaction_id ON public.hidden_objections USING btree (interaction_id)` |
 | idx_hidden_objections_resolved | btree | resolved | não | sim |  | `CREATE INDEX idx_hidden_objections_resolved ON public.hidden_objections USING btree (resolved)` |
-| idx_objections_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_objections_contact ON public.hidden_objections USING btree (contact_id)` |
 | idx_objections_user | btree | user_id | não | sim |  | `CREATE INDEX idx_objections_user ON public.hidden_objections USING btree (user_id)` |
 
 

@@ -45,7 +45,6 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | decision_criteria_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX decision_criteria_pkey ON public.decision_criteria USING btree (id)` |
-| idx_dec_crit_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_dec_crit_contact ON public.decision_criteria USING btree (contact_id)` |
 | idx_decision_criteria_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_decision_criteria_contact ON public.decision_criteria USING btree (contact_id)` |
 | idx_decision_criteria_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_decision_criteria_user_id ON public.decision_criteria USING btree (user_id)` |
 

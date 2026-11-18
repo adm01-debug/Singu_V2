@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `4f4b78271f0173571dbe7a049c0ff458ab40a334` (2026-11-14T10:59:27-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d136c198f17c76b7429e1421f50429b5a00f2a6f` (2026-11-18T09:09:41-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2052), SQL (657), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
+- linguagens: TypeScript (2052), SQL (658), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3239 |
+| arquivos_total | 3240 |
 | arquivos_codigo | 2215 |
-| linhas_codigo | 414146 |
+| linhas_codigo | 414132 |
 | rotas | 114 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -46,7 +46,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 408 |
 | edge_functions | 109 |
 | tabelas | 418 |
-| migrations | 484 |
+| migrations | 485 |
 | cron_jobs | 34 |
 | testes | 268 |
 | workflows | 11 |
@@ -433,32 +433,32 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21147 nós · 35841 arestas · 2072 comunidades · grafo do commit `4f4b7827`
+- 21148 nós · 35841 arestas · 2073 comunidades · grafo do commit `d136c198`
 - comunidades maiores: ref_hooks (407), vitest (329), _shared/auth.ts (305), ref_types (277), ref_lib (274), 02_tables.sql (259), useAuth (249), framer-motion (247), react-router-dom (233), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (219), ref_components (219)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - CHANGELOG.md (48)
-- .github/workflows/ci.yml (19)
-- package.json (17)
+- .github/workflows/ci.yml (21)
+- package.json (18)
 - supabase/functions/external-data/index.ts (15)
 - docs/prod-readiness.md (14)
+- package-lock.json (13)
 - docs/qa/security-definer-audit.md (12)
-- package-lock.json (12)
 - tests/rls/security_definer_hardening.sql (11)
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
 - inventario/estado/banco.json (9)
+- .github/workflows/rls-exposure-guard.yml (8)
 - inventario/estado/edges.json (8)
 - inventario/estado/tabelas-uso.json (8)
-- .github/workflows/rls-exposure-guard.yml (7)
 - supabase/tests/get_contact_sidebar_by_phone.sql (7)
 
 ## Workflows
 - `automation-local.yml` — Automação local (pull_request, push, workflow_dispatch)
 - `ci.yml` — CI (pull_request, push)
-- `contexto.yml` — Contexto para agentes de IA (10 min) (push, schedule, workflow_dispatch; cron 3-59/10 * * * *)
+- `contexto.yml` — Contexto para agentes de IA (10 min) (push, schedule, workflow_dispatch; cron 3 * * * *)
 - `docs-ci.yml` — Documentação sem drift (pull_request, push)
 - `estado-real.yml` — Estado real do repositório (pull_request, push, workflow_dispatch)
 - `fix-jwt-proxies-externas.yml` — Fix JWT proxies externas (workflow_dispatch)
@@ -570,21 +570,21 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
-- 2026-11-14 `4f4b7827` fix: ativa strict mode no tsconfig.app e corrige tipos (#230)
-- 2026-11-14 `03b943ae` chore(docs): bump prod-readiness pos-merge 228 (final) (#229)
-- 2026-11-14 `2f709284` chore(docs): bump prod-readiness pos-merge 227 (final) (#228)
-- 2026-11-14 `4e67de36` chore(docs): bump prod-readiness pos-merge 226 (#227)
-- 2026-11-14 `8d6aaa93` chore(docs): bump prod-readiness pos-merge 226
-- 2026-11-14 `8a4e6f2f` chore(docs): bump prod-readiness pos-merge 225 (#226)
-- 2026-11-14 `8bc74893` chore(docs): bump prod-readiness pos-merge 225
-- 2026-11-14 `4d004ceb` chore(docs): bump prod-readiness pos-merge 224 (#225)
-- 2026-11-14 `1864cd1b` chore(docs): bump prod-readiness pos-merge 224
-- 2026-11-14 `48a9a50c` chore(docs): bump prod-readiness pos-merge 223 (#224)
-- 2026-11-13 `82deeda6` chore(docs): bump prod-readiness pos-merge 223
-- 2026-11-13 `e0851f2d` chore(docs): bump prod-readiness para o head pos-merge 222 (#223)
-- 2026-11-13 `31ec9931` chore(docs): bump prod-readiness para o head pos-merge 221 (#222)
-- 2026-11-13 `783135af` chore(docs): bump prod-readiness para o head pos-merge 220 (#221)
-- 2026-11-13 `63673dcd` chore(docs): bump prod-readiness para o head pos-merge 219 (#220)
+- 2026-11-18 `d136c19` fix(db): remove 18 indices exatamente duplicados (auditoria ao vivo) (#232)
+- 2026-11-18 `986ffa4` build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)
+- 2026-11-18 `563e484` build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)
+- 2026-11-18 `c027a81` chore(ci): roda os testes de edge function orfaos no pipeline (#231)
+- 2026-11-18 `889a650` build(deps): bump the minor-and-patch group with 11 updates (#237)
+- 2026-11-18 `ba42905` fix(ci): remove BOM UTF-8 da migration do MTTA que quebra o Supabase Preview (#233)
+- 2026-11-14 `0a7b484` chore: contexto agendado de 10 min para 1x/hora (#234)
+- 2026-11-14 `4f4b782` fix: ativa strict mode no tsconfig.app e corrige tipos (#230)
+- 2026-11-14 `03b943a` chore(docs): bump prod-readiness pos-merge 228 (final) (#229)
+- 2026-11-14 `2f70928` chore(docs): bump prod-readiness pos-merge 227 (final) (#228)
+- 2026-11-14 `4e67de3` chore(docs): bump prod-readiness pos-merge 226 (#227)
+- 2026-11-14 `8d6aaa9` chore(docs): bump prod-readiness pos-merge 226
+- 2026-11-14 `8a4e6f2` chore(docs): bump prod-readiness pos-merge 225 (#226)
+- 2026-11-14 `8bc7489` chore(docs): bump prod-readiness pos-merge 225
+- 2026-11-14 `4d004ce` chore(docs): bump prod-readiness pos-merge 224 (#225)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

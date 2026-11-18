@@ -47,8 +47,6 @@
 | idx_sales_activities_deleted_by | btree | deleted_by | não | sim |  | `CREATE INDEX idx_sales_activities_deleted_by ON public.sales_activities USING btree (deleted_by)` |
 | idx_sales_activities_sale_id | btree | sale_id | não | sim |  | `CREATE INDEX idx_sales_activities_sale_id ON public.sales_activities USING btree (sale_id)` |
 | idx_sales_activities_salesperson_id | btree | salesperson_id | não | sim |  | `CREATE INDEX idx_sales_activities_salesperson_id ON public.sales_activities USING btree (salesperson_id)` |
-| legacy_sales_activities_sale_scope_idx | btree | sale_id | não | sim |  | `CREATE INDEX legacy_sales_activities_sale_scope_idx ON public.sales_activities USING btree (sale_id)` |
-| legacy_sales_activities_salesperson_scope_idx | btree | salesperson_id | não | sim |  | `CREATE INDEX legacy_sales_activities_salesperson_scope_idx ON public.sales_activities USING btree (salesperson_id)` |
 | sales_activities_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX sales_activities_pkey ON public.sales_activities USING btree (id)` |
 
 

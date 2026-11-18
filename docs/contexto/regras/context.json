@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "4f4b78271f0173571dbe7a049c0ff458ab40a334",
+  "sha": "d136c198f17c76b7429e1421f50429b5a00f2a6f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-14 14:10 UTC",
-  "files_total": 3344,
-  "code_files": 2873,
-  "code_lines": 409851
+  "generated_at": "2026-11-18 12:34 UTC",
+  "files_total": 3345,
+  "code_files": 2874,
+  "code_lines": 409899
  },
  "version": "1.3.2",
- "facts_hash": "fa9ef76a5c4ae909",
+ "facts_hash": "df4c5a254a0c1461",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -27,7 +27,7 @@
     "in": "package.json"
    },
    "@tanstack/react-query": {
-    "version": "^5.106.1",
+    "version": "^5.107.1",
     "role": "Cache/fetch de dados (TanStack Query)",
     "in": "package.json"
    },
@@ -52,7 +52,7 @@
     "in": "package.json"
    },
    "react-hook-form": {
-    "version": "^7.91.0",
+    "version": "^7.92.0",
     "role": "Forms (react-hook-form)",
     "in": "package.json"
    },
@@ -72,7 +72,7 @@
     "in": "package.json"
    },
    "zustand": {
-    "version": "^5.0.16",
+    "version": "^5.1.0",
     "role": "Estado Zustand",
     "in": "package.json"
    },
@@ -92,7 +92,7 @@
     "in": "package.json"
    },
    "vite": {
-    "version": "6.4.5",
+    "version": "6.4.6",
     "role": "Bundler Vite",
     "in": "package.json"
    },
@@ -253,7 +253,7 @@
   "languages": {
    ".tsx": 1158,
    ".ts": 894,
-   ".sql": 657,
+   ".sql": 658,
    ".mjs": 123,
    ".py": 21,
    ".js": 18,
@@ -48907,7 +48907,8 @@
    "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
    "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
    "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql",
-   "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
+   "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
+   "supabase/migrations/20261114124000_remove_duplicate_indexes.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -65621,7 +65622,7 @@
    },
    {
     "kind": "GitHub Actions cron",
-    "detail": "3-59/10 * * * *",
+    "detail": "3 * * * *",
     "file": ".github/workflows/contexto.yml"
    },
    {
@@ -68773,7 +68774,7 @@
   {
    "module": "scripts",
    "files": 309,
-   "lines": 51549,
+   "lines": 51535,
    "tables": [
     "__proto__",
     "a",
@@ -70732,8 +70733,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 484,
-   "lines": 43056,
+   "files": 485,
+   "lines": 43118,
    "tables": [
     "users"
    ],
@@ -171438,7 +171439,7 @@
   },
   "scripts/ci/check-test-inventory.mjs": {
    "path": "scripts/ci/check-test-inventory.mjs",
-   "lines": 272,
+   "lines": 258,
    "exports": [
     "const RAIZ",
     "const ALLOWLIST_NODE",
@@ -171458,10 +171459,7 @@
     "regra, com fechamento transitivo por import estático (agregador cobre o importado).",
     "preflight local dizia OK e o mesmo commit falhava apenas no checkout limpo do CI."
    ],
-   "doc": "!/usr/bin/env node Inventário de testes: todo teste que existe no disco tem de ser executado por algum workflow. Sem este guarda um teste nasce (ou é tirado do CI) e ninguém percebe — foi exatamente o que aconteceu aqui: 15 suítes Deno de supabase/functions/ existiam no repo e nenhum passo de CI as …",
-   "side_effects": [
-    "notify"
-   ]
+   "doc": "!/usr/bin/env node Inventário de testes: todo teste que existe no disco tem de ser executado por algum workflow. Sem este guarda um teste nasce (ou é tirado do CI) e ninguém percebe — foi exatamente o que aconteceu aqui: 15 suítes Deno de supabase/functions/ existiam no repo e nenhum passo de CI as …"
   },
   "scripts/ci/check-test-inventory.test.mjs": {
    "path": "scripts/ci/check-test-inventory.test.mjs",
@@ -232144,6 +232142,10 @@
     "AND timestamp > now() - interval '24 hours';"
    ]
   },
+  "supabase/migrations/20261114124000_remove_duplicate_indexes.sql": {
+   "path": "supabase/migrations/20261114124000_remove_duplicate_indexes.sql",
+   "lines": 62
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -232817,10 +232819,82 @@
   }
  },
  "git": {
-  "sha": "4f4b78271f0173571dbe7a049c0ff458ab40a334",
+  "sha": "d136c198f17c76b7429e1421f50429b5a00f2a6f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "d136c19",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(db): remove 18 indices exatamente duplicados (auditoria ao vivo) (#232)",
+    "files": [
+     "supabase/migrations/20261114124000_remove_duplicate_indexes.sql"
+    ]
+   },
+   {
+    "sha": "986ffa4",
+    "date": "2026-11-18",
+    "author": "dependabot[bot]",
+    "subject": "build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)",
+    "files": [
+     ".github/workflows/automation-local.yml",
+     ".github/workflows/ci.yml",
+     ".github/workflows/docs-ci.yml",
+     ".github/workflows/estado-real.yml",
+     ".github/workflows/higiene-semanal.yml",
+     ".github/workflows/inventario-estado-semanal.yml",
+     ".github/workflows/restore-drill.yml",
+     ".github/workflows/rls-exposure-guard.yml"
+    ]
+   },
+   {
+    "sha": "563e484",
+    "date": "2026-11-18",
+    "author": "dependabot[bot]",
+    "subject": "build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)",
+    "files": [
+     ".github/workflows/inventario-estado-semanal.yml"
+    ]
+   },
+   {
+    "sha": "c027a81",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "chore(ci): roda os testes de edge function orfaos no pipeline (#231)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "scripts/ci/check-test-inventory.mjs"
+    ]
+   },
+   {
+    "sha": "889a650",
+    "date": "2026-11-18",
+    "author": "dependabot[bot]",
+    "subject": "build(deps): bump the minor-and-patch group with 11 updates (#237)",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
+   {
+    "sha": "ba42905",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(ci): remove BOM UTF-8 da migration do MTTA que quebra o Supabase Preview (#233)",
+    "files": [
+     "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
+    ]
+   },
+   {
+    "sha": "0a7b484",
+    "date": "2026-11-14",
+    "author": "adm01-debug",
+    "subject": "chore: contexto agendado de 10 min para 1x/hora (#234)",
+    "files": [
+     ".github/workflows/contexto.yml"
+    ]
+   },
    {
     "sha": "4f4b782",
     "date": "2026-11-14",
@@ -233202,199 +233276,6 @@
     "files": [
      ".github/workflows/inventario-estado-semanal.yml"
     ]
-   },
-   {
-    "sha": "7aa3014",
-    "date": "2026-11-12",
-    "author": "adm01-debug",
-    "subject": "chore: inventario do estado real [auto] (#210)",
-    "files": [
-     "inventario/estado/banco.json",
-     "inventario/estado/edges.json",
-     "inventario/estado/tabelas-uso.json"
-    ]
-   },
-   {
-    "sha": "6a57e02",
-    "date": "2026-11-12",
-    "author": "adm01-debug",
-    "subject": "chore(scripts): integra endurecimento e testes de migração (trabalho pós-#186) (#207)",
-    "files": [
-     "docs/perf/explain-analyze.md",
-     "scripts/ai-context/README.md",
-     "scripts/ai-context/cenarios.mjs",
-     "scripts/ai-context/gerar.mjs",
-     "scripts/apply-cli.test.mjs",
-     "scripts/apply-e2e.test.mjs",
-     "scripts/automation.config.json",
-     "scripts/lib/supabase-mgmt.mjs",
-     "scripts/lib/supabase-mgmt.test.mjs",
-     "scripts/migration/.gitignore",
-     "scripts/migration/_mock_supabase.ts",
-     "scripts/migration/auth/export-identities.sh",
-     "scripts/migration/auth/import-identities.sh",
-     "scripts/migration/auth/rotate-jwt.sh",
-     "scripts/migration/cdc/README.md",
-     "scripts/migration/cdc/drain.sh",
-     "scripts/migration/cdc/dry-run.sh",
-     "scripts/migration/cdc/lag-watch.sh",
-     "scripts/migration/cdc/replay.ts",
-     "scripts/migration/cdc/replay_test.ts",
-     "scripts/migration/chaos/inject.sh",
-     "scripts/migration/compare-counts.sh",
-     "scripts/migration/compliance/lgpd-snapshot.ts",
-     "scripts/migration/compliance/lgpd-snapshot_test.ts",
-     "scripts/migration/cutover/dns-flip-checklist.md",
-     "scripts/migration/cutover/freeze-origin.sh",
-     "scripts/migration/cutover/smoke-tests.ts",
-     "scripts/migration/cutover/smoke-tests_test.ts",
-     "scripts/migration/dashboard.sh",
-     "scripts/migration/ddl/02_tables.sql",
-     "scripts/migration/ddl/03_indexes.sql",
-     "scripts/migration/ddl/08_functions.sql",
-     "scripts/migration/ddl/10_views.sql",
-     "scripts/migration/ddl/99_apply_all.sql",
-     "scripts/migration/ddl/tests/migrations-preamble.sql",
-     "scripts/migration/ddl/tests/supabase-stubs.sql",
-     "scripts/migration/ddl/verify-extensions.sh",
-     "scripts/migration/dr/backup-encryption-check.sh",
-     "scripts/migration/dr/restore-drill.sh",
-     "scripts/migration/dr/wal-archive-check.sh",
-     "scripts/migration/env.example",
-     "scripts/migration/export-data.sh",
-     "scripts/migration/extract-ddl.sh",
-     "scripts/migration/functions/deploy-all.sh",
-     "scripts/migration/functions/preflight-secrets.sh",
-     "scripts/migration/functions/rewrite-cron-urls.sh",
-     "scripts/migration/functions/secrets-leak-scan.sh",
-     "scripts/migration/functions/secrets.template.env",
-     "scripts/migration/functions/set-secrets.sh",
-     "scripts/migration/functions/verify-deploy.sh",
-     "scripts/migration/import-data-parallel.sh",
-     "scripts/migration/import-data.sh",
-     "scripts/migration/monitoring/post-cutover-watch.sh",
-     "scripts/migration/monitoring/synthetic-checks.ts",
-     "scripts/migration/monitoring/synthetic-checks_test.ts",
-     "scripts/migration/reset-passwords.sh",
-     "scripts/migration/reset-passwords.ts",
-     "scripts/migration/reset-passwords_test.ts",
-     "scripts/migration/rollback.sh",
-     "scripts/migration/rollback/full-restore.sh",
-     "scripts/migration/sql/sql.test.mjs",
-     "scripts/migration/storage/_lib.ts",
-     "scripts/migration/storage/_lib_test.ts",
-     "scripts/migration/storage/copy-large.ts",
-     "scripts/migration/storage/copy-objects.ts",
-     "scripts/migration/storage/create-buckets.ts",
-     "scripts/migration/storage/env.example",
-     "scripts/migration/storage/run.sh",
-     "scripts/migration/tests/cutover-cdc.test.sh",
-     "scripts/migration/tests/data.test.sh",
-     "scripts/migration/tests/dr.test.sh",
-     "scripts/migration/tests/functions.test.sh",
-     "scripts/migration/tests/lib.test.sh",
-     "scripts/migration/tests/lib/env-reads.sh",
-     "scripts/migration/tests/lib/harness.sh",
-     "scripts/migration/tests/lib/sigrun.py",
-     "scripts/migration/tests/run.sh",
-     "scripts/migration/tests/static.test.sh",
-     "scripts/migration/unmark-must-reset.sh",
-     "scripts/migration/verify/full-audit.sh",
-     "scripts/migration/verify/grants-parity.sh",
-     "scripts/migration/verify/logical-replica-identity.sql",
-     "scripts/migration/verify/planner-stats-freshness.sh",
-     "scripts/migration/verify/row-diff-deep.ts",
-     "scripts/migration/verify/row-diff.ts",
-     "scripts/migration/verify/storage-public-guard.ts",
-     "scripts/migration/verify/tests/README.md",
-     "scripts/migration/verify/tests/lib.sh",
-     "scripts/migration/verify/tests/scenarios/51-replication-lag-guard.sh",
-     "scripts/migration/verify/tests/scenarios/82-full-audit-endurecido.sh",
-     "scripts/migration/verify/tests/scenarios/83-full-audit-sem-conexao.sh",
-     "scripts/migration/verify/tests/scenarios/89-wrappers-canario-planner-timeline.sh",
-     "scripts/migration/verify/tests/scenarios/94-monitoring-tests.sh",
-     "scripts/migration/verify/tests/scenarios/README.md",
-     "scripts/migration/verify/triggers-parity.sh",
-     "scripts/monitoring/ai-gateway-partitions-alerts.yml",
-     "scripts/monitoring/ai-gateway-partitions-exporter.sh",
-     "scripts/monitoring/alerts.test.sh",
-     "scripts/monitoring/check-runbook-coverage.sh",
-     "scripts/monitoring/check-runbook-coverage.test.sh",
-     "scripts/monitoring/exporters.test.sh",
-     "scripts/monitoring/rpc-perf-alerts.yml",
-     "scripts/monitoring/rpc-perf-exporter.sh",
-     "scripts/monitoring/rpc-plan-exporter.sh",
-     "scripts/regras_negocio/README.md",
-     "scripts/supabase_snapshot/README.md",
-     "scripts/supabase_snapshot/test_snapshot_pg.py",
-     "scripts/supabase_snapshot/test_snapshot_seguranca.py"
-    ]
-   },
-   {
-    "sha": "0adf311",
-    "date": "2026-11-12",
-    "author": "adm01-debug",
-    "subject": "docs(auditoria): preserva AUDITORIA.md e visita.pdf da PR #130 (CLOSED) (#208)",
-    "files": [
-     "AUDITORIA.md",
-     "scripts/docs/citacoes-baseline.json",
-     "visita.pdf"
-    ]
-   },
-   {
-    "sha": "ba89bc0",
-    "date": "2026-11-12",
-    "author": "adm01-debug",
-    "subject": "fix(webhook): aceita timestamps textuais do Evolution e preserva época zero (#206)",
-    "files": [
-     "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
-     "supabase/functions/evolution-webhook/messages.ts",
-     "supabase/functions/evolution-webhook/payload.ts"
-    ]
-   },
-   {
-    "sha": "1e20172",
-    "date": "2026-11-12",
-    "author": "adm01-debug",
-    "subject": "chore: inventario do estado real [auto] (#205)",
-    "files": [
-     "inventario/estado/banco.json",
-     "inventario/estado/edge-tabela.json",
-     "inventario/estado/edges.json",
-     "inventario/estado/tabelas-uso.json"
-    ]
-   },
-   {
-    "sha": "51a85ab",
-    "date": "2026-11-12",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(whatsapp): vincula eventos ao proprietário da instância (#151)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "CHANGELOG.md",
-     "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md",
-     "docs/lacunas/G_banco_de_dados.md",
-     "scripts/docs/citacoes-baseline.json",
-     "supabase/functions/_shared/edge-test-harness.ts",
-     "supabase/functions/_shared/edge-types-contract_test.ts",
-     "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
-     "supabase/functions/_shared/evolution-ownership-contract_test.ts",
-     "supabase/functions/evolution-webhook/events.ts",
-     "supabase/functions/evolution-webhook/helpers.ts",
-     "supabase/functions/evolution-webhook/index.ts",
-     "supabase/functions/evolution-webhook/messages.ts"
-    ]
-   },
-   {
-    "sha": "3e49b84",
-    "date": "2026-11-12",
-    "author": "devin-ai-integration[bot]",
-    "subject": "fix(cache): preserva carga inicial e revalida relações da ficha (#147)",
-    "files": [
-     "src/hooks/__tests__/contact-cache-revalidation.test.tsx",
-     "src/hooks/useContactDetail.ts",
-     "src/hooks/useContacts.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -233403,32 +233284,60 @@
     14
    ],
    [
-    "inventario/estado/banco.json",
+    ".github/workflows/inventario-estado-semanal.yml",
     3
    ],
    [
-    "inventario/estado/edges.json",
-    3
-   ],
-   [
-    "inventario/estado/tabelas-uso.json",
-    3
-   ],
-   [
-    "src/hooks/__tests__/contact-cache-revalidation.test.tsx",
+    ".github/workflows/ci.yml",
     2
    ],
    [
-    "scripts/docs/citacoes-baseline.json",
+    "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
     2
    ],
    [
-    "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
-    2
+    "supabase/migrations/20261114124000_remove_duplicate_indexes.sql",
+    1
    ],
    [
-    "supabase/functions/evolution-webhook/messages.ts",
-    2
+    ".github/workflows/automation-local.yml",
+    1
+   ],
+   [
+    ".github/workflows/docs-ci.yml",
+    1
+   ],
+   [
+    ".github/workflows/estado-real.yml",
+    1
+   ],
+   [
+    ".github/workflows/higiene-semanal.yml",
+    1
+   ],
+   [
+    ".github/workflows/restore-drill.yml",
+    1
+   ],
+   [
+    ".github/workflows/rls-exposure-guard.yml",
+    1
+   ],
+   [
+    "scripts/ci/check-test-inventory.mjs",
+    1
+   ],
+   [
+    "package-lock.json",
+    1
+   ],
+   [
+    "package.json",
+    1
+   ],
+   [
+    ".github/workflows/contexto.yml",
+    1
    ],
    [
     "src/components/admin/PasswordResetApproval.tsx",
@@ -233448,34 +233357,6 @@
    ],
    [
     "src/components/analytics/ClosingScoreAlertsList.tsx",
-    1
-   ],
-   [
-    "src/components/analytics/DISCAnalyticsPanel.tsx",
-    1
-   ],
-   [
-    "src/components/analytics/RfmExternalDashboard.tsx",
-    1
-   ],
-   [
-    "src/components/analytics/disc-analytics/DISCAnalyticsSubComponents.tsx",
-    1
-   ],
-   [
-    "src/components/analytics/rfm/RFMSubComponents.tsx",
-    1
-   ],
-   [
-    "src/components/briefing/PreContactBriefing.tsx",
-    1
-   ],
-   [
-    "src/components/companies/CompaniesStatsBar.tsx",
-    1
-   ],
-   [
-    "src/components/companies/CompaniesTableView.tsx",
     1
    ]
   ]
