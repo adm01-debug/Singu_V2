@@ -186474,34 +186474,6 @@
     "foreign_servers": [],
     "functions": [
       {
-        "args": "",
-        "callers": {
-          "code": [],
-          "code_total_files": 0,
-          "cron": [],
-          "db": [],
-          "triggers": [],
-          "views": []
-        },
-        "comment": null,
-        "config": null,
-        "definition": null,
-        "definition_sha": "9f221343a8ad930c",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
-        "is_trigger_fn": false,
-        "kind": "function",
-        "language": "plpgsql",
-        "leakproof": false,
-        "name": "__diag_multiplix",
-        "owner": "postgres",
-        "returns": "TABLE(fn text, veredito text)",
-        "schema": "public",
-        "security_definer": false,
-        "strict": false,
-        "volatility": "volatile"
-      },
-      {
         "args": "p_company_id uuid",
         "callers": {
           "code": [],
@@ -220704,8 +220676,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -297304,6 +297281,26 @@
           "publication": "supabase_realtime_messages_publication",
           "schema": "realtime",
           "table": "messages_2026_11_17"
+        },
+        {
+          "publication": "supabase_realtime_messages_publication",
+          "schema": "realtime",
+          "table": "messages_2026_11_18"
+        },
+        {
+          "publication": "supabase_realtime_messages_publication",
+          "schema": "realtime",
+          "table": "messages_2026_11_19"
+        },
+        {
+          "publication": "supabase_realtime_messages_publication",
+          "schema": "realtime",
+          "table": "messages_2026_11_20"
+        },
+        {
+          "publication": "supabase_realtime_messages_publication",
+          "schema": "realtime",
+          "table": "messages_2026_11_21"
         }
       ]
     },

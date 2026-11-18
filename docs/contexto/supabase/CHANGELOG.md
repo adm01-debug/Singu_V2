@@ -2,6 +2,12 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-18 13:13 UTC
+
+- **functions** removido (1): `public.__diag_multiplix()`
+- **functions** alterado (1): `public.multiplix_list_ufs()`
+- **realtime** adicionado (4): `supabase_realtime_messages_publication:realtime.messages_2026_11_18`, `supabase_realtime_messages_publication:realtime.messages_2026_11_19`, `supabase_realtime_messages_publication:realtime.messages_2026_11_20`, `supabase_realtime_messages_publication:realtime.messages_2026_11_21`
+
 ## 2026-11-18 12:36 UTC
 
 - **functions** adicionado (1): `public.__diag_multiplix()`
