@@ -290,9 +290,11 @@ export function useSnoozeReminder() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ reminderId, hours }: { reminderId: string; hours: number }) => {
+      // A RPC e snooze_reminder(p_reminder_id uuid, p_hours integer): o nome
+      // p_snooze_hours nao existe e derrubava a chamada.
       const { data, error } = await callExternalRpc('snooze_reminder', {
         p_reminder_id: reminderId,
-        p_snooze_hours: hours,
+        p_hours: hours,
       });
       if (error) throw error;
       return data;
