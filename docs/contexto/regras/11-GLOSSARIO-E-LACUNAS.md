@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `72976e775d` · branch `main` · 2026-11-18 20:40 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `22f664c18f` · branch `main` · 2026-11-18 20:47 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -321,7 +321,7 @@ _nenhum item encontrado_
 |---|---|---|
 | status | valor `verified` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/admin/RequireAdmin.tsx`<br>`compara:src/components/security/MFAEnrollmentBanner.tsx`<br>`compara:src/hooks/use2FA.ts`<br>`compara:src/hooks/useMFAGuard.ts` |
 | status | valor `queued` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/admin/conexoes/IncomingWebhookLogsDialog.tsx` |
-| status | valor `ganho` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/contact-detail/commercial-tab/DealsCard.tsx`<br>`compara:src/hooks/useDealsAtRisk.ts` |
+| status | valor `ganho` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/contact-detail/commercial-tab/DealsCard.tsx`<br>`compara:src/hooks/useDealsAtRisk.ts`<br>`compara:src/hooks/useReportWidgets.ts` |
 | status | valor `reprocessing` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/crm/CRMAutomationAuditLog.tsx`<br>`escreve:src/components/crm/CRMAutomationAuditLog.tsx` |
 | status | valor `presented` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/crm/commercial/OfferSuggestionsElite.tsx`<br>`escreve:src/components/crm/commercial/OfferSuggestionsElite.tsx` |
 | status | valor `granted` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/crm/consent/ConsentAuditLog.tsx` |
@@ -335,7 +335,7 @@ _nenhum item encontrado_
 | status | valor `unverified` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/use2FA.ts` |
 | status | valor `overdue` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:src/hooks/useContactCadence.ts` |
 | status | valor `on_track` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useContactCadence.ts` |
-| status | valor `perdido` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDealsAtRisk.ts` |
+| status | valor `perdido` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDealsAtRisk.ts`<br>`compara:src/hooks/useReportWidgets.ts` |
 | status | valor `declined` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDocumentTemplates.ts`<br>`compara:src/pages/PublicSignaturePage.tsx`<br>`escreve:src/hooks/useDocumentTemplates.ts`<br>`escreve:supabase/functions/submit-signature/index.ts` |
 | status | valor `viewed` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDocumentTemplates.ts`<br>`compara:src/pages/Documentos.tsx`<br>`escreve:supabase/functions/get-signature/index.ts` |
 | status | valor `signed` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDocumentTemplates.ts`<br>`compara:src/pages/PublicSignaturePage.tsx`<br>`compara:supabase/functions/submit-signature/index.ts`<br>`escreve:supabase/functions/submit-signature/index.ts` |
@@ -409,6 +409,7 @@ _nenhum item encontrado_
 | coluna | coluna `sameness_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `specific_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `user_feedback` usada no código não existe no schema de `metaprogram_analysis` |  |
+| coluna | coluna `assunto` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `channel` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `direction` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `duracao_segundos` usada no código não existe no schema de `interactions` |  |
@@ -445,6 +446,8 @@ _nenhum item encontrado_
 | coluna | coluna `completion_notes` usada no código não existe no schema de `contact_next_actions` |  |
 | coluna | coluna `contextual_tone` usada no código não existe no schema de `contact_next_actions` |  |
 | coluna | coluna `was_successful` usada no código não existe no schema de `contact_next_actions` |  |
+| coluna | coluna `pipeline_stage` usada no código não existe no schema de `deals` |  |
+| coluna | coluna `stage` usada no código não existe no schema de `deals` |  |
 | coluna | coluna `id` usada no código não existe no schema de `users` |  |
 | coluna | coluna `branch_on_no_step` usada no código não existe no schema de `sequence_steps` |  |
 | coluna | coluna `branch_on_yes_step` usada no código não existe no schema de `sequence_steps` |  |
@@ -461,7 +464,6 @@ _nenhum item encontrado_
 | coluna | coluna `metadata` usada no código não existe no schema de `competitors` |  |
 | coluna | coluna `claim_expires_at` usada no código não existe no schema de `notification_logs` |  |
 | coluna | coluna `claim_token` usada no código não existe no schema de `notification_logs` |  |
-| coluna | coluna `stage` usada no código não existe no schema de `deals` |  |
 | tabela | tabela `__proto__` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `a` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
 | tabela | tabela `alfa` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
@@ -496,6 +498,7 @@ _nenhum item encontrado_
 | tabela | tabela `toString` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `tools_runtime` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
 | tabela | tabela `tx` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
+| tabela | tabela `vw_churn_risk_ranking` usada no código não existe nas migrations/types do repo | `src/hooks/useReportWidgets.ts` |
 | tabela | tabela `vw_communication_dashboard` usada no código não existe nas migrations/types do repo | `src/hooks/useNLPClosingProbability.ts` |
 | tabela | tabela `x` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.mjs`<br>`scripts/audit-ausentes.test.mjs`<br>`scripts/diff-tables.mjs`<br>`scripts/inventario/gerar-edge-tabela.mjs` |
 | tabela | tabela `zeta` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |

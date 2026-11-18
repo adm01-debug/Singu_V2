@@ -2136,7 +2136,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 330,
+   "usado_por": 331,
    "usado_por_modulos": [
     "components/admin",
     "components/analytics",
@@ -2707,7 +2707,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 118,
+   "usado_por": 119,
    "usado_por_modulos": [
     "components/admin",
     "components/bulk-actions",
@@ -2721,6 +2721,7 @@
     "components/interactions",
     "components/lead-routing",
     "components/onboarding",
+    "components/reports",
     "components/search",
     "components/sequences",
     "components/session",

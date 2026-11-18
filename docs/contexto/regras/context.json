@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "72976e775d1e9aeeec972c67af0a52e35076251f",
+  "sha": "22f664c18f37a01817f9c0df3cd62fc8b860c8e9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 20:40 UTC",
-  "files_total": 3352,
-  "code_files": 2881,
-  "code_lines": 411001
+  "generated_at": "2026-11-18 20:47 UTC",
+  "files_total": 3356,
+  "code_files": 2885,
+  "code_lines": 411517
  },
  "version": "1.3.2",
- "facts_hash": "4f3221029d4b6e8e",
+ "facts_hash": "9ef6595672d64ede",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -251,8 +251,8 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".tsx": 1159,
-   ".ts": 897,
+   ".tsx": 1161,
+   ".ts": 899,
    ".sql": 661,
    ".mjs": 123,
    ".py": 21,
@@ -61283,6 +61283,7 @@
      "alerts",
      "companies",
      "contacts",
+     "deals",
      "emotional_states_history",
      "error_logs",
      "health_alerts",
@@ -61291,8 +61292,11 @@
      "metaprogram_analysis",
      "objection_example_feedback",
      "score_history",
+     "support_tickets",
      "system_alerts",
-     "vak_analysis_history"
+     "ticket_comments",
+     "vak_analysis_history",
+     "vw_churn_risk_ranking"
     ],
     "invokes_transitive": [
      "disc-analyzer",
@@ -61301,7 +61305,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 100
+    "deps_count": 109
    },
    {
     "path": "",
@@ -65710,7 +65714,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 987,
+  "components_count": 990,
   "hooks": [
    {
     "name": "useContacts",
@@ -67761,6 +67765,38 @@
     "file": "src/hooks/useReportInfiniteScrollProgress.ts"
    },
    {
+    "name": "useContactsCount",
+    "file": "src/hooks/useReportWidgets.ts"
+   },
+   {
+    "name": "useCompaniesCount",
+    "file": "src/hooks/useReportWidgets.ts"
+   },
+   {
+    "name": "useInteractionsWeek",
+    "file": "src/hooks/useReportWidgets.ts"
+   },
+   {
+    "name": "usePipelineWidget",
+    "file": "src/hooks/useReportWidgets.ts"
+   },
+   {
+    "name": "useChurnRiskWidget",
+    "file": "src/hooks/useReportWidgets.ts"
+   },
+   {
+    "name": "useSentimentDistribution",
+    "file": "src/hooks/useReportWidgets.ts"
+   },
+   {
+    "name": "useRecentActivity",
+    "file": "src/hooks/useReportWidgets.ts"
+   },
+   {
+    "name": "useTopContactsByScore",
+    "file": "src/hooks/useReportWidgets.ts"
+   },
+   {
     "name": "useRfmDashboard",
     "file": "src/hooks/useReportsAnalytics.ts"
    },
@@ -69165,8 +69201,8 @@
   },
   {
    "module": "src/components",
-   "files": 987,
-   "lines": 148446,
+   "files": 990,
+   "lines": 148751,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -69612,8 +69648,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 437,
-   "lines": 57518,
+   "files": 438,
+   "lines": 57749,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -69688,6 +69724,7 @@
     "deal_room_milestones",
     "deal_room_stakeholders",
     "deal_rooms",
+    "deals",
     "disc_analysis_history",
     "disc_communication_logs",
     "disc_conversion_metrics",
@@ -69805,6 +69842,7 @@
     "vak_analysis_history",
     "validation_queue",
     "visit_checkins",
+    "vw_churn_risk_ranking",
     "vw_communication_dashboard",
     "vw_rodizio_bloqueios",
     "vw_rodizio_carga_closers",
@@ -70183,7 +70221,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28747,
+   "lines": 28727,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -71421,6 +71459,7 @@
      "src/hooks/usePortfolioCompatibility.ts",
      "src/hooks/usePreContactBriefing.ts",
      "src/hooks/usePrefetch.ts",
+     "src/hooks/useReportWidgets.ts",
      "src/hooks/useTimelineByEntity.ts",
      "src/hooks/useYourDay.ts",
      "src/pages/Calendario.tsx",
@@ -71797,6 +71836,7 @@
      "src/hooks/usePortfolioCompatibility.ts",
      "src/hooks/usePreContactBriefing.ts",
      "src/hooks/usePrefetch.ts",
+     "src/hooks/useReportWidgets.ts",
      "src/hooks/useSequences.ts",
      "src/hooks/useSmartTemplateSuggestions.ts",
      "src/hooks/useSocialIntelligence.ts",
@@ -72166,6 +72206,7 @@
    },
    "deals": {
     "select": [
+     "src/hooks/useReportWidgets.ts",
      "supabase/functions/mcp-server/index.ts"
     ],
     "update": [
@@ -72644,6 +72685,7 @@
      "src/hooks/useNotifications.ts",
      "src/hooks/usePreContactBriefing.ts",
      "src/hooks/usePrefetch.ts",
+     "src/hooks/useReportWidgets.ts",
      "src/hooks/useTeamDashboard.ts",
      "src/hooks/useTimelineByEntity.ts",
      "src/hooks/useTouchpointSequences.ts",
@@ -73850,6 +73892,11 @@
      "src/hooks/useVisitCheckins.ts"
     ]
    },
+   "vw_churn_risk_ranking": {
+    "select": [
+     "src/hooks/useReportWidgets.ts"
+    ]
+   },
    "vw_communication_dashboard": {
     "select": [
      "src/hooks/useNLPClosingProbability.ts"
@@ -74952,9 +74999,12 @@
    "deals": [
     "company_id",
     "id",
+    "pipeline_stage",
     "stage",
+    "status",
     "title",
     "user_id",
+    "valor",
     "value"
    ],
    "decision_criteria": [
@@ -75327,6 +75377,7 @@
     "user_id"
    ],
    "interactions": [
+    "assunto",
     "audio_url",
     "channel",
     "company_id",
@@ -76404,6 +76455,12 @@
     "photo_url",
     "user_id",
     "visit_type"
+   ],
+   "vw_churn_risk_ranking": [
+    "contact_id",
+    "contact_name",
+    "days_since_contact",
+    "risk_level"
    ],
    "vw_communication_dashboard": [
     "communication_action",
@@ -78462,6 +78519,7 @@
    "toString",
    "tools_runtime",
    "tx",
+   "vw_churn_risk_ranking",
    "vw_communication_dashboard",
    "x",
    "zeta"
@@ -78602,6 +78660,10 @@
    {
     "table": "metaprogram_analysis",
     "column": "user_feedback"
+   },
+   {
+    "table": "interactions",
+    "column": "assunto"
    },
    {
     "table": "interactions",
@@ -78748,6 +78810,14 @@
     "column": "was_successful"
    },
    {
+    "table": "deals",
+    "column": "pipeline_stage"
+   },
+   {
+    "table": "deals",
+    "column": "stage"
+   },
+   {
     "table": "users",
     "column": "id"
    },
@@ -78810,10 +78880,6 @@
    {
     "table": "notification_logs",
     "column": "claim_token"
-   },
-   {
-    "table": "deals",
-    "column": "stage"
    }
   ]
  },
@@ -82612,6 +82678,10 @@
    {
     "file": "src/components/proactive-intelligence/ProactiveIntelligencePanel.tsx",
     "msg": "Não foi possível copiar"
+   },
+   {
+    "file": "src/components/reports/widgets/WidgetShell.tsx",
+    "msg": ">\n            <AlertCircle className="
    },
    {
     "file": "src/components/revops/RevOpsAlertList.tsx",
@@ -100126,6 +100196,11 @@
     "value": "'infinite-scroll-clear'"
    },
    {
+    "file": "src/hooks/useReportWidgets.ts",
+    "name": "CINCO_MIN",
+    "value": "5"
+   },
+   {
     "file": "src/hooks/useSavedAskViews.ts",
     "name": "MAX",
     "value": "20"
@@ -103423,6 +103498,18 @@
     "file": "src/components/recently-viewed/RecentlyViewedSection.tsx",
     "field": "type",
     "value": "company",
+    "kind": "compara"
+   },
+   {
+    "file": "src/components/reports/widgets/ReportWidgets.tsx",
+    "field": "status",
+    "value": "resolved",
+    "kind": "compara"
+   },
+   {
+    "file": "src/components/reports/widgets/ReportWidgets.tsx",
+    "field": "status",
+    "value": "closed",
     "kind": "compara"
    },
    {
@@ -106778,6 +106865,18 @@
     "field": "type",
     "value": "eq",
     "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useReportWidgets.ts",
+    "field": "status",
+    "value": "ganho",
+    "kind": "compara"
+   },
+   {
+    "file": "src/hooks/useReportWidgets.ts",
+    "field": "status",
+    "value": "perdido",
+    "kind": "compara"
    },
    {
     "file": "src/hooks/useRodizioBloqueios.ts",
@@ -116290,6 +116389,18 @@
    {
     "file": "src/hooks/useRelationshipScoreHistory.ts",
     "line": "staleTime: 10 * 60 * 1000,"
+   },
+   {
+    "file": "src/hooks/useReportWidgets.ts",
+    "line": "const CINCO_MIN = 5 * 60 * 1000;"
+   },
+   {
+    "file": "src/hooks/useReportWidgets.ts",
+    "line": "const quatorzeDias = new Date(agora - 14 * 24 * 60 * 60 * 1000).toISOString();"
+   },
+   {
+    "file": "src/hooks/useReportWidgets.ts",
+    "line": "const seteDias = new Date(agora - 7 * 24 * 60 * 60 * 1000).toISOString();"
    },
    {
     "file": "src/hooks/useReportsAnalytics.ts",
@@ -151000,7 +151111,8 @@
      ],
      "ganho": [
       "compara:src/components/contact-detail/commercial-tab/DealsCard.tsx",
-      "compara:src/hooks/useDealsAtRisk.ts"
+      "compara:src/hooks/useDealsAtRisk.ts",
+      "compara:src/hooks/useReportWidgets.ts"
      ],
      "done": [
       "compara:src/components/contact-detail/commercial-tab/TasksCard.tsx",
@@ -151118,6 +151230,7 @@
      ],
      "closed": [
       "compara:src/components/forecasting/PeriodSelector.tsx",
+      "compara:src/components/reports/widgets/ReportWidgets.tsx",
       "compara:src/hooks/useSupportTickets.ts",
       "compara:src/pages/Suporte.tsx",
       "escreve:src/hooks/useForecasting.ts"
@@ -151157,6 +151270,12 @@
      ],
      "offline": [
       "compara:src/components/pwa/NetworkComponents.tsx"
+     ],
+     "resolved": [
+      "compara:src/components/reports/widgets/ReportWidgets.tsx",
+      "compara:src/hooks/useSupportTickets.ts",
+      "compara:src/pages/Suporte.tsx",
+      "compara:supabase/migrations/20260721000071_fix_secdef_crlf_unguarded.sql"
      ],
      "archived": [
       "compara:src/components/sequences/SequenceCard.tsx"
@@ -151212,7 +151331,8 @@
       "compara:src/pages/AdminConexoesLogs.tsx"
      ],
      "perdido": [
-      "compara:src/hooks/useDealsAtRisk.ts"
+      "compara:src/hooks/useDealsAtRisk.ts",
+      "compara:src/hooks/useReportWidgets.ts"
      ],
      "declined": [
       "compara:src/hooks/useDocumentTemplates.ts",
@@ -151277,11 +151397,6 @@
      "snoozed": [
       "compara:src/hooks/useSmartNotifications.ts",
       "escreve:src/hooks/useSmartNotifications.ts"
-     ],
-     "resolved": [
-      "compara:src/hooks/useSupportTickets.ts",
-      "compara:src/pages/Suporte.tsx",
-      "compara:supabase/migrations/20260721000071_fix_secdef_crlf_unguarded.sql"
      ],
      "up": [
       "escreve:src/lib/systemHealth.ts",
@@ -167802,7 +167917,8 @@
     "msg": "valor `ganho` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:src/components/contact-detail/commercial-tab/DealsCard.tsx",
-     "compara:src/hooks/useDealsAtRisk.ts"
+     "compara:src/hooks/useDealsAtRisk.ts",
+     "compara:src/hooks/useReportWidgets.ts"
     ]
    },
    {
@@ -167909,7 +168025,8 @@
     "kind": "status",
     "msg": "valor `perdido` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
-     "compara:src/hooks/useDealsAtRisk.ts"
+     "compara:src/hooks/useDealsAtRisk.ts",
+     "compara:src/hooks/useReportWidgets.ts"
     ]
    },
    {
@@ -168404,6 +168521,11 @@
    },
    {
     "kind": "coluna",
+    "msg": "coluna `assunto` usada no código não existe no schema de `interactions`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
     "msg": "coluna `channel` usada no código não existe no schema de `interactions`",
     "where": []
    },
@@ -168584,6 +168706,16 @@
    },
    {
     "kind": "coluna",
+    "msg": "coluna `pipeline_stage` usada no código não existe no schema de `deals`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `stage` usada no código não existe no schema de `deals`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
     "msg": "coluna `id` usada no código não existe no schema de `users`",
     "where": []
    },
@@ -168660,11 +168792,6 @@
    {
     "kind": "coluna",
     "msg": "coluna `claim_token` usada no código não existe no schema de `notification_logs`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `stage` usada no código não existe no schema de `deals`",
     "where": []
    },
    {
@@ -168910,6 +169037,13 @@
     "msg": "tabela `tx` usada no código não existe nas migrations/types do repo",
     "where": [
      "scripts/ai-context/cenarios.mjs"
+    ]
+   },
+   {
+    "kind": "tabela",
+    "msg": "tabela `vw_churn_risk_ranking` usada no código não existe nas migrations/types do repo",
+    "where": [
+     "src/hooks/useReportWidgets.ts"
     ]
    },
    {
@@ -188596,6 +188730,56 @@
     "function ReportResultView"
    ]
   },
+  "src/components/reports/widgets/ReportWidgets.tsx": {
+   "path": "src/components/reports/widgets/ReportWidgets.tsx",
+   "lines": 210,
+   "exports": [
+    "function KpisWidget",
+    "function ContactsCountWidget",
+    "function CompaniesCountWidget",
+    "function InteractionsWeekWidget",
+    "function PipelineValueWidget",
+    "function DealsByStageWidget",
+    "function ChurnRiskWidget",
+    "function BestTimeWidget",
+    "function SentimentDistWidget",
+    "function RecentActivityWidget",
+    "function TopContactsWidget",
+    "function TicketsOpenWidget"
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "resolved",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "closed",
+     "kind": "compara"
+    }
+   ]
+  },
+  "src/components/reports/widgets/WidgetShell.tsx": {
+   "path": "src/components/reports/widgets/WidgetShell.tsx",
+   "lines": 60,
+   "exports": [
+    "function WidgetShell",
+    "function NumeroGrande"
+   ],
+   "errors": [
+    ">\n            <AlertCircle className="
+   ]
+  },
+  "src/components/reports/widgets/index.ts": {
+   "path": "src/components/reports/widgets/index.ts",
+   "lines": 35,
+   "exports": [
+    "const WIDGET_COMPONENTS",
+    "type WidgetComponentId"
+   ],
+   "doc": "Registro dos widgets do Report Builder. Este arquivo nao define componente nenhum: so mapeia id -> componente, para nao misturar export de componente com export de constante (react-refresh/only-export-components)."
+  },
   "src/components/revops/BenchmarkConfigForm.tsx": {
    "path": "src/components/revops/BenchmarkConfigForm.tsx",
    "lines": 92,
@@ -207615,6 +207799,131 @@
     "useReportInfiniteScrollProgress"
    ]
   },
+  "src/hooks/useReportWidgets.ts": {
+   "path": "src/hooks/useReportWidgets.ts",
+   "lines": 231,
+   "exports": [
+    "function useContactsCount",
+    "function useCompaniesCount",
+    "interface InteracoesSemana",
+    "function useInteractionsWeek",
+    "interface ResumoPipeline",
+    "function usePipelineWidget",
+    "interface ContatoEmRisco",
+    "function useChurnRiskWidget",
+    "interface DistribuicaoSentimento",
+    "function useSentimentDistribution",
+    "interface AtividadeRecente",
+    "function useRecentActivity",
+    "interface ContatoPorScore",
+    "function useTopContactsByScore"
+   ],
+   "tables": [
+    {
+     "table": "contacts",
+     "op": "select"
+    },
+    {
+     "table": "companies",
+     "op": "select"
+    },
+    {
+     "table": "interactions",
+     "op": "select"
+    },
+    {
+     "table": "interactions",
+     "op": "select"
+    },
+    {
+     "table": "deals",
+     "op": "select"
+    },
+    {
+     "table": "vw_churn_risk_ranking",
+     "op": "select"
+    },
+    {
+     "table": "interactions",
+     "op": "select"
+    },
+    {
+     "table": "interactions",
+     "op": "select"
+    },
+    {
+     "table": "contacts",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "contacts": [
+     "deleted_at",
+     "full_name",
+     "id",
+     "relationship_score",
+     "user_id"
+    ],
+    "companies": [
+     "deleted_at",
+     "id",
+     "user_id"
+    ],
+    "interactions": [
+     "assunto",
+     "channel",
+     "data_interacao",
+     "id",
+     "sentiment",
+     "user_id"
+    ],
+    "deals": [
+     "pipeline_stage",
+     "status",
+     "user_id",
+     "valor"
+    ],
+    "vw_churn_risk_ranking": [
+     "contact_id",
+     "contact_name",
+     "days_since_contact",
+     "risk_level"
+    ]
+   },
+   "params": [
+    {
+     "name": "CINCO_MIN",
+     "value": "5"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "ganho",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "perdido",
+     "kind": "compara"
+    }
+   ],
+   "hooks": [
+    "useContactsCount",
+    "useCompaniesCount",
+    "useInteractionsWeek",
+    "usePipelineWidget",
+    "useChurnRiskWidget",
+    "useSentimentDistribution",
+    "useRecentActivity",
+    "useTopContactsByScore"
+   ],
+   "temporal": [
+    "const CINCO_MIN = 5 * 60 * 1000;",
+    "const quatorzeDias = new Date(agora - 14 * 24 * 60 * 60 * 1000).toISOString();",
+    "const seteDias = new Date(agora - 7 * 24 * 60 * 60 * 1000).toISOString();"
+   ]
+  },
   "src/hooks/useReportsAnalytics.ts": {
    "path": "src/hooks/useReportsAnalytics.ts",
    "lines": 322,
@@ -216910,7 +217219,7 @@
   },
   "src/pages/ReportBuilder.tsx": {
    "path": "src/pages/ReportBuilder.tsx",
-   "lines": 214,
+   "lines": 194,
    "exports": [
     "function ReportBuilder"
    ]
@@ -233415,10 +233724,24 @@
   }
  },
  "git": {
-  "sha": "72976e775d1e9aeeec972c67af0a52e35076251f",
+  "sha": "22f664c18f37a01817f9c0df3cd62fc8b860c8e9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "22f664c",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "feat(reports): os 12 widgets do Report Builder passam a mostrar dado real (#250)",
+    "files": [
+     "docs/estado/03_MARKETING_AUTOMACAO.md",
+     "src/components/reports/widgets/ReportWidgets.tsx",
+     "src/components/reports/widgets/WidgetShell.tsx",
+     "src/components/reports/widgets/index.ts",
+     "src/hooks/useReportWidgets.ts",
+     "src/pages/ReportBuilder.tsx"
+    ]
+   },
    {
     "sha": "72976e7",
     "date": "2026-11-18",
@@ -233907,13 +234230,6 @@
     "files": [
      "docs/prod-readiness.md"
     ]
-   },
-   {
-    "sha": "8a4e6f2",
-    "date": "2026-11-14",
-    "author": "adm01-debug",
-    "subject": "chore(docs): bump prod-readiness pos-merge 225 (#226)",
-    "files": []
    }
   ],
   "hot_files": [
@@ -233958,6 +234274,30 @@
     2
    ],
    [
+    "docs/estado/03_MARKETING_AUTOMACAO.md",
+    1
+   ],
+   [
+    "src/components/reports/widgets/ReportWidgets.tsx",
+    1
+   ],
+   [
+    "src/components/reports/widgets/WidgetShell.tsx",
+    1
+   ],
+   [
+    "src/components/reports/widgets/index.ts",
+    1
+   ],
+   [
+    "src/hooks/useReportWidgets.ts",
+    1
+   ],
+   [
+    "src/pages/ReportBuilder.tsx",
+    1
+   ],
+   [
     "src/app/AppRoutes.tsx",
     1
    ],
@@ -233971,30 +234311,6 @@
    ],
    [
     "src/hooks/useAuditAnalytics.ts",
-    1
-   ],
-   [
-    "src/pages/AdminAuditTrail.tsx",
-    1
-   ],
-   [
-    "src/components/contact-detail/ContactBehavioralTab.tsx",
-    1
-   ],
-   [
-    "src/components/analytics/DealVelocityPanel.tsx",
-    1
-   ],
-   [
-    "src/hooks/useDealVelocity.ts",
-    1
-   ],
-   [
-    "src/components/pipeline/NLPProbabilityBadge.tsx",
-    1
-   ],
-   [
-    "src/hooks/useNLPClosingProbability.ts",
     1
    ]
   ]

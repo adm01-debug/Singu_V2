@@ -1,12 +1,12 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1953,
- "arestas": 8437,
+ "nos": 1957,
+ "arestas": 8450,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
-   "importado_por": 580
+   "importado_por": 581
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
@@ -22,15 +22,15 @@
   },
   {
    "arquivo": "src/hooks/useAuth.tsx",
-   "importado_por": 338
+   "importado_por": 339
   },
   {
    "arquivo": "src/integrations/supabase/client.ts",
-   "importado_por": 332
+   "importado_por": 333
   },
   {
    "arquivo": "src/components/ui/skeleton.tsx",
-   "importado_por": 198
+   "importado_por": 199
   },
   {
    "arquivo": "src/components/ui/input.tsx",
@@ -53,12 +53,12 @@
    "importado_por": 120
   },
   {
-   "arquivo": "src/types/index.ts",
+   "arquivo": "src/lib/errorMessages.ts",
    "importado_por": 119
   },
   {
-   "arquivo": "src/lib/errorMessages.ts",
-   "importado_por": 118
+   "arquivo": "src/types/index.ts",
+   "importado_por": 119
   },
   {
    "arquivo": "supabase/functions/_shared/auth.ts",
@@ -70,7 +70,7 @@
   },
   {
    "arquivo": "src/components/ui/progress.tsx",
-   "importado_por": 105
+   "importado_por": 106
   },
   {
    "arquivo": "src/components/ui/textarea.tsx",
@@ -302,12 +302,12 @@
   {
    "modulo": "hooks",
    "depende_de": 15,
-   "importado_por": 100
+   "importado_por": 101
   },
   {
    "modulo": "lib",
    "depende_de": 6,
-   "importado_por": 94
+   "importado_por": 95
   },
   {
    "modulo": "pages",

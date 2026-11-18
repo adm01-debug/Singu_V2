@@ -3036,6 +3036,7 @@
    "src/hooks/useRelationshipScoreHistory.ts",
    "src/hooks/useReportInfiniteScrollProgress.ts",
    "src/hooks/useReportsAnalytics.ts",
+   "src/hooks/useReportWidgets.ts",
    "src/hooks/useRevOps.ts",
    "src/hooks/useRFMSegmentConfig.ts",
    "src/hooks/useRodizioBloqueios.ts",

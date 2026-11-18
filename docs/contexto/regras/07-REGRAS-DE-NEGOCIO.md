@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `72976e775d` · branch `main` · 2026-11-18 20:40 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `22f664c18f` · branch `main` · 2026-11-18 20:47 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1426,7 +1426,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `cancelled` | compara | `src/components/company-detail/CompanyCommercialTab.tsx` |
 | `status` | `changed` | compara | `src/components/admin/RpcPlanDiffDialog.tsx`<br>`src/components/intel/MetadataDiffPanel.tsx`<br>`src/components/search/PresetFiltersDiff.tsx`<br>`src/lib/rpcPlanDiff.ts` |
 | `status` | `clicked` | compara, escreve | `src/hooks/useSmartNotifications.ts` |
-| `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
+| `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `completed` | compara, escreve | `src/components/company-detail/CompanyCommercialTab.tsx`<br>`src/components/contact-detail/commercial-tab/TasksCard.tsx`<br>`src/components/gamification/UserGoalsWidget.tsx`<br>`src/components/lux/LuxHistoryTimeline.tsx`<br>`src/components/lux/LuxIntelligencePanel.tsx`<br>… +9 |
 | `status` | `connected` | compara | `src/components/whatsapp/WhatsAppDashboard.tsx` |
 | … +176 linhas — lista completa em `context.json` | | | |
@@ -3391,6 +3391,7 @@ _nenhum item encontrado_
 | `MAX_ITEMS` | `10` | `src/hooks/useRecentlyViewed.ts` |
 | `INFINITE_SCROLL_PROGRESS_EVENT` | `'infinite-scroll-progress'` | `src/hooks/useReportInfiniteScrollProgress.ts` |
 | `INFINITE_SCROLL_CLEAR_EVENT` | `'infinite-scroll-clear'` | `src/hooks/useReportInfiniteScrollProgress.ts` |
+| `CINCO_MIN` | `5` | `src/hooks/useReportWidgets.ts` |
 | `MAX` | `20` | `src/hooks/useSavedAskViews.ts` |
 | `STALE` | `60` | `src/hooks/useScoreAutomations.ts` |
 | `SLOW_THRESHOLD_MS` | `3000` | `src/hooks/useSlowQueryDetector.ts` |
@@ -3771,7 +3772,7 @@ _nenhum item encontrado_
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 3 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +215 linhas — lista completa em `context.json` | |
+| … +218 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -4383,7 +4384,7 @@ _nenhum item encontrado_
 | Nada para exportar no bundle. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar. | `src/components/intelligence/CrossRefTab.tsx` |
 | Falha ao buscar entidades. | `src/components/intelligence/Entity360Tab.tsx` |
-| … +781 linhas — lista completa em `context.json` | |
+| … +782 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

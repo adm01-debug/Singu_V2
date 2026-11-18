@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "72976e775d1e9aeeec972c67af0a52e35076251f",
+  "commit": "22f664c18f37a01817f9c0df3cd62fc8b860c8e9",
   "branch": "main",
-  "data_commit": "2026-11-18T17:39:08-03:00",
+  "data_commit": "2026-11-18T17:47:10-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "22f664c",
+    "data": "2026-11-18",
+    "assunto": "feat(reports): os 12 widgets do Report Builder passam a mostrar dado real (#250)"
+   },
    {
     "sha": "72976e7",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "0a7b484",
     "data": "2026-11-14",
     "assunto": "chore: contexto agendado de 10 min para 1x/hora (#234)"
-   },
-   {
-    "sha": "4f4b782",
-    "data": "2026-11-14",
-    "assunto": "fix: ativa strict mode no tsconfig.app e corrige tipos (#230)"
    }
   ],
-  "arquivos_mudados_7d": 438,
+  "arquivos_mudados_7d": 444,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 96
+    "commits": 97
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,16 +322,16 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3247,
-  "arquivos_codigo": 2219,
-  "linhas_codigo": 414998,
+  "arquivos_total": 3251,
+  "arquivos_codigo": 2223,
+  "linhas_codigo": 415514,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 64,
   "modulos": 141,
-  "componentes": 1058,
-  "hooks": 410,
+  "componentes": 1060,
+  "hooks": 411,
   "edge_functions": 109,
   "tabelas": 418,
   "migrations": 488,
@@ -647,8 +647,8 @@
    "linhas": 591
   },
   "src/components": {
-   "arquivos": 987,
-   "linhas": 148446
+   "arquivos": 990,
+   "linhas": 148751
   },
   "src/config": {
    "arquivos": 1,
@@ -667,8 +667,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 437,
-   "linhas": 57518
+   "arquivos": 438,
+   "linhas": 57749
   },
   "src/integrations": {
    "arquivos": 3,
@@ -684,7 +684,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28747
+   "linhas": 28727
   },
   "src/store": {
    "arquivos": 1,
@@ -981,6 +981,7 @@
    "information_schema.tables",
    "logs",
    "migration_password_reset_log",
+   "vw_churn_risk_ranking",
    "vw_communication_dashboard"
   ],
   "tabelas_com_drift_migration_vs_types": [
@@ -1142,6 +1143,7 @@
    "Cadastro",
    "Calendario",
    "Campanhas",
+   "ChurnRiskWidget",
    "CollapsibleSection",
    "CompanyProfileAnalytics",
    "ComparisonBadge",

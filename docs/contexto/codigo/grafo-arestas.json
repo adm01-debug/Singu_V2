@@ -6325,6 +6325,22 @@
    "src/components/ui/table.tsx",
    "src/lib/reports/reportEngine.ts"
   ],
+  "src/components/reports/widgets/ReportWidgets.tsx": [
+   "src/components/reports/widgets/WidgetShell.tsx",
+   "src/components/ui/progress.tsx",
+   "src/hooks/useBestTimeHeatmap.ts",
+   "src/hooks/useDailyKpis.ts",
+   "src/hooks/useReportWidgets.ts",
+   "src/hooks/useSupportTickets.ts"
+  ],
+  "src/components/reports/widgets/WidgetShell.tsx": [
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/lib/errorMessages.ts"
+  ],
+  "src/components/reports/widgets/index.ts": [
+   "src/components/reports/widgets/ReportWidgets.tsx"
+  ],
   "src/components/revops/BenchmarkConfigForm.tsx": [
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
@@ -8904,6 +8920,10 @@
    "src/hooks/useAuth.tsx",
    "src/lib/externalData.ts"
   ],
+  "src/hooks/useReportWidgets.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
   "src/hooks/useReportsAnalytics.ts": [
    "src/hooks/useAuth.tsx",
    "src/lib/externalData.ts"
@@ -10634,6 +10654,7 @@
    "src/components/dashboard/DashboardErrorBoundary.tsx",
    "src/components/layout/AppLayout.tsx",
    "src/components/navigation/PageHeader.tsx",
+   "src/components/reports/widgets/index.ts",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/input.tsx",

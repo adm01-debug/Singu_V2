@@ -8824,7 +8824,7 @@
      "verificado_em"
     ]
    },
-   "usada_no_front": 25,
+   "usada_no_front": 26,
    "usada_em_edges": [
     "ai-assistant",
     "health",
@@ -14842,7 +14842,7 @@
      "tags_array"
     ]
    },
-   "usada_no_front": 63,
+   "usada_no_front": 64,
    "usada_em_edges": [
     "_shared",
     "ai-assistant",
@@ -19813,7 +19813,7 @@
      "titulo"
     ]
    },
-   "usada_no_front": 1,
+   "usada_no_front": 2,
    "usada_em_edges": [
     "mcp-server"
    ],
@@ -27519,7 +27519,7 @@
      "usuario_responsavel_id"
     ]
    },
-   "usada_no_front": 48,
+   "usada_no_front": 49,
    "usada_em_edges": [
     "bitrix24-webhook",
     "check-health-alerts",
@@ -48940,6 +48940,7 @@
   "information_schema.tables",
   "logs",
   "migration_password_reset_log",
+  "vw_churn_risk_ranking",
   "vw_communication_dashboard"
  ],
  "rpcs_usadas_no_codigo": [

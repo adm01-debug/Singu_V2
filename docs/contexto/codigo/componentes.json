@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1058,
+ "total": 1060,
  "orfaos": 39,
  "nomes_duplicados": {
   "ABM": [
@@ -95,6 +95,10 @@
   "Campanhas": [
    "src/app/lazyPages.tsx",
    "src/pages/Campanhas.tsx"
+  ],
+  "ChurnRiskWidget": [
+   "src/components/contact-detail/ChurnRiskWidget.tsx",
+   "src/components/reports/widgets/ReportWidgets.tsx"
   ],
   "CollapsibleSection": [
    "src/components/briefing/pre-contact/BriefingSections.tsx",
@@ -12312,6 +12316,58 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/reports/widgets/ReportWidgets.tsx",
+   "exports": [
+    "BestTimeWidget",
+    "ChurnRiskWidget",
+    "CompaniesCountWidget",
+    "ContactsCountWidget",
+    "DealsByStageWidget",
+    "InteractionsWeekWidget",
+    "KpisWidget",
+    "PipelineValueWidget",
+    "RecentActivityWidget",
+    "SentimentDistWidget",
+    "TicketsOpenWidget",
+    "TopContactsWidget"
+   ],
+   "export_default": null,
+   "linhas": 210,
+   "dominio": "components/reports",
+   "hooks_locais": [
+    "useBestTimeHeatmap",
+    "useChurnRiskWidget",
+    "useCompaniesCount",
+    "useContactsCount",
+    "useDailyKpis",
+    "useInteractionsWeek",
+    "usePipelineWidget",
+    "useRecentActivity",
+    "useSentimentDistribution",
+    "useSupportTickets",
+    "useTopContactsByScore"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/reports/widgets/WidgetShell.tsx",
+   "exports": [
+    "NumeroGrande",
+    "WidgetShell"
+   ],
+   "export_default": null,
+   "linhas": 60,
+   "dominio": "components/reports",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/revops/BenchmarkConfigForm.tsx",
    "exports": [
     "BenchmarkConfigForm"
@@ -13915,7 +13971,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 580,
+   "usado_por": 581,
    "orfao": false
   },
   {
@@ -14370,7 +14426,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 105,
+   "usado_por": 106,
    "orfao": false
   },
   {
@@ -14700,7 +14756,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 198,
+   "usado_por": 199,
    "orfao": false
   },
   {
@@ -15207,7 +15263,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 335,
+   "usado_por": 336,
    "orfao": false
   },
   {
@@ -17289,7 +17345,7 @@
     "ReportBuilder"
    ],
    "export_default": "ReportBuilder",
-   "linhas": 214,
+   "linhas": 194,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth"

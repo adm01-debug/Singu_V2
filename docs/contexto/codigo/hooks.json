@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 410,
+ "total": 411,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -1263,7 +1263,7 @@
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 335,
+   "usado_por": 336,
    "usado_por_arquivos": [
     "src/app/AppChrome.tsx",
     "src/app/AppProviders.tsx",
@@ -1527,9 +1527,10 @@
     "useAuth"
    ],
    "canais_realtime": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_arquivos": [
-    "src/components/dashboard/BestTimeHeatmapCard.tsx"
+    "src/components/dashboard/BestTimeHeatmapCard.tsx",
+    "src/components/reports/widgets/ReportWidgets.tsx"
    ],
    "coberto_por_testes": 0
   },
@@ -3725,10 +3726,11 @@
     "useQuery"
    ],
    "canais_realtime": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_arquivos": [
     "src/components/analytics/DailyStatsWidget.tsx",
-    "src/components/dashboard/widgets/DailyKpisWidget.tsx"
+    "src/components/dashboard/widgets/DailyKpisWidget.tsx",
+    "src/components/reports/widgets/ReportWidgets.tsx"
    ],
    "coberto_por_testes": 1
   },
@@ -8223,6 +8225,40 @@
    "coberto_por_testes": 0
   },
   {
+   "arquivo": "src/hooks/useReportWidgets.ts",
+   "hooks_exportados": [
+    "useChurnRiskWidget",
+    "useCompaniesCount",
+    "useContactsCount",
+    "useInteractionsWeek",
+    "usePipelineWidget",
+    "useRecentActivity",
+    "useSentimentDistribution",
+    "useTopContactsByScore"
+   ],
+   "linhas": 231,
+   "dominio": "hooks",
+   "tabelas": [
+    "companies",
+    "contacts",
+    "deals",
+    "interactions",
+    "vw_churn_risk_ranking"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/reports/widgets/ReportWidgets.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
    "arquivo": "src/hooks/useRestoreEntity.ts",
    "hooks_exportados": [
     "useRestoreEntity"
@@ -9338,8 +9374,9 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_arquivos": [
+    "src/components/reports/widgets/ReportWidgets.tsx",
     "src/components/support/TicketDetailDrawer.tsx",
     "src/pages/Suporte.tsx"
    ],

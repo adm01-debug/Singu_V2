@@ -6,12 +6,12 @@
    "src/pages (114)"
   ],
   "componentes": [
-   "src/components (909)",
+   "src/components (911)",
    "src/pages (140)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (379)",
+   "src/hooks (380)",
    "src/components (20)",
    "src/stores (5)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1058)"
+  ".tsx (1060)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(reports): os 12 widgets do Report Builder passam a mostrar dado real (#250)",
    "fix(analytics): chama a RPC de agregação direto, sem passar pelo gateway (#256)",
    "feat(admin): termina e publica a página de Observabilidade (#254)",
    "feat(admin): liga o resumo de auditoria ao Audit Trail (#255)",
-   "feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)",
-   "fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)"
+   "feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)"
   ]
  },
  "pr_template": null,
