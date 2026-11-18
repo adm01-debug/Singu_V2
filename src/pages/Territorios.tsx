@@ -3,7 +3,7 @@ import { MapPin, Plus, Search, LayoutGrid, Map } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useTerritories, useTerritoryPerformance } from '@/hooks/useTerritories';
+import { useTerritories, useTerritoriesPerformance } from '@/hooks/useTerritories';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { TerritoryCard } from '@/components/territories/TerritoryCard';
 import { TerritoryForm } from '@/components/territories/TerritoryForm';
@@ -12,7 +12,8 @@ import { BRAZILIAN_STATES } from '@/lib/brazilianStates';
 
 export default function Territorios() {
   const { data: territories = [], isLoading } = useTerritories();
-  const { data: performances = [] } = useTerritoryPerformance();
+  // get_territory_performance e por territorio: uma consulta por item da lista.
+  const performances = useTerritoriesPerformance(territories.map(t => t.id));
   const { isAdmin } = useIsAdmin();
 
   const [search, setSearch] = useState('');
@@ -33,11 +34,11 @@ export default function Territorios() {
       list = list.filter(t =>
         t.name.toLowerCase().includes(q) ||
         t.description?.toLowerCase().includes(q) ||
-        t.assigned_to_name?.toLowerCase().includes(q)
+        t.manager_name?.toLowerCase().includes(q)
       );
     }
     if (stateFilter !== 'all') {
-      list = list.filter(t => t.state?.includes(stateFilter));
+      list = list.filter(t => t.states.includes(stateFilter));
     }
     return list;
   }, [territories, search, stateFilter]);
