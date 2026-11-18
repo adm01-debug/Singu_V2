@@ -75,16 +75,28 @@ export function useInteractionHistory(companyId?: string, tipo?: string, limit =
   });
 }
 
+/**
+ * Superseded por `src/hooks/usePendingFollowups.ts`, que le a view
+ * `vw_pending_followups` e e o hook que o widget do dashboard usa. Este aqui
+ * nao e importado por ninguem; fica corrigido para nao propagar a chamada
+ * errada caso volte a ser ligado.
+ *
+ * `get_pending_followups(p_vendedor_id integer, p_limit integer)` filtra por
+ * `interactions.usuario_responsavel_id`, um id legado inteiro — nao o uuid do
+ * Supabase. Passar `p_user_id` nem existe como argumento. A funcao e SECURITY
+ * INVOKER, entao a RLS ja limita o que o usuario ve: o filtro por vendedor
+ * fica de fora.
+ */
 export function usePendingFollowups(limit = 20) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['pending-followups', limit, user?.id],
+    queryKey: ['pending-followups-rpc', limit, user?.id],
     enabled: !!user,
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PendingFollowup[]>(
         'get_pending_followups',
-        { p_user_id: user.id, p_limit: limit }
+        { p_limit: limit }
       );
       if (error) throw error;
       return data || [];
