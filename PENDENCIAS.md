@@ -1,10 +1,14 @@
 # PENDENCIAS.md — Bloqueios e itens fora do escopo (Singu_V2)
 
-Atualizado em: 2026-10-29
+Atualizado em: 2026-11-18
 
 ---
 
-## P0 — Merge do PR `fix/ci-workflows` retido propositalmente
+## P0 — RESOLVIDO (2026-11-18) — PR `fix/ci-workflows` foi mergeada
+
+- **Estado real:** a PR #140 (`fix/ci-workflows`) foi **mergeada em 2026-10-27T15:08:49Z**. Não há nada retido.
+- Verificado em 2026-11-18 via API do GitHub: `state=closed`, `merged_at=2026-10-27T15:08:49Z`.
+- Registro histórico do que era o bloqueio, mantido abaixo para rastreabilidade:
 
 - **Workflows afetados:** CI / Dependabot Updates
 - **Erro corrigido:** gate `npm audit --omit=dev --audit-level=high` (zod GHSA-mrhx-c7xc-m3w5) + EOVERRIDE do Dependabot.
@@ -41,27 +45,69 @@ Atualizado em: 2026-10-29
 
 ---
 
-## P5 — Banco informado diverge do canônico
+## P5 — RESOLVIDO (2026-11-18) — projeto canônico travado por teste de CI
 
-- A URL passada (`doufxqlfyjuvxuezpln`) é o Catálogo de Produtos (Projeto Gifts), não o banco canônico do Singu (`pgxfvjmuubtbowutlide` — Gestão de Clientes/CRM). Não bloqueou a correção; registrar para futuras sessões que precisem de SQL direto.
+- **Estado real:** `supabase/config.toml` declara `project_id = "pgxfvjmuubtbowutlide"` (Gestão de Clientes/CRM), o banco canônico. Corrigido pela PR #183 e **travado contra regressão** por `scripts/check-supabase-project-ref.test.mjs`, que roda no CI.
+- Registro histórico: a URL `doufxqlfyjuvxuezpln` que aparecia em sessões antigas é o Catálogo de Produtos (Projeto Gifts), não o Singu. Se você receber essa referência, ela está errada.
 
 ---
 
-## P7 — CI da main bloqueado por billing — BLOQUEIO DEFINITIVO CONFIRMADO — REQUER AÇÃO DO JOAQUIM
+## P7 — RESOLVIDO (2026-11-18) — o diagnóstico anterior estava ERRADO; a causa era a allowlist de Actions
 
-- **Sintoma:** `runner_id=0`, `runner_name=""`, `steps=[]` — GitHub nunca alocou runner ubuntu-latest.
-- **Evidência de 4 runs/tentativas distintas, todas `queued` indefinidamente:**
+> **Leia isto antes de agir sobre CI.** A versão anterior deste item afirmava "CI da main bloqueado por
+> billing — BLOQUEIO DEFINITIVO CONFIRMADO" e mandava adicionar método de pagamento. Isso estava errado
+> e levaria o próximo agente a perseguir a causa errada. O texto original ficou preservado no histórico
+> do git e na tag `arquivo-historico-agentes-261118`.
 
-  | Run | Workflow | Commit | Início | Status |
-  |---|---|---|---|---|
-  | [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474) attempt 1 | CI | `7566982e` | 20:17:32Z | ❌ runner nunca alocado |
-  | [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474) attempt 2 | CI | `7566982e` | 20:24:12Z | ❌ runner nunca alocado |
-  | [40947707323](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707323) | RLS exposure guard | `7566982e` | 20:17:32Z | ❌ runner nunca alocado |
-  | [40949461879](https://github.com/adm01-debug/Singu_V2/actions/runs/40949461879) | CI | `e5562ef9` | 20:29:17Z | ❌ runner nunca alocado |
+### Por que o diagnóstico de billing estava errado
 
-- **Diagnóstico definitivo:** minutos do GitHub Actions free tier (2.000 min/mês) esgotados. 4 runs de 2 commits diferentes em ~12 minutos — não é flake, é billing. O run do PR #136 (40944516179) com 31 steps (~20+ min de ubuntu-latest) consumiu a cota do ciclo.
-- **O que você precisa fazer (Joaquim):**
-  1. Acesse https://github.com/settings/billing/summary → "Actions" → "Minutes used this month"
-  2. Se esgotados: adicione método de pagamento OU aguarde reset no próximo ciclo de faturação
-  3. Após resolver: acesse https://github.com/adm01-debug/Singu_V2/actions/runs/40949461879 e clique "Re-run all jobs"
-  4. Se `conclusion=success`: a correção está completamente validada — PR #136 ✅ (31 steps) + CI da main ✅
+1. **As 4 runs citadas como prova terminaram com `success`.** Verificado em 2026-11-18 pela API:
+
+   | Run | Conclusão real |
+   |---|---|
+   | [40947707474](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707474) attempt 2 | `success` |
+   | [40949461879](https://github.com/adm01-debug/Singu_V2/actions/runs/40949461879) | `success` |
+   | [40947707323](https://github.com/adm01-debug/Singu_V2/actions/runs/40947707323) | `success` |
+   | [40944516179](https://github.com/adm01-debug/Singu_V2/actions/runs/40944516179) | `success` |
+
+   Elas ficaram em fila e rodaram. Não houve bloqueio definitivo.
+
+2. **Repositório público não consome cota.** `adm01-debug/Singu_V2` está com `visibility: PUBLIC`, e
+   repositórios públicos têm minutos de GitHub Actions ilimitados em runners padrão. A tese dos
+   "2.000 min/mês esgotados" era estruturalmente impossível enquanto o repo estiver público.
+
+### Qual era a causa real da parada de 17–18/11
+
+Entre 17/11 e 18/11 **todo** workflow do repositório falhava com `conclusion=startup_failure` e
+**zero jobs** — sintoma diferente do `queued` de 29/10. Causa raiz: as permissões de Actions do
+repositório estavam em **`allowed_actions: "local_only"`**, que só permite actions definidas no próprio
+repositório. Isso bloqueava `actions/checkout`, `actions/setup-node`, `denoland/setup-deno` e
+`peter-evans/create-pull-request` antes de qualquer job iniciar.
+
+**Correção aplicada (2026-11-18):** `allowed_actions` passou para `selected`, com menor privilégio —
+GitHub-owned permitidas, `verified_allowed: false`, e apenas os dois padrões de terceiros realmente
+usados: `denoland/setup-deno@*` e `peter-evans/create-pull-request@*`.
+Prova: run [44305201672](https://github.com/adm01-debug/Singu_V2/actions/runs/44305201672), 5/5 jobs `success`.
+
+### O que estava escondido atrás disso
+
+Com o Actions destravado, apareceram dois bloqueios reais de código que nunca tinham rodado, ambos
+corrigidos pela PR #239:
+
+- **`Typecheck` estourava a memória.** `tsc --noEmit` sobre `src/` (1819 arquivos) com `"strict": true`
+  (ligado na PR #230) passava do heap padrão do Node (~2 GB): `exit 134` e
+  `FATAL ERROR: Ineffective mark-compacts near heap limit`. Pico medido: 2611 MB de RSS, sem nenhum
+  erro de tipo. Resolvido com `NODE_OPTIONS: --max-old-space-size=6144` no step.
+- **`Security audit` falhava com 6 `high`.** `workbox-build` estava em `dependencies` sendo ferramenta
+  de build, arrastando `@rollup/pluginutils` → `picomatch` (ReDoS, GHSA-fc5q-39xc-vjpf) para o escopo
+  auditado. Movida para `devDependencies`.
+
+Como o job morria no step 22 de 32, os 11 steps seguintes nunca rodavam. Depois das correções o
+pipeline fechou **verde de ponta a ponta na `main`**, incluindo Playwright, matriz RLS, bundle size e
+Lighthouse.
+
+### Lição para o próximo agente
+
+`startup_failure` com 0 jobs em **todos** os workflows não é billing nem YAML inválido: comece por
+`GET /repos/{owner}/{repo}/actions/permissions` e verifique `allowed_actions`. Runs presas em `queued`
+são um sintoma diferente, e em repositório público também não são cota.
