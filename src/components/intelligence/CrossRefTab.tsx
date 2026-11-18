@@ -153,18 +153,27 @@ export const CrossRefTab = () => {
       setLoadingMeta(true);
       try {
         const table = type === 'contact' ? 'contacts' : 'companies';
-        const rows = await Promise.all(
-          picked.map(async (p) => {
-            const { data: r } = await queryExternalData<Record<string, unknown>>({
-              table,
-              select: '*',
-              filters: [{ type: 'eq', column: 'id', value: p.id }, { type: 'eq', column: 'user_id', value: user?.id ?? '' }],
-              range: { from: 0, to: 0 },
-              signal: controller.signal,
-            });
-            return { id: p.id, name: p.name, metadata: r?.[0] || {} };
-          })
+        // Uma consulta para todos os selecionados, em vez de uma por item:
+        // este efeito roda fora do TanStack Query, entao cada chamada ia direto
+        // ao gateway sem cache — N requisicoes por abertura da aba.
+        const { data: encontrados } = await queryExternalData<Record<string, unknown>>({
+          table,
+          select: '*',
+          filters: [
+            { type: 'in', column: 'id', value: picked.map((p) => p.id) },
+            { type: 'eq', column: 'user_id', value: user?.id ?? '' },
+          ],
+          range: { from: 0, to: Math.max(picked.length - 1, 0) },
+          signal: controller.signal,
+        });
+        const porId = new Map<string, Record<string, unknown>>(
+          (encontrados ?? []).map((r) => [String(r.id), r]),
         );
+        const rows = picked.map((p) => ({
+          id: p.id,
+          name: p.name,
+          metadata: porId.get(p.id) ?? {},
+        }));
         if (!controller.signal.aborted) setMetaRows(rows);
       } catch (e) {
         if (e instanceof Error && e.name === 'AbortError') return;
