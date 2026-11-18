@@ -483,7 +483,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 187,
+   "linhas": 188,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -14700,7 +14700,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 197,
+   "usado_por": 198,
    "orfao": false
   },
   {
@@ -15388,7 +15388,7 @@
     "Observability"
    ],
    "export_default": "Observability",
-   "linhas": 135,
+   "linhas": 237,
    "dominio": "pages/admin",
    "hooks_locais": [],
    "tabelas": [

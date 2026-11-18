@@ -35,7 +35,7 @@
    "modulo": "app",
    "arquivos": 6,
    "testes": 0,
-   "linhas": 590,
+   "linhas": 591,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -13421,7 +13421,7 @@
    "modulo": "pages/admin",
    "arquivos": 9,
    "testes": 0,
-   "linhas": 2415,
+   "linhas": 2517,
    "itens_menu": [
     "Auditoria de Reanálises",
     "Error Budget",
@@ -13437,6 +13437,7 @@
     "/admin/error-logs",
     "/admin/feature-flags",
     "/admin/insight-feedback",
+    "/admin/observabilidade",
     "/admin/seguranca"
    ],
    "rotas_http": [],

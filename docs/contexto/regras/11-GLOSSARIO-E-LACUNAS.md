@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4177a35028` · branch `main` · 2026-11-18 20:10 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `217bbf088a` · branch `main` · 2026-11-18 20:32 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -402,8 +402,6 @@ _nenhum item encontrado_
 | coluna | coluna `metaprogram_profile` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `objection_patterns` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `status` usada no código não existe no schema de `contacts` |  |
-| coluna | coluna `avg_latency_ms` usada no código não existe no schema de `system_health_snapshots` |  |
-| coluna | coluna `captured_at` usada no código não existe no schema de `system_health_snapshots` |  |
 | coluna | coluna `difference_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `general_score` usada no código não existe no schema de `metaprogram_analysis` |  |
 | coluna | coluna `proactive_score` usada no código não existe no schema de `metaprogram_analysis` |  |

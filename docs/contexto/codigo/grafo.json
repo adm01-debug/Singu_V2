@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "nos": 1953,
- "arestas": 8437,
+ "arestas": 8438,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -29,11 +29,11 @@
    "importado_por": 332
   },
   {
-   "arquivo": "src/components/ui/input.tsx",
-   "importado_por": 197
+   "arquivo": "src/components/ui/skeleton.tsx",
+   "importado_por": 198
   },
   {
-   "arquivo": "src/components/ui/skeleton.tsx",
+   "arquivo": "src/components/ui/input.tsx",
    "importado_por": 197
   },
   {

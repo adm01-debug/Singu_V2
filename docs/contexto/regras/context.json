@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "4177a350289c8cebfb3b00b898e8915e842a315d",
+  "sha": "217bbf088a276f1a517a9a31f7fb3103f92d9584",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 20:10 UTC",
+  "generated_at": "2026-11-18 20:32 UTC",
   "files_total": 3352,
   "code_files": 2881,
-  "code_lines": 410889
+  "code_lines": 410992
  },
  "version": "1.3.2",
- "facts_hash": "62de3a60a63f37ea",
+ "facts_hash": "22f8f7b6627989c7",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -64897,6 +64897,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/admin/observabilidade",
+    "component": "Admin",
+    "guard": "",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/admin/permissions",
     "component": "Admin",
     "guard": "",
@@ -69122,7 +69129,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 590,
+   "lines": 591,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -70176,7 +70183,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28645,
+   "lines": 28747,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -76278,8 +76285,6 @@
     "value"
    ],
    "system_health_snapshots": [
-    "avg_latency_ms",
-    "captured_at",
     "components",
     "status",
     "timestamp"
@@ -78569,14 +78574,6 @@
    {
     "table": "contacts",
     "column": "status"
-   },
-   {
-    "table": "system_health_snapshots",
-    "column": "avg_latency_ms"
-   },
-   {
-    "table": "system_health_snapshots",
-    "column": "captured_at"
    },
    {
     "table": "metaprogram_analysis",
@@ -100319,6 +100316,11 @@
     "value": "50"
    },
    {
+    "file": "src/pages/admin/Observability.tsx",
+    "name": "JANELA_DIAS",
+    "value": "7"
+   },
+   {
     "file": "src/pages/contatos/ContatosContent.tsx",
     "name": "RENDER_BATCH",
     "value": "100"
@@ -108464,6 +108466,12 @@
     "kind": "compara"
    },
    {
+    "file": "src/pages/admin/Observability.tsx",
+    "field": "status",
+    "value": "healthy",
+    "kind": "compara"
+   },
+   {
     "file": "src/pages/automacoes/RuleFormDialog.tsx",
     "field": "type",
     "value": "create_alert",
@@ -116566,6 +116574,10 @@
    {
     "file": "src/pages/Suporte.tsx",
     "line": "const sla_deadline = new Date(Date.now() + slaHours * 60 * 60 * 1000).toISOString();"
+   },
+   {
+    "file": "src/pages/admin/Observability.tsx",
+    "line": "const desde = new Date(Date.now() - JANELA_DIAS * 24 * 60 * 60 * 1000).toISOString();"
    },
    {
     "file": "src/pages/relatorio/ReportScriptsSection.tsx",
@@ -148236,10 +148248,6 @@
     "limit": "10"
    },
    {
-    "file": "src/pages/admin/Observability.tsx",
-    "limit": "100"
-   },
-   {
     "file": "src/pages/tarefas/CreateTaskDialog.tsx",
     "limit": "100"
    },
@@ -150759,6 +150767,7 @@
       "compara:src/hooks/usePortfolioHealth.ts",
       "compara:src/pages/AdminDashboard.tsx",
       "compara:src/pages/AdminVoiceDiagnostics.tsx",
+      "compara:src/pages/admin/Observability.tsx",
       "compara:supabase/functions/health/index.ts",
       "escreve:src/hooks/useEmailPipelineHealth.ts",
       "escreve:src/hooks/useTerritoryOptimization.ts",
@@ -168360,16 +168369,6 @@
    },
    {
     "kind": "coluna",
-    "msg": "coluna `avg_latency_ms` usada no código não existe no schema de `system_health_snapshots`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `captured_at` usada no código não existe no schema de `system_health_snapshots`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
     "msg": "coluna `difference_score` usada no código não existe no schema de `metaprogram_analysis`",
     "where": []
    },
@@ -175727,7 +175726,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 187,
+   "lines": 188,
    "exports": [
     "const AppRoutes"
    ],
@@ -176295,6 +176294,12 @@
     },
     {
      "path": "/admin/error-logs",
+     "component": "Admin",
+     "guard": "",
+     "roles": []
+    },
+    {
+     "path": "/admin/observabilidade",
      "component": "Admin",
      "guard": "",
      "roles": []
@@ -217425,7 +217430,7 @@
   },
   "src/pages/admin/Observability.tsx": {
    "path": "src/pages/admin/Observability.tsx",
-   "lines": 135,
+   "lines": 237,
    "exports": [
     "function Observability"
    ],
@@ -217441,8 +217446,8 @@
    ],
    "table_cols": {
     "system_health_snapshots": [
-     "avg_latency_ms",
-     "captured_at"
+     "status",
+     "timestamp"
     ],
     "slow_queries_audit": [
      "calls",
@@ -217450,9 +217455,24 @@
      "query"
     ]
    },
+   "params": [
+    {
+     "name": "JANELA_DIAS",
+     "value": "7"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "healthy",
+     "kind": "compara"
+    }
+   ],
+   "temporal": [
+    "const desde = new Date(Date.now() - JANELA_DIAS * 24 * 60 * 60 * 1000).toISOString();"
+   ],
    "pagination": [
-    "10",
-    "100"
+    "10"
    ]
   },
   "src/pages/admin/TelemetryTable.tsx": {
@@ -233395,10 +233415,20 @@
   }
  },
  "git": {
-  "sha": "4177a350289c8cebfb3b00b898e8915e842a315d",
+  "sha": "217bbf088a276f1a517a9a31f7fb3103f92d9584",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "217bbf0",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "feat(admin): termina e publica a página de Observabilidade (#254)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/pages/admin/Observability.tsx"
+    ]
+   },
    {
     "sha": "4177a35",
     "date": "2026-11-18",
@@ -233884,13 +233914,6 @@
     "files": [
      "docs/prod-readiness.md"
     ]
-   },
-   {
-    "sha": "4d004ce",
-    "date": "2026-11-14",
-    "author": "adm01-debug",
-    "subject": "chore(docs): bump prod-readiness pos-merge 224 (#225)",
-    "files": []
    }
   ],
   "hot_files": [
@@ -233931,6 +233954,14 @@
     2
    ],
    [
+    "src/app/AppRoutes.tsx",
+    1
+   ],
+   [
+    "src/pages/admin/Observability.tsx",
+    1
+   ],
+   [
     "src/components/admin/AuditAnalyticsPanel.tsx",
     1
    ],
@@ -233964,14 +233995,6 @@
    ],
    [
     "ESTADO_ATUAL.md",
-    1
-   ],
-   [
-    "PLANEJADO_NAO_EXECUTADO.md",
-    1
-   ],
-   [
-    "docs/estado/04_REVOPS_VENDAS.md",
     1
    ]
   ]

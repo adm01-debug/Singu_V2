@@ -10909,6 +10909,7 @@
   "src/pages/admin/Observability.tsx": [
    "src/components/layout/AppLayout.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
    "src/integrations/supabase/client.ts"
   ],
   "src/pages/admin/TelemetryTable.tsx": [

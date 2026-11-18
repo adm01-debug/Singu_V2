@@ -3,7 +3,7 @@
  "format_version": 2,
  "onde_ficam": {
   "telas": [
-   "src/pages (113)"
+   "src/pages (114)"
   ],
   "componentes": [
    "src/components (909)",
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(admin): termina e publica a página de Observabilidade (#254)",
    "feat(admin): liga o resumo de auditoria ao Audit Trail (#255)",
    "feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)",
    "fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)",
-   "fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)",
-   "feat: agregação real por período em /analytics e painel de relacionamento (#253)"
+   "fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)"
   ]
  },
  "pr_template": null,

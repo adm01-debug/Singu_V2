@@ -1518,7 +1518,7 @@
    "src/components/auth/MFAGuard.tsx",
    "src/hooks/useAuth.tsx"
   ],
-  "rotas_protegidas": 102,
+  "rotas_protegidas": 103,
   "rotas_publicas": [
    "/*",
    "/auth",

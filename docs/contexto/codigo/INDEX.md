@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `4177a350289c8cebfb3b00b898e8915e842a315d` (2026-11-18T17:04:03-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `217bbf088a276f1a517a9a31f7fb3103f92d9584` (2026-11-18T17:31:07-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,8 +36,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3247 |
 | arquivos_codigo | 2219 |
-| linhas_codigo | 414886 |
-| rotas | 114 |
+| linhas_codigo | 414989 |
+| rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
 | itens_menu | 64 |
@@ -54,7 +54,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | docs_md | 156 |
 
 ## Onde ficam as coisas
-- telas: src/pages (113)
+- telas: src/pages (114)
 - componentes: src/components (909), src/pages (140), src/app (4)
 - hooks: src/hooks (379), src/components (20), src/stores (5)
 - servicos_logica: src/lib (72), src/data (46), src/domain (8)
@@ -121,7 +121,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 68 | 16 | 2 | 13 |
 | pages | 51 | 105 | 105 | 622 | 67 | 224 |
-| pages/admin | 6 | 7 | 9 | 355 | 29 | 104 |
+| pages/admin | 6 | 8 | 9 | 355 | 29 | 104 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
@@ -148,6 +148,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `/admin/insight-feedback` [tela] → src/pages/admin/InsightFeedbackAnalytics.tsx (protegida)
 - `/admin/knowledge-export` [tela] → src/pages/AdminKnowledgeExport.tsx (protegida)
 - `/admin/lux-config` [tela] → src/pages/AdminLuxConfig.tsx (protegida)
+- `/admin/observabilidade` [tela] → src/pages/admin/Observability.tsx (protegida)
 - `/admin/permissions` [tela] → src/pages/PermissionsPage.tsx (protegida)
 - `/admin/role-permissions` [tela] → src/pages/RolePermissionsPage.tsx (protegida)
 - `/admin/roles` [tela] → src/pages/RolesPage.tsx (protegida)
@@ -412,7 +413,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Permissões / papéis
 - papéis no código: user (38), system (32), status (30), alert (26), group (18), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), tab (1), tablist (1)
 - enums de papel: app_role: admin|moderator|user; entity_relationship_role: buyer|manager|owner|decision_maker|influencer|user|sponsor|partner|supplier|subsidiary|parent|employee_of|other; salesperson_role: sdr|closer|hybrid
-- guards: src/app/lazyPages.tsx, src/components/auth/MFAGuard.tsx, src/hooks/useAuth.tsx · rotas protegidas: 102 · públicas: /*, /auth, /design-system, /dr/:token, /f/:slug, /lm/:slug, /lp/:slug, /reset-password, /signature/:token, /sso/callback, /status, /survey/:token
+- guards: src/app/lazyPages.tsx, src/components/auth/MFAGuard.tsx, src/hooks/useAuth.tsx · rotas protegidas: 103 · públicas: /*, /auth, /design-system, /dr/:token, /f/:slug, /lm/:slug, /lp/:slug, /reset-password, /signature/:token, /sso/callback, /status, /survey/:token
 - feature flags: nenhuma
 
 ## Alertas (baseline.json → alertas)
@@ -433,8 +434,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21205 nós · 35916 arestas · 2168 comunidades · grafo do commit `4177a350`
-- comunidades maiores: react (456), @tanstack/react-query (421), ref_components (387), useAuth (303), _shared/auth.ts (282), framer-motion (268), 02_tables.sql (259), ref_types (248), ref_lib (242), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (226), sonner (195)
+- 21207 nós · 35919 arestas · 2113 comunidades · grafo do commit `217bbf08`
+- comunidades maiores: ref_lib (364), react (276), _shared/auth.ts (268), ref_hooks (261), lucide-react (259), 02_tables.sql (259), react-router-dom (257), framer-motion (251), vitest (250), useAuth (242), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (196)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -570,6 +571,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `217bbf0` feat(admin): termina e publica a página de Observabilidade (#254)
 - 2026-11-18 `4177a35` feat(admin): liga o resumo de auditoria ao Audit Trail (#255)
 - 2026-11-18 `d6eaeb2` feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)
 - 2026-11-18 `d05b650` fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)
@@ -584,7 +586,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `682ad79` docs(pendencias): corrige o diagnostico errado do P7 e fecha P0 e P5 (#242)
 - 2026-11-18 `adb1e39` fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)
 - 2026-11-18 `91be466` fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)
-- 2026-11-18 `10085c6` fix(db): recupera trabalho pendente de outros agentes nas branches (#238)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

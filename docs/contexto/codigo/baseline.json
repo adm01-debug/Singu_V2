@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "4177a350289c8cebfb3b00b898e8915e842a315d",
+  "commit": "217bbf088a276f1a517a9a31f7fb3103f92d9584",
   "branch": "main",
-  "data_commit": "2026-11-18T17:04:03-03:00",
+  "data_commit": "2026-11-18T17:31:07-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "217bbf0",
+    "data": "2026-11-18",
+    "assunto": "feat(admin): termina e publica a página de Observabilidade (#254)"
+   },
    {
     "sha": "4177a35",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "03b943a",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 228 (final) (#229)"
-   },
-   {
-    "sha": "2f70928",
-    "data": "2026-11-14",
-    "assunto": "chore(docs): bump prod-readiness pos-merge 227 (final) (#228)"
    }
   ],
-  "arquivos_mudados_7d": 436,
+  "arquivos_mudados_7d": 438,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 94
+    "commits": 95
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,8 +324,8 @@
  "contagens": {
   "arquivos_total": 3247,
   "arquivos_codigo": 2219,
-  "linhas_codigo": 414886,
-  "rotas": 114,
+  "linhas_codigo": 414989,
+  "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 64,
@@ -644,7 +644,7 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 590
+   "linhas": 591
   },
   "src/components": {
    "arquivos": 987,
@@ -684,7 +684,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28645
+   "linhas": 28747
   },
   "src/store": {
    "arquivos": 1,

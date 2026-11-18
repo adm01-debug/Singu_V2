@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4177a35028` · branch `main` · 2026-11-18 20:10 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `217bbf088a` · branch `main` · 2026-11-18 20:32 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3429,6 +3429,7 @@ _nenhum item encontrado_
 | `GEOCODING_BATCH_SIZE` | `50` | `src/pages/MapaEmpresas.tsx` |
 | `SMS_LIMIT` | `160` | `src/pages/SmsMarketing.tsx` |
 | `PAGE_SIZE` | `50` | `src/pages/admin/BehavioralRegenAudit.tsx` |
+| `JANELA_DIAS` | `7` | `src/pages/admin/Observability.tsx` |
 | `RENDER_BATCH` | `100` | `src/pages/contatos/ContatosContent.tsx` |
 | `RENDER_BATCH` | `60` | `src/pages/empresas/EmpresasContent.tsx` |
 | `PAGE_SIZE` | `500` | `src/pages/mapa/companyQueries.ts` |
@@ -3770,7 +3771,7 @@ _nenhum item encontrado_
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 3 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +214 linhas — lista completa em `context.json` | |
+| … +215 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -4044,7 +4045,6 @@ _nenhum item encontrado_
 | 500 | `src/pages/admin/BehavioralRegenAudit.tsx` |
 | 500 | `src/pages/admin/InsightFeedbackAnalytics.tsx` |
 | 10 | `src/pages/admin/Observability.tsx` |
-| 100 | `src/pages/admin/Observability.tsx` |
 | 100 | `src/pages/tarefas/CreateTaskDialog.tsx` |
 | 100 | `src/pages/tarefas/TaskDetailDrawer.tsx` |
 | 20 | `supabase/functions/ai-assistant/index.ts` |
@@ -4076,7 +4076,8 @@ _nenhum item encontrado_
 | 1 | `supabase/functions/health/index.ts` |
 | 1 | `supabase/functions/health-aggregate/index.ts` |
 | 5000 | `supabase/functions/intent-aggregator/index.ts` |
-| … +23 linhas — lista completa em `context.json` | |
+| 5000 | `supabase/functions/lead-score-cron/index.ts` |
+| … +22 linhas — lista completa em `context.json` | |
 
 ## I. Regras implícitas em mensagens de erro/validação
 

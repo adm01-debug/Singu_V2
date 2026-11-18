@@ -2751,6 +2751,7 @@
    "src/pages/admin/ErrorLogs.tsx",
    "src/pages/admin/FeatureFlagsPage.tsx",
    "src/pages/admin/InsightFeedbackAnalytics.tsx",
+   "src/pages/admin/Observability.tsx",
    "src/pages/crm/CopywritingEnterprise.tsx"
   ],
   "hooks": [
