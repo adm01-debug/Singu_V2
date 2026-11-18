@@ -76,7 +76,7 @@ export function CompanyInsightsTab({
                   <span className="text-sm font-semibold">Próxima Ação Recomendada</span>
                   <Badge variant="outline" className="text-[10px]">{nextAction.priority}</Badge>
                 </div>
-                <p className="text-sm text-foreground/80">{nextAction.description}</p>
+                <p className="text-sm text-foreground/80">{nextAction.action}</p>
                 {nextAction.reason && (
                   <p className="text-xs text-muted-foreground mt-1">💡 {nextAction.reason}</p>
                 )}
@@ -263,10 +263,10 @@ export function CompanyInsightsTab({
           <CardContent>
             <div className="space-y-2">
               {keyContacts.slice(0, 5).map((kc) => (
-                <div key={kc.id} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
+                <div key={kc.contact_id} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
                   <div>
                     <p className="text-sm font-medium">{kc.name}</p>
-                    {kc.role && <p className="text-[10px] text-muted-foreground">{kc.role}</p>}
+                    {kc.cargo && <p className="text-[10px] text-muted-foreground">{kc.cargo}</p>}
                   </div>
                   <Badge variant={kc.importance_score >= 70 ? 'default' : 'secondary'} className="text-[10px]">
                     {kc.importance_score}%
