@@ -21,11 +21,11 @@ export function TerritoryForm({ open, onClose, initial }: TerritoryFormProps) {
 
   const [name, setName] = useState(initial?.name ?? '');
   const [description, setDescription] = useState(initial?.description ?? '');
-  const [selectedStates, setSelectedStates] = useState<string[]>(
-    initial?.state?.split(',').map(s => s.trim()).filter(Boolean) ?? []
-  );
-  const [cities, setCities] = useState(initial?.city ?? '');
-  const [assignedTo, setAssignedTo] = useState(initial?.assigned_to ?? '');
+  // `states` e `cities` sao arrays no dominio (a tabela guarda text[]);
+  // antes o formulario lia `state`/`city` como string separada por virgula.
+  const [selectedStates, setSelectedStates] = useState<string[]>(initial?.states ?? []);
+  const [cities, setCities] = useState((initial?.cities ?? []).join(', '));
+  const [assignedTo, setAssignedTo] = useState('');
   const [isActive, setIsActive] = useState(true);
 
   const toggleState = (uf: string) => {

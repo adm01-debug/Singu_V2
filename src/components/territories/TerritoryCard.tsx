@@ -10,8 +10,10 @@ interface TerritoryCardProps {
 }
 
 export function TerritoryCard({ territory, performance, onClick }: TerritoryCardProps) {
-  const states = territory.state?.split(',').map(s => s.trim()).filter(Boolean) ?? [];
-  const cities = territory.city?.split(',').map(c => c.trim()).filter(Boolean) ?? [];
+  // `states` e `cities` ja vem como array do dominio; antes eram string
+  // separada por virgula, formato que a RPC nunca devolveu.
+  const states = territory.states;
+  const cities = territory.cities;
 
   return (
     <Card
@@ -48,7 +50,7 @@ export function TerritoryCard({ territory, performance, onClick }: TerritoryCard
         {/* Manager */}
         <div className="flex items-center gap-1.5 text-xs">
           <User className="h-3 w-3 shrink-0 text-muted-foreground" />
-          <span className="truncate">{territory.assigned_to_name || 'Sem gestor'}</span>
+          <span className="truncate">{territory.manager_name || 'Sem gestor'}</span>
         </div>
 
         {/* Stats row */}
@@ -61,10 +63,10 @@ export function TerritoryCard({ territory, performance, onClick }: TerritoryCard
             <>
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <TrendingUp className="h-3 w-3" />
-                <span>{(performance.conversion_rate * 100).toFixed(0)}%</span>
+                <span>{performance.active_deals} em aberto</span>
               </div>
               <div className="text-xs text-muted-foreground">
-                R$ {(performance.total_revenue ?? 0).toLocaleString('pt-BR')}
+                R$ {(performance.revenue_month ?? 0).toLocaleString('pt-BR')} no mês
               </div>
             </>
           )}

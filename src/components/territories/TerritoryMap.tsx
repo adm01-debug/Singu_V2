@@ -56,7 +56,7 @@ export function TerritoryMap({ territories, onTerritoryClick }: TerritoryMapProp
   const ufAssignment = useMemo(() => {
     const map: Record<string, { territory: Territory; color: string }> = {};
     territories.forEach((t, i) => {
-      const states = t.state?.split(',').map(s => s.trim()).filter(Boolean) ?? [];
+      const states = t.states;
       const color = TERRITORY_COLORS[i % TERRITORY_COLORS.length];
       states.forEach(uf => {
         map[uf] = { territory: t, color };
