@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `12454dfa84` · branch `main` · 2026-11-18 23:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `679cafa13f` · branch `main` · 2026-11-18 23:26 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3350,6 +3350,7 @@ _nenhum item encontrado_
 | `MAX_COMPANIES_TOTAL` | `60000` | `src/hooks/useCompanies.ts` |
 | `INITIAL_FAST_LOAD` | `100` | `src/hooks/useCompanies.ts` |
 | `MAX_LOOKUP_OPTIONS` | `60` | `src/hooks/useCompanyFilterOptions.ts` |
+| `MS_POR_DIA` | `24` | `src/hooks/useContactDaysWithout.ts` |
 | `PAGE_SIZE` | `50` | `src/hooks/useContacts.ts` |
 | `MAX_HISTORY` | `10` | `src/hooks/useConversationalSearch.ts` |
 | `AVG_CYCLE_DAYS` | `60` | `src/hooks/useDealForecastConfidence.ts` |
@@ -3651,6 +3652,7 @@ _nenhum item encontrado_
 | `idleId = window.requestIdleCallback(scheduleCheck, { timeout: 5000 });` | `src/hooks/useCompatibilityAlerts.ts` |
 | `gcTime: 15 * 60 * 1000,` | `src/hooks/useCompleteDashboard.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useCompleteDashboard.ts` |
+| `const MS_POR_DIA = 24 * 60 * 60 * 1000;` | `src/hooks/useContactDaysWithout.ts` |
 | `gcTime: 60 * 60 * 1000,` | `src/hooks/useContactDaysWithout.ts` |
 | `staleTime: 30 * 60 * 1000,` | `src/hooks/useContactDaysWithout.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useContactDeals.ts` |
@@ -3775,8 +3777,7 @@ _nenhum item encontrado_
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 3 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| `staleTime: 5 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +218 linhas — lista completa em `context.json` | |
+| … +219 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -3872,6 +3873,7 @@ _nenhum item encontrado_
 | 500 | `src/hooks/useContactBehavior.ts` |
 | 1 | `src/hooks/useContactCadence.ts` |
 | 500 | `src/hooks/useContactCadence.ts` |
+| 1 | `src/hooks/useContactDaysWithout.ts` |
 | 10 | `src/hooks/useContactDetail.ts` |
 | 20 | `src/hooks/useContactDetail.ts` |
 | 50 | `src/hooks/useContactDetail.ts` |
@@ -4081,8 +4083,7 @@ _nenhum item encontrado_
 | 1 | `supabase/functions/health/index.ts` |
 | 1 | `supabase/functions/health-aggregate/index.ts` |
 | 5000 | `supabase/functions/intent-aggregator/index.ts` |
-| 5000 | `supabase/functions/lead-score-cron/index.ts` |
-| … +22 linhas — lista completa em `context.json` | |
+| … +23 linhas — lista completa em `context.json` | |
 
 ## I. Regras implícitas em mensagens de erro/validação
 
@@ -4537,7 +4538,7 @@ _nenhum item encontrado_
 | `scripts/inventario/gerar-rotas.test.mjs` | 8 | extrairChamadas separa tabela, bucket, rpc e edge (inclusive por constante e por URL) · extrairChamadas nao resolve const declarada dentro de funcao · resolverImport: null para externo, caminho para alias @/ e undefined para local quebrado · lerUrls le path, componente, arquivo, acesso, parametro, skeleton e redirect … |
 | `scripts/maintenance/tests/configuration.mjs` | 8 | CLI e config desconhecidas falham fechadas · tsconfig vazio impede doctor saudável · TypeScript 7 sem API usa CLI isolada e valida o patch · TypeScript 7 com CLI sem arquivos bloqueia doctor … |
 | `scripts/maintenance/tests/locking.mjs` | 8 | trava atômica impede segundo executor · timeout mata grupo de subprocessos e distingue resultado · trava de pid morto é recuperada, trava recente sem dono fica bloqueante · namespace de rede impede acesso externo de todos os filhos … |
-| `src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx` | 8 | Registro da próxima ação com contrato de contato · registra %s no contato, sem inventar empresa · não anuncia sucesso sem a confirmação correta: %j · preserva o resumo quando o banco rejeita a chamada … |
+| `src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx` | 8 | Registro da próxima ação com contrato de contato · registra %s no contato, sem inventar empresa · não anuncia sucesso sem a confirmação correta: %j · preserva o resumo quando o banco rejeita a gravação … |
 | `src/components/interactions/__tests__/DateRangePopover.shortcut.test.tsx` | 8 | DateRangePopover · atalho Alt+D · chama applyDateRange(undefined, undefined) quando há datas aplicadas · aceita Alt+D em maiúsculas (case-insensitive) · é no-op silencioso quando não há datas aplicadas … |
 | `src/components/interactions/__tests__/DensityChips.test.tsx` | 8 | DensityChips · renderiza dois botões com aria-pressed correto (comfortable ativo) · renderiza com aria-pressed refletindo compact quando ativo · expõe role= … |
 | `src/data/__tests__/carnegieAppreciation.test.ts` | 8 | Carnegie Appreciation Templates · has at least 3 appreciation types · Type %s · has name … |
@@ -4903,6 +4904,7 @@ _nenhum item encontrado_
 | page nunca é persistida via applyAll: qualquer mudança em filtros deve voltar pra página 1. | `src/hooks/useInteractionsAdvancedFilter.ts` |
 | * Limpa SOMENTE o intervalo de datas (`de` e `ate`) em uma única operação | `src/hooks/useInteractionsAdvancedFilter.ts` |
 | * Restaura SOMENTE preferências de visualização (density, perPage, view, sort) | `src/hooks/useInteractionsAdvancedFilter.ts` |
+| PostgREST nao encontrar a funcao. O `companyId` segue apenas governando | `src/hooks/useInteractionsRpc.ts` |
 | A RPC canônica aceita somente p_company_id; contatos usam os mesmos campos reais. | `src/hooks/useInteractionsRpc.ts` |
 | ')) throw new Error('URL do webhook deve usar HTTPS'); | `src/hooks/useLuxWebhookConfig.ts` |
 | Busca apenas analyses cujo array `objections` contém algum item — filtro | `src/hooks/useMarkObjectionHandled.ts` |

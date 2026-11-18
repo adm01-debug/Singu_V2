@@ -2761,9 +2761,11 @@
    "hooks_exportados": [
     "useContactDaysWithout"
    ],
-   "linhas": 22,
+   "linhas": 41,
    "dominio": "hooks",
-   "tabelas": [],
+   "tabelas": [
+    "interactions"
+   ],
    "rpcs": [],
    "edges": [],
    "hooks_internos": [
@@ -6309,7 +6311,7 @@
     "usePendingFollowups",
     "useUnifiedCommunicationHistory"
    ],
-   "linhas": 238,
+   "linhas": 273,
    "dominio": "hooks",
    "tabelas": [
     "interactions"

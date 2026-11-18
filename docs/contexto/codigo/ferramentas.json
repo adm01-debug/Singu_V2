@@ -1001,15 +1001,15 @@
     "arquivos": 5
    },
    {
-    "host": "test.supabase.co",
-    "arquivos": 5
-   },
-   {
     "host": "wa.me",
     "arquivos": 5
    },
    {
     "host": "example.invalid",
+    "arquivos": 4
+   },
+   {
+    "host": "test.supabase.co",
     "arquivos": 4
    },
    {

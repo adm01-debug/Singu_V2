@@ -790,7 +790,7 @@
   {
    "arquivo": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
    "tipo": "contrato",
-   "linhas": 155,
+   "linhas": 181,
    "testa": [
     "src/components/ficha-360/ProximaAcaoCTA.tsx"
    ],

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "12454dfa8420cf7851424f2c52483cdc6d0cd063",
+  "sha": "679cafa13f687fca9ba98ac1868e467fa9b11b03",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 23:13 UTC",
+  "generated_at": "2026-11-18 23:26 UTC",
   "files_total": 3358,
   "code_files": 2887,
-  "code_lines": 411908
+  "code_lines": 411988
  },
  "version": "1.3.2",
- "facts_hash": "286550bd985f41da",
+ "facts_hash": "72a1697cdced521a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -69204,7 +69204,7 @@
   {
    "module": "src/components",
    "files": 991,
-   "lines": 148912,
+   "lines": 148938,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -69651,7 +69651,7 @@
   {
    "module": "src/hooks",
    "files": 439,
-   "lines": 57972,
+   "lines": 58026,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -72669,6 +72669,7 @@
      "src/hooks/useChannelPerformanceMatrix.ts",
      "src/hooks/useCompanyProfileAnalytics.ts",
      "src/hooks/useContactCadence.ts",
+     "src/hooks/useContactDaysWithout.ts",
      "src/hooks/useContactDetail.ts",
      "src/hooks/useContactSentimentTrend.ts",
      "src/hooks/useConversationIntel.ts",
@@ -72727,6 +72728,7 @@
      "src/components/contact-detail/ContactInteractionsTab.tsx",
      "src/components/crm/NextBestAction.tsx",
      "src/hooks/useContactDetail.ts",
+     "src/hooks/useInteractionsRpc.ts",
      "src/hooks/useNextBestAction.ts",
      "supabase/functions/bitrix24-webhook/index.ts",
      "supabase/functions/evolution-webhook/events.ts",
@@ -86045,6 +86047,10 @@
    {
     "file": "src/hooks/useInteractionsAdvancedFilter.ts",
     "text": "* Restaura SOMENTE preferências de visualização (density, perPage, view, sort)"
+   },
+   {
+    "file": "src/hooks/useInteractionsRpc.ts",
+    "text": "PostgREST nao encontrar a funcao. O `companyId` segue apenas governando"
    },
    {
     "file": "src/hooks/useInteractionsRpc.ts",
@@ -100012,6 +100018,11 @@
     "file": "src/hooks/useCompanyFilterOptions.ts",
     "name": "MAX_LOOKUP_OPTIONS",
     "value": "60"
+   },
+   {
+    "file": "src/hooks/useContactDaysWithout.ts",
+    "name": "MS_POR_DIA",
+    "value": "24"
    },
    {
     "file": "src/hooks/useContacts.ts",
@@ -115853,6 +115864,10 @@
    },
    {
     "file": "src/hooks/useContactDaysWithout.ts",
+    "line": "const MS_POR_DIA = 24 * 60 * 60 * 1000;"
+   },
+   {
+    "file": "src/hooks/useContactDaysWithout.ts",
     "line": "gcTime: 60 * 60 * 1000,"
    },
    {
@@ -121813,7 +121828,7 @@
    },
    {
     "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
-    "name": "preserva o resumo quando o banco rejeita a chamada"
+    "name": "preserva o resumo quando o banco rejeita a gravação"
    },
    {
     "file": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
@@ -147718,6 +147733,10 @@
    {
     "file": "src/hooks/useContactCadence.ts",
     "limit": "500"
+   },
+   {
+    "file": "src/hooks/useContactDaysWithout.ts",
+    "limit": "1"
    },
    {
     "file": "src/hooks/useContactDetail.ts",
@@ -183826,13 +183845,13 @@
   },
   "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx": {
    "path": "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
-   "lines": 155,
+   "lines": 181,
    "is_test": true,
    "tests": [
     "Registro da próxima ação com contrato de contato",
     "registra %s no contato, sem inventar empresa",
     "não anuncia sucesso sem a confirmação correta: %j",
-    "preserva o resumo quando o banco rejeita a chamada",
+    "preserva o resumo quando o banco rejeita a gravação",
     "não envia resumo vazio",
     "não envia sem usuário autenticado",
     "bloqueia Enter repetido enquanto aguarda a confirmação",
@@ -198315,16 +198334,38 @@
   },
   "src/hooks/useContactDaysWithout.ts": {
    "path": "src/hooks/useContactDaysWithout.ts",
-   "lines": 22,
+   "lines": 41,
    "exports": [
     "function useContactDaysWithout"
+   ],
+   "tables": [
+    {
+     "table": "interactions",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "interactions": [
+     "contact_id",
+     "data_interacao"
+    ]
+   },
+   "params": [
+    {
+     "name": "MS_POR_DIA",
+     "value": "24"
+    }
    ],
    "hooks": [
     "useContactDaysWithout"
    ],
    "temporal": [
+    "const MS_POR_DIA = 24 * 60 * 60 * 1000;",
     "gcTime: 60 * 60 * 1000,",
     "staleTime: 30 * 60 * 1000,"
+   ],
+   "pagination": [
+    "1"
    ]
   },
   "src/hooks/useContactDeals.ts": {
@@ -204238,7 +204279,7 @@
   },
   "src/hooks/useInteractionsRpc.ts": {
    "path": "src/hooks/useInteractionsRpc.ts",
-   "lines": 238,
+   "lines": 273,
    "exports": [
     "interface InteractionHistoryItem",
     "interface PendingFollowup",
@@ -204254,6 +204295,10 @@
     "function useUnifiedCommunicationHistory"
    ],
    "tables": [
+    {
+     "table": "interactions",
+     "op": "insert,select"
+    },
     {
      "table": "interactions",
      "op": "select"
@@ -204280,6 +204325,7 @@
     "Usuário não autenticado"
    ],
    "rule_comments": [
+    "PostgREST nao encontrar a funcao. O `companyId` segue apenas governando",
     "A RPC canônica aceita somente p_company_id; contatos usam os mesmos campos reais."
    ],
    "hooks": [
@@ -233865,10 +233911,22 @@
   }
  },
  "git": {
-  "sha": "12454dfa8420cf7851424f2c52483cdc6d0cd063",
+  "sha": "679cafa13f687fca9ba98ac1868e467fa9b11b03",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "679cafa",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)",
+    "files": [
+     "src/components/company-detail/OptimalContactWindowsWidget.tsx",
+     "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+     "src/hooks/useContactDaysWithout.ts",
+     "src/hooks/useInteractionsRpc.ts"
+    ]
+   },
    {
     "sha": "12454df",
     "date": "2026-11-18",
@@ -234197,25 +234255,15 @@
     "files": [
      ".github/workflows/inventario-estado-semanal.yml"
     ]
-   },
-   {
-    "sha": "c027a81",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "chore(ci): roda os testes de edge function orfaos no pipeline (#231)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "scripts/ci/check-test-inventory.mjs"
-    ]
    }
   ],
   "hot_files": [
    [
-    ".github/workflows/ci.yml",
-    4
+    "src/pages/Analytics.tsx",
+    3
    ],
    [
-    "src/pages/Analytics.tsx",
+    ".github/workflows/ci.yml",
     3
    ],
    [
@@ -234233,6 +234281,22 @@
    [
     ".github/workflows/inventario-estado-semanal.yml",
     2
+   ],
+   [
+    "src/components/company-detail/OptimalContactWindowsWidget.tsx",
+    1
+   ],
+   [
+    "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
+    1
+   ],
+   [
+    "src/hooks/useContactDaysWithout.ts",
+    1
+   ],
+   [
+    "src/hooks/useInteractionsRpc.ts",
+    1
    ],
    [
     "src/components/territories/TerritoryCard.tsx",
@@ -234272,22 +234336,6 @@
    ],
    [
     "src/components/gamification/BadgesWidget.tsx",
-    1
-   ],
-   [
-    "src/components/gamification/QuotaStatusWidget.tsx",
-    1
-   ],
-   [
-    "src/hooks/useGamification.ts",
-    1
-   ],
-   [
-    "src/hooks/__tests__/create-task-contract.test.ts",
-    1
-   ],
-   [
-    "src/hooks/useTasks.ts",
     1
    ]
   ]

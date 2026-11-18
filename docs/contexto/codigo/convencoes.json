@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)",
    "fix(territorios): módulo inteiro estava fora de contrato com o banco (#265)",
    "fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)",
    "fix(gamificacao): três RPCs eram chamadas sem o p_user_id obrigatório (#263)",
-   "fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)",
-   "fix(analytics): avisa que as abas PNL e Gatilhos usam contato fictício (#260)"
+   "fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)"
   ]
  },
  "pr_template": null,

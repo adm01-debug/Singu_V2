@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "12454dfa8420cf7851424f2c52483cdc6d0cd063",
+  "commit": "679cafa13f687fca9ba98ac1868e467fa9b11b03",
   "branch": "main",
-  "data_commit": "2026-11-18T20:11:16-03:00",
+  "data_commit": "2026-11-18T20:25:43-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "679cafa",
+    "data": "2026-11-18",
+    "assunto": "fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)"
+   },
    {
     "sha": "12454df",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "adb1e39",
     "data": "2026-11-18",
     "assunto": "fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)"
-   },
-   {
-    "sha": "91be466",
-    "data": "2026-11-18",
-    "assunto": "fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)"
    }
   ],
-  "arquivos_mudados_7d": 428,
+  "arquivos_mudados_7d": 431,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -294,14 +294,14 @@
     "mudancas": 5
    },
    {
-    "arquivo": "src/pages/ContatoDetalhe.tsx",
+    "arquivo": "src/hooks/useInteractionsRpc.ts",
     "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 105
+    "commits": 106
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3253,
   "arquivos_codigo": 2225,
-  "linhas_codigo": 415905,
+  "linhas_codigo": 415985,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 991,
-   "linhas": 148912
+   "linhas": 148938
   },
   "src/config": {
    "arquivos": 1,
@@ -668,7 +668,7 @@
   },
   "src/hooks": {
    "arquivos": 439,
-   "linhas": 57972
+   "linhas": 58026
   },
   "src/integrations": {
    "arquivos": 3,

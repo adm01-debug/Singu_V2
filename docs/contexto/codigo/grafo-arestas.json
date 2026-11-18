@@ -8035,7 +8035,7 @@
   ],
   "src/hooks/useContactDaysWithout.ts": [
    "src/hooks/useAuth.tsx",
-   "src/lib/externalData.ts"
+   "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useContactDeals.ts": [
    "src/hooks/useAuth.tsx",

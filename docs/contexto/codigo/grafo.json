@@ -26,7 +26,7 @@
   },
   {
    "arquivo": "src/integrations/supabase/client.ts",
-   "importado_por": 334
+   "importado_por": 335
   },
   {
    "arquivo": "src/components/ui/skeleton.tsx",
@@ -46,7 +46,7 @@
   },
   {
    "arquivo": "src/lib/externalData.ts",
-   "importado_por": 129
+   "importado_por": 128
   },
   {
    "arquivo": "src/components/ui/select.tsx",
