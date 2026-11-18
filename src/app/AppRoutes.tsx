@@ -172,6 +172,7 @@ export const AppRoutes = () => {
       <Route path="/admin/audit-trail" element={<Admin><P.AdminAuditTrail /></Admin>} />
       <Route path="/admin/knowledge-export" element={<Admin><P.AdminKnowledgeExport /></Admin>} />
       <Route path="/admin/error-logs" element={<Admin><P.AdminErrorLogs /></Admin>} />
+      <Route path="/admin/observabilidade" element={<Admin><P.AdminObservability /></Admin>} />
       <Route path="/admin/component-gallery" element={<Admin><P.AdminComponentGallery /></Admin>} />
       <Route path="/admin/docs" element={<Admin><P.DocsPage /></Admin>} />
       <Route path="/admin/feature-flags" element={<Admin><P.AdminFeatureFlagsPage /></Admin>} />
