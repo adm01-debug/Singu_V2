@@ -83,7 +83,7 @@ export function DealVelocityPanel({ compact = false }: DealVelocityPanelProps) {
         </CardTitle>
         {!compact && (
           <Badge variant="outline" className="text-sm">
-            {metrics.totalActiveDeals} deals ativos
+            {metrics.totalActiveDeals} contatos no funil
           </Badge>
         )}
       </CardHeader>
@@ -100,7 +100,7 @@ export function DealVelocityPanel({ compact = false }: DealVelocityPanelProps) {
               {metrics.averageCycleTime}
             </div>
             <div className="text-xs text-muted-foreground">
-              dias em média
+              dias parados em média
             </div>
           </motion.div>
 
@@ -131,7 +131,7 @@ export function DealVelocityPanel({ compact = false }: DealVelocityPanelProps) {
                 {metrics.stageVelocities.find(s => s.stage === metrics.bottleneckStage)?.stageName}
               </div>
               <div className="text-xs text-muted-foreground">
-                gargalo atual
+                mais parado
               </div>
             </motion.div>
           )}
@@ -148,7 +148,7 @@ export function DealVelocityPanel({ compact = false }: DealVelocityPanelProps) {
                 {metrics.stageVelocities.find(s => s.stage === metrics.fastestStage)?.stageName}
               </div>
               <div className="text-xs text-muted-foreground">
-                mais rápido
+                mais recente
               </div>
             </motion.div>
           )}
@@ -158,7 +158,7 @@ export function DealVelocityPanel({ compact = false }: DealVelocityPanelProps) {
         {!compact && (
           <div>
             <h4 className="text-sm font-medium text-muted-foreground mb-3">
-              Tempo por Estágio
+              Tempo parado por estágio
             </h4>
             <div className="space-y-3">
               {metrics.stageVelocities
