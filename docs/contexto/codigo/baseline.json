@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "28bc93dc89e793d93ebc9e7331d3015476e6c333",
+  "commit": "6917cfd2a577cdae74f9fefbdb4841e03c27c51c",
   "branch": "main",
-  "data_commit": "2026-11-18T18:11:51-03:00",
+  "data_commit": "2026-11-18T18:46:14-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "6917cfd",
+    "data": "2026-11-18",
+    "assunto": "fix(intelligence): troca N consultas por uma na aba de referência cruzada (#258)"
+   },
    {
     "sha": "28bc93d",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "889a650",
     "data": "2026-11-18",
     "assunto": "build(deps): bump the minor-and-patch group with 11 updates (#237)"
-   },
-   {
-    "sha": "ba42905",
-    "data": "2026-11-18",
-    "assunto": "fix(ci): remove BOM UTF-8 da migration do MTTA que quebra o Supabase Preview (#233)"
    }
   ],
-  "arquivos_mudados_7d": 444,
+  "arquivos_mudados_7d": 445,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 98
+    "commits": 99
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3251,
   "arquivos_codigo": 2223,
-  "linhas_codigo": 415515,
+  "linhas_codigo": 415524,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 990,
-   "linhas": 148752
+   "linhas": 148761
   },
   "src/config": {
    "arquivos": 1,

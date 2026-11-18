@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `28bc93dc89` · branch `main` · 2026-11-18 21:16 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6917cfd2a5` · branch `main` · 2026-11-18 21:47 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1271,7 +1271,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `image_url` | escreve | `supabase/functions/visual-search/index.ts` |
 | `type` | `impersonal` | escreve | `src/data/carnegieWarmth.ts` |
 | `type` | `improvement_noted` | escreve | `src/data/carnegieProgressCelebration.ts` |
-| `type` | `in` | compara, escreve | `src/hooks/useCrossReference.ts`<br>`src/hooks/useExternalInteractions.ts`<br>`supabase/functions/_shared/tenant-guard_test.ts`<br>`supabase/functions/external-data/index.ts` |
+| `type` | `in` | compara, escreve | `src/components/intelligence/CrossRefTab.tsx`<br>`src/hooks/useCrossReference.ts`<br>`src/hooks/useExternalInteractions.ts`<br>`supabase/functions/_shared/tenant-guard_test.ts`<br>`supabase/functions/external-data/index.ts` |
 | `type` | `influence` | compara, escreve | `src/components/stakeholders/CoalitionDetectionPanel.tsx`<br>`src/components/stakeholders/StakeholderInfluenceNetwork.tsx`<br>`src/components/stakeholders/stakeholder-network/NetworkHelpers.ts`<br>`src/hooks/useCoalitionDetection.ts` |
 | `type` | `input_file` | escreve | `supabase/functions/voice-to-text/index.ts` |
 | `type` | `insight` | compara, escreve | `public/sw-push.js`<br>`src/hooks/useRealtimeNotifications.ts`<br>`supabase/functions/check-notifications/index.ts` |

@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(intelligence): troca N consultas por uma na aba de referência cruzada (#258)",
    "feat(ui): entrada de Observabilidade no menu de administração (#257)",
    "feat(reports): os 12 widgets do Report Builder passam a mostrar dado real (#250)",
    "fix(analytics): chama a RPC de agregação direto, sem passar pelo gateway (#256)",
-   "feat(admin): termina e publica a página de Observabilidade (#254)",
-   "feat(admin): liga o resumo de auditoria ao Audit Trail (#255)"
+   "feat(admin): termina e publica a página de Observabilidade (#254)"
   ]
  },
  "pr_template": null,

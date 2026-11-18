@@ -9257,7 +9257,7 @@
     "CrossRefTab"
    ],
    "export_default": null,
-   "linhas": 487,
+   "linhas": 496,
    "dominio": "components/intelligence",
    "hooks_locais": [
     "useAuth",
