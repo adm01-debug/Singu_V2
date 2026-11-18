@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-18 16:14 UTC
+
+- **realtime** removido (4): `supabase_realtime_messages_publication:realtime.messages_2026_11_11`, `supabase_realtime_messages_publication:realtime.messages_2026_11_12`, `supabase_realtime_messages_publication:realtime.messages_2026_11_13`, `supabase_realtime_messages_publication:realtime.messages_2026_11_14`
+
 ## 2026-11-18 15:13 UTC
 
 - **constraints** alterado (6): `public.companies.chk_companies_no_self_reference`, `public.csat_surveys.csat_surveys_answered_score_check`, `public.entity_relationships.entity_relationships_no_self`, `public.entity_relationships.entity_relationships_period_valid`, `zapp_history.conversation_daily_summaries.chk_cds_period_order`, `zapp_history.messages.chk_content_or_media`
