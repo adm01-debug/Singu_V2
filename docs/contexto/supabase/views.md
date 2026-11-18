@@ -255,8 +255,8 @@ SELECT id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.company_emails, public.company_phones, public.deals, public.interactions, public.profiles |
 | populada | n/a |
 | comentário |  |
@@ -505,8 +505,8 @@ SELECT id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_emails, public.company_phones, public.contacts |
 | populada | n/a |
 | comentário |  |
@@ -789,8 +789,8 @@ SELECT ia.id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | _dormant.alertas_inativacao, public.companies, public.company_addresses, public.company_emails, public.company_phones |
 | populada | n/a |
 | comentário |  |
@@ -1214,8 +1214,8 @@ SELECT co.nome_crm AS transportadora,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.carrier_homologations, public.carriers, public.companies, public.company_addresses, public.company_emails, public.company_phones |
 | populada | n/a |
 | comentário |  |
@@ -1389,8 +1389,8 @@ SELECT rank() OVER (ORDER BY cs.score_geral DESC NULLS LAST) AS ranking,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.carrier_homologations, public.carrier_scores, public.carriers, public.companies, public.company_addresses, public.company_emails, public.company_phones |
 | populada | n/a |
 | comentário |  |
@@ -1446,8 +1446,8 @@ SELECT c.id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.carrier_homologations, public.carrier_scores, public.carriers, public.companies, public.company_addresses, public.company_emails, public.company_phones, public.users |
 | populada | n/a |
 | comentário |  |
@@ -1668,8 +1668,8 @@ SELECT c.id AS contact_id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.company_emails, public.company_phones, public.customers |
 | populada | n/a |
 | comentário |  |
@@ -1738,8 +1738,8 @@ SELECT cust.id AS customer_id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.company_emails, public.company_phones, public.customers |
 | populada | n/a |
 | comentário |  |
@@ -1985,8 +1985,8 @@ SELECT c.id AS contact_id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.company_emails, public.company_phones, public.contacts, public.grupos_economicos |
 | populada | n/a |
 | comentário |  |
@@ -2236,8 +2236,8 @@ SELECT c.id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses |
 | populada | n/a |
 | comentário |  |
@@ -2566,8 +2566,8 @@ SELECT ct.id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.contact_emails, public.contact_phones, public.contacts, public.interactions |
 | populada | n/a |
 | comentário |  |
@@ -2691,8 +2691,8 @@ UNION ALL
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.company_emails, public.company_phones, public.customers |
 | populada | n/a |
 | comentário |  |
@@ -5828,8 +5828,8 @@ SELECT co.nome_crm AS fornecedor,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.company_emails, public.company_phones, public.supplier_homologations, public.suppliers |
 | populada | n/a |
 | comentário |  |
@@ -6002,8 +6002,8 @@ SELECT rank() OVER (ORDER BY ss.score_geral DESC NULLS LAST) AS ranking,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.company_emails, public.company_phones, public.supplier_homologations, public.supplier_scores, public.suppliers |
 | populada | n/a |
 | comentário |  |
@@ -6062,8 +6062,8 @@ SELECT c.id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.company_emails, public.company_phones, public.supplier_homologations, public.supplier_scores, public.suppliers, public.users |
 | populada | n/a |
 | comentário |  |
@@ -6264,8 +6264,8 @@ SELECT sr.id,
 | campo | valor |
 |---|---|
 | owner | postgres |
-| security_invoker | não |
-| opções |  |
+| security_invoker | sim |
+| opções | security_invoker=true |
 | depende de | public.companies, public.company_addresses, public.customers |
 | populada | n/a |
 | comentário |  |

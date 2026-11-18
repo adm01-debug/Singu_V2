@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "adb1e39ae36508bc3db16a5d4b869be80168e253",
+  "sha": "682ad793f5080f5ef81b3771a3e469518a49faed",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 14:34 UTC",
+  "generated_at": "2026-11-18 15:11 UTC",
   "files_total": 3346,
   "code_files": 2875,
   "code_lines": 409966
@@ -232858,10 +232858,19 @@
   }
  },
  "git": {
-  "sha": "adb1e39ae36508bc3db16a5d4b869be80168e253",
+  "sha": "682ad793f5080f5ef81b3771a3e469518a49faed",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "682ad79",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "docs(pendencias): corrige o diagnostico errado do P7 e fecha P0 e P5 (#242)",
+    "files": [
+     "PENDENCIAS.md"
+    ]
+   },
    {
     "sha": "adb1e39",
     "date": "2026-11-18",
@@ -233306,21 +233315,12 @@
     "files": [
      "docs/prod-readiness.md"
     ]
-   },
-   {
-    "sha": "be23f3a",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "chore(docs): inventário de prod readiness do main (113 rotas, 109 edge functions, banco, workflows) (#214)",
-    "files": [
-     "docs/prod-readiness.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    14
+    13
    ],
    [
     ".github/workflows/ci.yml",
@@ -233341,6 +233341,10 @@
    [
     "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
     2
+   ],
+   [
+    "PENDENCIAS.md",
+    1
    ],
    [
     "supabase/migrations/20260924215142_t216_fix_reversao_devolve_status_staging.sql",
@@ -233392,10 +233396,6 @@
    ],
    [
     "src/components/ai/AIEmailComposer.tsx",
-    1
-   ],
-   [
-    "src/components/ai/AIMessageGenerator.tsx",
     1
    ]
   ]

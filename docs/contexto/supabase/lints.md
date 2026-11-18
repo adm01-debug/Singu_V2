@@ -12,25 +12,9 @@ Verificações objetivas feitas no catálogo. Um agente deve ler isto antes de p
 | ALTA | view_security_definer | public.push_subscriptions_safe | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | ALTA | view_security_definer | public.slow_queries_audit | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | ALTA | view_security_definer | public.users_public | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.v_company_summary | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | ALTA | view_security_definer | public.v_contact_personality_audit | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | ALTA | view_security_definer | public.v_contact_relatives_audit | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.v_entities | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | ALTA | view_security_definer | public.v_life_events_audit | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_alertas_pendentes_vendedor | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_carrier_homologation_queue | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_carriers | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_carriers_completo | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_cliente_completo | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_clientes_prioridade | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_companies_completo | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_company_addresses | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_contacts_sem_apelido | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_customers | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_supplier_homologation_queue | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_suppliers | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_suppliers_completo | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
-| ALTA | view_security_definer | public.vw_top_clientes_vendedor | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | BAIXA | extension_in_public | pg_net | Extensão instalada no schema public (recomendado: schema extensions). |
 | BAIXA | extension_in_public | plpgsql_check | Extensão instalada no schema public (recomendado: schema extensions). |
 | BAIXA | fk_without_index | _dormant.access_denied_logs.access_denied_logs_user_id_fkey | FK sem índice nas colunas ['user_id']: joins e DELETE/UPDATE na tabela pai ficam lentos. |

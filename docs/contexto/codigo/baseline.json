@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "adb1e39ae36508bc3db16a5d4b869be80168e253",
+  "commit": "682ad793f5080f5ef81b3771a3e469518a49faed",
   "branch": "main",
-  "data_commit": "2026-11-18T11:34:03-03:00",
+  "data_commit": "2026-11-18T11:52:26-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "682ad79",
+    "data": "2026-11-18",
+    "assunto": "docs(pendencias): corrige o diagnostico errado do P7 e fecha P0 e P5 (#242)"
+   },
    {
     "sha": "adb1e39",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "783135a",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 220 (#221)"
-   },
-   {
-    "sha": "63673dc",
-    "data": "2026-11-13",
-    "assunto": "chore(docs): bump prod-readiness para o head pos-merge 219 (#220)"
    }
   ],
-  "arquivos_mudados_7d": 396,
+  "arquivos_mudados_7d": 397,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -270,6 +270,10 @@
     "mudancas": 5
    },
    {
+    "arquivo": "PENDENCIAS.md",
+    "mudancas": 5
+   },
+   {
     "arquivo": "docs/qa/functions-authenticated-allowlist.md",
     "mudancas": 5
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "src/pages/Empresas.tsx",
     "mudancas": 5
-   },
-   {
-    "arquivo": "supabase/functions/evolution-bitrix-connector/index.ts",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 82
+    "commits": 83
    },
    {
     "autor": "devin-ai-integration[bot]",

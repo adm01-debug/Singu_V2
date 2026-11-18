@@ -2,6 +2,13 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-18 15:13 UTC
+
+- **constraints** alterado (6): `public.companies.chk_companies_no_self_reference`, `public.csat_surveys.csat_surveys_answered_score_check`, `public.entity_relationships.entity_relationships_no_self`, `public.entity_relationships.entity_relationships_period_valid`, `zapp_history.conversation_daily_summaries.chk_cds_period_order`, `zapp_history.messages.chk_content_or_media`
+- **lints** removido (16): `view_security_definer:public.v_company_summary`, `view_security_definer:public.v_entities`, `view_security_definer:public.vw_alertas_pendentes_vendedor`, `view_security_definer:public.vw_carrier_homologation_queue`, `view_security_definer:public.vw_carriers`, `view_security_definer:public.vw_carriers_completo`, `view_security_definer:public.vw_cliente_completo`, `view_security_definer:public.vw_clientes_prioridade`, `view_security_definer:public.vw_companies_completo`, `view_security_definer:public.vw_company_addresses`, `view_security_definer:public.vw_contacts_sem_apelido`, `view_security_definer:public.vw_customers`, `view_security_definer:public.vw_supplier_homologation_queue`, `view_security_definer:public.vw_suppliers`, `view_security_definer:public.vw_suppliers_completo`, `view_security_definer:public.vw_top_clientes_vendedor`
+- **migrations** adicionado (1): `20261118150043_views_security_invoker_16`
+- **views** alterado (16): `public.v_company_summary`, `public.v_entities`, `public.vw_alertas_pendentes_vendedor`, `public.vw_carrier_homologation_queue`, `public.vw_carriers`, `public.vw_carriers_completo`, `public.vw_cliente_completo`, `public.vw_clientes_prioridade`, `public.vw_companies_completo`, `public.vw_company_addresses`, `public.vw_contacts_sem_apelido`, `public.vw_customers`, `public.vw_supplier_homologation_queue`, `public.vw_suppliers`, `public.vw_suppliers_completo`, `public.vw_top_clientes_vendedor`
+
 ## 2026-11-18 13:13 UTC
 
 - **functions** removido (1): `public.__diag_multiplix()`

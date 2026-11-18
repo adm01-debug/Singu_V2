@@ -164385,8 +164385,8 @@
       },
       {
         "columns": [
-          "matriz_id",
-          "id"
+          "id",
+          "matriz_id"
         ],
         "deferrable": false,
         "definition": "CHECK (matriz_id IS NULL OR matriz_id <> id)",
@@ -168952,11 +168952,11 @@
       },
       {
         "columns": [
-          "status",
-          "survey_type",
           "score",
           "nps_score",
-          "ces_score"
+          "ces_score",
+          "survey_type",
+          "status"
         ],
         "deferrable": false,
         "definition": "CHECK (status <> 'answered'::text OR\nCASE survey_type\n    WHEN 'csat'::text THEN score IS NOT NULL\n    WHEN 'nps'::text THEN nps_score IS NOT NULL\n    WHEN 'ces'::text THEN ces_score IS NOT NULL\n    WHEN 'custom'::text THEN true\n    ELSE false\nEND)",
@@ -172099,8 +172099,8 @@
       {
         "columns": [
           "from_type",
-          "to_type",
           "from_id",
+          "to_type",
           "to_id"
         ],
         "deferrable": false,
@@ -172118,8 +172118,8 @@
       },
       {
         "columns": [
-          "ended_at",
-          "started_at"
+          "started_at",
+          "ended_at"
         ],
         "deferrable": false,
         "definition": "CHECK (ended_at IS NULL OR started_at IS NULL OR ended_at >= started_at)",
@@ -184636,8 +184636,8 @@
       },
       {
         "columns": [
-          "period_end",
-          "period_start"
+          "period_start",
+          "period_end"
         ],
         "deferrable": false,
         "definition": "CHECK (period_end >= period_start)",
@@ -185579,8 +185579,8 @@
       },
       {
         "columns": [
-          "content",
-          "message_type"
+          "message_type",
+          "content"
         ],
         "deferrable": false,
         "definition": "CHECK (content IS NOT NULL OR (message_type = ANY (ARRAY['audio'::text, 'image'::text, 'video'::text, 'document'::text, 'sticker'::text, 'location'::text, 'contact'::text])))",
@@ -270399,12 +270399,6 @@
       {
         "code": "view_security_definer",
         "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.v_company_summary",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
         "object": "public.v_contact_personality_audit",
         "severity": "ALTA"
       },
@@ -270417,97 +270411,7 @@
       {
         "code": "view_security_definer",
         "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.v_entities",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
         "object": "public.v_life_events_audit",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_alertas_pendentes_vendedor",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_carrier_homologation_queue",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_carriers",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_carriers_completo",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_cliente_completo",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_clientes_prioridade",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_companies_completo",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_company_addresses",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_contacts_sem_apelido",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_customers",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_supplier_homologation_queue",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_suppliers",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_suppliers_completo",
-        "severity": "ALTA"
-      },
-      {
-        "code": "view_security_definer",
-        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
-        "object": "public.vw_top_clientes_vendedor",
         "severity": "ALTA"
       },
       {
@@ -276771,6 +276675,12 @@
         "statements": 1,
         "statements_sha": "e1d9ba7d303441dc",
         "version": "20261118122016"
+      },
+      {
+        "name": "views_security_invoker_16",
+        "statements": 1,
+        "statements_sha": "fb4db9b511c1c8c6",
+        "version": "20261118150043"
       }
     ],
     "policies": [
@@ -313836,11 +313746,13 @@
         ],
         "kind": "view",
         "name": "v_company_summary",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -313962,11 +313874,13 @@
         ],
         "kind": "view",
         "name": "v_entities",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -314113,11 +314027,13 @@
         ],
         "kind": "view",
         "name": "vw_alertas_pendentes_vendedor",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -314284,11 +314200,13 @@
         ],
         "kind": "view",
         "name": "vw_carrier_homologation_queue",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": "Dashboard gerencial consolidado de transportadoras: totais, segmentos, trends, homologações",
@@ -314343,11 +314261,13 @@
         ],
         "kind": "view",
         "name": "vw_carriers",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -314364,11 +314284,13 @@
         ],
         "kind": "view",
         "name": "vw_carriers_completo",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -314442,11 +314364,13 @@
         ],
         "kind": "view",
         "name": "vw_cliente_completo",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -314460,11 +314384,13 @@
         ],
         "kind": "view",
         "name": "vw_clientes_prioridade",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -314546,11 +314472,13 @@
         ],
         "kind": "view",
         "name": "vw_companies_completo",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": "Substitui companies.phone/email. Fonte: company_phones e company_emails.",
@@ -314636,11 +314564,13 @@
         ],
         "kind": "view",
         "name": "vw_company_addresses",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -314750,11 +314680,13 @@
         ],
         "kind": "view",
         "name": "vw_contacts_sem_apelido",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -314785,11 +314717,13 @@
         ],
         "kind": "view",
         "name": "vw_customers",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -316065,11 +315999,13 @@
         ],
         "kind": "view",
         "name": "vw_supplier_homologation_queue",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": "Dashboard consolidado: totais, segmentos, tendências, homologações, avaliações. Consulta única para painel gerencial.",
@@ -316124,11 +316060,13 @@
         ],
         "kind": "view",
         "name": "vw_suppliers",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -316145,11 +316083,13 @@
         ],
         "kind": "view",
         "name": "vw_suppliers_completo",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,
@@ -316213,11 +316153,13 @@
         ],
         "kind": "view",
         "name": "vw_top_clientes_vendedor",
-        "options": null,
+        "options": [
+          "security_invoker=true"
+        ],
         "owner": "postgres",
         "populated": null,
         "schema": "public",
-        "security_invoker": false
+        "security_invoker": true
       },
       {
         "comment": null,

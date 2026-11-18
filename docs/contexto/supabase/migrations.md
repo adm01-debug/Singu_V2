@@ -688,3 +688,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261112001000 | [weekly_digest_cron_horario](migrations/20261112001000_weekly_digest_cron_horario.sql) | 0 |
 | 20261118121105 | [remove_duplicate_indexes](migrations/20261118121105_remove_duplicate_indexes.sql) | 1 |
 | 20261118122016 | [multiplix_list_ufs_cast_text](migrations/20261118122016_multiplix_list_ufs_cast_text.sql) | 1 |
+| 20261118150043 | [views_security_invoker_16](migrations/20261118150043_views_security_invoker_16.sql) | 1 |

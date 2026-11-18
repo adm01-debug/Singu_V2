@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `adb1e39ae36508bc3db16a5d4b869be80168e253` (2026-11-18T11:34:03-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `682ad793f5080f5ef81b3771a3e469518a49faed` (2026-11-18T11:52:26-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -433,8 +433,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21150 nós · 35842 arestas · 2114 comunidades · grafo do commit `adb1e39a`
-- comunidades maiores: react (379), ref_types (352), ref_hooks (316), 02_tables.sql (259), framer-motion (254), ref_lib (240), useAuth (239), _shared/auth.ts (237), react-router-dom (235), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (211), date-fns (201)
+- 21154 nós · 35846 arestas · 2116 comunidades · grafo do commit `682ad793`
+- comunidades maiores: ref_components (308), sonner (270), framer-motion (260), 02_tables.sql (259), ref_lib (258), useAuth (258), _shared/auth.ts (251), lucide-react (236), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (221), react-router-dom (219), ref_hooks (199)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -520,7 +520,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `FIELD_MAPPING.md` — Mapeamento Campo-a-Campo: Banco Local ↔ Banco Externo (288 linhas)
 - `FUNCIONALIDADES_SISTEMA.md` — 📋 SINGU CRM — Levantamento Completo de Funcionalidades (434 linhas)
 - `HANDOFF.md` — SINGU CRM — Handoff Document (193 linhas)
-- `PENDENCIAS.md` — PENDENCIAS.md — Bloqueios e itens fora do escopo (Singu_V2) (68 linhas)
+- `PENDENCIAS.md` — PENDENCIAS.md — Bloqueios e itens fora do escopo (Singu_V2) (114 linhas)
 - `PLANEJADO_NAO_EXECUTADO.md` — PLANEJADO × EXECUTADO — SINGU CRM v2 (637 linhas)
 - `README.md` — SINGU CRM (193 linhas)
 - `RELATORIO_CI.md` — RELATORIO_CI.md — Correção dos workflows com falha (Singu_V2) (123 linhas)
@@ -570,6 +570,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `682ad79` docs(pendencias): corrige o diagnostico errado do P7 e fecha P0 e P5 (#242)
 - 2026-11-18 `adb1e39` fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)
 - 2026-11-18 `91be466` fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)
 - 2026-11-18 `10085c6` fix(db): recupera trabalho pendente de outros agentes nas branches (#238)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-14 `03b943a` chore(docs): bump prod-readiness pos-merge 228 (final) (#229)
 - 2026-11-14 `2f70928` chore(docs): bump prod-readiness pos-merge 227 (final) (#228)
 - 2026-11-14 `4e67de3` chore(docs): bump prod-readiness pos-merge 226 (#227)
-- 2026-11-14 `8d6aaa9` chore(docs): bump prod-readiness pos-merge 226
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
