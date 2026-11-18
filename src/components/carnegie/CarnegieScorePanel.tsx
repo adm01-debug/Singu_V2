@@ -127,7 +127,22 @@ export function CarnegieScorePanel({ score, className }: CarnegieScorePanelProps
             {Object.entries(score.components).map(([key, value]) => {
               const Icon = COMPONENT_ICONS[key as keyof typeof COMPONENT_ICONS];
               const label = COMPONENT_LABELS[key as keyof typeof COMPONENT_LABELS];
-              
+
+              // `null` = principio sem funcao de medicao. Mostrar barra zerada
+              // ou um numero inventado passaria por nota ruim/boa; o texto diz
+              // o que de fato acontece.
+              if (value === null) {
+                return (
+                  <div key={key} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Icon className="h-4 w-4" />
+                      <span>{label}</span>
+                    </div>
+                    <span className="text-xs text-muted-foreground">não medido</span>
+                  </div>
+                );
+              }
+
               return (
                 <div key={key} className="space-y-1">
                   <div className="flex items-center justify-between text-sm">

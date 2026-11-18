@@ -410,16 +410,19 @@ export interface ProgressCelebrationSuggestion {
 export interface CarnegieScore {
   overall: number; // 0-100
   
-  // Component scores
+  // Pontuacao por componente. `null` = principio sem medicao disponivel:
+  // so ha funcao de pontuacao para calor humano (calculateWarmthScore em
+  // data/carnegieWarmth). Os demais modulos Carnegie sao bibliotecas de
+  // sugestao/deteccao, nao de medicao, entao nao viram nota.
   components: {
-    nobleCause: number;
-    identityLabeling: number;
-    appreciation: number;
-    talkRatio: number;
-    warmth: number;
-    faceSaving: number;
-    vulnerability: number;
-    progressCelebration: number;
+    nobleCause: number | null;
+    identityLabeling: number | null;
+    appreciation: number | null;
+    talkRatio: number | null;
+    warmth: number | null;
+    faceSaving: number | null;
+    vulnerability: number | null;
+    progressCelebration: number | null;
   };
   
   // Level
