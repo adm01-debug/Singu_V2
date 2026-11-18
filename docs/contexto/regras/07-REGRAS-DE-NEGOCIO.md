@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `775c89c04d` · branch `main` · 2026-11-18 17:45 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `602a7f8dac` · branch `main` · 2026-11-18 17:58 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1171,7 +1171,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `analogy` | escreve | `src/data/carnegieStorytelling.ts` |
 | `type` | `analysis_paralysis` | escreve | `src/hooks/useAdvancedTriggers.ts` |
 | `type` | `anniversary` | compara, escreve | `src/components/contact-detail/life-events/LifeEventsGapChecklist.tsx`<br>`src/components/dashboard/important-dates/EventCard.tsx`<br>`src/hooks/useImportantDates.ts` |
-| `type` | `array` | compara, escreve | `src/hooks/useContactSegmentation.ts`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/abm-whitespace-analyzer/index.ts`<br>`supabase/functions/ai-writing-assistant/index.ts`<br>… +12 |
+| `type` | `array` | compara, escreve | `src/hooks/useContactSegmentation.ts`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/abm-whitespace-analyzer/index.ts`<br>`supabase/functions/ai-writing-assistant/index.ts`<br>… +13 |
 | `type` | `ask_more` | compara, escreve | `src/data/carnegieTalkRatio.ts`<br>`src/types/carnegie.ts` |
 | `type` | `asking_for_help` | escreve | `src/data/carnegieVulnerability.ts` |
 | `type` | `at_risk` | compara, escreve, filtra | `src/components/contact-detail/CRMAlertsWidget.tsx`<br>`src/hooks/useCRMAlerts.ts`<br>`src/hooks/useUnifiedTimeline.ts`<br>`supabase/functions/client-notifications/index.ts` |
@@ -2193,9 +2193,17 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```ts
   { contactId: z.string().optional(), contact: z.record(z.unknown()).optional(), interactions: z.array(z.record(z.unknown())).optional(), company: z.record(z.unknown()).optional(), }
   ```
+- **RoadmapItemSchema** (`supabase/functions/suggest-next-action/index.ts`, z.object):
+  ```ts
+  { months_ahead: z.union([z.literal(1), z.literal(3), z.literal(6)]), predicted_need: z.string().trim().min(10).max(300), suggested_offering: z.string().trim().min(3).max(120), probability: z.number().min(0).max(100), rationale: z.string().trim().min(10).max(500), }
+  ```
 - **SuggestionSchema** (`supabase/functions/suggest-next-action/index.ts`, z.object):
   ```ts
-  { confidence: z.number(), action_type: z.string() }
+  { confidence: z.number(), action_type: z.string(), }
+  ```
+- **roadmapParsed** (`supabase/functions/suggest-next-action/index.ts`, z.array):
+  ```ts
+  RoadmapItemSchema
   ```
 - **bodySchema** (`supabase/functions/validate-access/index.ts`, z.object):
   ```ts
@@ -4993,7 +5001,8 @@ _nenhum item encontrado_
 | Service-role callers (crons) must specify userId | `supabase/functions/send-push-notification/index.ts` |
 | sequence-processor; responde { ok: true, messageId } apenas quando o Resend aceita o envio. | `supabase/functions/send-transactional-email/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/social-events-detector/index.ts` |
-| 🔮 Roadmap Prediction Logic (Only if high confidence) | `supabase/functions/suggest-next-action/index.ts` |
+| O roadmap e validado a parte, com safeParse: um marco malformado nao pode | `supabase/functions/suggest-next-action/index.ts` |
+| Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os | `supabase/functions/suggest-next-action/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/template-success-notifications/index.ts` |
 | * Pela tela, e-mail só quando o usuário pede o teste; chave única por clique (o limite é 3/min). */ | `supabase/functions/weekly-digest/index.ts` |
 | INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |

@@ -3402,7 +3402,7 @@
    "nome": "suggest-next-action",
    "entrada": "supabase/functions/suggest-next-action/index.ts",
    "arquivos": 1,
-   "linhas": 217,
+   "linhas": 252,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

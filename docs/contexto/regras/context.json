@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "775c89c04dd0988d84be31655359569e3f7cd2e8",
+  "sha": "602a7f8dace0a8736d015778986ea63d7f7b680f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 17:45 UTC",
+  "generated_at": "2026-11-18 17:58 UTC",
   "files_total": 3347,
   "code_files": 2876,
-  "code_lines": 410194
+  "code_lines": 410229
  },
  "version": "1.3.2",
- "facts_hash": "5996a52d6ab661ed",
+ "facts_hash": "30d14839d33fe1fd",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -70476,7 +70476,7 @@
   {
    "module": "supabase/functions",
    "files": 174,
-   "lines": 26797,
+   "lines": 26832,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -71630,7 +71630,7 @@
      "src/components/crm/NextBestAction.tsx",
      "src/components/crm/behavior/PredictiveRoadmap.tsx"
     ],
-    "ref": [
+    "upsert": [
      "supabase/functions/suggest-next-action/index.ts"
     ]
    },
@@ -79814,9 +79814,25 @@
    },
    {
     "file": "supabase/functions/suggest-next-action/index.ts",
+    "name": "RoadmapItemSchema",
+    "kind": "object",
+    "body": "{ months_ahead: z.union([z.literal(1), z.literal(3), z.literal(6)]), predicted_need: z.string().trim().min(10).max(300), suggested_offering: z.string().trim().min(3).max(120), probability: z.number().min(0).max(100), rationale: z.string().trim().min(10).max(500), }",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
     "name": "SuggestionSchema",
     "kind": "object",
-    "body": "{ confidence: z.number(), action_type: z.string() }",
+    "body": "{ confidence: z.number(), action_type: z.string(), }",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
+    "name": "roadmapParsed",
+    "kind": "array",
+    "body": "RoadmapItemSchema",
     "refines": [],
     "chain": []
    },
@@ -86312,7 +86328,11 @@
    },
    {
     "file": "supabase/functions/suggest-next-action/index.ts",
-    "text": "🔮 Roadmap Prediction Logic (Only if high confidence)"
+    "text": "O roadmap e validado a parte, com safeParse: um marco malformado nao pode"
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
+    "text": "Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os"
    },
    {
     "file": "supabase/functions/template-success-notifications/index.ts",
@@ -112835,6 +112855,48 @@
     "file": "supabase/functions/suggest-next-action/index.ts",
     "field": "type",
     "value": "number",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
+    "field": "type",
+    "value": "array",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
+    "field": "type",
+    "value": "object",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
+    "field": "type",
+    "value": "number",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
+    "field": "type",
+    "value": "string",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
+    "field": "type",
+    "value": "string",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
+    "field": "type",
+    "value": "number",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/suggest-next-action/index.ts",
+    "field": "type",
+    "value": "string",
     "kind": "escreve"
    },
    {
@@ -150095,6 +150157,7 @@
       "escreve:supabase/functions/generate-behavioral-profile/index.ts",
       "escreve:supabase/functions/playbook-generator/index.ts",
       "escreve:supabase/functions/semantic-search/index.ts",
+      "escreve:supabase/functions/suggest-next-action/index.ts",
       "escreve:supabase/functions/territory-optimization/index.ts",
       "escreve:supabase/functions/visual-search/index.ts",
       "escreve:supabase/functions/voice-agent/index.ts",
@@ -228443,7 +228506,7 @@
   },
   "supabase/functions/suggest-next-action/index.ts": {
    "path": "supabase/functions/suggest-next-action/index.ts",
-   "lines": 217,
+   "lines": 252,
    "tables": [
     {
      "table": "contacts",
@@ -228455,7 +228518,7 @@
     },
     {
      "table": "contact_predictive_roadmap",
-     "op": "ref"
+     "op": "upsert"
     }
    ],
    "table_cols": {
@@ -228486,9 +228549,23 @@
      "chain": []
     },
     {
+     "name": "RoadmapItemSchema",
+     "kind": "object",
+     "body": "{ months_ahead: z.union([z.literal(1), z.literal(3), z.literal(6)]), predicted_need: z.string().trim().min(10).max(300), suggested_offering: z.string().trim().min(3).max(120), probability: z.number().min(0).max(100), rationale: z.string().trim().min(10).max(500), }",
+     "refines": [],
+     "chain": []
+    },
+    {
      "name": "SuggestionSchema",
      "kind": "object",
-     "body": "{ confidence: z.number(), action_type: z.string() }",
+     "body": "{ confidence: z.number(), action_type: z.string(), }",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "roadmapParsed",
+     "kind": "array",
+     "body": "RoadmapItemSchema",
      "refines": [],
      "chain": []
     }
@@ -228556,12 +228633,48 @@
     },
     {
      "field": "type",
+     "value": "array",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "object",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "number",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "string",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "string",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "number",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "string",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
      "value": "function",
      "kind": "escreve"
     }
    ],
    "rule_comments": [
-    "🔮 Roadmap Prediction Logic (Only if high confidence)"
+    "O roadmap e validado a parte, com safeParse: um marco malformado nao pode",
+    "Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os"
    ],
    "pagination": [
     "10"
@@ -232868,10 +232981,19 @@
   }
  },
  "git": {
-  "sha": "775c89c04dd0988d84be31655359569e3f7cd2e8",
+  "sha": "602a7f8dace0a8736d015778986ea63d7f7b680f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "602a7f8",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(edge): roadmap preditivo para de sortear a previsao gravada no banco (#246)",
+    "files": [
+     "supabase/functions/suggest-next-action/index.ts"
+    ]
+   },
    {
     "sha": "775c89c",
     "date": "2026-11-18",
@@ -233322,21 +233444,12 @@
     "files": [
      "docs/prod-readiness.md"
     ]
-   },
-   {
-    "sha": "f8312ef",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)",
-    "files": [
-     "docs/prod-readiness.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    11
+    10
    ],
    [
     ".github/workflows/ci.yml",
@@ -233361,6 +233474,10 @@
    [
     ".github/workflows/inventario-estado-semanal.yml",
     2
+   ],
+   [
+    "supabase/functions/suggest-next-action/index.ts",
+    1
    ],
    [
     "src/components/layout/AppSidebar.tsx",
@@ -233408,10 +233525,6 @@
    ],
    [
     ".github/workflows/automation-local.yml",
-    1
-   ],
-   [
-    ".github/workflows/docs-ci.yml",
     1
    ]
   ]

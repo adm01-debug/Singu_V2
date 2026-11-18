@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `775c89c04dd0988d84be31655359569e3f7cd2e8` (2026-11-18T14:43:44-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `602a7f8dace0a8736d015778986ea63d7f7b680f` (2026-11-18T14:57:28-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3242 |
 | arquivos_codigo | 2215 |
-| linhas_codigo | 414261 |
+| linhas_codigo | 414296 |
 | rotas | 114 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -433,8 +433,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21156 nós · 35848 arestas · 2093 comunidades · grafo do commit `775c89c0`
-- comunidades maiores: ref_types (359), _shared/auth.ts (292), useAuth (270), ref_lib (263), 02_tables.sql (259), react (252), 📖 Dicionário de Dados — SINGU CRM (227), framer-motion (223), react-router-dom (211), date-fns (199), ref_hooks (196), ref_components (191)
+- 21157 nós · 35849 arestas · 2158 comunidades · grafo do commit `602a7f8d`
+- comunidades maiores: 02_tables.sql (259), 📖 Dicionário de Dados — SINGU CRM (227), react (221), useAuth (211), ref_hooks (201), react-router-dom (190), ref_npm_supabase (184), lucide-react (174), react-helmet-async (172), ref_components (166), date-fns (159), _shared/auth.ts (158)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -570,6 +570,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `602a7f8` fix(edge): roadmap preditivo para de sortear a previsao gravada no banco (#246)
 - 2026-11-18 `775c89c` feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)
 - 2026-11-18 `f6ec6ec` fix(ui): telas deixam de mostrar "vazio" quando a consulta falhou (#244)
 - 2026-11-18 `a9fdfb7` fix(db): liga security_invoker nas 16 views que ignoravam o RLS (#243)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `889a650` build(deps): bump the minor-and-patch group with 11 updates (#237)
 - 2026-11-18 `ba42905` fix(ci): remove BOM UTF-8 da migration do MTTA que quebra o Supabase Preview (#233)
 - 2026-11-14 `0a7b484` chore: contexto agendado de 10 min para 1x/hora (#234)
-- 2026-11-14 `4f4b782` fix: ativa strict mode no tsconfig.app e corrige tipos (#230)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
