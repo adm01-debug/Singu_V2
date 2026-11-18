@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "b2d6c1ac30ee076fb5556328e9be1808305dd404",
+  "commit": "185ce78159ae6ae2ea6de68feeb6eaac036937b7",
   "branch": "main",
-  "data_commit": "2026-11-18T19:22:57-03:00",
+  "data_commit": "2026-11-18T19:38:03-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "185ce78",
+    "data": "2026-11-18",
+    "assunto": "fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)"
+   },
    {
     "sha": "b2d6c1a",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "986ffa4",
     "data": "2026-11-18",
     "assunto": "build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)"
-   },
-   {
-    "sha": "563e484",
-    "data": "2026-11-18",
-    "assunto": "build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)"
    }
   ],
-  "arquivos_mudados_7d": 451,
+  "arquivos_mudados_7d": 452,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 101
+    "commits": 102
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,9 +322,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3252,
-  "arquivos_codigo": 2224,
-  "linhas_codigo": 415603,
+  "arquivos_total": 3253,
+  "arquivos_codigo": 2225,
+  "linhas_codigo": 415701,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -336,7 +336,7 @@
   "tabelas": 418,
   "migrations": 488,
   "cron_jobs": 34,
-  "testes": 268,
+  "testes": 269,
   "workflows": 11,
   "scripts": 296,
   "docs_md": 156
@@ -667,8 +667,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 438,
-   "linhas": 57755
+   "arquivos": 439,
+   "linhas": 57853
   },
   "src/integrations": {
    "arquivos": 3,

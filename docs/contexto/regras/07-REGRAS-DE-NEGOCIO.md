@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b2d6c1ac30` · branch `main` · 2026-11-18 22:23 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `185ce78159` · branch `main` · 2026-11-18 22:38 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4383,7 +4383,7 @@ _nenhum item encontrado_
 | Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar no bundle. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar. | `src/components/intelligence/CrossRefTab.tsx` |
-| … +783 linhas — lista completa em `context.json` | |
+| … +785 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4415,7 +4415,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3169 testes em 243 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3175 testes em 244 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4561,6 +4561,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/canonical-rfm-day-contracts.test.tsx` | 6 | RFM conserva recomendações do produtor e metadados existentes · normaliza IDs locais estáveis e marca o impacto ausente sem inventar uma estimativa · Meu Dia distingue falha, carregamento e ausência de login · encerra carregamento ao falhar e recupera os dados após nova tentativa … |
 | `src/hooks/__tests__/company-composite.contract.test.ts` | 6 | dados compostos da empresa no contrato canônico · converte os três formatos reais do formulário sem perder dados · identifica WhatsApp sem assumir um tipo de aparelho e mantém o enum canônico explícito · deduplica os aliases básicos sem substituir os metadados compostos … |
 | `src/hooks/__tests__/contact-detail-external-retry.test.tsx` | 6 | Consulta do contato disponível apenas na fonte externa · limpa somente a ficha cuja ausência foi confirmada nas duas fontes; cache=%s · limita retries de indisponibilidade sem declarar ausência; cache=%s · Recuperação da ficha com o cliente externo real e transporte simulado … |
+| `src/hooks/__tests__/create-task-contract.test.ts` | 6 | montarArgsCriarTarefa · usa apenas nomes de argumento que a RPC aceita · sempre envia os dois argumentos sem valor padrão · descarta campos do Task que a RPC não recebe … |
 | `src/lib/pushNotifications.sw.test.ts` | 6 | A-007: service worker de push unificado · vite.config importa sw-push.js no SW gerado (sem precache duplicado) · main.tsx nunca cancela inscrição nem desregistra service worker · em produção usa serviceWorker.ready e NÃO registra /sw-push.js … |
 | `src/lib/__tests__/logger.test.ts` | 6 | Logger Utility · deve gerar IDs de requisição únicos · deve formatar logs corretamente em desenvolvimento · deve persistir erros no banco de dados … |
 | `src/lib/__tests__/providerGuard.test.ts` | 6 | Provider Guard & Hierarchy · deve validar corretamente uma ordem de providers válida · deve detectar violação quando AuthProvider vem antes de BrowserRouter · deve detectar violação quando AuthProvider vem antes de QueryClientProvider … |

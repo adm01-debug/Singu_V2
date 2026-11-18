@@ -5,9 +5,9 @@
   "vitest",
   "playwright"
  ],
- "total": 268,
+ "total": 269,
  "por_tipo": {
-  "contrato": 39,
+  "contrato": 40,
   "e2e": 12,
   "pytest": 9,
   "unit": 206
@@ -19,7 +19,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 90
+   "arquivos": 91
   },
   {
    "padrao": "tests/",
@@ -1525,6 +1525,15 @@
    "casos": 11
   },
   {
+   "arquivo": "src/hooks/__tests__/create-task-contract.test.ts",
+   "tipo": "contrato",
+   "linhas": 63,
+   "testa": [
+    "src/hooks/useTasks.ts"
+   ],
+   "casos": 5
+  },
+  {
    "arquivo": "src/hooks/__tests__/dashboard-session.test.tsx",
    "tipo": "unit",
    "linhas": 51,
@@ -2598,6 +2607,7 @@
   "src/hooks/useSequenceProcessor.ts": 1,
   "src/hooks/useSequences.ts": 2,
   "src/hooks/useSocialInsights.ts": 1,
+  "src/hooks/useTasks.ts": 1,
   "src/hooks/useUnifiedHistory.ts": 1,
   "src/hooks/useWhatsAppImport.ts": 1,
   "src/hooks/useWinLoss.ts": 1,
@@ -3076,7 +3086,6 @@
    "src/hooks/useSuccessCelebration.ts",
    "src/hooks/useSupportTickets.ts",
    "src/hooks/useTableDensity.ts",
-   "src/hooks/useTasks.ts",
    "src/hooks/useTeamDashboard.ts",
    "src/hooks/useTelemetryExport.ts",
    "src/hooks/useTemplateNotifications.ts",

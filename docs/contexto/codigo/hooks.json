@@ -9417,7 +9417,7 @@
     "useSnoozeReminder",
     "useUpdateTask"
    ],
-   "linhas": 277,
+   "linhas": 312,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -9440,7 +9440,7 @@
     "src/pages/tarefas/TaskCard.tsx",
     "src/pages/tarefas/TaskDetailDrawer.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useTeamDashboard.ts",
