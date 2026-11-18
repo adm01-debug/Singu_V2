@@ -1346,9 +1346,11 @@
    "src/components/carnegie/TalkRatioPanel.tsx",
    "src/components/carnegie/VulnerabilityPanel.tsx",
    "src/components/carnegie/WarmthAnalyzerPanel.tsx",
+   "src/components/ui/card.tsx",
    "src/components/ui/tabs.tsx",
    "src/hooks/useCarnegieAnalysis.ts",
    "src/lib/utils.ts",
+   "src/types/carnegie.ts",
    "src/types/index.ts"
   ],
   "src/components/carnegie/CarnegieQuickAccess.tsx": [
@@ -1363,6 +1365,7 @@
    "src/components/ui/dialog.tsx",
    "src/hooks/useCarnegieAnalysis.ts",
    "src/lib/utils.ts",
+   "src/types/carnegie.ts",
    "src/types/index.ts"
   ],
   "src/components/carnegie/CarnegieScorePanel.tsx": [

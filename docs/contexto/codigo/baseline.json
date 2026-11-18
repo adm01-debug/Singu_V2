@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "6917cfd2a577cdae74f9fefbdb4841e03c27c51c",
+  "commit": "213464a1d4afc80ad5565cc105fcf46ca46424bd",
   "branch": "main",
-  "data_commit": "2026-11-18T18:46:14-03:00",
+  "data_commit": "2026-11-18T19:19:42-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "213464a",
+    "data": "2026-11-18",
+    "assunto": "fix(carnegie): score deixa de ser número fixo e passa a refletir a análise real (#259)"
+   },
    {
     "sha": "6917cfd",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "c027a81",
     "data": "2026-11-18",
     "assunto": "chore(ci): roda os testes de edge function orfaos no pipeline (#231)"
-   },
-   {
-    "sha": "889a650",
-    "data": "2026-11-18",
-    "assunto": "build(deps): bump the minor-and-patch group with 11 updates (#237)"
    }
   ],
-  "arquivos_mudados_7d": 445,
+  "arquivos_mudados_7d": 450,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 99
+    "commits": 100
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3251,
   "arquivos_codigo": 2223,
-  "linhas_codigo": 415524,
+  "linhas_codigo": 415569,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 990,
-   "linhas": 148761
+   "linhas": 148797
   },
   "src/config": {
    "arquivos": 1,
@@ -668,7 +668,7 @@
   },
   "src/hooks": {
    "arquivos": 438,
-   "linhas": 57749
+   "linhas": 57755
   },
   "src/integrations": {
    "arquivos": 3,
@@ -700,7 +700,7 @@
   },
   "src/types": {
    "arquivos": 21,
-   "linhas": 5967
+   "linhas": 5970
   },
   "supabase/functions": {
    "arquivos": 174,

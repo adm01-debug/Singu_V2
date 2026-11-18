@@ -2471,7 +2471,7 @@
     "CarnegieDashboard"
    ],
    "export_default": null,
-   "linhas": 146,
+   "linhas": 159,
    "dominio": "components/carnegie",
    "hooks_locais": [
     "useCarnegieAnalysis"
@@ -2487,7 +2487,7 @@
     "CarnegieQuickAccess"
    ],
    "export_default": null,
-   "linhas": 247,
+   "linhas": 255,
    "dominio": "components/carnegie",
    "hooks_locais": [
     "useCarnegieAnalysis"
@@ -2503,7 +2503,7 @@
     "CarnegieScorePanel"
    ],
    "export_default": null,
-   "linhas": 231,
+   "linhas": 246,
    "dominio": "components/carnegie",
    "hooks_locais": [],
    "tabelas": [],
@@ -13971,7 +13971,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 581,
+   "usado_por": 582,
    "orfao": false
   },
   {

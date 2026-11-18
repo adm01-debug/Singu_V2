@@ -1779,7 +1779,7 @@
    "hooks_exportados": [
     "useCarnegieAnalysis"
    ],
-   "linhas": 140,
+   "linhas": 146,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

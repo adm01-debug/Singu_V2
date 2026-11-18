@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6917cfd2a5` · branch `main` · 2026-11-18 21:47 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `213464a1d4` · branch `main` · 2026-11-18 22:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3228,7 +3228,6 @@ _nenhum item encontrado_
 | `score: (slot.positiveRate * 0.6 + slot.responseRate * 0.4) * Math.log(slot.interactionCount + 1)` | `src/hooks/useBestTimeToContact.ts` |
 | `acknowledgments: Math.floor(statementCount * 0.3),` | `src/hooks/useCarnegieAnalysis.ts` |
 | `closedQuestions: Math.floor(questionCount * 0.7),` | `src/hooks/useCarnegieAnalysis.ts` |
-| `const overall = Math.round(warmthScore * 0.4 + 50 * 0.6);` | `src/hooks/useCarnegieAnalysis.ts` |
 | `openEndedQuestions: Math.floor(questionCount * 0.3),` | `src/hooks/useCarnegieAnalysis.ts` |
 | `reflectiveStatements: Math.floor(statementCount * 0.2),` | `src/hooks/useCarnegieAnalysis.ts` |
 | `} else if (last30Days < previous30Days * 0.5) {` | `src/hooks/useChurnPrediction.ts` |
