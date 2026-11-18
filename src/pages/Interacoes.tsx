@@ -25,6 +25,8 @@ import { useSearchParams } from 'react-router-dom';
 import { List, Activity, Sparkles } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
+import { ErrorState, InlineError } from '@/components/feedback';
+import { parseApiError } from '@/lib/errorMessages';
 
 const InsightsPanel = lazy(() => import('@/components/interactions/insights/InsightsPanel').then(m => ({ default: m.InsightsPanel })));
 
@@ -44,7 +46,7 @@ const sortOptions: SortOption[] = [
 
 const Interacoes = () => {
   usePageTitle('Interações');
-  const { interactions, loading, hasMore, loadMore, isFetchingNextPage, totalCount, createInteraction, updateInteraction, deleteInteraction } = useInteractions();
+  const { interactions, loading, hasMore, loadMore, isFetchingNextPage, totalCount, createInteraction, updateInteraction, deleteInteraction, fetchInteractions, error: loadError } = useInteractions();
   const { contacts } = useContacts(undefined, { fetchAll: true });
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingInteraction, setEditingInteraction] = useState<Interaction | null>(null);
@@ -169,7 +171,25 @@ const Interacoes = () => {
           <TabsTrigger value="insights" className="gap-2"><Sparkles className="w-4 h-4" />Insights</TabsTrigger>
         </TabsList>
         <TabsContent value="lista" className="mt-0">
+          {loadError && interactions.length === 0 && !loading ? (
+            <ErrorState
+              title="Não foi possível carregar as interações"
+              description={parseApiError(loadError)}
+              onRetry={() => { void fetchInteractions(); }}
+            />
+          ) : (
+          <>
+          {loadError && (
+            <div className="mb-3">
+              <InlineError
+                message={`Falha ao atualizar o histórico — ${parseApiError(loadError)} As interações abaixo podem estar desatualizadas.`}
+                onRetry={() => { void fetchInteractions(); }}
+              />
+            </div>
+          )}
           <InteracoesContent interactions={interactions} loading={loading} hasMore={hasMore} loadMore={loadMore} isFetchingNextPage={isFetchingNextPage} totalCount={totalCount} contactMap={contactMap} stats={stats} onSetIsFormOpen={setIsFormOpen} onSetEditingInteraction={setEditingInteraction} onSetDeletingInteraction={setDeletingInteraction} filterConfigs={filterConfigs} sortOptions={sortOptions} />
+          </>
+          )}
         </TabsContent>
         <TabsContent value="timeline" className="mt-0 p-6">
           <UnifiedTimelineView />

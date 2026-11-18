@@ -16,6 +16,8 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
 } from '@/components/ui/dialog';
 import type { DuplicatePair } from '@/lib/fuzzyDedup';
+import { ErrorState } from '@/components/feedback';
+import { parseApiError } from '@/lib/errorMessages';
 
 function PairRow({ pair, onMerge }: { pair: DuplicatePair; onMerge: (p: DuplicatePair) => void }) {
   const sev = pair.score >= 0.95 ? 'destructive' : pair.score >= 0.88 ? 'default' : 'secondary';
@@ -54,7 +56,7 @@ function PairRow({ pair, onMerge }: { pair: DuplicatePair; onMerge: (p: Duplicat
 function DedupTab({ entity }: { entity: DedupEntity }) {
   const [threshold, setThreshold] = useState(0.85);
   const [filter, setFilter] = useState('');
-  const { pairs, isLoading, isFetching, totalScanned, refetch } = useDedupEngine(entity, threshold);
+  const { pairs, isLoading, isFetching, totalScanned, refetch, error: loadError } = useDedupEngine(entity, threshold);
   const merge = useMergeRecords();
   const [active, setActive] = useState<DuplicatePair | null>(null);
 
@@ -148,6 +150,13 @@ function DedupTab({ entity }: { entity: DedupEntity }) {
         <CardContent>
           {isLoading ? (
             <div className="space-y-2">{[1, 2, 3].map(i => <Skeleton key={i} className="h-16" />)}</div>
+          ) : loadError ? (
+            <ErrorState
+              title="Não foi possível varrer a base"
+              description={`${parseApiError(loadError)} Sem essa leitura não é possível afirmar que a base está limpa.`}
+              onRetry={() => { void refetch(); }}
+              isRetrying={isFetching}
+            />
           ) : filtered.length === 0 ? (
             <div className="text-center py-8">
               <Copy className="h-8 w-8 text-success mx-auto mb-2 opacity-60" />
