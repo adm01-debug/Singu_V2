@@ -102,21 +102,27 @@ export function useCarnegieAnalysis(contact: Contact | null) {
     return getCelebrationForDISC(progressType, discProfile);
   }, [discProfile]);
 
-  // Calculate overall Carnegie score
+  // Pontuacao Carnegie a partir de uma analise real de texto.
+  //
+  // Antes esta funcao devolvia 50 fixo em sete dos oito componentes e um
+  // `overall` que nao dependia de nada medido. Dos modulos Carnegie, so
+  // carnegieWarmth tem funcao de pontuacao (calculateWarmthScore); os demais
+  // detectam cenarios ou sugerem abordagens, e nao produzem nota. Por isso os
+  // sete entram como `null` ("nao medido") e o geral e o proprio calor humano.
   const calculateCarnegieScore = useCallback((warmthScore: number): CarnegieScore => {
-    const overall = Math.round(warmthScore * 0.4 + 50 * 0.6);
+    const overall = Math.round(warmthScore);
     
     return {
       overall,
       components: {
-        nobleCause: 50,
-        identityLabeling: 50,
-        appreciation: 50,
-        talkRatio: 50,
+        nobleCause: null,
+        identityLabeling: null,
+        appreciation: null,
+        talkRatio: null,
         warmth: warmthScore,
-        faceSaving: 50,
-        vulnerability: 50,
-        progressCelebration: 50
+        faceSaving: null,
+        vulnerability: null,
+        progressCelebration: null
       },
       level: overall >= 80 ? 'master' : overall >= 65 ? 'expert' : overall >= 50 ? 'proficient' : overall >= 35 ? 'developing' : 'novice',
       strengths: warmthScore >= 70 ? ['Comunicação Calorosa'] : [],

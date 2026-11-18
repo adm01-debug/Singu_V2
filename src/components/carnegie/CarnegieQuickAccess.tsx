@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Contact } from '@/types';
+import { WarmthScore } from '@/types/carnegie';
 import { useCarnegieAnalysis } from '@/hooks/useCarnegieAnalysis';
 import { cn } from '@/lib/utils';
 import {
@@ -86,14 +87,17 @@ const QUICK_PRINCIPLES = [
 export function CarnegieQuickAccess({ contact, className }: CarnegieQuickAccessProps) {
   const [selectedPrinciple, setSelectedPrinciple] = useState<string | null>(null);
   const { calculateCarnegieScore, discProfile } = useCarnegieAnalysis(contact);
-  
-  // Calculate a demo score
-  const score = calculateCarnegieScore(65);
+
+  // O score so aparece depois que o usuario analisa um texto no analisador de
+  // calor humano. Antes era `calculateCarnegieScore(65)` — literal de
+  // demonstracao, que exibia sempre a mesma nota.
+  const [warmth, setWarmth] = useState<WarmthScore | null>(null);
+  const score = warmth ? calculateCarnegieScore(warmth.overall) : null;
 
   const renderPrincipleContent = () => {
     switch (selectedPrinciple) {
       case 'warmth':
-        return <WarmthAnalyzerPanel contact={contact} />;
+        return <WarmthAnalyzerPanel contact={contact} onAnalysisComplete={setWarmth} />;
       case 'noble':
         return <NobleCausePanel contact={contact} />;
       case 'identity':
@@ -153,17 +157,21 @@ export function CarnegieQuickAccess({ contact, className }: CarnegieQuickAccessP
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-warning/20 to-primary/20 flex items-center justify-center">
-                <span className={cn("text-lg font-bold", getScoreColor(score.overall))}>
-                  {score.overall}
+                <span className={cn("text-lg font-bold", score ? getScoreColor(score.overall) : 'text-muted-foreground')}>
+                  {score ? score.overall : '—'}
                 </span>
               </div>
               <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-warning" />
             </div>
             <div>
               <p className="text-sm font-medium">Score Carnegie</p>
-              <p className={cn("text-xs", getScoreColor(score.overall))}>
-                {getScoreLabel(score.level)}
-              </p>
+              {score ? (
+                <p className={cn("text-xs", getScoreColor(score.overall))}>
+                  {getScoreLabel(score.level)}
+                </p>
+              ) : (
+                <p className="text-xs text-muted-foreground">Analise um texto em Calor Humano</p>
+              )}
             </div>
           </div>
           <Badge variant="outline" className="text-xs">
@@ -214,7 +222,7 @@ export function CarnegieQuickAccess({ contact, className }: CarnegieQuickAccessP
         </div>
 
         {/* Strengths */}
-        {score.strengths.length > 0 && (
+        {score && score.strengths.length > 0 && (
           <div className="pt-3 border-t">
             <p className="text-xs font-medium text-muted-foreground mb-2">Pontos Fortes</p>
             <div className="flex flex-wrap gap-1">
@@ -228,7 +236,7 @@ export function CarnegieQuickAccess({ contact, className }: CarnegieQuickAccessP
         )}
 
         {/* Areas for Improvement */}
-        {score.areasForImprovement.length > 0 && (
+        {score && score.areasForImprovement.length > 0 && (
           <div>
             <p className="text-xs font-medium text-muted-foreground mb-2">Áreas para Melhorar</p>
             <div className="flex flex-wrap gap-1">

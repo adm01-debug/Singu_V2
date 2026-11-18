@@ -17,7 +17,9 @@ import {
   Gift,
   LayoutDashboard
 } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Contact } from '@/types';
+import { WarmthScore } from '@/types/carnegie';
 import { useCarnegieAnalysis } from '@/hooks/useCarnegieAnalysis';
 import { CarnegieScorePanel } from './CarnegieScorePanel';
 import { WarmthAnalyzerPanel } from './WarmthAnalyzerPanel';
@@ -39,8 +41,11 @@ export function CarnegieDashboard({ contact = null, className }: CarnegieDashboa
   const { calculateCarnegieScore } = useCarnegieAnalysis(contact);
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Calculate a sample score for demo
-  const sampleScore = calculateCarnegieScore(65);
+  // O score vem da analise que o usuario roda no analisador de calor humano.
+  // Antes era `calculateCarnegieScore(65)` — um literal de demonstracao, que
+  // fazia a aba exibir sempre a mesma nota para qualquer usuario.
+  const [warmth, setWarmth] = useState<WarmthScore | null>(null);
+  const score = warmth ? calculateCarnegieScore(warmth.overall) : null;
 
   return (
     <div className={cn("space-y-6", className)}>
@@ -101,15 +106,23 @@ export function CarnegieDashboard({ contact = null, className }: CarnegieDashboa
         {/* Tab Contents */}
         <TabsContent value="overview" className="mt-6">
           <div className="grid gap-6 lg:grid-cols-2">
-            <CarnegieScorePanel score={sampleScore} />
+            {score ? (
+              <CarnegieScorePanel score={score} />
+            ) : (
+              <Card>
+                <CardContent className="h-full min-h-[200px] flex items-center justify-center p-6 text-center text-sm text-muted-foreground">
+                  Analise um texto no painel ao lado para ver a pontuação Carnegie.
+                </CardContent>
+              </Card>
+            )}
             <div className="space-y-6">
-              <WarmthAnalyzerPanel contact={contact} />
+              <WarmthAnalyzerPanel contact={contact} onAnalysisComplete={setWarmth} />
             </div>
           </div>
         </TabsContent>
 
         <TabsContent value="warmth" className="mt-6">
-          <WarmthAnalyzerPanel contact={contact} />
+          <WarmthAnalyzerPanel contact={contact} onAnalysisComplete={setWarmth} />
         </TabsContent>
 
         <TabsContent value="noble" className="mt-6">
