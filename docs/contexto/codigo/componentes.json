@@ -8616,7 +8616,7 @@
     "React"
    ],
    "export_default": "React",
-   "linhas": 109,
+   "linhas": 106,
    "dominio": "components/gamification",
    "hooks_locais": [
     "useCheckAndAwardBadges",
@@ -8665,7 +8665,7 @@
     "React"
    ],
    "export_default": "React",
-   "linhas": 54,
+   "linhas": 84,
    "dominio": "components/gamification",
    "hooks_locais": [
     "useQuotaStatus"
