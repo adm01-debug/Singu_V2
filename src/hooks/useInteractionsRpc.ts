@@ -38,11 +38,16 @@ export interface ActivityHeatmapData {
   count: number;
 }
 
+/**
+ * Retorno real de `get_optimal_contact_windows()`:
+ * TABLE(window_name text, success_rate numeric, total_interactions bigint).
+ * O tipo antigo declarava `day_of_week`, `hour` e `total_attempts`, que a
+ * função nunca devolveu — o widget renderizava campos vazios.
+ */
 export interface OptimalContactWindow {
-  day_of_week: number;
-  hour: number;
-  success_rate: number;
-  total_attempts: number;
+  window_name: string;
+  success_rate: number | null;
+  total_interactions: number | null;
 }
 
 export function useInteractionHistory(companyId?: string, tipo?: string, limit = 50) {
@@ -70,16 +75,28 @@ export function useInteractionHistory(companyId?: string, tipo?: string, limit =
   });
 }
 
+/**
+ * Superseded por `src/hooks/usePendingFollowups.ts`, que le a view
+ * `vw_pending_followups` e e o hook que o widget do dashboard usa. Este aqui
+ * nao e importado por ninguem; fica corrigido para nao propagar a chamada
+ * errada caso volte a ser ligado.
+ *
+ * `get_pending_followups(p_vendedor_id integer, p_limit integer)` filtra por
+ * `interactions.usuario_responsavel_id`, um id legado inteiro — nao o uuid do
+ * Supabase. Passar `p_user_id` nem existe como argumento. A funcao e SECURITY
+ * INVOKER, entao a RLS ja limita o que o usuario ve: o filtro por vendedor
+ * fica de fora.
+ */
 export function usePendingFollowups(limit = 20) {
   const { user } = useAuth();
   return useQuery({
-    queryKey: ['pending-followups', limit, user?.id],
+    queryKey: ['pending-followups-rpc', limit, user?.id],
     enabled: !!user,
     queryFn: async () => {
       if (!user) throw new Error('Not authenticated');
       const { data, error } = await callExternalRpc<PendingFollowup[]>(
         'get_pending_followups',
-        { p_user_id: user.id, p_limit: limit }
+        { p_limit: limit }
       );
       if (error) throw error;
       return data || [];
@@ -131,19 +148,31 @@ export function useCreateContactQuickInteraction() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   return useMutation({
+    // `create_quick_interaction` em producao e por EMPRESA
+    // (p_company_id, p_tipo, p_resumo, p_vendedor_id, p_followup_dias) e nao
+    // aceita `p_contact_interaction` — a chamada antiga nunca encontrava a
+    // funcao. Nao existe RPC equivalente por contato, entao a interacao e
+    // gravada direto em `interactions`, do mesmo jeito que useNextBestAction
+    // ja faz ao concluir uma acao.
     mutationFn: async (params: { p_contact_id: string; p_tipo: string; p_resumo: string }) => {
       if (!user) throw new Error('Usuário não autenticado');
-      const { data, error } = await callExternalRpc('create_quick_interaction', {
-        p_contact_interaction: {
+      const { data, error } = await supabase
+        .from('interactions')
+        .insert([{
           contact_id: params.p_contact_id,
-          tipo: params.p_tipo,
-          resumo: params.p_resumo,
-        },
-      });
+          user_id: user.id,
+          type: params.p_tipo,
+          channel: params.p_tipo,
+          direction: 'outbound',
+          initiated_by: 'us',
+          title: 'Interação rápida',
+          content: params.p_resumo,
+        }])
+        .select('id, contact_id')
+        .single();
       if (error) throw error;
       return z.object({
-        success: z.literal(true),
-        interaction_id: z.string().uuid(),
+        id: z.string().uuid(),
         contact_id: z.literal(params.p_contact_id),
       }).parse(data);
     },
@@ -180,13 +209,19 @@ export function useActivityHeatmap(days = 30) {
   });
 }
 
+/**
+ * `get_optimal_contact_windows()` nao recebe argumento: o padrao de horario e
+ * calculado sobre toda a base, nao por empresa. Passar `p_company_id` fazia o
+ * PostgREST nao encontrar a funcao. O `companyId` segue apenas governando
+ * quando o widget da ficha da empresa busca.
+ */
 export function useOptimalContactWindows(companyId?: string) {
   return useQuery({
-    queryKey: ['optimal-contact-windows', companyId],
+    queryKey: ['optimal-contact-windows'],
     queryFn: async () => {
       const { data, error } = await callExternalRpc<OptimalContactWindow[]>(
         'get_optimal_contact_windows',
-        { p_company_id: companyId }
+        {}
       );
       if (error) throw error;
       return data || [];
