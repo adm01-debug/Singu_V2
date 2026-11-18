@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { callExternalRpc } from '@/lib/externalData';
 import { useAuth } from '@/hooks/useAuth';
 
 /**
@@ -41,13 +40,23 @@ export function janelaDoPeriodo(periodo: PeriodoAtividade, deslocamento = 0) {
 }
 
 async function buscar(de: string, ate: string, bucket: string): Promise<ResumoAtividade> {
-  // Via gateway external-data, como os demais RPCs do projeto: ele repassa o JWT
-  // do usuario, entao auth.uid() dentro da funcao resolve para quem chamou e o
-  // RLS continua valendo.
-  const { data, error } = await callExternalRpc<ResumoAtividade>('get_activity_overview', {
+  // Chamada direta ao banco canonico, como os demais hooks que leem
+  // `interactions` (useTimelineByEntity, useDealsAtRisk, useDISCAnalysis...).
+  // O gateway `external-data` existe para o banco EXTERNO; rotear por ele
+  // exigiria redeploy da function so para liberar esta RPC na allowlist.
+  // A funcao e SECURITY INVOKER, entao o RLS do usuario filtra as linhas.
+  //
+  // O cast existe porque `types.ts` e gerado e ainda nao conhece esta RPC;
+  // a assinatura abaixo e exatamente a da migration 20261118182753.
+  const chamarRpc = supabase.rpc as unknown as (
+    nome: 'get_activity_overview',
+    args: { p_from: string; p_to: string; p_bucket: string },
+  ) => Promise<{ data: ResumoAtividade | null; error: { message: string } | null }>;
+
+  const { data, error } = await chamarRpc('get_activity_overview', {
     p_from: de, p_to: ate, p_bucket: bucket,
   });
-  if (error) throw error;
+  if (error) throw new Error(error.message);
   if (!data) throw new Error('Resposta vazia da agregacao de atividade');
   return data;
 }
