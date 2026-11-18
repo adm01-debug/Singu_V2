@@ -12,7 +12,19 @@ import { rateLimit } from "../_shared/rate-limit.ts";
  });
 
 const limiter = rateLimit({ windowMs: 60_000, max: 20 });
-const SuggestionSchema = z.object({ confidence: z.number(), action_type: z.string() }).passthrough();
+const RoadmapItemSchema = z.object({
+  months_ahead: z.union([z.literal(1), z.literal(3), z.literal(6)]),
+  predicted_need: z.string().trim().min(10).max(300),
+  suggested_offering: z.string().trim().min(3).max(120),
+  probability: z.number().min(0).max(100),
+  rationale: z.string().trim().min(10).max(500),
+});
+// O roadmap e validado a parte, com safeParse: um marco malformado nao pode
+// derrubar a sugestao, que e a resposta principal da funcao.
+const SuggestionSchema = z.object({
+  confidence: z.number(),
+  action_type: z.string(),
+}).passthrough();
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -90,6 +102,12 @@ Gere UMA sugestão de próxima ação que seja:
 - Adequada ao perfil comportamental do contato
 - Com timing apropriado
 
+Quando a sua confianca na sugestao for maior que 80, preencha tambem o campo roadmap
+com exatamente 3 marcos (1, 3 e 6 meses). Cada marco precisa sair do contexto real
+deste contato e desta empresa: a necessidade prevista, a oferta correspondente, a
+probabilidade e o porque. Se o contexto nao sustentar uma previsao honesta, deixe o
+roadmap fora da resposta - e melhor nao prever do que inventar.
+
 Use tool calling para retornar a resposta estruturada.`;
 
     const userPrompt = `Analise este contato e sugira a melhor próxima ação:
@@ -137,7 +155,24 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
                   urgency: { type: "string", enum: ["low", "medium", "high", "critical"], description: "Nível de urgência da ação" },
                   best_time: { type: "string", description: "Melhor horário ou dia para realizar a ação" },
                   reasoning: { type: "string", description: "Explicação de por que esta ação é a melhor escolha" },
-                  confidence: { type: "number", description: "Nível de confiança na sugestão (0-100)" }
+                  confidence: { type: "number", description: "Nível de confiança na sugestão (0-100)" },
+                  roadmap: {
+                    type: "array",
+                    description: "Só quando confidence > 80: 3 marcos previstos (1, 3 e 6 meses) derivados do contexto real deste contato. Omita se o contexto não sustentar uma previsão honesta.",
+                    maxItems: 3,
+                    items: {
+                      type: "object",
+                      properties: {
+                        months_ahead: { type: "number", enum: [1, 3, 6], description: "Meses à frente" },
+                        predicted_need: { type: "string", description: "Necessidade prevista do contato nesse marco" },
+                        suggested_offering: { type: "string", description: "Oferta correspondente a essa necessidade" },
+                        probability: { type: "number", description: "Probabilidade estimada (0-100)" },
+                        rationale: { type: "string", description: "Por que essa previsão se sustenta no histórico" }
+                      },
+                      required: ["months_ahead", "predicted_need", "suggested_offering", "probability", "rationale"],
+                      additionalProperties: false
+                    }
+                  }
                 },
                 required: ["action_type", "title", "description", "urgency", "reasoning", "confidence"],
                 additionalProperties: false
@@ -147,7 +182,7 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
         ],
         tool_choice: { type: "function", function: { name: "suggest_next_action" } },
         temperature: 0.7,
-        max_tokens: 1500,
+        max_tokens: 2500,
       }),
     });
 
@@ -169,36 +204,36 @@ Com base nestes dados, qual é a melhor próxima ação a ser tomada com este co
          const nextSuggestion = SuggestionSchema.parse(parsedSuggestion);
          suggestion = nextSuggestion;
          
-         // 🔮 Roadmap Prediction Logic (Only if high confidence)
-         if (contactId && nextSuggestion.confidence > 80) {
-           // Generate 3 milestone predictions for the roadmap
-           const roadmapMonths = [1, 3, 6];
-           const roadmapPromises = roadmapMonths.map(async (monthsAhead) => {
+         // Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os
+         // 3 marcos eram sorteados de uma lista fixa de 5 frases genericas com
+         // Math.random e gravados em contact_predictive_roadmap como previsao real.
+         const roadmapParsed = z.array(RoadmapItemSchema).max(3).safeParse(
+           (parsedSuggestion as { roadmap?: unknown }).roadmap ?? [],
+         );
+         if (!roadmapParsed.success) {
+           console.error("roadmap_invalido_descartado:", roadmapParsed.error.message);
+         }
+         const roadmap = roadmapParsed.success ? roadmapParsed.data : [];
+         if (contactId && nextSuggestion.confidence > 80 && roadmap.length > 0) {
+           const rows = roadmap.map((item) => {
              const forecastDate = new Date();
-             forecastDate.setMonth(forecastDate.getMonth() + monthsAhead);
-             
-             // Simple prediction logic based on current suggestion + months ahead
-             // In a real scenario, this would be another LLM call or complex logic
-             const needs = [
-               "Expansão de licenças e adoção de novos recursos",
-               "Revisão estratégica de performance e ROI",
-               "Renovação de contrato com ajuste de volume",
-               "Implementação de módulos avançados de BI",
-               "Treinamento de reciclagem para novas equipes"
-             ];
-             
-             return supabase.from('contact_predictive_roadmap').upsert({
+             forecastDate.setMonth(forecastDate.getMonth() + item.months_ahead);
+             return {
                contact_id: contactId,
                user_id: userId,
                forecast_month: forecastDate.toISOString().split('T')[0],
-               // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-               predicted_need: needs[Math.floor(Math.random() * needs.length)],
-               suggested_offering: `Pacote de Serviços ${monthsAhead}m`,
-               probability: Math.max(40, nextSuggestion.confidence - (monthsAhead * 5)),
-               rationale: `Projeção baseada na tendência atual de ${nextSuggestion.action_type}.`
-             });
+               predicted_need: item.predicted_need,
+               suggested_offering: item.suggested_offering,
+               probability: Math.round(item.probability),
+               rationale: item.rationale,
+             };
            });
-           await Promise.all(roadmapPromises);
+           const { error: roadmapError } = await supabase
+             .from('contact_predictive_roadmap')
+             .upsert(rows);
+           if (roadmapError) {
+             console.error("roadmap_persist_failed:", roadmapError.message);
+           }
          }
        } catch (parseError) {
          console.error("Error parsing/persisting prediction:", parseError);

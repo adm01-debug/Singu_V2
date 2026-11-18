@@ -29,6 +29,8 @@ import { SavedViewsBar } from '@/components/views/SavedViewsBar';
 import { useSavedViews } from '@/hooks/useSavedViews';
 import { useActionToast } from '@/hooks/useActionToast';
 import { useRestoreEntity } from '@/hooks/useRestoreEntity';
+import { ErrorState, InlineError } from '@/components/feedback';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface ContatosViewState {
   searchTerm: string;
@@ -91,7 +93,7 @@ const Contatos = () => {
   usePageTitle('Contatos');
   const [searchParams, setSearchParams] = useSearchParams();
   const { pathname: ownPathname } = useLocation();
-  const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts, hasMore, loadMore, totalCount } = useContacts();
+  const { contacts, loading, createContact, updateContact, deleteContact, fetchContacts, hasMore, loadMore, totalCount, error: loadError, isFetching } = useContacts();
 
   const dynamicFilterConfigs = useMemo(() => {
     const configs = [...filterConfigs];
@@ -119,6 +121,16 @@ const Contatos = () => {
   }, [contacts]);
 
   // Defer secondary data (companies, interactions) until contacts are loaded — reduces initial concurrent requests
+  // Entrada vinda de fora com ?novo=1 (ex.: TopContactsCard no dashboard) abre o
+  // formulario de novo contato uma unica vez e limpa o parametro da URL.
+  useEffect(() => {
+    if (searchParams.get('novo') !== '1') return;
+    setIsFormOpen(true);
+    const next = new URLSearchParams(searchParams);
+    next.delete('novo');
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
+
   const [secondaryReady, setSecondaryReady] = useState(false);
   useEffect(() => {
     if (!loading && contacts.length > 0) {
@@ -308,6 +320,25 @@ const Contatos = () => {
           />
         </div>
 
+        {loadError && contacts.length === 0 && !loading ? (
+          <div className="px-4 md:px-6">
+            <ErrorState
+              title="Não foi possível carregar os contatos"
+              description={parseApiError(loadError)}
+              onRetry={() => { void handleRefresh(); }}
+              isRetrying={isFetching}
+            />
+          </div>
+        ) : (
+        <>
+        {loadError && (
+          <div className="px-4 md:px-6 mb-3">
+            <InlineError
+              message={`Falha ao atualizar a lista — ${parseApiError(loadError)} Os contatos abaixo podem estar desatualizados.`}
+              onRetry={() => { void handleRefresh(); }}
+            />
+          </div>
+        )}
         <ContatosContent
           contacts={contacts} loading={loading} filteredAndSortedContacts={filteredAndSortedContacts} totalCount={totalCount}
           searchTerm={searchTerm} onSearchChange={handleSearchChange}
@@ -329,6 +360,8 @@ const Contatos = () => {
           hasMore={hasMore}
           onLoadMore={loadMore}
         />
+        </>
+        )}
 
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
