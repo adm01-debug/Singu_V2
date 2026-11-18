@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "10085c6a8f1b20aeffe879ac8924c4e636aaaef3",
+  "sha": "91be466f8319cf628e9df7e45e1957028684f608",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 12:38 UTC",
+  "generated_at": "2026-11-18 13:17 UTC",
   "files_total": 3346,
   "code_files": 2875,
   "code_lines": 409966
@@ -232858,10 +232858,21 @@
   }
  },
  "git": {
-  "sha": "10085c6a8f1b20aeffe879ac8924c4e636aaaef3",
+  "sha": "91be466f8319cf628e9df7e45e1957028684f608",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "91be466",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "package-lock.json",
+     "package.json"
+    ]
+   },
    {
     "sha": "10085c6",
     "date": "2026-11-18",
@@ -233305,17 +233316,6 @@
      ".gitignore",
      "graphify.local.json"
     ]
-   },
-   {
-    "sha": "3a76dce",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "chore: inventario do estado real [auto] (#212)",
-    "files": [
-     "inventario/estado/banco.json",
-     "inventario/estado/edges.json",
-     "inventario/estado/tabelas-uso.json"
-    ]
    }
   ],
   "hot_files": [
@@ -233325,6 +233325,14 @@
    ],
    [
     ".github/workflows/ci.yml",
+    3
+   ],
+   [
+    "package-lock.json",
+    2
+   ],
+   [
+    "package.json",
     2
    ],
    [
@@ -233373,14 +233381,6 @@
    ],
    [
     "scripts/ci/check-test-inventory.mjs",
-    1
-   ],
-   [
-    "package-lock.json",
-    1
-   ],
-   [
-    "package.json",
     1
    ],
    [

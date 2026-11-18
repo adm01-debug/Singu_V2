@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `10085c6a8f1b20aeffe879ac8924c4e636aaaef3` (2026-11-18T09:37:12-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `91be466f8319cf628e9df7e45e1957028684f608` (2026-11-18T10:16:54-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -433,18 +433,18 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21150 nós · 35842 arestas · 2114 comunidades · grafo do commit `10085c6a`
+- 21150 nós · 35842 arestas · 2114 comunidades · grafo do commit `91be466f`
 - comunidades maiores: react (379), ref_types (352), ref_hooks (316), 02_tables.sql (259), framer-motion (254), ref_lib (240), useAuth (239), _shared/auth.ts (237), react-router-dom (235), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (211), date-fns (201)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - CHANGELOG.md (48)
-- .github/workflows/ci.yml (21)
-- package.json (18)
+- .github/workflows/ci.yml (22)
+- package.json (19)
 - supabase/functions/external-data/index.ts (15)
 - docs/prod-readiness.md (14)
-- package-lock.json (13)
+- package-lock.json (14)
 - docs/qa/security-definer-audit.md (12)
 - tests/rls/security_definer_hardening.sql (11)
 - src/hooks/useContacts.ts (10)
@@ -570,6 +570,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `91be466` fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)
 - 2026-11-18 `10085c6` fix(db): recupera trabalho pendente de outros agentes nas branches (#238)
 - 2026-11-18 `d136c19` fix(db): remove 18 indices exatamente duplicados (auditoria ao vivo) (#232)
 - 2026-11-18 `986ffa4` build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-14 `4e67de3` chore(docs): bump prod-readiness pos-merge 226 (#227)
 - 2026-11-14 `8d6aaa9` chore(docs): bump prod-readiness pos-merge 226
 - 2026-11-14 `8a4e6f2` chore(docs): bump prod-readiness pos-merge 225 (#226)
-- 2026-11-14 `8bc7489` chore(docs): bump prod-readiness pos-merge 225
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

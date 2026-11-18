@@ -84,8 +84,8 @@
    "test:unit": "vitest run",
    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json"
   },
-  "dependencias": 76,
-  "dev_dependencias": 29,
+  "dependencias": 75,
+  "dev_dependencias": 30,
   "principais": {
    "@supabase/supabase-js": "^2.119.0",
    "@tanstack/react-query": "^5.107.1",

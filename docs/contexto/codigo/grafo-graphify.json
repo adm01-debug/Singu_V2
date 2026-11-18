@@ -4,7 +4,7 @@
  "presente": true,
  "como_gerar": "uvx --from \"graphifyy[sql]\" graphify update .  (ou: bun run graph:update); saída em graphify-out/ — graph.json e graph.html NÃO são versionados (dezenas de MB); use `graphify query/path/explain` localmente",
  "relatorio": null,
- "commit_do_grafo": "10085c6a8f1b20aeffe879ac8924c4e636aaaef3",
+ "commit_do_grafo": "91be466f8319cf628e9df7e45e1957028684f608",
  "grafo_atual": true,
  "nos": 21150,
  "arestas": 35842,
@@ -518,26 +518,9 @@
    ]
   },
   {
-   "id": 25,
-   "nome": "package.json",
-   "nos": 77,
-   "callables": 4,
-   "arquivos": 12,
-   "exemplos_arquivos": [
-    "eslint.config.js",
-    "package.json",
-    "src/components/ui/collapsible.tsx",
-    "src/components/ui/popover.tsx",
-    "src/components/ui/progress.tsx",
-    "src/components/ui/separator.tsx",
-    "src/components/ui/slider.tsx",
-    "src/components/ui/switch.tsx"
-   ]
-  },
-  {
    "id": 26,
    "nome": "dependencies",
-   "nos": 77,
+   "nos": 76,
    "callables": 0,
    "arquivos": 1,
    "exemplos_arquivos": [
@@ -586,6 +569,23 @@
    "arquivos": 1,
    "exemplos_arquivos": [
     "scripts/migration/ddl/08_functions.sql"
+   ]
+  },
+  {
+   "id": 25,
+   "nome": "package.json",
+   "nos": 73,
+   "callables": 3,
+   "arquivos": 11,
+   "exemplos_arquivos": [
+    "eslint.config.js",
+    "package.json",
+    "src/components/ui/collapsible.tsx",
+    "src/components/ui/popover.tsx",
+    "src/components/ui/separator.tsx",
+    "src/components/ui/slider.tsx",
+    "src/components/ui/switch.tsx",
+    "src/lib/utils.ts"
    ]
   },
   {
@@ -1507,7 +1507,7 @@
    "id": "package_dependencies",
    "rotulo": "dependencies",
    "arquivo": "package.json",
-   "grau": 77,
+   "grau": 76,
    "comunidade": "dependencies"
   },
   {
@@ -3919,10 +3919,10 @@
   "src/components/ui/accessible-chart.tsx": "error-budget-dashboard.md",
   "src/components/ui/accordion.tsx": "accordion.tsx",
   "src/components/ui/alert-dialog.tsx": "alert-dialog.tsx",
-  "src/components/ui/alert.tsx": "form.tsx",
+  "src/components/ui/alert.tsx": "sheet.tsx",
   "src/components/ui/avatar.tsx": "optimized-avatar.tsx",
   "src/components/ui/badge.tsx": "company-health-score.tsx",
-  "src/components/ui/button.tsx": "form.tsx",
+  "src/components/ui/button.tsx": "sheet.tsx",
   "src/components/ui/calendar.tsx": "ref_lib",
   "src/components/ui/card.tsx": "company-health-score.tsx",
   "src/components/ui/checkbox.tsx": "lucide-react",
@@ -3952,7 +3952,7 @@
   "src/components/ui/optimized-image.tsx": "ref_lib",
   "src/components/ui/popover.tsx": "package.json",
   "src/components/ui/priority-indicator.tsx": "priority-indicator.tsx",
-  "src/components/ui/progress.tsx": "package.json",
+  "src/components/ui/progress.tsx": "radio-group.tsx",
   "src/components/ui/prompt-chips.tsx": "framer-motion",
   "src/components/ui/pull-to-refresh.tsx": "framer-motion",
   "src/components/ui/radio-group.tsx": "radio-group.tsx",
@@ -3960,12 +3960,12 @@
   "src/components/ui/relationship-stage.tsx": "ref_types",
   "src/components/ui/responsive-dialog.tsx": "responsive-dialog.tsx",
   "src/components/ui/role-badge.tsx": "disc-badge.tsx",
-  "src/components/ui/scroll-area.tsx": "scroll-area.tsx",
+  "src/components/ui/scroll-area.tsx": "radio-group.tsx",
   "src/components/ui/searchable-select.tsx": "react",
   "src/components/ui/select.tsx": "select.tsx",
   "src/components/ui/sentiment-indicator.tsx": "ref_types",
   "src/components/ui/separator.tsx": "package.json",
-  "src/components/ui/sheet.tsx": "command.tsx",
+  "src/components/ui/sheet.tsx": "sheet.tsx",
   "src/components/ui/sidebar.tsx": "sidebar.tsx",
   "src/components/ui/sidebar/sidebar-context.tsx": "sidebar.tsx",
   "src/components/ui/sidebar/sidebar-group.tsx": "sidebar.tsx",

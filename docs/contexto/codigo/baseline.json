@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "10085c6a8f1b20aeffe879ac8924c4e636aaaef3",
+  "commit": "91be466f8319cf628e9df7e45e1957028684f608",
   "branch": "main",
-  "data_commit": "2026-11-18T09:37:12-03:00",
+  "data_commit": "2026-11-18T10:16:54-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "91be466",
+    "data": "2026-11-18",
+    "assunto": "fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)"
+   },
    {
     "sha": "10085c6",
     "data": "2026-11-18",
@@ -126,11 +131,6 @@
     "sha": "f8312ef",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness pós-merge #213 (migration MTTA aplicada em prod) (#219)"
-   },
-   {
-    "sha": "a8cca0e",
-    "data": "2026-11-13",
-    "assunto": "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)"
    }
   ],
   "arquivos_mudados_7d": 396,
@@ -164,6 +164,10 @@
     "mudancas": 15
    },
    {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 14
+   },
+   {
     "pasta": "docs/prod-readiness.md",
     "mudancas": 14
    },
@@ -174,10 +178,6 @@
    {
     "pasta": "scripts/migration/tests",
     "mudancas": 14
-   },
-   {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 13
    },
    {
     "pasta": "src/components/admin",
@@ -203,11 +203,11 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 21
+    "mudancas": 22
    },
    {
     "arquivo": "package.json",
-    "mudancas": 18
+    "mudancas": 19
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
@@ -219,7 +219,7 @@
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "arquivo": "docs/qa/security-definer-audit.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 80
+    "commits": 81
    },
    {
     "autor": "devin-ai-integration[bot]",
