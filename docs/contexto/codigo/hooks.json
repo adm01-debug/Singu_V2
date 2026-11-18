@@ -7180,9 +7180,11 @@
    "hooks_exportados": [
     "useNLPClosingProbability"
    ],
-   "linhas": 54,
+   "linhas": 135,
    "dominio": "hooks",
-   "tabelas": [],
+   "tabelas": [
+    "vw_communication_dashboard"
+   ],
    "rpcs": [],
    "edges": [],
    "hooks_internos": [

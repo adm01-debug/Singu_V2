@@ -12040,7 +12040,7 @@
     "NLPProbabilityBadge"
    ],
    "export_default": null,
-   "linhas": 79,
+   "linhas": 93,
    "dominio": "components/pipeline",
    "hooks_locais": [
     "useNLPClosingProbability"

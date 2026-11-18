@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `1735cf37f6283a2e52a9927094c21e426d0ce87c` (2026-11-18T16:25:58-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `a5987fd1795ef9a3d30cf759ba5403a29f2709a4` (2026-11-18T16:52:25-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3245 |
 | arquivos_codigo | 2217 |
-| linhas_codigo | 414496 |
+| linhas_codigo | 414591 |
 | rotas | 114 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -69,7 +69,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 641 | 68 | 228 |
+| app | 0 | 0 | 6 | 641 | 68 | 229 |
 | components/abm | 0 | 0 | 8 | 19 | 2 | 6 |
 | components/admin | 0 | 0 | 44 | 35 | 12 | 19 |
 | components/analytics | 0 | 0 | 42 | 81 | 2 | 26 |
@@ -95,16 +95,16 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/intelligence | 0 | 0 | 5 | 15 | 2 | 7 |
 | components/intent | 0 | 0 | 5 | 11 | 2 | 4 |
 | components/interactions | 0 | 0 | 42 | 44 | 3 | 17 |
-| components/layout | 0 | 0 | 6 | 310 | 24 | 89 |
+| components/layout | 0 | 0 | 6 | 310 | 24 | 90 |
 | components/lead-routing | 0 | 0 | 6 | 16 | 0 | 10 |
 | components/lead-scoring | 0 | 0 | 13 | 17 | 1 | 7 |
 | components/lux | 0 | 0 | 6 | 3 | 1 | 3 |
 | components/micro-interactions | 0 | 0 | 6 | 0 | 0 | 0 |
-| components/navigation | 0 | 0 | 12 | 310 | 24 | 89 |
+| components/navigation | 0 | 0 | 12 | 310 | 24 | 90 |
 | components/neuromarketing | 0 | 0 | 17 | 1 | 0 | 0 |
 | components/nlp | 0 | 0 | 33 | 10 | 2 | 9 |
 | components/onboarding | 0 | 0 | 8 | 5 | 0 | 3 |
-| components/pipeline | 0 | 0 | 10 | 14 | 1 | 6 |
+| components/pipeline | 0 | 0 | 10 | 14 | 1 | 7 |
 | components/playbooks | 0 | 0 | 6 | 14 | 2 | 4 |
 | components/revops | 0 | 0 | 5 | 9 | 1 | 4 |
 | components/search | 0 | 0 | 12 | 13 | 5 | 7 |
@@ -117,11 +117,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/win-loss | 0 | 0 | 8 | 17 | 1 | 5 |
 | data | 0 | 0 | 46 | 5 | 1 | 7 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
-| hooks | 0 | 0 | 376 | 631 | 53 | 206 |
+| hooks | 0 | 0 | 376 | 631 | 53 | 207 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 68 | 16 | 2 | 13 |
-| pages | 51 | 105 | 105 | 618 | 66 | 222 |
-| pages/admin | 6 | 7 | 9 | 326 | 26 | 96 |
+| pages | 51 | 105 | 105 | 618 | 66 | 223 |
+| pages/admin | 6 | 7 | 9 | 326 | 26 | 97 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
@@ -422,7 +422,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - edges_orfas: 29 — ex.: attribution-calculator, audit-analytics, auto-rebatch-behavioral
 - edges_chamadas_sem_pasta: 0
 - tabelas_sem_rls: 9 — ex.: audit_log_default, company_addresses, company_emails
-- tabelas_usadas_sem_definicao: 4 — ex.: information_schema.columns, information_schema.tables, logs
+- tabelas_usadas_sem_definicao: 5 — ex.: information_schema.columns, information_schema.tables, logs
 - tabelas_com_drift_migration_vs_types: 88 — ex.: access_blocked_log, access_security_settings, activities
 - rpcs_sem_definicao: 2 — ex.: get_territories, get_territory_performance
 - componentes_orfaos: 43 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/admin/SystemHealthWidget.tsx
@@ -433,8 +433,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21191 nós · 35893 arestas · 2107 comunidades · grafo do commit `1735cf37`
-- comunidades maiores: ref_hooks (393), vitest (319), ref_types (299), _shared/auth.ts (299), framer-motion (261), 02_tables.sql (259), ref_lib (256), useAuth (242), react-router-dom (240), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (216), react (210)
+- 21194 nós · 35898 arestas · 2114 comunidades · grafo do commit `a5987fd1`
+- comunidades maiores: _shared/auth.ts (309), sonner (299), framer-motion (261), 02_tables.sql (259), ref_lib (258), react (245), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (226), react-router-dom (226), lucide-react (220), ref_hooks (212), useAuth (211)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -570,6 +570,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `a5987fd` fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)
 - 2026-11-18 `1735cf3` feat: agregação real por período em /analytics e painel de relacionamento (#253)
 - 2026-11-18 `e3b8d5a` fix(nlp): confianca de objecao e forca de indicador saem da evidencia (#249)
 - 2026-11-18 `7dcac42` fix(ui): filtros do Pipeline passam a filtrar e 3 botoes mortos ganham acao (#248)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `d136c19` fix(db): remove 18 indices exatamente duplicados (auditoria ao vivo) (#232)
 - 2026-11-18 `986ffa4` build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)
 - 2026-11-18 `563e484` build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)
-- 2026-11-18 `c027a81` chore(ci): roda os testes de edge function orfaos no pipeline (#231)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

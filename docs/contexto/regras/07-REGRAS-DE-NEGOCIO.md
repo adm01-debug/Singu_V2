@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1735cf37f6` · branch `main` · 2026-11-18 19:27 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a5987fd179` · branch `main` · 2026-11-18 19:56 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3234,7 +3234,6 @@ _nenhum item encontrado_
 | `} else if (last30Days < previous30Days * 0.5) {` | `src/hooks/useChurnPrediction.ts` |
 | `projectedConversions: Math.round(totalActive * 0.3),` | `src/hooks/useDealVelocity.ts` |
 | `stagnation * 0.4 + sentimentScore * 0.25 + engagement * 0.25 + age * 0.1` | `src/hooks/useDealsAtRisk.ts` |
-| `const nlpBoost = (factors.reduce((acc, f) => acc + f.score, 0) / 4) * 0.25;` | `src/hooks/useNLPClosingProbability.ts` |
 | `value: Math.min(1 + interactionCount * 0.5, 5),` | `src/hooks/useNetworkGraph.ts` |
 | `const score = Math.round((brainAlignment * 0.3 + stimuliMatch * 0.3 + chemicalBalance * 0.2 + communicationFit * 0.2));` | `src/hooks/useNeuromarketing.ts` |
 | `intensity: Math.round(brainScores.limbic * 0.8),` | `src/hooks/useNeuromarketing.ts` |
@@ -3381,6 +3380,9 @@ _nenhum item encontrado_
 | `SLA_MINUTES` | `30` | `src/hooks/useMttaSlaBreachSnapshot.ts` |
 | `DEFAULT_SLA_MIN` | `30` | `src/hooks/useMttaSlaThreshold.ts` |
 | `MIN_TEXT_LENGTH` | `100` | `src/hooks/useNLPAutoAnalysis.ts` |
+| `AJUSTE_MAXIMO` | `10` | `src/hooks/useNLPClosingProbability.ts` |
+| `TETO` | `98` | `src/hooks/useNLPClosingProbability.ts` |
+| `ACAO_GENERICA` | `'Seguir perfil'` | `src/hooks/useNLPClosingProbability.ts` |
 | `STALE_24H` | `24` | `src/hooks/useNextBestAction.ts` |
 | `DEFAULT_SORT` | `'sugerido'` | `src/hooks/useProximosPassosFilters.ts` |
 | `RAGE_THRESHOLD` | `5` | `src/hooks/useRageClickDetector.ts` |
@@ -4862,6 +4864,7 @@ _nenhum item encontrado_
 | * USO: Apenas para exibição/formatação local (labels, UI). | `src/components/interactions/insights/weekUtils.ts` |
 | conteúdo foi totalmente reescrito. O conceito de "regra de roteamento" | `src/components/lead-routing/tabs/RoutingRulesTab.tsx` |
 | O tour não deve abrir sozinho no dashboard para não bloquear a interface. | `src/components/onboarding/OnboardingTourWrapper.tsx` |
+| O badge mostra a probabilidade real do negocio. Quando ha leitura | `src/components/pipeline/NLPProbabilityBadge.tsx` |
 | Notification Permission Request | `src/components/pwa/NotificationAndMisc.tsx` |
 | Check current permission and subscription status | `src/components/settings/TourPreferencesPanel.tsx` |
 | Request permission first | `src/components/settings/TourPreferencesPanel.tsx` |
@@ -4898,6 +4901,14 @@ _nenhum item encontrado_
 | Calcula apenas as linhas que precisam realmente mudar (idempotente). | `src/hooks/useMarkObjectionHandled.ts` |
 | dia calendário registra no máximo 1 snapshot por navegador. | `src/hooks/useMttaSlaBreachSnapshot.ts` |
 | usuários não-admin apenas ignoram o insert. | `src/hooks/useMttaSlaBreachSnapshot.ts` |
+| * Probabilidade final exibida: base do negócio + ajuste comportamental. */ | `src/hooks/useNLPClosingProbability.ts` |
+| * Probabilidade do próprio negócio, como está no banco. */ | `src/hooks/useNLPClosingProbability.ts` |
+| * Probabilidade de fechamento do negócio, com ajuste pela leitura | `src/hooks/useNLPClosingProbability.ts` |
+| pontos — à probabilidade de qualquer negócio. O próprio comentário dizia | `src/hooks/useNLPClosingProbability.ts` |
+| * Agora o número exibido é a probabilidade real do negócio (`deals.probabilidade`). | `src/hooks/useNLPClosingProbability.ts` |
+| probabilidade do negócio e diz, no tooltip, que não há leitura. O badge não | `src/hooks/useNLPClosingProbability.ts` |
+| * Peso máximo que a leitura comportamental pode somar à probabilidade do deal. */ | `src/hooks/useNLPClosingProbability.ts` |
+| mapeamento, que não justifica mexer na probabilidade do negócio. | `src/hooks/useNLPClosingProbability.ts` |
 | Uma falha no status não deve duplicar a interação na mesma instância do hook. | `src/hooks/useNextBestAction.ts` |
 | * Trabalho 100% client-side: não há fetch envolvido — apenas evitamos pagar | `src/hooks/useNextPagePrefetch.ts` |
 | Request notification permission and subscribe | `src/hooks/useNotifications.ts` |

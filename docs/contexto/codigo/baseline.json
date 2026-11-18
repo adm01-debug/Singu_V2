@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "1735cf37f6283a2e52a9927094c21e426d0ce87c",
+  "commit": "a5987fd1795ef9a3d30cf759ba5403a29f2709a4",
   "branch": "main",
-  "data_commit": "2026-11-18T16:25:58-03:00",
+  "data_commit": "2026-11-18T16:52:25-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "a5987fd",
+    "data": "2026-11-18",
+    "assunto": "fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)"
+   },
    {
     "sha": "1735cf3",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "8a4e6f2",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 225 (#226)"
-   },
-   {
-    "sha": "8bc7489",
-    "data": "2026-11-14",
-    "assunto": "chore(docs): bump prod-readiness pos-merge 225"
    }
   ],
-  "arquivos_mudados_7d": 428,
+  "arquivos_mudados_7d": 430,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 90
+    "commits": 91
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3245,
   "arquivos_codigo": 2217,
-  "linhas_codigo": 414496,
+  "linhas_codigo": 414591,
   "rotas": 114,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 986,
-   "linhas": 148242
+   "linhas": 148256
   },
   "src/config": {
    "arquivos": 1,
@@ -668,7 +668,7 @@
   },
   "src/hooks": {
    "arquivos": 436,
-   "linhas": 57331
+   "linhas": 57412
   },
   "src/integrations": {
    "arquivos": 3,
@@ -981,7 +981,8 @@
    "information_schema.columns",
    "information_schema.tables",
    "logs",
-   "migration_password_reset_log"
+   "migration_password_reset_log",
+   "vw_communication_dashboard"
   ],
   "tabelas_com_drift_migration_vs_types": [
    "access_blocked_log",

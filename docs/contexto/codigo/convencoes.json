@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)",
    "feat: agregação real por período em /analytics e painel de relacionamento (#253)",
    "fix(nlp): confianca de objecao e forca de indicador saem da evidencia (#249)",
    "fix(ui): filtros do Pipeline passam a filtrar e 3 botoes mortos ganham acao (#248)",
-   "fix(edge): roadmap preditivo para de sortear a previsao gravada no banco (#246)",
-   "feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)"
+   "fix(edge): roadmap preditivo para de sortear a previsao gravada no banco (#246)"
   ]
  },
  "pr_template": null,

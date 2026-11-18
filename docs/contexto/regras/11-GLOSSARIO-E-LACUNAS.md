@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1735cf37f6` · branch `main` · 2026-11-18 19:27 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a5987fd179` · branch `main` · 2026-11-18 19:56 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -498,6 +498,7 @@ _nenhum item encontrado_
 | tabela | tabela `toString` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `tools_runtime` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
 | tabela | tabela `tx` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
+| tabela | tabela `vw_communication_dashboard` usada no código não existe nas migrations/types do repo | `src/hooks/useNLPClosingProbability.ts` |
 | tabela | tabela `x` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.mjs`<br>`scripts/audit-ausentes.test.mjs`<br>`scripts/diff-tables.mjs`<br>`scripts/inventario/gerar-edge-tabela.mjs` |
 | tabela | tabela `zeta` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
 | rls | `company_addresses`: acessada do front (3 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useBIAdvanced.ts`<br>`src/hooks/useConversationalSearch.ts`<br>`src/pages/MapaEmpresas.tsx` |

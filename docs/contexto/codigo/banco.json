@@ -48939,7 +48939,8 @@
   "information_schema.columns",
   "information_schema.tables",
   "logs",
-  "migration_password_reset_log"
+  "migration_password_reset_log",
+  "vw_communication_dashboard"
  ],
  "rpcs_usadas_no_codigo": [
   {

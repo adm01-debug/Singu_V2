@@ -8708,7 +8708,8 @@
    "src/lib/logger.ts"
   ],
   "src/hooks/useNLPClosingProbability.ts": [
-   "src/hooks/usePipeline.ts"
+   "src/hooks/usePipeline.ts",
+   "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useNetworkGraph.ts": [
    "src/hooks/useAuth.tsx",
