@@ -1,6 +1,12 @@
--- Achádo na auditoria: rodizio_reverter_execucao restaurava o vendedor mas não devolvia
+-- Achado na auditoria: rodizio_reverter_execucao restaurava o vendedor mas não devolvia
 -- o status da linha em rodizio_distribuicao_staging de 'APLICADO' pra 'APROVADO', deixando
 -- a reversão invisível na staging e impedindo reaplicar a mesma onda sem intervenção manual.
+--
+-- Aplicada diretamente em produção em outra sessão (versão 20260924215142 registrada em
+-- supabase_migrations.schema_migrations); este arquivo só registra no histórico do repo.
+-- Superseded por 20260924220017_rodizio_fix_reverter_orfao_nome_e_n1_sugestao.sql, que
+-- reescreve esta mesma função corrigindo bugs adicionais (nome de vendedor stale e linha
+-- órfã em customer_ownership_history em reversões de ondas encadeadas).
 
 CREATE OR REPLACE FUNCTION public.rodizio_reverter_execucao(p_execucao_id uuid, p_revertido_por_id integer DEFAULT NULL::integer)
  RETURNS jsonb
