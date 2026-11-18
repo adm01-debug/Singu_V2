@@ -50,7 +50,7 @@ Base exclusiva: `a2b73c7dee837f19aa756e6afe385eba837b5d54`. Árvore versionada l
 | PH-08 | NÃO VERIFICADO NO RUNTIME | `src/pages/AdminAuditTrail.tsx:89-92` | Confirmar produtor EXTERNAL_SYNC | Evento real aparece no filtro |
 | PH-09 | AINDA REPRODUZÍVEL | `src/components/ficha-360/DadosPessoaisCard.tsx:590` | Editar eventos | Alteração persiste e recarrega |
 | PH-10 | DECISÃO DE PRODUTO/INTEGRAÇÃO ADIADA | `src/components/crm/copywriting/CopyAnalyzer.tsx:38,73-75` | IA adiada; rotular heurística | Sem afirmar análise IA validada |
-| HF-01 | AINDA REPRODUZÍVEL | `src/pages/Analytics.tsx:66-92,169-172`; `src/data/analyticsData.ts:27-211` | Consultas reais | Sem vendedores/KPIs inventados |
+| HF-01 | RESOLVIDO (18/11/2026) | `src/hooks/useActivityOverview.ts:1-99` | Consultas reais via RPC `get_activity_overview` | Sem vendedores/KPIs inventados |
 | HF-02 | AINDA REPRODUZÍVEL | `src/pages/Analytics.tsx:158-163` | Exportar/refetch | Arquivo correto e atualização observável |
 | HF-03 | AINDA REPRODUZÍVEL | `src/pages/Analytics.tsx:214-221` | Agregação portfólio | Vazio não vira distribuição fixa |
 | HF-04 | AINDA REPRODUZÍVEL | `src/pages/Analytics.tsx:273-278`; `RapportRealtimeCoach.tsx:65` | Contexto real/demo explícita | Contato selecionado propagado |

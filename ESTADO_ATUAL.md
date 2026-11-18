@@ -188,7 +188,7 @@ Em `/seguranca` o redirect é suprimido, o guard continua reprovando, e a págin
 | `src/hooks/useDealVelocity.ts:67` | Dias médios por estágio do pipeline (3–18) |
 | `supabase/functions/suggest-next-action/index.ts:192` | `predicted_need` — **sorteado e persistido no banco** |
 
-- Somam-se: `src/data/analyticsData.ts:27-213` (toda a aba Overview de `/analytics`, com ranking de nomes inventados em `:171-177`), `NLPMasteryScore.tsx:19` ("10/10" fixo), `MarketingHub.tsx:254,258,262` (CPL/CAC/LTV fixos — `:256` e `:260` ao menos rotulam "Estimado"/"Sugerido").
+- Somam-se: `src/data/analyticsData.ts` (toda a aba Overview de `/analytics`, com ranking de nomes inventados — **resolvido em 18/11/2026** — `/analytics` consome a RPC `get_activity_overview` (`src/hooks/useActivityOverview.ts:1-99`)), `NLPMasteryScore.tsx:19` ("10/10" fixo), `MarketingHub.tsx:254,258,262` (CPL/CAC/LTV fixos — `:256` e `:260` ao menos rotulam "Estimado"/"Sugerido").
 
 > **Alcançabilidade verificada na validação:** todos os itens acima são atingíveis por rotas vivas — os hooks por painéis de `/analytics` e do detalhe de contato, os componentes NLP por `src/pages/NLPAnalytics.tsx`, o Carnegie por `src/pages/Insights.tsx`, o `analyticsData.ts` por `src/pages/Analytics.tsx:72`.
 >

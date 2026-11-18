@@ -14,6 +14,7 @@ import { DealRiskDrawer } from '@/components/pipeline/DealRiskDrawer';
 import { DealDetailDrawer } from '@/components/pipeline/DealDetailDrawer';
 import { DealDialog } from '@/components/pipeline/DealDialog';
 import { PipelineFilterBar } from '@/components/pipeline/PipelineFilterBar';
+import { EMPTY_PIPELINE_FILTERS, type PipelineFilters } from '@/components/pipeline/pipelineFilters';
 import { DealConfidenceBadge } from '@/components/pipeline/DealConfidenceBadge';
 import { NLPProbabilityBadge } from '@/components/pipeline/NLPProbabilityBadge';
 import { ForecastConfidencePanel } from '@/components/pipeline/ForecastConfidencePanel';
@@ -306,14 +307,34 @@ export default function Pipeline() {
   const [editDeal, setEditDeal] = useState<PipelineDeal | null>(null);
   const [isDealDialogOpen, setIsDealDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState<PipelineFilters>(EMPTY_PIPELINE_FILTERS);
 
   const filteredDeals = useMemo(() => {
     if (!deals) return [];
-    return deals.filter(d => 
-      d.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.company_name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [deals, searchTerm]);
+    const termo = searchTerm.trim().toLowerCase();
+    const agora = new Date();
+    const inicioDoMes = new Date(agora.getFullYear(), agora.getMonth(), 1);
+    const inicioDoMesSeguinte = new Date(agora.getFullYear(), agora.getMonth() + 1, 1);
+
+    return deals.filter((d) => {
+      if (termo && !(
+        d.titulo.toLowerCase().includes(termo) ||
+        d.company_name?.toLowerCase().includes(termo)
+      )) return false;
+
+      if (filters.altaProbabilidade && d.probabilidade <= 70) return false;
+      if (filters.ticketAlto && d.valor <= 10000) return false;
+
+      if (filters.fechamentoNoMes) {
+        if (!d.previsao_fechamento) return false;
+        const previsao = new Date(d.previsao_fechamento);
+        if (Number.isNaN(previsao.getTime())) return false;
+        if (previsao < inicioDoMes || previsao >= inicioDoMesSeguinte) return false;
+      }
+
+      return true;
+    });
+  }, [deals, searchTerm, filters]);
 
   const dealsByStage = useMemo(() => {
     const map: Record<string, PipelineDeal[]> = {};
@@ -370,10 +391,11 @@ export default function Pipeline() {
             <p className="text-muted-foreground text-sm">Gerencie seus deals com drag & drop</p>
           </div>
           <div className="flex items-center gap-2">
-            <PipelineFilterBar 
-              search={searchTerm} 
-              onSearchChange={setSearchTerm} 
-              onFilterChange={() => {}} 
+            <PipelineFilterBar
+              search={searchTerm}
+              onSearchChange={setSearchTerm}
+              filters={filters}
+              onFilterChange={setFilters}
             />
             <Button onClick={() => setIsDealDialogOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />

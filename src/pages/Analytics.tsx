@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { AnalyticsEngagementTab } from './analytics/AnalyticsEngagementTab';
@@ -10,13 +10,12 @@ import { Area, Bar,
 } from 'recharts';
 import {
   TrendingUp, BarChart3, Users,
-  MessageSquare, Heart, Target, Zap, Calendar, Download, RefreshCw, Brain,
+  MessageSquare, Target, Zap, Calendar, Download, RefreshCw, Brain,
 } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Header } from '@/components/layout/Header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -50,7 +49,6 @@ import {
   NeurochemicalInfluenceMap,
 } from '@/components/neuromarketing';
 import { SmartBreadcrumbs } from '@/components/navigation/SmartBreadcrumbs';
-import { cn } from '@/lib/utils';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { DataHealthWidget } from '@/components/analytics/DataHealthWidget';
 import { UsageKpisWidget } from '@/components/analytics/UsageKpisWidget';
@@ -66,31 +64,37 @@ const TagExplorerWidget = lazy(() => import('@/components/analytics/TagExplorerW
 
 // Extracted data & shared components
 import {
-  periodOptions, getMetricsStats,
-  getRelationshipEvolutionData, getSentimentDistributionData,
-  getSentimentColors, getEngagementByChannelData,
-  getEngagementRadarData, getTopPerformersData,
+  periodOptions, getSentimentColors,
+  toMetricsStats, toRelationshipEvolution,
+  toSentimentDistribution, toEngagementByChannel, toEngagementRadar,
 } from '@/data/analyticsData';
+import { useActivityOverview, useTopRelationships, type PeriodoAtividade } from '@/hooks/useActivityOverview';
 import { CustomTooltip, StatCard } from '@/components/analytics/AnalyticsShared';
 
 const Analytics = () => {
   usePageTitle('Analytics');
   const [period, setPeriod] = useState<PeriodFilter>('30d');
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
+  // Periodo atual e o imediatamente anterior, para as comparacoes "vs anterior".
+  const atual = useActivityOverview(period as PeriodoAtividade, 0);
+  const anterior = useActivityOverview(period as PeriodoAtividade, 1);
+  const topContatos = useTopRelationships();
 
-  const stats = getMetricsStats(period);
-  const relationshipData = getRelationshipEvolutionData(period);
-  const sentimentData = getSentimentDistributionData(period);
+  const loading = atual.isLoading;
+  const erro = atual.error as Error | null;
+
+  const stats = toMetricsStats(atual.data, anterior.data);
+  const relationshipData = toRelationshipEvolution(atual.data);
+  const sentimentAtual = toSentimentDistribution(atual.data);
+  const sentimentAnterior = toSentimentDistribution(anterior.data);
+  const sentimentData = sentimentAtual.map(s => ({
+    ...s,
+    prevValue: sentimentAnterior.find(a => a.name === s.name)?.value ?? 0,
+  }));
   const sentimentColors = getSentimentColors();
-  const channelData = getEngagementByChannelData(period);
-  const radarData = getEngagementRadarData(period);
-  const topPerformers = getTopPerformersData();
+  const channelData = toEngagementByChannel(atual.data);
+  const radarData = toEngagementRadar(atual.data);
 
   if (loading) {
     return (
@@ -165,12 +169,20 @@ const Analytics = () => {
           </div>
         </motion.div>
 
+        {erro && (
+          <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4" role="alert">
+            <p className="text-sm text-destructive">
+              Não foi possível carregar os números do período: {erro.message}
+            </p>
+          </div>
+        )}
+
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard title="Total de Interações" value={stats.totalInteractions.current} comparison={stats.totalInteractions} icon={MessageSquare} iconColor="bg-primary/10 text-primary" />
-          <StatCard title="Score Médio" value={`${stats.avgScore.current}%`} comparison={stats.avgScore} icon={Heart} iconColor="bg-destructive/10 text-destructive" />
-          <StatCard title="Taxa Positiva" value={`${stats.positiveRate.current}%`} comparison={stats.positiveRate} icon={TrendingUp} iconColor="bg-success/10 text-success" />
-          <StatCard title="Engajamento" value={`${stats.engagementRate.current}%`} comparison={stats.engagementRate} icon={Zap} iconColor="bg-warning/10 text-warning" />
+          <StatCard title="Contatos Alcançados" value={stats.contatosAlcancados.current} comparison={stats.contatosAlcancados} icon={Users} iconColor="bg-destructive/10 text-destructive" />
+          <StatCard title="Taxa Positiva" value={`${stats.taxaPositiva.current}%`} comparison={stats.taxaPositiva} icon={TrendingUp} iconColor="bg-success/10 text-success" />
+          <StatCard title="Recebidas" value={stats.recebidas.current} comparison={stats.recebidas} icon={Zap} iconColor="bg-warning/10 text-warning" />
         </div>
 
         {/* Tabs */}
@@ -289,7 +301,7 @@ const Analytics = () => {
                     <CardTitle className="text-lg flex items-center gap-2">
                       <TrendingUp className="w-5 h-5 text-primary" />Evolução do Relacionamento
                     </CardTitle>
-                    <CardDescription>Score médio e novos contatos ao longo do tempo</CardDescription>
+                    <CardDescription>Interações e contatos alcançados ao longo do período</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="h-[300px]">
@@ -307,8 +319,8 @@ const Analytics = () => {
                           <YAxis yAxisId="right" orientation="right" tick={{ fill: 'hsl(var(--muted-foreground))' }} axisLine={{ stroke: 'hsl(var(--border))' }} />
                           <Tooltip content={<CustomTooltip />} />
                           <Legend />
-                          <Area yAxisId="left" type="monotone" dataKey="score" name="Score" stroke="hsl(221, 83%, 53%)" fill="url(#colorScoreAnalytics)" strokeWidth={2} />
-                          <Bar yAxisId="right" dataKey="newContacts" name="Novos Contatos" fill="hsl(142, 76%, 36%)" radius={[4, 4, 0, 0]} />
+                          <Area yAxisId="left" type="monotone" dataKey="interactions" name="Interações" stroke="hsl(221, 83%, 53%)" fill="url(#colorScoreAnalytics)" strokeWidth={2} />
+                          <Bar yAxisId="right" dataKey="newContacts" name="Contatos alcançados" fill="hsl(142, 76%, 36%)" radius={[4, 4, 0, 0]} />
                         </ComposedChart>
                       </ResponsiveContainer>
                     </div>
@@ -326,18 +338,18 @@ const Analytics = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {topPerformers.map((performer, index) => (
-                        <motion.div key={performer.name} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * index }} className="flex items-center gap-4 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                      {topContatos.isLoading && <Skeleton className="h-16 w-full" />}
+                      {!topContatos.isLoading && (topContatos.data ?? []).length === 0 && (
+                        <p className="text-sm text-muted-foreground">Nenhum contato com score calculado.</p>
+                      )}
+                      {(topContatos.data ?? []).map((contato, index) => (
+                        <motion.div key={contato.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * index }} className="flex items-center gap-4 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
                           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary font-bold text-sm">{index + 1}</div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-foreground truncate">{performer.name}</p>
-                            <p className="text-sm text-muted-foreground">{performer.interactions} interações</p>
+                            <p className="font-medium text-foreground truncate">{contato.nome}</p>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-lg text-foreground">{performer.score}</p>
-                            <Badge variant="outline" className={cn("text-xs", performer.sentiment === 'positivo' ? 'bg-success/10 text-success border-success/30' : 'bg-muted text-muted-foreground')}>
-                              {performer.sentiment}
-                            </Badge>
+                            <p className="font-bold text-lg text-foreground">{contato.score}</p>
                           </div>
                         </motion.div>
                       ))}
