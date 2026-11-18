@@ -18,8 +18,8 @@ interface NLPProbabilityBadgeProps {
 export const NLPProbabilityBadge = ({ deal }: NLPProbabilityBadgeProps) => {
   const { data: nlpData, isLoading } = useNLPClosingProbability(deal);
 
-  // Sem leitura comportamental para o contato, o hook devolve null e o badge
-  // simplesmente nao aparece, em vez de exibir numero inventado.
+  // O badge mostra a probabilidade real do negocio. Quando ha leitura
+  // comportamental do contato, ela ajusta o numero e aparece no tooltip.
   if (isLoading || !nlpData) return null;
 
   const levelColors = {
@@ -48,20 +48,32 @@ export const NLPProbabilityBadge = ({ deal }: NLPProbabilityBadgeProps) => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold flex items-center gap-1">
-                <Brain className="h-3 w-3 text-primary" /> Leitura comportamental
+                <Brain className="h-3 w-3 text-primary" /> Probabilidade do negócio
               </span>
               <span className="text-xs font-black">{nlpData.probability}%</span>
             </div>
             
             <div className="space-y-1">
-              {nlpData.factors.map((f, i) => (
-                <div key={i} className="flex items-center justify-between text-[10px]">
+              <div className="flex items-center justify-between text-[10px]">
+                <span className="text-muted-foreground">Probabilidade do negócio</span>
+                <span className="font-medium">{nlpData.base}%</span>
+              </div>
+              {nlpData.ajuste !== 0 && (
+                <div className="flex items-center justify-between text-[10px]">
+                  <span className="text-muted-foreground">Ajuste por rapport</span>
+                  <span className={cn('font-medium', nlpData.ajuste > 0 ? 'text-success' : 'text-destructive')}>
+                    {nlpData.ajuste > 0 ? '+' : ''}{nlpData.ajuste}
+                  </span>
+                </div>
+              )}
+              {nlpData.factors.map((f) => (
+                <div key={f.label} className="flex items-center justify-between text-[10px]">
                   <span className="text-muted-foreground">{f.label}</span>
                   <span className={cn(
                     "font-medium",
                     f.impact === 'positive' ? 'text-success' : f.impact === 'negative' ? 'text-destructive' : 'text-muted-foreground'
                   )}>
-                    {f.score}%
+                    {f.score === null ? 'mapeado' : `${f.score}%`}
                   </span>
                 </div>
               ))}
