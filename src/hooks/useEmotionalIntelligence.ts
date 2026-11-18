@@ -21,6 +21,20 @@ interface Interaction {
   createdAt?: string;
 }
 
+/**
+ * Forca do indicador a partir da evidencia no texto, nao de sorteio: comeca na
+ * base e sobe 1 por repeticao da expressao, ate o teto da polaridade.
+ */
+const FORCA_BASE_POSITIVA = 7;
+const FORCA_TETO_POSITIVA = 10;
+const FORCA_BASE_NEGATIVA = 4;
+const FORCA_TETO_NEGATIVA = 7;
+
+function forcaPorEvidencia(texto: string, expressao: string, base: number, teto: number): number {
+  const ocorrencias = texto.split(expressao.toLowerCase()).length - 1;
+  return Math.min(teto, base + Math.max(0, ocorrencias - 1));
+}
+
 export function useEmotionalIntelligence(contact: Contact, interactions: Interaction[]) {
   const [analyzing] = useState(false);
 
@@ -49,8 +63,7 @@ export function useEmotionalIntelligence(contact: Contact, interactions: Interac
           detectedPhrase: sentence.trim().slice(0, 100),
           context: 'Indicador positivo detectado',
           polarity: 'positive',
-          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-          strength: 7 + Math.random() * 3, // 7-10
+          strength: forcaPorEvidencia(lowerText, keyword, FORCA_BASE_POSITIVA, FORCA_TETO_POSITIVA),
           timestamp
         });
       }
@@ -69,8 +82,7 @@ export function useEmotionalIntelligence(contact: Contact, interactions: Interac
           detectedPhrase: sentence.trim().slice(0, 100),
           context: 'Indicador negativo detectado',
           polarity: 'negative',
-          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-          strength: 3 + Math.random() * 4, // 3-7
+          strength: forcaPorEvidencia(lowerText, keyword, FORCA_BASE_NEGATIVA, FORCA_TETO_NEGATIVA),
           timestamp
         });
       }
