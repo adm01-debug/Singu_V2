@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)",
    "fix(gamificacao): três RPCs eram chamadas sem o p_user_id obrigatório (#263)",
    "fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)",
    "fix(analytics): avisa que as abas PNL e Gatilhos usam contato fictício (#260)",
-   "fix(carnegie): score deixa de ser número fixo e passa a refletir a análise real (#259)",
-   "fix(intelligence): troca N consultas por uma na aba de referência cruzada (#258)"
+   "fix(carnegie): score deixa de ser número fixo e passa a refletir a análise real (#259)"
   ]
  },
  "pr_template": null,

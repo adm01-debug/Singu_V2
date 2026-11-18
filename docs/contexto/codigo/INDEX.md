@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `485bd331e8d00db2d2fda80ec9036a4ad513d33e` (2026-11-18T19:59:13-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `15e29cffad37863d44b1bcd36f558fba1d542284` (2026-11-18T19:59:19-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3253 |
 | arquivos_codigo | 2225 |
-| linhas_codigo | 415755 |
+| linhas_codigo | 415820 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -76,7 +76,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/bi | 0 | 0 | 5 | 20 | 2 | 6 |
 | components/carnegie | 0 | 0 | 12 | 1 | 0 | 0 |
 | components/companies | 0 | 0 | 5 | 7 | 1 | 2 |
-| components/company-detail | 0 | 0 | 29 | 66 | 2 | 11 |
+| components/company-detail | 0 | 0 | 29 | 76 | 3 | 11 |
 | components/contact-detail | 0 | 0 | 110 | 123 | 14 | 75 |
 | components/contacts | 0 | 0 | 10 | 15 | 2 | 10 |
 | components/conversation-intel | 0 | 0 | 11 | 12 | 1 | 5 |
@@ -435,8 +435,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21251 nós · 35992 arestas · 2125 comunidades · grafo do commit `485bd331`
-- comunidades maiores: @tanstack/react-query (315), ref_types (263), 02_tables.sql (259), useAuth (254), lucide-react (253), _shared/auth.ts (249), ref_hooks (247), react (232), 📖 Dicionário de Dados — SINGU CRM (227), framer-motion (223), react-router-dom (204), ref_components (190)
+- 21255 nós · 35998 arestas · 2143 comunidades · grafo do commit `15e29cff`
+- comunidades maiores: _shared/auth.ts (310), ref_components (276), framer-motion (266), ref_lib (259), 02_tables.sql (259), sonner (249), ref_hooks (240), useAuth (238), 📖 Dicionário de Dados — SINGU CRM (237), lucide-react (226), react-router-dom (217), react (205)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -572,6 +572,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `15e29cf` fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)
 - 2026-11-18 `485bd33` fix(gamificacao): três RPCs eram chamadas sem o p_user_id obrigatório (#263)
 - 2026-11-18 `185ce78` fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)
 - 2026-11-18 `b2d6c1a` fix(analytics): avisa que as abas PNL e Gatilhos usam contato fictício (#260)
@@ -586,7 +587,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `d05b650` fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)
 - 2026-11-18 `a5987fd` fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)
 - 2026-11-18 `1735cf3` feat: agregação real por período em /analytics e painel de relacionamento (#253)
-- 2026-11-18 `e3b8d5a` fix(nlp): confianca de objecao e forca de indicador saem da evidencia (#249)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

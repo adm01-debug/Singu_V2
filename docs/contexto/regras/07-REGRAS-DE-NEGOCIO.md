@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `485bd331e8` · branch `main` · 2026-11-18 23:00 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `15e29cffad` · branch `main` · 2026-11-18 23:03 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2317,6 +2317,10 @@ _nenhum item encontrado_
   ```
   v != null ? `R$ ${v.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : '—';
   ```
+- **gerar(escolhido: MessageTone)** — `src/components/company-detail/QuickFollowUpGenerator.tsx`
+  ```
+  setTom(escolhido); if (!principal) { toast.error('Cadastre ao menos um contato nesta empresa para gerar o roteiro'); return; } const [primeiro, ...resto] = principal.name.trim().split(/\s+/); await generateSuggestions({ contact: { firstName: primeiro, lastName: resto.join(' '), roleTitle: principal.cargo ?? undefined, companyName }, messageType: 'follow_up', tone: escolhido, customContext: proximaAcao ? `${proximaAcao.action}. ${proximaAcao.reason}` : undefined, });
+  ```
 - **ScoreExplicabilityPanel({ contactId }: Props)** — `src/components/contact-detail/ScoreExplicabilityPanel.tsx`
   ```
   const { data, isLoading } = useQuery({ queryKey: ['score-explicability', contactId], queryFn: async () => { const { data, error } = await supabase.rpc('get_score_explicability', { p_contact_id: contactId }); if (error) throw error; return data; }, staleTime: 5 * 60_000, }); if (isLoading) return <Skeleton className="h-64 w-full" />; if (!data || typeof data !== 'object') return null; interface FactorEntry { value: number; impact: number; days?: number } interface Explicability { current_score: n …
@@ -3102,6 +3106,7 @@ _nenhum item encontrado_
 | `delay: 0.2 + i * 0.05,` | `src/components/celebrations/CelebrationProvider.tsx` |
 | `delay: Math.random() * 0.3,` | `src/components/celebrations/CelebrationProvider.tsx` |
 | `transition={{ duration: 0.2, delay: Math.min(index * 0.02, 0.2) }}` | `src/components/company-card/CompanyInteractionsModal.tsx` |
+| `* `total_contacts * 10`, que estoura 100% com dez contatos.` | `src/components/company-detail/CompanyBenchmarkRadar.tsx` |
 | `<span>0%</span><span>100%</span>` | `src/components/company-detail/CompanyInsightsTab.tsx` |
 | `transition={{ duration: 0.3, delay: index * 0.05 }}` | `src/components/company-detail/CompanyInteractionsTab.tsx` |
 | `transition={{ duration: 0.2, delay: Math.min(index * 0.03, 0.3) }}` | `src/components/contact-card/ContactCardWithContext.tsx` |
@@ -4275,6 +4280,7 @@ _nenhum item encontrado_
 | useCelebration must be used within CelebrationProvider | `src/components/celebrations/CelebrationProvider.tsx` |
 | Erro ao registrar interação | `src/components/company-detail/QuickActionsWidget.tsx` |
 | Informe um resumo | `src/components/company-detail/QuickActionsWidget.tsx` |
+| Cadastre ao menos um contato nesta empresa para gerar o roteiro | `src/components/company-detail/QuickFollowUpGenerator.tsx` |
 | Não foi possível copiar | `src/components/company-detail/QuickFollowUpGenerator.tsx` |
 | Não autenticado | `src/components/contact-detail/ContactBehavioralTab.tsx` |
 | Erro ao atualizar estágio | `src/components/contact-detail/ContactDetailHeader.tsx` |
@@ -4382,8 +4388,7 @@ _nenhum item encontrado_
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
 | Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar no bundle. | `src/components/intelligence/CrossRefTab.tsx` |
-| Nada para exportar. | `src/components/intelligence/CrossRefTab.tsx` |
-| … +786 linhas — lista completa em `context.json` | |
+| … +787 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

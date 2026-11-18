@@ -1040,10 +1040,11 @@
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_arquivos": [
     "src/components/ai/AIEmailComposer.tsx",
-    "src/components/ai/AIMessageGenerator.tsx"
+    "src/components/ai/AIMessageGenerator.tsx",
+    "src/components/company-detail/QuickFollowUpGenerator.tsx"
    ],
    "coberto_por_testes": 0
   },
@@ -2403,7 +2404,7 @@
     "useStrategicAccounts",
     "useTouchpointSummary"
    ],
-   "linhas": 376,
+   "linhas": 386,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -2412,7 +2413,7 @@
     "useQuery"
    ],
    "canais_realtime": [],
-   "usado_por": 10,
+   "usado_por": 11,
    "usado_por_arquivos": [
     "src/components/analytics/TagCloudWidget.tsx",
     "src/components/analytics/TagExplorerWidget.tsx",
@@ -2423,6 +2424,7 @@
     "src/components/company-detail/CompanyInsightsTab.tsx",
     "src/components/company-detail/CompanyStatisticsWidget.tsx",
     "src/components/company-detail/PropensityScoreWidget.tsx",
+    "src/components/company-detail/QuickFollowUpGenerator.tsx",
     "src/components/dashboard/widgets/StrategicAccountsWidget.tsx"
    ],
    "coberto_por_testes": 0
@@ -9429,8 +9431,9 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 8,
+   "usado_por": 9,
    "usado_por_arquivos": [
+    "src/components/company-detail/QuickFollowUpGenerator.tsx",
     "src/components/contact-detail/NextBestActionCard.tsx",
     "src/components/ficha-360/ProximaAcaoCTA.tsx",
     "src/components/ficha-360/ProximoPassoQuickForm.tsx",

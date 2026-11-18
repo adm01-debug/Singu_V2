@@ -1576,10 +1576,10 @@
    "src/hooks/useCompanyIntelligence.ts"
   ],
   "src/components/company-detail/CompanyBenchmarkRadar.tsx": [
-   "src/components/ui/badge.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/skeleton.tsx",
-   "src/hooks/useCompanyIntelligence.ts"
+   "src/hooks/useCompanyIntelligence.ts",
+   "src/lib/utils.ts"
   ],
   "src/components/company-detail/CompanyCommercialTab.tsx": [
    "src/components/ui/badge.tsx",
@@ -1730,7 +1730,10 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
-   "src/components/ui/prompt-chips.tsx"
+   "src/components/ui/prompt-chips.tsx",
+   "src/hooks/useAIWritingAssistant.ts",
+   "src/hooks/useCompanyIntelligence.ts",
+   "src/hooks/useTasks.ts"
   ],
   "src/components/company-detail/contacts/RelatedContactsSection.tsx": [
    "src/components/ui/card.tsx",

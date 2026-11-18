@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "485bd331e8d00db2d2fda80ec9036a4ad513d33e",
+  "sha": "15e29cffad37863d44b1bcd36f558fba1d542284",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 23:00 UTC",
+  "generated_at": "2026-11-18 23:03 UTC",
   "files_total": 3358,
   "code_files": 2887,
-  "code_lines": 411758
+  "code_lines": 411823
  },
  "version": "1.3.2",
- "facts_hash": "4a79477342334f19",
+ "facts_hash": "8eff5bd356777775",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -60126,6 +60126,7 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "ai-writing-assistant",
      "disc-analyzer",
      "lux-trigger",
      "voice-to-text"
@@ -60133,7 +60134,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 202
+    "deps_count": 204
    },
    {
     "path": "",
@@ -69202,7 +69203,7 @@
   {
    "module": "src/components",
    "files": 991,
-   "lines": 148855,
+   "lines": 148910,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -69649,7 +69650,7 @@
   {
    "module": "src/hooks",
    "files": 439,
-   "lines": 57880,
+   "lines": 57890,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -82030,6 +82031,10 @@
    {
     "file": "src/components/company-detail/QuickActionsWidget.tsx",
     "msg": "Informe um resumo"
+   },
+   {
+    "file": "src/components/company-detail/QuickFollowUpGenerator.tsx",
+    "msg": "Cadastre ao menos um contato nesta empresa para gerar o roteiro"
    },
    {
     "file": "src/components/company-detail/QuickFollowUpGenerator.tsx",
@@ -113971,6 +113976,12 @@
     "body": "v != null ? `R$ ${v.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : '—';"
    },
    {
+    "file": "src/components/company-detail/QuickFollowUpGenerator.tsx",
+    "name": "gerar",
+    "params": "escolhido: MessageTone",
+    "body": "setTom(escolhido); if (!principal) { toast.error('Cadastre ao menos um contato nesta empresa para gerar o roteiro'); return; } const [primeiro, ...resto] = principal.name.trim().split(/\\s+/); await generateSuggestions({ contact: { firstName: primeiro, lastName: resto.join(' '), roleTitle: principal.cargo ?? undefined, companyName }, messageType: 'follow_up', tone: escolhido, customContext: proximaAcao ? `${proximaAcao.action}. ${proximaAcao.reason}` : undefined, });"
+   },
+   {
     "file": "src/components/contact-detail/ScoreExplicabilityPanel.tsx",
     "name": "ScoreExplicabilityPanel",
     "params": "{ contactId }: Props",
@@ -117255,6 +117266,10 @@
    {
     "file": "src/components/company-card/CompanyInteractionsModal.tsx",
     "line": "transition={{ duration: 0.2, delay: Math.min(index * 0.02, 0.2) }}"
+   },
+   {
+    "file": "src/components/company-detail/CompanyBenchmarkRadar.tsx",
+    "line": "* `total_contacts * 10`, que estoura 100% com dez contatos."
    },
    {
     "file": "src/components/company-detail/CompanyInsightsTab.tsx",
@@ -178821,9 +178836,12 @@
   },
   "src/components/company-detail/CompanyBenchmarkRadar.tsx": {
    "path": "src/components/company-detail/CompanyBenchmarkRadar.tsx",
-   "lines": 69,
+   "lines": 93,
    "exports": [
     "function CompanyBenchmarkRadar"
+   ],
+   "percents": [
+    "* `total_contacts * 10`, que estoura 100% com dez contatos."
    ]
   },
   "src/components/company-detail/CompanyCommercialTab.test.tsx": {
@@ -179010,9 +179028,20 @@
   },
   "src/components/company-detail/QuickFollowUpGenerator.tsx": {
    "path": "src/components/company-detail/QuickFollowUpGenerator.tsx",
-   "lines": 151,
+   "lines": 182,
+   "exports": [
+    "const QuickFollowUpGenerator"
+   ],
    "errors": [
+    "Cadastre ao menos um contato nesta empresa para gerar o roteiro",
     "Não foi possível copiar"
+   ],
+   "calc_fns": [
+    {
+     "name": "gerar",
+     "params": "escolhido: MessageTone",
+     "body": "setTom(escolhido); if (!principal) { toast.error('Cadastre ao menos um contato nesta empresa para gerar o roteiro'); return; } const [primeiro, ...resto] = principal.name.trim().split(/\\s+/); await generateSuggestions({ contact: { firstName: primeiro, lastName: resto.join(' '), roleTitle: principal.cargo ?? undefined, companyName }, messageType: 'follow_up', tone: escolhido, customContext: proximaAcao ? `${proximaAcao.action}. ${proximaAcao.reason}` : undefined, });"
+    }
    ]
   },
   "src/components/company-detail/contacts/RelatedContactsSection.tsx": {
@@ -197512,7 +197541,7 @@
   },
   "src/hooks/useCompanyIntelligence.ts": {
    "path": "src/hooks/useCompanyIntelligence.ts",
-   "lines": 376,
+   "lines": 386,
    "exports": [
     "interface CompanyStatistics",
     "interface CompanyTimelineEvent",
@@ -233787,10 +233816,22 @@
   }
  },
  "git": {
-  "sha": "485bd331e8d00db2d2fda80ec9036a4ad513d33e",
+  "sha": "15e29cffad37863d44b1bcd36f558fba1d542284",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "15e29cf",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)",
+    "files": [
+     "src/components/company-detail/CompanyBenchmarkRadar.tsx",
+     "src/components/company-detail/CompanyInsightsTab.tsx",
+     "src/components/company-detail/QuickFollowUpGenerator.tsx",
+     "src/hooks/useCompanyIntelligence.ts"
+    ]
+   },
    {
     "sha": "485bd33",
     "date": "2026-11-18",
@@ -234114,15 +234155,6 @@
      "package-lock.json",
      "package.json"
     ]
-   },
-   {
-    "sha": "ba42905",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(ci): remove BOM UTF-8 da migration do MTTA que quebra o Supabase Preview (#233)",
-    "files": [
-     "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -234159,6 +234191,22 @@
     2
    ],
    [
+    "src/components/company-detail/CompanyBenchmarkRadar.tsx",
+    1
+   ],
+   [
+    "src/components/company-detail/CompanyInsightsTab.tsx",
+    1
+   ],
+   [
+    "src/components/company-detail/QuickFollowUpGenerator.tsx",
+    1
+   ],
+   [
+    "src/hooks/useCompanyIntelligence.ts",
+    1
+   ],
+   [
     "src/components/gamification/BadgesWidget.tsx",
     1
    ],
@@ -234188,22 +234236,6 @@
    ],
    [
     "src/components/carnegie/CarnegieQuickAccess.tsx",
-    1
-   ],
-   [
-    "src/components/carnegie/CarnegieScorePanel.tsx",
-    1
-   ],
-   [
-    "src/hooks/useCarnegieAnalysis.ts",
-    1
-   ],
-   [
-    "src/types/carnegie.ts",
-    1
-   ],
-   [
-    "src/components/intelligence/CrossRefTab.tsx",
     1
    ]
   ]

@@ -2907,7 +2907,7 @@
     "CompanyBenchmarkRadar"
    ],
    "export_default": "CompanyBenchmarkRadar",
-   "linhas": 69,
+   "linhas": 93,
    "dominio": "components/company-detail",
    "hooks_locais": [
     "useCompany360"
@@ -3310,9 +3310,14 @@
     "QuickFollowUpGenerator"
    ],
    "export_default": null,
-   "linhas": 151,
+   "linhas": 182,
    "dominio": "components/company-detail",
-   "hooks_locais": [],
+   "hooks_locais": [
+    "useAIWritingAssistant",
+    "useCreateTask",
+    "useKeyContacts",
+    "useNextBestAction"
+   ],
    "tabelas": [],
    "edges": [],
    "usado_por": 1,
@@ -13935,7 +13940,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 542,
+   "usado_por": 541,
    "orfao": false
   },
   {
