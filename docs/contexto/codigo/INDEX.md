@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `682ad793f5080f5ef81b3771a3e469518a49faed` (2026-11-18T11:52:26-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `a9fdfb7776abe6cca4d16ef4d58fc62d78742f8d` (2026-11-18T12:26:13-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2052), SQL (659), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
+- linguagens: TypeScript (2052), SQL (660), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3241 |
+| arquivos_total | 3242 |
 | arquivos_codigo | 2215 |
 | linhas_codigo | 414132 |
 | rotas | 114 |
@@ -46,7 +46,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 408 |
 | edge_functions | 109 |
 | tabelas | 418 |
-| migrations | 486 |
+| migrations | 487 |
 | cron_jobs | 34 |
 | testes | 268 |
 | workflows | 11 |
@@ -433,7 +433,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21154 nós · 35846 arestas · 2116 comunidades · grafo do commit `682ad793`
+- 21155 nós · 35846 arestas · 2117 comunidades · grafo do commit `a9fdfb77`
 - comunidades maiores: ref_components (308), sonner (270), framer-motion (260), 02_tables.sql (259), ref_lib (258), useAuth (258), _shared/auth.ts (251), lucide-react (236), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (221), react-router-dom (219), ref_hooks (199)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -570,6 +570,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `a9fdfb7` fix(db): liga security_invoker nas 16 views que ignoravam o RLS (#243)
 - 2026-11-18 `682ad79` docs(pendencias): corrige o diagnostico errado do P7 e fecha P0 e P5 (#242)
 - 2026-11-18 `adb1e39` fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)
 - 2026-11-18 `91be466` fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-14 `4f4b782` fix: ativa strict mode no tsconfig.app e corrige tipos (#230)
 - 2026-11-14 `03b943a` chore(docs): bump prod-readiness pos-merge 228 (final) (#229)
 - 2026-11-14 `2f70928` chore(docs): bump prod-readiness pos-merge 227 (final) (#228)
-- 2026-11-14 `4e67de3` chore(docs): bump prod-readiness pos-merge 226 (#227)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

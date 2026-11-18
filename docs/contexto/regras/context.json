@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "682ad793f5080f5ef81b3771a3e469518a49faed",
+  "sha": "a9fdfb7776abe6cca4d16ef4d58fc62d78742f8d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 15:11 UTC",
-  "files_total": 3346,
-  "code_files": 2875,
-  "code_lines": 409966
+  "generated_at": "2026-11-18 15:26 UTC",
+  "files_total": 3347,
+  "code_files": 2876,
+  "code_lines": 410065
  },
  "version": "1.3.2",
- "facts_hash": "870b9c7992fc4464",
+ "facts_hash": "e0588bccde9f3cd5",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -253,7 +253,7 @@
   "languages": {
    ".tsx": 1158,
    ".ts": 894,
-   ".sql": 659,
+   ".sql": 660,
    ".mjs": 123,
    ".py": 21,
    ".js": 18,
@@ -48909,7 +48909,8 @@
    "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql",
    "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
    "supabase/migrations/20261114124000_remove_duplicate_indexes.sql",
-   "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
+   "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
+   "supabase/migrations/20261118150043_views_security_invoker_16.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -70750,8 +70751,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 486,
-   "lines": 43185,
+   "files": 487,
+   "lines": 43284,
    "tables": [
     "users"
    ],
@@ -156054,6 +156055,7 @@
    "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
    "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
    "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
+   "supabase/migrations/20261118150043_views_security_invoker_16.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -232185,6 +232187,11 @@
    "lines": 60,
    "uses_service_role": true
   },
+  "supabase/migrations/20261118150043_views_security_invoker_16.sql": {
+   "path": "supabase/migrations/20261118150043_views_security_invoker_16.sql",
+   "lines": 99,
+   "uses_service_role": true
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -232858,10 +232865,19 @@
   }
  },
  "git": {
-  "sha": "682ad793f5080f5ef81b3771a3e469518a49faed",
+  "sha": "a9fdfb7776abe6cca4d16ef4d58fc62d78742f8d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "a9fdfb7",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(db): liga security_invoker nas 16 views que ignoravam o RLS (#243)",
+    "files": [
+     "supabase/migrations/20261118150043_views_security_invoker_16.sql"
+    ]
+   },
    {
     "sha": "682ad79",
     "date": "2026-11-18",
@@ -233306,21 +233322,12 @@
     "files": [
      "docs/prod-readiness.md"
     ]
-   },
-   {
-    "sha": "5c7e2f3",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "docs(prod-readiness): atualiza referência para main pós-merge #214 e CI verde (#215)",
-    "files": [
-     "docs/prod-readiness.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    13
+    12
    ],
    [
     ".github/workflows/ci.yml",
@@ -233341,6 +233348,10 @@
    [
     "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
     2
+   ],
+   [
+    "supabase/migrations/20261118150043_views_security_invoker_16.sql",
+    1
    ],
    [
     "PENDENCIAS.md",
@@ -233392,10 +233403,6 @@
    ],
    [
     "src/components/admin/PasswordResetApproval.tsx",
-    1
-   ],
-   [
-    "src/components/ai/AIEmailComposer.tsx",
     1
    ]
   ]

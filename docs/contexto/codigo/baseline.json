@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "682ad793f5080f5ef81b3771a3e469518a49faed",
+  "commit": "a9fdfb7776abe6cca4d16ef4d58fc62d78742f8d",
   "branch": "main",
-  "data_commit": "2026-11-18T11:52:26-03:00",
+  "data_commit": "2026-11-18T12:26:13-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "a9fdfb7",
+    "data": "2026-11-18",
+    "assunto": "fix(db): liga security_invoker nas 16 views que ignoravam o RLS (#243)"
+   },
    {
     "sha": "682ad79",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "31ec993",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness para o head pos-merge 221 (#222)"
-   },
-   {
-    "sha": "783135a",
-    "data": "2026-11-13",
-    "assunto": "chore(docs): bump prod-readiness para o head pos-merge 220 (#221)"
    }
   ],
-  "arquivos_mudados_7d": 397,
+  "arquivos_mudados_7d": 398,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 83
+    "commits": 84
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,7 +322,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3241,
+  "arquivos_total": 3242,
   "arquivos_codigo": 2215,
   "linhas_codigo": 414132,
   "rotas": 114,
@@ -334,7 +334,7 @@
   "hooks": 408,
   "edge_functions": 109,
   "tabelas": 418,
-  "migrations": 486,
+  "migrations": 487,
   "cron_jobs": 34,
   "testes": 268,
   "workflows": 11,
