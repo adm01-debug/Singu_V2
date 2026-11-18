@@ -9,11 +9,21 @@ import { cn } from '@/lib/utils';
 
 interface BulkImportDialogProps {
   entityType: ImportEntityType;
-  trigger?: React.ReactNode;
+  /** `null` nao renderiza gatilho: use com `open`/`onOpenChange`. */
+  trigger?: React.ReactNode | null;
+  /** Controle externo. Omitido, o dialogo gerencia o proprio estado como antes. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function BulkImportDialog({ entityType, trigger }: BulkImportDialogProps) {
-  const [open, setOpen] = useState(false);
+export function BulkImportDialog({ entityType, trigger, open: openProp, onOpenChange }: BulkImportDialogProps) {
+  const [openInterno, setOpenInterno] = useState(false);
+  const controlado = openProp !== undefined;
+  const open = controlado ? openProp : openInterno;
+  const setOpen = (valor: boolean) => {
+    if (!controlado) setOpenInterno(valor);
+    onOpenChange?.(valor);
+  };
   const fileRef = useRef<HTMLInputElement>(null);
   const { parseFile, preview, headers, file, validFields, importMutation, reset, isImporting } = useBulkImport(entityType);
 
@@ -41,6 +51,7 @@ export function BulkImportDialog({ entityType, trigger }: BulkImportDialogProps)
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) handleClose(); else setOpen(true); }}>
+      {trigger !== null && (
       <DialogTrigger asChild>
         {trigger ?? (
           <Button variant="outline" size="sm">
@@ -49,6 +60,7 @@ export function BulkImportDialog({ entityType, trigger }: BulkImportDialogProps)
           </Button>
         )}
       </DialogTrigger>
+      )}
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
