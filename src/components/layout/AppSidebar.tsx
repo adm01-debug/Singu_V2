@@ -91,6 +91,7 @@ const adminSection = {
     { title: "Permissões", url: "/admin/role-permissions", icon: ShieldCheck },
     { title: "Segurança (admin)", url: "/admin/seguranca", icon: Shield },
     { title: "Logs de erro", url: "/admin/error-logs", icon: FileWarning },
+    { title: "Observabilidade", url: "/admin/observabilidade", icon: Gauge },
   ],
 };
 
