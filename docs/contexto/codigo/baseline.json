@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "15e29cffad37863d44b1bcd36f558fba1d542284",
+  "commit": "12454dfa8420cf7851424f2c52483cdc6d0cd063",
   "branch": "main",
-  "data_commit": "2026-11-18T19:59:19-03:00",
+  "data_commit": "2026-11-18T20:11:16-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "12454df",
+    "data": "2026-11-18",
+    "assunto": "fix(territorios): módulo inteiro estava fora de contrato com o banco (#265)"
+   },
    {
     "sha": "15e29cf",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "91be466",
     "data": "2026-11-18",
     "assunto": "fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)"
-   },
-   {
-    "sha": "10085c6",
-    "data": "2026-11-18",
-    "assunto": "fix(db): recupera trabalho pendente de outros agentes nas branches (#238)"
    }
   ],
-  "arquivos_mudados_7d": 423,
+  "arquivos_mudados_7d": 428,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 104
+    "commits": 105
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3253,
   "arquivos_codigo": 2225,
-  "linhas_codigo": 415820,
+  "linhas_codigo": 415905,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 991,
-   "linhas": 148910
+   "linhas": 148912
   },
   "src/config": {
    "arquivos": 1,
@@ -668,7 +668,7 @@
   },
   "src/hooks": {
    "arquivos": 439,
-   "linhas": 57890
+   "linhas": 57972
   },
   "src/integrations": {
    "arquivos": 3,
@@ -684,7 +684,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28730
+   "linhas": 28731
   },
   "src/store": {
    "arquivos": 1,

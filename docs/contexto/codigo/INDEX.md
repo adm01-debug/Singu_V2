@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `15e29cffad37863d44b1bcd36f558fba1d542284` (2026-11-18T19:59:19-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `12454dfa8420cf7851424f2c52483cdc6d0cd063` (2026-11-18T20:11:16-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3253 |
 | arquivos_codigo | 2225 |
-| linhas_codigo | 415820 |
+| linhas_codigo | 415905 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -69,7 +69,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 653 | 69 | 231 |
+| app | 0 | 0 | 6 | 653 | 69 | 232 |
 | components/abm | 0 | 0 | 8 | 19 | 2 | 6 |
 | components/admin | 0 | 0 | 45 | 36 | 13 | 19 |
 | components/analytics | 0 | 0 | 43 | 81 | 2 | 26 |
@@ -95,12 +95,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/intelligence | 0 | 0 | 5 | 15 | 2 | 7 |
 | components/intent | 0 | 0 | 5 | 11 | 2 | 4 |
 | components/interactions | 0 | 0 | 42 | 44 | 3 | 17 |
-| components/layout | 0 | 0 | 6 | 339 | 27 | 97 |
+| components/layout | 0 | 0 | 6 | 339 | 27 | 98 |
 | components/lead-routing | 0 | 0 | 6 | 16 | 0 | 10 |
 | components/lead-scoring | 0 | 0 | 13 | 17 | 1 | 7 |
 | components/lux | 0 | 0 | 6 | 3 | 1 | 3 |
 | components/micro-interactions | 0 | 0 | 6 | 0 | 0 | 0 |
-| components/navigation | 0 | 0 | 12 | 339 | 27 | 97 |
+| components/navigation | 0 | 0 | 12 | 339 | 27 | 98 |
 | components/neuromarketing | 0 | 0 | 17 | 1 | 0 | 0 |
 | components/nlp | 0 | 0 | 33 | 10 | 2 | 9 |
 | components/onboarding | 0 | 0 | 8 | 5 | 0 | 3 |
@@ -118,11 +118,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/win-loss | 0 | 0 | 8 | 17 | 1 | 5 |
 | data | 0 | 0 | 46 | 5 | 0 | 6 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
-| hooks | 0 | 0 | 378 | 640 | 54 | 208 |
+| hooks | 0 | 0 | 378 | 640 | 54 | 209 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 68 | 16 | 2 | 13 |
-| pages | 51 | 105 | 105 | 630 | 67 | 225 |
-| pages/admin | 7 | 8 | 9 | 355 | 29 | 104 |
+| pages | 51 | 105 | 105 | 630 | 67 | 226 |
+| pages/admin | 7 | 8 | 9 | 355 | 29 | 105 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
@@ -435,8 +435,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21255 nós · 35998 arestas · 2143 comunidades · grafo do commit `15e29cff`
-- comunidades maiores: _shared/auth.ts (310), ref_components (276), framer-motion (266), ref_lib (259), 02_tables.sql (259), sonner (249), ref_hooks (240), useAuth (238), 📖 Dicionário de Dados — SINGU CRM (237), lucide-react (226), react-router-dom (217), react (205)
+- 21257 nós · 36002 arestas · 2174 comunidades · grafo do commit `12454dfa`
+- comunidades maiores: ref_hooks (427), @tanstack/react-query (417), _shared/auth.ts (335), useAuth (312), framer-motion (278), sonner (272), 02_tables.sql (259), ref_types (251), ref_lib (238), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (224), react (222)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -572,6 +572,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `12454df` fix(territorios): módulo inteiro estava fora de contrato com o banco (#265)
 - 2026-11-18 `15e29cf` fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)
 - 2026-11-18 `485bd33` fix(gamificacao): três RPCs eram chamadas sem o p_user_id obrigatório (#263)
 - 2026-11-18 `185ce78` fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)
@@ -586,7 +587,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `d6eaeb2` feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)
 - 2026-11-18 `d05b650` fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)
 - 2026-11-18 `a5987fd` fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)
-- 2026-11-18 `1735cf3` feat: agregação real por período em /analytics e painel de relacionamento (#253)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

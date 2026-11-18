@@ -9546,16 +9546,19 @@
    "hooks_exportados": [
     "useCreateTerritory",
     "useTerritories",
-    "useTerritoryPerformance"
+    "useTerritoriesPerformance"
    ],
-   "linhas": 97,
+   "linhas": 179,
    "dominio": "hooks",
-   "tabelas": [],
+   "tabelas": [
+    "territories"
+   ],
    "rpcs": [],
    "edges": [],
    "hooks_internos": [
     "useAuth",
     "useMutation",
+    "useQueries",
     "useQuery",
     "useQueryClient"
    ],

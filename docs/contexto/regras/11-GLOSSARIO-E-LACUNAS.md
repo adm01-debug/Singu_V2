@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `15e29cffad` · branch `main` · 2026-11-18 23:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `12454dfa84` · branch `main` · 2026-11-18 23:13 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -495,6 +495,7 @@ _nenhum item encontrado_
 | tabela | tabela `t1` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
 | tabela | tabela `tabela` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.mjs`<br>`scripts/inventario/gerar-banco.mjs`<br>`scripts/inventario/gerar-repo.mjs` |
 | tabela | tabela `tabela_de_teste` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-edge-tabela.test.mjs` |
+| tabela | tabela `territories` usada no código não existe nas migrations/types do repo | `src/hooks/useTerritories.ts` |
 | tabela | tabela `toString` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `tools_runtime` usada no código não existe nas migrations/types do repo | `scripts/ai-context/gerar.unit.mjs` |
 | tabela | tabela `tx` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |

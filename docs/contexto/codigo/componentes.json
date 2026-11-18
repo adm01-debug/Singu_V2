@@ -13330,7 +13330,7 @@
     "TerritoryCard"
    ],
    "export_default": null,
-   "linhas": 76,
+   "linhas": 78,
    "dominio": "components/territories",
    "hooks_locais": [],
    "tabelas": [],
@@ -17637,12 +17637,12 @@
     "Territorios"
    ],
    "export_default": "Territorios",
-   "linhas": 140,
+   "linhas": 141,
    "dominio": "pages",
    "hooks_locais": [
     "useIsAdmin",
     "useTerritories",
-    "useTerritoryPerformance"
+    "useTerritoriesPerformance"
    ],
    "tabelas": [],
    "edges": [],

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `15e29cffad` · branch `main` · 2026-11-18 23:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `12454dfa84` · branch `main` · 2026-11-18 23:13 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4388,7 +4388,7 @@ _nenhum item encontrado_
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
 | Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar no bundle. | `src/components/intelligence/CrossRefTab.tsx` |
-| … +787 linhas — lista completa em `context.json` | |
+| … +788 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

@@ -9148,6 +9148,7 @@
   ],
   "src/hooks/useTerritories.ts": [
    "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts",
    "src/lib/externalData.ts",
    "src/lib/logger.ts"
   ],
