@@ -14,7 +14,11 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { useActivityOverview } from '@/hooks/useActivityOverview';
+import { toEngagementByChannel, toWeekdayActivity, calcChange } from '@/data/analyticsData';
+import { parseApiError } from '@/lib/errorMessages';
 
 interface StatMetric {
   label: string;
@@ -30,60 +34,6 @@ interface RelationshipStatsPanelProps {
   className?: string;
   compact?: boolean;
 }
-
-// Mock data generation based on real metrics
-const getRelationshipStats = () => {
-  return {
-    averageResponseTime: {
-      value: '4.2h',
-      change: -15,
-      previous: '4.9h',
-      trend: 'improving',
-    },
-    contactFrequency: {
-      value: 3.8,
-      change: 12,
-      previous: 3.4,
-      unit: 'contatos/semana',
-    },
-    scoreEvolution: {
-      current: 72,
-      previous: 68,
-      change: 5.9,
-      trend: [65, 67, 68, 70, 71, 72],
-    },
-    engagementRate: {
-      value: 78,
-      change: 8,
-      previous: 72,
-    },
-    responseRate: {
-      value: 92,
-      change: 3,
-      previous: 89,
-    },
-    activeContacts: {
-      value: 45,
-      total: 58,
-      change: 5,
-    },
-    topChannels: [
-      { name: 'Email', count: 45, percentage: 42 },
-      { name: 'WhatsApp', count: 32, percentage: 30 },
-      { name: 'Reunião', count: 18, percentage: 17 },
-      { name: 'Ligação', count: 12, percentage: 11 },
-    ],
-    weeklyActivity: [
-      { day: 'Seg', interactions: 8 },
-      { day: 'Ter', interactions: 12 },
-      { day: 'Qua', interactions: 6 },
-      { day: 'Qui', interactions: 15 },
-      { day: 'Sex', interactions: 9 },
-      { day: 'Sáb', interactions: 2 },
-      { day: 'Dom', interactions: 1 },
-    ],
-  };
-};
 
 const ChangeIndicator = ({ value, size = 'default' }: { value: number; size?: 'default' | 'sm' }) => {
   const isPositive = value > 0;
@@ -129,46 +79,84 @@ const MiniSparkline = ({ data, color }: { data: number[]; color: string }) => {
 };
 
 export const RelationshipStatsPanel = React.memo(function RelationshipStatsPanel({ className, compact = false }: RelationshipStatsPanelProps) {
-  const stats = getRelationshipStats();
-  
+  // Janela de 30 dias e a mesma janela anterior, para as comparacoes.
+  const atual = useActivityOverview('30d', 0);
+  const anterior = useActivityOverview('30d', 1);
+
+  const canais = toEngagementByChannel(atual.data);
+  const totalCanais = canais.reduce((soma, c) => soma + c.sent + c.received, 0);
+  const atividadeSemanal = toWeekdayActivity(atual.data);
+
+  const interacoes = atual.data?.totais.interacoes ?? 0;
+  const interacoesAntes = anterior.data?.totais.interacoes ?? 0;
+  const alcancados = atual.data?.totais.contatos_alcancados ?? 0;
+  const alcancadosAntes = anterior.data?.totais.contatos_alcancados ?? 0;
+  const recebidas = atual.data?.totais.recebidas ?? 0;
+  const recebidasAntes = anterior.data?.totais.recebidas ?? 0;
+
+  const cmpInteracoes = calcChange(interacoes, interacoesAntes);
+  const cmpAlcancados = calcChange(alcancados, alcancadosAntes);
+  const cmpRecebidas = calcChange(recebidas, recebidasAntes);
+  // Media semanal sobre a janela de 30 dias, arredondada a uma casa.
+  const porSemana = Math.round((interacoes / 30) * 7 * 10) / 10;
+  const porSemanaAntes = Math.round((interacoesAntes / 30) * 7 * 10) / 10;
+
   const mainMetrics: StatMetric[] = [
     {
-      label: 'Tempo Médio de Resposta',
-      value: stats.averageResponseTime.value,
-      change: stats.averageResponseTime.change,
-      changeLabel: `vs ${stats.averageResponseTime.previous}`,
-      icon: Timer,
-      color: 'text-info',
-      description: 'Reduzindo ↓',
+      label: 'Interações (30 dias)',
+      value: interacoes,
+      change: cmpInteracoes.change,
+      changeLabel: `vs ${interacoesAntes} nos 30 anteriores`,
+      icon: MessageSquare,
+      color: 'text-success',
     },
     {
       label: 'Frequência de Contato',
-      value: `${stats.contactFrequency.value}`,
-      change: stats.contactFrequency.change,
-      changeLabel: stats.contactFrequency.unit,
-      icon: MessageSquare,
-      color: 'text-success',
-      description: 'Interações por semana',
+      value: porSemana,
+      change: calcChange(porSemana, porSemanaAntes).change,
+      changeLabel: 'interações por semana',
+      icon: Timer,
+      color: 'text-info',
     },
     {
-      label: 'Score Médio',
-      value: `${stats.scoreEvolution.current}%`,
-      change: stats.scoreEvolution.change,
-      changeLabel: `vs ${stats.scoreEvolution.previous}%`,
+      label: 'Contatos Alcançados',
+      value: alcancados,
+      change: cmpAlcancados.change,
+      changeLabel: `vs ${alcancadosAntes} nos 30 anteriores`,
       icon: Target,
       color: 'text-warning',
-      description: 'Evolução positiva',
     },
     {
-      label: 'Taxa de Engajamento',
-      value: `${stats.engagementRate.value}%`,
-      change: stats.engagementRate.change,
-      changeLabel: `vs ${stats.engagementRate.previous}%`,
+      label: 'Recebidas',
+      value: recebidas,
+      change: cmpRecebidas.change,
+      changeLabel: 'interações de entrada',
       icon: Zap,
       color: 'text-primary',
-      description: 'Contatos engajados',
     },
   ];
+
+  if (atual.isLoading) {
+    return (
+      <Card className={cn('h-full', className)}>
+        <CardContent className="p-6 space-y-3">
+          <Skeleton className="h-6 w-56" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (atual.error) {
+    return (
+      <Card className={cn('h-full', className)}>
+        <CardContent className="p-6" role="alert">
+          <p className="text-sm text-destructive">{parseApiError(atual.error)}</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (compact) {
     return (
@@ -255,33 +243,34 @@ export const RelationshipStatsPanel = React.memo(function RelationshipStatsPanel
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Taxa de Resposta</span>
+                <span className="text-muted-foreground">Taxa de resposta</span>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">{stats.responseRate.value}%</span>
-                  <ChangeIndicator value={stats.responseRate.change} size="sm" />
+                  <span className="font-semibold">
+                    {interacoes > 0 ? Math.round((recebidas / interacoes) * 100) : 0}%
+                  </span>
+                  <ChangeIndicator value={cmpRecebidas.change} size="sm" />
                 </div>
               </div>
-              <Progress value={stats.responseRate.value} className="h-2" />
+              <Progress value={interacoes > 0 ? (recebidas / interacoes) * 100 : 0} className="h-2" />
+              <p className="text-[10px] text-muted-foreground">
+                {recebidas} de entrada em {interacoes} interações no período
+              </p>
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Contatos Ativos</span>
+                <span className="text-muted-foreground">Contatos alcançados</span>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">{stats.activeContacts.value}/{stats.activeContacts.total}</span>
-                  <ChangeIndicator value={stats.activeContacts.change} size="sm" />
+                  <span className="font-semibold">{alcancados}</span>
+                  <ChangeIndicator value={cmpAlcancados.change} size="sm" />
                 </div>
               </div>
-              <Progress 
-                value={(stats.activeContacts.value / stats.activeContacts.total) * 100} 
-                className="h-2" 
-              />
             </div>
 
             <div className="pt-2 border-t">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Evolução do Score</span>
-                <MiniSparkline data={stats.scoreEvolution.trend} color="bg-primary" />
+                <span className="text-sm text-muted-foreground">Volume por período</span>
+                <MiniSparkline data={(atual.data?.serie ?? []).map(p => p.interacoes)} color="bg-primary" />
               </div>
             </div>
           </CardContent>
@@ -296,22 +285,22 @@ export const RelationshipStatsPanel = React.memo(function RelationshipStatsPanel
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {stats.topChannels.map((channel, index) => (
+            {canais.map((channel, index) => (
               <motion.div
-                key={channel.name}
+                key={channel.channel}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: 0.2 + index * 0.1 }}
                 className="space-y-1.5"
               >
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">{channel.name}</span>
-                  <span className="font-medium">{channel.count} ({channel.percentage}%)</span>
+                  <span className="text-muted-foreground">{channel.channel}</span>
+                  <span className="font-medium">{channel.sent + channel.received} ({totalCanais > 0 ? Math.round(((channel.sent + channel.received) / totalCanais) * 100) : 0}%)</span>
                 </div>
                 <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: `${channel.percentage}%` }}
+                    animate={{ width: `${totalCanais > 0 ? Math.round(((channel.sent + channel.received) / totalCanais) * 100) : 0}%` }}
                     transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
                     className={cn(
                       'h-full rounded-full',
@@ -337,13 +326,13 @@ export const RelationshipStatsPanel = React.memo(function RelationshipStatsPanel
           </CardHeader>
           <CardContent>
             <div className="flex items-end justify-between h-24 gap-1">
-              {stats.weeklyActivity.map((day, index) => {
-                const maxInteractions = Math.max(...stats.weeklyActivity.map(d => d.interactions));
-                const height = (day.interactions / maxInteractions) * 100;
+              {atividadeSemanal.map((day, index) => {
+                const maxInteractions = Math.max(1, ...atividadeSemanal.map(d => d.interacoes));
+                const height = (day.interacoes / maxInteractions) * 100;
                 
                 return (
                   <motion.div
-                    key={day.day}
+                    key={day.dia}
                     initial={{ height: 0 }}
                     animate={{ height: `${height}%` }}
                     transition={{ duration: 0.4, delay: 0.3 + index * 0.05 }}
@@ -363,9 +352,9 @@ export const RelationshipStatsPanel = React.memo(function RelationshipStatsPanel
               })}
             </div>
             <div className="flex justify-between mt-2">
-              {stats.weeklyActivity.map((day, index) => (
+              {atividadeSemanal.map((day, index) => (
                 <span 
-                  key={day.day} 
+                  key={day.dia} 
                   className={cn(
                     'text-xs flex-1 text-center',
                     index === new Date().getDay() - 1 
@@ -373,14 +362,14 @@ export const RelationshipStatsPanel = React.memo(function RelationshipStatsPanel
                       : 'text-muted-foreground'
                   )}
                 >
-                  {day.day}
+                  {day.dia}
                 </span>
               ))}
             </div>
             <div className="mt-4 pt-3 border-t flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Total da semana</span>
+              <span className="text-muted-foreground">Total no período</span>
               <span className="font-semibold text-foreground">
-                {stats.weeklyActivity.reduce((sum, d) => sum + d.interactions, 0)} interações
+                {atividadeSemanal.reduce((sum, d) => sum + d.interacoes, 0)} interações
               </span>
             </div>
           </CardContent>
