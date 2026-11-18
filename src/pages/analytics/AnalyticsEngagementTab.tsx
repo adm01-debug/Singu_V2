@@ -1,20 +1,18 @@
 import { motion } from 'framer-motion';
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, Legend, RadarChart, PolarGrid,
-  PolarAngleAxis, PolarRadiusAxis, Radar,
+  Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
-import { BarChart3, Activity, Target } from 'lucide-react';
+import { BarChart3, Activity } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { CustomTooltip } from '@/components/analytics/AnalyticsShared';
 
 interface AnalyticsEngagementTabProps {
   channelData: { channel: string; sent: number; received: number }[];
-  radarData: { metric: string; value: number }[];
   relationshipData: { date: string; interactions: number }[];
 }
 
-export function AnalyticsEngagementTab({ channelData, radarData, relationshipData }: AnalyticsEngagementTabProps) {
+export function AnalyticsEngagementTab({ channelData, relationshipData }: AnalyticsEngagementTabProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
@@ -35,27 +33,6 @@ export function AnalyticsEngagementTab({ channelData, radarData, relationshipDat
                   <Bar dataKey="sent" name="Enviadas" fill="hsl(221, 83%, 53%)" radius={[0, 4, 4, 0]} />
                   <Bar dataKey="received" name="Recebidas" fill="hsl(142, 76%, 36%)" radius={[0, 4, 4, 0]} />
                 </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-        <Card className="h-full">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2"><Target className="w-5 h-5 text-primary" />Métricas de Engajamento</CardTitle>
-            <CardDescription>Análise multidimensional do seu desempenho</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={radarData}>
-                  <PolarGrid stroke="hsl(var(--border))" />
-                  <PolarAngleAxis dataKey="metric" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} />
-                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: 'hsl(var(--muted-foreground))' }} />
-                  <Radar name="Atual" dataKey="value" stroke="hsl(221, 83%, 53%)" fill="hsl(221, 83%, 53%)" fillOpacity={0.3} strokeWidth={2} />
-                </RadarChart>
               </ResponsiveContainer>
             </div>
           </CardContent>

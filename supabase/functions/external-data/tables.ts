@@ -79,6 +79,8 @@ export const ALLOWED_RPCS = [
     'get_data_quality_report', 'get_incomplete_companies',
     // ── Logs & Approvals ──
     'get_ai_recommendation_logs', 'approve_follow_up', 'reject_follow_up',
+    // ── Agregacao por periodo (analytics, dashboard) ──
+    'get_activity_overview',
   ] as const;
 
 export type AllowedRpc = typeof ALLOWED_RPCS[number];

@@ -17,7 +17,7 @@ interface SentimentItem {
 interface AnalyticsSentimentTabProps {
   sentimentData: SentimentItem[];
   sentimentColors: Record<string, string>;
-  relationshipData: { date: string; score: number }[];
+  relationshipData: { date: string; interactions: number }[];
 }
 
 export function AnalyticsSentimentTab({ sentimentData, sentimentColors, relationshipData }: AnalyticsSentimentTabProps) {
@@ -74,7 +74,7 @@ export function AnalyticsSentimentTab({ sentimentData, sentimentColors, relation
                   <XAxis dataKey="date" tick={{ fill: 'hsl(var(--muted-foreground))' }} />
                   <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Bar dataKey="score" name="Score de Relacionamento" fill="hsl(221, 83%, 53%)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="interactions" name="Interações" fill="hsl(221, 83%, 53%)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
