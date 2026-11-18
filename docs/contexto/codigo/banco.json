@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 487,
+ "migrations": 488,
  "seeds": [],
  "avisos": [
   "132 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -263,6 +263,7 @@
   "generate_daily_digest",
   "generate_pre_contact_briefing",
   "generate_rapport_suggestions",
+  "get_activity_overview",
   "get_ai_gateway_health",
   "get_ai_gateway_partition_stats",
   "get_ai_recommendation_logs",
@@ -14841,7 +14842,7 @@
      "tags_array"
     ]
    },
-   "usada_no_front": 62,
+   "usada_no_front": 63,
    "usada_em_edges": [
     "_shared",
     "ai-assistant",

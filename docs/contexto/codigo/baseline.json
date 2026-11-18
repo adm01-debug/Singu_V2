@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "e3b8d5a5a6e644087a93e694d69252bb9d9b4ab0",
+  "commit": "1735cf37f6283a2e52a9927094c21e426d0ce87c",
   "branch": "main",
-  "data_commit": "2026-11-18T15:14:14-03:00",
+  "data_commit": "2026-11-18T16:25:58-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "1735cf3",
+    "data": "2026-11-18",
+    "assunto": "feat: agregação real por período em /analytics e painel de relacionamento (#253)"
+   },
    {
     "sha": "e3b8d5a",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "8bc7489",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 225"
-   },
-   {
-    "sha": "4d004ce",
-    "data": "2026-11-14",
-    "assunto": "chore(docs): bump prod-readiness pos-merge 224 (#225)"
    }
   ],
-  "arquivos_mudados_7d": 410,
+  "arquivos_mudados_7d": 428,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -223,11 +223,11 @@
    },
    {
     "arquivo": "docs/qa/security-definer-audit.md",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "tests/rls/security_definer_hardening.sql",
-    "mudancas": 11
+    "mudancas": 12
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 89
+    "commits": 90
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,19 +322,19 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3243,
-  "arquivos_codigo": 2216,
-  "linhas_codigo": 414418,
+  "arquivos_total": 3245,
+  "arquivos_codigo": 2217,
+  "linhas_codigo": 414496,
   "rotas": 114,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 64,
   "modulos": 141,
   "componentes": 1057,
-  "hooks": 408,
+  "hooks": 409,
   "edge_functions": 109,
   "tabelas": 418,
-  "migrations": 487,
+  "migrations": 488,
   "cron_jobs": 34,
   "testes": 268,
   "workflows": 11,
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 986,
-   "linhas": 148253
+   "linhas": 148242
   },
   "src/config": {
    "arquivos": 1,
@@ -660,15 +660,15 @@
   },
   "src/data": {
    "arquivos": 74,
-   "linhas": 22050
+   "linhas": 22014
   },
   "src/domain": {
    "arquivos": 8,
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 435,
-   "linhas": 57226
+   "arquivos": 436,
+   "linhas": 57331
   },
   "src/integrations": {
    "arquivos": 3,
@@ -684,7 +684,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28619
+   "linhas": 28637
   },
   "src/store": {
    "arquivos": 1,
@@ -704,7 +704,7 @@
   },
   "supabase/functions": {
    "arquivos": 174,
-   "linhas": 26832
+   "linhas": 26834
   },
   "tailwind.config.ts": {
    "arquivos": 1,

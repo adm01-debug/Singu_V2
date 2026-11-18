@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e3b8d5a5a6` · branch `main` · 2026-11-18 18:17 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1735cf37f6` · branch `main` · 2026-11-18 19:27 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1483,6 +1483,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | MessageType | follow_up \| introduction \| proposal \| check_in \| thank_you \| meeting_request \| custom | `src/hooks/useAIWritingAssistant.ts` |
 | MessageTone | formal \| casual \| friendly | `src/hooks/useAIWritingAssistant.ts` |
 | PersuasionFramework | AIDA \| PAS \| FAB \| 4Ps \| Storytelling \| None | `src/hooks/useAIWritingAssistant.ts` |
+| PeriodoAtividade | 7d \| 30d \| 90d \| 365d | `src/hooks/useActivityOverview.ts` |
 | AttributionModel | first \| last \| linear \| u_shape \| w_shape \| time_decay | `src/hooks/useAttribution.ts` |
 | TriggerType | interaction_created \| contact_stage_changed \| score_changed \| tag_added \| no_contact_days \| sentiment_changed \| follow_up_due | `src/hooks/useAutomationRules.ts` |
 | ActionType | create_alert \| create_task \| update_stage \| add_tag \| send_notification \| update_score \| enroll_in_sequence | `src/hooks/useAutomationRules.ts` |
@@ -2504,6 +2505,10 @@ _nenhum item encontrado_
   ```
   const change = previous === 0 ? 0 : Math.round(((current - previous) / previous) * 100); return { current, previous, change, changeType: change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral', };
   ```
+- **taxaPositiva(dados?: ResumoAtividade)** — `src/data/analyticsData.ts`
+  ```
+  const total = dados?.totais.interacoes ?? 0; if (total === 0) return 0; const positivas = (dados?.por_sentimento ?? []) .filter(s => s.sentimento === 'positivo' || s.sentimento === 'positive') .reduce((soma, s) => soma + s.total, 0); return Math.round((positivas / total) * 100);
+  ```
 - **generateAppreciationSuggestion(contactName: string, discProfile: DiscProfileKey, daysSinceLast: number)** — `src/data/carnegieAppreciation.ts`
   ```
   const profile = APPRECIATION_BY_DISC[discProfile]; const preferredType = profile.preferredTypes[0]; const template = APPRECIATION_TEMPLATES[preferredType]; if (!template) return null; const urgency: 'low' | 'medium' | 'high' = daysSinceLast > APPRECIATION_GAP_THRESHOLDS.critical ? 'high' : daysSinceLast > APPRECIATION_GAP_THRESHOLDS.warning ? 'medium' : 'low'; return { contactId: '', // To be filled by caller contactName, type: preferredType, reason: `${contactName} não recebe apreciação há ${da …
@@ -3326,6 +3331,7 @@ _nenhum item encontrado_
 | `SIDEBAR_WIDTH_MOBILE` | `"18rem"` | `src/components/ui/sidebar/sidebar-context.tsx` |
 | `CHANNEL_PERSISTENCE_TTL_DAYS` | `30` | `src/config/channelPersistence.config.ts` |
 | `MAX_STACK_SIZE` | `20` | `src/contexts/NavigationStackContext.tsx` |
+| `TOTAL_CANAIS` | `5` | `src/data/analyticsData.ts` |
 | `DAY_MS` | `86` | `src/domain/forecastSimulation.ts` |
 | `MOBILE_BREAKPOINT` | `768` | `src/hooks/use-mobile.tsx` |
 | `TOAST_LIMIT` | `1` | `src/hooks/use-toast.ts` |
@@ -3576,6 +3582,9 @@ _nenhum item encontrado_
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useABM.ts` |
 | `gcTime: 10 * 60 * 1000,` | `src/hooks/useActiveAlerts.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useActiveAlerts.ts` |
+| `const fim = new Date(Date.now() - deslocamento * dias * 24 * 60 * 60 * 1000);` | `src/hooks/useActivityOverview.ts` |
+| `const inicio = new Date(fim.getTime() - dias * 24 * 60 * 60 * 1000);` | `src/hooks/useActivityOverview.ts` |
+| `staleTime: 5 * 60 * 1000,` | `src/hooks/useActivityOverview.ts` |
 | `? new Date(parseISO(exposure.lastExposedAt).getTime() + SATURATION_CONFIG.COOLDOWN_HOURS * 60 * 60 * 1000).toISOString()` | `src/hooks/useAdvancedTriggers.ts` |
 | `const windowStart = new Date(now.getTime() - SATURATION_CONFIG.EXPOSURE_WINDOW_DAYS * 24 * 60 * 60 * 1000);` | `src/hooks/useAdvancedTriggers.ts` |
 | `const since = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();` | `src/hooks/useAiGatewayCriticalToast.ts` |
@@ -3759,10 +3768,7 @@ _nenhum item encontrado_
 | `staleTime: 3 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `const threeMonthsAgo = subDays(now, 90);` | `src/hooks/usePortfolioHealth.ts` |
-| `const in60Minutes = addMinutes(now, 60);` | `src/hooks/usePreContactBriefing.ts` |
-| `gcTime: 5 * 60 * 1000,` | `src/hooks/usePreContactBriefing.ts` |
-| `refetchInterval: 5 * 60 * 1000,` | `src/hooks/usePreContactBriefing.ts` |
-| … +210 linhas — lista completa em `context.json` | |
+| … +213 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -4314,6 +4320,7 @@ _nenhum item encontrado_
 | Não foi possível copiar | `src/components/crm/copywriting/SalesScriptGenerator.tsx` |
 | Erro ao abrir a impressão:  | `src/components/crm/relationship/RelationshipReportExport.tsx` |
 | Erro ao exportar CSV:  | `src/components/crm/relationship/RelationshipReportExport.tsx` |
+| >           <p className= | `src/components/dashboard/RelationshipStatsPanel.tsx` |
 | Erro ao agendar | `src/components/dashboard/StrategicNextStepsCard.tsx` |
 | Erro ao gerar follow-up | `src/components/dashboard/StrategicNextStepsCard.tsx` |
 | Erro na exportação | `src/components/dashboard/StrategicNextStepsCard.tsx` |
@@ -4373,8 +4380,7 @@ _nenhum item encontrado_
 | Nada para exportar no bundle. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar. | `src/components/intelligence/CrossRefTab.tsx` |
 | Falha ao buscar entidades. | `src/components/intelligence/Entity360Tab.tsx` |
-| Não foi possível copiar | `src/components/intelligence/Entity360Tab.tsx` |
-| … +778 linhas — lista completa em `context.json` | |
+| … +781 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

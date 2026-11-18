@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e3b8d5a5a6e644087a93e694d69252bb9d9b4ab0` (2026-11-18T15:14:14-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `1735cf37f6283a2e52a9927094c21e426d0ce87c` (2026-11-18T16:25:58-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2053), SQL (660), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
+- linguagens: TypeScript (2054), SQL (661), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,19 +34,19 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3243 |
-| arquivos_codigo | 2216 |
-| linhas_codigo | 414418 |
+| arquivos_total | 3245 |
+| arquivos_codigo | 2217 |
+| linhas_codigo | 414496 |
 | rotas | 114 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
 | itens_menu | 64 |
 | modulos | 141 |
 | componentes | 1057 |
-| hooks | 408 |
+| hooks | 409 |
 | edge_functions | 109 |
 | tabelas | 418 |
-| migrations | 487 |
+| migrations | 488 |
 | cron_jobs | 34 |
 | testes | 268 |
 | workflows | 11 |
@@ -56,7 +56,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Onde ficam as coisas
 - telas: src/pages (113)
 - componentes: src/components (908), src/pages (140), src/app (4)
-- hooks: src/hooks (377), src/components (20), src/stores (5)
+- hooks: src/hooks (378), src/components (20), src/stores (5)
 - servicos_logica: src/lib (72), src/data (46), src/domain (8)
 - testes: co-localizado (*.test) (126), co-localizado (__tests__) (90), tests/ (23)
 - edge_functions: supabase/functions
@@ -69,10 +69,10 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 639 | 68 | 228 |
+| app | 0 | 0 | 6 | 641 | 68 | 228 |
 | components/abm | 0 | 0 | 8 | 19 | 2 | 6 |
 | components/admin | 0 | 0 | 44 | 35 | 12 | 19 |
-| components/analytics | 0 | 0 | 42 | 79 | 2 | 26 |
+| components/analytics | 0 | 0 | 42 | 81 | 2 | 26 |
 | components/bi | 0 | 0 | 5 | 20 | 2 | 6 |
 | components/carnegie | 0 | 0 | 12 | 1 | 0 | 0 |
 | components/companies | 0 | 0 | 5 | 7 | 1 | 2 |
@@ -82,7 +82,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/conversation-intel | 0 | 0 | 11 | 12 | 1 | 5 |
 | components/crm | 0 | 0 | 34 | 17 | 1 | 37 |
 | components/customer-success | 0 | 0 | 8 | 14 | 0 | 6 |
-| components/dashboard | 0 | 0 | 46 | 100 | 6 | 38 |
+| components/dashboard | 0 | 0 | 46 | 102 | 6 | 38 |
 | components/deal-rooms | 0 | 0 | 8 | 22 | 3 | 8 |
 | components/disc | 0 | 0 | 9 | 5 | 0 | 5 |
 | components/enrichment | 0 | 0 | 11 | 25 | 4 | 15 |
@@ -95,12 +95,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/intelligence | 0 | 0 | 5 | 15 | 2 | 7 |
 | components/intent | 0 | 0 | 5 | 11 | 2 | 4 |
 | components/interactions | 0 | 0 | 42 | 44 | 3 | 17 |
-| components/layout | 0 | 0 | 6 | 308 | 24 | 89 |
+| components/layout | 0 | 0 | 6 | 310 | 24 | 89 |
 | components/lead-routing | 0 | 0 | 6 | 16 | 0 | 10 |
 | components/lead-scoring | 0 | 0 | 13 | 17 | 1 | 7 |
 | components/lux | 0 | 0 | 6 | 3 | 1 | 3 |
 | components/micro-interactions | 0 | 0 | 6 | 0 | 0 | 0 |
-| components/navigation | 0 | 0 | 12 | 308 | 24 | 89 |
+| components/navigation | 0 | 0 | 12 | 310 | 24 | 89 |
 | components/neuromarketing | 0 | 0 | 17 | 1 | 0 | 0 |
 | components/nlp | 0 | 0 | 33 | 10 | 2 | 9 |
 | components/onboarding | 0 | 0 | 8 | 5 | 0 | 3 |
@@ -115,13 +115,13 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/triggers | 0 | 0 | 33 | 12 | 1 | 10 |
 | components/ui | 0 | 0 | 72 | 10 | 0 | 2 |
 | components/win-loss | 0 | 0 | 8 | 17 | 1 | 5 |
-| data | 0 | 0 | 46 | 3 | 0 | 6 |
+| data | 0 | 0 | 46 | 5 | 1 | 7 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
-| hooks | 0 | 0 | 375 | 629 | 53 | 206 |
+| hooks | 0 | 0 | 376 | 631 | 53 | 206 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 68 | 16 | 2 | 13 |
-| pages | 51 | 105 | 105 | 616 | 66 | 222 |
-| pages/admin | 6 | 7 | 9 | 324 | 26 | 96 |
+| pages | 51 | 105 | 105 | 618 | 66 | 222 |
+| pages/admin | 6 | 7 | 9 | 326 | 26 | 96 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
@@ -410,7 +410,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, DEEPSEEK_API_KEY, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, N8N_LUX_WEBHOOK_URL, RESEND_API_KEY, RESEND_FROM, TWILIO_API_KEY
 
 ## Permissões / papéis
-- papéis no código: user (38), system (32), status (30), alert (24), group (18), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), tab (1), tablist (1)
+- papéis no código: user (38), system (32), status (30), alert (26), group (18), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), tab (1), tablist (1)
 - enums de papel: app_role: admin|moderator|user; entity_relationship_role: buyer|manager|owner|decision_maker|influencer|user|sponsor|partner|supplier|subsidiary|parent|employee_of|other; salesperson_role: sdr|closer|hybrid
 - guards: src/app/lazyPages.tsx, src/components/auth/MFAGuard.tsx, src/hooks/useAuth.tsx · rotas protegidas: 102 · públicas: /*, /auth, /design-system, /dr/:token, /f/:slug, /lm/:slug, /lp/:slug, /reset-password, /signature/:token, /sso/callback, /status, /survey/:token
 - feature flags: nenhuma
@@ -433,8 +433,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21162 nós · 35860 arestas · 2160 comunidades · grafo do commit `e3b8d5a5`
-- comunidades maiores: ref_lib (624), react (604), ref_components (311), framer-motion (267), 02_tables.sql (259), _shared/auth.ts (257), ref_types (246), react-router-dom (235), 📖 Dicionário de Dados — SINGU CRM (227), withAuth (212), date-fns (209), @testing-library/react (149)
+- 21191 nós · 35893 arestas · 2107 comunidades · grafo do commit `1735cf37`
+- comunidades maiores: ref_hooks (393), vitest (319), ref_types (299), _shared/auth.ts (299), framer-motion (261), 02_tables.sql (259), ref_lib (256), useAuth (242), react-router-dom (240), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (216), react (210)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -445,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - supabase/functions/external-data/index.ts (15)
 - docs/prod-readiness.md (14)
 - package-lock.json (14)
-- docs/qa/security-definer-audit.md (12)
-- tests/rls/security_definer_hardening.sql (11)
+- docs/qa/security-definer-audit.md (13)
+- tests/rls/security_definer_hardening.sql (12)
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
 - inventario/estado/banco.json (9)
@@ -570,6 +570,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `1735cf3` feat: agregação real por período em /analytics e painel de relacionamento (#253)
 - 2026-11-18 `e3b8d5a` fix(nlp): confianca de objecao e forca de indicador saem da evidencia (#249)
 - 2026-11-18 `7dcac42` fix(ui): filtros do Pipeline passam a filtrar e 3 botoes mortos ganham acao (#248)
 - 2026-11-18 `602a7f8` fix(edge): roadmap preditivo para de sortear a previsao gravada no banco (#246)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `986ffa4` build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)
 - 2026-11-18 `563e484` build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)
 - 2026-11-18 `c027a81` chore(ci): roda os testes de edge function orfaos no pipeline (#231)
-- 2026-11-18 `889a650` build(deps): bump the minor-and-patch group with 11 updates (#237)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -6407,9 +6407,11 @@
     "RelationshipStatsPanel"
    ],
    "export_default": null,
-   "linhas": 392,
+   "linhas": 381,
    "dominio": "components/dashboard",
-   "hooks_locais": [],
+   "hooks_locais": [
+    "useActivityOverview"
+   ],
    "tabelas": [],
    "edges": [],
    "usado_por": 1,
@@ -13847,7 +13849,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 543,
+   "usado_por": 542,
    "orfao": false
   },
   {
@@ -14682,7 +14684,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 195,
+   "usado_por": 196,
    "orfao": false
   },
   {
@@ -15189,7 +15191,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 334,
+   "usado_por": 335,
    "orfao": false
   },
   {
@@ -15613,10 +15615,12 @@
     "Analytics"
    ],
    "export_default": "Analytics",
-   "linhas": 394,
+   "linhas": 406,
    "dominio": "pages",
    "hooks_locais": [
-    "usePageTitle"
+    "useActivityOverview",
+    "usePageTitle",
+    "useTopRelationships"
    ],
    "tabelas": [],
    "edges": [],
@@ -15629,7 +15633,7 @@
     "AnalyticsEngagementTab"
    ],
    "export_default": null,
-   "linhas": 95,
+   "linhas": 101,
    "dominio": "pages/analytics",
    "hooks_locais": [],
    "tabelas": [],

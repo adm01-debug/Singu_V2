@@ -2783,6 +2783,7 @@
    "src/hooks/useAccessSecurity.ts",
    "src/hooks/useAccountChurnPrediction.ts",
    "src/hooks/useActionToast.ts",
+   "src/hooks/useActivityOverview.ts",
    "src/hooks/useAdvancedTriggers.ts",
    "src/hooks/useAIApprovals.ts",
    "src/hooks/useAiAssistant.ts",

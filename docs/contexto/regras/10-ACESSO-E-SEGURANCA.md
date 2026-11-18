@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e3b8d5a5a6` · branch `main` · 2026-11-18 18:17 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1735cf37f6` · branch `main` · 2026-11-18 19:27 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -729,7 +729,7 @@ Middleware matcher (Next.js): nenhum
 | grant | anon, authenticated | execute | `get_deal_room_by_token`, `record_buyer_view`, `buyer_toggle_milestone`, `buyer_add_comment`, `get_buyer_document_path`, `increment_magnet_view`, `track_magnet_download`, `increment_form_view`, `submit_public_form` |
 | grant | anon, authenticated | select | `csat_surveys_public`, `forms_public`, `landing_pages_public`, `document_signatures_public` |
 | grant | anon, authenticated, service_role | execute | `get_public_csat_survey`, `submit_public_csat_survey`, `increment_landing_page_view`, `get_public_csat_survey`, `submit_public_csat_survey` |
-| grant | authenticated | execute | `seed_deal_room`, `encrypt_connection_config`, `decrypt_connection_config`, `get_connection_metrics`, `compute_attribution`, `check_relationship_consistency`, `get_contact_behavior_gaps`, `validate_behavioral_consistency`, `get_contact_framework_gaps`, `get_contact_life_event_gaps`, `get_connection_metrics`, `seed_conversation_topics`, `compute_account_health`, `cs_renewal_pipeline`, `seed_forecast_period` … +35 |
+| grant | authenticated | execute | `seed_deal_room`, `encrypt_connection_config`, `decrypt_connection_config`, `get_connection_metrics`, `compute_attribution`, `check_relationship_consistency`, `get_contact_behavior_gaps`, `validate_behavioral_consistency`, `get_contact_framework_gaps`, `get_contact_life_event_gaps`, `get_connection_metrics`, `seed_conversation_topics`, `compute_account_health`, `cs_renewal_pipeline`, `seed_forecast_period` … +36 |
 | grant | authenticated | select | `v_life_events_audit`, `slow_queries_audit`, `v_entities`, `behavioral_profile_regen_queue`, `contact_analytical_profile_versions`, `system_config`, `document_signatures_public`, `csat_surveys_public`, `mv_daily_kpis`, `mv_daily_stats`, `data_retention_policies`, `ai_gateway_metrics`, `rpc_perf_samples`, `rpc_plan_snapshots`, `users_public` … +7 |
 | grant | authenticated | select, insert | `audit_log`, `rfm_history` |
 | grant | authenticated | select, insert, update | `migration_password_reset_log` |

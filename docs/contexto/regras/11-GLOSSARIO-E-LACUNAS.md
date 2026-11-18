@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e3b8d5a5a6` · branch `main` · 2026-11-18 18:17 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1735cf37f6` · branch `main` · 2026-11-18 19:27 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -307,7 +307,7 @@
 | `validation_queue_status` (enum) | pending, processing, done, error |  | banco |
 | `email_type` (enum) | corporativo, pessoal, financeiro, nfe, marketing, comercial, compras |  | banco |
 | `phone_type` (enum) | celular_corporativo, fixo_comercial, celular_pessoal, invalido |  | banco |
-| … +232 linhas — lista completa em `context.json` | | | |
+| … +233 linhas — lista completa em `context.json` | | | |
 
 ## Dados de referência (seed — planos, categorias, perfis fixos)
 

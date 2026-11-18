@@ -3367,6 +3367,10 @@
   "src/components/dashboard/RelationshipStatsPanel.tsx": [
    "src/components/ui/card.tsx",
    "src/components/ui/progress.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/data/analyticsData.ts",
+   "src/hooks/useActivityOverview.ts",
+   "src/lib/errorMessages.ts",
    "src/lib/utils.ts"
   ],
   "src/components/dashboard/SmartNotificationsCard.tsx": [
@@ -7445,6 +7449,7 @@
    "src/hooks/useAuth.tsx"
   ],
   "src/data/analyticsData.ts": [
+   "src/hooks/useActivityOverview.ts",
    "src/lib/tab-utils.ts"
   ],
   "src/data/carnegieAppreciation.ts": [
@@ -7655,6 +7660,11 @@
    "src/integrations/supabase/client.ts",
    "src/integrations/supabase/types.ts",
    "src/lib/logger.ts"
+  ],
+  "src/hooks/useActivityOverview.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/lib/externalData.ts"
   ],
   "src/hooks/useAdvancedTriggers.ts": [
    "src/data/triggersAdvancedData.ts",
@@ -9576,16 +9586,15 @@
    "src/components/seo/SEOHead.tsx",
    "src/components/triggers/AdvancedTriggersPanel.tsx",
    "src/components/triggers/TriggerAnalytics.tsx",
-   "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/select.tsx",
    "src/components/ui/skeleton.tsx",
    "src/components/ui/tabs.tsx",
    "src/data/analyticsData.ts",
+   "src/hooks/useActivityOverview.ts",
    "src/hooks/usePageTitle.ts",
    "src/lib/tab-utils.ts",
-   "src/lib/utils.ts",
    "src/pages/analytics/AnalyticsEngagementTab.tsx",
    "src/pages/analytics/AnalyticsSentimentTab.tsx"
   ],

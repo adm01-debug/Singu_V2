@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1950,
- "arestas": 8420,
+ "nos": 1951,
+ "arestas": 8427,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -10,7 +10,7 @@
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 544
+   "importado_por": 543
   },
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -18,15 +18,15 @@
   },
   {
    "arquivo": "src/lib/utils.ts",
-   "importado_por": 424
+   "importado_por": 423
   },
   {
    "arquivo": "src/hooks/useAuth.tsx",
-   "importado_por": 337
+   "importado_por": 338
   },
   {
    "arquivo": "src/integrations/supabase/client.ts",
-   "importado_por": 329
+   "importado_por": 330
   },
   {
    "arquivo": "src/components/ui/input.tsx",
@@ -34,7 +34,7 @@
   },
   {
    "arquivo": "src/components/ui/skeleton.tsx",
-   "importado_por": 195
+   "importado_por": 196
   },
   {
    "arquivo": "src/lib/logger.ts",
@@ -46,7 +46,7 @@
   },
   {
    "arquivo": "src/lib/externalData.ts",
-   "importado_por": 129
+   "importado_por": 130
   },
   {
    "arquivo": "src/components/ui/select.tsx",
@@ -58,7 +58,7 @@
   },
   {
    "arquivo": "src/lib/errorMessages.ts",
-   "importado_por": 117
+   "importado_por": 118
   },
   {
    "arquivo": "supabase/functions/_shared/auth.ts",
@@ -335,7 +335,7 @@
   },
   {
    "modulo": "components/dashboard",
-   "depende_de": 12,
+   "depende_de": 13,
    "importado_por": 10
   },
   {
@@ -351,7 +351,7 @@
   {
    "modulo": "data",
    "depende_de": 3,
-   "importado_por": 11
+   "importado_por": 12
   },
   {
    "modulo": "pages/contatos",

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e3b8d5a5a6e644087a93e694d69252bb9d9b4ab0",
+  "sha": "1735cf37f6283a2e52a9927094c21e426d0ce87c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 18:17 UTC",
-  "files_total": 3348,
-  "code_files": 2877,
-  "code_lines": 410351
+  "generated_at": "2026-11-18 19:27 UTC",
+  "files_total": 3350,
+  "code_files": 2879,
+  "code_lines": 410499
  },
  "version": "1.3.2",
- "facts_hash": "1dac1431cab35129",
+ "facts_hash": "bfa8b97940c9ce50",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -252,8 +252,8 @@
   "package_manager": "bun",
   "languages": {
    ".tsx": 1158,
-   ".ts": 895,
-   ".sql": 660,
+   ".ts": 896,
+   ".sql": 661,
    ".mjs": 123,
    ".py": 21,
    ".js": 18,
@@ -41468,6 +41468,26 @@
     "tables": [
      "nurturing_workflows"
     ]
+   },
+   "get_activity_overview": {
+    "args": "p_from timestamptz, p_to timestamptz, p_bucket text DEFAULT 'week'",
+    "returns": "jsonb",
+    "lang": "sql",
+    "src": "supabase/migrations/20261118182753_get_activity_overview.sql",
+    "security_definer": false,
+    "search_path": true,
+    "body": "WITH par AS ( SELECT CASE lower(p_bucket) WHEN 'day' THEN 'day' WHEN 'month' THEN 'month' ELSE 'week' END AS b ), base AS ( SELECT i.channel, i.sentiment, i.direction, i.contact_id, i.data_interacao FROM public.interactions i WHERE i.user_id = auth.uid() AND i.data_interacao >= p_from AND i.data_interacao < p_to ), serie AS ( SELECT date_trunc((SELECT b FROM par), data_interacao) AS inicio, count(*) AS interacoes, count(DISTINCT contact_id) AS contatos FROM base GROUP BY 1 ), canal AS ( SELECT coalesce(channel,'sem_canal') AS canal, count(*) AS n, count(*) FILTER (WHERE direction = 'outbound') AS enviadas, count(*) FILTER (WHERE direction = 'inbound') AS recebidas FROM base GROUP BY 1 ), sen …",
+    "raises": [],
+    "tables": [
+     "base",
+     "canal",
+     "data_interacao",
+     "dow",
+     "interactions",
+     "par",
+     "sent",
+     "serie"
+    ]
    }
   },
   "enums": {
@@ -48910,7 +48930,8 @@
    "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
    "supabase/migrations/20261114124000_remove_duplicate_indexes.sql",
    "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
-   "supabase/migrations/20261118150043_views_security_invoker_16.sql"
+   "supabase/migrations/20261118150043_views_security_invoker_16.sql",
+   "supabase/migrations/20261118182753_get_activity_overview.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -58035,6 +58056,14 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "get_activity_overview",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261118182753_get_activity_overview.sql"
    }
   ],
   "raises": [
@@ -59391,7 +59420,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 253
+    "deps_count": 254
    },
    {
     "path": "",
@@ -65850,6 +65879,14 @@
     "file": "src/hooks/useActivityLogger.ts"
    },
    {
+    "name": "useActivityOverview",
+    "file": "src/hooks/useActivityOverview.ts"
+   },
+   {
+    "name": "useTopRelationships",
+    "file": "src/hooks/useActivityOverview.ts"
+   },
+   {
     "name": "useAdvancedTriggers",
     "file": "src/hooks/useAdvancedTriggers.ts"
    },
@@ -69103,7 +69140,7 @@
   {
    "module": "src/components",
    "files": 986,
-   "lines": 148253,
+   "lines": 148242,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -69370,10 +69407,10 @@
   {
    "module": "src/data",
    "files": 74,
-   "lines": 22050,
+   "lines": 22014,
    "tables": [],
    "exports": [
-    "analyticsData.ts: PeriodComparison, calcChange, periodOptions, getRelationshipEvolutionData, getSentimentDistributionData, getSentimentColors",
+    "analyticsData.ts: PeriodComparison, calcChange, periodOptions, getSentimentColors, PontoEvolucao, toRelationshipEvolution",
     "anchorTrackingData.ts: AnchorSuggestion, COMMON_POSITIVE_ANCHORS, COMMON_NEGATIVE_ANCHORS",
     "carnegieAppreciation.ts: APPRECIATION_TEMPLATES, APPRECIATION_TIMING, APPRECIATION_BY_DISC, APPRECIATION_GAP_THRESHOLDS, APPRECIATION_FORMULAS, RECIPROCITY_INDICATORS",
     "carnegieCriticismDetector.ts: CRITICAL_PATTERNS, POSITIVE_ALTERNATIVES, CRITICISM_PRINCIPLES, detectCriticalLanguage, calculateCriticismScore, rewriteWithoutCriticism",
@@ -69549,8 +69586,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 435,
-   "lines": 57226,
+   "files": 436,
+   "lines": 57331,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -69771,6 +69808,7 @@
     "useActionToast.ts: useActionToast",
     "useActiveAlerts.ts: ActiveAlert, useActiveAlerts",
     "useActivityLogger.ts: useActivityLogger",
+    "useActivityOverview.ts: PeriodoAtividade, PontoSerie, TotalCanal, TotalSentimento, TotalDiaSemana, ResumoAtividade",
     "useAdvancedTriggers.ts: useAdvancedTriggers",
     "useAiAssistant.ts: ChatThread, ChatMessage, useAiAssistant",
     "useAiGatewayCriticalToast.ts: useAiGatewayCriticalToast",
@@ -69797,8 +69835,7 @@
     "useBestTimeToContact.ts: TimeSlot, ContactTimeAnalysis, useBestTimeToContact",
     "useBirthdayContacts.ts: useBirthdayContacts",
     "useBulkImport.ts: ImportEntityType, mapImportBatch, useBulkImport",
-    "useBulkRevalidate.ts: BulkRevalidateKind, BulkRevalidateStatus, BulkRevalidateFilters, BulkRevalidateResult, useBulkRevalidatePreview, useBulkRevalidate",
-    "useBulkSelection.ts: useBulkSelection"
+    "useBulkRevalidate.ts: BulkRevalidateKind, BulkRevalidateStatus, BulkRevalidateFilters, BulkRevalidateResult, useBulkRevalidatePreview, useBulkRevalidate"
    ],
    "docs": [
     "useAdvancedTriggers.ts: ============================================== ADVANCED TRIGGERS HOOK - Enterprise Mental Trigger Analysis Provides trigger chains, saturation detection, timing, and A/B testing ==============================================",
@@ -69852,6 +69889,7 @@
     "src/hooks/useActiveAlerts.ts",
     "src/hooks/useActivityLogger.test.tsx",
     "src/hooks/useActivityLogger.ts",
+    "src/hooks/useActivityOverview.ts",
     "src/hooks/useAdvancedTriggers.ts",
     "src/hooks/useAiAssistant.ts",
     "src/hooks/useAiGatewayCriticalToast.ts",
@@ -69917,8 +69955,7 @@
     "src/hooks/useCompanyIntelligence.ts",
     "src/hooks/useCompanyProfileAnalytics.ts",
     "src/hooks/useCompanyRelatedData.ts",
-    "src/hooks/useCompanyViews.ts",
-    "src/hooks/useCompatibilityAlerts.ts"
+    "src/hooks/useCompanyViews.ts"
    ]
   },
   {
@@ -70119,7 +70156,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28619,
+   "lines": 28637,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -70476,7 +70513,7 @@
   {
    "module": "supabase/functions",
    "files": 174,
-   "lines": 26832,
+   "lines": 26834,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -70751,8 +70788,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 487,
-   "lines": 43284,
+   "files": 488,
+   "lines": 43354,
    "tables": [
     "users"
    ],
@@ -71708,6 +71745,7 @@
      "src/components/triggers/template-history/useTemplateHistoryMetrics.ts",
      "src/components/triggers/trigger-analytics/useTriggerAnalyticsData.ts",
      "src/hooks/useAIApprovals.ts",
+     "src/hooks/useActivityOverview.ts",
      "src/hooks/useBIAdvanced.ts",
      "src/hooks/useBehaviorAlerts.ts",
      "src/hooks/useBehavioralProfilesList.ts",
@@ -80152,6 +80190,11 @@
     "values": "AIDA | PAS | FAB | 4Ps | Storytelling | None"
    },
    {
+    "file": "src/hooks/useActivityOverview.ts",
+    "name": "PeriodoAtividade",
+    "values": "7d | 30d | 90d | 365d"
+   },
+   {
     "file": "src/hooks/useAttribution.ts",
     "name": "AttributionModel",
     "values": "first | last | linear | u_shape | w_shape | time_decay"
@@ -82079,6 +82122,10 @@
     "msg": "Erro ao exportar CSV: "
    },
    {
+    "file": "src/components/dashboard/RelationshipStatsPanel.tsx",
+    "msg": ">\n          <p className="
+   },
+   {
     "file": "src/components/dashboard/StrategicNextStepsCard.tsx",
     "msg": "Erro ao agendar"
    },
@@ -82797,6 +82844,10 @@
    {
     "file": "src/hooks/useAccessSecurity.ts",
     "msg": "Não autenticado"
+   },
+   {
+    "file": "src/hooks/useActivityOverview.ts",
+    "msg": "Resposta vazia da agregacao de atividade"
    },
    {
     "file": "src/hooks/useAiAssistant.ts",
@@ -84453,6 +84504,10 @@
    {
     "file": "src/pages/AdminTelemetria.tsx",
     "msg": "Erro ao limpar dados antigos"
+   },
+   {
+    "file": "src/pages/Analytics.tsx",
+    "msg": ">\n            <p className="
    },
    {
     "file": "src/pages/Auth.tsx",
@@ -99689,6 +99744,11 @@
     "value": "20"
    },
    {
+    "file": "src/data/analyticsData.ts",
+    "name": "TOTAL_CANAIS",
+    "value": "5"
+   },
+   {
     "file": "src/domain/forecastSimulation.ts",
     "name": "DAY_MS",
     "value": "86"
@@ -113987,6 +114047,12 @@
     "body": "const change = previous === 0 ? 0 : Math.round(((current - previous) / previous) * 100); return { current, previous, change, changeType: change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral', };"
    },
    {
+    "file": "src/data/analyticsData.ts",
+    "name": "taxaPositiva",
+    "params": "dados?: ResumoAtividade",
+    "body": "const total = dados?.totais.interacoes ?? 0; if (total === 0) return 0; const positivas = (dados?.por_sentimento ?? []) .filter(s => s.sentimento === 'positivo' || s.sentimento === 'positive') .reduce((soma, s) => soma + s.total, 0); return Math.round((positivas / total) * 100);"
+   },
+   {
     "file": "src/data/carnegieAppreciation.ts",
     "name": "generateAppreciationSuggestion",
     "params": "contactName: string, discProfile: DiscProfileKey, daysSinceLast: number",
@@ -115300,6 +115366,18 @@
    },
    {
     "file": "src/hooks/useActiveAlerts.ts",
+    "line": "staleTime: 5 * 60 * 1000,"
+   },
+   {
+    "file": "src/hooks/useActivityOverview.ts",
+    "line": "const fim = new Date(Date.now() - deslocamento * dias * 24 * 60 * 60 * 1000);"
+   },
+   {
+    "file": "src/hooks/useActivityOverview.ts",
+    "line": "const inicio = new Date(fim.getTime() - dias * 24 * 60 * 60 * 1000);"
+   },
+   {
+    "file": "src/hooks/useActivityOverview.ts",
     "line": "staleTime: 5 * 60 * 1000,"
    },
    {
@@ -145801,6 +145879,26 @@
     "tables": [
      "nurturing_workflows"
     ]
+   },
+   "get_activity_overview": {
+    "args": "p_from timestamptz, p_to timestamptz, p_bucket text DEFAULT 'week'",
+    "returns": "jsonb",
+    "lang": "sql",
+    "src": "supabase/migrations/20261118182753_get_activity_overview.sql",
+    "security_definer": false,
+    "search_path": true,
+    "body": "WITH par AS ( SELECT CASE lower(p_bucket) WHEN 'day' THEN 'day' WHEN 'month' THEN 'month' ELSE 'week' END AS b ), base AS ( SELECT i.channel, i.sentiment, i.direction, i.contact_id, i.data_interacao FROM public.interactions i WHERE i.user_id = auth.uid() AND i.data_interacao >= p_from AND i.data_interacao < p_to ), serie AS ( SELECT date_trunc((SELECT b FROM par), data_interacao) AS inicio, count(*) AS interacoes, count(DISTINCT contact_id) AS contatos FROM base GROUP BY 1 ), canal AS ( SELECT coalesce(channel,'sem_canal') AS canal, count(*) AS n, count(*) FILTER (WHERE direction = 'outbound') AS enviadas, count(*) FILTER (WHERE direction = 'inbound') AS recebidas FROM base GROUP BY 1 ), sen …",
+    "raises": [],
+    "tables": [
+     "base",
+     "canal",
+     "data_interacao",
+     "dow",
+     "interactions",
+     "par",
+     "sent",
+     "serie"
+    ]
    }
   },
   "db_enums": {
@@ -165181,6 +165279,14 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "get_activity_overview",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261118182753_get_activity_overview.sql"
    }
   ],
   "guards": [
@@ -181730,9 +181836,12 @@
   },
   "src/components/dashboard/RelationshipStatsPanel.tsx": {
    "path": "src/components/dashboard/RelationshipStatsPanel.tsx",
-   "lines": 392,
+   "lines": 381,
    "exports": [
     "const RelationshipStatsPanel"
+   ],
+   "errors": [
+    ">\n          <p className="
    ],
    "percents": [
     "transition={{ duration: 0.3, delay: 0.2 + index * 0.1 }}",
@@ -191025,24 +191134,41 @@
   },
   "src/data/analyticsData.ts": {
    "path": "src/data/analyticsData.ts",
-   "lines": 214,
+   "lines": 178,
    "exports": [
     "interface PeriodComparison",
     "const calcChange",
     "const periodOptions",
-    "const getRelationshipEvolutionData",
-    "const getSentimentDistributionData",
     "const getSentimentColors",
-    "const getEngagementByChannelData",
-    "const getEngagementRadarData",
-    "const getTopPerformersData",
-    "const getMetricsStats"
+    "interface PontoEvolucao",
+    "const toRelationshipEvolution",
+    "interface FatiaSentimento",
+    "const toSentimentDistribution",
+    "interface EngajamentoCanal",
+    "const toEngagementByChannel",
+    "interface AtividadeDiaSemana",
+    "const toWeekdayActivity",
+    "interface MetricasPeriodo",
+    "const toMetricsStats",
+    "interface EixoEngajamento",
+    "const toEngagementRadar"
+   ],
+   "params": [
+    {
+     "name": "TOTAL_CANAIS",
+     "value": "5"
+    }
    ],
    "calc_fns": [
     {
      "name": "calcChange",
      "params": "current: number, previous: number",
      "body": "const change = previous === 0 ? 0 : Math.round(((current - previous) / previous) * 100); return { current, previous, change, changeType: change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral', };"
+    },
+    {
+     "name": "taxaPositiva",
+     "params": "dados?: ResumoAtividade",
+     "body": "const total = dados?.totais.interacoes ?? 0; if (total === 0) return 0; const positivas = (dados?.por_sentimento ?? []) .filter(s => s.sentimento === 'positivo' || s.sentimento === 'positive') .reduce((soma, s) => soma + s.total, 0); return Math.round((positivas / total) * 100);"
     }
    ]
   },
@@ -194420,6 +194546,55 @@
    ],
    "hooks": [
     "useActivityLogger"
+   ]
+  },
+  "src/hooks/useActivityOverview.ts": {
+   "path": "src/hooks/useActivityOverview.ts",
+   "lines": 105,
+   "exports": [
+    "type PeriodoAtividade",
+    "interface PontoSerie",
+    "interface TotalCanal",
+    "interface TotalSentimento",
+    "interface TotalDiaSemana",
+    "interface ResumoAtividade",
+    "function janelaDoPeriodo",
+    "function useActivityOverview",
+    "interface RelacionamentoTopo",
+    "function useTopRelationships"
+   ],
+   "tables": [
+    {
+     "table": "contacts",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "contacts": [
+     "deleted_at",
+     "full_name",
+     "id",
+     "relationship_score",
+     "user_id"
+    ]
+   },
+   "errors": [
+    "Resposta vazia da agregacao de atividade"
+   ],
+   "enums": [
+    {
+     "name": "PeriodoAtividade",
+     "values": "7d | 30d | 90d | 365d"
+    }
+   ],
+   "hooks": [
+    "useActivityOverview",
+    "useTopRelationships"
+   ],
+   "temporal": [
+    "const fim = new Date(Date.now() - deslocamento * dias * 24 * 60 * 60 * 1000);",
+    "const inicio = new Date(fim.getTime() - dias * 24 * 60 * 60 * 1000);",
+    "staleTime: 5 * 60 * 1000,"
    ]
   },
   "src/hooks/useAdvancedTriggers.ts": {
@@ -214885,9 +215060,12 @@
   },
   "src/pages/Analytics.tsx": {
    "path": "src/pages/Analytics.tsx",
-   "lines": 394,
+   "lines": 406,
    "exports": [
     "default Analytics"
+   ],
+   "errors": [
+    ">\n            <p className="
    ]
   },
   "src/pages/Assistente.tsx": {
@@ -217134,7 +217312,7 @@
   },
   "src/pages/analytics/AnalyticsEngagementTab.tsx": {
    "path": "src/pages/analytics/AnalyticsEngagementTab.tsx",
-   "lines": 95,
+   "lines": 101,
    "exports": [
     "function AnalyticsEngagementTab"
    ]
@@ -224241,7 +224419,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 161,
+   "lines": 163,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -232388,6 +232566,10 @@
    "lines": 99,
    "uses_service_role": true
   },
+  "supabase/migrations/20261118182753_get_activity_overview.sql": {
+   "path": "supabase/migrations/20261118182753_get_activity_overview.sql",
+   "lines": 70
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -233061,10 +233243,37 @@
   }
  },
  "git": {
-  "sha": "e3b8d5a5a6e644087a93e694d69252bb9d9b4ab0",
+  "sha": "1735cf37f6283a2e52a9927094c21e426d0ce87c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "1735cf3",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "feat: agregação real por período em /analytics e painel de relacionamento (#253)",
+    "files": [
+     "ESTADO_ATUAL.md",
+     "PLANEJADO_NAO_EXECUTADO.md",
+     "docs/estado/04_REVOPS_VENDAS.md",
+     "docs/lacunas/B1_reverificacao_estado_01_04.md",
+     "docs/lacunas/B2_reverificacao_estado_05_10.md",
+     "docs/lacunas/D_ui_rotas_componentes.md",
+     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_CONTRATOS.md",
+     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_UX.md",
+     "docs/qa/security-definer-audit.md",
+     "scripts/docs/citacoes-baseline.json",
+     "src/components/dashboard/RelationshipStatsPanel.tsx",
+     "src/data/analyticsData.ts",
+     "src/hooks/useActivityOverview.ts",
+     "src/pages/Analytics.tsx",
+     "src/pages/analytics/AnalyticsEngagementTab.tsx",
+     "src/pages/analytics/AnalyticsSentimentTab.tsx",
+     "supabase/functions/external-data/tables.ts",
+     "supabase/migrations/20261118182753_get_activity_overview.sql",
+     "tests/rls/security_definer_hardening.sql"
+    ]
+   },
    {
     "sha": "e3b8d5a",
     "date": "2026-11-18",
@@ -233522,21 +233731,12 @@
     "files": [
      "docs/prod-readiness.md"
     ]
-   },
-   {
-    "sha": "31ec993",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "chore(docs): bump prod-readiness para o head pos-merge 221 (#222)",
-    "files": [
-     "docs/prod-readiness.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    8
+    7
    ],
    [
     ".github/workflows/ci.yml",
@@ -233563,55 +233763,55 @@
     2
    ],
    [
-    "src/hooks/useEmotionalIntelligence.ts",
+    "ESTADO_ATUAL.md",
     1
    ],
    [
-    "src/hooks/useHiddenObjections.ts",
+    "PLANEJADO_NAO_EXECUTADO.md",
     1
    ],
    [
-    "src/components/dashboard/TopContactsCard.tsx",
+    "docs/estado/04_REVOPS_VENDAS.md",
     1
    ],
    [
-    "src/components/import/BulkImportDialog.tsx",
+    "docs/lacunas/B1_reverificacao_estado_01_04.md",
     1
    ],
    [
-    "src/components/pipeline/PipelineFilterBar.tsx",
+    "docs/lacunas/B2_reverificacao_estado_05_10.md",
     1
    ],
    [
-    "src/components/pipeline/pipelineFilters.ts",
+    "docs/lacunas/D_ui_rotas_componentes.md",
     1
    ],
    [
-    "src/pages/Pipeline.tsx",
+    "docs/lacunas/MATRIZ_RECONCILIADA_20261012_CONTRATOS.md",
     1
    ],
    [
-    "src/pages/contatos/ContatosContent.tsx",
+    "docs/lacunas/MATRIZ_RECONCILIADA_20261012_UX.md",
     1
    ],
    [
-    "supabase/functions/suggest-next-action/index.ts",
+    "docs/qa/security-definer-audit.md",
     1
    ],
    [
-    "src/components/layout/AppSidebar.tsx",
+    "scripts/docs/citacoes-baseline.json",
     1
    ],
    [
-    "src/pages/Auth.tsx",
+    "src/components/dashboard/RelationshipStatsPanel.tsx",
     1
    ],
    [
-    "src/hooks/useSequences.ts",
+    "src/data/analyticsData.ts",
     1
    ],
    [
-    "src/pages/Deduplicacao.tsx",
+    "src/hooks/useActivityOverview.ts",
     1
    ]
   ]
