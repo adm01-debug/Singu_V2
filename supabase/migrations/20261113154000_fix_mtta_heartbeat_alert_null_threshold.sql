@@ -1,4 +1,4 @@
-﻿-- fix(mtta): preenche threshold_pct/consumed_pct (NOT NULL) no alerta de heartbeat travado
+-- fix(mtta): preenche threshold_pct/consumed_pct (NOT NULL) no alerta de heartbeat travado
 -- Causa: INSERT ANTIGO omitia as colunas (NOT NULL sem default) -> a funcao
 -- quebrava no momento do alerta (null value in column "threshold_pct").
 -- Corrige criando/recriando a funcao que alimenta o cron mtta-auto-ack-heartbeat-watchdog.
