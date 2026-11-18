@@ -3965,7 +3965,7 @@
    "hooks_exportados": [
     "useDealVelocity"
    ],
-   "linhas": 95,
+   "linhas": 158,
    "dominio": "hooks",
    "tabelas": [
     "contacts"

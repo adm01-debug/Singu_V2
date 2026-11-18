@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "a5987fd1795ef9a3d30cf759ba5403a29f2709a4",
+  "commit": "d05b650bc1ea775bb62d27642404a51b023fb0bd",
   "branch": "main",
-  "data_commit": "2026-11-18T16:52:25-03:00",
+  "data_commit": "2026-11-18T17:03:44-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "d05b650",
+    "data": "2026-11-18",
+    "assunto": "fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)"
+   },
    {
     "sha": "a5987fd",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "8d6aaa9",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 226"
-   },
-   {
-    "sha": "8a4e6f2",
-    "data": "2026-11-14",
-    "assunto": "chore(docs): bump prod-readiness pos-merge 225 (#226)"
    }
   ],
-  "arquivos_mudados_7d": 430,
+  "arquivos_mudados_7d": 432,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -192,7 +192,7 @@
     "mudancas": 12
    },
    {
-    "pasta": "src/components/crm",
+    "pasta": "src/components/analytics",
     "mudancas": 10
    }
   ],
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 91
+    "commits": 92
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3245,
   "arquivos_codigo": 2217,
-  "linhas_codigo": 414591,
+  "linhas_codigo": 414654,
   "rotas": 114,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -668,7 +668,7 @@
   },
   "src/hooks": {
    "arquivos": 436,
-   "linhas": 57412
+   "linhas": 57475
   },
   "src/integrations": {
    "arquivos": 3,

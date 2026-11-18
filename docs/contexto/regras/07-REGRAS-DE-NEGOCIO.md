@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a5987fd179` · branch `main` · 2026-11-18 19:56 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d05b650bc1` · branch `main` · 2026-11-18 20:07 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1429,7 +1429,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `completed` | compara, escreve | `src/components/company-detail/CompanyCommercialTab.tsx`<br>`src/components/contact-detail/commercial-tab/TasksCard.tsx`<br>`src/components/gamification/UserGoalsWidget.tsx`<br>`src/components/lux/LuxHistoryTimeline.tsx`<br>`src/components/lux/LuxIntelligencePanel.tsx`<br>… +9 |
 | `status` | `connected` | compara | `src/components/whatsapp/WhatsAppDashboard.tsx` |
-| … +175 linhas — lista completa em `context.json` | | | |
+| … +176 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -3232,7 +3232,6 @@ _nenhum item encontrado_
 | `openEndedQuestions: Math.floor(questionCount * 0.3),` | `src/hooks/useCarnegieAnalysis.ts` |
 | `reflectiveStatements: Math.floor(statementCount * 0.2),` | `src/hooks/useCarnegieAnalysis.ts` |
 | `} else if (last30Days < previous30Days * 0.5) {` | `src/hooks/useChurnPrediction.ts` |
-| `projectedConversions: Math.round(totalActive * 0.3),` | `src/hooks/useDealVelocity.ts` |
 | `stagnation * 0.4 + sentimentScore * 0.25 + engagement * 0.25 + age * 0.1` | `src/hooks/useDealsAtRisk.ts` |
 | `value: Math.min(1 + interactionCount * 0.5, 5),` | `src/hooks/useNetworkGraph.ts` |
 | `const score = Math.round((brainAlignment * 0.3 + stimuliMatch * 0.3 + chemicalBalance * 0.2 + communicationFit * 0.2));` | `src/hooks/useNeuromarketing.ts` |
@@ -3350,6 +3349,7 @@ _nenhum item encontrado_
 | `PAGE_SIZE` | `50` | `src/hooks/useContacts.ts` |
 | `MAX_HISTORY` | `10` | `src/hooks/useConversationalSearch.ts` |
 | `AVG_CYCLE_DAYS` | `60` | `src/hooks/useDealForecastConfidence.ts` |
+| `MS_PER_DAY` | `1000` | `src/hooks/useDealVelocity.ts` |
 | `PAGE` | `1000` | `src/hooks/useEmailCampaigns.ts` |
 | `BATCH` | `500` | `src/hooks/useEmailCampaigns.ts` |
 | `FORCA_BASE_POSITIVA` | `7` | `src/hooks/useEmotionalIntelligence.ts` |
@@ -3695,6 +3695,7 @@ _nenhum item encontrado_
 | `? Math.floor((Date.now() - lastInbound.getTime()) / (1000 * 60 * 60 * 24))` | `src/hooks/useDealSlipRisk.ts` |
 | `const totalAge = Math.floor((Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24));` | `src/hooks/useDealSlipRisk.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useDealSlipRisk.ts` |
+| `const MS_PER_DAY = 1000 * 60 * 60 * 24;` | `src/hooks/useDealVelocity.ts` |
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/useDealVelocity.ts` |
 | `gcTime: 20 * 60 * 1000,` | `src/hooks/useDealVelocityBenchmark.ts` |
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/useDealVelocityBenchmark.ts` |
@@ -3769,8 +3770,7 @@ _nenhum item encontrado_
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 3 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| `const threeMonthsAgo = subDays(now, 90);` | `src/hooks/usePortfolioHealth.ts` |
-| … +213 linhas — lista completa em `context.json` | |
+| … +214 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 

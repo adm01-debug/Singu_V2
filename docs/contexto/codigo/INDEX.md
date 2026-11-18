@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `a5987fd1795ef9a3d30cf759ba5403a29f2709a4` (2026-11-18T16:52:25-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d05b650bc1ea775bb62d27642404a51b023fb0bd` (2026-11-18T17:03:44-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3245 |
 | arquivos_codigo | 2217 |
-| linhas_codigo | 414591 |
+| linhas_codigo | 414654 |
 | rotas | 114 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -433,8 +433,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21194 nós · 35898 arestas · 2114 comunidades · grafo do commit `a5987fd1`
-- comunidades maiores: _shared/auth.ts (309), sonner (299), framer-motion (261), 02_tables.sql (259), ref_lib (258), react (245), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (226), react-router-dom (226), lucide-react (220), ref_hooks (212), useAuth (211)
+- 21198 nós · 35904 arestas · 2116 comunidades · grafo do commit `d05b650b`
+- comunidades maiores: ref_components (304), sonner (294), framer-motion (277), ref_lib (269), 02_tables.sql (259), lucide-react (245), react-router-dom (244), 📖 Dicionário de Dados — SINGU CRM (227), useAuth (213), react (210), date-fns (208), ref_hooks (205)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -570,6 +570,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `d05b650` fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)
 - 2026-11-18 `a5987fd` fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)
 - 2026-11-18 `1735cf3` feat: agregação real por período em /analytics e painel de relacionamento (#253)
 - 2026-11-18 `e3b8d5a` fix(nlp): confianca de objecao e forca de indicador saem da evidencia (#249)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `10085c6` fix(db): recupera trabalho pendente de outros agentes nas branches (#238)
 - 2026-11-18 `d136c19` fix(db): remove 18 indices exatamente duplicados (auditoria ao vivo) (#232)
 - 2026-11-18 `986ffa4` build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)
-- 2026-11-18 `563e484` build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
