@@ -1052,6 +1052,9 @@
    "src/hooks/useDealVelocity.ts",
    "src/lib/utils.ts"
   ],
+  "src/components/analytics/DemoContactNotice.tsx": [
+   "src/components/ui/alert.tsx"
+  ],
   "src/components/analytics/DiscDashboardWidget.tsx": [
    "src/components/ui/badge.tsx",
    "src/components/ui/card.tsx",
@@ -9601,6 +9604,7 @@
    "src/components/analytics/DailyStatsWidget.tsx",
    "src/components/analytics/DataHealthWidget.tsx",
    "src/components/analytics/DealVelocityPanel.tsx",
+   "src/components/analytics/DemoContactNotice.tsx",
    "src/components/analytics/DiscDashboardWidget.tsx",
    "src/components/analytics/NLPAnalyticsPanel.tsx",
    "src/components/analytics/NeuroPortfolioDashboard.tsx",

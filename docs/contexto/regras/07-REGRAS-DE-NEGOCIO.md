@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `213464a1d4` · branch `main` · 2026-11-18 22:20 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b2d6c1ac30` · branch `main` · 2026-11-18 22:23 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4258,6 +4258,7 @@ _nenhum item encontrado_
 | Não foi possível copiar | `src/components/analytics/ApproachRecommendationPanel.tsx` |
 | Não foi possível detectar novos alertas. Tente novamente. | `src/components/analytics/BehaviorAlertsPanel.tsx` |
 |  className= | `src/components/analytics/DISCAnalyticsPanel.tsx` |
+| ;  /**  * Aviso de modo demonstração.  *  * Os painéis de PNL e de gatilhos avançados aceitam  | `src/components/analytics/DemoContactNotice.tsx` |
 | Não foi possível salvar a análise RFM. Tente novamente. | `src/components/analytics/RFMAnalysisPanel.tsx` |
 | Erro ao enviar email de recuperação. | `src/components/auth/ForgotPasswordForm.tsx` |
 |  className= | `src/components/auth/MFAGuard.tsx` |
@@ -4382,8 +4383,7 @@ _nenhum item encontrado_
 | Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar no bundle. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar. | `src/components/intelligence/CrossRefTab.tsx` |
-| Falha ao buscar entidades. | `src/components/intelligence/Entity360Tab.tsx` |
-| … +782 linhas — lista completa em `context.json` | |
+| … +783 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

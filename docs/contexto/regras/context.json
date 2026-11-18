@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "213464a1d4afc80ad5565cc105fcf46ca46424bd",
+  "sha": "b2d6c1ac30ee076fb5556328e9be1808305dd404",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 22:20 UTC",
-  "files_total": 3356,
-  "code_files": 2885,
-  "code_lines": 411572
+  "generated_at": "2026-11-18 22:23 UTC",
+  "files_total": 3357,
+  "code_files": 2886,
+  "code_lines": 411606
  },
  "version": "1.3.2",
- "facts_hash": "a2c40922fbd75f4d",
+ "facts_hash": "184536c59eb883bd",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -251,7 +251,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".tsx": 1161,
+   ".tsx": 1162,
    ".ts": 899,
    ".sql": 661,
    ".mjs": 123,
@@ -59422,7 +59422,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 260
+    "deps_count": 262
    },
    {
     "path": "",
@@ -65714,7 +65714,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 990,
+  "components_count": 991,
   "hooks": [
    {
     "name": "useContacts",
@@ -69201,8 +69201,8 @@
   },
   {
    "module": "src/components",
-   "files": 990,
-   "lines": 148797,
+   "files": 991,
+   "lines": 148828,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -70221,7 +70221,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28727,
+   "lines": 28730,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -81962,6 +81962,10 @@
    {
     "file": "src/components/analytics/DISCAnalyticsPanel.tsx",
     "msg": " className="
+   },
+   {
+    "file": "src/components/analytics/DemoContactNotice.tsx",
+    "msg": ";\n\n/**\n * Aviso de modo demonstração.\n *\n * Os painéis de PNL e de gatilhos avançados aceitam "
    },
    {
     "file": "src/components/analytics/RFMAnalysisPanel.tsx",
@@ -177914,6 +177918,16 @@
     "transition={{ delay: index * 0.1, duration: 0.5 }}"
    ]
   },
+  "src/components/analytics/DemoContactNotice.tsx": {
+   "path": "src/components/analytics/DemoContactNotice.tsx",
+   "lines": 31,
+   "exports": [
+    "function DemoContactNotice"
+   ],
+   "errors": [
+    ";\n\n/**\n * Aviso de modo demonstração.\n *\n * Os painéis de PNL e de gatilhos avançados aceitam "
+   ]
+  },
   "src/components/analytics/DiscDashboardWidget.tsx": {
    "path": "src/components/analytics/DiscDashboardWidget.tsx",
    "lines": 125,
@@ -215522,7 +215536,7 @@
   },
   "src/pages/Analytics.tsx": {
    "path": "src/pages/Analytics.tsx",
-   "lines": 408,
+   "lines": 411,
    "exports": [
     "default Analytics"
    ],
@@ -233720,10 +233734,20 @@
   }
  },
  "git": {
-  "sha": "213464a1d4afc80ad5565cc105fcf46ca46424bd",
+  "sha": "b2d6c1ac30ee076fb5556328e9be1808305dd404",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "b2d6c1a",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(analytics): avisa que as abas PNL e Gatilhos usam contato fictício (#260)",
+    "files": [
+     "src/components/analytics/DemoContactNotice.tsx",
+     "src/pages/Analytics.tsx"
+    ]
+   },
    {
     "sha": "213464a",
     "date": "2026-11-18",
@@ -234223,21 +234247,16 @@
      "src/types/disc.ts",
      "tsconfig.app.json"
     ]
-   },
-   {
-    "sha": "03b943a",
-    "date": "2026-11-14",
-    "author": "adm01-debug",
-    "subject": "chore(docs): bump prod-readiness pos-merge 228 (final) (#229)",
-    "files": [
-     "docs/prod-readiness.md"
-    ]
    }
   ],
   "hot_files": [
    [
     ".github/workflows/ci.yml",
     4
+   ],
+   [
+    "src/pages/Analytics.tsx",
+    3
    ],
    [
     "src/pages/Contatos.tsx",
@@ -234256,10 +234275,6 @@
     2
    ],
    [
-    "src/pages/Analytics.tsx",
-    2
-   ],
-   [
     "src/pages/Interacoes.tsx",
     2
    ],
@@ -234274,6 +234289,10 @@
    [
     ".github/workflows/inventario-estado-semanal.yml",
     2
+   ],
+   [
+    "src/components/analytics/DemoContactNotice.tsx",
+    1
    ],
    [
     "src/components/carnegie/CarnegieDashboard.tsx",
@@ -234309,10 +234328,6 @@
    ],
    [
     "src/components/reports/widgets/WidgetShell.tsx",
-    1
-   ],
-   [
-    "src/components/reports/widgets/index.ts",
     1
    ]
   ]

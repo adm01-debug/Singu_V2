@@ -1468,13 +1468,13 @@
   },
   {
    "modulo": "components/analytics",
-   "arquivos": 42,
+   "arquivos": 43,
    "testes": 2,
-   "linhas": 6968,
+   "linhas": 6999,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
-   "componentes": 41,
+   "componentes": 42,
    "hooks_locais": [
     "useAccountChurnPrediction",
     "useAccountPlan",
@@ -12144,7 +12144,7 @@
    "modulo": "pages",
    "arquivos": 105,
    "testes": 6,
-   "linhas": 20985,
+   "linhas": 20988,
    "itens_menu": [
     "ABM",
     "Análise PNL",

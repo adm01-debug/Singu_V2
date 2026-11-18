@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1060,
+ "total": 1061,
  "orfaos": 39,
  "nomes_duplicados": {
   "ABM": [
@@ -1853,6 +1853,20 @@
    "tabelas": [],
    "edges": [],
    "usado_por": 3,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/analytics/DemoContactNotice.tsx",
+   "exports": [
+    "DemoContactNotice"
+   ],
+   "export_default": null,
+   "linhas": 31,
+   "dominio": "components/analytics",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
    "orfao": false
   },
   {
@@ -13887,7 +13901,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 19,
+   "usado_por": 20,
    "orfao": false
   },
   {
@@ -15687,7 +15701,7 @@
     "Analytics"
    ],
    "export_default": "Analytics",
-   "linhas": 408,
+   "linhas": 411,
    "dominio": "pages",
    "hooks_locais": [
     "useActivityOverview",
