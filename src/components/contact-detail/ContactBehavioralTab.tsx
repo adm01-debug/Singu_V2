@@ -30,6 +30,7 @@ const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget')
 const EmotionalTrendWidget = lazy(() => import('./EmotionalTrendWidget'));
 const EmotionalTrendByContactWidget = lazy(() => import('./EmotionalTrendByContactWidget'));
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DISCCommunicationLogsPanel } from '@/components/contact-detail/DISCCommunicationLogsPanel';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -181,6 +182,7 @@ import type { Contact } from '@/hooks/useContactDetail';
 
       <TabsContent value="disc" className="space-y-4">
         <DiscSubTab contactId={contact.id} />
+        <DISCCommunicationLogsPanel contactId={contact.id} />
       </TabsContent>
 
       <TabsContent value="vak">
