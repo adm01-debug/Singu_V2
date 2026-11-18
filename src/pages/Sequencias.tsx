@@ -14,10 +14,12 @@ import { SequenceMetricsCard } from '@/components/sequences/SequenceMetricsCard'
 import { SequenceDetailDrawer } from '@/components/sequences/SequenceDetailDrawer';
 import { SequenceEnrollDialog } from '@/components/sequences/SequenceEnrollDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { ErrorState } from '@/components/feedback';
+import { parseApiError } from '@/lib/errorMessages';
 
 export default function Sequencias() {
   usePageTitle('Sequências');
-  const { sequences, loading, createSequence, toggleStatus, deleteSequence, enrollContact, creating, enrolling } = useSequences();
+  const { sequences, loading, createSequence, toggleStatus, deleteSequence, enrollContact, creating, enrolling, error: loadError, refetch } = useSequences();
   const processor = useSequenceProcessor();
   const [formOpen, setFormOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -88,6 +90,16 @@ export default function Sequencias() {
               <Card key={i}><CardContent className="p-4 h-40 animate-pulse bg-secondary/30" /></Card>
             ))}
           </div>
+        ) : loadError ? (
+          <Card>
+            <CardContent className="p-2">
+              <ErrorState
+                title="Não foi possível carregar as sequências"
+                description={parseApiError(loadError)}
+                onRetry={() => { void refetch(); }}
+              />
+            </CardContent>
+          </Card>
         ) : sequences.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center space-y-3">

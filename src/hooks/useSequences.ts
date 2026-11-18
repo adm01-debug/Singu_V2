@@ -215,7 +215,7 @@ export function useSequences() {
   const qc = useQueryClient();
   const userId = user?.id;
 
-  const { data: sequences = [], isLoading, error } = useQuery({
+  const { data: sequences = [], isLoading, error, refetch } = useQuery({
     queryKey: ['sequences', userId],
     queryFn: async () => {
       if (!userId) return [];
@@ -337,6 +337,7 @@ export function useSequences() {
     sequences,
     loading: isLoading,
     error,
+    refetch,
     createSequence: createSequence.mutateAsync,
     toggleStatus: toggleStatus.mutateAsync,
     deleteSequence: deleteSequence.mutateAsync,

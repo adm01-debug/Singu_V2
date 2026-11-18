@@ -16,11 +16,14 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import type { TablesUpdate } from '@/integrations/supabase/types';
 import { parseApiError } from '@/lib/errorMessages';
+import { ErrorState } from '@/components/feedback';
+import { useNavigate } from 'react-router-dom';
 
 export default function MarketingFormDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { user } = useAuth();
-  const { data: form, isLoading } = useForm(id);
+  const { data: form, isLoading, error: loadError, isFetching, refetch } = useForm(id);
   const { data: submissions = [] } = useFormSubmissions(id);
   const qc = useQueryClient();
 
@@ -30,7 +33,35 @@ export default function MarketingFormDetail() {
     if (form) setDraft(form);
   }, [form]);
 
-  if (isLoading || !draft) return <div className="container py-8 text-sm text-muted-foreground">Carregando...</div>;
+  if (isLoading) return <div className="container py-8 text-sm text-muted-foreground">Carregando...</div>;
+
+  if (loadError) {
+    return (
+      <div className="container max-w-3xl py-8">
+        <ErrorState
+          title="Não foi possível carregar o formulário"
+          description={parseApiError(loadError)}
+          onRetry={() => { void refetch(); }}
+          isRetrying={isFetching}
+        />
+      </div>
+    );
+  }
+
+  if (form === null) {
+    return (
+      <div className="container max-w-3xl py-8">
+        <ErrorState
+          type="notFound"
+          title="Formulário não encontrado"
+          description="Ele pode ter sido excluído ou pertencer a outro usuário."
+          secondaryAction={{ label: 'Voltar para Marketing', onClick: () => navigate('/marketing') }}
+        />
+      </div>
+    );
+  }
+
+  if (!draft) return <div className="container py-8 text-sm text-muted-foreground">Carregando...</div>;
 
   const save = async () => {
     if (!user) return;
