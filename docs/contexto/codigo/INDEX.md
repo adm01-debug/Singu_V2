@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `217bbf088a276f1a517a9a31f7fb3103f92d9584` (2026-11-18T17:31:07-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `72976e775d1e9aeeec972c67af0a52e35076251f` (2026-11-18T17:39:08-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3247 |
 | arquivos_codigo | 2219 |
-| linhas_codigo | 414989 |
+| linhas_codigo | 414998 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -115,7 +115,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/triggers | 0 | 0 | 33 | 12 | 1 | 10 |
 | components/ui | 0 | 0 | 72 | 10 | 0 | 2 |
 | components/win-loss | 0 | 0 | 8 | 17 | 1 | 5 |
-| data | 0 | 0 | 46 | 5 | 1 | 7 |
+| data | 0 | 0 | 46 | 5 | 0 | 6 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
 | hooks | 0 | 0 | 377 | 632 | 54 | 207 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
@@ -434,7 +434,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21207 nós · 35919 arestas · 2113 comunidades · grafo do commit `217bbf08`
+- 21207 nós · 35918 arestas · 2113 comunidades · grafo do commit `72976e77`
 - comunidades maiores: ref_lib (364), react (276), _shared/auth.ts (268), ref_hooks (261), lucide-react (259), 02_tables.sql (259), react-router-dom (257), framer-motion (251), vitest (250), useAuth (242), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (196)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -571,6 +571,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `72976e7` fix(analytics): chama a RPC de agregação direto, sem passar pelo gateway (#256)
 - 2026-11-18 `217bbf0` feat(admin): termina e publica a página de Observabilidade (#254)
 - 2026-11-18 `4177a35` feat(admin): liga o resumo de auditoria ao Audit Trail (#255)
 - 2026-11-18 `d6eaeb2` feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)
@@ -585,7 +586,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `a9fdfb7` fix(db): liga security_invoker nas 16 views que ignoravam o RLS (#243)
 - 2026-11-18 `682ad79` docs(pendencias): corrige o diagnostico errado do P7 e fecha P0 e P5 (#242)
 - 2026-11-18 `adb1e39` fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)
-- 2026-11-18 `91be466` fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

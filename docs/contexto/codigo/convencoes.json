@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(analytics): chama a RPC de agregação direto, sem passar pelo gateway (#256)",
    "feat(admin): termina e publica a página de Observabilidade (#254)",
    "feat(admin): liga o resumo de auditoria ao Audit Trail (#255)",
    "feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)",
-   "fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)",
-   "fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)"
+   "fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)"
   ]
  },
  "pr_template": null,

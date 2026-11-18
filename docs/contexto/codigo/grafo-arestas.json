@@ -7671,8 +7671,7 @@
   ],
   "src/hooks/useActivityOverview.ts": [
    "src/hooks/useAuth.tsx",
-   "src/integrations/supabase/client.ts",
-   "src/lib/externalData.ts"
+   "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useAdvancedTriggers.ts": [
    "src/data/triggersAdvancedData.ts",

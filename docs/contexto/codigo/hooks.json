@@ -855,7 +855,7 @@
     "useActivityOverview",
     "useTopRelationships"
    ],
-   "linhas": 105,
+   "linhas": 114,
    "dominio": "hooks",
    "tabelas": [
     "contacts"

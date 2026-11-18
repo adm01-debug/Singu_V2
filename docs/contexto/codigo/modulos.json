@@ -9317,11 +9317,8 @@
     "useTopRelationships"
    ],
    "hooks_definidos": [],
-   "edges": [
-    "external-data"
-   ],
+   "edges": [],
    "tabelas": [
-    "activities",
     "client_values",
     "contacts",
     "emotional_states_history",
@@ -9455,7 +9452,7 @@
    "modulo": "hooks",
    "arquivos": 377,
    "testes": 23,
-   "linhas": 50413,
+   "linhas": 50422,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -14058,11 +14055,8 @@
     "useTopRelationships"
    ],
    "hooks_definidos": [],
-   "edges": [
-    "external-data"
-   ],
+   "edges": [],
    "tabelas": [
-    "activities",
     "contacts",
     "error_logs"
    ],

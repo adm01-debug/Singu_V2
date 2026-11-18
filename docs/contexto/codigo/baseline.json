@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "217bbf088a276f1a517a9a31f7fb3103f92d9584",
+  "commit": "72976e775d1e9aeeec972c67af0a52e35076251f",
   "branch": "main",
-  "data_commit": "2026-11-18T17:31:07-03:00",
+  "data_commit": "2026-11-18T17:39:08-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "72976e7",
+    "data": "2026-11-18",
+    "assunto": "fix(analytics): chama a RPC de agregação direto, sem passar pelo gateway (#256)"
+   },
    {
     "sha": "217bbf0",
     "data": "2026-11-18",
@@ -126,11 +131,6 @@
     "sha": "4f4b782",
     "data": "2026-11-14",
     "assunto": "fix: ativa strict mode no tsconfig.app e corrige tipos (#230)"
-   },
-   {
-    "sha": "03b943a",
-    "data": "2026-11-14",
-    "assunto": "chore(docs): bump prod-readiness pos-merge 228 (final) (#229)"
    }
   ],
   "arquivos_mudados_7d": 438,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 95
+    "commits": 96
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,7 +324,7 @@
  "contagens": {
   "arquivos_total": 3247,
   "arquivos_codigo": 2219,
-  "linhas_codigo": 414989,
+  "linhas_codigo": 414998,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -668,7 +668,7 @@
   },
   "src/hooks": {
    "arquivos": 437,
-   "linhas": 57509
+   "linhas": 57518
   },
   "src/integrations": {
    "arquivos": 3,
