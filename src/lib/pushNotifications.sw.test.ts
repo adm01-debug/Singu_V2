@@ -26,7 +26,7 @@ describe('A-007: service worker de push unificado', () => {
   });
 
   it('em produção usa serviceWorker.ready e NÃO registra /sw-push.js', async () => {
-    vi.stubEnv('PROD', true as unknown as string);
+    vi.stubEnv('PROD', true);
     const reg = { scope: '/' } as ServiceWorkerRegistration;
     const register = vi.fn();
     vi.stubGlobal('navigator', { serviceWorker: { ready: Promise.resolve(reg), register } });
@@ -37,7 +37,7 @@ describe('A-007: service worker de push unificado', () => {
 
   it('em produção, se o SW nunca ficar pronto, devolve null (não trava)', async () => {
     vi.useFakeTimers();
-    vi.stubEnv('PROD', true as unknown as string);
+    vi.stubEnv('PROD', true);
     vi.stubGlobal('navigator', { serviceWorker: { ready: new Promise(() => {}), register: vi.fn() } });
     const { registerServiceWorker } = await import('./pushNotifications');
     const p = registerServiceWorker();
@@ -47,7 +47,7 @@ describe('A-007: service worker de push unificado', () => {
   });
 
   it('em dev registra /sw-push.js direto', async () => {
-    vi.stubEnv('PROD', false as unknown as string);
+    vi.stubEnv('PROD', false);
     const reg = { scope: '/' } as ServiceWorkerRegistration;
     const register = vi.fn().mockResolvedValue(reg);
     vi.stubGlobal('navigator', { serviceWorker: { ready: new Promise(() => {}), register } });
