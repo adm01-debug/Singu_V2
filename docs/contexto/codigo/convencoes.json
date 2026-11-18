@@ -6,12 +6,12 @@
    "src/pages (113)"
   ],
   "componentes": [
-   "src/components (908)",
+   "src/components (909)",
    "src/pages (140)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (378)",
+   "src/hooks (379)",
    "src/components (20)",
    "src/stores (5)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1057)"
+  ".tsx (1058)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(admin): liga o resumo de auditoria ao Audit Trail (#255)",
+   "feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)",
    "fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)",
    "fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)",
-   "feat: agregação real por período em /analytics e painel de relacionamento (#253)",
-   "fix(nlp): confianca de objecao e forca de indicador saem da evidencia (#249)",
-   "fix(ui): filtros do Pipeline passam a filtrar e 3 botoes mortos ganham acao (#248)"
+   "feat: agregação real por período em /analytics e painel de relacionamento (#253)"
   ]
  },
  "pr_template": null,

@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "d05b650bc1ea775bb62d27642404a51b023fb0bd",
+  "commit": "4177a350289c8cebfb3b00b898e8915e842a315d",
   "branch": "main",
-  "data_commit": "2026-11-18T17:03:44-03:00",
+  "data_commit": "2026-11-18T17:04:03-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "4177a35",
+    "data": "2026-11-18",
+    "assunto": "feat(admin): liga o resumo de auditoria ao Audit Trail (#255)"
+   },
+   {
+    "sha": "d6eaeb2",
+    "data": "2026-11-18",
+    "assunto": "feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)"
+   },
    {
     "sha": "d05b650",
     "data": "2026-11-18",
@@ -121,19 +131,9 @@
     "sha": "2f70928",
     "data": "2026-11-14",
     "assunto": "chore(docs): bump prod-readiness pos-merge 227 (final) (#228)"
-   },
-   {
-    "sha": "4e67de3",
-    "data": "2026-11-14",
-    "assunto": "chore(docs): bump prod-readiness pos-merge 226 (#227)"
-   },
-   {
-    "sha": "8d6aaa9",
-    "data": "2026-11-14",
-    "assunto": "chore(docs): bump prod-readiness pos-merge 226"
    }
   ],
-  "arquivos_mudados_7d": 432,
+  "arquivos_mudados_7d": 436,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "src/components/contact-detail",
-    "mudancas": 21
+    "mudancas": 22
    },
    {
     "pasta": "scripts/migration/storage",
@@ -181,7 +181,7 @@
    },
    {
     "pasta": "src/components/admin",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "pasta": "scripts/migration/ddl",
@@ -290,18 +290,18 @@
     "mudancas": 5
    },
    {
-    "arquivo": "src/pages/ContatoDetalhe.tsx",
+    "arquivo": "src/components/pipeline/DealDetailDrawer.tsx",
     "mudancas": 5
    },
    {
-    "arquivo": "src/pages/Empresas.tsx",
+    "arquivo": "src/pages/ContatoDetalhe.tsx",
     "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 92
+    "commits": 94
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,16 +322,16 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3245,
-  "arquivos_codigo": 2217,
-  "linhas_codigo": 414654,
+  "arquivos_total": 3247,
+  "arquivos_codigo": 2219,
+  "linhas_codigo": 414886,
   "rotas": 114,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 64,
   "modulos": 141,
-  "componentes": 1057,
-  "hooks": 409,
+  "componentes": 1058,
+  "hooks": 410,
   "edge_functions": 109,
   "tabelas": 418,
   "migrations": 488,
@@ -647,8 +647,8 @@
    "linhas": 590
   },
   "src/components": {
-   "arquivos": 986,
-   "linhas": 148256
+   "arquivos": 987,
+   "linhas": 148446
   },
   "src/config": {
    "arquivos": 1,
@@ -667,8 +667,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 436,
-   "linhas": 57475
+   "arquivos": 437,
+   "linhas": 57509
   },
   "src/integrations": {
    "arquivos": 3,
@@ -684,7 +684,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28637
+   "linhas": 28645
   },
   "src/store": {
    "arquivos": 1,
@@ -936,7 +936,6 @@
   ],
   "edges_orfas": [
    "attribution-calculator",
-   "audit-analytics",
    "auto-rebatch-behavioral",
    "auto-regen-behavioral-profiles",
    "bitrix24-webhook",
@@ -1089,7 +1088,6 @@
    "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
    "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
    "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx",
-   "src/components/contact-detail/DISCCommunicationLogsPanel.tsx",
    "src/components/conversation-intel/TopicsChart.tsx",
    "src/components/crm/commercial/components/SocialMatchPanel.tsx",
    "src/components/crm/ContactBehaviorExtended.tsx",
@@ -1106,7 +1104,6 @@
    "src/components/interactions/DensityChips.tsx",
    "src/components/interactions/InteractionCardMemo.tsx",
    "src/components/lead-scoring/LeadScoreCard.tsx",
-   "src/components/playbooks/PlaybookSuggestionDrawer.tsx",
    "src/components/search/VisualSearchButton.tsx",
    "src/components/security/MFAEnrollmentBanner.tsx",
    "src/components/triggers/CompatibilityScore.tsx",
@@ -1115,12 +1112,10 @@
    "src/components/triggers/smart-template/TemplatePreviewContent.tsx",
    "src/components/triggers/SmartTemplateSuggestions.tsx",
    "src/components/triggers/TemplateHistoryByProfile.tsx",
-   "src/components/triggers/TemplatePerformanceComparison.tsx",
    "src/components/ui/density-toggle.tsx",
    "src/components/ui/keyboard-list-hint.tsx",
    "src/components/ui/multi-step-progress.tsx",
    "src/components/ui/priority-indicator.tsx",
-   "src/components/win-loss/WinLossCaptureDialog.tsx",
    "supabase/functions/_shared/email-templates/password-migration-reset.tsx"
   ],
   "componentes_com_nome_duplicado": [

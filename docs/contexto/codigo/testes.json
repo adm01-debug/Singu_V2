@@ -2798,6 +2798,7 @@
    "src/hooks/useAppUserId.ts",
    "src/hooks/useAskCrm.ts",
    "src/hooks/useAttribution.ts",
+   "src/hooks/useAuditAnalytics.ts",
    "src/hooks/useAutomationRules.ts",
    "src/hooks/useBattleCards.ts",
    "src/hooks/useBehaviorAlerts.ts",

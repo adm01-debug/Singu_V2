@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 409,
+ "total": 410,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -1219,6 +1219,26 @@
     "src/components/marketing/AttributionBreakdownChart.tsx",
     "src/components/marketing/ContactTouchpointsTab.tsx",
     "src/pages/MarketingHub.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAuditAnalytics.ts",
+   "hooks_exportados": [
+    "useAuditAnalytics"
+   ],
+   "linhas": 34,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "audit-analytics"
+   ],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/admin/AuditAnalyticsPanel.tsx"
    ],
    "coberto_por_testes": 0
   },

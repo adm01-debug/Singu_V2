@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d05b650bc1` · branch `main` · 2026-11-18 20:07 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4177a35028` · branch `main` · 2026-11-18 20:10 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4713,6 +4713,7 @@ _nenhum item encontrado_
 | `invoke(` | `src/hooks/useABM.ts` |
 | `invoke(` | `src/hooks/useAIWritingAssistant.ts` |
 | `notify_new_device` | `src/hooks/useAccessSecurity.ts` |
+| `invoke(` | `src/hooks/useAuditAnalytics.ts` |
 | `invoke(` | `src/hooks/useBIAdvanced.ts` |
 | `invoke(` | `src/hooks/useBehavioralProfile.ts` |
 | `invoke(` | `src/hooks/useBulkRevalidate.ts` |

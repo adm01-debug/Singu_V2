@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1057,
- "orfaos": 43,
+ "total": 1058,
+ "orfaos": 39,
  "nomes_duplicados": {
   "ABM": [
    "src/app/lazyPages.tsx",
@@ -861,6 +861,22 @@
    "dominio": "components/admin",
    "hooks_locais": [
     "useAiGatewayPartitionStats"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/admin/AuditAnalyticsPanel.tsx",
+   "exports": [
+    "AuditAnalyticsPanel"
+   ],
+   "export_default": null,
+   "linhas": 140,
+   "dominio": "components/admin",
+   "hooks_locais": [
+    "useAuditAnalytics"
    ],
    "tabelas": [],
    "edges": [],
@@ -4092,7 +4108,7 @@
     "ContactBehavioralTab"
    ],
    "export_default": null,
-   "linhas": 273,
+   "linhas": 275,
    "dominio": "components/contact-detail",
    "hooks_locais": [
     "useAuth"
@@ -4579,8 +4595,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/contact-detail/DuplicateManagementPanel.tsx",
@@ -11953,7 +11969,7 @@
     "DealDetailDrawer"
    ],
    "export_default": null,
-   "linhas": 320,
+   "linhas": 368,
    "dominio": "components/pipeline",
    "hooks_locais": [
     "useAuth"
@@ -12150,8 +12166,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/proactive-intelligence/ProactiveIntelligencePanel.tsx",
@@ -13672,8 +13688,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/triggers/training/TrainingPracticeTab.tsx",
@@ -13899,7 +13915,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 579,
+   "usado_por": 580,
    "orfao": false
   },
   {
@@ -14684,7 +14700,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 196,
+   "usado_por": 197,
    "orfao": false
   },
   {
@@ -15104,8 +15120,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/win-loss/WinLossInsightCard.tsx",
@@ -15403,7 +15419,7 @@
     "AdminAuditTrail"
    ],
    "export_default": "AdminAuditTrail",
-   "linhas": 337,
+   "linhas": 343,
    "dominio": "pages",
    "hooks_locais": [
     "useIsAdmin"
@@ -15615,7 +15631,7 @@
     "Analytics"
    ],
    "export_default": "Analytics",
-   "linhas": 406,
+   "linhas": 408,
    "dominio": "pages",
    "hooks_locais": [
     "useActivityOverview",

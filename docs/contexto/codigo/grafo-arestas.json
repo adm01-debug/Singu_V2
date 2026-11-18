@@ -569,6 +569,11 @@
    "src/components/ui/skeleton.tsx",
    "src/hooks/useAiGatewayPartitionStats.ts"
   ],
+  "src/components/admin/AuditAnalyticsPanel.tsx": [
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useAuditAnalytics.ts"
+  ],
   "src/components/admin/AuditDiffViewer.tsx": [
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx"
@@ -1855,6 +1860,7 @@
   ],
   "src/components/contact-detail/ContactBehavioralTab.tsx": [
    "src/components/contact-detail/CommunicationIntelWidget.tsx",
+   "src/components/contact-detail/DISCCommunicationLogsPanel.tsx",
    "src/components/contact-detail/EmotionalTrendByContactWidget.tsx",
    "src/components/contact-detail/EmotionalTrendWidget.tsx",
    "src/components/contact-detail/NeuroEvolutionChart.tsx",
@@ -6149,12 +6155,14 @@
    "src/lib/utils.ts"
   ],
   "src/components/pipeline/DealDetailDrawer.tsx": [
+   "src/components/playbooks/PlaybookSuggestionDrawer.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/form.tsx",
    "src/components/ui/input.tsx",
    "src/components/ui/searchable-select.tsx",
    "src/components/ui/select.tsx",
    "src/components/ui/sheet.tsx",
+   "src/components/win-loss/WinLossCaptureDialog.tsx",
    "src/hooks/useAuth.tsx",
    "src/hooks/usePipeline.ts",
    "src/integrations/supabase/client.ts",
@@ -7720,6 +7728,9 @@
    "src/integrations/supabase/client.ts",
    "src/integrations/supabase/types.ts",
    "src/lib/errorMessages.ts"
+  ],
+  "src/hooks/useAuditAnalytics.ts": [
+   "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useAuth.tsx": [
    "src/components/feedback/PageLoadingFallback.tsx",
@@ -9427,6 +9438,7 @@
   ],
   "src/pages/AdminAuditTrail.tsx": [
    "src/components/admin/AdminLayout.tsx",
+   "src/components/admin/AuditAnalyticsPanel.tsx",
    "src/components/admin/AuditDiffViewer.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
@@ -9586,6 +9598,7 @@
    "src/components/nlp/index.ts",
    "src/components/seo/SEOHead.tsx",
    "src/components/triggers/AdvancedTriggersPanel.tsx",
+   "src/components/triggers/TemplatePerformanceComparison.tsx",
    "src/components/triggers/TriggerAnalytics.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",

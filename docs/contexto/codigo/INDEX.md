@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d05b650bc1ea775bb62d27642404a51b023fb0bd` (2026-11-18T17:03:44-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `4177a350289c8cebfb3b00b898e8915e842a315d` (2026-11-18T17:04:03-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2054), SQL (661), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
+- linguagens: TypeScript (2056), SQL (661), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,16 +34,16 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3245 |
-| arquivos_codigo | 2217 |
-| linhas_codigo | 414654 |
+| arquivos_total | 3247 |
+| arquivos_codigo | 2219 |
+| linhas_codigo | 414886 |
 | rotas | 114 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
 | itens_menu | 64 |
 | modulos | 141 |
-| componentes | 1057 |
-| hooks | 409 |
+| componentes | 1058 |
+| hooks | 410 |
 | edge_functions | 109 |
 | tabelas | 418 |
 | migrations | 488 |
@@ -55,8 +55,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 
 ## Onde ficam as coisas
 - telas: src/pages (113)
-- componentes: src/components (908), src/pages (140), src/app (4)
-- hooks: src/hooks (378), src/components (20), src/stores (5)
+- componentes: src/components (909), src/pages (140), src/app (4)
+- hooks: src/hooks (379), src/components (20), src/stores (5)
 - servicos_logica: src/lib (72), src/data (46), src/domain (8)
 - testes: co-localizado (*.test) (126), co-localizado (__tests__) (90), tests/ (23)
 - edge_functions: supabase/functions
@@ -69,9 +69,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 641 | 68 | 229 |
+| app | 0 | 0 | 6 | 645 | 69 | 230 |
 | components/abm | 0 | 0 | 8 | 19 | 2 | 6 |
-| components/admin | 0 | 0 | 44 | 35 | 12 | 19 |
+| components/admin | 0 | 0 | 45 | 36 | 13 | 19 |
 | components/analytics | 0 | 0 | 42 | 81 | 2 | 26 |
 | components/bi | 0 | 0 | 5 | 20 | 2 | 6 |
 | components/carnegie | 0 | 0 | 12 | 1 | 0 | 0 |
@@ -95,16 +95,16 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/intelligence | 0 | 0 | 5 | 15 | 2 | 7 |
 | components/intent | 0 | 0 | 5 | 11 | 2 | 4 |
 | components/interactions | 0 | 0 | 42 | 44 | 3 | 17 |
-| components/layout | 0 | 0 | 6 | 310 | 24 | 90 |
+| components/layout | 0 | 0 | 6 | 339 | 27 | 97 |
 | components/lead-routing | 0 | 0 | 6 | 16 | 0 | 10 |
 | components/lead-scoring | 0 | 0 | 13 | 17 | 1 | 7 |
 | components/lux | 0 | 0 | 6 | 3 | 1 | 3 |
 | components/micro-interactions | 0 | 0 | 6 | 0 | 0 | 0 |
-| components/navigation | 0 | 0 | 12 | 310 | 24 | 90 |
+| components/navigation | 0 | 0 | 12 | 339 | 27 | 97 |
 | components/neuromarketing | 0 | 0 | 17 | 1 | 0 | 0 |
 | components/nlp | 0 | 0 | 33 | 10 | 2 | 9 |
 | components/onboarding | 0 | 0 | 8 | 5 | 0 | 3 |
-| components/pipeline | 0 | 0 | 10 | 14 | 1 | 7 |
+| components/pipeline | 0 | 0 | 10 | 41 | 4 | 14 |
 | components/playbooks | 0 | 0 | 6 | 14 | 2 | 4 |
 | components/revops | 0 | 0 | 5 | 9 | 1 | 4 |
 | components/search | 0 | 0 | 12 | 13 | 5 | 7 |
@@ -117,11 +117,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/win-loss | 0 | 0 | 8 | 17 | 1 | 5 |
 | data | 0 | 0 | 46 | 5 | 1 | 7 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
-| hooks | 0 | 0 | 376 | 631 | 53 | 207 |
+| hooks | 0 | 0 | 377 | 632 | 54 | 207 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 68 | 16 | 2 | 13 |
-| pages | 51 | 105 | 105 | 618 | 66 | 223 |
-| pages/admin | 6 | 7 | 9 | 326 | 26 | 97 |
+| pages | 51 | 105 | 105 | 622 | 67 | 224 |
+| pages/admin | 6 | 7 | 9 | 355 | 29 | 104 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
@@ -265,7 +265,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `ai-writing-assistant` — tabelas: -; chamada por 2 arquivo(s) do front
 - `ask-crm` — tabelas: user_roles; chamada por 1 arquivo(s) do front
 - `attribution-calculator` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `audit-analytics` — tabelas: audit_log; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `audit-analytics` — tabelas: audit_log; chamada por 1 arquivo(s) do front
 - `auto-rebatch-behavioral` — tabelas: behavioral_insight_feedback, contact_analytical_profiles, cron_secrets; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `auto-regen-behavioral-profiles` — tabelas: behavioral_profile_regen_queue, system_alerts; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `bitrix24-webhook` — tabelas: contacts, interactions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
@@ -419,13 +419,13 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rotas_sem_arquivo: 0
 - componentes_ambiguos: 0
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
-- edges_orfas: 29 — ex.: attribution-calculator, audit-analytics, auto-rebatch-behavioral
+- edges_orfas: 28 — ex.: attribution-calculator, auto-rebatch-behavioral, auto-regen-behavioral-profiles
 - edges_chamadas_sem_pasta: 0
 - tabelas_sem_rls: 9 — ex.: audit_log_default, company_addresses, company_emails
 - tabelas_usadas_sem_definicao: 5 — ex.: information_schema.columns, information_schema.tables, logs
 - tabelas_com_drift_migration_vs_types: 88 — ex.: access_blocked_log, access_security_settings, activities
 - rpcs_sem_definicao: 2 — ex.: get_territories, get_territory_performance
-- componentes_orfaos: 43 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/admin/SystemHealthWidget.tsx
+- componentes_orfaos: 39 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/admin/SystemHealthWidget.tsx
 - componentes_com_nome_duplicado: 106 — ex.: ABM, ABMAccountDetail, ABMCampaigns
 - scripts_orfaos: 8 — ex.: scripts/hardening/check-client-tls.sql, scripts/hardening/check-extensions-hardening.sql, scripts/hardening/check-indexes-duplicated.sql
 - env_usadas_nao_declaradas: 4 — ex.: DEV, PROD, VITE_APP_VERSION
@@ -433,8 +433,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21198 nós · 35904 arestas · 2116 comunidades · grafo do commit `d05b650b`
-- comunidades maiores: ref_components (304), sonner (294), framer-motion (277), ref_lib (269), 02_tables.sql (259), lucide-react (245), react-router-dom (244), 📖 Dicionário de Dados — SINGU CRM (227), useAuth (213), react (210), date-fns (208), ref_hooks (205)
+- 21205 nós · 35916 arestas · 2168 comunidades · grafo do commit `4177a350`
+- comunidades maiores: react (456), @tanstack/react-query (421), ref_components (387), useAuth (303), _shared/auth.ts (282), framer-motion (268), 02_tables.sql (259), ref_types (248), ref_lib (242), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (226), sonner (195)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -570,6 +570,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `4177a35` feat(admin): liga o resumo de auditoria ao Audit Trail (#255)
+- 2026-11-18 `d6eaeb2` feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)
 - 2026-11-18 `d05b650` fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)
 - 2026-11-18 `a5987fd` fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)
 - 2026-11-18 `1735cf3` feat: agregação real por período em /analytics e painel de relacionamento (#253)
@@ -583,8 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `adb1e39` fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)
 - 2026-11-18 `91be466` fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)
 - 2026-11-18 `10085c6` fix(db): recupera trabalho pendente de outros agentes nas branches (#238)
-- 2026-11-18 `d136c19` fix(db): remove 18 indices exatamente duplicados (auditoria ao vivo) (#232)
-- 2026-11-18 `986ffa4` build(deps): bump actions/setup-node from 6.5.0 to 7.1.0 (#236)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

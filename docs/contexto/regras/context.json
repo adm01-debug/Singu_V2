@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d05b650bc1ea775bb62d27642404a51b023fb0bd",
+  "sha": "4177a350289c8cebfb3b00b898e8915e842a315d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 20:07 UTC",
-  "files_total": 3350,
-  "code_files": 2879,
-  "code_lines": 410657
+  "generated_at": "2026-11-18 20:10 UTC",
+  "files_total": 3352,
+  "code_files": 2881,
+  "code_lines": 410889
  },
  "version": "1.3.2",
- "facts_hash": "ec34151c556fb10a",
+ "facts_hash": "62de3a60a63f37ea",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -251,8 +251,8 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".tsx": 1158,
-   ".ts": 896,
+   ".tsx": 1159,
+   ".ts": 897,
    ".sql": 661,
    ".mjs": 123,
    ".py": 21,
@@ -59175,11 +59175,13 @@
     "tables_transitive": [
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "audit-analytics"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 19
+    "deps_count": 21
    },
    {
     "path": "",
@@ -59420,7 +59422,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 254
+    "deps_count": 260
    },
    {
     "path": "",
@@ -59787,7 +59789,7 @@
      "get_score_explicability",
      "has_role"
     ],
-    "deps_count": 252
+    "deps_count": 253
    },
    {
     "path": "",
@@ -61074,7 +61076,9 @@
      "activities",
      "alerts",
      "audit_log",
+     "battle_cards",
      "companies",
+     "competitors",
      "contacts",
      "emotional_states_history",
      "error_logs",
@@ -61083,19 +61087,28 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "playbook_usage_log",
+     "sales_playbooks",
      "score_history",
      "system_alerts",
      "vak_analysis_history",
-     "vw_communication_dashboard"
+     "vw_communication_dashboard",
+     "win_loss_insights",
+     "win_loss_reasons",
+     "win_loss_records"
     ],
     "invokes_transitive": [
      "disc-analyzer",
-     "voice-to-text"
+     "playbook-generator",
+     "playbook-recommender",
+     "voice-to-text",
+     "win-loss-analyzer"
     ],
     "rpc_transitive": [
-     "has_role"
+     "has_role",
+     "seed_win_loss_defaults"
     ],
-    "deps_count": 125
+    "deps_count": 131
    },
    {
     "path": "",
@@ -61700,6 +61713,7 @@
      "custom_fields",
      "decision_criteria",
      "disc_analysis_history",
+     "disc_communication_logs",
      "documents",
      "email_finder_results",
      "email_thread_summaries",
@@ -61778,7 +61792,7 @@
      "seed_conversation_topics",
      "validate_behavioral_consistency"
     ],
-    "deps_count": 358
+    "deps_count": 360
    },
    {
     "path": "/survey/:token",
@@ -65689,7 +65703,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 986,
+  "components_count": 987,
   "hooks": [
    {
     "name": "useContacts",
@@ -65942,6 +65956,10 @@
    {
     "name": "useRecordTouchpoint",
     "file": "src/hooks/useAttribution.ts"
+   },
+   {
+    "name": "useAuditAnalytics",
+    "file": "src/hooks/useAuditAnalytics.ts"
    },
    {
     "name": "useAuth",
@@ -69140,8 +69158,8 @@
   },
   {
    "module": "src/components",
-   "files": 986,
-   "lines": 148256,
+   "files": 987,
+   "lines": 148446,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -69207,6 +69225,7 @@
     "AiGatewayErrorHeatmap.tsx: AiGatewayErrorHeatmap",
     "AiGatewayHealthCard.tsx: AiGatewayHealthCard",
     "AiGatewayPartitionsCard.tsx: AiGatewayPartitionsCard",
+    "AuditAnalyticsPanel.tsx: AuditAnalyticsPanel",
     "AuditDiffViewer.tsx: AuditDiffViewer",
     "BehavioralRegenAlertBanner.tsx: BehavioralRegenAlertBanner",
     "BehavioralRegenAlertsStats.tsx: BehavioralRegenAlertsStats",
@@ -69229,8 +69248,7 @@
     "UptimeSparkline.tsx: UptimeSparkline",
     "VoiceAITestPanel.tsx: VoiceAITestPanel",
     "AnomaliesWidget.tsx: AnomaliesWidget",
-    "ConnectionCard.tsx: ConnectionCard",
-    "ConnectionFormDialog.tsx: ConnectionFormDialog"
+    "ConnectionCard.tsx: ConnectionCard"
    ],
    "docs": [
     "AppreciationPanel.tsx: ============================================== APPRECIATION TRACKER PANEL Give honest and sincere appreciation ==============================================",
@@ -69295,6 +69313,7 @@
     "src/components/admin/AiGatewayErrorHeatmap.tsx",
     "src/components/admin/AiGatewayHealthCard.tsx",
     "src/components/admin/AiGatewayPartitionsCard.tsx",
+    "src/components/admin/AuditAnalyticsPanel.tsx",
     "src/components/admin/AuditDiffViewer.tsx",
     "src/components/admin/BehavioralRegenAlertBanner.tsx",
     "src/components/admin/BehavioralRegenAlertsStats.tsx",
@@ -69357,8 +69376,7 @@
     "src/components/analytics/DISCAnalyticsPanel.tsx",
     "src/components/analytics/DISCConversionMetricsPanel.tsx",
     "src/components/analytics/DailyStatsWidget.tsx",
-    "src/components/analytics/DataHealthWidget.contract.test.tsx",
-    "src/components/analytics/DataHealthWidget.tsx"
+    "src/components/analytics/DataHealthWidget.contract.test.tsx"
    ]
   },
   {
@@ -69587,8 +69605,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 436,
-   "lines": 57475,
+   "files": 437,
+   "lines": 57509,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -69823,6 +69841,7 @@
     "useApproachRecommendation.ts: useApproachRecommendation",
     "useAskCrm.ts: AskCrmMessage, useAskCrm",
     "useAttribution.ts: AttributionModel, Touchpoint, Allocation, useTouchpoints, useAttribution, useRecordTouchpoint",
+    "useAuditAnalytics.ts: ResumoAuditoria, useAuditAnalytics",
     "useAuth.tsx: AuthProvider, useAuth, RequireAuth",
     "useAutomationRules.ts: TriggerType, ActionType, AutomationCondition, AutomationAction, AutomationRule, AutomationLog",
     "useBIAdvanced.ts: DemandForecast, useDemandForecast, ProfitabilityItem, useProfitabilityByContact, GeoSalesPoint, useGeoSalesData",
@@ -69836,8 +69855,7 @@
     "useBestTimeHeatmap.ts: HeatmapCell, TopSlot, BestTimeHeatmapResult, useBestTimeHeatmap, HEATMAP_CONSTANTS",
     "useBestTimeToContact.ts: TimeSlot, ContactTimeAnalysis, useBestTimeToContact",
     "useBirthdayContacts.ts: useBirthdayContacts",
-    "useBulkImport.ts: ImportEntityType, mapImportBatch, useBulkImport",
-    "useBulkRevalidate.ts: BulkRevalidateKind, BulkRevalidateStatus, BulkRevalidateFilters, BulkRevalidateResult, useBulkRevalidatePreview, useBulkRevalidate"
+    "useBulkImport.ts: ImportEntityType, mapImportBatch, useBulkImport"
    ],
    "docs": [
     "useAdvancedTriggers.ts: ============================================== ADVANCED TRIGGERS HOOK - Enterprise Mental Trigger Analysis Provides trigger chains, saturation detection, timing, and A/B testing ==============================================",
@@ -69904,6 +69922,7 @@
     "src/hooks/useApproachRecommendation.ts",
     "src/hooks/useAskCrm.ts",
     "src/hooks/useAttribution.ts",
+    "src/hooks/useAuditAnalytics.ts",
     "src/hooks/useAuth.tsx",
     "src/hooks/useAutomationRules.ts",
     "src/hooks/useBIAdvanced.ts",
@@ -69956,8 +69975,7 @@
     "src/hooks/useCompanyFilterOptions.ts",
     "src/hooks/useCompanyIntelligence.ts",
     "src/hooks/useCompanyProfileAnalytics.ts",
-    "src/hooks/useCompanyRelatedData.ts",
-    "src/hooks/useCompanyViews.ts"
+    "src/hooks/useCompanyRelatedData.ts"
    ]
   },
   {
@@ -70158,7 +70176,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28637,
+   "lines": 28645,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -77638,6 +77656,9 @@
    "ai-writing-assistant": [
     "src/components/nlp/copywriting/CopywritingAiGeneratorTab.tsx",
     "src/hooks/useAIWritingAssistant.ts"
+   ],
+   "audit-analytics": [
+    "src/hooks/useAuditAnalytics.ts"
    ],
    "bulk-revalidate": [
     "src/hooks/useBulkRevalidate.ts"
@@ -130667,6 +130688,10 @@
     "call": "notify_new_device"
    },
    {
+    "file": "src/hooks/useAuditAnalytics.ts",
+    "call": "invoke("
+   },
+   {
     "file": "src/hooks/useBIAdvanced.ts",
     "call": "invoke("
    },
@@ -176672,6 +176697,13 @@
     ";\nimport { Database, AlertTriangle } from "
    ]
   },
+  "src/components/admin/AuditAnalyticsPanel.tsx": {
+   "path": "src/components/admin/AuditAnalyticsPanel.tsx",
+   "lines": 140,
+   "exports": [
+    "function AuditAnalyticsPanel"
+   ]
+  },
   "src/components/admin/AuditDiffViewer.tsx": {
    "path": "src/components/admin/AuditDiffViewer.tsx",
    "lines": 178,
@@ -178964,7 +178996,7 @@
   },
   "src/components/contact-detail/ContactBehavioralTab.tsx": {
    "path": "src/components/contact-detail/ContactBehavioralTab.tsx",
-   "lines": 273,
+   "lines": 275,
    "tables": [
     {
      "table": "disc_analysis_history",
@@ -188078,7 +188110,7 @@
   },
   "src/components/pipeline/DealDetailDrawer.tsx": {
    "path": "src/components/pipeline/DealDetailDrawer.tsx",
-   "lines": 320,
+   "lines": 368,
    "exports": [
     "function DealDetailDrawer"
    ],
@@ -195109,6 +195141,23 @@
    ],
    "pagination": [
     "1000"
+   ]
+  },
+  "src/hooks/useAuditAnalytics.ts": {
+   "path": "src/hooks/useAuditAnalytics.ts",
+   "lines": 34,
+   "exports": [
+    "interface ResumoAuditoria",
+    "function useAuditAnalytics"
+   ],
+   "invokes": [
+    "audit-analytics"
+   ],
+   "hooks": [
+    "useAuditAnalytics"
+   ],
+   "side_effects": [
+    "invoke("
    ]
   },
   "src/hooks/useAuth.tsx": {
@@ -214676,7 +214725,7 @@
   },
   "src/pages/AdminAuditTrail.tsx": {
    "path": "src/pages/AdminAuditTrail.tsx",
-   "lines": 337,
+   "lines": 343,
    "exports": [
     "function AdminAuditTrail"
    ],
@@ -215163,7 +215212,7 @@
   },
   "src/pages/Analytics.tsx": {
    "path": "src/pages/Analytics.tsx",
-   "lines": 406,
+   "lines": 408,
    "exports": [
     "default Analytics"
    ],
@@ -233346,10 +233395,32 @@
   }
  },
  "git": {
-  "sha": "d05b650bc1ea775bb62d27642404a51b023fb0bd",
+  "sha": "4177a350289c8cebfb3b00b898e8915e842a315d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "4177a35",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "feat(admin): liga o resumo de auditoria ao Audit Trail (#255)",
+    "files": [
+     "src/components/admin/AuditAnalyticsPanel.tsx",
+     "src/hooks/useAuditAnalytics.ts",
+     "src/pages/AdminAuditTrail.tsx"
+    ]
+   },
+   {
+    "sha": "d6eaeb2",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "feat(ui): liga os 4 componentes completos que nenhuma tela importava (#251)",
+    "files": [
+     "src/components/contact-detail/ContactBehavioralTab.tsx",
+     "src/components/pipeline/DealDetailDrawer.tsx",
+     "src/pages/Analytics.tsx"
+    ]
+   },
    {
     "sha": "d05b650",
     "date": "2026-11-18",
@@ -233820,36 +233891,28 @@
     "author": "adm01-debug",
     "subject": "chore(docs): bump prod-readiness pos-merge 224 (#225)",
     "files": []
-   },
-   {
-    "sha": "1864cd1",
-    "date": "2026-11-14",
-    "author": "Copilot App",
-    "subject": "chore(docs): bump prod-readiness pos-merge 224",
-    "files": [
-     "docs/prod-readiness.md"
-    ]
-   },
-   {
-    "sha": "48a9a50",
-    "date": "2026-11-14",
-    "author": "adm01-debug",
-    "subject": "chore(docs): bump prod-readiness pos-merge 223 (#224)",
-    "files": []
    }
   ],
   "hot_files": [
-   [
-    "docs/prod-readiness.md",
-    5
-   ],
    [
     ".github/workflows/ci.yml",
     4
    ],
    [
+    "docs/prod-readiness.md",
+    4
+   ],
+   [
     "src/pages/Contatos.tsx",
     3
+   ],
+   [
+    "src/components/pipeline/DealDetailDrawer.tsx",
+    2
+   ],
+   [
+    "src/pages/Analytics.tsx",
+    2
    ],
    [
     "src/pages/Interacoes.tsx",
@@ -233866,6 +233929,22 @@
    [
     ".github/workflows/inventario-estado-semanal.yml",
     2
+   ],
+   [
+    "src/components/admin/AuditAnalyticsPanel.tsx",
+    1
+   ],
+   [
+    "src/hooks/useAuditAnalytics.ts",
+    1
+   ],
+   [
+    "src/pages/AdminAuditTrail.tsx",
+    1
+   ],
+   [
+    "src/components/contact-detail/ContactBehavioralTab.tsx",
+    1
    ],
    [
     "src/components/analytics/DealVelocityPanel.tsx",
@@ -233893,30 +233972,6 @@
    ],
    [
     "docs/estado/04_REVOPS_VENDAS.md",
-    1
-   ],
-   [
-    "docs/lacunas/B1_reverificacao_estado_01_04.md",
-    1
-   ],
-   [
-    "docs/lacunas/B2_reverificacao_estado_05_10.md",
-    1
-   ],
-   [
-    "docs/lacunas/D_ui_rotas_componentes.md",
-    1
-   ],
-   [
-    "docs/lacunas/MATRIZ_RECONCILIADA_20261012_CONTRATOS.md",
-    1
-   ],
-   [
-    "docs/lacunas/MATRIZ_RECONCILIADA_20261012_UX.md",
-    1
-   ],
-   [
-    "docs/qa/security-definer-audit.md",
     1
    ]
   ]
