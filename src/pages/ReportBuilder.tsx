@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
+import { WIDGET_COMPONENTS } from '@/components/reports/widgets';
 
 const AVAILABLE_WIDGETS = [
   { id: 'kpis', label: 'KPIs Diários', icon: BarChart3, category: 'overview' },
@@ -38,30 +39,9 @@ const DEFAULT_LAYOUTS: DashboardLayout[] = [
 ];
 
 function WidgetRenderer({ widgetId }: { widgetId: WidgetId }) {
-  const widget = AVAILABLE_WIDGETS.find(w => w.id === widgetId);
-  if (!widget) return null;
-  const Icon = widget.icon;
-
-  // Placeholder widget rendering - these would connect to real hooks in production
-  return (
-    <Card className="h-full">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-sm">
-          <Icon className="h-4 w-4 text-primary" />
-          {widget.label}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center justify-center h-24 text-muted-foreground">
-          <div className="text-center">
-            <Icon className="h-8 w-8 mx-auto mb-2 opacity-30" />
-            <p className="text-xs">Widget: {widget.label}</p>
-            <p className="text-[10px] text-muted-foreground">Categoria: {widget.category}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  const Componente = WIDGET_COMPONENTS[widgetId];
+  if (!Componente) return null;
+  return <Componente />;
 }
 
 export default function ReportBuilder() {
