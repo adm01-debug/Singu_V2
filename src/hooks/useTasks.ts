@@ -130,11 +130,44 @@ export function useAllTasks(statusFilter?: string) {
   });
 }
 
+/**
+ * Monta os argumentos de `create_task` a partir de um Task parcial.
+ *
+ * A RPC em producao e
+ * `create_task(p_title text, p_due_date date, p_company_id uuid,
+ *              p_task_type text, p_priority text, p_description text,
+ *              p_contact_id uuid, p_deal_id uuid, p_user_id uuid)`
+ * — argumentos com prefixo `p_`, dos quais so os dois primeiros nao tem
+ * valor padrao. O objeto Task usa nomes sem prefixo (`title`, `due_date`) e
+ * `callExternalRpc` repassa as chaves como estao, entao o PostgREST procurava
+ * uma funcao `create_task(title => ...)` que nao existe e toda criacao de
+ * tarefa falhava. Chaves que a RPC nao recebe (`status`, `nba_id`,
+ * `script_context`) tambem derrubavam a chamada e por isso ficam de fora.
+ *
+ * `p_deal_id` e `p_user_id` ficam com o padrao da propria RPC
+ * (`NULL` e `auth.uid()`).
+ */
+export function montarArgsCriarTarefa(task: Partial<Task>): Record<string, unknown> {
+  if (!task.title?.trim()) throw new Error('Título da tarefa é obrigatório');
+  const vencimento = task.due_date ? new Date(task.due_date) : new Date();
+  if (Number.isNaN(vencimento.getTime())) throw new Error('Data de vencimento inválida');
+  return {
+    p_title: task.title,
+    // p_due_date e `date`: enviar só a parte do dia evita conversão de fuso.
+    p_due_date: vencimento.toISOString().slice(0, 10),
+    p_company_id: task.company_id ?? null,
+    p_task_type: task.task_type ?? 'todo',
+    p_priority: task.priority ?? 'medium',
+    p_description: task.description ?? null,
+    p_contact_id: task.contact_id ?? null,
+  };
+}
+
 export function useCreateTask() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (task: Partial<Task>) => {
-      const { data, error } = await callExternalRpc<Task>('create_task', task);
+      const { data, error } = await callExternalRpc<Task>('create_task', montarArgsCriarTarefa(task));
       if (error) throw error;
       return data;
     },
@@ -257,9 +290,11 @@ export function useSnoozeReminder() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ reminderId, hours }: { reminderId: string; hours: number }) => {
+      // A RPC e snooze_reminder(p_reminder_id uuid, p_hours integer): o nome
+      // p_snooze_hours nao existe e derrubava a chamada.
       const { data, error } = await callExternalRpc('snooze_reminder', {
         p_reminder_id: reminderId,
-        p_snooze_hours: hours,
+        p_hours: hours,
       });
       if (error) throw error;
       return data;
