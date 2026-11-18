@@ -7,13 +7,6 @@ import { useUserBadges, useCheckAndAwardBadges } from '@/hooks/useGamification';
 import { Award, RefreshCw, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
-const RARITY_COLORS: Record<string, string> = {
-  common: 'bg-muted text-muted-foreground',
-  rare: 'bg-info/20 text-info',
-  epic: 'bg-accent/20 text-accent',
-  legendary: 'bg-warning/20 text-warning',
-};
-
 const BADGE_ICONS: Record<string, string> = {
   deals: '🤝',
   contacts: '👥',
@@ -70,24 +63,28 @@ function BadgesWidget() {
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[320px] overflow-y-auto">
-            {badges.map((badge, i) => {
-              const icon = badge.icon || BADGE_ICONS[badge.category || ''] || '🏅';
-              const rarityClass = RARITY_COLORS[badge.rarity || 'common'] || RARITY_COLORS.common;
+            {/* `get_user_badges` devolve badge_icon, badge_description,
+                badge_category e badge_points. Os nomes antigos (icon,
+                description, category, rarity) nunca chegavam: o card so
+                mostrava o emoji padrao e o nome. `rarity` nao existe no
+                banco — no lugar entram os pontos da conquista. */}
+            {badges.map((badge) => {
+              const icon = badge.badge_icon || BADGE_ICONS[badge.badge_category || ''] || '🏅';
               return (
                 <div
-                  key={badge.id || i}
+                  key={badge.badge_id}
                   className="flex flex-col items-center p-3 rounded-xl bg-muted/30 border border-border/30 hover:border-primary/20 transition-colors text-center"
                 >
                   <span className="text-2xl mb-1.5">{icon}</span>
                   <p className="text-xs font-medium text-foreground line-clamp-1">
-                    {badge.badge_name || badge.badge_key || 'Badge'}
+                    {badge.badge_name}
                   </p>
-                  {badge.description && (
-                    <p className="text-[9px] text-muted-foreground mt-0.5 line-clamp-2">{badge.description}</p>
+                  {badge.badge_description && (
+                    <p className="text-[9px] text-muted-foreground mt-0.5 line-clamp-2">{badge.badge_description}</p>
                   )}
-                  {badge.rarity && (
-                    <Badge variant="outline" className={`text-[8px] mt-1.5 ${rarityClass}`}>
-                      {badge.rarity}
+                  {badge.badge_points != null && (
+                    <Badge variant="outline" className="text-[8px] mt-1.5">
+                      {badge.badge_points} pts
                     </Badge>
                   )}
                   {badge.earned_at && (

@@ -30,15 +30,23 @@ export interface GoalsDashboard {
   [key: string]: unknown;
 }
 
+/**
+ * Retorno real de `get_quota_status(p_user_id)`: um único objeto jsonb com
+ * a meta de receita vigente em `sales_goals`. O tipo anterior declarava
+ * `quota_type`, `target`, `progress_pct`, `period` e `status`, que a função
+ * nunca devolveu — o widget lia tudo isso como `undefined`.
+ */
 export interface QuotaStatus {
-  quota_type?: string;
-  target?: number;
-  achieved?: number;
-  progress_pct?: number;
-  remaining?: number;
-  period?: string;
-  status?: string;
-  [key: string]: unknown;
+  user_id: string;
+  quota: number;
+  achieved: number;
+  remaining: number;
+  pct_achieved: number;
+  days_elapsed: number | null;
+  days_remaining: number;
+  daily_required: number;
+  on_track: boolean | null;
+  pace_pct: number;
 }
 
 export interface LeaderboardEntry {
@@ -53,16 +61,26 @@ export interface LeaderboardEntry {
   [key: string]: unknown;
 }
 
+/**
+ * Retorno real de `get_user_badges(p_user_id)`:
+ * TABLE(badge_id uuid, badge_code text, badge_name text,
+ *       badge_description text, badge_icon text, badge_category text,
+ *       badge_points integer, earned_at timestamptz, is_recent boolean).
+ *
+ * O tipo anterior declarava `id`, `badge_key`, `description`, `icon`,
+ * `category` e `rarity` — destes só `badge_name` e `earned_at` existiam, e
+ * `rarity` nunca existiu em lugar nenhum do banco.
+ */
 export interface UserBadge {
-  id?: string;
-  badge_key?: string;
-  badge_name?: string;
-  description?: string;
-  icon?: string;
-  category?: string;
-  earned_at?: string;
-  rarity?: string;
-  [key: string]: unknown;
+  badge_id: string;
+  badge_code: string;
+  badge_name: string;
+  badge_description: string | null;
+  badge_icon: string | null;
+  badge_category: string | null;
+  badge_points: number | null;
+  earned_at: string;
+  is_recent: boolean | null;
 }
 
 // ── Hooks ──
@@ -107,7 +125,10 @@ export function useQuotaStatus(enabled = true) {
     queryKey: ['gamification', 'quota-status', user?.id],
     queryFn: async () => {
       try {
-        const { data, error } = await callExternalRpc<QuotaStatus | QuotaStatus[]>('get_quota_status', {});
+        // get_quota_status(p_user_id uuid) nao tem valor padrao: chamar sem
+        // argumento faz o PostgREST nao encontrar a funcao, e o catch abaixo
+        // devolvia lista vazia — o widget ficava em branco sem erro visivel.
+        const { data, error } = await callExternalRpc<QuotaStatus | QuotaStatus[]>('get_quota_status', { p_user_id: user?.id });
         if (error) { logger.warn('[Gamification] get_quota_status error:', error); return []; }
         return (Array.isArray(data) ? data : data ? [data] : []) as QuotaStatus[];
       } catch (e) { logger.warn('[Gamification] get_quota_status failed:', e); return []; }
@@ -141,7 +162,8 @@ export function useUserBadges(enabled = true) {
     queryKey: ['gamification', 'user-badges', user?.id],
     queryFn: async () => {
       try {
-        const { data, error } = await callExternalRpc<UserBadge[]>('get_user_badges', {});
+        // get_user_badges(p_user_id uuid) tambem exige o argumento.
+        const { data, error } = await callExternalRpc<UserBadge[]>('get_user_badges', { p_user_id: user?.id });
         if (error) { logger.warn('[Gamification] get_user_badges error:', error); return []; }
         return (Array.isArray(data) ? data : []) as UserBadge[];
       } catch (e) { logger.warn('[Gamification] get_user_badges failed:', e); return []; }
@@ -154,9 +176,14 @@ export function useUserBadges(enabled = true) {
 
 export function useCheckAndAwardBadges() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   return useMutation({
     mutationFn: async () => {
-      const { data, error } = await callExternalRpc<unknown>('check_and_award_badges', {});
+      if (!user) throw new Error('Não autenticado');
+      // check_and_award_badges(p_user_id uuid) exige o argumento; sem ele a
+      // premiação nunca rodou — `user_badges` está zerada em produção
+      // enquanto `badges` tem 10 conquistas cadastradas.
+      const { data, error } = await callExternalRpc<unknown>('check_and_award_badges', { p_user_id: user.id });
       if (error) throw error;
       return data;
     },
