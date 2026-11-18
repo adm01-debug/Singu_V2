@@ -189,6 +189,9 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
       if (error) throw error;
       toast.success(status === 'won' ? 'Parabéns! Deal Ganho! 🏆' : 'Deal marcado como perdido.');
       invalidateDealQueries();
+      // Fecha a gaveta (contrato de DealDetailDrawer.contract.test.tsx) e abre
+      // a captura do motivo, que vive fora do <Sheet> para sobreviver a ele.
+      onOpenChange(false);
       setWinLossOutcome(status);
     } catch {
       toast.error('Erro ao atualizar status');
@@ -198,7 +201,8 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
   };
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <>
+      <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:max-w-md overflow-y-auto">
         <SheetHeader>
           <SheetTitle>Editar Deal</SheetTitle>
@@ -333,14 +337,13 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
           </form>
         </Form>
       </SheetContent>
+      </Sheet>
 
       {deal && (
         <WinLossCaptureDialog
           open={winLossOutcome !== null}
           onOpenChange={aberto => {
-            if (aberto) return;
-            setWinLossOutcome(null);
-            onOpenChange(false);
+            if (!aberto) setWinLossOutcome(null);
           }}
           dealId={deal.id}
           initialOutcome={winLossOutcome ?? 'won'}
@@ -359,6 +362,6 @@ export function DealDetailDrawer({ deal, open, onOpenChange }: Props) {
           }}
         />
       )}
-    </Sheet>
+    </>
   );
 }
