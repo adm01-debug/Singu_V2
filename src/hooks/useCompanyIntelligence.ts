@@ -41,12 +41,17 @@ export interface Company360 {
   key_metrics?: Record<string, unknown>;
 }
 
+/**
+ * Retorno real de `get_next_best_action(p_company_id)`: um jsonb com
+ * `action`, `priority`, `channel` e `reason`. O tipo anterior declarava
+ * `action_type`, `description` e `suggested_date`, que a função nunca
+ * devolveu — o card da ficha da empresa exibia a ação em branco.
+ */
 export interface NextBestAction {
-  action_type: string;
-  description: string;
+  action: string;
   priority: string;
+  channel: string;
   reason: string;
-  suggested_date?: string;
 }
 
 export interface AccountPlan {
@@ -253,11 +258,16 @@ export function useKeyContacts(companyId?: string) {
   return useQuery({
     queryKey: ['key-contacts', companyId],
     queryFn: async () => {
+      // A RPC devolve TABLE(contact_id uuid, name text, cargo text,
+      // importance_score integer, has_whatsapp boolean). O tipo anterior
+      // declarava `id` e `role`, que nunca vêm no retorno: a chave do React
+      // ficava `undefined` em toda a lista e o cargo jamais aparecia.
       const { data, error } = await callExternalRpc<Array<{
-        id: string;
+        contact_id: string;
         name: string;
-        role: string;
+        cargo: string | null;
         importance_score: number;
+        has_whatsapp: boolean | null;
       }>>(
         'get_key_contacts',
         { p_company_id: companyId }
