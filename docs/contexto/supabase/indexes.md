@@ -973,6 +973,8 @@ Uso e tamanho em `stats.md`.
 | public.incoming_webhook_dlq | idx_dlq_webhook_id | btree | webhook_id | não | sim |  |
 | public.incoming_webhook_dlq | incoming_webhook_dlq_pkey | btree | id | sim | sim |  |
 | public.incoming_webhook_logs | incoming_webhook_logs_pkey | btree | id | sim | sim |  |
+| public.incoming_webhook_nonces | idx_incoming_webhook_nonces_expires_at | btree | expires_at | não | sim |  |
+| public.incoming_webhook_nonces | incoming_webhook_nonces_pkey | btree | webhook_id, idempotency_key | sim | sim |  |
 | public.incoming_webhooks | incoming_webhooks_pkey | btree | id | sim | sim |  |
 | public.incoming_webhooks | incoming_webhooks_token_key | btree | token | sim | sim |  |
 | public.insights | idx_insights_active | btree | contact_id, user_id | não | sim | `(dismissed = false)` |

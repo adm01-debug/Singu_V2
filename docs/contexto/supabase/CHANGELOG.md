@@ -2,6 +2,20 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-18 19:11 UTC
+
+- **colunas** adicionado (4): `public.incoming_webhook_nonces.created_at`, `public.incoming_webhook_nonces.expires_at`, `public.incoming_webhook_nonces.idempotency_key`, `public.incoming_webhook_nonces.webhook_id`
+- **colunas** alterado (1): `public.incoming_webhooks.require_signature`
+- **constraints** adicionado (4): `public.incoming_webhook_nonces.incoming_webhook_nonces_idempotency_key_check`, `public.incoming_webhook_nonces.incoming_webhook_nonces_pkey`, `public.incoming_webhook_nonces.incoming_webhook_nonces_webhook_id_fkey`, `public.incoming_webhooks.incoming_webhooks_active_signature_check`
+- **functions** adicionado (2): `public.get_activity_overview(p_from timestamp with time zone, p_to timestamp with time zone, p_bucket text)`, `public.guard_contact_relation_write()`
+- **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`
+- **grants** adicionado (1): `public.incoming_webhook_nonces:service_role`
+- **indexes** adicionado (2): `public.idx_incoming_webhook_nonces_expires_at`, `public.incoming_webhook_nonces_pkey`
+- **migrations** adicionado (7): `20261118181543_incoming_webhook_nonces`, `20261118181554_harden_incoming_webhooks_signature`, `20261118182244_guard_contact_relation_write_fn`, `20261118182317_serialize_contact_relation_write_triggers`, `20261118182619_get_activity_overview`, `20261118182753_get_activity_overview_direcao`, `20261118183212_incoming_webhook_nonces_policy`
+- **policies (RLS)** adicionado (1): `public.incoming_webhook_nonces.incoming_webhook_nonces_service_only`
+- **tabelas** adicionado (1): `public.incoming_webhook_nonces`
+- **triggers** adicionado (4): `public.contact_addresses.serialize_contact_relation_write`, `public.contact_emails.serialize_contact_relation_write`, `public.contact_phones.serialize_contact_relation_write`, `public.contact_social_media.serialize_contact_relation_write`
+
 ## 2026-11-18 16:14 UTC
 
 - **realtime** removido (4): `supabase_realtime_messages_publication:realtime.messages_2026_11_11`, `supabase_realtime_messages_publication:realtime.messages_2026_11_12`, `supabase_realtime_messages_publication:realtime.messages_2026_11_13`, `supabase_realtime_messages_publication:realtime.messages_2026_11_14`

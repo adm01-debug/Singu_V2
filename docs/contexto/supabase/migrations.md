@@ -689,3 +689,10 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261118121105 | [remove_duplicate_indexes](migrations/20261118121105_remove_duplicate_indexes.sql) | 1 |
 | 20261118122016 | [multiplix_list_ufs_cast_text](migrations/20261118122016_multiplix_list_ufs_cast_text.sql) | 1 |
 | 20261118150043 | [views_security_invoker_16](migrations/20261118150043_views_security_invoker_16.sql) | 1 |
+| 20261118181543 | [incoming_webhook_nonces](migrations/20261118181543_incoming_webhook_nonces.sql) | 1 |
+| 20261118181554 | [harden_incoming_webhooks_signature](migrations/20261118181554_harden_incoming_webhooks_signature.sql) | 1 |
+| 20261118182244 | [guard_contact_relation_write_fn](migrations/20261118182244_guard_contact_relation_write_fn.sql) | 1 |
+| 20261118182317 | [serialize_contact_relation_write_triggers](migrations/20261118182317_serialize_contact_relation_write_triggers.sql) | 1 |
+| 20261118182619 | [get_activity_overview](migrations/20261118182619_get_activity_overview.sql) | 1 |
+| 20261118182753 | [get_activity_overview_direcao](migrations/20261118182753_get_activity_overview_direcao.sql) | 1 |
+| 20261118183212 | [incoming_webhook_nonces_policy](migrations/20261118183212_incoming_webhook_nonces_policy.sql) | 1 |

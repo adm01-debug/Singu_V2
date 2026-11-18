@@ -432,6 +432,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.inactivity_alerts](tables/public/inactivity_alerts.md) | table | sim | 1 | 16 | não |  |
 | [public.incoming_webhook_dlq](tables/public/incoming_webhook_dlq.md) | table | sim | 1 | 13 | não |  |
 | [public.incoming_webhook_logs](tables/public/incoming_webhook_logs.md) | table | sim | 2 | 11 | não |  |
+| [public.incoming_webhook_nonces](tables/public/incoming_webhook_nonces.md) | table | sim | 1 | 4 | não |  |
 | [public.incoming_webhooks](tables/public/incoming_webhooks.md) | table | sim | 1 | 17 | não |  |
 | [public.insights](tables/public/insights.md) | table | sim | 8 | 13 | não | Insights de IA sobre contatos/empresas |
 | [public.integration_logs](tables/public/integration_logs.md) | table | sim | 1 | 10 | não |  |

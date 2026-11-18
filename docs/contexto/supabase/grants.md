@@ -1074,6 +1074,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.incoming_webhook_dlq | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.incoming_webhook_logs | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.incoming_webhook_logs | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.incoming_webhook_nonces | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.incoming_webhooks | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.incoming_webhooks | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.insights | authenticated | DELETE, INSERT, SELECT, UPDATE |

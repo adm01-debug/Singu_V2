@@ -525,6 +525,7 @@
 | public.inactivity_alerts | company_id | public.companies | id | NO ACTION | NO ACTION |
 | public.inactivity_alerts | contact_id | public.contacts | id | NO ACTION | NO ACTION |
 | public.inactivity_alerts | resolved_by | public.profiles | id | NO ACTION | NO ACTION |
+| public.incoming_webhook_nonces | webhook_id | public.incoming_webhooks | id | CASCADE | NO ACTION |
 | public.insights | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.integration_logs | integration_id | public.integrations | id | CASCADE | NO ACTION |
 | public.integrations | created_by | public.profiles | id | NO ACTION | NO ACTION |

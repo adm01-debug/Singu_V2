@@ -929,6 +929,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.incoming_webhook_dlq | Admins manage DLQ | ALL | PERMISSIVE | public | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | public.incoming_webhook_logs | admins read incoming_webhook_logs | SELECT | PERMISSIVE | authenticated | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |  |
 | public.incoming_webhook_logs | service_role_inserts_webhook_logs | INSERT | PERMISSIVE | authenticated |  | `false` |
+| public.incoming_webhook_nonces | incoming_webhook_nonces_service_only | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.incoming_webhooks | admins manage incoming_webhooks | ALL | PERMISSIVE | authenticated | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | public.insights | Users can delete own | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.insights | Users can delete their own insights | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |

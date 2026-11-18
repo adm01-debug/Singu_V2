@@ -101,6 +101,7 @@
 
 | nome | timing | eventos | nível | status | função |
 |---|---|---|---|---|---|
+| serialize_contact_relation_write | BEFORE | INSERT OR DELETE OR UPDATE | ROW | enabled | public.guard_contact_relation_write |
 | set_updated_at | BEFORE | UPDATE | ROW | enabled | public.set_updated_at |
 | trg_contact_social_media_updated | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 

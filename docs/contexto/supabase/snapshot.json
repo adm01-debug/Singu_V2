@@ -72001,6 +72001,58 @@
       },
       {
         "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "webhook_id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "incoming_webhook_nonces",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "idempotency_key",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "incoming_webhook_nonces",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "expires_at",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "incoming_webhook_nonces",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_at",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "incoming_webhook_nonces",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -72196,7 +72248,7 @@
       },
       {
         "comment": null,
-        "default": "false",
+        "default": "true",
         "generated": null,
         "identity": null,
         "is_enum": false,
@@ -173254,6 +173306,79 @@
       },
       {
         "columns": [
+          "idempotency_key"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (length(idempotency_key) >= 16 AND length(idempotency_key) <= 128)",
+        "name": "incoming_webhook_nonces_idempotency_key_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "incoming_webhook_nonces",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "webhook_id",
+          "idempotency_key"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (webhook_id, idempotency_key)",
+        "name": "incoming_webhook_nonces_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "incoming_webhook_nonces",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "webhook_id"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (webhook_id) REFERENCES incoming_webhooks(id) ON DELETE CASCADE",
+        "name": "incoming_webhook_nonces_webhook_id_fkey",
+        "on_delete": "CASCADE",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "public",
+        "ref_table": "incoming_webhooks",
+        "schema": "public",
+        "table": "incoming_webhook_nonces",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "is_active",
+          "webhook_secret",
+          "require_signature"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (NOT is_active OR require_signature AND webhook_secret IS NOT NULL AND length(webhook_secret) >= 32)",
+        "name": "incoming_webhooks_active_signature_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "incoming_webhooks",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
           "id"
         ],
         "deferrable": false,
@@ -200072,6 +200197,36 @@
         "volatility": "stable"
       },
       {
+        "args": "p_from timestamp with time zone, p_to timestamp with time zone, p_bucket text",
+        "callers": {
+          "code": [],
+          "code_total_files": 0,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definition": null,
+        "definition_sha": "6f072e315b89172f",
+        "execute_api_roles": "authenticated, service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "sql",
+        "leakproof": false,
+        "name": "get_activity_overview",
+        "owner": "postgres",
+        "returns": "jsonb",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "stable"
+      },
+      {
         "args": "p_script_id uuid, p_contact_id uuid",
         "callers": {
           "code": [],
@@ -217691,6 +217846,46 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [
+            "public.contact_addresses.serialize_contact_relation_write",
+            "public.contact_emails.serialize_contact_relation_write",
+            "public.contact_phones.serialize_contact_relation_write",
+            "public.contact_social_media.serialize_contact_relation_write"
+          ],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definition": null,
+        "definition_sha": "669b4069cdba16f8",
+        "execute_api_roles": null,
+        "execute_public": false,
+        "is_trigger_fn": true,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "guard_contact_relation_write",
+        "owner": "postgres",
+        "returns": "trigger",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "",
+        "callers": {
+          "code": [
+            {
               "file": "supabase/migrations/20261013033433_sequence_write_fences.sql",
               "hits": 1
             }
@@ -218169,6 +218364,7 @@
             "public.get_rpc_perf_stats",
             "public.get_slow_rpc_trend",
             "public.get_top_slow_rpcs",
+            "public.guard_contact_relation_write",
             "public.move_deal",
             "public.publish_mtta_sla_breach_alert",
             "public.simulate_behavioral_regen_alert",
@@ -241946,6 +242142,12 @@
           "table": "incoming_webhook_logs"
         },
         {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "incoming_webhook_nonces"
+        },
+        {
           "grantee": "authenticated",
           "privileges": "DELETE, INSERT, SELECT, UPDATE",
           "schema": "public",
@@ -260707,6 +260909,35 @@
       },
       {
         "columns": [
+          "expires_at"
+        ],
+        "definition": "CREATE INDEX idx_incoming_webhook_nonces_expires_at ON public.incoming_webhook_nonces USING btree (expires_at)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_incoming_webhook_nonces_expires_at",
+        "predicate": null,
+        "schema": "public",
+        "table": "incoming_webhook_nonces"
+      },
+      {
+        "columns": [
+          "webhook_id",
+          "idempotency_key"
+        ],
+        "definition": "CREATE UNIQUE INDEX incoming_webhook_nonces_pkey ON public.incoming_webhook_nonces USING btree (webhook_id, idempotency_key)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "incoming_webhook_nonces_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "incoming_webhook_nonces"
+      },
+      {
+        "columns": [
           "id"
         ],
         "definition": "CREATE UNIQUE INDEX incoming_webhooks_pkey ON public.incoming_webhooks USING btree (id)",
@@ -276681,6 +276912,48 @@
         "statements": 1,
         "statements_sha": "fb4db9b511c1c8c6",
         "version": "20261118150043"
+      },
+      {
+        "name": "incoming_webhook_nonces",
+        "statements": 1,
+        "statements_sha": "2bfc9658e8ed00a4",
+        "version": "20261118181543"
+      },
+      {
+        "name": "harden_incoming_webhooks_signature",
+        "statements": 1,
+        "statements_sha": "6353bd2cca139f42",
+        "version": "20261118181554"
+      },
+      {
+        "name": "guard_contact_relation_write_fn",
+        "statements": 1,
+        "statements_sha": "964147462218ccb3",
+        "version": "20261118182244"
+      },
+      {
+        "name": "serialize_contact_relation_write_triggers",
+        "statements": 1,
+        "statements_sha": "2fc3089d4913178c",
+        "version": "20261118182317"
+      },
+      {
+        "name": "get_activity_overview",
+        "statements": 1,
+        "statements_sha": "47522d21f0fccf52",
+        "version": "20261118182619"
+      },
+      {
+        "name": "get_activity_overview_direcao",
+        "statements": 1,
+        "statements_sha": "4e79b7340341636d",
+        "version": "20261118182753"
+      },
+      {
+        "name": "incoming_webhook_nonces_policy",
+        "statements": 1,
+        "statements_sha": "caed1eecc62e598f",
+        "version": "20261118183212"
       }
     ],
     "policies": [
@@ -287774,6 +288047,18 @@
         "table": "incoming_webhook_logs",
         "using": null,
         "with_check": "false"
+      },
+      {
+        "cmd": "ALL",
+        "name": "incoming_webhook_nonces_service_only",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "service_role"
+        ],
+        "schema": "public",
+        "table": "incoming_webhook_nonces",
+        "using": "true",
+        "with_check": "true"
       },
       {
         "cmd": "ALL",
@@ -304137,6 +304422,21 @@
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
+        "name": "incoming_webhook_nonces",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
+        "comment": null,
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
         "name": "incoming_webhooks",
         "owner": "postgres",
         "parent": null,
@@ -308853,6 +309153,17 @@
         "timing": "BEFORE"
       },
       {
+        "definition": "CREATE TRIGGER serialize_contact_relation_write BEFORE INSERT OR DELETE OR UPDATE ON contact_addresses FOR EACH ROW EXECUTE FUNCTION guard_contact_relation_write()",
+        "events": "INSERT OR DELETE OR UPDATE",
+        "function": "public.guard_contact_relation_write",
+        "level": "ROW",
+        "name": "serialize_contact_relation_write",
+        "schema": "public",
+        "status": "enabled",
+        "table": "contact_addresses",
+        "timing": "BEFORE"
+      },
+      {
         "definition": "CREATE TRIGGER set_updated_at BEFORE UPDATE ON contact_addresses FOR EACH ROW EXECUTE FUNCTION set_updated_at()",
         "events": "UPDATE",
         "function": "public.set_updated_at",
@@ -309029,6 +309340,17 @@
         "timing": "BEFORE"
       },
       {
+        "definition": "CREATE TRIGGER serialize_contact_relation_write BEFORE INSERT OR DELETE OR UPDATE ON contact_emails FOR EACH ROW EXECUTE FUNCTION guard_contact_relation_write()",
+        "events": "INSERT OR DELETE OR UPDATE",
+        "function": "public.guard_contact_relation_write",
+        "level": "ROW",
+        "name": "serialize_contact_relation_write",
+        "schema": "public",
+        "status": "enabled",
+        "table": "contact_emails",
+        "timing": "BEFORE"
+      },
+      {
         "definition": "CREATE TRIGGER set_updated_at BEFORE UPDATE ON contact_emails FOR EACH ROW EXECUTE FUNCTION set_updated_at()",
         "events": "UPDATE",
         "function": "public.set_updated_at",
@@ -309180,6 +309502,17 @@
         "schema": "public",
         "status": "enabled",
         "table": "contact_personality",
+        "timing": "BEFORE"
+      },
+      {
+        "definition": "CREATE TRIGGER serialize_contact_relation_write BEFORE INSERT OR DELETE OR UPDATE ON contact_phones FOR EACH ROW EXECUTE FUNCTION guard_contact_relation_write()",
+        "events": "INSERT OR DELETE OR UPDATE",
+        "function": "public.guard_contact_relation_write",
+        "level": "ROW",
+        "name": "serialize_contact_relation_write",
+        "schema": "public",
+        "status": "enabled",
+        "table": "contact_phones",
         "timing": "BEFORE"
       },
       {
@@ -309378,6 +309711,17 @@
         "schema": "public",
         "status": "enabled",
         "table": "contact_report_overrides",
+        "timing": "BEFORE"
+      },
+      {
+        "definition": "CREATE TRIGGER serialize_contact_relation_write BEFORE INSERT OR DELETE OR UPDATE ON contact_social_media FOR EACH ROW EXECUTE FUNCTION guard_contact_relation_write()",
+        "events": "INSERT OR DELETE OR UPDATE",
+        "function": "public.guard_contact_relation_write",
+        "level": "ROW",
+        "name": "serialize_contact_relation_write",
+        "schema": "public",
+        "status": "enabled",
+        "table": "contact_social_media",
         "timing": "BEFORE"
       },
       {

@@ -121,6 +121,7 @@
 
 | nome | timing | eventos | nível | status | função |
 |---|---|---|---|---|---|
+| serialize_contact_relation_write | BEFORE | INSERT OR DELETE OR UPDATE | ROW | enabled | public.guard_contact_relation_write |
 | trg_contact_phones_normalizar | BEFORE | INSERT OR UPDATE | ROW | enabled | public.trg_normalizar_telefone_contact |
 | trg_set_updated_at | BEFORE | UPDATE | ROW | enabled | public.set_updated_at |
 | trg_singu_sync_contact_phone | AFTER | INSERT OR DELETE OR UPDATE | ROW | enabled | public.singu_sync_contact_phone |

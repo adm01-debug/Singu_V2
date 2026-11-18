@@ -31,7 +31,7 @@
 | 13 | `created_at` | `timestamp with time zone` | não | `now()` |  |  |
 | 14 | `updated_at` | `timestamp with time zone` | não | `now()` |  |  |
 | 15 | `webhook_secret` | `text` | sim |  |  |  |
-| 16 | `require_signature` | `boolean` | não | `false` |  |  |
+| 16 | `require_signature` | `boolean` | não | `true` |  |  |
 | 17 | `replay_window_seconds` | `integer` | não | `300` |  |  |
 
 
@@ -39,9 +39,17 @@
 
 | nome | tipo | definição | on delete | on update | validada |
 |---|---|---|---|---|---|
+| incoming_webhooks_active_signature_check | CHECK | `CHECK (NOT is_active OR require_signature AND webhook_secret IS NOT NULL AND length(webhook_secret) >= 32)` |  |  | sim |
 | incoming_webhooks_pkey | PRIMARY KEY | `PRIMARY KEY (id)` |  |  | sim |
 | incoming_webhooks_target_entity_check | CHECK | `CHECK (target_entity = ANY (ARRAY['contact'::text, 'company'::text, 'deal'::text, 'interaction'::text, 'note'::text, 'custom'::text]))` |  |  | sim |
 | incoming_webhooks_token_key | UNIQUE | `UNIQUE (token)` |  |  | sim |
+
+
+## Referenciada por (FKs de outras tabelas)
+
+| tabela | constraint | colunas | on delete |
+|---|---|---|---|
+| public.incoming_webhook_nonces | incoming_webhook_nonces_webhook_id_fkey | webhook_id | CASCADE |
 
 
 ## Índices
