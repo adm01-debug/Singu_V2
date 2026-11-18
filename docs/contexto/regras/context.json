@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "91be466f8319cf628e9df7e45e1957028684f608",
+  "sha": "adb1e39ae36508bc3db16a5d4b869be80168e253",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 13:17 UTC",
+  "generated_at": "2026-11-18 14:34 UTC",
   "files_total": 3346,
   "code_files": 2875,
   "code_lines": 409966
@@ -232858,10 +232858,19 @@
   }
  },
  "git": {
-  "sha": "91be466f8319cf628e9df7e45e1957028684f608",
+  "sha": "adb1e39ae36508bc3db16a5d4b869be80168e253",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "adb1e39",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)",
+    "files": [
+     ".github/workflows/ci.yml"
+    ]
+   },
    {
     "sha": "91be466",
     "date": "2026-11-18",
@@ -233306,16 +233315,6 @@
     "files": [
      "docs/prod-readiness.md"
     ]
-   },
-   {
-    "sha": "6e9097a",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "fix(graphify): saída local fora do graphify-out versionado e ignorada no .gitignore (#211)",
-    "files": [
-     ".gitignore",
-     "graphify.local.json"
-    ]
    }
   ],
   "hot_files": [
@@ -233325,7 +233324,7 @@
    ],
    [
     ".github/workflows/ci.yml",
-    3
+    4
    ],
    [
     "package-lock.json",
