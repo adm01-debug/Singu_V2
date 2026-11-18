@@ -5,6 +5,7 @@ import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { supabase } from '@/integrations/supabase/client';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { AuditDiffViewer } from '@/components/admin/AuditDiffViewer';
+import { AuditAnalyticsPanel } from '@/components/admin/AuditAnalyticsPanel';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -184,6 +185,11 @@ export default function AdminAuditTrail() {
             </Button>
           </div>
         </div>
+
+        <Separator />
+
+        {/* Resumo agregado de 30 dias (edge function audit-analytics) */}
+        <AuditAnalyticsPanel />
 
         <Separator />
 
