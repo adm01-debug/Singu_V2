@@ -158,7 +158,7 @@ Passaram 15 regressões de componente/hook/transporte e sete provas com PostgreS
 | R17, R25 | AINDA REPRODUZÍVEL | C/playbooks/PlaybookSuggestionDrawer.tsx; C/lead-scoring/LeadScoreCard.tsx sem alcance de main | Componentes não montados; prioridade baixa, não defeito produtivo provado | Integrar apenas feature mantida |
 | R19, R21 | AINDA REPRODUZÍVEL | H/useTerritories.ts:41–49; H/useGamification.ts:76–79 | Falha RPC vira vazio; CREATEs de leitura/metas não encontrados | Mostrar erro; validar catálogo e carteira |
 | R20 | AINDA REPRODUZÍVEL | F/territory-optimization/index.ts:211–230; H/useTerritoryOptimization.ts:70–90 | Service role externa, retorno EMPTY por erro, sem persistência | Escopo autorizado, erro explícito, recomendação recuperável |
-| R23 | AINDA REPRODUZÍVEL | P/Analytics.tsx:82–91; src/data/analyticsData.ts:171–177 | Ranking/Overview inventados | Dados próprios ou demonstração explícita |
+| R23 | RESOLVIDO (18/11/2026) | src/hooks/useActivityOverview.ts:1-99 | Ranking/Overview reais via RPC `get_activity_overview` | — |
 | X05 | DECISÃO DE PRODUTO/INTEGRAÇÃO ADIADA | C/lead-routing/QuickDistributeWidget.tsx:15–24 | Lead avulso retirado por desenho de ondas | Negócio decide; não reintroduzir automaticamente |
 
 ## Pendências não verificadas

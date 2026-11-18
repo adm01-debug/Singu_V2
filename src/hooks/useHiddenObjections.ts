@@ -2,6 +2,13 @@ import { useState, useCallback, useMemo } from 'react';
 import { ObjectionAnalysis, HiddenObjection, ObjectionType } from '@/types/nlp-advanced';
 import { OBJECTION_PATTERNS } from '@/data/nlpAdvancedData';
 
+/** Confianca inicial de uma objecao detectada por uma unica expressao. */
+const PROBABILIDADE_BASE = 60;
+/** Acrescimo por repeticao da mesma expressao no texto. */
+const PROBABILIDADE_POR_REPETICAO = 10;
+/** Teto: nenhuma deteccao por palavra-chave vira certeza. */
+const PROBABILIDADE_TETO = 95;
+
 interface Interaction {
   id: string;
   content?: string;
@@ -22,14 +29,18 @@ export function useHiddenObjections(interactions: Interaction[]) {
     (Object.entries(OBJECTION_PATTERNS) as [ObjectionType, typeof OBJECTION_PATTERNS[ObjectionType]][]).forEach(
       ([type, pattern]) => {
         pattern.indicators.forEach(indicator => {
-          if (lowerText.includes(indicator.toLowerCase())) {
-            detected.push({
-              type,
-              indicator,
-              // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-              probability: 60 + Math.random() * 30 // 60-90%
-            });
-          }
+          const alvo = indicator.toLowerCase();
+          if (!lowerText.includes(alvo)) return;
+          // A deteccao e deterministica: ou a expressao esta no texto, ou nao esta.
+          // A confianca sai da evidencia - quantas vezes a expressao aparece - e nao
+          // de um sorteio. A escalada por deteccoes repetidas continua na agregacao
+          // abaixo (+10 por ocorrencia adicional, teto de 95).
+          const ocorrencias = lowerText.split(alvo).length - 1;
+          detected.push({
+            type,
+            indicator,
+            probability: Math.min(PROBABILIDADE_TETO, PROBABILIDADE_BASE + (ocorrencias - 1) * PROBABILIDADE_POR_REPETICAO),
+          });
         });
       }
     );

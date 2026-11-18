@@ -9,7 +9,7 @@ import { Surface } from '@/components/ui/surface';
 import { Typography } from '@/components/ui/typography';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { EmptyState } from '@/components/ui/empty-state';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { pluralize } from '@/lib/formatters';
@@ -59,6 +59,7 @@ function LowScoreHint() {
 }
 
 export function TopContactsCard({ contacts, animations = [], compact = false }: TopContactsCardProps) {
+  const navigate = useNavigate();
   const allLowScores = contacts.length > 0 && contacts.every(c => c.relationshipScore < 40);
 
   return (
@@ -88,7 +89,7 @@ export function TopContactsCard({ contacts, animations = [], compact = false }: 
                 title="Nenhum contato"
                 description="Adicione contatos para ver seus melhores relacionamentos."
                 actions={[
-                  { label: 'Adicionar contato', onClick: () => {}, variant: 'default' }
+                  { label: 'Adicionar contato', onClick: () => navigate('/contatos?novo=1'), variant: 'default' }
                 ]}
               />
             ) : (

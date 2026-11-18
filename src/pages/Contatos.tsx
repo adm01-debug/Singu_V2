@@ -121,6 +121,16 @@ const Contatos = () => {
   }, [contacts]);
 
   // Defer secondary data (companies, interactions) until contacts are loaded — reduces initial concurrent requests
+  // Entrada vinda de fora com ?novo=1 (ex.: TopContactsCard no dashboard) abre o
+  // formulario de novo contato uma unica vez e limpa o parametro da URL.
+  useEffect(() => {
+    if (searchParams.get('novo') !== '1') return;
+    setIsFormOpen(true);
+    const next = new URLSearchParams(searchParams);
+    next.delete('novo');
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
+
   const [secondaryReady, setSecondaryReady] = useState(false);
   useEffect(() => {
     if (!loading && contacts.length > 0) {

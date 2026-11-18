@@ -82,6 +82,7 @@ export function ContatosContent(props: Props) {
   const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
   const [isExternalSearchOpen, setIsExternalSearchOpen] = useState(false);
+  const [isImportOpen, setIsImportOpen] = useState(false);
   const RENDER_BATCH = 100;
   const [visibleCount, setVisibleCount] = useState(RENDER_BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -193,7 +194,7 @@ export function ContatosContent(props: Props) {
             <Button variant="outline" size="sm" onClick={() => setIsExternalSearchOpen(true)} className="gap-2 h-11 px-4 md:h-9 md:px-3 text-sm md:text-xs">
               <Globe className="w-4 h-4" aria-hidden="true" /><span className="hidden sm:inline">Busca Externa</span>
             </Button>
-            {isAdmin && <BulkImportDialog entityType="contacts" />}
+            {isAdmin && <BulkImportDialog entityType="contacts" open={isImportOpen} onOpenChange={setIsImportOpen} />}
             <Button variant={selectionMode ? 'default' : 'outline'} size="sm" onClick={onToggleSelectionMode} className="gap-2 h-11 px-4 md:h-9 md:px-3 text-sm md:text-xs">
               <CheckSquare className="w-4 h-4" aria-hidden="true" /><span className="hidden sm:inline">{selectionMode ? 'Cancelar' : 'Selecionar'}</span>
             </Button>
@@ -256,7 +257,7 @@ export function ContatosContent(props: Props) {
             {filteredAndSortedContacts.length === 0 && !loading && (
               searchTerm || Object.keys(activeFilters).length > 0
                 ? <SearchEmptyState searchTerm={searchTerm || 'filtros ativos'} onClearSearch={() => { onSearchChange(''); onFiltersChange({}); }} entityName="contatos" />
-                : <EmptyState illustration="contacts" title="Sua rede de contatos começa aqui" description="Adicione seu primeiro contato para começar a gerenciar seus relacionamentos profissionais de forma inteligente." actions={[{ label: 'Adicionar Contato', onClick: () => onSetIsFormOpen(true), icon: UserPlus }, { label: 'Importar CSV', onClick: () => {}, variant: 'outline', icon: Upload }]} tips={['Adicione informações como cargo e empresa para contextualizar', 'Use tags para organizar seus contatos por projeto ou área', 'O perfil DISC ajuda a personalizar sua comunicação']} />
+                : <EmptyState illustration="contacts" title="Sua rede de contatos começa aqui" description="Adicione seu primeiro contato para começar a gerenciar seus relacionamentos profissionais de forma inteligente." actions={[{ label: 'Adicionar Contato', onClick: () => onSetIsFormOpen(true), icon: UserPlus }, { label: 'Importar CSV', onClick: () => setIsImportOpen(true), variant: 'outline', icon: Upload }]} tips={['Adicione informações como cargo e empresa para contextualizar', 'Use tags para organizar seus contatos por projeto ou área', 'O perfil DISC ajuda a personalizar sua comunicação']} />
             )}
           </>
         )}
