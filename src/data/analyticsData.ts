@@ -145,4 +145,33 @@ export const toMetricsStats = (
   recebidas: calcChange(atual?.totais.recebidas ?? 0, anterior?.totais.recebidas ?? 0),
 });
 
+/** Canais que o sistema registra em `interactions.channel`. */
+const TOTAL_CANAIS = 5;
+
+export interface EixoEngajamento { metric: string; value: number }
+
+/**
+ * Radar de engajamento. Cada eixo e uma razao medida sobre o periodo — nenhum
+ * valor e estimado. Os eixos antigos (Qualidade, Proatividade, Follow-up,
+ * Conversao) eram constantes cravadas; ficaram so os que o banco sustenta.
+ */
+export const toEngagementRadar = (dados?: ResumoAtividade): EixoEngajamento[] => {
+  const totais = dados?.totais;
+  const interacoes = totais?.interacoes ?? 0;
+  if (!dados || interacoes === 0) return [];
+
+  const serie = dados.serie ?? [];
+  const comAtividade = serie.filter(p => p.interacoes > 0).length;
+
+  const pct = (parte: number, todo: number) => (todo === 0 ? 0 : Math.round((parte / todo) * 100));
+
+  return [
+    { metric: 'Taxa de resposta', value: pct(totais?.recebidas ?? 0, interacoes) },
+    { metric: 'Proatividade', value: pct(totais?.enviadas ?? 0, interacoes) },
+    { metric: 'Sentimento positivo', value: taxaPositiva(dados) },
+    { metric: 'Consistencia', value: pct(comAtividade, serie.length) },
+    { metric: 'Alcance de canais', value: pct((dados.por_canal ?? []).length, TOTAL_CANAIS) },
+  ];
+};
+
 export type { PeriodFilter };

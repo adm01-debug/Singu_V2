@@ -65,7 +65,7 @@ const TagExplorerWidget = lazy(() => import('@/components/analytics/TagExplorerW
 import {
   periodOptions, getSentimentColors,
   toMetricsStats, toRelationshipEvolution,
-  toSentimentDistribution, toEngagementByChannel,
+  toSentimentDistribution, toEngagementByChannel, toEngagementRadar,
 } from '@/data/analyticsData';
 import { useActivityOverview, useTopRelationships, type PeriodoAtividade } from '@/hooks/useActivityOverview';
 import { CustomTooltip, StatCard } from '@/components/analytics/AnalyticsShared';
@@ -93,6 +93,7 @@ const Analytics = () => {
   }));
   const sentimentColors = getSentimentColors();
   const channelData = toEngagementByChannel(atual.data);
+  const radarData = toEngagementRadar(atual.data);
 
   if (loading) {
     return (
@@ -382,7 +383,7 @@ const Analytics = () => {
           </TabsContent>
 
           <TabsContent value="engagement" className="space-y-6">
-            <AnalyticsEngagementTab channelData={channelData} relationshipData={relationshipData} />
+            <AnalyticsEngagementTab channelData={channelData} radarData={radarData} relationshipData={relationshipData} />
           </TabsContent>
 
           <TabsContent value="sentiment" className="space-y-6">
