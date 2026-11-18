@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "7dcac425348f53b846ca179f9e8ca96712e89793",
+  "sha": "e3b8d5a5a6e644087a93e694d69252bb9d9b4ab0",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 18:10 UTC",
+  "generated_at": "2026-11-18 18:17 UTC",
   "files_total": 3348,
   "code_files": 2877,
-  "code_lines": 410328
+  "code_lines": 410351
  },
  "version": "1.3.2",
- "facts_hash": "1fd87c09c256a172",
+ "facts_hash": "1dac1431cab35129",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -69550,7 +69550,7 @@
   {
    "module": "src/hooks",
    "files": 435,
-   "lines": 57203,
+   "lines": 57226,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -99794,6 +99794,26 @@
     "value": "500"
    },
    {
+    "file": "src/hooks/useEmotionalIntelligence.ts",
+    "name": "FORCA_BASE_POSITIVA",
+    "value": "7"
+   },
+   {
+    "file": "src/hooks/useEmotionalIntelligence.ts",
+    "name": "FORCA_TETO_POSITIVA",
+    "value": "10"
+   },
+   {
+    "file": "src/hooks/useEmotionalIntelligence.ts",
+    "name": "FORCA_BASE_NEGATIVA",
+    "value": "4"
+   },
+   {
+    "file": "src/hooks/useEmotionalIntelligence.ts",
+    "name": "FORCA_TETO_NEGATIVA",
+    "value": "7"
+   },
+   {
     "file": "src/hooks/useEntityBookmarks.ts",
     "name": "MAX",
     "value": "10"
@@ -99837,6 +99857,21 @@
     "file": "src/hooks/useFicha360Sort.ts",
     "name": "PARAM",
     "value": "'ordem'"
+   },
+   {
+    "file": "src/hooks/useHiddenObjections.ts",
+    "name": "PROBABILIDADE_BASE",
+    "value": "60"
+   },
+   {
+    "file": "src/hooks/useHiddenObjections.ts",
+    "name": "PROBABILIDADE_POR_REPETICAO",
+    "value": "10"
+   },
+   {
+    "file": "src/hooks/useHiddenObjections.ts",
+    "name": "PROBABILIDADE_TETO",
+    "value": "95"
    },
    {
     "file": "src/hooks/useInboundActivityHeatmap.ts",
@@ -117444,10 +117479,6 @@
    {
     "file": "src/hooks/useDealsAtRisk.ts",
     "line": "stagnation * 0.4 + sentimentScore * 0.25 + engagement * 0.25 + age * 0.1"
-   },
-   {
-    "file": "src/hooks/useHiddenObjections.ts",
-    "line": "probability: 60 + Math.random() * 30 // 60-90%"
    },
    {
     "file": "src/hooks/useNLPClosingProbability.ts",
@@ -201017,9 +201048,27 @@
   },
   "src/hooks/useEmotionalIntelligence.ts": {
    "path": "src/hooks/useEmotionalIntelligence.ts",
-   "lines": 314,
+   "lines": 326,
    "exports": [
     "function useEmotionalIntelligence"
+   ],
+   "params": [
+    {
+     "name": "FORCA_BASE_POSITIVA",
+     "value": "7"
+    },
+    {
+     "name": "FORCA_TETO_POSITIVA",
+     "value": "10"
+    },
+    {
+     "name": "FORCA_BASE_NEGATIVA",
+     "value": "4"
+    },
+    {
+     "name": "FORCA_TETO_NEGATIVA",
+     "value": "7"
+    }
    ],
    "hooks": [
     "useEmotionalIntelligence"
@@ -202794,15 +202843,26 @@
   },
   "src/hooks/useHiddenObjections.ts": {
    "path": "src/hooks/useHiddenObjections.ts",
-   "lines": 143,
+   "lines": 154,
    "exports": [
     "function useHiddenObjections"
    ],
+   "params": [
+    {
+     "name": "PROBABILIDADE_BASE",
+     "value": "60"
+    },
+    {
+     "name": "PROBABILIDADE_POR_REPETICAO",
+     "value": "10"
+    },
+    {
+     "name": "PROBABILIDADE_TETO",
+     "value": "95"
+    }
+   ],
    "hooks": [
     "useHiddenObjections"
-   ],
-   "percents": [
-    "probability: 60 + Math.random() * 30 // 60-90%"
    ]
   },
   "src/hooks/useIPMaskingPreference.ts": {
@@ -233001,10 +233061,20 @@
   }
  },
  "git": {
-  "sha": "7dcac425348f53b846ca179f9e8ca96712e89793",
+  "sha": "e3b8d5a5a6e644087a93e694d69252bb9d9b4ab0",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "e3b8d5a",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(nlp): confianca de objecao e forca de indicador saem da evidencia (#249)",
+    "files": [
+     "src/hooks/useEmotionalIntelligence.ts",
+     "src/hooks/useHiddenObjections.ts"
+    ]
+   },
    {
     "sha": "7dcac42",
     "date": "2026-11-18",
@@ -233461,21 +233531,12 @@
     "files": [
      "docs/prod-readiness.md"
     ]
-   },
-   {
-    "sha": "783135a",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "chore(docs): bump prod-readiness para o head pos-merge 220 (#221)",
-    "files": [
-     "docs/prod-readiness.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    9
+    8
    ],
    [
     ".github/workflows/ci.yml",
@@ -233500,6 +233561,14 @@
    [
     ".github/workflows/inventario-estado-semanal.yml",
     2
+   ],
+   [
+    "src/hooks/useEmotionalIntelligence.ts",
+    1
+   ],
+   [
+    "src/hooks/useHiddenObjections.ts",
+    1
    ],
    [
     "src/components/dashboard/TopContactsCard.tsx",
@@ -233543,14 +233612,6 @@
    ],
    [
     "src/pages/Deduplicacao.tsx",
-    1
-   ],
-   [
-    "src/pages/MarketingFormDetail.tsx",
-    1
-   ],
-   [
-    "src/pages/Sequencias.tsx",
     1
    ]
   ]

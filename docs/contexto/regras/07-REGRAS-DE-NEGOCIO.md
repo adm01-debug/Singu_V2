@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7dcac42534` · branch `main` · 2026-11-18 18:10 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e3b8d5a5a6` · branch `main` · 2026-11-18 18:17 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3229,7 +3229,6 @@ _nenhum item encontrado_
 | `} else if (last30Days < previous30Days * 0.5) {` | `src/hooks/useChurnPrediction.ts` |
 | `projectedConversions: Math.round(totalActive * 0.3),` | `src/hooks/useDealVelocity.ts` |
 | `stagnation * 0.4 + sentimentScore * 0.25 + engagement * 0.25 + age * 0.1` | `src/hooks/useDealsAtRisk.ts` |
-| `probability: 60 + Math.random() * 30 // 60-90%` | `src/hooks/useHiddenObjections.ts` |
 | `const nlpBoost = (factors.reduce((acc, f) => acc + f.score, 0) / 4) * 0.25;` | `src/hooks/useNLPClosingProbability.ts` |
 | `value: Math.min(1 + interactionCount * 0.5, 5),` | `src/hooks/useNetworkGraph.ts` |
 | `const score = Math.round((brainAlignment * 0.3 + stimuliMatch * 0.3 + chemicalBalance * 0.2 + communicationFit * 0.2));` | `src/hooks/useNeuromarketing.ts` |
@@ -3348,6 +3347,10 @@ _nenhum item encontrado_
 | `AVG_CYCLE_DAYS` | `60` | `src/hooks/useDealForecastConfidence.ts` |
 | `PAGE` | `1000` | `src/hooks/useEmailCampaigns.ts` |
 | `BATCH` | `500` | `src/hooks/useEmailCampaigns.ts` |
+| `FORCA_BASE_POSITIVA` | `7` | `src/hooks/useEmotionalIntelligence.ts` |
+| `FORCA_TETO_POSITIVA` | `10` | `src/hooks/useEmotionalIntelligence.ts` |
+| `FORCA_BASE_NEGATIVA` | `4` | `src/hooks/useEmotionalIntelligence.ts` |
+| `FORCA_TETO_NEGATIVA` | `7` | `src/hooks/useEmotionalIntelligence.ts` |
 | `MAX` | `10` | `src/hooks/useEntityBookmarks.ts` |
 | `DEBOUNCE_MS` | `500` | `src/hooks/useEntityNotes.ts` |
 | `MAX_FAVORITES` | `10` | `src/hooks/useFicha360FilterFavorites.ts` |
@@ -3357,6 +3360,9 @@ _nenhum item encontrado_
 | `SCOPE` | `'ficha360'` | `src/hooks/useFicha360PreferencesSync.ts` |
 | `DEFAULT` | `'recente'` | `src/hooks/useFicha360Sort.ts` |
 | `PARAM` | `'ordem'` | `src/hooks/useFicha360Sort.ts` |
+| `PROBABILIDADE_BASE` | `60` | `src/hooks/useHiddenObjections.ts` |
+| `PROBABILIDADE_POR_REPETICAO` | `10` | `src/hooks/useHiddenObjections.ts` |
+| `PROBABILIDADE_TETO` | `95` | `src/hooks/useHiddenObjections.ts` |
 | `HOUR_START` | `6` | `src/hooks/useInboundActivityHeatmap.ts` |
 | `HOUR_END` | `22` | `src/hooks/useInboundActivityHeatmap.ts` |
 | `MIN_TOTAL` | `10` | `src/hooks/useInboundActivityHeatmap.ts` |

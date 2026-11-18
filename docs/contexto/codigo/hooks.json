@@ -4468,7 +4468,7 @@
    "hooks_exportados": [
     "useEmotionalIntelligence"
    ],
-   "linhas": 314,
+   "linhas": 326,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -5725,7 +5725,7 @@
    "hooks_exportados": [
     "useHiddenObjections"
    ],
-   "linhas": 143,
+   "linhas": 154,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

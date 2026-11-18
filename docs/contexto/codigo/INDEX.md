@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `7dcac425348f53b846ca179f9e8ca96712e89793` (2026-11-18T15:08:34-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e3b8d5a5a6e644087a93e694d69252bb9d9b4ab0` (2026-11-18T15:14:14-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3243 |
 | arquivos_codigo | 2216 |
-| linhas_codigo | 414395 |
+| linhas_codigo | 414418 |
 | rotas | 114 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -433,8 +433,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21161 nós · 35858 arestas · 2091 comunidades · grafo do commit `7dcac425`
-- comunidades maiores: ref_types (362), ref_components (308), ref_lib (269), 02_tables.sql (259), lucide-react (249), _shared/auth.ts (236), framer-motion (230), ref_hooks (228), 📖 Dicionário de Dados — SINGU CRM (227), react (227), useAuth (220), react-router-dom (205)
+- 21162 nós · 35860 arestas · 2160 comunidades · grafo do commit `e3b8d5a5`
+- comunidades maiores: ref_lib (624), react (604), ref_components (311), framer-motion (267), 02_tables.sql (259), _shared/auth.ts (257), ref_types (246), react-router-dom (235), 📖 Dicionário de Dados — SINGU CRM (227), withAuth (212), date-fns (209), @testing-library/react (149)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -570,6 +570,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-18 `e3b8d5a` fix(nlp): confianca de objecao e forca de indicador saem da evidencia (#249)
 - 2026-11-18 `7dcac42` fix(ui): filtros do Pipeline passam a filtrar e 3 botoes mortos ganham acao (#248)
 - 2026-11-18 `602a7f8` fix(edge): roadmap preditivo para de sortear a previsao gravada no banco (#246)
 - 2026-11-18 `775c89c` feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)
@@ -584,7 +585,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `563e484` build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)
 - 2026-11-18 `c027a81` chore(ci): roda os testes de edge function orfaos no pipeline (#231)
 - 2026-11-18 `889a650` build(deps): bump the minor-and-patch group with 11 updates (#237)
-- 2026-11-18 `ba42905` fix(ci): remove BOM UTF-8 da migration do MTTA que quebra o Supabase Preview (#233)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
