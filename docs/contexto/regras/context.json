@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "f6ec6ec4d76d319f81804d45494f809f41830e7b",
+  "sha": "775c89c04dd0988d84be31655359569e3f7cd2e8",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 17:41 UTC",
+  "generated_at": "2026-11-18 17:45 UTC",
   "files_total": 3347,
   "code_files": 2876,
-  "code_lines": 410161
+  "code_lines": 410194
  },
  "version": "1.3.2",
- "facts_hash": "335bfd5438759a62",
+ "facts_hash": "5996a52d6ab661ed",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -59433,7 +59433,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 17
+    "deps_count": 18
    },
    {
     "path": "",
@@ -69103,7 +69103,7 @@
   {
    "module": "src/components",
    "files": 985,
-   "lines": 148168,
+   "lines": 148187,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -70119,7 +70119,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28572,
+   "lines": 28586,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -185489,7 +185489,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 295,
+   "lines": 314,
    "exports": [
     "const AppSidebar"
    ],
@@ -214778,7 +214778,7 @@
   },
   "src/pages/Auth.tsx": {
    "path": "src/pages/Auth.tsx",
-   "lines": 230,
+   "lines": 244,
    "exports": [
     "default Auth"
    ],
@@ -232868,10 +232868,20 @@
   }
  },
  "git": {
-  "sha": "f6ec6ec4d76d319f81804d45494f809f41830e7b",
+  "sha": "775c89c04dd0988d84be31655359569e3f7cd2e8",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "775c89c",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)",
+    "files": [
+     "src/components/layout/AppSidebar.tsx",
+     "src/pages/Auth.tsx"
+    ]
+   },
    {
     "sha": "f6ec6ec",
     "date": "2026-11-18",
@@ -233321,15 +233331,6 @@
     "files": [
      "docs/prod-readiness.md"
     ]
-   },
-   {
-    "sha": "a8cca0e",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)",
-    "files": [
-     "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -233362,8 +233363,12 @@
     2
    ],
    [
-    "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
-    2
+    "src/components/layout/AppSidebar.tsx",
+    1
+   ],
+   [
+    "src/pages/Auth.tsx",
+    1
    ],
    [
     "src/hooks/useSequences.ts",
@@ -233407,10 +233412,6 @@
    ],
    [
     ".github/workflows/docs-ci.yml",
-    1
-   ],
-   [
-    ".github/workflows/estado-real.yml",
     1
    ]
   ]

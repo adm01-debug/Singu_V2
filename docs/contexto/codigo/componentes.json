@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "total": 1057,
- "orfaos": 44,
+ "orfaos": 43,
  "nomes_duplicados": {
   "ABM": [
    "src/app/lazyPages.tsx",
@@ -2219,8 +2219,8 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/auth/MFAGuard.tsx",
@@ -10068,10 +10068,11 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 295,
+   "linhas": 314,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
+    "useIsAdmin",
     "usePrefetch",
     "useSidebar"
    ],
@@ -15672,7 +15673,7 @@
     "Auth"
    ],
    "export_default": "Auth",
-   "linhas": 230,
+   "linhas": 244,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth"

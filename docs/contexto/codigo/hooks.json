@@ -6344,7 +6344,7 @@
     "useQuery"
    ],
    "canais_realtime": [],
-   "usado_por": 25,
+   "usado_por": 26,
    "usado_por_arquivos": [
     "src/components/admin/MttaSlaThresholdEditor.tsx",
     "src/components/admin/SchemaDriftBanner.tsx",
@@ -6353,6 +6353,7 @@
     "src/components/enrichment/ValidationQueueCard.tsx",
     "src/components/feedback/SlowQueryIndicator.tsx",
     "src/components/interactions/insights/AnnotationList.tsx",
+    "src/components/layout/AppSidebar.tsx",
     "src/hooks/useAiGatewayCriticalToast.ts",
     "src/hooks/useDailyKpis.ts",
     "src/hooks/useMFAGuard.ts",

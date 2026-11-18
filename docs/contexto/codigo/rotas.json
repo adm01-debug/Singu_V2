@@ -5,7 +5,7 @@
   "urls": 114,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 56,
+  "itens_menu": 64,
   "lazy": 220
  },
  "urls": [
@@ -8687,7 +8687,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 18
+   "arquivos_puxados": 19
   },
   {
    "protegida": true,
@@ -42739,6 +42739,15 @@
    "resolve_para": "src/pages/Analytics.tsx"
   },
   {
+   "rotulo": "Assistente IA",
+   "destino": "/assistente",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/Assistente.tsx"
+  },
+  {
    "rotulo": "Audit Trail",
    "destino": "/admin/audit-trail",
    "grupo": null,
@@ -42782,6 +42791,15 @@
    "papeis_nao_resolvidos": null,
    "definido_em": "src/components/layout/MobileSidebarDrawer.tsx",
    "resolve_para": "src/pages/BIAvancado.tsx"
+  },
+  {
+   "rotulo": "Cadastro",
+   "destino": "/cadastro",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/Cadastro.tsx"
   },
   {
    "rotulo": "Calendário",
@@ -42955,6 +42973,15 @@
    "resolve_para": "src/pages/AdminFieldMapping.tsx"
   },
   {
+   "rotulo": "Histórico Unificado",
+   "destino": "/historico",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/Historico.tsx"
+  },
+  {
    "rotulo": "Início",
    "destino": "/",
    "grupo": null,
@@ -43007,6 +43034,15 @@
    "papeis_nao_resolvidos": null,
    "definido_em": "src/components/layout/MobileSidebarDrawer.tsx",
    "resolve_para": "src/pages/LeadScoring.tsx"
+  },
+  {
+   "rotulo": "Logs de erro",
+   "destino": "/admin/error-logs",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/admin/ErrorLogs.tsx"
   },
   {
    "rotulo": "Lux Intelligence",
@@ -43090,6 +43126,24 @@
    "resolve_para": "src/pages/NPS.tsx"
   },
   {
+   "rotulo": "Papéis",
+   "destino": "/admin/roles",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/RolesPage.tsx"
+  },
+  {
+   "rotulo": "Perfis Comportamentais",
+   "destino": "/perfis-comportamentais",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/PerfisComportamentais.tsx"
+  },
+  {
    "rotulo": "Performance",
    "destino": "/performance",
    "grupo": null,
@@ -43097,6 +43151,15 @@
    "papeis_nao_resolvidos": null,
    "definido_em": "src/components/layout/MobileSidebarDrawer.tsx",
    "resolve_para": "src/pages/Performance.tsx"
+  },
+  {
+   "rotulo": "Permissões",
+   "destino": "/admin/role-permissions",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/RolePermissionsPage.tsx"
   },
   {
    "rotulo": "Pipeline",
@@ -43151,6 +43214,15 @@
    "papeis_nao_resolvidos": null,
    "definido_em": "src/components/layout/MobileSidebarDrawer.tsx",
    "resolve_para": "src/pages/Security.tsx"
+  },
+  {
+   "rotulo": "Segurança (admin)",
+   "destino": "/admin/seguranca",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/admin/AdminSegurancaPage.tsx"
   },
   {
    "rotulo": "Sequências",

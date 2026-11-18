@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)",
    "fix(ui): telas deixam de mostrar \"vazio\" quando a consulta falhou (#244)",
    "fix(db): liga security_invoker nas 16 views que ignoravam o RLS (#243)",
    "docs(pendencias): corrige o diagnostico errado do P7 e fecha P0 e P5 (#242)",
-   "fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)",
-   "fix(ci): destrava o CI da main - heap do typecheck e audit gate (#239)"
+   "fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)"
   ]
  },
  "pr_template": null,

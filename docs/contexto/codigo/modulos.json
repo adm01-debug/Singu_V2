@@ -1712,7 +1712,8 @@
     "rpcs": []
    },
    "importado_por_outros_modulos": [
-    "app"
+    "app",
+    "pages"
    ],
    "depende_de_modulos": [
     "components/feedback",
@@ -5275,7 +5276,7 @@
    "modulo": "components/layout",
    "arquivos": 6,
    "testes": 1,
-   "linhas": 1383,
+   "linhas": 1402,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -11919,15 +11920,17 @@
    "modulo": "pages",
    "arquivos": 105,
    "testes": 6,
-   "linhas": 20939,
+   "linhas": 20953,
    "itens_menu": [
     "ABM",
     "Análise PNL",
     "Analytics",
+    "Assistente IA",
     "Audit Trail",
     "Auditoria IA",
     "Automações",
     "BI Avançado",
+    "Cadastro",
     "Calendário",
     "Conexões",
     "Configurações",
@@ -11942,6 +11945,7 @@
     "Empresas",
     "Enriquecimento",
     "Field Mapping",
+    "Histórico Unificado",
     "Início",
     "Insights",
     "Intelligence",
@@ -11955,7 +11959,10 @@
     "Network",
     "Notificações",
     "NPS & Satisfação",
+    "Papéis",
+    "Perfis Comportamentais",
     "Performance",
+    "Permissões",
     "Pipeline",
     "Schema Drift",
     "Secrets",
@@ -13129,6 +13136,7 @@
     "components/admin",
     "components/ai",
     "components/analytics",
+    "components/auth",
     "components/automation",
     "components/bi",
     "components/campaigns",
@@ -13247,7 +13255,9 @@
     "Auditoria de Reanálises",
     "Error Budget",
     "Feature Flags",
-    "Feedback de Insights"
+    "Feedback de Insights",
+    "Logs de erro",
+    "Segurança (admin)"
    ],
    "telas": [
     "/admin/behavioral-regen-audit",

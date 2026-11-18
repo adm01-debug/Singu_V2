@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "nos": 1949,
- "arestas": 8415,
+ "arestas": 8417,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -137,15 +137,15 @@
    "importado_por": 27
   },
   {
+   "arquivo": "src/hooks/useIsAdmin.ts",
+   "importado_por": 27
+  },
+  {
    "arquivo": "supabase/functions/_shared/best-effort-write.ts",
    "importado_por": 27
   },
   {
    "arquivo": "src/components/dashboard/DashboardErrorBoundary.tsx",
-   "importado_por": 26
-  },
-  {
-   "arquivo": "src/hooks/useIsAdmin.ts",
    "importado_por": 26
   },
   {
@@ -226,7 +226,6 @@
   "src/components/analytics/ApproachRecommendationPanel.tsx",
   "src/components/analytics/ClientHealthPanel.tsx",
   "src/components/analytics/CognitiveBiasesPanel.tsx",
-  "src/components/auth/ForgotPasswordForm.tsx",
   "src/components/celebrations/index.ts",
   "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
   "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
@@ -316,7 +315,7 @@
   },
   {
    "modulo": "pages",
-   "depende_de": 96,
+   "depende_de": 97,
    "importado_por": 3
   },
   {

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "f6ec6ec4d76d319f81804d45494f809f41830e7b",
+  "commit": "775c89c04dd0988d84be31655359569e3f7cd2e8",
   "branch": "main",
-  "data_commit": "2026-11-18T14:39:32-03:00",
+  "data_commit": "2026-11-18T14:43:44-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "775c89c",
+    "data": "2026-11-18",
+    "assunto": "feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)"
+   },
    {
     "sha": "f6ec6ec",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "82deeda",
     "data": "2026-11-13",
     "assunto": "chore(docs): bump prod-readiness pos-merge 223"
-   },
-   {
-    "sha": "e0851f2",
-    "data": "2026-11-13",
-    "assunto": "chore(docs): bump prod-readiness para o head pos-merge 222 (#223)"
    }
   ],
-  "arquivos_mudados_7d": 400,
+  "arquivos_mudados_7d": 402,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 85
+    "commits": 86
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -324,11 +324,11 @@
  "contagens": {
   "arquivos_total": 3242,
   "arquivos_codigo": 2215,
-  "linhas_codigo": 414228,
+  "linhas_codigo": 414261,
   "rotas": 114,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 56,
+  "itens_menu": 64,
   "modulos": 141,
   "componentes": 1057,
   "hooks": 408,
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 985,
-   "linhas": 148168
+   "linhas": 148187
   },
   "src/config": {
    "arquivos": 1,
@@ -684,7 +684,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28572
+   "linhas": 28586
   },
   "src/store": {
    "arquivos": 1,
@@ -1085,7 +1085,6 @@
    "src/components/analytics/ApproachRecommendationPanel.tsx",
    "src/components/analytics/ClientHealthPanel.tsx",
    "src/components/analytics/CognitiveBiasesPanel.tsx",
-   "src/components/auth/ForgotPasswordForm.tsx",
    "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
    "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
    "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx",

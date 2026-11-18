@@ -5167,6 +5167,7 @@
    "src/components/ui/separator.tsx",
    "src/components/ui/sidebar.tsx",
    "src/hooks/useAuth.tsx",
+   "src/hooks/useIsAdmin.ts",
    "src/lib/utils.ts",
    "src/pages/ConversationIntelligence.tsx"
   ],
@@ -9598,6 +9599,7 @@
    "src/lib/utils.ts"
   ],
   "src/pages/Auth.tsx": [
+   "src/components/auth/ForgotPasswordForm.tsx",
    "src/components/seo/SEOHead.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
