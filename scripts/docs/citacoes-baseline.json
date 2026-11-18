@@ -1,7 +1,7 @@
 {
   "fonte": "scripts/docs/verificar-citacoes.mjs --baseline",
   "o_que_e": "citacoes arquivo:linha que já estavam quebradas quando a catraca foi criada. A lista só pode encolher: quebra nova reprova. Corrigiu uma? rode --baseline e commite.",
-  "total": 190,
+  "total": 189,
   "quebras": [
     "AGENTS.md -> docs/contexto/00-INDEX.md (arquivo nao existe)",
     "AUDITORIA.md -> src/main.tsx:103-123 (arquivo tem 97 linhas)",
@@ -107,7 +107,6 @@
     "docs/dr-drills/README.md -> docs/dr-drills/AAAA-MM-restore.md (arquivo nao existe)",
     "docs/estado/01_CORE_CRM.md -> src/hooks/useMergeRecords.ts:26-69 (arquivo tem 60 linhas)",
     "docs/estado/01_CORE_CRM.md -> src/hooks/useMergeRecords.ts:32-66 (arquivo tem 60 linhas)",
-    "docs/estado/01_CORE_CRM.md -> src/pages/Interacoes.tsx:1-245 (arquivo tem 243 linhas)",
     "docs/estado/01_CORE_CRM.md -> supabase/migrations/20260317213221_...sql:3 (arquivo nao existe)",
     "docs/estado/01_CORE_CRM.md -> supabase/migrations/20260422122247_...sql (arquivo nao existe)",
     "docs/estado/01_CORE_CRM.md -> supabase/migrations/20260512184042_...sql:24 (arquivo nao existe)",
