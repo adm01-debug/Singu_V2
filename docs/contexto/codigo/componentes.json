@@ -16006,7 +16006,7 @@
     "Contatos"
    ],
    "export_default": "Contatos",
-   "linhas": 389,
+   "linhas": 412,
    "dominio": "pages",
    "hooks_locais": [
     "useAccessibleToast",
@@ -16196,7 +16196,7 @@
     "Deduplicacao"
    ],
    "export_default": "Deduplicacao",
-   "linhas": 233,
+   "linhas": 242,
    "dominio": "pages",
    "hooks_locais": [
     "useDedupEngine",
@@ -16607,7 +16607,7 @@
     "Interacoes"
    ],
    "export_default": "Interacoes",
-   "linhas": 243,
+   "linhas": 263,
    "dominio": "pages",
    "hooks_locais": [
     "useContacts",
@@ -16765,7 +16765,7 @@
     "MarketingFormDetail"
    ],
    "export_default": "MarketingFormDetail",
-   "linhas": 146,
+   "linhas": 177,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth",
@@ -17384,7 +17384,7 @@
     "Sequencias"
    ],
    "export_default": "Sequencias",
-   "linhas": 166,
+   "linhas": 178,
    "dominio": "pages",
    "hooks_locais": [
     "usePageTitle",

@@ -9775,6 +9775,7 @@
   ],
   "src/pages/Contatos.tsx": [
    "src/components/celebrations/MiniCelebration.tsx",
+   "src/components/feedback/index.ts",
    "src/components/forms/ContactForm.tsx",
    "src/components/keyboard/KeyboardShortcutsCheatsheet.tsx",
    "src/components/layout/AppLayout.tsx",
@@ -9796,6 +9797,7 @@
    "src/hooks/useRestoreEntity.ts",
    "src/hooks/useSavedViews.ts",
    "src/hooks/useSuccessCelebration.ts",
+   "src/lib/errorMessages.ts",
    "src/lib/haptics.ts",
    "src/lib/sorting-utils.ts",
    "src/pages/contatos/ContatosContent.tsx"
@@ -9880,6 +9882,7 @@
    "src/hooks/useDealRooms.ts"
   ],
   "src/pages/Deduplicacao.tsx": [
+   "src/components/feedback/index.ts",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
@@ -9890,6 +9893,7 @@
    "src/components/ui/tabs.tsx",
    "src/hooks/useDedupEngine.ts",
    "src/hooks/useMergeRecords.ts",
+   "src/lib/errorMessages.ts",
    "src/lib/fuzzyDedup.ts"
   ],
   "src/pages/DesignSystem.tsx": [
@@ -10213,6 +10217,7 @@
   "src/pages/Interacoes.tsx": [
    "src/components/celebrations/MiniCelebration.tsx",
    "src/components/dashboard/DashboardErrorBoundary.tsx",
+   "src/components/feedback/index.ts",
    "src/components/filters/AdvancedFilters.tsx",
    "src/components/forms/InteractionForm.tsx",
    "src/components/interactions/UnifiedTimelineView.tsx",
@@ -10229,6 +10234,7 @@
    "src/hooks/useNLPAutoAnalysis.ts",
    "src/hooks/usePageTitle.ts",
    "src/hooks/useSearchPresets.ts",
+   "src/lib/errorMessages.ts",
    "src/lib/searchPresetTransport.ts",
    "src/pages/interacoes/InteracoesContent.tsx"
   ],
@@ -10306,6 +10312,7 @@
    "src/pages/mapa/geocoding.ts"
   ],
   "src/pages/MarketingFormDetail.tsx": [
+   "src/components/feedback/index.ts",
    "src/components/marketing/FormBuilder.tsx",
    "src/components/marketing/PublicFormRenderer.tsx",
    "src/components/ui/button.tsx",
@@ -10662,6 +10669,7 @@
    "src/hooks/useIPMaskingPreference.ts"
   ],
   "src/pages/Sequencias.tsx": [
+   "src/components/feedback/index.ts",
    "src/components/layout/AppLayout.tsx",
    "src/components/seo/SEOHead.tsx",
    "src/components/sequences/SequenceCard.tsx",
@@ -10674,7 +10682,8 @@
    "src/components/ui/card.tsx",
    "src/hooks/usePageTitle.ts",
    "src/hooks/useSequenceProcessor.ts",
-   "src/hooks/useSequences.ts"
+   "src/hooks/useSequences.ts",
+   "src/lib/errorMessages.ts"
   ],
   "src/pages/SmsMarketing.tsx": [
    "src/components/ui/badge.tsx",

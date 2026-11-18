@@ -181,8 +181,14 @@
    "edges": [],
    "hooks_internos": [],
    "canais_realtime": [],
-   "usado_por": 0,
-   "usado_por_arquivos": [],
+   "usado_por": 5,
+   "usado_por_arquivos": [
+    "src/pages/Contatos.tsx",
+    "src/pages/Deduplicacao.tsx",
+    "src/pages/Interacoes.tsx",
+    "src/pages/MarketingFormDetail.tsx",
+    "src/pages/Sequencias.tsx"
+   ],
    "coberto_por_testes": 0
   },
   {
@@ -8895,7 +8901,7 @@
     "useSequencePausedEmails",
     "useSequences"
    ],
-   "linhas": 349,
+   "linhas": 350,
    "dominio": "hooks",
    "tabelas": [
     "contacts",

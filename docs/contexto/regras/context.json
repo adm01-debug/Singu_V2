@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "a9fdfb7776abe6cca4d16ef4d58fc62d78742f8d",
+  "sha": "f6ec6ec4d76d319f81804d45494f809f41830e7b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 15:26 UTC",
+  "generated_at": "2026-11-18 17:41 UTC",
   "files_total": 3347,
   "code_files": 2876,
-  "code_lines": 410065
+  "code_lines": 410161
  },
  "version": "1.3.2",
- "facts_hash": "e0588bccde9f3cd5",
+ "facts_hash": "335bfd5438759a62",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -59789,7 +59789,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 158
+    "deps_count": 169
    },
    {
     "path": "",
@@ -59992,7 +59992,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 21
+    "deps_count": 37
    },
    {
     "path": "",
@@ -60498,7 +60498,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 187
+    "deps_count": 199
    },
    {
     "path": "",
@@ -60684,7 +60684,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 20
+    "deps_count": 37
    },
    {
     "path": "",
@@ -61392,7 +61392,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 116
+    "deps_count": 128
    },
    {
     "path": "",
@@ -61625,7 +61625,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 180
+    "deps_count": 191
    },
    {
     "path": "/contatos/:id",
@@ -69550,7 +69550,7 @@
   {
    "module": "src/hooks",
    "files": 435,
-   "lines": 57202,
+   "lines": 57203,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -70119,7 +70119,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28477,
+   "lines": 28572,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -208146,7 +208146,7 @@
   },
   "src/hooks/useSequences.ts": {
    "path": "src/hooks/useSequences.ts",
-   "lines": 349,
+   "lines": 350,
    "exports": [
     "interface SequenceStep",
     "interface Sequence",
@@ -215097,7 +215097,7 @@
   },
   "src/pages/Contatos.tsx": {
    "path": "src/pages/Contatos.tsx",
-   "lines": 389,
+   "lines": 412,
    "exports": [
     "default Contatos"
    ]
@@ -215176,7 +215176,7 @@
   },
   "src/pages/Deduplicacao.tsx": {
    "path": "src/pages/Deduplicacao.tsx",
-   "lines": 233,
+   "lines": 242,
    "exports": [
     "function Deduplicacao"
    ]
@@ -215537,7 +215537,7 @@
   },
   "src/pages/Interacoes.tsx": {
    "path": "src/pages/Interacoes.tsx",
-   "lines": 243,
+   "lines": 263,
    "exports": [
     "default Interacoes"
    ],
@@ -215638,7 +215638,7 @@
   },
   "src/pages/MarketingFormDetail.tsx": {
    "path": "src/pages/MarketingFormDetail.tsx",
-   "lines": 146,
+   "lines": 177,
    "exports": [
     "function MarketingFormDetail"
    ],
@@ -215654,6 +215654,9 @@
      "user_id"
     ]
    },
+   "navigates": [
+    "/marketing"
+   ],
    "errors": [
     "Não foi possível copiar"
    ]
@@ -216544,7 +216547,7 @@
   },
   "src/pages/Sequencias.tsx": {
    "path": "src/pages/Sequencias.tsx",
-   "lines": 166,
+   "lines": 178,
    "exports": [
     "function Sequencias"
    ],
@@ -232865,10 +232868,24 @@
   }
  },
  "git": {
-  "sha": "a9fdfb7776abe6cca4d16ef4d58fc62d78742f8d",
+  "sha": "f6ec6ec4d76d319f81804d45494f809f41830e7b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "f6ec6ec",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(ui): telas deixam de mostrar \"vazio\" quando a consulta falhou (#244)",
+    "files": [
+     "src/hooks/useSequences.ts",
+     "src/pages/Contatos.tsx",
+     "src/pages/Deduplicacao.tsx",
+     "src/pages/Interacoes.tsx",
+     "src/pages/MarketingFormDetail.tsx",
+     "src/pages/Sequencias.tsx"
+    ]
+   },
    {
     "sha": "a9fdfb7",
     "date": "2026-11-18",
@@ -233313,25 +233330,24 @@
     "files": [
      "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
     ]
-   },
-   {
-    "sha": "b7233bb",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)",
-    "files": [
-     "docs/prod-readiness.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/prod-readiness.md",
-    12
+    11
    ],
    [
     ".github/workflows/ci.yml",
     4
+   ],
+   [
+    "src/pages/Contatos.tsx",
+    2
+   ],
+   [
+    "src/pages/Interacoes.tsx",
+    2
    ],
    [
     "package-lock.json",
@@ -233348,6 +233364,22 @@
    [
     "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
     2
+   ],
+   [
+    "src/hooks/useSequences.ts",
+    1
+   ],
+   [
+    "src/pages/Deduplicacao.tsx",
+    1
+   ],
+   [
+    "src/pages/MarketingFormDetail.tsx",
+    1
+   ],
+   [
+    "src/pages/Sequencias.tsx",
+    1
    ],
    [
     "supabase/migrations/20261118150043_views_security_invoker_16.sql",
@@ -233379,30 +233411,6 @@
    ],
    [
     ".github/workflows/estado-real.yml",
-    1
-   ],
-   [
-    ".github/workflows/higiene-semanal.yml",
-    1
-   ],
-   [
-    ".github/workflows/restore-drill.yml",
-    1
-   ],
-   [
-    ".github/workflows/rls-exposure-guard.yml",
-    1
-   ],
-   [
-    "scripts/ci/check-test-inventory.mjs",
-    1
-   ],
-   [
-    ".github/workflows/contexto.yml",
-    1
-   ],
-   [
-    "src/components/admin/PasswordResetApproval.tsx",
     1
    ]
   ]

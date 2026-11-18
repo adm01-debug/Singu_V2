@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "nos": 1949,
- "arestas": 8406,
+ "arestas": 8415,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -58,7 +58,7 @@
   },
   {
    "arquivo": "src/lib/errorMessages.ts",
-   "importado_por": 113
+   "importado_por": 117
   },
   {
    "arquivo": "supabase/functions/_shared/auth.ts",
@@ -243,7 +243,6 @@
   "src/components/docs/TechTooltip.tsx",
   "src/components/docs/VersionBadge.tsx",
   "src/components/feedback/ProgressStepper.tsx",
-  "src/components/feedback/index.ts",
   "src/components/help/ContextualHelpTooltip.tsx",
   "src/components/hoc/withProviderCheck.tsx",
   "src/components/intent/IntentSignalCard.tsx",
