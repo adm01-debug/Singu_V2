@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "d136c198f17c76b7429e1421f50429b5a00f2a6f",
+  "commit": "10085c6a8f1b20aeffe879ac8924c4e636aaaef3",
   "branch": "main",
-  "data_commit": "2026-11-18T09:09:41-03:00",
+  "data_commit": "2026-11-18T09:37:12-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "10085c6",
+    "data": "2026-11-18",
+    "assunto": "fix(db): recupera trabalho pendente de outros agentes nas branches (#238)"
+   },
    {
     "sha": "d136c19",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "a8cca0e",
     "data": "2026-11-13",
     "assunto": "fix(mtta): preenche threshold_pct/consumed_pct no alerta de heartbeat travado (#213)"
-   },
-   {
-    "sha": "b7233bb",
-    "data": "2026-11-13",
-    "assunto": "chore(docs): bump prod-readiness para main 5c7e2f39 pos-merge 215 (#216)"
    }
   ],
-  "arquivos_mudados_7d": 394,
+  "arquivos_mudados_7d": 396,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 79
+    "commits": 80
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,7 +322,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3240,
+  "arquivos_total": 3241,
   "arquivos_codigo": 2215,
   "linhas_codigo": 414132,
   "rotas": 114,
@@ -334,7 +334,7 @@
   "hooks": 408,
   "edge_functions": 109,
   "tabelas": 418,
-  "migrations": 485,
+  "migrations": 486,
   "cron_jobs": 34,
   "testes": 268,
   "workflows": 11,

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d136c198f17c76b7429e1421f50429b5a00f2a6f",
+  "sha": "10085c6a8f1b20aeffe879ac8924c4e636aaaef3",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 12:34 UTC",
-  "files_total": 3345,
-  "code_files": 2874,
-  "code_lines": 409899
+  "generated_at": "2026-11-18 12:38 UTC",
+  "files_total": 3346,
+  "code_files": 2875,
+  "code_lines": 409966
  },
  "version": "1.3.2",
- "facts_hash": "df4c5a254a0c1461",
+ "facts_hash": "870b9c7992fc4464",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -253,7 +253,7 @@
   "languages": {
    ".tsx": 1158,
    ".ts": 894,
-   ".sql": 658,
+   ".sql": 659,
    ".mjs": 123,
    ".py": 21,
    ".js": 18,
@@ -40142,10 +40142,10 @@
     "args": "",
     "returns": "TABLE(uf text, total bigint)",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20260926133544_multiplix_audience_rpcs.sql",
+    "src": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
     "security_definer": true,
     "search_path": true,
-    "body": "BEGIN RETURN QUERY SELECT ca.estado AS uf, count(DISTINCT ca.company_id)::bigint AS total FROM public.company_addresses ca JOIN public.companies c ON c.id = ca.company_id WHERE ca.is_primary = true AND ca.estado IS NOT NULL AND c.deleted_at IS NULL AND c.status = 'ativo' GROUP BY 1 ORDER BY total DESC; END;",
+    "body": "BEGIN RETURN QUERY SELECT ca.estado::text AS uf, count(DISTINCT ca.company_id)::bigint AS total FROM public.company_addresses ca JOIN public.companies c ON c.id = ca.company_id WHERE ca.is_primary = true AND ca.estado IS NOT NULL AND c.deleted_at IS NULL AND c.status = 'ativo' GROUP BY 1 ORDER BY total DESC; END;",
     "raises": [],
     "tables": [
      "companies",
@@ -48908,7 +48908,8 @@
    "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
    "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql",
    "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
-   "supabase/migrations/20261114124000_remove_duplicate_indexes.sql"
+   "supabase/migrations/20261114124000_remove_duplicate_indexes.sql",
+   "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -58017,6 +58018,22 @@
     "objkind": "function",
     "roles": "PUBLIC, anon, authenticated",
     "src": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "multiplix_list_ufs",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "multiplix_list_ufs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
    }
   ],
   "raises": [
@@ -70733,8 +70750,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 485,
-   "lines": 43118,
+   "files": 486,
+   "lines": 43185,
    "tables": [
     "users"
    ],
@@ -144360,10 +144377,10 @@
     "args": "",
     "returns": "TABLE(uf text, total bigint)",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20260926133544_multiplix_audience_rpcs.sql",
+    "src": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
     "security_definer": true,
     "search_path": true,
-    "body": "BEGIN RETURN QUERY SELECT ca.estado AS uf, count(DISTINCT ca.company_id)::bigint AS total FROM public.company_addresses ca JOIN public.companies c ON c.id = ca.company_id WHERE ca.is_primary = true AND ca.estado IS NOT NULL AND c.deleted_at IS NULL AND c.status = 'ativo' GROUP BY 1 ORDER BY total DESC; END;",
+    "body": "BEGIN RETURN QUERY SELECT ca.estado::text AS uf, count(DISTINCT ca.company_id)::bigint AS total FROM public.company_addresses ca JOIN public.companies c ON c.id = ca.company_id WHERE ca.is_primary = true AND ca.estado IS NOT NULL AND c.deleted_at IS NULL AND c.status = 'ativo' GROUP BY 1 ORDER BY total DESC; END;",
     "raises": [],
     "tables": [
      "companies",
@@ -156036,6 +156053,7 @@
    "supabase/migrations/20261029120000_drop_update_company_fields.sql",
    "supabase/migrations/20261108190000_cron_job_run_details_retention.sql",
    "supabase/migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql",
+   "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -165047,6 +165065,22 @@
     "objkind": "function",
     "roles": "PUBLIC, anon, authenticated",
     "src": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "multiplix_list_ufs",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "multiplix_list_ufs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
    }
   ],
   "guards": [
@@ -231707,7 +231741,7 @@
   },
   "supabase/migrations/20260924215142_t216_fix_reversao_devolve_status_staging.sql": {
    "path": "supabase/migrations/20260924215142_t216_fix_reversao_devolve_status_staging.sql",
-   "lines": 63
+   "lines": 70
   },
   "supabase/migrations/20260924220017_rodizio_fix_reverter_orfao_nome_e_n1_sugestao.sql": {
    "path": "supabase/migrations/20260924220017_rodizio_fix_reverter_orfao_nome_e_n1_sugestao.sql",
@@ -232145,6 +232179,11 @@
   "supabase/migrations/20261114124000_remove_duplicate_indexes.sql": {
    "path": "supabase/migrations/20261114124000_remove_duplicate_indexes.sql",
    "lines": 62
+  },
+  "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql": {
+   "path": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
+   "lines": 60,
+   "uses_service_role": true
   },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
@@ -232819,10 +232858,20 @@
   }
  },
  "git": {
-  "sha": "d136c198f17c76b7429e1421f50429b5a00f2a6f",
+  "sha": "10085c6a8f1b20aeffe879ac8924c4e636aaaef3",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "10085c6",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(db): recupera trabalho pendente de outros agentes nas branches (#238)",
+    "files": [
+     "supabase/migrations/20260924215142_t216_fix_reversao_devolve_status_staging.sql",
+     "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
+    ]
+   },
    {
     "sha": "d136c19",
     "date": "2026-11-18",
@@ -233267,15 +233316,6 @@
      "inventario/estado/edges.json",
      "inventario/estado/tabelas-uso.json"
     ]
-   },
-   {
-    "sha": "0a83cb7",
-    "date": "2026-11-13",
-    "author": "adm01-debug",
-    "subject": "fix(ci): pat do dono abre o pr do inventario semanal (#209)",
-    "files": [
-     ".github/workflows/inventario-estado-semanal.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -233284,16 +233324,24 @@
     14
    ],
    [
-    ".github/workflows/inventario-estado-semanal.yml",
-    3
+    ".github/workflows/ci.yml",
+    2
    ],
    [
-    ".github/workflows/ci.yml",
+    ".github/workflows/inventario-estado-semanal.yml",
     2
    ],
    [
     "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
     2
+   ],
+   [
+    "supabase/migrations/20260924215142_t216_fix_reversao_devolve_status_staging.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
+    1
    ],
    [
     "supabase/migrations/20261114124000_remove_duplicate_indexes.sql",
@@ -233349,14 +233397,6 @@
    ],
    [
     "src/components/ai/AIMessageGenerator.tsx",
-    1
-   ],
-   [
-    "src/components/analytics/AdvancedAnalyticsTab.tsx",
-    1
-   ],
-   [
-    "src/components/analytics/ClosingScoreAlertsList.tsx",
     1
    ]
   ]
