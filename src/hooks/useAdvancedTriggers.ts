@@ -26,6 +26,11 @@ import {
   INTENSITY_LEVELS,
 } from '@/data/triggersAdvancedData';
 import { COMPLETE_TRIGGER_CONFLICTS, COMPLETE_TRIGGER_SYNERGIES } from '@/data/triggerConflictsMatrix';
+import {
+  EXTENDED_TRIGGER_CONFLICTS,
+  EXTENDED_TRIGGER_SYNERGIES,
+  EXTENDED_TRIGGER_FALLBACKS,
+} from '@/data/triggersExtendedData';
 import { useTriggerHistory } from './useTriggerHistory';
 
 /**
@@ -48,8 +53,19 @@ function unir<T extends { trigger1: string; trigger2: string }>(emUso: T[], extr
   return [...emUso, ...extras.filter(item => !cobertos.has(chaveDoPar(item.trigger1, item.trigger2)))];
 }
 
-const CONFLITOS = unir(TRIGGER_CONFLICTS, COMPLETE_TRIGGER_CONFLICTS);
-const SINERGIAS = unir(TRIGGER_SYNERGIES, COMPLETE_TRIGGER_SYNERGIES);
+// data/triggersExtendedData.ts trazia mais 14 conflitos, 13 sinergias e 4
+// árvores de alternativa para os 12 gatilhos estendidos (ancoragem, priming,
+// enquadramento...). Os gatilhos já estavam em ADVANCED_MENTAL_TRIGGERS, mas as
+// relações entre eles não: o módulo não era importado por ninguém. Entram pela
+// mesma união aditiva.
+export const CONFLITOS = unir(unir(TRIGGER_CONFLICTS, COMPLETE_TRIGGER_CONFLICTS), EXTENDED_TRIGGER_CONFLICTS);
+export const SINERGIAS = unir(unir(TRIGGER_SYNERGIES, COMPLETE_TRIGGER_SYNERGIES), EXTENDED_TRIGGER_SYNERGIES);
+export const ALTERNATIVAS = [
+  ...TRIGGER_FALLBACKS,
+  ...EXTENDED_TRIGGER_FALLBACKS.filter(
+    extra => !TRIGGER_FALLBACKS.some(emUso => emUso.primaryTrigger === extra.primaryTrigger),
+  ),
+];
 import { differenceInHours, parseISO } from 'date-fns';
 
 // ============================================
@@ -293,7 +309,7 @@ export function useAdvancedTriggers(contact: Contact | null | undefined) {
   // FALLBACK RECOMMENDATIONS
   // ============================================
   const getFallbacks = useCallback((triggerId: AllTriggerTypes, failureIndicator?: string) => {
-    const fallbackTree = TRIGGER_FALLBACKS.find(f => f.primaryTrigger === triggerId);
+    const fallbackTree = ALTERNATIVAS.find(f => f.primaryTrigger === triggerId);
     if (!fallbackTree) return [];
 
     return fallbackTree.fallbackSequence.map(f => ({
@@ -413,6 +429,6 @@ export function useAdvancedTriggers(contact: Contact | null | undefined) {
     conflicts: CONFLITOS,
     synergies: SINERGIAS,
     neurochemicalTiming: NEUROCHEMICAL_TIMING,
-    fallbackTrees: TRIGGER_FALLBACKS,
+    fallbackTrees: ALTERNATIVAS,
   };
 }
