@@ -25,7 +25,31 @@ import {
   TRIGGER_FALLBACKS,
   INTENSITY_LEVELS,
 } from '@/data/triggersAdvancedData';
+import { COMPLETE_TRIGGER_CONFLICTS, COMPLETE_TRIGGER_SYNERGIES } from '@/data/triggerConflictsMatrix';
 import { useTriggerHistory } from './useTriggerHistory';
+
+/**
+ * Matriz de conflitos e sinergias de gatilhos.
+ *
+ * O painel de Gatilhos Avançados (Analytics) detectava conflito entre apenas
+ * 6 pares e sinergia entre 7 — os que estão em data/triggersAdvancedRelations.
+ * Ao lado, data/triggerConflictsMatrix.ts trazia 45 conflitos e 33 sinergias
+ * do mesmo tipo (`TriggerConflict`/`TriggerSynergy`) e do mesmo espaço de
+ * identificadores, e nenhum arquivo o importava.
+ *
+ * A união é ADITIVA: os pares já em uso ficam como estão e só entram os que
+ * ainda não tinham cobertura. A chave ignora a ordem do par, porque
+ * `detectConflicts` já casa (a,b) e (b,a) como o mesmo conflito.
+ */
+const chaveDoPar = (a: string, b: string) => [a, b].sort().join('|');
+
+function unir<T extends { trigger1: string; trigger2: string }>(emUso: T[], extras: T[]): T[] {
+  const cobertos = new Set(emUso.map(item => chaveDoPar(item.trigger1, item.trigger2)));
+  return [...emUso, ...extras.filter(item => !cobertos.has(chaveDoPar(item.trigger1, item.trigger2)))];
+}
+
+const CONFLITOS = unir(TRIGGER_CONFLICTS, COMPLETE_TRIGGER_CONFLICTS);
+const SINERGIAS = unir(TRIGGER_SYNERGIES, COMPLETE_TRIGGER_SYNERGIES);
 import { differenceInHours, parseISO } from 'date-fns';
 
 // ============================================
@@ -243,7 +267,7 @@ export function useAdvancedTriggers(contact: Contact | null | undefined) {
 
     for (let i = 0; i < recentTriggers.length; i++) {
       for (let j = i + 1; j < recentTriggers.length; j++) {
-        const conflict = TRIGGER_CONFLICTS.find(
+        const conflict = CONFLITOS.find(
           c => (c.trigger1 === recentTriggers[i] && c.trigger2 === recentTriggers[j]) ||
                (c.trigger1 === recentTriggers[j] && c.trigger2 === recentTriggers[i])
         );
@@ -260,7 +284,7 @@ export function useAdvancedTriggers(contact: Contact | null | undefined) {
   // SYNERGY RECOMMENDATIONS
   // ============================================
   const getSynergies = useCallback((triggerId: AllTriggerTypes): TriggerSynergy[] => {
-    return TRIGGER_SYNERGIES.filter(
+    return SINERGIAS.filter(
       s => s.trigger1 === triggerId || s.trigger2 === triggerId
     ).sort((a, b) => b.synergyLevel - a.synergyLevel);
   }, []);
@@ -386,8 +410,8 @@ export function useAdvancedTriggers(contact: Contact | null | undefined) {
     getRecommendedIntensity,
     
     // Static data
-    conflicts: TRIGGER_CONFLICTS,
-    synergies: TRIGGER_SYNERGIES,
+    conflicts: CONFLITOS,
+    synergies: SINERGIAS,
     neurochemicalTiming: NEUROCHEMICAL_TIMING,
     fallbackTrees: TRIGGER_FALLBACKS,
   };
