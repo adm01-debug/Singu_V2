@@ -20,7 +20,10 @@ DO $$ BEGIN
   END IF;
 END $$;
 
-CREATE TABLE public.user_roles (
+-- user_roles pode ja existir desde 20260321123026 (salespro batch1,
+-- CREATE TABLE IF NOT EXISTS sem policies). Converge: cria se ausente,
+-- mas nunca duplica quando o batch anterior ja a criou.
+CREATE TABLE IF NOT EXISTS public.user_roles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   role app_role NOT NULL,
