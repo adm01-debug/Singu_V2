@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "16da53a195efeb18d4a592f61ab5dca89b993332",
+  "commit": "f7463935e247073b7a7666f56d5bcaac419697d5",
   "branch": "main",
-  "data_commit": "2026-11-19T08:15:07-03:00",
+  "data_commit": "2026-11-19T15:02:08-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "f746393",
+    "data": "2026-11-19",
+    "assunto": "fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)"
+   },
    {
     "sha": "16da53a",
     "data": "2026-11-19",
@@ -126,14 +131,9 @@
     "sha": "775c89c",
     "data": "2026-11-18",
     "assunto": "feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)"
-   },
-   {
-    "sha": "f6ec6ec",
-    "data": "2026-11-18",
-    "assunto": "fix(ui): telas deixam de mostrar \"vazio\" quando a consulta falhou (#244)"
    }
   ],
-  "arquivos_mudados_7d": 434,
+  "arquivos_mudados_7d": 400,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -185,7 +185,7 @@
    },
    {
     "pasta": "src/hooks/__tests__",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "pasta": "scripts/migration/ddl",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 109
+    "commits": 110
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,9 +322,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3259,
-  "arquivos_codigo": 2231,
-  "linhas_codigo": 416849,
+  "arquivos_total": 3260,
+  "arquivos_codigo": 2232,
+  "linhas_codigo": 416948,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -336,7 +336,7 @@
   "tabelas": 418,
   "migrations": 488,
   "cron_jobs": 34,
-  "testes": 273,
+  "testes": 274,
   "workflows": 11,
   "scripts": 296,
   "docs_md": 156
@@ -667,8 +667,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 441,
-   "linhas": 58224
+   "arquivos": 442,
+   "linhas": 58323
   },
   "src/integrations": {
    "arquivos": 3,

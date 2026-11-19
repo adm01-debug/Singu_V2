@@ -6847,7 +6847,7 @@
    "hooks_exportados": [
     "useMetaprogramAnalysis"
    ],
-   "linhas": 213,
+   "linhas": 244,
    "dominio": "hooks",
    "tabelas": [
     "metaprogram_analysis"
@@ -6867,7 +6867,7 @@
     "src/hooks/useFicha360NLP.ts",
     "src/hooks/useNLPAutoAnalysis.ts"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useMFAGuard.ts",
@@ -7174,7 +7174,7 @@
    "hooks_exportados": [
     "useNLPAutoAnalysis"
    ],
-   "linhas": 323,
+   "linhas": 326,
    "dominio": "hooks",
    "tabelas": [
     "companies",

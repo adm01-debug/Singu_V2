@@ -22,7 +22,7 @@
   ],
   "testes": [
    "co-localizado (*.test) (126)",
-   "co-localizado (__tests__) (95)",
+   "co-localizado (__tests__) (96)",
    "tests/ (23)"
   ],
   "edge_functions": "supabase/functions",
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)",
    "feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)",
    "feat(gatilhos): liga a matriz completa de conflitos e sinergias que estava desligada (#268)",
    "fix(carnegie): analise de fala/escuta passa a ler o texto em vez de inventar (#266)",
-   "fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)",
-   "fix(territorios): módulo inteiro estava fora de contrato com o banco (#265)"
+   "fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)"
   ]
  },
  "pr_template": null,

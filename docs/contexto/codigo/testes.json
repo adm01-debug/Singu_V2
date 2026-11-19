@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 273,
+ "total": 274,
  "por_tipo": {
   "contrato": 40,
   "e2e": 12,
   "pytest": 9,
-  "unit": 210
+  "unit": 211
  },
  "onde_ficam": [
   {
@@ -19,7 +19,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 95
+   "arquivos": 96
   },
   {
    "padrao": "tests/",
@@ -1481,6 +1481,15 @@
    "casos": 1
   },
   {
+   "arquivo": "src/hooks/__tests__/confianca-metaprogramas.test.ts",
+   "tipo": "unit",
+   "linhas": 65,
+   "testa": [
+    "src/hooks/useMetaprogramAnalysis.ts"
+   ],
+   "casos": 8
+  },
+  {
    "arquivo": "src/hooks/__tests__/contact-cache-concurrency.test.tsx",
    "tipo": "unit",
    "linhas": 246,
@@ -2634,6 +2643,7 @@
   "src/hooks/useIsAdmin.ts": 1,
   "src/hooks/useLuxWebhookConfig.ts": 2,
   "src/hooks/useMergeRecords.ts": 2,
+  "src/hooks/useMetaprogramAnalysis.ts": 1,
   "src/hooks/useModalHistory.ts": 2,
   "src/hooks/useNextBestAction.ts": 2,
   "src/hooks/useNpsSurveys.ts": 3,
@@ -3039,7 +3049,6 @@
    "src/hooks/useMarketingInsights.ts",
    "src/hooks/useMarkObjectionHandled.ts",
    "src/hooks/useMeetingSummary.ts",
-   "src/hooks/useMetaprogramAnalysis.ts",
    "src/hooks/useMFAGuard.ts",
    "src/hooks/useMQL.ts",
    "src/hooks/useMttaSlaBreachSnapshot.ts",

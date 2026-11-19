@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `16da53a195` · branch `main` · 2026-11-19 11:15 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f7463935e2` · branch `main` · 2026-11-19 18:02 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4422,7 +4422,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3206 testes em 248 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3216 testes em 249 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4521,6 +4521,7 @@ _nenhum item encontrado_
 | `src/data/__tests__/emotionalIntelligence.test.ts` | 10 | EQ Pillar Data Integrity · has exactly 5 Goleman pillars · includes all 5 pillars · Pillar %s … |
 | `src/data/__tests__/triggerConflicts.test.ts` | 10 | Trigger Conflicts Matrix · has at least 30 conflicts · all conflicts have two triggers · trigger1 !== trigger2 (no self-conflicts) … |
 | `src/hooks/__tests__/canonical-delivery-retry-contract.test.tsx` | 10 | Conclusão parcial não duplica a interação na mesma instância · repete apenas o update quando a interação já foi gravada · compartilha a gravação entre duas tentativas simultâneas · permite repetir a interação quando seu insert falhou … |
+| `src/hooks/__tests__/confianca-metaprogramas.test.ts` | 10 | direcaoEConfianca · sem sinal nenhum, confiança é zero · empate técnico fica equilibrado em 50 · margem decidida aponta a direção e eleva a confiança … |
 | `src/hooks/__tests__/contact-detail-partial-failures.test.tsx` | 10 | Política real de repetição da ficha · não repete erro permanente na carga inicial sem cache · limita a três retries mesmo quando a falha transitória persiste · Mensagens seguras da ficha … |
 | `src/lib/externalData.read-audit.test.ts` | 10 | Auditoria de leitura · classifica leitura de %s como visualização de contato · não inventa criação de interação ao ler %s · registra o ID filtrado mesmo quando a seleção não retorna esse campo … |
 | `src/pages/mapa/geocoding.test.ts` | 10 | geocode · valida coordenadas e reutiliza apenas resultados válidos do cache · retorna null somente para busca válida sem resultados · propaga falhas HTTP e permite tentar novamente sem cache de falha … |
