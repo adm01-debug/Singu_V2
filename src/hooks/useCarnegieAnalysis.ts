@@ -11,6 +11,12 @@ import { getTopLabelsForContact } from '@/data/carnegieIdentityLabels';
 import { calculateWarmthScore, getWarmthLevel, detectWarmthIndicators, detectColdIndicators, getWarmthSuggestions } from '@/data/carnegieWarmth';
 import { detectFaceSavingScenario, getTechniqueForDISC } from '@/data/carnegieFaceSaving';
 import { detectProgressType, getCelebrationForDISC } from '@/data/carnegieProgressCelebration';
+import {
+  INTERRUPTION_INDICATORS,
+  LISTENING_INDICATORS,
+  QUESTION_PATTERNS,
+  getRecommendations,
+} from '@/data/carnegieTalkRatio';
 import { getDominantVAK, getDISCProfile } from '@/lib/contact-utils';
 
 export function useCarnegieAnalysis(contact: Contact | null) {
@@ -53,38 +59,75 @@ export function useCarnegieAnalysis(contact: Contact | null) {
     };
   }, []);
 
-  // Analyze talk ratio
-  const analyzeTalkRatio = useCallback((text: string, isUserSpeaking: boolean = true): TalkRatioAnalysis => {
-    const questionPatterns = /\?/g;
-    const statementPatterns = /\./g;
-    
-    const questionCount = (text.match(questionPatterns) || []).length;
-    const statementCount = (text.match(statementPatterns) || []).length;
-    
-    const speakerRatio = isUserSpeaking ? 60 : 40; // Simplified
-    const idealRatio = 35;
-    const deviation = Math.abs(speakerRatio - idealRatio);
+  // Analise de proporcao de fala.
+  //
+  // Antes esta funcao inventava quase tudo: `speakerRatio = isUserSpeaking ? 60 : 40`,
+  // `idealRatio = 35`, `openEndedQuestions = questionCount * 0.3`,
+  // `closedQuestions * 0.7`, `reflectiveStatements * 0.2`,
+  // `acknowledgments * 0.3` e `interruptionIndicators: 0` — nenhum lia o texto.
+  //
+  // Os padroes que faltavam ja existiam em data/carnegieTalkRatio.ts (410 linhas
+  // que nenhum arquivo importava): QUESTION_PATTERNS separa pergunta aberta,
+  // fechada e reflexiva; LISTENING_INDICATORS marca escuta ativa;
+  // INTERRUPTION_INDICATORS marca interrupcao. Agora sao eles que contam.
+  //
+  // O que continua sem medicao: proporcao de fala. O painel recebe um lado so
+  // da conversa, e a proporcao exige os dois lados com duracao — por isso
+  // speakerRatio, listenerRatio, idealRatio, deviation e quality vao como null.
+  const analyzeTalkRatio = useCallback((text: string): TalkRatioAnalysis => {
+    const frases = text
+      .split(/(?<=[.!?])\s+/)
+      .map(frase => frase.trim())
+      .filter(Boolean);
+    const perguntas = frases.filter(frase => frase.endsWith('?'));
+    const afirmacoes = frases.filter(frase => !frase.endsWith('?'));
 
-    const quality = 
-      deviation <= 10 ? 'excellent' :
-      deviation <= 20 ? 'good' :
-      deviation <= 35 ? 'needs_improvement' : 'poor';
+    const casam = (alvos: string[], padroes: readonly RegExp[]) =>
+      alvos.filter(alvo => padroes.some(padrao => padrao.test(alvo))).length;
+
+    // Cada pergunta entra em UMA categoria, da mais especifica para a menos.
+    // `closed.patterns` inclui /\?$/, que casa com qualquer pergunta: sem
+    // precedencia, toda pergunta seria contada tambem como fechada.
+    const classificar = (pergunta: string) => {
+      if (QUESTION_PATTERNS.reflective.patterns.some(padrao => padrao.test(pergunta))) return 'reflexiva';
+      if (QUESTION_PATTERNS.openEnded.patterns.some(padrao => padrao.test(pergunta))) return 'aberta';
+      if (QUESTION_PATTERNS.clarifying.patterns.some(padrao => padrao.test(pergunta))) return 'clarificacao';
+      return 'fechada';
+    };
+    const categorias = perguntas.map(classificar);
+    const openEndedQuestions = categorias.filter(c => c === 'aberta').length;
+    const closedQuestions = categorias.filter(c => c === 'fechada').length;
+    const reflectiveStatements = categorias.filter(c => c === 'reflexiva').length;
+    const acknowledgments = casam(frases, LISTENING_INDICATORS.active.patterns);
+
+    // Escuta ativa soma todos os grupos de LISTENING_INDICATORS que tenham padroes.
+    const gruposDeEscuta = Object.values(LISTENING_INDICATORS)
+      .map(grupo => (grupo as { patterns?: readonly RegExp[] }).patterns)
+      .filter((padroes): padroes is readonly RegExp[] => Array.isArray(padroes));
+    const activeListeningIndicators = frases.filter(frase =>
+      gruposDeEscuta.some(padroes => padroes.some(padrao => padrao.test(frase))),
+    ).length;
+
+    const interruptionIndicators = casam(frases, INTERRUPTION_INDICATORS.patterns);
 
     return {
-      speakerRatio,
-      listenerRatio: 100 - speakerRatio,
-      idealRatio,
-      deviation,
-      quality,
-      questionCount,
-      statementCount,
-      interruptionIndicators: 0,
-      activeListeningIndicators: questionCount,
-      openEndedQuestions: Math.floor(questionCount * 0.3),
-      closedQuestions: Math.floor(questionCount * 0.7),
-      reflectiveStatements: Math.floor(statementCount * 0.2),
-      acknowledgments: Math.floor(statementCount * 0.3),
-      recommendations: []
+      speakerRatio: null,
+      listenerRatio: null,
+      idealRatio: null,
+      deviation: null,
+      quality: null,
+      questionCount: perguntas.length,
+      statementCount: afirmacoes.length,
+      interruptionIndicators,
+      activeListeningIndicators,
+      openEndedQuestions,
+      closedQuestions,
+      reflectiveStatements,
+      acknowledgments,
+      // Os dois primeiros argumentos governam a recomendacao por proporcao de
+      // fala, que nao medimos: 0 e 0 desligam esse ramo (0 > 0 + 15 e falso) e
+      // deixam valer as recomendacoes por numero de perguntas e reconhecimentos.
+      recommendations: getRecommendations(0, 0, perguntas.length, acknowledgments),
     };
   }, []);
 

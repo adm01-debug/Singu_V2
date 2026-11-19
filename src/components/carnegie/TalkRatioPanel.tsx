@@ -48,13 +48,13 @@ export function TalkRatioPanel({ contact = null, className }: TalkRatioPanelProp
     
     setIsAnalyzing(true);
     setTimeout(() => {
-      const result = analyzeTalkRatio(text, true);
+      const result = analyzeTalkRatio(text);
       setAnalysis(result);
       setIsAnalyzing(false);
     }, 300);
   }, [text, analyzeTalkRatio]);
 
-  const qualityConfig = analysis ? QUALITY_CONFIG[analysis.quality] : null;
+  const qualityConfig = analysis?.quality ? QUALITY_CONFIG[analysis.quality] : null;
 
   return (
     <Card variant="elevated" className={cn("overflow-hidden", className)}>
@@ -99,60 +99,77 @@ export function TalkRatioPanel({ contact = null, className }: TalkRatioPanelProp
         {/* Results */}
         {analysis && (
           <div className="space-y-4 pt-4 border-t">
-            {/* Quality Badge */}
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Qualidade da Conversa</span>
-              <Badge className={cn(qualityConfig?.bg, qualityConfig?.color)}>
-                {qualityConfig?.label}
-              </Badge>
-            </div>
-
-            {/* Talk/Listen Ratio Visualization */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <MessageCircle className="h-4 w-4 text-primary" />
-                  <span>Você Falou</span>
-                </div>
-                <span className="font-medium">{analysis.speakerRatio}%</span>
-              </div>
-              <div className="h-4 bg-secondary rounded-full overflow-hidden flex">
-                <div 
-                  className={cn(
-                    "h-full transition-all duration-500",
-                    analysis.speakerRatio > 50 ? "bg-warning" : "bg-success"
-                  )}
-                  style={{ width: `${analysis.speakerRatio}%` }}
-                />
-                <div 
-                  className="h-full bg-primary/20"
-                  style={{ width: `${analysis.listenerRatio}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <Ear className="h-4 w-4 text-muted-foreground" />
-                  <span>Você Ouviu</span>
-                </div>
-                <span className="font-medium">{analysis.listenerRatio}%</span>
-              </div>
-            </div>
-
-            {/* Ideal Ratio Indicator */}
-            <div className="p-3 rounded-lg bg-muted/50 flex items-center gap-3">
-              <Target className="h-5 w-5 text-primary shrink-0" />
-              <div className="flex-1">
-                <p className="text-sm font-medium">Proporção Ideal: {analysis.idealRatio}% fala</p>
+            {/* Proporção de fala: só existe com os dois lados da conversa.
+                O painel recebe um texto só, então aqui vai a explicação em vez
+                de um número — antes vinham 60% fixo e "ideal 35%" fixo. */}
+            {analysis.speakerRatio === null ? (
+              <div className="p-3 rounded-lg bg-muted/50 flex items-start gap-3">
+                <Target className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
                 <p className="text-xs text-muted-foreground">
-                  Desvio atual: {analysis.deviation}% {analysis.deviation > 0 ? 'acima' : 'abaixo'} do ideal
+                  Proporção de fala não medida: ela exige os dois lados da conversa com duração.
+                  O que está abaixo foi contado no texto que você colou.
                 </p>
               </div>
-              {analysis.deviation <= 10 ? (
-                <Check className="h-5 w-5 text-success" />
-              ) : (
-                <AlertTriangle className="h-5 w-5 text-warning" />
-              )}
-            </div>
+            ) : (
+              <>
+                {/* Quality Badge */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Qualidade da Conversa</span>
+                  <Badge className={cn(qualityConfig?.bg, qualityConfig?.color)}>
+                    {qualityConfig?.label}
+                  </Badge>
+                </div>
+
+                {/* Talk/Listen Ratio Visualization */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <MessageCircle className="h-4 w-4 text-primary" />
+                      <span>Você Falou</span>
+                    </div>
+                    <span className="font-medium">{analysis.speakerRatio}%</span>
+                  </div>
+                  <div className="h-4 bg-secondary rounded-full overflow-hidden flex">
+                    <div
+                      className={cn(
+                        "h-full transition-all duration-500",
+                        analysis.speakerRatio > 50 ? "bg-warning" : "bg-success"
+                      )}
+                      style={{ width: `${analysis.speakerRatio}%` }}
+                    />
+                    <div
+                      className="h-full bg-primary/20"
+                      style={{ width: `${analysis.listenerRatio}%` }}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <Ear className="h-4 w-4 text-muted-foreground" />
+                      <span>Você Ouviu</span>
+                    </div>
+                    <span className="font-medium">{analysis.listenerRatio}%</span>
+                  </div>
+                </div>
+
+                {/* Ideal Ratio Indicator */}
+                {analysis.idealRatio !== null && analysis.deviation !== null && (
+                  <div className="p-3 rounded-lg bg-muted/50 flex items-center gap-3">
+                    <Target className="h-5 w-5 text-primary shrink-0" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">Proporção Ideal: {analysis.idealRatio}% fala</p>
+                      <p className="text-xs text-muted-foreground">
+                        Desvio atual: {analysis.deviation}% {analysis.deviation > 0 ? 'acima' : 'abaixo'} do ideal
+                      </p>
+                    </div>
+                    {analysis.deviation <= 10 ? (
+                      <Check className="h-5 w-5 text-success" />
+                    ) : (
+                      <AlertTriangle className="h-5 w-5 text-warning" />
+                    )}
+                  </div>
+                )}
+              </>
+            )}
 
             {/* Metrics */}
             <div className="grid grid-cols-2 gap-3">
