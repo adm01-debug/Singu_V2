@@ -10,7 +10,7 @@ import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Link2, AlertTriangle, Clock,
-  Shield, Sparkles, Activity, Gauge, FlaskConical,
+  Shield, Sparkles, Activity, Gauge, FlaskConical, ListChecks,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Contact } from '@/types';
@@ -18,6 +18,8 @@ import { useAdvancedTriggers } from '@/hooks/useAdvancedTriggers';
 import { MENTAL_TRIGGERS } from '@/types/triggers';
 import { DEMO_CONTACT } from '@/domain/demoEntities';
 import { ChainsTab, SaturationTab } from './advanced-triggers/AdvancedTriggersTabContent';
+import { BundlesTab } from './advanced-triggers/BundlesTab';
+import { getDISCProfile } from '@/lib/contact-utils';
 
 interface AdvancedTriggersPanelProps {
   contact?: Contact | null;
@@ -32,7 +34,7 @@ export function AdvancedTriggersPanel({ contact: contactProp, className }: Advan
     getRecommendedIntensity,
   } = useAdvancedTriggers(contact);
 
-  const [activeTab, setActiveTab] = useState<'chains' | 'saturation' | 'timing' | 'advanced'>('chains');
+  const [activeTab, setActiveTab] = useState<'chains' | 'saturation' | 'timing' | 'advanced' | 'bundles'>('chains');
   const [selectedChain, setSelectedChain] = useState<string | null>(null);
 
   const getSaturationColor = (level: string) => {
@@ -91,11 +93,12 @@ export function AdvancedTriggersPanel({ contact: contactProp, className }: Advan
         )}
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="chains" className="text-xs gap-1"><Link2 className="h-3 w-3" />Chains</TabsTrigger>
             <TabsTrigger value="saturation" className="text-xs gap-1"><Gauge className="h-3 w-3" />Saturação</TabsTrigger>
             <TabsTrigger value="timing" className="text-xs gap-1"><Clock className="h-3 w-3" />Timing</TabsTrigger>
             <TabsTrigger value="advanced" className="text-xs gap-1"><Sparkles className="h-3 w-3" />Novos</TabsTrigger>
+            <TabsTrigger value="bundles" className="text-xs gap-1"><ListChecks className="h-3 w-3" />Roteiros</TabsTrigger>
           </TabsList>
 
           <TabsContent value="chains" className="mt-4">
@@ -220,6 +223,10 @@ export function AdvancedTriggersPanel({ contact: contactProp, className }: Advan
                 </div>
               </div>
             </ScrollArea>
+          </TabsContent>
+          <TabsContent value="bundles" className="mt-4">
+            {/* Só o contato real pré-seleciona o perfil; o de demonstração não. */}
+            <BundlesTab discInicial={contactProp ? getDISCProfile(contactProp) : null} />
           </TabsContent>
         </Tabs>
       </CardContent>
