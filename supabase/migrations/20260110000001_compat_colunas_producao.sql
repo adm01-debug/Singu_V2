@@ -455,68 +455,66 @@ CREATE TABLE IF NOT EXISTS public.alert_rules (
 );
 
 -- ============================================================
--- SCHEMA STORAGE minimo (criado pelo servico Storage do Supabase;
--- ausente no container Docker de preview). Mantido minimo para o
--- replay das migrations que inserem buckets e criam policies.
--- ============================================================
-CREATE SCHEMA IF NOT EXISTS storage;
-DO $$ BEGIN
-  CREATE TYPE storage.buckettype AS ENUM ('STANDARD', 'PUBLIC', 'PRIVATE');
-EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+-- Storage ? gerenciado pela plataforma no Preview e em produ??o (schema
+-- storage j? existe com objetos do service). O bloco abaixo s? roda quando
+-- storage.buckets N?O existe (replay local em Docker, caso do agente que
+-- recuperou a migration), preservando o trabalho sem colidir com o Storage.
+DO $storage_block$ BEGIN
+  IF to_regclass('storage.buckets') IS NULL THEN
+    EXECUTE $stor$ CREATE SCHEMA IF NOT EXISTS storage $stor$;
+    EXECUTE $stor$ DO $$ BEGIN
+      CREATE TYPE storage.buckettype AS ENUM ('STANDARD', 'PUBLIC', 'PRIVATE');
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$ $stor$;
+    EXECUTE $stor$ CREATE TABLE IF NOT EXISTS storage.buckets (
+      id text NOT NULL PRIMARY KEY,
+      name text NOT NULL,
+      owner uuid,
+      created_at timestamptz DEFAULT now(),
+      updated_at timestamptz DEFAULT now(),
+      public boolean DEFAULT false,
+      avif_autodetection boolean DEFAULT false,
+      file_size_limit bigint,
+      allowed_mime_types text[],
+      owner_id text,
+      type storage.buckettype DEFAULT 'STANDARD',
+      versioning_status text DEFAULT 'DISABLED',
+      lifecycle_configuration jsonb,
+      lifecycle_configuration_generation uuid
+    ) $stor$;
+    EXECUTE $stor$ CREATE TABLE IF NOT EXISTS storage.objects (
+      id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+      bucket_id text,
+      name text,
+      owner uuid,
+      created_at timestamptz DEFAULT now(),
+      updated_at timestamptz DEFAULT now(),
+      last_accessed_at timestamptz DEFAULT now(),
+      metadata jsonb,
+      path_tokens text[],
+      version text,
+      owner_id text,
+      user_metadata jsonb,
+      archived_at timestamptz,
+      is_delete_marker boolean DEFAULT false,
+      is_versioned boolean DEFAULT false
+    ) $stor$;
+    EXECUTE $stor$ ALTER TABLE storage.buckets ENABLE ROW LEVEL SECURITY $stor$;
+    EXECUTE $stor$ ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY $stor$;
+    EXECUTE $stor$ GRANT USAGE ON SCHEMA storage TO anon, authenticated, service_role $stor$;
+    EXECUTE $stor$ CREATE OR REPLACE FUNCTION storage.foldername(name text)
+      RETURNS text[]
+      LANGUAGE plpgsql
+      AS $fn$
+      DECLARE
+        parts text[];
+      BEGIN
+        SELECT string_to_array(name, '/') INTO parts;
+        RETURN parts;
+      END
+      $fn$ $stor$;
+  END IF;
+END $storage_block$;
 
-CREATE TABLE IF NOT EXISTS storage.buckets (
-  id text NOT NULL PRIMARY KEY,
-  name text NOT NULL,
-  owner uuid,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz DEFAULT now(),
-  public boolean DEFAULT false,
-  avif_autodetection boolean DEFAULT false,
-  file_size_limit bigint,
-  allowed_mime_types text[],
-  owner_id text,
-  type storage.buckettype DEFAULT 'STANDARD',
-  versioning_status text DEFAULT 'DISABLED',
-  lifecycle_configuration jsonb,
-  lifecycle_configuration_generation uuid
-);
-
-CREATE TABLE IF NOT EXISTS storage.objects (
-  id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-  bucket_id text,
-  name text,
-  owner uuid,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz DEFAULT now(),
-  last_accessed_at timestamptz DEFAULT now(),
-  metadata jsonb,
-  path_tokens text[],
-  version text,
-  owner_id text,
-  user_metadata jsonb,
-  archived_at timestamptz,
-  is_delete_marker boolean DEFAULT false,
-  is_versioned boolean DEFAULT false
-);
-
-ALTER TABLE storage.buckets ENABLE ROW LEVEL SECURITY;
-ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
-GRANT USAGE ON SCHEMA storage TO anon, authenticated, service_role;
-
--- Helper storage.foldername (parte do schema Storage do Supabase)
-CREATE OR REPLACE FUNCTION storage.foldername(name text)
-RETURNS text[]
-LANGUAGE plpgsql
-AS $$
-DECLARE
-  parts text[];
-BEGIN
-  SELECT string_to_array(name, '/') INTO parts;
-  RETURN parts;
-END
-$$;
-
--- ============================================================
 -- PIPELINES / PIPELINE_STAGES (criadas organicamente em producao
 -- pelo dashboard; a migration 20260512184042 que as descreve nunca
 -- rodou em producao. Schema a seguir replica o real de producao).
