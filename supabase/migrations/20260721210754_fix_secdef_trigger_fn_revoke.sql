@@ -26,25 +26,39 @@
 -- for direct user calls.
 
 -- ── Trigger functions ─────────────────────────────────────────────────────────
-REVOKE ALL ON FUNCTION public.audit_companies_trigger()     FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.audit_trigger_fn()           FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.audit_trigger_func()         FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.auto_calculate_lead_score()  FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.companies_search_vector_update() FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.fn_set_novelty_updated_at()  FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.fn_sync_novelty_to_product() FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.handle_new_singu_profile()   FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.handle_new_user()            FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.log_deal_status_change()     FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.mark_customer_on_deal_won()  FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.set_updated_at()             FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.singu_audit_trigger_fn()     FROM PUBLIC, anon, authenticated;
+DO $fncheck$
+DECLARE fn_name text;
+BEGIN
+  FOREACH fn_name IN ARRAY ARRAY['audit_companies_trigger','audit_trigger_fn','audit_trigger_func',
+    'auto_calculate_lead_score','companies_search_vector_update','fn_set_novelty_updated_at',
+    'fn_sync_novelty_to_product','handle_new_singu_profile','handle_new_user','log_deal_status_change',
+    'mark_customer_on_deal_won','set_updated_at','singu_audit_trigger_fn']
+  LOOP
+    IF EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+               WHERE n.nspname='public' AND p.proname=fn_name) THEN
+      EXECUTE format('REVOKE ALL ON FUNCTION public.%I() FROM PUBLIC, anon, authenticated', fn_name);
+    END IF;
+  END LOOP;
+END;
+$fncheck$;
 
 -- ── Internal helpers ──────────────────────────────────────────────────────────
 -- get_singu_allowed_tables is called internally by singu_* SECURITY DEFINER
 -- functions; direct user calls return no sensitive data but are pointless.
-REVOKE ALL ON FUNCTION public.get_singu_allowed_tables() FROM PUBLIC, anon;
-GRANT  EXECUTE ON FUNCTION public.get_singu_allowed_tables() TO service_role;
+DO $fncheck$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.proname='get_singu_allowed_tables') THEN
+    REVOKE ALL ON FUNCTION public.get_singu_allowed_tables() FROM PUBLIC, anon;
+  END IF;
+END;
+$fncheck$;
+DO $grant$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.proname='get_singu_allowed_tables') THEN
+    GRANT EXECUTE ON FUNCTION public.get_singu_allowed_tables() TO service_role;
+  END IF;
+END;
+$grant$;
 
 -- ── Verification ──────────────────────────────────────────────────────────────
 DO $$

@@ -50,6 +50,7 @@ CREATE POLICY "service_role_full" ON public.lead_routing_rules FOR ALL TO servic
 DO $$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_proc WHERE proname='update_updated_at_column') THEN
+    EXECUTE 'DROP TRIGGER IF EXISTS update_lead_routing_rules_updated_at ON public.lead_routing_rules';
     EXECUTE 'CREATE TRIGGER update_lead_routing_rules_updated_at BEFORE UPDATE ON public.lead_routing_rules FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()';
   END IF;
 END $$;

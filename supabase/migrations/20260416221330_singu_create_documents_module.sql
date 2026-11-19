@@ -30,6 +30,21 @@ CREATE TABLE IF NOT EXISTS public.document_templates (
 );
 COMMENT ON TABLE public.document_templates IS 'SINGU: Templates reutilizáveis de documentos (contratos, propostas, NDAs) com variáveis substituíveis.';
 
+ALTER TABLE public.document_templates
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS name text NOT NULL,
+  ADD COLUMN IF NOT EXISTS description text,
+  ADD COLUMN IF NOT EXISTS category text CHECK (category IN ('contract','proposal','nda','quote','invoice','receipt','other')),
+  ADD COLUMN IF NOT EXISTS html_template text,
+  ADD COLUMN IF NOT EXISTS variables jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS default_values jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS is_active boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS usage_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS public.document_signatures (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   document_id uuid NOT NULL,
@@ -58,6 +73,33 @@ CREATE TABLE IF NOT EXISTS public.document_signatures (
 );
 COMMENT ON TABLE public.document_signatures IS 'SINGU: Assinaturas eletrônicas de documentos com multi-signer, ordering, tracking completo (IP, device, location) e métodos variados.';
 
+ALTER TABLE public.document_signatures
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS document_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS signer_name text NOT NULL,
+  ADD COLUMN IF NOT EXISTS signer_email text NOT NULL,
+  ADD COLUMN IF NOT EXISTS signer_phone text,
+  ADD COLUMN IF NOT EXISTS signer_role text,
+  ADD COLUMN IF NOT EXISTS order_index integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','sent','viewed','signed','rejected','expired','cancelled')),
+  ADD COLUMN IF NOT EXISTS signature_method text CHECK (signature_method IN ('click','draw','type','certificate','whatsapp','sms')),
+  ADD COLUMN IF NOT EXISTS signature_data text,
+  ADD COLUMN IF NOT EXISTS ip_address inet,
+  ADD COLUMN IF NOT EXISTS user_agent text,
+  ADD COLUMN IF NOT EXISTS location jsonb,
+  ADD COLUMN IF NOT EXISTS sent_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS viewed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS signed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS rejected_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS rejection_reason text,
+  ADD COLUMN IF NOT EXISTS expires_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS verification_code text,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE TABLE IF NOT EXISTS public.document_views (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   document_id uuid NOT NULL,
@@ -77,6 +119,24 @@ CREATE TABLE IF NOT EXISTS public.document_views (
   metadata jsonb DEFAULT '{}'::jsonb
 );
 COMMENT ON TABLE public.document_views IS 'SINGU: Rastreamento granular de visualizações de documentos (páginas vistas, duração, downloads, geo).';
+
+ALTER TABLE public.document_views
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS document_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS viewer_email text,
+  ADD COLUMN IF NOT EXISTS viewer_name text,
+  ADD COLUMN IF NOT EXISTS ip_address inet,
+  ADD COLUMN IF NOT EXISTS user_agent text,
+  ADD COLUMN IF NOT EXISTS country text,
+  ADD COLUMN IF NOT EXISTS city text,
+  ADD COLUMN IF NOT EXISTS session_duration_seconds integer,
+  ADD COLUMN IF NOT EXISTS pages_viewed integer[] DEFAULT '{}'::integer[],
+  ADD COLUMN IF NOT EXISTS download_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS referer text,
+  ADD COLUMN IF NOT EXISTS is_signer boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS viewed_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb;
 
 CREATE INDEX IF NOT EXISTS idx_doc_templates_user_active ON public.document_templates (user_id, is_active);
 CREATE INDEX IF NOT EXISTS idx_doc_signatures_doc ON public.document_signatures (document_id, order_index);

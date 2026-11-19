@@ -1,71 +1,533 @@
-ALTER POLICY "Users can update their own disc_analysis_history" ON public.disc_analysis_history USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own DISC analysis history" ON public.disc_analysis_history USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own DISC audit" ON public.disc_analysis_history_audit USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can create their own DISC communication logs" ON public.disc_communication_logs WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can delete their own disc_communication_logs" ON public.disc_communication_logs USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can update their own DISC communication logs" ON public.disc_communication_logs USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own DISC communication logs" ON public.disc_communication_logs USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can delete their own DISC conversion metrics" ON public.disc_conversion_metrics USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can insert their own DISC conversion metrics" ON public.disc_conversion_metrics WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can update their own DISC conversion metrics" ON public.disc_conversion_metrics USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own DISC conversion metrics" ON public.disc_conversion_metrics USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users delete own signatures" ON public.document_signatures USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users insert own signatures" ON public.document_signatures WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users update own signatures" ON public.document_signatures USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users view own signatures" ON public.document_signatures USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users delete own templates" ON public.document_templates USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users insert own templates" ON public.document_templates WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users update own templates" ON public.document_templates USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users view own templates" ON public.document_templates USING (((select auth.uid()) = user_id));
-ALTER POLICY "Owner views document_views via signature" ON public.document_views USING ((EXISTS ( SELECT 1
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_analysis_history' AND p.polname='Users can update their own disc_analysis_history') THEN
+    ALTER POLICY "Users can update their own disc_analysis_history" ON public.disc_analysis_history USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_analysis_history' AND p.polname='Users can view their own DISC analysis history') THEN
+    ALTER POLICY "Users can view their own DISC analysis history" ON public.disc_analysis_history USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_analysis_history_audit' AND p.polname='Users can view their own DISC audit') THEN
+    ALTER POLICY "Users can view their own DISC audit" ON public.disc_analysis_history_audit USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_communication_logs' AND p.polname='Users can create their own DISC communication logs') THEN
+    ALTER POLICY "Users can create their own DISC communication logs" ON public.disc_communication_logs WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_communication_logs' AND p.polname='Users can delete their own disc_communication_logs') THEN
+    ALTER POLICY "Users can delete their own disc_communication_logs" ON public.disc_communication_logs USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_communication_logs' AND p.polname='Users can update their own DISC communication logs') THEN
+    ALTER POLICY "Users can update their own DISC communication logs" ON public.disc_communication_logs USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_communication_logs' AND p.polname='Users can view their own DISC communication logs') THEN
+    ALTER POLICY "Users can view their own DISC communication logs" ON public.disc_communication_logs USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_conversion_metrics' AND p.polname='Users can delete their own DISC conversion metrics') THEN
+    ALTER POLICY "Users can delete their own DISC conversion metrics" ON public.disc_conversion_metrics USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_conversion_metrics' AND p.polname='Users can insert their own DISC conversion metrics') THEN
+    ALTER POLICY "Users can insert their own DISC conversion metrics" ON public.disc_conversion_metrics WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_conversion_metrics' AND p.polname='Users can update their own DISC conversion metrics') THEN
+    ALTER POLICY "Users can update their own DISC conversion metrics" ON public.disc_conversion_metrics USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='disc_conversion_metrics' AND p.polname='Users can view their own DISC conversion metrics') THEN
+    ALTER POLICY "Users can view their own DISC conversion metrics" ON public.disc_conversion_metrics USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='document_signatures' AND p.polname='Users delete own signatures') THEN
+    ALTER POLICY "Users delete own signatures" ON public.document_signatures USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='document_signatures' AND p.polname='Users insert own signatures') THEN
+    ALTER POLICY "Users insert own signatures" ON public.document_signatures WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='document_signatures' AND p.polname='Users update own signatures') THEN
+    ALTER POLICY "Users update own signatures" ON public.document_signatures USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='document_signatures' AND p.polname='Users view own signatures') THEN
+    ALTER POLICY "Users view own signatures" ON public.document_signatures USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='document_templates' AND p.polname='Users delete own templates') THEN
+    ALTER POLICY "Users delete own templates" ON public.document_templates USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='document_templates' AND p.polname='Users insert own templates') THEN
+    ALTER POLICY "Users insert own templates" ON public.document_templates WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='document_templates' AND p.polname='Users update own templates') THEN
+    ALTER POLICY "Users update own templates" ON public.document_templates USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='document_templates' AND p.polname='Users view own templates') THEN
+    ALTER POLICY "Users view own templates" ON public.document_templates USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='document_views' AND p.polname='Owner views document_views via signature') THEN
+    ALTER POLICY "Owner views document_views via signature" ON public.document_views USING ((EXISTS ( SELECT 1
    FROM document_signatures s
   WHERE ((s.id = document_views.signature_id) AND (s.user_id = (select auth.uid()))))));
-ALTER POLICY "Users manage own documents" ON public.documents USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users manage own campaigns" ON public.email_campaigns USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY efr_delete_own ON public.email_finder_results USING (((select auth.uid()) = user_id));
-ALTER POLICY efr_insert_own ON public.email_finder_results WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY efr_select_own ON public.email_finder_results USING (((select auth.uid()) = user_id));
-ALTER POLICY efr_update_own ON public.email_finder_results USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users delete own email thread summaries" ON public.email_thread_summaries USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users insert own email thread summaries" ON public.email_thread_summaries WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users update own email thread summaries" ON public.email_thread_summaries USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users view own email thread summaries" ON public.email_thread_summaries USING (((select auth.uid()) = user_id));
-ALTER POLICY ev_delete_own ON public.email_verifications USING (((select auth.uid()) = user_id));
-ALTER POLICY ev_insert_own ON public.email_verifications WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY ev_select_own ON public.email_verifications USING (((select auth.uid()) = user_id));
-ALTER POLICY ev_update_own ON public.email_verifications USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can create their own emotional anchors" ON public.emotional_anchors WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can delete their own emotional anchors" ON public.emotional_anchors USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can update their own emotional anchors" ON public.emotional_anchors USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own emotional anchors" ON public.emotional_anchors USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can create their own emotional states history" ON public.emotional_states_history WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can delete their own emotional states history" ON public.emotional_states_history USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can update their own emotional_states_history" ON public.emotional_states_history USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own emotional states history" ON public.emotional_states_history USING (((select auth.uid()) = user_id));
-ALTER POLICY "auth users insert entity_relationships" ON public.entity_relationships WITH CHECK (((select auth.uid()) IS NOT NULL));
-ALTER POLICY "creator or admin deletes entity_relationships" ON public.entity_relationships USING (((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role)));
-ALTER POLICY "creator or admin updates entity_relationships" ON public.entity_relationships USING (((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role))) WITH CHECK (((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role)));
-ALTER POLICY "Users can create their own EQ analysis history" ON public.eq_analysis_history WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can delete their own EQ analysis history" ON public.eq_analysis_history USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can update their own eq_analysis_history" ON public.eq_analysis_history USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own EQ analysis history" ON public.eq_analysis_history USING (((select auth.uid()) = user_id));
-ALTER POLICY "Admins can view error logs" ON public.error_logs USING (has_role((select auth.uid()), 'admin'::app_role));
-ALTER POLICY "Authenticated users can insert error logs" ON public.error_logs WITH CHECK (((select auth.uid()) IS NOT NULL));
-ALTER POLICY "Users can delete their own favorites" ON public.favorite_templates USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can insert their own favorites" ON public.favorite_templates WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own favorites" ON public.favorite_templates USING (((select auth.uid()) = user_id));
-ALTER POLICY "Admins can delete feature flags" ON public.feature_flags USING (has_role((select auth.uid()), 'admin'::app_role));
-ALTER POLICY "Admins can insert feature flags" ON public.feature_flags WITH CHECK (has_role((select auth.uid()), 'admin'::app_role));
-ALTER POLICY "Admins can update feature flags" ON public.feature_flags USING (has_role((select auth.uid()), 'admin'::app_role)) WITH CHECK (has_role((select auth.uid()), 'admin'::app_role));
-ALTER POLICY "Users delete own f360 summaries" ON public.ficha360_conversation_summaries USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users insert own f360 summaries" ON public.ficha360_conversation_summaries WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users see own f360 summaries" ON public.ficha360_conversation_summaries USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can create their own follow-up approvals" ON public.follow_up_approvals WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can delete their own follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can manage their follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can update their own follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can manage their own follow-up approvals" ON public.follow_up_approvals_v2 USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='documents' AND p.polname='Users manage own documents') THEN
+    ALTER POLICY "Users manage own documents" ON public.documents USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_campaigns' AND p.polname='Users manage own campaigns') THEN
+    ALTER POLICY "Users manage own campaigns" ON public.email_campaigns USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_finder_results' AND p.polname='efr_delete_own') THEN
+    ALTER POLICY efr_delete_own ON public.email_finder_results USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_finder_results' AND p.polname='efr_insert_own') THEN
+    ALTER POLICY efr_insert_own ON public.email_finder_results WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_finder_results' AND p.polname='efr_select_own') THEN
+    ALTER POLICY efr_select_own ON public.email_finder_results USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_finder_results' AND p.polname='efr_update_own') THEN
+    ALTER POLICY efr_update_own ON public.email_finder_results USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_thread_summaries' AND p.polname='Users delete own email thread summaries') THEN
+    ALTER POLICY "Users delete own email thread summaries" ON public.email_thread_summaries USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_thread_summaries' AND p.polname='Users insert own email thread summaries') THEN
+    ALTER POLICY "Users insert own email thread summaries" ON public.email_thread_summaries WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_thread_summaries' AND p.polname='Users update own email thread summaries') THEN
+    ALTER POLICY "Users update own email thread summaries" ON public.email_thread_summaries USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_thread_summaries' AND p.polname='Users view own email thread summaries') THEN
+    ALTER POLICY "Users view own email thread summaries" ON public.email_thread_summaries USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_verifications' AND p.polname='ev_delete_own') THEN
+    ALTER POLICY ev_delete_own ON public.email_verifications USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_verifications' AND p.polname='ev_insert_own') THEN
+    ALTER POLICY ev_insert_own ON public.email_verifications WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_verifications' AND p.polname='ev_select_own') THEN
+    ALTER POLICY ev_select_own ON public.email_verifications USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='email_verifications' AND p.polname='ev_update_own') THEN
+    ALTER POLICY ev_update_own ON public.email_verifications USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='emotional_anchors' AND p.polname='Users can create their own emotional anchors') THEN
+    ALTER POLICY "Users can create their own emotional anchors" ON public.emotional_anchors WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='emotional_anchors' AND p.polname='Users can delete their own emotional anchors') THEN
+    ALTER POLICY "Users can delete their own emotional anchors" ON public.emotional_anchors USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='emotional_anchors' AND p.polname='Users can update their own emotional anchors') THEN
+    ALTER POLICY "Users can update their own emotional anchors" ON public.emotional_anchors USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='emotional_anchors' AND p.polname='Users can view their own emotional anchors') THEN
+    ALTER POLICY "Users can view their own emotional anchors" ON public.emotional_anchors USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='emotional_states_history' AND p.polname='Users can create their own emotional states history') THEN
+    ALTER POLICY "Users can create their own emotional states history" ON public.emotional_states_history WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='emotional_states_history' AND p.polname='Users can delete their own emotional states history') THEN
+    ALTER POLICY "Users can delete their own emotional states history" ON public.emotional_states_history USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='emotional_states_history' AND p.polname='Users can update their own emotional_states_history') THEN
+    ALTER POLICY "Users can update their own emotional_states_history" ON public.emotional_states_history USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='emotional_states_history' AND p.polname='Users can view their own emotional states history') THEN
+    ALTER POLICY "Users can view their own emotional states history" ON public.emotional_states_history USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='entity_relationships' AND p.polname='auth users insert entity_relationships') THEN
+    ALTER POLICY "auth users insert entity_relationships" ON public.entity_relationships WITH CHECK (((select auth.uid()) IS NOT NULL));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='entity_relationships' AND p.polname='creator or admin deletes entity_relationships') THEN
+    ALTER POLICY "creator or admin deletes entity_relationships" ON public.entity_relationships USING (((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role)));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='entity_relationships' AND p.polname='creator or admin updates entity_relationships') THEN
+    ALTER POLICY "creator or admin updates entity_relationships" ON public.entity_relationships USING (((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role))) WITH CHECK (((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role)));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='eq_analysis_history' AND p.polname='Users can create their own EQ analysis history') THEN
+    ALTER POLICY "Users can create their own EQ analysis history" ON public.eq_analysis_history WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='eq_analysis_history' AND p.polname='Users can delete their own EQ analysis history') THEN
+    ALTER POLICY "Users can delete their own EQ analysis history" ON public.eq_analysis_history USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='eq_analysis_history' AND p.polname='Users can update their own eq_analysis_history') THEN
+    ALTER POLICY "Users can update their own eq_analysis_history" ON public.eq_analysis_history USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='eq_analysis_history' AND p.polname='Users can view their own EQ analysis history') THEN
+    ALTER POLICY "Users can view their own EQ analysis history" ON public.eq_analysis_history USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='error_logs' AND p.polname='Admins can view error logs') THEN
+    ALTER POLICY "Admins can view error logs" ON public.error_logs USING (has_role((select auth.uid()), 'admin'::app_role));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='error_logs' AND p.polname='Authenticated users can insert error logs') THEN
+    ALTER POLICY "Authenticated users can insert error logs" ON public.error_logs WITH CHECK (((select auth.uid()) IS NOT NULL));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='favorite_templates' AND p.polname='Users can delete their own favorites') THEN
+    ALTER POLICY "Users can delete their own favorites" ON public.favorite_templates USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='favorite_templates' AND p.polname='Users can insert their own favorites') THEN
+    ALTER POLICY "Users can insert their own favorites" ON public.favorite_templates WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='favorite_templates' AND p.polname='Users can view their own favorites') THEN
+    ALTER POLICY "Users can view their own favorites" ON public.favorite_templates USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='feature_flags' AND p.polname='Admins can delete feature flags') THEN
+    ALTER POLICY "Admins can delete feature flags" ON public.feature_flags USING (has_role((select auth.uid()), 'admin'::app_role));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='feature_flags' AND p.polname='Admins can insert feature flags') THEN
+    ALTER POLICY "Admins can insert feature flags" ON public.feature_flags WITH CHECK (has_role((select auth.uid()), 'admin'::app_role));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='feature_flags' AND p.polname='Admins can update feature flags') THEN
+    ALTER POLICY "Admins can update feature flags" ON public.feature_flags USING (has_role((select auth.uid()), 'admin'::app_role)) WITH CHECK (has_role((select auth.uid()), 'admin'::app_role));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='ficha360_conversation_summaries' AND p.polname='Users delete own f360 summaries') THEN
+    ALTER POLICY "Users delete own f360 summaries" ON public.ficha360_conversation_summaries USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='ficha360_conversation_summaries' AND p.polname='Users insert own f360 summaries') THEN
+    ALTER POLICY "Users insert own f360 summaries" ON public.ficha360_conversation_summaries WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='ficha360_conversation_summaries' AND p.polname='Users see own f360 summaries') THEN
+    ALTER POLICY "Users see own f360 summaries" ON public.ficha360_conversation_summaries USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='follow_up_approvals' AND p.polname='Users can create their own follow-up approvals') THEN
+    ALTER POLICY "Users can create their own follow-up approvals" ON public.follow_up_approvals WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='follow_up_approvals' AND p.polname='Users can delete their own follow-up approvals') THEN
+    ALTER POLICY "Users can delete their own follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='follow_up_approvals' AND p.polname='Users can manage their follow-up approvals') THEN
+    ALTER POLICY "Users can manage their follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='follow_up_approvals' AND p.polname='Users can update their own follow-up approvals') THEN
+    ALTER POLICY "Users can update their own follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='follow_up_approvals' AND p.polname='Users can view their own follow-up approvals') THEN
+    ALTER POLICY "Users can view their own follow-up approvals" ON public.follow_up_approvals USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='follow_up_approvals_v2' AND p.polname='Users can manage their own follow-up approvals') THEN
+    ALTER POLICY "Users can manage their own follow-up approvals" ON public.follow_up_approvals_v2 USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
 DO $migration$
 BEGIN
   IF EXISTS (
@@ -81,26 +543,187 @@ BEGIN
   END IF;
 END;
 $migration$;
-ALTER POLICY "own forecast_cat_history insert" ON public.forecast_categories_history WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "own forecast_cat_history select" ON public.forecast_categories_history USING (((select auth.uid()) = user_id));
-ALTER POLICY "own forecast_periods delete" ON public.forecast_periods USING (((select auth.uid()) = user_id));
-ALTER POLICY "own forecast_periods insert" ON public.forecast_periods WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "own forecast_periods select" ON public.forecast_periods USING (((select auth.uid()) = user_id));
-ALTER POLICY "own forecast_periods update" ON public.forecast_periods USING (((select auth.uid()) = user_id));
-ALTER POLICY "own quota_settings insert" ON public.forecast_quota_settings WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "own quota_settings select" ON public.forecast_quota_settings USING (((select auth.uid()) = user_id));
-ALTER POLICY "own quota_settings update" ON public.forecast_quota_settings USING (((select auth.uid()) = user_id));
-ALTER POLICY "own forecast_snapshots delete" ON public.forecast_snapshots USING (((select auth.uid()) = user_id));
-ALTER POLICY "own forecast_snapshots insert" ON public.forecast_snapshots WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "own forecast_snapshots select" ON public.forecast_snapshots USING (((select auth.uid()) = user_id));
-ALTER POLICY fs_owner_all ON public.form_submissions USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY forms_owner_all ON public.forms USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users manage own geo countries" ON public.geo_allowed_countries USING ((user_id = (select auth.uid()))) WITH CHECK ((user_id = (select auth.uid())));
-ALTER POLICY "Admins can view all handoff requests" ON public.handoff_requests USING (has_role((select auth.uid()), 'admin'::app_role));
-ALTER POLICY "Users can delete their own handoff requests" ON public.handoff_requests USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can insert their own handoff requests" ON public.handoff_requests WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can update their own handoff requests" ON public.handoff_requests USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can view their own handoff requests" ON public.handoff_requests USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can create their own health settings" ON public.health_alert_settings WITH CHECK (((select auth.uid()) = user_id));
-ALTER POLICY "Users can delete their own health_alert_settings" ON public.health_alert_settings USING (((select auth.uid()) = user_id));
-ALTER POLICY "Users can update their own health settings" ON public.health_alert_settings USING (((select auth.uid()) = user_id));
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_categories_history' AND p.polname='own forecast_cat_history insert') THEN
+    ALTER POLICY "own forecast_cat_history insert" ON public.forecast_categories_history WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_categories_history' AND p.polname='own forecast_cat_history select') THEN
+    ALTER POLICY "own forecast_cat_history select" ON public.forecast_categories_history USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_periods' AND p.polname='own forecast_periods delete') THEN
+    ALTER POLICY "own forecast_periods delete" ON public.forecast_periods USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_periods' AND p.polname='own forecast_periods insert') THEN
+    ALTER POLICY "own forecast_periods insert" ON public.forecast_periods WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_periods' AND p.polname='own forecast_periods select') THEN
+    ALTER POLICY "own forecast_periods select" ON public.forecast_periods USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_periods' AND p.polname='own forecast_periods update') THEN
+    ALTER POLICY "own forecast_periods update" ON public.forecast_periods USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_quota_settings' AND p.polname='own quota_settings insert') THEN
+    ALTER POLICY "own quota_settings insert" ON public.forecast_quota_settings WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_quota_settings' AND p.polname='own quota_settings select') THEN
+    ALTER POLICY "own quota_settings select" ON public.forecast_quota_settings USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_quota_settings' AND p.polname='own quota_settings update') THEN
+    ALTER POLICY "own quota_settings update" ON public.forecast_quota_settings USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_snapshots' AND p.polname='own forecast_snapshots delete') THEN
+    ALTER POLICY "own forecast_snapshots delete" ON public.forecast_snapshots USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_snapshots' AND p.polname='own forecast_snapshots insert') THEN
+    ALTER POLICY "own forecast_snapshots insert" ON public.forecast_snapshots WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forecast_snapshots' AND p.polname='own forecast_snapshots select') THEN
+    ALTER POLICY "own forecast_snapshots select" ON public.forecast_snapshots USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='form_submissions' AND p.polname='fs_owner_all') THEN
+    ALTER POLICY fs_owner_all ON public.form_submissions USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='forms' AND p.polname='forms_owner_all') THEN
+    ALTER POLICY forms_owner_all ON public.forms USING (((select auth.uid()) = user_id)) WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='geo_allowed_countries' AND p.polname='Users manage own geo countries') THEN
+    ALTER POLICY "Users manage own geo countries" ON public.geo_allowed_countries USING ((user_id = (select auth.uid()))) WITH CHECK ((user_id = (select auth.uid())));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='handoff_requests' AND p.polname='Admins can view all handoff requests') THEN
+    ALTER POLICY "Admins can view all handoff requests" ON public.handoff_requests USING (has_role((select auth.uid()), 'admin'::app_role));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='handoff_requests' AND p.polname='Users can delete their own handoff requests') THEN
+    ALTER POLICY "Users can delete their own handoff requests" ON public.handoff_requests USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='handoff_requests' AND p.polname='Users can insert their own handoff requests') THEN
+    ALTER POLICY "Users can insert their own handoff requests" ON public.handoff_requests WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='handoff_requests' AND p.polname='Users can update their own handoff requests') THEN
+    ALTER POLICY "Users can update their own handoff requests" ON public.handoff_requests USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='handoff_requests' AND p.polname='Users can view their own handoff requests') THEN
+    ALTER POLICY "Users can view their own handoff requests" ON public.handoff_requests USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='health_alert_settings' AND p.polname='Users can create their own health settings') THEN
+    ALTER POLICY "Users can create their own health settings" ON public.health_alert_settings WITH CHECK (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='health_alert_settings' AND p.polname='Users can delete their own health_alert_settings') THEN
+    ALTER POLICY "Users can delete their own health_alert_settings" ON public.health_alert_settings USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;
+DO $w$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid
+             WHERE c.relname='health_alert_settings' AND p.polname='Users can update their own health settings') THEN
+    ALTER POLICY "Users can update their own health settings" ON public.health_alert_settings USING (((select auth.uid()) = user_id));
+  END IF;
+END;
+$w$;

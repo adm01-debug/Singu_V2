@@ -10,6 +10,9 @@
 -- nome:   add_missing_indexes_pipeline_notifications
 
 -- Index for Kanban pipeline view (groups/filters deals by stage constantly)
+-- Compat: coluna pipeline_stage existe em producao (types.ts) mas o DDL de deals nao a criou.
+ALTER TABLE public.deals ADD COLUMN IF NOT EXISTS pipeline_stage TEXT;
+
 CREATE INDEX IF NOT EXISTS idx_deals_pipeline_stage
   ON public.deals (pipeline_stage);
 

@@ -17,6 +17,7 @@
 -- service_role  → all operations via rolbypassrls=true (pipeline writes)
 -- anon          → no access
 
+DROP POLICY IF EXISTS phone_to_contact_select ON zapp_history.phone_to_contact;
 CREATE POLICY phone_to_contact_select
   ON zapp_history.phone_to_contact
   FOR SELECT

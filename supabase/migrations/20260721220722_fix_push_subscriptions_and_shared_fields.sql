@@ -13,6 +13,10 @@
 
 -- ── 1. push_subscriptions ─────────────────────────────────────────────────────
 DROP POLICY IF EXISTS "push_subscriptions_all" ON public.push_subscriptions;
+DROP POLICY IF EXISTS "push_subscriptions_user_select" ON public.push_subscriptions;
+DROP POLICY IF EXISTS "push_subscriptions_user_insert" ON public.push_subscriptions;
+DROP POLICY IF EXISTS "push_subscriptions_user_update" ON public.push_subscriptions;
+DROP POLICY IF EXISTS "push_subscriptions_user_delete" ON public.push_subscriptions;
 
 CREATE POLICY "push_subscriptions_user_select" ON public.push_subscriptions
   FOR SELECT TO authenticated USING (user_id = auth.uid());

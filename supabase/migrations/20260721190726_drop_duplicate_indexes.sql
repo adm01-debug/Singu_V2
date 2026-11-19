@@ -47,7 +47,10 @@ DROP INDEX IF EXISTS public.idx_companies_razao_social_gin;
 DROP INDEX IF EXISTS public.idx_companies_search_vector;
 
 -- ── compatibility_settings ───────────────────────────────────────────────────
-DROP INDEX IF EXISTS public.compatibility_settings_user_id_key;
+-- E um UNIQUE CONSTRAINT (nao um index avulso): DROP INDEX falha com
+-- "cannot drop index ... constraint requires it". Usa DROP CONSTRAINT.
+ALTER TABLE public.compatibility_settings
+  DROP CONSTRAINT IF EXISTS compatibility_settings_user_id_key;
 
 -- ── connector_log ────────────────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_connector_log_created_at;
@@ -92,11 +95,14 @@ DROP INDEX IF EXISTS public.idx_eq_analysis_history_contact_id;
 DROP INDEX IF EXISTS public.idx_eq_analysis_history_user_id;
 
 -- ── favorite_templates ───────────────────────────────────────────────────────
-DROP INDEX IF EXISTS public.favorite_templates_user_id_template_id_key;
+-- e um INDICE de constraint UNIQUE; DROP INDEX falha. Derruba via constraint.
+ALTER TABLE public.favorite_templates
+  DROP CONSTRAINT IF EXISTS favorite_templates_user_id_template_id_key;
 DROP INDEX IF EXISTS public.idx_favorite_templates_user_id;
 
 -- ── health_alert_settings ────────────────────────────────────────────────────
-DROP INDEX IF EXISTS public.unique_user_health_settings;
+ALTER TABLE public.health_alert_settings
+  DROP CONSTRAINT IF EXISTS unique_user_health_settings;
 
 -- ── hidden_objections ────────────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_hidden_objections_contact;
@@ -122,7 +128,8 @@ DROP INDEX IF EXISTS public.idx_metaprogram_analysis_contact;
 DROP INDEX IF EXISTS public.idx_metaprogram_analysis_user;
 
 -- ── nurturing_enrollments ────────────────────────────────────────────────────
-DROP INDEX IF EXISTS public.nurturing_enrollments_workflow_id_contact_id_key;
+ALTER TABLE public.nurturing_enrollments
+  DROP CONSTRAINT IF EXISTS nurturing_enrollments_workflow_id_contact_id_key;
 
 -- ── offer_suggestions ────────────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_offer_suggestions_contact;
@@ -146,7 +153,8 @@ DROP INDEX IF EXISTS public.idx_search_products_cache_hash;
 DROP INDEX IF EXISTS public.idx_seller_metrics_user;
 
 -- ── sequence_enrollments ─────────────────────────────────────────────────────
-DROP INDEX IF EXISTS public.sequence_enrollments_sequence_id_contact_id_key;
+ALTER TABLE public.sequence_enrollments
+  DROP CONSTRAINT IF EXISTS sequence_enrollments_sequence_id_contact_id_key;
 
 -- ── sequence_steps ───────────────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_sequence_steps_seq;
@@ -155,7 +163,8 @@ DROP INDEX IF EXISTS public.idx_sequence_steps_seq;
 DROP INDEX IF EXISTS public.idx_sms_recipients_campaign;
 
 -- ── sms_opt_outs ─────────────────────────────────────────────────────────────
-DROP INDEX IF EXISTS public.sms_opt_outs_user_id_phone_key;
+ALTER TABLE public.sms_opt_outs
+  DROP CONSTRAINT IF EXISTS sms_opt_outs_user_id_phone_key;
 
 -- ── social_behavior_analysis ─────────────────────────────────────────────────
 DROP INDEX IF EXISTS public.idx_social_behavior_analysis_contact;
@@ -171,4 +180,5 @@ DROP INDEX IF EXISTS public.idx_trigger_usage_history_contact_id;
 DROP INDEX IF EXISTS public.idx_trigger_usage_history_user_id;
 
 -- ── weekly_report_settings ───────────────────────────────────────────────────
-DROP INDEX IF EXISTS public.unique_user_report_settings;
+ALTER TABLE public.weekly_report_settings
+  DROP CONSTRAINT IF EXISTS unique_user_report_settings;

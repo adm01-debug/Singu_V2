@@ -17,15 +17,15 @@ CREATE OR REPLACE FUNCTION public.immutable_unaccent(text)
  RETURNS text
  LANGUAGE sql
  IMMUTABLE PARALLEL SAFE STRICT
- SET search_path TO 'public'
+ SET search_path TO 'public', 'extensions'
 AS $function$
-  SELECT public.unaccent($1);
+  SELECT extensions.unaccent($1);
 $function$;
 
 CREATE OR REPLACE FUNCTION public.auto_reset_leads_on_update()
  RETURNS trigger
  LANGUAGE plpgsql
- SET search_path TO 'public'
+ SET search_path TO 'public', 'extensions'
 AS $function$
 BEGIN
   IF OLD.leads_today_reset_at IS NULL OR OLD.leads_today_reset_at::date < CURRENT_DATE THEN
@@ -44,7 +44,7 @@ CREATE OR REPLACE FUNCTION public.execute_readonly_query(query_text text)
  RETURNS json
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO 'public'
+ SET search_path TO 'public', 'extensions'
 AS $function$
 DECLARE
   result json;
@@ -70,7 +70,7 @@ CREATE OR REPLACE FUNCTION public.get_team_member_ids(_manager_user_id uuid)
  RETURNS uuid[]
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public'
+ SET search_path TO 'public', 'extensions'
 AS $function$
   SELECT array_agg(stm.user_id)
   FROM public.sales_team_members stm
@@ -84,7 +84,7 @@ CREATE OR REPLACE FUNCTION public.reset_daily_lead_counts()
  RETURNS integer
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO 'public'
+ SET search_path TO 'public', 'extensions'
 AS $function$
 DECLARE
   affected integer;
@@ -102,7 +102,7 @@ CREATE OR REPLACE FUNCTION public.search_companies_unaccent(p_user_id uuid, p_qu
  RETURNS TABLE(id uuid, name text, industry text, city text, state text)
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public'
+ SET search_path TO 'public', 'extensions'
 AS $function$
   SELECT c.id, c.name, c.industry, c.city, c.state
   FROM public.companies c
@@ -119,7 +119,7 @@ CREATE OR REPLACE FUNCTION public.search_contacts_unaccent(p_user_id uuid, p_que
  RETURNS TABLE(id uuid, first_name text, last_name text, email text, phone text, role_title text, company_id uuid)
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public'
+ SET search_path TO 'public', 'extensions'
 AS $function$
   SELECT c.id, c.first_name, c.last_name, c.email, c.phone, c.role_title, c.company_id
   FROM public.contacts c
@@ -137,7 +137,7 @@ CREATE OR REPLACE FUNCTION public.search_interactions_unaccent(p_user_id uuid, p
  RETURNS TABLE(id uuid, title text, type text, created_at timestamp with time zone, contact_id uuid)
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public'
+ SET search_path TO 'public', 'extensions'
 AS $function$
   SELECT i.id, i.title, i.type, i.created_at, i.contact_id
   FROM public.interactions i
@@ -154,15 +154,15 @@ CREATE OR REPLACE FUNCTION public.search_products_semantic(p_user_id uuid, p_que
  RETURNS TABLE(id uuid, external_id text, name text, description text, category text, tags text[], image_url text, price numeric, metadata jsonb, similarity real)
  LANGUAGE sql
  STABLE SECURITY DEFINER
- SET search_path TO 'public'
+ SET search_path TO 'public', 'extensions'
 AS $function$
   SELECT
     p.id, p.external_id, p.name, p.description, p.category,
     p.tags, p.image_url, p.price, p.metadata,
     GREATEST(
-      public.similarity(public.immutable_unaccent(lower(p.name)), public.immutable_unaccent(lower(p_query))),
-      public.similarity(public.immutable_unaccent(lower(COALESCE(p.description, ''))), public.immutable_unaccent(lower(p_query))) * 0.7,
-      public.similarity(public.immutable_unaccent(lower(COALESCE(p.category, ''))), public.immutable_unaccent(lower(p_query))) * 0.5
+      extensions.similarity(public.immutable_unaccent(lower(p.name)), public.immutable_unaccent(lower(p_query))),
+      extensions.similarity(public.immutable_unaccent(lower(COALESCE(p.description, ''))), public.immutable_unaccent(lower(p_query))) * 0.7,
+      extensions.similarity(public.immutable_unaccent(lower(COALESCE(p.category, ''))), public.immutable_unaccent(lower(p_query))) * 0.5
     )::real AS similarity
   FROM public.search_products_cache p
   WHERE p.user_id = p_user_id

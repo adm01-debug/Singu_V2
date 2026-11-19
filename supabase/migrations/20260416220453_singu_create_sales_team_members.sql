@@ -38,6 +38,26 @@ CREATE TABLE IF NOT EXISTS public.sales_team_members (
 
 COMMENT ON TABLE public.sales_team_members IS 'SINGU: Membros do time de vendas com role (sdr/closer/manager), peso para round-robin ponderado (1-10), caps diário/total e controle de férias. Usado pelo módulo Lead Routing & Portfolio Rotation.';
 
+ALTER TABLE public.sales_team_members
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS member_user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS role text NOT NULL CHECK (role IN ('sdr','closer','manager','admin')),
+  ADD COLUMN IF NOT EXISTS weight integer NOT NULL DEFAULT 5 CHECK (weight BETWEEN 1 AND 10),
+  ADD COLUMN IF NOT EXISTS daily_cap integer DEFAULT 20,
+  ADD COLUMN IF NOT EXISTS total_cap integer,
+  ADD COLUMN IF NOT EXISTS is_active boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS is_on_vacation boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS vacation_start date,
+  ADD COLUMN IF NOT EXISTS vacation_end date,
+  ADD COLUMN IF NOT EXISTS last_assigned_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS assignments_today integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS assignments_total integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE INDEX IF NOT EXISTS idx_sales_team_members_user_active ON public.sales_team_members (user_id, is_active) WHERE is_active = true;
 CREATE INDEX IF NOT EXISTS idx_sales_team_members_role ON public.sales_team_members (role) WHERE is_active = true;
 CREATE INDEX IF NOT EXISTS idx_sales_team_members_last_assigned ON public.sales_team_members (last_assigned_at ASC NULLS FIRST) WHERE is_active = true AND is_on_vacation = false;
@@ -54,6 +74,7 @@ CREATE POLICY "service_role_full" ON public.sales_team_members FOR ALL TO servic
 DO $$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_proc WHERE proname='update_updated_at_column') THEN
+    EXECUTE 'DROP TRIGGER IF EXISTS update_sales_team_members_updated_at ON public.sales_team_members';
     EXECUTE 'CREATE TRIGGER update_sales_team_members_updated_at BEFORE UPDATE ON public.sales_team_members FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()';
   END IF;
 END $$;

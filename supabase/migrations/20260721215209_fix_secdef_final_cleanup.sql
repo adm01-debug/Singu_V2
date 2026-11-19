@@ -23,12 +23,19 @@
 --     which was already locked in Wave 163. Fix: service-role-only lockdown.
 
 -- ── 1. resolver_alerta_inativacao ─────────────────────────────────────────────
-REVOKE ALL ON FUNCTION public.resolver_alerta_inativacao(
-  uuid, text, integer, text, text
-) FROM PUBLIC, anon, authenticated;
-GRANT EXECUTE ON FUNCTION public.resolver_alerta_inativacao(
-  uuid, text, integer, text, text
-) TO service_role;
+DO $fncheck$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+             WHERE n.nspname='public' AND p.proname='resolver_alerta_inativacao') THEN
+    REVOKE ALL ON FUNCTION public.resolver_alerta_inativacao(
+      uuid, text, integer, text, text
+    ) FROM PUBLIC, anon, authenticated;
+    GRANT EXECUTE ON FUNCTION public.resolver_alerta_inativacao(
+      uuid, text, integer, text, text
+    ) TO service_role;
+  END IF;
+END;
+$fncheck$;
 
 -- ── 2. create_product overload 1: (p_name, p_sku, ..., p_stock_quantity) ──────
 DO $$

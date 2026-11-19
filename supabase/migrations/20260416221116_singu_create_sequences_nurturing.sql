@@ -34,6 +34,24 @@ CREATE TABLE IF NOT EXISTS public.sequences (
 );
 COMMENT ON TABLE public.sequences IS 'SINGU: Sequências (cadências) multi-canal de contato. Mãe dos steps individuais em sequence_steps.';
 
+ALTER TABLE public.sequences
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS name text NOT NULL,
+  ADD COLUMN IF NOT EXISTS description text,
+  ADD COLUMN IF NOT EXISTS sequence_type text NOT NULL DEFAULT 'outbound' CHECK (sequence_type IN ('outbound','inbound','reengagement','onboarding','custom')),
+  ADD COLUMN IF NOT EXISTS is_active boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS pause_on_reply boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS pause_on_meeting_booked boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS total_steps integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_enrolled integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS completion_rate numeric(5,2),
+  ADD COLUMN IF NOT EXISTS reply_rate numeric(5,2),
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE TABLE IF NOT EXISTS public.sequence_steps (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   sequence_id uuid NOT NULL,
@@ -53,6 +71,23 @@ CREATE TABLE IF NOT EXISTS public.sequence_steps (
   CONSTRAINT unique_step_per_sequence UNIQUE (sequence_id, step_number)
 );
 COMMENT ON TABLE public.sequence_steps IS 'SINGU: Passos individuais de uma sequência. Ordem via step_number. Delay em dias+horas. Canal: email/whatsapp/sms/call/linkedin/task/wait.';
+
+ALTER TABLE public.sequence_steps
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS sequence_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS step_number integer NOT NULL,
+  ADD COLUMN IF NOT EXISTS channel text NOT NULL CHECK (channel IN ('email','whatsapp','sms','call','linkedin','task','wait')),
+  ADD COLUMN IF NOT EXISTS delay_days integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS delay_hours integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS subject text,
+  ADD COLUMN IF NOT EXISTS body text,
+  ADD COLUMN IF NOT EXISTS template_id uuid,
+  ADD COLUMN IF NOT EXISTS conditions jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS actions_on_complete jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS is_active boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
 
 CREATE TABLE IF NOT EXISTS public.sequence_enrollments (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -75,6 +110,24 @@ CREATE TABLE IF NOT EXISTS public.sequence_enrollments (
 );
 COMMENT ON TABLE public.sequence_enrollments IS 'SINGU: Matrículas de contatos em sequências. Pause automático on reply / on meeting_booked. 1 por contato por sequência (unique).';
 
+ALTER TABLE public.sequence_enrollments
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS sequence_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'active' CHECK (status IN ('active','paused','completed','cancelled','failed','replied','meeting_booked')),
+  ADD COLUMN IF NOT EXISTS current_step integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS next_step_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS enrolled_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS completed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS paused_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS paused_reason text,
+  ADD COLUMN IF NOT EXISTS last_step_completed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS reply_detected_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS public.nurturing_workflows (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
@@ -92,6 +145,21 @@ CREATE TABLE IF NOT EXISTS public.nurturing_workflows (
 );
 COMMENT ON TABLE public.nurturing_workflows IS 'SINGU: Fluxos de nutrição long-term (mais complexos que sequences). Trigger-based (score/segment/inactivity/event).';
 
+ALTER TABLE public.nurturing_workflows
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS name text NOT NULL,
+  ADD COLUMN IF NOT EXISTS description text,
+  ADD COLUMN IF NOT EXISTS trigger_type text NOT NULL CHECK (trigger_type IN ('score_change','segment_change','inactivity','event','manual','custom')),
+  ADD COLUMN IF NOT EXISTS trigger_conditions jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS workflow_steps jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS is_active boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS total_enrolled integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS success_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS public.nurturing_enrollments (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   workflow_id uuid NOT NULL,
@@ -106,6 +174,19 @@ CREATE TABLE IF NOT EXISTS public.nurturing_enrollments (
   updated_at timestamp with time zone NOT NULL DEFAULT now()
 );
 COMMENT ON TABLE public.nurturing_enrollments IS 'SINGU: Contatos em workflows de nurturing. Context carrega estado entre steps.';
+
+ALTER TABLE public.nurturing_enrollments
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS workflow_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'active' CHECK (status IN ('active','paused','completed','cancelled','failed')),
+  ADD COLUMN IF NOT EXISTS current_step_index integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS context jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS enrolled_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS completed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
 
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_sequences_user_active ON public.sequences (user_id, is_active) WHERE is_active = true;

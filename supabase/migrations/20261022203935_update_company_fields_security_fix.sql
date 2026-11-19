@@ -9,7 +9,14 @@
 -- versao: 20261022203935
 -- nome:   update_company_fields_security_fix
 
-REVOKE EXECUTE ON FUNCTION public.update_company_fields(p_company_id uuid, p_data jsonb) FROM PUBLIC;
+DO $fnc$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+             WHERE n.nspname='public' AND p.proname='update_company_fields') THEN
+    REVOKE EXECUTE ON FUNCTION public.update_company_fields(p_company_id uuid, p_data jsonb) FROM PUBLIC;
+  END IF;
+END;
+$fnc$;
 
 CREATE OR REPLACE FUNCTION public.update_company_fields(p_company_id uuid, p_data jsonb)
  RETURNS jsonb

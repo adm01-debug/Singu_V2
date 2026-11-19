@@ -50,8 +50,8 @@ CREATE INDEX IF NOT EXISTS idx_score_history_contact_id ON public.score_history 
 CREATE INDEX IF NOT EXISTS idx_score_history_score_type ON public.score_history USING btree (score_type);
 CREATE INDEX IF NOT EXISTS idx_score_history_user_id ON public.score_history USING btree (user_id);
 -- Ajustado: gin_trgm_ops em schema public no destino
-CREATE INDEX IF NOT EXISTS idx_search_products_desc_trgm ON public.search_products_cache USING gin (description public.gin_trgm_ops);
-CREATE INDEX IF NOT EXISTS idx_search_products_name_trgm ON public.search_products_cache USING gin (name public.gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_search_products_desc_trgm ON public.search_products_cache USING gin (description extensions.gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_search_products_name_trgm ON public.search_products_cache USING gin (name extensions.gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_search_products_user ON public.search_products_cache USING btree (user_id);
 CREATE INDEX IF NOT EXISTS idx_secret_rotation_name ON public.secret_rotation_log USING btree (secret_name, rotated_at DESC);
 CREATE INDEX IF NOT EXISTS idx_semantic_cache_lookup ON public.semantic_search_cache USING btree (user_id, query_hash, expires_at);

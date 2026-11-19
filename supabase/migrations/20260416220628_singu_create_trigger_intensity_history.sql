@@ -41,6 +41,28 @@ CREATE TABLE IF NOT EXISTS public.trigger_intensity_history (
 
 COMMENT ON TABLE public.trigger_intensity_history IS 'SINGU: Histórico temporal de intensidade dos gatilhos mentais aplicados por contato. Trackeia escalação progressiva (1-5) para analytics de quais níveis converteram. Append-only. is_escalation e reached_max_intensity são computed.';
 
+ALTER TABLE public.trigger_intensity_history
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS trigger_type_id uuid,
+  ADD COLUMN IF NOT EXISTS trigger_bundle_id uuid,
+  ADD COLUMN IF NOT EXISTS intensity_level integer NOT NULL CHECK (intensity_level BETWEEN 1 AND 5),
+  ADD COLUMN IF NOT EXISTS previous_intensity integer CHECK (previous_intensity BETWEEN 1 AND 5),
+  ADD COLUMN IF NOT EXISTS intensity_change integer GENERATED ALWAYS AS (intensity_level - COALESCE(previous_intensity, intensity_level)) STORED,
+  ADD COLUMN IF NOT EXISTS channel text NOT NULL,
+  ADD COLUMN IF NOT EXISTS applied_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS response_received boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS response_sentiment text CHECK (response_sentiment IN ('positive','neutral','negative','hostile')),
+  ADD COLUMN IF NOT EXISTS conversion boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS effectiveness_score numeric(5,2),
+  ADD COLUMN IF NOT EXISTS is_escalation boolean GENERATED ALWAYS AS (COALESCE(previous_intensity, 0) < intensity_level) STORED,
+  ADD COLUMN IF NOT EXISTS reached_max_intensity boolean GENERATED ALWAYS AS (intensity_level = 5) STORED,
+  ADD COLUMN IF NOT EXISTS notes text,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE INDEX IF NOT EXISTS idx_trigger_intensity_contact ON public.trigger_intensity_history (contact_id, applied_at DESC);
 CREATE INDEX IF NOT EXISTS idx_trigger_intensity_user ON public.trigger_intensity_history (user_id, applied_at DESC);
 CREATE INDEX IF NOT EXISTS idx_trigger_intensity_type ON public.trigger_intensity_history (trigger_type_id, intensity_level);

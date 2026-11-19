@@ -48,6 +48,31 @@ CREATE TABLE IF NOT EXISTS public.rfm_analysis (
 
 COMMENT ON TABLE public.rfm_analysis IS 'SINGU: Análise RFM corrente por empresa (1 registro por company_id). Snapshot atual. Série histórica vai em rfm_history. Configuração de segmentos em rfm_segment_config. Segments typical: Champions, Loyal, At Risk, Lost, New, Promising, Need Attention, About to Sleep, Cannot Lose Them, Hibernating.';
 
+ALTER TABLE public.rfm_analysis
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS company_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS recency_score integer NOT NULL CHECK (recency_score BETWEEN 1 AND 5),
+  ADD COLUMN IF NOT EXISTS frequency_score integer NOT NULL CHECK (frequency_score BETWEEN 1 AND 5),
+  ADD COLUMN IF NOT EXISTS monetary_score integer NOT NULL CHECK (monetary_score BETWEEN 1 AND 5),
+  ADD COLUMN IF NOT EXISTS rfm_score text GENERATED ALWAYS AS (recency_score::text || frequency_score::text || monetary_score::text) STORED,
+  ADD COLUMN IF NOT EXISTS rfm_total integer GENERATED ALWAYS AS (recency_score + frequency_score + monetary_score) STORED,
+  ADD COLUMN IF NOT EXISTS segment_code text NOT NULL,
+  ADD COLUMN IF NOT EXISTS segment_name text,
+  ADD COLUMN IF NOT EXISTS days_since_last_purchase integer,
+  ADD COLUMN IF NOT EXISTS purchase_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_revenue numeric(15,2) DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS avg_ticket numeric(15,2) DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS previous_segment text,
+  ADD COLUMN IF NOT EXISTS segment_changed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS trend text CHECK (trend IN ('up','down','stable','new','churning')),
+  ADD COLUMN IF NOT EXISTS recommended_actions jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS churn_risk_score integer CHECK (churn_risk_score BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS analyzed_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE INDEX IF NOT EXISTS idx_rfm_analysis_user_segment ON public.rfm_analysis (user_id, segment_code);
 CREATE INDEX IF NOT EXISTS idx_rfm_analysis_company ON public.rfm_analysis (company_id);
 CREATE INDEX IF NOT EXISTS idx_rfm_analysis_score_total ON public.rfm_analysis (rfm_total DESC);

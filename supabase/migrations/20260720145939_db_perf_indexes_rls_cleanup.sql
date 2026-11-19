@@ -38,11 +38,20 @@ CREATE INDEX IF NOT EXISTS idx_cadence_enrollments_cadence_id
 CREATE INDEX IF NOT EXISTS idx_carrier_score_history_carrier_id
   ON public.carrier_score_history(carrier_id);
 
-CREATE INDEX IF NOT EXISTS idx_customer_health_scores_company_id
-  ON public.customer_health_scores(company_id);
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+             WHERE n.nspname='public' AND c.relname='customer_health_scores') THEN
+    CREATE INDEX IF NOT EXISTS idx_customer_health_scores_company_id
+      ON public.customer_health_scores(company_id);
+  END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_deal_competitors_deal_id
   ON public.deal_competitors(deal_id);
+
+-- Compat: producao tem company_id (types.ts); o DDL de junho nao o criou.
+ALTER TABLE public.lead_score_history ADD COLUMN IF NOT EXISTS company_id UUID;
 
 CREATE INDEX IF NOT EXISTS idx_lead_score_history_company_id
   ON public.lead_score_history(company_id);

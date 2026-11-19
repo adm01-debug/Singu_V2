@@ -16,6 +16,7 @@ DROP POLICY IF EXISTS "Permitir upload de logos"  ON storage.objects;
 DROP POLICY IF EXISTS "Permitir update de logos"  ON storage.objects;
 
 -- ── Authenticated-only INSERT ─────────────────────────────────────────────────
+DROP POLICY IF EXISTS logos_authenticated_insert ON storage.objects;
 CREATE POLICY logos_authenticated_insert ON storage.objects
   FOR INSERT
   TO authenticated
@@ -25,6 +26,7 @@ CREATE POLICY logos_authenticated_insert ON storage.objects
   );
 
 -- ── Authenticated-only UPDATE (own files or any, depending on app logic) ─────
+DROP POLICY IF EXISTS logos_authenticated_update ON storage.objects;
 CREATE POLICY logos_authenticated_update ON storage.objects
   FOR UPDATE
   TO authenticated

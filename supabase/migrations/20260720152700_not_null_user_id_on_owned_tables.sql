@@ -29,6 +29,8 @@ ALTER TABLE public.proposals              ALTER COLUMN user_id SET NOT NULL;
 ALTER TABLE public.quick_notes            ALTER COLUMN user_id SET NOT NULL;
 ALTER TABLE public.reminders              ALTER COLUMN user_id SET NOT NULL;
 ALTER TABLE public.sales_forecasts        ALTER COLUMN user_id SET NOT NULL;
+-- Compat: sales_goals surgiu (salespro_mig_003) sem user_id; producao o tem (types.ts).
+ALTER TABLE public.sales_goals ADD COLUMN IF NOT EXISTS user_id UUID;
 ALTER TABLE public.sales_goals            ALTER COLUMN user_id SET NOT NULL;
 ALTER TABLE public.scheduled_visits       ALTER COLUMN user_id SET NOT NULL;
 ALTER TABLE public.seller_daily_metrics   ALTER COLUMN user_id SET NOT NULL;

@@ -48,6 +48,38 @@ CREATE TABLE IF NOT EXISTS public.email_campaigns (
 );
 COMMENT ON TABLE public.email_campaigns IS 'SINGU: Campanhas de email marketing com Email Builder Visual (blocos), A/B test, agendamento e métricas full-funnel.';
 
+ALTER TABLE public.email_campaigns
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS name text NOT NULL,
+  ADD COLUMN IF NOT EXISTS subject text NOT NULL,
+  ADD COLUMN IF NOT EXISTS preheader text,
+  ADD COLUMN IF NOT EXISTS from_name text,
+  ADD COLUMN IF NOT EXISTS from_email text,
+  ADD COLUMN IF NOT EXISTS reply_to text,
+  ADD COLUMN IF NOT EXISTS html_body text,
+  ADD COLUMN IF NOT EXISTS text_body text,
+  ADD COLUMN IF NOT EXISTS builder_blocks jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS template_id uuid,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','scheduled','sending','sent','paused','cancelled','failed')),
+  ADD COLUMN IF NOT EXISTS scheduled_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS sent_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS total_recipients integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_sent integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_delivered integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_opened integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_clicked integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_bounced integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_complained integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_unsubscribed integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS open_rate numeric(5,2),
+  ADD COLUMN IF NOT EXISTS click_rate numeric(5,2),
+  ADD COLUMN IF NOT EXISTS segment_filter jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS ab_test_config jsonb,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS public.campaign_recipients (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   campaign_id uuid NOT NULL,
@@ -70,6 +102,27 @@ CREATE TABLE IF NOT EXISTS public.campaign_recipients (
   created_at timestamp with time zone NOT NULL DEFAULT now()
 );
 COMMENT ON TABLE public.campaign_recipients IS 'SINGU: Destinatários individuais de email_campaigns com tracking granular (opens, clicks, bounces).';
+
+ALTER TABLE public.campaign_recipients
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS campaign_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid,
+  ADD COLUMN IF NOT EXISTS email text NOT NULL,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','sent','delivered','opened','clicked','bounced','complained','unsubscribed','failed')),
+  ADD COLUMN IF NOT EXISTS sent_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS delivered_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS opened_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS clicked_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS bounced_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS bounce_reason text,
+  ADD COLUMN IF NOT EXISTS opens_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS clicks_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS last_opened_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS last_clicked_url text,
+  ADD COLUMN IF NOT EXISTS ab_variant text,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now();
 
 CREATE TABLE IF NOT EXISTS public.sms_campaigns (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -94,6 +147,27 @@ CREATE TABLE IF NOT EXISTS public.sms_campaigns (
 );
 COMMENT ON TABLE public.sms_campaigns IS 'SINGU: Campanhas de SMS com provider configurável, segmentação e tracking de custo.';
 
+ALTER TABLE public.sms_campaigns
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS name text NOT NULL,
+  ADD COLUMN IF NOT EXISTS message text NOT NULL,
+  ADD COLUMN IF NOT EXISTS sender_id text,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','scheduled','sending','sent','paused','cancelled','failed')),
+  ADD COLUMN IF NOT EXISTS scheduled_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS sent_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS total_recipients integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_sent integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_delivered integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_failed integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_opt_outs integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS cost numeric(10,4),
+  ADD COLUMN IF NOT EXISTS provider text,
+  ADD COLUMN IF NOT EXISTS segment_filter jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS public.sms_campaign_recipients (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   campaign_id uuid NOT NULL,
@@ -112,6 +186,22 @@ CREATE TABLE IF NOT EXISTS public.sms_campaign_recipients (
 );
 COMMENT ON TABLE public.sms_campaign_recipients IS 'SINGU: Destinatários individuais de sms_campaigns.';
 
+ALTER TABLE public.sms_campaign_recipients
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS campaign_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid,
+  ADD COLUMN IF NOT EXISTS phone_number text NOT NULL,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','sent','delivered','failed','opted_out')),
+  ADD COLUMN IF NOT EXISTS sent_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS delivered_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS failed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS failure_reason text,
+  ADD COLUMN IF NOT EXISTS provider_message_id text,
+  ADD COLUMN IF NOT EXISTS cost numeric(10,4),
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS public.sms_templates (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
@@ -127,6 +217,19 @@ CREATE TABLE IF NOT EXISTS public.sms_templates (
 );
 COMMENT ON TABLE public.sms_templates IS 'SINGU: Templates reutilizáveis de SMS com placeholders de variáveis.';
 
+ALTER TABLE public.sms_templates
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS name text NOT NULL,
+  ADD COLUMN IF NOT EXISTS message text NOT NULL,
+  ADD COLUMN IF NOT EXISTS category text,
+  ADD COLUMN IF NOT EXISTS variables jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS usage_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS is_active boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS public.sms_opt_outs (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
@@ -140,6 +243,18 @@ CREATE TABLE IF NOT EXISTS public.sms_opt_outs (
   CONSTRAINT unique_opt_out UNIQUE (user_id, phone_number)
 );
 COMMENT ON TABLE public.sms_opt_outs IS 'SINGU: Lista de telefones que fizeram opt-out de SMS (compliance LGPD). Check obrigatório antes de envio.';
+
+ALTER TABLE public.sms_opt_outs
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS phone_number text NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid,
+  ADD COLUMN IF NOT EXISTS reason text,
+  ADD COLUMN IF NOT EXISTS source text CHECK (source IN ('sms_reply','request','bounce','complaint','manual','gdpr')),
+  ADD COLUMN IF NOT EXISTS opted_out_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now();
+
 
 CREATE TABLE IF NOT EXISTS public.landing_pages (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -169,6 +284,32 @@ CREATE TABLE IF NOT EXISTS public.landing_pages (
   CONSTRAINT unique_slug_lp UNIQUE (user_id, slug)
 );
 COMMENT ON TABLE public.landing_pages IS 'SINGU: Landing pages (rota pública /lp/:slug) com builder visual, captura de leads e UTMs. Mem: features/landing-pages-module.';
+
+ALTER TABLE public.landing_pages
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS slug text NOT NULL,
+  ADD COLUMN IF NOT EXISTS title text NOT NULL,
+  ADD COLUMN IF NOT EXISTS description text,
+  ADD COLUMN IF NOT EXISTS html_content text,
+  ADD COLUMN IF NOT EXISTS builder_blocks jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS meta_title text,
+  ADD COLUMN IF NOT EXISTS meta_description text,
+  ADD COLUMN IF NOT EXISTS og_image text,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','published','archived')),
+  ADD COLUMN IF NOT EXISTS is_public boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS require_captcha boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS form_fields jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS success_message text,
+  ADD COLUMN IF NOT EXISTS redirect_url text,
+  ADD COLUMN IF NOT EXISTS tracking_pixel_ids jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS total_views integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_submissions integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS conversion_rate numeric(5,2),
+  ADD COLUMN IF NOT EXISTS published_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
 
 CREATE TABLE IF NOT EXISTS public.landing_page_submissions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -201,6 +342,33 @@ CREATE TABLE IF NOT EXISTS public.landing_page_submissions (
   created_at timestamp with time zone NOT NULL DEFAULT now()
 );
 COMMENT ON TABLE public.landing_page_submissions IS 'SINGU: Submissões capturadas via landing pages com UTMs, geolocalização e anti-spam scoring.';
+
+ALTER TABLE public.landing_page_submissions
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS landing_page_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid,
+  ADD COLUMN IF NOT EXISTS form_data jsonb NOT NULL,
+  ADD COLUMN IF NOT EXISTS utm_source text,
+  ADD COLUMN IF NOT EXISTS utm_medium text,
+  ADD COLUMN IF NOT EXISTS utm_campaign text,
+  ADD COLUMN IF NOT EXISTS utm_term text,
+  ADD COLUMN IF NOT EXISTS utm_content text,
+  ADD COLUMN IF NOT EXISTS referrer text,
+  ADD COLUMN IF NOT EXISTS ip_address inet,
+  ADD COLUMN IF NOT EXISTS user_agent text,
+  ADD COLUMN IF NOT EXISTS country text,
+  ADD COLUMN IF NOT EXISTS region text,
+  ADD COLUMN IF NOT EXISTS city text,
+  ADD COLUMN IF NOT EXISTS device_type text,
+  ADD COLUMN IF NOT EXISTS browser text,
+  ADD COLUMN IF NOT EXISTS processed boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS processed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS processing_error text,
+  ADD COLUMN IF NOT EXISTS spam_score integer CHECK (spam_score BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS is_spam boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now();
 
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_email_campaigns_user_status ON public.email_campaigns (user_id, status);

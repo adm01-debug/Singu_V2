@@ -47,6 +47,34 @@ CREATE TABLE IF NOT EXISTS public.handoff_requests (
 
 COMMENT ON TABLE public.handoff_requests IS 'SINGU: Fila de handoff SDR→Closer com qualificação BANT (Budget/Authority/Need/Timing), SLA de aceite de 4h (configurável) e tracking completo. Estados: pending → accepted/rejected/expired.';
 
+ALTER TABLE public.handoff_requests
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS company_id uuid,
+  ADD COLUMN IF NOT EXISTS from_user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS to_user_id uuid,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','accepted','rejected','expired','cancelled')),
+  ADD COLUMN IF NOT EXISTS bant_budget text,
+  ADD COLUMN IF NOT EXISTS bant_authority text,
+  ADD COLUMN IF NOT EXISTS bant_need text,
+  ADD COLUMN IF NOT EXISTS bant_timing text,
+  ADD COLUMN IF NOT EXISTS bant_score integer CHECK (bant_score BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS qualification_notes text,
+  ADD COLUMN IF NOT EXISTS next_steps text,
+  ADD COLUMN IF NOT EXISTS priority text DEFAULT 'medium' CHECK (priority IN ('low','medium','high','urgent')),
+  ADD COLUMN IF NOT EXISTS sla_deadline timestamp with time zone NOT NULL DEFAULT (now() + interval '4 hours'),
+  ADD COLUMN IF NOT EXISTS sla_breached boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS accepted_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS rejected_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS rejection_reason text,
+  ADD COLUMN IF NOT EXISTS expired_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS assignment_id uuid,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE INDEX IF NOT EXISTS idx_handoff_requests_user_status ON public.handoff_requests (user_id, status, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_handoff_requests_to_user_pending ON public.handoff_requests (to_user_id, status) WHERE status = 'pending';
 CREATE INDEX IF NOT EXISTS idx_handoff_requests_sla ON public.handoff_requests (sla_deadline) WHERE status = 'pending';
@@ -63,6 +91,7 @@ CREATE POLICY "service_role_full" ON public.handoff_requests FOR ALL TO service_
 DO $$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_proc WHERE proname='update_updated_at_column') THEN
+    EXECUTE 'DROP TRIGGER IF EXISTS update_handoff_requests_updated_at ON public.handoff_requests';
     EXECUTE 'CREATE TRIGGER update_handoff_requests_updated_at BEFORE UPDATE ON public.handoff_requests FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()';
   END IF;
 END $$;

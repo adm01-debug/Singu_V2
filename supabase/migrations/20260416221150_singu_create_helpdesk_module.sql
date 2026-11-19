@@ -46,6 +46,34 @@ CREATE TABLE IF NOT EXISTS public.support_tickets (
 );
 COMMENT ON TABLE public.support_tickets IS 'SINGU: Tickets de suporte com SLA automático por prioridade, canal multi (email/whatsapp/phone/chat), categorização e CSAT integrado. ticket_number sequential.';
 
+ALTER TABLE public.support_tickets
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS ticket_number bigserial,
+  ADD COLUMN IF NOT EXISTS contact_id uuid,
+  ADD COLUMN IF NOT EXISTS company_id uuid,
+  ADD COLUMN IF NOT EXISTS subject text NOT NULL,
+  ADD COLUMN IF NOT EXISTS description text,
+  ADD COLUMN IF NOT EXISTS category text CHECK (category IN ('bug','question','request','complaint','feedback','billing','other')),
+  ADD COLUMN IF NOT EXISTS priority text NOT NULL DEFAULT 'medium' CHECK (priority IN ('low','medium','high','urgent','critical')),
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'open' CHECK (status IN ('open','in_progress','waiting_customer','waiting_internal','resolved','closed','cancelled')),
+  ADD COLUMN IF NOT EXISTS assigned_to uuid,
+  ADD COLUMN IF NOT EXISTS channel text CHECK (channel IN ('email','whatsapp','phone','chat','form','portal','api')),
+  ADD COLUMN IF NOT EXISTS sla_first_response_deadline timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS sla_resolution_deadline timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS sla_first_response_breached boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS sla_resolution_breached boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS first_response_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS resolved_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS closed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS csat_sent boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS csat_score integer CHECK (csat_score BETWEEN 1 AND 5),
+  ADD COLUMN IF NOT EXISTS tags text[] DEFAULT '{}'::text[],
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE TABLE IF NOT EXISTS public.ticket_comments (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   ticket_id uuid NOT NULL,
@@ -59,6 +87,18 @@ CREATE TABLE IF NOT EXISTS public.ticket_comments (
   updated_at timestamp with time zone NOT NULL DEFAULT now()
 );
 COMMENT ON TABLE public.ticket_comments IS 'SINGU: Comentários/mensagens em tickets. is_internal=true = nota privada (não visível ao cliente).';
+
+ALTER TABLE public.ticket_comments
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS ticket_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS author_type text NOT NULL DEFAULT 'agent' CHECK (author_type IN ('agent','customer','system','ai')),
+  ADD COLUMN IF NOT EXISTS content text NOT NULL,
+  ADD COLUMN IF NOT EXISTS is_internal boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS attachments jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
 
 CREATE TABLE IF NOT EXISTS public.csat_surveys (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -79,6 +119,23 @@ CREATE TABLE IF NOT EXISTS public.csat_surveys (
 );
 COMMENT ON TABLE public.csat_surveys IS 'SINGU: Pesquisas de satisfação (CSAT 1-5, NPS 0-10, CES 1-7). Vinculadas opcionalmente a ticket/contact/company.';
 
+ALTER TABLE public.csat_surveys
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS ticket_id uuid,
+  ADD COLUMN IF NOT EXISTS contact_id uuid,
+  ADD COLUMN IF NOT EXISTS company_id uuid,
+  ADD COLUMN IF NOT EXISTS score integer NOT NULL CHECK (score BETWEEN 1 AND 5),
+  ADD COLUMN IF NOT EXISTS nps_score integer CHECK (nps_score BETWEEN 0 AND 10),
+  ADD COLUMN IF NOT EXISTS ces_score integer CHECK (ces_score BETWEEN 1 AND 7),
+  ADD COLUMN IF NOT EXISTS feedback text,
+  ADD COLUMN IF NOT EXISTS channel text,
+  ADD COLUMN IF NOT EXISTS survey_type text DEFAULT 'csat' CHECK (survey_type IN ('csat','nps','ces','custom')),
+  ADD COLUMN IF NOT EXISTS sent_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS responded_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS public.canned_responses (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
@@ -95,6 +152,20 @@ CREATE TABLE IF NOT EXISTS public.canned_responses (
   CONSTRAINT unique_shortcut_per_user UNIQUE (user_id, shortcut)
 );
 COMMENT ON TABLE public.canned_responses IS 'SINGU: Respostas prontas/templates curtos acessíveis por shortcut (/ola, /encerrar, etc). is_shared=true para disponibilizar ao time.';
+
+ALTER TABLE public.canned_responses
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS shortcut text NOT NULL,
+  ADD COLUMN IF NOT EXISTS title text NOT NULL,
+  ADD COLUMN IF NOT EXISTS content text NOT NULL,
+  ADD COLUMN IF NOT EXISTS category text,
+  ADD COLUMN IF NOT EXISTS tags text[] DEFAULT '{}'::text[],
+  ADD COLUMN IF NOT EXISTS usage_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS is_shared boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
 
 CREATE TABLE IF NOT EXISTS public.knowledge_base_articles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -118,6 +189,26 @@ CREATE TABLE IF NOT EXISTS public.knowledge_base_articles (
   CONSTRAINT unique_slug_per_user UNIQUE (user_id, slug)
 );
 COMMENT ON TABLE public.knowledge_base_articles IS 'SINGU: Artigos da base de conhecimento público/interno. search_vector para busca full-text. Workflow draft→published→archived.';
+
+ALTER TABLE public.knowledge_base_articles
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS slug text NOT NULL,
+  ADD COLUMN IF NOT EXISTS title text NOT NULL,
+  ADD COLUMN IF NOT EXISTS content text NOT NULL,
+  ADD COLUMN IF NOT EXISTS excerpt text,
+  ADD COLUMN IF NOT EXISTS category text,
+  ADD COLUMN IF NOT EXISTS tags text[] DEFAULT '{}'::text[],
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','published','archived')),
+  ADD COLUMN IF NOT EXISTS visibility text DEFAULT 'public' CHECK (visibility IN ('public','internal','private')),
+  ADD COLUMN IF NOT EXISTS view_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS helpful_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS not_helpful_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS published_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS search_vector tsvector,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
 
 CREATE INDEX IF NOT EXISTS idx_support_tickets_user_status ON public.support_tickets (user_id, status, priority);
 CREATE INDEX IF NOT EXISTS idx_support_tickets_assigned ON public.support_tickets (assigned_to, status) WHERE status IN ('open','in_progress');

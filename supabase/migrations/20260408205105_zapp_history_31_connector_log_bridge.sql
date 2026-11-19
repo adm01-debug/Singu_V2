@@ -30,6 +30,12 @@ CREATE TABLE IF NOT EXISTS public.connector_log (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+ALTER TABLE public.connector_log
+  ADD COLUMN IF NOT EXISTS raw_payload JSONB,
+  ADD COLUMN IF NOT EXISTS processed BOOLEAN NOT NULL DEFAULT FALSE,
+  ADD COLUMN IF NOT EXISTS zapp_message_id UUID,
+  ADD COLUMN IF NOT EXISTS parse_error TEXT;
+
 CREATE INDEX IF NOT EXISTS idx_cl_created ON public.connector_log(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_cl_direction ON public.connector_log(direction, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_cl_phone ON public.connector_log(whatsapp_number, created_at DESC);

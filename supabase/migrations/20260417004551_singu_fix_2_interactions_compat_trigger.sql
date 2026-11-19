@@ -46,6 +46,10 @@ $$;
 
 COMMENT ON FUNCTION public.singu_interactions_compat_sync() IS 'SINGU: mapeia type → channel e garante direction preenchido. Previne NOT NULL violation no INSERT do SINGU.';
 
+ALTER TABLE public.interactions
+  ADD COLUMN IF NOT EXISTS channel text,
+  ADD COLUMN IF NOT EXISTS direction text;
+
 DROP TRIGGER IF EXISTS trg_singu_interactions_compat ON public.interactions;
 CREATE TRIGGER trg_singu_interactions_compat
 BEFORE INSERT OR UPDATE OF type, channel, direction

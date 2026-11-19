@@ -39,6 +39,29 @@ CREATE TABLE IF NOT EXISTS public.lead_assignments (
 
 COMMENT ON TABLE public.lead_assignments IS 'SINGU: Histórico completo de atribuições de leads. Cada atribuição (automática via regra, manual, ou handoff SDR→Closer) gera um registro com SLA tracking, status e motivo de rejeição se aplicável. Append-only via convenção.';
 
+ALTER TABLE public.lead_assignments
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid,
+  ADD COLUMN IF NOT EXISTS company_id uuid,
+  ADD COLUMN IF NOT EXISTS assigned_to uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS assigned_by uuid,
+  ADD COLUMN IF NOT EXISTS assigned_by_rule_id uuid,
+  ADD COLUMN IF NOT EXISTS previous_owner uuid,
+  ADD COLUMN IF NOT EXISTS assignment_type text NOT NULL DEFAULT 'automatic' CHECK (assignment_type IN ('automatic','manual','handoff','redistribution','reassignment')),
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'active' CHECK (status IN ('active','accepted','rejected','expired','completed','reassigned')),
+  ADD COLUMN IF NOT EXISTS sla_deadline timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS sla_status text DEFAULT 'within' CHECK (sla_status IN ('within','warning','breached','na')),
+  ADD COLUMN IF NOT EXISTS accepted_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS rejected_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS completed_at timestamp with time zone,
+  ADD COLUMN IF NOT EXISTS rejection_reason text,
+  ADD COLUMN IF NOT EXISTS notes text,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE INDEX IF NOT EXISTS idx_lead_assignments_user_contact ON public.lead_assignments (user_id, contact_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_lead_assignments_assigned_to_active ON public.lead_assignments (assigned_to, status) WHERE status = 'active';
 CREATE INDEX IF NOT EXISTS idx_lead_assignments_sla ON public.lead_assignments (sla_deadline) WHERE status = 'active' AND sla_status != 'na';
@@ -55,6 +78,7 @@ CREATE POLICY "service_role_full" ON public.lead_assignments FOR ALL TO service_
 DO $$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_proc WHERE proname='update_updated_at_column') THEN
+    EXECUTE 'DROP TRIGGER IF EXISTS update_lead_assignments_updated_at ON public.lead_assignments';
     EXECUTE 'CREATE TRIGGER update_lead_assignments_updated_at BEFORE UPDATE ON public.lead_assignments FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()';
   END IF;
 END $$;

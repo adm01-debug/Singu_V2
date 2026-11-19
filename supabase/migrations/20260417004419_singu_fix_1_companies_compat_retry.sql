@@ -39,5 +39,5 @@ EXECUTE FUNCTION public.singu_companies_compat_sync();
 
 -- Criar index trigram para search_companies_unaccent
 CREATE INDEX IF NOT EXISTS idx_companies_name_trgm 
-ON public.companies USING gin (name public.gin_trgm_ops) 
+ON public.companies USING gin (name extensions.gin_trgm_ops) 
 WHERE name IS NOT NULL;

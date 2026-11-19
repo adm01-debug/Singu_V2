@@ -19,7 +19,7 @@ CREATE FUNCTION public.search_companies_unaccent(
   p_user_id uuid, p_query text, p_limit integer DEFAULT 5
 )
 RETURNS TABLE(id uuid, name text, industry text, city text, state text)
-LANGUAGE sql STABLE SECURITY DEFINER SET search_path TO 'public'
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path TO 'public', 'extensions'
 AS $fn$
   WITH q AS (SELECT public.immutable_unaccent(lower(p_query)) AS norm_q)
   SELECT c.id, c.name, c.industry, c.city, c.state
@@ -31,7 +31,7 @@ AS $fn$
       OR public.immutable_unaccent(lower(coalesce(c.city,''))) % q.norm_q
       OR public.immutable_unaccent(lower(coalesce(c.nome_crm,''))) % q.norm_q
     )
-  ORDER BY public.similarity(public.immutable_unaccent(lower(c.name)), q.norm_q) DESC NULLS LAST
+  ORDER BY extensions.similarity(public.immutable_unaccent(lower(c.name)), q.norm_q) DESC NULLS LAST
   LIMIT p_limit;
 $fn$;
 
@@ -39,7 +39,7 @@ CREATE FUNCTION public.search_contacts_unaccent(
   p_user_id uuid, p_query text, p_limit integer DEFAULT 5
 )
 RETURNS TABLE(id uuid, first_name text, last_name text, email text, phone text)
-LANGUAGE sql STABLE SECURITY DEFINER SET search_path TO 'public'
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path TO 'public', 'extensions'
 AS $fn$
   WITH q AS (SELECT public.immutable_unaccent(lower(p_query)) AS norm_q)
   SELECT c.id, c.first_name, c.last_name, c.email, c.phone
@@ -51,8 +51,8 @@ AS $fn$
       OR public.immutable_unaccent(lower(coalesce(c.email,''))) % q.norm_q
     )
   ORDER BY GREATEST(
-      public.similarity(public.immutable_unaccent(lower(coalesce(c.first_name,''))), q.norm_q),
-      public.similarity(public.immutable_unaccent(lower(coalesce(c.last_name,''))), q.norm_q)
+      extensions.similarity(public.immutable_unaccent(lower(coalesce(c.first_name,''))), q.norm_q),
+      extensions.similarity(public.immutable_unaccent(lower(coalesce(c.last_name,''))), q.norm_q)
     ) DESC NULLS LAST
   LIMIT p_limit;
 $fn$;
@@ -61,7 +61,7 @@ CREATE FUNCTION public.search_interactions_unaccent(
   p_user_id uuid, p_query text, p_limit integer DEFAULT 5
 )
 RETURNS TABLE(id uuid, title text, content text, type text, created_at timestamptz)
-LANGUAGE sql STABLE SECURITY DEFINER SET search_path TO 'public'
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path TO 'public', 'extensions'
 AS $fn$
   WITH q AS (SELECT public.immutable_unaccent(lower(p_query)) AS norm_q)
   SELECT i.id, i.title, i.content, i.type, i.created_at
@@ -72,7 +72,7 @@ AS $fn$
       OR public.immutable_unaccent(lower(coalesce(i.content,''))) % q.norm_q
     )
   ORDER BY 
-    public.similarity(public.immutable_unaccent(lower(coalesce(i.title,''))), q.norm_q) DESC NULLS LAST,
+    extensions.similarity(public.immutable_unaccent(lower(coalesce(i.title,''))), q.norm_q) DESC NULLS LAST,
     i.created_at DESC
   LIMIT p_limit;
 $fn$;

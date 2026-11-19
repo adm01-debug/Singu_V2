@@ -5,7 +5,7 @@
 -- =====================================================
 
 -- Tabela para armazenar scores calculados
-CREATE TABLE public.lead_scores (
+CREATE TABLE IF NOT EXISTS public.lead_scores (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -40,8 +40,29 @@ CREATE TABLE public.lead_scores (
   UNIQUE(contact_id, user_id)
 );
 
+ALTER TABLE public.lead_scores
+  ADD COLUMN IF NOT EXISTS id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  ADD COLUMN IF NOT EXISTS contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
+  ADD COLUMN IF NOT EXISTS user_id UUID NOT NULL,
+  ADD COLUMN IF NOT EXISTS total_score NUMERIC(5,2) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS grade TEXT NOT NULL DEFAULT 'cold', -- cold, warm, hot, on_fire,
+  ADD COLUMN IF NOT EXISTS engagement_score NUMERIC(5,2) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS fit_score NUMERIC(5,2) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS intent_score NUMERIC(5,2) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS relationship_score NUMERIC(5,2) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS score_factors JSONB NOT NULL DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS weight_engagement NUMERIC(3,2) NOT NULL DEFAULT 0.30,
+  ADD COLUMN IF NOT EXISTS weight_fit NUMERIC(3,2) NOT NULL DEFAULT 0.20,
+  ADD COLUMN IF NOT EXISTS weight_intent NUMERIC(3,2) NOT NULL DEFAULT 0.25,
+  ADD COLUMN IF NOT EXISTS weight_relationship NUMERIC(3,2) NOT NULL DEFAULT 0.25,
+  ADD COLUMN IF NOT EXISTS last_calculated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS score_change NUMERIC(5,2) DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS previous_score NUMERIC(5,2) DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now();
+
 -- Histórico de scores para tendências
-CREATE TABLE public.lead_score_history (
+CREATE TABLE IF NOT EXISTS public.lead_score_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -55,7 +76,7 @@ CREATE TABLE public.lead_score_history (
 );
 
 -- Configurações de pesos por usuário
-CREATE TABLE public.lead_score_config (
+CREATE TABLE IF NOT EXISTS public.lead_score_config (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL UNIQUE,
   weight_engagement NUMERIC(3,2) NOT NULL DEFAULT 0.30,

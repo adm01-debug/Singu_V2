@@ -20,16 +20,20 @@
 DROP POLICY IF EXISTS tasks_all ON public.tasks;
 
 -- Scoped policies: user can only see/touch their own tasks
+DROP POLICY IF EXISTS tasks_select ON public.tasks;
 CREATE POLICY tasks_select ON public.tasks
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS tasks_insert ON public.tasks;
 CREATE POLICY tasks_insert ON public.tasks
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS tasks_update ON public.tasks;
 CREATE POLICY tasks_update ON public.tasks
   FOR UPDATE USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS tasks_delete ON public.tasks;
 CREATE POLICY tasks_delete ON public.tasks
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -40,16 +44,20 @@ DROP POLICY IF EXISTS deals_select_policy ON public.deals;
 DROP POLICY IF EXISTS deals_insert_policy ON public.deals;
 DROP POLICY IF EXISTS deals_update_policy ON public.deals;
 
+DROP POLICY IF EXISTS deals_select ON public.deals;
 CREATE POLICY deals_select ON public.deals
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS deals_insert ON public.deals;
 CREATE POLICY deals_insert ON public.deals
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS deals_update ON public.deals;
 CREATE POLICY deals_update ON public.deals
   FOR UPDATE USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS deals_delete ON public.deals;
 CREATE POLICY deals_delete ON public.deals
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -60,15 +68,19 @@ DROP POLICY IF EXISTS notifications_select ON public.notifications;
 DROP POLICY IF EXISTS notifications_insert ON public.notifications;
 DROP POLICY IF EXISTS notifications_update ON public.notifications;
 
+DROP POLICY IF EXISTS notifications_select ON public.notifications;
 CREATE POLICY notifications_select ON public.notifications
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS notifications_insert ON public.notifications;
 CREATE POLICY notifications_insert ON public.notifications
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS notifications_update ON public.notifications;
 CREATE POLICY notifications_update ON public.notifications
   FOR UPDATE USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS notifications_delete ON public.notifications;
 CREATE POLICY notifications_delete ON public.notifications
   FOR DELETE USING (auth.uid() = user_id);

@@ -1,6 +1,6 @@
 -- Create storage buckets
-INSERT INTO storage.buckets (id, name, public) VALUES ('interaction-audios', 'interaction-audios', false);
-INSERT INTO storage.buckets (id, name, public) VALUES ('interaction-attachments', 'interaction-attachments', false);
+INSERT INTO storage.buckets (id, name, public) VALUES ('interaction-audios', 'interaction-audios', false) ON CONFLICT (id) DO NOTHING;
+INSERT INTO storage.buckets (id, name, public) VALUES ('interaction-attachments', 'interaction-attachments', false) ON CONFLICT (id) DO NOTHING;
 
 -- Create policies for audio uploads
 CREATE POLICY "Users can upload interaction audios" 

@@ -15,18 +15,34 @@
 
 -- PART A
 DROP POLICY IF EXISTS "read_only_auth" ON public.churn_predictions;
+DROP POLICY IF EXISTS "churn_predictions_select" ON public.churn_predictions;
+DROP POLICY IF EXISTS "churn_predictions_insert" ON public.churn_predictions;
+DROP POLICY IF EXISTS "churn_predictions_update" ON public.churn_predictions;
+DROP POLICY IF EXISTS "churn_predictions_delete" ON public.churn_predictions;
 CREATE POLICY "churn_predictions_select" ON public.churn_predictions
   FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
 
 DROP POLICY IF EXISTS "read_only_auth" ON public.deal_velocity_analysis;
+DROP POLICY IF EXISTS "deal_velocity_analysis_select" ON public.deal_velocity_analysis;
+DROP POLICY IF EXISTS "deal_velocity_analysis_insert" ON public.deal_velocity_analysis;
+DROP POLICY IF EXISTS "deal_velocity_analysis_update" ON public.deal_velocity_analysis;
+DROP POLICY IF EXISTS "deal_velocity_analysis_delete" ON public.deal_velocity_analysis;
 CREATE POLICY "deal_velocity_analysis_select" ON public.deal_velocity_analysis
   FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
 
 DROP POLICY IF EXISTS "authenticated_read" ON public.search_products_cache;
+DROP POLICY IF EXISTS "search_products_cache_select" ON public.search_products_cache;
+DROP POLICY IF EXISTS "search_products_cache_insert" ON public.search_products_cache;
+DROP POLICY IF EXISTS "search_products_cache_update" ON public.search_products_cache;
+DROP POLICY IF EXISTS "search_products_cache_delete" ON public.search_products_cache;
 CREATE POLICY "search_products_cache_select" ON public.search_products_cache
   FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
 
 DROP POLICY IF EXISTS "authenticated_read" ON public.semantic_search_cache;
+DROP POLICY IF EXISTS "semantic_search_cache_select" ON public.semantic_search_cache;
+DROP POLICY IF EXISTS "semantic_search_cache_insert" ON public.semantic_search_cache;
+DROP POLICY IF EXISTS "semantic_search_cache_update" ON public.semantic_search_cache;
+DROP POLICY IF EXISTS "semantic_search_cache_delete" ON public.semantic_search_cache;
 CREATE POLICY "semantic_search_cache_select" ON public.semantic_search_cache
   FOR SELECT TO authenticated USING (user_id = (SELECT auth.uid()));
 

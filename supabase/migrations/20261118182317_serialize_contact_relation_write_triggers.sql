@@ -9,14 +9,18 @@
 -- versao: 20261118182317
 -- nome:   serialize_contact_relation_write_triggers
 
-CREATE TRIGGER serialize_contact_relation_write BEFORE INSERT OR UPDATE OR DELETE
-  ON public.contact_emails FOR EACH ROW EXECUTE FUNCTION public.guard_contact_relation_write();
-
-CREATE TRIGGER serialize_contact_relation_write BEFORE INSERT OR UPDATE OR DELETE
-  ON public.contact_phones FOR EACH ROW EXECUTE FUNCTION public.guard_contact_relation_write();
-
-CREATE TRIGGER serialize_contact_relation_write BEFORE INSERT OR UPDATE OR DELETE
-  ON public.contact_addresses FOR EACH ROW EXECUTE FUNCTION public.guard_contact_relation_write();
-
-CREATE TRIGGER serialize_contact_relation_write BEFORE INSERT OR UPDATE OR DELETE
-  ON public.contact_social_media FOR EACH ROW EXECUTE FUNCTION public.guard_contact_relation_write();
+DO $install$
+DECLARE
+  relation_name text;
+BEGIN
+  FOREACH relation_name IN ARRAY ARRAY[
+    'contact_emails', 'contact_phones', 'contact_addresses', 'contact_social_media'
+  ] LOOP
+    IF to_regclass(format('public.%I', relation_name)) IS NULL THEN CONTINUE; END IF;
+    EXECUTE format('DROP TRIGGER IF EXISTS serialize_contact_relation_write ON public.%I', relation_name);
+    EXECUTE format('CREATE TRIGGER serialize_contact_relation_write
+      BEFORE INSERT OR UPDATE OR DELETE ON public.%I FOR EACH ROW
+      EXECUTE FUNCTION public.guard_contact_relation_write()', relation_name);
+  END LOOP;
+END;
+$install$;

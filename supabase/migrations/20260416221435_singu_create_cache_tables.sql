@@ -29,6 +29,20 @@ CREATE TABLE IF NOT EXISTS public.search_products_cache (
 );
 COMMENT ON TABLE public.search_products_cache IS 'SINGU: Cache de buscas de produtos por fornecedor (XBZ/Stricker/SPOT). TTL 6h. query_hash para dedup.';
 
+ALTER TABLE public.search_products_cache
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid,
+  ADD COLUMN IF NOT EXISTS query_hash text NOT NULL,
+  ADD COLUMN IF NOT EXISTS query_text text,
+  ADD COLUMN IF NOT EXISTS source text NOT NULL CHECK (source IN ('xbz','stricker','spot','multi','other')),
+  ADD COLUMN IF NOT EXISTS results jsonb NOT NULL,
+  ADD COLUMN IF NOT EXISTS result_count integer,
+  ADD COLUMN IF NOT EXISTS cache_hit_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS last_accessed_at timestamp with time zone DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS expires_at timestamp with time zone NOT NULL DEFAULT (now() + interval '6 hours'),
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE TABLE IF NOT EXISTS public.semantic_search_cache (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid,
@@ -45,6 +59,20 @@ CREATE TABLE IF NOT EXISTS public.semantic_search_cache (
   CONSTRAINT unique_semantic_cache UNIQUE (query_embedding_hash, entity_type)
 );
 COMMENT ON TABLE public.semantic_search_cache IS 'SINGU: Cache de buscas semânticas (embedding-based) com TTL 24h. query_embedding_hash para matching determinístico.';
+
+ALTER TABLE public.semantic_search_cache
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid,
+  ADD COLUMN IF NOT EXISTS query_text text NOT NULL,
+  ADD COLUMN IF NOT EXISTS query_embedding_hash text NOT NULL,
+  ADD COLUMN IF NOT EXISTS entity_type text CHECK (entity_type IN ('contact','company','product','document','article','all')),
+  ADD COLUMN IF NOT EXISTS results jsonb NOT NULL,
+  ADD COLUMN IF NOT EXISTS similarity_threshold numeric(4,3) DEFAULT 0.75,
+  ADD COLUMN IF NOT EXISTS result_count integer,
+  ADD COLUMN IF NOT EXISTS cache_hit_count integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS last_accessed_at timestamp with time zone DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS expires_at timestamp with time zone NOT NULL DEFAULT (now() + interval '24 hours'),
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now();
 
 CREATE INDEX IF NOT EXISTS idx_search_products_cache_hash ON public.search_products_cache (query_hash, source);
 CREATE INDEX IF NOT EXISTS idx_search_products_cache_expires ON public.search_products_cache (expires_at);

@@ -16,9 +16,22 @@
 -- Both must remain SECURITY DEFINER so they run as postgres (owner) and bypass RLS.
 
 ALTER FUNCTION public.handle_new_user() SECURITY DEFINER;
-ALTER FUNCTION public.handle_new_singu_profile() SECURITY DEFINER;
-
+DO $fnc$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+             WHERE n.nspname='public' AND p.proname='handle_new_singu_profile') THEN
+    ALTER FUNCTION public.handle_new_singu_profile() SECURITY DEFINER;
+  END IF;
+END;
+$fnc$;
 -- Harden the search_path so these SECURITY DEFINER functions cannot be tricked via
 -- a malicious public-schema object shadowing pg_catalog or auth functions.
 ALTER FUNCTION public.handle_new_user() SET search_path = public, auth, extensions;
-ALTER FUNCTION public.handle_new_singu_profile() SET search_path = public, auth, extensions;
+DO $fnc$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+             WHERE n.nspname='public' AND p.proname='handle_new_singu_profile') THEN
+    ALTER FUNCTION public.handle_new_singu_profile() SET search_path = public, auth, extensions;
+  END IF;
+END;
+$fnc$;

@@ -33,6 +33,23 @@ CREATE TABLE IF NOT EXISTS public.redistribution_log (
 
 COMMENT ON TABLE public.redistribution_log IS 'SINGU: Log append-only de redistribuições de carteira. Cada linha = 1 transferência de lead de um vendedor para outro, com motivo (inatividade, férias, cap excedido, manual, etc). Base para auditoria e analytics de rotação.';
 
+ALTER TABLE public.redistribution_log
+  ADD COLUMN IF NOT EXISTS id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS contact_id uuid,
+  ADD COLUMN IF NOT EXISTS company_id uuid,
+  ADD COLUMN IF NOT EXISTS from_user_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS to_user_id uuid,
+  ADD COLUMN IF NOT EXISTS reason text NOT NULL CHECK (reason IN ('inactivity','vacation','cap_exceeded','manual','performance','territory_change','load_balance','other')),
+  ADD COLUMN IF NOT EXISTS reason_details text,
+  ADD COLUMN IF NOT EXISTS triggered_by text NOT NULL DEFAULT 'system' CHECK (triggered_by IN ('system','manager','admin','automation')),
+  ADD COLUMN IF NOT EXISTS triggered_by_user uuid,
+  ADD COLUMN IF NOT EXISTS previous_assignment_id uuid,
+  ADD COLUMN IF NOT EXISTS new_assignment_id uuid,
+  ADD COLUMN IF NOT EXISTS metadata jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamp with time zone NOT NULL DEFAULT now();
+
+
 CREATE INDEX IF NOT EXISTS idx_redistribution_log_user_created ON public.redistribution_log (user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_redistribution_log_contact ON public.redistribution_log (contact_id, created_at DESC) WHERE contact_id IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_redistribution_log_from_to ON public.redistribution_log (from_user_id, to_user_id);

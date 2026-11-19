@@ -17,6 +17,10 @@
 
 -- ── GROUP A: Blanket *_all / *_write policies ─────────────────────────────────
 
+DROP POLICY IF EXISTS "activity_feed_select" ON public.activity_feed;
+DROP POLICY IF EXISTS "activity_feed_insert" ON public.activity_feed;
+DROP POLICY IF EXISTS "activity_feed_update" ON public.activity_feed;
+DROP POLICY IF EXISTS "activity_feed_delete" ON public.activity_feed;
 -- 1. activity_feed
 DROP POLICY IF EXISTS "activity_feed_all" ON public.activity_feed;
 CREATE POLICY "activity_feed_select" ON public.activity_feed
@@ -29,6 +33,10 @@ CREATE POLICY "activity_feed_update" ON public.activity_feed
 CREATE POLICY "activity_feed_delete" ON public.activity_feed
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "cadence_enrollments_select" ON public.cadence_enrollments;
+DROP POLICY IF EXISTS "cadence_enrollments_insert" ON public.cadence_enrollments;
+DROP POLICY IF EXISTS "cadence_enrollments_update" ON public.cadence_enrollments;
+DROP POLICY IF EXISTS "cadence_enrollments_delete" ON public.cadence_enrollments;
 -- 2. cadence_enrollments
 DROP POLICY IF EXISTS "cadence_enrollments_all" ON public.cadence_enrollments;
 CREATE POLICY "cadence_enrollments_select" ON public.cadence_enrollments
@@ -41,6 +49,10 @@ CREATE POLICY "cadence_enrollments_update" ON public.cadence_enrollments
 CREATE POLICY "cadence_enrollments_delete" ON public.cadence_enrollments
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "commissions_select" ON public.commissions;
+DROP POLICY IF EXISTS "commissions_insert" ON public.commissions;
+DROP POLICY IF EXISTS "commissions_update" ON public.commissions;
+DROP POLICY IF EXISTS "commissions_delete" ON public.commissions;
 -- 3. commissions
 DROP POLICY IF EXISTS "commissions_all" ON public.commissions;
 CREATE POLICY "commissions_select" ON public.commissions
@@ -53,6 +65,10 @@ CREATE POLICY "commissions_update" ON public.commissions
 CREATE POLICY "commissions_delete" ON public.commissions
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "company_cadences_select" ON public.company_cadences;
+DROP POLICY IF EXISTS "company_cadences_insert" ON public.company_cadences;
+DROP POLICY IF EXISTS "company_cadences_update" ON public.company_cadences;
+DROP POLICY IF EXISTS "company_cadences_delete" ON public.company_cadences;
 -- 4. company_cadences
 DROP POLICY IF EXISTS "company_cadences_all" ON public.company_cadences;
 CREATE POLICY "company_cadences_select" ON public.company_cadences
@@ -65,6 +81,10 @@ CREATE POLICY "company_cadences_update" ON public.company_cadences
 CREATE POLICY "company_cadences_delete" ON public.company_cadences
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "favorites_select" ON public.favorites;
+DROP POLICY IF EXISTS "favorites_insert" ON public.favorites;
+DROP POLICY IF EXISTS "favorites_update" ON public.favorites;
+DROP POLICY IF EXISTS "favorites_delete" ON public.favorites;
 -- 5. favorites
 DROP POLICY IF EXISTS "favorites_all" ON public.favorites;
 CREATE POLICY "favorites_select" ON public.favorites
@@ -77,6 +97,10 @@ CREATE POLICY "favorites_update" ON public.favorites
 CREATE POLICY "favorites_delete" ON public.favorites
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "interaction_templates_select" ON public.interaction_templates;
+DROP POLICY IF EXISTS "interaction_templates_insert" ON public.interaction_templates;
+DROP POLICY IF EXISTS "interaction_templates_update" ON public.interaction_templates;
+DROP POLICY IF EXISTS "interaction_templates_delete" ON public.interaction_templates;
 -- 6. interaction_templates
 DROP POLICY IF EXISTS "interaction_templates_all" ON public.interaction_templates;
 CREATE POLICY "interaction_templates_select" ON public.interaction_templates
@@ -89,6 +113,10 @@ CREATE POLICY "interaction_templates_update" ON public.interaction_templates
 CREATE POLICY "interaction_templates_delete" ON public.interaction_templates
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "query_telemetry_select" ON public.query_telemetry;
+DROP POLICY IF EXISTS "query_telemetry_insert" ON public.query_telemetry;
+DROP POLICY IF EXISTS "query_telemetry_update" ON public.query_telemetry;
+DROP POLICY IF EXISTS "query_telemetry_delete" ON public.query_telemetry;
 -- 7. query_telemetry
 DROP POLICY IF EXISTS "query_telemetry_all" ON public.query_telemetry;
 CREATE POLICY "query_telemetry_select" ON public.query_telemetry
@@ -101,6 +129,10 @@ CREATE POLICY "query_telemetry_update" ON public.query_telemetry
 CREATE POLICY "query_telemetry_delete" ON public.query_telemetry
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "rfm_history_select" ON public.rfm_history;
+DROP POLICY IF EXISTS "rfm_history_insert" ON public.rfm_history;
+DROP POLICY IF EXISTS "rfm_history_update" ON public.rfm_history;
+DROP POLICY IF EXISTS "rfm_history_delete" ON public.rfm_history;
 -- 8. rfm_history
 DROP POLICY IF EXISTS "rfm_history_all" ON public.rfm_history;
 CREATE POLICY "rfm_history_select" ON public.rfm_history
@@ -113,6 +145,10 @@ CREATE POLICY "rfm_history_update" ON public.rfm_history
 CREATE POLICY "rfm_history_delete" ON public.rfm_history
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "rfm_metrics_select" ON public.rfm_metrics;
+DROP POLICY IF EXISTS "rfm_metrics_insert" ON public.rfm_metrics;
+DROP POLICY IF EXISTS "rfm_metrics_update" ON public.rfm_metrics;
+DROP POLICY IF EXISTS "rfm_metrics_delete" ON public.rfm_metrics;
 -- 9. rfm_metrics
 DROP POLICY IF EXISTS "rfm_metrics_all" ON public.rfm_metrics;
 CREATE POLICY "rfm_metrics_select" ON public.rfm_metrics
@@ -125,6 +161,10 @@ CREATE POLICY "rfm_metrics_update" ON public.rfm_metrics
 CREATE POLICY "rfm_metrics_delete" ON public.rfm_metrics
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "sales_goals_select" ON public.sales_goals;
+DROP POLICY IF EXISTS "sales_goals_insert" ON public.sales_goals;
+DROP POLICY IF EXISTS "sales_goals_update" ON public.sales_goals;
+DROP POLICY IF EXISTS "sales_goals_delete" ON public.sales_goals;
 -- 10. sales_goals
 DROP POLICY IF EXISTS "sales_goals_all" ON public.sales_goals;
 CREATE POLICY "sales_goals_select" ON public.sales_goals
@@ -137,6 +177,10 @@ CREATE POLICY "sales_goals_update" ON public.sales_goals
 CREATE POLICY "sales_goals_delete" ON public.sales_goals
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "scheduled_visits_select" ON public.scheduled_visits;
+DROP POLICY IF EXISTS "scheduled_visits_insert" ON public.scheduled_visits;
+DROP POLICY IF EXISTS "scheduled_visits_update" ON public.scheduled_visits;
+DROP POLICY IF EXISTS "scheduled_visits_delete" ON public.scheduled_visits;
 -- 11. scheduled_visits
 DROP POLICY IF EXISTS "scheduled_visits_all" ON public.scheduled_visits;
 CREATE POLICY "scheduled_visits_select" ON public.scheduled_visits
@@ -149,6 +193,10 @@ CREATE POLICY "scheduled_visits_update" ON public.scheduled_visits
 CREATE POLICY "scheduled_visits_delete" ON public.scheduled_visits
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "schema_drift_alerts_select" ON public.schema_drift_alerts;
+DROP POLICY IF EXISTS "schema_drift_alerts_insert" ON public.schema_drift_alerts;
+DROP POLICY IF EXISTS "schema_drift_alerts_update" ON public.schema_drift_alerts;
+DROP POLICY IF EXISTS "schema_drift_alerts_delete" ON public.schema_drift_alerts;
 -- 12. schema_drift_alerts
 DROP POLICY IF EXISTS "schema_drift_all" ON public.schema_drift_alerts;
 CREATE POLICY "schema_drift_alerts_select" ON public.schema_drift_alerts
@@ -161,6 +209,10 @@ CREATE POLICY "schema_drift_alerts_update" ON public.schema_drift_alerts
 CREATE POLICY "schema_drift_alerts_delete" ON public.schema_drift_alerts
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "score_history_select" ON public.score_history;
+DROP POLICY IF EXISTS "score_history_insert" ON public.score_history;
+DROP POLICY IF EXISTS "score_history_update" ON public.score_history;
+DROP POLICY IF EXISTS "score_history_delete" ON public.score_history;
 -- 13. score_history
 DROP POLICY IF EXISTS "score_history_all" ON public.score_history;
 CREATE POLICY "score_history_select" ON public.score_history
@@ -173,6 +225,10 @@ CREATE POLICY "score_history_update" ON public.score_history
 CREATE POLICY "score_history_delete" ON public.score_history
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "sla_violations_select" ON public.sla_violations;
+DROP POLICY IF EXISTS "sla_violations_insert" ON public.sla_violations;
+DROP POLICY IF EXISTS "sla_violations_update" ON public.sla_violations;
+DROP POLICY IF EXISTS "sla_violations_delete" ON public.sla_violations;
 -- 14. sla_violations
 DROP POLICY IF EXISTS "sla_violations_all" ON public.sla_violations;
 CREATE POLICY "sla_violations_select" ON public.sla_violations
@@ -185,6 +241,10 @@ CREATE POLICY "sla_violations_update" ON public.sla_violations
 CREATE POLICY "sla_violations_delete" ON public.sla_violations
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "social_behavior_analysis_select" ON public.social_behavior_analysis;
+DROP POLICY IF EXISTS "social_behavior_analysis_insert" ON public.social_behavior_analysis;
+DROP POLICY IF EXISTS "social_behavior_analysis_update" ON public.social_behavior_analysis;
+DROP POLICY IF EXISTS "social_behavior_analysis_delete" ON public.social_behavior_analysis;
 -- 15. social_behavior_analysis
 DROP POLICY IF EXISTS "social_behavior_all" ON public.social_behavior_analysis;
 CREATE POLICY "social_behavior_analysis_select" ON public.social_behavior_analysis
@@ -197,6 +257,10 @@ CREATE POLICY "social_behavior_analysis_update" ON public.social_behavior_analys
 CREATE POLICY "social_behavior_analysis_delete" ON public.social_behavior_analysis
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "social_life_events_select" ON public.social_life_events;
+DROP POLICY IF EXISTS "social_life_events_insert" ON public.social_life_events;
+DROP POLICY IF EXISTS "social_life_events_update" ON public.social_life_events;
+DROP POLICY IF EXISTS "social_life_events_delete" ON public.social_life_events;
 -- 16. social_life_events
 DROP POLICY IF EXISTS "social_life_events_all" ON public.social_life_events;
 CREATE POLICY "social_life_events_select" ON public.social_life_events
@@ -209,6 +273,10 @@ CREATE POLICY "social_life_events_update" ON public.social_life_events
 CREATE POLICY "social_life_events_delete" ON public.social_life_events
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "social_profiles_select" ON public.social_profiles;
+DROP POLICY IF EXISTS "social_profiles_insert" ON public.social_profiles;
+DROP POLICY IF EXISTS "social_profiles_update" ON public.social_profiles;
+DROP POLICY IF EXISTS "social_profiles_delete" ON public.social_profiles;
 -- 17. social_profiles
 DROP POLICY IF EXISTS "social_profiles_all" ON public.social_profiles;
 CREATE POLICY "social_profiles_select" ON public.social_profiles
@@ -221,6 +289,10 @@ CREATE POLICY "social_profiles_update" ON public.social_profiles
 CREATE POLICY "social_profiles_delete" ON public.social_profiles
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "social_scraping_schedule_select" ON public.social_scraping_schedule;
+DROP POLICY IF EXISTS "social_scraping_schedule_insert" ON public.social_scraping_schedule;
+DROP POLICY IF EXISTS "social_scraping_schedule_update" ON public.social_scraping_schedule;
+DROP POLICY IF EXISTS "social_scraping_schedule_delete" ON public.social_scraping_schedule;
 -- 18. social_scraping_schedule
 DROP POLICY IF EXISTS "social_scraping_all" ON public.social_scraping_schedule;
 CREATE POLICY "social_scraping_schedule_select" ON public.social_scraping_schedule
@@ -233,6 +305,10 @@ CREATE POLICY "social_scraping_schedule_update" ON public.social_scraping_schedu
 CREATE POLICY "social_scraping_schedule_delete" ON public.social_scraping_schedule
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "stakeholder_alerts_select" ON public.stakeholder_alerts;
+DROP POLICY IF EXISTS "stakeholder_alerts_insert" ON public.stakeholder_alerts;
+DROP POLICY IF EXISTS "stakeholder_alerts_update" ON public.stakeholder_alerts;
+DROP POLICY IF EXISTS "stakeholder_alerts_delete" ON public.stakeholder_alerts;
 -- 19. stakeholder_alerts
 DROP POLICY IF EXISTS "stakeholder_alerts_all" ON public.stakeholder_alerts;
 CREATE POLICY "stakeholder_alerts_select" ON public.stakeholder_alerts
@@ -245,6 +321,10 @@ CREATE POLICY "stakeholder_alerts_update" ON public.stakeholder_alerts
 CREATE POLICY "stakeholder_alerts_delete" ON public.stakeholder_alerts
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "territory_assignments_select" ON public.territory_assignments;
+DROP POLICY IF EXISTS "territory_assignments_insert" ON public.territory_assignments;
+DROP POLICY IF EXISTS "territory_assignments_update" ON public.territory_assignments;
+DROP POLICY IF EXISTS "territory_assignments_delete" ON public.territory_assignments;
 -- 20. territory_assignments
 DROP POLICY IF EXISTS "territory_assignments_all" ON public.territory_assignments;
 CREATE POLICY "territory_assignments_select" ON public.territory_assignments
@@ -257,6 +337,10 @@ CREATE POLICY "territory_assignments_update" ON public.territory_assignments
 CREATE POLICY "territory_assignments_delete" ON public.territory_assignments
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "trigger_ab_tests_select" ON public.trigger_ab_tests;
+DROP POLICY IF EXISTS "trigger_ab_tests_insert" ON public.trigger_ab_tests;
+DROP POLICY IF EXISTS "trigger_ab_tests_update" ON public.trigger_ab_tests;
+DROP POLICY IF EXISTS "trigger_ab_tests_delete" ON public.trigger_ab_tests;
 -- 21. trigger_ab_tests
 DROP POLICY IF EXISTS "trigger_ab_tests_all" ON public.trigger_ab_tests;
 CREATE POLICY "trigger_ab_tests_select" ON public.trigger_ab_tests
@@ -269,6 +353,10 @@ CREATE POLICY "trigger_ab_tests_update" ON public.trigger_ab_tests
 CREATE POLICY "trigger_ab_tests_delete" ON public.trigger_ab_tests
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "trigger_channel_effectiveness_select" ON public.trigger_channel_effectiveness;
+DROP POLICY IF EXISTS "trigger_channel_effectiveness_insert" ON public.trigger_channel_effectiveness;
+DROP POLICY IF EXISTS "trigger_channel_effectiveness_update" ON public.trigger_channel_effectiveness;
+DROP POLICY IF EXISTS "trigger_channel_effectiveness_delete" ON public.trigger_channel_effectiveness;
 -- 22. trigger_channel_effectiveness
 DROP POLICY IF EXISTS "trigger_channel_all" ON public.trigger_channel_effectiveness;
 CREATE POLICY "trigger_channel_effectiveness_select" ON public.trigger_channel_effectiveness
@@ -281,6 +369,10 @@ CREATE POLICY "trigger_channel_effectiveness_update" ON public.trigger_channel_e
 CREATE POLICY "trigger_channel_effectiveness_delete" ON public.trigger_channel_effectiveness
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "trigger_usage_history_select" ON public.trigger_usage_history;
+DROP POLICY IF EXISTS "trigger_usage_history_insert" ON public.trigger_usage_history;
+DROP POLICY IF EXISTS "trigger_usage_history_update" ON public.trigger_usage_history;
+DROP POLICY IF EXISTS "trigger_usage_history_delete" ON public.trigger_usage_history;
 -- 23. trigger_usage_history
 DROP POLICY IF EXISTS "trigger_usage_all" ON public.trigger_usage_history;
 CREATE POLICY "trigger_usage_history_select" ON public.trigger_usage_history
@@ -293,6 +385,10 @@ CREATE POLICY "trigger_usage_history_update" ON public.trigger_usage_history
 CREATE POLICY "trigger_usage_history_delete" ON public.trigger_usage_history
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "weekly_report_settings_select" ON public.weekly_report_settings;
+DROP POLICY IF EXISTS "weekly_report_settings_insert" ON public.weekly_report_settings;
+DROP POLICY IF EXISTS "weekly_report_settings_update" ON public.weekly_report_settings;
+DROP POLICY IF EXISTS "weekly_report_settings_delete" ON public.weekly_report_settings;
 -- 24. weekly_report_settings
 DROP POLICY IF EXISTS "weekly_report_settings_all" ON public.weekly_report_settings;
 CREATE POLICY "weekly_report_settings_select" ON public.weekly_report_settings
@@ -305,6 +401,10 @@ CREATE POLICY "weekly_report_settings_update" ON public.weekly_report_settings
 CREATE POLICY "weekly_report_settings_delete" ON public.weekly_report_settings
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "weekly_reports_select" ON public.weekly_reports;
+DROP POLICY IF EXISTS "weekly_reports_insert" ON public.weekly_reports;
+DROP POLICY IF EXISTS "weekly_reports_update" ON public.weekly_reports;
+DROP POLICY IF EXISTS "weekly_reports_delete" ON public.weekly_reports;
 -- 25. weekly_reports
 DROP POLICY IF EXISTS "weekly_reports_all" ON public.weekly_reports;
 CREATE POLICY "weekly_reports_select" ON public.weekly_reports
@@ -317,6 +417,10 @@ CREATE POLICY "weekly_reports_update" ON public.weekly_reports
 CREATE POLICY "weekly_reports_delete" ON public.weekly_reports
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "whatsapp_kpis_select" ON public.whatsapp_kpis;
+DROP POLICY IF EXISTS "whatsapp_kpis_insert" ON public.whatsapp_kpis;
+DROP POLICY IF EXISTS "whatsapp_kpis_update" ON public.whatsapp_kpis;
+DROP POLICY IF EXISTS "whatsapp_kpis_delete" ON public.whatsapp_kpis;
 -- 26. whatsapp_kpis
 DROP POLICY IF EXISTS "whatsapp_kpis_all" ON public.whatsapp_kpis;
 CREATE POLICY "whatsapp_kpis_select" ON public.whatsapp_kpis
@@ -329,6 +433,10 @@ CREATE POLICY "whatsapp_kpis_update" ON public.whatsapp_kpis
 CREATE POLICY "whatsapp_kpis_delete" ON public.whatsapp_kpis
   FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()));
 
+DROP POLICY IF EXISTS "workspace_accounts_select" ON public.workspace_accounts;
+DROP POLICY IF EXISTS "workspace_accounts_insert" ON public.workspace_accounts;
+DROP POLICY IF EXISTS "workspace_accounts_update" ON public.workspace_accounts;
+DROP POLICY IF EXISTS "workspace_accounts_delete" ON public.workspace_accounts;
 -- 27. workspace_accounts
 -- NOTE: workspace_accounts.user_id is INTEGER (Google Workspace numeric ID),
 -- not UUID. The auth identity is stored in the `id` column (uuid primary key).

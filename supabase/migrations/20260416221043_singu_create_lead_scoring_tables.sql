@@ -140,6 +140,20 @@ CREATE TABLE IF NOT EXISTS public.churn_risk_scores (
 );
 
 ALTER TABLE public.churn_risk_scores
+  ADD COLUMN IF NOT EXISTS "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS "user_id" uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS "contact_id" uuid,
+  ADD COLUMN IF NOT EXISTS "company_id" uuid,
+  ADD COLUMN IF NOT EXISTS "risk_score" integer CHECK (risk_score BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS "risk_level" text CHECK (risk_level IN ('low','medium','high','critical')),
+  ADD COLUMN IF NOT EXISTS "factors_detected" jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS "factors_breakdown" jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS "recommended_actions" jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS "confidence" integer DEFAULT 70 CHECK (confidence BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS "previous_score" integer,
+  ADD COLUMN IF NOT EXISTS "calculated_at" timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS "is_current" boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS "created_at" timestamp with time zone NOT NULL DEFAULT now(),
   ADD COLUMN IF NOT EXISTS "risk_factors" jsonb NOT NULL DEFAULT '[]'::jsonb,
   ADD COLUMN IF NOT EXISTS "recommendations" text[] DEFAULT '{}',
   ADD COLUMN IF NOT EXISTS "days_since_last_interaction" integer,
@@ -165,7 +179,9 @@ CREATE POLICY "service_role_full" ON public.churn_risk_scores FOR ALL TO service
 DO $$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_proc WHERE proname='update_updated_at_column') THEN
+    EXECUTE 'DROP TRIGGER IF EXISTS update_lead_scores_updated_at ON public.lead_scores';
     EXECUTE 'CREATE TRIGGER update_lead_scores_updated_at BEFORE UPDATE ON public.lead_scores FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()';
+    EXECUTE 'DROP TRIGGER IF EXISTS update_lead_score_config_updated_at ON public.lead_score_config';
     EXECUTE 'CREATE TRIGGER update_lead_score_config_updated_at BEFORE UPDATE ON public.lead_score_config FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column()';
   END IF;
 END $$;
