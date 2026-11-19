@@ -2045,13 +2045,13 @@
   },
   {
    "modulo": "components/carnegie",
-   "arquivos": 12,
-   "testes": 0,
-   "linhas": 2639,
+   "arquivos": 13,
+   "testes": 1,
+   "linhas": 2997,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
-   "componentes": 11,
+   "componentes": 12,
    "hooks_locais": [
     "useCarnegieAnalysis"
    ],
@@ -9363,7 +9363,7 @@
    "modulo": "data",
    "arquivos": 46,
    "testes": 0,
-   "linhas": 17123,
+   "linhas": 17125,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -9414,6 +9414,7 @@
     "components/nlp",
     "components/triggers",
     "hooks",
+    "lib",
     "pages",
     "pages/analytics"
    ],
@@ -11862,9 +11863,9 @@
   },
   {
    "modulo": "lib",
-   "arquivos": 68,
+   "arquivos": 69,
    "testes": 18,
-   "linhas": 6603,
+   "linhas": 6769,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -12041,6 +12042,7 @@
    "depende_de_modulos": [
     "components/email-builder",
     "config",
+    "data",
     "domain",
     "hooks",
     "integrations/supabase",
@@ -12061,7 +12063,7 @@
   {
    "modulo": "lib/__tests__",
    "arquivos": 0,
-   "testes": 8,
+   "testes": 9,
    "linhas": 0,
    "itens_menu": [],
    "telas": [],

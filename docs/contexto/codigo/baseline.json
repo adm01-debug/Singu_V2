@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "f76d507559e4e01ee0499fe828e34e196bbe72ab",
+  "commit": "16da53a195efeb18d4a592f61ab5dca89b993332",
   "branch": "main",
-  "data_commit": "2026-11-18T21:16:20-03:00",
+  "data_commit": "2026-11-19T08:15:07-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "16da53a",
+    "data": "2026-11-19",
+    "assunto": "feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)"
+   },
    {
     "sha": "f76d507",
     "data": "2026-11-18",
@@ -126,11 +131,6 @@
     "sha": "f6ec6ec",
     "data": "2026-11-18",
     "assunto": "fix(ui): telas deixam de mostrar \"vazio\" quando a consulta falhou (#244)"
-   },
-   {
-    "sha": "a9fdfb7",
-    "data": "2026-11-18",
-    "assunto": "fix(db): liga security_invoker nas 16 views que ignoravam o RLS (#243)"
    }
   ],
   "arquivos_mudados_7d": 434,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 108
+    "commits": 109
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,21 +322,21 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3255,
-  "arquivos_codigo": 2227,
-  "linhas_codigo": 416204,
+  "arquivos_total": 3259,
+  "arquivos_codigo": 2231,
+  "linhas_codigo": 416849,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 65,
   "modulos": 141,
-  "componentes": 1061,
+  "componentes": 1062,
   "hooks": 411,
   "edge_functions": 109,
   "tabelas": 418,
   "migrations": 488,
   "cron_jobs": 34,
-  "testes": 271,
+  "testes": 273,
   "workflows": 11,
   "scripts": 296,
   "docs_md": 156
@@ -647,8 +647,8 @@
    "linhas": 591
   },
   "src/components": {
-   "arquivos": 991,
-   "linhas": 148955
+   "arquivos": 993,
+   "linhas": 149347
   },
   "src/config": {
    "arquivos": 1,
@@ -660,7 +660,7 @@
   },
   "src/data": {
    "arquivos": 74,
-   "linhas": 22014
+   "linhas": 22016
   },
   "src/domain": {
    "arquivos": 8,
@@ -675,8 +675,8 @@
    "linhas": 69375
   },
   "src/lib": {
-   "arquivos": 100,
-   "linhas": 8939
+   "arquivos": 102,
+   "linhas": 9190
   },
   "src/main.tsx": {
    "arquivos": 1,

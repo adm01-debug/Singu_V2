@@ -1344,6 +1344,7 @@
    "src/components/carnegie/CarnegieScorePanel.tsx",
    "src/components/carnegie/FaceSavingPanel.tsx",
    "src/components/carnegie/IdentityLabelingPanel.tsx",
+   "src/components/carnegie/MessageReviewPanel.tsx",
    "src/components/carnegie/NobleCausePanel.tsx",
    "src/components/carnegie/ProgressCelebrationPanel.tsx",
    "src/components/carnegie/TalkRatioPanel.tsx",
@@ -1396,6 +1397,16 @@
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/hooks/useCarnegieAnalysis.ts",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/components/carnegie/MessageReviewPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/lib/carnegieMessageReview.ts",
+   "src/lib/contact-utils.ts",
    "src/lib/utils.ts",
    "src/types/index.ts"
   ],
@@ -1459,6 +1470,7 @@
    "src/components/carnegie/CarnegieScorePanel.tsx",
    "src/components/carnegie/FaceSavingPanel.tsx",
    "src/components/carnegie/IdentityLabelingPanel.tsx",
+   "src/components/carnegie/MessageReviewPanel.tsx",
    "src/components/carnegie/NobleCausePanel.tsx",
    "src/components/carnegie/ProgressCelebrationPanel.tsx",
    "src/components/carnegie/TalkRatioPanel.tsx",
@@ -9328,6 +9340,18 @@
   "src/integrations/supabase/client.ts": [
    "src/integrations/supabase/types.ts",
    "src/lib/resilientFetch.ts"
+  ],
+  "src/lib/carnegieMessageReview.ts": [
+   "src/data/carnegieCriticismDetector.ts",
+   "src/data/carnegieEagerWant.ts",
+   "src/data/carnegieEmpathyTemplates.ts",
+   "src/data/carnegieEncouragement.ts",
+   "src/data/carnegieGenuineInterest.ts",
+   "src/data/carnegieOwnershipTransfer.ts",
+   "src/data/carnegieQuestionInfluence.ts",
+   "src/data/carnegieStorytelling.ts",
+   "src/data/carnegieYesLadder.ts",
+   "src/types/carnegie-extended.ts"
   ],
   "src/lib/channelCountsCache.ts": [
    "src/lib/countByChannel.ts"

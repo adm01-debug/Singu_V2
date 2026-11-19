@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "f76d507559e4e01ee0499fe828e34e196bbe72ab",
+  "sha": "16da53a195efeb18d4a592f61ab5dca89b993332",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-19 00:17 UTC",
-  "files_total": 3360,
-  "code_files": 2889,
-  "code_lines": 412207
+  "generated_at": "2026-11-19 11:15 UTC",
+  "files_total": 3364,
+  "code_files": 2893,
+  "code_lines": 412852
  },
  "version": "1.3.2",
- "facts_hash": "3812262d6f26da77",
+ "facts_hash": "ea6e8a7d9da8a41a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -251,8 +251,8 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".tsx": 1162,
-   ".ts": 902,
+   ".tsx": 1164,
+   ".ts": 904,
    ".sql": 661,
    ".mjs": 123,
    ".py": 21,
@@ -60399,7 +60399,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 152
+    "deps_count": 163
    },
    {
     "path": "",
@@ -65716,7 +65716,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 991,
+  "components_count": 993,
   "hooks": [
    {
     "name": "useContacts",
@@ -69203,8 +69203,8 @@
   },
   {
    "module": "src/components",
-   "files": 991,
-   "lines": 148955,
+   "files": 993,
+   "lines": 149347,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -69471,7 +69471,7 @@
   {
    "module": "src/data",
    "files": 74,
-   "lines": 22014,
+   "lines": 22016,
    "tables": [],
    "exports": [
     "analyticsData.ts: PeriodComparison, calcChange, periodOptions, getSentimentColors, PontoEvolucao, toRelationshipEvolution",
@@ -70053,8 +70053,8 @@
   },
   {
    "module": "src/lib",
-   "files": 100,
-   "lines": 8939,
+   "files": 102,
+   "lines": 9190,
    "tables": [
     "activities",
     "crm_relationship_audit_logs",
@@ -70068,6 +70068,7 @@
     "behavioralAlertStats.ts: AlertRowLike, AlertStats, computeAlertStats, formatMtta",
     "brazilianStates.ts: BRAZILIAN_STATES, BrazilianUF, getRegion",
     "canaisInteracao.ts: INTERACTION_CHANNELS, InteractionChannel, INTERACTION_CHANNELS_SET, FICHA360_CHANNELS, Ficha360Channel, FICHA360_CHANNELS_SET",
+    "carnegieMessageReview.ts: PerfilDisc, RevisaoMensagem, revisarMensagemCarnegie",
     "celebrate.ts: celebrate",
     "channelCountsCache.ts: getChannelCountsCached, clearChannelCountsCache, channelCountsCacheSize",
     "channelPersistence.ts: readAppliedCanais, writeAppliedCanais, clearAppliedCanais",
@@ -70103,16 +70104,15 @@
     "keyboardShortcutRegistry.ts: ScopedShortcut, registerShortcut, getRegisteredShortcuts, subscribeShortcuts, useScopedShortcut",
     "logger.ts: setRequestId, setLogUser, generateRequestId, logger",
     "mfaEvents.ts: MFA_STATUS_CHANGED_EVENT, MFA_VERIFIED_EVENT",
-    "navigationLabels.ts: getReadableLabel, getSectionFallback, getNavigationDescription",
-    "preserveScroll.ts: PreserveScrollHandle, preserveScroll"
+    "navigationLabels.ts: getReadableLabel, getSectionFallback, getNavigationDescription"
    ],
    "docs": [
+    "carnegieMessageReview.ts: Revisor de mensagem pelos principios de Carnegie. Junta os nove detectores de texto de `src/data/carnegie*` (critica, ordens, empatia, encorajamento, interesse genuino, autoria, narrativa, escada do sim e desejos) em um unico laudo. Funcao pura: recebe o texto e devolve so o que foi encontrado nele. …",
     "celebrate.ts: Celebrações sutis para marcos do CRM (deal fechado, meta batida, NPS alto, etc.) Implementação CSS-only (sem dependências externas) + integração com sonner.",
     "circuitBreaker.ts: Circuit Breaker — Prevents cascading failures when external services are down. States: - CLOSED: Normal operation, requests pass through - OPEN: Service is down, requests fail fast without calling the service - HALF_OPEN: After cooldown, allows one probe request to test recovery Usage: const breaker …",
     "civilDate.ts: Helpers para tratar `de`/`ate` como **datas civis** (Y-M-D, sem fuso), evitando o bug clássico de `new Date('2025-01-15')` virar `2025-01-14` em fusos a oeste e de `toISOString().slice(0,10)` pular um dia em fusos a leste. Convenção: a data é armazenada como `Date` em **horário local à meia-noite**. …",
     "contact-utils.ts: Type-safe utilities for working with Contact behavior data",
-    "countByChannel.ts: Conta interações por canal a partir de uma lista em memória. Contrato: - Usa `channel` ou `tipo` (o que estiver presente), normalizado para lowercase. - Itens sem canal válido são ignorados. - Espera receber o dataset já filtrado por todos os critérios que NÃO sejam o próprio filtro de canal — assim …",
-    "crossRefInsights.ts: Heurísticas locais (sem LLM) para gerar observações sobre o cruzamento de entidades."
+    "countByChannel.ts: Conta interações por canal a partir de uma lista em memória. Contrato: - Usa `channel` ou `tipo` (o que estiver presente), normalizado para lowercase. - Itens sem canal válido são ignorados. - Espera receber o dataset já filtrado por todos os critérios que NÃO sejam o próprio filtro de canal — assim …"
    ],
    "deps": [
     "@supabase/supabase-js",
@@ -70132,6 +70132,7 @@
    "imports_modules": [
     "src/components",
     "src/config",
+    "src/data",
     "src/domain",
     "src/hooks",
     "src/integrations",
@@ -70142,6 +70143,7 @@
     "src/lib/behavioralAlertStats.ts",
     "src/lib/brazilianStates.ts",
     "src/lib/canaisInteracao.ts",
+    "src/lib/carnegieMessageReview.ts",
     "src/lib/celebrate.ts",
     "src/lib/channelCountsCache.ts",
     "src/lib/channelPersistence.ts",
@@ -70217,8 +70219,7 @@
     "src/lib/sortInteractions.ts",
     "src/lib/sorting-utils.ts",
     "src/lib/suggestPresetName.ts",
-    "src/lib/supabaseInvoke.ts",
-    "src/lib/systemHealth.test.ts"
+    "src/lib/supabaseInvoke.ts"
    ]
   },
   {
@@ -80806,6 +80807,11 @@
     "file": "src/lib/canaisInteracao.ts",
     "name": "FICHA360_CHANNELS",
     "values": "'whatsapp', 'call', 'email', 'meeting', 'note', 'audio', 'transcription'"
+   },
+   {
+    "file": "src/lib/carnegieMessageReview.ts",
+    "name": "PerfilDisc",
+    "values": "D | I | S | C"
    },
    {
     "file": "src/lib/circuitBreaker.ts",
@@ -100302,6 +100308,11 @@
     "file": "src/hooks/voice/useVoiceState.ts",
     "name": "ERROR_RESET_DELAY_MS",
     "value": "5000"
+   },
+   {
+    "file": "src/lib/carnegieMessageReview.ts",
+    "name": "BASE_NEUTRA",
+    "value": "50"
    },
    {
     "file": "src/lib/channelCountsCache.ts",
@@ -121707,6 +121718,22 @@
     "name": "handles zero recipients without dividing by zero"
    },
    {
+    "file": "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx",
+    "name": "MessageReviewPanel"
+   },
+   {
+    "file": "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx",
+    "name": "começa vazio, com o botão desabilitado"
+   },
+   {
+    "file": "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx",
+    "name": "mensagem sem problema não mostra ponto de atenção nem nota inventada"
+   },
+   {
+    "file": "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx",
+    "name": "aponta os problemas e aplica a versão sugerida ao rascunho"
+   },
+   {
     "file": "src/components/company-detail/CompanyCommercialTab.test.tsx",
     "name": "Contrato comercial de empresa"
    },
@@ -128325,6 +128352,58 @@
    {
     "file": "src/lib/__tests__/behavioralAlertStats.test.ts",
     "name": "formata %s → %s"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "revisarMensagemCarnegie"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "devolve null para texto vazio ou só com espaços"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "não inventa nota quando o texto não traz nenhum sinal"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "aponta ordens diretas e conta como ponto de atenção"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "só sugere perguntas por perfil quando o perfil DISC é conhecido"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "mede empatia quando há frase de empatia no texto"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "mede a queda de empatia quando só há sinal negativo"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "aponta frase que desanima e baixa a nota de encorajamento"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "aponta frase que tira a autoria do cliente e oferece alternativas"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "propõe versão reescrita só quando a troca muda o texto"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "conta perguntas pessoais como sinal de interesse genuíno"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "traduz os elementos de narrativa para português"
+   },
+   {
+    "file": "src/lib/__tests__/carnegieMessageReview.test.ts",
+    "name": "só sugere perguntas de concordância quando há oportunidade no texto"
    },
    {
     "file": "src/lib/__tests__/leadScoreContract.test.ts",
@@ -178629,7 +178708,7 @@
   },
   "src/components/carnegie/CarnegieDashboard.tsx": {
    "path": "src/components/carnegie/CarnegieDashboard.tsx",
-   "lines": 159,
+   "lines": 169,
    "exports": [
     "function CarnegieDashboard"
    ],
@@ -178675,6 +178754,14 @@
     "Future Projection & Past Validation */}"
    ],
    "doc": "============================================== IDENTITY LABELING PANEL Give people a reputation to live up to =============================================="
+  },
+  "src/components/carnegie/MessageReviewPanel.tsx": {
+   "path": "src/components/carnegie/MessageReviewPanel.tsx",
+   "lines": 347,
+   "exports": [
+    "function MessageReviewPanel"
+   ],
+   "doc": "============================================== MESSAGE REVIEW PANEL Revisa um rascunho de mensagem pelos principios de Carnegie =============================================="
   },
   "src/components/carnegie/NobleCausePanel.tsx": {
    "path": "src/components/carnegie/NobleCausePanel.tsx",
@@ -178727,8 +178814,19 @@
   },
   "src/components/carnegie/index.ts": {
    "path": "src/components/carnegie/index.ts",
-   "lines": 16,
+   "lines": 17,
    "doc": "============================================== CARNEGIE COMPONENTS - BARREL EXPORT =============================================="
+  },
+  "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx": {
+   "path": "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx",
+   "lines": 34,
+   "is_test": true,
+   "tests": [
+    "MessageReviewPanel",
+    "começa vazio, com o botão desabilitado",
+    "mensagem sem problema não mostra ponto de atenção nem nota inventada",
+    "aponta os problemas e aplica a versão sugerida ao rascunho"
+   ]
   },
   "src/components/celebrations/CelebrationProvider.tsx": {
    "path": "src/components/celebrations/CelebrationProvider.tsx",
@@ -191764,7 +191862,7 @@
   },
   "src/data/carnegieEmpathyTemplates.ts": {
    "path": "src/data/carnegieEmpathyTemplates.ts",
-   "lines": 313,
+   "lines": 315,
    "exports": [
     "const EMPATHY_TEMPLATES",
     "const EMPATHY_PHRASES",
@@ -213117,6 +213215,28 @@
     }
    ]
   },
+  "src/lib/carnegieMessageReview.ts": {
+   "path": "src/lib/carnegieMessageReview.ts",
+   "lines": 166,
+   "exports": [
+    "type PerfilDisc",
+    "interface RevisaoMensagem",
+    "function revisarMensagemCarnegie"
+   ],
+   "enums": [
+    {
+     "name": "PerfilDisc",
+     "values": "D | I | S | C"
+    }
+   ],
+   "params": [
+    {
+     "name": "BASE_NEUTRA",
+     "value": "50"
+    }
+   ],
+   "doc": "Revisor de mensagem pelos principios de Carnegie. Junta os nove detectores de texto de `src/data/carnegie*` (critica, ordens, empatia, encorajamento, interesse genuino, autoria, narrativa, escada do sim e desejos) em um unico laudo. Funcao pura: recebe o texto e devolve so o que foi encontrado nele. …"
+  },
   "src/lib/celebrate.ts": {
    "path": "src/lib/celebrate.ts",
    "lines": 80,
@@ -214825,6 +214945,26 @@
     "calcula p95 por interpolação em amostra maior",
     "formatMtta",
     "formata %s → %s"
+   ]
+  },
+  "src/lib/__tests__/carnegieMessageReview.test.ts": {
+   "path": "src/lib/__tests__/carnegieMessageReview.test.ts",
+   "lines": 85,
+   "is_test": true,
+   "tests": [
+    "revisarMensagemCarnegie",
+    "devolve null para texto vazio ou só com espaços",
+    "não inventa nota quando o texto não traz nenhum sinal",
+    "aponta ordens diretas e conta como ponto de atenção",
+    "só sugere perguntas por perfil quando o perfil DISC é conhecido",
+    "mede empatia quando há frase de empatia no texto",
+    "mede a queda de empatia quando só há sinal negativo",
+    "aponta frase que desanima e baixa a nota de encorajamento",
+    "aponta frase que tira a autoria do cliente e oferece alternativas",
+    "propõe versão reescrita só quando a troca muda o texto",
+    "conta perguntas pessoais como sinal de interesse genuíno",
+    "traduz os elementos de narrativa para português",
+    "só sugere perguntas de concordância quando há oportunidade no texto"
    ]
   },
   "src/lib/__tests__/leadScoreContract.test.ts": {
@@ -233997,10 +234137,25 @@
   }
  },
  "git": {
-  "sha": "f76d507559e4e01ee0499fe828e34e196bbe72ab",
+  "sha": "16da53a195efeb18d4a592f61ab5dca89b993332",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "16da53a",
+    "date": "2026-11-19",
+    "author": "adm01-debug",
+    "subject": "feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)",
+    "files": [
+     "src/components/carnegie/CarnegieDashboard.tsx",
+     "src/components/carnegie/MessageReviewPanel.tsx",
+     "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx",
+     "src/components/carnegie/index.ts",
+     "src/data/carnegieEmpathyTemplates.ts",
+     "src/lib/__tests__/carnegieMessageReview.test.ts",
+     "src/lib/carnegieMessageReview.ts"
+    ]
+   },
    {
     "sha": "f76d507",
     "date": "2026-11-18",
@@ -234329,21 +234484,16 @@
      "supabase/migrations/20260924215142_t216_fix_reversao_devolve_status_staging.sql",
      "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql"
     ]
-   },
-   {
-    "sha": "d136c19",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(db): remove 18 indices exatamente duplicados (auditoria ao vivo) (#232)",
-    "files": [
-     "supabase/migrations/20261114124000_remove_duplicate_indexes.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "src/pages/Analytics.tsx",
     3
+   ],
+   [
+    "src/components/carnegie/CarnegieDashboard.tsx",
+    2
    ],
    [
     "src/hooks/useCarnegieAnalysis.ts",
@@ -234370,6 +234520,30 @@
     2
    ],
    [
+    "src/components/carnegie/MessageReviewPanel.tsx",
+    1
+   ],
+   [
+    "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx",
+    1
+   ],
+   [
+    "src/components/carnegie/index.ts",
+    1
+   ],
+   [
+    "src/data/carnegieEmpathyTemplates.ts",
+    1
+   ],
+   [
+    "src/lib/__tests__/carnegieMessageReview.test.ts",
+    1
+   ],
+   [
+    "src/lib/carnegieMessageReview.ts",
+    1
+   ],
+   [
     "src/hooks/__tests__/matriz-conflitos-gatilhos.test.ts",
     1
    ],
@@ -234391,34 +234565,6 @@
    ],
    [
     "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
-    1
-   ],
-   [
-    "src/hooks/useContactDaysWithout.ts",
-    1
-   ],
-   [
-    "src/hooks/useInteractionsRpc.ts",
-    1
-   ],
-   [
-    "src/components/territories/TerritoryCard.tsx",
-    1
-   ],
-   [
-    "src/components/territories/TerritoryForm.tsx",
-    1
-   ],
-   [
-    "src/components/territories/TerritoryMap.tsx",
-    1
-   ],
-   [
-    "src/hooks/useTerritories.ts",
-    1
-   ],
-   [
-    "src/pages/Territorios.tsx",
     1
    ]
   ]

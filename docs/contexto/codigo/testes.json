@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 271,
+ "total": 273,
  "por_tipo": {
   "contrato": 40,
   "e2e": 12,
   "pytest": 9,
-  "unit": 208
+  "unit": 210
  },
  "onde_ficam": [
   {
@@ -19,7 +19,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 93
+   "arquivos": 95
   },
   {
    "padrao": "tests/",
@@ -695,6 +695,15 @@
     "src/hooks/useEmailCampaigns.ts"
    ],
    "casos": 6
+  },
+  {
+   "arquivo": "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx",
+   "tipo": "unit",
+   "linhas": 34,
+   "testa": [
+    "src/components/carnegie/MessageReviewPanel.tsx"
+   ],
+   "casos": 3
   },
   {
    "arquivo": "src/components/company-detail/CompanyCommercialTab.test.tsx",
@@ -1834,6 +1843,15 @@
    "casos": 6
   },
   {
+   "arquivo": "src/lib/__tests__/carnegieMessageReview.test.ts",
+   "tipo": "unit",
+   "linhas": 85,
+   "testa": [
+    "src/lib/carnegieMessageReview.ts"
+   ],
+   "casos": 12
+  },
+  {
    "arquivo": "src/lib/__tests__/leadScoreContract.test.ts",
    "tipo": "unit",
    "linhas": 44,
@@ -2506,6 +2524,7 @@
   "src/components/analytics/DataHealthWidget.tsx": 1,
   "src/components/auth/MFAGuard.tsx": 1,
   "src/components/campaigns/CampaignDetailDrawer.tsx": 1,
+  "src/components/carnegie/MessageReviewPanel.tsx": 1,
   "src/components/company-detail/CompanyCommercialTab.tsx": 1,
   "src/components/contact-detail/ContactDetailHeader.tsx": 1,
   "src/components/contact-detail/LifeEventsTab.tsx": 1,
@@ -2636,6 +2655,7 @@
   "src/hooks/voice/retry.ts": 1,
   "src/integrations/supabase/client.ts": 2,
   "src/lib/behavioralAlertStats.ts": 1,
+  "src/lib/carnegieMessageReview.ts": 1,
   "src/lib/circuitBreaker.ts": 4,
   "src/lib/contactBehaviorAudit.ts": 1,
   "src/lib/errorReporting.ts": 2,

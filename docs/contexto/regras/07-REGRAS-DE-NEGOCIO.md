@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f76d507559` · branch `main` · 2026-11-19 00:17 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `16da53a195` · branch `main` · 2026-11-19 11:15 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1582,6 +1582,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | VoiceAgentPhase | idle \| listening \| processing \| speaking \| error | `src/hooks/voice/types.ts` |
 | INTERACTION_CHANNELS | 'whatsapp', 'call', 'email', 'meeting', 'video_call', 'note', | `src/lib/canaisInteracao.ts` |
 | FICHA360_CHANNELS | 'whatsapp', 'call', 'email', 'meeting', 'note', 'audio', 'transcription' | `src/lib/canaisInteracao.ts` |
+| PerfilDisc | D \| I \| S \| C | `src/lib/carnegieMessageReview.ts` |
 | CircuitState | CLOSED \| OPEN \| HALF_OPEN | `src/lib/circuitBreaker.ts` |
 | IsolatedFilterKey | q \| contact \| company \| direcao \| canais \| de \| ate \| sentimento | `src/lib/computeIsolatedFilterCounts.ts` |
 | DealRiskLevel | healthy \| attention \| high | `src/lib/deal-risk-constants.ts` |
@@ -3405,6 +3406,7 @@ _nenhum item encontrado_
 | `COMPANY_LIGHT_SELECT` | `'id, nome_crm'` | `src/hooks/useYourDay.ts` |
 | `PROCESSING_ERROR_RESET_DELAY_MS` | `3000` | `src/hooks/voice/useTranscriptProcessor.ts` |
 | `ERROR_RESET_DELAY_MS` | `5000` | `src/hooks/voice/useVoiceState.ts` |
+| `BASE_NEUTRA` | `50` | `src/lib/carnegieMessageReview.ts` |
 | `MAX_ENTRIES` | `32` | `src/lib/channelCountsCache.ts` |
 | `DEAL_RISK_LOOKBACK_DAYS` | `60` | `src/lib/deal-risk-constants.ts` |
 | `DEAL_ENGAGEMENT_GAP_DAYS` | `30` | `src/lib/deal-risk-constants.ts` |
@@ -4420,7 +4422,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3189 testes em 246 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3206 testes em 248 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4494,6 +4496,7 @@ _nenhum item encontrado_
 | `src/data/__tests__/sleightOfMouth.test.ts` | 13 | Sleight of Mouth Patterns · has exactly 14 patterns (Robert Dilts) · all patterns have matching id and key · all patterns have required string fields … |
 | `src/data/__tests__/vakTemplates.test.ts` | 13 | VAK Adapted Templates · has at least 5 templates · all templates have unique IDs · all templates have base title … |
 | `src/hooks/__tests__/canonical-next-action-contract.test.tsx` | 13 | Contrato real da próxima melhor ação · confirma pelo ID persistido enviado pelo produtor e mantém o escopo do contato · envia contactId e recupera o ID persistido quando o produtor não retorna ID · rejeita resposta incompatível sem anunciar sucesso: %j … |
+| `src/lib/__tests__/carnegieMessageReview.test.ts` | 13 | revisarMensagemCarnegie · devolve null para texto vazio ou só com espaços · não inventa nota quando o texto não traz nenhum sinal · aponta ordens diretas e conta como ponto de atenção … |
 | `src/test/providers.test.ts` | 13 | Provider Hierarchy Guard · validateProviderOrder · deve aceitar a ordem correta sem violações · deve detectar AuthProvider sem BrowserRouter acima … |
 | `scripts/check-backend-linter-baseline.test.mjs` | 12 | o teto do script é o documentado em linter-baseline.md · no teto: aprova e mostra a comparação · acima do teto: exit 1 com a contagem no stderr · abaixo do teto: aprova e avisa para apertar o ratchet … |
 | `scripts/lint-providers.test.mjs` | 12 | o repositório atual passa e o lint realmente encontra os providers · as dependências do lint são as mesmas de src/lib/providerGuard.ts · aprova a ordem certa num App.tsx só · reprova ${nome} … |
@@ -4600,6 +4603,7 @@ _nenhum item encontrado_
 | `e2e/contacts-rapport.spec.ts` | 4 | Contacts Rapport & Intelligence · CRUD de contatos com Hobbies e Interesses · Filtro por Hobbies e Interesses · Ficha 360: Edição Inline de Família e Histórico |
 | `e2e/smoke.spec.ts` | 4 | SINGU Smoke Tests · jornada A: dashboard → criar contato · jornada B: pipeline → mover deal · jornada C: inbox → completar tarefa → desfazer |
 | `src/components/analytics/DataHealthWidget.contract.test.tsx` | 4 | Contrato agregado da saúde dos dados · converte a escala de 0 a 10 e mostra os totais reais sem inventar tabelas · distingue pontuação ausente de zero real · distingue ausência de métricas de falha na consulta |
+| `src/components/carnegie/__tests__/MessageReviewPanel.test.tsx` | 4 | MessageReviewPanel · começa vazio, com o botão desabilitado · mensagem sem problema não mostra ponto de atenção nem nota inventada · aponta os problemas e aplica a versão sugerida ao rascunho |
 | `src/components/contact-detail/__tests__/LifeEventsTab.test.tsx` | 4 | LifeEventsTab · renders correctly and shows the title · displays the gap checklist tab · displays the audit trail tab |
 | `src/components/crm/NextBestAction.contract.test.tsx` | 4 | Contrato canônico de conclusão de próxima ação · preserva o tipo permitido %s e informa canal e direção · registra %s como nota sem violar a constraint de tipo · não anuncia conclusão quando a gravação da interação falha |
 | `src/components/sequences/SequenceEnrollDialog.contract.test.tsx` | 4 | Inscrição com busca e cache da carteira · impede fechar pelo X ou Escape durante uma inscrição pendente · repete o mesmo termo depois de falha transitória e oferece o contato recuperado · não inscreve um contato selecionado que desapareceu do cache após arquivamento |

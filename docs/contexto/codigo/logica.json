@@ -1,13 +1,13 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 148,
+ "total": 149,
  "por_camada": {
   "config": 1,
   "data": 46,
   "domain": 8,
   "integrations": 3,
-  "lib": 72,
+  "lib": 73,
   "python": 12,
   "store": 1,
   "stores": 5
@@ -676,10 +676,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 3,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/carnegieEagerWant.ts",
@@ -703,10 +705,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 2,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/carnegieEmpathyTemplates.ts",
@@ -721,7 +725,7 @@
     "getEmpathyTemplatesByType"
    ],
    "export_default": null,
-   "linhas": 313,
+   "linhas": 315,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -730,10 +734,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 2,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/carnegieEncouragement.ts",
@@ -758,10 +764,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 2,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/carnegieFaceSaving.ts",
@@ -816,10 +824,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 3,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/carnegieIdentityLabels.ts",
@@ -899,10 +909,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 2,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/carnegieProgressCelebration.ts",
@@ -959,10 +971,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 2,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/carnegieStorytelling.ts",
@@ -986,10 +1000,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 2,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/carnegieTalkRatio.ts",
@@ -1104,10 +1120,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 3,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/cognitiveBiasesData.ts",
@@ -2310,6 +2328,31 @@
    "orfao": false
   },
   {
+   "arquivo": "src/lib/carnegieMessageReview.ts",
+   "camada": "lib",
+   "exports": [
+    "PerfilDisc",
+    "RevisaoMensagem",
+    "revisarMensagemCarnegie"
+   ],
+   "export_default": null,
+   "linhas": 166,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/carnegie"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/lib/celebrate.ts",
    "camada": "lib",
    "exports": [
@@ -2521,9 +2564,10 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 18,
+   "usado_por": 19,
    "usado_por_modulos": [
     "components/analytics",
+    "components/carnegie",
     "components/disc",
     "components/nlp",
     "hooks"
@@ -4251,7 +4295,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 424,
+   "usado_por": 425,
    "usado_por_modulos": [
     "components/abm",
     "components/admin",

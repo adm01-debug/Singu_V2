@@ -1,24 +1,24 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1958,
- "arestas": 8461,
+ "nos": 1960,
+ "arestas": 8481,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
-   "importado_por": 582
+   "importado_por": 583
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 542
+   "importado_por": 543
   },
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 513
+   "importado_por": 514
   },
   {
    "arquivo": "src/lib/utils.ts",
-   "importado_por": 424
+   "importado_por": 425
   },
   {
    "arquivo": "src/hooks/useAuth.tsx",
@@ -53,11 +53,11 @@
    "importado_por": 120
   },
   {
-   "arquivo": "src/lib/errorMessages.ts",
-   "importado_por": 119
+   "arquivo": "src/types/index.ts",
+   "importado_por": 120
   },
   {
-   "arquivo": "src/types/index.ts",
+   "arquivo": "src/lib/errorMessages.ts",
    "importado_por": 119
   },
   {
@@ -74,7 +74,7 @@
   },
   {
    "arquivo": "src/components/ui/textarea.tsx",
-   "importado_por": 94
+   "importado_por": 95
   },
   {
    "arquivo": "src/components/ui/tabs.tsx",
@@ -259,15 +259,6 @@
   "src/components/ui/keyboard-list-hint.tsx",
   "src/components/ui/multi-step-progress.tsx",
   "src/components/ui/priority-indicator.tsx",
-  "src/data/carnegieCriticismDetector.ts",
-  "src/data/carnegieEagerWant.ts",
-  "src/data/carnegieEmpathyTemplates.ts",
-  "src/data/carnegieEncouragement.ts",
-  "src/data/carnegieGenuineInterest.ts",
-  "src/data/carnegieOwnershipTransfer.ts",
-  "src/data/carnegieQuestionInfluence.ts",
-  "src/data/carnegieStorytelling.ts",
-  "src/data/carnegieYesLadder.ts",
   "src/data/triggerBundles.ts",
   "src/data/triggerTemplatesMetaprograms.ts",
   "src/data/triggerTemplatesVAK.ts",
@@ -304,7 +295,7 @@
   },
   {
    "modulo": "lib",
-   "depende_de": 6,
+   "depende_de": 7,
    "importado_por": 95
   },
   {
@@ -345,7 +336,7 @@
   {
    "modulo": "data",
    "depende_de": 3,
-   "importado_por": 12
+   "importado_por": 13
   },
   {
    "modulo": "pages/contatos",

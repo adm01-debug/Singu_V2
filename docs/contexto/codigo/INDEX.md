@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `f76d507559e4e01ee0499fe828e34e196bbe72ab` (2026-11-18T21:16:20-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `16da53a195efeb18d4a592f61ab5dca89b993332` (2026-11-19T08:15:07-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2064), SQL (661), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
+- linguagens: TypeScript (2068), SQL (661), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,31 +34,31 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3255 |
-| arquivos_codigo | 2227 |
-| linhas_codigo | 416204 |
+| arquivos_total | 3259 |
+| arquivos_codigo | 2231 |
+| linhas_codigo | 416849 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
 | itens_menu | 65 |
 | modulos | 141 |
-| componentes | 1061 |
+| componentes | 1062 |
 | hooks | 411 |
 | edge_functions | 109 |
 | tabelas | 418 |
 | migrations | 488 |
 | cron_jobs | 34 |
-| testes | 271 |
+| testes | 273 |
 | workflows | 11 |
 | scripts | 296 |
 | docs_md | 156 |
 
 ## Onde ficam as coisas
 - telas: src/pages (114)
-- componentes: src/components (912), src/pages (140), src/app (4)
+- componentes: src/components (913), src/pages (140), src/app (4)
 - hooks: src/hooks (380), src/components (20), src/stores (5)
-- servicos_logica: src/lib (72), src/data (46), src/domain (8)
-- testes: co-localizado (*.test) (126), co-localizado (__tests__) (93), tests/ (23)
+- servicos_logica: src/lib (73), src/data (46), src/domain (8)
+- testes: co-localizado (*.test) (126), co-localizado (__tests__) (95), tests/ (23)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/migration (177), scripts/maintenance (15), scripts/hardening (10)
@@ -74,7 +74,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/admin | 0 | 0 | 45 | 36 | 13 | 19 |
 | components/analytics | 0 | 0 | 43 | 81 | 2 | 26 |
 | components/bi | 0 | 0 | 5 | 20 | 2 | 6 |
-| components/carnegie | 0 | 0 | 12 | 1 | 0 | 0 |
+| components/carnegie | 0 | 0 | 13 | 1 | 0 | 0 |
 | components/companies | 0 | 0 | 5 | 7 | 1 | 2 |
 | components/company-detail | 0 | 0 | 29 | 76 | 3 | 11 |
 | components/contact-detail | 0 | 0 | 110 | 123 | 14 | 75 |
@@ -120,7 +120,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
 | hooks | 0 | 0 | 378 | 640 | 54 | 209 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
-| lib | 0 | 0 | 68 | 16 | 2 | 13 |
+| lib | 0 | 0 | 69 | 16 | 2 | 13 |
 | pages | 51 | 105 | 105 | 630 | 67 | 226 |
 | pages/admin | 7 | 8 | 9 | 355 | 29 | 105 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
@@ -435,8 +435,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21265 nós · 36018 arestas · 2115 comunidades · grafo do commit `f76d5075`
-- comunidades maiores: useAuth (268), ref_types (265), 02_tables.sql (259), _shared/auth.ts (254), ref_lib (250), framer-motion (242), 📖 Dicionário de Dados — SINGU CRM (227), ref_hooks (226), lucide-react (223), react (222), react-router-dom (220), date-fns (200)
+- 21281 nós · 36050 arestas · 2115 comunidades · grafo do commit `16da53a1`
+- comunidades maiores: ref_components (298), _shared/auth.ts (289), useAuth (282), 02_tables.sql (259), ref_types (254), ref_hooks (244), react (238), ref_lib (230), 📖 Dicionário de Dados — SINGU CRM (227), framer-motion (222), date-fns (219), react-router-dom (200)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -572,6 +572,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-19 `16da53a` feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)
 - 2026-11-18 `f76d507` feat(gatilhos): liga a matriz completa de conflitos e sinergias que estava desligada (#268)
 - 2026-11-18 `5e72a50` fix(carnegie): analise de fala/escuta passa a ler o texto em vez de inventar (#266)
 - 2026-11-18 `679cafa` fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)
@@ -586,7 +587,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `22f664c` feat(reports): os 12 widgets do Report Builder passam a mostrar dado real (#250)
 - 2026-11-18 `72976e7` fix(analytics): chama a RPC de agregação direto, sem passar pelo gateway (#256)
 - 2026-11-18 `217bbf0` feat(admin): termina e publica a página de Observabilidade (#254)
-- 2026-11-18 `4177a35` feat(admin): liga o resumo de auditoria ao Audit Trail (#255)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1061,
+ "total": 1062,
  "orfaos": 39,
  "nomes_duplicados": {
   "ABM": [
@@ -2485,7 +2485,7 @@
     "CarnegieDashboard"
    ],
    "export_default": null,
-   "linhas": 159,
+   "linhas": 169,
    "dominio": "components/carnegie",
    "hooks_locais": [
     "useCarnegieAnalysis"
@@ -2555,6 +2555,20 @@
    "tabelas": [],
    "edges": [],
    "usado_por": 3,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/carnegie/MessageReviewPanel.tsx",
+   "exports": [
+    "MessageReviewPanel"
+   ],
+   "export_default": null,
+   "linhas": 347,
+   "dominio": "components/carnegie",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -13940,7 +13954,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 541,
+   "usado_por": 542,
    "orfao": false
   },
   {
@@ -13955,7 +13969,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 512,
+   "usado_por": 513,
    "orfao": false
   },
   {
@@ -13990,7 +14004,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 582,
+   "usado_por": 583,
    "orfao": false
   },
   {
@@ -14945,7 +14959,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 94,
+   "usado_por": 95,
    "orfao": false
   },
   {
