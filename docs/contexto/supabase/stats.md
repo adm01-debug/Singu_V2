@@ -20,7 +20,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | tabela | linhas (~) | total | heap | índices | linhas mortas (~) | seq scans (~) | idx scans (~) | último autovacuum |
 |---|---|---|---|---|---|---|---|---|
 | public.audit_log | ~434.2k | 1.6 GB | 600.2 MB | 38.8 MB | ~17.9k | ~7.3k | ~2.2k | 2026-11-13 |
-| public.companies | ~70.3k | 886.7 MB | 117.4 MB | 769.2 MB | ~3.2k | ~281.8k | ~35.8M | 2026-11-13 |
+| public.companies | ~70.3k | 886.7 MB | 117.4 MB | 769.2 MB | ~3.2k | ~281.9k | ~35.8M | 2026-11-13 |
 | public.company_cnaes | ~287.5k | 61.3 MB | 28.5 MB | 32.8 MB | ~160 | ~150 | ~326.5k | 2026-10-19 |
 | public.company_addresses | ~98.5k | 47.0 MB | 27.0 MB | 20.0 MB | ~820 | ~1.6k | ~3.1M | 2026-11-13 |
 | public.customers | ~78.6k | 39.0 MB | 24.9 MB | 14.1 MB | ~180 | ~3.7k | ~8M | 2026-11-14 |
@@ -33,14 +33,14 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.error_logs | ~17k | 12.7 MB | 12.1 MB | 632.0 KB | ~150 | ~40 | ~10 | 2026-11-11 |
 | public.activities | ~7.9k | 9.3 MB | 8.4 MB | 904.0 KB | ~1.6k | ~18.6k | ~12.3k | 2026-11-12 |
 | public.interactions | ~8.9k | 8.0 MB | 4.0 MB | 4.0 MB | ~240 | ~37k | ~34.9M | 2026-11-18 |
-| public.health_alerts | ~7k | 3.3 MB | 2.7 MB | 512.0 KB | 0 | ~210 | ~29.5k | 2026-11-18 |
+| public.health_alerts | ~8k | 3.7 MB | 3.1 MB | 544.0 KB | 0 | ~220 | ~29.5k | 2026-11-18 |
 | zapp_history.conversation_daily_summaries | 0 | 3.3 MB | 8.0 KB | 3.2 MB | 7 | ~540 | ~7.1k |  |
 | zapp_history.message_audio | 0 | 3.2 MB | 8.0 KB | 3.2 MB | 7 | ~420 | ~680 |  |
 | zapp_history.message_embeddings | 0 | 3.2 MB | 0 B | 3.2 MB | 0 | ~30 | ~510 |  |
 | public.contact_emails | ~3.1k | 1.5 MB | 552.0 KB | 968.0 KB | ~660 | ~190 | ~2.5M | 2026-11-18 |
 | public.staging_portal_sicoob | ~4.4k | 1.5 MB | 1.1 MB | 296.0 KB | 0 | ~1.4k | ~9.9k | 2026-03-22 |
 | public.contact_phones | ~3.1k | 1.3 MB | 488.0 KB | 808.0 KB | ~70 | ~6.9k | ~353.5k | 2026-11-18 |
-| zapp_history.messages | 0 | 1.2 MB | 0 B | 1.1 MB | 0 | ~666.1k | ~1.3M | 2026-04-10 |
+| zapp_history.messages | 0 | 1.2 MB | 0 B | 1.1 MB | 0 | ~666.4k | ~1.3M | 2026-04-10 |
 | public.cidades | ~5.6k | 1.1 MB | 720.0 KB | 344.0 KB | 0 | ~30 | ~33.4k |  |
 | public.sync_log | ~1.5k | 688.0 KB | 360.0 KB | 232.0 KB | 4 | ~30 | ~30 |  |
 | public.customer_events | ~40 | 608.0 KB | 24.0 KB | 544.0 KB | 3 | ~10.4k | ~5.9k | 2026-09-27 |
@@ -58,7 +58,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.rfm_analysis | 0 | 144.0 KB | 8.0 KB | 112.0 KB | ~50 | ~6.7k | ~1.8k | 2026-11-18 |
 | public.tasks | 0 | 144.0 KB | 8.0 KB | 128.0 KB | ~10 | ~80 | ~6.6k |  |
 | public.carriers | ~110 | 136.0 KB | 32.0 KB | 64.0 KB | ~10 | ~560 | ~4.2k | 2026-03-31 |
-| public.system_health_snapshots | ~160 | 136.0 KB | 48.0 KB | 48.0 KB | ~80 | ~190 | ~500 | 2026-11-18 |
+| public.system_health_snapshots | ~160 | 136.0 KB | 48.0 KB | 48.0 KB | ~80 | ~190 | ~520 | 2026-11-18 |
 | zapp_history.conversations | 0 | 136.0 KB | 0 B | 112.0 KB | 0 | ~4.3k | ~1.3M | 2026-04-10 |
 | zapp_history.product_dictionary | ~100 | 136.0 KB | 24.0 KB | 80.0 KB | ~10 | ~260 | ~160 |  |
 | public.activity_feed | 1 | 128.0 KB | 8.0 KB | 80.0 KB | ~10 | ~7.6k | 2 | 2026-11-19 |
@@ -264,9 +264,9 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.ai_gateway_metrics_2026_08 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~10.4k |  |
 | public.ai_gateway_metrics_2026_09 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~10.4k |  |
 | public.ai_gateway_metrics_2026_10 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~27.1k |  |
-| public.ai_gateway_metrics_2026_11 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~39.5k |  |
-| public.ai_gateway_metrics_2026_12 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~39.5k |  |
-| public.ai_gateway_metrics_2027_01 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~39.5k |  |
+| public.ai_gateway_metrics_2026_11 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~39.6k |  |
+| public.ai_gateway_metrics_2026_12 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~39.6k |  |
+| public.ai_gateway_metrics_2027_01 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | ~39.6k |  |
 | public.automation_executions | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~7.5k | ~70 |  |
 | public.campaigns | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~100 |  |
 | public.client_values | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~5.7k |  |
@@ -707,13 +707,13 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | service_role | ~15.7M | ~320.2M | 20.34 | `WITH pgrst_source AS (UPDATE "public"."companies" SET "cnpj_normalizado_em" = "pgrst_body"."cnpj_normalizado_em" FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "cnpj_normalizado_em" FROM json_to_record(pgrs` |
 | service_role | ~15.8M | ~308.6M | 19.56 | `WITH pgrst_source AS (UPDATE "public"."companies" SET "address" = "pgrst_body"."address", "city" = "pgrst_body"."city", "email" = "pgrst_body"."email", "phone" = "pgrst_body"."phone", "state" = "pgrst_body"."state" FROM ` |
 | postgres | ~18.9k | ~26.1M | 1383.61 | `SELECT pg_advisory_xact_lock(hashtext($1))` |
-| postgres | ~644.4k | ~10.6M | 16.39 | `SELECT zapp_history.reconcile_nlp_responses()` |
+| postgres | ~644.7k | ~10.6M | 16.39 | `SELECT zapp_history.reconcile_nlp_responses()` |
 | postgres | ~5.5k | ~6.4M | 1171.32 | `with f as ( -- CTE with sane arg_modes, arg_names, and arg_types. -- All three are always of the same length. -- All three include all args, including OUT and TABLE args. with functions as ( select *, -- proargmodes is n` |
 | service_role | ~4.2k | ~6.1M | 1456.57 | `WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_phones" FROM json_to_record(pgrst_payload.json_data) AS _("p_phones" text[]) LIMIT $4) pgrst_body , LAT` |
 | postgres | ~5.6k | ~4.9M | 877.68 | `SELECT tbl.schemaname, tbl.tablename, tbl.quoted_name, tbl.is_table, json_agg(a) as columns FROM ( SELECT n.nspname as schemaname, c.relname as tablename, (quote_ident(n.nspname) \|\| $1 \|\| quote_ident(c.relname)) as quote` |
 | service_role | ~13.1k | ~3.6M | 272.09 | `WITH pgrst_source AS ( SELECT "public"."companies".* FROM "public"."companies" WHERE "public"."companies"."is_customer" = $1 AND "public"."companies"."deleted_at" IS NULL ORDER BY "public"."companies"."razao_social" ASC ` |
 | postgres | ~120 | ~3.4M | 29461.80 | `SELECT string_agg( format($1, id, table_name, record_id, action, CASE WHEN old_data IS NULL THEN $2 ELSE quote_literal(old_data::text) \|\|$3 END, CASE WHEN new_data IS NULL THEN $4 ELSE quote_literal(new_data::text) \|\|$5 ` |
-| postgres | ~49.5k | ~2.6M | 53.03 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
+| postgres | ~49.8k | ~2.6M | 52.77 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
 | service_role | ~11.1k | ~2.3M | 210.80 | `WITH pgrst_source AS ( SELECT "public"."companies"."id", "public"."companies"."razao_social", "public"."companies"."nome_fantasia", "public"."companies"."ramo_atividade", "public"."companies"."cnpj", "public"."companies"` |
 | service_role | ~64M | ~2M | 0.03 | `select set_config('?', $1, true), set_config($2, $3, true), set_config('?', $4, true), set_config('?', $5, true), set_config('?', $6, true), set_config('?', $7, true)` |
 | service_role | ~5.4k | ~1.9M | 342.90 | `WITH pgrst_source AS ( SELECT "public"."companies".*, row_to_json("companies_customers_1".*)::jsonb AS "customers", COALESCE( "companies_contacts_1"."companies_contacts_1", $9) AS "contacts" FROM "public"."companies" LEF` |
@@ -726,7 +726,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 |---|---|---|
 | authenticator | idle | 7 |
 | pgbouncer | idle | 1 |
-| postgres | active | 2 |
+| postgres | active | 1 |
 | postgres |  | 1 |
 | supabase_admin | idle | 2 |
 | supabase_admin |  | 1 |
