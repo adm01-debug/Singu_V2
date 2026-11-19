@@ -3,7 +3,7 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2069)",
+   "TypeScript (2074)",
    "SQL (661)",
    "Markdown (156)",
    "Shell (147)",
@@ -1347,7 +1347,7 @@
    },
    {
     "papel": "group",
-    "ocorrencias": 18
+    "ocorrencias": 19
    },
    {
     "papel": "button",

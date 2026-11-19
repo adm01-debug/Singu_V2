@@ -6832,6 +6832,7 @@
   ],
   "src/components/triggers/AdvancedTriggersPanel.tsx": [
    "src/components/triggers/advanced-triggers/AdvancedTriggersTabContent.tsx",
+   "src/components/triggers/advanced-triggers/BundlesTab.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/progress.tsx",
@@ -6839,6 +6840,7 @@
    "src/components/ui/tabs.tsx",
    "src/domain/demoEntities.ts",
    "src/hooks/useAdvancedTriggers.ts",
+   "src/lib/contact-utils.ts",
    "src/lib/utils.ts",
    "src/types/index.ts",
    "src/types/triggers-advanced.ts",
@@ -7007,6 +7009,15 @@
    "src/components/ui/scroll-area.tsx",
    "src/components/ui/tooltip.tsx",
    "src/lib/utils.ts",
+   "src/types/triggers.ts"
+  ],
+  "src/components/triggers/advanced-triggers/BundlesTab.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/data/triggerBundles.ts",
+   "src/data/triggerTemplatesMetaprograms.ts",
+   "src/lib/triggerPlaybook.ts",
    "src/types/triggers.ts"
   ],
   "src/components/triggers/compatibility/compatibilityData.ts": [
@@ -7713,6 +7724,7 @@
   "src/hooks/useAdvancedTriggers.ts": [
    "src/data/triggerConflictsMatrix.ts",
    "src/data/triggersAdvancedData.ts",
+   "src/data/triggersExtendedData.ts",
    "src/hooks/useTriggerHistory.ts",
    "src/types/index.ts",
    "src/types/triggers-advanced.ts",
@@ -9441,6 +9453,13 @@
    "src/integrations/supabase/client.ts",
    "src/integrations/supabase/types.ts",
    "src/lib/logger.ts"
+  ],
+  "src/lib/triggerPlaybook.ts": [
+   "src/data/triggerBundles.ts",
+   "src/data/triggerTemplatesMetaprograms.ts",
+   "src/data/triggerTemplatesVAK.ts",
+   "src/data/triggersAdvancedData.ts",
+   "src/types/triggers.ts"
   ],
   "src/lib/validationSchemas.ts": [
    "src/domain/validationSchemas.ts"

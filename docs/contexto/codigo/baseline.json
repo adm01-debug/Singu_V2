@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "f7463935e247073b7a7666f56d5bcaac419697d5",
+  "commit": "677b1938ced23a5946fa9b3843e5f4758e1be240",
   "branch": "main",
-  "data_commit": "2026-11-19T15:02:08-03:00",
+  "data_commit": "2026-11-19T15:02:28-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "677b193",
+    "data": "2026-11-19",
+    "assunto": "feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)"
+   },
+   {
+    "sha": "097e860",
+    "data": "2026-11-19",
+    "assunto": "feat(gatilhos): liga conflitos, sinergias e alternativas dos gatilhos estendidos (#271)"
+   },
    {
     "sha": "f746393",
     "data": "2026-11-19",
@@ -121,19 +131,9 @@
     "sha": "7dcac42",
     "data": "2026-11-18",
     "assunto": "fix(ui): filtros do Pipeline passam a filtrar e 3 botoes mortos ganham acao (#248)"
-   },
-   {
-    "sha": "602a7f8",
-    "data": "2026-11-18",
-    "assunto": "fix(edge): roadmap preditivo para de sortear a previsao gravada no banco (#246)"
-   },
-   {
-    "sha": "775c89c",
-    "data": "2026-11-18",
-    "assunto": "feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)"
    }
   ],
-  "arquivos_mudados_7d": 400,
+  "arquivos_mudados_7d": 406,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -144,16 +144,16 @@
     "mudancas": 22
    },
    {
+    "pasta": "src/components/triggers",
+    "mudancas": 21
+   },
+   {
     "pasta": "scripts/migration/storage",
     "mudancas": 20
    },
    {
     "pasta": "supabase/functions/_shared",
     "mudancas": 20
-   },
-   {
-    "pasta": "src/components/triggers",
-    "mudancas": 18
    },
    {
     "pasta": ".github/workflows/ci.yml",
@@ -165,6 +165,10 @@
    },
    {
     "pasta": "scripts/migration/functions",
+    "mudancas": 15
+   },
+   {
+    "pasta": "src/hooks/__tests__",
     "mudancas": 15
    },
    {
@@ -181,10 +185,6 @@
    },
    {
     "pasta": "src/components/admin",
-    "mudancas": 14
-   },
-   {
-    "pasta": "src/hooks/__tests__",
     "mudancas": 14
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 110
+    "commits": 112
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,21 +322,21 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3260,
-  "arquivos_codigo": 2232,
-  "linhas_codigo": 416948,
+  "arquivos_total": 3265,
+  "arquivos_codigo": 2237,
+  "linhas_codigo": 417496,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 65,
   "modulos": 141,
-  "componentes": 1062,
+  "componentes": 1063,
   "hooks": 411,
   "edge_functions": 109,
   "tabelas": 418,
   "migrations": 488,
   "cron_jobs": 34,
-  "testes": 274,
+  "testes": 277,
   "workflows": 11,
   "scripts": 296,
   "docs_md": 156
@@ -647,8 +647,8 @@
    "linhas": 591
   },
   "src/components": {
-   "arquivos": 993,
-   "linhas": 149347
+   "arquivos": 995,
+   "linhas": 149669
   },
   "src/config": {
    "arquivos": 1,
@@ -667,16 +667,16 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 442,
-   "linhas": 58323
+   "arquivos": 443,
+   "linhas": 58408
   },
   "src/integrations": {
    "arquivos": 3,
    "linhas": 69375
   },
   "src/lib": {
-   "arquivos": 102,
-   "linhas": 9190
+   "arquivos": 104,
+   "linhas": 9331
   },
   "src/main.tsx": {
    "arquivos": 1,

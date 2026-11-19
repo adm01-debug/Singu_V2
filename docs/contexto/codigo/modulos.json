@@ -8685,13 +8685,13 @@
   },
   {
    "modulo": "components/triggers",
-   "arquivos": 33,
-   "testes": 0,
-   "linhas": 5335,
+   "arquivos": 34,
+   "testes": 1,
+   "linhas": 5581,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
-   "componentes": 26,
+   "componentes": 27,
    "hooks_locais": [
     "useAdvancedTriggers",
     "useAuth",
@@ -8739,6 +8739,7 @@
    "flags": [],
    "papeis": [
     "decision_maker",
+    "group",
     "status"
    ],
    "diretos": {
@@ -9512,7 +9513,7 @@
    "modulo": "hooks",
    "arquivos": 378,
    "testes": 23,
-   "linhas": 50968,
+   "linhas": 50984,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -11579,7 +11580,7 @@
   {
    "modulo": "hooks/__tests__",
    "arquivos": 0,
-   "testes": 28,
+   "testes": 29,
    "linhas": 0,
    "itens_menu": [],
    "telas": [],
@@ -11863,9 +11864,9 @@
   },
   {
    "modulo": "lib",
-   "arquivos": 69,
+   "arquivos": 70,
    "testes": 18,
-   "linhas": 6769,
+   "linhas": 6848,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -12063,7 +12064,7 @@
   {
    "modulo": "lib/__tests__",
    "arquivos": 0,
-   "testes": 9,
+   "testes": 10,
    "linhas": 0,
    "itens_menu": [],
    "telas": [],

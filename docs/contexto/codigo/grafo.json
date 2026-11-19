@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1960,
- "arestas": 8481,
+ "nos": 1962,
+ "arestas": 8496,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -10,11 +10,11 @@
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 543
+   "importado_por": 544
   },
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 514
+   "importado_por": 515
   },
   {
    "arquivo": "src/lib/utils.ts",
@@ -82,7 +82,7 @@
   },
   {
    "arquivo": "src/components/ui/scroll-area.tsx",
-   "importado_por": 90
+   "importado_por": 91
   },
   {
    "arquivo": "supabase/functions/_shared/rate-limit.ts",
@@ -149,6 +149,10 @@
    "importado_por": 26
   },
   {
+   "arquivo": "src/types/triggers.ts",
+   "importado_por": 26
+  },
+  {
    "arquivo": "src/hooks/use-toast.ts",
    "importado_por": 25
   },
@@ -158,10 +162,6 @@
   },
   {
    "arquivo": "src/components/seo/SEOHead.tsx",
-   "importado_por": 24
-  },
-  {
-   "arquivo": "src/components/ui/dropdown-menu.tsx",
    "importado_por": 24
   }
  ],
@@ -259,10 +259,6 @@
   "src/components/ui/keyboard-list-hint.tsx",
   "src/components/ui/multi-step-progress.tsx",
   "src/components/ui/priority-indicator.tsx",
-  "src/data/triggerBundles.ts",
-  "src/data/triggerTemplatesMetaprograms.ts",
-  "src/data/triggerTemplatesVAK.ts",
-  "src/data/triggersExtendedData.ts",
   "src/domain/closingScore.ts",
   "src/domain/dealState.ts",
   "src/hooks/useBulkSelection.ts",

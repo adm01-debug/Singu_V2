@@ -879,7 +879,7 @@
    "hooks_exportados": [
     "useAdvancedTriggers"
    ],
-   "linhas": 419,
+   "linhas": 435,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -894,7 +894,7 @@
    "usado_por_arquivos": [
     "src/components/triggers/AdvancedTriggersPanel.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useAIApprovals.ts",

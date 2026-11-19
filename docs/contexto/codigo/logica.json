@@ -1,13 +1,13 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 149,
+ "total": 150,
  "por_camada": {
   "config": 1,
   "data": 46,
   "domain": 8,
   "integrations": 3,
-  "lib": 73,
+  "lib": 74,
   "python": 12,
   "store": 1,
   "stores": 5
@@ -1668,10 +1668,13 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
-   "coberto_por_testes": 1,
-   "orfao": true
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/triggers",
+    "lib"
+   ],
+   "coberto_por_testes": 3,
+   "orfao": false
   },
   {
    "arquivo": "src/data/triggerConflictsMatrix.ts",
@@ -1700,7 +1703,7 @@
    "usado_por_modulos": [
     "hooks"
    ],
-   "coberto_por_testes": 3,
+   "coberto_por_testes": 4,
    "orfao": false
   },
   {
@@ -1726,11 +1729,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
-    "hooks"
+    "hooks",
+    "lib"
    ],
-   "coberto_por_testes": 2,
+   "coberto_por_testes": 3,
    "orfao": false
   },
   {
@@ -1783,10 +1787,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
-   "coberto_por_testes": 1,
-   "orfao": true
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "hooks"
+   ],
+   "coberto_por_testes": 2,
+   "orfao": false
   },
   {
    "arquivo": "src/data/triggerTemplatesMetaprograms.ts",
@@ -1810,10 +1816,13 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/triggers",
+    "lib"
+   ],
    "coberto_por_testes": 1,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/triggerTemplatesVAK.ts",
@@ -1835,10 +1844,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 0,
-   "usado_por_modulos": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "lib"
+   ],
    "coberto_por_testes": 1,
-   "orfao": true
+   "orfao": false
   },
   {
    "arquivo": "src/data/vakTemplates.ts",
@@ -2564,12 +2575,13 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 19,
+   "usado_por": 20,
    "usado_por_modulos": [
     "components/analytics",
     "components/carnegie",
     "components/disc",
     "components/nlp",
+    "components/triggers",
     "hooks"
    ],
    "coberto_por_testes": 0,
@@ -4272,6 +4284,35 @@
     "hooks"
    ],
    "coberto_por_testes": 0,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/triggerPlaybook.ts",
+   "camada": "lib",
+   "exports": [
+    "PassoDoRoteiro",
+    "PerfilDisc",
+    "PerfilDoCliente",
+    "PerfilVak",
+    "RoteiroDeGatilhos",
+    "montarRoteiro",
+    "nomeDoGatilho"
+   ],
+   "export_default": null,
+   "linhas": 79,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 1,
+   "usado_por_modulos": [
+    "components/triggers"
+   ],
+   "coberto_por_testes": 1,
    "orfao": false
   },
   {

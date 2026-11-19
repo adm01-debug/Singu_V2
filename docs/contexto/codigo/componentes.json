@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1062,
+ "total": 1063,
  "orfaos": 39,
  "nomes_duplicados": {
   "ABM": [
@@ -13468,12 +13468,26 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/triggers/advanced-triggers/BundlesTab.tsx",
+   "exports": [
+    "BundlesTab"
+   ],
+   "export_default": null,
+   "linhas": 239,
+   "dominio": "components/triggers",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/triggers/AdvancedTriggersPanel.tsx",
    "exports": [
     "AdvancedTriggersPanel"
    ],
    "export_default": null,
-   "linhas": 229,
+   "linhas": 236,
    "dominio": "components/triggers",
    "hooks_locais": [
     "useAdvancedTriggers"
@@ -13954,7 +13968,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 542,
+   "usado_por": 543,
    "orfao": false
   },
   {
@@ -13969,7 +13983,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 513,
+   "usado_por": 514,
    "orfao": false
   },
   {
@@ -14584,7 +14598,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 90,
+   "usado_por": 91,
    "orfao": false
   },
   {

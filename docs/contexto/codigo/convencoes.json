@@ -6,7 +6,7 @@
    "src/pages (114)"
   ],
   "componentes": [
-   "src/components (913)",
+   "src/components (914)",
    "src/pages (140)",
    "src/app (4)"
   ],
@@ -16,13 +16,13 @@
    "src/stores (5)"
   ],
   "servicos_logica": [
-   "src/lib (73)",
+   "src/lib (74)",
    "src/data (46)",
    "src/domain (8)"
   ],
   "testes": [
    "co-localizado (*.test) (126)",
-   "co-localizado (__tests__) (96)",
+   "co-localizado (__tests__) (99)",
    "tests/ (23)"
   ],
   "edge_functions": "supabase/functions",
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1062)"
+  ".tsx (1063)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)",
+   "feat(gatilhos): liga conflitos, sinergias e alternativas dos gatilhos estendidos (#271)",
    "fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)",
    "feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)",
-   "feat(gatilhos): liga a matriz completa de conflitos e sinergias que estava desligada (#268)",
-   "fix(carnegie): analise de fala/escuta passa a ler o texto em vez de inventar (#266)",
-   "fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)"
+   "feat(gatilhos): liga a matriz completa de conflitos e sinergias que estava desligada (#268)"
   ]
  },
  "pr_template": null,

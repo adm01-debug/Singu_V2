@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f7463935e2` · branch `main` · 2026-11-19 18:02 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `677b1938ce` · branch `main` · 2026-11-19 18:05 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1609,6 +1609,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | TriggerCategoryTab | all \| urgency \| social_proof \| scarcity \| authority \| reciprocity \| commitment \| liking | `src/lib/tab-utils.ts` |
 | EITabWithHistory | overview \| pillars \| sales \| history | `src/lib/tab-utils.ts` |
 | MetaprogramFocusType | motivation \| reference \| working | `src/lib/tab-utils.ts` |
+| PerfilDisc | D \| I \| S \| C | `src/lib/triggerPlaybook.ts` |
+| PerfilVak | V \| A \| K | `src/lib/triggerPlaybook.ts` |
 | MatchMode | exact \| partial | `src/lib/insights/extractExcerpts.ts` |
 | EntityKey | contacts \| companies \| interactions \| deals \| tickets | `src/lib/reports/reportEngine.ts` |
 | FieldType | text \| number \| date \| enum \| boolean | `src/lib/reports/reportEngine.ts` |
@@ -4390,7 +4392,7 @@ _nenhum item encontrado_
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
 | Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar no bundle. | `src/components/intelligence/CrossRefTab.tsx` |
-| … +788 linhas — lista completa em `context.json` | |
+| … +789 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4422,7 +4424,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3216 testes em 249 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3239 testes em 252 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4544,11 +4546,13 @@ _nenhum item encontrado_
 | `src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx` | 8 | Registro da próxima ação com contrato de contato · registra %s no contato, sem inventar empresa · não anuncia sucesso sem a confirmação correta: %j · preserva o resumo quando o banco rejeita a gravação … |
 | `src/components/interactions/__tests__/DateRangePopover.shortcut.test.tsx` | 8 | DateRangePopover · atalho Alt+D · chama applyDateRange(undefined, undefined) quando há datas aplicadas · aceita Alt+D em maiúsculas (case-insensitive) · é no-op silencioso quando não há datas aplicadas … |
 | `src/components/interactions/__tests__/DensityChips.test.tsx` | 8 | DensityChips · renderiza dois botões com aria-pressed correto (comfortable ativo) · renderiza com aria-pressed refletindo compact quando ativo · expõe role= … |
+| `src/components/triggers/advanced-triggers/__tests__/BundlesTab.test.tsx` | 8 | BundlesTab · abre no roteiro de objeção de preço, com abertura, passos e fechamento · não mostra a taxa de sucesso fixa do arquivo de dados · oferece as 8 situações e troca o roteiro ao escolher outra … |
 | `src/data/__tests__/carnegieAppreciation.test.ts` | 8 | Carnegie Appreciation Templates · has at least 3 appreciation types · Type %s · has name … |
 | `src/data/__tests__/copywritingData.test.ts` | 8 | FAB Templates Integrity · has at least 3 FAB templates · all templates have unique IDs · all templates have required fields … |
 | `src/data/__tests__/neuromarketingData.test.ts` | 8 | Neuromarketing Data Integrity · has exactly 3 brain systems (triune model) · includes reptilian, limbic, and neocortex · all systems have required fields … |
 | `src/hooks/__tests__/canonical-related-recovery-contracts.test.tsx` | 8 | Uploads privados compensam falhas posteriores · remove o mesmo objeto após falhar no %s · preserva a falha original e alerta quando a remoção também falha · Relações não enviam a carteira inteira na URL … |
 | `src/lib/externalData.delete-audit.test.ts` | 8 | Auditoria única após exclusão confirmada · grava somente um evento para %s com contexto do dono · preserva o sucesso se a auditoria lançar uma exceção · não registra exclusão se a mutação falhar … |
+| `src/lib/__tests__/triggerPlaybook.test.ts` | 8 | montarRoteiro · todo cenário tem roteiro, com um passo por gatilho do pacote · todo gatilho dos roteiros tem nome em português no catálogo · sem perfil escolhido não traz modelo de frase por perfil … |
 | `src/pages/mapa/relationshipScores.contract.test.ts` | 8 | Score real de empresa no mapa · usa a medição mais recente e mantém score zero e ausência de score · não consulta a tabela global quando não há empresas autorizadas · pagina o histórico sem truncar empresas ainda não encontradas … |
 | `scripts/apply-e2e.test.mjs` | 7 | ${script}: banco vazio → aplica tudo; reexecução é idempotente (mesmo banco, saída 0, zero falha) · o SQL impresso por --sql, executado pelo psql (divisor independente), dá o mesmo banco que --apply · fix-enums → retry-failed → apply-missing → apply-remaining reconstroem o banco; cada passo é idempotente · instrução inválida de verdade num lote: as vizinhas entram, a culpada é nomeada, saída 1 — e o resultado é estável … |
 | `scripts/ci/workflow-invariants.test.mjs` | 7 | passa quando test:coverage aparece uma vez e nenhum job usa always() · R3: reprova test:coverage duplicado em dois passos · R5: reprova always() no nível do job de required check · R5: reprova quando o required check desaparece do ci.yml … |
@@ -4557,6 +4561,7 @@ _nenhum item encontrado_
 | `src/components/interactions/__tests__/InfiniteScrollSentinel.density.test.tsx` | 7 | InfiniteScrollSentinel — densidade ambiente · usa  · lê  · DensityProvider tem prioridade sobre localStorage … |
 | `src/data/__tests__/cognitiveBiasesData.test.ts` | 7 | Cognitive Biases Data Integrity · has at least 4 bias categories · all categories have required fields · all category colors are valid tailwind classes … |
 | `src/hooks/__tests__/matriz-conflitos-gatilhos.test.ts` | 7 | união das matrizes de gatilhos · não perde nenhum conflito que já estava em uso · não perde nenhuma sinergia que já estava em uso · amplia de fato a cobertura de conflitos … |
+| `src/hooks/__tests__/relacoes-estendidas-gatilhos.test.ts` | 7 | relações dos gatilhos estendidos · todo conflito estendido passa a ser detectado · toda sinergia estendida passa a ser detectada · não perde nem altera nenhuma relação que já estava em uso … |
 | `src/hooks/__tests__/talk-ratio-medicao.test.ts` | 7 | analyzeTalkRatio · não devolve proporção de fala: ela exige os dois lados da conversa · separa pergunta aberta de fechada pelos padrões do módulo · conta escuta ativa e reconhecimento a partir do texto … |
 | `src/lib/errorReporting.unload.test.ts` | 7 | Envio final autenticado de erros · inicia o envio em segundo plano sem consultar a sessão nem repetir no fechamento · descarta erros anteriores ao login sem descartar os capturados após autenticar · descarta lote anônimo se o login acontece durante a consulta da sessão … |
 | `src/lib/insights/__tests__/pickTopPassages.test.ts` | 7 | pickTopPassages · retorna até MAX_TOTAL_CAP itens mesmo com totalCap maior · é determinística: mesma entrada → mesma saída · aplica round-robin entre fontes (distribui antes de aprofundar) … |
