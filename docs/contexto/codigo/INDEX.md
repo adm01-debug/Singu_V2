@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `677b1938ced23a5946fa9b3843e5f4758e1be240` (2026-11-19T15:02:28-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `62b6b2a183cced5f15d38b030d437e8da90949eb` (2026-11-19T15:34:02-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2074), SQL (661), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (17)
+- linguagens: TypeScript (2074), SQL (661), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3265 |
+| arquivos_total | 3266 |
 | arquivos_codigo | 2237 |
 | linhas_codigo | 417496 |
 | rotas | 115 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | migrations | 488 |
 | cron_jobs | 34 |
 | testes | 277 |
-| workflows | 11 |
+| workflows | 12 |
 | scripts | 296 |
 | docs_md | 156 |
 
@@ -435,7 +435,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21309 nós · 36110 arestas · 2118 comunidades · grafo do commit `677b1938`
+- 21309 nós · 36110 arestas · 2118 comunidades · grafo do commit `62b6b2a1`
 - comunidades maiores: ref_types (342), lucide-react (342), _shared/auth.ts (299), useAuth (268), react (263), 02_tables.sql (259), framer-motion (252), ref_lib (246), ref_hooks (242), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (220), date-fns (192)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -461,6 +461,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `automation-local.yml` — Automação local (pull_request, push, workflow_dispatch)
 - `ci.yml` — CI (pull_request, push)
 - `contexto.yml` — Contexto para agentes de IA (10 min) (push, schedule, workflow_dispatch; cron 3 * * * *)
+- `dependency-review.yml` — Dependency Review (pull_request)
 - `docs-ci.yml` — Documentação sem drift (pull_request, push)
 - `estado-real.yml` — Estado real do repositório (pull_request, push, workflow_dispatch)
 - `fix-jwt-proxies-externas.yml` — Fix JWT proxies externas (workflow_dispatch)
@@ -572,6 +573,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-19 `62b6b2a` ci(security): dependency review barra CVE novo high/critical nos PRs (#273)
 - 2026-11-19 `677b193` feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)
 - 2026-11-19 `097e860` feat(gatilhos): liga conflitos, sinergias e alternativas dos gatilhos estendidos (#271)
 - 2026-11-19 `f746393` fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)
@@ -586,7 +588,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `b2d6c1a` fix(analytics): avisa que as abas PNL e Gatilhos usam contato fictício (#260)
 - 2026-11-18 `213464a` fix(carnegie): score deixa de ser número fixo e passa a refletir a análise real (#259)
 - 2026-11-18 `6917cfd` fix(intelligence): troca N consultas por uma na aba de referência cruzada (#258)
-- 2026-11-18 `28bc93d` feat(ui): entrada de Observabilidade no menu de administração (#257)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

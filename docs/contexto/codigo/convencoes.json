@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "ci(security): dependency review barra CVE novo high/critical nos PRs (#273)",
    "feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)",
    "feat(gatilhos): liga conflitos, sinergias e alternativas dos gatilhos estendidos (#271)",
    "fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)",
-   "feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)",
-   "feat(gatilhos): liga a matriz completa de conflitos e sinergias que estava desligada (#268)"
+   "feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)"
   ]
  },
  "pr_template": null,
