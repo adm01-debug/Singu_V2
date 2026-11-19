@@ -9,6 +9,44 @@ import {
 } from '@/types/metaprograms';
 import { logger } from "@/lib/logger";
 
+/**
+ * Direcao e confianca de um eixo de metaprograma, a partir dos dois scores
+ * que competem nele. A confianca vem da margem entre os dois: quanto mais
+ * decidido o eixo, maior. Empate tecnico (margem < 20%) fica em 50.
+ *
+ * Estava embutida dentro de `getContactMetaprogramProfile`, que so le o
+ * historico do banco. Exportada aqui para que a analise de um texto unico
+ * use a mesma conta, em vez do 75 fixo que `useNLPAutoAnalysis` gravava.
+ */
+export function direcaoEConfianca(
+  score1: number,
+  score2: number,
+): { direction: 'first' | 'second' | 'balanced'; confidence: number } {
+  const total = score1 + score2;
+  if (total === 0) return { direction: 'balanced', confidence: 0 };
+  const ratio = Math.abs(score1 - score2) / total;
+  const confidence = Math.round(ratio * 100);
+  if (ratio < 0.2) return { direction: 'balanced', confidence: 50 };
+  return { direction: score1 > score2 ? 'first' : 'second', confidence: Math.min(95, 50 + confidence) };
+}
+
+/** Confianca geral do perfil: media dos seis eixos. */
+export function confiancaDosMetaprogramas(scores: {
+  toward: number; awayFrom: number; internal: number; external: number;
+  options: number; procedures: number; general: number; specific: number;
+  proactive: number; reactive: number; sameness: number; difference: number;
+}): number {
+  const eixos = [
+    direcaoEConfianca(scores.toward, scores.awayFrom),
+    direcaoEConfianca(scores.internal, scores.external),
+    direcaoEConfianca(scores.options, scores.procedures),
+    direcaoEConfianca(scores.general, scores.specific),
+    direcaoEConfianca(scores.proactive, scores.reactive),
+    direcaoEConfianca(scores.sameness, scores.difference),
+  ];
+  return Math.round(eixos.reduce((soma, eixo) => soma + eixo.confidence, 0) / eixos.length);
+}
+
 export function useMetaprogramAnalysis() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -130,14 +168,7 @@ export function useMetaprogramAnalysis() {
         proactive: 0, reactive: 0, sameness: 0, difference: 0 
       });
 
-      const getDirectionAndConfidence = (score1: number, score2: number): { direction: 'first' | 'second' | 'balanced', confidence: number } => {
-        const total = score1 + score2;
-        if (total === 0) return { direction: 'balanced', confidence: 0 };
-        const ratio = Math.abs(score1 - score2) / total;
-        const confidence = Math.round(ratio * 100);
-        if (ratio < 0.2) return { direction: 'balanced', confidence: 50 };
-        return { direction: score1 > score2 ? 'first' : 'second', confidence: Math.min(95, 50 + confidence) };
-      };
+      const getDirectionAndConfidence = direcaoEConfianca;
 
       const motivation = getDirectionAndConfidence(totals.toward, totals.awayFrom);
       const reference = getDirectionAndConfidence(totals.internal, totals.external);

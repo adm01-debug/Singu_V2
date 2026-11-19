@@ -7,7 +7,7 @@ import { useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { useVAKAnalysis } from './useVAKAnalysis';
-import { useMetaprogramAnalysis } from './useMetaprogramAnalysis';
+import { confiancaDosMetaprogramas, useMetaprogramAnalysis } from './useMetaprogramAnalysis';
 import { useEmotionalStates } from './useEmotionalStates';
 import { toast } from 'sonner';
 import { logger } from "@/lib/logger";
@@ -88,6 +88,9 @@ export function useNLPAutoAnalysis() {
       // 1-3: Run VAK, Metaprogram, and Emotional analyses in parallel
       const vakResult = analyzeVAK(text);
       const metaResult = analyzeMetaprograms(text);
+      // Confianca real dos metaprogramas: media da margem dos seis eixos.
+      // Antes era 75 fixo no perfil e 50 fixo na confianca geral.
+      const metaConfidence = confiancaDosMetaprogramas(metaResult.scores);
       const emotionalResult = detectEmotionalState(text);
 
       const [,, { error: emotionalInsertError }] = await Promise.all([
@@ -139,7 +142,7 @@ export function useNLPAutoAnalysis() {
          motivation: metaResult.scores.toward >= metaResult.scores.awayFrom ? 'toward' : 'away_from',
          working_style: metaResult.scores.options >= metaResult.scores.procedures ? 'options' : 'procedures',
          reference_frame: metaResult.scores.internal >= metaResult.scores.external ? 'internal' : 'external',
-         confidence: 75, // Simplified confidence
+         confidence: metaConfidence,
          last_updated: new Date().toISOString()
        };
 
@@ -163,7 +166,7 @@ export function useNLPAutoAnalysis() {
 
       // 5. Calculate overall confidence
       const overallConfidence = Math.round(
-        (vakResult.confidence + emotionalResult.confidence + 50) / 3
+        (vakResult.confidence + emotionalResult.confidence + metaConfidence) / 3
       );
 
       const result: NLPAnalysisResult = {
