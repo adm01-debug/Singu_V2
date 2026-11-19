@@ -15,6 +15,7 @@ import {
   Heart,
   Trophy,
   Gift,
+  ClipboardCheck,
   LayoutDashboard
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -30,6 +31,7 @@ import { FaceSavingPanel } from './FaceSavingPanel';
 import { VulnerabilityPanel } from './VulnerabilityPanel';
 import { ProgressCelebrationPanel } from './ProgressCelebrationPanel';
 import { AppreciationPanel } from './AppreciationPanel';
+import { MessageReviewPanel } from './MessageReviewPanel';
 import { cn } from '@/lib/utils';
 
 interface CarnegieDashboardProps {
@@ -101,6 +103,10 @@ export function CarnegieDashboard({ contact = null, className }: CarnegieDashboa
             <Gift className="h-4 w-4" />
             <span className="text-xs hidden sm:block">Apreciação</span>
           </TabsTrigger>
+          <TabsTrigger value="review" className="flex flex-col items-center gap-1 py-2 px-1">
+            <ClipboardCheck className="h-4 w-4" />
+            <span className="text-xs hidden sm:block">Revisor</span>
+          </TabsTrigger>
         </TabsList>
 
         {/* Tab Contents */}
@@ -151,6 +157,10 @@ export function CarnegieDashboard({ contact = null, className }: CarnegieDashboa
 
         <TabsContent value="appreciation" className="mt-6">
           <AppreciationPanel contact={contact} />
+        </TabsContent>
+
+        <TabsContent value="review" className="mt-6">
+          <MessageReviewPanel contact={contact} />
         </TabsContent>
       </Tabs>
     </div>

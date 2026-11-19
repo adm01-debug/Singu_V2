@@ -11,5 +11,6 @@ export { FaceSavingPanel } from './FaceSavingPanel';
 export { VulnerabilityPanel } from './VulnerabilityPanel';
 export { ProgressCelebrationPanel } from './ProgressCelebrationPanel';
 export { AppreciationPanel } from './AppreciationPanel';
+export { MessageReviewPanel } from './MessageReviewPanel';
 export { CarnegieDashboard } from './CarnegieDashboard';
 export { CarnegieQuickAccess } from './CarnegieQuickAccess';
