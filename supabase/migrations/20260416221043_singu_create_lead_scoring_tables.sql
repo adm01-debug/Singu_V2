@@ -43,6 +43,33 @@ CREATE TABLE IF NOT EXISTS public.lead_scores (
   CONSTRAINT unique_lead_score_contact UNIQUE (user_id, contact_id)
 );
 
+-- Colunas adicionais (convergencia): a tabela ja existia na cadeia local sem estas colunas.
+ALTER TABLE public.lead_scores
+  ADD COLUMN IF NOT EXISTS "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  ADD COLUMN IF NOT EXISTS "user_id" uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS "contact_id" uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS "total_score" integer NOT NULL DEFAULT 0 CHECK (total_score BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS "engagement_score" integer NOT NULL DEFAULT 0 CHECK (engagement_score BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS "fit_score" integer NOT NULL DEFAULT 0 CHECK (fit_score BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS "intent_score" integer NOT NULL DEFAULT 0 CHECK (intent_score BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS "relationship_score" integer NOT NULL DEFAULT 0 CHECK (relationship_score BETWEEN 0 AND 100),
+  ADD COLUMN IF NOT EXISTS "grade" text NOT NULL DEFAULT 'cold' CHECK (grade IN ('cold','warm','hot','on_fire')),
+  ADD COLUMN IF NOT EXISTS "factors" jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS "weights_snapshot" jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS "previous_score" integer,
+  ADD COLUMN IF NOT EXISTS "score_change" integer GENERATED ALWAYS AS (total_score - COALESCE(previous_score, 0)) STORED,
+  ADD COLUMN IF NOT EXISTS "trend" text CHECK (trend IN ('rising','falling','stable','new')),
+  ADD COLUMN IF NOT EXISTS "calculated_at" timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS "created_at" timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS "updated_at" timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS "last_calculated_at" timestamp with time zone DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS "score_factors" jsonb NOT NULL DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS "weight_engagement" numeric(3,2) NOT NULL DEFAULT 0.30,
+  ADD COLUMN IF NOT EXISTS "weight_fit" numeric(3,2) NOT NULL DEFAULT 0.20,
+  ADD COLUMN IF NOT EXISTS "weight_intent" numeric(3,2) NOT NULL DEFAULT 0.25,
+  ADD COLUMN IF NOT EXISTS "weight_relationship" numeric(3,2) NOT NULL DEFAULT 0.25
+;
+
 COMMENT ON TABLE public.lead_scores IS 'SINGU: Score atual de lead por contato. 4 dimensões ponderadas (Engagement 30%, Fit 20%, Intent 25%, Relationship 25%). Grade automática. 1 registro por contato. Série temporal em lead_score_history.';
 
 CREATE INDEX IF NOT EXISTS idx_lead_scores_user_grade ON public.lead_scores (user_id, grade);
@@ -78,6 +105,10 @@ CREATE TABLE IF NOT EXISTS public.lead_score_config (
   CONSTRAINT thresholds_ordered CHECK (threshold_warm < threshold_hot AND threshold_hot < threshold_on_fire)
 );
 
+ALTER TABLE public.lead_score_config
+  ADD COLUMN IF NOT EXISTS "grade_thresholds" jsonb NOT NULL DEFAULT '{"cold": 0, "warm": 30, "hot": 60, "on_fire": 85}'::jsonb
+;
+
 COMMENT ON TABLE public.lead_score_config IS 'SINGU: Config de pesos e thresholds do lead scoring por usuário. Soma dos 4 pesos = 1.00. Thresholds ordenados crescente.';
 
 CREATE INDEX IF NOT EXISTS idx_lead_score_config_user ON public.lead_score_config (user_id);
@@ -107,6 +138,17 @@ CREATE TABLE IF NOT EXISTS public.churn_risk_scores (
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT churn_risk_either_contact_or_company CHECK (contact_id IS NOT NULL OR company_id IS NOT NULL)
 );
+
+ALTER TABLE public.churn_risk_scores
+  ADD COLUMN IF NOT EXISTS "risk_factors" jsonb NOT NULL DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS "recommendations" text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS "days_since_last_interaction" integer,
+  ADD COLUMN IF NOT EXISTS "sentiment_trend" text,
+  ADD COLUMN IF NOT EXISTS "score_trend" text,
+  ADD COLUMN IF NOT EXISTS "analyzed_at" timestamp with time zone NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS "expires_at" timestamp with time zone NOT NULL DEFAULT (now() + interval '7 days'),
+  ADD COLUMN IF NOT EXISTS "updated_at" timestamp with time zone NOT NULL DEFAULT now()
+;
 
 COMMENT ON TABLE public.churn_risk_scores IS 'SINGU: Histórico de scores de risco de churn (análise local, 5 fatores). Espelha feature churn-risk-detection das memories. is_current=true para score atual.';
 
