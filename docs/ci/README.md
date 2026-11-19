@@ -4,7 +4,7 @@
 > este arquivo divergir do bloco `# docs:` de cada workflow. Para mudar o texto daqui, mude o
 > bloco no YAML.
 
-**11 workflows, 10 com bloco `# docs:`.**
+**12 workflows, 10 com bloco `# docs:`.**
 
 | Workflow | Arquivo | Gatilho | O que prova | Quando falha | Quem é avisado | Custo/sem (min) | Falha (7 d) |
 |---|---|---|---|---|---|---|---|
@@ -111,3 +111,4 @@
 > em um deles acrescenta o bloco no topo do YAML e roda o gerador de novo.
 
 - [`ci.yml`](../../.github/workflows/ci.yml) — CI
+- [`dependency-review.yml`](../../.github/workflows/dependency-review.yml) — Dependency Review
