@@ -274,7 +274,9 @@ export function analyzeEmpathyInText(text: string): {
   // Check for positive empathy patterns
   for (const pattern of EMPATHY_DETECTION.positive) {
     const match = text.match(pattern);
-    if (match) {
+    // "isso não faz sentido" não é empatia: frase negada não conta.
+    const negada = match?.index !== undefined && /\bnão\s+$/i.test(text.slice(0, match.index));
+    if (match && !negada) {
       empathyStatements.push(match[0]);
       empathyScore += 10;
     }
