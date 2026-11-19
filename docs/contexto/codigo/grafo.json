@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "nos": 1958,
- "arestas": 8460,
+ "arestas": 8461,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -269,7 +269,6 @@
   "src/data/carnegieStorytelling.ts",
   "src/data/carnegieYesLadder.ts",
   "src/data/triggerBundles.ts",
-  "src/data/triggerConflictsMatrix.ts",
   "src/data/triggerTemplatesMetaprograms.ts",
   "src/data/triggerTemplatesVAK.ts",
   "src/data/triggersExtendedData.ts",

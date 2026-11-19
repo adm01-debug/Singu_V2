@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 270,
+ "total": 271,
  "por_tipo": {
   "contrato": 40,
   "e2e": 12,
   "pytest": 9,
-  "unit": 207
+  "unit": 208
  },
  "onde_ficam": [
   {
@@ -19,7 +19,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 92
+   "arquivos": 93
   },
   {
    "padrao": "tests/",
@@ -1555,6 +1555,16 @@
    "casos": 3
   },
   {
+   "arquivo": "src/hooks/__tests__/matriz-conflitos-gatilhos.test.ts",
+   "tipo": "unit",
+   "linhas": 64,
+   "testa": [
+    "src/data/triggerConflictsMatrix.ts",
+    "src/data/triggersAdvancedData.ts"
+   ],
+   "casos": 6
+  },
+  {
    "arquivo": "src/hooks/__tests__/merge-company-name-override.test.tsx",
    "tipo": "unit",
    "linhas": 48,
@@ -2568,10 +2578,10 @@
   "src/data/nlpAdvancedData.ts": 1,
   "src/data/sleightOfMouth.ts": 1,
   "src/data/triggerBundles.ts": 1,
-  "src/data/triggerConflictsMatrix.ts": 2,
+  "src/data/triggerConflictsMatrix.ts": 3,
   "src/data/triggerTemplatesMetaprograms.ts": 1,
   "src/data/triggerTemplatesVAK.ts": 1,
-  "src/data/triggersAdvancedData.ts": 1,
+  "src/data/triggersAdvancedData.ts": 2,
   "src/data/triggersExtendedData.ts": 1,
   "src/data/vakTemplates.ts": 1,
   "src/domain/validationSchemas.ts": 1,

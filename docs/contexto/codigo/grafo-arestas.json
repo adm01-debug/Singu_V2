@@ -7699,6 +7699,7 @@
    "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useAdvancedTriggers.ts": [
+   "src/data/triggerConflictsMatrix.ts",
    "src/data/triggersAdvancedData.ts",
    "src/hooks/useTriggerHistory.ts",
    "src/types/index.ts",

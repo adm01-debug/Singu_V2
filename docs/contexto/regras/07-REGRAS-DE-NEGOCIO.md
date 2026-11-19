@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5e72a50f5e` · branch `main` · 2026-11-19 00:06 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f76d507559` · branch `main` · 2026-11-19 00:17 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4420,7 +4420,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3182 testes em 245 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3189 testes em 246 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4552,6 +4552,7 @@ _nenhum item encontrado_
 | `src/components/campaigns/__tests__/CampaignDetailDrawer.test.tsx` | 7 | CampaignDetailDrawer · returns null when no campaign provided · renders campaign name, subject and computed metric percentages · shows the send CTA only for drafts and triggers mutation on click … |
 | `src/components/interactions/__tests__/InfiniteScrollSentinel.density.test.tsx` | 7 | InfiniteScrollSentinel — densidade ambiente · usa  · lê  · DensityProvider tem prioridade sobre localStorage … |
 | `src/data/__tests__/cognitiveBiasesData.test.ts` | 7 | Cognitive Biases Data Integrity · has at least 4 bias categories · all categories have required fields · all category colors are valid tailwind classes … |
+| `src/hooks/__tests__/matriz-conflitos-gatilhos.test.ts` | 7 | união das matrizes de gatilhos · não perde nenhum conflito que já estava em uso · não perde nenhuma sinergia que já estava em uso · amplia de fato a cobertura de conflitos … |
 | `src/hooks/__tests__/talk-ratio-medicao.test.ts` | 7 | analyzeTalkRatio · não devolve proporção de fala: ela exige os dois lados da conversa · separa pergunta aberta de fechada pelos padrões do módulo · conta escuta ativa e reconhecimento a partir do texto … |
 | `src/lib/errorReporting.unload.test.ts` | 7 | Envio final autenticado de erros · inicia o envio em segundo plano sem consultar a sessão nem repetir no fechamento · descarta erros anteriores ao login sem descartar os capturados após autenticar · descarta lote anônimo se o login acontece durante a consulta da sessão … |
 | `src/lib/insights/__tests__/pickTopPassages.test.ts` | 7 | pickTopPassages · retorna até MAX_TOTAL_CAP itens mesmo com totalCap maior · é determinística: mesma entrada → mesma saída · aplica round-robin entre fontes (distribui antes de aprofundar) … |
@@ -4881,6 +4882,7 @@ _nenhum item encontrado_
 | Mínimo de 44x44px conforme WCAG para melhor touch target mobile | `src/components/ui/button.tsx` |
 | MISSED DEADLINE | `src/data/carnegieFaceSaving.ts` |
 | * Validates if a transition between stages is business-compliant. | `src/domain/dealState.ts` |
+| * O painel de Gatilhos Avançados (Analytics) detectava conflito entre apenas | `src/hooks/useAdvancedTriggers.ts` |
 | Business hours | `src/hooks/useBestTimeToContact.ts` |
 | Mantém apenas combinações com >=1 canal (vazio == "todos", já é o default). | `src/hooks/useChannelHistory.ts` |
 | Vencedor por estágio (maior taxa, mínimo 3 interações) | `src/hooks/useChannelPerformanceMatrix.ts` |

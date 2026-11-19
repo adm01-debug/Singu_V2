@@ -879,7 +879,7 @@
    "hooks_exportados": [
     "useAdvancedTriggers"
    ],
-   "linhas": 395,
+   "linhas": 419,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

@@ -9511,7 +9511,7 @@
    "modulo": "hooks",
    "arquivos": 378,
    "testes": 23,
-   "linhas": 50910,
+   "linhas": 50934,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -11578,7 +11578,7 @@
   {
    "modulo": "hooks/__tests__",
    "arquivos": 0,
-   "testes": 26,
+   "testes": 27,
    "linhas": 0,
    "itens_menu": [],
    "telas": [],

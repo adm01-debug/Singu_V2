@@ -22,7 +22,7 @@
   ],
   "testes": [
    "co-localizado (*.test) (126)",
-   "co-localizado (__tests__) (92)",
+   "co-localizado (__tests__) (93)",
    "tests/ (23)"
   ],
   "edge_functions": "supabase/functions",
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(gatilhos): liga a matriz completa de conflitos e sinergias que estava desligada (#268)",
    "fix(carnegie): analise de fala/escuta passa a ler o texto em vez de inventar (#266)",
    "fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)",
    "fix(territorios): módulo inteiro estava fora de contrato com o banco (#265)",
-   "fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)",
-   "fix(gamificacao): três RPCs eram chamadas sem o p_user_id obrigatório (#263)"
+   "fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)"
   ]
  },
  "pr_template": null,
