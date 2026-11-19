@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 269,
+ "total": 270,
  "por_tipo": {
   "contrato": 40,
   "e2e": 12,
   "pytest": 9,
-  "unit": 206
+  "unit": 207
  },
  "onde_ficam": [
   {
@@ -19,7 +19,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 91
+   "arquivos": 92
   },
   {
    "padrao": "tests/",
@@ -1573,6 +1573,15 @@
    "casos": 2
   },
   {
+   "arquivo": "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+   "tipo": "unit",
+   "linhas": 67,
+   "testa": [
+    "src/hooks/useCarnegieAnalysis.ts"
+   ],
+   "casos": 6
+  },
+  {
    "arquivo": "src/hooks/useActivityLogger.test.tsx",
    "tipo": "unit",
    "linhas": 34,
@@ -2574,6 +2583,7 @@
   "src/hooks/useBehavioralProfilesList.ts": 2,
   "src/hooks/useBulkImport.ts": 1,
   "src/hooks/useCSATSurveys.ts": 2,
+  "src/hooks/useCarnegieAnalysis.ts": 1,
   "src/hooks/useCompanies.ts": 3,
   "src/hooks/useCompanyActions.ts": 1,
   "src/hooks/useContactDetail.ts": 7,
@@ -2826,7 +2836,6 @@
    "src/hooks/useCadenceEnrollments.ts",
    "src/hooks/useCampaignRecipients.ts",
    "src/hooks/useCannedResponses.ts",
-   "src/hooks/useCarnegieAnalysis.ts",
    "src/hooks/useChannelHistory.ts",
    "src/hooks/useChannelPerformanceMatrix.ts",
    "src/hooks/useChannelSyncMode.ts",

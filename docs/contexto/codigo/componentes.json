@@ -2595,7 +2595,7 @@
     "TalkRatioPanel"
    ],
    "export_default": null,
-   "linhas": 245,
+   "linhas": 262,
    "dominio": "components/carnegie",
    "hooks_locais": [
     "useCarnegieAnalysis"

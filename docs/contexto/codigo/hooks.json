@@ -1780,7 +1780,7 @@
    "hooks_exportados": [
     "useCarnegieAnalysis"
    ],
-   "linhas": 146,
+   "linhas": 189,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -1803,7 +1803,7 @@
     "src/components/carnegie/VulnerabilityPanel.tsx",
     "src/components/carnegie/WarmthAnalyzerPanel.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useChannelHistory.ts",

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "679cafa13f687fca9ba98ac1868e467fa9b11b03",
+  "commit": "5e72a50f5e54c1b3a0fd2f0ff79aa77939e2bdf7",
   "branch": "main",
-  "data_commit": "2026-11-18T20:25:43-03:00",
+  "data_commit": "2026-11-18T21:04:48-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "5e72a50",
+    "data": "2026-11-18",
+    "assunto": "fix(carnegie): analise de fala/escuta passa a ler o texto em vez de inventar (#266)"
+   },
    {
     "sha": "679cafa",
     "data": "2026-11-18",
@@ -126,14 +131,9 @@
     "sha": "682ad79",
     "data": "2026-11-18",
     "assunto": "docs(pendencias): corrige o diagnostico errado do P7 e fecha P0 e P5 (#242)"
-   },
-   {
-    "sha": "adb1e39",
-    "data": "2026-11-18",
-    "assunto": "fix(ci): recupera correcao de grafia nos nomes de step perdida no squash (#241)"
    }
   ],
-  "arquivos_mudados_7d": 431,
+  "arquivos_mudados_7d": 432,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -188,12 +188,12 @@
     "mudancas": 12
    },
    {
-    "pasta": "supabase/functions/evolution-webhook",
+    "pasta": "src/hooks/__tests__",
     "mudancas": 12
    },
    {
-    "pasta": "src/components/analytics",
-    "mudancas": 11
+    "pasta": "supabase/functions/evolution-webhook",
+    "mudancas": 12
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 106
+    "commits": 107
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -322,9 +322,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3253,
-  "arquivos_codigo": 2225,
-  "linhas_codigo": 415985,
+  "arquivos_total": 3254,
+  "arquivos_codigo": 2226,
+  "linhas_codigo": 416116,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -336,7 +336,7 @@
   "tabelas": 418,
   "migrations": 488,
   "cron_jobs": 34,
-  "testes": 269,
+  "testes": 270,
   "workflows": 11,
   "scripts": 296,
   "docs_md": 156
@@ -648,7 +648,7 @@
   },
   "src/components": {
    "arquivos": 991,
-   "linhas": 148938
+   "linhas": 148955
   },
   "src/config": {
    "arquivos": 1,
@@ -667,8 +667,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 439,
-   "linhas": 58026
+   "arquivos": 440,
+   "linhas": 58136
   },
   "src/integrations": {
    "arquivos": 3,
@@ -700,7 +700,7 @@
   },
   "src/types": {
    "arquivos": 21,
-   "linhas": 5970
+   "linhas": 5974
   },
   "supabase/functions": {
    "arquivos": 174,

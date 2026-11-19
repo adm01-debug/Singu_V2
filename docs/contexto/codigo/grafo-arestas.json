@@ -7862,6 +7862,7 @@
    "src/data/carnegieIdentityLabels.ts",
    "src/data/carnegieNobleCauses.ts",
    "src/data/carnegieProgressCelebration.ts",
+   "src/data/carnegieTalkRatio.ts",
    "src/data/carnegieWarmth.ts",
    "src/lib/contact-utils.ts",
    "src/types/carnegie.ts",

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "679cafa13f687fca9ba98ac1868e467fa9b11b03",
+  "sha": "5e72a50f5e54c1b3a0fd2f0ff79aa77939e2bdf7",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-18 23:26 UTC",
-  "files_total": 3358,
-  "code_files": 2887,
-  "code_lines": 411988
+  "generated_at": "2026-11-19 00:06 UTC",
+  "files_total": 3359,
+  "code_files": 2888,
+  "code_lines": 412119
  },
  "version": "1.3.2",
- "facts_hash": "72a1697cdced521a",
+ "facts_hash": "721dfd6f755bb2cf",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -252,7 +252,7 @@
   "package_manager": "bun",
   "languages": {
    ".tsx": 1162,
-   ".ts": 900,
+   ".ts": 901,
    ".sql": 661,
    ".mjs": 123,
    ".py": 21,
@@ -60399,7 +60399,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 151
+    "deps_count": 152
    },
    {
     "path": "",
@@ -69204,7 +69204,7 @@
   {
    "module": "src/components",
    "files": 991,
-   "lines": 148938,
+   "lines": 148955,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -69650,8 +69650,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 439,
-   "lines": 58026,
+   "files": 440,
+   "lines": 58136,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -70505,7 +70505,7 @@
   {
    "module": "src/types",
    "files": 21,
-   "lines": 5970,
+   "lines": 5974,
    "tables": [],
    "exports": [
     "behavior.ts: BehaviorJson, isBehaviorJson, getBehavior, getDISCProfile, getVAKPrimary, getVAKSecondary",
@@ -117806,19 +117806,15 @@
    },
    {
     "file": "src/hooks/useCarnegieAnalysis.ts",
-    "line": "acknowledgments: Math.floor(statementCount * 0.3),"
+    "line": "// `acknowledgments * 0.3` e `interruptionIndicators: 0` — nenhum lia o texto."
    },
    {
     "file": "src/hooks/useCarnegieAnalysis.ts",
-    "line": "closedQuestions: Math.floor(questionCount * 0.7),"
+    "line": "// `closedQuestions * 0.7`, `reflectiveStatements * 0.2`,"
    },
    {
     "file": "src/hooks/useCarnegieAnalysis.ts",
-    "line": "openEndedQuestions: Math.floor(questionCount * 0.3),"
-   },
-   {
-    "file": "src/hooks/useCarnegieAnalysis.ts",
-    "line": "reflectiveStatements: Math.floor(statementCount * 0.2),"
+    "line": "// `idealRatio = 35`, `openEndedQuestions = questionCount * 0.3`,"
    },
    {
     "file": "src/hooks/useChurnPrediction.ts",
@@ -117938,7 +117934,7 @@
    },
    {
     "file": "src/types/carnegie.ts",
-    "line": "idealRatio: number; // Target ratio (usually 30-40% speaking)"
+    "line": "idealRatio: number | null; // Target ratio (usually 30-40% speaking)"
    },
    {
     "file": "src/types/neuromarketing.ts",
@@ -127533,6 +127529,34 @@
    {
     "file": "src/hooks/__tests__/restore-response-contract.test.tsx",
     "name": "HTTP 200 com registro correspondente mantém o sucesso"
+   },
+   {
+    "file": "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+    "name": "analyzeTalkRatio"
+   },
+   {
+    "file": "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+    "name": "não devolve proporção de fala: ela exige os dois lados da conversa"
+   },
+   {
+    "file": "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+    "name": "separa pergunta aberta de fechada pelos padrões do módulo"
+   },
+   {
+    "file": "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+    "name": "conta escuta ativa e reconhecimento a partir do texto"
+   },
+   {
+    "file": "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+    "name": "marca interrupção quando o texto tem os marcadores"
+   },
+   {
+    "file": "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+    "name": "as contagens mudam com o texto — não são fração fixa do total"
+   },
+   {
+    "file": "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+    "name": "conta afirmações separadas de perguntas"
    },
    {
     "file": "src/hooks/voice/__tests__/voice-system-exhaustive.test.ts",
@@ -178644,7 +178668,7 @@
   },
   "src/components/carnegie/TalkRatioPanel.tsx": {
    "path": "src/components/carnegie/TalkRatioPanel.tsx",
-   "lines": 245,
+   "lines": 262,
    "exports": [
     "function TalkRatioPanel"
    ],
@@ -196541,7 +196565,7 @@
   },
   "src/hooks/useCarnegieAnalysis.ts": {
    "path": "src/hooks/useCarnegieAnalysis.ts",
-   "lines": 146,
+   "lines": 189,
    "exports": [
     "function useCarnegieAnalysis"
    ],
@@ -196577,10 +196601,9 @@
     "useCarnegieAnalysis"
    ],
    "percents": [
-    "acknowledgments: Math.floor(statementCount * 0.3),",
-    "closedQuestions: Math.floor(questionCount * 0.7),",
-    "openEndedQuestions: Math.floor(questionCount * 0.3),",
-    "reflectiveStatements: Math.floor(statementCount * 0.2),"
+    "// `acknowledgments * 0.3` e `interruptionIndicators: 0` — nenhum lia o texto.",
+    "// `closedQuestions * 0.7`, `reflectiveStatements * 0.2`,",
+    "// `idealRatio = 35`, `openEndedQuestions = questionCount * 0.3`,"
    ]
   },
   "src/hooks/useChannelHistory.ts": {
@@ -212546,6 +212569,20 @@
     "HTTP 200 com registro correspondente mantém o sucesso"
    ]
   },
+  "src/hooks/__tests__/talk-ratio-medicao.test.ts": {
+   "path": "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+   "lines": 67,
+   "is_test": true,
+   "tests": [
+    "analyzeTalkRatio",
+    "não devolve proporção de fala: ela exige os dois lados da conversa",
+    "separa pergunta aberta de fechada pelos padrões do módulo",
+    "conta escuta ativa e reconhecimento a partir do texto",
+    "marca interrupção quando o texto tem os marcadores",
+    "as contagens mudam com o texto — não são fração fixa do total",
+    "conta afirmações separadas de perguntas"
+   ]
+  },
   "src/hooks/approach/approachTypes.ts": {
    "path": "src/hooks/approach/approachTypes.ts",
    "lines": 99,
@@ -219300,7 +219337,7 @@
   },
   "src/types/carnegie.ts": {
    "path": "src/types/carnegie.ts",
-   "lines": 461,
+   "lines": 465,
    "exports": [
     "type LowMedHigh",
     "interface NobleCause",
@@ -219381,7 +219418,7 @@
    ],
    "doc": "============================================== DALE CARNEGIE PRINCIPLES - TYPE DEFINITIONS Based on \"How to Win Friends and Influence People\" ==============================================",
    "percents": [
-    "idealRatio: number; // Target ratio (usually 30-40% speaking)"
+    "idealRatio: number | null; // Target ratio (usually 30-40% speaking)"
    ]
   },
   "src/types/cognitive-biases.ts": {
@@ -233911,10 +233948,22 @@
   }
  },
  "git": {
-  "sha": "679cafa13f687fca9ba98ac1868e467fa9b11b03",
+  "sha": "5e72a50f5e54c1b3a0fd2f0ff79aa77939e2bdf7",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "5e72a50",
+    "date": "2026-11-18",
+    "author": "adm01-debug",
+    "subject": "fix(carnegie): analise de fala/escuta passa a ler o texto em vez de inventar (#266)",
+    "files": [
+     "src/components/carnegie/TalkRatioPanel.tsx",
+     "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+     "src/hooks/useCarnegieAnalysis.ts",
+     "src/types/carnegie.ts"
+    ]
+   },
    {
     "sha": "679cafa",
     "date": "2026-11-18",
@@ -234246,15 +234295,6 @@
      ".github/workflows/restore-drill.yml",
      ".github/workflows/rls-exposure-guard.yml"
     ]
-   },
-   {
-    "sha": "563e484",
-    "date": "2026-11-18",
-    "author": "dependabot[bot]",
-    "subject": "build(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.3 (#235)",
-    "files": [
-     ".github/workflows/inventario-estado-semanal.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -234265,6 +234305,14 @@
    [
     ".github/workflows/ci.yml",
     3
+   ],
+   [
+    "src/hooks/useCarnegieAnalysis.ts",
+    2
+   ],
+   [
+    "src/types/carnegie.ts",
+    2
    ],
    [
     "src/components/layout/AppSidebar.tsx",
@@ -234279,8 +234327,12 @@
     2
    ],
    [
-    ".github/workflows/inventario-estado-semanal.yml",
-    2
+    "src/components/carnegie/TalkRatioPanel.tsx",
+    1
+   ],
+   [
+    "src/hooks/__tests__/talk-ratio-medicao.test.ts",
+    1
    ],
    [
     "src/components/company-detail/OptimalContactWindowsWidget.tsx",
@@ -234324,18 +234376,6 @@
    ],
    [
     "src/components/company-detail/CompanyInsightsTab.tsx",
-    1
-   ],
-   [
-    "src/components/company-detail/QuickFollowUpGenerator.tsx",
-    1
-   ],
-   [
-    "src/hooks/useCompanyIntelligence.ts",
-    1
-   ],
-   [
-    "src/components/gamification/BadgesWidget.tsx",
     1
    ]
   ]

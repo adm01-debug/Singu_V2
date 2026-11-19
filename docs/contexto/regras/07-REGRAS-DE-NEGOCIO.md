@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `679cafa13f` · branch `main` · 2026-11-18 23:26 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5e72a50f5e` · branch `main` · 2026-11-19 00:06 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3231,10 +3231,9 @@ _nenhum item encontrado_
 | `} else if (last30Days < previous30Days * 0.5 && previous30Days > 0) {` | `src/hooks/useAccountChurnPrediction.ts` |
 | `roi_score: Math.round((c.relationship_score \|\| 0) * 0.6 + (stats.count > 0 ? Math.min(stats.count * 5, 40) : 0)),` | `src/hooks/useBIAdvanced.ts` |
 | `score: (slot.positiveRate * 0.6 + slot.responseRate * 0.4) * Math.log(slot.interactionCount + 1)` | `src/hooks/useBestTimeToContact.ts` |
-| `acknowledgments: Math.floor(statementCount * 0.3),` | `src/hooks/useCarnegieAnalysis.ts` |
-| `closedQuestions: Math.floor(questionCount * 0.7),` | `src/hooks/useCarnegieAnalysis.ts` |
-| `openEndedQuestions: Math.floor(questionCount * 0.3),` | `src/hooks/useCarnegieAnalysis.ts` |
-| `reflectiveStatements: Math.floor(statementCount * 0.2),` | `src/hooks/useCarnegieAnalysis.ts` |
+| `// `acknowledgments * 0.3` e `interruptionIndicators: 0` — nenhum lia o texto.` | `src/hooks/useCarnegieAnalysis.ts` |
+| `// `closedQuestions * 0.7`, `reflectiveStatements * 0.2`,` | `src/hooks/useCarnegieAnalysis.ts` |
+| `// `idealRatio = 35`, `openEndedQuestions = questionCount * 0.3`,` | `src/hooks/useCarnegieAnalysis.ts` |
 | `} else if (last30Days < previous30Days * 0.5) {` | `src/hooks/useChurnPrediction.ts` |
 | `stagnation * 0.4 + sentimentScore * 0.25 + engagement * 0.25 + age * 0.1` | `src/hooks/useDealsAtRisk.ts` |
 | `value: Math.min(1 + interactionCount * 0.5, 5),` | `src/hooks/useNetworkGraph.ts` |
@@ -3264,7 +3263,7 @@ _nenhum item encontrado_
 | `<AlertTitle>Atenção — Budget &gt;50% consumido</AlertTitle>` | `src/pages/admin/ErrorBudget.tsx` |
 | `Consumo ≥100% do orçamento mensal. Conforme RUNBOOK §Error Budget Policy: pause feature` | `src/pages/admin/ErrorBudget.tsx` |
 | `{data.sample_interval_minutes} min — degradado vale 50%, unhealthy vale 100%.` | `src/pages/admin/ErrorBudget.tsx` |
-| `idealRatio: number; // Target ratio (usually 30-40% speaking)` | `src/types/carnegie.ts` |
+| `idealRatio: number \| null; // Target ratio (usually 30-40% speaking)` | `src/types/carnegie.ts` |
 | `\| 'visual' // 50% brain dedicated to visual` | `src/types/neuromarketing.ts` |
 | `probability: number; // 0-100%` | `src/types/nlp-advanced.ts` |
 | `engagementLevel * 0.25 +` | `supabase/functions/check-health-alerts/index.ts` |
@@ -4421,7 +4420,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 
-## K. Testes como especificação (3175 testes em 244 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3182 testes em 245 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4553,6 +4552,7 @@ _nenhum item encontrado_
 | `src/components/campaigns/__tests__/CampaignDetailDrawer.test.tsx` | 7 | CampaignDetailDrawer · returns null when no campaign provided · renders campaign name, subject and computed metric percentages · shows the send CTA only for drafts and triggers mutation on click … |
 | `src/components/interactions/__tests__/InfiniteScrollSentinel.density.test.tsx` | 7 | InfiniteScrollSentinel — densidade ambiente · usa  · lê  · DensityProvider tem prioridade sobre localStorage … |
 | `src/data/__tests__/cognitiveBiasesData.test.ts` | 7 | Cognitive Biases Data Integrity · has at least 4 bias categories · all categories have required fields · all category colors are valid tailwind classes … |
+| `src/hooks/__tests__/talk-ratio-medicao.test.ts` | 7 | analyzeTalkRatio · não devolve proporção de fala: ela exige os dois lados da conversa · separa pergunta aberta de fechada pelos padrões do módulo · conta escuta ativa e reconhecimento a partir do texto … |
 | `src/lib/errorReporting.unload.test.ts` | 7 | Envio final autenticado de erros · inicia o envio em segundo plano sem consultar a sessão nem repetir no fechamento · descarta erros anteriores ao login sem descartar os capturados após autenticar · descarta lote anônimo se o login acontece durante a consulta da sessão … |
 | `src/lib/insights/__tests__/pickTopPassages.test.ts` | 7 | pickTopPassages · retorna até MAX_TOTAL_CAP itens mesmo com totalCap maior · é determinística: mesma entrada → mesma saída · aplica round-robin entre fontes (distribui antes de aprofundar) … |
 | `scripts/maintenance/tests/hooks.mjs` | 6 | hook ${name} bloqueante impede commit validado · hooks versionados rodam offline sem .env/segredo e commit inclui escopo obrigatório · hook que altera e adiciona o patch é rejeitado depois do commit isolado · hook que remove o escopo da mensagem não produz commit validado … |
