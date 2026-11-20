@@ -331,8 +331,8 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert their own contacts`
@@ -341,9 +341,9 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
+| roles | public |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update their own contacts`
 
@@ -351,8 +351,8 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view their own contacts`
@@ -361,8 +361,8 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `service_role_full_contacts`

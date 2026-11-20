@@ -128,6 +128,7 @@
 | idx_interactions_company_created | btree | company_id, created_at | não | sim |  | `CREATE INDEX idx_interactions_company_created ON public.interactions USING btree (company_id, created_at DESC)` |
 | idx_interactions_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_interactions_contact ON public.interactions USING btree (contact_id)` |
 | idx_interactions_contact_created | btree | contact_id, created_at | não | sim |  | `CREATE INDEX idx_interactions_contact_created ON public.interactions USING btree (contact_id, created_at DESC)` |
+| idx_interactions_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_interactions_contact_id ON public.interactions USING btree (contact_id)` |
 | idx_interactions_created_at | btree | created_at | não | sim |  | `CREATE INDEX idx_interactions_created_at ON public.interactions USING btree (created_at DESC)` |
 | idx_interactions_data | btree | data_interacao | não | sim |  | `CREATE INDEX idx_interactions_data ON public.interactions USING btree (data_interacao DESC)` |
 | idx_interactions_followup_pending | btree | follow_up_date | não | sim | `((follow_up_date IS NOT NULL) AND (COALESCE(followup_concluido, false) = false))` | `CREATE INDEX idx_interactions_followup_pending ON public.interactions USING btree (follow_up_date) WHERE ((follow_up_date IS NOT NULL) AND (COALESCE(followup_concluido, false) = false))` |
@@ -161,8 +162,8 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert their own interactions`
@@ -171,9 +172,9 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
+| roles | public |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update their own interactions`
 
@@ -181,8 +182,8 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view their own interactions`
@@ -191,8 +192,8 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `service_role_full_interactions`

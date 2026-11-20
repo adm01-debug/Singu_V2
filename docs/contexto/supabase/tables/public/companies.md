@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 7 |
+| policies | 9 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -229,14 +229,34 @@
 
 ## Policies (RLS)
 
+### `Users can delete their own companies`
+
+| campo | valor |
+|---|---|
+| comando | DELETE |
+| tipo | PERMISSIVE |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
+| WITH CHECK |  |
+
+### `Users can insert their own companies`
+
+| campo | valor |
+|---|---|
+| comando | INSERT |
+| tipo | PERMISSIVE |
+| roles | public |
+| USING |  |
+| WITH CHECK | `(auth.uid() = user_id)` |
+
 ### `Users can update their own companies`
 
 | campo | valor |
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view their own companies`
@@ -245,8 +265,8 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `service_role_full_companies`

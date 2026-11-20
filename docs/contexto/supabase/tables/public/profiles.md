@@ -186,9 +186,9 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
+| roles | public |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = id)` |
+| WITH CHECK | `(auth.uid() = id)` |
 
 ### `Users can update their own profile`
 
@@ -196,8 +196,8 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = id)` |
+| roles | public |
+| USING | `(auth.uid() = id)` |
 | WITH CHECK |  |
 
 ### `Users can view their own profile`
@@ -206,8 +206,8 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = id)` |
+| roles | public |
+| USING | `(auth.uid() = id)` |
 | WITH CHECK |  |
 
 ### `service_role_full_profiles`
@@ -259,6 +259,7 @@
 | set_updated_at | BEFORE | UPDATE | ROW | enabled | public.set_updated_at |
 | set_updated_at_profiles | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 | tr_profiles_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_profiles_updated_at |
+| update_profiles_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 
 
 ## Grants

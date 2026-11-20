@@ -50,6 +50,7 @@
 |---|---|---|---|---|---|---|
 | idx_insights_active | btree | contact_id, user_id | não | sim | `(dismissed = false)` | `CREATE INDEX idx_insights_active ON public.insights USING btree (contact_id, user_id) WHERE (dismissed = false)` |
 | idx_insights_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_insights_contact ON public.insights USING btree (contact_id)` |
+| idx_insights_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_insights_contact_id ON public.insights USING btree (contact_id)` |
 | idx_insights_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_insights_user_id ON public.insights USING btree (user_id)` |
 | insights_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX insights_pkey ON public.insights USING btree (id)` |
 
@@ -72,8 +73,8 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert own`
@@ -92,9 +93,9 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
+| roles | public |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update own`
 
@@ -112,8 +113,8 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own`
@@ -132,8 +133,8 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 

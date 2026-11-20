@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 8 |
+| policies | 9 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -65,6 +65,7 @@
 | idx_alerts_active | btree | contact_id, user_id | não | sim | `(dismissed = false)` | `CREATE INDEX idx_alerts_active ON public.alerts USING btree (contact_id, user_id) WHERE (dismissed = false)` |
 | idx_alerts_company_id | btree | company_id | não | sim |  | `CREATE INDEX idx_alerts_company_id ON public.alerts USING btree (company_id)` |
 | idx_alerts_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_alerts_contact_id ON public.alerts USING btree (contact_id)` |
+| idx_alerts_dismissed | btree | dismissed | não | sim | `(dismissed = false)` | `CREATE INDEX idx_alerts_dismissed ON public.alerts USING btree (dismissed) WHERE (dismissed = false)` |
 | idx_alerts_interaction_id | btree | interaction_id | não | sim |  | `CREATE INDEX idx_alerts_interaction_id ON public.alerts USING btree (interaction_id)` |
 | idx_alerts_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_alerts_user_id ON public.alerts USING btree (user_id)` |
 
@@ -77,8 +78,8 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert their own alerts`
@@ -87,9 +88,9 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
+| roles | public |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update their own alerts`
 
@@ -97,8 +98,18 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
+| WITH CHECK |  |
+
+### `Users can view their own alerts`
+
+| campo | valor |
+|---|---|
+| comando | SELECT |
+| tipo | PERMISSIVE |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `service_role_full_alerts`

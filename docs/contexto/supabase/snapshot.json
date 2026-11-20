@@ -218495,10 +218495,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=public"
         ],
         "definition": null,
-        "definition_sha": "d1ee5e20e5f293ef",
+        "definition_sha": "f7448811c489a0ed",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -231058,6 +231058,7 @@
             "public.pipelines.update_pipelines_updated_at",
             "public.products.trg_products_updated_at",
             "public.profiles.set_updated_at_profiles",
+            "public.profiles.update_profiles_updated_at",
             "public.proposals.trg_proposals_updated_at",
             "public.purchase_history.set_updated_at_purchase_history",
             "public.purchase_history.update_purchase_history_updated_at",
@@ -231124,7 +231125,7 @@
           "search_path=public"
         ],
         "definition": null,
-        "definition_sha": "008b4fffe75c0bb2",
+        "definition_sha": "da6d5887832211be",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -254349,6 +254350,20 @@
       },
       {
         "columns": [
+          "created_at"
+        ],
+        "definition": "CREATE INDEX idx_activities_created_at ON public.activities USING btree (created_at DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_activities_created_at",
+        "predicate": null,
+        "schema": "public",
+        "table": "activities"
+      },
+      {
+        "columns": [
           "interaction_id"
         ],
         "definition": "CREATE INDEX idx_activities_interaction_id ON public.activities USING btree (interaction_id)",
@@ -254920,6 +254935,20 @@
         "method": "btree",
         "name": "idx_alerts_contact_id",
         "predicate": null,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "columns": [
+          "dismissed"
+        ],
+        "definition": "CREATE INDEX idx_alerts_dismissed ON public.alerts USING btree (dismissed) WHERE (dismissed = false)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_alerts_dismissed",
+        "predicate": "(dismissed = false)",
         "schema": "public",
         "table": "alerts"
       },
@@ -263426,6 +263455,20 @@
       },
       {
         "columns": [
+          "contact_id"
+        ],
+        "definition": "CREATE INDEX idx_insights_contact_id ON public.insights USING btree (contact_id)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_insights_contact_id",
+        "predicate": null,
+        "schema": "public",
+        "table": "insights"
+      },
+      {
+        "columns": [
           "user_id"
         ],
         "definition": "CREATE INDEX idx_insights_user_id ON public.insights USING btree (user_id)",
@@ -263690,6 +263733,20 @@
         "is_valid": true,
         "method": "btree",
         "name": "idx_interactions_contact_created",
+        "predicate": null,
+        "schema": "public",
+        "table": "interactions"
+      },
+      {
+        "columns": [
+          "contact_id"
+        ],
+        "definition": "CREATE INDEX idx_interactions_contact_id ON public.interactions USING btree (contact_id)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_interactions_contact_id",
         "predicate": null,
         "schema": "public",
         "table": "interactions"
@@ -275125,6 +275182,90 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.activities.Users can insert their own activities",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.activities.Users can view their own activities",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.alerts.Users can delete their own alerts",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.alerts.Users can insert their own alerts",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.alerts.Users can update their own alerts",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.alerts.Users can view their own alerts",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.companies.Users can delete their own companies",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.companies.Users can insert their own companies",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.companies.Users can update their own companies",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.companies.Users can view their own companies",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.contacts.Users can delete their own contacts",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.contacts.Users can insert their own contacts",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.contacts.Users can update their own contacts",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.contacts.Users can view their own contacts",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.error_logs.Authenticated users can insert error logs",
         "severity": "BAIXA"
       },
@@ -275132,6 +275273,72 @@
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.external_data_audit_log.admin_only_select_external_data_audit",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.insights.Users can delete their own insights",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.insights.Users can insert their own insights",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.insights.Users can update their own insights",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.insights.Users can view their own insights",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.interactions.Users can delete their own interactions",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.interactions.Users can insert their own interactions",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.interactions.Users can update their own interactions",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.interactions.Users can view their own interactions",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.profiles.Users can insert their own profile",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.profiles.Users can update their own profile",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.profiles.Users can view their own profile",
         "severity": "BAIXA"
       },
       {
@@ -275250,6 +275457,18 @@
       }
     ],
     "migrations": [
+      {
+        "name": "1cfd4579-a713-4b94-89fc-38494c14566f",
+        "statements": 86,
+        "statements_sha": "ba929ebb422e979f",
+        "version": "20260109144944"
+      },
+      {
+        "name": "baseline_tabelas_fundadoras",
+        "statements": 86,
+        "statements_sha": "d3af0efc1c789539",
+        "version": "20260109144945"
+      },
       {
         "name": "recreate_trigger_contact_phones_normalizar",
         "statements": 1,
@@ -282028,12 +282247,12 @@
         "name": "Users can insert their own activities",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "activities",
         "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+        "with_check": "(auth.uid() = user_id)"
       },
       {
         "cmd": "UPDATE",
@@ -282052,11 +282271,11 @@
         "name": "Users can view their own activities",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "activities",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -282424,11 +282643,11 @@
         "name": "Users can delete their own alerts",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "alerts",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -282436,23 +282655,35 @@
         "name": "Users can insert their own alerts",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "alerts",
         "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+        "with_check": "(auth.uid() = user_id)"
       },
       {
         "cmd": "UPDATE",
         "name": "Users can update their own alerts",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "alerts",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "Users can view their own alerts",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "public"
+        ],
+        "schema": "public",
+        "table": "alerts",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -284257,15 +284488,39 @@
         "with_check": null
       },
       {
+        "cmd": "DELETE",
+        "name": "Users can delete their own companies",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "public"
+        ],
+        "schema": "public",
+        "table": "companies",
+        "using": "(auth.uid() = user_id)",
+        "with_check": null
+      },
+      {
+        "cmd": "INSERT",
+        "name": "Users can insert their own companies",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "public"
+        ],
+        "schema": "public",
+        "table": "companies",
+        "using": null,
+        "with_check": "(auth.uid() = user_id)"
+      },
+      {
         "cmd": "UPDATE",
         "name": "Users can update their own companies",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "companies",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -284273,11 +284528,11 @@
         "name": "Users can view their own companies",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "companies",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -286421,11 +286676,11 @@
         "name": "Users can delete their own contacts",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "contacts",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -286433,23 +286688,23 @@
         "name": "Users can insert their own contacts",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "contacts",
         "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+        "with_check": "(auth.uid() = user_id)"
       },
       {
         "cmd": "UPDATE",
         "name": "Users can update their own contacts",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "contacts",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -286457,11 +286712,11 @@
         "name": "Users can view their own contacts",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "contacts",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -290538,11 +290793,11 @@
         "name": "Users can delete their own insights",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "insights",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -290562,12 +290817,12 @@
         "name": "Users can insert their own insights",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "insights",
         "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+        "with_check": "(auth.uid() = user_id)"
       },
       {
         "cmd": "UPDATE",
@@ -290586,11 +290841,11 @@
         "name": "Users can update their own insights",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "insights",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -290610,11 +290865,11 @@
         "name": "Users can view their own insights",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "insights",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -290874,11 +291129,11 @@
         "name": "Users can delete their own interactions",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "interactions",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -290886,23 +291141,23 @@
         "name": "Users can insert their own interactions",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "interactions",
         "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+        "with_check": "(auth.uid() = user_id)"
       },
       {
         "cmd": "UPDATE",
         "name": "Users can update their own interactions",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "interactions",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -290910,11 +291165,11 @@
         "name": "Users can view their own interactions",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "interactions",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -293543,23 +293798,23 @@
         "name": "Users can insert their own profile",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "profiles",
         "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) = id)"
+        "with_check": "(auth.uid() = id)"
       },
       {
         "cmd": "UPDATE",
         "name": "Users can update their own profile",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "profiles",
-        "using": "(( SELECT auth.uid() AS uid) = id)",
+        "using": "(auth.uid() = id)",
         "with_check": null
       },
       {
@@ -293567,11 +293822,11 @@
         "name": "Users can view their own profile",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "profiles",
-        "using": "(( SELECT auth.uid() AS uid) = id)",
+        "using": "(auth.uid() = id)",
         "with_check": null
       },
       {
@@ -314185,6 +314440,17 @@
         "function": "public.update_profiles_updated_at",
         "level": "ROW",
         "name": "tr_profiles_updated_at",
+        "schema": "public",
+        "status": "enabled",
+        "table": "profiles",
+        "timing": "BEFORE"
+      },
+      {
+        "definition": "CREATE TRIGGER update_profiles_updated_at BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()",
+        "events": "UPDATE",
+        "function": "public.update_updated_at_column",
+        "level": "ROW",
+        "name": "update_profiles_updated_at",
         "schema": "public",
         "status": "enabled",
         "table": "profiles",

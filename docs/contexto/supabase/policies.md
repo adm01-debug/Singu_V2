@@ -224,9 +224,9 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.access_security_settings | Users manage own security settings | ALL | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
 | public.achievements | achievements_all | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
 | public.activities | Users can delete their own activities | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.activities | Users can insert their own activities | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
+| public.activities | Users can insert their own activities | INSERT | PERMISSIVE | public |  | `(auth.uid() = user_id)` |
 | public.activities | Users can update their own activities | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.activities | Users can view their own activities | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.activities | Users can view their own activities | SELECT | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.activities | service_role_full_activities | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.activities | singu_activities_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.activities | singu_activities_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
@@ -257,9 +257,10 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.ai_tone_preferences | Users can manage their own tone preferences | ALL | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.alert_rules | read_only_auth | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.alert_rules | service_full | ALL | PERMISSIVE | service_role | `true` | `true` |
-| public.alerts | Users can delete their own alerts | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.alerts | Users can insert their own alerts | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
-| public.alerts | Users can update their own alerts | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.alerts | Users can delete their own alerts | DELETE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.alerts | Users can insert their own alerts | INSERT | PERMISSIVE | public |  | `(auth.uid() = user_id)` |
+| public.alerts | Users can update their own alerts | UPDATE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.alerts | Users can view their own alerts | SELECT | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.alerts | service_role_full_alerts | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.alerts | singu_alerts_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.alerts | singu_alerts_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
@@ -410,8 +411,10 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.communication_preferences | Users can update their own communication preferences | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.communication_preferences | Users can view own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.communication_preferences | Users can view their own communication preferences | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.companies | Users can update their own companies | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.companies | Users can view their own companies | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.companies | Users can delete their own companies | DELETE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.companies | Users can insert their own companies | INSERT | PERMISSIVE | public |  | `(auth.uid() = user_id)` |
+| public.companies | Users can update their own companies | UPDATE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.companies | Users can view their own companies | SELECT | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.companies | service_role_full_companies | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.companies | singu_companies_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.companies | singu_companies_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
@@ -590,10 +593,10 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.contact_time_analysis | Users can view their own contact time analysis | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.contact_time_analysis_audit | Users can view their own analysis audit | SELECT | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.contacts | Users can access their own contacts | ALL | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.contacts | Users can delete their own contacts | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.contacts | Users can insert their own contacts | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
-| public.contacts | Users can update their own contacts | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.contacts | Users can view their own contacts | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.contacts | Users can delete their own contacts | DELETE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.contacts | Users can insert their own contacts | INSERT | PERMISSIVE | public |  | `(auth.uid() = user_id)` |
+| public.contacts | Users can update their own contacts | UPDATE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.contacts | Users can view their own contacts | SELECT | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.contacts | service_role_full_contacts | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.contacts | singu_contacts_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.contacts | singu_contacts_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
@@ -933,13 +936,13 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.incoming_webhook_nonces | incoming_webhook_nonces_service_only | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.incoming_webhooks | admins manage incoming_webhooks | ALL | PERMISSIVE | authenticated | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | public.insights | Users can delete own | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.insights | Users can delete their own insights | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.insights | Users can delete their own insights | DELETE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.insights | Users can insert own | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
-| public.insights | Users can insert their own insights | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
+| public.insights | Users can insert their own insights | INSERT | PERMISSIVE | public |  | `(auth.uid() = user_id)` |
 | public.insights | Users can update own | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.insights | Users can update their own insights | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.insights | Users can update their own insights | UPDATE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.insights | Users can view own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.insights | Users can view their own insights | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.insights | Users can view their own insights | SELECT | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.integration_logs | integration_logs_all | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
 | public.integrations | integrations_all | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
 | public.intent_scores | Users delete own intent scores | DELETE | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
@@ -961,10 +964,10 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.interaction_templates | interaction_templates_select | SELECT | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` |  |
 | public.interaction_templates | interaction_templates_update | UPDATE | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
 | public.interactions | Users can access their own interactions | ALL | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.interactions | Users can delete their own interactions | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.interactions | Users can insert their own interactions | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
-| public.interactions | Users can update their own interactions | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.interactions | Users can view their own interactions | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.interactions | Users can delete their own interactions | DELETE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.interactions | Users can insert their own interactions | INSERT | PERMISSIVE | public |  | `(auth.uid() = user_id)` |
+| public.interactions | Users can update their own interactions | UPDATE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.interactions | Users can view their own interactions | SELECT | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.interactions | service_role_full_interactions | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.interactions | singu_interactions_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.interactions | singu_interactions_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
@@ -1183,9 +1186,9 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.product_novelties | authenticated_read_novelties | SELECT | PERMISSIVE | authenticated | `true` |  |
 | public.product_novelties | service_all_novelties | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.products | products_all | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| public.profiles | Users can insert their own profile | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = id)` |
-| public.profiles | Users can update their own profile | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = id)` |  |
-| public.profiles | Users can view their own profile | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = id)` |  |
+| public.profiles | Users can insert their own profile | INSERT | PERMISSIVE | public |  | `(auth.uid() = id)` |
+| public.profiles | Users can update their own profile | UPDATE | PERMISSIVE | public | `(auth.uid() = id)` |  |
+| public.profiles | Users can view their own profile | SELECT | PERMISSIVE | public | `(auth.uid() = id)` |  |
 | public.profiles | service_role_full_profiles | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.profiles | singu_profiles_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = id)` |
 | public.profiles | singu_profiles_select | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = id)` |  |

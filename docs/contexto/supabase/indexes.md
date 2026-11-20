@@ -343,6 +343,7 @@ Uso e tamanho em `stats.md`.
 | public.activities | activities_pkey | btree | id | sim | sim |  |
 | public.activities | idx_activities_company_id | btree | company_id | não | sim |  |
 | public.activities | idx_activities_contact_id | btree | contact_id | não | sim |  |
+| public.activities | idx_activities_created_at | btree | created_at | não | sim |  |
 | public.activities | idx_activities_interaction_id | btree | interaction_id | não | sim |  |
 | public.activities | idx_activities_user_id | btree | user_id | não | sim |  |
 | public.activity_feed | activity_feed_pkey | btree | id | sim | sim |  |
@@ -383,6 +384,7 @@ Uso e tamanho em `stats.md`.
 | public.alerts | idx_alerts_active | btree | contact_id, user_id | não | sim | `(dismissed = false)` |
 | public.alerts | idx_alerts_company_id | btree | company_id | não | sim |  |
 | public.alerts | idx_alerts_contact_id | btree | contact_id | não | sim |  |
+| public.alerts | idx_alerts_dismissed | btree | dismissed | não | sim | `(dismissed = false)` |
 | public.alerts | idx_alerts_interaction_id | btree | interaction_id | não | sim |  |
 | public.alerts | idx_alerts_user_id | btree | user_id | não | sim |  |
 | public.applied_objection_responses | applied_objection_responses_pkey | btree | id | sim | sim |  |
@@ -982,6 +984,7 @@ Uso e tamanho em `stats.md`.
 | public.incoming_webhooks | incoming_webhooks_token_key | btree | token | sim | sim |  |
 | public.insights | idx_insights_active | btree | contact_id, user_id | não | sim | `(dismissed = false)` |
 | public.insights | idx_insights_contact | btree | contact_id | não | sim |  |
+| public.insights | idx_insights_contact_id | btree | contact_id | não | sim |  |
 | public.insights | idx_insights_user_id | btree | user_id | não | sim |  |
 | public.insights | insights_pkey | btree | id | sim | sim |  |
 | public.integration_logs | idx_integration_logs_integration_id | btree | integration_id | não | sim |  |
@@ -1001,6 +1004,7 @@ Uso e tamanho em `stats.md`.
 | public.interactions | idx_interactions_company_created | btree | company_id, created_at | não | sim |  |
 | public.interactions | idx_interactions_contact | btree | contact_id | não | sim |  |
 | public.interactions | idx_interactions_contact_created | btree | contact_id, created_at | não | sim |  |
+| public.interactions | idx_interactions_contact_id | btree | contact_id | não | sim |  |
 | public.interactions | idx_interactions_created_at | btree | created_at | não | sim |  |
 | public.interactions | idx_interactions_data | btree | data_interacao | não | sim |  |
 | public.interactions | idx_interactions_followup_pending | btree | follow_up_date | não | sim | `((follow_up_date IS NOT NULL) AND (COALESCE(followup_concluido, false) = false))` |

@@ -246,7 +246,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.ai_recommendation_logs](tables/public/ai_recommendation_logs.md) | table | sim | 3 | 9 | não |  |
 | [public.ai_tone_preferences](tables/public/ai_tone_preferences.md) | table | sim | 1 | 6 | não |  |
 | [public.alert_rules](tables/public/alert_rules.md) | table | sim | 2 | 18 | não | Regras configuráveis de alerta |
-| [public.alerts](tables/public/alerts.md) | table | sim | 8 | 22 | não | Sistema de alertas e notificações |
+| [public.alerts](tables/public/alerts.md) | table | sim | 9 | 22 | não | Sistema de alertas e notificações |
 | [public.applied_objection_responses](tables/public/applied_objection_responses.md) | table | sim | 3 | 10 | não |  |
 | [public.asia_upload_mapping](tables/public/asia_upload_mapping.md) | table | sim | 1 | 8 | não | Rastreia requisições pg_net para upload de imagens Asia Import ao Cloudflare Images |
 | [public.attribution_models_cache](tables/public/attribution_models_cache.md) | table | sim | 1 | 7 | não |  |
@@ -289,7 +289,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.commission_rules](tables/public/commission_rules.md) | table | sim | 1 | 10 | não |  |
 | [public.commissions](tables/public/commissions.md) | table | sim | 4 | 11 | não |  |
 | [public.communication_preferences](tables/public/communication_preferences.md) | table | sim | 8 | 13 | não | SINGU: Dados analíticos de comunicação com taxas de resposta por canal. |
-| [public.companies](tables/public/companies.md) | table | sim | 7 | 81 | não | Cadastro de empresas (clientes, fornecedores, transportadoras) |
+| [public.companies](tables/public/companies.md) | table | sim | 9 | 81 | não | Cadastro de empresas (clientes, fornecedores, transportadoras) |
 | [public.company_addresses](tables/public/company_addresses.md) | table | sim | 6 | 24 | não |  |
 | [public.company_cadences](tables/public/company_cadences.md) | table | sim | 4 | 11 | não |  |
 | [public.company_cnaes](tables/public/company_cnaes.md) | table | sim | 1 | 7 | não | Vínculo empresa ↔ CNAEs. Cada empresa tem 1 principal (is_principal=true) e N secundários. |

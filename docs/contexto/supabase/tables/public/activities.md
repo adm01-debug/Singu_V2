@@ -56,6 +56,7 @@
 | activities_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX activities_pkey ON public.activities USING btree (id)` |
 | idx_activities_company_id | btree | company_id | não | sim |  | `CREATE INDEX idx_activities_company_id ON public.activities USING btree (company_id)` |
 | idx_activities_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_activities_contact_id ON public.activities USING btree (contact_id)` |
+| idx_activities_created_at | btree | created_at | não | sim |  | `CREATE INDEX idx_activities_created_at ON public.activities USING btree (created_at DESC)` |
 | idx_activities_interaction_id | btree | interaction_id | não | sim |  | `CREATE INDEX idx_activities_interaction_id ON public.activities USING btree (interaction_id)` |
 | idx_activities_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_activities_user_id ON public.activities USING btree (user_id)` |
 
@@ -78,9 +79,9 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
+| roles | public |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update their own activities`
 
@@ -98,8 +99,8 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `service_role_full_activities`
