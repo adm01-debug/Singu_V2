@@ -1,0 +1,30 @@
+name: "Temp: aplicar migration em producao"
+on:
+  workflow_dispatch:
+    inputs:
+      migration:
+        description: 'Arquivo em supabase/migrations/'
+        required: false
+        default: '20261119000000_external_data_audit_log.sql'
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    env:
+      PGHOST: ${{ secrets.PGHOST }}
+      PGUSER: ${{ secrets.PGUSER }}
+      PGPASSWORD: ${{ secrets.PGPASSWORD }}
+      PGDATABASE: ${{ secrets.PGDATABASE }}
+      MIGRATION: ${{ inputs.migration }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar conexao (read-only)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+          psql "postgresql://${PGUSER}@${PGHOST}:5432/${PGDATABASE}?sslmode=require" \
+            -c "select current_database(), current_user, version();"
+      - name: Aplicar migration
+        if: ${{ inputs.migration != '' }}
+        run: |
+          psql "postgresql://${PGUSER}@${PGHOST}:5432/${PGDATABASE}?sslmode=require" \
+            -v ON_ERROR_STOP=1 -f "supabase/migrations/${MIGRATION}"
