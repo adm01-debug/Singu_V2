@@ -187356,11 +187356,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.resolve_alert"
@@ -187397,11 +187401,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721214918_fix_secdef_remaining_guards.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.advance_cadence_step"
@@ -187446,6 +187454,18 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721212000_fix_secdef_object_ownership_guard.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260721214918_fix_secdef_remaining_guards.sql",
+              "hits": 5
+            },
+            {
+              "file": "supabase/migrations/20260721215925_revoke_assert_helpers_from_authenticated.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             },
@@ -187454,7 +187474,7 @@
               "hits": 3
             }
           ],
-          "code_total_files": 5,
+          "code_total_files": 8,
           "cron": [],
           "db": [
             "public.activate_customer",
@@ -187532,6 +187552,10 @@
               "hits": 2
             },
             {
+              "file": "supabase/migrations/20260721212000_fix_secdef_object_ownership_guard.sql",
+              "hits": 2
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             },
@@ -187544,7 +187568,7 @@
               "hits": 1
             }
           ],
-          "code_total_files": 4,
+          "code_total_files": 5,
           "cron": [],
           "db": [
             "public.calculate_client_health_score",
@@ -187592,11 +187616,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.ativar_cliente",
@@ -187639,11 +187667,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.calculate_commission"
@@ -187680,11 +187712,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.update_event_status"
@@ -187721,11 +187757,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.update_goal_progress"
@@ -187762,6 +187802,10 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             },
@@ -187770,7 +187814,7 @@
               "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "public.complete_followup",
@@ -187810,11 +187854,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.archive_note",
@@ -187852,11 +187900,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.mark_notification_read"
@@ -187893,11 +187945,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721214918_fix_secdef_remaining_guards.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.update_opportunity_status"
@@ -187934,11 +187990,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.send_proposal",
@@ -187980,11 +188040,19 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 5,
           "cron": [],
           "db": [
             "public.complete_reminder",
@@ -188034,6 +188102,22 @@
               "hits": 2
             },
             {
+              "file": "supabase/migrations/20260721205314_fix_secdef_impersonation_guard.sql",
+              "hits": 4
+            },
+            {
+              "file": "supabase/migrations/20260721205654_fix_secdef_impersonation_guard_all.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260721210234_fix_secdef_crlf_unguarded.sql",
+              "hits": 8
+            },
+            {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 2
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             },
@@ -188046,7 +188130,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 7,
+          "code_total_files": 11,
           "cron": [],
           "db": [
             "public.add_company_tag",
@@ -188255,6 +188339,10 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             },
@@ -188263,7 +188351,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "public.complete_task",
@@ -188303,11 +188391,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.resolve_sla_violation"
@@ -188344,11 +188436,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261007100000_external_rpc_user_scope.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.complete_visit",
@@ -188414,9 +188510,13 @@
             {
               "file": "supabase/migrations/20260721000074_fix_secdef_object_ownership_guard.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260721212000_fix_secdef_object_ownership_guard.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -189164,11 +189264,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260416230430_singu_triggers_batch_b.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [],
           "triggers": [
@@ -190524,8 +190628,25 @@
       {
         "args": "p_company_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409143212_zapp_history_75_lead_scoring.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409144328_zapp_history_88_fix_extractors.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165654_zapp_history_97_fix_extractor_collisions.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165738_zapp_history_98_fix_qty_match_after_orcamento.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "public.recalculate_all_lead_scores",
@@ -190897,8 +191018,13 @@
       {
         "args": "p_contact_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260401192028_create_rpc_sync_interaction_from_zapp.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "public.sync_interaction_from_zapp",
@@ -192704,9 +192830,13 @@
             {
               "file": "supabase/migrations/20260721000076_fix_secdef_entity_ownership_guard_2.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -192739,9 +192869,13 @@
             {
               "file": "supabase/migrations/20260721000076_fix_secdef_entity_ownership_guard_2.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -193250,8 +193384,13 @@
       {
         "args": "p_data text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260308171347_coop003_batch0_execute.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -194043,9 +194182,13 @@
             {
               "file": "supabase/migrations/20260721000078_fix_secdef_final_cleanup.sql",
               "hits": 7
+            },
+            {
+              "file": "supabase/migrations/20260721215209_fix_secdef_final_cleanup.sql",
+              "hits": 7
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -194078,9 +194221,13 @@
             {
               "file": "supabase/migrations/20260721000078_fix_secdef_final_cleanup.sql",
               "hits": 7
+            },
+            {
+              "file": "supabase/migrations/20260721215209_fix_secdef_final_cleanup.sql",
+              "hits": 7
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -194323,9 +194470,13 @@
             {
               "file": "supabase/migrations/20260721000069_fix_secdef_impersonation_guard.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260721205314_fix_secdef_impersonation_guard.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -194568,9 +194719,13 @@
             {
               "file": "supabase/migrations/20260721000077_fix_secdef_remaining_guards.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260721214918_fix_secdef_remaining_guards.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -194603,9 +194758,13 @@
             {
               "file": "supabase/migrations/20260721000077_fix_secdef_remaining_guards.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260721214918_fix_secdef_remaining_guards.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -197497,8 +197656,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260330122215_create_fn_carrier_cron_endpoint_and_unified.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "public.fn_cron_daily_endpoint"
@@ -197529,8 +197693,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260330122215_create_fn_carrier_cron_endpoint_and_unified.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "public.fn_carrier_cron_endpoint"
@@ -197669,8 +197838,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260330121942_create_fn_carrier_daily_check.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "public.fn_carrier_daily_check"
@@ -197701,8 +197875,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260330121942_create_fn_carrier_daily_check.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "public.fn_carrier_daily_check"
@@ -197733,8 +197912,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260329181512_create_fn_supplier_daily_check.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "public.fn_supplier_daily_check"
@@ -197765,8 +197949,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260329181512_create_fn_supplier_daily_check.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "public.fn_supplier_daily_check"
@@ -197827,8 +198016,13 @@
       {
         "args": "p_product_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260611174718_fn_get_product_ai_context_canonical.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -197958,11 +198152,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260611204206_fn_promote_kit_components_batch.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260721000040_revoke_authenticated_internal_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -198091,8 +198289,17 @@
       {
         "args": "p_carrier_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260330121857_create_fn_carrier_bulk_recalc.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260330122025_create_carrier_triggers.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "public.fn_carrier_bulk_recalc",
@@ -198124,8 +198331,17 @@
       {
         "args": "p_supplier_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260329181359_create_trigger_auto_recalc_score_on_evaluation.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260329182209_create_fn_supplier_bulk_recalc.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "public.fn_supplier_bulk_recalc",
@@ -198204,6 +198420,10 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260611130820_create_product_novelties_table_v2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260721000037_revoke_anon_secdef_execute.sql",
               "hits": 1
             },
@@ -198220,7 +198440,7 @@
               "hits": 1
             }
           ],
-          "code_total_files": 4,
+          "code_total_files": 5,
           "cron": [],
           "db": [],
           "triggers": [
@@ -198320,8 +198540,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260330122215_create_fn_carrier_cron_endpoint_and_unified.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "public.fn_cron_daily_endpoint"
@@ -198352,8 +198577,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260329204104_create_fn_supplier_cron_endpoint.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "public.fn_supplier_cron_endpoint"
@@ -198476,6 +198706,10 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260611130820_create_product_novelties_table_v2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260721000037_revoke_anon_secdef_execute.sql",
               "hits": 1
             },
@@ -198492,7 +198726,7 @@
               "hits": 1
             }
           ],
-          "code_total_files": 4,
+          "code_total_files": 5,
           "cron": [],
           "db": [],
           "triggers": [
@@ -198560,11 +198794,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260503002114_create_contact_notes_for_zapp_web.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -206160,11 +206398,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260418155258_fix_rpcs_instant_kpis_and_duplicate_contacts_v2.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -214562,9 +214804,13 @@
             {
               "file": "supabase/migrations/20260721000073_fix_secdef_trigger_fn_revoke.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260721204158_fix_singu_user_impersonation.sql",
+              "hits": 4
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.singu_delete",
@@ -217848,9 +218094,13 @@
             {
               "file": "supabase/migrations/20261027220000_serialize_contact_relation_writes.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261118182317_serialize_contact_relation_write_triggers.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -218046,6 +218296,14 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260721000048_revoke_authenticated_trigger_functions.sql",
               "hits": 1
             },
@@ -218066,7 +218324,7 @@
               "hits": 1
             }
           ],
-          "code_total_files": 6,
+          "code_total_files": 8,
           "cron": [],
           "db": [],
           "triggers": [
@@ -218302,6 +218560,10 @@
               "hits": 8
             },
             {
+              "file": "supabase/migrations/20260417104948_qa_fix_user_roles_policy_optimize.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260420115057_db3a83d8-00a2-415e-9126-17ba7ba6c80d.sql",
               "hits": 7
             },
@@ -218344,13 +218606,9 @@
             {
               "file": "supabase/migrations/20260507194929_8a897147-414a-4dff-ad62-bf627f7d8dad.sql",
               "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260513143103_c834a03b-5b1e-41c7-a213-eea176782e00.sql",
-              "hits": 1
             }
           ],
-          "code_total_files": 80,
+          "code_total_files": 82,
           "cron": [],
           "db": [
             "public.claim_behavioral_profile_retry",
@@ -218478,6 +218736,18 @@
               "hits": 14
             },
             {
+              "file": "supabase/migrations/20260416224009_singu_create_missing_functions_fixed.sql",
+              "hits": 32
+            },
+            {
+              "file": "supabase/migrations/20260417005040_singu_fix_6b_functional_trigram_indexes.sql",
+              "hits": 9
+            },
+            {
+              "file": "supabase/migrations/20260417005153_singu_fix_6c_search_drop_recreate.sql",
+              "hits": 16
+            },
+            {
               "file": "supabase/migrations/20260417193714_f801257e-ab8e-472d-a10a-488718c0c4d6.sql",
               "hits": 31
             },
@@ -218494,7 +218764,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 9,
+          "code_total_files": 12,
           "cron": [],
           "db": [
             "public.search_companies_unaccent",
@@ -220874,11 +221144,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20261118122016_multiplix_list_ufs_cast_text.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261118123000_multiplix_list_ufs_cast_text.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -225231,8 +225505,13 @@
       {
         "args": "search_term text, max_results integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260321192746_optimize_companies_indexes.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -226721,11 +227000,19 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260417004419_singu_fix_1_companies_compat_retry.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260417103505_singu_fix_14b_industry_ramo_atividade_sync.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 3,
           "cron": [],
           "db": [],
           "triggers": [
@@ -226756,11 +227043,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260417103108_singu_fix_12_normalize_contacts_role_sentiment_stage.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -226795,9 +227086,13 @@
             {
               "file": "supabase/migrations/20260721000068_fix_singu_user_impersonation.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260721204158_fix_singu_user_impersonation.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -226830,9 +227125,13 @@
             {
               "file": "supabase/migrations/20260721000068_fix_singu_user_impersonation.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260721204158_fix_singu_user_impersonation.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -226863,11 +227162,19 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260417004551_singu_fix_2_interactions_compat_trigger.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260417102942_singu_fix_11_interactions_trigger_refactor.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 3,
           "cron": [],
           "db": [],
           "triggers": [
@@ -226902,9 +227209,13 @@
             {
               "file": "supabase/migrations/20260721000068_fix_singu_user_impersonation.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260721204158_fix_singu_user_impersonation.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -226935,11 +227246,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260417103206_singu_fix_14_sync_company_address_to_city_state.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -226970,11 +227285,19 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260417004956_singu_fix_5b_contact_reverse_sync.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260417103108_singu_fix_12_normalize_contacts_role_sentiment_stage.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 3,
           "cron": [],
           "db": [],
           "triggers": [
@@ -227007,11 +227330,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260417004633_singu_fix_3_sales_team_members_compat.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -227044,6 +227371,10 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260417103206_singu_fix_14_sync_company_address_to_city_state.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             },
@@ -227052,7 +227383,7 @@
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [],
           "triggers": [
@@ -227085,11 +227416,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260417004914_singu_fix_5_sync_contact_emails_phones.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -227122,11 +227457,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260417004914_singu_fix_5_sync_contact_emails_phones.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -227161,9 +227500,13 @@
             {
               "file": "supabase/migrations/20260721000068_fix_singu_user_impersonation.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260721204158_fix_singu_user_impersonation.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -228440,11 +228783,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260330122025_create_carrier_triggers.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228477,11 +228824,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260330122025_create_carrier_triggers.sql",
+              "hits": 2
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228515,11 +228866,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260330122025_create_carrier_triggers.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228552,11 +228907,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260329204121_protect_evaluations_immutable.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228589,11 +228948,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260330122025_create_carrier_triggers.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228626,11 +228989,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260329204052_create_trigger_protect_qualification_config_delete.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228663,11 +229030,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260329181359_create_trigger_auto_recalc_score_on_evaluation.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228700,11 +229071,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260330120931_create_carrier_company_sync_trigger.sql",
+              "hits": 2
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228738,11 +229113,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260329203616_create_trigger_auto_sync_company_supplier.sql",
+              "hits": 2
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228776,11 +229155,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260329181412_create_trigger_auto_update_homologado_flag.sql",
+              "hits": 2
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228897,11 +229280,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260306190655_recreate_trigger_contact_phones_normalizar.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -228934,11 +229321,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260319185913_create_pix_accounts_table.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -230143,11 +230534,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20260315172339_create_uapi_sessions.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260924181300_t204_fase1_revoke_remaining_trigger_functions.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -230230,8 +230625,16 @@
               "hits": 3
             },
             {
+              "file": "supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql",
+              "hits": 3
+            },
+            {
               "file": "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+              "hits": 4
             },
             {
               "file": "supabase/migrations/20260111024043_59300762-e425-469a-9e34-35f8ba7ca1e3.sql",
@@ -230274,6 +230677,54 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260321125638_salespro_mig_002_core_sales_complete.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260321133834_create_singu_tables_batch3_of_3.sql",
+              "hits": 17
+            },
+            {
+              "file": "supabase/migrations/20260329175349_create_supplier_homologation_status_enum_and_table.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260329175425_create_supplier_scores_and_qualification_config.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260330122025_create_carrier_triggers.sql",
+              "hits": 4
+            },
+            {
+              "file": "supabase/migrations/20260330173636_fix_audit_gaps_g1_g2_g3_g4.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260408195933_zapp_history_02_base_tables.sql",
+              "hits": 3
+            },
+            {
+              "file": "supabase/migrations/20260408195951_zapp_history_03_message_media.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408200011_zapp_history_04_message_audio.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408200032_zapp_history_05_links_and_embeddings.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408200057_zapp_history_06_daily_summaries.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408200123_zapp_history_07_training_dataset_and_pii.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260412151802_5e3b71db-9c2a-4886-a09f-795123523359.sql",
               "hits": 1
             },
@@ -230284,65 +230735,9 @@
             {
               "file": "supabase/migrations/20260415233816_bf8ddb84-c73e-4d23-a2b0-c3c0f8fdfcc8.sql",
               "hits": 4
-            },
-            {
-              "file": "supabase/migrations/20260416005302_557a4633-8c05-46e2-9b4a-31f1341c9540.sql",
-              "hits": 2
-            },
-            {
-              "file": "supabase/migrations/20260416013658_9e847ea5-9b59-4ccf-8b48-631aa6cb2539.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416025140_c0179f4c-b812-4504-8844-d344c80d5496.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416181200_6d3557ca-038e-4e4c-b64e-bc3a706f929f.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416181618_cf783015-8b5c-48a9-8de2-acbf3d4a9fc0.sql",
-              "hits": 2
-            },
-            {
-              "file": "supabase/migrations/20260416183013_d2d67858-eca4-40cf-b4ef-ed32abbfb00a.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416193918_2ab4e7fb-e095-44c9-aad7-00fcff26517d.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416200246_1d21f8b8-a860-4bc1-a79b-6bc3f319f128.sql",
-              "hits": 2
-            },
-            {
-              "file": "supabase/migrations/20260416232800_aca98b93-9185-4f06-99ae-dd1cd5abafff.sql",
-              "hits": 5
-            },
-            {
-              "file": "supabase/migrations/20260416233829_14fcc07a-6773-4d98-aada-f86fa6a13e98.sql",
-              "hits": 2
-            },
-            {
-              "file": "supabase/migrations/20260416234628_b8308aff-93ad-4104-a929-e8c91d30137c.sql",
-              "hits": 3
-            },
-            {
-              "file": "supabase/migrations/20260416235533_dfd48be7-fc61-445f-ab80-f484fa00dc41.sql",
-              "hits": 3
-            },
-            {
-              "file": "supabase/migrations/20260417000551_4e28ff77-21ba-433e-8628-55418356e7b7.sql",
-              "hits": 3
-            },
-            {
-              "file": "supabase/migrations/20260417001337_e3b9438d-89c9-4f77-a877-8feab6e00231.sql",
-              "hits": 3
             }
           ],
-          "code_total_files": 67,
+          "code_total_files": 97,
           "cron": [],
           "db": [],
           "triggers": [
@@ -231642,8 +232037,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409190547_zapp_history_134_churn_alert_trigger.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -231674,8 +232074,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409141437_zapp_history_63_urgent_order_alert.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -231736,8 +232141,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409180856_zapp_history_114_auto_enrich_contact.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -231768,8 +232178,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409141507_zapp_history_65_auto_tag_contacts.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -231800,8 +232215,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408195933_zapp_history_02_base_tables.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -231832,8 +232252,33 @@
       {
         "args": "p_message_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409230844_zapp_history_audit_fix_2_bant_negativo.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409232352_zapp_history_audit_fix_11_bant_merged.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409232444_zapp_history_audit_fix_13_enterprise_boost.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409232848_zapp_history_audit_fix_16_quantity_bilingual.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260410001910_zapp_test_fix_spam_regex_and_special_chars.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 6,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -231900,8 +232345,25 @@
       {
         "args": "p_message_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409143212_zapp_history_75_lead_scoring.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409144328_zapp_history_88_fix_extractors.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165654_zapp_history_97_fix_extractor_collisions.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165738_zapp_history_98_fix_qty_match_after_orcamento.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "public.recalculate_all_lead_scores",
@@ -231933,8 +232395,21 @@
       {
         "args": "p_lead_score integer, p_sentiment text, p_churn_risk text, p_funnel_stage text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409211334_zapp_history_165_priority_matrix.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211447_zapp_history_167_fix_trigger_order.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260409211523_zapp_history_167b_fix_null_urgent.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "zapp_history.trg_set_priority_quadrant"
@@ -231965,8 +232440,65 @@
       {
         "args": "p_text text, p_has_cnpj boolean, p_qty integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183603_zapp_history_128_b2c_priority_personal.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 14,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232057,8 +232589,21 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232089,8 +232634,53 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 11,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232121,8 +232711,53 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 11,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232153,8 +232788,61 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 13,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232185,8 +232873,25 @@
       {
         "args": "p_text text, p_qty integer, p_budget numeric",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232217,8 +232922,25 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224605_zapp_history_207_fix_competitor.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232249,8 +232971,37 @@
       {
         "args": "p_text text, p_phone text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220932_zapp_history_187_credibility_stricter.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260410001910_zapp_test_fix_spam_regex_and_special_chars.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 7,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232281,8 +233032,13 @@
       {
         "args": "p_text text, p_speaker_role text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232313,8 +233069,17 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232345,8 +233110,49 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 10,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232377,8 +233183,33 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 6,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232409,8 +233240,61 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 13,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232441,8 +233325,77 @@
       {
         "args": "p_text text, p_has_product boolean, p_has_quantity boolean, p_has_budget boolean, p_has_cnpj boolean",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409165440_zapp_history_93_reconcile_v4_full.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165654_zapp_history_97_fix_extractor_collisions.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165738_zapp_history_98_fix_qty_match_after_orcamento.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409180841_zapp_history_113_reconcile_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 17,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232473,8 +233426,29 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 5,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232505,8 +233479,45 @@
       {
         "args": "p_text text, p_funnel_stage text, p_lead_score integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 9,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232537,8 +233548,29 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 5,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232569,8 +233601,37 @@
       {
         "args": "p_text text, p_qty integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 7,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232601,8 +233662,25 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232633,8 +233711,13 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409110143_zapp_history_39_smart_fallback_and_pii.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "zapp_history.parse_connector_log_to_messages"
@@ -232665,8 +233748,41 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 8,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232697,8 +233813,33 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 6,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232729,8 +233870,21 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409231855_zapp_history_audit_fix_9_referral_priority.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232761,8 +233915,25 @@
       {
         "args": "p_contact_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232793,8 +233964,25 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232825,8 +234013,37 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 7,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232857,8 +234074,13 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409234215_zapp_audit_m07_technical_interest_detector.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "zapp_history.trg_set_technical_interest"
@@ -232889,8 +234111,41 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 8,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232921,8 +234176,17 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -232953,8 +234217,13 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409234314_zapp_audit_m09_urgency_text_detector.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "zapp_history.trg_supplement_urgency"
@@ -232985,8 +234254,85 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409144107_zapp_history_83_full_reconcile_v3.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409144328_zapp_history_88_fix_extractors.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165440_zapp_history_93_reconcile_v4_full.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165654_zapp_history_97_fix_extractor_collisions.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165738_zapp_history_98_fix_qty_match_after_orcamento.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409180841_zapp_history_113_reconcile_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 19,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -233017,8 +234363,69 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409180841_zapp_history_113_reconcile_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409181025_zapp_history_117_fix_instagram_regex.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 15,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -233049,8 +234456,13 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -233079,8 +234491,77 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409143114_zapp_history_73_reconcile_with_extractors.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409144107_zapp_history_83_full_reconcile_v3.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165440_zapp_history_93_reconcile_v4_full.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409180841_zapp_history_113_reconcile_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 17,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -233111,8 +234592,77 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409144107_zapp_history_83_full_reconcile_v3.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409144328_zapp_history_88_fix_extractors.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165440_zapp_history_93_reconcile_v4_full.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409180841_zapp_history_113_reconcile_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 17,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -233143,8 +234693,65 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409180841_zapp_history_113_reconcile_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 14,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -233175,8 +234782,69 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409165440_zapp_history_93_reconcile_v4_full.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409180841_zapp_history_113_reconcile_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 15,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -233207,8 +234875,81 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409141648_zapp_history_67_product_dictionary_postprocessor.sql",
+              "hits": 3
+            },
+            {
+              "file": "supabase/migrations/20260409143114_zapp_history_73_reconcile_with_extractors.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409144107_zapp_history_83_full_reconcile_v3.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165440_zapp_history_93_reconcile_v4_full.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409180841_zapp_history_113_reconcile_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 18,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -233239,8 +234980,89 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409143114_zapp_history_73_reconcile_with_extractors.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409144107_zapp_history_83_full_reconcile_v3.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165440_zapp_history_93_reconcile_v4_full.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165654_zapp_history_97_fix_extractor_collisions.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409165738_zapp_history_98_fix_qty_match_after_orcamento.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409180841_zapp_history_113_reconcile_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183254_zapp_history_124_reconcile_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190531_zapp_history_133_reconcile_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205330_zapp_history_144_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205650_zapp_history_143_reconcile_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210511_zapp_history_153_reconcile_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211259_zapp_history_163_reconcile_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212030_zapp_history_173_reconcile_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409220605_zapp_history_184_reconcile_v12.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222312_zapp_history_194_reconcile_v13.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224419_zapp_history_204_reconcile_v14.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225126_zapp_history_214_reconcile_v15.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225744_zapp_history_223_reconcile_v16_bant.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409232848_zapp_history_audit_fix_16_quantity_bilingual.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 20,
           "cron": [],
           "db": [
             "zapp_history.reconcile_nlp_responses"
@@ -233271,8 +235093,17 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409232926_zapp_history_audit_fix_17_gc_zombies.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260410110044_zapp_test_fix_gc_zombie_entity_id.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
           "cron": [
             "11:zapp-gc-zombie-messages"
           ],
@@ -233303,8 +235134,37 @@
       {
         "args": "p_key text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409133339_zapp_history_45b_runtime_config_table.sql",
+              "hits": 10
+            },
+            {
+              "file": "supabase/migrations/20260409133409_zapp_history_46_health_check_v2.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260409133917_zapp_history_49_auto_invoke_triggers.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260409134821_zapp_history_51_remove_service_role_key_dependency.sql",
+              "hits": 4
+            },
+            {
+              "file": "supabase/migrations/20260409134848_zapp_history_52_health_and_trigger_no_key_required.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409135049_zapp_history_53_nlp_pipeline_integration.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409141437_zapp_history_63_urgent_order_alert.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 7,
           "cron": [],
           "db": [
             "zapp_history.alert_urgent_order_via_bitrix",
@@ -233551,8 +235411,65 @@
       {
         "args": "p_limit integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409174932_zapp_history_110_master_dashboard.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409181150_zapp_history_119_master_dashboard_geo.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183646_zapp_history_130_master_dashboard_segmentation.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190803_zapp_history_138_intelligence360_v2.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205931_zapp_history_149_master_dashboard_disc.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210719_zapp_history_159_master_dashboard_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211613_zapp_history_169_master_dashboard_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212244_zapp_history_179_master_dashboard_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225335_zapp_history_219_master_dashboard_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409230007_zapp_history_229_master_dashboard_v12.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 14,
           "cron": [],
           "db": [
             "zapp_history.master_dashboard"
@@ -233583,8 +235500,13 @@
       {
         "args": "p_key text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409234102_zapp_audit_m04_webhook_secret_validation.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "zapp_history.trg_connector_log_validate_secret"
@@ -233615,8 +235537,73 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409141452_zapp_history_64_dashboard_summary_rpc.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409143327_zapp_history_77_recreate_dashboard_view.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409174932_zapp_history_110_master_dashboard.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409181150_zapp_history_119_master_dashboard_geo.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183646_zapp_history_130_master_dashboard_segmentation.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409190803_zapp_history_138_intelligence360_v2.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409205931_zapp_history_149_master_dashboard_disc.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409210719_zapp_history_159_master_dashboard_v5.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211613_zapp_history_169_master_dashboard_v6.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409212244_zapp_history_179_master_dashboard_v7.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409225335_zapp_history_219_master_dashboard_v11.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409230007_zapp_history_229_master_dashboard_v12.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 16,
           "cron": [],
           "db": [
             "zapp_history.dashboard_summary",
@@ -233678,8 +235665,17 @@
       {
         "args": "p_function_name text, p_body jsonb",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408200316_zapp_history_10_pg_cron_jobs.sql",
+              "hits": 4
+            },
+            {
+              "file": "supabase/migrations/20260408201117_zapp_history_18_backfill_summaries_rpc.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
           "cron": [
             "1:zapp-generate-daily-summaries",
             "2:zapp-process-pending-media",
@@ -233715,8 +235711,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -233745,8 +235746,13 @@
       {
         "args": "p_name text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409144420_zapp_history_90_normalize_product_category.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -233777,8 +235783,17 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408205204_zapp_history_32_connector_log_parser_trigger.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408205837_zapp_history_35_reprocess_connector_log.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "zapp_history.reprocess_connector_log"
@@ -233811,8 +235826,29 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409135049_zapp_history_53_nlp_pipeline_integration.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409135739_zapp_history_56_faster_reconcile.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260409141400_zapp_history_61_immediate_reconcile_trigger.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183435_zapp_history_127_fix_qty_cast.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409183521_zapp_history_127b_fix_emoji_regex.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 5,
           "cron": [
             "9:zapp-reconcile-nlp",
             "10:zapp-reconcile-nlp-30s"
@@ -233846,8 +235882,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408200918_zapp_history_14_contact_stats_mat_view.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [
             "7:zapp-refresh-contact-stats"
           ],
@@ -233938,8 +235979,17 @@
       {
         "args": "p_texts jsonb, p_provider text, p_task text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409133917_zapp_history_49_auto_invoke_triggers.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409134848_zapp_history_52_health_and_trigger_no_key_required.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -233968,8 +236018,21 @@
       {
         "args": "p_text text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409135049_zapp_history_53_nlp_pipeline_integration.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409230753_zapp_history_audit_fix_1_short_messages.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260410001910_zapp_test_fix_spam_regex_and_special_chars.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "zapp_history.trg_auto_request_embedding"
@@ -234030,8 +236093,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409143144_zapp_history_74_cnpj_company_resolver.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234182,8 +236250,13 @@
       {
         "args": "p_message_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409225934_zapp_history_228_routing_queue_view.sql",
+              "hits": 6
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -234214,8 +236287,13 @@
       {
         "args": "p_msg_time timestamp with time zone, p_lead_score integer, p_churn_risk text, p_sentiment text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409212204_zapp_history_177_response_window.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [
             "zapp_history.trg_set_response_window"
@@ -234246,8 +236324,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409135201_zapp_history_54_realtime_singu_bridge_per_message.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234278,8 +236361,17 @@
       {
         "args": "p_summary_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408200316_zapp_history_10_pg_cron_jobs.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408200830_zapp_history_11_auto_sync_summary_to_interaction.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
           "cron": [
             "6:zapp-sync-pending-summaries"
           ],
@@ -234312,8 +236404,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409133917_zapp_history_49_auto_invoke_triggers.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234344,8 +236441,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409133917_zapp_history_49_auto_invoke_triggers.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234376,8 +236478,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408200845_zapp_history_12_auto_fill_contact_id.sql",
+              "hits": 3
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234410,8 +236517,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409143212_zapp_history_75_lead_scoring.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234442,8 +236554,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409234045_zapp_audit_m03_dedup_evolution_msg_id.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234474,8 +236591,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409234032_zapp_audit_m02_rate_limit_connector.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234506,8 +236628,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409234102_zapp_audit_m04_webhook_secret_validation.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234538,8 +236665,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409234113_zapp_audit_m05_content_flood_detector.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234570,8 +236702,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408200858_zapp_history_13_auto_flag_messages.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234602,8 +236739,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409141400_zapp_history_61_immediate_reconcile_trigger.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234634,8 +236776,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409174431_zapp_history_104_business_hours.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234666,8 +236813,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408200858_zapp_history_13_auto_flag_messages.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234698,8 +236850,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408200858_zapp_history_13_auto_flag_messages.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234730,8 +236887,17 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409211334_zapp_history_165_priority_matrix.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260409211447_zapp_history_167_fix_trigger_order.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234762,8 +236928,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409212204_zapp_history_177_response_window.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234794,8 +236965,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409234215_zapp_audit_m07_technical_interest_detector.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234826,8 +237002,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409230740_audit_fix_03b_short_messages_posix.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234858,8 +237039,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409220619_zapp_history_185_spam_quarantine.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234890,8 +237076,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409234314_zapp_audit_m09_urgency_text_detector.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234922,8 +237113,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408200830_zapp_history_11_auto_sync_summary_to_interaction.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -234954,8 +237150,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260409174349_zapp_history_101_response_time_sla.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -235026,8 +237227,16 @@
               "hits": 3
             },
             {
+              "file": "supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql",
+              "hits": 3
+            },
+            {
               "file": "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+              "hits": 4
             },
             {
               "file": "supabase/migrations/20260111024043_59300762-e425-469a-9e34-35f8ba7ca1e3.sql",
@@ -235070,6 +237279,54 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260321125638_salespro_mig_002_core_sales_complete.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260321133834_create_singu_tables_batch3_of_3.sql",
+              "hits": 17
+            },
+            {
+              "file": "supabase/migrations/20260329175349_create_supplier_homologation_status_enum_and_table.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260329175425_create_supplier_scores_and_qualification_config.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260330122025_create_carrier_triggers.sql",
+              "hits": 4
+            },
+            {
+              "file": "supabase/migrations/20260330173636_fix_audit_gaps_g1_g2_g3_g4.sql",
+              "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20260408195933_zapp_history_02_base_tables.sql",
+              "hits": 3
+            },
+            {
+              "file": "supabase/migrations/20260408195951_zapp_history_03_message_media.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408200011_zapp_history_04_message_audio.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408200032_zapp_history_05_links_and_embeddings.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408200057_zapp_history_06_daily_summaries.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408200123_zapp_history_07_training_dataset_and_pii.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20260412151802_5e3b71db-9c2a-4886-a09f-795123523359.sql",
               "hits": 1
             },
@@ -235080,65 +237337,9 @@
             {
               "file": "supabase/migrations/20260415233816_bf8ddb84-c73e-4d23-a2b0-c3c0f8fdfcc8.sql",
               "hits": 4
-            },
-            {
-              "file": "supabase/migrations/20260416005302_557a4633-8c05-46e2-9b4a-31f1341c9540.sql",
-              "hits": 2
-            },
-            {
-              "file": "supabase/migrations/20260416013658_9e847ea5-9b59-4ccf-8b48-631aa6cb2539.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416025140_c0179f4c-b812-4504-8844-d344c80d5496.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416181200_6d3557ca-038e-4e4c-b64e-bc3a706f929f.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416181618_cf783015-8b5c-48a9-8de2-acbf3d4a9fc0.sql",
-              "hits": 2
-            },
-            {
-              "file": "supabase/migrations/20260416183013_d2d67858-eca4-40cf-b4ef-ed32abbfb00a.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416193918_2ab4e7fb-e095-44c9-aad7-00fcff26517d.sql",
-              "hits": 1
-            },
-            {
-              "file": "supabase/migrations/20260416200246_1d21f8b8-a860-4bc1-a79b-6bc3f319f128.sql",
-              "hits": 2
-            },
-            {
-              "file": "supabase/migrations/20260416232800_aca98b93-9185-4f06-99ae-dd1cd5abafff.sql",
-              "hits": 5
-            },
-            {
-              "file": "supabase/migrations/20260416233829_14fcc07a-6773-4d98-aada-f86fa6a13e98.sql",
-              "hits": 2
-            },
-            {
-              "file": "supabase/migrations/20260416234628_b8308aff-93ad-4104-a929-e8c91d30137c.sql",
-              "hits": 3
-            },
-            {
-              "file": "supabase/migrations/20260416235533_dfd48be7-fc61-445f-ab80-f484fa00dc41.sql",
-              "hits": 3
-            },
-            {
-              "file": "supabase/migrations/20260417000551_4e28ff77-21ba-433e-8628-55418356e7b7.sql",
-              "hits": 3
-            },
-            {
-              "file": "supabase/migrations/20260417001337_e3b9438d-89c9-4f77-a877-8feab6e00231.sql",
-              "hits": 3
             }
           ],
-          "code_total_files": 67,
+          "code_total_files": 97,
           "cron": [],
           "db": [],
           "triggers": [
@@ -235176,8 +237377,21 @@
       {
         "args": "p_contact_id uuid, p_user_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20260408200219_zapp_history_08_helpers_and_rls.sql",
+              "hits": 7
+            },
+            {
+              "file": "supabase/migrations/20260408201038_zapp_history_16_get_contact_intelligence_v2.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260408201156_zapp_history_20_storage_buckets_and_policies.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "zapp_history.get_contact_intelligence_v2"
