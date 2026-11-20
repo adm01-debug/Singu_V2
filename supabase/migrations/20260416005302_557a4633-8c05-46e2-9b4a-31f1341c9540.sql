@@ -103,49 +103,60 @@ ALTER TABLE public.lead_score_history ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.lead_score_config ENABLE ROW LEVEL SECURITY;
 
 -- Policies: lead_scores
+DROP POLICY IF EXISTS "Users can view their own lead scores" ON public.lead_scores;  -- [singu-idem]
 CREATE POLICY "Users can view their own lead scores"
   ON public.lead_scores FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own lead scores" ON public.lead_scores;  -- [singu-idem]
 CREATE POLICY "Users can insert their own lead scores"
   ON public.lead_scores FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own lead scores" ON public.lead_scores;  -- [singu-idem]
 CREATE POLICY "Users can update their own lead scores"
   ON public.lead_scores FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own lead scores" ON public.lead_scores;  -- [singu-idem]
 CREATE POLICY "Users can delete their own lead scores"
   ON public.lead_scores FOR DELETE
   USING (auth.uid() = user_id);
 
 -- Policies: lead_score_history
+DROP POLICY IF EXISTS "Users can view their own score history" ON public.lead_score_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own score history"
   ON public.lead_score_history FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own score history" ON public.lead_score_history;  -- [singu-idem]
 CREATE POLICY "Users can insert their own score history"
   ON public.lead_score_history FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- Policies: lead_score_config
+DROP POLICY IF EXISTS "Users can view their own config" ON public.lead_score_config;  -- [singu-idem]
 CREATE POLICY "Users can view their own config"
   ON public.lead_score_config FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own config" ON public.lead_score_config;  -- [singu-idem]
 CREATE POLICY "Users can insert their own config"
   ON public.lead_score_config FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own config" ON public.lead_score_config;  -- [singu-idem]
 CREATE POLICY "Users can update their own config"
   ON public.lead_score_config FOR UPDATE
   USING (auth.uid() = user_id);
 
 -- Trigger updated_at
+DROP TRIGGER IF EXISTS update_lead_scores_updated_at ON public.lead_scores;  -- [singu-idem]
 CREATE TRIGGER update_lead_scores_updated_at
   BEFORE UPDATE ON public.lead_scores
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_lead_score_config_updated_at ON public.lead_score_config;  -- [singu-idem]
 CREATE TRIGGER update_lead_score_config_updated_at
   BEFORE UPDATE ON public.lead_score_config
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

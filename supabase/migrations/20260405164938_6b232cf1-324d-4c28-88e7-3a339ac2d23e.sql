@@ -5,24 +5,28 @@ DROP POLICY IF EXISTS "Users can manage their own DISC conversion metrics" ON pu
 DROP POLICY IF EXISTS "Users can view their own DISC conversion metrics" ON public.disc_conversion_metrics;
 
 -- Create granular policies
+DROP POLICY IF EXISTS "Users can view their own DISC conversion metrics" ON public.disc_conversion_metrics;  -- [singu-idem]
 CREATE POLICY "Users can view their own DISC conversion metrics"
 ON public.disc_conversion_metrics
 FOR SELECT
 TO authenticated
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own DISC conversion metrics" ON public.disc_conversion_metrics;  -- [singu-idem]
 CREATE POLICY "Users can insert their own DISC conversion metrics"
 ON public.disc_conversion_metrics
 FOR INSERT
 TO authenticated
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own DISC conversion metrics" ON public.disc_conversion_metrics;  -- [singu-idem]
 CREATE POLICY "Users can update their own DISC conversion metrics"
 ON public.disc_conversion_metrics
 FOR UPDATE
 TO authenticated
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own DISC conversion metrics" ON public.disc_conversion_metrics;  -- [singu-idem]
 CREATE POLICY "Users can delete their own DISC conversion metrics"
 ON public.disc_conversion_metrics
 FOR DELETE

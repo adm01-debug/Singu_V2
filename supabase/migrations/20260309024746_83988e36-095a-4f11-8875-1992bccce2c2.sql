@@ -1,6 +1,6 @@
 
 -- Tabela para armazenar resultados do módulo Lux
-CREATE TABLE public.lux_intelligence (
+CREATE TABLE IF NOT EXISTS public.lux_intelligence (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   entity_type text NOT NULL CHECK (entity_type IN ('contact', 'company')),
@@ -43,23 +43,28 @@ CREATE TABLE public.lux_intelligence (
 -- RLS
 ALTER TABLE public.lux_intelligence ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own lux intelligence" ON public.lux_intelligence;  -- [singu-idem]
 CREATE POLICY "Users can view their own lux intelligence"
   ON public.lux_intelligence FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own lux intelligence" ON public.lux_intelligence;  -- [singu-idem]
 CREATE POLICY "Users can insert their own lux intelligence"
   ON public.lux_intelligence FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own lux intelligence" ON public.lux_intelligence;  -- [singu-idem]
 CREATE POLICY "Users can update their own lux intelligence"
   ON public.lux_intelligence FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own lux intelligence" ON public.lux_intelligence;  -- [singu-idem]
 CREATE POLICY "Users can delete their own lux intelligence"
   ON public.lux_intelligence FOR DELETE
   USING (auth.uid() = user_id);
 
 -- Service role pode atualizar (para o webhook do n8n)
+DROP POLICY IF EXISTS "Service role can update lux intelligence" ON public.lux_intelligence;  -- [singu-idem]
 CREATE POLICY "Service role can update lux intelligence"
   ON public.lux_intelligence FOR UPDATE
   USING (true)

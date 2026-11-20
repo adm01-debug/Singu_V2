@@ -15,12 +15,14 @@ END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS tr_check_mbti_consistency ON public.contact_personality;
+DROP TRIGGER IF EXISTS tr_check_mbti_consistency ON public.contact_personality;  -- [singu-idem]
 CREATE TRIGGER tr_check_mbti_consistency 
 BEFORE INSERT OR UPDATE ON public.contact_personality
 FOR EACH ROW EXECUTE FUNCTION public.check_mbti_consistency();
 
 -- 2. Update Audit View to be more inclusive
-CREATE OR REPLACE VIEW public.v_contact_personality_audit AS
+DROP VIEW IF EXISTS public.v_contact_personality_audit CASCADE;  -- [singu-idem]
+CREATE VIEW public.v_contact_personality_audit AS
 SELECT 
     l.id,
     l.contact_id,

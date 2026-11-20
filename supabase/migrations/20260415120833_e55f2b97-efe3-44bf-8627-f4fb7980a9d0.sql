@@ -20,6 +20,7 @@ CREATE INDEX IF NOT EXISTS idx_schema_drift_unresolved ON public.schema_drift_al
 CREATE INDEX IF NOT EXISTS idx_schema_drift_entity ON public.schema_drift_alerts(entity_name, error_type);
 
 -- Admins can view all alerts
+DROP POLICY IF EXISTS "Admins can view schema drift alerts" ON public.schema_drift_alerts;  -- [singu-idem]
 CREATE POLICY "Admins can view schema drift alerts"
 ON public.schema_drift_alerts
 FOR SELECT
@@ -27,6 +28,7 @@ TO authenticated
 USING (public.has_role(auth.uid(), 'admin'));
 
 -- Admins can update (resolve) alerts
+DROP POLICY IF EXISTS "Admins can update schema drift alerts" ON public.schema_drift_alerts;  -- [singu-idem]
 CREATE POLICY "Admins can update schema drift alerts"
 ON public.schema_drift_alerts
 FOR UPDATE
@@ -34,6 +36,7 @@ TO authenticated
 USING (public.has_role(auth.uid(), 'admin'));
 
 -- Authenticated users can insert (edge function uses service role, but fallback)
+DROP POLICY IF EXISTS "System can insert schema drift alerts" ON public.schema_drift_alerts;  -- [singu-idem]
 CREATE POLICY "System can insert schema drift alerts"
 ON public.schema_drift_alerts
 FOR INSERT

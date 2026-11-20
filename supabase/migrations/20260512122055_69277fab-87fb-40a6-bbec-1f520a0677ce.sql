@@ -23,15 +23,18 @@ CREATE TABLE IF NOT EXISTS public.crm_objection_intelligence (
 ALTER TABLE public.crm_objection_intelligence ENABLE ROW LEVEL SECURITY;
 
 -- Políticas de Acesso
+DROP POLICY IF EXISTS "Usuários podem ver inteligência de objeções" ON public.crm_objection_intelligence;  -- [singu-idem]
 CREATE POLICY "Usuários podem ver inteligência de objeções"
 ON public.crm_objection_intelligence FOR SELECT
 USING (auth.role() = 'authenticated');
 
+DROP POLICY IF EXISTS "Usuários podem gerenciar inteligência de objeções" ON public.crm_objection_intelligence;  -- [singu-idem]
 CREATE POLICY "Usuários podem gerenciar inteligência de objeções"
 ON public.crm_objection_intelligence FOR ALL
 USING (auth.role() = 'authenticated');
 
 -- Trigger para updated_at
+DROP TRIGGER IF EXISTS update_crm_objection_intelligence_updated_at ON public.crm_objection_intelligence;  -- [singu-idem]
 CREATE TRIGGER update_crm_objection_intelligence_updated_at
 BEFORE UPDATE ON public.crm_objection_intelligence
 FOR EACH ROW

@@ -1,5 +1,5 @@
 -- Table for suggested rapport intel (approval flow)
-CREATE TABLE public.suggested_rapport_intel (
+CREATE TABLE IF NOT EXISTS public.suggested_rapport_intel (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
     user_id UUID NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE public.suggested_rapport_intel (
 );
 
 -- Table for contact family history (versioning)
-CREATE TABLE public.contact_family_history (
+CREATE TABLE IF NOT EXISTS public.contact_family_history (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
     user_id UUID NOT NULL,
@@ -25,6 +25,7 @@ ALTER TABLE public.suggested_rapport_intel ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_family_history ENABLE ROW LEVEL SECURITY;
 
 -- Policies for suggested_rapport_intel
+DROP POLICY IF EXISTS "Users can manage their suggested rapport" ON public.suggested_rapport_intel;  -- [singu-idem]
 CREATE POLICY "Users can manage their suggested rapport"
 ON public.suggested_rapport_intel
 FOR ALL
@@ -32,11 +33,13 @@ USING (auth.uid() = user_id)
 WITH CHECK (auth.uid() = user_id);
 
 -- Policies for contact_family_history
+DROP POLICY IF EXISTS "Users can view their contact family history" ON public.contact_family_history;  -- [singu-idem]
 CREATE POLICY "Users can view their contact family history"
 ON public.contact_family_history
 FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their contact family history" ON public.contact_family_history;  -- [singu-idem]
 CREATE POLICY "Users can insert their contact family history"
 ON public.contact_family_history
 FOR INSERT
@@ -62,11 +65,13 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Trigger on contacts table
+DROP TRIGGER IF EXISTS trg_record_family_history ON public.contacts;  -- [singu-idem]
 CREATE TRIGGER trg_record_family_history
 AFTER INSERT OR UPDATE ON public.contacts
 FOR EACH ROW EXECUTE FUNCTION public.record_family_history();
 
 -- Trigger for updated_at on suggested_rapport_intel
+DROP TRIGGER IF EXISTS update_suggested_rapport_updated_at ON public.suggested_rapport_intel;  -- [singu-idem]
 CREATE TRIGGER update_suggested_rapport_updated_at
 BEFORE UPDATE ON public.suggested_rapport_intel
 FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

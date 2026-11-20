@@ -17,18 +17,22 @@ CREATE INDEX IF NOT EXISTS idx_conv_search_cache_expires
 
 ALTER TABLE public.conversational_search_cache ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "users read own conv cache" ON public.conversational_search_cache;  -- [singu-idem]
 CREATE POLICY "users read own conv cache"
   ON public.conversational_search_cache FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "users insert own conv cache" ON public.conversational_search_cache;  -- [singu-idem]
 CREATE POLICY "users insert own conv cache"
   ON public.conversational_search_cache FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "users update own conv cache" ON public.conversational_search_cache;  -- [singu-idem]
 CREATE POLICY "users update own conv cache"
   ON public.conversational_search_cache FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "users delete own conv cache" ON public.conversational_search_cache;  -- [singu-idem]
 CREATE POLICY "users delete own conv cache"
   ON public.conversational_search_cache FOR DELETE
   USING (auth.uid() = user_id);

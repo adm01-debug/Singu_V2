@@ -1,5 +1,5 @@
 -- Create favorite_templates table to store user's favorite templates
-CREATE TABLE public.favorite_templates (
+CREATE TABLE IF NOT EXISTS public.favorite_templates (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   template_id TEXT NOT NULL,
@@ -11,16 +11,19 @@ CREATE TABLE public.favorite_templates (
 ALTER TABLE public.favorite_templates ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for user access
+DROP POLICY IF EXISTS "Users can view their own favorites" ON public.favorite_templates;  -- [singu-idem]
 CREATE POLICY "Users can view their own favorites" 
 ON public.favorite_templates 
 FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own favorites" ON public.favorite_templates;  -- [singu-idem]
 CREATE POLICY "Users can insert their own favorites" 
 ON public.favorite_templates 
 FOR INSERT 
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own favorites" ON public.favorite_templates;  -- [singu-idem]
 CREATE POLICY "Users can delete their own favorites" 
 ON public.favorite_templates 
 FOR DELETE 

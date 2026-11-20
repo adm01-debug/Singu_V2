@@ -18,19 +18,23 @@ CREATE TABLE IF NOT EXISTS public.notifications (
 
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "notifications_select_own" ON public.notifications;  -- [singu-idem]
 CREATE POLICY "notifications_select_own"
   ON public.notifications FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "notifications_insert_own" ON public.notifications;  -- [singu-idem]
 CREATE POLICY "notifications_insert_own"
   ON public.notifications FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "notifications_update_own" ON public.notifications;  -- [singu-idem]
 CREATE POLICY "notifications_update_own"
   ON public.notifications FOR UPDATE
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "notifications_delete_own" ON public.notifications;  -- [singu-idem]
 CREATE POLICY "notifications_delete_own"
   ON public.notifications FOR DELETE
   USING (auth.uid() = user_id);
@@ -63,19 +67,23 @@ CREATE TABLE IF NOT EXISTS public.tasks (
 
 ALTER TABLE public.tasks ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "tasks_select_own" ON public.tasks;  -- [singu-idem]
 CREATE POLICY "tasks_select_own"
   ON public.tasks FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "tasks_insert_own" ON public.tasks;  -- [singu-idem]
 CREATE POLICY "tasks_insert_own"
   ON public.tasks FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "tasks_update_own" ON public.tasks;  -- [singu-idem]
 CREATE POLICY "tasks_update_own"
   ON public.tasks FOR UPDATE
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "tasks_delete_own" ON public.tasks;  -- [singu-idem]
 CREATE POLICY "tasks_delete_own"
   ON public.tasks FOR DELETE
   USING (auth.uid() = user_id);
@@ -106,19 +114,23 @@ CREATE TABLE IF NOT EXISTS public.social_insights (
 
 ALTER TABLE public.social_insights ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "social_insights_select_own" ON public.social_insights;  -- [singu-idem]
 CREATE POLICY "social_insights_select_own"
   ON public.social_insights FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "social_insights_insert_own" ON public.social_insights;  -- [singu-idem]
 CREATE POLICY "social_insights_insert_own"
   ON public.social_insights FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "social_insights_update_own" ON public.social_insights;  -- [singu-idem]
 CREATE POLICY "social_insights_update_own"
   ON public.social_insights FOR UPDATE
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "social_insights_delete_own" ON public.social_insights;  -- [singu-idem]
 CREATE POLICY "social_insights_delete_own"
   ON public.social_insights FOR DELETE
   USING (auth.uid() = user_id);

@@ -1,6 +1,6 @@
 
 -- Tabela de regras de automação
-CREATE TABLE public.automation_rules (
+CREATE TABLE IF NOT EXISTS public.automation_rules (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   name TEXT NOT NULL,
@@ -28,28 +28,32 @@ CREATE TABLE public.automation_rules (
 
 ALTER TABLE public.automation_rules ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own automation rules" ON public.automation_rules;  -- [singu-idem]
 CREATE POLICY "Users can view their own automation rules"
   ON public.automation_rules FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own automation rules" ON public.automation_rules;  -- [singu-idem]
 CREATE POLICY "Users can create their own automation rules"
   ON public.automation_rules FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own automation rules" ON public.automation_rules;  -- [singu-idem]
 CREATE POLICY "Users can update their own automation rules"
   ON public.automation_rules FOR UPDATE
   TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own automation rules" ON public.automation_rules;  -- [singu-idem]
 CREATE POLICY "Users can delete their own automation rules"
   ON public.automation_rules FOR DELETE
   TO authenticated
   USING (auth.uid() = user_id);
 
 -- Log de execuções
-CREATE TABLE public.automation_logs (
+CREATE TABLE IF NOT EXISTS public.automation_logs (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   rule_id UUID NOT NULL REFERENCES public.automation_rules(id) ON DELETE CASCADE,
@@ -63,22 +67,26 @@ CREATE TABLE public.automation_logs (
 
 ALTER TABLE public.automation_logs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own automation logs" ON public.automation_logs;  -- [singu-idem]
 CREATE POLICY "Users can view their own automation logs"
   ON public.automation_logs FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own automation logs" ON public.automation_logs;  -- [singu-idem]
 CREATE POLICY "Users can create their own automation logs"
   ON public.automation_logs FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own automation logs" ON public.automation_logs;  -- [singu-idem]
 CREATE POLICY "Users can delete their own automation logs"
   ON public.automation_logs FOR DELETE
   TO authenticated
   USING (auth.uid() = user_id);
 
 -- Trigger para updated_at
+DROP TRIGGER IF EXISTS update_automation_rules_updated_at ON public.automation_rules;  -- [singu-idem]
 CREATE TRIGGER update_automation_rules_updated_at
   BEFORE UPDATE ON public.automation_rules
   FOR EACH ROW

@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS public.contact_automation_settings (
 ALTER TABLE public.contact_automation_settings ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can manage their own contact automation settings" ON public.contact_automation_settings;  -- [singu-idem]
 CREATE POLICY "Users can manage their own contact automation settings" 
 ON public.contact_automation_settings 
 FOR ALL 
@@ -28,6 +29,7 @@ ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP WITH TIME ZONE,
 ADD COLUMN IF NOT EXISTS completion_notes TEXT;
 
 -- Trigger to update updated_at
+DROP TRIGGER IF EXISTS update_contact_automation_settings_updated_at ON public.contact_automation_settings;  -- [singu-idem]
 CREATE TRIGGER update_contact_automation_settings_updated_at
 BEFORE UPDATE ON public.contact_automation_settings
 FOR EACH ROW

@@ -16,15 +16,20 @@ CREATE TABLE IF NOT EXISTS public.document_templates (
 
 ALTER TABLE public.document_templates ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users view own templates" ON public.document_templates;  -- [singu-idem]
 CREATE POLICY "Users view own templates" ON public.document_templates
   FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users insert own templates" ON public.document_templates;  -- [singu-idem]
 CREATE POLICY "Users insert own templates" ON public.document_templates
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users update own templates" ON public.document_templates;  -- [singu-idem]
 CREATE POLICY "Users update own templates" ON public.document_templates
   FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users delete own templates" ON public.document_templates;  -- [singu-idem]
 CREATE POLICY "Users delete own templates" ON public.document_templates
   FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_document_templates_updated_at ON public.document_templates;  -- [singu-idem]
 CREATE TRIGGER trg_document_templates_updated_at
   BEFORE UPDATE ON public.document_templates
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
@@ -60,19 +65,25 @@ CREATE TABLE IF NOT EXISTS public.document_signatures (
 
 ALTER TABLE public.document_signatures ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users view own signatures" ON public.document_signatures;  -- [singu-idem]
 CREATE POLICY "Users view own signatures" ON public.document_signatures
   FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users insert own signatures" ON public.document_signatures;  -- [singu-idem]
 CREATE POLICY "Users insert own signatures" ON public.document_signatures
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users update own signatures" ON public.document_signatures;  -- [singu-idem]
 CREATE POLICY "Users update own signatures" ON public.document_signatures
   FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users delete own signatures" ON public.document_signatures;  -- [singu-idem]
 CREATE POLICY "Users delete own signatures" ON public.document_signatures
   FOR DELETE USING (auth.uid() = user_id);
 
 -- Política pública para acesso via token (signatário externo)
+DROP POLICY IF EXISTS "Public can view by token" ON public.document_signatures;  -- [singu-idem]
 CREATE POLICY "Public can view by token" ON public.document_signatures
   FOR SELECT USING (true);
 
+DROP TRIGGER IF EXISTS trg_document_signatures_updated_at ON public.document_signatures;  -- [singu-idem]
 CREATE TRIGGER trg_document_signatures_updated_at
   BEFORE UPDATE ON public.document_signatures
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
@@ -95,6 +106,7 @@ CREATE TABLE IF NOT EXISTS public.document_views (
 
 ALTER TABLE public.document_views ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Owner views document_views via signature" ON public.document_views;  -- [singu-idem]
 CREATE POLICY "Owner views document_views via signature" ON public.document_views
   FOR SELECT USING (
     EXISTS (
@@ -103,6 +115,7 @@ CREATE POLICY "Owner views document_views via signature" ON public.document_view
     )
   );
 
+DROP POLICY IF EXISTS "Anyone can insert document_views" ON public.document_views;  -- [singu-idem]
 CREATE POLICY "Anyone can insert document_views" ON public.document_views
   FOR INSERT WITH CHECK (true);
 

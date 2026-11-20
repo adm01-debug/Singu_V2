@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS public.call_logs (
 ALTER TABLE public.call_logs ENABLE ROW LEVEL SECURITY;
 
 -- Políticas de acesso
+DROP POLICY IF EXISTS "Users can manage their own call logs" ON public.call_logs;  -- [singu-idem]
 CREATE POLICY "Users can manage their own call logs" 
 ON public.call_logs 
 FOR ALL 
@@ -94,6 +95,7 @@ $$ LANGUAGE plpgsql SET search_path = public;
 
 -- Trigger para atualizar métricas após nova interação
 DROP TRIGGER IF EXISTS tr_update_relationship_metrics ON public.interactions;
+DROP TRIGGER IF EXISTS tr_update_relationship_metrics ON public.interactions;  -- [singu-idem]
 CREATE TRIGGER tr_update_relationship_metrics
 AFTER INSERT OR UPDATE ON public.interactions
 FOR EACH ROW

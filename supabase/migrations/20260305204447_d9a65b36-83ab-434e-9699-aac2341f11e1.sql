@@ -1,6 +1,6 @@
 
 -- WhatsApp messages table for tracking message history and delivery status
-CREATE TABLE public.whatsapp_messages (
+CREATE TABLE IF NOT EXISTS public.whatsapp_messages (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   contact_id uuid REFERENCES public.contacts(id) ON DELETE SET NULL,
@@ -25,7 +25,7 @@ CREATE TABLE public.whatsapp_messages (
 );
 
 -- WhatsApp instances table for managing connected instances
-CREATE TABLE public.whatsapp_instances (
+CREATE TABLE IF NOT EXISTS public.whatsapp_instances (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   instance_name text NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE public.whatsapp_instances (
 );
 
 -- WhatsApp KPIs table for monitoring
-CREATE TABLE public.whatsapp_kpis (
+CREATE TABLE IF NOT EXISTS public.whatsapp_kpis (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   instance_name text NOT NULL,
@@ -67,8 +67,11 @@ ALTER TABLE public.whatsapp_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.whatsapp_instances ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.whatsapp_kpis ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can manage their own whatsapp_messages" ON public.whatsapp_messages;  -- [singu-idem]
 CREATE POLICY "Users can manage their own whatsapp_messages" ON public.whatsapp_messages FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can manage their own whatsapp_instances" ON public.whatsapp_instances;  -- [singu-idem]
 CREATE POLICY "Users can manage their own whatsapp_instances" ON public.whatsapp_instances FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can manage their own whatsapp_kpis" ON public.whatsapp_kpis;  -- [singu-idem]
 CREATE POLICY "Users can manage their own whatsapp_kpis" ON public.whatsapp_kpis FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Indexes for performance
@@ -79,4 +82,10 @@ CREATE INDEX IF NOT EXISTS idx_whatsapp_messages_timestamp ON public.whatsapp_me
 CREATE INDEX IF NOT EXISTS idx_whatsapp_instances_user ON public.whatsapp_instances(user_id);
 
 -- Enable realtime for messages
-ALTER PUBLICATION supabase_realtime ADD TABLE public.whatsapp_messages;
+-- [singu-idem] publication 'supabase_realtime' garante 'public.whatsapp_messages'
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND schemaname || '.' || tablename = 'public.whatsapp_messages') THEN
+        EXECUTE format('ALTER PUBLICATION supabase_realtime ADD TABLE public.whatsapp_messages');
+    END IF;
+END $$;

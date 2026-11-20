@@ -12,6 +12,7 @@ GRANT ALL ON public.cron_secrets TO service_role;
 ALTER TABLE public.cron_secrets ENABLE ROW LEVEL SECURITY;
 
 -- policy vazia (nenhum role authenticated/anon pode ler)
+DROP POLICY IF EXISTS "service role only" ON public.cron_secrets;  -- [singu-idem]
 CREATE POLICY "service role only"
   ON public.cron_secrets FOR ALL
   TO service_role

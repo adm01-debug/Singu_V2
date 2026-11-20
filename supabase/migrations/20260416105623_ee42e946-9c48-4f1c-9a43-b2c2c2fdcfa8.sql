@@ -1,5 +1,5 @@
 
-CREATE TABLE public.csat_surveys (
+CREATE TABLE IF NOT EXISTS public.csat_surveys (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE NOT NULL,
@@ -17,4 +17,5 @@ CREATE TABLE public.csat_surveys (
 );
 
 ALTER TABLE public.csat_surveys ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own csat surveys" ON public.csat_surveys;  -- [singu-idem]
 CREATE POLICY "Users manage own csat surveys" ON public.csat_surveys FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);

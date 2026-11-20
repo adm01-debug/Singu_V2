@@ -1,5 +1,5 @@
 -- Tabela de transições permitidas
-CREATE TABLE public.pipeline_stage_transitions (
+CREATE TABLE IF NOT EXISTS public.pipeline_stage_transitions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     pipeline_id UUID REFERENCES public.pipelines(id) ON DELETE CASCADE,
     from_stage_id UUID REFERENCES public.pipeline_stages(id) ON DELETE CASCADE,
@@ -13,10 +13,12 @@ CREATE TABLE public.pipeline_stage_transitions (
 ALTER TABLE public.pipeline_stage_transitions ENABLE ROW LEVEL SECURITY;
 
 -- Políticas
+DROP POLICY IF EXISTS "Permitir leitura de transições para todos os usuários autenticados" ON public.pipeline_stage_transitions;  -- [singu-idem]
 CREATE POLICY "Permitir leitura de transições para todos os usuários autenticados"
 ON public.pipeline_stage_transitions FOR SELECT
 USING (auth.uid() IS NOT NULL);
 
+DROP POLICY IF EXISTS "Apenas admins podem gerenciar transições" ON public.pipeline_stage_transitions;  -- [singu-idem]
 CREATE POLICY "Apenas admins podem gerenciar transições"
 ON public.pipeline_stage_transitions FOR ALL
 USING (public.has_role(auth.uid(), 'admin'));
@@ -54,6 +56,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Trigger na tabela deals
+DROP TRIGGER IF EXISTS tr_validate_deal_stage_transition ON public.deals;  -- [singu-idem]
 CREATE TRIGGER tr_validate_deal_stage_transition
 BEFORE UPDATE OF stage_id ON public.deals
 FOR EACH ROW

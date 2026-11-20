@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.notification_logs (
 ALTER TABLE public.notification_logs ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view their own notification logs" ON public.notification_logs;  -- [singu-idem]
 CREATE POLICY "Users can view their own notification logs" 
     ON public.notification_logs FOR SELECT 
     USING (auth.uid() = user_id);

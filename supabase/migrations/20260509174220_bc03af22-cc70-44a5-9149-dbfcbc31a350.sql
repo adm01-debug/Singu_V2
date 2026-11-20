@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.crm_automation_logs (
 );
 
 ALTER TABLE public.crm_automation_logs ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view their own automation logs" ON public.crm_automation_logs;  -- [singu-idem]
 CREATE POLICY "Users can view their own automation logs" ON public.crm_automation_logs FOR SELECT USING (auth.uid() = user_id);
 
 -- 2. Regras de Cadência Personalizáveis
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS public.crm_cadence_rules (
 );
 
 ALTER TABLE public.crm_cadence_rules ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can manage their own cadence rules" ON public.crm_cadence_rules;  -- [singu-idem]
 CREATE POLICY "Users can manage their own cadence rules" ON public.crm_cadence_rules FOR ALL USING (auth.uid() = user_id);
 
 -- 3. Overrides Manuais de Métricas (Explicabilidade e Controle)
@@ -46,6 +48,7 @@ CREATE TABLE IF NOT EXISTS public.crm_metric_overrides (
 );
 
 ALTER TABLE public.crm_metric_overrides ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can manage their own overrides" ON public.crm_metric_overrides;  -- [singu-idem]
 CREATE POLICY "Users can manage their own overrides" ON public.crm_metric_overrides FOR ALL USING (auth.uid() = user_id);
 
 -- 4. Função para Explicabilidade do Score (Calculada on-the-fly para o Front-End)

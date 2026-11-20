@@ -1,5 +1,5 @@
 -- 1) Tabela de automações por threshold
-CREATE TABLE public.lead_score_threshold_automations (
+CREATE TABLE IF NOT EXISTS public.lead_score_threshold_automations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL,
   name TEXT NOT NULL,
@@ -19,18 +19,24 @@ CREATE TABLE public.lead_score_threshold_automations (
 CREATE INDEX IF NOT EXISTS idx_lsta_user_active ON public.lead_score_threshold_automations(user_id, active);
 
 ALTER TABLE public.lead_score_threshold_automations ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "auto select own" ON public.lead_score_threshold_automations;  -- [singu-idem]
 CREATE POLICY "auto select own" ON public.lead_score_threshold_automations FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "auto insert own" ON public.lead_score_threshold_automations;  -- [singu-idem]
 CREATE POLICY "auto insert own" ON public.lead_score_threshold_automations FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "auto update own" ON public.lead_score_threshold_automations;  -- [singu-idem]
 CREATE POLICY "auto update own" ON public.lead_score_threshold_automations FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "auto delete own" ON public.lead_score_threshold_automations;  -- [singu-idem]
 CREATE POLICY "auto delete own" ON public.lead_score_threshold_automations FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_lsta_updated ON public.lead_score_threshold_automations;  -- [singu-idem]
 CREATE TRIGGER trg_lsta_updated BEFORE UPDATE ON public.lead_score_threshold_automations
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS trg_lsta_audit ON public.lead_score_threshold_automations;  -- [singu-idem]
 CREATE TRIGGER trg_lsta_audit AFTER INSERT OR UPDATE OR DELETE ON public.lead_score_threshold_automations
   FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- 2) Log de disparos
-CREATE TABLE public.lead_score_threshold_log (
+CREATE TABLE IF NOT EXISTS public.lead_score_threshold_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL,
   automation_id UUID NOT NULL REFERENCES public.lead_score_threshold_automations(id) ON DELETE CASCADE,
@@ -48,7 +54,9 @@ CREATE INDEX IF NOT EXISTS idx_lstl_automation ON public.lead_score_threshold_lo
 CREATE INDEX IF NOT EXISTS idx_lstl_contact ON public.lead_score_threshold_log(contact_id, fired_at DESC);
 
 ALTER TABLE public.lead_score_threshold_log ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "log select own" ON public.lead_score_threshold_log;  -- [singu-idem]
 CREATE POLICY "log select own" ON public.lead_score_threshold_log FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "log insert own" ON public.lead_score_threshold_log;  -- [singu-idem]
 CREATE POLICY "log insert own" ON public.lead_score_threshold_log FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- 3) Atualizar seed para incluir regras de eventos de sequência
@@ -146,6 +154,7 @@ END;
 $function$;
 
 DROP TRIGGER IF EXISTS tg_sequence_events_to_intent ON public.sequence_events;
+DROP TRIGGER IF EXISTS tg_sequence_events_to_intent ON public.sequence_events;  -- [singu-idem]
 CREATE TRIGGER tg_sequence_events_to_intent
 AFTER INSERT ON public.sequence_events
 FOR EACH ROW EXECUTE FUNCTION public.sequence_event_to_intent_signal();

@@ -1,5 +1,5 @@
 -- Create score_history table for persistent scores
-CREATE TABLE public.score_history (
+CREATE TABLE IF NOT EXISTS public.score_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -23,16 +23,19 @@ CREATE INDEX IF NOT EXISTS idx_score_history_composite ON public.score_history(c
 ALTER TABLE public.score_history ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
+DROP POLICY IF EXISTS "Users can view their own score history" ON public.score_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own score history"
 ON public.score_history
 FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own score history" ON public.score_history;  -- [singu-idem]
 CREATE POLICY "Users can insert their own score history"
 ON public.score_history
 FOR INSERT
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own score history" ON public.score_history;  -- [singu-idem]
 CREATE POLICY "Users can delete their own score history"
 ON public.score_history
 FOR DELETE

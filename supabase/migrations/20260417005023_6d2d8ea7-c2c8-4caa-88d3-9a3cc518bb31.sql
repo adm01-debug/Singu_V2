@@ -3,7 +3,7 @@
 -- =========================================
 
 -- 1. sales_playbooks
-CREATE TABLE public.sales_playbooks (
+CREATE TABLE IF NOT EXISTS public.sales_playbooks (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   name TEXT NOT NULL,
@@ -27,25 +27,31 @@ CREATE INDEX IF NOT EXISTS idx_sales_playbooks_tags ON public.sales_playbooks US
 
 ALTER TABLE public.sales_playbooks ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "playbooks_select_own" ON public.sales_playbooks;  -- [singu-idem]
 CREATE POLICY "playbooks_select_own" ON public.sales_playbooks
   FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "playbooks_insert_own" ON public.sales_playbooks;  -- [singu-idem]
 CREATE POLICY "playbooks_insert_own" ON public.sales_playbooks
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "playbooks_update_own" ON public.sales_playbooks;  -- [singu-idem]
 CREATE POLICY "playbooks_update_own" ON public.sales_playbooks
   FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "playbooks_delete_own" ON public.sales_playbooks;  -- [singu-idem]
 CREATE POLICY "playbooks_delete_own" ON public.sales_playbooks
   FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS update_sales_playbooks_updated_at ON public.sales_playbooks;  -- [singu-idem]
 CREATE TRIGGER update_sales_playbooks_updated_at
   BEFORE UPDATE ON public.sales_playbooks
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS audit_sales_playbooks ON public.sales_playbooks;  -- [singu-idem]
 CREATE TRIGGER audit_sales_playbooks
   AFTER INSERT OR UPDATE OR DELETE ON public.sales_playbooks
   FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- 2. battle_cards
-CREATE TABLE public.battle_cards (
+CREATE TABLE IF NOT EXISTS public.battle_cards (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   competitor_name TEXT NOT NULL,
@@ -70,25 +76,31 @@ CREATE INDEX IF NOT EXISTS idx_battle_cards_competitor ON public.battle_cards(us
 
 ALTER TABLE public.battle_cards ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "battle_cards_select_own" ON public.battle_cards;  -- [singu-idem]
 CREATE POLICY "battle_cards_select_own" ON public.battle_cards
   FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "battle_cards_insert_own" ON public.battle_cards;  -- [singu-idem]
 CREATE POLICY "battle_cards_insert_own" ON public.battle_cards
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "battle_cards_update_own" ON public.battle_cards;  -- [singu-idem]
 CREATE POLICY "battle_cards_update_own" ON public.battle_cards
   FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "battle_cards_delete_own" ON public.battle_cards;  -- [singu-idem]
 CREATE POLICY "battle_cards_delete_own" ON public.battle_cards
   FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS update_battle_cards_updated_at ON public.battle_cards;  -- [singu-idem]
 CREATE TRIGGER update_battle_cards_updated_at
   BEFORE UPDATE ON public.battle_cards
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS audit_battle_cards ON public.battle_cards;  -- [singu-idem]
 CREATE TRIGGER audit_battle_cards
   AFTER INSERT OR UPDATE OR DELETE ON public.battle_cards
   FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- 3. playbook_usage_log
-CREATE TABLE public.playbook_usage_log (
+CREATE TABLE IF NOT EXISTS public.playbook_usage_log (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   playbook_id UUID REFERENCES public.sales_playbooks(id) ON DELETE CASCADE,
@@ -106,8 +118,10 @@ CREATE INDEX IF NOT EXISTS idx_playbook_usage_battle_card ON public.playbook_usa
 
 ALTER TABLE public.playbook_usage_log ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "playbook_usage_select_own" ON public.playbook_usage_log;  -- [singu-idem]
 CREATE POLICY "playbook_usage_select_own" ON public.playbook_usage_log
   FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "playbook_usage_insert_own" ON public.playbook_usage_log;  -- [singu-idem]
 CREATE POLICY "playbook_usage_insert_own" ON public.playbook_usage_log
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
@@ -128,6 +142,7 @@ BEGIN
 END;
 $$;
 
+DROP TRIGGER IF EXISTS tg_playbook_usage_increment ON public.playbook_usage_log;  -- [singu-idem]
 CREATE TRIGGER tg_playbook_usage_increment
   AFTER INSERT ON public.playbook_usage_log
   FOR EACH ROW EXECUTE FUNCTION public.increment_playbook_usage();

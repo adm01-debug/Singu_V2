@@ -1,7 +1,8 @@
 -- Ação 7: Views públicas scoped para acesso anônimo seguro
 
 -- 7.1 CSAT public view (apenas via public_token, não expirado)
-CREATE OR REPLACE VIEW public.csat_surveys_public
+DROP VIEW IF EXISTS public.csat_surveys_public CASCADE;  -- [singu-idem]
+CREATE VIEW public.csat_surveys_public
 WITH (security_invoker = on) AS
 SELECT
   id,
@@ -18,7 +19,8 @@ WHERE public_token IS NOT NULL
 GRANT SELECT ON public.csat_surveys_public TO anon, authenticated;
 
 -- 7.2 Forms public view (apenas formulários publicados)
-CREATE OR REPLACE VIEW public.forms_public
+DROP VIEW IF EXISTS public.forms_public CASCADE;  -- [singu-idem]
+CREATE VIEW public.forms_public
 WITH (security_invoker = on) AS
 SELECT
   id,
@@ -34,7 +36,8 @@ WHERE is_published = true;
 GRANT SELECT ON public.forms_public TO anon, authenticated;
 
 -- 7.3 Landing pages public view (apenas páginas publicadas)
-CREATE OR REPLACE VIEW public.landing_pages_public
+DROP VIEW IF EXISTS public.landing_pages_public CASCADE;  -- [singu-idem]
+CREATE VIEW public.landing_pages_public
 WITH (security_invoker = on) AS
 SELECT
   id,
@@ -50,7 +53,8 @@ WHERE is_published = true;
 GRANT SELECT ON public.landing_pages_public TO anon, authenticated;
 
 -- 7.4 Document signatures public view (apenas via signature_token, não expirado/declinado)
-CREATE OR REPLACE VIEW public.document_signatures_public
+DROP VIEW IF EXISTS public.document_signatures_public CASCADE;  -- [singu-idem]
+CREATE VIEW public.document_signatures_public
 WITH (security_invoker = on) AS
 SELECT
   id,

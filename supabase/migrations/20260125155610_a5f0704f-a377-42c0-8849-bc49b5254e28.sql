@@ -4,7 +4,7 @@
 -- ==============================================
 
 -- 1. NEURAL A/B TESTING TABLE
-CREATE TABLE public.trigger_ab_tests (
+CREATE TABLE IF NOT EXISTS public.trigger_ab_tests (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -37,7 +37,7 @@ CREATE TABLE public.trigger_ab_tests (
 );
 
 -- 2. TRIGGER INTENSITY HISTORY TABLE
-CREATE TABLE public.trigger_intensity_history (
+CREATE TABLE IF NOT EXISTS public.trigger_intensity_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -50,7 +50,7 @@ CREATE TABLE public.trigger_intensity_history (
 );
 
 -- 3. TRIGGER CHANNEL EFFECTIVENESS TABLE
-CREATE TABLE public.trigger_channel_effectiveness (
+CREATE TABLE IF NOT EXISTS public.trigger_channel_effectiveness (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -67,7 +67,7 @@ CREATE TABLE public.trigger_channel_effectiveness (
 );
 
 -- 4. TRIGGER BUNDLES TABLE
-CREATE TABLE public.trigger_bundles (
+CREATE TABLE IF NOT EXISTS public.trigger_bundles (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   name TEXT NOT NULL,
@@ -92,84 +92,103 @@ ALTER TABLE public.trigger_channel_effectiveness ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.trigger_bundles ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for trigger_ab_tests
+DROP POLICY IF EXISTS "Users can view their own AB tests" ON public.trigger_ab_tests;  -- [singu-idem]
 CREATE POLICY "Users can view their own AB tests"
   ON public.trigger_ab_tests FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own AB tests" ON public.trigger_ab_tests;  -- [singu-idem]
 CREATE POLICY "Users can create their own AB tests"
   ON public.trigger_ab_tests FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own AB tests" ON public.trigger_ab_tests;  -- [singu-idem]
 CREATE POLICY "Users can update their own AB tests"
   ON public.trigger_ab_tests FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own AB tests" ON public.trigger_ab_tests;  -- [singu-idem]
 CREATE POLICY "Users can delete their own AB tests"
   ON public.trigger_ab_tests FOR DELETE
   USING (auth.uid() = user_id);
 
 -- RLS Policies for trigger_intensity_history
+DROP POLICY IF EXISTS "Users can view their own intensity history" ON public.trigger_intensity_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own intensity history"
   ON public.trigger_intensity_history FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own intensity history" ON public.trigger_intensity_history;  -- [singu-idem]
 CREATE POLICY "Users can create their own intensity history"
   ON public.trigger_intensity_history FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own intensity history" ON public.trigger_intensity_history;  -- [singu-idem]
 CREATE POLICY "Users can update their own intensity history"
   ON public.trigger_intensity_history FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own intensity history" ON public.trigger_intensity_history;  -- [singu-idem]
 CREATE POLICY "Users can delete their own intensity history"
   ON public.trigger_intensity_history FOR DELETE
   USING (auth.uid() = user_id);
 
 -- RLS Policies for trigger_channel_effectiveness
+DROP POLICY IF EXISTS "Users can view their own channel effectiveness" ON public.trigger_channel_effectiveness;  -- [singu-idem]
 CREATE POLICY "Users can view their own channel effectiveness"
   ON public.trigger_channel_effectiveness FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own channel effectiveness" ON public.trigger_channel_effectiveness;  -- [singu-idem]
 CREATE POLICY "Users can create their own channel effectiveness"
   ON public.trigger_channel_effectiveness FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own channel effectiveness" ON public.trigger_channel_effectiveness;  -- [singu-idem]
 CREATE POLICY "Users can update their own channel effectiveness"
   ON public.trigger_channel_effectiveness FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own channel effectiveness" ON public.trigger_channel_effectiveness;  -- [singu-idem]
 CREATE POLICY "Users can delete their own channel effectiveness"
   ON public.trigger_channel_effectiveness FOR DELETE
   USING (auth.uid() = user_id);
 
 -- RLS Policies for trigger_bundles
+DROP POLICY IF EXISTS "Users can view their own bundles" ON public.trigger_bundles;  -- [singu-idem]
 CREATE POLICY "Users can view their own bundles"
   ON public.trigger_bundles FOR SELECT
   USING (auth.uid() = user_id OR is_system_bundle = true);
 
+DROP POLICY IF EXISTS "Users can create their own bundles" ON public.trigger_bundles;  -- [singu-idem]
 CREATE POLICY "Users can create their own bundles"
   ON public.trigger_bundles FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own bundles" ON public.trigger_bundles;  -- [singu-idem]
 CREATE POLICY "Users can update their own bundles"
   ON public.trigger_bundles FOR UPDATE
   USING (auth.uid() = user_id AND is_system_bundle = false);
 
+DROP POLICY IF EXISTS "Users can delete their own bundles" ON public.trigger_bundles;  -- [singu-idem]
 CREATE POLICY "Users can delete their own bundles"
   ON public.trigger_bundles FOR DELETE
   USING (auth.uid() = user_id AND is_system_bundle = false);
 
 -- Triggers for updated_at
+DROP TRIGGER IF EXISTS update_trigger_ab_tests_updated_at ON public.trigger_ab_tests;  -- [singu-idem]
 CREATE TRIGGER update_trigger_ab_tests_updated_at
   BEFORE UPDATE ON public.trigger_ab_tests
   FOR EACH ROW
   EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_trigger_channel_effectiveness_updated_at ON public.trigger_channel_effectiveness;  -- [singu-idem]
 CREATE TRIGGER update_trigger_channel_effectiveness_updated_at
   BEFORE UPDATE ON public.trigger_channel_effectiveness
   FOR EACH ROW
   EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_trigger_bundles_updated_at ON public.trigger_bundles;  -- [singu-idem]
 CREATE TRIGGER update_trigger_bundles_updated_at
   BEFORE UPDATE ON public.trigger_bundles
   FOR EACH ROW

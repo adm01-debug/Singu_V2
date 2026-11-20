@@ -1,5 +1,5 @@
 -- Create metaprograms table
-CREATE TABLE public.contact_metaprograms (
+CREATE TABLE IF NOT EXISTS public.contact_metaprograms (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
     
@@ -32,10 +32,13 @@ CREATE TABLE public.contact_metaprograms (
 
 -- Enable RLS
 ALTER TABLE public.contact_metaprograms ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow all for authenticated users on metaprograms" ON public.contact_metaprograms;  -- [singu-idem]
 CREATE POLICY "Allow all for authenticated users on metaprograms" ON public.contact_metaprograms FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 -- Register for audit
+DROP TRIGGER IF EXISTS log_contact_metaprograms_change ON public.contact_metaprograms;  -- [singu-idem]
 CREATE TRIGGER log_contact_metaprograms_change AFTER UPDATE ON public.contact_metaprograms FOR EACH ROW EXECUTE FUNCTION public.log_behavioral_change();
 
 -- Update updated_at trigger
+DROP TRIGGER IF EXISTS update_contact_metaprograms_updated_at ON public.contact_metaprograms;  -- [singu-idem]
 CREATE TRIGGER update_contact_metaprograms_updated_at BEFORE UPDATE ON public.contact_metaprograms FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

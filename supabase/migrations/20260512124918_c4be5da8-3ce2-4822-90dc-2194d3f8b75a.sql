@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS public.contact_predictive_roadmap (
 ALTER TABLE public.contact_predictive_roadmap ENABLE ROW LEVEL SECURITY;
 
 -- Policies for predictive roadmap
+DROP POLICY IF EXISTS "Users can view predictive roadmap for their contacts" ON public.contact_predictive_roadmap;  -- [singu-idem]
 CREATE POLICY "Users can view predictive roadmap for their contacts"
     ON public.contact_predictive_roadmap
     FOR SELECT
@@ -26,6 +27,7 @@ CREATE POLICY "Users can view predictive roadmap for their contacts"
         )
     );
 
+DROP POLICY IF EXISTS "System can manage predictive roadmap" ON public.contact_predictive_roadmap;  -- [singu-idem]
 CREATE POLICY "System can manage predictive roadmap"
     ON public.contact_predictive_roadmap
     FOR ALL
@@ -47,6 +49,7 @@ CREATE TABLE IF NOT EXISTS public.crm_objection_intelligence (
 ALTER TABLE public.crm_objection_intelligence ENABLE ROW LEVEL SECURITY;
 
 -- Policies for objection intelligence
+DROP POLICY IF EXISTS "Users can view objection intelligence for their contacts" ON public.crm_objection_intelligence;  -- [singu-idem]
 CREATE POLICY "Users can view objection intelligence for their contacts"
     ON public.crm_objection_intelligence
     FOR SELECT
@@ -58,6 +61,7 @@ CREATE POLICY "Users can view objection intelligence for their contacts"
         )
     );
 
+DROP POLICY IF EXISTS "System can manage objection intelligence" ON public.crm_objection_intelligence;  -- [singu-idem]
 CREATE POLICY "System can manage objection intelligence"
     ON public.crm_objection_intelligence
     FOR ALL
@@ -73,6 +77,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS set_updated_at ON public.contact_predictive_roadmap;
+DROP TRIGGER IF EXISTS set_updated_at ON public.contact_predictive_roadmap;  -- [singu-idem]
 CREATE TRIGGER set_updated_at
     BEFORE UPDATE ON public.contact_predictive_roadmap
     FOR EACH ROW

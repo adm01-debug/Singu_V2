@@ -20,18 +20,22 @@ CREATE TABLE IF NOT EXISTS public.search_products_cache (
 
 ALTER TABLE public.search_products_cache ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users view own products cache" ON public.search_products_cache;  -- [singu-idem]
 CREATE POLICY "Users view own products cache"
   ON public.search_products_cache FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users insert own products cache" ON public.search_products_cache;  -- [singu-idem]
 CREATE POLICY "Users insert own products cache"
   ON public.search_products_cache FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users update own products cache" ON public.search_products_cache;  -- [singu-idem]
 CREATE POLICY "Users update own products cache"
   ON public.search_products_cache FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users delete own products cache" ON public.search_products_cache;  -- [singu-idem]
 CREATE POLICY "Users delete own products cache"
   ON public.search_products_cache FOR DELETE
   USING (auth.uid() = user_id);
@@ -42,6 +46,7 @@ CREATE INDEX IF NOT EXISTS idx_search_products_desc_trgm
   ON public.search_products_cache USING gin (description extensions.gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_search_products_user ON public.search_products_cache(user_id);
 
+DROP TRIGGER IF EXISTS trg_update_search_products_cache_updated_at ON public.search_products_cache;  -- [singu-idem]
 CREATE TRIGGER trg_update_search_products_cache_updated_at
   BEFORE UPDATE ON public.search_products_cache
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
@@ -113,14 +118,17 @@ CREATE TABLE IF NOT EXISTS public.semantic_search_cache (
 
 ALTER TABLE public.semantic_search_cache ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users view own search cache" ON public.semantic_search_cache;  -- [singu-idem]
 CREATE POLICY "Users view own search cache"
   ON public.semantic_search_cache FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users insert own search cache" ON public.semantic_search_cache;  -- [singu-idem]
 CREATE POLICY "Users insert own search cache"
   ON public.semantic_search_cache FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users delete own search cache" ON public.semantic_search_cache;  -- [singu-idem]
 CREATE POLICY "Users delete own search cache"
   ON public.semantic_search_cache FOR DELETE
   USING (auth.uid() = user_id);

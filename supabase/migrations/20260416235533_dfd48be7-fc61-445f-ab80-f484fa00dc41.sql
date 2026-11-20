@@ -3,7 +3,7 @@
 -- ============================================================
 
 -- 1) Catálogo de motivos
-CREATE TABLE public.win_loss_reasons (
+CREATE TABLE IF NOT EXISTS public.win_loss_reasons (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   category text NOT NULL CHECK (category IN ('price','product','timing','relationship','competition','budget','authority','need','other')),
@@ -20,15 +20,17 @@ CREATE INDEX IF NOT EXISTS idx_win_loss_reasons_user ON public.win_loss_reasons(
 
 ALTER TABLE public.win_loss_reasons ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "users manage own reasons" ON public.win_loss_reasons;  -- [singu-idem]
 CREATE POLICY "users manage own reasons" ON public.win_loss_reasons
   FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_win_loss_reasons_updated ON public.win_loss_reasons;  -- [singu-idem]
 CREATE TRIGGER trg_win_loss_reasons_updated
   BEFORE UPDATE ON public.win_loss_reasons
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- 2) Concorrentes
-CREATE TABLE public.competitors (
+CREATE TABLE IF NOT EXISTS public.competitors (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   name text NOT NULL,
@@ -48,15 +50,17 @@ CREATE INDEX IF NOT EXISTS idx_competitors_user ON public.competitors(user_id, a
 
 ALTER TABLE public.competitors ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "users manage own competitors" ON public.competitors;  -- [singu-idem]
 CREATE POLICY "users manage own competitors" ON public.competitors
   FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_competitors_updated ON public.competitors;  -- [singu-idem]
 CREATE TRIGGER trg_competitors_updated
   BEFORE UPDATE ON public.competitors
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- 3) Registros Win/Loss
-CREATE TABLE public.win_loss_records (
+CREATE TABLE IF NOT EXISTS public.win_loss_records (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   deal_id text NOT NULL,
@@ -81,19 +85,22 @@ CREATE INDEX IF NOT EXISTS idx_win_loss_records_primary_reason ON public.win_los
 
 ALTER TABLE public.win_loss_records ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "users manage own win_loss_records" ON public.win_loss_records;  -- [singu-idem]
 CREATE POLICY "users manage own win_loss_records" ON public.win_loss_records
   FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_win_loss_records_updated ON public.win_loss_records;  -- [singu-idem]
 CREATE TRIGGER trg_win_loss_records_updated
   BEFORE UPDATE ON public.win_loss_records
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS trg_win_loss_records_audit ON public.win_loss_records;  -- [singu-idem]
 CREATE TRIGGER trg_win_loss_records_audit
   AFTER INSERT OR UPDATE OR DELETE ON public.win_loss_records
   FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- 4) Insights (cache de IA)
-CREATE TABLE public.win_loss_insights (
+CREATE TABLE IF NOT EXISTS public.win_loss_insights (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   period_start timestamptz NOT NULL,
@@ -111,12 +118,15 @@ CREATE INDEX IF NOT EXISTS idx_win_loss_insights_user_generated ON public.win_lo
 
 ALTER TABLE public.win_loss_insights ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "users view own insights" ON public.win_loss_insights;  -- [singu-idem]
 CREATE POLICY "users view own insights" ON public.win_loss_insights
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "users insert own insights" ON public.win_loss_insights;  -- [singu-idem]
 CREATE POLICY "users insert own insights" ON public.win_loss_insights
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "users delete own insights" ON public.win_loss_insights;  -- [singu-idem]
 CREATE POLICY "users delete own insights" ON public.win_loss_insights
   FOR DELETE USING (auth.uid() = user_id);
 

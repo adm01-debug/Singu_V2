@@ -4,24 +4,28 @@
 DROP POLICY IF EXISTS "Admins can manage all roles" ON public.user_roles;
 
 -- Admin SELECT
+DROP POLICY IF EXISTS "Admins can view all roles" ON public.user_roles;  -- [singu-idem]
 CREATE POLICY "Admins can view all roles"
 ON public.user_roles FOR SELECT
 TO authenticated
 USING (public.has_role(auth.uid(), 'admin'));
 
 -- Admin INSERT (only admins can assign roles)
+DROP POLICY IF EXISTS "Admins can insert roles" ON public.user_roles;  -- [singu-idem]
 CREATE POLICY "Admins can insert roles"
 ON public.user_roles FOR INSERT
 TO authenticated
 WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
 -- Admin UPDATE
+DROP POLICY IF EXISTS "Admins can update roles" ON public.user_roles;  -- [singu-idem]
 CREATE POLICY "Admins can update roles"
 ON public.user_roles FOR UPDATE
 TO authenticated
 USING (public.has_role(auth.uid(), 'admin'));
 
 -- Admin DELETE
+DROP POLICY IF EXISTS "Admins can delete roles" ON public.user_roles;  -- [singu-idem]
 CREATE POLICY "Admins can delete roles"
 ON public.user_roles FOR DELETE
 TO authenticated
@@ -37,6 +41,7 @@ DROP POLICY IF EXISTS "Users can view their own subscriptions" ON public.push_su
 
 -- Create a restricted SELECT policy that still works (users need to verify their own subscriptions exist)
 -- But we'll create a view that omits the sensitive columns
+DROP POLICY IF EXISTS "Users can view own subscriptions limited" ON public.push_subscriptions;  -- [singu-idem]
 CREATE POLICY "Users can view own subscriptions limited"
 ON public.push_subscriptions FOR SELECT
 TO authenticated
@@ -44,7 +49,8 @@ USING (auth.uid() = user_id);
 
 -- Note: Column-level restrictions require a security definer view
 -- Create a safe view that excludes crypto keys
-CREATE OR REPLACE VIEW public.push_subscriptions_safe AS
+DROP VIEW IF EXISTS public.push_subscriptions_safe CASCADE;  -- [singu-idem]
+CREATE VIEW public.push_subscriptions_safe AS
 SELECT id, user_id, endpoint, created_at
 FROM public.push_subscriptions
 WHERE auth.uid() = user_id;

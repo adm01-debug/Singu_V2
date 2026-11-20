@@ -1,7 +1,7 @@
 
 -- ============= TABLES =============
 
-CREATE TABLE public.deal_rooms (
+CREATE TABLE IF NOT EXISTS public.deal_rooms (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL,
   deal_id TEXT,
@@ -27,7 +27,7 @@ CREATE INDEX IF NOT EXISTS idx_deal_rooms_status ON public.deal_rooms(user_id, s
 CREATE INDEX IF NOT EXISTS idx_deal_rooms_company ON public.deal_rooms(company_id);
 CREATE INDEX IF NOT EXISTS idx_deal_rooms_token ON public.deal_rooms(share_token);
 
-CREATE TABLE public.deal_room_milestones (
+CREATE TABLE IF NOT EXISTS public.deal_room_milestones (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   room_id UUID NOT NULL REFERENCES public.deal_rooms(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE public.deal_room_milestones (
 CREATE INDEX IF NOT EXISTS idx_dr_milestones_room ON public.deal_room_milestones(room_id, sort_order);
 CREATE INDEX IF NOT EXISTS idx_dr_milestones_user ON public.deal_room_milestones(user_id);
 
-CREATE TABLE public.deal_room_stakeholders (
+CREATE TABLE IF NOT EXISTS public.deal_room_stakeholders (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   room_id UUID NOT NULL REFERENCES public.deal_rooms(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE public.deal_room_stakeholders (
 CREATE INDEX IF NOT EXISTS idx_dr_stakeholders_room ON public.deal_room_stakeholders(room_id);
 CREATE INDEX IF NOT EXISTS idx_dr_stakeholders_user ON public.deal_room_stakeholders(user_id);
 
-CREATE TABLE public.deal_room_documents (
+CREATE TABLE IF NOT EXISTS public.deal_room_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   room_id UUID NOT NULL REFERENCES public.deal_rooms(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE public.deal_room_documents (
 CREATE INDEX IF NOT EXISTS idx_dr_docs_room ON public.deal_room_documents(room_id);
 CREATE INDEX IF NOT EXISTS idx_dr_docs_user ON public.deal_room_documents(user_id);
 
-CREATE TABLE public.deal_room_activities (
+CREATE TABLE IF NOT EXISTS public.deal_room_activities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   room_id UUID NOT NULL REFERENCES public.deal_rooms(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE public.deal_room_activities (
 );
 CREATE INDEX IF NOT EXISTS idx_dr_activities_room ON public.deal_room_activities(room_id, created_at DESC);
 
-CREATE TABLE public.deal_room_comments (
+CREATE TABLE IF NOT EXISTS public.deal_room_comments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   room_id UUID NOT NULL REFERENCES public.deal_rooms(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -110,19 +110,30 @@ ALTER TABLE public.deal_room_documents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.deal_room_activities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.deal_room_comments ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "owner_all_rooms" ON public.deal_rooms;  -- [singu-idem]
 CREATE POLICY "owner_all_rooms" ON public.deal_rooms FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "owner_all_ms" ON public.deal_room_milestones;  -- [singu-idem]
 CREATE POLICY "owner_all_ms" ON public.deal_room_milestones FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "owner_all_sh" ON public.deal_room_stakeholders;  -- [singu-idem]
 CREATE POLICY "owner_all_sh" ON public.deal_room_stakeholders FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "owner_all_docs" ON public.deal_room_documents;  -- [singu-idem]
 CREATE POLICY "owner_all_docs" ON public.deal_room_documents FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "owner_all_act" ON public.deal_room_activities;  -- [singu-idem]
 CREATE POLICY "owner_all_act" ON public.deal_room_activities FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "owner_all_cmt" ON public.deal_room_comments;  -- [singu-idem]
 CREATE POLICY "owner_all_cmt" ON public.deal_room_comments FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- ============= TRIGGERS =============
+DROP TRIGGER IF EXISTS tr_dr_rooms_updated ON public.deal_rooms;  -- [singu-idem]
 CREATE TRIGGER tr_dr_rooms_updated BEFORE UPDATE ON public.deal_rooms FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS tr_dr_ms_updated ON public.deal_room_milestones;  -- [singu-idem]
 CREATE TRIGGER tr_dr_ms_updated BEFORE UPDATE ON public.deal_room_milestones FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS tr_dr_sh_updated ON public.deal_room_stakeholders;  -- [singu-idem]
 CREATE TRIGGER tr_dr_sh_updated BEFORE UPDATE ON public.deal_room_stakeholders FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS tr_dr_rooms_audit ON public.deal_rooms;  -- [singu-idem]
 CREATE TRIGGER tr_dr_rooms_audit AFTER INSERT OR UPDATE OR DELETE ON public.deal_rooms FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
+DROP TRIGGER IF EXISTS tr_dr_ms_audit ON public.deal_room_milestones;  -- [singu-idem]
 CREATE TRIGGER tr_dr_ms_audit AFTER INSERT OR UPDATE OR DELETE ON public.deal_room_milestones FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- ============= RPCs =============
@@ -346,6 +357,7 @@ GRANT EXECUTE ON FUNCTION public.seed_deal_room(UUID, TEXT, TEXT, UUID, TEXT) TO
 
 -- ============= STORAGE POLICIES =============
 -- Bucket 'documents' already exists (private). Path convention: deal-rooms/{room_id}/{filename}
+DROP POLICY IF EXISTS "deal_rooms_owner_read_docs" ON storage.objects;  -- [singu-idem]
 CREATE POLICY "deal_rooms_owner_read_docs"
 ON storage.objects FOR SELECT
 USING (
@@ -358,6 +370,7 @@ USING (
   )
 );
 
+DROP POLICY IF EXISTS "deal_rooms_owner_write_docs" ON storage.objects;  -- [singu-idem]
 CREATE POLICY "deal_rooms_owner_write_docs"
 ON storage.objects FOR INSERT
 WITH CHECK (
@@ -370,6 +383,7 @@ WITH CHECK (
   )
 );
 
+DROP POLICY IF EXISTS "deal_rooms_owner_delete_docs" ON storage.objects;  -- [singu-idem]
 CREATE POLICY "deal_rooms_owner_delete_docs"
 ON storage.objects FOR DELETE
 USING (

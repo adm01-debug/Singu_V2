@@ -1,4 +1,4 @@
-CREATE TABLE public.email_thread_summaries (
+CREATE TABLE IF NOT EXISTS public.email_thread_summaries (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   thread_key TEXT NOT NULL,
@@ -16,18 +16,22 @@ CREATE TABLE public.email_thread_summaries (
 
 ALTER TABLE public.email_thread_summaries ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users view own email thread summaries" ON public.email_thread_summaries;  -- [singu-idem]
 CREATE POLICY "Users view own email thread summaries"
   ON public.email_thread_summaries FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users insert own email thread summaries" ON public.email_thread_summaries;  -- [singu-idem]
 CREATE POLICY "Users insert own email thread summaries"
   ON public.email_thread_summaries FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users update own email thread summaries" ON public.email_thread_summaries;  -- [singu-idem]
 CREATE POLICY "Users update own email thread summaries"
   ON public.email_thread_summaries FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users delete own email thread summaries" ON public.email_thread_summaries;  -- [singu-idem]
 CREATE POLICY "Users delete own email thread summaries"
   ON public.email_thread_summaries FOR DELETE
   USING (auth.uid() = user_id);
@@ -35,6 +39,7 @@ CREATE POLICY "Users delete own email thread summaries"
 CREATE INDEX IF NOT EXISTS idx_ets_user_thread ON public.email_thread_summaries (user_id, thread_key);
 CREATE INDEX IF NOT EXISTS idx_ets_user_created ON public.email_thread_summaries (user_id, created_at DESC);
 
+DROP TRIGGER IF EXISTS update_email_thread_summaries_updated_at ON public.email_thread_summaries;  -- [singu-idem]
 CREATE TRIGGER update_email_thread_summaries_updated_at
   BEFORE UPDATE ON public.email_thread_summaries
   FOR EACH ROW

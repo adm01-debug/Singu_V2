@@ -1,5 +1,5 @@
 
-CREATE TABLE public.sentiment_annotations (
+CREATE TABLE IF NOT EXISTS public.sentiment_annotations (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   created_by UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -16,30 +16,35 @@ CREATE INDEX IF NOT EXISTS idx_sentiment_annotations_contact_week
 
 ALTER TABLE public.sentiment_annotations ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Authenticated can view sentiment annotations" ON public.sentiment_annotations;  -- [singu-idem]
 CREATE POLICY "Authenticated can view sentiment annotations"
   ON public.sentiment_annotations
   FOR SELECT
   TO authenticated
   USING (true);
 
+DROP POLICY IF EXISTS "Users can create their own sentiment annotations" ON public.sentiment_annotations;  -- [singu-idem]
 CREATE POLICY "Users can create their own sentiment annotations"
   ON public.sentiment_annotations
   FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = created_by);
 
+DROP POLICY IF EXISTS "Owner or admin can update sentiment annotations" ON public.sentiment_annotations;  -- [singu-idem]
 CREATE POLICY "Owner or admin can update sentiment annotations"
   ON public.sentiment_annotations
   FOR UPDATE
   TO authenticated
   USING (auth.uid() = created_by OR public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Owner or admin can delete sentiment annotations" ON public.sentiment_annotations;  -- [singu-idem]
 CREATE POLICY "Owner or admin can delete sentiment annotations"
   ON public.sentiment_annotations
   FOR DELETE
   TO authenticated
   USING (auth.uid() = created_by OR public.has_role(auth.uid(), 'admin'));
 
+DROP TRIGGER IF EXISTS trg_sentiment_annotations_updated_at ON public.sentiment_annotations;  -- [singu-idem]
 CREATE TRIGGER trg_sentiment_annotations_updated_at
   BEFORE UPDATE ON public.sentiment_annotations
   FOR EACH ROW

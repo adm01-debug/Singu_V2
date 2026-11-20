@@ -1,14 +1,26 @@
 -- Add constraints to life_events
-ALTER TABLE public.life_events 
+-- [singu-idem] constraint 'check_event_type'
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'check_event_type') THEN
+        EXECUTE $sql$ ALTER TABLE public.life_events 
 ADD CONSTRAINT check_event_type 
-CHECK (event_type IN ('birthday', 'anniversary', 'promotion', 'travel', 'family', 'achievement', 'other'));
+CHECK (event_type IN ('birthday', 'anniversary', 'promotion', 'travel', 'family', 'achievement', 'other')) $sql$;
+    END IF;
+END $$;
 
-ALTER TABLE public.life_events 
+-- [singu-idem] constraint 'check_reminder_days'
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'check_reminder_days') THEN
+        EXECUTE $sql$ ALTER TABLE public.life_events 
 ADD CONSTRAINT check_reminder_days 
-CHECK (reminder_days_before >= 0);
+CHECK (reminder_days_before >= 0) $sql$;
+    END IF;
+END $$;
 
 -- Create history table
-CREATE TABLE public.life_events_history (
+CREATE TABLE IF NOT EXISTS public.life_events_history (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     life_event_id UUID NOT NULL,
     contact_id UUID NOT NULL,
@@ -27,6 +39,7 @@ CREATE TABLE public.life_events_history (
 ALTER TABLE public.life_events_history ENABLE ROW LEVEL SECURITY;
 
 -- Policies for history
+DROP POLICY IF EXISTS "Users can view their own life events history" ON public.life_events_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own life events history" 
 ON public.life_events_history FOR SELECT 
 USING (auth.uid() = user_id);
@@ -62,12 +75,14 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Create trigger
+DROP TRIGGER IF EXISTS tr_audit_life_events ON public.life_events;  -- [singu-idem]
 CREATE TRIGGER tr_audit_life_events
 AFTER INSERT OR UPDATE OR DELETE ON public.life_events
 FOR EACH ROW EXECUTE FUNCTION public.audit_life_events();
 
 -- Create view for audit
-CREATE OR REPLACE VIEW public.v_life_events_audit AS
+DROP VIEW IF EXISTS public.v_life_events_audit CASCADE;  -- [singu-idem]
+CREATE VIEW public.v_life_events_audit AS
 SELECT 
     h.id,
     h.life_event_id,

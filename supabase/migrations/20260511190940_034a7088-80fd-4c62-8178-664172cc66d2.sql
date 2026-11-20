@@ -1,5 +1,6 @@
 -- View for easy access to NLP profiles with calculated fields
-CREATE OR REPLACE VIEW public.vw_contacts_nlp AS
+DROP VIEW IF EXISTS public.vw_contacts_nlp CASCADE;  -- [singu-idem]
+CREATE VIEW public.vw_contacts_nlp AS
 WITH latest_vak AS (
     SELECT DISTINCT ON (contact_id) 
         contact_id,

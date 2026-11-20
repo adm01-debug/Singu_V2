@@ -10,37 +10,45 @@ GRANT SELECT ON public.deal_room_activities TO anon;
 GRANT INSERT ON public.deal_room_activities TO anon;
 
 -- 2) Policies públicas (share_enabled) — deal_rooms
+DROP POLICY IF EXISTS dr_public_read_shared ON public.deal_rooms;  -- [singu-idem]
 CREATE POLICY dr_public_read_shared ON public.deal_rooms
   FOR SELECT TO anon, authenticated
   USING (share_enabled = true);
 
+DROP POLICY IF EXISTS dr_public_increment_view ON public.deal_rooms;  -- [singu-idem]
 CREATE POLICY dr_public_increment_view ON public.deal_rooms
   FOR UPDATE TO anon, authenticated
   USING (share_enabled = true)
   WITH CHECK (share_enabled = true);
 
 -- 3) Policies públicas em tabelas filhas — SELECT quando sala pai compartilhada
+DROP POLICY IF EXISTS drm_public_read_shared ON public.deal_room_milestones;  -- [singu-idem]
 CREATE POLICY drm_public_read_shared ON public.deal_room_milestones
   FOR SELECT TO anon, authenticated
   USING (EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true));
 
+DROP POLICY IF EXISTS drs_public_read_shared ON public.deal_room_stakeholders;  -- [singu-idem]
 CREATE POLICY drs_public_read_shared ON public.deal_room_stakeholders
   FOR SELECT TO anon, authenticated
   USING (EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true));
 
+DROP POLICY IF EXISTS drd_public_read_shared ON public.deal_room_documents;  -- [singu-idem]
 CREATE POLICY drd_public_read_shared ON public.deal_room_documents
   FOR SELECT TO anon, authenticated
   USING (EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true));
 
+DROP POLICY IF EXISTS drc_public_read_shared ON public.deal_room_comments;  -- [singu-idem]
 CREATE POLICY drc_public_read_shared ON public.deal_room_comments
   FOR SELECT TO anon, authenticated
   USING (EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true));
 
+DROP POLICY IF EXISTS dra_public_read_shared ON public.deal_room_activities;  -- [singu-idem]
 CREATE POLICY dra_public_read_shared ON public.deal_room_activities
   FOR SELECT TO anon, authenticated
   USING (EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true));
 
 -- 4) Insert de "buyer view" pelo visitante em salas compartilhadas
+DROP POLICY IF EXISTS dra_public_insert_buyer_view ON public.deal_room_activities;  -- [singu-idem]
 CREATE POLICY dra_public_insert_buyer_view ON public.deal_room_activities
   FOR INSERT TO anon, authenticated
   WITH CHECK (

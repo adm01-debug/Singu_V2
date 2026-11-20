@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.whatsapp_transcriptions (
 ALTER TABLE public.whatsapp_transcriptions ENABLE ROW LEVEL SECURITY;
 
 -- Políticas para whatsapp_transcriptions
+DROP POLICY IF EXISTS "Users can view transcriptions of their messages" ON public.whatsapp_transcriptions;  -- [singu-idem]
 CREATE POLICY "Users can view transcriptions of their messages"
     ON public.whatsapp_transcriptions
     FOR SELECT
@@ -39,16 +40,19 @@ CREATE TABLE IF NOT EXISTS public.ai_recommendation_audit_logs (
 ALTER TABLE public.ai_recommendation_audit_logs ENABLE ROW LEVEL SECURITY;
 
 -- Políticas para ai_recommendation_audit_logs
+DROP POLICY IF EXISTS "Users can view their own recommendation audit logs" ON public.ai_recommendation_audit_logs;  -- [singu-idem]
 CREATE POLICY "Users can view their own recommendation audit logs"
     ON public.ai_recommendation_audit_logs
     FOR SELECT
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own recommendation audit logs" ON public.ai_recommendation_audit_logs;  -- [singu-idem]
 CREATE POLICY "Users can insert their own recommendation audit logs"
     ON public.ai_recommendation_audit_logs
     FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own recommendation audit logs" ON public.ai_recommendation_audit_logs;  -- [singu-idem]
 CREATE POLICY "Users can update their own recommendation audit logs"
     ON public.ai_recommendation_audit_logs
     FOR UPDATE

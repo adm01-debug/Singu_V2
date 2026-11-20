@@ -1,4 +1,5 @@
 
+DROP POLICY IF EXISTS "Admins read all regen queue" ON public.behavioral_profile_regen_queue;  -- [singu-idem]
 CREATE POLICY "Admins read all regen queue"
 ON public.behavioral_profile_regen_queue
 FOR SELECT

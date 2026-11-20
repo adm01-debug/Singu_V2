@@ -38,6 +38,7 @@ END;
 $$;
 
 -- Attach trigger
+DROP TRIGGER IF EXISTS trg_auto_reset_leads_daily ON public.sales_team_members;  -- [singu-idem]
 CREATE TRIGGER trg_auto_reset_leads_daily
 BEFORE UPDATE ON public.sales_team_members
 FOR EACH ROW

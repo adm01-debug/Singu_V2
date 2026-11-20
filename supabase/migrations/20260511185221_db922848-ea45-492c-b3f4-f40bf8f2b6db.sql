@@ -3,19 +3,23 @@ INSERT INTO storage.buckets (id, name, public) VALUES ('interaction-audios', 'in
 INSERT INTO storage.buckets (id, name, public) VALUES ('interaction-attachments', 'interaction-attachments', false) ON CONFLICT (id) DO NOTHING;
 
 -- Create policies for audio uploads
+DROP POLICY IF EXISTS "Users can upload interaction audios" ON storage.objects;  -- [singu-idem]
 CREATE POLICY "Users can upload interaction audios" 
 ON storage.objects FOR INSERT 
 WITH CHECK (bucket_id = 'interaction-audios' AND auth.uid()::text = (storage.foldername(name))[1]);
 
+DROP POLICY IF EXISTS "Users can view their interaction audios" ON storage.objects;  -- [singu-idem]
 CREATE POLICY "Users can view their interaction audios" 
 ON storage.objects FOR SELECT 
 USING (bucket_id = 'interaction-audios' AND auth.uid()::text = (storage.foldername(name))[1]);
 
 -- Create policies for attachment uploads
+DROP POLICY IF EXISTS "Users can upload interaction attachments" ON storage.objects;  -- [singu-idem]
 CREATE POLICY "Users can upload interaction attachments" 
 ON storage.objects FOR INSERT 
 WITH CHECK (bucket_id = 'interaction-attachments' AND auth.uid()::text = (storage.foldername(name))[1]);
 
+DROP POLICY IF EXISTS "Users can view their interaction attachments" ON storage.objects;  -- [singu-idem]
 CREATE POLICY "Users can view their interaction attachments" 
 ON storage.objects FOR SELECT 
 USING (bucket_id = 'interaction-attachments' AND auth.uid()::text = (storage.foldername(name))[1]);
@@ -35,6 +39,7 @@ CREATE TABLE IF NOT EXISTS public.interactions_audit (
 
 -- Enable RLS on audit table
 ALTER TABLE public.interactions_audit ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view their own interactions audit" ON public.interactions_audit;  -- [singu-idem]
 CREATE POLICY "Users can view their own interactions audit" ON public.interactions_audit
     FOR SELECT USING (auth.uid() = user_id);
 

@@ -16,16 +16,19 @@ CREATE TABLE IF NOT EXISTS public.contact_predictive_roadmap (
 ALTER TABLE public.contact_predictive_roadmap ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view roadmap for their contacts" ON public.contact_predictive_roadmap;  -- [singu-idem]
 CREATE POLICY "Users can view roadmap for their contacts" 
 ON public.contact_predictive_roadmap 
 FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert roadmap for their contacts" ON public.contact_predictive_roadmap;  -- [singu-idem]
 CREATE POLICY "Users can insert roadmap for their contacts" 
 ON public.contact_predictive_roadmap 
 FOR INSERT 
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update roadmap for their contacts" ON public.contact_predictive_roadmap;  -- [singu-idem]
 CREATE POLICY "Users can update roadmap for their contacts" 
 ON public.contact_predictive_roadmap 
 FOR UPDATE 

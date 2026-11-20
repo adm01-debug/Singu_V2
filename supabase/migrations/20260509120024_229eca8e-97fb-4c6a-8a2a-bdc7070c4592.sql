@@ -37,22 +37,28 @@ ALTER TABLE public.follow_up_approvals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.whatsapp_ingestion_logs ENABLE ROW LEVEL SECURITY;
 
 -- Policies for follow_up_approvals
+DROP POLICY IF EXISTS "Users can view their own follow-up approvals" ON public.follow_up_approvals;  -- [singu-idem]
 CREATE POLICY "Users can view their own follow-up approvals" 
 ON public.follow_up_approvals FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own follow-up approvals" ON public.follow_up_approvals;  -- [singu-idem]
 CREATE POLICY "Users can create their own follow-up approvals" 
 ON public.follow_up_approvals FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own follow-up approvals" ON public.follow_up_approvals;  -- [singu-idem]
 CREATE POLICY "Users can update their own follow-up approvals" 
 ON public.follow_up_approvals FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own follow-up approvals" ON public.follow_up_approvals;  -- [singu-idem]
 CREATE POLICY "Users can delete their own follow-up approvals" 
 ON public.follow_up_approvals FOR DELETE USING (auth.uid() = user_id);
 
 -- Policies for whatsapp_ingestion_logs
+DROP POLICY IF EXISTS "Users can view their own ingestion logs" ON public.whatsapp_ingestion_logs;  -- [singu-idem]
 CREATE POLICY "Users can view their own ingestion logs" 
 ON public.whatsapp_ingestion_logs FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own ingestion logs" ON public.whatsapp_ingestion_logs;  -- [singu-idem]
 CREATE POLICY "Users can insert their own ingestion logs" 
 ON public.whatsapp_ingestion_logs FOR INSERT WITH CHECK (auth.uid() = user_id);
 
@@ -66,6 +72,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS update_follow_up_approvals_updated_at ON public.follow_up_approvals;
+DROP TRIGGER IF EXISTS update_follow_up_approvals_updated_at ON public.follow_up_approvals;  -- [singu-idem]
 CREATE TRIGGER update_follow_up_approvals_updated_at
 BEFORE UPDATE ON public.follow_up_approvals
 FOR EACH ROW

@@ -1,5 +1,5 @@
 -- Create table for Emotional Intelligence (EQ) analysis history
-CREATE TABLE public.eq_analysis_history (
+CREATE TABLE IF NOT EXISTS public.eq_analysis_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -29,7 +29,7 @@ CREATE TABLE public.eq_analysis_history (
 );
 
 -- Create table for Cognitive Biases analysis history
-CREATE TABLE public.cognitive_bias_history (
+CREATE TABLE IF NOT EXISTS public.cognitive_bias_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -62,32 +62,38 @@ ALTER TABLE public.eq_analysis_history ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cognitive_bias_history ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for eq_analysis_history
+DROP POLICY IF EXISTS "Users can view their own EQ analysis history" ON public.eq_analysis_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own EQ analysis history" 
 ON public.eq_analysis_history 
 FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own EQ analysis history" ON public.eq_analysis_history;  -- [singu-idem]
 CREATE POLICY "Users can create their own EQ analysis history" 
 ON public.eq_analysis_history 
 FOR INSERT 
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own EQ analysis history" ON public.eq_analysis_history;  -- [singu-idem]
 CREATE POLICY "Users can delete their own EQ analysis history" 
 ON public.eq_analysis_history 
 FOR DELETE 
 USING (auth.uid() = user_id);
 
 -- RLS Policies for cognitive_bias_history
+DROP POLICY IF EXISTS "Users can view their own cognitive bias history" ON public.cognitive_bias_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own cognitive bias history" 
 ON public.cognitive_bias_history 
 FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own cognitive bias history" ON public.cognitive_bias_history;  -- [singu-idem]
 CREATE POLICY "Users can create their own cognitive bias history" 
 ON public.cognitive_bias_history 
 FOR INSERT 
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own cognitive bias history" ON public.cognitive_bias_history;  -- [singu-idem]
 CREATE POLICY "Users can delete their own cognitive bias history" 
 ON public.cognitive_bias_history 
 FOR DELETE 

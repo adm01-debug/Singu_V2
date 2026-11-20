@@ -14,5 +14,6 @@ CREATE TABLE IF NOT EXISTS public.crm_objection_intelligence (
 ALTER TABLE public.crm_objection_intelligence ENABLE ROW LEVEL SECURITY;
 
 -- Create policies (admin only or authenticated users for now)
+DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.crm_objection_intelligence;  -- [singu-idem]
 CREATE POLICY "Enable all for authenticated users" ON public.crm_objection_intelligence
     FOR ALL USING (auth.role() = 'authenticated');

@@ -4,7 +4,7 @@
 -- =====================================================
 
 -- 1. Table: disc_analysis_history - Complete history tracking
-CREATE TABLE public.disc_analysis_history (
+CREATE TABLE IF NOT EXISTS public.disc_analysis_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -45,7 +45,7 @@ CREATE TABLE public.disc_analysis_history (
 );
 
 -- 2. Table: disc_profile_config - Extended DISC profile configuration
-CREATE TABLE public.disc_profile_config (
+CREATE TABLE IF NOT EXISTS public.disc_profile_config (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   profile_type TEXT NOT NULL UNIQUE CHECK (profile_type IN ('D', 'I', 'S', 'C', 'DI', 'DC', 'ID', 'IS', 'SI', 'SC', 'CS', 'CD')),
   
@@ -90,7 +90,7 @@ CREATE TABLE public.disc_profile_config (
 );
 
 -- 3. Table: disc_conversion_metrics - Track sales outcomes by DISC profile
-CREATE TABLE public.disc_conversion_metrics (
+CREATE TABLE IF NOT EXISTS public.disc_conversion_metrics (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   
@@ -125,7 +125,7 @@ CREATE TABLE public.disc_conversion_metrics (
 );
 
 -- 4. Table: disc_communication_logs - Track how you communicate with each profile
-CREATE TABLE public.disc_communication_logs (
+CREATE TABLE IF NOT EXISTS public.disc_communication_logs (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -156,41 +156,50 @@ ALTER TABLE public.disc_conversion_metrics ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.disc_communication_logs ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for disc_analysis_history
+DROP POLICY IF EXISTS "Users can view their own DISC analysis history" ON public.disc_analysis_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own DISC analysis history"
   ON public.disc_analysis_history FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own DISC analysis" ON public.disc_analysis_history;  -- [singu-idem]
 CREATE POLICY "Users can create their own DISC analysis"
   ON public.disc_analysis_history FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own DISC analysis" ON public.disc_analysis_history;  -- [singu-idem]
 CREATE POLICY "Users can delete their own DISC analysis"
   ON public.disc_analysis_history FOR DELETE
   USING (auth.uid() = user_id);
 
 -- RLS Policies for disc_profile_config (public read, admin write)
+DROP POLICY IF EXISTS "Everyone can view DISC profile configs" ON public.disc_profile_config;  -- [singu-idem]
 CREATE POLICY "Everyone can view DISC profile configs"
   ON public.disc_profile_config FOR SELECT
   USING (true);
 
 -- RLS Policies for disc_conversion_metrics
+DROP POLICY IF EXISTS "Users can view their own DISC conversion metrics" ON public.disc_conversion_metrics;  -- [singu-idem]
 CREATE POLICY "Users can view their own DISC conversion metrics"
   ON public.disc_conversion_metrics FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can manage their own DISC conversion metrics" ON public.disc_conversion_metrics;  -- [singu-idem]
 CREATE POLICY "Users can manage their own DISC conversion metrics"
   ON public.disc_conversion_metrics FOR ALL
   USING (auth.uid() = user_id);
 
 -- RLS Policies for disc_communication_logs
+DROP POLICY IF EXISTS "Users can view their own DISC communication logs" ON public.disc_communication_logs;  -- [singu-idem]
 CREATE POLICY "Users can view their own DISC communication logs"
   ON public.disc_communication_logs FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own DISC communication logs" ON public.disc_communication_logs;  -- [singu-idem]
 CREATE POLICY "Users can create their own DISC communication logs"
   ON public.disc_communication_logs FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own DISC communication logs" ON public.disc_communication_logs;  -- [singu-idem]
 CREATE POLICY "Users can update their own DISC communication logs"
   ON public.disc_communication_logs FOR UPDATE
   USING (auth.uid() = user_id);

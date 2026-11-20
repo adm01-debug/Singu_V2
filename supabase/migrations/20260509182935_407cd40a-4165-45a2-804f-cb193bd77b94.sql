@@ -31,7 +31,11 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Triggers for behavioral tables
+DROP TRIGGER IF EXISTS log_contact_behavior_change ON public.contact_behavior;  -- [singu-idem]
 CREATE TRIGGER log_contact_behavior_change AFTER UPDATE ON public.contact_behavior FOR EACH ROW EXECUTE FUNCTION public.log_behavioral_change();
+DROP TRIGGER IF EXISTS log_contact_decision_change ON public.contact_decision_making;  -- [singu-idem]
 CREATE TRIGGER log_contact_decision_change AFTER UPDATE ON public.contact_decision_making FOR EACH ROW EXECUTE FUNCTION public.log_behavioral_change();
+DROP TRIGGER IF EXISTS log_contact_influence_change ON public.contact_influence;  -- [singu-idem]
 CREATE TRIGGER log_contact_influence_change AFTER UPDATE ON public.contact_influence FOR EACH ROW EXECUTE FUNCTION public.log_behavioral_change();
+DROP TRIGGER IF EXISTS log_contact_business_change ON public.contact_business_context;  -- [singu-idem]
 CREATE TRIGGER log_contact_business_change AFTER UPDATE ON public.contact_business_context FOR EACH ROW EXECUTE FUNCTION public.log_behavioral_change();

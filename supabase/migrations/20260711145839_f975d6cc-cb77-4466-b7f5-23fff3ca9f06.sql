@@ -63,6 +63,7 @@ END $$;
 
 -- brain_dominance_analysis: INSERT permissiva
 DROP POLICY IF EXISTS "Users can insert brain dominance analysis" ON public.brain_dominance_analysis;
+DROP POLICY IF EXISTS "Owner or admin can insert brain dominance analysis" ON public.brain_dominance_analysis;  -- [singu-idem]
 CREATE POLICY "Owner or admin can insert brain dominance analysis"
   ON public.brain_dominance_analysis
   FOR INSERT TO authenticated WITH CHECK (
@@ -72,6 +73,7 @@ CREATE POLICY "Owner or admin can insert brain dominance analysis"
 
 -- neuro_pnl_sessions: INSERT permissiva
 DROP POLICY IF EXISTS "Users can insert neuro pnl sessions" ON public.neuro_pnl_sessions;
+DROP POLICY IF EXISTS "Owner or admin can insert neuro pnl sessions" ON public.neuro_pnl_sessions;  -- [singu-idem]
 CREATE POLICY "Owner or admin can insert neuro pnl sessions"
   ON public.neuro_pnl_sessions
   FOR INSERT TO authenticated WITH CHECK (
@@ -82,11 +84,13 @@ CREATE POLICY "Owner or admin can insert neuro pnl sessions"
 -- whatsapp_messages_index: SELECT/INSERT permissivas
 DROP POLICY IF EXISTS "Users can view whatsapp messages index" ON public.whatsapp_messages_index;
 DROP POLICY IF EXISTS "Users can insert whatsapp messages index" ON public.whatsapp_messages_index;
+DROP POLICY IF EXISTS "Owner or admin can view whatsapp messages index" ON public.whatsapp_messages_index;  -- [singu-idem]
 CREATE POLICY "Owner or admin can view whatsapp messages index"
   ON public.whatsapp_messages_index FOR SELECT TO authenticated USING (
     EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = whatsapp_messages_index.contact_id AND c.user_id = auth.uid())
     OR public.has_role(auth.uid(), 'admin')
   );
+DROP POLICY IF EXISTS "Owner or admin can insert whatsapp messages index" ON public.whatsapp_messages_index;  -- [singu-idem]
 CREATE POLICY "Owner or admin can insert whatsapp messages index"
   ON public.whatsapp_messages_index FOR INSERT TO authenticated WITH CHECK (
     EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = whatsapp_messages_index.contact_id AND c.user_id = auth.uid())
@@ -95,6 +99,7 @@ CREATE POLICY "Owner or admin can insert whatsapp messages index"
 
 -- social_sync_queue: SELECT permissiva
 DROP POLICY IF EXISTS "Users can view their own social sync queue" ON public.social_sync_queue;
+DROP POLICY IF EXISTS "Owner or admin can view social sync queue" ON public.social_sync_queue;  -- [singu-idem]
 CREATE POLICY "Owner or admin can view social sync queue"
   ON public.social_sync_queue FOR SELECT TO authenticated USING (
     EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = social_sync_queue.contact_id AND c.user_id = auth.uid())
@@ -103,6 +108,7 @@ CREATE POLICY "Owner or admin can view social sync queue"
 
 -- psychographic_audit_log: SELECT permissiva
 DROP POLICY IF EXISTS "Users can view psychographic audit logs" ON public.psychographic_audit_log;
+DROP POLICY IF EXISTS "Owner or admin can view psychographic audit logs" ON public.psychographic_audit_log;  -- [singu-idem]
 CREATE POLICY "Owner or admin can view psychographic audit logs"
   ON public.psychographic_audit_log FOR SELECT TO authenticated USING (
     EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = psychographic_audit_log.contact_id AND c.user_id = auth.uid())
@@ -111,10 +117,12 @@ CREATE POLICY "Owner or admin can view psychographic audit logs"
 
 -- suggested_life_events: policy "Service role can manage" com TO public true/true — escopa para service_role
 DROP POLICY IF EXISTS "Service role can manage suggested life events" ON public.suggested_life_events;
+DROP POLICY IF EXISTS "Service role can manage suggested life events" ON public.suggested_life_events;  -- [singu-idem]
 CREATE POLICY "Service role can manage suggested life events"
   ON public.suggested_life_events FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 -- INSERT owner policy (nao existia INSERT owner-side)
+DROP POLICY IF EXISTS "Users can insert their own suggested life events" ON public.suggested_life_events;  -- [singu-idem]
 CREATE POLICY "Users can insert their own suggested life events"
   ON public.suggested_life_events FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id OR public.has_role(auth.uid(), 'admin'));
@@ -123,19 +131,23 @@ CREATE POLICY "Users can insert their own suggested life events"
 DROP POLICY IF EXISTS "Users can view their own suggested life events" ON public.suggested_life_events;
 DROP POLICY IF EXISTS "Users can update their own suggested life events" ON public.suggested_life_events;
 DROP POLICY IF EXISTS "Users can delete their own suggested life events" ON public.suggested_life_events;
+DROP POLICY IF EXISTS "Owner or admin can view suggested life events" ON public.suggested_life_events;  -- [singu-idem]
 CREATE POLICY "Owner or admin can view suggested life events"
   ON public.suggested_life_events FOR SELECT TO authenticated
   USING (auth.uid() = user_id OR public.has_role(auth.uid(), 'admin'));
+DROP POLICY IF EXISTS "Owner or admin can update suggested life events" ON public.suggested_life_events;  -- [singu-idem]
 CREATE POLICY "Owner or admin can update suggested life events"
   ON public.suggested_life_events FOR UPDATE TO authenticated
   USING (auth.uid() = user_id OR public.has_role(auth.uid(), 'admin'))
   WITH CHECK (auth.uid() = user_id OR public.has_role(auth.uid(), 'admin'));
+DROP POLICY IF EXISTS "Owner or admin can delete suggested life events" ON public.suggested_life_events;  -- [singu-idem]
 CREATE POLICY "Owner or admin can delete suggested life events"
   ON public.suggested_life_events FOR DELETE TO authenticated
   USING (auth.uid() = user_id OR public.has_role(auth.uid(), 'admin'));
 
 -- sentiment_annotations: SELECT true -> escopar (autor ou admin, ou dono do contato)
 DROP POLICY IF EXISTS "Authenticated can view sentiment annotations" ON public.sentiment_annotations;
+DROP POLICY IF EXISTS "Owner or admin can view sentiment annotations" ON public.sentiment_annotations;  -- [singu-idem]
 CREATE POLICY "Owner or admin can view sentiment annotations"
   ON public.sentiment_annotations FOR SELECT TO authenticated USING (
     auth.uid() = created_by

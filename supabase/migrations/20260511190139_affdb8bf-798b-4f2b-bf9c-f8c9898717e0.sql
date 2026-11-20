@@ -17,14 +17,17 @@ CREATE TABLE IF NOT EXISTS public.reframing_analysis (
 ALTER TABLE public.reframing_analysis ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view their own reframing analysis" ON public.reframing_analysis;  -- [singu-idem]
 CREATE POLICY "Users can view their own reframing analysis" 
 ON public.reframing_analysis FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own reframing analysis" ON public.reframing_analysis;  -- [singu-idem]
 CREATE POLICY "Users can create their own reframing analysis" 
 ON public.reframing_analysis FOR INSERT 
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own reframing analysis" ON public.reframing_analysis;  -- [singu-idem]
 CREATE POLICY "Users can update their own reframing analysis" 
 ON public.reframing_analysis FOR UPDATE 
 USING (auth.uid() = user_id);
@@ -44,6 +47,7 @@ CREATE TABLE IF NOT EXISTS public.reframing_analysis_audit (
 
 -- Enable RLS on audit
 ALTER TABLE public.reframing_analysis_audit ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view their own reframing audit" ON public.reframing_analysis_audit;  -- [singu-idem]
 CREATE POLICY "Users can view their own reframing audit" ON public.reframing_analysis_audit
     FOR SELECT USING (auth.uid() = user_id);
 

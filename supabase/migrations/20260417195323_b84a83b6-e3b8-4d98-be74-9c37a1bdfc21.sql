@@ -2,7 +2,7 @@
 -- Causa raiz: salespro (20260321125738) recria notification_preferences com shape legado
 -- (id/email/frequency); shape final de producao e user_id. Drop+recreate para alinhar.
 DROP TABLE IF EXISTS public.notification_preferences CASCADE;
-CREATE TABLE public.notification_preferences (
+CREATE TABLE IF NOT EXISTS public.notification_preferences (
   user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   quiet_hours_start SMALLINT NOT NULL DEFAULT 22 CHECK (quiet_hours_start BETWEEN 0 AND 23),
   quiet_hours_end SMALLINT NOT NULL DEFAULT 8 CHECK (quiet_hours_end BETWEEN 0 AND 23),
@@ -16,8 +16,11 @@ CREATE TABLE public.notification_preferences (
 );
 
 ALTER TABLE public.notification_preferences ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "self read prefs" ON public.notification_preferences;  -- [singu-idem]
 CREATE POLICY "self read prefs" ON public.notification_preferences FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "self upsert prefs" ON public.notification_preferences;  -- [singu-idem]
 CREATE POLICY "self upsert prefs" ON public.notification_preferences FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "self update prefs" ON public.notification_preferences;  -- [singu-idem]
 CREATE POLICY "self update prefs" ON public.notification_preferences FOR UPDATE USING (auth.uid() = user_id);
 
 -- Notifications queue
@@ -50,12 +53,22 @@ CREATE INDEX IF NOT EXISTS idx_smart_notif_bundle ON public.smart_notifications 
 CREATE INDEX IF NOT EXISTS idx_smart_notif_urgency ON public.smart_notifications (user_id, urgency, status);
 
 ALTER TABLE public.smart_notifications ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "self read notif" ON public.smart_notifications;  -- [singu-idem]
 CREATE POLICY "self read notif" ON public.smart_notifications FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "self insert notif" ON public.smart_notifications;  -- [singu-idem]
 CREATE POLICY "self insert notif" ON public.smart_notifications FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "self update notif" ON public.smart_notifications;  -- [singu-idem]
 CREATE POLICY "self update notif" ON public.smart_notifications FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "self delete notif" ON public.smart_notifications;  -- [singu-idem]
 CREATE POLICY "self delete notif" ON public.smart_notifications FOR DELETE USING (auth.uid() = user_id);
 
-ALTER PUBLICATION supabase_realtime ADD TABLE public.smart_notifications;
+-- [singu-idem] publication 'supabase_realtime' garante 'public.smart_notifications'
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND schemaname || '.' || tablename = 'public.smart_notifications') THEN
+        EXECUTE format('ALTER PUBLICATION supabase_realtime ADD TABLE public.smart_notifications');
+    END IF;
+END $$;
 
 -- RPC manual enqueue with bundle dedup (6h window)
 CREATE OR REPLACE FUNCTION public.enqueue_smart_notification(
@@ -148,11 +161,13 @@ END;
 $$;
 
 DROP TRIGGER IF EXISTS trg_notify_critical_next_action ON public.contact_next_actions;
+DROP TRIGGER IF EXISTS trg_notify_critical_next_action ON public.contact_next_actions;  -- [singu-idem]
 CREATE TRIGGER trg_notify_critical_next_action
 AFTER INSERT OR UPDATE OF urgency ON public.contact_next_actions
 FOR EACH ROW EXECUTE FUNCTION public.notify_critical_next_action();
 
 -- Trigger updated_at on prefs
+DROP TRIGGER IF EXISTS trg_notif_prefs_updated_at ON public.notification_preferences;  -- [singu-idem]
 CREATE TRIGGER trg_notif_prefs_updated_at
 BEFORE UPDATE ON public.notification_preferences
 FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

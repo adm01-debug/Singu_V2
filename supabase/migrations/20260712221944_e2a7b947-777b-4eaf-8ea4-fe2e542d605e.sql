@@ -1,5 +1,5 @@
 
-CREATE TABLE public.contact_analytical_profile_versions (
+CREATE TABLE IF NOT EXISTS public.contact_analytical_profile_versions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -26,12 +26,14 @@ GRANT ALL ON public.contact_analytical_profile_versions TO service_role;
 
 ALTER TABLE public.contact_analytical_profile_versions ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users read own profile versions" ON public.contact_analytical_profile_versions;  -- [singu-idem]
 CREATE POLICY "Users read own profile versions"
 ON public.contact_analytical_profile_versions
 FOR SELECT
 TO authenticated
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users insert own profile versions" ON public.contact_analytical_profile_versions;  -- [singu-idem]
 CREATE POLICY "Users insert own profile versions"
 ON public.contact_analytical_profile_versions
 FOR INSERT

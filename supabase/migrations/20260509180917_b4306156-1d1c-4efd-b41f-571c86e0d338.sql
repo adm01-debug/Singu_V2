@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS public.crm_relationship_audit_logs (
 ALTER TABLE public.crm_relationship_audit_logs ENABLE ROW LEVEL SECURITY;
 
 -- Políticas de acesso
+DROP POLICY IF EXISTS "Users can view their own relationship audit logs" ON public.crm_relationship_audit_logs;  -- [singu-idem]
 CREATE POLICY "Users can view their own relationship audit logs" 
 ON public.crm_relationship_audit_logs 
 FOR SELECT 
@@ -53,6 +54,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_log_contact_relationship_changes ON public.contacts;  -- [singu-idem]
 CREATE TRIGGER trigger_log_contact_relationship_changes
 AFTER UPDATE ON public.contacts
 FOR EACH ROW

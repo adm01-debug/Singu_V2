@@ -1,5 +1,5 @@
 -- Create compatibility_alerts table
-CREATE TABLE public.compatibility_alerts (
+CREATE TABLE IF NOT EXISTS public.compatibility_alerts (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -14,7 +14,7 @@ CREATE TABLE public.compatibility_alerts (
 );
 
 -- Create compatibility_settings table to store user thresholds
-CREATE TABLE public.compatibility_settings (
+CREATE TABLE IF NOT EXISTS public.compatibility_settings (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL UNIQUE,
   alert_threshold INTEGER NOT NULL DEFAULT 50,
@@ -30,36 +30,44 @@ ALTER TABLE public.compatibility_alerts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.compatibility_settings ENABLE ROW LEVEL SECURITY;
 
 -- RLS policies for compatibility_alerts
+DROP POLICY IF EXISTS "Users can view their own compatibility alerts" ON public.compatibility_alerts;  -- [singu-idem]
 CREATE POLICY "Users can view their own compatibility alerts"
 ON public.compatibility_alerts FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own compatibility alerts" ON public.compatibility_alerts;  -- [singu-idem]
 CREATE POLICY "Users can create their own compatibility alerts"
 ON public.compatibility_alerts FOR INSERT
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own compatibility alerts" ON public.compatibility_alerts;  -- [singu-idem]
 CREATE POLICY "Users can update their own compatibility alerts"
 ON public.compatibility_alerts FOR UPDATE
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own compatibility alerts" ON public.compatibility_alerts;  -- [singu-idem]
 CREATE POLICY "Users can delete their own compatibility alerts"
 ON public.compatibility_alerts FOR DELETE
 USING (auth.uid() = user_id);
 
 -- RLS policies for compatibility_settings
+DROP POLICY IF EXISTS "Users can view their own compatibility settings" ON public.compatibility_settings;  -- [singu-idem]
 CREATE POLICY "Users can view their own compatibility settings"
 ON public.compatibility_settings FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own compatibility settings" ON public.compatibility_settings;  -- [singu-idem]
 CREATE POLICY "Users can create their own compatibility settings"
 ON public.compatibility_settings FOR INSERT
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own compatibility settings" ON public.compatibility_settings;  -- [singu-idem]
 CREATE POLICY "Users can update their own compatibility settings"
 ON public.compatibility_settings FOR UPDATE
 USING (auth.uid() = user_id);
 
 -- Create trigger for updated_at
+DROP TRIGGER IF EXISTS update_compatibility_settings_updated_at ON public.compatibility_settings;  -- [singu-idem]
 CREATE TRIGGER update_compatibility_settings_updated_at
 BEFORE UPDATE ON public.compatibility_settings
 FOR EACH ROW

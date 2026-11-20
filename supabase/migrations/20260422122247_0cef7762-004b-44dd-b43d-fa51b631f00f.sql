@@ -1,4 +1,4 @@
-CREATE TABLE public.ficha360_conversation_summaries (
+CREATE TABLE IF NOT EXISTS public.ficha360_conversation_summaries (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   contact_id uuid NOT NULL,
@@ -16,14 +16,17 @@ CREATE INDEX IF NOT EXISTS idx_f360_summ_hash ON public.ficha360_conversation_su
 
 ALTER TABLE public.ficha360_conversation_summaries ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users see own f360 summaries" ON public.ficha360_conversation_summaries;  -- [singu-idem]
 CREATE POLICY "Users see own f360 summaries"
   ON public.ficha360_conversation_summaries FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users insert own f360 summaries" ON public.ficha360_conversation_summaries;  -- [singu-idem]
 CREATE POLICY "Users insert own f360 summaries"
   ON public.ficha360_conversation_summaries FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users delete own f360 summaries" ON public.ficha360_conversation_summaries;  -- [singu-idem]
 CREATE POLICY "Users delete own f360 summaries"
   ON public.ficha360_conversation_summaries FOR DELETE
   USING (auth.uid() = user_id);

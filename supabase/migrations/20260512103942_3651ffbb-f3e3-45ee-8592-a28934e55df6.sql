@@ -13,20 +13,24 @@ CREATE TABLE IF NOT EXISTS public.contact_report_overrides (
 ALTER TABLE public.contact_report_overrides ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view report overrides" ON public.contact_report_overrides;  -- [singu-idem]
 CREATE POLICY "Users can view report overrides" 
     ON public.contact_report_overrides FOR SELECT 
     USING (auth.uid() IS NOT NULL);
 
+DROP POLICY IF EXISTS "Users can insert report overrides" ON public.contact_report_overrides;  -- [singu-idem]
 CREATE POLICY "Users can insert report overrides" 
     ON public.contact_report_overrides FOR INSERT 
     WITH CHECK (auth.uid() IS NOT NULL);
 
+DROP POLICY IF EXISTS "Users can update report overrides" ON public.contact_report_overrides;  -- [singu-idem]
 CREATE POLICY "Users can update report overrides" 
     ON public.contact_report_overrides FOR UPDATE 
     USING (auth.uid() IS NOT NULL)
     WITH CHECK (auth.uid() IS NOT NULL);
 
 -- Create trigger for updated_at
+DROP TRIGGER IF EXISTS update_contact_report_overrides_updated_at ON public.contact_report_overrides;  -- [singu-idem]
 CREATE TRIGGER update_contact_report_overrides_updated_at
     BEFORE UPDATE ON public.contact_report_overrides
     FOR EACH ROW

@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.contact_time_analysis_audit (
 
 -- Enable RLS on audit table
 ALTER TABLE public.contact_time_analysis_audit ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view their own analysis audit" ON public.contact_time_analysis_audit;  -- [singu-idem]
 CREATE POLICY "Users can view their own analysis audit" ON public.contact_time_analysis_audit
     FOR SELECT USING (auth.uid() = user_id);
 

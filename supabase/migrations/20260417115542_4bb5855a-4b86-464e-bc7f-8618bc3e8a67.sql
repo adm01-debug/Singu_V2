@@ -1,5 +1,5 @@
 -- ============ EMAIL VERIFICATIONS ============
-CREATE TABLE public.email_verifications (
+CREATE TABLE IF NOT EXISTS public.email_verifications (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -23,15 +23,20 @@ CREATE INDEX IF NOT EXISTS idx_email_verif_contact ON public.email_verifications
 CREATE INDEX IF NOT EXISTS idx_email_verif_email ON public.email_verifications(lower(email));
 CREATE INDEX IF NOT EXISTS idx_email_verif_verified_at ON public.email_verifications(verified_at DESC);
 ALTER TABLE public.email_verifications ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "ev_select_own" ON public.email_verifications;  -- [singu-idem]
 CREATE POLICY "ev_select_own" ON public.email_verifications FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "ev_insert_own" ON public.email_verifications;  -- [singu-idem]
 CREATE POLICY "ev_insert_own" ON public.email_verifications FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "ev_update_own" ON public.email_verifications;  -- [singu-idem]
 CREATE POLICY "ev_update_own" ON public.email_verifications FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "ev_delete_own" ON public.email_verifications;  -- [singu-idem]
 CREATE POLICY "ev_delete_own" ON public.email_verifications FOR DELETE USING (auth.uid() = user_id);
+DROP TRIGGER IF EXISTS trg_ev_updated_at ON public.email_verifications;  -- [singu-idem]
 CREATE TRIGGER trg_ev_updated_at BEFORE UPDATE ON public.email_verifications
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ============ PHONE VALIDATIONS ============
-CREATE TABLE public.phone_validations (
+CREATE TABLE IF NOT EXISTS public.phone_validations (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -55,15 +60,20 @@ CREATE INDEX IF NOT EXISTS idx_phone_val_contact ON public.phone_validations(con
 CREATE INDEX IF NOT EXISTS idx_phone_val_e164 ON public.phone_validations(phone_e164);
 CREATE INDEX IF NOT EXISTS idx_phone_val_validated_at ON public.phone_validations(validated_at DESC);
 ALTER TABLE public.phone_validations ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "pv_select_own" ON public.phone_validations;  -- [singu-idem]
 CREATE POLICY "pv_select_own" ON public.phone_validations FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "pv_insert_own" ON public.phone_validations;  -- [singu-idem]
 CREATE POLICY "pv_insert_own" ON public.phone_validations FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "pv_update_own" ON public.phone_validations;  -- [singu-idem]
 CREATE POLICY "pv_update_own" ON public.phone_validations FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "pv_delete_own" ON public.phone_validations;  -- [singu-idem]
 CREATE POLICY "pv_delete_own" ON public.phone_validations FOR DELETE USING (auth.uid() = user_id);
+DROP TRIGGER IF EXISTS trg_pv_updated_at ON public.phone_validations;  -- [singu-idem]
 CREATE TRIGGER trg_pv_updated_at BEFORE UPDATE ON public.phone_validations
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ============ EMAIL FINDER RESULTS ============
-CREATE TABLE public.email_finder_results (
+CREATE TABLE IF NOT EXISTS public.email_finder_results (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE SET NULL,
@@ -83,15 +93,20 @@ CREATE INDEX IF NOT EXISTS idx_efr_user ON public.email_finder_results(user_id);
 CREATE INDEX IF NOT EXISTS idx_efr_contact ON public.email_finder_results(contact_id);
 CREATE INDEX IF NOT EXISTS idx_efr_domain ON public.email_finder_results(domain);
 ALTER TABLE public.email_finder_results ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "efr_select_own" ON public.email_finder_results;  -- [singu-idem]
 CREATE POLICY "efr_select_own" ON public.email_finder_results FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "efr_insert_own" ON public.email_finder_results;  -- [singu-idem]
 CREATE POLICY "efr_insert_own" ON public.email_finder_results FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "efr_update_own" ON public.email_finder_results;  -- [singu-idem]
 CREATE POLICY "efr_update_own" ON public.email_finder_results FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "efr_delete_own" ON public.email_finder_results;  -- [singu-idem]
 CREATE POLICY "efr_delete_own" ON public.email_finder_results FOR DELETE USING (auth.uid() = user_id);
+DROP TRIGGER IF EXISTS trg_efr_updated_at ON public.email_finder_results;  -- [singu-idem]
 CREATE TRIGGER trg_efr_updated_at BEFORE UPDATE ON public.email_finder_results
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ============ PEOPLE INTELLIGENCE EVENTS ============
-CREATE TABLE public.people_intelligence_events (
+CREATE TABLE IF NOT EXISTS public.people_intelligence_events (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -109,8 +124,11 @@ CREATE INDEX IF NOT EXISTS idx_pie_user ON public.people_intelligence_events(use
 CREATE INDEX IF NOT EXISTS idx_pie_contact ON public.people_intelligence_events(contact_id, detected_at DESC);
 CREATE INDEX IF NOT EXISTS idx_pie_type ON public.people_intelligence_events(event_type);
 ALTER TABLE public.people_intelligence_events ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "pie_select_own" ON public.people_intelligence_events;  -- [singu-idem]
 CREATE POLICY "pie_select_own" ON public.people_intelligence_events FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "pie_insert_own" ON public.people_intelligence_events;  -- [singu-idem]
 CREATE POLICY "pie_insert_own" ON public.people_intelligence_events FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "pie_delete_own" ON public.people_intelligence_events;  -- [singu-idem]
 CREATE POLICY "pie_delete_own" ON public.people_intelligence_events FOR DELETE USING (auth.uid() = user_id);
 
 -- ============ TRIGGER: detecta mudanças em contacts ============
@@ -153,6 +171,7 @@ END;
 $$;
 
 DROP TRIGGER IF EXISTS trg_detect_contact_intel ON public.contacts;
+DROP TRIGGER IF EXISTS trg_detect_contact_intel ON public.contacts;  -- [singu-idem]
 CREATE TRIGGER trg_detect_contact_intel
 AFTER UPDATE ON public.contacts
 FOR EACH ROW

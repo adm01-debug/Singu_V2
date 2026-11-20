@@ -1,5 +1,5 @@
 -- Create personality frameworks table
-CREATE TABLE public.contact_personality (
+CREATE TABLE IF NOT EXISTS public.contact_personality (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
     
@@ -35,10 +35,13 @@ CREATE TABLE public.contact_personality (
 
 -- Enable RLS
 ALTER TABLE public.contact_personality ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow all for authenticated users on personality" ON public.contact_personality;  -- [singu-idem]
 CREATE POLICY "Allow all for authenticated users on personality" ON public.contact_personality FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 -- Register for audit
+DROP TRIGGER IF EXISTS log_contact_personality_change ON public.contact_personality;  -- [singu-idem]
 CREATE TRIGGER log_contact_personality_change AFTER UPDATE ON public.contact_personality FOR EACH ROW EXECUTE FUNCTION public.log_behavioral_change();
 
 -- Update updated_at trigger
+DROP TRIGGER IF EXISTS update_contact_personality_updated_at ON public.contact_personality;  -- [singu-idem]
 CREATE TRIGGER update_contact_personality_updated_at BEFORE UPDATE ON public.contact_personality FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

@@ -1,6 +1,6 @@
 
 -- Custom Fields definitions
-CREATE TABLE public.custom_fields (
+CREATE TABLE IF NOT EXISTS public.custom_fields (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   entity_type TEXT NOT NULL CHECK (entity_type IN ('contact', 'company', 'deal')),
@@ -16,7 +16,7 @@ CREATE TABLE public.custom_fields (
 );
 
 -- Custom Field Values
-CREATE TABLE public.custom_field_values (
+CREATE TABLE IF NOT EXISTS public.custom_field_values (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   custom_field_id UUID REFERENCES public.custom_fields(id) ON DELETE CASCADE NOT NULL,
@@ -31,5 +31,7 @@ CREATE TABLE public.custom_field_values (
 ALTER TABLE public.custom_fields ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.custom_field_values ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users manage own custom fields" ON public.custom_fields;  -- [singu-idem]
 CREATE POLICY "Users manage own custom fields" ON public.custom_fields FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users manage own custom field values" ON public.custom_field_values;  -- [singu-idem]
 CREATE POLICY "Users manage own custom field values" ON public.custom_field_values FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);

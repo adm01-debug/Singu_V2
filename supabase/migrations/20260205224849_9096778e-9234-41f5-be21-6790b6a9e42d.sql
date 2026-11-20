@@ -1,6 +1,6 @@
 
 -- Tabela para parentes/familiares dos contatos
-CREATE TABLE public.contact_relatives (
+CREATE TABLE IF NOT EXISTS public.contact_relatives (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL,
@@ -25,23 +25,28 @@ CREATE INDEX IF NOT EXISTS idx_contact_relatives_contact_id ON public.contact_re
 -- RLS
 ALTER TABLE public.contact_relatives ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own contact_relatives" ON public.contact_relatives;  -- [singu-idem]
 CREATE POLICY "Users can view their own contact_relatives"
   ON public.contact_relatives FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own contact_relatives" ON public.contact_relatives;  -- [singu-idem]
 CREATE POLICY "Users can insert their own contact_relatives"
   ON public.contact_relatives FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own contact_relatives" ON public.contact_relatives;  -- [singu-idem]
 CREATE POLICY "Users can update their own contact_relatives"
   ON public.contact_relatives FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own contact_relatives" ON public.contact_relatives;  -- [singu-idem]
 CREATE POLICY "Users can delete their own contact_relatives"
   ON public.contact_relatives FOR DELETE
   USING (auth.uid() = user_id);
 
 -- Trigger para updated_at
+DROP TRIGGER IF EXISTS update_contact_relatives_updated_at ON public.contact_relatives;  -- [singu-idem]
 CREATE TRIGGER update_contact_relatives_updated_at
   BEFORE UPDATE ON public.contact_relatives
   FOR EACH ROW
