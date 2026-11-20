@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "2020e5bc7e5afc31ccff8d3d078972482663ba32",
+  "sha": "b5d24314be213a1cbefbb0cbb3367833bc2b69e2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 19:50 UTC",
-  "files_total": 3990,
+  "generated_at": "2026-11-20 21:10 UTC",
+  "files_total": 3991,
   "code_files": 3518,
   "code_lines": 473835
  },
@@ -305650,10 +305650,19 @@
   }
  },
  "git": {
-  "sha": "2020e5bc7e5afc31ccff8d3d078972482663ba32",
+  "sha": "b5d24314be213a1cbefbb0cbb3367833bc2b69e2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "b5d2431",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "docs(auditoria): linha de base do estado real em docs/pendencias (#289)",
+    "files": [
+     "docs/pendencias/_linha-de-base.md"
+    ]
+   },
    {
     "sha": "2020e5b",
     "date": "2026-11-20",
@@ -306725,18 +306734,6 @@
      "src/hooks/useTerritories.ts",
      "src/pages/Territorios.tsx"
     ]
-   },
-   {
-    "sha": "15e29cf",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)",
-    "files": [
-     "src/components/company-detail/CompanyBenchmarkRadar.tsx",
-     "src/components/company-detail/CompanyInsightsTab.tsx",
-     "src/components/company-detail/QuickFollowUpGenerator.tsx",
-     "src/hooks/useCompanyIntelligence.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306785,6 +306782,10 @@
     2
    ],
    [
+    "docs/pendencias/_linha-de-base.md",
+    1
+   ],
+   [
     "src/pages/insights/InsightsContent.tsx",
     1
    ],
@@ -306814,10 +306815,6 @@
    ],
    [
     "supabase/migrations/20260111010914_d0b0ab7c-31d9-4a05-99c5-bbd77320bdd8.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260111011309_3cf6eaa0-1797-40c2-88e3-ecf1283452bd.sql",
     1
    ]
   ]
