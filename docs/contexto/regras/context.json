@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "df6e5c636b7517205e871e22fc6605d674b46da1",
+  "sha": "3e6b290ffe7f96da4705006477a258239fc7a976",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 16:37 UTC",
+  "generated_at": "2026-11-20 17:39 UTC",
   "files_total": 3990,
   "code_files": 3518,
   "code_lines": 473788
  },
  "version": "1.3.2",
- "facts_hash": "7eeb7323d0935f30",
+ "facts_hash": "a3d0b5dfcc4052be",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -57,7 +57,7 @@
     "in": "package.json"
    },
    "react-router-dom": {
-    "version": "^6.30.6",
+    "version": "^7.18.6",
     "role": "Roteamento (React Router)",
     "in": "package.json"
    },
@@ -97,7 +97,7 @@
     "in": "package.json"
    },
    "vitest": {
-    "version": "^3.2.7",
+    "version": "^5.1.1",
     "role": "Testes Vitest",
     "in": "package.json"
    }
@@ -305619,10 +305619,22 @@
   }
  },
  "git": {
-  "sha": "df6e5c636b7517205e871e22fc6605d674b46da1",
+  "sha": "3e6b290ffe7f96da4705006477a258239fc7a976",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "3e6b290",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "fix(deps): bump react-router 7.18.6 e vitest 5.1.1 (alerts dependabot) (#286)",
+    "files": [
+     "package-lock.json",
+     "package.json",
+     "src/app/AppProviders.tsx",
+     "src/test/setup.ts"
+    ]
+   },
    {
     "sha": "df6e5c6",
     "date": "2026-11-20",
@@ -306695,16 +306707,6 @@
      "src/components/gamification/QuotaStatusWidget.tsx",
      "src/hooks/useGamification.ts"
     ]
-   },
-   {
-    "sha": "185ce78",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)",
-    "files": [
-     "src/hooks/__tests__/create-task-contract.test.ts",
-     "src/hooks/useTasks.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306753,6 +306755,22 @@
     2
    ],
    [
+    "package-lock.json",
+    1
+   ],
+   [
+    "package.json",
+    1
+   ],
+   [
+    "src/app/AppProviders.tsx",
+    1
+   ],
+   [
+    "src/test/setup.ts",
+    1
+   ],
+   [
     "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql",
     1
    ],
@@ -306770,22 +306788,6 @@
    ],
    [
     "supabase/migrations/20260111014845_9ce8adb5-376f-4e58-aa9e-da013720eb79.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260111024043_59300762-e425-469a-9e34-35f8ba7ca1e3.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260111130846_783060ff-715f-4433-b3e4-1c0ef5409533.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260111162422_931d8ea9-50f0-4793-b167-51ddb862bc64.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260111164638_38eff8c4-2221-4951-83a6-fd9f3bef0574.sql",
     1
    ]
   ]
