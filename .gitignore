@@ -63,3 +63,6 @@ __pycache__/
 /.tools/graphify/local-state/
 /.tools/graphify/output/
 /.tools/graphify/.venv/
+
+# Supabase CLI — artefatos de link local
+supabase/.temp/
