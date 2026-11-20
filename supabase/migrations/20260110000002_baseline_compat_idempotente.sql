@@ -2526,6 +2526,43 @@ ALTER TABLE public.alerts
   ADD COLUMN IF NOT EXISTS read_at timestamptz,
   ADD COLUMN IF NOT EXISTS updated_at timestamptz DEFAULT now();
 -- ============ PUSH_SUBSCRIPTIONS ============
+-- PROTETOR (preview): o banco do preview tem migrations antigas registradas
+-- sem aplicar; push_subscriptions pode nao existir quando a 0002 roda.
+-- Recria o schema identico ao da 20260109173224 apenas quando ausente
+-- (idempotente: no replay completo a tabela ja existe -> no-op).
+DO $push_subscriptions_protector$
+BEGIN
+  IF to_regclass('public.push_subscriptions') IS NULL THEN
+    CREATE TABLE public.push_subscriptions (
+      id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+      user_id UUID NOT NULL,
+      endpoint TEXT NOT NULL,
+      p256dh TEXT NOT NULL,
+      auth TEXT NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+      updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+      UNIQUE(user_id, endpoint)
+    );
+    ALTER TABLE public.push_subscriptions ENABLE ROW LEVEL SECURITY;
+    CREATE POLICY "Users can view their own subscriptions"
+      ON public.push_subscriptions FOR SELECT
+      USING (auth.uid() = user_id);
+    CREATE POLICY "Users can create their own subscriptions"
+      ON public.push_subscriptions FOR INSERT
+      WITH CHECK (auth.uid() = user_id);
+    CREATE POLICY "Users can update their own subscriptions"
+      ON public.push_subscriptions FOR UPDATE
+      USING (auth.uid() = user_id);
+    CREATE POLICY "Users can delete their own subscriptions"
+      ON public.push_subscriptions FOR DELETE
+      USING (auth.uid() = user_id);
+    CREATE TRIGGER update_push_subscriptions_updated_at
+      BEFORE UPDATE ON public.push_subscriptions
+      FOR EACH ROW
+      EXECUTE FUNCTION public.update_updated_at_column();
+  END IF;
+END $push_subscriptions_protector$;
+
 ALTER TABLE public.push_subscriptions
   ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
 -- ============ CONSTRAINTS PREEXISTENTES ============
