@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `62b6b2a183` · branch `main` · 2026-11-19 18:34 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0418f640eb` · branch `main` · 2026-11-20 11:03 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -49,7 +49,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `contact_rapport_strategy` | Owner or admin can select contact_rapport_strategy | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
 | `contact_rapport_strategy` | Owner or admin can update contact_rapport_strategy | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
 | `follow_up_approvals_v2` | Users can manage their own follow-up approvals v2 | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `neuro_behavioral_history` | Users can insert their own contact's neuro history | INSERT | public | permissive | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))` | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))` |
+| `neuro_behavioral_history` | Users can insert their own contact's neuro history | INSERT | public | permissive | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid()))))` | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))` |
 | `whatsapp_messages` | Users can manage their own whatsapp messages | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `migration_password_reset_log` | mprl_admin_read | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
 | `profiles` | Users can view their own profile | SELECT | public | permissive | `((select auth.uid()) = id)` |  |
@@ -77,68 +77,18 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `alerts` | Users can delete their own alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `activities` | Users can view their own activities | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `activities` | Users can insert their own activities | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `push_subscriptions` | Users can create their own subscriptions | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `push_subscriptions` | Users can update their own subscriptions | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `push_subscriptions` | Users can delete their own subscriptions | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `trigger_usage_history` | Users can view their own trigger usage history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `trigger_usage_history` | Users can insert their own trigger usage history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `trigger_usage_history` | Users can update their own trigger usage history | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `trigger_usage_history` | Users can delete their own trigger usage history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `favorite_templates` | Users can view their own favorites | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `favorite_templates` | Users can insert their own favorites | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `favorite_templates` | Users can delete their own favorites | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `vak_analysis_history` | Users can view their own VAK analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `vak_analysis_history` | Users can insert their own VAK analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `vak_analysis_history` | Users can delete their own VAK analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `metaprogram_analysis` | Users can view their own metaprogram analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `metaprogram_analysis` | Users can create their own metaprogram analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `metaprogram_analysis` | Users can delete their own metaprogram analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `compatibility_alerts` | Users can view their own compatibility alerts | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `compatibility_alerts` | Users can create their own compatibility alerts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `compatibility_alerts` | Users can update their own compatibility alerts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `compatibility_alerts` | Users can delete their own compatibility alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `compatibility_settings` | Users can view their own compatibility settings | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `compatibility_settings` | Users can create their own compatibility settings | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `compatibility_settings` | Users can update their own compatibility settings | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `emotional_states_history` | Users can view their own emotional states history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `emotional_states_history` | Users can create their own emotional states history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `emotional_states_history` | Users can delete their own emotional states history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `emotional_anchors` | Users can view their own emotional anchors | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `emotional_anchors` | Users can create their own emotional anchors | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `emotional_anchors` | Users can update their own emotional anchors | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `emotional_anchors` | Users can delete their own emotional anchors | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `client_values` | Users can view their own client values | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `client_values` | Users can create their own client values | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `client_values` | Users can update their own client values | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `client_values` | Users can delete their own client values | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `decision_criteria` | Users can view their own decision criteria | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `decision_criteria` | Users can create their own decision criteria | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `decision_criteria` | Users can update their own decision criteria | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `decision_criteria` | Users can delete their own decision criteria | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `hidden_objections` | Users can view their own hidden objections | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `hidden_objections` | Users can create their own hidden objections | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `hidden_objections` | Users can update their own hidden objections | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `hidden_objections` | Users can delete their own hidden objections | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `eq_analysis_history` | Users can view their own EQ analysis history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `eq_analysis_history` | Users can create their own EQ analysis history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `eq_analysis_history` | Users can delete their own EQ analysis history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `cognitive_bias_history` | Users can view their own cognitive bias history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `cognitive_bias_history` | Users can create their own cognitive bias history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `cognitive_bias_history` | Users can delete their own cognitive bias history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `stakeholder_alerts` | Users can view their own stakeholder alerts | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `stakeholder_alerts` | Users can create their own stakeholder alerts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `stakeholder_alerts` | Users can update their own stakeholder alerts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `stakeholder_alerts` | Users can delete their own stakeholder alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `health_alert_settings` | Users can view their own health settings | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `health_alert_settings` | Users can create their own health settings | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `health_alert_settings` | Users can update their own health settings | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `health_alerts` | Users can view their own health alerts | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `health_alerts` | Users can create their own health alerts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `health_alerts` | Users can update their own health alerts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `health_alerts` | Users can delete their own health alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `weekly_report_settings` | Users can view their own report settings | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `weekly_report_settings` | Users can create their own report settings | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `weekly_report_settings` | Users can update their own report settings | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `weekly_reports` | Users can view their own reports | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `weekly_reports` | Users can create their own reports | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `purchase_history` | Users can view their own purchase history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
@@ -153,14 +103,115 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `life_events` | Users can insert their own life events | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `life_events` | Users can update their own life events | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `life_events` | Users can delete their own life events | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `contact_time_analysis` | Users can view their own contact time analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `contact_time_analysis` | Users can insert their own contact time analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `contact_time_analysis` | Users can update their own contact time analysis | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `contact_time_analysis` | Users can delete their own contact time analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `offer_suggestions` | Users can view their own offer suggestions | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `offer_suggestions` | Users can insert their own offer suggestions | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `offer_suggestions` | Users can update their own offer suggestions | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `offer_suggestions` | Users can delete their own offer suggestions | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `rfm_history` | Users can view their own RFM history | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `rfm_segment_config` | Users can manage their RFM segment config | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_bundles` | Users can view their own bundles | SELECT | authenticated | permissive | `(((select auth.uid()) = user_id) OR (is_system_bundle = true))` |  |
+| `trigger_bundles` | Users can create their own bundles | INSERT | authenticated | permissive |  | `(((select auth.uid()) = user_id) AND (COALESCE(is_system_bundle, false) = false))` |
+| `trigger_bundles` | Users can update their own bundles | UPDATE | authenticated | permissive | `(((select auth.uid()) = user_id) AND (is_system_bundle = false))` |  |
+| `trigger_bundles` | Users can delete their own bundles | DELETE | authenticated | permissive | `(((select auth.uid()) = user_id) AND (is_system_bundle = false))` |  |
+| `activities` | Users can update their own activities | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `activities` | Users can delete their own activities | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_reports` | Users can update their own weekly_reports | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_reports` | Users can delete their own weekly_reports | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_profile_config` | Authenticated users can view DISC profile configs | SELECT | authenticated | permissive | `true` |  |
+| `saved_filters` | Users can view own filters | SELECT | public | permissive | `auth.uid() = user_id` |  |
+| `saved_filters` | Users can insert own filters | INSERT | public | permissive |  | `auth.uid() = user_id` |
+| `saved_filters` | Users can update own filters | UPDATE | public | permissive | `auth.uid() = user_id` | `auth.uid() = user_id` |
+| `saved_filters` | Users can delete own filters | DELETE | public | permissive | `auth.uid() = user_id` |  |
+| `entity_versions` | Users can view versions | SELECT | public | permissive | `true` |  |
+| `salespeople` | Allow public read access to salespeople | SELECT | public | permissive | `true` |  |
+| `salespeople` | Allow authenticated insert to salespeople | INSERT | public | permissive |  | `true` |
+| `salespeople` | Allow authenticated update to salespeople | UPDATE | public | permissive | `true` |  |
+| `sales` | Allow public read access to sales | SELECT | public | permissive | `true` |  |
+| `sales` | Allow authenticated insert to sales | INSERT | public | permissive |  | `true` |
+| `sales` | Allow authenticated update to sales | UPDATE | public | permissive | `true` |  |
+| `sales` | Allow authenticated delete on sales | DELETE | public | permissive | `true` |  |
+| `daily_metrics` | Allow public read access to daily_metrics | SELECT | public | permissive | `true` |  |
+| `category_metrics` | Allow public read access to category_metrics | SELECT | public | permissive | `true` |  |
+| `clients` | clients_all | ALL | public | permissive | `true` |  |
+| `products` | products_select | SELECT | public | permissive | `true` |  |
+| `teams` | teams_select | SELECT | public | permissive | `true` |  |
+| `teams` | teams_all | ALL | public | permissive | `true` |  |
+| `team_closers` | team_closers_select | SELECT | public | permissive | `true` |  |
+| `team_closers` | team_closers_all | ALL | public | permissive | `true` |  |
+| `deal_outcomes` | deal_outcomes_all | ALL | public | permissive | `true` |  |
+| `deal_stage_history` | deal_stage_history_all | ALL | public | permissive | `true` |  |
+| `deal_chat_history` | deal_chat_all | ALL | public | permissive | `true` |  |
+| `sales_activities` | sales_activities_all | ALL | public | permissive | `true` |  |
+| `sales_tasks` | sales_tasks_all | ALL | public | permissive | `true` |  |
+| `playbooks` | playbooks_all | ALL | public | permissive | `true` |  |
+| `cadences` | cadences_all | ALL | public | permissive | `true` |  |
+| `activity_goals` | activity_goals_all | ALL | public | permissive | `true` |  |
+| `achievements` | achievements_all | ALL | public | permissive | `true` |  |
+| `salesperson_xp` | xp_all | ALL | public | permissive | `true` |  |
+| `xp_history` | xp_history_all | ALL | public | permissive | `true` |  |
+| `weekly_challenges` | challenges_all | ALL | public | permissive | `true` |  |
+| `daily_challenges` | daily_challenges_all | ALL | public | permissive | `true` |  |
+| `collectible_badges` | badges_all | ALL | public | permissive | `true` |  |
+| `victory_feed` | victory_all | ALL | public | permissive | `true` |  |
+| `trigger_usage_history` | Users can view their own trigger usage history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_usage_history` | Users can insert their own trigger usage history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `trigger_usage_history` | Users can update their own trigger usage history | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `trigger_usage_history` | Users can delete their own trigger usage history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `favorite_templates` | Users can view their own favorites | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `favorite_templates` | Users can insert their own favorites | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `favorite_templates` | Users can delete their own favorites | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `vak_analysis_history` | Users can view their own VAK analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `vak_analysis_history` | Users can insert their own VAK analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `vak_analysis_history` | Users can delete their own VAK analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `vak_analysis_history` | Users can update their own vak_analysis_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `metaprogram_analysis` | Users can view their own metaprogram analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `metaprogram_analysis` | Users can create their own metaprogram analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `metaprogram_analysis` | Users can delete their own metaprogram analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `metaprogram_analysis` | Users can update their own metaprogram_analysis | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_alerts` | Users can view their own compatibility alerts | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_alerts` | Users can create their own compatibility alerts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `compatibility_alerts` | Users can update their own compatibility alerts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_alerts` | Users can delete their own compatibility alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_settings` | Users can view their own compatibility settings | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_settings` | Users can create their own compatibility settings | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `compatibility_settings` | Users can update their own compatibility settings | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `compatibility_settings` | Users can delete their own compatibility_settings | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `emotional_states_history` | Users can view their own emotional states history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `emotional_states_history` | Users can create their own emotional states history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `emotional_states_history` | Users can delete their own emotional states history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `emotional_states_history` | Users can update their own emotional_states_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `client_values` | Users can view their own client values | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `client_values` | Users can create their own client values | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `client_values` | Users can update their own client values | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `client_values` | Users can delete their own client values | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `hidden_objections` | Users can view their own hidden objections | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `hidden_objections` | Users can create their own hidden objections | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `hidden_objections` | Users can update their own hidden objections | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `hidden_objections` | Users can delete their own hidden objections | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `eq_analysis_history` | Users can view their own EQ analysis history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `eq_analysis_history` | Users can create their own EQ analysis history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `eq_analysis_history` | Users can delete their own EQ analysis history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `eq_analysis_history` | Users can update their own eq_analysis_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `cognitive_bias_history` | Users can view their own cognitive bias history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `cognitive_bias_history` | Users can create their own cognitive bias history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `cognitive_bias_history` | Users can delete their own cognitive bias history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `cognitive_bias_history` | Users can update their own cognitive_bias_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `stakeholder_alerts` | Users can view their own stakeholder alerts | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `stakeholder_alerts` | Users can create their own stakeholder alerts | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `stakeholder_alerts` | Users can update their own stakeholder alerts | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `stakeholder_alerts` | Users can delete their own stakeholder alerts | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `health_alert_settings` | Users can view their own health settings | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `health_alert_settings` | Users can create their own health settings | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `health_alert_settings` | Users can update their own health settings | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `health_alert_settings` | Users can delete their own health_alert_settings | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_report_settings` | Users can view their own report settings | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_report_settings` | Users can create their own report settings | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `weekly_report_settings` | Users can update their own report settings | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `weekly_report_settings` | Users can delete their own weekly_report_settings | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_time_analysis` | Users can view their own contact time analysis | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_time_analysis` | Users can insert their own contact time analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `contact_time_analysis` | Users can update their own contact time analysis | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `contact_time_analysis` | Users can delete their own contact time analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `contact_cadence` | Users can view their own contact cadence | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `contact_cadence` | Users can create their own contact cadence | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `contact_cadence` | Users can update their own contact cadence | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
@@ -172,6 +223,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `score_history` | Users can view their own score history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `score_history` | Users can insert their own score history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `score_history` | Users can delete their own score history | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `score_history` | Users can update their own score_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
 | `social_profiles` | Users can view their own social profiles | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `social_profiles` | Users can insert their own social profiles | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `social_profiles` | Users can update their own social profiles | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
@@ -189,15 +241,15 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `social_scraping_schedule` | Users can update their own scraping schedule | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `social_scraping_schedule` | Users can delete their own scraping schedule | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `rfm_analysis` | Users can manage their own RFM analysis | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `rfm_history` | Users can view their own RFM history | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `rfm_segment_config` | Users can manage their RFM segment config | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `rfm_metrics` | Users can view their RFM metrics | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `disc_analysis_history` | Users can view their own DISC analysis history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `disc_analysis_history` | Users can create their own DISC analysis | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `disc_analysis_history` | Users can delete their own DISC analysis | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_analysis_history` | Users can update their own disc_analysis_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
 | `disc_communication_logs` | Users can view their own DISC communication logs | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `disc_communication_logs` | Users can create their own DISC communication logs | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `disc_communication_logs` | Users can update their own DISC communication logs | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
+| `disc_communication_logs` | Users can delete their own disc_communication_logs | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
 | `trigger_ab_tests` | Users can view their own AB tests | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `trigger_ab_tests` | Users can create their own AB tests | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `trigger_ab_tests` | Users can update their own AB tests | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
@@ -210,10 +262,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `trigger_channel_effectiveness` | Users can create their own channel effectiveness | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `trigger_channel_effectiveness` | Users can update their own channel effectiveness | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `trigger_channel_effectiveness` | Users can delete their own channel effectiveness | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `trigger_bundles` | Users can view their own bundles | SELECT | authenticated | permissive | `(((select auth.uid()) = user_id) OR (is_system_bundle = true))` |  |
-| `trigger_bundles` | Users can create their own bundles | INSERT | authenticated | permissive |  | `(((select auth.uid()) = user_id) AND (COALESCE(is_system_bundle, false) = false))` |
-| `trigger_bundles` | Users can update their own bundles | UPDATE | authenticated | permissive | `(((select auth.uid()) = user_id) AND (is_system_bundle = false))` |  |
-| `trigger_bundles` | Users can delete their own bundles | DELETE | authenticated | permissive | `(((select auth.uid()) = user_id) AND (is_system_bundle = false))` |  |
 | `contact_relatives` | Users can view their own contact_relatives | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `contact_relatives` | Users can insert their own contact_relatives | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `contact_relatives` | Users can update their own contact_relatives | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
@@ -225,22 +273,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `lux_intelligence` | Users can insert their own lux intelligence | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
 | `lux_intelligence` | Users can update their own lux intelligence | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `lux_intelligence` | Users can delete their own lux intelligence | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `disc_analysis_history` | Users can update their own disc_analysis_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `cognitive_bias_history` | Users can update their own cognitive_bias_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `emotional_states_history` | Users can update their own emotional_states_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `eq_analysis_history` | Users can update their own eq_analysis_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `vak_analysis_history` | Users can update their own vak_analysis_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `score_history` | Users can update their own score_history | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `metaprogram_analysis` | Users can update their own metaprogram_analysis | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `disc_communication_logs` | Users can delete their own disc_communication_logs | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `health_alert_settings` | Users can delete their own health_alert_settings | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `compatibility_settings` | Users can delete their own compatibility_settings | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `weekly_report_settings` | Users can delete their own weekly_report_settings | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `activities` | Users can update their own activities | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `activities` | Users can delete their own activities | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `weekly_reports` | Users can update their own weekly_reports | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `weekly_reports` | Users can delete their own weekly_reports | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `disc_profile_config` | Authenticated users can view DISC profile configs | SELECT | authenticated | permissive | `true` |  |
 | `automation_rules` | Users can view their own automation rules | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
 | `automation_rules` | Users can create their own automation rules | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
 | `automation_rules` | Users can update their own automation rules | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
@@ -249,69 +281,37 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `automation_logs` | Users can create their own automation logs | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
 | `automation_logs` | Users can delete their own automation logs | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
 | `automation_logs` | Users can only update own automation logs | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` | `((select auth.uid()) = user_id)` |
-| `query_telemetry` | Users can view their own telemetry | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `query_telemetry` | Users can insert their own telemetry | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
-| `query_telemetry` | Users can delete their own telemetry | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `user_roles` | Users can view their own roles | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `storage.objects` | Anyone can view company logos | SELECT | public | permissive | `bucket_id = 'company-logos'` |  |
-| `storage.objects` | Users can upload logos to their folder | INSERT | authenticated | permissive |  | `bucket_id = 'company-logos' AND (storage.foldername(name))[1] = auth.uid()::text` |
-| `storage.objects` | Users can update logos in their folder | UPDATE | authenticated | permissive | `bucket_id = 'company-logos' AND (storage.foldername(name))[1] = auth.uid()::text` | `bucket_id = 'company-logos' AND (storage.foldername(name))[1] = auth.uid()::text` |
-| `storage.objects` | Users can delete logos in their folder | DELETE | authenticated | permissive | `bucket_id = 'company-logos' AND (storage.foldername(name))[1] = auth.uid()::text` |  |
-| `user_roles` | Admins can view all roles | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `user_roles` | Admins can insert roles | INSERT | authenticated | permissive |  | `has_role((select auth.uid()), 'admin'::app_role)` |
-| `user_roles` | Admins can update roles | UPDATE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `user_roles` | Admins can delete roles | DELETE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `push_subscriptions` | Users can view own subscriptions limited | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `disc_conversion_metrics` | Users can view their own DISC conversion metrics | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `disc_conversion_metrics` | Users can insert their own DISC conversion metrics | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
-| `disc_conversion_metrics` | Users can update their own DISC conversion metrics | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `disc_conversion_metrics` | Users can delete their own DISC conversion metrics | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `storage.objects` | Contact avatars are publicly accessible | SELECT | public | permissive | `bucket_id = 'contact-avatars'` |  |
-| `storage.objects` | Users can upload contact avatars | INSERT | authenticated | permissive |  | `bucket_id = 'contact-avatars' AND (auth.uid())::text = (storage.foldername(name))[1]` |
-| `storage.objects` | Users can update contact avatars | UPDATE | authenticated | permissive | `bucket_id = 'contact-avatars' AND (auth.uid())::text = (storage.foldername(name))[1]` |  |
-| `storage.objects` | Users can delete contact avatars | DELETE | authenticated | permissive | `bucket_id = 'contact-avatars' AND (auth.uid())::text = (storage.foldername(name))[1]` |  |
-| `realtime.messages` | Users can only access their own realtime channels | ALL | authenticated | permissive | `realtime.topic() LIKE ((auth.uid())::text \|\| ':%')` | `realtime.topic() LIKE ((auth.uid())::text \|\| ':%')` |
-| `schema_drift_alerts` | Admins can view schema drift alerts | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `schema_drift_alerts` | Admins can update schema drift alerts | UPDATE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `schema_drift_alerts` | Users can insert their own schema drift alerts | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
-| `lux_webhook_config` | Admins can view lux_webhook_config | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `lux_webhook_config` | Admins can insert lux_webhook_config | INSERT | authenticated | permissive |  | `has_role((select auth.uid()), 'admin'::app_role)` |
-| `lux_webhook_config` | Admins can update lux_webhook_config | UPDATE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `lux_webhook_config` | Admins can delete lux_webhook_config | DELETE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `secret_rotation_log` | Admins can view secret rotation logs | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `secret_rotation_log` | Admins can insert secret rotation logs | INSERT | authenticated | permissive |  | `has_role((select auth.uid()), 'admin'::app_role)` |
-| `secret_rotation_log` | Admins can delete secret rotation logs | DELETE | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `sales_team_members` | Users can view their own team members | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `sales_team_members` | Admins can view all team members | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `sales_team_members` | Users can insert their own team members | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
-| `sales_team_members` | Users can update their own team members | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `sales_team_members` | Users can delete their own team members | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_routing_rules` | Users can view their own routing rules | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_routing_rules` | Admins can view all routing rules | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `lead_routing_rules` | Users can insert their own routing rules | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
-| `lead_routing_rules` | Users can update their own routing rules | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_routing_rules` | Users can delete their own routing rules | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_assignments` | Users can view their own assignments | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_assignments` | Admins can view all assignments | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `lead_assignments` | Users can insert their own assignments | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
-| `lead_assignments` | Users can update their own assignments | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_assignments` | Users can delete their own assignments | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `handoff_requests` | Users can view their own handoff requests | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `handoff_requests` | Admins can view all handoff requests | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `handoff_requests` | Users can insert their own handoff requests | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
-| `handoff_requests` | Users can update their own handoff requests | UPDATE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `handoff_requests` | Users can delete their own handoff requests | DELETE | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `redistribution_log` | Users can view their own redistribution logs | SELECT | authenticated | permissive | `((select auth.uid()) = user_id)` |  |
-| `redistribution_log` | Admins can view all redistribution logs | SELECT | authenticated | permissive | `has_role((select auth.uid()), 'admin'::app_role)` |  |
-| `redistribution_log` | Users can insert their own redistribution logs | INSERT | authenticated | permissive |  | `((select auth.uid()) = user_id)` |
-| `lead_scores` | Users can view their own lead scores | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_scores` | Users can insert their own lead scores | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `lead_scores` | Users can update their own lead scores | UPDATE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_scores` | Users can delete their own lead scores | DELETE | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_score_history` | Users can view their own score history | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `lead_score_history` | Users can insert their own score history | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
-| `lead_score_config` | Users can view their own config | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
-| … +527 linhas — lista completa em `context.json` | | | | | | |
+| `companies` | companies_select | SELECT | public | permissive | `true` |  |
+| `companies` | companies_insert | INSERT | public | permissive |  | `true` |
+| `companies` | companies_update | UPDATE | public | permissive | `true` |  |
+| `companies` | companies_delete | DELETE | public | permissive | `true` |  |
+| `contacts` | contacts_select | SELECT | public | permissive | `true` |  |
+| `contacts` | contacts_insert | INSERT | public | permissive |  | `true` |
+| `contacts` | contacts_update | UPDATE | public | permissive | `true` |  |
+| `contacts` | contacts_delete | DELETE | public | permissive | `true` |  |
+| `customers` | customers_select | SELECT | public | permissive | `true` |  |
+| `customers` | customers_insert | INSERT | public | permissive |  | `true` |
+| `customers` | customers_update | UPDATE | public | permissive | `true` |  |
+| `customers` | customers_delete | DELETE | public | permissive | `true` |  |
+| `company_phones` | company_phones_select | SELECT | public | permissive | `true` |  |
+| `company_phones` | company_phones_insert | INSERT | public | permissive |  | `true` |
+| `company_phones` | company_phones_update | UPDATE | public | permissive | `true` |  |
+| `company_phones` | company_phones_delete | DELETE | public | permissive | `true` |  |
+| `company_emails` | company_emails_select | SELECT | public | permissive | `true` |  |
+| `company_emails` | company_emails_insert | INSERT | public | permissive |  | `true` |
+| `company_emails` | company_emails_update | UPDATE | public | permissive | `true` |  |
+| `company_emails` | company_emails_delete | DELETE | public | permissive | `true` |  |
+| `company_addresses` | company_addresses_select | SELECT | public | permissive | `true` |  |
+| `company_addresses` | company_addresses_insert | INSERT | public | permissive |  | `true` |
+| `company_addresses` | company_addresses_update | UPDATE | public | permissive | `true` |  |
+| `company_addresses` | company_addresses_delete | DELETE | public | permissive | `true` |  |
+| `company_social_media` | company_social_media_select | SELECT | public | permissive | `true` |  |
+| `company_social_media` | company_social_media_insert | INSERT | public | permissive |  | `true` |
+| `company_social_media` | company_social_media_update | UPDATE | public | permissive | `true` |  |
+| `company_social_media` | company_social_media_delete | DELETE | public | permissive | `true` |  |
+| `contact_phones` | contact_phones_select | SELECT | public | permissive | `true` |  |
+| `contact_phones` | contact_phones_insert | INSERT | public | permissive |  | `true` |
+| … +950 linhas — lista completa em `context.json` | | | | | | |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -372,37 +372,50 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `abm_whitespace_opportunities` | `created_at` | default now() |
 | `abm_whitespace_opportunities` | `updated_at` | default now() |
 | `access_blocked_log` | `id` | PK; default gen_random_uuid() |
-| `access_blocked_log` | `user_id` | FK → users.id ON DELETE SET NULL |
-| `access_blocked_log` | `reason` | obrigatório |
+| `access_blocked_log` | `block_reason` | obrigatório; CHECK block_reason IN ('brute_force','ip_not_whitelisted','country_blocked','device_not_trusted','rate_limit','suspicious_pattern','admin_block','other') |
+| `access_blocked_log` | `is_resolved` | default false |
+| `access_blocked_log` | `metadata` | default '{}'::jsonb |
 | `access_blocked_log` | `created_at` | default now() |
 | `access_security_settings` | `id` | PK; default gen_random_uuid() |
-| `access_security_settings` | `user_id` | obrigatório; único; FK → users.id ON DELETE CASCADE |
-| `access_security_settings` | `enable_ip_restriction` | default false |
-| `access_security_settings` | `enable_geo_blocking` | default false |
-| `access_security_settings` | `enable_device_detection` | default true |
-| `access_security_settings` | `notify_new_device` | default true |
-| `access_security_settings` | `max_sessions` | default 5 |
+| `access_security_settings` | `user_id` | obrigatório; único |
+| `access_security_settings` | `require_mfa` | default false |
+| `access_security_settings` | `mfa_method` | CHECK mfa_method IN ('totp','webauthn','sms','email') |
+| `access_security_settings` | `ip_whitelist_enabled` | default false |
+| `access_security_settings` | `geo_restriction_enabled` | default false |
+| `access_security_settings` | `device_trust_enabled` | default true |
 | `access_security_settings` | `session_timeout_minutes` | default 480 |
+| `access_security_settings` | `max_concurrent_sessions` | default 3 |
+| `access_security_settings` | `password_policy` | default '{"min_length":8 |
+| `access_security_settings` | `brute_force_threshold` | default 5 |
+| `access_security_settings` | `brute_force_window_minutes` | default 15 |
+| `access_security_settings` | `brute_force_lockout_minutes` | default 30 |
+| `access_security_settings` | `notify_on_new_device` | default true |
+| `access_security_settings` | `notify_on_new_location` | default true |
+| `access_security_settings` | `metadata` | default '{}'::jsonb |
 | `access_security_settings` | `created_at` | default now() |
 | `access_security_settings` | `updated_at` | default now() |
+| `access_security_settings` | `enable_ip_restriction` | default false |
 | `activities` | `id` | PK; default gen_random_uuid() |
 | `activities` | `user_id` | obrigatório; FK → users.id ON DELETE CASCADE |
 | `activities` | `type` | obrigatório; CHECK type IN ('company_created', 'contact_created', 'interaction_added', 'insight_generated', 'tag_added', 'profile_updated', 'alert_triggered') |
 | `activities` | `entity_type` | obrigatório; CHECK entity_type IN ('company', 'contact', 'interaction', 'insight', 'alert') |
 | `activities` | `created_at` | default NOW() |
+| `activities` | `contact_id` | FK → contacts.id |
 | `ai_chat_messages` | `id` | PK; default gen_random_uuid() |
-| `ai_chat_messages` | `thread_id` | obrigatório; FK → ai_chat_threads.id ON DELETE CASCADE |
+| `ai_chat_messages` | `thread_id` | obrigatório |
 | `ai_chat_messages` | `user_id` | obrigatório |
-| `ai_chat_messages` | `role` | obrigatório; CHECK role IN ('user', 'assistant', 'system') |
+| `ai_chat_messages` | `role` | obrigatório; CHECK role IN ('user','assistant','system','function','tool') |
 | `ai_chat_messages` | `content` | obrigatório |
+| `ai_chat_messages` | `tool_calls` | default '[]'::jsonb |
 | `ai_chat_messages` | `metadata` | default '{}'::jsonb |
 | `ai_chat_messages` | `created_at` | default now() |
 | `ai_chat_threads` | `id` | PK; default gen_random_uuid() |
 | `ai_chat_threads` | `user_id` | obrigatório |
-| `ai_chat_threads` | `title` | default 'Nova |
-| `ai_chat_threads` | `pinned` | default false |
-| `ai_chat_threads` | `archived` | default false |
-| `ai_chat_threads` | `last_message_at` | default now() |
+| `ai_chat_threads` | `context_type` | default 'crm_data'; CHECK context_type IN ('crm_data','contact','company','deal','general','custom') |
+| `ai_chat_threads` | `total_messages` | default 0 |
+| `ai_chat_threads` | `total_tokens` | default 0 |
+| `ai_chat_threads` | `is_archived` | default false |
+| `ai_chat_threads` | `metadata` | default '{}'::jsonb |
 | `ai_chat_threads` | `created_at` | default now() |
 | `ai_chat_threads` | `updated_at` | default now() |
 | `ai_recommendation_audit_logs` | `id` | PK; default gen_random_uuid() |
@@ -441,6 +454,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `alerts` | `title` | obrigatório |
 | `alerts` | `dismissed` | default FALSE |
 | `alerts` | `created_at` | default NOW() |
+| `alerts` | `(tabela)` | constraint alerts_type_check CHECK ( type = ANY (ARRAY[ 'relationship_risk'::text, 'follow_up_due'::text, 'birthday_reminder'::text, 'inactivity_warning'::text, 'sentiment_drop'::text, 'opportunity'::text, 'disc_insight'::text, 'life_event'::text, 'engagement_spike'::text, 'churn_risk'::text, 'upsel … |
 | `applied_objection_responses` | `id` | PK; default gen_random_uuid() |
 | `applied_objection_responses` | `user_id` | obrigatório; FK → users.id ON DELETE CASCADE |
 | `applied_objection_responses` | `objection` | obrigatório |
@@ -532,35 +546,44 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `call_logs` | `external_id` | único |
 | `call_logs` | `created_at` | default now() |
 | `campaign_recipients` | `id` | PK; default gen_random_uuid() |
-| `campaign_recipients` | `campaign_id` | obrigatório; FK → email_campaigns.id ON DELETE CASCADE |
-| `campaign_recipients` | `contact_id` | obrigatório; FK → contacts.id ON DELETE CASCADE |
+| `campaign_recipients` | `campaign_id` | obrigatório |
+| `campaign_recipients` | `user_id` | obrigatório |
 | `campaign_recipients` | `email` | obrigatório |
-| `campaign_recipients` | `status` | default 'pending'; CHECK status IN ('pending', 'sent', 'delivered', 'opened', 'clicked', 'bounced', 'unsubscribed') |
+| `campaign_recipients` | `status` | default 'pending'; CHECK status IN ('pending','sent','delivered','opened','clicked','bounced','complained','unsubscribed','failed') |
+| `campaign_recipients` | `opens_count` | default 0 |
+| `campaign_recipients` | `clicks_count` | default 0 |
+| `campaign_recipients` | `metadata` | default '{}'::jsonb |
 | `campaign_recipients` | `created_at` | default now() |
-| `campaign_recipients` | `(tabela)` | UNIQUE(campaign_id, contact_id) |
+| `campaign_recipients` | `(tabela)` | constraint uq_campaign_recipients_campaign_email UNIQUE (campaign_id, email) |
 | `canned_responses` | `id` | PK; default gen_random_uuid() |
-| `canned_responses` | `user_id` | obrigatório; FK → users.id ON DELETE CASCADE |
+| `canned_responses` | `user_id` | obrigatório |
+| `canned_responses` | `shortcut` | obrigatório |
 | `canned_responses` | `title` | obrigatório |
 | `canned_responses` | `content` | obrigatório |
-| `canned_responses` | `category` | default 'geral' |
+| `canned_responses` | `tags` | default '{}'::text[] |
 | `canned_responses` | `usage_count` | default 0 |
+| `canned_responses` | `is_shared` | default false |
+| `canned_responses` | `metadata` | default '{}'::jsonb |
 | `canned_responses` | `created_at` | default now() |
 | `canned_responses` | `updated_at` | default now() |
+| `canned_responses` | `(tabela)` | CONSTRAINT unique_shortcut_per_user UNIQUE (user_id, shortcut) |
 | `churn_risk_scores` | `id` | PK; default gen_random_uuid() |
 | `churn_risk_scores` | `user_id` | obrigatório |
-| `churn_risk_scores` | `contact_id` | obrigatório; FK → contacts.id ON DELETE CASCADE |
-| `churn_risk_scores` | `risk_level` | default 'low'; CHECK risk_level IN ('low', 'medium', 'high', 'critical') |
-| `churn_risk_scores` | `risk_score` | default 0; CHECK risk_score >= 0 AND risk_score <= 100 |
-| `churn_risk_scores` | `risk_factors` | default '[]'::jsonb |
-| `churn_risk_scores` | `recommendations` | default '{}' |
-| `churn_risk_scores` | `analyzed_at` | default now() |
-| `churn_risk_scores` | `expires_at` | default (now() |
+| `churn_risk_scores` | `risk_score` | obrigatório; CHECK risk_score BETWEEN 0 AND 100 |
+| `churn_risk_scores` | `risk_level` | obrigatório; CHECK risk_level IN ('low','medium','high','critical') |
+| `churn_risk_scores` | `factors_detected` | default '[]'::jsonb |
+| `churn_risk_scores` | `factors_breakdown` | default '{}'::jsonb |
+| `churn_risk_scores` | `recommended_actions` | default '[]'::jsonb |
+| `churn_risk_scores` | `confidence` | default 70; CHECK confidence BETWEEN 0 AND 100 |
+| `churn_risk_scores` | `calculated_at` | default now() |
+| `churn_risk_scores` | `is_current` | default true |
 | `churn_risk_scores` | `created_at` | default now() |
-| `churn_risk_scores` | `updated_at` | default now() |
+| `churn_risk_scores` | `risk_factors` | default '[]'::jsonb |
+| `churn_risk_scores` | `(tabela)` | CONSTRAINT churn_risk_either_contact_or_company CHECK (contact_id IS NOT NULL OR company_id IS NOT NULL) |
 | `city_whitelist` | `id` | PK; default gen_random_uuid() |
-| `city_whitelist` | `user_id` | obrigatório; FK → users.id ON DELETE CASCADE |
-| `city_whitelist` | `city` | obrigatório |
-| `city_whitelist` | `country_code` | default 'BR' |
+| `city_whitelist` | `user_id` | obrigatório |
+| `city_whitelist` | `country_code` | obrigatório |
+| `city_whitelist` | `city_name` | obrigatório |
 | `city_whitelist` | `is_active` | default true |
 | `city_whitelist` | `created_at` | default now() |
 | `client_values` | `id` | PK; default gen_random_uuid() |
@@ -594,60 +617,133 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `communication_preferences` | `contact_id` | obrigatório; FK → contacts.id ON DELETE CASCADE |
 | `communication_preferences` | `preferred_channel` | default 'whatsapp' |
 | `communication_preferences` | `preferred_days` | default '{}' |
-| `communication_preferences` | `contact_frequency` | default 'weekly' |
-| `communication_preferences` | `avoid_days` | default '{}' |
-| `communication_preferences` | `response_rate_by_channel` | default '{}' |
-| `communication_preferences` | `created_at` | default now() |
-| `communication_preferences` | `updated_at` | default now() |
-| `communication_preferences` | `(tabela)` | UNIQUE(user_id, contact_id) |
-| `companies` | `id` | PK; default gen_random_uuid() |
-| `companies` | `user_id` | obrigatório; FK → users.id ON DELETE CASCADE |
-| `companies` | `name` | obrigatório |
-| `companies` | `tags` | default '{}' |
-| `companies` | `financial_health` | default 'unknown'; CHECK financial_health IN ('growing', 'stable', 'cutting', 'unknown') |
-| `companies` | `competitors` | default '{}' |
-| `companies` | `challenges` | default '{}' |
-| `companies` | `created_at` | default NOW() |
-| `companies` | `updated_at` | default NOW() |
-| `companies` | `version` | default 0 |
-| `companies` | `strategic_roadmap` | default '[]'::jsonb |
-| `compatibility_alerts` | `id` | PK; default gen_random_uuid() |
-| `compatibility_alerts` | `user_id` | obrigatório |
-| `compatibility_alerts` | `contact_id` | FK → contacts.id ON DELETE CASCADE |
-| `compatibility_alerts` | `compatibility_score` | obrigatório |
-| `compatibility_alerts` | `threshold` | obrigatório |
-| `compatibility_alerts` | `alert_type` | default 'below_threshold' |
-| … +2310 linhas — lista completa em `context.json` | | |
+| … +4176 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
 | Trigger | Quando | Tabela | Executa | Condição |
 |---|---|---|---|---|
-| update_communication_preferences_updated_at | BEFORE UPDATE | `communication_preferences` | `update_updated_at_column` |  |
-| update_disc_conversion_metrics_updated_at | BEFORE UPDATE | `disc_conversion_metrics` | `update_updated_at_column` |  |
-| update_life_events_updated_at | BEFORE UPDATE | `life_events` | `update_updated_at_column` |  |
-| update_lux_intelligence_updated_at | BEFORE UPDATE | `lux_intelligence` | `update_updated_at_column` |  |
 | trg_mprl_touch | BEFORE UPDATE | `migration_password_reset_log` | `tg_mprl_touch_updated_at` |  |
 | on_auth_user_created | AFTER INSERT | `auth.users` | `handle_new_user` |  |
-| set_updated_at_client_values | BEFORE UPDATE | `client_values` | `update_updated_at_column` |  |
-| set_updated_at_communication_preferences | BEFORE UPDATE | `communication_preferences` | `update_updated_at_column` |  |
+| trg_contact_phones_normalizar | BEFORE INSERT OR UPDATE | `contact_phones` | `trg_normalizar_telefone_contact` |  |
+| trg_uapi_sessions_updated_at | BEFORE UPDATE | `uapi_sessions` | `update_uapi_sessions_updated_at` |  |
 | set_updated_at_companies | BEFORE UPDATE | `companies` | `update_updated_at_column` |  |
-| set_updated_at_compatibility_settings | BEFORE UPDATE | `compatibility_settings` | `update_updated_at_column` |  |
-| set_updated_at_contact_cadence | BEFORE UPDATE | `contact_cadence` | `update_updated_at_column` |  |
-| set_updated_at_contact_preferences | BEFORE UPDATE | `contact_preferences` | `update_updated_at_column` |  |
-| set_updated_at_contact_relatives | BEFORE UPDATE | `contact_relatives` | `update_updated_at_column` |  |
 | set_updated_at_contacts | BEFORE UPDATE | `contacts` | `update_updated_at_column` |  |
-| set_updated_at_decision_criteria | BEFORE UPDATE | `decision_criteria` | `update_updated_at_column` |  |
-| set_updated_at_disc_conversion_metrics | BEFORE UPDATE | `disc_conversion_metrics` | `update_updated_at_column` |  |
-| set_updated_at_disc_profile_config | BEFORE UPDATE | `disc_profile_config` | `update_updated_at_column` |  |
-| set_updated_at_health_alert_settings | BEFORE UPDATE | `health_alert_settings` | `update_updated_at_column` |  |
-| set_updated_at_life_events | BEFORE UPDATE | `life_events` | `update_updated_at_column` |  |
-| set_updated_at_lux_intelligence | BEFORE UPDATE | `lux_intelligence` | `update_updated_at_column` |  |
 | set_updated_at_profiles | BEFORE UPDATE | `profiles` | `update_updated_at_column` |  |
+| pix_accounts_set_updated_at | BEFORE UPDATE | `pix_accounts` | `trg_pix_accounts_updated_at` |  |
+| update_sales_updated_at | BEFORE UPDATE | `sales` | `update_updated_at_column` |  |
+| set_updated_at_whatsapp_messages | BEFORE UPDATE | `whatsapp_messages` | `update_updated_at_column` |  |
+| set_updated_at_automation_rules | BEFORE UPDATE | `automation_rules` | `update_updated_at_column` |  |
+| trg_supplier_homologations_updated_at | BEFORE UPDATE | `supplier_homologations` | `update_updated_at_column` |  |
+| trg_supplier_qualification_config_updated_at | BEFORE UPDATE | `supplier_qualification_config` | `update_updated_at_column` |  |
+| trg_supplier_scores_updated_at | BEFORE UPDATE | `supplier_scores` | `update_updated_at_column` |  |
+| trg_supplier_evaluation_recalc_score | AFTER INSERT | `supplier_evaluations` | `trg_fn_recalc_score_after_evaluation` |  |
+| trg_homologation_insert_update_flag | BEFORE INSERT | `supplier_homologations` | `trg_fn_update_homologado_flag` |  |
+| trg_homologation_update_update_flag | BEFORE UPDATE OF STATUS | `supplier_homologations` | `trg_fn_update_homologado_flag` | `OLD.status IS DISTINCT FROM NEW.status` |
+| trg_company_sync_supplier | AFTER UPDATE OF IS_SUPPLIER | `companies` | `trg_fn_sync_company_supplier` | `OLD.is_supplier IS DISTINCT FROM NEW.is_supplier` |
+| trg_company_insert_sync_supplier | AFTER INSERT | `companies` | `trg_fn_sync_company_supplier` | `NEW.is_supplier = true` |
+| trg_protect_qualification_config_delete | BEFORE DELETE | `supplier_qualification_config` | `trg_fn_protect_qualification_config` |  |
+| trg_prevent_evaluation_update | BEFORE UPDATE | `supplier_evaluations` | `trg_fn_prevent_evaluation_update` |  |
+| trg_company_sync_carrier | AFTER UPDATE OF IS_CARRIER | `companies` | `trg_fn_sync_company_carrier` | `OLD.is_carrier IS DISTINCT FROM NEW.is_carrier` |
+| trg_company_insert_sync_carrier | AFTER INSERT | `companies` | `trg_fn_sync_company_carrier` | `NEW.is_carrier = true` |
+| trg_carrier_evaluation_recalc_score | AFTER INSERT | `carrier_evaluations` | `trg_fn_carrier_recalc_score_after_evaluation` |  |
+| trg_carrier_homologation_insert_update_flag | BEFORE INSERT | `carrier_homologations` | `trg_fn_carrier_update_homologado_flag` |  |
+| trg_carrier_homologation_update_update_flag | BEFORE UPDATE OF STATUS | `carrier_homologations` | `trg_fn_carrier_update_homologado_flag` | `OLD.status IS DISTINCT FROM NEW.status` |
+| trg_prevent_carrier_evaluation_update | BEFORE UPDATE | `carrier_evaluations` | `trg_fn_prevent_carrier_evaluation_update` |  |
+| trg_protect_carrier_qualification_config_delete | BEFORE DELETE | `carrier_qualification_config` | `trg_fn_protect_carrier_qualification_config` |  |
+| trg_carrier_homologations_updated_at | BEFORE UPDATE | `carrier_homologations` | `update_updated_at_column` |  |
+| trg_carrier_scores_updated_at | BEFORE UPDATE | `carrier_scores` | `update_updated_at_column` |  |
+| trg_carrier_qualification_config_updated_at | BEFORE UPDATE | `carrier_qualification_config` | `update_updated_at_column` |  |
+| trg_carriers_updated_at | BEFORE UPDATE | `carriers` | `update_updated_at_column` |  |
+| trg_suppliers_updated_at | BEFORE UPDATE | `suppliers` | `update_updated_at_column` |  |
+| trg_whatsapp_connections_updated_at | BEFORE UPDATE | `zapp_history.whatsapp_connections` | `update_updated_at_column` |  |
+| trg_conversations_updated_at | BEFORE UPDATE | `zapp_history.conversations` | `update_updated_at_column` |  |
+| trg_messages_updated_at | BEFORE UPDATE | `zapp_history.messages` | `update_updated_at_column` |  |
+| trg_bump_conversation_on_message | AFTER INSERT | `zapp_history.messages` | `bump_conversation_on_message` |  |
+| trg_mm_updated_at | BEFORE UPDATE | `zapp_history.message_media` | `update_updated_at_column` |  |
+| trg_ma_updated_at | BEFORE UPDATE | `zapp_history.message_audio` | `update_updated_at_column` |  |
+| trg_ml_updated_at | BEFORE UPDATE | `zapp_history.message_links` | `update_updated_at_column` |  |
+| trg_cds_updated_at | BEFORE UPDATE | `zapp_history.conversation_daily_summaries` | `update_updated_at_column` |  |
+| trg_atd_updated_at | BEFORE UPDATE | `zapp_history.ai_training_dataset` | `update_updated_at_column` |  |
+| trg_auto_sync_summary | AFTER INSERT OR UPDATE OF SUMMARY_TEXT | `zapp_history.conversation_daily_summaries` | `trg_sync_summary_to_interaction` |  |
+| trg_mm_autofill | BEFORE INSERT | `zapp_history.message_media` | `trg_autofill_contact_from_message` |  |
+| trg_ma_autofill | BEFORE INSERT | `zapp_history.message_audio` | `trg_autofill_contact_from_message` |  |
+| trg_ml_autofill | BEFORE INSERT | `zapp_history.message_links` | `trg_autofill_contact_from_message` |  |
+| trg_mm_set_flag | AFTER INSERT | `zapp_history.message_media` | `trg_set_has_media` |  |
+| trg_ma_set_flag | AFTER INSERT | `zapp_history.message_audio` | `trg_set_has_audio` |  |
+| trg_ml_increment | AFTER INSERT | `zapp_history.message_links` | `trg_increment_link_count` |  |
+| trg_parse_connector_log | AFTER INSERT OR UPDATE OF PROCESSED | `connector_log` | `parse_connector_log_to_messages` | `NEW.processed = FALSE` |
+| trg_auto_embed_message | AFTER INSERT | `zapp_history.messages` | `trg_auto_request_embedding` |  |
+| trg_auto_enqueue_audio | AFTER INSERT | `zapp_history.message_audio` | `trg_auto_enqueue_transcription` |  |
+| trg_sync_msg_nlp_to_singu | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `sync_message_nlp_to_interaction` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| trg_msg_periodic_reconcile | AFTER INSERT | `zapp_history.messages` | `trg_periodic_reconcile` |  |
+| trg_urgent_order_alert | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `alert_urgent_order_via_bitrix` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| trg_auto_tag_contact | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `auto_tag_contact_from_nlp` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| trg_resolve_company_cnpj | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `resolve_company_from_cnpj` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| trg_lead_score_calc | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `trg_calculate_lead_score` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| trg_response_time_calc | AFTER INSERT | `zapp_history.messages` | `trg_update_response_time` |  |
+| trg_set_business_hours | BEFORE INSERT | `zapp_history.messages` | `trg_set_business_hours` |  |
+| trg_auto_enrich_contact | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `auto_enrich_contact` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| trg_churn_alert | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `alert_churn_critical` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| zzz_trg_priority_quadrant | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `trg_set_priority_quadrant` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| zzz2_trg_response_window | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `trg_set_response_window` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| zzz3_trg_spam_quarantine | AFTER UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `trg_spam_quarantine` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| trg_short_msg_auto_process | BEFORE INSERT | `zapp_history.messages` | `trg_short_message_auto_process` |  |
+| trg_rate_limit_connector_log | BEFORE INSERT | `connector_log` | `trg_connector_log_rate_limit` |  |
+| trg_dedup_connector_log | BEFORE INSERT | `connector_log` | `trg_connector_log_dedup` |  |
+| trg_validate_secret_connector_log | BEFORE INSERT | `connector_log` | `trg_connector_log_validate_secret` |  |
+| trg_content_flood | BEFORE INSERT | `zapp_history.messages` | `trg_detect_content_flood` |  |
+| zzz4_trg_technical_interest | BEFORE UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `trg_set_technical_interest` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| zzz5_trg_supplement_urgency | BEFORE UPDATE OF NLP_PROCESSED_AT | `zapp_history.messages` | `trg_supplement_urgency` | `NEW.nlp_processed_at IS NOT NULL AND OLD.nlp_processed_at IS NULL` |
+| audit_contacts | AFTER INSERT OR UPDATE OR DELETE | `contacts` | `audit_trigger_fn` |  |
+| audit_companies | AFTER INSERT OR UPDATE OR DELETE | `companies` | `audit_trigger_fn` |  |
+| audit_interactions | AFTER INSERT OR UPDATE OR DELETE | `interactions` | `audit_trigger_fn` |  |
+| update_rfm_analysis_updated_at | BEFORE UPDATE | `rfm_analysis` | `update_updated_at_column` |  |
+| update_ai_chat_threads_updated_at | BEFORE UPDATE | `ai_chat_threads` | `update_updated_at_column` |  |
+| update_automation_rules_updated_at | BEFORE UPDATE | `automation_rules` | `update_updated_at_column` |  |
+| update_churn_risk_scores_updated_at | BEFORE UPDATE | `churn_risk_scores` | `update_updated_at_column` |  |
+| set_updated_at_client_values | BEFORE UPDATE | `client_values` | `update_updated_at_column` |  |
+| update_client_values_updated_at | BEFORE UPDATE | `client_values` | `update_updated_at_column` |  |
+| set_updated_at_communication_preferences | BEFORE UPDATE | `communication_preferences` | `update_updated_at_column` |  |
+| update_communication_preferences_updated_at | BEFORE UPDATE | `communication_preferences` | `update_updated_at_column` |  |
+| set_updated_at_compatibility_settings | BEFORE UPDATE | `compatibility_settings` | `update_updated_at_column` |  |
+| update_compatibility_settings_updated_at | BEFORE UPDATE | `compatibility_settings` | `update_updated_at_column` |  |
+| set_updated_at_contact_cadence | BEFORE UPDATE | `contact_cadence` | `update_updated_at_column` |  |
+| update_contact_cadence_updated_at | BEFORE UPDATE | `contact_cadence` | `update_updated_at_column` |  |
+| set_updated_at_contact_preferences | BEFORE UPDATE | `contact_preferences` | `update_updated_at_column` |  |
+| update_contact_preferences_updated_at | BEFORE UPDATE | `contact_preferences` | `update_updated_at_column` |  |
+| set_updated_at_contact_relatives | BEFORE UPDATE | `contact_relatives` | `update_updated_at_column` |  |
+| update_contact_relatives_updated_at | BEFORE UPDATE | `contact_relatives` | `update_updated_at_column` |  |
+| set_updated_at_decision_criteria | BEFORE UPDATE | `decision_criteria` | `update_updated_at_column` |  |
+| update_decision_criteria_updated_at | BEFORE UPDATE | `decision_criteria` | `update_updated_at_column` |  |
+| set_updated_at_disc_conversion_metrics | BEFORE UPDATE | `disc_conversion_metrics` | `update_updated_at_column` |  |
+| update_disc_conversion_metrics_updated_at | BEFORE UPDATE | `disc_conversion_metrics` | `update_updated_at_column` |  |
+| set_updated_at_disc_profile_config | BEFORE UPDATE | `disc_profile_config` | `update_updated_at_column` |  |
+| trg_document_signatures_updated_at | BEFORE UPDATE | `document_signatures` | `update_updated_at_column` |  |
+| trg_document_templates_updated_at | BEFORE UPDATE | `document_templates` | `update_updated_at_column` |  |
+| update_handoff_requests_updated_at | BEFORE UPDATE | `handoff_requests` | `update_updated_at_column` |  |
+| set_updated_at_health_alert_settings | BEFORE UPDATE | `health_alert_settings` | `update_updated_at_column` |  |
+| update_health_alert_settings_updated_at | BEFORE UPDATE | `health_alert_settings` | `update_updated_at_column` |  |
+| set_landing_pages_updated_at | BEFORE UPDATE | `landing_pages` | `update_updated_at_column` |  |
+| update_lead_assignments_updated_at | BEFORE UPDATE | `lead_assignments` | `update_updated_at_column` |  |
+| update_lead_routing_rules_updated_at | BEFORE UPDATE | `lead_routing_rules` | `update_updated_at_column` |  |
+| update_lead_score_config_updated_at | BEFORE UPDATE | `lead_score_config` | `update_updated_at_column` |  |
+| update_lead_scores_updated_at | BEFORE UPDATE | `lead_scores` | `update_updated_at_column` |  |
+| set_updated_at_life_events | BEFORE UPDATE | `life_events` | `update_updated_at_column` |  |
+| update_life_events_updated_at | BEFORE UPDATE | `life_events` | `update_updated_at_column` |  |
+| set_updated_at_lux_intelligence | BEFORE UPDATE | `lux_intelligence` | `update_updated_at_column` |  |
+| update_lux_intelligence_updated_at | BEFORE UPDATE | `lux_intelligence` | `update_updated_at_column` |  |
+| update_lux_webhook_config_updated_at | BEFORE UPDATE | `lux_webhook_config` | `update_updated_at_column` |  |
+| update_meeting_summaries_updated_at | BEFORE UPDATE | `meeting_summaries` | `update_updated_at_column` |  |
 | set_updated_at_purchase_history | BEFORE UPDATE | `purchase_history` | `update_updated_at_column` |  |
 | set_updated_at_push_subscriptions | BEFORE UPDATE | `push_subscriptions` | `update_updated_at_column` |  |
 | set_updated_at_rfm_analysis | BEFORE UPDATE | `rfm_analysis` | `update_updated_at_column` |  |
 | set_updated_at_rfm_segment_config | BEFORE UPDATE | `rfm_segment_config` | `update_updated_at_column` |  |
+| trg_auto_reset_leads_daily | BEFORE UPDATE | `sales_team_members` | `auto_reset_leads_on_update` | `(old.leads_today IS DISTINCT FROM new.leads_today)` |
+| update_sales_team_members_updated_at | BEFORE UPDATE | `sales_team_members` | `update_updated_at_column` |  |
+| trg_update_search_products_cache_updated_at | BEFORE UPDATE | `search_products_cache` | `update_updated_at_column` |  |
+| trg_sms_campaigns_updated_at | BEFORE UPDATE | `sms_campaigns` | `update_updated_at_column` |  |
+| trg_sms_templates_updated_at | BEFORE UPDATE | `sms_templates` | `update_updated_at_column` |  |
 | set_updated_at_social_profiles | BEFORE UPDATE | `social_profiles` | `update_updated_at_column` |  |
 | set_updated_at_social_scraping_schedule | BEFORE UPDATE | `social_scraping_schedule` | `update_updated_at_column` |  |
 | set_updated_at_trigger_ab_tests | BEFORE UPDATE | `trigger_ab_tests` | `update_updated_at_column` |  |
@@ -655,28 +751,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | set_updated_at_trigger_channel_effectiveness | BEFORE UPDATE | `trigger_channel_effectiveness` | `update_updated_at_column` |  |
 | set_updated_at_weekly_report_settings | BEFORE UPDATE | `weekly_report_settings` | `update_updated_at_column` |  |
 | set_updated_at_whatsapp_instances | BEFORE UPDATE | `whatsapp_instances` | `update_updated_at_column` |  |
-| set_updated_at_whatsapp_messages | BEFORE UPDATE | `whatsapp_messages` | `update_updated_at_column` |  |
-| update_automation_rules_updated_at | BEFORE UPDATE | `automation_rules` | `update_updated_at_column` |  |
-| audit_contacts | AFTER INSERT OR UPDATE OR DELETE | `contacts` | `audit_trigger_fn` |  |
-| audit_companies | AFTER INSERT OR UPDATE OR DELETE | `companies` | `audit_trigger_fn` |  |
-| audit_interactions | AFTER INSERT OR UPDATE OR DELETE | `interactions` | `audit_trigger_fn` |  |
-| update_lux_webhook_config_updated_at | BEFORE UPDATE | `lux_webhook_config` | `update_updated_at_column` |  |
-| update_sales_team_members_updated_at | BEFORE UPDATE | `sales_team_members` | `update_updated_at_column` |  |
-| update_lead_routing_rules_updated_at | BEFORE UPDATE | `lead_routing_rules` | `update_updated_at_column` |  |
-| update_lead_assignments_updated_at | BEFORE UPDATE | `lead_assignments` | `update_updated_at_column` |  |
-| update_handoff_requests_updated_at | BEFORE UPDATE | `handoff_requests` | `update_updated_at_column` |  |
-| trg_auto_reset_leads_daily | BEFORE UPDATE | `sales_team_members` | `auto_reset_leads_on_update` | `OLD.leads_today IS DISTINCT FROM NEW.leads_today` |
-| update_lead_scores_updated_at | BEFORE UPDATE | `lead_scores` | `update_updated_at_column` |  |
-| update_lead_score_config_updated_at | BEFORE UPDATE | `lead_score_config` | `update_updated_at_column` |  |
-| update_meeting_summaries_updated_at | BEFORE UPDATE | `meeting_summaries` | `update_updated_at_column` |  |
-| update_churn_risk_scores_updated_at | BEFORE UPDATE | `churn_risk_scores` | `update_updated_at_column` |  |
-| trg_update_search_products_cache_updated_at | BEFORE UPDATE | `search_products_cache` | `update_updated_at_column` |  |
-| trg_document_templates_updated_at | BEFORE UPDATE | `document_templates` | `update_updated_at_column` |  |
-| trg_document_signatures_updated_at | BEFORE UPDATE | `document_signatures` | `update_updated_at_column` |  |
-| update_ai_chat_threads_updated_at | BEFORE UPDATE | `ai_chat_threads` | `update_updated_at_column` |  |
-| set_landing_pages_updated_at | BEFORE UPDATE | `landing_pages` | `update_updated_at_column` |  |
-| trg_sms_campaigns_updated_at | BEFORE UPDATE | `sms_campaigns` | `update_updated_at_column` |  |
-| trg_sms_templates_updated_at | BEFORE UPDATE | `sms_templates` | `update_updated_at_column` |  |
 | trg_sequence_pause_on_reply | AFTER INSERT | `interactions` | `sequence_pause_on_interaction_reply` |  |
 | abm_accounts_updated_at | BEFORE UPDATE | `abm_accounts` | `update_updated_at_column` |  |
 | abm_accounts_audit | AFTER INSERT OR UPDATE OR DELETE | `abm_accounts` | `audit_trigger_fn` |  |
@@ -714,6 +788,8 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | trg_lsta_updated | BEFORE UPDATE | `lead_score_threshold_automations` | `update_updated_at_column` |  |
 | trg_lsta_audit | AFTER INSERT OR UPDATE OR DELETE | `lead_score_threshold_automations` | `audit_trigger_fn` |  |
 | tg_sequence_events_to_intent | AFTER INSERT | `sequence_events` | `sequence_event_to_intent_signal` |  |
+| trg_singu_sync_contact_email | AFTER INSERT OR UPDATE OR DELETE | `contact_emails` | `singu_sync_contact_email` |  |
+| trg_singu_sync_contact_phone | AFTER INSERT OR UPDATE OR DELETE | `contact_phones` | `singu_sync_contact_phone` |  |
 | update_sales_playbooks_updated_at | BEFORE UPDATE | `sales_playbooks` | `update_updated_at_column` |  |
 | audit_sales_playbooks | AFTER INSERT OR UPDATE OR DELETE | `sales_playbooks` | `audit_trigger_fn` |  |
 | update_battle_cards_updated_at | BEFORE UPDATE | `battle_cards` | `update_updated_at_column` |  |
@@ -724,6 +800,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | trg_mqlc_updated | BEFORE UPDATE | `mql_criteria` | `update_updated_at_column` |  |
 | trg_mqlcls_updated | BEFORE UPDATE | `mql_classifications` | `update_updated_at_column` |  |
 | trg_ne_updated | BEFORE UPDATE | `nurturing_executions` | `update_updated_at_column` |  |
+| trg_singu_sync_company_address | AFTER INSERT OR UPDATE OR DELETE | `company_addresses` | `singu_sync_company_address` |  |
 | trg_revops_benchmarks_updated_at | BEFORE UPDATE | `revops_benchmarks` | `update_updated_at_column` |  |
 | trg_cs_accounts_updated | BEFORE UPDATE | `cs_accounts` | `update_updated_at_column` |  |
 | trg_cs_qbrs_updated | BEFORE UPDATE | `cs_qbrs` | `update_updated_at_column` |  |
@@ -750,6 +827,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | trg_user_ui_preferences_updated_at | BEFORE UPDATE | `user_ui_preferences` | `set_user_ui_preferences_updated_at` |  |
 | update_applied_objection_responses_updated_at | BEFORE UPDATE | `applied_objection_responses` | `update_updated_at_column` |  |
 | update_objection_example_feedback_updated_at | BEFORE UPDATE | `objection_example_feedback` | `update_updated_at_column` |  |
+| trg_contact_notes_updated_at | BEFORE UPDATE | `contact_notes` | `fn_update_contact_notes_updated_at` |  |
 | update_follow_up_approvals_updated_at | BEFORE UPDATE | `follow_up_approvals` | `update_updated_at_column` |  |
 | tr_increment_contact_version | BEFORE UPDATE | `contacts` | `increment_contact_version` |  |
 | update_suggested_rapport_updated_at | BEFORE UPDATE | `suggested_rapport_intel` | `update_updated_at_column` |  |
@@ -804,6 +882,8 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | update_deals_updated_at | BEFORE UPDATE | `deals` | `update_updated_at_column` |  |
 | tr_validate_deal_stage_transition | BEFORE UPDATE OF STAGE_ID | `deals` | `fn_validate_deal_stage_transition` |  |
 | update_ai_tone_preferences_updated_at | BEFORE UPDATE | `ai_tone_preferences` | `update_updated_at_column` |  |
+| trg_novelty_updated_at | BEFORE UPDATE | `product_novelties` | `fn_set_novelty_updated_at` |  |
+| trg_sync_novelty_to_product | AFTER INSERT OR UPDATE OR DELETE | `product_novelties` | `fn_sync_novelty_to_product` |  |
 | trg_entity_relationships_updated_at | BEFORE UPDATE | `entity_relationships` | `tg_set_updated_at` |  |
 | trg_validate_entity_relationship | BEFORE INSERT OR UPDATE | `entity_relationships` | `validate_entity_relationship` |  |
 | trg_enqueue_bpr_whatsapp | AFTER INSERT | `whatsapp_messages` | `enqueue_behavioral_profile_regen` |  |
@@ -813,21 +893,56 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | trg_bif_updated_at | BEFORE UPDATE | `behavioral_insight_feedback` | `update_updated_at_column` |  |
 | trg_notify_admins_critical_behavioral | AFTER INSERT | `system_alerts` | `notify_admins_on_critical_behavioral_alert` |  |
 | system_config_touch | BEFORE UPDATE | `system_config` | `touch_system_config` |  |
+| trg_automations_updated_at | BEFORE UPDATE | `automations` | `update_updated_at_column` |  |
+| trg_calendar_events_updated_at | BEFORE UPDATE | `calendar_events` | `update_updated_at_column` |  |
+| trg_campaigns_updated_at | BEFORE UPDATE | `campaigns` | `update_updated_at_column` |  |
+| trg_company_cadences_updated_at | BEFORE UPDATE | `company_cadences` | `update_updated_at_column` |  |
+| trg_csat_surveys_updated_at | BEFORE UPDATE | `csat_surveys` | `update_updated_at_column` |  |
+| trg_custom_field_values_updated_at | BEFORE UPDATE | `custom_field_values` | `update_updated_at_column` |  |
+| trg_custom_fields_updated_at | BEFORE UPDATE | `custom_fields` | `update_updated_at_column` |  |
+| trg_documents_updated_at | BEFORE UPDATE | `documents` | `update_updated_at_column` |  |
+| trg_economic_groups_updated_at | BEFORE UPDATE | `economic_groups` | `update_updated_at_column` |  |
+| trg_inactivity_alerts_updated_at | BEFORE UPDATE | `inactivity_alerts` | `update_updated_at_column` |  |
+| trg_integrations_updated_at | BEFORE UPDATE | `integrations` | `update_updated_at_column` |  |
+| trg_interaction_templates_updated_at | BEFORE UPDATE | `interaction_templates` | `update_updated_at_column` |  |
+| trg_message_templates_updated_at | BEFORE UPDATE | `message_templates` | `update_updated_at_column` |  |
+| trg_products_updated_at | BEFORE UPDATE | `products` | `update_updated_at_column` |  |
+| trg_proposals_updated_at | BEFORE UPDATE | `proposals` | `update_updated_at_column` |  |
+| trg_quick_notes_updated_at | BEFORE UPDATE | `quick_notes` | `update_updated_at_column` |  |
+| trg_sales_cadences_updated_at | BEFORE UPDATE | `sales_cadences` | `update_updated_at_column` |  |
+| trg_sales_forecasts_updated_at | BEFORE UPDATE | `sales_forecasts` | `update_updated_at_column` |  |
+| trg_sales_goals_updated_at | BEFORE UPDATE | `sales_goals` | `update_updated_at_column` |  |
+| trg_sales_opportunities_updated_at | BEFORE UPDATE | `sales_opportunities` | `update_updated_at_column` |  |
+| trg_smart_segments_updated_at | BEFORE UPDATE | `smart_segments` | `update_updated_at_column` |  |
+| trg_tasks_updated_at | BEFORE UPDATE | `tasks` | `update_updated_at_column` |  |
+| trg_user_goals_updated_at | BEFORE UPDATE | `user_goals` | `update_updated_at_column` |  |
+| trg_whatsapp_messages_updated_at | BEFORE UPDATE | `whatsapp_messages` | `update_updated_at_column` |  |
 | update_data_retention_policies_updated_at | BEFORE UPDATE | `data_retention_policies` | `update_updated_at_column` |  |
 | trg_customer_purchases_after_insert | AFTER INSERT | `customer_purchases` | `trg_after_purchase` |  |
 | trg_valida_dominio_signup | BEFORE INSERT | `auth.users` | `fn_valida_dominio_signup` |  |
 | trg_rpc_plan_changed | BEFORE INSERT | `rpc_plan_snapshots` | `set_rpc_plan_changed` |  |
 | a_singu_sync_legacy_company_name | BEFORE INSERT OR UPDATE | `companies` | `singu_sync_legacy_company_name` |  |
 | sequence_enrollment_write_guard | BEFORE INSERT OR UPDATE | `sequence_enrollments` | `guard_sequence_enrollment_write` |  |
-| sequence_enrollment_counter | AFTER INSERT OR DELETE | `sequence_enrollments` | `refresh_sequence_enrollment_count` |  |
-| sequence_status_send_guard | BEFORE UPDATE OF STATUS | `sequences` | `guard_sequence_status_while_send` |  |
-| sequence_email_reservation_settle | AFTER UPDATE | `sequence_enrollments` | `settle_sequence_email_reservation` |  |
-| contact_sequence_archive_guard | BEFORE UPDATE OR DELETE | `contacts` | `guard_contact_sequence_archive` |  |
+| … +4 linhas — lista completa em `context.json` | | | | |
 
 Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banco):
 
 | Função | Mensagem | Origem |
 |---|---|---|
+| `trg_normalizar_telefone_contact` | Número de telefone inválido: "%" — deve ter entre 8 e 13 dígitos (recebido: % dígitos) | `supabase/migrations/20260306192439_add_length_validation_phone_triggers.sql` |
+| `trg_normalizar_telefone` | Número de telefone inválido: "%" — deve ter entre 8 e 13 dígitos (recebido: % dígitos) | `supabase/migrations/20260306192439_add_length_validation_phone_triggers.sql` |
+| `deactivate_social_media` | entity_type inválido: % | `supabase/migrations/20260321134401_remove_google_maps_enum_v2.sql` |
+| `trg_fn_protect_qualification_config` | Não é possível deletar segmento "%" pois existem fornecedores classificados nele. | `supabase/migrations/20260329204052_create_trigger_protect_qualification_config_delete.sql` |
+| `trg_fn_prevent_evaluation_update` | Avaliações de fornecedor são imutáveis. Não é possível alterar registros existentes. Crie uma nova avaliação. | `supabase/migrations/20260329204121_protect_evaluations_immutable.sql` |
+| `trg_fn_prevent_carrier_evaluation_update` | Avaliações de transportadora são imutáveis. Não é possível alterar registros existentes. Crie uma nova avaliação. | `supabase/migrations/20260330122025_create_carrier_triggers.sql` |
+| `trg_fn_protect_carrier_qualification_config` | Não é possível deletar segmento "%" pois existem transportadoras classificadas nele. | `supabase/migrations/20260330122025_create_carrier_triggers.sql` |
+| `trg_autofill_contact_from_message` | message_id % not found in zapp_history.messages | `supabase/migrations/20260408200845_zapp_history_12_auto_fill_contact_id.sql` |
+| `get_contact_intelligence_v2` | access denied to contact % | `supabase/migrations/20260408201038_zapp_history_16_get_contact_intelligence_v2.sql` |
+| `trigger_backfill_summaries` | start_date (%) must be <= end_date (%) | `supabase/migrations/20260408201117_zapp_history_18_backfill_summaries_rpc.sql` |
+| `trigger_backfill_summaries` | backfill window too large (max 90 days). Requested: % days | `supabase/migrations/20260408201117_zapp_history_18_backfill_summaries_rpc.sql` |
+| `sync_summary_to_interaction` | summary % not found | `supabase/migrations/20260408204226_zapp_history_23_fix_sync_type.sql` |
+| `webhook_log_message` | invalid direction: % | `supabase/migrations/20260409133218_zapp_history_43_webhook_log_rpc.sql` |
+| `webhook_log_message` | whatsapp_number required | `supabase/migrations/20260409133218_zapp_history_43_webhook_log_rpc.sql` |
 | `seed_deal_room` | Forbidden | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
 | `buyer_add_comment` | Invalid comment | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
 | `submit_public_form` | Form not found or not published | `supabase/migrations/20260417011613_40e57206-6feb-4bd8-a3f0-110e3a2cb8e1.sql` |
@@ -842,42 +957,43 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `move_deal` | Sem permissão para mover este negócio | `supabase/migrations/20260513143442_29ae388a-6dff-4a07-b25c-8d2b70aec893.sql` |
 | `update_deal_amount` | Valor do negócio não pode ser negativo | `supabase/migrations/20260513143442_29ae388a-6dff-4a07-b25c-8d2b70aec893.sql` |
 | `update_deal_amount` | Deal não encontrado ou sem permissão | `supabase/migrations/20260513143442_29ae388a-6dff-4a07-b25c-8d2b70aec893.sql` |
+| `fn_cf_collect_sm_legacy` | CF credentials not found in vault | `supabase/migrations/20260607210923_fn_cf_collect_sm_legacy_v1.sql` |
 | `validate_entity_relationship` | from entity % % não existe | `supabase/migrations/20260712215719_930fd99a-437f-423c-a6ce-9a3c5c065106.sql` |
 | `validate_entity_relationship` | to entity % % não existe | `supabase/migrations/20260712215719_930fd99a-437f-423c-a6ce-9a3c5c065106.sql` |
 | `get_behavioral_regen_cron_health` | permission denied | `supabase/migrations/20260713104851_60372e3b-0254-498a-936b-9da1d6741f8e.sql` |
 | `simulate_behavioral_regen_alert` | permission denied | `supabase/migrations/20260713105408_4c9c3e79-bf88-4c94-857a-651b4ce922ce.sql` |
 | `simulate_behavioral_regen_alert` | invalid alert_type | `supabase/migrations/20260713105408_4c9c3e79-bf88-4c94-857a-651b4ce922ce.sql` |
 | `simulate_behavioral_regen_alert` | invalid severity | `supabase/migrations/20260713105408_4c9c3e79-bf88-4c94-857a-651b4ce922ce.sql` |
-| `create_deal` | create_deal: unauthenticated call | `supabase/migrations/20260720000003_bd1_deal_ownership_checks.sql` |
-| `bulk_reassign_companies` | bulk_reassign_companies: admin role required | `supabase/migrations/20260720000005_bd2_company_contact_ownership_checks.sql` |
-| `singu_delete` | Authentication required | `supabase/migrations/20260721000068_fix_singu_user_impersonation.sql` |
-| `singu_delete` | Table % not allowed | `supabase/migrations/20260721000068_fix_singu_user_impersonation.sql` |
-| `singu_insert` | Authentication required | `supabase/migrations/20260721000068_fix_singu_user_impersonation.sql` |
-| `singu_insert` | Table % not allowed | `supabase/migrations/20260721000068_fix_singu_user_impersonation.sql` |
-| `singu_update` | Authentication required | `supabase/migrations/20260721000068_fix_singu_user_impersonation.sql` |
-| `singu_update` | Table % not allowed | `supabase/migrations/20260721000068_fix_singu_user_impersonation.sql` |
-| `singu_query` | Authentication required | `supabase/migrations/20260721000068_fix_singu_user_impersonation.sql` |
-| `singu_query` | Table % not allowed | `supabase/migrations/20260721000068_fix_singu_user_impersonation.sql` |
-| `assert_self_user_id` | Unauthorized: cannot perform operations on behalf of another user | `supabase/migrations/20260721000070_fix_secdef_impersonation_guard_all.sql` |
-| `assert_company_access` | Unauthorized: company % does not belong to the current user | `supabase/migrations/20260721000074_fix_secdef_object_ownership_guard.sql` |
-| `assert_contact_access` | Unauthorized: contact % does not belong to the current user | `supabase/migrations/20260721000074_fix_secdef_object_ownership_guard.sql` |
-| `assert_deal_access` | Unauthorized: deal % does not belong to the current user | `supabase/migrations/20260721000075_fix_secdef_entity_ownership_guard.sql` |
-| `assert_event_access` | Unauthorized: event % does not belong to the current user | `supabase/migrations/20260721000075_fix_secdef_entity_ownership_guard.sql` |
-| `assert_interaction_access` | Unauthorized: interaction % does not belong to the current user | `supabase/migrations/20260721000075_fix_secdef_entity_ownership_guard.sql` |
-| `assert_note_access` | Unauthorized: note % does not belong to the current user | `supabase/migrations/20260721000075_fix_secdef_entity_ownership_guard.sql` |
-| `assert_reminder_access` | Unauthorized: reminder % does not belong to the current user | `supabase/migrations/20260721000075_fix_secdef_entity_ownership_guard.sql` |
-| `assert_task_access` | Unauthorized: task % does not belong to the current user | `supabase/migrations/20260721000075_fix_secdef_entity_ownership_guard.sql` |
-| `assert_visit_access` | Unauthorized: visit % does not belong to the current user | `supabase/migrations/20260721000076_fix_secdef_entity_ownership_guard_2.sql` |
-| `assert_notification_access` | Unauthorized: notification % does not belong to the current user | `supabase/migrations/20260721000076_fix_secdef_entity_ownership_guard_2.sql` |
-| `assert_proposal_access` | Unauthorized: proposal % does not belong to the current user | `supabase/migrations/20260721000076_fix_secdef_entity_ownership_guard_2.sql` |
-| `assert_goal_access` | Unauthorized: goal % does not belong to the current user | `supabase/migrations/20260721000076_fix_secdef_entity_ownership_guard_2.sql` |
-| `assert_violation_access` | Unauthorized: SLA violation % does not belong to the current user | `supabase/migrations/20260721000076_fix_secdef_entity_ownership_guard_2.sql` |
-| `assert_alert_access` | Unauthorized: alert % does not belong to the current user | `supabase/migrations/20260721000076_fix_secdef_entity_ownership_guard_2.sql` |
-| `assert_customer_access` | Unauthorized: customer % does not belong to the current user | `supabase/migrations/20260721000076_fix_secdef_entity_ownership_guard_2.sql` |
-| `assert_cadence_access` | Unauthorized: cadence % does not belong to the current user | `supabase/migrations/20260721000077_fix_secdef_remaining_guards.sql` |
-| `assert_opportunity_access` | Unauthorized: opportunity % does not belong to the current user | `supabase/migrations/20260721000077_fix_secdef_remaining_guards.sql` |
-| `resolve_alerts_batch` | Unauthorized: one or more alerts do not belong to you | `supabase/migrations/20260721000077_fix_secdef_remaining_guards.sql` |
-| `record_nps_response` | Unauthorized: NPS survey % does not belong to the current user | `supabase/migrations/20260721000077_fix_secdef_remaining_guards.sql` |
+| `create_deal` | create_deal: unauthenticated call | `supabase/migrations/20260720134409_bd1_deal_ownership_checks.sql` |
+| `bulk_reassign_companies` | bulk_reassign_companies: admin role required | `supabase/migrations/20260720135515_bd2_company_contact_ownership_checks.sql` |
+| `singu_delete` | Authentication required | `supabase/migrations/20260721204158_fix_singu_user_impersonation.sql` |
+| `singu_delete` | Table % not allowed | `supabase/migrations/20260721204158_fix_singu_user_impersonation.sql` |
+| `singu_insert` | Authentication required | `supabase/migrations/20260721204158_fix_singu_user_impersonation.sql` |
+| `singu_insert` | Table % not allowed | `supabase/migrations/20260721204158_fix_singu_user_impersonation.sql` |
+| `singu_update` | Authentication required | `supabase/migrations/20260721204158_fix_singu_user_impersonation.sql` |
+| `singu_update` | Table % not allowed | `supabase/migrations/20260721204158_fix_singu_user_impersonation.sql` |
+| `singu_query` | Authentication required | `supabase/migrations/20260721204158_fix_singu_user_impersonation.sql` |
+| `singu_query` | Table % not allowed | `supabase/migrations/20260721204158_fix_singu_user_impersonation.sql` |
+| `assert_self_user_id` | Unauthorized: cannot perform operations on behalf of another user | `supabase/migrations/20260721205654_fix_secdef_impersonation_guard_all.sql` |
+| `assert_company_access` | Unauthorized: company % does not belong to the current user | `supabase/migrations/20260721212000_fix_secdef_object_ownership_guard.sql` |
+| `assert_contact_access` | Unauthorized: contact % does not belong to the current user | `supabase/migrations/20260721212000_fix_secdef_object_ownership_guard.sql` |
+| `assert_deal_access` | Unauthorized: deal % does not belong to the current user | `supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql` |
+| `assert_event_access` | Unauthorized: event % does not belong to the current user | `supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql` |
+| `assert_interaction_access` | Unauthorized: interaction % does not belong to the current user | `supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql` |
+| `assert_note_access` | Unauthorized: note % does not belong to the current user | `supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql` |
+| `assert_reminder_access` | Unauthorized: reminder % does not belong to the current user | `supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql` |
+| `assert_task_access` | Unauthorized: task % does not belong to the current user | `supabase/migrations/20260721212539_fix_secdef_entity_ownership_guard.sql` |
+| `assert_visit_access` | Unauthorized: visit % does not belong to the current user | `supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql` |
+| `assert_notification_access` | Unauthorized: notification % does not belong to the current user | `supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql` |
+| `assert_proposal_access` | Unauthorized: proposal % does not belong to the current user | `supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql` |
+| `assert_goal_access` | Unauthorized: goal % does not belong to the current user | `supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql` |
+| `assert_violation_access` | Unauthorized: SLA violation % does not belong to the current user | `supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql` |
+| `assert_alert_access` | Unauthorized: alert % does not belong to the current user | `supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql` |
+| `assert_customer_access` | Unauthorized: customer % does not belong to the current user | `supabase/migrations/20260721213727_fix_secdef_entity_ownership_guard_2.sql` |
+| `assert_cadence_access` | Unauthorized: cadence % does not belong to the current user | `supabase/migrations/20260721214918_fix_secdef_remaining_guards.sql` |
+| `assert_opportunity_access` | Unauthorized: opportunity % does not belong to the current user | `supabase/migrations/20260721214918_fix_secdef_remaining_guards.sql` |
+| `resolve_alerts_batch` | Unauthorized: one or more alerts do not belong to you | `supabase/migrations/20260721214918_fix_secdef_remaining_guards.sql` |
+| `record_nps_response` | Unauthorized: NPS survey % does not belong to the current user | `supabase/migrations/20260721214918_fix_secdef_remaining_guards.sql` |
 | `cs_renewal_pipeline` | Forbidden | `supabase/migrations/20260723120839_8d1857f8-929d-453c-9f9b-9ede9fef5d41.sql` |
 | `seed_lead_score_defaults` | not authorized | `supabase/migrations/20260723121057_9d1bb7f0-69a6-4197-8656-8dfeb9dfe6bc.sql` |
 | `compute_account_health` | Account not found | `supabase/migrations/20260723122017_4576ad54-c38d-4259-9e8d-b3b241622eac.sql` |
@@ -995,8 +1111,6 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `enroll_lead_score_contact` | Automação exclusiva do serviço | `supabase/migrations/20261013033433_sequence_write_fences.sql` |
 | `enroll_lead_score_contact` | Automação indisponível | `supabase/migrations/20261013033433_sequence_write_fences.sql` |
 | `enroll_lead_score_contact` | Inscrição indisponível | `supabase/migrations/20261013033433_sequence_write_fences.sql` |
-| `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
-| `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 | `create_quick_interaction` | Authentication required | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
 | `create_quick_interaction` | Invalid interaction | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
 | `create_quick_interaction` | Invalid interaction | `supabase/migrations/20261028224000_contact_quick_interaction.sql` |
@@ -1021,6 +1135,8 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `merge_records_atomically` | Mesclagem criaria relação circular: % | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
 | `merge_records_atomically` | Ancestral de outro proprietário | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
 | `merge_records_atomically` | Relação pertence a outro usuário | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
+| `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
+| `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 
 ## E. Estados, máquinas de estado e transições
 
@@ -1033,8 +1149,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `abm_campaigns` | `status` | `active`, `archived`, `completed`, `draft`, `paused` | `draft` |
 | `abm_whitespace_opportunities` | `status` | `dismissed`, `identified`, `lost`, `pursuing`, `won` | `identified` |
 | `call_logs` | `status` | `busy`, `completed`, `failed`, `missed`, `no-answer` |  |
-| `campaign_recipients` | `status` | `bounced`, `clicked`, `delivered`, `opened`, `pending`, `sent`, `unsubscribed` | `pending` |
-| `city_whitelist` | `state` | **livre (sem enum/CHECK)** |  |
+| `campaign_recipients` | `status` | `bounced`, `clicked`, `complained`, `delivered`, `failed`, `opened`, `pending`, `sent`, `unsubscribed` | `pending` |
 | `companies` | `state` | **livre (sem enum/CHECK)** |  |
 | `connection_configs` | `last_test_status` | **livre (sem enum/CHECK)** |  |
 | `connection_test_logs` | `status` | **livre (sem enum/CHECK)** |  |
@@ -1048,13 +1163,12 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `cs_accounts` | `lifecycle_stage` | `adopting`, `at_risk`, `churned`, `mature`, `onboarding` | `onboarding` |
 | `cs_qbrs` | `status` | `cancelled`, `completed`, `no_show`, `scheduled` | `scheduled` |
 | `cs_renewals` | `status` | `churned`, `downgraded`, `expanded`, `in_negotiation`, `renewed`, `upcoming` | `upcoming` |
-| `csat_surveys` | `status` | `answered`, `ces`, `csat`, `custom`, `expired`, `nps`, `pending`, `sent` | `pending` |
 | `deal_forecasts` | `stage` | **livre (sem enum/CHECK)** |  |
 | `deal_room_milestones` | `status` | `blocked`, `done`, `in_progress`, `pending` | `pending` |
 | `deal_rooms` | `status` | `active`, `lost`, `paused`, `won` | `active` |
-| `document_signatures` | `status` | **livre (sem enum/CHECK)** | `pending` |
+| `document_signatures` | `status` | `cancelled`, `expired`, `pending`, `rejected`, `sent`, `signed`, `viewed` | `pending` |
 | `documents` | `status` | `active`, `archived`, `draft` | `active` |
-| `email_campaigns` | `status` | `cancelled`, `draft`, `scheduled`, `sending`, `sent` | `draft` |
+| `email_campaigns` | `status` | `cancelled`, `draft`, `failed`, `paused`, `scheduled`, `sending`, `sent` | `draft` |
 | `email_verifications` | `status` | `catchall`, `invalid`, `risky`, `unknown`, `valid` | `unknown` |
 | `emotional_anchors` | `emotional_state` | **livre (sem enum/CHECK)** |  |
 | `emotional_states_history` | `emotional_state` | **livre (sem enum/CHECK)** |  |
@@ -1067,56 +1181,138 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `incoming_webhook_logs` | `status` | **livre (sem enum/CHECK)** |  |
 | `incoming_webhook_logs` | `http_status` | **livre (sem enum/CHECK)** |  |
 | `interaction_summaries` | `negotiation_stage_summary` | **livre (sem enum/CHECK)** |  |
-| `lead_assignments` | `status` | `active`, `completed`, `expired`, `reassigned` | `active` |
+| `interactions` | `status` | `agendado`, `cancelado`, `concluido`, `pendente` |  |
+| `knowledge_base_articles` | `status` | `archived`, `draft`, `published` | `draft` |
+| `landing_pages` | `status` | `archived`, `draft`, `published` | `draft` |
+| `lead_assignments` | `status` | `accepted`, `active`, `completed`, `expired`, `reassigned`, `rejected` | `active` |
+| `lead_assignments` | `sla_status` | `breached`, `na`, `warning`, `within` | `within` |
 | `lux_intelligence` | `status` | `completed`, `error`, `pending`, `processing` | `pending` |
-| `lux_webhook_config` | `last_test_status` | **livre (sem enum/CHECK)** |  |
 | `mcp_tool_calls` | `status` | `denied`, `error`, `success` |  |
 | `mql_classifications` | `status` | `customer`, `disqualified`, `mql`, `sql` | `mql` |
 | `neuro_pnl_sessions` | `emotional_state_before` | **livre (sem enum/CHECK)** |  |
 | `neuro_pnl_sessions` | `emotional_state_after` | **livre (sem enum/CHECK)** |  |
 | `notification_logs` | `delivery_status` | `pending`, `rejected`, `sent`, `unknown` | `sent` |
+| `nurturing_enrollments` | `status` | `active`, `cancelled`, `completed`, `failed`, `paused` | `active` |
+| `nurturing_enrollments` | `current_step_index` | **livre (sem enum/CHECK)** | `0` |
 | `nurturing_enrollments` | `current_step` | **livre (sem enum/CHECK)** | `0` |
-| `nurturing_enrollments` | `status` | `active`, `cancelled`, `completed`, `paused` | `active` |
 | `nurturing_executions` | `current_step` | **livre (sem enum/CHECK)** | `0` |
 | `nurturing_executions` | `status` | `active`, `cancelled`, `completed`, `failed`, `paused` | `active` |
 | `offer_suggestions` | `status` | **livre (sem enum/CHECK)** | `pending` |
-| `password_reset_requests` | `status` | **livre (sem enum/CHECK)** | `pending` |
 | `phone_validations` | `status` | `invalid`, `unknown`, `unreachable`, `valid` | `unknown` |
 | `reframing_analysis` | `status` | **livre (sem enum/CHECK)** | `pending` |
 | `revops_snapshots` | `funnel_stage` | `customer`, `lead`, `mql`, `opportunity`, `sql`, `visitor` |  |
 | `sales_playbooks` | `stage_target` | **livre (sem enum/CHECK)** |  |
-| `sequence_enrollments` | `status` | `active`, `bounced`, `completed`, `paused`, `replied`, `unsubscribed` | `active` |
+| `sequence_enrollments` | `status` | `active`, `cancelled`, `completed`, `failed`, `meeting_booked`, `paused`, `replied` | `active` |
 | `sequence_enrollments` | `current_step` | **livre (sem enum/CHECK)** | `0` |
-| `sequence_enrollments` | `last_step_executed_at` | **livre (sem enum/CHECK)** |  |
+| `sequence_enrollments` | `last_step_completed_at` | **livre (sem enum/CHECK)** |  |
 | `sequence_enrollments` | `last_step_sent_at` | **livre (sem enum/CHECK)** |  |
 | `sequence_events` | `step_order` | **livre (sem enum/CHECK)** |  |
 | `sequence_send_log` | `step_order` | **livre (sem enum/CHECK)** |  |
 | `sequence_send_log` | `status` | `bounced`, `failed`, `sent`, `skipped` | `sent` |
+| `sequence_steps` | `step_number` | **livre (sem enum/CHECK)** |  |
 | `sequence_steps` | `step_order` | **livre (sem enum/CHECK)** | `1` |
 | `sequences` | `status` | `active`, `archived`, `draft`, `paused` | `draft` |
 | `smart_notifications` | `status` | `clicked`, `delivered`, `dismissed`, `pending`, `snoozed`, `suppressed` | `pending` |
-| `sms_campaign_recipients` | `status` | `delivered`, `failed`, `opted_out`, `pending`, `replied`, `sent` | `pending` |
-| `sms_campaigns` | `status` | `draft`, `failed`, `paused`, `scheduled`, `sending`, `sent` | `draft` |
+| `sms_campaign_recipients` | `status` | `delivered`, `failed`, `opted_out`, `pending`, `sent` | `pending` |
+| `sms_campaigns` | `status` | `cancelled`, `draft`, `failed`, `paused`, `scheduled`, `sending`, `sent` | `draft` |
 | `social_sync_queue` | `status` | **livre (sem enum/CHECK)** | `pending` |
 | `suggested_life_events` | `status` | `accepted`, `pending`, `rejected` | `pending` |
 | `suggested_rapport_intel` | `status` | `approved`, `pending`, `rejected` | `pending` |
-| `support_tickets` | `status` | `closed`, `in_progress`, `open`, `resolved`, `waiting` | `open` |
+| `support_tickets` | `status` | `cancelled`, `closed`, `in_progress`, `open`, `resolved`, `waiting_customer`, `waiting_internal` | `open` |
 | `system_health_snapshots` | `status` | `degraded`, `healthy`, `unhealthy` |  |
 | `validation_queue` | `status` | `pending`, `processing`, `done`, `error` | `pending` |
 | `whatsapp_ingestion_logs` | `status` | **livre (sem enum/CHECK)** |  |
-| `whatsapp_instances` | `status` | **livre (sem enum/CHECK)** | `disconnected` |
+| `whatsapp_instances` | `status` | `connected`, `connecting`, `disconnected`, `error`, `qr_code` | `disconnected` |
 | `whatsapp_messages` | `status` | **livre (sem enum/CHECK)** | `pending` |
 | `migration_password_reset_log` | `status` | `failed`, `pending`, `sent`, `skipped` |  |
+| `calendar_events` | `status` | `cancelled`, `completed`, `confirmed`, `scheduled`, `tentative` | `scheduled` |
+| `campaigns` | `status` | `active`, `archived`, `cancelled`, `completed`, `draft`, `paused` | `draft` |
+| `commissions` | `status` | `approved`, `cancelled`, `paid`, `pending` | `pending` |
+| `company_addresses` | `estado` | **livre (sem enum/CHECK)** |  |
+| `deal_competitors` | `status` | `competing`, `lost_to`, `won_against` | `competing` |
+| `deal_velocity_analysis` | `stage_velocity` | **livre (sem enum/CHECK)** |  |
+| `deal_velocity_analysis` | `bottleneck_stage` | **livre (sem enum/CHECK)** |  |
+| `interaction_templates` | `for_stage` | **livre (sem enum/CHECK)** |  |
+| `meetings` | `status` | `cancelled`, `completed`, `confirmed`, `no_show`, `scheduled` | `scheduled` |
+| `proposals` | `status` | `aceita`, `enviada`, `expirada`, `rascunho`, `rejeitada`, `visualizada` | `rascunho` |
+| `relationship_score_history` | `stage` | **livre (sem enum/CHECK)** |  |
+| `relationship_score_history` | `previous_stage` | **livre (sem enum/CHECK)** |  |
+| `scheduled_visits` | `status` | `cancelled`, `completed`, `no_show`, `rescheduled`, `scheduled` | `scheduled` |
+| `sync_log` | `status` | **livre (sem enum/CHECK)** |  |
+| `cadence_enrollments` | `current_step` | **livre (sem enum/CHECK)** | `1` |
+| `cadence_enrollments` | `status` | `active`, `bounced`, `completed`, `opted_out`, `paused`, `replied` | `active` |
+| `campaign_members` | `status` | `active`, `bounced`, `completed`, `opted_out`, `pending`, `unsubscribed` | `pending` |
+| `company_cadences` | `current_step` | **livre (sem enum/CHECK)** | `1` |
+| `company_cadences` | `status` | `active`, `archived`, `completed`, `paused` | `active` |
+| `contact_addresses` | `estado` | **livre (sem enum/CHECK)** |  |
+| `stg_portal_sicoob` | `match_status` | **livre (sem enum/CHECK)** | `NEW` |
+| `stg_bcb_sicoob` | `match_status` | **livre (sem enum/CHECK)** | `NEW` |
+| `stg_site_sicoob_pacs` | `match_status` | **livre (sem enum/CHECK)** | `NEW` |
+| `sales` | `status` | `cancelled`, `completed`, `discovery`, `lead`, `negotiation`, `pending`, `proposal`, `qualification` | `pending` |
+| `products` | `status` | **livre (sem enum/CHECK)** | `ativo` |
+| `deal_stage_history` | `stage` | **livre (sem enum/CHECK)** |  |
+| `playbooks` | `stage` | **livre (sem enum/CHECK)** |  |
+| `sales_tasks` | `status` | `pending`, `in_progress`, `completed`, `cancelled` | `pending` |
+| `cadence_steps` | `step_order` | **livre (sem enum/CHECK)** | `0` |
+| `prospect_cadences` | `status` | `active`, `cancelled`, `completed`, `paused` | `active` |
+| `prospect_cadences` | `current_step` | **livre (sem enum/CHECK)** | `0` |
+| `cadence_tasks` | `status` | `completed`, `pending`, `skipped` | `pending` |
+| `sales_battles` | `status` | `active`, `completed`, `upcoming` | `upcoming` |
+| `competitive_seasons` | `status` | `active`, `completed`, `upcoming` | `upcoming` |
+| `weekly_matchups` | `status` | `active`, `completed` | `active` |
+| `tournaments` | `status` | `active`, `cancelled`, `completed`, `registration` | `registration` |
+| `tournament_participants` | `status` | `active`, `eliminated`, `runner_up`, `winner` | `active` |
+| `tournament_matches` | `status` | `active`, `completed`, `pending` | `pending` |
+| `performance_bets` | `status` | `active`, `cancelled`, `lost`, `won` | `active` |
+| `reauthentication_requests` | `status` | `expired`, `failed`, `pending`, `verified` | `pending` |
+| `webauthn_credentials` | `backup_state` | **livre (sem enum/CHECK)** | `false` |
+| `password_reset_requests` | `status` | `approved`, `expired`, `pending`, `rejected` | `pending` |
+| `client_portfolio` | `status` | `active`, `inactive` | `inactive` |
+| `bitrix24_sync_logs` | `status` | **livre (sem enum/CHECK)** | `success` |
+| `email_logs` | `status` | **livre (sem enum/CHECK)** | `sent` |
+| `quotes` | `status` | `approved`, `draft`, `expired`, `rejected`, `sent` | `draft` |
+| `quote_sync_logs` | `status` | **livre (sem enum/CHECK)** | `pending` |
+| `supplier_orders` | `status` | `cancelled`, `confirmed`, `delivered`, `pending`, `shipped` | `pending` |
+| `digital_signatures` | `status` | `draft`, `expired`, `pending`, `rejected`, `signed` | `draft` |
+| `document_signers` | `status` | `pending`, `rejected`, `signed` | `pending` |
+| `stg_pesquisa_singulares` | `situacao_cadastral_rfb` | **livre (sem enum/CHECK)** |  |
+| `stg_pesquisa_singulares` | `status_pesquisa` | `CLONE_MERGEADO`, `CNPJ_TERCEIRO`, `INCORPORADA`, `INVESTIGAR`, `PAC_DISFARÇADO`, `RECLASSIFICADO`, `SINGULAR_LEGÍTIMA` |  |
+| `data_quality_audits` | `status` | **livre (sem enum/CHECK)** | `CONCLUIDO` |
+| `staging_portal_sicoob` | `estado` | **livre (sem enum/CHECK)** |  |
+| `supplier_homologations` | `status` | `pendente`, `em_analise`, `homologado`, `reprovado`, `suspenso`, `vencido` | `pendente` |
+| `carrier_homologations` | `status` | `pendente`, `em_analise`, `homologado`, `reprovado`, `suspenso`, `vencido` | `pendente` |
+| `zapp_history.whatsapp_connections` | `status` | `banned`, `connected`, `connecting`, `disconnected`, `error`, `qr_pending` | `disconnected` |
+| `zapp_history.conversations` | `status` | `archived`, `closed`, `open`, `pending`, `resolved`, `spam` | `open` |
+| `zapp_history.messages` | `embedding_status` | `done`, `failed`, `pending`, `processing`, `skipped` | `pending` |
+| `zapp_history.messages` | `delivery_status` | **livre (sem enum/CHECK)** |  |
+| `zapp_history.messages` | `funnel_stage` | **livre (sem enum/CHECK)** |  |
+| `zapp_history.messages` | `journey_stage` | **livre (sem enum/CHECK)** |  |
+| `zapp_history.messages` | `emotional_state` | **livre (sem enum/CHECK)** |  |
+| `zapp_history.messages` | `relationship_status` | **livre (sem enum/CHECK)** |  |
+| `zapp_history.message_media` | `download_status` | `downloaded`, `downloading`, `expired`, `failed`, `pending` | `pending` |
+| `zapp_history.message_audio` | `transcription_status` | `done`, `failed`, `pending`, `processing`, `skipped` | `pending` |
+| `zapp_history.message_links` | `fetch_status` | `blocked`, `done`, `failed`, `fetching`, `pending`, `skipped` | `pending` |
+| `zapp_history.async_request_log` | `status` | **livre (sem enum/CHECK)** | `dispatched` |
+| `zapp_history.location_dictionary` | `state` | **livre (sem enum/CHECK)** |  |
+| `singu_migration._checklist` | `step_number` | **livre (sem enum/CHECK)** |  |
+| `singu_migration._checklist` | `step_name` | **livre (sem enum/CHECK)** |  |
+| `singu_migration._checklist` | `status` | `done`, `error`, `in_progress`, `pending`, `skipped` | `pending` |
 | `deals` | `status` | `lost`, `on_hold`, `open`, `won` | `open` |
+| `deals` | `pipeline_stage` | **livre (sem enum/CHECK)** |  |
 | `pipeline_stage_transitions` | `from_stage` | **livre (sem enum/CHECK)** |  |
 | `pipeline_stage_transitions` | `to_stage` | **livre (sem enum/CHECK)** |  |
+| `sm_upload_mapping` | `status` | **livre (sem enum/CHECK)** | `pending` |
+| `xbz_upload_mapping` | `status` | **livre (sem enum/CHECK)** | `pending` |
+| `asia_upload_mapping` | `status` | **livre (sem enum/CHECK)** | `pending` |
 | `tasks` | `status` | `cancelled`, `completed`, `in_progress`, `pending` | `pending` |
+| `inactivity_alerts` | `status` | `active`, `dismissed`, `resolved`, `snoozed` |  |
+| `automation_executions` | `status` | `cancelled`, `completed`, `failed`, `pending`, `running` |  |
+| `integrations` | `sync_status` | **livre (sem enum/CHECK)** |  |
+| `sales_opportunities` | `status` | `identified`, `lost`, `negotiation`, `on_hold`, `proposal`, `qualified`, `won` |  |
 | `ai_gateway_metrics` | `status` | `error`, `rate_limited`, `success`, `timeout` |  |
 | `ai_gateway_metrics` | `http_status` | **livre (sem enum/CHECK)** |  |
 | `rodizio_distribuicao_staging` | `status` | `APLICADO`, `APROVADO`, `RASCUNHO`, `REJEITADO` | `RASCUNHO` |
 | `cidades` | `estado_ibge` | **livre (sem enum/CHECK)** |  |
-| `company_addresses` | `estado` | **livre (sem enum/CHECK)** |  |
-| `sales` | `status` | `cancelled`, `completed`, `discovery`, `lead`, `negotiation`, `pending`, `proposal`, `qualification` | `pending` |
 | `_dormant.inactivity_alerts` | `status` | **livre (sem enum/CHECK)** | `active` |
 | `sequence_email_reservations` | `current_step` | **livre (sem enum/CHECK)** |  |
 | `sequence_email_reservations` | `step_order` | **livre (sem enum/CHECK)** |  |
@@ -1429,25 +1625,35 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `completed` | compara, escreve | `src/components/company-detail/CompanyCommercialTab.tsx`<br>`src/components/contact-detail/commercial-tab/TasksCard.tsx`<br>`src/components/gamification/UserGoalsWidget.tsx`<br>`src/components/lux/LuxHistoryTimeline.tsx`<br>`src/components/lux/LuxIntelligencePanel.tsx`<br>… +9 |
 | `status` | `connected` | compara | `src/components/whatsapp/WhatsAppDashboard.tsx` |
-| … +176 linhas — lista completa em `context.json` | | | |
+| … +177 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
 | Nome | Valores | Onde |
 |---|---|---|
-| app_role | `admin`, `moderator`, `user` | banco |
+| app_role | `admin`, `manager`, `salesperson`, `moderator`, `user` | banco |
 | entity_relationship_role | `buyer`, `manager`, `owner`, `decision_maker`, `influencer`, `user`, `sponsor`, `partner`, `supplier`, `subsidiary`, `parent`, `employee_of`, `other` | banco |
 | entity_type | `company`, `contact` | banco |
 | error_severity | `info`, `warning`, `error`, `critical` | banco |
 | passo_outcome | `respondeu_positivo`, `respondeu_neutro`, `nao_respondeu`, `nao_atendeu`, `pulou` | banco |
 | validation_kind | `email`, `phone` | banco |
 | validation_queue_status | `pending`, `processing`, `done`, `error` | banco |
-| email_type | `corporativo`, `pessoal`, `financeiro`, `nfe`, `marketing`, `comercial`, `compras` | banco |
 | phone_type | `celular_corporativo`, `fixo_comercial`, `celular_pessoal`, `invalido` | banco |
+| email_type | `corporativo`, `pessoal`, `financeiro`, `nfe`, `marketing`, `comercial`, `compras` | banco |
+| social_media_platform | `linkedin`, `instagram`, `facebook`, `x`, `youtube`, `tiktok`, `whatsapp`, `google_business`, `website` | banco |
+| workspace_account_type | `user`, `group`, `alias`, `shared_mailbox`, `service_account` | banco |
+| data_source | `CRM`, `SPA_CLIENTE`, `SPA_FORNECEDOR`, `SPA_TRANSPORTADORA`, `MERGED`, `MANUAL`, `LINKEDIN`, `LUSHA`, `LEADCONTACT`, `WHATSAPP` | banco |
 | company_status | `ativo`, `inativo`, `suspenso` | banco |
-| salesperson_role | `sdr`, `closer`, `hybrid` | banco |
+| buckettype | `STANDARD`, `PUBLIC`, `PRIVATE` | banco |
+| task_priority | `high`, `medium`, `low` | banco |
+| task_status | `pending`, `in_progress`, `completed`, `cancelled` | banco |
+| task_type | `call`, `meeting`, `follow_up`, `email`, `proposal`, `other` | banco |
 | activity_type | `call`, `email`, `meeting`, `linkedin`, `whatsapp`, `other` | banco |
 | activity_outcome | `connected`, `no_answer`, `scheduled`, `voicemail`, `busy`, `callback`, `not_interested`, `qualified` | banco |
+| salesperson_role | `sdr`, `closer`, `hybrid` | banco |
+| supplier_homologation_status | `pendente`, `em_analise`, `homologado`, `reprovado`, `suspenso`, `vencido` | banco |
+| supplier_alert_severity | `info`, `atencao`, `critico` | banco |
+| carrier_homologation_status | `pendente`, `em_analise`, `homologado`, `reprovado`, `suspenso`, `vencido` | banco |
 | EvidenceKind | preference \| hobby \| tone | `src/components/contacts/EvidenceDrillDownSheet.tsx` |
 | PeriodFilter | 7d \| 30d \| 90d | `src/components/dashboard/charts/ChartDataUtils.ts` |
 | EmailBlockType | heading \| text \| button \| image \| divider \| spacer | `src/components/email-builder/types.ts` |
@@ -2264,8 +2470,14 @@ _nenhum item encontrado_
 
 | Tabela | Coluna | Expressão |
 |---|---|---|
-| `rfm_analysis` | `rfm_score` | `recency_score * 100 + frequency_score * 10 + monetary_score` |
-| `rfm_analysis` | `total_score` | `recency_score + frequency_score + monetary_score` |
+| `rfm_analysis` | `rfm_score` | `recency_score::text \|\| frequency_score::text \|\| monetary_score::text` |
+| `rfm_analysis` | `rfm_total` | `recency_score + frequency_score + monetary_score` |
+| `trigger_intensity_history` | `intensity_change` | `intensity_level - COALESCE(previous_intensity, intensity_level)` |
+| `trigger_intensity_history` | `is_escalation` | `COALESCE(previous_intensity, 0) < intensity_level` |
+| `trigger_intensity_history` | `reached_max_intensity` | `intensity_level = 5` |
+| `lead_scores` | `score_change` | `total_score - COALESCE(previous_score, 0)` |
+| `supplier_evaluations` | `nota_geral` | `(nota_preco + nota_prazo + nota_qualidade + nota_entrega)::numeric / 4.0` |
+| `carrier_evaluations` | `nota_geral` | `(nota_pontualidade + nota_conservacao + nota_preco_frete + nota_rastreamento + nota_cobertura)::numeric / 5.0` |
 | `sequence_email_reservations` | `idempotency_key` | `'seq-' \|\| enrollment_id::text \|\| '-step-' \|\| step_order::text` |
 
 ### G.2 Views (consultas derivadas)
@@ -2276,7 +2488,7 @@ _nenhum item encontrado_
 | `document_signatures_public` | `SELECT id, signer_name, signer_email, rendered_html, status, viewed_at, signed_at, expires_at FROM public.document_signatures WHERE signature_token IS NOT NULL AND status <> ALL (ARRAY['declined'::text, 'expired'::text]) AND (expires_at IS NULL OR expires_at > now())` |
 | `forms_public` | `SELECT id, slug, name, description, fields, redirect_url, success_message FROM public.forms WHERE is_published = true` |
 | `landing_pages_public` | `SELECT id, slug, title, description, blocks, theme, redirect_url FROM public.landing_pages WHERE is_published = true` |
-| `push_subscriptions_safe` | `SELECT id, user_id, endpoint, created_at FROM public.push_subscriptions` |
+| `push_subscriptions_safe` | `SELECT id, user_id, endpoint, created_at FROM public.push_subscriptions WHERE user_id = (SELECT auth.uid())` |
 | `slow_queries_audit` | `SELECT query, calls, total_exec_time / 1000 as total_exec_seconds, mean_exec_time as mean_exec_ms, rows FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT 50` |
 | `v_contact_behavior_audit` | `SELECT id, contact_id, user_id, 'vak' as analysis_type, created_at as timestamp, analyzed_text, is_validated, user_feedback FROM public.vak_analysis_history UNION ALL SELECT id, contact_id, user_id, 'metaprogram' as analysis_type, created_at as timestamp, analyzed_text, is_validated, user_feedback F …` |
 | `v_contact_personality_audit` | `SELECT l.id, l.contact_id, l.created_at AS "timestamp", p.first_name \|\| ' ' \|\| p.last_name AS user_name, l.change_source, l.field_name, l.old_value, l.new_value, l.reason FROM (public.crm_relationship_audit_logs l LEFT JOIN public.profiles p ON ((l.user_id = p.id))) WHERE ((l.reason ~~ '%Atualização …` |
@@ -2284,6 +2496,89 @@ _nenhum item encontrado_
 | `v_entities` | `SELECT 'company'::public.entity_type AS entity_type, c.id, COALESCE(c.name, c.nome_fantasia, c.razao_social) AS display_name, c.email, c.phone, c.created_at, c.updated_at FROM public.companies c UNION ALL SELECT 'contact'::public.entity_type, p.id, TRIM(BOTH ' ' FROM CONCAT_WS(' ', p.first_name, p.l …` |
 | `v_life_events_audit` | `SELECT h.id, h.life_event_id, h.contact_id, h.user_id, COALESCE(p.first_name \|\| ' ' \|\| p.last_name, 'Sistema') as user_name, h.event_type, h.title, h.event_date, h.recurring, h.reminder_days_before, h.change_type, h.reason, h.changed_at FROM public.life_events_history h LEFT JOIN public.profiles p O …` |
 | `vw_contacts_nlp` | `SELECT c.id as contact_id, c.first_name, c.last_name, c.vak_dominant, c.motivation_direction, c.working_style, c.user_id FROM public.contacts c` |
+| `vw_lalamove_plus_alerts` | `SELECT 'dead_letter' as alert_type, COUNT(*) as count, MAX(created_at) as latest FROM lalamove_dead_letter WHERE resolved = false AND created_at > now() - interval '24 hours' UNION ALL SELECT 'stall_alerts' as alert_type, COUNT(*) as count, MAX(created_at) as latest FROM lalamove_position_log WHERE …` |
+| `vw_pix_accounts` | `SELECT p.id AS pix_id, p.company_id, c.razao_social, c.nome_fantasia, c.cnpj, p.pix_tipo, p.pix_chave, p.pix_favorecido, p.is_active, p.created_by, p.updated_by, p.created_at, p.updated_at FROM public.pix_accounts p JOIN public.companies c ON c.id = p.company_id` |
+| `vw_suppliers` | `SELECT c.id, c.bitrix_company_id, c.nome_crm AS title, c.cnpj, (SELECT cp.numero FROM company_phones cp WHERE cp.company_id = c.id AND cp.is_primary = true LIMIT 1) AS phone, (SELECT ce.email FROM company_emails ce WHERE ce.company_id = c.id AND ce.is_primary = true LIMIT 1) AS email, addr.cidade, a …` |
+| `vw_carriers` | `SELECT c.id, c.bitrix_company_id, c.nome_crm AS title, c.cnpj, (SELECT cp.numero FROM company_phones cp WHERE cp.company_id = c.id AND cp.is_primary = true LIMIT 1) AS phone, (SELECT ce.email FROM company_emails ce WHERE ce.company_id = c.id AND ce.is_primary = true LIMIT 1) AS email, addr.cidade, a …` |
+| `vw_suppliers_completo` | `SELECT s.id, s.company_id, s.categoria, s.tipo_fornecedor, s.ramo_atividade, s.grupo_economico, s.produtos, s.servicos, s.api_url, s.tem_integracao, s.perfil_preco, s.perfil_qualidade, s.perfil_prazo, s.prazo_entrega_medio, s.pedido_minimo, s.forma_pagamento, s.prazo_pagamento, s.homologado, s.data_ …` |
+| `vw_company_social_media` | `SELECT c.id AS company_id, c.nome_fantasia, c.razao_social, c.status AS company_status, max(CASE WHEN csm.plataforma = 'linkedin' THEN csm.url::text END) AS linkedin_url, max(CASE WHEN csm.plataforma = 'linkedin' THEN csm.handle::text END) AS linkedin_handle, max(CASE WHEN csm.plataforma = 'instagra …` |
+| `vw_contact_social_media` | `SELECT ct.id AS contact_id, ct.full_name, ct.cargo, ct.company_id, co.nome_fantasia AS empresa, max(CASE WHEN csm.plataforma = 'linkedin' THEN csm.url::text END) AS linkedin_url, max(CASE WHEN csm.plataforma = 'linkedin' THEN csm.handle::text END) AS linkedin_handle, max(CASE WHEN csm.plataforma = ' …` |
+| `vw_social_media_stats` | `SELECT 'companies'::text AS entidade, count(DISTINCT c.id) AS total_registros, count(DISTINCT CASE WHEN csm.plataforma = 'linkedin' THEN csm.company_id END) AS com_linkedin, count(DISTINCT CASE WHEN csm.plataforma = 'instagram' THEN csm.company_id END) AS com_instagram, count(DISTINCT CASE WHEN csm. …` |
+| `vw_supplier_qualification_dashboard` | `SELECT COUNT(*) AS total_fornecedores, COUNT(*) FILTER (WHERE s.homologado = true) AS total_homologados, COUNT(*) FILTER (WHERE s.homologado = false) AS total_nao_homologados, ROUND(100.0 * COUNT(*) FILTER (WHERE s.homologado = true) / NULLIF(COUNT(*), 0), 1) AS pct_homologados, COUNT(*) FILTER (WHE …` |
+| `vw_supplier_ranking` | `SELECT RANK() OVER (ORDER BY ss.score_geral DESC NULLS LAST) AS ranking, co.nome_crm AS fornecedor, co.cnpj, s.homologado, ss.score_geral, ss.score_preco, ss.score_prazo, ss.score_qualidade, ss.score_entrega, ss.classificacao, ss.segment_code, ss.trend, ss.total_avaliacoes, ss.ultima_avaliacao, ss.s …` |
+| `vw_supplier_homologation_control` | `SELECT co.nome_crm AS fornecedor, co.cnpj, s.homologado, sh.status AS ultimo_status, sh.data_solicitacao, sh.data_decisao, sh.validade, CASE WHEN sh.validade IS NULL THEN NULL WHEN sh.validade < CURRENT_DATE THEN 0 - (CURRENT_DATE - sh.validade) ELSE sh.validade - CURRENT_DATE END AS dias_para_vence …` |
+| `vw_supplier_evaluations_history` | `SELECT co.nome_crm AS fornecedor, se.data_avaliacao, se.referencia, se.nota_preco, se.nota_prazo, se.nota_qualidade, se.nota_entrega, se.nota_geral, se.comentario, u.name AS avaliador, u.departamento AS departamento_avaliador, s.id AS supplier_id, s.company_id, se.id AS evaluation_id, se.created_at …` |
+| `vw_supplier_alerts` | `SELECT a.id AS alert_id, a.type, a.priority, a.title, a.message, a.status AS alert_status, a.metadata, a.created_at, a.read_at, co.nome_crm AS fornecedor, co.cnpj, s.homologado, s.score_geral FROM alerts a JOIN companies co ON co.id = a.company_id AND co.deleted_at IS NULL LEFT JOIN suppliers s ON s …` |
+| `vw_supplier_homologation_queue` | `SELECT co.nome_crm AS fornecedor, co.cnpj, co.razao_social, CASE WHEN co.cnpj IS NOT NULL THEN true ELSE false END AS tem_cnpj, CASE WHEN EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id) THEN true ELSE false END AS tem_telefone, CASE WHEN EXISTS(SELECT 1 FROM company_emails ce WHE …` |
+| `vw_supplier_data_quality` | `SELECT COUNT(*) AS total_fornecedores, COUNT(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj != '') AS com_cnpj, ROUND(100.0 * COUNT(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj != '') / COUNT(*), 1) AS pct_cnpj, COUNT(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social != '') AS c …` |
+| `vw_supplier_by_state` | `SELECT COALESCE(addr.estado, 'SEM ESTADO') AS estado, COUNT(*) AS total, COUNT(*) FILTER (WHERE s.homologado = true) AS homologados, COUNT(*) FILTER (WHERE s.homologado = false) AS nao_homologados, ROUND(AVG(ss.score_geral), 2) AS score_medio, COUNT(ss.supplier_id) AS com_avaliacao FROM suppliers s …` |
+| `vw_carriers_completo` | `SELECT ca.id, ca.company_id, ca.tipo_transporte, ca.grupo_economico, ca.estados_atendidos, ca.cidades_atendidas, ca.prazo_por_trecho, ca.tipo_frete, ca.tabela_frete, ca.homologado, ca.data_homologacao, ca.score_geral, ca.created_at, ca.updated_at, co.razao_social, co.nome_fantasia, co.nome_crm AS co …` |
+| `vw_carrier_qualification_dashboard` | `SELECT count(*) AS total_transportadoras, count(*) FILTER (WHERE ca.homologado = true) AS total_homologados, count(*) FILTER (WHERE ca.homologado = false) AS total_nao_homologados, round(100.0 * count(*) FILTER (WHERE ca.homologado = true)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_homologad …` |
+| `vw_carrier_ranking` | `SELECT rank() OVER (ORDER BY cs.score_geral DESC NULLS LAST) AS ranking, co.nome_crm AS transportadora, co.cnpj, ca.homologado, cs.score_geral, cs.score_pontualidade, cs.score_conservacao, cs.score_preco_frete, cs.score_rastreamento, cs.score_cobertura, cs.classificacao, cs.segment_code, cs.trend, c …` |
+| `vw_carrier_homologation_control` | `SELECT co.nome_crm AS transportadora, co.cnpj, ca.homologado, ch.status AS ultimo_status, ch.data_solicitacao, ch.data_decisao, ch.validade, CASE WHEN ch.validade IS NULL THEN NULL WHEN ch.validade < CURRENT_DATE THEN 0 - (CURRENT_DATE - ch.validade) ELSE ch.validade - CURRENT_DATE END AS dias_para_ …` |
+| `vw_carrier_homologation_queue` | `SELECT co.nome_crm AS transportadora, co.cnpj, co.razao_social, CASE WHEN co.cnpj IS NOT NULL THEN true ELSE false END AS tem_cnpj, CASE WHEN EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id) THEN true ELSE false END AS tem_telefone, CASE WHEN EXISTS(SELECT 1 FROM company_emails ce …` |
+| `vw_carrier_evaluations_history` | `SELECT co.nome_crm AS transportadora, ce.data_avaliacao, ce.referencia, ce.nota_pontualidade, ce.nota_conservacao, ce.nota_preco_frete, ce.nota_rastreamento, ce.nota_cobertura, ce.nota_geral, ce.comentario, u.name AS avaliador, u.departamento AS departamento_avaliador, ca.id AS carrier_id, ca.compan …` |
+| `vw_carrier_alerts` | `SELECT a.id AS alert_id, a.type, a.priority, a.title, a.message, a.status AS alert_status, a.metadata, a.created_at, a.read_at, co.nome_crm AS transportadora, co.cnpj, ca.homologado, ca.score_geral FROM alerts a JOIN companies co ON co.id = a.company_id AND co.deleted_at IS NULL LEFT JOIN carriers c …` |
+| `vw_carrier_data_quality` | `SELECT count(*) AS total_transportadoras, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> '') AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> '')::numeric / count(*)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.raz …` |
+| `vw_carrier_by_state` | `SELECT COALESCE(addr.estado, 'SEM ESTADO') AS estado, count(*) AS total, count(*) FILTER (WHERE ca.homologado = true) AS homologados, count(*) FILTER (WHERE ca.homologado = false) AS nao_homologados, round(avg(cs.score_geral), 2) AS score_medio, count(cs.carrier_id) AS com_avaliacao FROM carriers ca …` |
+| `v_guardrail_dashboard` | `SELECT date_trunc('day', created_at) as dia, COUNT(*) as total_checks, COUNT(*) FILTER (WHERE all_passed = true) as passed, COUNT(*) FILTER (WHERE all_passed = false) as blocked, ROUND(COUNT(*) FILTER (WHERE all_passed = false)::numeric / NULLIF(COUNT(*),0) * 100, 1) as block_rate_pct, array_agg(DIS …` |
+| `v_ragas_by_agent` | `SELECT agent_id, COUNT(*) as evaluations, ROUND(AVG(faithfulness)::numeric, 3) as avg_faithfulness, ROUND(AVG(answer_relevancy)::numeric, 3) as avg_relevancy, ROUND(AVG(context_precision)::numeric, 3) as avg_precision, ROUND(AVG(context_recall)::numeric, 3) as avg_recall, ROUND(AVG(overall_score)::n …` |
+| `v_nlp_analytics` | `SELECT date_trunc('day', created_at) as dia, source_type, COUNT(*) as total_extractions, COUNT(*) FILTER (WHERE sentiment_label = 'urgent') as urgent, COUNT(*) FILTER (WHERE sentiment_label = 'negative') as negative, COUNT(*) FILTER (WHERE sentiment_label = 'positive') as positive, COUNT(*) FILTER ( …` |
+| `v_model_catalog` | `SELECT tier, model, provider, input_cost_per_1m as cost_input, output_cost_per_1m as cost_output, context_window, capabilities, CASE WHEN input_cost_per_1m <= 0.01 THEN 'ultra-low' WHEN input_cost_per_1m <= 0.05 THEN 'low' WHEN input_cost_per_1m <= 0.20 THEN 'medium' WHEN input_cost_per_1m <= 1.00 T …` |
+| `zapp_history.v_daily_cost` | `SELECT date_trunc('day', occurred_at)::date AS day, function_name, model, COUNT(*) AS calls, COUNT(*) FILTER (WHERE success = TRUE) AS successful, COUNT(*) FILTER (WHERE success = FALSE) AS failed, SUM(input_tokens) AS input_tokens_total, SUM(output_tokens) AS output_tokens_total, SUM(cost_cents) / …` |
+| `zapp_history.v_pipeline_pending` | `SELECT 'media_download' AS pipeline, COUNT(*) AS pending, COUNT(*) FILTER (WHERE download_attempts >= 3) AS stuck FROM zapp_history.message_media WHERE download_status IN ('pending','failed') AND download_attempts < 5 UNION ALL SELECT 'audio_transcription', COUNT(*), COUNT(*) FILTER (WHERE transcrip …` |
+| `zapp_history.v_recent_summaries` | `SELECT s.id, s.contact_id, c.full_name AS contact_name, co.nome_crm AS company_name, s.summary_date, s.message_count, s.audio_count, s.media_count, s.summary_short, s.sentiment_overall, s.sentiment_score, s.conversion_signal, s.customer_mood, s.synced_to_interactions, s.generated_by_model, s.generat …` |
+| `zapp_history.contact_message_stats` | `SELECT c.id AS contact_id, c.full_name, c.company_id, co.nome_crm AS company_name, COUNT(m.id) AS total_messages, COUNT(m.id) FILTER (WHERE m.direction = 'inbound') AS inbound_count, COUNT(m.id) FILTER (WHERE m.direction = 'outbound') AS outbound_count, COUNT(DISTINCT mm.id) AS total_media, COUNT(DI …` |
+| `zapp_history.v_contact_360` | `SELECT c.id AS contact_id, c.full_name, c.first_name, c.last_name, c.cargo, c.departamento, c.cpf, c.data_nascimento, c.relationship_stage, c.relationship_score, c.sentiment AS contact_sentiment, c.tags_array AS contact_tags, c.behavior, c.notes, c.user_id AS owner_user_id, co.id AS company_id, co.n …` |
+| `zapp_history.v_runtime_config_safe` | `SELECT key, CASE WHEN is_secret THEN CASE WHEN value = 'PENDING_MANUAL_INSERT' THEN '⚠️ NOT_SET' WHEN length(value) > 12 THEN substring(value FROM 1 FOR 6) \|\| '...' \|\| substring(value FROM length(value) - 4) ELSE '***' END ELSE value END AS value_safe, is_secret, description, updated_at FROM zapp_hi …` |
+| `zapp_history.v_pedidos_detectados` | `SELECT m.id AS message_id, m.created_at AS recebido_em, c.full_name AS contato, c.id AS contact_id, comp.razao_social AS empresa, m.content AS mensagem_original, m.nlp_sentiment AS urgencia, m.nlp_sentiment_score AS confianca, m.lead_score, m.lead_score_breakdown, m.nlp_structured_order->>'product' …` |
+| `zapp_history.v_dashboard_atendimento` | `SELECT (SELECT COUNT(*) FROM zapp_history.messages WHERE created_at::date = CURRENT_DATE) AS msgs_hoje, (SELECT COUNT(*) FROM zapp_history.messages WHERE created_at::date = CURRENT_DATE AND direction = 'inbound') AS msgs_recebidas_hoje, (SELECT COUNT(*) FROM zapp_history.messages WHERE created_at::d …` |
+| `zapp_history.v_funil_origem` | `SELECT COALESCE(discovery_channel, 'nao_identificado') AS canal, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, COUNT(*) FILTER (WHERE lead_score >= 80) AS leads_hot, COUNT(*) FILTER (WHERE lead_score BETWEEN 60 AND 79) AS leads_warm, COUNT(*) FILTER (WHERE lead_score BE …` |
+| `zapp_history.v_top_produtos_demanda` | `WITH normalized AS ( SELECT m.*, zapp_history.normalize_product_name(m.nlp_structured_order->>'product') AS produto_canonico FROM zapp_history.messages m WHERE m.nlp_structured_order ? 'product' ) SELECT n.produto_canonico AS produto, pd.category AS categoria, COUNT(*) AS total_pedidos, COUNT(DISTIN …` |
+| `zapp_history.v_funil_vendas` | `WITH stages AS ( SELECT 'descoberta' AS stage, 1 AS ordem UNION ALL SELECT 'interesse', 2 UNION ALL SELECT 'cotacao', 3 UNION ALL SELECT 'proposta', 4 UNION ALL SELECT 'negociacao', 5 UNION ALL SELECT 'fechamento', 6 ) SELECT s.stage AS etapa, s.ordem, COUNT(m.id) AS total_mensagens, COUNT(DISTINCT …` |
+| `zapp_history.v_objecoes_recorrentes` | `SELECT unnest(objections) AS objecao, COUNT(*) AS total_ocorrencias, COUNT(DISTINCT contact_id) AS contatos_distintos, AVG(lead_score)::numeric(5,2) AS lead_score_medio, COUNT(*) FILTER (WHERE funnel_stage = 'fechamento') AS apareceu_no_fechamento, COUNT(*) FILTER (WHERE funnel_stage = 'negociacao') …` |
+| `zapp_history.v_sla_atendimento` | `SELECT COALESCE(sla_status, 'sem_resposta') AS sla, COUNT(*) AS total_conversas, MIN(first_response_seconds) AS resposta_mais_rapida_seg, MAX(first_response_seconds) AS resposta_mais_lenta_seg, AVG(first_response_seconds)::INT AS resposta_media_seg, AVG(first_response_seconds / 60.0)::numeric(6,2) A …` |
+| `zapp_history.v_conversas_aguardando` | `SELECT c.id AS conversation_id, c.contact_id, ct.full_name AS contato, c.remote_jid AS whatsapp, c.last_message_at AS ultima_msg, EXTRACT(EPOCH FROM (NOW() - c.last_message_at))::INT AS aguardando_seg, EXTRACT(EPOCH FROM (NOW() - c.last_message_at))::INT / 60 AS aguardando_min, c.unread_count, c.las …` |
+| `zapp_history.v_volume_por_hora` | `SELECT day_of_week AS dia_semana, EXTRACT(HOUR FROM (created_at AT TIME ZONE 'America/Sao_Paulo'))::INT AS hora, COUNT(*) AS total_mensagens, COUNT(*) FILTER (WHERE direction = 'inbound') AS inbound, COUNT(*) FILTER (WHERE direction = 'outbound') AS outbound, COUNT(*) FILTER (WHERE in_business_hours …` |
+| `zapp_history.v_melhores_horarios` | `SELECT day_of_week AS dia_semana, EXTRACT(HOUR FROM (created_at AT TIME ZONE 'America/Sao_Paulo'))::INT AS hora, COUNT(*) AS volume, COUNT(*) FILTER (WHERE lead_score >= 80) AS leads_hot, AVG(lead_score)::numeric(5,2) AS score_medio FROM zapp_history.messages WHERE direction = 'inbound' AND day_of_w …` |
+| `zapp_history.v_top_contatos_potencial` | `SELECT ct.id AS contact_id, ct.full_name AS contato, comp.razao_social AS empresa, COUNT(DISTINCT m.id) AS total_mensagens, COUNT(DISTINCT conv.id) AS total_conversas, MAX(m.lead_score) AS melhor_lead_score, AVG(m.lead_score)::numeric(5,2) AS score_medio, SUM(m.budget_detected)::numeric(14,2) AS bud …` |
+| `zapp_history.v_intelligence_360` | `SELECT m.id AS message_id, m.created_at AS recebido_em, m.direction, m.in_business_hours, m.day_of_week, EXTRACT(HOUR FROM (m.created_at AT TIME ZONE 'America/Sao_Paulo'))::INT AS hora_local, ct.id AS contact_id, ct.full_name AS contato, ct.tags_array AS contato_tags, comp.id AS company_id, comp.raz …` |
+| `zapp_history.v_demanda_geografica` | `SELECT COALESCE(location_extracted->>'state', 'nao_identificado') AS uf, COALESCE(location_extracted->>'region', 'nao_identificado') AS regiao, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, COUNT(*) FILTER (WHERE lead_score >= 80) AS leads_hot, COUNT(*) FILTER (WHERE le …` |
+| `zapp_history.v_demanda_por_cidade` | `SELECT location_extracted->>'city' AS cidade, location_extracted->>'state' AS uf, (location_extracted->>'is_capital')::BOOLEAN AS capital, COUNT(*) AS total_pedidos, COUNT(DISTINCT contact_id) AS contatos, AVG(lead_score)::numeric(5,2) AS score_medio, SUM(budget_detected)::numeric(14,2) AS budget_to …` |
+| `zapp_history.v_segmentacao_clientes` | `SELECT COALESCE(customer_type, 'indefinido') AS tipo_cliente, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS lead_score_medio, COUNT(*) FILTER (WHERE lead_score >= 80) AS leads_hot, AVG((nlp_structured_order->>'quantity')::INT)::INT AS qt …` |
+| `zapp_history.v_eventos_demanda` | `SELECT event_type AS tipo_evento, COUNT(*) AS total_pedidos, COUNT(DISTINCT contact_id) AS contatos, AVG(lead_score)::numeric(5,2) AS score_medio, AVG((nlp_structured_order->>'quantity')::INT)::INT AS qty_media, SUM(budget_detected)::numeric(14,2) AS budget_total, array_agg(DISTINCT nlp_structured_o …` |
+| `zapp_history.v_tom_comunicacao` | `SELECT communication_tone->>'tone' AS tom, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio, AVG((communication_tone->>'emoji_count')::INT)::numeric(5,2) AS emojis_medios, AVG((communication_tone->>'word_count')::INT)::numeric(5 …` |
+| `zapp_history.v_buying_triggers` | `SELECT unnest(buying_triggers) AS trigger, COUNT(*) AS total_ocorrencias, COUNT(DISTINCT contact_id) AS contatos_distintos, AVG(lead_score)::numeric(5,2) AS lead_score_medio, AVG(budget_detected)::numeric(12,2) AS budget_medio, COUNT(*) FILTER (WHERE funnel_stage = 'fechamento') AS chegou_no_fechame …` |
+| `zapp_history.v_churn_alerts` | `SELECT m.id AS message_id, m.created_at AS detectado_em, ct.full_name AS contato, comp.razao_social AS empresa, conv.remote_jid AS whatsapp, m.churn_risk->>'risk' AS risco, (m.churn_risk->>'score')::INT AS score_risco, m.churn_risk->'signals' AS sinais, LEFT(m.content, 300) AS mensagem, m.nlp_sentim …` |
+| `zapp_history.v_disc_distribution` | `SELECT disc_profile->>'profile' AS perfil, disc_profile->>'description' AS descricao, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS lead_score_medio, COUNT(*) FILTER (WHERE lead_score >= 80) AS leads_hot, AVG(budget_detected)::numeric(12 …` |
+| `zapp_history.v_payment_preferences` | `SELECT unnest(payment_preferences) AS forma_pagamento, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio, SUM(budget_detected)::numeric(14,2) AS valor_total_mencionado FROM zapp_history.messages WHERE payment_preferences IS NOT N …` |
+| `zapp_history.v_customization_demand` | `WITH expanded AS ( SELECT id, contact_id, lead_score, jsonb_array_elements_text(COALESCE(customization_extracted->'colors', '[]'::jsonb)) AS color, NULL::TEXT AS material, NULL::TEXT AS technique FROM zapp_history.messages WHERE customization_extracted IS NOT NULL UNION ALL SELECT id, contact_id, le …` |
+| `zapp_history.v_journey_funnel` | `WITH stages AS ( SELECT 'TOFU' AS stage, 1 AS ordem, 'Topo - descobrindo' AS jdesc UNION ALL SELECT 'MOFU', 2, 'Meio - comparando' UNION ALL SELECT 'BOFU', 3, 'Fundo - pronto pra comprar' ) SELECT s.stage AS etapa, s.ordem, s.jdesc AS descricao, COUNT(m.id) AS total_mensagens, COUNT(DISTINCT m.conta …` |
+| `zapp_history.v_disc_funnel_matrix` | `SELECT disc_profile->>'profile' AS perfil_disc, funnel_stage AS etapa_funil, COUNT(*) AS total, AVG(lead_score)::numeric(5,2) AS score_medio FROM zapp_history.messages WHERE disc_profile IS NOT NULL AND funnel_stage IS NOT NULL GROUP BY disc_profile->>'profile', funnel_stage ORDER BY perfil_disc, et …` |
+| `zapp_history.v_topicos_recorrentes` | `SELECT unnest(topics) AS topico, COUNT(*) AS total_ocorrencias, COUNT(DISTINCT contact_id) AS contatos_distintos, AVG(lead_score)::numeric(5,2) AS lead_score_medio, array_agg(DISTINCT funnel_stage) FILTER (WHERE funnel_stage IS NOT NULL) AS etapas_observadas FROM zapp_history.messages WHERE topics I …` |
+| `zapp_history.v_intents_distribution` | `SELECT primary_intent AS intencao, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio, COUNT(*) FILTER (WHERE lead_score >= 80) AS leads_hot, COUNT(*) FILTER (WHERE churn_risk IS NOT NULL) AS com_churn, array_agg(DISTINCT funnel_s …` |
+| `zapp_history.v_speaker_roles` | `SELECT speaker_role AS papel, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio, COUNT(*) FILTER (WHERE lead_score >= 80) AS leads_hot, AVG(budget_detected)::numeric(12,2) AS ticket_medio, COUNT(*) FILTER (WHERE funnel_stage = 'f …` |
+| `zapp_history.v_complexity_distribution` | `SELECT order_complexity->>'level' AS complexidade, COUNT(*) AS total_pedidos, AVG((order_complexity->>'score')::INT)::numeric(5,2) AS score_complex_medio, AVG(lead_score)::numeric(5,2) AS lead_score_medio, AVG((nlp_structured_order->>'quantity')::INT)::INT AS qty_media, AVG(budget_detected)::numeric …` |
+| `zapp_history.v_priority_matrix` | `WITH quadrants AS ( SELECT 'Q1_FAZER_AGORA' AS q, 1 AS ord, '🔥 Fazer agora' AS label UNION ALL SELECT 'Q2_AGENDAR', 2, '📅 Agendar' UNION ALL SELECT 'Q3_DELEGAR', 3, '⚡ Delegar' UNION ALL SELECT 'Q4_AUTOMACAO', 4, '🤖 Automatizar' ) SELECT q.q AS quadrante, q.ord, q.label, COUNT(m.id) AS total, COUNT( …` |
+| `zapp_history.v_emotional_states` | `SELECT emotional_state->>'dominant' AS estado, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS lead_score_medio, COUNT(*) FILTER (WHERE churn_risk IS NOT NULL) AS com_churn_risco, array_agg(DISTINCT funnel_stage) FILTER (WHERE funnel_stage …` |
+| `zapp_history.v_question_topics` | `SELECT jsonb_array_elements_text(question_analysis->'topics') AS topico_pergunta, question_analysis->>'type' AS tipo_pergunta, COUNT(*) AS total_perguntas, COUNT(DISTINCT contact_id) AS contatos_distintos, AVG(lead_score)::numeric(5,2) AS score_medio FROM zapp_history.messages WHERE question_analysi …` |
+| `zapp_history.v_proximas_respostas` | `SELECT m.id AS message_id, m.created_at AS recebido_em, m.suggested_response_at AS responder_ate, m.suggested_response_label AS prazo_label, EXTRACT(EPOCH FROM (m.suggested_response_at - NOW()))/60 AS minutos_restantes, ct.full_name AS contato, conv.remote_jid AS whatsapp, m.lead_score, m.priority_q …` |
+| `zapp_history.v_language_distribution` | `SELECT language_info->>'lang' AS idioma, language_info->>'dialect' AS dialeto, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio FROM zapp_history.messages WHERE language_info IS NOT NULL GROUP BY language_info->>'lang', language …` |
+| `zapp_history.v_hesitation_funnel` | `SELECT hesitation->>'level' AS nivel_hesitacao, COUNT(*) AS total, COUNT(DISTINCT contact_id) AS contatos, AVG(lead_score)::numeric(5,2) AS score_medio, array_agg(DISTINCT funnel_stage) FILTER (WHERE funnel_stage IS NOT NULL) AS etapas FROM zapp_history.messages WHERE hesitation IS NOT NULL GROUP BY …` |
+| `zapp_history.v_spam_log` | `SELECT m.id, m.created_at, m.content AS mensagem, c.remote_jid AS whatsapp, m.credibility->>'level' AS nivel, (m.credibility->>'score')::INT AS score, m.credibility->'flags' AS flags, m.quarantined, m.quarantine_reason FROM zapp_history.messages m JOIN zapp_history.conversations c ON c.id = m.conver …` |
+| `zapp_history.v_company_sizes` | `SELECT company_size->>'size' AS porte, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio, AVG(budget_detected)::numeric(14,2) AS ticket_medio, AVG((nlp_structured_order->>'quantity')::INT)::INT AS qty_media, COUNT(*) FILTER (WHER …` |
+| `zapp_history.v_seasonality_demand` | `SELECT unnest(seasonality) AS sazonalidade, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio, SUM((nlp_structured_order->>'quantity')::INT) AS qty_total, SUM(budget_detected)::numeric(14,2) AS valor_total FROM zapp_history.messa …` |
+| `zapp_history.v_relationship_funnel` | `SELECT relationship_status->>'status' AS status, COUNT(*) AS total_mensagens, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio, AVG((relationship_status->>'total_msgs')::INT)::INT AS msgs_medias_por_contato, COUNT(*) FILTER (WHERE funnel_stage = 'fechamento …` |
+| `zapp_history.v_budget_sensitivity` | `SELECT budget_sensitivity->>'sensitivity' AS sensibilidade, COUNT(*) AS total, COUNT(DISTINCT contact_id) AS contatos, AVG(lead_score)::numeric(5,2) AS score_medio, AVG(budget_detected)::numeric(14,2) AS ticket_medio, COUNT(*) FILTER (WHERE funnel_stage = 'fechamento') AS fechou FROM zapp_history.me …` |
+| `zapp_history.v_competitor_alerts` | `SELECT m.id AS message_id, m.created_at, ct.full_name AS contato, comp.razao_social AS empresa, m.competitor_mention->>'context' AS contexto, m.competitor_mention->'flags' AS flags, m.lead_score, m.funnel_stage, LEFT(m.content, 200) AS preview, CASE m.competitor_mention->>'context' WHEN 'pressao_pre …` |
+| `zapp_history.v_full_intelligence_stream` | `SELECT m.id AS message_id, m.created_at, ct.full_name AS contato, comp.razao_social AS empresa, m.content AS preview, m.lead_score, CASE WHEN m.lead_score >= 80 THEN 'HOT' WHEN m.lead_score >= 60 THEN 'WARM' WHEN m.lead_score >= 40 THEN 'LUKEWARM' ELSE 'COLD' END AS classificacao, m.priority_quadran …` |
+| `zapp_history.v_units_distribution` | `SELECT unit_of_measure AS unidade, COUNT(*) AS total, AVG((nlp_structured_order->>'quantity')::INT)::INT AS qty_media FROM zapp_history.messages WHERE unit_of_measure IS NOT NULL GROUP BY unit_of_measure ORDER BY total DESC` |
+| `zapp_history.v_delivery_distribution` | `SELECT delivery_preference->>'method' AS metodo, delivery_preference->>'urgency' AS urgencia, COUNT(*) AS total, AVG(lead_score)::numeric(5,2) AS score_medio FROM zapp_history.messages WHERE delivery_preference IS NOT NULL GROUP BY delivery_preference->>'method', delivery_preference->>'urgency' ORDE …` |
+| `zapp_history.v_referral_sources` | `SELECT referral_source->>'source' AS fonte, COUNT(*) AS total, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio, COUNT(*) FILTER (WHERE funnel_stage = 'fechamento') AS fechou FROM zapp_history.messages WHERE referral_source IS NOT NULL GROUP BY referral_sou …` |
+| `zapp_history.v_bant_distribution` | `SELECT bant_score->>'classification' AS classificacao, COUNT(*) AS total, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG((bant_score->>'bant_total')::INT)::numeric(5,2) AS score_bant_medio, AVG((bant_score->>'budget')::INT)::numeric(5,2) AS budget_medio, AVG((bant_score->>'authority')::INT)::num …` |
+| `zapp_history.v_authority_funnel` | `SELECT decision_authority->>'level' AS nivel_autoridade, COUNT(*) AS total, COUNT(DISTINCT contact_id) AS contatos_unicos, AVG(lead_score)::numeric(5,2) AS score_medio, COUNT(*) FILTER (WHERE funnel_stage = 'fechamento') AS fechou, ROUND(100.0 * COUNT(*) FILTER (WHERE funnel_stage = 'fechamento') / …` |
+| `zapp_history.v_routing_queue` | `SELECT m.id AS message_id, m.created_at, ct.full_name AS contato, comp.razao_social AS empresa, m.lead_score, m.bant_score->>'classification' AS bant, m.priority_quadrant, (zapp_history.smart_routing(m.id))->>'queue' AS fila, ((zapp_history.smart_routing(m.id))->>'priority')::INT AS prioridade, (zap …` |
+| `zapp_history.v_audit_intelligence` | `SELECT m.id, m.created_at, m.contact_id, m.direction, m.content, m.lead_score, m.primary_intent, m.funnel_stage, m.priority_quadrant, m.quarantined, m.bant_score->>'classification' AS bant_class, (m.bant_score->>'bant_total')::INT AS bant_total, m.bant_score->'signals' AS bant_signals, m.bant_score- …` |
 | `mv_daily_kpis` | `SELECT * FROM reporting.mv_daily_kpis` |
 | `mv_daily_stats` | `SELECT * FROM reporting.mv_daily_stats` |
 | `users_public` | `SELECT id, name, email, departamento, is_active, is_vendedor FROM public.users` |
@@ -3780,7 +4075,7 @@ _nenhum item encontrado_
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 3 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +219 linhas — lista completa em `context.json` | |
+| … +230 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -4392,7 +4687,7 @@ _nenhum item encontrado_
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
 | Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
 | Nada para exportar no bundle. | `src/components/intelligence/CrossRefTab.tsx` |
-| … +789 linhas — lista completa em `context.json` | |
+| … +796 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4423,6 +4718,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20260513143442_29ae388a-6dff-4a07-b25c-8d2b70aec893.sql` |
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
+| `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 
 ## K. Testes como especificação (3239 testes em 252 arquivos — nomes completos em `context.json`)
 
@@ -4813,7 +5109,26 @@ _nenhum item encontrado_
 | `sendEmail` | `supabase/functions/weekly-digest/index.ts` |
 | `notify_on_critical` | `supabase/migrations/20260111181309_0d3ec51c-0121-4afe-a635-9223c46d26aa.sql` |
 | `notify_on_warning` | `supabase/migrations/20260111181309_0d3ec51c-0121-4afe-a635-9223c46d26aa.sql` |
+| `notify_at_risk_goals` | `supabase/migrations/20260321123053_salespro_batch1b_playbooks_cadences_achievements.sql` |
+| `notify_inactive_clients` | `supabase/migrations/20260321123053_salespro_batch1b_playbooks_cadences_achievements.sql` |
+| `notify_stagnant_deals` | `supabase/migrations/20260321123053_salespro_batch1b_playbooks_cadences_achievements.sql` |
+| `notify_failed_login` | `supabase/migrations/20260321123327_salespro_batch4_tournaments_territories_final.sql` |
+| `notify_new_device` | `supabase/migrations/20260321123327_salespro_batch4_tournaments_territories_final.sql` |
+| `notify_password_change` | `supabase/migrations/20260321123327_salespro_batch4_tournaments_territories_final.sql` |
+| `notify_role_change` | `supabase/migrations/20260321123327_salespro_batch4_tournaments_territories_final.sql` |
+| `notify_at_risk_goals` | `supabase/migrations/20260321125738_salespro_mig_004_playbooks_cadences_leads.sql` |
+| `notify_inactive_clients` | `supabase/migrations/20260321125738_salespro_mig_004_playbooks_cadences_leads.sql` |
+| `notify_stagnant_deals` | `supabase/migrations/20260321125738_salespro_mig_004_playbooks_cadences_leads.sql` |
+| `notify_failed_login` | `supabase/migrations/20260321125922_salespro_mig_007_security_bi_supply_remaining.sql` |
+| `notify_new_device` | `supabase/migrations/20260321125922_salespro_mig_007_security_bi_supply_remaining.sql` |
+| `notify_password_change` | `supabase/migrations/20260321125922_salespro_mig_007_security_bi_supply_remaining.sql` |
+| `notify_role_change` | `supabase/migrations/20260321125922_salespro_mig_007_security_bi_supply_remaining.sql` |
+| `notify_on_critical` | `supabase/migrations/20260321133652_create_singu_tables_batch1_of_3.sql` |
+| `notify_on_warning` | `supabase/migrations/20260321133652_create_singu_tables_batch1_of_3.sql` |
 | `notify_new_device` | `supabase/migrations/20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql` |
+| `notify_on_new_device` | `supabase/migrations/20260416221418_singu_create_security_auth_module.sql` |
+| `notify_on_new_location` | `supabase/migrations/20260416221418_singu_create_security_auth_module.sql` |
+| `notify_new_device` | `supabase/migrations/20260416223701_singu_add_cols_batch_2.sql` |
 | `notify` | `supabase/migrations/20260417004129_55991427-8b13-48b9-a9ac-702dec46887e.sql` |
 | `notify_critical_next_action` | `supabase/migrations/20260417195323_b84a83b6-e3b8-4d98-be74-9c37a1bdfc21.sql` |
 | `notify_connection_failures` | `supabase/migrations/20260420121651_b36d3337-3bfe-4477-b87d-9b3a39c72679.sql` |
@@ -5051,26 +5366,91 @@ _nenhum item encontrado_
 | Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os | `supabase/functions/suggest-next-action/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/template-success-notifications/index.ts` |
 | * Pela tela, e-mail só quando o usuário pede o teste; chave única por clique (o limite é 3/min). */ | `supabase/functions/weekly-digest/index.ts` |
-| INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
-| FROM public.deal_room_activities WHERE room_id = _room.id ORDER BY created_at DESC LIMIT 50) a | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
-| INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
-| INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
-| INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
-| INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql` |
-| *Urgência real**: "Esse desconto é até sexta porque fechamos lote aqui"', | `supabase/migrations/20260417005023_6d2d8ea7-c2c8-4caa-88d3-9a3cc518bb31.sql` |
-| INTO _form FROM public.forms WHERE slug = _slug AND is_published = true LIMIT 1; | `supabase/migrations/20260417011613_40e57206-6feb-4bd8-a3f0-110e3a2cb8e1.sql` |
-| INTO _magnet FROM public.lead_magnets WHERE slug = _slug AND is_published = true LIMIT 1; | `supabase/migrations/20260417011613_40e57206-6feb-4bd8-a3f0-110e3a2cb8e1.sql` |
-| rqodmqosrotmtrjnnjul.supabase.co/functions/v1/validation-queue-worker', | `supabase/migrations/20260417120721_823eaa43-3b8a-4ea7-a046-ad763d7c5f03.sql` |
-| )) FROM (SELECT * FROM public.%I WHERE %s ORDER BY %I %s LIMIT %s OFFSET %s) t', | `supabase/migrations/20260721000068_fix_singu_user_impersonation.sql` |
-| INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260723132318_35e7a45e-dd21-4ae8-8880-f6462f12ff5c.sql` |
-| FROM public.deal_room_activities WHERE room_id = _room.id ORDER BY created_at DESC LIMIT 50) a | `supabase/migrations/20260723132318_35e7a45e-dd21-4ae8-8880-f6462f12ff5c.sql` |
-| INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260723132318_35e7a45e-dd21-4ae8-8880-f6462f12ff5c.sql` |
-| INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1; | `supabase/migrations/20260723132318_35e7a45e-dd21-4ae8-8880-f6462f12ff5c.sql` |
-| p_page_size LIMIT p_page_size; | `supabase/migrations/20260926133544_multiplix_audience_rpcs.sql` |
-| p_page_size LIMIT p_page_size; | `supabase/migrations/20260926134938_fix_multiplix_search_audience_uf_cast.sql` |
-| p_page_size LIMIT p_page_size; | `supabase/migrations/20260926135318_fix_multiplix_search_and_resolve_text_casts.sql` |
-| FROM contacts WHERE company_id = p_company_id ORDER BY relationship_score DESC NULLS LAST LIMIT 5) ct | `supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql` |
-| FROM interactions WHERE company_id = p_company_id ORDER BY data_interacao DESC LIMIT 10) i | `supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql` |
-| FROM interactions WHERE company_id = p_company_id ORDER BY data_interacao DESC LIMIT 10) i | `supabase/migrations/20261008120000_fix_frontend_rpcs_canonical.sql` |
-| ) DESC LIMIT p_limit; | `supabase/migrations/20261012120000_live_rpc_relations_contract.sql` |
-| pgxfvjmuubtbowutlide.supabase.co/functions/v1/validation-queue-worker', | `supabase/migrations/20261111210500_agenda_edge_functions_cron.sql` |
+| 267: o Supabase Preview aplica APENAS as migrations novas | `supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql` |
+| 267: o Supabase Preview aplica APENAS as migrations novas | `supabase/migrations/20260110000002_baseline_compat_idempotente.sql` |
+| FROM supplier_evaluations WHERE supplier_id = s.id ORDER BY data_avaliacao DESC LIMIT 5) se | `supabase/migrations/20260329182140_create_fn_supplier_stats.sql` |
+| FROM supplier_score_history WHERE supplier_id = s.id ORDER BY measured_at DESC LIMIT 10) ssh | `supabase/migrations/20260329182140_create_fn_supplier_stats.sql` |
+| FROM supplier_homologations sh2 WHERE sh2.supplier_id = s.id ORDER BY sh2.created_at DESC LIMIT 1 | `supabase/migrations/20260329203937_create_vw_supplier_homologation_queue.sql` |
+| FROM carrier_evaluations WHERE carrier_id = c.id ORDER BY data_avaliacao DESC LIMIT 5) ce | `supabase/migrations/20260330121632_create_fn_carrier_stats.sql` |
+| FROM carrier_score_history WHERE carrier_id = c.id ORDER BY measured_at DESC LIMIT 10) csh | `supabase/migrations/20260330121632_create_fn_carrier_stats.sql` |
+| INTO v_customer FROM customers WHERE company_id = v_company_id AND deleted_at IS NULL LIMIT 1; | `supabase/migrations/20260401192532_create_rpc_contact_intelligence_by_phone_v2.sql` |
+| INTO v_rfm FROM company_rfm_scores WHERE company_id = v_company_id ORDER BY calculated_at DESC LIMIT 1; | `supabase/migrations/20260401192532_create_rpc_contact_intelligence_by_phone_v2.sql` |
+| FROM interactions WHERE contact_id = v_contact_id ORDER BY data_interacao DESC LIMIT 3) i; | `supabase/migrations/20260401192532_create_rpc_contact_intelligence_by_phone_v2.sql` |
+| FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp | `supabase/migrations/20260409174932_zapp_history_110_master_dashboard.sql` |
+| FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o | `supabase/migrations/20260409174932_zapp_history_110_master_dashboard.sql` |
+| FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc | `supabase/migrations/20260409174932_zapp_history_110_master_dashboard.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409181150_zapp_history_119_master_dashboard_geo.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409181150_zapp_history_119_master_dashboard_geo.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409181150_zapp_history_119_master_dashboard_geo.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409181150_zapp_history_119_master_dashboard_geo.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409181150_zapp_history_119_master_dashboard_geo.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409183646_zapp_history_130_master_dashboard_segmentation.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409183646_zapp_history_130_master_dashboard_segmentation.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409183646_zapp_history_130_master_dashboard_segmentation.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409183646_zapp_history_130_master_dashboard_segmentation.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409183646_zapp_history_130_master_dashboard_segmentation.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409190803_zapp_history_138_intelligence360_v2.sql` |
+| FROM zapp_history.v_churn_alerts LIMIT 10) c | `supabase/migrations/20260409190803_zapp_history_138_intelligence360_v2.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409190803_zapp_history_138_intelligence360_v2.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409190803_zapp_history_138_intelligence360_v2.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409190803_zapp_history_138_intelligence360_v2.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409190803_zapp_history_138_intelligence360_v2.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_customization_demand LIMIT 20) c), | `supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409205604_zapp_history_148_intelligence360_v3.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409205931_zapp_history_149_master_dashboard_disc.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409205931_zapp_history_149_master_dashboard_disc.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409205931_zapp_history_149_master_dashboard_disc.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409205931_zapp_history_149_master_dashboard_disc.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409205931_zapp_history_149_master_dashboard_disc.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409205931_zapp_history_149_master_dashboard_disc.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409210719_zapp_history_159_master_dashboard_v5.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409210719_zapp_history_159_master_dashboard_v5.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409210719_zapp_history_159_master_dashboard_v5.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409210719_zapp_history_159_master_dashboard_v5.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409210719_zapp_history_159_master_dashboard_v5.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409210719_zapp_history_159_master_dashboard_v5.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409211613_zapp_history_169_master_dashboard_v6.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409211613_zapp_history_169_master_dashboard_v6.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409211613_zapp_history_169_master_dashboard_v6.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409211613_zapp_history_169_master_dashboard_v6.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409211613_zapp_history_169_master_dashboard_v6.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409211613_zapp_history_169_master_dashboard_v6.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409212244_zapp_history_179_master_dashboard_v7.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409212244_zapp_history_179_master_dashboard_v7.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409212244_zapp_history_179_master_dashboard_v7.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409212244_zapp_history_179_master_dashboard_v7.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409212244_zapp_history_179_master_dashboard_v7.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409212244_zapp_history_179_master_dashboard_v7.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409212244_zapp_history_179_master_dashboard_v7.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_full_intelligence_stream LIMIT 20) fs), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_competitor_alerts LIMIT 15) ca), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| … +43 linhas — lista completa em `context.json` | |

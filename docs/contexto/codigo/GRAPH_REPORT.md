@@ -1,17 +1,17 @@
-# Graph Report - Singu_V2  (2026-11-19)
+# Graph Report - Singu_V2  (2026-11-20)
 
 ## Corpus Check
-- 3325 files · ~2,336,837 words
+- 3941 files · ~2,638,009 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 18 file(s) not represented in the graph (top: (none) 8, .example 3, .lock 1)
 
 ## Summary
-- 21309 nodes · 36110 edges · 2118 communities (1072 shown, 1046 thin omitted)
+- 25709 nodes · 41006 edges · 3120 communities (1409 shown, 1711 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 1598 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `62b6b2a1`
+- Built from commit: `0418f640`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -27,10 +27,10 @@
 - ref_domain
 - TimelineGroupCard.tsx
 - _shared/auth.ts
-- sonner
-- @tanstack/react-query
+- useSemanticSearch.ts
+- ContactOverviewTab.tsx
 - recharts
-- ref_integrations
+- @tanstack/react-query
 - SectionFrame.tsx
 - 09_triggers.sql
 - ref_pages
@@ -39,28 +39,28 @@
 - ContactBehavioralTab.tsx
 - framer-motion
 - Tabela de evidências
-- lazyPages.tsx
+- Componentes e features órfãs
 - package.json
 - dependencies
 - 02_tables.sql
-- useIntent.ts
+- Tabela de evidências
 - fetch-utils.ts
-- withAuth
-- TriggerAnalyticsTabs.tsx
+- C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado
+- ProfileBasedSuggestions.tsx
 - tracedLogger
 - ContactCommercialTab.tsx
 - 03_indexes.sql
-- ContactOverviewTab.tsx
-- Achados
+- ContactDetailHeader.tsx
+- withAuth
 - GlobalSearch.tsx
 - _lib.ts
-- auth.users
-- Hooks (`src/hooks/`)
+- contacts
+- useEntityBookmarks.ts
 - vitest
 - ContactDataTab.tsx
 - StakeholderMap.tsx
 - bulk-revalidate/index.ts
-- contacts
+- lazyPages.tsx
 - useCompanies.ts
 - 20261008120000_fix_frontend_rpcs_canonical.sql
 - useConversationIntel.ts
@@ -74,9 +74,9 @@
 - carnegie-extended.ts
 - 📊 ANÁLISE COMPLETA DO SISTEMA RelateIQ CRM
 - useChurnRisk.ts
-- ✅ Resolvidos nesta rodada
-- useCustomerSuccess.ts
-- useTriggerHistory.ts
+- rfm.ts
+- Hooks mortos
+- useDashboardStats.ts
 - 3.4 Hooks de Analytics
 - Runbooks — DB Guards (Rodada 26/10)
 - 20261006140000_ai_gateway_observability.sql
@@ -84,34 +84,34 @@
 - copywriting.ts
 - TOP 20 ACHADOS CRÍTICOS
 - external-data/index.ts
-- useInteractionsRpc.ts
+- canonical-communication-contracts.test.tsx
 - gerar.mjs
 - CopywritingSalesTools.tsx
-- AccountChurnPredictionPanel.tsx
+- 20260110000002_baseline_compat_idempotente.sql
 - micro-interactions/index.ts
 - types/index.ts
 - lgpd-snapshot_test.ts
 - useRealtimeNotifications.ts
 - usePlaybooks.ts
-- design-system-audit.test.ts
+- lint-providers.cjs
 - externalData.ts
 - Verificação adversarial — camada de dados
 - 🔍 AUDITORIA EXAUSTIVA — SINGU CRM
-- branch-podaveis.test.mjs
+- 3. Riscos estruturais, por gravidade
 - carnegie.ts
-- safeFetch
-- ref_node_fs
+- connection-tester/index.ts
+- marketing-automation-suite.md
 - CompanyForm.tsx
 - SalesTeamTab.tsx
 - sidebar.tsx
-- snapshot.py
+- AppProviders.tsx
 - WhyScoreDrawer.tsx
 - @playwright/test
 - 📋 SINGU CRM — Levantamento Completo de Funcionalidades
 - PageSkeletons.tsx
 - canonical-delivery-retry-contract.test.tsx
 - 20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql
-- graphify-local.mjs
+- DISCCompatibilityAlerts.tsx
 - insights/SentimentTrendChart.tsx
 - devDependencies
 - useCustomSimulationPresetsStore.ts
@@ -127,7 +127,7 @@
 - carnegieProgressStorytellingQuestions.test.ts
 - useRFMAnalysis.ts
 - 20260416232800_aca98b93-9185-4f06-99ae-dd1cd5abafff.sql
-- PortfolioHealthDashboard.tsx
+- WeeklyReportPanel.tsx
 - 10_views.sql
 - DashboardCharts.tsx
 - carnegieVulnerabilityYesLadderInterest.test.ts
@@ -138,12 +138,12 @@
 - InsightsPanel.tsx
 - useInteractionsAdvancedFilter.ts
 - tab-utils.ts
-- AppProviders.tsx
+- main.tsx
 - SINGU CRM — Handoff Document
 - useReportsAnalytics.ts
-- SchemaDiscoveryCard.tsx
-- .lovable/memory/features/*.md (57 arquivos)
-- check-bundle-size.mjs
+- Entrega (5 melhorias → 55/55)
+- branch-podaveis.test.mjs
+- ref_node_fs
 - 🔧 MÓDULO 4: COMPONENTES (150+)
 - company-health-score.tsx
 - ConversationAnalysisCard.tsx
@@ -152,40 +152,40 @@
 - severity
 - 📡 Endpoints
 - Achados relevantes
-- MiniCelebration.tsx
-- collect_and_render
+- CelebrationProvider.tsx
+- run.mjs
 - useApproachRecommendation.ts
 - useFicha360FilterFavorites.ts
 - useFicha360PreferencesSync.ts
 - 20260719000002_add_missing_performance_indexes.sql
 - compilerOptions
-- BulkActionsBar.tsx
-- useKeyboardShortcutsEnhanced
-- IncomingWebhookCard.tsx
+- Padrões Obrigatórios
+- useKeyboardShortcutsEnhanced.ts
+- 20260110000000_baseline_tabelas_base.sql
 - 20260417005023_6d2d8ea7-c2c8-4caa-88d3-9a3cc518bb31.sql
 - 20260417001337_e3b9438d-89c9-4f77-a877-8feab6e00231.sql
 - 20260924181919_rodizio_bloco2_motor.sql
 - LuxIntelligencePanel.tsx
 - usePipeline.ts
 - IncomingWebhookFormDialog.tsx
-- Riscos residuais
+- TelemetryTable.tsx
 - canonical-side-effect-contracts.test.tsx
-- mgmt-mock.test.mjs
-- zod
+- useInteractionsRpc.ts
+- dealState.ts
 - SentimentChartTooltip.tsx
 - masked-input.tsx
 - 20260125155610_a5f0704f-a377-42c0-8849-bc49b5254e28.sql
-- useBulkRevalidate.ts
-- ref_node_path
+- Revalidação em massa
+- ref_node_url
 - public.contacts
 - CompanyCardWithContext.tsx
 - useCompanyIntelligence.ts
 - searchPresetTransport.ts
-- automation.mjs
-- health-aggregate/index.ts
-- C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado
+- InteractionForm.tsx
+- system-health/index.ts
+- Fatia A — Documentos da raiz + memória Lovable (.lovable/plan.md + 98 arquivos de .lovable/memory) + .devin/.windsurf
 - 1. A Missão Global dividida em 30 Etapas
-- priority-indicator.tsx
+- disc-badge.tsx
 - public.check_behavioral_regen_cron_staleness
 - EmailBuilder.tsx
 - celebrate.ts
@@ -200,14 +200,14 @@
 - 📋 Relatório de Análise QA - RelateIQ
 - PWAComponents.tsx
 - useTouchpointSequences.ts
-- .metadata
+- Ficha360FilterPanel.tsx
 - ObjectionExamplesModal.tsx
 - ObjectionsSpotlight.tsx
 - useLeadScore.ts
-- circuitBreaker.ts
+- supplier_scores
 - contact-utils.ts
 - reportEngine.ts
-- replay.ts
+- snapshot.py
 - 20260416233829_14fcc07a-6773-4d98-aada-f86fa6a13e98.sql
 - 20260417000551_4e28ff77-21ba-433e-8628-55418356e7b7.sql
 - components.json
@@ -220,15 +220,15 @@
 - optimized-avatar.tsx
 - command.tsx
 - CompanyProfileCard.tsx
-- DailyBriefingCard.tsx
+- PortfolioContactCard.tsx
 - carnegieCriticismEmpathy.test.ts
 - carnegieEncouragementFaceSaving.test.ts
-- gerar-rotas.mjs
+- mgmt-mock.test.mjs
 - useStakeholderAnalysis.ts
 - 20260522142751_81b336f5-f4c5-4bae-af01-e2d61e04a945.sql
 - audit_trigger_fn
 - keyboardShortcutRegistry.ts
-- sql-raiz.test.mjs
+- automation.mjs
 - smoke-tests_test.ts
 - behavior.ts
 - Teste manual: Sincronização URL → UI dos filtros da Ficha 360
@@ -236,8 +236,8 @@
 - useChannelPerformanceMatrix.ts
 - 20260417004129_55991427-8b13-48b9-a9ac-702dec46887e.sql
 - useVoiceAgent.ts
-- ContactDetailHeader.tsx
-- gerar-banco.mjs
+- supplier_homologations
+- NavigationPatterns.tsx
 - carnegieIdentityOwnership.test.ts
 - useCompanyRelatedData.ts
 - usePreContactBriefing.ts
@@ -257,8 +257,8 @@
 - SINGU CRM — Guia de Onboarding para Desenvolvedores
 - 20260721000077_fix_secdef_remaining_guards.sql
 - public.get_contact_sidebar_by_phone
-- interactions
-- harness.sh
+- 20260721223121_wave173_idx_and_final_isnull_fix.sql
+- gerar-banco.mjs
 - PreContactBriefing.tsx
 - CompanyInteractionsTab.tsx
 - EvidenceDrillDownSheet.tsx
@@ -273,49 +273,49 @@
 - normalize
 - 20260111183305_a7554561-ed71-4a77-a1b5-2ad2436f5356.sql
 - 20261006130000_frontend_rpcs_authenticated.sql
-- .write
+- .metadata
 - useNLPAutoAnalysis.ts
 - Estratégia de Backup e Disaster Recovery
 - Estado — Infraestrutura, CI, Testes e Documentação
-- B1 — "Marketing/Automação é a dimensão mais frágil: apenas 6 de 38 funcionalidades ✅ (16%)"
-- 🔴 Oportunidades Críticas
+- 20260321133834_create_singu_tables_batch3_of_3.sql
+- useHapticFeedback.ts
 - 📊 Resumo Executivo - v19.0
-- OnboardingTour.tsx
+- OnboardingTourWrapper.tsx
 - 20260721000071_fix_secdef_crlf_unguarded.sql
 - useIncomingWebhooks.ts
 - error-budget-dashboard.md
-- .source
-- StrategicNextStepsCard.tsx
+- carrier_homologations
+- useTelemetryExport.ts
 - pool-saturation.js
 - supabase-mgmt.mjs
-- evolution-webhook/index.ts
+- AccountChurnPredictionPanel.tsx
 - GlobalCommandBar.tsx
 - ForecastConfidencePanel.tsx
 - PresetFiltersDiff.tsx
-- fixture-schema.sql
+- discAdvancedData.ts
 - useCompanyProfileAnalytics.ts
 - useFicha360.ts
-- useContactDetail.presence.test.tsx
-- cenarios.mjs
+- useStakeholderAlerts.ts
+- replay.ts
 - voice-system-exhaustive.test.ts
 - errorReporting.ts
 - 20260416181618_cf783015-8b5c-48a9-8de2-acbf3d4a9fc0.sql
 - 20260720000023_create_phantom_tables.sql
 - Arquitetura do SINGU CRM
-- PlaybookSectionRenderer.tsx
+- sanitize.ts
 - Achados
 - resilientFetch
 - Migração das Edge Functions — Runbook
 - 🔧 Troubleshooting
-- AdminDashboard.tsx
-- Fatia H — CI/CD, testes, infra, observabilidade e tooling
+- AdminSidebar.tsx
+- carrier_scores
 - reset-passwords_test.ts
 - ResumoConversaIADialog.tsx
 - useCoalitionDetection.ts
 - useContactBehavior.ts
 - formatters.ts
 - InsightFeedbackAnalytics.tsx
-- InteracoesContent.tsx
+- 20260321133652_create_singu_tables_batch1_of_3.sql
 - companyQueries.ts
 - disc.ts
 - 20260416005302_557a4633-8c05-46e2-9b4a-31f1341c9540.sql
@@ -323,31 +323,31 @@
 - public.multiplix_search_audience
 - public.vw_singu_data_health
 - ADR-015 — Connections Governance, HMAC e Quotas
-- RelationshipKPIsDashboard.tsx
+- O que está BOM (auditado)
 - Achados
 - 📊 Análise Exaustiva do Banco de Dados - RelateIQ
-- 11. Nove páginas do escopo renderizam sem `AppLayout`
-- Pipeline.tsx
-- 3. Riscos estruturais, por gravidade
+- zapp_history.master_dashboard
+- gerar-rotas.mjs
+- 20260722001941_wave178_idx_remaining_unindexed_fks.sql
 - Postmortem — Migração Origem para Destino
 - ✅ Correções Realizadas (v4.0)
-- Fatia A — Documentos da raiz + memória Lovable (.lovable/plan.md + 98 arquivos de .lovable/memory) + .devin/.windsurf
+- zapp_history.master_dashboard
 - 🛡️ Camadas de Proteção
 - crossRefInsights.ts
 - 20260712221610_4c6bd7d1-8599-4798-a055-a56e9e3f0f5c.sql
 - SINGU CRM
-- Componentes (`src/components/intel/`)
+- zapp_history.master_dashboard
 - password-migration-reset.tsx
 - useBulkImport.ts
 - order-guard_test.ts
-- dados.sql
+- DISCAnalyticsPanel.tsx
 - ErrorBoundary.tsx
 - RelatoriosFixosBar.tsx
 - InfiniteScrollSentinel.tsx
-- StatusIndicators.tsx
-- badge.tsx
+- 20260321133745_create_singu_tables_batch2_of_3.sql
+- useDealRooms.ts
 - form.tsx
-- check-test-inventory.mjs
+- domain/validationSchemas.ts
 - intelSnapshot.ts
 - interactionTags.ts
 - suggestPresetName.ts
@@ -360,7 +360,7 @@
 - empty-state.tsx
 - ADR-014 — Connections Observability & Resilience
 - 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM
-- 20261011195900_company_relations_baseline.sql
+- 20260720150318_composite_indexes_and_updated_at_triggers.sql
 - 🧠 MÓDULO 2: 10 FRAMEWORKS DE COMPORTAMENTO HUMANO
 - SINGU CRM — Disaster Recovery Plan
 - useErpData.ts
@@ -370,8 +370,8 @@
 - Post-Mortem — {Título do Incidente}
 - Eliminação de `as any` - 12 Correções
 - Signing Key Rotation Runbook
-- useDISCAutoAnalysis.ts
-- _sqlseguro.py
+- 4. 🧠 Módulo DISC Enterprise
+- Pipeline automático de validação
 - 20260509152638_b3581ab3-1770-47d0-a2f7-73f0581a78e1.sql
 - 20260509170538_45b95e4b-470c-4067-af3c-7502d9b60532.sql
 - context-menu.tsx
@@ -381,18 +381,18 @@
 - check-rls-baseline.mjs
 - ImportantDatesCalendar.tsx
 - ContextualLoader.tsx
-- PassoFeedbackMenu.tsx
-- CanaisQuickFilter.tsx
-- SnapshotAgainstPostgres
+- ProximosPassosCard.tsx
+- AdvancedSearchBar.tsx
+- company-form-exhaustive.test.tsx
 - closingScore.ts
-- G — Camada de banco: funcionalidades planejadas e não executadas
+- useAutomationRules.ts
 - useConversationalSearch.ts
 - useFicha360Filters.ts
 - useInboundActivityHeatmap.ts
-- PLANEJADO × EXECUTADO — SINGU CRM v2
+- useUnifiedHistory.ts
 - canaisInteracao.ts
 - rateLimiter.ts
-- contact-detail-partial-failures.test.tsx
+- 20260321130011_salespro_mig_008_bi_chat_supply_quotes_final.sql
 - 20260111162422_931d8ea9-50f0-4793-b167-51ddb862bc64.sql
 - 20260416234628_b8308aff-93ad-4104-a929-e8c91d30137c.sql
 - 20260417105530_03a1c9e4-218e-4962-a9e5-145c3627b96c.sql
@@ -405,7 +405,7 @@
 - public.rodizio_reverter_execucao
 - 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM
 - adr/README.md
-- ADR-012 — Rodada I: Polimento Final & Hardening Profundo
+- zapp_history.master_dashboard
 - Decisão
 - WebhookSnippetsSheet
 - ADR-018: Hardening — Strict Mode, Feature Flags e Optimistic Locking
@@ -414,36 +414,36 @@
 - 🔴 Oportunidades Críticas
 - useSearchPresets.ts
 - useBestTimeHeatmap.ts
-- company-form-exhaustive.test.tsx
+- harness.sh
 - useVoiceAIHealth.ts
 - lead-scorer/index.ts
 - 20261005230000_fix_contacts_companies_write_triggers.sql
-- ReportWidgets.tsx
+- test_generate_fatos.py
 - alert-dialog.tsx
-- 20261013033433_sequence_write_fences.sql
+- useWinLoss.ts
 - report_schema_compatibility.sql
 - run-all.sh
-- LifeEventsTab.tsx
+- supplier_evaluations
 - ProviderErrorBoundary
-- AdvancedSearchBar.tsx
+- Any
 - ObjectionsTrendChart.tsx
 - responsive-dialog.tsx
-- 20261012194307_recover_atomic_queue_claims.sql
+- zapp_history.master_dashboard
 - NavigationStackContext.tsx
 - carnegieWarmth.ts
 - useAiGatewayHealth.ts
 - useCompanyViews.ts
 - useFicha360Domain.ts
 - useContactSentimentTrend.ts
-- useEntityRelationships.ts
+- .source
 - useNLPAnalyticsData.ts
-- useScoreAutomations.ts
+- evolution-webhook/index.ts
 - deal-risk-constants.ts
 - intelExportUniversal.ts
 - sortInteractions.ts
 - BehavioralRegenAudit.tsx
-- push.ts
-- AdminTelemetria.tsx
+- PLANEJADO × EXECUTADO — SINGU CRM v2
+- telemetry-helpers.test.ts
 - 20260305204447_d9a65b36-83ab-434e-9699-aac2341f11e1.sql
 - 20260416181200_6d3557ca-038e-4e4c-b64e-bc3a706f929f.sql
 - 20260417195323_b84a83b6-e3b8-4d98-be74-9c37a1bdfc21.sql
@@ -471,25 +471,25 @@
 - log_behavioral_change
 - useEmailPipelineHealth.ts
 - InboundActivityHeatmapCard.tsx
-- StakeholderInfluenceNetwork.tsx
-- UnifiedNotificationsBell.tsx
+- useSmsCampaigns.ts
+- .lovable/memory/features/*.md (57 arquivos)
 - 20260509180917_b4306156-1d1c-4efd-b41f-571c86e0d338.sql
 - fuzzyDedup.ts
 - select.tsx
 - drawer.tsx
-- audit-ausentes.mjs
-- mudou-conteudo.test.mjs
-- SequenceDetailDrawer.tsx
+- audit-ausentes.test.mjs
+- fixture-schema.sql
+- useContactDetail.presence.test.tsx
 - public.whatsapp_messages
 - AiGatewayHealthCard.tsx
 - CompanyCommercialTab.tsx
-- CustomFieldsManager.tsx
-- ReportsTab.tsx
-- DashboardErrorBoundary
-- ProximosPassosCard.tsx
-- InteracoesPresetsMenu.tsx
+- sortArray
+- 20260109144945_baseline_tabelas_fundadoras.sql
+- 20260408195933_zapp_history_02_base_tables.sql
+- 20260416230430_singu_triggers_batch_b.sql
+- zapp_history.master_dashboard
 - AutomationWizard.tsx
-- Contatos.tsx
+- contact-detail-partial-failures.test.tsx
 - carnegieEagerWant.ts
 - communicationTrainingData.ts
 - sleightOfMouth.ts
@@ -497,17 +497,17 @@
 - useDedupEngine.ts
 - useContactTagsHistory.ts
 - useDailyKpis.test.tsx
-- IntelStatusBar.tsx
+- useDealForecastConfidence.ts
 - useEntity360.ts
-- Histórico de versões 1.0.0 a 1.5.0
-- useLuxIntelligence.ts
+- useFicha360ConversationSummary.ts
+- 20260416230402_singu_triggers_batch_a.sql
 - useNextPagePrefetch.ts
 - useProximoPassoFeedback.ts
-- SnapshotDBStatsTests
+- cenarios.mjs
 - channelCountsCache.ts
 - excerptWindow.ts
 - rpcChurn.ts
-- modulos
+- public.customers
 - Inbox.tsx
 - external-data-telemetry.test.ts
 - mbti.ts
@@ -522,7 +522,7 @@
 - 20260723104220_eb7db141-b328-4d34-9962-78214341bb72.sql
 - 20260723154109_ad0a12c4-62a1-4a6a-928e-686b828d2fe1.sql
 - public.registrar_pedido_erp
-- supabase-stubs.sql
+- AppLayout.tsx
 - restore-drill.integration.sh
 - AGENTS.md — Singu_V2
 - useExternalLookup.ts
@@ -533,14 +533,14 @@
 - RPC `get_contact_sidebar_by_phone(p_phone text)`
 - Migração Supabase — Brief Executivo
 - Migration Master Runbook — Supabase → Supabase
-- 🔴 Oportunidades Críticas
+- MorphingNumber
 - 3. Cenários complementares
 - 🛠️ Melhorias Implementadas (Rodada Final)
 - 2. 👤 Gestão de Contatos (Contacts)
-- sales_team_members
+- dados.sql
 - Arquitetura
 - Lead Scoring Server-Side
-- useSmartNotifications.ts
+- check-test-inventory.mjs
 - Entregáveis
 - Rodada 30/10 — Onda D: Zero-Warning Ratchet Final
 - 20260509184111_637bda7b-3924-43cf-80cb-cc4d3094c09d.sql
@@ -548,20 +548,20 @@
 - create-reset-log.sql
 - channelPersistence.ts
 - @supabase/supabase-js
-- Contexto para agentes de IA — como ler o estado real do Singu V2
+- 20260321125738_salespro_mig_004_playbooks_cadences_leads.sql
 - public.interactions
 - row-diff_test.ts
-- Auditoria técnica total — SINGU CRM
-- NextBestAction.tsx
-- AgendarReuniaoForm.tsx
+- 20260405205155_huggingface_improvements_m01_m40.sql
+- zapp_history.master_dashboard
+- zapp_history.master_dashboard
 - ProximaAcaoCTA.tsx
 - ActiveFiltersBar.tsx
-- SortChips.tsx
-- ScrollToTopButton.tsx
-- uniq
+- 20260720135515_bd2_company_contact_ownership_checks.sql
+- ScrollToTopButton.test.tsx
+- 20260720145939_db_perf_indexes_rls_cleanup.sql
 - SequenceFormDialog.tsx
-- gerar.unit.mjs
-- MATRIZ_RECONCILIADA_20261012.md
+- 20261011195900_company_relations_baseline.sql
+- view-mode-switcher.tsx
 - DensityContext.tsx
 - useChannelHistory.ts
 - useDocumentTemplates.ts
@@ -569,10 +569,10 @@
 - groupInteractions.ts
 - intelHealth.ts
 - AdminKnowledgeExport.tsx
-- PublicSurvey.tsx
+- 20260321125922_salespro_mig_007_security_bi_supply_remaining.sql
 - telemetry-data-integrity.test.ts
 - emotional-intelligence.ts
-- error-budget/index.ts
+- SnapshotAgainstPostgres
 - public.score_history
 - 20260416025140_c0179f4c-b812-4504-8844-d344c80d5496.sql
 - 20260420115057_db3a83d8-00a2-415e-9126-17ba7ba6c80d.sql
@@ -584,23 +584,23 @@
 - 20260511190722_390b5ee7-617b-489a-a007-6c4e386e4cac.sql
 - 20260512151247_371fdb19-5fa5-459c-87d3-7bbac407fd35.sql
 - 20260726154355_78f8a8c2-f06f-4ab4-9bd3-fe04c60c3ed5.sql
-- MFAEnrollmentBanner.tsx
+- 5. `docs/TECH_DEBT.md`
 - ADR-009: Rate Limiting em Múltiplas Camadas
-- readText
-- useContactCadence.ts
+- useFicha360DeeplinkToast.ts
+- 7. Descoberta e navegação
 - DR Drills & Game Days — Índice
-- verificar-citacoes.mjs
+- B3 — "Envio de e-mail é encenado em 3 lugares"
 - 🛡️ Hardening Phase 2 — BD Físico pgxfvjmuubtbowutlide
 - Load Testing — k6
-- NLPAnalysisCard.tsx
+- QA Findings — Rodada 27/10
 - Auditoria SECURITY DEFINER — Rodada 01/11
 - Testes E2E (Playwright)
 - 5. 🧬 Módulo PNL/NLP Enterprise
 - Singu_V2 — Regras da Casa (Hermes) — suplemento
-- .lovable/memory/architecture/*.md (4) + standards (1) + technical (1)
-- useDuplicateContacts.ts
+- providerGuard.ts
+- G — Camada de banco: funcionalidades planejadas e não executadas
 - intent-data-module.md
-- Lead Score Threshold Automations + Behavioral Bridge
+- Componentes (`src/components/intel/`)
 - RpcPlanDiffDialog.tsx
 - Rodada 33/10 — Onda G Bucket B (parcial): DEFINER → INVOKER
 - 20260511185111_1b0fce9e-8228-40ff-9451-7273de1d925f.sql
@@ -608,37 +608,37 @@
 - 20260509184703_f7b0de13-0370-4ec9-bfc4-75dfd4f19eb5.sql
 - 20260416231124_3f12de1f-6365-48b0-8a87-461f3968a40d.sql
 - 20260422165633_c28b4fde-cb8f-4e41-b247-bdb2e17199de.sql
-- GeradoresComBanco
-- check-rls-baseline.test.mjs
-- useReportWidgets.ts
-- Detalhe
+- ReportWidgets.tsx
+- gen-supabase-types.test.mjs
+- 20260110000001_compat_colunas_producao.sql
+- carrier_evaluations
 - sequences
 - synthetic-checks.ts
-- E — Camada de dados do front × contratos de backend (SINGU CRM v2)
+- zapp_history.master_dashboard
 - ContactTimeHeatmap.tsx
-- CadenceRulesConfig.tsx
-- Categorias
-- RecentActivityCard.tsx
-- Intelligence Hub (`/intelligence`)
-- TopContactsCard.tsx
-- BaseOffline
+- 20260416221418_singu_create_security_auth_module.sql
+- 20261013033433_sequence_write_fences.sql
+- 20260321123232_salespro_batch3_security_quotes_competitive.sql
+- zapp_history.master_dashboard
+- 20261012194307_recover_atomic_queue_claims.sql
+- push.ts
 - ErrorState.tsx
 - FrequenciaContatoCard.tsx
-- ProximoPassoQuickForm.tsx
-- contact-cache-revalidation.test.tsx
-- public.get_contact_sidebar_by_phone
-- 3.8 Hooks de UX/UI
+- Fatia H — CI/CD, testes, infra, observabilidade e tooling
+- mudou-conteudo.test.mjs
+- 20260321123053_salespro_batch1b_playbooks_cadences_achievements.sql
+- 20260321123133_salespro_batch2_bi_chat_challenges_supply.sql
 - ChannelShortcutsHelpOverlay.tsx
 - PrefetchLink.tsx
-- SocialIntelligencePanel.tsx
+- 20260321123201_salespro_batch2b_supply_security.sql
 - emotionalIntelligenceData.ts
 - triggerBundles.ts
 - useBehavioralProfileVersions.ts
-- AskTab.tsx
-- RELATORIO_CI.md — Correção dos workflows com falha (Singu_V2)
-- useSentimentAnnotations.ts
+- zapp_history.master_dashboard
+- useSavedViews.ts
+- public.contacts
 - computeIsolatedFilterCounts.ts
-- AdminFieldMapping.tsx
+- 20260321123026_salespro_batch1_core_sales.sql
 - auth-flow.test.ts
 - big-five.ts
 - cognitive-biases.ts
@@ -680,8 +680,8 @@
 - RUNBOOK.md
 - Drift: repo × tipos gerados — quantificado
 - Reconstruibilidade do ambiente a partir do repositório
-- weekly-digest/index.ts
-- public.vw_contacts_sem_apelido
+- 20260321125846_salespro_mig_006_competitive_security_supply.sql
+- 💰 Error Budget Policy
 - healthy
 - forecasting-revenue-intelligence.md
 - revops-dashboard.md
@@ -694,41 +694,41 @@
 - 20260511190139_affdb8bf-798b-4f2b-bf9c-f8c9898717e0.sql
 - 20260715190421_5c51ba03-2b4a-4802-9896-a835854471e8.sql
 - 20260511191129_8b0d76c4-d9ed-4a6a-9a44-a23f1f423135.sql
-- create-drill-backup.mjs
-- ☁️ MÓDULO 5: EDGE FUNCTIONS (12)
+- graphify-local.mjs
+- zapp_history.health_check
 - DNS Flip — Checklist da Janela de Cutover
 - public.score_history
 - public.system_alerts
 - public.vak_analysis_history
 - post-cutover-watch.sh
-- useEmotionalIntelligence.ts
-- PENDENCIAS.md — Bloqueios e itens fora do escopo (Singu_V2)
-- check-edge-cors.mjs
-- ContactEmailThreadsSection.tsx
-- contact-cache-concurrency.test.tsx
+- zapp_history.health_check
+- AuditDiffViewer.tsx
+- ReportsTab.tsx
+- 20260721214918_fix_secdef_remaining_guards.sql
+- Achados
 - NotificationGroup.tsx
-- useActivityOverview.ts
-- Como ler a matriz
-- ProximosPassosFiltersBar.tsx
-- DateRangePopover.tsx
-- ViewModeChips.tsx
-- storage-public-guard.ts
-- render-workflow-docs.mjs
-- DealConfidenceBadge.tsx
-- workflow-invariants.mjs
-- channelPersistence.config.ts
-- gerar-repo.mjs
-- lint-providers.cjs
+- CopiarLinkFiltrosButton.tsx
 - contact-relation-concurrency.mjs
-- dr.test.sh
-- useEmailThreadSummary.ts
-- dual-write-diverge.ts
-- exporters.test.sh
+- collect_and_render
+- 20260409230707_audit_fix_02_fk_indexes.sql
+- zapp_history.audit_dashboard_v13
+- 20260416221307_singu_create_email_sms_campaigns.sql
+- Histórico de versões 1.0.0 a 1.5.0
+- DealConfidenceBadge.tsx
+- relationship-score.tsx
+- channelPersistence.config.ts
+- SnapshotDBStatsTests
+- modulos
+- useCrossReference.ts
+- useDeviceDetection.ts
+- supabase-stubs.sql
+- useEvidenceForLabel.ts
+- VoiceSearchOverlay.tsx
 - contactBehaviorAudit.test.ts
 - secretRotation.ts
-- CurrentSqlSourcesTests
-- ExplainComBanco
-- contact-detail-external-retry.test.tsx
+- useAdvancedTriggers.ts
+- zapp_history.audit_dashboard_v13
+- MATRIZ_RECONCILIADA_20261012.md
 - public.vak_analysis_history
 - 20260111024043_59300762-e425-469a-9e34-35f8ba7ca1e3.sql
 - public.stakeholder_alerts
@@ -761,8 +761,8 @@
 - 👤 CORE - Entidades Principais
 - 🎯 DISC - Análise Comportamental
 - 📂 Disaster Recovery Drill — 2026 Q2
-- useEntityBookmarks.ts
-- public.vw_singu_data_health
+- uniq
+- Gates de CI
 - Graphify
 - ⚡ EXPLAIN — consultas centrais
 - Certificação QA 10/10 — Rodada 27/10
@@ -785,7 +785,7 @@
 - 20260511191057_b81de04f-8180-4986-b2be-f5d0f9ddfbd0.sql
 - accordion.tsx
 - tabs.tsx
-- Regras de negócio — preencha o que o código não diz
+- SequenceDetailDrawer.tsx
 - CDC / Replay Layer — RPO=0
 - public.abm_accounts
 - public.attribution_touchpoints
@@ -822,22 +822,22 @@
 - 26-runbook-coverage.sh
 - 26-silence-template.sh
 - Suíte de exposição RLS (etapa 84 do plano banco-único)
-- useDealVelocity.ts
+- useForecasting.ts
 - DailySummaryWidget.tsx
-- useHapticFeedback.ts
-- CopyScriptMenu.tsx
-- ProximosPassosPresets.tsx
+- 20260321123300_salespro_batch3b_gamification_competitive.sql
+- 20260321125811_salespro_mig_005_gamification.sql
+- 20260326115100_ensure_company_rfm_scores.sql
 - CompanyAddressesForm.tsx
-- Prod Readiness ? Singu_V2
-- Next-Best-Action (NBA) por Contato
-- DirecaoQuickFilter.tsx
-- bump-toolchain.mjs
-- exists
-- sql.test.mjs
+- vw_supplier_homologation_queue
+- CompanySocialMediaForm.tsx
+- gerar.unit.mjs
+- _sqlseguro.py
+- StakeholderInfluenceNetwork.tsx
+- readText
 - nlpTrainingScenarios.ts
-- SnapshotFunctionCallerTests
-- useMarkObjectionHandled.ts
-- useNeuromarketing.ts
+- verificar-citacoes.mjs
+- build_function_callers
+- useReportWidgets.ts
 - ipMasking.ts
 - requestId.ts
 - telemetry-charts.test.ts
@@ -868,28 +868,28 @@
 - public.rodizio_reverter_execucao
 - public.rodizio_aplicar_onda
 - 20261006120000_least_privilege_canonical.sql
-- CelebrationProvider.tsx
+- 20260326115101_add_composite_performance_indices.sql
 - 20261011150000_restore_canonical_contracts.sql
-- EntityMonthlyTimeline.tsx
-- BundlesTab.tsx
-- proactiveIntelligence.ts
-- MapaEmpresas.tsx
-- Texto-mestre adm01-debug (2026-11-02) — íntegra
+- 20260330122025_create_carrier_triggers.sql
+- 20260408200032_zapp_history_05_links_and_embeddings.sql
+- zapp_history.health_check
+- zapp_history.master_dashboard
+- Contexto para agentes de IA — como ler o estado real do Singu V2
 - ADR-007: CORS Scoped por Origem
-- Banco, migrations, CI e operação
+- 🧪 Achados — Testes, Build, Config, CI & Docs-vs-Realidade
 - Gaps e Problemas
 - Funções do Banco
 - Recomendações
 - Backup Encryption Verification
-- parseEnv
-- cutover-cdc.test.sh
-- FailureModeTests
+- Tabelas sem RLS / sem política
+- Detalhe
+- Monitoring
 - 🚨 Procedimento de Hotfix
 - Auditoria Estática — Rodada 27/10
 - Superfície do Sistema — Rodada 27/10
 - enqueue_behavioral_profile_regen
 - schema-freeze-guard.sql
-- _pgdocs.py
+- test_snapshot.py
 - security.md
 - Project Memory
 - completion-35-10.md
@@ -899,11 +899,11 @@
 - 20261011120000_rpc_plan_structural_hash.sql
 - 20260925102411_t219_restringe_signup_por_dominio.sql
 - 20260421115417_8822bf70-0a05-4ea5-afe2-8fc7b2e4af45.sql
-- progress.tsx
-- SoftDeletePanel.test.tsx
-- useAdvancedTriggers.ts
-- calendar.tsx
-- useContactRelationalData.ts
+- E — Camada de dados do front × contratos de backend (SINGU CRM v2)
+- Categorias
+- scroll-area.tsx
+- 20260611130820_create_product_novelties_table_v2.sql
+- BaseOffline
 - dry-run.sh
 - public.behavioral_insight_feedback
 - public.churn_risk_scores
@@ -937,13 +937,13 @@
 - restore-drill.sh
 - _lib.sh
 - rollback.sh
-- useSemanticSearch.ts
-- useSocialInsights.test.tsx
-- headers
-- pg_temp.db01_snapshot
-- merge_records_atomic.sql
-- CoalitionDetectionPanel.tsx
-- table.tsx
+- EntityMonthlyTimeline.tsx
+- contact-cache-revalidation.test.tsx
+- weekly-digest/index.ts
+- zapp_history.message_audio
+- zapp_history.conversation_daily_summaries
+- 20260408200248_zapp_history_09_observability.sql
+- 20260416224009_singu_create_missing_functions_fixed.sql
 - anchorTrackingData.ts
 - exporterConfigs.ts
 - brazilianStates.ts
@@ -981,9 +981,9 @@
 - Políticas RLS
 - forecast_periods
 - increment_version_column
-- public.nurturing_enrollments
+- 20260721222911_idx_user_id_missing_tables.sql
 - public.slow_queries_audit
-- process_contact_relatives_audit
+- public.get_contact_sidebar_by_phone
 - public.audit_log_2026_07
 - public.audit_log_2026_08
 - public.audit_log_2026_09
@@ -995,7 +995,7 @@
 - rotate-jwt.sh
 - lag-watch.sh
 - inject.sh
-- filterProximosPassos.ts
+- public.get_contact_sidebar_by_phone
 - freeze-origin.sh
 - applied_objection_responses_user_applied_at_idx
 - idx_abm_campaigns_status
@@ -1055,13 +1055,13 @@
 - public.validate_behavioral_consistency
 - tr_sync_meta_to_contact
 - wal-archive-check.sh
-- triggerPlaybook.ts
-- system-health/index.ts
+- RELATORIO_CI.md — Correção dos workflows com falha (Singu_V2)
+- ddl.test.mjs
 - secrets-leak-scan.sh
-- 20261012040000_legacy_sales_owner_scope.sql
-- Automação local — Singu_V2
+- check-rls-baseline.test.mjs
+- 20260321123327_salespro_batch4_tournaments_territories_final.sql
 - full-restore.sh
-- Contratos frontend/backend
+- 20260321125638_salespro_mig_002_core_sales_complete.sql
 - dns-multi-region.sh
 - full-audit.sh
 - grants-parity.sh
@@ -1069,7 +1069,7 @@
 - triggers-parity.sh
 - check-runbook-coverage.sh
 - Tabelas/views ausentes no Singu (referenciadas pelo código do Lovable)
-- temperament.ts
+- 20260416221150_singu_create_helpdesk_module.sql
 - neuroTrainingQuestions.ts
 - stateElicitationData.ts
 - fileValidation.ts
@@ -1084,7 +1084,7 @@
 - public.get_team_member_ids
 - public.knowledge_base_articles
 - public.canned_responses
-- public.ip_whitelist
+- 20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql
 - csat_surveys_public_token_key
 - 20260420204951_1bd46e2e-bb94-4aeb-8d7f-5fb6cab85538.sql
 - public.proximo_passo_feedback
@@ -1095,7 +1095,7 @@
 - public.contact_objection_scripts
 - public.crm_objection_intelligence
 - idx_social_sync_queue_status
-- 20261013033427_dashboard_source_contract.sql
+- 20260721210234_fix_secdef_crlf_unguarded.sql
 - public.get_ai_gateway_health
 - public.get_rpc_plan_diff
 - tsconfig.json
@@ -1112,7 +1112,7 @@
 - deal_forecasts
 - trg_detect_contact_intel
 - er-diagram.md
-- 52-subscription-lag-guard.sh
+- public.vw_contacts_sem_apelido
 - trg_enqueue_contact_validation
 - tr_validate_deal_stage_transition
 - tr_handle_recurring_life_event
@@ -1148,7 +1148,7 @@
 - import-identities.sh
 - checkpoint.sql
 - drain.sh
-- AccountHierarchyTree.tsx
+- indice.py
 - contact_analytical_profiles_contact_unique
 - csat_surveys_public_token_key
 - idx_ai_chat_messages_thread
@@ -1208,7 +1208,7 @@
 - automation_rules
 - document_signatures
 - landing_pages
-- SequenceEnrollDialog.contract.test.tsx
+- Metas.tsx
 - public.whatsapp_transcriptions
 - public.get_contact_behavior_gaps
 - public.get_contact_framework_gaps
@@ -1230,12 +1230,12 @@
 - trg_sequence_pause_on_reply
 - trg_user_ui_preferences_updated_at
 - trg_validate_entity_relationship
-- SkeletonPrimitives.tsx
+- 3.8 Hooks de UX/UI
 - preflight-secrets.sh
-- DesignSystem.tsx
-- sequence-contract_test.ts
-- Backend e integrações
-- Automações de estado real
+- ☁️ MÓDULO 5: EDGE FUNCTIONS (12)
+- useCompanies
+- Intelligence Hub (`/intelligence`)
+- PENDENCIAS.md — Bloqueios e itens fora do escopo (Singu_V2)
 - connection-pool-exhaustion-canary.sh
 - dns-propagation.sh
 - full-audit-exporter.sh
@@ -1248,49 +1248,50 @@
 - ai-gateway-partitions-exporter.sh
 - rpc-perf-exporter.sh
 - rpc-plan-exporter.sh
-- Inscrições e reservas de email
+- check-edge-cors.mjs
 - 20260309024746_83988e36-095a-4f11-8875-1992bccce2c2.sql
 - 20260415123115_30dcc732-370f-4502-9f70-69eb4b3c43bb.sql
+- 20260511185221_db922848-ea45-492c-b3f4-f40bf8f2b6db.sql
 - 20260712223208_00845b35-c2fa-4378-b2e8-2649a03c4c92.sql
 - rls/run.sh
-- useLandingPages.ts
-- useEasterEggs.ts
-- check-edge-imports.mjs
+- contact-cache-concurrency.test.tsx
+- zapp_history.master_dashboard
+- 20260416221043_singu_create_lead_scoring_tables.sql
 - _mock_supabase.ts
 - public.ai_recommendation_audit_logs_v2
-- functions.test.sh
-- 38-lock-wait-duration-guard.sh
-- 50-replication-slots-guard.sh
+- 20260416221116_singu_create_sequences_nurturing.sql
+- 20260721213727_fix_secdef_entity_ownership_guard_2.sql
+- 20260721221440_idx_user_id_rls_tables.sql
 - public.contact_cadence_audit
 - public.contact_preferences_audit
 - public.contact_relatives_audit
 - public.contact_time_analysis_audit
 - public.cron_secrets
-- 51-replication-lag-guard.sh
-- 55-pg-stat-statements-reset-guard.sh
+- public.get_contact_360_by_phone
+- Como ler a matriz
 - public.disc_analysis_history_audit
-- public.disc_profile_config
+- AIEmailComposer.tsx
 - public.feature_flags
 - public.follow_up_approvals_v2
-- PipelineFilterBar.tsx
-- canonical-competitor-save-contract.test.tsx
-- public.lead_score_config
+- render-workflow-docs.mjs
+- workflow-invariants.mjs
+- gerar-repo.mjs
 - public.lead_score_thresholds
 - public.lux_intelligence
-- public.lux_webhook_config
-- useActivityLogger.ts
-- public.permissions
+- dr.test.sh
+- dual-write-diverge.ts
+- exporters.test.sh
 - public.pipeline_stage_transitions
 - public.reframing_analysis_audit
-- useClosingScoreRanking.ts
-- public.rfm_segment_config
-- useKeyboardShortcutsEnhanced.ts
-- usePortfolioHealth.ts
-- public.weekly_report_settings
-- public.weekly_reports
-- public.whatsapp_kpis
-- test_snapshot.py
-- useReducedMotion.ts
+- CurrentSqlSourcesTests
+- ExplainComBanco
+- contact-detail-external-retry.test.tsx
+- public.cadence_enrollments
+- 20260321125705_salespro_mig_003_teams_clients_products.sql
+- vw_carrier_data_quality
+- zapp_history.message_media
+- _pgdocs.py
+- _pgdocs_catalogo.py
 - public.abm_account_plans
 - public.abm_accounts
 - public.abm_buying_committee
@@ -1566,23 +1567,147 @@
 - public.competitors
 - public.contacts
 - public.interactions_audit
-- useTerritoryOptimization.ts
-- architecture-compliance.test.ts
+- 20260408200123_zapp_history_07_training_dataset_and_pii.sql
+- 20260409110014_zapp_history_38_integrate_singu_pipelines.sql
 - public.deals
 - public.interactions
 - public.metaprogram_analysis
 - public.rfm_analysis
 - public.sequence_steps
 - public.vak_analysis_history
+- 20260416221224_singu_create_ai_chat_and_meetings.sql
+- 20260416230608_singu_indexes_batch_2.sql
+- 20260417005040_singu_fix_6b_functional_trigram_indexes.sql
+- public.vw_singu_data_health
+- Regras de negócio — preencha o que o código não diz
+- useDealVelocity.ts
+- Prod Readiness ? Singu_V2
+- bump-toolchain.mjs
+- check-bundle-size.mjs
+- exists
+- sql.test.mjs
+- SnapshotFunctionCallerTests
+- BundlesTab.tsx
+- carnegieTalkRatio.ts
+- proactiveIntelligence.ts
+- MapaEmpresas.tsx
+- 20260309231822_create_lalamove_plus_tables.sql
+- 20260321134401_remove_google_maps_enum_v2.sql
+- zapp_history.master_dashboard
+- 20260721002547_add_missing_indexes_pipeline_notifications.sql
+- 20260721212539_fix_secdef_entity_ownership_guard.sql
+- Infra, deploy e configuração
+- AnomaliesWidget
+- Texto-mestre adm01-debug (2026-11-02) — íntegra
+- Banco, migrations, CI e operação
+- Next-Best-Action (NBA) por Contato
+- 20260319185913_create_pix_accounts_table.sql
+- parseEnv
+- cutover-cdc.test.sh
+- FailureModeTests
+- SuccessCheckmark.tsx
+- carnegieAppreciation.ts
+- triggersAdvancedData.ts
+- useSocialInsights.test.tsx
+- 20260321184838_create_indexes_fk_high_volume.sql
+- 20260330173636_fix_audit_gaps_g1_g2_g3_g4.sql
+- 20260408200858_zapp_history_13_auto_flag_messages.sql
+- 20260409133917_zapp_history_49_auto_invoke_triggers.sql
+- zapp_history.v_dashboard_atendimento
+- 20260416232129_singu_indexes_batch_4.sql
+- Hooks (`src/hooks/`)
+- pg_temp.db01_snapshot
+- merge_records_atomic.sql
+- 20260417004914_singu_fix_5_sync_contact_emails_phones.sql
+- AppChrome.tsx
+- ProntidaoFactorBreakdownChart.tsx
+- table.tsx
+- copywritingData.ts
+- neuromarketingData.ts
+- company-contracts.test.ts
+- useAIWritingAssistant.ts
+- filterProximosPassos.ts
+- prontidaoTrendMilestones.ts
+- triggerPlaybook.ts
+- public.campaign_members
+- public.vw_suppliers
+- 20260321125604_salespro_mig_001_saved_filters.sql
+- zapp_history.v_contact_360
+- 20260409135049_zapp_history_53_nlp_pipeline_integration.sql
+- 20260416230539_singu_indexes_batch_1.sql
+- 20261012040000_legacy_sales_owner_scope.sql
+- public.get_contact_intelligence_by_phone
+- Automação local — Singu_V2
+- Lacunas: o que NÃO verifiquei e por quê
+- gap-modules-smoke.spec.ts
+- 20261013033427_dashboard_source_contract.sql
+- 20260411012403_harden_pks_policies_fk_indexes.sql
+- 20260417103206_singu_fix_14_sync_company_address_to_city_state.sql
+- 52-subscription-lag-guard.sh
+- run
+- AccountHierarchyTree.tsx
+- SearchLocalGroups.tsx
+- copywritingAdvancedData.ts
+- nlpAdvancedData.ts
+- triggerTemplatesMetaprograms.ts
+- forecastSimulation.ts
+- useSequences.ts
+- DesignSystem.tsx
+- Pipeline.tsx
+- sequence-contract_test.ts
+- public.company_addresses
+- public.company_addresses
+- public.customers
+- 20260409133339_zapp_history_45b_runtime_config_table.sql
+- zapp_history.v_dashboard_atendimento
+- 20260409211334_zapp_history_165_priority_matrix.sql
+- 20260409234406_zapp_audit_m13_partial_indexes_dashboard.sql
+- 20260416221330_singu_create_documents_module.sql
+- 20260417005015_singu_fix_6_trigram_indexes_search.sql
+- 20260503002114_create_contact_notes_for_zapp_web.sql
+- 20260609124546_create_xbz_asia_upload_mapping_tables.sql
+- 20260720145800_create_production_baseline_tables.sql
+- Auditoria técnica total — SINGU CRM
+- Backend e integrações
+- Automações de estado real
+- Estado — Core CRM
+- Inscrições e reservas de email
+- Mapeamento Campo-a-Campo: Banco Local ↔ Banco Externo
+- useLandingPages.ts
+- check-edge-imports.mjs
+- functions.test.sh
+- 38-lock-wait-duration-guard.sh
+- 50-replication-slots-guard.sh
+- 51-replication-lag-guard.sh
+- 55-pg-stat-statements-reset-guard.sh
+- ValidadorSql
+- PipelineFilterBar.tsx
+- StakeholderSimulator.tsx
+- relationship-stage.tsx
+- typography.tsx
+- carnegieNobleCauses.ts
+- triggersExtendedData.ts
+- useActivityLogger.ts
+- useClosingScoreRanking.ts
+- usePortfolioHealth.ts
+- useReducedMotion.ts
+- public.search_contacts_advanced
+- 20260408200918_zapp_history_14_contact_stats_mat_view.sql
+- 20260409143212_zapp_history_75_lead_scoring.sql
+- zapp_history.v_churn_alerts
+- zapp_history.v_competitor_alerts
+- 20260416221435_singu_create_cache_tables.sql
+- 20260416230644_singu_indexes_batch_3.sql
+- 20260417005153_singu_fix_6c_search_drop_recreate.sql
+- 20260720134409_bd1_deal_ownership_checks.sql
+- 20260721223203_idx_user_id_wave173_tables.sql
+- 20260722005234_wave179_partial_indexes_followup_alerts_insights.sql
 - public.rodizio_sugerir_distribuicao
 - public.confirm_sequence_manual_step
+- 27. 📊 Dashboard — ✅ IMPLEMENTADO
 - check-backend-linter-baseline.mjs
-- 🗄️ MÓDULO 6: BANCO DE DADOS (25+ tabelas)
-- Rodada 28/10 — Onda B: Gap Coverage & ESLint Test Hygiene
 - 17. 🔔 Sistema de Alertas
-- utils.ts
-- behavioral-retry-contract_test.ts
-- TwoFactorSetup.test.tsx
+- public.singu_reverse_sync_contact
 - 36-access-exclusive-locks-guard.sh
 - 39-prepared-xacts-guard.sh
 - 46-fk-integrity.sh
@@ -1595,13 +1720,48 @@
 - 88-wrappers-paridade.sh
 - alerts.test.sh
 - ScrubTests
-- DataHealthWidget.tsx
-- PendingFollowupsWidget.tsx
+- InsightFeedbackTrendChart.tsx
+- IntelBookmarksNotesBadge.tsx
 - RecentChannelCombos.tsx
+- FloatingParticles.tsx
+- nlpAnalyticsConstants.ts
+- triggerTemplatesVAK.ts
+- vakTemplates.ts
 - useAccountChurnPrediction.ts
-- useEnrichSocialProfiles.ts
+- useExternalInteractions.ts
+- useIntelTelemetry.ts
+- public.company_rfm_scores
+- public.proposals
+- public.campaign_members
+- public.company_rfm_scores
+- public.proposals
+- 20260408200219_zapp_history_08_helpers_and_rls.sql
+- 20260408205105_zapp_history_31_connector_log_bridge.sql
+- 20260408205750_zapp_history_34_phone_lookup_atomic.sql
+- zapp_history.v_pedidos_detectados
+- 20260409141648_zapp_history_67_product_dictionary_postprocessor.sql
+- zapp_history.v_pedidos_detectados
+- zapp_history.v_conversas_aguardando
+- 20260409174431_zapp_history_104_business_hours.sql
+- zapp_history.v_top_contatos_potencial
+- zapp_history.v_intelligence_360
+- zapp_history.get_conversation_intelligence
+- 20260409221006_zapp_history_188_language_spam_views.sql
+- 20260416220523_singu_create_lead_assignments.sql
+- 20260416220539_singu_create_handoff_requests.sql
+- 20260416220553_singu_create_redistribution_log.sql
+- 20260416220628_singu_create_trigger_intensity_history.sql
+- 20260416220648_singu_create_rfm_analysis.sql
+- public.score_history
+- 20260417004419_singu_fix_1_companies_compat_retry.sql
+- public.get_instant_kpis
+- public.assert_contact_access
+- fn_cf_collect_sm_legacy_harvest
 - ADR 023: Serialização de relações e transferência de contato
+- Testes — inventário, skips, fora do CI
+- 4. Casos de borda
 - 7. ✍️ Copywriting & Sales Tools (Enterprise)
+- public.fn_sm_promote_images_to_gold
 - CompaniesInlineMap.tsx
 - migrations-preamble.sql
 - data.test.sh
@@ -1619,31 +1779,95 @@
 - 65-ssl-conexao-sem-tls.sh
 - 66-archive-falhando.sh
 - 78-audits-com-achados.sh
-- RpcPerfCard.tsx
-- FiscalDataCard.tsx
+- DataHealthWidget.contract.test.tsx
+- CompanyEmailsForm.tsx
 - MultiDiffPanel.tsx
+- ActivityHeatmapChart.tsx
 - ActiveFiltersBar.onAfterRemove.test.tsx
+- ReportResultView.tsx
+- VoiceSearchOverlayConnected.tsx
+- surface.tsx
+- cognitiveBiasesData.ts
+- metaprogramTemplates.ts
+- demoEntities.ts
+- useClientHealth.ts
+- useContactValidationStatus.ts
 - useEntityNotes.ts
 - useGraphLayout.ts
+- useInfiniteList.ts
 - useIntelTheme.ts
 - useIntelTour.ts
+- usePurchasePatterns.ts
+- useRecentlyViewed.ts
+- useReportInfiniteScrollProgress.ts
 - useSavedAskViews.ts
+- useWhyScoreDrawerPreference.ts
 - navigationLabels.ts
 - prontidaoWeightsHealth.ts
-- Observability.tsx
 - MapaEmpresas.batch.test.tsx
+- NPS.contract.test.tsx
+- public.calendar_events
+- public.commissions
+- public.company_phones
+- public.company_social_media
+- public.economic_group_members
+- public.meetings
+- public.territory_assignments
+- public.calendar_events
+- public.company_cadences
+- public.company_social_media
+- public.company_stakeholder_map
+- public.customer_ownership_history
+- public.customer_sdr_history
+- public.meetings
+- 20260315172339_create_uapi_sessions.sql
+- 20260321172813_fix_unique_constraints_and_not_null.sql
+- 20260408195848_zapp_history_01_extensions_and_schema.sql
+- 20260408205204_zapp_history_32_connector_log_parser_trigger.sql
+- 20260409133202_zapp_history_42_propagate_raw_payload_from_bitrix_response.sql
+- zapp_history.dashboard_summary
+- 20260409144048_zapp_history_82_discovery_channel_detector.sql
+- zapp_history.v_top_produtos_demanda
+- 20260409174349_zapp_history_101_response_time_sla.sql
+- 20260409180819_zapp_history_112_location_extractor.sql
+- 20260409183312_zapp_history_125_segmentacao_clientes.sql
+- 20260409205351_zapp_history_145_disc_payment_custom_views.sql
+- 20260409205720_zapp_history_144_disc_journey_views_v2.sql
+- zapp_history.v_proximas_respostas
+- zapp_history.reconcile_nlp_responses
+- zapp_history.reconcile_nlp_responses
+- 20260409222328_zapp_history_195_new_views.sql
+- zapp_history.reconcile_nlp_responses
+- zapp_history.v_full_intelligence_stream
+- zapp_history.reconcile_nlp_responses
+- 20260409225140_zapp_history_215_new_views.sql
+- zapp_history.reconcile_nlp_responses
+- zapp_history.v_routing_queue
+- 20260409234045_zapp_audit_m03_dedup_evolution_msg_id.sql
+- 20260409234102_zapp_audit_m04_webhook_secret_validation.sql
+- 20260409234215_zapp_audit_m07_technical_interest_detector.sql
+- 20260416220453_singu_create_sales_team_members.sql
+- 20260416220612_singu_create_vak_analysis_history.sql
+- public.handoff_requests
+- public.lead_scores
+- public.assert_self_user_id
+- public.assert_self_user_id
 - public.resume_sequence_email
 - 20261108200000_fix_contact_phones_trigger_primary_indexes.sql
-- A4 — Órfãos
+- 20261108203932_fix_contact_phones_trigger_primary_indexes.sql
+- Scripts — inventário por finalidade
+- useSequences
 - Reconciliação do histórico de pesquisas
 - 🚩 TECH DEBT BACKLOG — SINGU CRM
 - inventario/estado — o que existe de verdade, medido
-- Componentes
 - validation_delivery_atomic.sql
 - sequence_legacy_email_retry.sql
 - sequence_manual_confirmation.sql
 - sequence_email_resume.sql
 - contact-relation-version-fixture.sql
+- public.fn_spot_gold_enrich
+- 20260417004633_singu_fix_3_sales_team_members_compat.sql
+- public.fn_spot_silver_enrich
 - isSrc
 - public.validate_entity_relationship
 - 32-rls-coverage-sem-policy.sh
@@ -1667,13 +1891,131 @@
 - 91-pitr-window-verifier-endurecido.sh
 - 92-dns-scripts.sh
 - check-runbook-coverage.test.sh
+- StrategicAccountsWidget.tsx
 - DataGrid.tsx
+- EntityNotesPanel.tsx
 - ExportFormatMenu.tsx
-- GraphLegend.tsx
-- useChurnPrediction.ts
-- useConnectionAnomalies.ts
+- IntelHealthPanel.tsx
+- TemporalHeatmap.tsx
+- RevOpsPeriodSelector.tsx
+- JsonLd.tsx
+- neuroScriptSections.ts
+- persuasionTemplates.ts
+- useFocusTrap.ts
 - useIntelDensity.ts
+- LeadScoringAutomationsPage
+- public.churn_predictions
+- public.coop_sistemas
+- public.deal_velocity_analysis
+- public.relationship_score_history
+- public.reminders
+- public.scheduled_visits
+- public.sync_log
+- public.company_emails
+- public.contact_addresses
+- public.churn_predictions
+- public.commissions
+- public.deal_velocity_analysis
+- public.relationship_score_history
+- public.reminders
+- public.scheduled_visits
+- public.sdr_closer_assignments
+- public.sync_log
+- public.update_updated_at_column
+- coop003_pending
+- public.companies
+- public.companies
+- 20260329175449_alter_suppliers_add_homologation_fields_and_config.sql
+- fn_homologar_fornecedor
+- 20260329203616_create_trigger_auto_sync_company_supplier.sql
+- 20260330120931_create_carrier_company_sync_trigger.sql
+- 20260330121409_alter_carriers_add_qualification_fields.sql
+- fn_homologar_carrier
+- public.sync_interaction_from_zapp
+- 20260408200830_zapp_history_11_auto_sync_summary_to_interaction.sql
+- zapp_history.search_messages_hybrid
+- zapp_history.search_messages_hybrid
+- 20260408205837_zapp_history_35_reprocess_connector_log.sql
+- 20260409135201_zapp_history_54_realtime_singu_bridge_per_message.sql
+- 20260409141400_zapp_history_61_immediate_reconcile_trigger.sql
+- zapp_history.reconcile_nlp_responses
+- zapp_history.reconcile_nlp_responses
+- zapp_history.v_top_produtos_demanda
+- 20260409165358_zapp_history_91_objection_detector.sql
+- 20260409165416_zapp_history_92_funnel_stage_detector.sql
+- zapp_history.reconcile_nlp_responses
+- 20260409174444_zapp_history_105_volume_heatmap.sql
+- 20260409180748_zapp_history_111_contact_info_extractor.sql
+- zapp_history.reconcile_nlp_responses
+- 20260409180909_zapp_history_115_geographic_demand.sql
+- 20260409183149_zapp_history_121_communication_tone.sql
+- 20260409183209_zapp_history_122_customer_type.sql
+- 20260409183229_zapp_history_123_event_type_detector.sql
+- zapp_history.reconcile_nlp_responses
+- 20260409190443_zapp_history_131_buying_triggers.sql
+- 20260409190505_zapp_history_132_churn_risk.sql
+- zapp_history.reconcile_nlp_responses
+- 20260409205209_zapp_history_141_disc_detector.sql
+- 20260409205228_zapp_history_142_payment_preference.sql
+- 20260409205300_zapp_history_143_customization_extractor.sql
+- zapp_history.reconcile_nlp_responses
+- 20260409205605_zapp_history_141_disc_profile.sql
+- 20260409205621_zapp_history_142_journey_stage.sql
+- zapp_history.reconcile_nlp_responses
+- 20260409205757_zapp_history_145_disc_playbook.sql
+- 20260409210416_zapp_history_151_topic_detector.sql
+- 20260409210439_zapp_history_152_intent_detector.sql
+- zapp_history.reconcile_nlp_responses
+- 20260409210523_zapp_history_154_topics_intents_views.sql
+- 20260409211202_zapp_history_161_speaker_role.sql
+- 20260409211226_zapp_history_162_order_complexity.sql
+- zapp_history.reconcile_nlp_responses
+- 20260409211312_zapp_history_164_speaker_complexity_views.sql
+- 20260409211929_zapp_history_171_emotional_state.sql
+- 20260409211955_zapp_history_172_question_type.sql
+- zapp_history.reconcile_nlp_responses
+- 20260409212043_zapp_history_174_emotional_question_views.sql
+- 20260409220443_zapp_history_181_language_detector.sql
+- 20260409220503_zapp_history_182_hesitation_detector.sql
+- 20260409220528_zapp_history_183_credibility_detector.sql
+- 20260409220619_zapp_history_185_spam_quarantine.sql
+- 20260409222157_zapp_history_191_company_size.sql
+- 20260409222216_zapp_history_192_seasonality.sql
+- 20260409222232_zapp_history_193_relationship_status.sql
+- zapp_history.get_full_intelligence_report
+- 20260409224303_zapp_history_201_implicit_budget.sql
+- 20260409224317_zapp_history_202_financial_objections.sql
+- 20260409224337_zapp_history_203_competitor_mention.sql
+- 20260409225008_zapp_history_211_unit_detector.sql
+- 20260409225025_zapp_history_212_delivery_preference.sql
+- 20260409225043_zapp_history_213_referral_detector.sql
+- 20260409225638_zapp_history_221_decision_authority.sql
+- 20260409225658_zapp_history_222_bant_score.sql
+- 20260409225800_zapp_history_224_bant_views.sql
+- 20260409230740_audit_fix_03b_short_messages_posix.sql
+- 20260409230953_audit_fix_07_smart_routing_and_bant.sql
+- 20260416213501_create_singu_migration_staging.sql
+- 20260416220708_singu_create_lux_webhook_config.sql
+- public.churn_risk_scores
+- public.cognitive_bias_history
+- public.disc_analysis_history
+- public.favorite_templates
+- public.eq_analysis_history
+- public.interactions
+- public.landing_pages
+- public.query_telemetry
+- public.sales_team_members
+- public.search_products_cache
+- public.trigger_ab_tests
+- public.trigger_channel_effectiveness
+- public.trigger_usage_history
+- 20260417004551_singu_fix_2_interactions_compat_trigger.sql
+- 20260417102942_singu_fix_11_interactions_trigger_refactor.sql
+- 20260417103505_singu_fix_14b_industry_ramo_atividade_sync.sql
+- 20260607214628_sm_upload_pipeline_v1.sql
 - public.check_mtta_auto_ack_heartbeat
+- public.incoming_webhook_nonces
+- public.fn_promote_kit_components_batch
 - log
 - tname
 - ai-context — contexto de código para agentes de IA
@@ -1692,12 +2034,98 @@
 - 90-pitr-window-verifier.sh
 - 93-contrato-estatico-detecta.sh
 - 94-monitoring-tests.sh
-- useIntelPresentation.ts
+- IntelErrorState.tsx
+- IntelSkeleton.tsx
+- SEOHead.tsx
+- neuroObjectionData.ts
 - mfaEvents.ts
+- public.deal_competitors
+- public.campaigns
+- public.company_cnaes
+- public.contact_emails
+- public.economic_group_members
+- public.quick_notes
+- public.sla_violations
+- public.user_badges
+- public.user_goals
+- trg_contact_phones_normalizar
+- public.contacts
+- 20260321203218_create_staging_portal_sicoob.sql
+- 20260329181359_create_trigger_auto_recalc_score_on_evaluation.sql
+- 20260329204121_protect_evaluations_immutable.sql
+- fn_recalcular_carrier_score
+- public.recalculate_rfm_for_company
+- idx_ml_conversation
+- zapp_history.sync_summary_to_interaction
+- zapp_history.get_embedding_config
+- zapp_history.parse_connector_log_to_messages
+- zapp_history.parse_connector_log_to_messages
+- zapp_history.parse_connector_log_to_messages
+- idx_product_dict_patterns
+- zapp_history.calculate_lead_score
+- zapp_history.v_funil_origem
+- zapp_history.v_funil_vendas
+- zapp_history.v_objecoes_recorrentes
+- zapp_history.v_sla_atendimento
+- zapp_history.trg_set_priority_quadrant
+- zapp_history.calculate_conversion_probability
+- zapp_history.smart_routing
+- zapp_history.calculate_lead_score
+- zapp_history.calculate_bant_score
+- zapp_history.calculate_bant_score
+- zapp_history.calculate_bant_score
+- zapp_history.get_runtime_secret
+- zapp_history.calculate_bant_score
+- zapp_history.calculate_bant_score
+- 20260416220507_singu_create_lead_routing_rules.sql
+- client_values_user_id_contact_id_category_value_name_key
+- communication_preferences_user_id_contact_id_key
+- contact_time_analysis_user_id_contact_id_day_of_week_hour_o_key
+- disc_conversion_metrics_user_id_disc_profile_period_start_p_key
+- idx_activities_created_at
+- idx_alerts_dismissed
+- idx_audit_log_entity
+- idx_contact_relatives_contact_id
+- idx_contacts_company_id
+- idx_emotional_states_contact
+- idx_hidden_objections_contact
+- idx_insights_contact_id
+- idx_lp_submissions_lp
+- idx_routing_rules_active
+- idx_life_events_contact
+- idx_metaprogram_analysis_contact
+- idx_offer_suggestions_contact
+- idx_purchase_history_contact
+- idx_rfm_history_contact
+- idx_semantic_cache_lookup
+- idx_sms_opt_outs_user_phone
+- idx_sms_recipients_campaign
+- idx_social_profiles_contact
+- idx_social_scraping_schedule_next
+- idx_stakeholder_alerts_dismissed
+- idx_trigger_bundles_scenario
+- idx_trigger_intensity_history_trigger
+- idx_vak_analysis_contact
+- idx_whatsapp_instances_user
+- public.push_subscriptions_safe
+- public.fn_ingest_asia_hg_batch
+- public.fn_apply_auto_tag_rules
+- idx_pn_product_id_unique
+- public.fn_get_product_ai_context
+- uq_campaign_members_campaign_contact
+- idx_messages_company_id
 - notification_logs_pending_expiration_idx
 - company_emails_company_id_lower_email_unique
 - public.get_activity_overview
+- public.get_activity_overview
 - manual/README.md
+- _redact_literal
+- idx_achievements_salesperson_id
+- idx_contact_notes_user_id
+- idx_coop_sistemas_grupo_economico_id
+- idx_disc_templates_created_by
+- idx_sales_activities_deleted_by
+- idx_sdr_closer_assignments_criado_por_id
 - run.sh script
 - public.compute_attribution
 - public.get_system_config_num
@@ -1705,9 +2133,330 @@
 - env-reads.sh
 - tests/run.sh
 - valida-prom.sh
+- on_auth_user_created
+- 20260313143911_create_staging_bitrix_companies.sql
+- 20260314153642_create_stg_site_sicoob_pacs.sql
+- 20260315230724_create_oauth_tokens_table.sql
+- 20260315230848_create_connector_log_table.sql
+- 20260320195944_create_portal_pac_lookup.sql
+- 20260321191111_create_data_quality_audits.sql
+- 20260321201713_create_bcb_postos_temp.sql
+- 20260330000000_garante_disc_conversion_metrics_em_public.sql
+- 20260409235607_zapp_audit_m16_edge_function_v6_template.sql
+- idx_activities_interaction_id
+- idx_alerts_interaction_id
+- idx_churn_predictions_user_id
+- idx_clients_deleted_by
+- idx_cognitive_bias_history_interaction_id
+- idx_company_stakeholder_map_access_via_contact_id
+- idx_compatibility_alerts_contact_id
+- idx_customer_ownership_history_registrado_por_id
+- idx_customer_sdr_history_closer_destino_id
+- idx_deal_velocity_analysis_user_id
+- idx_disc_analysis_history_interaction_id
+- idx_disc_communication_logs_interaction_id
+- idx_emotional_states_history_interaction_id
+- idx_eq_analysis_history_interaction_id
+- idx_hidden_objections_interaction_id
+- idx_interactions_usuario_responsavel_id
+- idx_metaprogram_analysis_interaction_id
+- idx_role_permissions_permission_id
+- idx_sales_deleted_by
+- access_security_settings_user_id_key
+- campaign_recipients_campaign_id_contact_id_key
+- compatibility_settings_user_id_key
+- contact_cadence_user_id_contact_id_key
+- contact_preferences_user_id_contact_id_key
+- csat_surveys_public_token_key
+- custom_field_values_custom_field_id_entity_id_key
+- custom_fields_user_id_entity_type_field_name_key
+- idx_ai_chat_messages_thread
+- idx_ai_chat_threads_user
+- idx_decision_criteria_contact
+- idx_disc_communication_logs_contact
+- disc_profile_config_profile_type_key
+- idx_document_templates_user
+- idx_document_views_signature
+- idx_emotional_anchors_contact
+- idx_lead_score_history_contact
+- lead_score_config_user_id_key
+- unique_user_health_settings
+- idx_meeting_summaries_interaction
+- idx_redistribution_created
+- idx_rfm_metrics_period
+- idx_schema_drift_entity
+- idx_secret_rotation_name
+- lead_scores_contact_id_user_id_key
+- lux_webhook_config_entity_type_key
+- nurturing_enrollments_workflow_id_contact_id_key
+- rfm_segment_config_user_id_segment_key_key
+- idx_sms_campaigns_user_status
+- idx_sms_templates_user
+- idx_social_behavior_analysis_contact
+- sequence_enrollments_sequence_id_contact_id_key
+- sequence_steps_sequence_id_step_order_key
+- unique_user_report_settings
+- 20260609215617_create_spot_typecode_canonical_map.sql
+- idx_ai_chat_messages_user_id
+- idx_automation_logs_user_id
+- idx_calendar_events_user_id
+- idx_campaign_recipients_user_id
+- idx_churn_risk_scores_user_id
+- idx_city_whitelist_user_id
+- idx_cognitive_bias_history_user_id
+- idx_compatibility_alerts_user_id
+- idx_contact_relatives_user_id
+- idx_custom_field_values_user_id
+- idx_decision_criteria_user_id
+- idx_device_login_notifications_user_id
+- idx_disc_communication_logs_user_id
+- idx_document_signatures_user_id
+- idx_document_templates_user_id
+- idx_document_views_user_id
+- idx_email_campaigns_user_id
+- idx_emotional_anchors_user_id
+- idx_emotional_states_history_user_id
+- idx_eq_analysis_history_user_id
+- idx_handoff_requests_user_id
+- idx_health_alerts_user_id
+- idx_insights_user_id
+- idx_ip_whitelist_user_id
+- idx_landing_page_submissions_user_id
+- idx_lead_assignments_user_id
+- idx_lead_routing_rules_user_id
+- idx_life_events_user_id
+- idx_metaprogram_analysis_user_id
+- idx_nurturing_enrollments_user_id
+- idx_nurturing_workflows_user_id
+- idx_offer_suggestions_user_id
+- idx_redistribution_log_user_id
+- idx_sequence_enrollments_user_id
+- idx_sequence_steps_user_id
+- idx_sequences_user_id
+- idx_sms_campaign_recipients_user_id
+- idx_sms_campaigns_user_id
+- idx_sms_templates_user_id
+- idx_support_tickets_user_id
+- idx_ticket_comments_user_id
+- idx_trigger_intensity_history_user_id
+- idx_vak_analysis_history_user_id
+- idx_visit_checkins_user_id
+- idx_webauthn_credentials_user_id
+- idx_whatsapp_messages_user_id
+- _dormant.company_stakeholder_map
+- _dormant.data_quality_audits
+- _dormant.oauth_tokens
+- _dormant.portfolio_settings
+- _dormant.sales_activities
+- _dormant.weekly_challenges
+- public.asia_upload_mapping
+- public.automation_executions
+- public.campaigns
+- public.company_cnaes
+- public.company_social_media
+- public.grupos_economicos
+- public.inactivity_alerts
+- public.sales_forecasts
+- public.sm_upload_mapping
+- public.sync_log
+- public.user_badges
+- public.xbz_upload_mapping
 - public.automation_rules
 - public.compatibility_settings
+- public.disc_profile_config
 - public.health_alert_settings
+- public.lead_score_config
+- public.lux_webhook_config
+- public.permissions
+- public.rfm_segment_config
+- public.weekly_report_settings
+- public.weekly_reports
+- public.whatsapp_kpis
+- public.activities
+- public.alerts
+- public.contacts
+- public.insights
+- public.interactions
+- public.profiles
+- public.push_subscriptions
+- storage.objects
+- storage.objects
+- public.suppliers
+- contact_phones
+- company_phones
+- public.contact_social_media
+- company_emails
+- contact_emails
+- public.pix_accounts
+- public.pix_accounts
+- company_social_media
+- public.sales
+- public.company_emails
+- public.company_phones
+- public.contact_emails
+- public.contact_phones
+- public.company_phones
+- public.contact_phones
+- public.company_phones
+- public.contact_phones
+- public.carriers
+- public.companies
+- public.company_addresses
+- public.company_emails
+- public.company_phones
+- public.contact_addresses
+- public.contact_emails
+- public.contact_phones
+- public.contact_social_media
+- public.contacts
+- public.customers
+- public.email_logs
+- public.suppliers
+- suppliers
+- alerts
+- zapp_history.admin_grants
+- zapp_history.ai_training_dataset
+- zapp_history.conversations
+- zapp_history.message_audio
+- zapp_history.message_embeddings
+- zapp_history.message_links
+- zapp_history.message_media
+- zapp_history.messages
+- zapp_history.whatsapp_connections
+- zapp_history.conversation_daily_summaries
+- zapp_history.conversations
+- zapp_history.message_audio
+- zapp_history.message_media
+- zapp_history.messages
+- zapp_history.conversation_daily_summaries
+- zapp_history.conversations
+- zapp_history.message_audio
+- zapp_history.message_links
+- zapp_history.message_media
+- zapp_history.messages
+- zapp_history.admin_grants
+- zapp_history.disc_playbook
+- zapp_history.product_dictionary
+- zapp_history.messages
+- zapp_history.conversations
+- zapp_history.messages
+- zapp_history.whatsapp_connections
+- zapp_history.messages
+- public.ip_whitelist
+- public.access_blocked_log
+- public.audit_log
+- public.csat_surveys
+- public.document_signatures
+- public.handoff_requests
+- public.lead_assignments
+- public.login_attempts
+- public.offer_suggestions
+- public.rfm_analysis
+- public.sequence_enrollments
+- public.sms_opt_outs
+- public.trigger_channel_effectiveness
+- public.visit_checkins
+- public.access_security_settings
+- public.churn_risk_scores
+- public.custom_field_values
+- public.document_templates
+- public.interactions
+- public.lead_routing_rules
+- public.lux_webhook_config
+- public.password_reset_requests
+- public.rfm_segment_config
+- public.sequence_steps
+- public.sms_templates
+- public.trigger_intensity_history
+- public.webauthn_credentials
+- public.activities
+- public.city_whitelist
+- public.custom_fields
+- public.document_views
+- public.knowledge_base_articles
+- public.lead_score_config
+- public.meeting_summaries
+- public.permissions
+- public.sales_team_members
+- public.sequences
+- public.support_tickets
+- public.trigger_usage_history
+- public.whatsapp_messages
+- public.ai_chat_threads
+- public.companies
+- public.device_login_notifications
+- public.documents
+- public.landing_page_submissions
+- public.lead_score_history
+- public.nurturing_enrollments
+- public.purchase_history
+- public.search_products_cache
+- public.sms_campaign_recipients
+- public.trigger_ab_tests
+- public.user_known_devices
+- public.alerts
+- public.contacts
+- public.disc_profile_config
+- public.email_campaigns
+- public.landing_pages
+- public.lead_scores
+- public.nurturing_workflows
+- public.redistribution_log
+- public.semantic_search_cache
+- public.sms_campaigns
+- public.trigger_bundles
+- public.vak_analysis_history
+- public.interactions
+- public.products
+- public.products
+- public.companies
+- public.calendar_events
+- public.campaign_members
+- public.company_cadences
+- public.csat_surveys
+- public.documents
+- public.interactions
+- public.password_reset_requests
+- public.reminders
+- public.sales_opportunities
+- public.scheduled_visits
+- public.sequences
+- public.visit_checkins
+- public.whatsapp_instances
+- public.activity_feed
+- public.cadence_enrollments
+- public.commissions
+- public.company_cadences
+- public.deals
+- public.documents
+- public.favorites
+- public.meetings
+- public.notifications
+- public.proposals
+- public.quick_notes
+- public.reminders
+- public.sales_goals
+- public.scheduled_visits
+- public.seller_daily_metrics
+- public.sla_violations
+- public.tasks
+- public.territory_assignments
+- public.user_goals
+- public.churn_predictions
+- public.deal_velocity_analysis
+- public.relationship_score_history
+- public.interactions
+- public.campaign_recipients
+- public.nurturing_enrollments
+- public.sms_campaign_recipients
+- public.social_profiles
+- public.compatibility_settings
+- public.favorite_templates
+- public.health_alert_settings
+- public.nurturing_enrollments
+- public.sequence_enrollments
+- public.sms_opt_outs
+- public.weekly_report_settings
 - public.companies
 - public.profiles
 - public.activities
@@ -1719,7 +2468,9 @@
 - public.companies
 - public.contacts
 - public.sequence_enrollments
+- public.incoming_webhooks
 - public.contact_emails
+- zapp_history.location_dictionary
 
 ## God Nodes (most connected - your core abstractions)
 1. `react` - 953 edges
@@ -1748,15 +2499,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (2118 total, 1046 thin omitted)
+## Communities (3120 total, 1711 thin omitted)
 
 ### Community 0 - "ref_components"
 Cohesion: 0.01
-Nodes (123): 4.1 Componentes de Layout, ref_components, Header(), ActivityChart, AnalyticsTabProps, BestTimeToContactPanel, ChurnPredictionPanel, ContactDistributionChart (+115 more)
+Nodes (113): ref_components, react-window, Props, SocialInsightsError(), PLATFORM_ICONS, Props, ActivityChart, AnalyticsTabProps (+105 more)
 
 ### Community 1 - "ref_types"
 Cohesion: 0.01
-Nodes (219): 6. 🧪 Neuromarketing Enterprise — ✅ IMPLEMENTADO, 4.5 Componentes de Gatilhos/Templates, Componentes e features órfãs, ref_types, NeuroPortfolioTabs(), Props, DiscProfile, Contact (+211 more)
+Nodes (160): ref_types, BiasCard(), getPolarityColor(), getPolarityIcon(), HistoryRecord, HistoryTabContent(), StrategiesTabContent(), CognitiveBiasesPanelProps (+152 more)
 
 ### Community 2 - "📖 Dicionário de Dados — SINGU CRM"
 Cohesion: 0.01
@@ -1764,27 +2515,27 @@ Nodes (226): 📖 Dicionário de Dados — SINGU CRM, 📋 Tabela: `abm_account_
 
 ### Community 3 - "ref_lib"
 Cohesion: 0.01
-Nodes (152): ref_lib, CohortAnalysisWidget, retentionColor(), DailyStatsWidget, DISC_COLORS, DISC_COLORS, DISC_LABELS, DiscRecord (+144 more)
+Nodes (143): ref_lib, PHASE_LABELS, TestPhase, TestResult, VoiceAITestPanel(), CohortAnalysisWidget, retentionColor(), DailyStatsWidget (+135 more)
 
 ### Community 4 - "date-fns"
 Cohesion: 0.01
-Nodes (108): date-fns, Props, STATUS_BADGE, channelColors, channelIcons, Props, UnifiedTimelineSection, ContactTimelineWidget (+100 more)
+Nodes (141): date-fns, SEVERITY_VARIANT, TYPE_META, Props, Props, ColumnInfo, DiscoveredSchema, Props (+133 more)
 
 ### Community 5 - "react"
 Cohesion: 0.01
-Nodes (143): AUDITORIA_COMPLETA_SISTEMA.md (2026-07-19, plano de remediação em 50 etapas), ref_contexts, react, channelOptions, roleConfig, roleOrder, formatCurrency(), MonthlyReportWidget (+135 more)
+Nodes (125): react, channelOptions, roleConfig, roleOrder, BehavioralIntelSummaryWidget, TREND_COLOR, TREND_ICON, formatCurrency() (+117 more)
 
 ### Community 6 - "useAuth"
-Cohesion: 0.01
-Nodes (214): 4. Código morto no frontend do escopo, Tabela de evidências, ðŸ”´ 1. `attribution-calculator` â€” a auditoria inverteu produtor e substituto, Hooks mortos, ABMAccount, ABMAccountPlan, ABMCampaign, AccountStatus (+206 more)
+Cohesion: 0.03
+Nodes (94): ðŸ”´ 1. `attribution-calculator` â€” a auditoria inverteu produtor e substituto, SuggestedRapportIntel, useAIApprovals(), Allocation, AttributionModel, Touchpoint, useAttribution(), useRecordTouchpoint() (+86 more)
 
 ### Community 7 - "ref_hooks"
 Cohesion: 0.01
-Nodes (120): ref_hooks, AiGatewayPartitionsCard(), formatBytes(), partitionBadge(), BehavioralIntelSummaryWidget, TREND_COLOR, TREND_ICON, TagCloudWidget (+112 more)
+Nodes (120): UI, ref_hooks, AiGatewayPartitionsCard(), formatBytes(), partitionBadge(), FIELDS, Props, Props (+112 more)
 
 ### Community 8 - "ref_domain"
 Cohesion: 0.02
-Nodes (95): Erro de precisão em R9, 9. O que foi resolvido desde a auditoria de 16/08, ref_domain, ref_stores, makeTooltipContent(), MILESTONE_META, ProntidaoTrendChart, Props (+87 more)
+Nodes (87): Erro de precisão em R9, ref_domain, ref_stores, makeTooltipContent(), MILESTONE_META, ProntidaoTrendChart, Props, trendMeta (+79 more)
 
 ### Community 9 - "TimelineGroupCard.tsx"
 Cohesion: 0.16
@@ -1792,63 +2543,63 @@ Nodes (10): CHANNEL_OPTIONS, Props, TimelineFilterBar, eventColors, eventIcons, 
 
 ### Community 10 - "_shared/auth.ts"
 Cohesion: 0.02
-Nodes (193): Decisão, ADR-007 — CORS escopado, ref_npm_libphonenumber_js_1_11_7, ref_npm_supabase, ref_npm_web_push_3_6_7, ref_npm_zod_3_23_8, Database, AIOpportunity (+185 more)
+Nodes (189): Decisão, ADR-007 — CORS escopado, ref_npm_libphonenumber_js_1_11_7, ref_npm_supabase, ref_npm_web_push_3_6_7, ref_npm_zod_3_23_8, AIOpportunity, limiter (+181 more)
 
-### Community 11 - "sonner"
-Cohesion: 0.01
-Nodes (94): sonner, AlertRow, BehavioralRegenCronHealth(), CronHealthRow, formatAgo(), minutesSince(), dashboardColors, EmbeddableDashboards (+86 more)
+### Community 11 - "useSemanticSearch.ts"
+Cohesion: 0.20
+Nodes (8): EMPTY, SearchOpts, SemanticCompanyRow, SemanticContactRow, SemanticEntity, SemanticInteractionRow, SemanticProductRow, SemanticSearchResults
 
-### Community 12 - "@tanstack/react-query"
-Cohesion: 0.01
-Nodes (53): @tanstack/react-query, ActiveAlert, CriticalAlertRow, useAiGatewayCriticalToast(), ClosingMoment, BestContactTime, BirthdayContact, BusinessAlert (+45 more)
+### Community 12 - "ContactOverviewTab.tsx"
+Cohesion: 0.03
+Nodes (69): BestContactTimeWidget(), CHANNEL_ICONS, DAYS_OF_WEEK, Props, ChurnPredictionsWidget, ChurnRiskWidget, RISK_CONFIG, churnRiskToScore() (+61 more)
 
 ### Community 13 - "recharts"
-Cohesion: 0.02
-Nodes (80): recharts, AuditAnalyticsPanel(), ROTULO_ACAO, rotuloAcao(), buildWeeks(), InsightFeedbackTrendChart(), Row, startOfWeekISO() (+72 more)
-
-### Community 14 - "ref_integrations"
 Cohesion: 0.01
-Nodes (64): ref_integrations, Props, BehavioralRegenAlertsTrend(), dayKey(), DayPoint, Props, Row, HeartbeatRow (+56 more)
+Nodes (92): recharts, AuditAnalyticsPanel(), ROTULO_ACAO, rotuloAcao(), BehavioralRegenAlertsTrend(), dayKey(), DayPoint, Props (+84 more)
+
+### Community 14 - "@tanstack/react-query"
+Cohesion: 0.01
+Nodes (250): UI, ref_integrations, sonner, @tanstack/react-query, zod, AlertRow, Props, BehavioralRegenCronHealth() (+242 more)
 
 ### Community 15 - "SectionFrame.tsx"
-Cohesion: 0.09
-Nodes (23): CommonEventsTimeline(), CommonEventsTimelineProps, InteractionLite, CrossRefInsightsPanel(), CrossRefInsightsPanelProps, SEV_LABEL, EntityNotesPanel(), EntityNotesPanelProps (+15 more)
+Cohesion: 0.14
+Nodes (15): CommonEventsTimeline(), CommonEventsTimelineProps, InteractionLite, CrossRefInsightsPanel(), CrossRefInsightsPanelProps, SEV_LABEL, IntelEmptyState(), IntelEmptyStateProps (+7 more)
 
 ### Community 16 - "09_triggers.sql"
 Cohesion: 0.03
-Nodes (125): abm_accounts_updated_at, abm_campaigns_updated_at, abm_committee_updated_at, abm_plans_updated_at, abm_whitespace_updated_at, feature_flags_updated_at, set_landing_pages_updated_at, set_updated_at_client_values (+117 more)
+Nodes (128): process_contact_relatives_audit, abm_accounts_updated_at, abm_campaigns_updated_at, abm_committee_updated_at, abm_plans_updated_at, abm_whitespace_updated_at, feature_flags_updated_at, on_contact_relatives_change (+120 more)
 
 ### Community 17 - "ref_pages"
 Cohesion: 0.02
-Nodes (112): ref_pages, ABM, ABMAccountDetail, ABMCampaigns, AdminAuditTrail, AdminBehavioralRegenAudit, AdminComponentGallery, AdminConexoes (+104 more)
+Nodes (113): ref_pages, ABM, ABMAccountDetail, ABMCampaigns, AdminAuditTrail, AdminBehavioralRegenAudit, AdminComponentGallery, AdminConexoes (+105 more)
 
 ### Community 18 - "lucide-react"
 Cohesion: 0.01
-Nodes (153): 7. Descoberta e navegação, lucide-react, react-helmet-async, react-router-dom, RequireAdminProps, factors, CompaniesTableView, CompaniesTableViewProps (+145 more)
+Nodes (147): lucide-react, react-helmet-async, react-router-dom, ChurnItem, WINDOW_LABELS, ClosingScoreRankingProps, probabilityConfig, rankIcons (+139 more)
 
 ### Community 19 - "sequence-processor/index.ts"
-Cohesion: 0.10
-Nodes (20): B3 — "Envio de e-mail é encenado em 3 lugares", Evidência — não existe caminho alternativo de envio, O que fiz para derrubar, Quarto sítio, não listado no achado original, Sítio 1 — `src/hooks/useEmailCampaigns.ts`, Sítio 2 — `supabase/functions/sequence-processor/index.ts`, Sítio 3 — `supabase/functions/nurturing-runner/index.ts`, completeEmailDelivery() (+12 more)
+Cohesion: 0.16
+Nodes (13): completeEmailDelivery(), Contact, EmailJob, EmailReservation, EmailResult, Enrollment, EnrRow, isEmailReservation() (+5 more)
 
 ### Community 20 - "ContactBehavioralTab.tsx"
 Cohesion: 0.03
-Nodes (72): TanStack Query (Estado do Servidor), BehavioralExecutiveSummary(), Props, BiasData, BiasesSubTab(), Props, BusinessContextSubTab(), Props (+64 more)
+Nodes (69): BehavioralExecutiveSummary(), Props, BiasData, BiasesSubTab(), Props, BusinessContextSubTab(), Props, CommunicationDashboardCard() (+61 more)
 
 ### Community 21 - "framer-motion"
 Cohesion: 0.01
-Nodes (140): Lacunas: o que NÃO verifiquei e por quê, framer-motion, typeConfig, CustomTooltip, CustomTooltipProps, PieTooltip, TooltipPayloadItem, CompanyDataTabProps (+132 more)
+Nodes (154): framer-motion, typeConfig, AIMessageGeneratorProps, FRAMEWORKS, MESSAGE_TYPES, TONES, CustomTooltip, CustomTooltipProps (+146 more)
 
 ### Community 22 - "Tabela de evidências"
-Cohesion: 0.02
-Nodes (104): B. Fios quebrados (funcionalidade que não fecha o ciclo), Tabela de evidências, Inteligência / IA (doc 02), Fluxos de Setup / Públicos / Marketing, ref_store, AIEmailComposer(), MESSAGE_TYPES, MessageType (+96 more)
+Cohesion: 0.10
+Nodes (26): B. Fios quebrados (funcionalidade que não fecha o ciclo), Tabela de evidências, Inteligência / IA (doc 02), Fluxos de Setup / Públicos / Marketing, AIMessageGenerator(), EmailThreadSummaryCard(), AIActionsPanel(), ScorecardEditor() (+18 more)
 
-### Community 24 - "lazyPages.tsx"
-Cohesion: 0.02
-Nodes (4): AdminConexoesLogs, IntentPage, MFAGuardLazy, RequireAdminLazy
+### Community 24 - "Componentes e features órfãs"
+Cohesion: 0.09
+Nodes (24): 6. 🧪 Neuromarketing Enterprise — ✅ IMPLEMENTADO, AUDITORIA_SISTEMA.md (2026-03-15), Componentes e features órfãs, ClientHealthPanel(), ClientHealthPanelProps, riskColors, statusColors, NeuroAlerts() (+16 more)
 
 ### Community 25 - "package.json"
 Cohesion: 0.03
-Nodes (65): ADR-0020, name, overrides, serialize-javascript, private, type, version, autoprefixer (+57 more)
+Nodes (69): ADR-0020, name, overrides, serialize-javascript, private, type, version, autoprefixer (+61 more)
 
 ### Community 26 - "dependencies"
 Cohesion: 0.03
@@ -1858,25 +2609,25 @@ Nodes (76): dependencies, axe-core, canvas-confetti, class-variance-authority, c
 Cohesion: 0.01
 Nodes (258): public.abm_account_plans, public.abm_accounts, public.abm_buying_committee, public.abm_campaigns, public.abm_whitespace_opportunities, public.access_blocked_log, public.access_security_settings, public.activities (+250 more)
 
-### Community 28 - "useIntent.ts"
-Cohesion: 0.07
-Nodes (20): generatePixelKey(), IntentPixel, IntentScope, IntentScore, IntentSignal, IntentTrend, SIGNAL_TYPE_LABELS, useCreatePixel() (+12 more)
+### Community 28 - "Tabela de evidências"
+Cohesion: 0.03
+Nodes (67): Tabela de evidências, ForecastNarrativeCard(), GeneratePlaybookDialog(), BenchmarkConfigForm(), RevenueFunnelChart(), RevOpsAlertList(), CompetitorEditor(), ReasonsEditor() (+59 more)
 
 ### Community 29 - "fetch-utils.ts"
-Cohesion: 0.02
-Nodes (79): A. Dado fictício apresentado como métrica, Achados, Arquivos que inspecionei, C. Funções órfãs (nenhum caminho de execução), Contradições com a documentação existente, D. Provedores de IA e secrets — mapa consolidado, E. Boas práticas observadas (contraponto), Estado — Inteligência, IA e Voz (+71 more)
+Cohesion: 0.03
+Nodes (70): A. Dado fictício apresentado como métrica, Achados, Arquivos que inspecionei, C. Funções órfãs (nenhum caminho de execução), Contradições com a documentação existente, D. Provedores de IA e secrets — mapa consolidado, E. Boas práticas observadas (contraponto), Estado — Inteligência, IA e Voz (+62 more)
 
-### Community 30 - "withAuth"
+### Community 30 - "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado"
 Cohesion: 0.02
-Nodes (171): Banco, Edge Functions, CI e código, Decision, Edge Functions (`supabase/functions/`), [ALTA] SEC-4. Crons sensíveis (envio de mensagens / massa) sem `CRON_SECRET`, com service_role, Controles que realmente funcionam (verificados), 🎯 Matriz de Risco Consolidada — Auditoria SINGU CRM v2, Placar por severidade, Sequência de remediação recomendada (Fase V — NÃO executada nesta entrega) (+163 more)
+Nodes (105): 6. Observabilidade, 4.10 Componentes de Navegação, A10 — 🟠 Métricas de RPC medem apenas a si mesmas, A11 — 🟡 Órfãos (código sem consumidor), A12 — 🟡 Links de navegação quebrados, A13 — 🟡 Rotas admin ausentes da navegação, A14 — 🟡 Cobertura de circuit breaker mínima, A15 — 🟡 Superfície pública desnecessária e política de senha fraca (+97 more)
 
-### Community 31 - "TriggerAnalyticsTabs.tsx"
-Cohesion: 0.22
-Nodes (12): Props, TriggerAnalyticsTabs(), DISC_BG_COLORS, DISC_COLORS, DISC_NAMES, DISCProfile, DISCTriggerStats, RESULT_COLORS (+4 more)
+### Community 31 - "ProfileBasedSuggestions.tsx"
+Cohesion: 0.06
+Nodes (35): 4.5 Componentes de Gatilhos/Templates, generateCombinedMessage(), SuggestedTemplate, TemplatePreviewDialog(), TemplatePreviewDialogProps, categoryBadges, DISC_DESCRIPTIONS, ProfileBasedSuggestions() (+27 more)
 
 ### Community 32 - "tracedLogger"
-Cohesion: 0.03
-Nodes (55): Added, ADR-008 — Logger estruturado, ✅ Itens concluídos e validados, 📊 Métricas objetivas, Plano — Estado atual: 10/10 sustentado, 🎯 Próxima ação, setRequestId(), limiter (+47 more)
+Cohesion: 0.04
+Nodes (45): Added, ADR-008 — Logger estruturado, ✅ Itens concluídos e validados, 📊 Métricas objetivas, Plano — Estado atual: 10/10 sustentado, 🎯 Próxima ação, logger, setRequestId() (+37 more)
 
 ### Community 33 - "ContactCommercialTab.tsx"
 Cohesion: 0.04
@@ -1886,61 +2637,61 @@ Nodes (46): 10. Fora de escopo deliberado, BestClosingMomentsCard(), Props, STAT
 Cohesion: 0.05
 Nodes (60): public.audit_log_2026_12, audit_log_2026_12_entity_type_entity_id_idx, audit_log_2026_12_user_id_created_at_idx, idx_assignments_assigned_to, idx_assignments_contact, idx_assignments_created, idx_assignments_status, idx_assignments_type (+52 more)
 
-### Community 35 - "ContactOverviewTab.tsx"
-Cohesion: 0.03
-Nodes (61): BestContactTimeWidget(), CHANNEL_ICONS, DAYS_OF_WEEK, Props, ChurnPredictionsWidget, ChurnRiskWidget, RISK_CONFIG, churnRiskToScore() (+53 more)
+### Community 35 - "ContactDetailHeader.tsx"
+Cohesion: 0.04
+Nodes (42): ContactCommercialTab(), ContactDataTab(), ContactDetailHeader(), DISC_COLORS, Props, ROLE_CONFIG, STAGE_CONFIG, contact (+34 more)
 
-### Community 36 - "Achados"
-Cohesion: 0.09
-Nodes (22): Achados, ⚙️ Achados — Edge Functions (Correção & Resiliência), [ALTO] EF-3. Nenhum timeout em chamadas externas (AI Gateway, Firecrawl, EnrichLayer, Evolution, ElevenLabs, Twilio), [ALTO] EF-4. `evolution-webhook` — sem verificação de assinatura + fallback perigoso de `user_id`, [ALTO] EF-5. `nurturing-runner` — `completed_count` sempre gravado como 1 + duplo incremento, [ALTO] EF-6. Crons/workers sem claim atômico — double-processing sob concorrência, [ALTO] EF-7. `send-sms-campaign` — envio síncrono, sem atomicidade, sem paginação, sem timeout, [BAIXO] EF-15. Inconsistência de CORS/imports/auth entre funções (+14 more)
+### Community 36 - "withAuth"
+Cohesion: 0.02
+Nodes (150): Banco, Edge Functions, CI e código, Decision, Edge Functions (`supabase/functions/`), Achados, [ALTA] SEC-3. Webhooks com service_role e SEM verificação de assinatura/segredo, [ALTA] SEC-4. Crons sensíveis (envio de mensagens / massa) sem `CRON_SECRET`, com service_role, [BAIXA] SEC-7. Injeção de filtro PostgREST no `mcp-server`, [CRÍTICA] SEC-1. Views `*_public` expõem tokens-segredo a `anon` → enumerar e assinar documentos de terceiros (+142 more)
 
 ### Community 37 - "GlobalSearch.tsx"
-Cohesion: 0.09
-Nodes (24): fuse.js, getColorClass(), getTypeIcon(), NavItem, Props, QuickAction, RecentItem, SearchLocalGroups() (+16 more)
+Cohesion: 0.12
+Nodes (17): fuse.js, Props, SearchResult, SearchResultGroups(), addRecentItem(), getRecentItems(), GlobalSearch, GlobalSearchProps (+9 more)
 
 ### Community 38 - "_lib.ts"
 Cohesion: 0.08
 Nodes (65): Ckpt, copiarGrande(), infoOrigem, nomeCkpt(), OpcoesLarge, pontoDeRetomada(), dados, base64Utf8() (+57 more)
 
-### Community 39 - "auth.users"
-Cohesion: 0.03
-Nodes (60): custom_fields, auth.users, public.access_blocked_log, public.access_security_settings, public.activities, public.ai_recommendation_audit_logs, public.ai_recommendation_logs, public.alerts (+52 more)
+### Community 39 - "contacts"
+Cohesion: 0.02
+Nodes (148): contact_analytical_profiles, custom_fields, email_campaigns, lead_routing_rules, nurturing_workflows, pipelines, sales_team_members, auth.users (+140 more)
 
-### Community 40 - "Hooks (`src/hooks/`)"
-Cohesion: 0.19
-Nodes (10): Hooks (`src/hooks/`), useEntityHistory(), TAB_BY_KEY, useIntelHotkeys(), useIntelSnapshots(), IntelTelemetryEvent, readEvents(), useIntelTabView() (+2 more)
+### Community 40 - "useEntityBookmarks.ts"
+Cohesion: 0.24
+Nodes (8): GENERIC, BookmarkType, EntityBookmark, read(), useEntityBookmarks(), write(), HistoryEntry, State
 
 ### Community 41 - "vitest"
-Cohesion: 0.06
-Nodes (17): ref_data, dompurify, vitest, ALL_DISC, ALL_VAK, chaveDoPar(), unir(), analisar() (+9 more)
+Cohesion: 0.05
+Nodes (20): ref_data, dompurify, vitest, ALL_DISC, ALL_VAK, chaveDoPar(), unir(), analisar() (+12 more)
 
 ### Community 42 - "ContactDataTab.tsx"
-Cohesion: 0.05
-Nodes (45): RelativesSection(), RelativesSectionProps, Props, ADDRESS_TYPES, AddressesCard, Props, CadencePreferencesCard, Props (+37 more)
+Cohesion: 0.07
+Nodes (34): Props, ADDRESS_TYPES, AddressesCard, Props, CadencePreferencesCard, ConsentAuditCard(), ContactEnrichedCard(), DataSummaryStrip (+26 more)
 
 ### Community 43 - "StakeholderMap.tsx"
-Cohesion: 0.10
-Nodes (26): 4.7 Componentes de Stakeholders, CoalitionDetectionPanel(), getSupportType(), PowerInterestGrid(), QUADRANT_CONFIG, RISK_COLORS, safeInitial(), StakeholderCard() (+18 more)
+Cohesion: 0.16
+Nodes (17): 4.7 Componentes de Stakeholders, CoalitionDetectionPanel(), getSupportType(), PowerInterestGrid(), QUADRANT_CONFIG, RISK_COLORS, safeInitial(), StakeholderCard() (+9 more)
 
 ### Community 44 - "bulk-revalidate/index.ts"
 Cohesion: 0.25
 Nodes (4): BodySchema, ContactRow, limiter, VerificationRow
 
-### Community 45 - "contacts"
-Cohesion: 0.04
-Nodes (57): contact_analytical_profiles, email_campaigns, public.behavioral_profile_regen_queue, public.brain_dominance_analysis, public.campaign_recipients, public.churn_risk_scores, public.client_values, public.communication_preferences (+49 more)
+### Community 45 - "lazyPages.tsx"
+Cohesion: 0.02
+Nodes (3): MFAGuardLazy, RequireAdminLazy, Territorios
 
 ### Community 46 - "useCompanies.ts"
-Cohesion: 0.04
-Nodes (58): FIELD_MAPPING.md, Arquitetura do Proxy, Campos EXTERNO-ONLY (não existem no local), Campos LOCAL-ONLY (não existem no externo), Fluxo de dados:, Mapeamento Campo-a-Campo: Banco Local ↔ Banco Externo, Tabela: companies, Tabela: contacts (+50 more)
+Cohesion: 0.06
+Nodes (32): addressInsertSchema, AddressSummary, addressSummarySchema, boolean, CompaniesPage, COMPANY_SEARCH_COLUMNS, CompanyAliases, companyAliasSchema (+24 more)
 
 ### Community 47 - "20261008120000_fix_frontend_rpcs_canonical.sql"
 Cohesion: 0.05
-Nodes (21): ai_recommendation_audit_logs, alerts, company_emails, company_phones, contact_emails, contact_phones, customers, public.assign_territory() (+13 more)
+Nodes (23): ai_recommendation_audit_logs, public.assign_territory(), public.check_relationship_consistency(), public.export_companies_csv(), public.export_contacts_csv(), public.get_ai_recommendation_logs(), public.get_company_360_view(), public.get_company_timeline() (+15 more)
 
 ### Community 48 - "useConversationIntel.ts"
-Cohesion: 0.05
-Nodes (47): Coexistência com meeting-summary, Edge Functions (verify_jwt=false em config.toml, JWT validado em código), Hooks (`src/hooks/useConversationIntel.ts`), Integração, Não fazer, Schema, UI, ContactInteractionsTab() (+39 more)
+Cohesion: 0.06
+Nodes (46): Coexistência com meeting-summary, Edge Functions (verify_jwt=false em config.toml, JWT validado em código), Hooks (`src/hooks/useConversationIntel.ts`), Integração, Não fazer, Schema, UI, analysis (+38 more)
 
 ### Community 49 - "leadScoring.ts"
 Cohesion: 0.06
@@ -1951,8 +2702,8 @@ Cohesion: 0.05
 Nodes (36): AccountPlanWidget, CompanyBenchmarkRadar(), corDaFaixa(), Indicador, CompanyDuplicatesWidget, CompanyHealthScoreWidget, LEVEL_CONFIG, AccountPlanWidget (+28 more)
 
 ### Community 51 - "@testing-library/react"
-Cohesion: 0.04
-Nodes (19): @testing-library/react, vitest-axe, mocks, CSATPanel(), Props, SCORE_COLORS, SCORE_LABELS, IncrementalLoadStickyBar (+11 more)
+Cohesion: 0.03
+Nodes (33): @testing-library/react, mocks, factors, BehaviorAlertsPanel(), mocks, detailKey, otherContactKey, otherUserKey (+25 more)
 
 ### Community 52 - "triggers-advanced.ts"
 Cohesion: 0.05
@@ -1964,7 +2715,7 @@ Nodes (42): idx_amc_user_deal, idx_atp_contact, idx_atp_deal, idx_atp_occurred, 
 
 ### Community 54 - "CHANGELOG.md"
 Cohesion: 0.06
-Nodes (33): [1.6.0] - 2026-04-10, [1.7.0] - 2026-04-11, [1.8.0] - 2026-04-12, [1.9.0] - 2026-04-12, [2.2.0] - 2026-04-20 — Rodada J: Connections Hardening (50/50), [2.7.1] - 2026-04-20 — Rodada P: Re-auditoria & Fechamento 10/10, [2.7.3] - 2026-04-20 — Rodada R: Tracing nas Edge Functions, Split Sidebar, ESLint warn, [2.7.4] - 2026-04-20 — Rodada S: Optimistic Locking End-to-End (+25 more)
+Nodes (35): [1.6.0] - 2026-04-10, [1.7.0] - 2026-04-11, [1.8.0] - 2026-04-12, [1.9.0] - 2026-04-12, [2.2.0] - 2026-04-20 — Rodada J: Connections Hardening (50/50), [2.4.0] - 2026-04-20 — Rodada L: Connections Governance (60/60), [2.7.1] - 2026-04-20 — Rodada P: Re-auditoria & Fechamento 10/10, [2.7.3] - 2026-04-20 — Rodada R: Tracing nas Edge Functions, Split Sidebar, ESLint warn (+27 more)
 
 ### Community 55 - "useBIAdvanced.ts"
 Cohesion: 0.12
@@ -1975,28 +2726,28 @@ Cohesion: 0.04
 Nodes (44): ArgumentAvoidanceTechnique, ArgumentIndicator, ArgumentRisk, ChallengeTechnique, CriticalLanguageType, CriticalPhrase, CriticismAnalysis, DesireCategory (+36 more)
 
 ### Community 57 - "📊 ANÁLISE COMPLETA DO SISTEMA RelateIQ CRM"
-Cohesion: 0.08
-Nodes (25): 11.1 Autenticação, 11.2 RLS (Row Level Security), 11.3 Edge Functions, 7.1 Supabase (Lovable Cloud), 7.2 Lovable AI Gateway, 7.3 PWA, 8.1 Tokens de Cor, 8.2 Tipografia (+17 more)
+Cohesion: 0.06
+Nodes (31): 11.1 Autenticação, 11.2 RLS (Row Level Security), 11.3 Edge Functions, 6.1 Tabelas Core, 6.2 Tabelas de Comportamento, 6.3 Tabelas de Preferências, 6.4 Tabelas de Alertas/Saúde, 6.5 Tabelas de Suporte (+23 more)
 
 ### Community 58 - "useChurnRisk.ts"
 Cohesion: 0.13
 Nodes (9): ChurnRiskPanel(), ChurnRiskPanelProps, RISK_CONFIG, TREND_ICONS, ChurnPrediction, ChurnRiskData, LocalChurnRisk, useAnalyzeChurnRisk() (+1 more)
 
-### Community 59 - "✅ Resolvidos nesta rodada"
-Cohesion: 0.07
-Nodes (24): ✅ Resolvidos nesta rodada, TimelineEvent, useContactTimeline(), BattleCardDetail(), CustomerSuccessAccount(), DealRoomDetail(), PlaybookDetail(), calculateRFMScore() (+16 more)
+### Community 59 - "rfm.ts"
+Cohesion: 0.12
+Nodes (17): calculateRFMScore(), CommunicationPriority, determineRFMSegment(), RFM_SCORE_LABELS, RFM_SEGMENTS, RFMAction, RFMAnalysis, RFMContactSummary (+9 more)
 
-### Community 60 - "useCustomerSuccess.ts"
-Cohesion: 0.06
-Nodes (36): AccountPortfolioCard(), STAGE_STYLES, TIER_STYLES, HealthScoreGauge(), HealthSignalTimeline(), TYPE_ICON, NPSDistributionChart(), NPSResponseDialog() (+28 more)
+### Community 60 - "Hooks mortos"
+Cohesion: 0.05
+Nodes (49): Hooks mortos, AccountPortfolioCard(), HealthSignalTimeline(), NPSDistributionChart(), NPSResponseDialog(), QBRTimeline(), STATUS_COLOR, STATUS_ICON (+41 more)
 
-### Community 61 - "useTriggerHistory.ts"
-Cohesion: 0.06
-Nodes (28): 3.1 Hooks de Dados Core, 3.3 Hooks de Persistência, 3.7 Hooks de Templates, 🎣 MÓDULO 3: HOOKS CUSTOMIZADOS (75 hooks), useAdvancedTriggers(), BiasEvolutionData, BiasHistoryRecord, convertCategoryDistribution() (+20 more)
+### Community 61 - "useDashboardStats.ts"
+Cohesion: 0.09
+Nodes (21): 3.1 Hooks de Dados Core, 3.3 Hooks de Persistência, 3.7 Hooks de Templates, 🎣 MÓDULO 3: HOOKS CUSTOMIZADOS (75 hooks), BiasEvolutionData, BiasHistoryRecord, convertCategoryDistribution(), convertDetectedBiases() (+13 more)
 
 ### Community 62 - "3.4 Hooks de Analytics"
-Cohesion: 0.14
-Nodes (11): 3.4 Hooks de Analytics, ContactTimeAnalysis, dayNames, TimeSlot, useBestTimeToContact(), ClosingScoreAlert, useClosingScoreAlerts(), CategoryPattern (+3 more)
+Cohesion: 0.18
+Nodes (9): 3.4 Hooks de Analytics, ContactTimeAnalysis, dayNames, TimeSlot, useBestTimeToContact(), ChurnFactor, ChurnRisk, useChurnPrediction() (+1 more)
 
 ### Community 63 - "Runbooks — DB Guards (Rodada 26/10)"
 Cohesion: 0.05
@@ -2019,12 +2770,12 @@ Cohesion: 0.05
 Nodes (40): #10 — CRÍTICA: Modo strict do TypeScript desabilitado, #11 — CRÍTICA: Zero cobertura de testes para 107 edge functions, #12 — CRÍTICA: Nenhum pipeline de deployment, #13 — ALTA: Error reporting em produção é código morto, #14 — ALTA: Módulo resilientFetch definido mas nunca importado, #15 — CRÍTICA: Bootstrap do PWA destrói todos os Service Workers e caches, #16 — ALTA: Rate limiting client-side trivialmente burlável, #17 — ALTA: 59 Edge Functions usam Service Role Key sem necessidade (+32 more)
 
 ### Community 68 - "external-data/index.ts"
-Cohesion: 0.09
-Nodes (29): getExternalClient(), getUserScopedClient(), hasAdminRole(), userScopedUnavailableReason, limiter, ALLOWED_RPCS, ALLOWED_TABLES, AllowedRpc (+21 more)
+Cohesion: 0.06
+Nodes (48): ⚙️ Achados — Edge Functions (Correção & Resiliência), Controles que realmente funcionam (verificados), Resumo, Veredito sobre as alegações da documentação, getExternalClient(), getRelationIdForRecord(), getUserScopedClient(), hasAdminRole() (+40 more)
 
-### Community 69 - "useInteractionsRpc.ts"
+### Community 69 - "canonical-communication-contracts.test.tsx"
 Cohesion: 0.05
-Nodes (31): AnswerSurveyDialog(), Props, Props, SendSurveyDialog(), message, mocks, profile, configuration (+23 more)
+Nodes (34): AnswerSurveyDialog(), SendSurveyDialog(), message, mocks, profile, configuration, mocks, mocks (+26 more)
 
 ### Community 70 - "gerar.mjs"
 Cohesion: 0.03
@@ -2032,15 +2783,15 @@ Nodes (67): AGG_KEYS, aliasesByBase, ALL, allDocs, ambiguos, apiHttp, args, banc
 
 ### Community 71 - "CopywritingSalesTools.tsx"
 Cohesion: 0.06
-Nodes (27): AiSuggestion, CopywritingAiGeneratorTab(), Props, AnalysisResult, CopywritingAnalyzerTab(), getScoreColor(), Props, CopywritingEmojiTab() (+19 more)
+Nodes (28): AiSuggestion, CopywritingAiGeneratorTab(), Props, AnalysisResult, CopywritingAnalyzerTab(), getScoreColor(), Props, CopywritingEmojiTab() (+20 more)
 
-### Community 72 - "AccountChurnPredictionPanel.tsx"
+### Community 72 - "20260110000002_baseline_compat_idempotente.sql"
 Cohesion: 0.03
-Nodes (72): 4.4 Componentes de Analytics, 1. Dado fictício, AUDITORIA_SISTEMA.md (2026-03-15), 4. `docs/auditoria/06_REAUDITORIA_IMPLEMENTACAO_20261002.md` (pendências e alegações), Handlers falsos / dados fake exibidos como reais, AccountChurnPredictionPanel(), AccountChurnPredictionPanelProps, channelIcons (+64 more)
+Nodes (59): idx_activity_feed_user_id, idx_automations_created_by, idx_cadence_enrollments_cadence_id, idx_cadence_enrollments_company_id_fk, idx_cadence_enrollments_contact_id_fk, idx_cadence_enrollments_user_id, idx_company_phones_created_at, idx_company_phones_e164 (+51 more)
 
 ### Community 73 - "micro-interactions/index.ts"
 Cohesion: 0.08
-Nodes (29): 4.9 Componentes de Microinterações, AnimatedBadge(), AnimatedBadgeProps, AnimatedCounterProps, CountUp(), CountUpProps, FlipCounter(), FlipDigitProps (+21 more)
+Nodes (25): AnimatedBadge(), AnimatedBadgeProps, AnimatedCounterProps, CountUp(), CountUpProps, FlipCounter(), FlipDigitProps, SlotCounter() (+17 more)
 
 ### Community 74 - "types/index.ts"
 Cohesion: 0.07
@@ -2051,48 +2802,48 @@ Cohesion: 0.24
 Nodes (11): assinar(), canonico(), Entry, hashTabela(), LeitorPagina, Manifesto, montarManifesto(), sha256() (+3 more)
 
 ### Community 76 - "useRealtimeNotifications.ts"
-Cohesion: 0.07
-Nodes (27): 3.9 Hooks de Notificações, CompatibilitySettings, DISC_COMPATIBILITY, SalespersonProfile, useCompatibilityAlerts(), VAK_COMPATIBILITY, DEFAULT_SETTINGS, HealthAlert (+19 more)
+Cohesion: 0.10
+Nodes (19): 3.9 Hooks de Notificações, useCompatibilityAlerts(), DEFAULT_SETTINGS, HealthAlert, HealthAlertSettings, useHealthAlerts(), useHealthAlertSettingsFetch(), useHealthAlertsFetch() (+11 more)
 
 ### Community 77 - "usePlaybooks.ts"
 Cohesion: 0.07
 Nodes (32): Edge Functions, Hooks, Sales Playbooks & Battle Cards, Schema, Sidebar, UI, BattleCard, BattleCardInsert (+24 more)
 
-### Community 78 - "design-system-audit.test.ts"
-Cohesion: 0.11
-Nodes (14): ref_fs, ref_path, allFiles, auditableFiles, componentFiles, COMPONENTS_DIR, EXCLUDED_FILES, findTsxFiles() (+6 more)
+### Community 78 - "lint-providers.cjs"
+Cohesion: 0.06
+Nodes (30): ref_fs, ref_path, analisar(), DEPENDENCIES, fimDaTag(), fs, importsLocais(), main() (+22 more)
 
 ### Community 79 - "externalData.ts"
-Cohesion: 0.09
-Nodes (31): 2. 👤 Gestão de Contatos — ✅ IMPLEMENTADO, [2.7.2] - 2026-04-20 — Rodada Q: Tracing E2E nos Hooks Críticos, Roadmap incremental (gaps técnicos restantes — não-bloqueantes), Score, 8. Auditoria de leitura grava uma linha em `activities` a cada consulta, Tabela de evidências, 5. As 14 causas-raiz, ThemeCustomizer() (+23 more)
+Cohesion: 0.06
+Nodes (42): Tabela de evidências, 26. 🗄️ Comunicação com Banco Externo, CustomFieldsManager(), ThemeCustomizer(), applyBehavioralFilters(), useDuplicateContacts(), useOrphanContacts(), { queryExternalData, callExternalRpc, from } (+34 more)
 
 ### Community 80 - "Verificação adversarial — camada de dados"
-Cohesion: 0.09
-Nodes (21): A1 — Inventário quantitativo, A2 — Statements sem `CREATE TABLE` correspondente, A3 — Materialized views e schemas nunca criados, A5 — Cobertura de RLS, Afirmação original, Afirmação original, Afirmação original, Afirmação original (+13 more)
+Cohesion: 0.06
+Nodes (33): 📋 Tabela: `lux_webhook_config`, A1 — Inventário quantitativo, A2 — Statements sem `CREATE TABLE` correspondente, A3 — Materialized views e schemas nunca criados, A4 — Órfãos, A5 — Cobertura de RLS, A6 — Jobs pg_cron, Afirmação original (+25 more)
 
 ### Community 81 - "🔍 AUDITORIA EXAUSTIVA — SINGU CRM"
 Cohesion: 0.06
-Nodes (33): 10. 📊 Análise RFM — ✅ IMPLEMENTADO, 11. 🎯 Inteligência Emocional — ✅ IMPLEMENTADO, 12. 🚫 Objeções Ocultas — ✅ IMPLEMENTADO, 13. 💰 Histórico de Compras — ✅ IMPLEMENTADO, 14. 🎁 Sugestões de Oferta — ✅ IMPLEMENTADO, 15. 📋 Critérios de Decisão — ✅ IMPLEMENTADO, 16. 💎 Valores do Cliente — ✅ IMPLEMENTADO, 17. 🔔 Sistema de Alertas — ✅ IMPLEMENTADO (+25 more)
+Nodes (34): 10. 📊 Análise RFM — ✅ IMPLEMENTADO, 11. 🎯 Inteligência Emocional — ✅ IMPLEMENTADO, 12. 🚫 Objeções Ocultas — ✅ IMPLEMENTADO, 13. 💰 Histórico de Compras — ✅ IMPLEMENTADO, 14. 🎁 Sugestões de Oferta — ✅ IMPLEMENTADO, 15. 📋 Critérios de Decisão — ✅ IMPLEMENTADO, 16. 💎 Valores do Cliente — ✅ IMPLEMENTADO, 17. 🔔 Sistema de Alertas — ✅ IMPLEMENTADO (+26 more)
 
-### Community 82 - "branch-podaveis.test.mjs"
+### Community 82 - "3. Riscos estruturais, por gravidade"
 Cohesion: 0.05
-Nodes (67): agregar(), CABECALHOS(), CANCELADOS, celulaSegura(), coletarJobs(), coletarRuns(), corpoDoKpi(), duracaoMinutos() (+59 more)
+Nodes (35): Falsos positivos encontrados (o que **NÃƒO** pode ser apagado), MÃ©todo (os 10 testes), Placar: 5 REFUTADOS / 16 CONFIRMADOS / 6 INCONCLUSIVOS de 27 alvos, ðŸ”´ 2. `crm-automation-monitor` â€” produtor exclusivo de widget da home, ðŸ”´ 3. `auto-regen-behavioral-profiles` â€” produtor exclusivo de alerta de admin, ðŸ”´ 4. `process-behavioral-regen-queue` â€” cron monitorado por UI viva, ðŸ”´ 5. Tabela `insights` â€” 5 leitores vivos, ðŸŸ  E mais seis que **nÃ£o devem ser apagados sem checar o painel Supabase** (+27 more)
 
 ### Community 83 - "carnegie.ts"
 Cohesion: 0.06
 Nodes (33): Appreciation, AppreciationMetrics, AppreciationSuggestion, AppreciationType, CarnegieAnalysisResult, CarnegieRecommendation, CarnegieScore, ClientProgress (+25 more)
 
-### Community 84 - "safeFetch"
-Cohesion: 0.07
-Nodes (35): A-10 · 🟡 MÉDIO — Zero secrets de backend documentados no `.env.example`, A-11 · 🔵 BAIXO — Host divergente no gateway de IA, A-12 · 🔵 BAIXO — Terceiros no frontend fora de qualquer inventário, A-1 · 🔴 CRÍTICO — Cron chama Edge Functions sem o header que elas exigem, A-3 · 🟠 ALTO — Pixel de intent aceita sinais forjados, A-4 · 🟠 ALTO — Envio de e-mail é encenado, não executado, A-5 · 🟠 ALTO — Segredo de terceiro real hard-coded em migration versionada, A-6 · 🟠 ALTO — `dual-write-proxy` não sobe e não autentica (+27 more)
+### Community 84 - "connection-tester/index.ts"
+Cohesion: 0.06
+Nodes (41): A-10 · 🟡 MÉDIO — Zero secrets de backend documentados no `.env.example`, A-11 · 🔵 BAIXO — Host divergente no gateway de IA, A-12 · 🔵 BAIXO — Terceiros no frontend fora de qualquer inventário, A-1 · 🔴 CRÍTICO — Cron chama Edge Functions sem o header que elas exigem, A-3 · 🟠 ALTO — Pixel de intent aceita sinais forjados, A-4 · 🟠 ALTO — Envio de e-mail é encenado, não executado, A-5 · 🟠 ALTO — Segredo de terceiro real hard-coded em migration versionada, A-6 · 🟠 ALTO — `dual-write-proxy` não sobe e não autentica (+33 more)
 
-### Community 85 - "ref_node_fs"
-Cohesion: 0.12
-Nodes (55): ref_node_events, ref_node_fs, ref_node_string_decoder, changed(), commitWithHooks(), digest(), exists(), fail() (+47 more)
+### Community 85 - "marketing-automation-suite.md"
+Cohesion: 0.09
+Nodes (24): AttributionBreakdownChart(), ContactTouchpointsTab(), FormBuilder(), PublicFormRenderer(), FormField, FormSubmission, KEY_BASE, MarketingForm (+16 more)
 
 ### Community 86 - "CompanyForm.tsx"
-Cohesion: 0.12
-Nodes (27): react-hook-form, CompanyFormBasicTab(), CompanyFormBasicTabProps, CompanyFormClassificationTab(), CompanyFormClassificationTabProps, CompanyFormCompositeFields(), Props, CompanyFormFiscalTab() (+19 more)
+Cohesion: 0.14
+Nodes (23): CompanyFormBasicTab(), CompanyFormBasicTabProps, CompanyFormClassificationTab(), CompanyFormClassificationTabProps, CompanyFormCompositeFields(), Props, CompanyFormFiscalTab(), CompanyFormFiscalTabProps (+15 more)
 
 ### Community 87 - "SalesTeamTab.tsx"
 Cohesion: 0.08
@@ -2102,16 +2853,16 @@ Nodes (12): HandoffQueueTab, RoutingMetricsTab, RoutingRulesTab, SalesTeamTab, B
 Cohesion: 0.10
 Nodes (33): SIDEBAR_COOKIE_MAX_AGE, SIDEBAR_COOKIE_NAME, SIDEBAR_KEYBOARD_SHORTCUT, SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, SIDEBAR_WIDTH_MOBILE, SidebarContext, SidebarContextValue (+25 more)
 
-### Community 89 - "snapshot.py"
-Cohesion: 0.08
-Nodes (60): Connection, decimal, Match, psycopg_rows, build_function_callers(), excluded_sql(), get_columns(), get_constraints() (+52 more)
+### Community 89 - "AppProviders.tsx"
+Cohesion: 0.11
+Nodes (7): ref_contexts, AppRoutes(), queryClient, PageTransitionProps, ScrollToTopButtonProps, SmartBackButtonProps, TableDensity
 
 ### Community 90 - "WhyScoreDrawer.tsx"
 Cohesion: 0.16
 Nodes (16): BAND_META, deriveBand(), DIRECTION_META, ExplanationFeedbackEntry, ExplanationFeedbackValue, FACTOR_BAND_META, getFactorBand(), inferDirection() (+8 more)
 
 ### Community 91 - "@playwright/test"
-Cohesion: 0.19
+Cohesion: 0.22
 Nodes (7): loginWithTestUser(), requireTestCredentials(), requireWritableEnvironment(), openContactsTable(), requireContactRows(), @playwright/test, page()
 
 ### Community 92 - "📋 SINGU CRM — Levantamento Completo de Funcionalidades"
@@ -2119,24 +2870,24 @@ Cohesion: 0.10
 Nodes (20): 10. 📊 Análise RFM (`rfm_analysis`), 11. 🎯 Inteligência Emocional (`eq_analysis_history`), 12. 🚫 Objeções Ocultas (`hidden_objections`), 13. 💰 Histórico de Compras (`purchase_history`), 14. 🎁 Sugestões de Oferta (`offer_suggestions`), 15. 📋 Critérios de Decisão (`decision_criteria`), 16. 💎 Valores do Cliente (`client_values`), 18. 📈 Atividades (`activities`) (+12 more)
 
 ### Community 93 - "PageSkeletons.tsx"
-Cohesion: 0.17
-Nodes (21): ActivitySkeleton(), CalendarSkeleton(), CompaniesGridSkeleton(), CompanyCardSkeleton, ContactCardSkeleton(), ContactsGridSkeleton(), ContactsListSkeleton(), DetailHeaderSkeleton() (+13 more)
+Cohesion: 0.08
+Nodes (41): 1. Gate a11y no CI via vitest-axe, 3. Component Gallery v2, 4. CHANGELOG Keep-a-Changelog estrito, 5. Versionamento, ADR-012 — Rodada I: Polimento Final & Hardening Profundo, Arquivos-chave, Consequências, Contexto (+33 more)
 
 ### Community 94 - "canonical-delivery-retry-contract.test.tsx"
-Cohesion: 0.08
-Nodes (24): action, campaignQueries(), complete(), loadAction(), mocks, queryResult(), queryWithResponse(), Response (+16 more)
+Cohesion: 0.11
+Nodes (18): action, campaignQueries(), complete(), loadAction(), mocks, queryResult(), queryWithResponse(), Response (+10 more)
 
 ### Community 95 - "20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql"
 Cohesion: 0.12
 Nodes (30): idx_deal_rooms_company, idx_deal_rooms_status, idx_deal_rooms_token, idx_deal_rooms_user, idx_dr_activities_room, idx_dr_comments_room, idx_dr_docs_room, idx_dr_docs_user (+22 more)
 
-### Community 96 - "graphify-local.mjs"
-Cohesion: 0.16
-Nodes (39): ref_node_crypto, runtime(), status(), validateGraph(), adoptInitial(), generate(), atomic(), canonical() (+31 more)
+### Community 96 - "DISCCompatibilityAlerts.tsx"
+Cohesion: 0.07
+Nodes (19): canvas-confetti, TRAINING_SCENARIOS, TrainingProgress, TrainingScenario, AlertSettings, CompatibilityAlert, DISCCompatibilityAlertsProps, DISC_COLORS (+11 more)
 
 ### Community 97 - "insights/SentimentTrendChart.tsx"
-Cohesion: 0.10
-Nodes (27): ANNOTATION_CATEGORIES, CATEGORY_KEYS, CategoryMeta, AnnotationDialog(), formatWeekLabel(), Props, AnnotationList(), formatDateTime() (+19 more)
+Cohesion: 0.11
+Nodes (26): ANNOTATION_CATEGORIES, CATEGORY_KEYS, CategoryMeta, AnnotationDialog(), formatWeekLabel(), Props, AnnotationList(), formatDateTime() (+18 more)
 
 ### Community 98 - "devDependencies"
 Cohesion: 0.06
@@ -2148,11 +2899,11 @@ Nodes (24): zustand, EmailComposerState, useEmailComposerStore, CustomSimulation
 
 ### Community 100 - "20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql"
 Cohesion: 0.13
-Nodes (26): public.handle_new_user, idx_activities_created_at, idx_activities_user_id, idx_alerts_dismissed, idx_alerts_user_id, idx_companies_user_id, idx_contacts_company_id, idx_contacts_user_id (+18 more)
+Nodes (26): idx_activities_created_at, idx_activities_user_id, idx_alerts_dismissed, idx_alerts_user_id, idx_companies_user_id, idx_contacts_company_id, idx_contacts_user_id, idx_insights_contact_id (+18 more)
 
 ### Community 101 - "ref_https"
 Cohesion: 0.04
-Nodes (38): ADR-005 — Gateway de IA (Lovable), ref_https, messageUpsertData, jwt, AiGatewayStatus, logAiGatewayCall(), LogAiGatewayCallInput, withAiGatewayMetrics() (+30 more)
+Nodes (37): ADR-005 — Gateway de IA (Lovable), Cobertura de _shared, ref_https, messageUpsertData, jwt, AiGatewayStatus, logAiGatewayCall(), LogAiGatewayCallInput (+29 more)
 
 ### Community 102 - "MapMarkerCluster.tsx"
 Cohesion: 0.22
@@ -2171,16 +2922,16 @@ Cohesion: 0.13
 Nodes (28): idx_assignments_assigned_to, idx_assignments_contact, idx_assignments_created, idx_assignments_status, idx_assignments_type, idx_handoff_created, idx_handoff_from, idx_handoff_status (+20 more)
 
 ### Community 106 - "SINGU CRM — Runbook Operacional"
-Cohesion: 0.06
-Nodes (35): Alertas automáticos de Error Budget, 💾 Backup Verification, 🗄️ Banco de Dados, Canais oficiais, 📈 Capacity Planning, 📜 Changelog, 🎲 Chaos Engineering & Game Days, Checklist trimestral de segurança (+27 more)
+Cohesion: 0.07
+Nodes (29): 💾 Backup Verification, 🗄️ Banco de Dados, Canais oficiais, 📈 Capacity Planning, 📜 Changelog, 🎲 Chaos Engineering & Game Days, Checklist trimestral de segurança, Definição dos papéis (+21 more)
 
 ### Community 107 - "evolution-bitrix-connector/index.ts"
 Cohesion: 0.12
 Nodes (27): ref_jsr_supabase, b24(), BitrixAuth, BitrixContact, BitrixProfile, callBitrixAsUser(), ConnectorData, ConnectorPayload (+19 more)
 
 ### Community 108 - "feedback/index.ts"
-Cohesion: 0.11
-Nodes (26): AnalyticsIllustration(), CompaniesIllustration(), ContactsIllustration(), IllustrationProps, Illustrations, InteractionsIllustration(), NoDataIllustration(), SearchIllustration() (+18 more)
+Cohesion: 0.12
+Nodes (25): AnalyticsIllustration(), CompaniesIllustration(), ContactsIllustration(), IllustrationProps, Illustrations, InteractionsIllustration(), NoDataIllustration(), SearchIllustration() (+17 more)
 
 ### Community 109 - "carnegieProgressStorytellingQuestions.test.ts"
 Cohesion: 0.13
@@ -2194,9 +2945,9 @@ Nodes (20): mocks, calculateChurnProbability(), determineCommunicationPriority()
 Cohesion: 0.12
 Nodes (27): abm_accounts_audit, abm_accounts_updated_at, abm_campaigns_updated_at, abm_committee_updated_at, abm_plans_audit, abm_plans_updated_at, abm_whitespace_updated_at, idx_abm_accounts_external (+19 more)
 
-### Community 112 - "PortfolioHealthDashboard.tsx"
-Cohesion: 0.07
-Nodes (21): 27. 📊 Dashboard — ✅ IMPLEMENTADO, 4.6 Componentes de Dashboard, AlertCardProps, HealthAlertsPanel(), ClientRow, PortfolioHealthDashboard(), PortfolioHealthDashboardProps, statusColors (+13 more)
+### Community 112 - "WeeklyReportPanel.tsx"
+Cohesion: 0.20
+Nodes (5): ContentToggleProps, LocalSettings, WeeklyReportSettingsTab(), WeeklyReportSettingsTabProps, ReportPreviewData
 
 ### Community 113 - "10_views.sql"
 Cohesion: 0.09
@@ -2212,7 +2963,7 @@ Nodes (21): calculateInterestScore(), countInterestIndicators(), GENUINE_INTERES
 
 ### Community 116 - "useContacts.ts"
 Cohesion: 0.06
-Nodes (31): 26. 🗄️ Comunicação com Banco Externo, api, Page, queryKey, raw, detail, detailKey, oldContact (+23 more)
+Nodes (31): Componentes, Fluxo, EmailFinderDialog(), api, Page, queryKey, raw, detail (+23 more)
 
 ### Community 117 - "20260417110650_9365a2d8-59c4-4df0-ae02-81957728485f.sql"
 Cohesion: 0.14
@@ -2224,11 +2975,11 @@ Nodes (18): Como reproduzir, Escopo auditado, 🔴 F1 — `idle-in-transaction-g
 
 ### Community 119 - "20260720000005_bd2_company_contact_ownership_checks.sql"
 Cohesion: 0.08
-Nodes (7): proposals, public.bulk_reassign_companies(), public.definir_como_filial(), public.move_to_pipeline_stage(), public.respond_to_proposal(), pipeline_stages, user_roles
+Nodes (7): public.bulk_reassign_companies(), public.definir_como_filial(), public.move_to_pipeline_stage(), public.respond_to_proposal(), pipeline_stages, proposals, user_roles
 
 ### Community 120 - "InsightsPanel.tsx"
-Cohesion: 0.10
-Nodes (17): InsightsPanel(), isCritical(), isObjectionFilter(), isPeriod(), isSentimentBucket(), KpiProps, ObjectionFilter, PERIOD_LABEL (+9 more)
+Cohesion: 0.19
+Nodes (12): InsightsPanel(), isCritical(), isObjectionFilter(), isPeriod(), isSentimentBucket(), KpiProps, ObjectionFilter, PERIOD_LABEL (+4 more)
 
 ### Community 121 - "useInteractionsAdvancedFilter.ts"
 Cohesion: 0.11
@@ -2238,9 +2989,9 @@ Nodes (25): AdvancedFilters, DEFAULT_PER_PAGE, DensityMode, DirecaoFilter, KEYS,
 Cohesion: 0.10
 Nodes (25): createEITabHandler(), createEITabWithHistoryHandler(), createFocusTypeHandler(), createMetaprogramFocusHandler(), createPeriodFilterHandler(), createTabHandler(), createTriggerAnalyticsTabHandler(), createTriggerCategoryHandler() (+17 more)
 
-### Community 123 - "AppProviders.tsx"
-Cohesion: 0.09
-Nodes (15): A-007 · [P1] · PWA — contrato de atualização/Web Push não é gerado pela configuração real, [ALTO] FE-4. 87 arquivos com `useQuery` sem `staleTime`, react-dom, App(), DeferredAppChrome(), AppProviders(), EasterEggsProvider, KeyboardShortcutsDialogEnhanced (+7 more)
+### Community 123 - "main.tsx"
+Cohesion: 0.20
+Nodes (7): A-007 · [P1] · PWA — contrato de atualização/Web Push não é gerado pela configuração real, [ALTO] FE-4. 87 arquivos com `useQuery` sem `staleTime`, react-dom, App(), AppProviders(), src_index, onNeedRefresh()
 
 ### Community 124 - "SINGU CRM — Handoff Document"
 Cohesion: 0.08
@@ -2250,29 +3001,29 @@ Nodes (24): Administração, 🏗 Arquitetura, 📊 Banco de Dados Local (Princi
 Cohesion: 0.08
 Nodes (10): ChannelAnalysis, CohortData, ConversionFunnel, IndustryAnalysis, LossReasonData, ParetoCustomer, PeriodComparison, RfmDashboard (+2 more)
 
-### Community 126 - "SchemaDiscoveryCard.tsx"
-Cohesion: 0.10
-Nodes (22): [2.3.0] - 2026-04-20 — Rodada K: Connections Observability (55/55), [2.5.0] - 2026-04-20 — Rodada M: Connections Federation & DX (65/65), Added, Added, Notes, SLO, 2. Métricas percentiladas via RPC, 2. Métricas P50/P95/P99 + sparkline (+14 more)
+### Community 126 - "Entrega (5 melhorias → 55/55)"
+Cohesion: 0.09
+Nodes (21): [2.3.0] - 2026-04-20 — Rodada K: Connections Observability (55/55), Added, SLO, 2. Métricas percentiladas via RPC, UI, 1. DLQ + Retry exponencial, 2. Métricas P50/P95/P99 + sparkline, 3. Alertas automáticos (+13 more)
 
-### Community 127 - ".lovable/memory/features/*.md (57 arquivos)"
-Cohesion: 0.05
-Nodes (30): .lovable/memory/features/*.md (57 arquivos), MCP Server v1.2.0, Playground (cURL/Snippets), Tabelas/colunas novas, Webhook Templates, AuditDiffViewer(), AuditDiffViewerProps, formatValue() (+22 more)
+### Community 127 - "branch-podaveis.test.mjs"
+Cohesion: 0.06
+Nodes (59): agregar(), CABECALHOS(), CANCELADOS, celulaSegura(), coletarJobs(), coletarRuns(), corpoDoKpi(), duracaoMinutos() (+51 more)
 
-### Community 128 - "check-bundle-size.mjs"
-Cohesion: 0.18
-Nodes (9): ref_node_zlib, argv, DIST_DIR, entries, files, iDist, listJavaScriptFiles(), report (+1 more)
+### Community 128 - "ref_node_fs"
+Cohesion: 0.03
+Nodes (91): ref_node_assert, ref_node_child_process, ref_node_fs, ref_node_http, ref_node_os, ref_node_path, ref_node_test, ./app/Chrome (+83 more)
 
 ### Community 129 - "🔧 MÓDULO 4: COMPONENTES (150+)"
-Cohesion: 0.38
-Nodes (7): 4.11 Componentes de Formulário, 4.2 Componentes de Contato, 🔧 MÓDULO 4: COMPONENTES (150+), NextActionSuggestion, ContactForm(), getField(), InteractionForm()
+Cohesion: 0.27
+Nodes (10): 4.11 Componentes de Formulário, 4.2 Componentes de Contato, 4.3 Componentes de Empresa, 🔧 MÓDULO 4: COMPONENTES (150+), NextActionSuggestion, getCompanyField(), CompanyForm(), ContactForm() (+2 more)
 
 ### Community 130 - "company-health-score.tsx"
-Cohesion: 0.11
-Nodes (21): 4.3 Componentes de Empresa, @radix-ui/react-tooltip, Card, CardContent, CardDescription, CardFooter, CardHeader, CardProps (+13 more)
+Cohesion: 0.07
+Nodes (28): @radix-ui/react-tooltip, Badge, BadgeGroupProps, BadgeProps, badgeVariants, NotificationBadgeProps, StatusBadgeProps, statusConfig (+20 more)
 
 ### Community 131 - "ConversationAnalysisCard.tsx"
-Cohesion: 0.12
-Nodes (16): AnalyzeButton(), Props, CoachingScoreBadge(), ConversationAnalysesTable(), Row, sentimentVariant(), Props, ICONS (+8 more)
+Cohesion: 0.13
+Nodes (15): AnalyzeButton(), CoachingScoreBadge(), ConversationAnalysesTable(), Row, sentimentVariant(), Props, ICONS, KeyMomentsTimeline() (+7 more)
 
 ### Community 132 - "nlp-advanced.ts"
 Cohesion: 0.08
@@ -2283,24 +3034,24 @@ Cohesion: 0.08
 Nodes (23): BLOQUEIO_STATUS_LABELS, BloqueioStatus, EXECUCAO_MODO_LABELS, EXECUCAO_TIPO_LABELS, ExecucaoModo, ExecucaoTipo, RodizioAplicarOndaResult, RodizioAprovarBloqueioResult (+15 more)
 
 ### Community 134 - "severity"
-Cohesion: 0.08
-Nodes (23): 📋 Tabela: `connection_anomalies`, 📋 Tabela: `crm_alerts`, 📋 Tabela: `error_logs`, 📋 Tabela: `hidden_objections`, 📋 Tabela: `query_telemetry`, 📋 Tabela: `revops_alerts`, 📋 Tabela: `stakeholder_alerts`, 📋 Tabela: `system_alerts` (+15 more)
+Cohesion: 0.09
+Nodes (21): 📋 Tabela: `connection_anomalies`, 📋 Tabela: `crm_alerts`, 📋 Tabela: `error_logs`, 📋 Tabela: `hidden_objections`, 📋 Tabela: `query_telemetry`, 📋 Tabela: `revops_alerts`, 📋 Tabela: `stakeholder_alerts`, 📋 Tabela: `system_alerts` (+13 more)
 
 ### Community 135 - "📡 Endpoints"
 Cohesion: 0.09
 Nodes (22): `ai-writing-assistant`, `disc-analyzer`, `elevenlabs-scribe-token`, `elevenlabs-tts`, 📡 Endpoints, `enrich-contacts`, `enrichlayer-linkedin`, `evolution-api` (+14 more)
 
 ### Community 136 - "Achados relevantes"
-Cohesion: 0.12
-Nodes (15): 12. Merge de duplicatas sem transação, 1. Split-brain de persistência: o mesmo domínio em dois bancos, 2. Pipeline: mover deal escreve em colunas que não existem, 3. `deals` tem duas migrations `CREATE TABLE` conflitantes, sem `IF NOT EXISTS`, 5. `types.ts` está dessincronizado das migrations e usa um tipo não declarado, 6. Três stores paralelos e concorrentes de preferência de notificação, 7. Quatro edge functions sem nenhum caminho de execução, 9. Credencial embutida em migration e project ref divergente (+7 more)
+Cohesion: 0.20
+Nodes (10): 12. Merge de duplicatas sem transação, 1. Split-brain de persistência: o mesmo domínio em dois bancos, 2. Pipeline: mover deal escreve em colunas que não existem, 3. `deals` tem duas migrations `CREATE TABLE` conflitantes, sem `IF NOT EXISTS`, 5. `types.ts` está dessincronizado das migrations e usa um tipo não declarado, 6. Três stores paralelos e concorrentes de preferência de notificação, 7. Quatro edge functions sem nenhum caminho de execução, 8. Auditoria de leitura grava uma linha em `activities` a cada consulta (+2 more)
 
-### Community 137 - "MiniCelebration.tsx"
-Cohesion: 0.21
-Nodes (9): CelebrationProvider(), useCelebration(), CelebratoryAction(), CelebratoryButtonProps, MiniCelebrationProps, MiniCelebrationVariant, sizeConfig, useMiniCelebration() (+1 more)
+### Community 137 - "CelebrationProvider.tsx"
+Cohesion: 0.11
+Nodes (17): CelebrationConfig, CelebrationContext, CelebrationContextType, CelebrationOverlayProps, CelebrationProvider(), CelebrationProviderProps, celebrationStyles, CelebrationType (+9 more)
 
-### Community 138 - "collect_and_render"
-Cohesion: 0.08
-Nodes (51): Any, 📋 Tabela: `forms`, 📋 Tabela: `forms_public`, 📋 Tabela: `landing_pages`, 📋 Tabela: `landing_pages_public`, 📋 Tabela: `lead_magnets`, api(), api_section() (+43 more)
+### Community 138 - "run.mjs"
+Cohesion: 0.15
+Nodes (45): ref_node_events, ref_node_string_decoder, changed(), commitWithHooks(), digest(), exists(), fail(), inside() (+37 more)
 
 ### Community 139 - "useApproachRecommendation.ts"
 Cohesion: 0.24
@@ -2322,17 +3073,17 @@ Nodes (22): idx_activities_user_created, idx_bpr_queue_next_run, idx_contact_ana
 Cohesion: 0.09
 Nodes (22): compilerOptions, allowImportingTsExtensions, isolatedModules, jsx, lib, module, moduleDetection, moduleResolution (+14 more)
 
-### Community 144 - "BulkActionsBar.tsx"
-Cohesion: 0.22
-Nodes (7): 3. Component Gallery v2, BulkActionsBar(), BulkActionsBarProps, commonTags, relationshipStages, EntityDetailPageSkeleton(), PipelinePageSkeleton()
+### Community 144 - "Padrões Obrigatórios"
+Cohesion: 0.29
+Nodes (7): Padrões Obrigatórios, Qualidade de Código, Resiliência, Segurança, TanStack Query (Estado do Servidor), ContactBehavioralTab(), fetchWithFallback()
 
-### Community 145 - "useKeyboardShortcutsEnhanced"
-Cohesion: 0.13
-Nodes (13): [2.0.0] - 2026-04-19 — Excellence Sustained (40/40), Arquivos-chave criados/modificados na Rodada H, Rodada H — Acessibilidade WCAG AA, DX & Polimento (5 itens), Rodadas A-G — entregas anteriores, ADR-011 — Rodada H: Acessibilidade WCAG AA, DX e Polimento Final, Consequências, Contexto, Decisão (+5 more)
+### Community 145 - "useKeyboardShortcutsEnhanced.ts"
+Cohesion: 0.09
+Nodes (18): [2.0.0] - 2026-04-19 — Excellence Sustained (40/40), Arquivos-chave criados/modificados na Rodada H, Rodada H — Acessibilidade WCAG AA, DX & Polimento (5 itens), Rodadas A-G — entregas anteriores, ADR-011 — Rodada H: Acessibilidade WCAG AA, DX e Polimento Final, Consequências, Contexto, Decisão (+10 more)
 
-### Community 146 - "IncomingWebhookCard.tsx"
-Cohesion: 0.13
-Nodes (15): [2.4.0] - 2026-04-20 — Rodada L: Connections Governance (60/60), Added, SLO, Constantes, Entregas (60/60), SLO, IncomingWebhookCard(), Props (+7 more)
+### Community 146 - "20260110000000_baseline_tabelas_base.sql"
+Cohesion: 0.06
+Nodes (52): company_emails_company_id_lower_email_unique, idx_activity_feed_user_id, idx_automations_created_by, idx_company_cnaes_cnae, idx_company_cnaes_company, idx_company_emails_company_id, idx_company_emails_email_lower, idx_company_stakeholder_map_access_via_contact_id (+44 more)
 
 ### Community 147 - "20260417005023_6d2d8ea7-c2c8-4caa-88d3-9a3cc518bb31.sql"
 Cohesion: 0.14
@@ -2344,35 +3095,35 @@ Nodes (20): public.log_deal_forecast_category_change, idx_deal_forecasts_period,
 
 ### Community 149 - "20260924181919_rodizio_bloco2_motor.sql"
 Cohesion: 0.17
-Nodes (18): public.sales_opportunities, public.fn_carga_atual_closer(), public.fn_proximo_closer(), public.fn_proximo_sdr(), public.fn_segmento_cliente(), public.rodizio_bloquear_cliente(), public.rodizio_closer_rotacionar_cliente(), public.rodizio_expirar_bloqueios() (+10 more)
+Nodes (18): public.fn_carga_atual_closer(), public.fn_proximo_closer(), public.fn_proximo_sdr(), public.fn_segmento_cliente(), public.rodizio_bloquear_cliente(), public.rodizio_closer_rotacionar_cliente(), public.rodizio_expirar_bloqueios(), public.rodizio_sdr_executar() (+10 more)
 
 ### Community 150 - "LuxIntelligencePanel.tsx"
 Cohesion: 0.14
 Nodes (15): CompanyIntelligence(), LuxAudienceData, ContactIntelligence(), LuxProfileData, LuxSocialData, LuxButton(), LuxButtonProps, LuxHistoryTimeline() (+7 more)
 
 ### Community 151 - "usePipeline.ts"
-Cohesion: 0.06
-Nodes (32): 10. Padrões obrigatórios, 11. Estrutura de diretórios, 1. Visão Geral, 2. Stack, 3. Fluxo de dados, 4. Resiliência, 5. Segurança, 7. Rotas críticas (+24 more)
+Cohesion: 0.11
+Nodes (17): LeituraComportamental, montarFatores(), NLPProbabilityFactor, NLPProbabilityResult, useNLPClosingProbability(), PipelineDeal, PipelineDealRow, PipelineSummary (+9 more)
 
 ### Community 152 - "IncomingWebhookFormDialog.tsx"
 Cohesion: 0.12
-Nodes (18): [2.6.0] - 2026-04-20 — Rodada N: Connections AI & Self-Healing (70/70), Added, Notes, ADR-017 — IA nas Conexões e self-healing, Capacidades, Contratos IA, Hooks/Componentes, AnomaliesWidget() (+10 more)
+Nodes (17): Added, Constantes, Entregas (60/60), SLO, MCP Server v1.2.0, Schema Discovery, Tabelas/colunas novas, Webhook Templates (+9 more)
 
-### Community 153 - "Riscos residuais"
-Cohesion: 0.10
-Nodes (18): Falsos positivos encontrados (o que **NÃƒO** pode ser apagado), MÃ©todo (os 10 testes), Placar: 5 REFUTADOS / 16 CONFIRMADOS / 6 INCONCLUSIVOS de 27 alvos, Riscos residuais, ðŸ”´ 2. `crm-automation-monitor` â€” produtor exclusivo de widget da home, ðŸ”´ 3. `auto-regen-behavioral-profiles` â€” produtor exclusivo de alerta de admin, ðŸ”´ 4. `process-behavioral-regen-queue` â€” cron monitorado por UI viva, ðŸ”´ 5. Tabela `insights` â€” 5 leitores vivos (+10 more)
+### Community 153 - "TelemetryTable.tsx"
+Cohesion: 0.53
+Nodes (5): formatDuration(), formatTime(), getSeverityBadge(), TelemetryTable(), TelemetryTableProps
 
 ### Community 154 - "canonical-side-effect-contracts.test.tsx"
-Cohesion: 0.04
-Nodes (48): Troubleshooting, CampaignDetailDrawer(), mocks, configuration, mocks, applyBehavioralFilters(), BehavioralProfileListItem, BehavioralProfilesFilters (+40 more)
+Cohesion: 0.16
+Nodes (9): configuration, mocks, DbCompany, DbContact, DbInteraction, lifeEventsSchema, normalizeDashboardLifeEvents(), useDashboardMappedData() (+1 more)
 
-### Community 155 - "mgmt-mock.test.mjs"
-Cohesion: 0.09
-Nodes (33): ref_node_net, ARQUIVOS, aplicar(), aplicarReferencia(), bancos, ctx, novoBanco(), opcoes (+25 more)
+### Community 155 - "useInteractionsRpc.ts"
+Cohesion: 0.18
+Nodes (8): ActivityHeatmapData, InteractionHistoryItem, OptimalContactWindow, PendingFollowup, useActivityHeatmap(), useCompleteFollowup(), useCreateContactQuickInteraction(), usePendingFollowups()
 
-### Community 156 - "zod"
-Cohesion: 0.02
-Nodes (75): @hookform/resolvers, zod, emailSchema, ForgotPasswordFormProps, ContactFormTabs(), Props, relationshipStageOptions, roleOptions (+67 more)
+### Community 156 - "dealState.ts"
+Cohesion: 0.25
+Nodes (5): DealStage, dealStageSchema, ForecastConfidenceInput, ForecastConfidenceResult, forecastConfidenceSchema
 
 ### Community 157 - "SentimentChartTooltip.tsx"
 Cohesion: 0.20
@@ -2386,13 +3137,13 @@ Nodes (20): CEPInput, CEPInputProps, CNPJInput, CNPJInputProps, CPFInput, CPFInp
 Cohesion: 0.16
 Nodes (20): idx_trigger_ab_tests_active, idx_trigger_ab_tests_disc, idx_trigger_ab_tests_user_contact, idx_trigger_bundles_scenario, idx_trigger_bundles_system, idx_trigger_channel_effectiveness_trigger_channel, idx_trigger_channel_effectiveness_user_contact, idx_trigger_intensity_history_trigger (+12 more)
 
-### Community 160 - "useBulkRevalidate.ts"
-Cohesion: 0.07
-Nodes (24): Edge function `bulk-revalidate`, Hooks, Restrições, Revalidação em massa, UI, Edge function `validation-queue-worker`, pg_cron, Pipeline automático de validação (+16 more)
+### Community 160 - "Revalidação em massa"
+Cohesion: 0.33
+Nodes (5): Edge function `bulk-revalidate`, Hooks, Restrições, Revalidação em massa, useBulkRevalidate()
 
-### Community 161 - "ref_node_path"
-Cohesion: 0.03
-Nodes (88): ref_node_assert, ref_node_child_process, ref_node_os, ref_node_path, ref_node_test, ref_node_url, ./app/Chrome, AUDIT (+80 more)
+### Community 161 - "ref_node_url"
+Cohesion: 0.07
+Nodes (40): ref_node_process, ref_node_url, AQUI, efemero, padrao, sessao(), alvo(), AQUI (+32 more)
 
 ### Community 162 - "public.contacts"
 Cohesion: 0.13
@@ -2410,25 +3161,21 @@ Nodes (5): AccountPlan, CompanyStatistics, CompanyTimelineEvent, NextBestAction,
 Cohesion: 0.15
 Nodes (18): base64ToUtf8(), base64UrlToBundle(), bundleToBase64Url(), dedupeNameAgainst(), downloadBundleAsFile(), ExportablePreset, findSimilarPresetName(), isFiltersShape() (+10 more)
 
-### Community 166 - "automation.mjs"
-Cohesion: 0.18
-Nodes (39): APPROVED, atomic(), command(), digest(), EVENTS, fail(), json(), nonempty() (+31 more)
+### Community 166 - "InteractionForm.tsx"
+Cohesion: 0.05
+Nodes (41): @hookform/resolvers, react-hook-form, ContactFormTabs(), Props, relationshipStageOptions, roleOptions, sexoOptions, ContactFormData (+33 more)
 
-### Community 167 - "health-aggregate/index.ts"
-Cohesion: 0.18
-Nodes (3): Check, ConnectionsHealth, limiter
-
-### Community 168 - "C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado"
-Cohesion: 0.03
-Nodes (73): ADR-010: Excelência Sustentada — 35/35 Melhorias (Rodadas A–G), Consequências, Contexto, Decisão, Marco, Rodada G — entregues, 6. Observabilidade, 4.10 Componentes de Navegação (+65 more)
+### Community 168 - "Fatia A — Documentos da raiz + memória Lovable (.lovable/plan.md + 98 arquivos de .lovable/memory) + .devin/.windsurf"
+Cohesion: 0.04
+Nodes (47): ADR-010: Excelência Sustentada — 35/35 Melhorias (Rodadas A–G), Consequências, Contexto, Decisão, Marco, Rodada G — entregues, 10. Padrões obrigatórios, 11. Estrutura de diretórios (+39 more)
 
 ### Community 169 - "1. A Missão Global dividida em 30 Etapas"
 Cohesion: 0.11
 Nodes (18): 0. Contexto do Sistema (ground truth medido), 1. A Missão Global dividida em 30 Etapas, 2. Plano de Execução em 50 Etapas, 3. Critérios de Severidade, 4. Artefatos desta Auditoria — ✅ CONCLUÍDOS (fase de descoberta), 5. Status de Execução, Bloco A — Fundações e Verdade Estrutural (1–6), Bloco B — Segurança (7–13) (+10 more)
 
-### Community 170 - "priority-indicator.tsx"
-Cohesion: 0.07
-Nodes (25): 4.12 Componentes UI (shadcn + customizados), DISC_TYPICAL_SCORES, DISCBadge(), DISCBadgeProps, DISCChartProps, DISCSelectorProps, OptimizedAvatar(), calculatePriority() (+17 more)
+### Community 170 - "disc-badge.tsx"
+Cohesion: 0.12
+Nodes (12): 4.12 Componentes UI (shadcn + customizados), DISC_TYPICAL_SCORES, DISCBadge(), DISCBadgeProps, DISCChartProps, DISCSelectorProps, OptimizedAvatar(), RoleBadge() (+4 more)
 
 ### Community 171 - "public.check_behavioral_regen_cron_staleness"
 Cohesion: 0.33
@@ -2439,8 +3186,8 @@ Cohesion: 0.18
 Nodes (14): EmailBuilder(), PALETTE, Props, ButtonBlock, createBlock(), DividerBlock, EmailBlock, EmailBlockAlign (+6 more)
 
 ### Community 173 - "celebrate.ts"
-Cohesion: 0.12
-Nodes (15): Arquitetura, Entregas, Próximas rodadas planejadas, Rodada A — Quick Wins de Product Design (Fev 2026), GlobalDensity, readInitial(), useGlobalDensity(), DocumentWithVT (+7 more)
+Cohesion: 0.13
+Nodes (14): Arquitetura, Entregas, Próximas rodadas planejadas, Rodada A — Quick Wins de Product Design (Fev 2026), GlobalDensity, readInitial(), useGlobalDensity(), useViewTransitions() (+6 more)
 
 ### Community 174 - "20260111130846_783060ff-715f-4433-b3e4-1c0ef5409533.sql"
 Cohesion: 0.18
@@ -2463,12 +3210,12 @@ Cohesion: 0.11
 Nodes (17): Branches, 📬 Canais, Checklist do revisor, 🔍 Code Review, 📝 Convenção de Commits, Exemplos, 🌳 Git Flow — Trunk-Based Development, Guia de Contribuição — SINGU CRM (+9 more)
 
 ### Community 179 - "useEnrichmentExport.ts"
-Cohesion: 0.16
-Nodes (14): [MÉDIO] FE-6. 5 mutations sem invalidação de cache, refineEmail(), RefineParams, RefineResult, useEmailRefine(), ContactRow, csvEscape(), downloadBlob() (+6 more)
+Cohesion: 0.27
+Nodes (9): ContactRow, csvEscape(), downloadBlob(), EmailFilter, ExportFilters, ExportRow, PhoneFilter, toCSV() (+1 more)
 
 ### Community 180 - "pushNotifications.ts"
 Cohesion: 0.07
-Nodes (32): 1. Os números de capa estavam errados, 2.1 Achado invertido — o mais grave desta validação, 2.2 Outras quatro refutações, 2.3 Seis inconclusivos — não apagar sem checar runtime, 2. A classificação de código morto é a menos confiável, 3. Lacuna de escopo: a camada PWA nunca foi auditada, 4-bis. R5 remedido pelo autor, e um achado novo que quase inverteu R1, 4. Números que eu publiquei sem ter medido (+24 more)
+Nodes (33): 1. Os números de capa estavam errados, 2.1 Achado invertido — o mais grave desta validação, 2.2 Outras quatro refutações, 2.3 Seis inconclusivos — não apagar sem checar runtime, 2. A classificação de código morto é a menos confiável, 3. Lacuna de escopo: a camada PWA nunca foi auditada, 4-bis. R5 remedido pelo autor, e um achado novo que quase inverteu R1, 4. Números que eu publiquei sem ter medido (+25 more)
 
 ### Community 181 - "🎨 ANÁLISE DE PRODUCT DESIGN STRATEGY - RelateIQ CRM"
 Cohesion: 0.11
@@ -2479,32 +3226,32 @@ Cohesion: 0.11
 Nodes (17): Analytics.tsx - Recharts forwardRef Issue, 🏗️ Arquitetura Validada, Componentes Não Utilizados, ✨ Conclusão, ✅ Correções Anteriores (v7.0), ✅ Correções v6.0, Erros de Runtime Corrigidos, Estrutura de Pastas ✅ (+9 more)
 
 ### Community 183 - "PWAComponents.tsx"
-Cohesion: 0.18
-Nodes (13): PWA, 7. src/components/pwa/PWAComponents.tsx - Navigator Connection API, BeforeInstallPromptEvent, InstallPrompt, Navigator, NetworkInformation, NetworkStatusBadge, OfflineIndicator() (+5 more)
+Cohesion: 0.22
+Nodes (11): PWA, 7. src/components/pwa/PWAComponents.tsx - Navigator Connection API, InstallPrompt, NetworkInformation, NetworkStatusBadge, OfflineIndicator(), AppSplashScreen(), IOSInstallInstructions() (+3 more)
 
 ### Community 184 - "useTouchpointSequences.ts"
-Cohesion: 0.22
-Nodes (10): dealOutcome(), normalizeChannel(), RawDeal, RawInteraction, SEQ_CHANNEL_LABELS, SEQ_CHANNELS, SeqChannel, SequenceStat (+2 more)
+Cohesion: 0.12
+Nodes (14): CHANNEL_ICONS, Length, LENGTHS, TouchpointSequenceCard(), dealOutcome(), normalizeChannel(), RawDeal, RawInteraction (+6 more)
 
-### Community 185 - ".metadata"
-Cohesion: 0.11
-Nodes (18): 📋 Tabela: `ai_chat_messages`, 📋 Tabela: `life_events`, 📋 Tabela: `offer_suggestions`, 📋 Tabela: `score_history`, 📋 Tabela: `search_products_cache`, 📋 Tabela: `sequence_events`, 📋 Tabela: `social_life_events`, 📋 Tabela: `suggested_life_events` (+10 more)
+### Community 185 - "Ficha360FilterPanel.tsx"
+Cohesion: 0.13
+Nodes (13): ChannelDef, CHANNELS, ContagemPorTipoBar(), Props, Ficha360FilterPanelProps, CHANNEL_META, FiltrosAtivosChips, PERIOD_LABEL (+5 more)
 
 ### Community 186 - "ObjectionExamplesModal.tsx"
 Cohesion: 0.17
 Nodes (18): bucketOf(), buildHighlightRegex(), ContactSummary, Example, extractObjectionTerms(), normalizeText(), ObjectionExamplesModal, ObjectionExamplesModalImpl() (+10 more)
 
 ### Community 187 - "ObjectionsSpotlight.tsx"
-Cohesion: 0.15
-Nodes (13): getSeverity(), ObjectionCard, ObjectionCardProps, ObjectionsSpotlight, objectionStorageKey(), PERIOD_TO_DAYS, Props, Severity (+5 more)
+Cohesion: 0.19
+Nodes (11): getSeverity(), ObjectionCard, ObjectionCardProps, objectionStorageKey(), PERIOD_TO_DAYS, Props, Severity, SEVERITY_STYLES (+3 more)
 
 ### Community 188 - "useLeadScore.ts"
-Cohesion: 0.16
-Nodes (16): calculateEngagement(), calculateFit(), calculateIntent(), calculateRelationship(), computeLeadScore(), ContactData, getGrade(), GRADE_CONFIG (+8 more)
+Cohesion: 0.15
+Nodes (17): calculateEngagement(), calculateFit(), calculateIntent(), calculateRelationship(), computeLeadScore(), ContactData, getGrade(), GRADE_CONFIG (+9 more)
 
-### Community 189 - "circuitBreaker.ts"
-Cohesion: 0.13
-Nodes (11): ADR-003 — Circuit Breaker, status(), CircuitBreaker, CircuitBreakerOptions, CircuitOpenError, CircuitState, getCircuitBreaker(), registry (+3 more)
+### Community 189 - "supplier_scores"
+Cohesion: 0.05
+Nodes (41): idx_supplier_scores_score_geral, idx_supplier_scores_segment, idx_supplier_scores_trend, suppliers, update_updated_at_column, supplier_qualification_config, supplier_scores, trg_supplier_qualification_config_updated_at (+33 more)
 
 ### Community 190 - "contact-utils.ts"
 Cohesion: 0.18
@@ -2514,9 +3261,9 @@ Nodes (17): ContactInput, DEFAULT_VAK_PROFILE, ExtendedBehavior, getCareerStage(
 Cohesion: 0.15
 Nodes (16): aggregate(), AggregationFn, applyFilters(), ENTITIES, EntityDef, EntityKey, exportToCsv(), FieldType (+8 more)
 
-### Community 192 - "replay.ts"
-Cohesion: 0.08
-Nodes (31): 12. `docs/COMPLETE_SYSTEM_ANALYSIS.md` (95 referências a arquivos/hooks + 8 alegações funcionais), Top 10 lacunas de maior impacto, Agrupador, aplicar(), ColV2, converter(), deColunas(), deListas() (+23 more)
+### Community 192 - "snapshot.py"
+Cohesion: 0.11
+Nodes (48): Connection, decimal, fcntl, hashlib, psycopg, psycopg_rows, excluded_sql(), get_columns() (+40 more)
 
 ### Community 193 - "20260416233829_14fcc07a-6773-4d98-aada-f86fa6a13e98.sql"
 Cohesion: 0.16
@@ -2535,15 +3282,15 @@ Cohesion: 0.12
 Nodes (16): 1. PR #3 Closed, 2. Edge Functions Hardened (2/45), 3. Database Audit Results, Auth Config (Dashboard → Auth → Providers → Email), ✅ Completed This Session, 🔴 Critical Finding: 7 Policies Still Allow Anonymous Access, Date: 2026-04-11, Edge Function Secrets (Dashboard → Edge Functions → Secrets) (+8 more)
 
 ### Community 197 - "companies"
-Cohesion: 0.08
-Nodes (23): document_templates, pipelines, pipeline_stages, public.ai_tone_preferences, public.call_logs, public.contacts, public.cs_accounts, public.deals (+15 more)
+Cohesion: 0.04
+Nodes (48): document_templates, public.ai_tone_preferences, public.call_logs, public.contacts, public.cs_accounts, public.document_signatures, public.intent_signals, public.interactions (+40 more)
 
 ### Community 198 - "useEnrichmentSuite.ts"
 Cohesion: 0.17
 Nodes (8): Restrições, EmailVerificationRow, EmailVerifyResult, PhoneValidateResult, PhoneValidationRow, useEmailFinder(), useEmailFinderResults(), useEmailVerifier()
 
 ### Community 199 - "rpcPlanDiff.ts"
-Cohesion: 0.17
+Cohesion: 0.20
 Nodes (12): RpcPlanSnapshotsCard(), asRecord(), diffPlans(), flattenPlan(), hasScanRegression(), numberOrNull(), PlanDiffRow, PlanNode (+4 more)
 
 ### Community 200 - "AriaLiveRegion.tsx"
@@ -2563,12 +3310,12 @@ Cohesion: 0.07
 Nodes (21): cmdk, @radix-ui/react-dialog, Command, CommandDialog, CommandDialogProps, CommandEmpty, CommandGroup, CommandInput (+13 more)
 
 ### Community 204 - "CompanyProfileCard.tsx"
-Cohesion: 0.19
-Nodes (10): Company, CompanyProfileCard(), CompanyProfileCardProps, formatPhone(), HealthStatus, platformIcon, safeInitial(), BusinessInfoCard() (+2 more)
+Cohesion: 0.14
+Nodes (14): Company, CompanyProfileCard(), CompanyProfileCardProps, formatPhone(), HealthStatus, platformIcon, safeInitial(), BusinessInfoCard() (+6 more)
 
-### Community 205 - "DailyBriefingCard.tsx"
-Cohesion: 0.12
-Nodes (20): Contact, DailyBriefingCard(), getGreeting(), Interaction, isToday(), isYesterday(), Props, todayKey() (+12 more)
+### Community 205 - "PortfolioContactCard.tsx"
+Cohesion: 0.22
+Nodes (11): PortfolioContactCard(), PortfolioContactCardProps, PortfolioStatsOverview(), PortfolioStatsOverviewProps, ContactWithCompatibility, DISC_COMPATIBILITY, LEVEL_CONFIG, PortfolioStats (+3 more)
 
 ### Community 206 - "carnegieCriticismEmpathy.test.ts"
 Cohesion: 0.21
@@ -2578,9 +3325,9 @@ Nodes (14): calculateCriticismScore(), CRITICAL_PATTERNS, CRITICISM_PRINCIPLES, 
 Cohesion: 0.20
 Nodes (12): calculateEncouragementScore(), CONFIDENCE_BOOSTERS, detectDiscouragement(), DISCOURAGEMENT_PATTERNS, ENCOURAGEMENT_TEMPLATES, generateEncouragementScript(), getEncouragementForContext(), MINIMIZATION_PHRASES (+4 more)
 
-### Community 208 - "gerar-rotas.mjs"
-Cohesion: 0.10
-Nodes (33): constantesDeString(), extrairChamadas(), semLiteraisDeString(), ehTeste(), gerarEdgeTabela(), listarTs(), main(), RAIZ_PADRAO (+25 more)
+### Community 208 - "mgmt-mock.test.mjs"
+Cohesion: 0.09
+Nodes (31): ref_node_net, aplicar(), bancos, ctx, novoBanco(), opcoes, tmp, aplicar() (+23 more)
 
 ### Community 209 - "useStakeholderAnalysis.ts"
 Cohesion: 0.19
@@ -2595,12 +3342,12 @@ Cohesion: 0.12
 Nodes (16): audit_trigger_fn, abm_accounts_audit, abm_plans_audit, audit_battle_cards, audit_companies, audit_contacts, audit_intent_signals, audit_interactions (+8 more)
 
 ### Community 212 - "keyboardShortcutRegistry.ts"
-Cohesion: 0.17
-Nodes (12): [2.1.0] - 2026-04-20 — Rodada I: Polimento Final (45/45), Added, Changed, Security, 2. Shortcut registry público, Edge Function, listeners, notify() (+4 more)
+Cohesion: 0.11
+Nodes (18): [2.1.0] - 2026-04-20 — Rodada I: Polimento Final (45/45), Added, Changed, Security, 2. Shortcut registry público, Coexistência, Edge Function, Hooks `src/hooks/useScoreAutomations.ts` (+10 more)
 
-### Community 213 - "sql-raiz.test.mjs"
-Cohesion: 0.10
-Nodes (30): AQUI, efemero, padrao, sessao(), alvo(), AQUI, CATALOGO, check() (+22 more)
+### Community 213 - "automation.mjs"
+Cohesion: 0.18
+Nodes (39): APPROVED, atomic(), command(), digest(), EVENTS, fail(), json(), nonempty() (+31 more)
 
 ### Community 214 - "smoke-tests_test.ts"
 Cohesion: 0.29
@@ -2611,8 +3358,8 @@ Cohesion: 0.23
 Nodes (14): src/types/behavior.ts - CRIADO, BehaviorJson, getBehavior(), getDISCProfile(), getVAKConfidence(), getVAKPrimary(), getVAKSecondary(), isBehaviorJson() (+6 more)
 
 ### Community 216 - "Teste manual: Sincronização URL → UI dos filtros da Ficha 360"
-Cohesion: 0.12
-Nodes (16): 1. Pré-requisitos, 2. Roteiro principal (caminho feliz), 4.1 Período inválido, 4.2 Canais vazios, 4.3 Case misto, 4.4 Canal desconhecido, 4. Casos de borda, 5. Checklist de aprovação (+8 more)
+Cohesion: 0.18
+Nodes (11): 1. Pré-requisitos, 2. Roteiro principal (caminho feliz), 5. Checklist de aprovação, 6. Como reportar falha, Passo 1 — Acessar o deep link, Passo 2 — Validar seletor de período (`FiltrosInteracoesBar`), Passo 3 — Validar seletor de canais (`FiltrosInteracoesBar`), Passo 4 — Validar chips de filtros ativos (`FiltrosAtivosChips`) (+3 more)
 
 ### Community 217 - "RPCs Disponíveis (Banco Externo)"
 Cohesion: 0.22
@@ -2620,7 +3367,7 @@ Nodes (9): Analytics & Reports, Contatos, Dashboard & KPIs, Empresas, Metas & Ga
 
 ### Community 218 - "useChannelPerformanceMatrix.ts"
 Cohesion: 0.12
-Nodes (17): CHANNEL_ICONS, ChannelPerformanceMatrixCard(), intensityClass(), Channel, CHANNEL_LABELS, CHANNELS, MatrixCell, MatrixResult (+9 more)
+Nodes (16): ChannelPerformanceMatrixCard(), intensityClass(), Channel, CHANNEL_LABELS, CHANNELS, MatrixCell, MatrixResult, normalizeChannel() (+8 more)
 
 ### Community 219 - "20260417004129_55991427-8b13-48b9-a9ac-702dec46887e.sql"
 Cohesion: 0.17
@@ -2630,13 +3377,13 @@ Nodes (14): public.sequence_event_to_intent_signal, idx_lsta_user_active, idx_ls
 Cohesion: 0.21
 Nodes (15): @elevenlabs/react, SCRIBE_CONNECT_OPTIONS, useVoiceAgent(), logVoiceCommand(), processVoiceTranscript(), VALID_ACTIONS, validateAction(), friendlyErrorMessage() (+7 more)
 
-### Community 221 - "ContactDetailHeader.tsx"
-Cohesion: 0.07
-Nodes (26): ContactCommercialTab(), ContactDataTab(), ContactDetailHeader(), DISC_COLORS, Props, ROLE_CONFIG, STAGE_CONFIG, contact (+18 more)
+### Community 221 - "supplier_homologations"
+Cohesion: 0.05
+Nodes (40): idx_supplier_homologations_avaliador, idx_supplier_homologations_status, idx_supplier_homologations_supplier, idx_supplier_homologations_validade, suppliers, update_updated_at_column, users, supplier_homologations (+32 more)
 
-### Community 222 - "gerar-banco.mjs"
-Cohesion: 0.09
-Nodes (32): AQUI, CAMPO_TODO, chamarApi(), compararEdges(), conferirOrigem(), contarUsoNoCodigo(), edgesExternasCatalogadas(), edgesNoRepo() (+24 more)
+### Community 222 - "NavigationPatterns.tsx"
+Cohesion: 0.12
+Nodes (8): AnimatedTabsProps, BreadcrumbDisplayItem, BreadcrumbItem, EllipsisItem, LiveRegionProps, MotionWrapperProps, SmartBreadcrumbsProps, TabItem
 
 ### Community 223 - "carnegieIdentityOwnership.test.ts"
 Cohesion: 0.21
@@ -2647,16 +3394,16 @@ Cohesion: 0.18
 Nodes (15): CompanyAddress, CompanyCnae, CompanyEmail, CompanyPhone, CompanyRfmScore, CompanySocialMedia, CompanyStakeholder, useCompanyAddresses() (+7 more)
 
 ### Community 225 - "usePreContactBriefing.ts"
-Cohesion: 0.17
-Nodes (15): analyzeEmotionalState(), analyzeVAK(), BriefingInteraction, Company, Contact, DISCProfileData, EmotionalProfile, generateOpeningTips() (+7 more)
+Cohesion: 0.13
+Nodes (18): 3.6 Hooks de Comunicação, useBehaviorAlerts(), useContactCadence(), analyzeEmotionalState(), analyzeVAK(), BriefingInteraction, Company, Contact (+10 more)
 
 ### Community 226 - "useStakeholderSimulator.ts"
 Cohesion: 0.22
 Nodes (15): StakeholderMetrics, applyChangesToStakeholders(), calculateEffort(), calculatePowerBalance(), calculateRiskScore(), calculateSuccessProbability(), estimateTime(), generateImprovements() (+7 more)
 
 ### Community 227 - "PessoaForm.tsx"
-Cohesion: 0.10
-Nodes (18): Cadastro(), EmpresaForm(), empty, FormValues, Props, schema, EntityPicker(), EntityPickerProps (+10 more)
+Cohesion: 0.06
+Nodes (34): 11. Nove páginas do escopo renderizam sem `AppLayout`, Cadastro(), EmpresaForm(), empty, FormValues, Props, schema, EntityPicker() (+26 more)
 
 ### Community 228 - "Insights.tsx"
 Cohesion: 0.13
@@ -2679,8 +3426,8 @@ Cohesion: 0.13
 Nodes (15): 1.10 Network (Network.tsx), 1.11 Configurações (Configuracoes.tsx), 1.12 Notificações (Notificacoes.tsx), 1.13 Auth (Auth.tsx), 1.14 Onboarding (Onboarding.tsx), 1.1 Dashboard (Index.tsx), 1.2 Contatos (Contatos.tsx), 1.3 Detalhe do Contato (ContatoDetalhe.tsx) (+7 more)
 
 ### Community 233 - "ContextualHelp.tsx"
-Cohesion: 0.12
-Nodes (11): Placeholders e "em breve", checkForNotifications(), ContextualHelp(), ContextualHelpProps, FeatureHighlight(), InlineHelp(), sizeClasses, ContextualHelpTooltip() (+3 more)
+Cohesion: 0.15
+Nodes (8): Placeholders e "em breve", checkForNotifications(), ContextualHelp(), ContextualHelpProps, FeatureHighlight(), InlineHelp(), sizeClasses, ContextualHelpTooltip()
 
 ### Community 234 - "analyticsData.ts"
 Cohesion: 0.10
@@ -2688,7 +3435,7 @@ Nodes (18): AtividadeDiaSemana, calcChange(), DIA_CURTO, EixoEngajamento, Engaja
 
 ### Community 235 - "Verificação adversarial — Marketing e Automação"
 Cohesion: 0.11
-Nodes (17): B2 — "Não existe motor de automação: nenhum trigger, EF ou cron consome `automation_rules`", B4 — "`send-transactional-email` é invocada mas não existe entre as 109 Edge Functions", B5 — "`enrollContact` (`useSequences.ts:167-190`) é código morto: nenhum .tsx chama", B7 — "Métricas hardcoded em `MarketingHub.tsx:254,258,262` (CPL/CAC/LTV)", Correções que devem entrar no `ESTADO_ATUAL.md`, Evidência, Evidência — nenhum consumidor de `automation_rules`, Evidência (`src/pages/MarketingHub.tsx:244-265`) (+9 more)
+Nodes (17): Achado 1 — a contagem publicada não bate com a tabela que ela resume, Achado 2 — duas linhas classificadas de forma errada ou injusta, Achado 3 — o terceiro "achado que domina o módulo" está errado, B1 — "Marketing/Automação é a dimensão mais frágil: apenas 6 de 38 funcionalidades ✅ (16%)", B2 — "Não existe motor de automação: nenhum trigger, EF ou cron consome `automation_rules`", B4 — "`send-transactional-email` é invocada mas não existe entre as 109 Edge Functions", B7 — "Métricas hardcoded em `MarketingHub.tsx:254,258,262` (CPL/CAC/LTV)", Evidência (+9 more)
 
 ### Community 236 - "📊 CATÁLOGO DE FUNÇÕES (400 total)"
 Cohesion: 0.13
@@ -2699,8 +3446,8 @@ Cohesion: 0.13
 Nodes (15): 1. Aplicar DDL parcial no destino, 2. Exportar da origem, 3. Importar no destino, 4. Ligar RLS, policies, triggers, views, 5. Validar, Checklist final, Estratégia big-bang, Execução — passo a passo (+7 more)
 
 ### Community 238 - "Migração de Storage — Runbook (Supabase → Supabase)"
-Cohesion: 0.13
-Nodes (15): Checklist de cutover, Como o `copy-objects` opera, Escopo, Estimativa, Execução completa, Flags úteis, Fora do escopo, Migração de Storage — Runbook (Supabase → Supabase) (+7 more)
+Cohesion: 0.12
+Nodes (17): Checklist de cutover, Como o `copy-objects` opera, Escopo, Estimativa, Execução completa, Flags úteis, Fora do escopo, Migração de Storage — Runbook (Supabase → Supabase) (+9 more)
 
 ### Community 239 - "SINGU CRM — Guia de Onboarding para Desenvolvedores"
 Cohesion: 0.13
@@ -2708,19 +3455,19 @@ Nodes (14): 1. `src/lib/externalData.ts`, 2. `src/hooks/voice/useTranscriptProce
 
 ### Community 240 - "20260721000077_fix_secdef_remaining_guards.sql"
 Cohesion: 0.14
-Nodes (3): nps_surveys, public.resolve_alerts_batch(), public.upsert_company()
+Nodes (3): public.resolve_alerts_batch(), public.upsert_company(), nps_surveys
 
 ### Community 241 - "public.get_contact_sidebar_by_phone"
 Cohesion: 0.13
 Nodes (14): public.get_contact_sidebar_by_phone(), public.companies, public.contact_behavior, public.contact_business_context, public.contact_decision_making, public.contact_emails, public.contact_influence, public.contact_metaprograms (+6 more)
 
-### Community 242 - "interactions"
-Cohesion: 0.12
-Nodes (18): public.cognitive_bias_history, public.conversation_analyses, public.disc_analysis_history, public.disc_communication_logs, public.emotional_states_history, public.eq_analysis_history, public.hidden_objections, public.meeting_summaries (+10 more)
+### Community 242 - "20260721223121_wave173_idx_and_final_isnull_fix.sql"
+Cohesion: 0.04
+Nodes (46): public.interaction_templates, idx_activity_feed_user_id, idx_cadence_enrollments_user_id, idx_commissions_user_id, idx_company_cadences_user_id, idx_company_stakeholder_map_user_id, idx_interaction_templates_user_id, idx_query_telemetry_user_id (+38 more)
 
-### Community 243 - "harness.sh"
-Cohesion: 0.09
-Nodes (19): as_pg(), eph(), eph_mkdb(), fail(), FAKE_LOG, falsy(), finish(), has() (+11 more)
+### Community 243 - "gerar-banco.mjs"
+Cohesion: 0.07
+Nodes (40): AQUI, CAMPO_TODO, chamarApi(), compararEdges(), conferirOrigem(), contarUsoNoCodigo(), edgesExternasCatalogadas(), edgesNoRepo() (+32 more)
 
 ### Community 244 - "PreContactBriefing.tsx"
 Cohesion: 0.19
@@ -2751,8 +3498,8 @@ Cohesion: 0.23
 Nodes (12): ACTIVE_THEME_STORAGE_KEY, applyThemeToDocument(), bootstrapTheme(), getStoredTheme(), isThemeValue(), resolveTheme(), Theme, initialState (+4 more)
 
 ### Community 251 - "canonical-mutation-contracts.test.tsx"
-Cohesion: 0.13
-Nodes (13): Lacunas graves e tarefas concretas, mocks, useExportCompaniesCsv(), useMergeCompanies(), companyOverridesSchema, contactOverridesSchema, MergeArgs, MergeEntity (+5 more)
+Cohesion: 0.09
+Nodes (19): Atualização local de E-R03 — 28/10/2026, Base e limites, Contratos frontend/backend, Contratos — reconciliação E + B1, Lacunas graves e tarefas concretas, Matriz B1 — 117 IDs, Matriz E — 101 IDs, Pendências não verificadas (+11 more)
 
 ### Community 252 - "use-toast.ts"
 Cohesion: 0.19
@@ -2774,41 +3521,41 @@ Nodes (14): idx_communication_preferences_contact, idx_contact_time_analysis_con
 Cohesion: 0.14
 Nodes (8): public.compute_revops_kpis(), public.enroll_contact_in_workflow(), public.move_deal_atomic(), public.contacts, public.deals, public.lead_scores, public.mql_classifications, public.mql_criteria
 
-### Community 258 - ".write"
-Cohesion: 0.14
-Nodes (9): CliRobustnessTests, DoBlockTests, HostileSqlTests, PolicyLifecycleTests, CompletedProcess, Path, skipUnless, RepoCase (+1 more)
+### Community 258 - ".metadata"
+Cohesion: 0.11
+Nodes (18): 📋 Tabela: `ai_chat_messages`, 📋 Tabela: `life_events`, 📋 Tabela: `offer_suggestions`, 📋 Tabela: `score_history`, 📋 Tabela: `search_products_cache`, 📋 Tabela: `sequence_events`, 📋 Tabela: `social_life_events`, 📋 Tabela: `suggested_life_events` (+10 more)
 
 ### Community 259 - "useNLPAutoAnalysis.ts"
-Cohesion: 0.23
-Nodes (12): 3.2 Hooks de Análise Comportamental, zerado, Interaction, useEmotionalStates(), useFicha360NLP(), confiancaDosMetaprogramas(), direcaoEConfianca(), useMetaprogramAnalysis() (+4 more)
+Cohesion: 0.13
+Nodes (22): 3.2 Hooks de Análise Comportamental, Dados sem produtor ou sem consumidor, zerado, forcaPorEvidencia(), generateProfileSummary(), getClosingStrategy(), getDecisionMakingStyle(), getObjectionHandling() (+14 more)
 
 ### Community 260 - "Estratégia de Backup e Disaster Recovery"
 Cohesion: 0.14
 Nodes (13): 1. Snapshots automáticos do Supabase (nativo), 2. pg_dump agendado (defesa em profundidade), 3. Storage cross-region, 4. Secrets, Camadas de proteção, Cenário A — Corrupção lógica (DROP acidental), Cenário B — Perda de região, Cenário C — Ransomware / comprometimento (+5 more)
 
 ### Community 261 - "Estado — Infraestrutura, CI, Testes e Documentação"
-Cohesion: 0.09
-Nodes (22): `ci.yml` — job único `build-and-test`, Declaração explícita, Doc afirma × eu medi, Docs obsoletos ou duplicados, Dois pipelines concorrendo pelo mesmo alvo?, Estado — Infraestrutura, CI, Testes e Documentação, Estão conectados a algo real? **Não.**, Existe pipeline de DEPLOY? (+14 more)
+Cohesion: 0.20
+Nodes (9): Declaração explícita, Doc afirma × eu medi, Docs obsoletos ou duplicados, Estado — Infraestrutura, CI, Testes e Documentação, Itens marcados `NAO_VERIFICADO` e o motivo, Lacunas: o que NÃO verifiquei e por quê, Limites metodológicos assumidos, Resumo (contagem por classificação com denominador) (+1 more)
 
-### Community 262 - "B1 — "Marketing/Automação é a dimensão mais frágil: apenas 6 de 38 funcionalidades ✅ (16%)""
-Cohesion: 0.33
-Nodes (6): Achado 1 — a contagem publicada não bate com a tabela que ela resume, Achado 2 — duas linhas classificadas de forma errada ou injusta, Achado 3 — o terceiro "achado que domina o módulo" está errado, B1 — "Marketing/Automação é a dimensão mais frágil: apenas 6 de 38 funcionalidades ✅ (16%)", O que fiz para derrubar, Observação de método
+### Community 262 - "20260321133834_create_singu_tables_batch3_of_3.sql"
+Cohesion: 0.08
+Nodes (44): idx_contact_relatives_contact_id, idx_contact_relatives_user_id, idx_trigger_ab_tests_active, idx_trigger_ab_tests_disc, idx_trigger_ab_tests_user_contact, idx_trigger_channel_effectiveness_trigger_channel, idx_trigger_channel_effectiveness_user_contact, idx_trigger_intensity_history_trigger (+36 more)
 
-### Community 263 - "🔴 Oportunidades Críticas"
-Cohesion: 0.22
-Nodes (9): 3.1 Loading States Inconsistentes, 3.2 Falta de Feedback Tátil (Haptic), 3.3 Progress Indicators Ausentes, 3.4 Transições de Página Uniformes mas Simples, 3.5 Empty States Sem Call-to-Action Contextual, 🔴 Oportunidades Críticas, 🟠 Oportunidades Importantes, 🎭 PILAR 3: MICROINTERAÇÕES & FEEDBACK (+1 more)
+### Community 263 - "useHapticFeedback.ts"
+Cohesion: 0.12
+Nodes (16): FUNCIONALIDADES_SISTEMA.md, 11. `docs/PRODUCT_DESIGN_STRATEGY_ANALYSIS_V6.md` (76 itens: 66 numerados + 9 subproblemas do pilar 12 + métricas), 3.1 Loading States Inconsistentes, 3.2 Falta de Feedback Tátil (Haptic), 3.3 Progress Indicators Ausentes, 3.4 Transições de Página Uniformes mas Simples, 3.5 Empty States Sem Call-to-Action Contextual, 🔴 Oportunidades Críticas (+8 more)
 
 ### Community 264 - "📊 Resumo Executivo - v19.0"
 Cohesion: 0.14
 Nodes (14): 1. Padronização de Export Style, 1. Tipagem Segura em catch blocks, 2. Props com any → Tipos Explícitos, 2. Remoção de Imports Desnecessários, ✅ Correções v13, ✅ Correções v15, ✅ Correções v16, ✅ Correções v19 (+6 more)
 
-### Community 265 - "OnboardingTour.tsx"
-Cohesion: 0.36
-Nodes (6): DEFAULT_TOUR_STEPS, OnboardingTour(), OnboardingTourProps, TourStep, useOnboardingTour(), OnboardingTourWrapper()
+### Community 265 - "OnboardingTourWrapper.tsx"
+Cohesion: 0.33
+Nodes (6): 21.1 AppLayout, 21.2 Engajamento & Retenção, 21. 🎨 Layout & UX, OnboardingTour(), useOnboardingTour(), OnboardingTourWrapper()
 
 ### Community 266 - "20260721000071_fix_secdef_crlf_unguarded.sql"
 Cohesion: 0.14
-Nodes (8): inactivity_alerts, notifications, smart_reminders, public.create_notification(), public.log_activity(), pg_language, pg_namespace, pg_proc
+Nodes (8): public.create_notification(), public.log_activity(), inactivity_alerts, notifications, pg_language, pg_namespace, pg_proc, smart_reminders
 
 ### Community 267 - "useIncomingWebhooks.ts"
 Cohesion: 0.16
@@ -2818,13 +3565,13 @@ Nodes (12): Hooks, ConnectionConfig, ConnectionTestLog, ConnectionType, useConne
 Cohesion: 0.19
 Nodes (10): formatDate(), UptimeSparkline(), UptimeSparklineProps, AccessibleChart(), AccessibleChartProps, ChartDataRow, ActiveErrorBudgetAlert, DailyUptimePoint (+2 more)
 
-### Community 269 - ".source"
-Cohesion: 0.14
-Nodes (13): 📋 Tabela: `attribution_touchpoints`, 📋 Tabela: `crm_consent_audit_logs`, 📋 Tabela: `cs_health_signals`, 📋 Tabela: `insights`, 📋 Tabela: `people_intelligence_events`, 📋 Tabela: `suggested_rapport_intel`, ContractTests, FailureModeTests (+5 more)
+### Community 269 - "carrier_homologations"
+Cohesion: 0.05
+Nodes (38): carrier_homologations, idx_carrier_homologations_avaliador, idx_carrier_homologations_carrier, idx_carrier_homologations_carrier_created, idx_carrier_homologations_status, idx_carrier_homologations_validade, carriers, users (+30 more)
 
-### Community 270 - "StrategicNextStepsCard.tsx"
-Cohesion: 0.17
-Nodes (10): jspdf, jspdf-autotable, Contact, ContactRecommendationSheet(), StrategicNextStepsCardProps, ExportMeta, formatDuration(), severityLabel() (+2 more)
+### Community 270 - "useTelemetryExport.ts"
+Cohesion: 0.24
+Nodes (8): jspdf, jspdf-autotable, ContactRecommendationSheet(), ExportMeta, formatDuration(), severityLabel(), TelemetryRow, useTelemetryExport()
 
 ### Community 271 - "pool-saturation.js"
 Cohesion: 0.14
@@ -2832,11 +3579,11 @@ Nodes (9): ref_k6, options, QUESTIONS, options, options, errors, HEADERS, option
 
 ### Community 272 - "supabase-mgmt.mjs"
 Cohesion: 0.04
-Nodes (90): definicao, main(), AQUI, SCRIPTS, TAMANHO_DO_LOTE, ARQUIVOS, definicao, main() (+82 more)
+Nodes (92): ARQUIVOS, definicao, main(), AQUI, SCRIPTS, TAMANHO_DO_LOTE, aplicarReferencia(), ARQUIVOS (+84 more)
 
-### Community 273 - "evolution-webhook/index.ts"
-Cohesion: 0.17
-Nodes (25): handleCall(), handleConnectionUpdate(), handleContactsUpsert(), handlePresenceUpdate(), findContactByPhone(), jsonResponse(), resolveInstanceOwner(), SupabaseAdminClient (+17 more)
+### Community 273 - "AccountChurnPredictionPanel.tsx"
+Cohesion: 0.08
+Nodes (40): 4.4 Componentes de Analytics, 1. Dado fictício, 4. `docs/auditoria/06_REAUDITORIA_IMPLEMENTACAO_20261002.md` (pendências e alegações), Handlers falsos / dados fake exibidos como reais, AccountChurnPredictionPanel(), AccountChurnPredictionPanelProps, ApproachRecommendationPanel(), BestTimeToContactPanel() (+32 more)
 
 ### Community 274 - "GlobalCommandBar.tsx"
 Cohesion: 0.25
@@ -2847,28 +3594,28 @@ Cohesion: 0.20
 Nodes (11): Bucket, clamp(), computeConfidence(), deal, mocks, ForecastConfidencePanel(), formatCurrency(), InteractionRow (+3 more)
 
 ### Community 276 - "PresetFiltersDiff.tsx"
-Cohesion: 0.19
-Nodes (8): arraysEqual(), defaultLabel(), DiffRow, FilterMap, normalize(), PresetFiltersDiff, Props, SearchPresetsMenuProps
+Cohesion: 0.24
+Nodes (7): arraysEqual(), defaultLabel(), DiffRow, FilterMap, normalize(), PresetFiltersDiff, Props
 
-### Community 277 - "fixture-schema.sql"
-Cohesion: 0.10
-Nodes (24): public.touch, auth.identities, auth.users, contacts_touch, cron.job, public.audit_log, public.audit_log_2026_01, public.behavioral_profile_regen_queue (+16 more)
+### Community 277 - "discAdvancedData.ts"
+Cohesion: 0.14
+Nodes (9): BlendProfileInfo, CompatibilityInfo, DetectionPattern, DISC_BLEND_PROFILES, DISC_COMPATIBILITY_MATRIX, DISC_DETECTION_PATTERNS, DISC_PROFILES, DISC_STRESS_SHIFTS (+1 more)
 
 ### Community 278 - "useCompanyProfileAnalytics.ts"
 Cohesion: 0.16
 Nodes (13): AnalyticsContact, AnalyticsInteraction, AnalyticsPreference, AnalyticsProfile, CHANNEL_BUCKETS, ChannelStat, CompanyProfileAnalyticsResult, InterestBucket (+5 more)
 
 ### Community 279 - "useFicha360.ts"
-Cohesion: 0.23
+Cohesion: 0.26
 Nodes (8): useContactIntelligence(), useContactView360(), useFicha360(), UseFicha360Options, RapportIntel, useRapportIntel(), RapportPoints, useRapportPoints()
 
-### Community 280 - "useContactDetail.presence.test.tsx"
-Cohesion: 0.08
-Nodes (16): Alert, Company, Contact, ContactDetailData, Insight, Interaction, contact, detail (+8 more)
+### Community 280 - "useStakeholderAlerts.ts"
+Cohesion: 0.33
+Nodes (5): ALERT_TYPES, SEVERITY_LEVELS, StakeholderAlert, StakeholderMetrics, StoredMetrics
 
-### Community 281 - "cenarios.mjs"
-Cohesion: 0.09
-Nodes (17): base(), comp(), fails, GERADOR, JS, KEEP, lazyNs(), PKG() (+9 more)
+### Community 281 - "replay.ts"
+Cohesion: 0.08
+Nodes (31): 12. `docs/COMPLETE_SYSTEM_ANALYSIS.md` (95 referências a arquivos/hooks + 8 alegações funcionais), Top 10 lacunas de maior impacto, Agrupador, aplicar(), ColV2, converter(), deColunas(), deListas() (+23 more)
 
 ### Community 282 - "voice-system-exhaustive.test.ts"
 Cohesion: 0.25
@@ -2887,20 +3634,20 @@ Cohesion: 0.26
 Nodes (13): notifications_user_id_created_at_idx, notifications_user_id_read_idx, public.notifications, public.social_insights, public.tasks, social_insights_contact_id_idx, social_insights_contact_id_platform_idx, social_insights_user_id_idx (+5 more)
 
 ### Community 286 - "Arquitetura do SINGU CRM"
-Cohesion: 0.12
-Nodes (16): 1. Dados Locais (CRUD direto), 2. Dados Externos (via proxy), 3. Análises Automáticas, Arquitetura do SINGU CRM, Decisões de Design e Trade-offs, Diagrama de Arquitetura, Estrutura de Diretórios, Fluxo de Dados (+8 more)
+Cohesion: 0.15
+Nodes (12): 1. Dados Locais (CRUD direto), 2. Dados Externos (via proxy), 3. Análises Automáticas, Arquitetura do SINGU CRM, Decisões de Design e Trade-offs, Diagrama de Arquitetura, Estrutura de Diretórios, Fluxo de Dados (+4 more)
 
-### Community 287 - "PlaybookSectionRenderer.tsx"
-Cohesion: 0.20
-Nodes (10): 🔐 Achados — Segurança, O que está BOM (controles reais e verificados), Resumo de severidade, [BAIXO] TQ-12. `sonarjs/dompurify-unsafe-config` em `src/lib/sanitize.ts`, ICONS, PlaybookSectionRenderer(), sanitizeDocumentHtml(), sanitizeHtml() (+2 more)
+### Community 287 - "sanitize.ts"
+Cohesion: 0.27
+Nodes (8): 🔐 Achados — Segurança, O que está BOM (controles reais e verificados), Resumo de severidade, PlaybookSectionRenderer(), sanitizeDocumentHtml(), sanitizeHtml(), sanitizeText(), sanitizeUrl()
 
 ### Community 288 - "Achados"
-Cohesion: 0.12
-Nodes (15): Achados, 🧪 Achados — Testes, Build, Config, CI & Docs-vs-Realidade, [ALTO] TQ-10. O workflow de CI referencia versões de actions inexistentes → falha no startup (0 jobs), [ALTO] TQ-1. ESLint quebra com 1.306 erros — o gate de qualidade da CI reprovaria, [ALTO] TQ-2. "Zero any" é falso — 108 usos de `any` (regra marcada como `error`), [ALTO] TQ-3. "0 erros TypeScript" com asterisco: o compilador está desligado, [ALTO] TQ-4. Documentação auto-contraditória com números fabricados, [BAIXO] TQ-11. Higiene de dependências: 3 lockfiles e classificação errada (+7 more)
+Cohesion: 0.15
+Nodes (13): Achados, [ALTO] TQ-10. O workflow de CI referencia versões de actions inexistentes → falha no startup (0 jobs), [ALTO] TQ-1. ESLint quebra com 1.306 erros — o gate de qualidade da CI reprovaria, [ALTO] TQ-2. "Zero any" é falso — 108 usos de `any` (regra marcada como `error`), [ALTO] TQ-3. "0 erros TypeScript" com asterisco: o compilador está desligado, [ALTO] TQ-4. Documentação auto-contraditória com números fabricados, [BAIXO] TQ-11. Higiene de dependências: 3 lockfiles e classificação errada, [BAIXO] TQ-12. `sonarjs/dompurify-unsafe-config` em `src/lib/sanitize.ts` (+5 more)
 
 ### Community 289 - "resilientFetch"
-Cohesion: 0.27
-Nodes (8): B6 — "`sequence-processor` tem chamador que não envia `x-cron-secret`, então retorna 401", Evidência — nenhuma camada injeta o header, O que fiz para derrubar, Precisão sobre o status devolvido, DEFAULT_RETRY_STATUSES, resilientFetch(), RetryOptions, sleep()
+Cohesion: 0.18
+Nodes (11): B6 — "`sequence-processor` tem chamador que não envia `x-cron-secret`, então retorna 401", Evidência — nenhuma camada injeta o header, O que fiz para derrubar, Precisão sobre o status devolvido, AUDITORIA_COMPLETA_SISTEMA.md (2026-07-19, plano de remediação em 50 etapas), mocks, useSequenceProcessor(), DEFAULT_RETRY_STATUSES (+3 more)
 
 ### Community 290 - "Migração das Edge Functions — Runbook"
 Cohesion: 0.15
@@ -2910,13 +3657,13 @@ Nodes (13): 1. Pré-requisitos, 2. Preparar `secrets.env`, 3. Ajustar `supabase/
 Cohesion: 0.15
 Nodes (13): 10. Drift de mapping de campos, 11. ElevenLabs 401 (Voice AI down), 12. Evolution API instance offline, 1. Edição concorrente — HTTP 409 `CONCURRENT_EDIT`, 2. Upstream gateway 502/503/504 (Cloudflare no banco externo), 3. Rate limit — HTTP 429, 4. Empresa demora para carregar, 5. Edge Function 401 (+5 more)
 
-### Community 292 - "AdminDashboard.tsx"
-Cohesion: 0.10
-Nodes (14): Edge Functions, Roteamento, Tabelas, UI, AdminLayoutProps, ADMIN_LINKS, AdminMobileNav(), AdminSidebar() (+6 more)
+### Community 292 - "AdminSidebar.tsx"
+Cohesion: 0.22
+Nodes (8): Edge Functions, Roteamento, Tabelas, AdminLayoutProps, ADMIN_LINKS, AdminMobileNav(), AdminSidebar(), AdminDashboard()
 
-### Community 293 - "Fatia H — CI/CD, testes, infra, observabilidade e tooling"
-Cohesion: 0.07
-Nodes (26): Check externo "Supabase Preview" (integração GitHub do Supabase, projeto `pgxfvjmuubtbowutlide`), CI — jobs e gates (prometido × real), `ci.yml` — job único `build-and-test` (gatilho: push/PR em `main`, `ci.yml:3-7`), Deploy (front, edge functions, migrations), DR, Edge Functions — sem pipeline, Env vars (código × `.env.example`), Estado real do CI em `main` (+18 more)
+### Community 293 - "carrier_scores"
+Cohesion: 0.05
+Nodes (35): carrier_qualification_config, carrier_scores, idx_carrier_scores_score_geral, idx_carrier_scores_segment, idx_carrier_scores_trend, carriers, fn_recalcular_carrier_score(), config_regras_negocio (+27 more)
 
 ### Community 294 - "reset-passwords_test.ts"
 Cohesion: 0.14
@@ -2942,9 +3689,9 @@ Nodes (6): formatContactName(), formatPhoneDisplay(), LOWERCASE_WORDS, normalize
 Cohesion: 0.18
 Nodes (8): aggregateByLabel(), ContactsWithMostDownvotes(), InsightFeedbackAnalytics(), Kind, KIND_LABEL, LabelAgg, Row, useFeedbackData()
 
-### Community 300 - "InteracoesContent.tsx"
-Cohesion: 0.15
-Nodes (10): filterConfigs, InsightsPanel, ActivityHeatmapChart, InteracoesContent(), interactionColors, interactionIcons, interactionLabels, normalize() (+2 more)
+### Community 300 - "20260321133652_create_singu_tables_batch1_of_3.sql"
+Cohesion: 0.09
+Nodes (41): idx_client_values_contact, idx_cognitive_bias_history_analyzed_at, idx_cognitive_bias_history_contact_id, idx_cognitive_bias_history_user_id, idx_contact_time_analysis_contact, idx_emotional_states_contact, idx_emotional_states_created, idx_eq_analysis_history_analyzed_at (+33 more)
 
 ### Community 301 - "companyQueries.ts"
 Cohesion: 0.23
@@ -2974,29 +3721,29 @@ Nodes (11): public.vw_singu_data_health, pg_catalog.pg_constraint, pg_catalog.pg
 Cohesion: 0.17
 Nodes (11): 1. Auditoria com mascaramento, 2. Assinatura HMAC SHA-256 + anti-replay, 3. Quotas mensais por webhook, 4. Dry-run e Replay, ADR-015 — Connections Governance, HMAC e Quotas, Consequências, Contexto, Decisão (+3 more)
 
-### Community 308 - "RelationshipKPIsDashboard.tsx"
-Cohesion: 0.13
-Nodes (12): O que está BOM (auditado), ConversationAnalysisCard(), AvgScoreDatum, LiveEvent, ObjectionRow, PieDatum, RelationshipKPIsDashboard(), STAGE_COLORS (+4 more)
+### Community 308 - "O que está BOM (auditado)"
+Cohesion: 0.12
+Nodes (10): 🖥️ Achados — Frontend, O que está BOM (auditado), Prioridade sugerida, Resumo (números medidos vs. doc), ConversationAnalysisCard(), RelationshipKPIsDashboard(), RenewalPipelineList(), DashboardErrorBoundary (+2 more)
 
 ### Community 309 - "Achados"
-Cohesion: 0.12
-Nodes (16): Achados, 🗄️ Achados — Banco de Dados & Migrations, [ALTA] BD-1. `DROP TABLE public.deals CASCADE` sem recriação na mesma migration, [BAIXA] BD-10. Inconsistência de precisão monetária, [BAIXA] BD-8. Índices redundantes candidatos, [BAIXA] BD-9. JSONB sem validação estrutural, [BAIXA-MÉDIA] BD-7. FKs sem `ON DELETE` → deleção bloqueada (NO ACTION), [INFORMATIVO] BD-11. `audit_log` recriada com DROP CASCADE (particionamento) (+8 more)
+Cohesion: 0.10
+Nodes (20): Achados, 🗄️ Achados — Banco de Dados & Migrations, [ALTA] BD-1. `DROP TABLE public.deals CASCADE` sem recriação na mesma migration, [BAIXA] BD-10. Inconsistência de precisão monetária, [BAIXA] BD-8. Índices redundantes candidatos, [BAIXA] BD-9. JSONB sem validação estrutural, [BAIXA-MÉDIA] BD-7. FKs sem `ON DELETE` → deleção bloqueada (NO ACTION), [INFORMATIVO] BD-11. `audit_log` recriada com DROP CASCADE (particionamento) (+12 more)
 
 ### Community 310 - "📊 Análise Exaustiva do Banco de Dados - RelateIQ"
 Cohesion: 0.17
 Nodes (11): 📊 Análise Exaustiva do Banco de Dados - RelateIQ, Changelog, Contagem de Registros, Diagrama ER (Simplificado), Inventário de Tabelas, Resumo Executivo, Status Atual, 📋 Sumário (+3 more)
 
-### Community 311 - "11. Nove páginas do escopo renderizam sem `AppLayout`"
-Cohesion: 0.13
-Nodes (12): 11. Nove páginas do escopo renderizam sem `AppLayout`, Deduplicacao(), ErpViewer(), formatBRL(), ProductsTab(), ProposalsTab(), CHANNELS, DIGESTS (+4 more)
+### Community 311 - "zapp_history.master_dashboard"
+Cohesion: 0.05
+Nodes (42): zapp_history.async_request_log, zapp_history.v_budget_sensitivity, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_company_sizes, zapp_history.v_competitor_alerts, zapp_history.v_complexity_distribution, zapp_history.v_dashboard_atendimento (+34 more)
 
-### Community 312 - "Pipeline.tsx"
-Cohesion: 0.10
-Nodes (17): Lacunas: o que NÃO verifiquei e por quê, Automacoes(), AutomacoesRulesList(), AutomacoesRulesListProps, RuleFormDialog(), RuleFormDialogProps, Ficha360(), NLPAnalytics() (+9 more)
+### Community 312 - "gerar-rotas.mjs"
+Cohesion: 0.11
+Nodes (33): constantesDeString(), extrairChamadas(), semLiteraisDeString(), ehTeste(), gerarEdgeTabela(), listarTs(), main(), RAIZ_PADRAO (+25 more)
 
-### Community 313 - "3. Riscos estruturais, por gravidade"
-Cohesion: 0.08
-Nodes (26): 1. Veredito em uma tela, 2. Contagem honesta, 3. Riscos estruturais, por gravidade, 4. Integrações — estado consolidado, 5. O que está bom, 6. O que esta auditoria NÃO cobriu, 8. Próximos passos, 9. Critério de pronto — autoavaliação honesta (+18 more)
+### Community 313 - "20260722001941_wave178_idx_remaining_unindexed_fks.sql"
+Cohesion: 0.05
+Nodes (40): public.carrier_evaluations, public.carrier_homologations, public.economic_group_members, public.supplier_evaluations, idx_cadence_enrollments_cadence_id, idx_campaign_members_campaign_id, idx_carrier_evaluations_carrier_id, idx_carrier_homologations_carrier_id (+32 more)
 
 ### Community 314 - "Postmortem — Migração Origem para Destino"
 Cohesion: 0.17
@@ -3006,9 +3753,9 @@ Nodes (11): 10. Anexos, 1. Resumo executivo, 2. Timeline (UTC), 3. O que foi bem
 Cohesion: 0.17
 Nodes (12): Arquivos Removidos - Fase 1, Arquivos Removidos - Fase 2, Arquivos Removidos - Fase 3, Componentes Não Utilizados, Componentes Não Utilizados, Correções de Tipagem, ✅ Correções Realizadas (v4.0), Documentação Obsoleta (+4 more)
 
-### Community 316 - "Fatia A — Documentos da raiz + memória Lovable (.lovable/plan.md + 98 arquivos de .lovable/memory) + .devin/.windsurf"
-Cohesion: 0.10
-Nodes (17): audit_report.md (2026-05-14), CHANGELOG.md, CONTRIBUTING.md, .devin/skills/graphify + .windsurf/rules/graphify.md, Fatia A — Documentos da raiz + memória Lovable (.lovable/plan.md + 98 arquivos de .lovable/memory) + .devin/.windsurf, HANDOFF.md, .hermes.md / tmp_view_check.js, Itens NÃO VERIFICADOS (dependem do banco/infra remotos) (+9 more)
+### Community 316 - "zapp_history.master_dashboard"
+Cohesion: 0.05
+Nodes (39): zapp_history.async_request_log, zapp_history.v_budget_sensitivity, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_company_sizes, zapp_history.v_competitor_alerts, zapp_history.v_complexity_distribution, zapp_history.v_dashboard_atendimento (+31 more)
 
 ### Community 317 - "🛡️ Camadas de Proteção"
 Cohesion: 0.17
@@ -3026,9 +3773,9 @@ Nodes (9): public.enqueue_behavioral_profile_regen, public.update_bpr_queue_upda
 Cohesion: 0.13
 Nodes (15): 🤖 Agentes de IA, 🏗️ Arquitetura, 🚀 Como rodar localmente, 🤝 Contribuindo, Credencial dos scripts administrativos, Gate RLS com rollback, 📄 Licença, 🧩 Módulos principais (+7 more)
 
-### Community 321 - "Componentes (`src/components/intel/`)"
-Cohesion: 0.08
-Nodes (17): Componentes (`src/components/intel/`), EntityCard(), EntityCardProps, IntelBadge(), IntelCommandPalette(), IntelCommandPaletteProps, IntelDensityToggle(), IntelErrorState() (+9 more)
+### Community 321 - "zapp_history.master_dashboard"
+Cohesion: 0.05
+Nodes (37): zapp_history.async_request_log, zapp_history.v_budget_sensitivity, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_company_sizes, zapp_history.v_competitor_alerts, zapp_history.v_complexity_distribution, zapp_history.v_dashboard_atendimento (+29 more)
 
 ### Community 322 - "password-migration-reset.tsx"
 Cohesion: 0.17
@@ -3042,9 +3789,9 @@ Nodes (10): papaparse, COMPANY_FIELDS, CONTACT_FIELDS, ImportEntityType, ImportR
 Cohesion: 0.09
 Nodes (40): ref_npm_postgres_3_4_4, avaliar(), Ciclo, cmpLsn(), criarColetor(), curto(), desvio(), Estado (+32 more)
 
-### Community 325 - "dados.sql"
-Cohesion: 0.10
-Nodes (20): public.mv_totais, public.tg_toca, clientes_nome_norm_idx, clientes_toca, mv_totais_pk, pedidos_abertos_idx, pedidos_cliente_dup_idx, pedidos_cliente_idx (+12 more)
+### Community 325 - "DISCAnalyticsPanel.tsx"
+Cohesion: 0.23
+Nodes (9): ContactsTab(), ContactWithDISC, DISC_BG_COLORS, DISC_COLORS, DistributionTab(), InsightsTab(), PerformanceTab(), ContactWithDISC (+1 more)
 
 ### Community 326 - "ErrorBoundary.tsx"
 Cohesion: 0.17
@@ -3058,21 +3805,21 @@ Nodes (10): buildSummary(), CHANNEL_LABELS, ChipProps, PresetChip(), Props, Rela
 Cohesion: 0.20
 Nodes (5): ComfortableItemSkeletonProps, CompactItemSkeletonProps, InfiniteScrollSentinel, Props, SKELETON_VARIANTS
 
-### Community 329 - "StatusIndicators.tsx"
-Cohesion: 0.17
-Nodes (10): colorClasses, ConnectionStatusProps, LiveIndicator(), LiveIndicatorProps, PulsingDot(), PulsingDotProps, sizeClasses, statusColors (+2 more)
+### Community 329 - "20260321133745_create_singu_tables_batch2_of_3.sql"
+Cohesion: 0.10
+Nodes (36): idx_disc_analysis_history_analyzed_at, idx_disc_analysis_history_contact, idx_disc_analysis_history_user, idx_disc_communication_logs_contact, idx_disc_conversion_metrics_user, idx_rfm_analysis_contact, idx_rfm_analysis_scores, idx_rfm_analysis_segment (+28 more)
 
-### Community 330 - "badge.tsx"
-Cohesion: 0.18
-Nodes (8): Badge, BadgeGroupProps, BadgeProps, badgeVariants, NotificationBadgeProps, StatusBadgeProps, statusConfig, StatusType
+### Community 330 - "useDealRooms.ts"
+Cohesion: 0.06
+Nodes (23): DealRoom, DealRoomActivity, DealRoomComment, DealRoomDocument, DealRoomMilestone, DealRoomStakeholder, DealRoomStatus, KEYS (+15 more)
 
 ### Community 331 - "form.tsx"
 Cohesion: 0.10
 Nodes (22): class-variance-authority, @radix-ui/react-label, @radix-ui/react-slot, Alert, AlertDescription, AlertTitle, alertVariants, Button (+14 more)
 
-### Community 332 - "check-test-inventory.mjs"
+### Community 332 - "domain/validationSchemas.ts"
 Cohesion: 0.17
-Nodes (22): ref_child_process, ref_url, ALLOWLIST_DENO, ALLOWLIST_NODE, casaPadrao(), gitLsFilesOuDisco(), listarArquivosNoDisco(), visitar() (+14 more)
+Nodes (11): cnpjSchema, CompanyFormData, companyFormSchema, ContactFormData, contactFormSchema, emailSchema, InteractionFormData, interactionFormSchema (+3 more)
 
 ### Community 333 - "intelSnapshot.ts"
 Cohesion: 0.21
@@ -3111,8 +3858,8 @@ Cohesion: 0.24
 Nodes (11): public.rodizio_aplicar_onda(), public.rodizio_closer_executar(), public.rodizio_reverter_execucao(), public.rodizio_sdr_executar(), public.customer_events, public.customer_ownership_history, public.customer_rotation_state, public.customers (+3 more)
 
 ### Community 342 - "empty-state.tsx"
-Cohesion: 0.13
-Nodes (11): ✅ Checklist do PR (autor), Banco, Edge Functions e CI — referência para agentes, CI (`.github/workflows/ci.yml`), Código (front), Migrations (`supabase/migrations/`), EmptyState(), EmptyStateAction, EmptyStateProps (+3 more)
+Cohesion: 0.15
+Nodes (10): ✅ Checklist do PR (autor), Banco, Edge Functions e CI — referência para agentes, CI (`.github/workflows/ci.yml`), Código (front), Migrations (`supabase/migrations/`), EmptyState(), EmptyStateAction, EmptyStateProps (+2 more)
 
 ### Community 343 - "ADR-014 — Connections Observability & Resilience"
 Cohesion: 0.18
@@ -3122,9 +3869,9 @@ Nodes (10): 1. Dead-Letter Queue com retry exponencial, 3. Alertas proativos via
 Cohesion: 0.18
 Nodes (10): 1. 📑 RESUMO EXECUTIVO, 2.1 Módulos Implementados (Core & Intel), 2.2 Módulos a Implementar / Em Evolução, 2. 🏗️ INVENTÁRIO DE MÓDULOS E FUNCIONALIDADES, 3. 🔍 EVIDÊNCIAS TÉCNICAS RASTREÁVEIS, 4. ⚖️ MATRIZ DE RISCO (AUDITORIA), 5. ✅ CHECKLIST OPERACIONAL DE AUDITORIA CONTÍNUA, 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM (+2 more)
 
-### Community 345 - "20261011195900_company_relations_baseline.sql"
-Cohesion: 0.14
-Nodes (20): company_emails_company_id_email_ci_unique, idx_company_addresses_cep, idx_company_addresses_cidade, idx_company_addresses_cidade_ibge, idx_company_addresses_company, idx_company_addresses_created_at, idx_company_addresses_primary, idx_company_addresses_tipo_logradouro (+12 more)
+### Community 345 - "20260720150318_composite_indexes_and_updated_at_triggers.sql"
+Cohesion: 0.09
+Nodes (35): idx_deals_user_created, idx_insights_contact_created, idx_notifications_user_created, idx_relationship_score_history_contact_measured, idx_tasks_user_created, public.deals, public.insights, public.notifications (+27 more)
 
 ### Community 346 - "🧠 MÓDULO 2: 10 FRAMEWORKS DE COMPORTAMENTO HUMANO"
 Cohesion: 0.18
@@ -3139,8 +3886,8 @@ Cohesion: 0.21
 Nodes (11): 4. ERP: nenhuma das tabelas consultadas está liberada no proxy, Core CRM (doc 01), CANDIDATE_PRODUCT_TABLES, CANDIDATE_PROPOSAL_TABLES, ErpProduct, ErpProposal, ErpStats, tryFetch() (+3 more)
 
 ### Community 349 - "Estado — Camada de Dados e Backend"
-Cohesion: 0.10
-Nodes (20): Achado inverso — RLS habilitada em tabela que o repositório NÃO cria — 3, Achados graves com migration:linha, Achados nos jobs, Arquivos de `src/data/` nunca importados — 16 de 46, Contradições com a documentação existente, Criadas sem `ENABLE ROW LEVEL SECURITY` — 1, Criadas sem nenhuma `CREATE POLICY` — 1, `docs/auditoria/04_ACHADOS_BANCO.md` (+12 more)
+Cohesion: 0.12
+Nodes (16): Achados graves com migration:linha, Achados nos jobs, Arquivos de `src/data/` nunca importados — 16 de 46, Contradições com a documentação existente, `docs/auditoria/04_ACHADOS_BANCO.md`, `docs/DATA_DICTIONARY.md` / `docs/data-dictionary.md` / `docs/er-diagram.md`, `docs/DATABASE_ANALYSIS.md`, Estado — Camada de Dados e Backend (+8 more)
 
 ### Community 350 - "Migração DDL — Runbook"
 Cohesion: 0.18
@@ -3162,13 +3909,13 @@ Nodes (11): 1. src/pages/Index.tsx - JSONB Tipado, 2. src/hooks/usePersonalizedO
 Cohesion: 0.18
 Nodes (10): 1. Prepare (T+0h), 2. Activate (T+24h), 3. Grace period (T+24h → T+48h), 4. Retire (T+48h), Fluxo (T = timeline), Princípios, Quando rotacionar, Referências (+2 more)
 
-### Community 355 - "useDISCAutoAnalysis.ts"
-Cohesion: 0.17
-Nodes (11): ARCHITECTURE.md (raiz), 4.1 Análise Automática (`useDISCAutoAnalysis`), 4.2 Histórico de Análises (`disc_analysis_history`), 4.3 Componentes UI, 4.4 Configuração de Perfil (`disc_profile_config`), 4.5 Logs de Comunicação (`disc_communication_logs`), 4.6 Métricas de Conversão (`disc_conversion_metrics`), 4. 🧠 Módulo DISC Enterprise (+3 more)
+### Community 355 - "4. 🧠 Módulo DISC Enterprise"
+Cohesion: 0.22
+Nodes (9): ARCHITECTURE.md (raiz), 4.1 Análise Automática (`useDISCAutoAnalysis`), 4.2 Histórico de Análises (`disc_analysis_history`), 4.3 Componentes UI, 4.4 Configuração de Perfil (`disc_profile_config`), 4.5 Logs de Comunicação (`disc_communication_logs`), 4.6 Métricas de Conversão (`disc_conversion_metrics`), 4. 🧠 Módulo DISC Enterprise (+1 more)
 
-### Community 356 - "_sqlseguro.py"
-Cohesion: 0.13
-Nodes (16): dataclasses, carregar(), Comando, dividir(), fechar(), _ler(), Divisão e validação de SQL somente-leitura para o run_explain_analyze.py.…, Separa o texto em comandos (ignora comandos vazios). Levanta SqlInvalido se… (+8 more)
+### Community 356 - "Pipeline automático de validação"
+Cohesion: 0.33
+Nodes (5): Edge function `validation-queue-worker`, pg_cron, Pipeline automático de validação, Tabela `validation_queue`, Trigger DB
 
 ### Community 357 - "20260509152638_b3581ab3-1770-47d0-a2f7-73f0581a78e1.sql"
 Cohesion: 0.20
@@ -3203,40 +3950,40 @@ Cohesion: 0.35
 Nodes (9): EventCard(), EventCardProps, getCardEventColor(), getCardEventIcon(), getEventColor(), getEventIcon(), getUrgencyColor(), ImportantDatesCalendar (+1 more)
 
 ### Community 365 - "ContextualLoader.tsx"
-Cohesion: 0.10
-Nodes (17): 4.8 Componentes de Feedback/UX, contextColors, contextIcons, ContextualLoader(), ContextualLoaderProps, LoaderContext, OverlayLoader(), OverlayLoaderProps (+9 more)
+Cohesion: 0.14
+Nodes (13): 4.8 Componentes de Feedback/UX, contextColors, contextIcons, ContextualLoader(), ContextualLoaderProps, LoaderContext, OverlayLoader(), OverlayLoaderProps (+5 more)
 
-### Community 366 - "PassoFeedbackMenu.tsx"
-Cohesion: 0.20
-Nodes (10): ChannelKey, CHANNELS, CONFIRM_DESCRIPTION, normalizeChannel(), OPTIONS, OutcomeOption, PassoFeedbackMenu, PassoFeedbackMenuComponent() (+2 more)
+### Community 366 - "ProximosPassosCard.tsx"
+Cohesion: 0.05
+Nodes (42): AgendarReuniaoForm, AgendarReuniaoFormComponent(), DURATION_OPTIONS, formatPtBr(), MODALITY_OPTIONS, nextBusinessDay(), Props, channelMeta (+34 more)
 
-### Community 367 - "CanaisQuickFilter.tsx"
-Cohesion: 0.29
-Nodes (9): arraysEqual(), CanaisQuickFilter, CHANNELS, clearPending(), Props, readApplied(), readPending(), readStoredArray() (+1 more)
+### Community 367 - "AdvancedSearchBar.tsx"
+Cohesion: 0.06
+Nodes (32): AdvancedSearchBar, CHANNEL_ICON_META, CompanyOption, ContactOption, EntityPickerProps, Props, arraysEqual(), CanaisQuickFilter (+24 more)
 
-### Community 368 - "SnapshotAgainstPostgres"
-Cohesion: 0.17
-Nodes (8): 📋 Tabela: `whatsapp_instances`, 🚀 Setup para Desenvolvimento, admin(), available(), Path, skipIf, SnapshotAgainstPostgres, settings()
+### Community 368 - "company-form-exhaustive.test.tsx"
+Cohesion: 0.06
+Nodes (17): @testing-library/user-event, CampaignDetailDrawer(), Props, STATUS_BADGE, sendMutate, LifeEventsTab(), queryClient, ItemConfig (+9 more)
 
-### Community 370 - "G — Camada de banco: funcionalidades planejadas e não executadas"
-Cohesion: 0.09
-Nodes (23): A. Sem nenhum leitor nem escritor (⬛ MORTO) — 15, B. Lidas por tela viva, mas sem nenhum produtor no repositório (🔌 painel sem produtor) — 26, C. Lidas por tela viva, produtor só em caminho morto (⏰ edge com gate de cron sem agendador / hook morto) — 9, Cobertura de testes SQL, D. Só leitura/escrita em caminho morto (⬛) — 10, E. Escritas em produção, sem leitor vivo (dado coletado e nunca exibido) — 29, Edge functions de "cron" sem agendador, Funções sem chamador (+15 more)
+### Community 370 - "useAutomationRules.ts"
+Cohesion: 0.18
+Nodes (9): ACTION_OPTIONS, ActionType, AutomationAction, AutomationCondition, AutomationLog, AutomationRule, CreateRuleData, TRIGGER_OPTIONS (+1 more)
 
 ### Community 371 - "useConversationalSearch.ts"
 Cohesion: 0.29
 Nodes (10): ConvEntity, ConvFilters, ConvInterpretation, ConvResultItem, executeFilters(), InteractionRow, loadHistory(), pushHistory() (+2 more)
 
 ### Community 372 - "useFicha360Filters.ts"
-Cohesion: 0.25
-Nodes (7): useExternalInteractions(), normalize(), useFicha360ChannelCounts(), Ficha360Period, KNOWN_TAGS_SET, SetterOptions, VALID_PERIODS
+Cohesion: 0.33
+Nodes (4): Ficha360Period, KNOWN_TAGS_SET, SetterOptions, VALID_PERIODS
 
 ### Community 373 - "useInboundActivityHeatmap.ts"
 Cohesion: 0.22
 Nodes (10): buildEmpty(), DAY_LABELS, INBOUND_HEATMAP_CONSTANTS, InboundCell, InboundChannel, InboundHeatmapResult, InboundPeak, InboundRow (+2 more)
 
-### Community 374 - "PLANEJADO × EXECUTADO — SINGU CRM v2"
-Cohesion: 0.09
-Nodes (23): 0. Atualização de 12/10/2026 (o que mudou durante a auditoria), 11. Trabalho em andamento e abandonado, 12. Plano de ataque recomendado, 13. O que não foi possível verificar, 14.1 Anexos (evidência completa, `arquivo:linha`), 14.2 Método, 14. Anexos e método, 1. Veredito em uma tela (+15 more)
+### Community 374 - "useUnifiedHistory.ts"
+Cohesion: 0.24
+Nodes (10): directionSchema, HistoryChannel, historyChannelSchema, HistoryItem, toItemFromCall(), toItemFromInteraction(), toItemFromWhatsapp(), UnifiedHistoryFilters (+2 more)
 
 ### Community 375 - "canaisInteracao.ts"
 Cohesion: 0.24
@@ -3246,9 +3993,9 @@ Nodes (10): FICHA360_CHANNELS, FICHA360_CHANNELS_SET, Ficha360Channel, findIgnor
 Cohesion: 0.25
 Nodes (8): AttemptRecord, attempts, checkRateLimit(), getLockoutDuration(), getRecord(), getRemainingAttempts(), LOCKOUT_DURATIONS_MS, recordFailedAttempt()
 
-### Community 377 - "contact-detail-partial-failures.test.tsx"
-Cohesion: 0.09
-Nodes (12): ref_app, company, contact, fresh, key, otherKey, populated, ReadError (+4 more)
+### Community 377 - "20260321130011_salespro_mig_008_bi_chat_supply_quotes_final.sql"
+Cohesion: 0.10
+Nodes (33): public.bitrix24_sync_logs, public.chat_conversations, public.chat_messages, public.client_portfolio, public.dashboard_layouts, public.demand_forecasts, public.digital_signatures, public.document_signers (+25 more)
 
 ### Community 378 - "20260111162422_931d8ea9-50f0-4793-b167-51ddb862bc64.sql"
 Cohesion: 0.33
@@ -3291,32 +4038,32 @@ Cohesion: 0.18
 Nodes (10): public.rodizio_reverter_execucao(), public.rodizio_sugerir_distribuicao(), public.companies, public.customer_events, public.customer_ownership_history, public.customer_rotation_state, public.customers, public.rodizio_distribuicao_staging (+2 more)
 
 ### Community 388 - "🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM"
-Cohesion: 0.20
+Cohesion: 0.17
 Nodes (10): 1. 📑 RESUMO EXECUTIVO, 2.1 Módulos Implementados (Core & Intel), 2.2 Módulos a Implementar / Em Evolução, 2. 🏗️ INVENTÁRIO DE MÓDULOS E FUNCIONALIDADES, 3. 🔍 EVIDÊNCIAS TÉCNICAS RASTREÁVEIS, 4. ⚖️ MATRIZ DE RISCO (AUDITORIA), 5. ✅ CHECKLIST OPERACIONAL DE AUDITORIA CONTÍNUA, 🔍 RELATÓRIO DE AUDITORIA ENTERPRISE — SINGU CRM (+2 more)
 
 ### Community 389 - "adr/README.md"
 Cohesion: 0.08
 Nodes (19): ADR 001: Feature-Sliced Design Architecture, Consequences, Decision, ADR 002: External Database Proxy via Edge Functions, Consequences, Decision, ADR 003: Circuit Breaker for External Services, Consequences (+11 more)
 
-### Community 390 - "ADR-012 — Rodada I: Polimento Final & Hardening Profundo"
-Cohesion: 0.20
-Nodes (9): 1. Gate a11y no CI via vitest-axe, 4. CHANGELOG Keep-a-Changelog estrito, 5. Versionamento, ADR-012 — Rodada I: Polimento Final & Hardening Profundo, Arquivos-chave, Consequências, Contexto, Decisões (+1 more)
+### Community 390 - "zapp_history.master_dashboard"
+Cohesion: 0.06
+Nodes (33): zapp_history.async_request_log, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_company_sizes, zapp_history.v_complexity_distribution, zapp_history.v_dashboard_atendimento, zapp_history.v_demanda_geografica, zapp_history.v_demanda_por_cidade (+25 more)
 
 ### Community 391 - "Decisão"
 Cohesion: 0.20
 Nodes (9): 1. Rate limiting + validação Zod nos endpoints públicos, 2. Criptografia simétrica (AES via `pgcrypto`), 3. Health check integrado, 4. Logs unificados, 5. Documentação, ADR-013: Hardening do Módulo de Conexões (Rodada J), Consequências, Contexto (+1 more)
 
 ### Community 392 - "WebhookSnippetsSheet"
-Cohesion: 0.13
-Nodes (14): 1. Schema Discovery via `information_schema`, 2. Templates de Webhook, 3. Snippets generators, 4. MCP server v1.2.0, ADR-016 — Federação, Schema Discovery & Developer Experience (Rodada M), Alternativas descartadas, Consequências, Contexto (+6 more)
+Cohesion: 0.11
+Nodes (17): [2.5.0] - 2026-04-20 — Rodada M: Connections Federation & DX (65/65), Added, Notes, 1. Schema Discovery via `information_schema`, 2. Templates de Webhook, 3. Snippets generators, 4. MCP server v1.2.0, ADR-016 — Federação, Schema Discovery & Developer Experience (Rodada M) (+9 more)
 
 ### Community 393 - "ADR-018: Hardening — Strict Mode, Feature Flags e Optimistic Locking"
 Cohesion: 0.20
 Nodes (9): 1. Strict Mode TypeScript em fases, 2. Feature Flags via banco, 3. Optimistic Locking, ADR-018: Hardening — Strict Mode, Feature Flags e Optimistic Locking, Alternativas consideradas, Consequências, Contexto, Decisão (+1 more)
 
 ### Community 394 - "Achados"
-Cohesion: 0.14
-Nodes (13): Achados, 🖥️ Achados — Frontend, [ALTO] FE-3. 65 arquivos-fonte violam o limite de 400 linhas (13 >600), [BAIXO] FE-10. NaN silencioso em `generateRecommendations` (stakeholders), [BAIXO] FE-8. `.find(...).prop` inseguro (2 casos, mitigados), [BAIXO] FE-9. `setInterval` sem `clearInterval`, [CRÍTICO] FE-1. "Zero any" é falso: 119 `any` + 183 double-casts, [CRÍTICO] FE-2. 72 arquivos fazem data-fetching dentro de `useEffect` (antipadrão proibido) (+5 more)
+Cohesion: 0.15
+Nodes (13): Achados, [ALTO] FE-3. 65 arquivos-fonte violam o limite de 400 linhas (13 >600), [BAIXO] FE-10. NaN silencioso em `generateRecommendations` (stakeholders), [BAIXO] FE-8. `.find(...).prop` inseguro (2 casos, mitigados), [BAIXO] FE-9. `setInterval` sem `clearInterval`, [CRÍTICO] FE-1. "Zero any" é falso: 119 `any` + 183 double-casts, [CRÍTICO] FE-2. 72 arquivos fazem data-fetching dentro de `useEffect` (antipadrão proibido), [INFO] FE-11. Erros reais de tipo: 2 (leaflet) (+5 more)
 
 ### Community 395 - "Passo a passo"
 Cohesion: 0.20
@@ -3334,33 +4081,33 @@ Nodes (9): 20.1 Busca Global (`GlobalSearch`), 20.2 Predefinições de Busca (`u
 Cohesion: 0.22
 Nodes (8): BestTimeHeatmapResult, buildEmpty(), DAY_LABELS, HEATMAP_CONSTANTS, HeatmapCell, InteractionRow, TopSlot, useBestTimeHeatmap()
 
-### Community 399 - "company-form-exhaustive.test.tsx"
+### Community 399 - "harness.sh"
 Cohesion: 0.09
-Nodes (11): @testing-library/user-event, sendMutate, ItemConfig, ITEMS, Props, SentimentQuickFilter, fullExternalCompany, minimalCompany (+3 more)
+Nodes (19): as_pg(), eph(), eph_mkdb(), fail(), FAKE_LOG, falsy(), finish(), has() (+11 more)
 
 ### Community 400 - "useVoiceAIHealth.ts"
 Cohesion: 0.24
 Nodes (8): Arquitetura, Intenções Testadas, Serviços Verificados, fetchVoiceHealth(), useRefreshVoiceHealth(), useVoiceAIHealth(), VoiceAIHealth, VoiceServiceCheck
 
 ### Community 401 - "lead-scorer/index.ts"
-Cohesion: 0.06
-Nodes (47): Achados, [ALTA] SEC-2. `external-data` concede CRUD total na base externa a qualquer autenticado (RLS 100% contornado), [ALTA] SEC-3. Webhooks com service_role e SEM verificação de assinatura/segredo, [BAIXA] SEC-7. Injeção de filtro PostgREST no `mcp-server`, [CRÍTICA] SEC-1. Views `*_public` expõem tokens-segredo a `anon` → enumerar e assinar documentos de terceiros, [MÉDIA] SEC-5. CORS aberto a qualquer subdomínio `*.lovable.app`/`*.lovableproject.com`, e `*` literal em ~35 funções, [MÉDIA] SEC-6. SSRF autenticado em `connection-tester`, `external-data` (+39 more)
+Cohesion: 0.07
+Nodes (38): [ALTA] SEC-2. `external-data` concede CRUD total na base externa a qualquer autenticado (RLS 100% contornado), `external-data`, RPCs chamadas pelo front e ausentes, Arquivos tocados (10), Correções aplicadas, Estado final (10/10), Inventário inicial (baseline), Próxima onda (+30 more)
 
 ### Community 402 - "20261005230000_fix_contacts_companies_write_triggers.sql"
 Cohesion: 0.24
 Nodes (4): pg_attribute, pg_index, public.audit_trigger_func(), public.trigger_log_interaction_activity()
 
-### Community 403 - "ReportWidgets.tsx"
-Cohesion: 0.14
-Nodes (20): WIDGET_COMPONENTS, WidgetComponentId, BestTimeWidget(), ChurnRiskWidget(), CompaniesCountWidget(), ContactsCountWidget(), DealsByStageWidget(), DIAS (+12 more)
+### Community 403 - "test_generate_fatos.py"
+Cohesion: 0.13
+Nodes (10): CliRobustnessTests, DoBlockTests, HostileSqlTests, PolicyLifecycleTests, CompletedProcess, Path, skipUnless, Fatos extraídos do SQL e robustez do gerador de regras (offline: sem banco, sem… (+2 more)
 
 ### Community 404 - "alert-dialog.tsx"
 Cohesion: 0.20
 Nodes (7): @radix-ui/react-alert-dialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogOverlay, AlertDialogTitle
 
-### Community 405 - "20261013033433_sequence_write_fences.sql"
-Cohesion: 0.11
-Nodes (17): public.guard_contact_sequence_archive, public.guard_sequence_enrollment_write, public.guard_sequence_status_while_send, public.sequence_email_reservations, public.settle_sequence_email_reservation, contact_sequence_archive_guard, public.enroll_lead_score_contact(), public.guard_sequence_enrollment_write() (+9 more)
+### Community 405 - "useWinLoss.ts"
+Cohesion: 0.07
+Nodes (29): mocks, renderMutation(), saved, Competitor, competitorMetadataSchema, InsightSeverity, InsightType, normalizeCompetitor() (+21 more)
 
 ### Community 406 - "report_schema_compatibility.sql"
 Cohesion: 0.22
@@ -3370,29 +4117,29 @@ Nodes (8): rls_report_compat.record_update, deal_update, relationship_update, rl
 Cohesion: 0.06
 Nodes (34): _BG_FD, bg_fecha(), bg_fecha_todas(), _BG_PID, config(), exige_config(), _FUMACA_OK_SE, lib.sh script (+26 more)
 
-### Community 408 - "LifeEventsTab.tsx"
-Cohesion: 0.11
-Nodes (15): LifeEventsAuditTrail(), LifeEventsAuditTrailProps, LifeEventsGapChecklist(), LifeEventsGapChecklistProps, LifeEventsTimeline(), LifeEventsTimelineProps, LifeEventsVisualSummary(), LifeEventsVisualSummaryProps (+7 more)
+### Community 408 - "supplier_evaluations"
+Cohesion: 0.07
+Nodes (26): idx_supplier_evaluations_avaliador, idx_supplier_evaluations_data, idx_supplier_evaluations_supplier, idx_supplier_evaluations_supplier_data, suppliers, users, supplier_evaluations, idx_supplier_score_history_supplier (+18 more)
 
 ### Community 409 - "ProviderErrorBoundary"
-Cohesion: 0.20
-Nodes (3): Props, ProviderErrorBoundary, State
+Cohesion: 0.12
+Nodes (7): .lovable/memory/architecture/*.md (4) + standards (1) + technical (1), ProviderErrorBoundary, KNOWN_CONTEXTS, withProviderCheck(), RouteAnnouncer(), routeTitles, SkipNav()
 
-### Community 410 - "AdvancedSearchBar.tsx"
-Cohesion: 0.20
-Nodes (6): AdvancedSearchBar, CHANNEL_ICON_META, CompanyOption, ContactOption, EntityPickerProps, Props
+### Community 410 - "Any"
+Cohesion: 0.12
+Nodes (32): Any, 📋 Tabela: `forms`, 📋 Tabela: `forms_public`, 📋 Tabela: `landing_pages`, 📋 Tabela: `landing_pages_public`, 📋 Tabela: `lead_magnets`, api(), approx() (+24 more)
 
 ### Community 411 - "ObjectionsTrendChart.tsx"
 Cohesion: 0.27
 Nodes (9): DIRECTION_CLASS, DIRECTION_ICON, DIRECTION_LABEL, formatWeek(), formatWeekRange(), ObjectionsTrendChart, ObjectionsTrendChartImpl(), ObjectionsTrendTooltip() (+1 more)
 
-### Community 413 - "20261012194307_recover_atomic_queue_claims.sql"
-Cohesion: 0.13
-Nodes (15): anon, authenticated, public.claim_behavioral_profile_retry(), public.claim_behavioral_profile_sla_batch(), public.claim_regen_batch(), public.complete_validation_queue_item(), PUBLIC, public.behavioral_insight_feedback (+7 more)
+### Community 413 - "zapp_history.master_dashboard"
+Cohesion: 0.06
+Nodes (30): zapp_history.async_request_log, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_complexity_distribution, zapp_history.v_dashboard_atendimento, zapp_history.v_demanda_geografica, zapp_history.v_demanda_por_cidade, zapp_history.v_disc_distribution (+22 more)
 
 ### Community 414 - "NavigationStackContext.tsx"
-Cohesion: 0.18
-Nodes (16): browserIndex(), currentEntry(), freshSnapshot(), loadSnapshot(), NavigationDirection, NavigationEntry, NavigationSnapshot, NavigationStackContext (+8 more)
+Cohesion: 0.22
+Nodes (14): browserIndex(), currentEntry(), freshSnapshot(), loadSnapshot(), NavigationDirection, NavigationEntry, NavigationSnapshot, NavigationStackContext (+6 more)
 
 ### Community 415 - "carnegieWarmth.ts"
 Cohesion: 0.27
@@ -3403,28 +4150,28 @@ Cohesion: 0.20
 Nodes (8): AiGatewayActiveAlert, AiGatewayFunctionRow, AiGatewayHealth, AiGatewayHeatmapCell, AiGatewayModelRow, AiGatewayMttrRow, AiGatewayResolvedRow, AiGatewayWorstWindow
 
 ### Community 417 - "useCompanyViews.ts"
-Cohesion: 0.29
-Nodes (9): CompanyContato, CompanyCores, CompanyStats, CompanySummary, useCompanyContatoView(), useCompanyCoresView(), useCompanyStatsView(), useCompanySummaryView() (+1 more)
+Cohesion: 0.25
+Nodes (10): Tabelas/views chamadas pelo front e ausentes no backend, CompanyContato, CompanyCores, CompanyStats, CompanySummary, useCompanyContatoView(), useCompanyCoresView(), useCompanyStatsView() (+2 more)
 
 ### Community 418 - "useFicha360Domain.ts"
-Cohesion: 0.29
-Nodes (7): ContactIntelligence, ContactView360, ExternalInteraction, Options, PassoFeedback, TrendWeeks, UseFicha360DomainProps
+Cohesion: 0.31
+Nodes (6): ContactIntelligence, ContactView360, ExternalInteraction, PassoFeedback, TrendWeeks, UseFicha360DomainProps
 
 ### Community 419 - "useContactSentimentTrend.ts"
 Cohesion: 0.29
 Nodes (9): formatLabel(), linearSlope(), SentimentPoint, SentimentStats, sentimentToValue(), SentimentTrendResult, startOfWeek(), TrendDirection (+1 more)
 
-### Community 420 - "useEntityRelationships.ts"
-Cohesion: 0.22
-Nodes (8): EntityRelationship, EntityRelationshipRole, EntityType, key(), NewEntityRelationship, ROLE_LABELS, useDeleteEntityRelationship(), useEntityRelationships()
+### Community 420 - ".source"
+Cohesion: 0.14
+Nodes (13): 📋 Tabela: `attribution_touchpoints`, 📋 Tabela: `crm_consent_audit_logs`, 📋 Tabela: `cs_health_signals`, 📋 Tabela: `insights`, 📋 Tabela: `people_intelligence_events`, 📋 Tabela: `suggested_rapport_intel`, ContractTests, FailureModeTests (+5 more)
 
 ### Community 421 - "useNLPAnalyticsData.ts"
 Cohesion: 0.29
 Nodes (9): buildTrend(), classify(), EMPTY, getPeriodDays(), NEGATIVE, NLPStats, PeriodFilter, POSITIVE (+1 more)
 
-### Community 422 - "useScoreAutomations.ts"
-Cohesion: 0.20
-Nodes (4): AutomationAction, AutomationLogRow, AutomationTrigger, ScoreAutomation
+### Community 422 - "evolution-webhook/index.ts"
+Cohesion: 0.17
+Nodes (25): handleCall(), handleConnectionUpdate(), handleContactsUpsert(), handlePresenceUpdate(), findContactByPhone(), jsonResponse(), resolveInstanceOwner(), SupabaseAdminClient (+17 more)
 
 ### Community 423 - "deal-risk-constants.ts"
 Cohesion: 0.20
@@ -3442,13 +4189,13 @@ Nodes (9): channelKey(), countOccurrences(), DateLike, entityKey(), getTime(), r
 Cohesion: 0.24
 Nodes (8): BehavioralRegenAudit(), exportCsv(), csvEscape(), formatDate(), PeriodKey, PERIODS, QueueRow, StatusFilter
 
-### Community 427 - "push.ts"
-Cohesion: 0.12
-Nodes (16): RFC-8030, SendPayload, buildPayload(), deliver(), isAllowedPushEndpoint(), PUSH_HOST_SUFFIXES, PushOutcome, PushPayload (+8 more)
+### Community 427 - "PLANEJADO × EXECUTADO — SINGU CRM v2"
+Cohesion: 0.07
+Nodes (28): 0. Atualização de 12/10/2026 (o que mudou durante a auditoria), 11. Trabalho em andamento e abandonado, 12. Plano de ataque recomendado, 13. O que não foi possível verificar, 14.1 Anexos (evidência completa, `arquivo:linha`), 14.2 Método, 14. Anexos e método, 1. Veredito em uma tela (+20 more)
 
-### Community 428 - "AdminTelemetria.tsx"
-Cohesion: 0.12
-Nodes (8): Patologia 1 — Teste-espelho (reimplementa o alvo localmente), AdminTelemetriaPage(), SeverityFilter, TimeFilter, getTimeThreshold(), SeverityFilter, TelemetryRow, TimeFilter
+### Community 428 - "telemetry-helpers.test.ts"
+Cohesion: 0.20
+Nodes (3): SeverityFilter, TelemetryRow, TimeFilter
 
 ### Community 429 - "20260305204447_d9a65b36-83ab-434e-9699-aac2341f11e1.sql"
 Cohesion: 0.31
@@ -3558,13 +4305,13 @@ Nodes (7): Anomalias Detectadas, Arquitetura, Status, EmailPipelineHealth, fetch
 Cohesion: 0.28
 Nodes (6): BestTimeHeatmapCard(), MEDAL_LABEL, rateColor(), HOURS, InboundActivityHeatmapCard(), intensityClass()
 
-### Community 456 - "StakeholderInfluenceNetwork.tsx"
-Cohesion: 0.20
-Nodes (16): react-force-graph-2d, NetworkSelectedNodePanel(), NetworkSelectedNodePanelProps, NetworkVisualizationProps, getQuadrantIcon(), getQuadrantLabel(), getSupportIcon(), getSupportLabel() (+8 more)
+### Community 456 - "useSmsCampaigns.ts"
+Cohesion: 0.28
+Nodes (7): CreateSmsCampaignInput, SmsCampaign, SmsCampaignRecipient, SmsTemplate, useSmsCampaignRecipients(), useSmsCampaigns(), useSmsTemplates()
 
-### Community 457 - "UnifiedNotificationsBell.tsx"
-Cohesion: 0.22
-Nodes (6): PRIORITY_STYLES, SOURCE_META, UnifiedNotificationsBell(), PRIORITY_RANK, UnifiedNotification, useUnifiedNotifications()
+### Community 457 - ".lovable/memory/features/*.md (57 arquivos)"
+Cohesion: 0.10
+Nodes (16): .lovable/memory/features/*.md (57 arquivos), Playground (cURL/Snippets), AskCrmChat(), CodeExample(), TechTooltip(), VersionBadge(), AccuracyChart(), IntentSignalCard() (+8 more)
 
 ### Community 458 - "20260509180917_b4306156-1d1c-4efd-b41f-571c86e0d338.sql"
 Cohesion: 0.25
@@ -3582,17 +4329,17 @@ Nodes (8): @radix-ui/react-select, SelectContent, SelectItem, SelectLabel, Selec
 Cohesion: 0.22
 Nodes (5): vaul, DrawerContent, DrawerDescription, DrawerOverlay, DrawerTitle
 
-### Community 462 - "audit-ausentes.mjs"
-Cohesion: 0.22
-Nodes (17): auditar(), chamadasFrom(), csvCampo(), listarFontes(), main(), paraCsv(), paraMarkdown(), RAIZ_PADRAO (+9 more)
+### Community 462 - "audit-ausentes.test.mjs"
+Cohesion: 0.18
+Nodes (20): auditar(), chamadasFrom(), csvCampo(), listarFontes(), main(), paraCsv(), paraMarkdown(), RAIZ_PADRAO (+12 more)
 
-### Community 463 - "mudou-conteudo.test.mjs"
-Cohesion: 0.15
-Nodes (17): CARIMBOS, IGNORADOS, limparHistoricoCron(), mudou(), normalizarAlerta(), PADRAO, semCarimbos(), TELEMETRIA (+9 more)
+### Community 463 - "fixture-schema.sql"
+Cohesion: 0.10
+Nodes (24): public.touch, auth.identities, auth.users, contacts_touch, cron.job, public.audit_log, public.audit_log_2026_01, public.behavioral_profile_regen_queue (+16 more)
 
-### Community 464 - "SequenceDetailDrawer.tsx"
-Cohesion: 0.12
-Nodes (10): EVENT_COLORS, EVENT_ICONS, Props, CHANNEL_LABELS, SequenceManualSteps(), mocks, task, SequencePausedEmails() (+2 more)
+### Community 464 - "useContactDetail.presence.test.tsx"
+Cohesion: 0.08
+Nodes (16): Alert, Company, Contact, ContactDetailData, Insight, Interaction, contact, detail (+8 more)
 
 ### Community 465 - "public.whatsapp_messages"
 Cohesion: 0.22
@@ -3606,33 +4353,33 @@ Nodes (7): AiGatewayErrorHeatmap(), cellColor(), DOW_LABELS, Props, AiGatewayHea
 Cohesion: 0.27
 Nodes (8): BadgeVariant, CompanyCommercialTab(), dealStatusConfig, formatCurrency(), formatDate(), proposalStatusConfig, Props, taskStatusConfig
 
-### Community 468 - "CustomFieldsManager.tsx"
-Cohesion: 0.28
-Nodes (7): CustomFieldsManager(), FIELD_TYPE_LABELS, Props, compareDates(), compareValues(), getSortValue(), sortArray()
+### Community 468 - "sortArray"
+Cohesion: 0.70
+Nodes (4): compareDates(), compareValues(), getSortValue(), sortArray()
 
-### Community 469 - "ReportsTab.tsx"
+### Community 469 - "20260109144945_baseline_tabelas_fundadoras.sql"
+Cohesion: 0.13
+Nodes (26): idx_activities_created_at, idx_activities_user_id, idx_alerts_dismissed, idx_alerts_user_id, idx_companies_user_id, idx_contacts_company_id, idx_contacts_user_id, idx_insights_contact_id (+18 more)
+
+### Community 470 - "20260408195933_zapp_history_02_base_tables.sql"
 Cohesion: 0.12
-Nodes (7): CohortAnalysisWidget, COLORS, formatCurrency(), MonthlyReportWidget, ParetoList(), PeriodComparisonCards(), YoyComparisonWidget
+Nodes (27): idx_conversations_assigned, idx_conversations_company, idx_conversations_contact, idx_conversations_remote_jid, idx_conversations_status, idx_messages_contact_created, idx_messages_content_fts, idx_messages_conversation (+19 more)
 
-### Community 470 - "DashboardErrorBoundary"
-Cohesion: 0.22
-Nodes (3): DashboardErrorBoundary, Props, State
+### Community 471 - "20260416230430_singu_triggers_batch_b.sql"
+Cohesion: 0.13
+Nodes (28): set_updated_at_life_events, set_updated_at_lux_intelligence, set_updated_at_purchase_history, set_updated_at_push_subscriptions, set_updated_at_rfm_analysis, set_updated_at_rfm_segment_config, set_updated_at_social_profiles, set_updated_at_social_scraping_schedule (+20 more)
 
-### Community 471 - "ProximosPassosCard.tsx"
-Cohesion: 0.28
-Nodes (8): channelIcon, outcomeMeta, priorityMeta, Props, ProximosPassosCard, ProximosPassosCardComponent(), relativeDays(), urgencyToClass()
-
-### Community 472 - "InteracoesPresetsMenu.tsx"
-Cohesion: 0.31
-Nodes (7): ImportPresetsDialog, Props, InteracoesPresetsMenu, parseDate(), Props, SerializedPayload, summarize()
+### Community 472 - "zapp_history.master_dashboard"
+Cohesion: 0.07
+Nodes (27): zapp_history.async_request_log, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_complexity_distribution, zapp_history.v_dashboard_atendimento, zapp_history.v_demanda_geografica, zapp_history.v_demanda_por_cidade, zapp_history.v_disc_distribution (+19 more)
 
 ### Community 473 - "AutomationWizard.tsx"
-Cohesion: 0.36
-Nodes (5): AUTOMATION_TEMPLATES, AutomationTemplate, Props, GradeTarget, Props
+Cohesion: 0.24
+Nodes (7): Correções que devem entrar no `ESTADO_ATUAL.md`, AUTOMATION_TEMPLATES, AutomationTemplate, Props, AutomationWizard(), GradeTarget, Props
 
-### Community 474 - "Contatos.tsx"
-Cohesion: 0.13
-Nodes (11): react-window, Contatos(), ContatosContent(), DuplicateContactsPanel, ExternalContactLookupDialog, Props, ContatosSavedViewsProps, ContatosViewState (+3 more)
+### Community 474 - "contact-detail-partial-failures.test.tsx"
+Cohesion: 0.06
+Nodes (20): ref_app, ref_jsr_std, status(), originalDeal, DealDetailDrawer(), company, contact, fresh (+12 more)
 
 ### Community 475 - "carnegieEagerWant.ts"
 Cohesion: 0.28
@@ -3662,21 +4409,21 @@ Nodes (8): AuditRow, CATEGORIES, diffArrays(), TagCategory, TagDiff, TagHistoryE
 Cohesion: 0.25
 Nodes (5): DailyKpi, DailyStats, mocks, queryClient, useDailyKpis()
 
-### Community 482 - "IntelStatusBar.tsx"
-Cohesion: 0.15
-Nodes (11): countBookmarks(), countNotes(), IntelBookmarksNotesBadge(), IntelDataSourceBadge(), Source, IntelInflightBadge(), IntelLatencyBadge(), percentile() (+3 more)
+### Community 482 - "useDealForecastConfidence.ts"
+Cohesion: 0.28
+Nodes (8): clamp(), ConfidenceFactor, ConfidenceLevel, DealForecastConfidence, levelFromConfidence(), MomentumPayload, STAGE_PROBABILITY, useDealForecastConfidence()
 
 ### Community 483 - "useEntity360.ts"
 Cohesion: 0.28
 Nodes (8): Entity360Related, Entity360Result, Entity360TimelineEvent, Entity360Type, fetchPeopleIntel(), fetchRelatives(), tableMap, useEntity360()
 
-### Community 484 - "Histórico de versões 1.0.0 a 1.5.0"
-Cohesion: 0.11
-Nodes (17): [1.0.0] - 2026-03-15, [1.1.0] - 2026-03-22, [1.2.0] - 2026-03-28, [1.3.0] - 2026-04-02, [1.4.0] - 2026-04-05, [1.5.0] - 2026-04-08, Adicionado, Adicionado (+9 more)
-
-### Community 485 - "useLuxIntelligence.ts"
+### Community 484 - "useFicha360ConversationSummary.ts"
 Cohesion: 0.22
-Nodes (7): LuxEducation, LuxFilial, LuxFiscalData, LuxIntelligenceRecord, LuxPersonalProfile, LuxSocialProfile, LuxStakeholder
+Nodes (7): ConversationSummary, ConversationSummaryPendency, ConversationSummaryResult, ConversationSummarySignal, GenerateSummaryParams, InteractionPayload, SummaryHistoryItem
+
+### Community 485 - "20260416230402_singu_triggers_batch_a.sql"
+Cohesion: 0.14
+Nodes (27): set_landing_pages_updated_at, set_updated_at_client_values, set_updated_at_communication_preferences, set_updated_at_compatibility_settings, set_updated_at_contact_cadence, set_updated_at_contact_preferences, set_updated_at_contact_relatives, set_updated_at_decision_criteria (+19 more)
 
 ### Community 486 - "useNextPagePrefetch.ts"
 Cohesion: 0.28
@@ -3686,9 +4433,9 @@ Nodes (8): cancelIdle(), IdleCallback, IdleDeadline, IdleWindow, Options, Prefet
 Cohesion: 0.28
 Nodes (6): FEEDBACK_KEY(), PassoFeedback, PassoOutcome, RegisterFeedbackPayload, useProximoPassoFeedbacks(), useRegisterPassoFeedback()
 
-### Community 488 - "SnapshotDBStatsTests"
-Cohesion: 0.20
-Nodes (5): 📋 Tabela: `slow_queries_audit`, OfflineConnection, Catálogo e resultados sintéticos; nenhum driver, socket ou banco real., SnapshotDBStatsTests, query()
+### Community 488 - "cenarios.mjs"
+Cohesion: 0.09
+Nodes (17): base(), comp(), fails, GERADOR, JS, KEEP, lazyNs(), PKG() (+9 more)
 
 ### Community 489 - "channelCountsCache.ts"
 Cohesion: 0.31
@@ -3702,9 +4449,9 @@ Nodes (5): DEFAULT_EXCERPT_PRESET, EXCERPT_PRESET_STORAGE_KEY, EXCERPT_WINDOW_PR
 Cohesion: 0.25
 Nodes (7): CHURN_WINDOW_VALUES, ChurnCsvRow, churnToCsv(), ChurnWindow, csvCell(), DEFAULT_CHURN_WINDOW, RFC-4180
 
-### Community 492 - "modulos"
-Cohesion: 0.18
-Nodes (18): aggregate(), anyFile(), camadaDe(), cap(), closure(), componentes, dominioDe(), enrich() (+10 more)
+### Community 492 - "public.customers"
+Cohesion: 0.08
+Nodes (27): idx_ca_contact, idx_contact_addresses_created_by, idx_contact_addresses_updated_by, idx_customer_ownership_history_company_id, idx_customer_ownership_history_customer_id, idx_customer_ownership_history_registrado_por_id, idx_customer_ownership_history_vendedor_id, idx_customer_sdr_history_closer_destino_id (+19 more)
 
 ### Community 493 - "Inbox.tsx"
 Cohesion: 0.25
@@ -3762,21 +4509,21 @@ Nodes (8): idx_ai_gateway_metrics_created, idx_ai_gateway_metrics_fn_created, pu
 Cohesion: 0.22
 Nodes (7): public.registrar_pedido_erp(), public.companies, public.config_regras_negocio, public.customer_ownership_history, public.customer_sdr_history, public.customers, public.interactions
 
-### Community 508 - "supabase-stubs.sql"
-Cohesion: 0.13
-Nodes (9): auth.identities, auth.refresh_tokens, auth.users, cron.job, cron.job_run_details, storage.buckets, storage.objects, vault.decrypted_secrets (+1 more)
+### Community 508 - "AppLayout.tsx"
+Cohesion: 0.10
+Nodes (19): 4.1 Componentes de Layout, Header(), AIEmailComposer, AppLayout(), AppLayoutInner(), AppLayoutProps, AskCrmChat, getBreadcrumbs() (+11 more)
 
 ### Community 509 - "restore-drill.integration.sh"
 Cohesion: 0.25
 Nodes (7): CRITICAL_TABLES, DRILL_DB_URL, PGPASSWORD, POSTGRES_PASSWORD, PROD_DB_URL, run_restore(), restore-drill.integration.sh script
 
 ### Community 510 - "AGENTS.md — Singu_V2"
-Cohesion: 0.11
-Nodes (16): AGENTS.md — Singu_V2, Bugs e funcionalidades, Comandos, Como trabalhar, Comunicação, Contexto, Fluxo Git (vários agentes ao mesmo tempo), Ler quando (+8 more)
+Cohesion: 0.13
+Nodes (14): AGENTS.md — Singu_V2, Bugs e funcionalidades, Comandos, Como trabalhar, Comunicação, Contexto, Fluxo Git (vários agentes ao mesmo tempo), Ler quando (+6 more)
 
 ### Community 511 - "useExternalLookup.ts"
-Cohesion: 0.43
-Nodes (7): Changed, BatchDistinctResponse, DistinctResponse, fetchBatchDistinct(), fetchDistinctValues(), useExternalBatchLookup(), useExternalLookup()
+Cohesion: 0.27
+Nodes (10): [2.7.2] - 2026-04-20 — Rodada Q: Tracing E2E nos Hooks Críticos, Changed, Roadmap incremental (gaps técnicos restantes — não-bloqueantes), Score, BatchDistinctResponse, DistinctResponse, fetchBatchDistinct(), fetchDistinctValues() (+2 more)
 
 ### Community 512 - "incoming_webhooks"
 Cohesion: 0.25
@@ -3791,8 +4538,8 @@ Cohesion: 0.25
 Nodes (7): Cenários adversariais cobertos, Controles comprovados localmente, Critério honesto para 10/10, Melhorias entregues, Pendências externas e riscos residuais, Reauditoria de implementação — 2026-10-02, Veredito
 
 ### Community 515 - "Estado dos testes"
-Cohesion: 0.14
-Nodes (14): [MÉDIO] TQ-5. Testes: suíte REAL e verde — número da doc desatualizado, Estado dos testes, Fragilidades adicionais dos testes, Números com denominador, Patologia 1b — Teste-grep (asserção sobre o *texto* do fonte, não sobre comportamento), Patologia 2 — Suíte desligada, Patologia 3 — Asserção vacuamente verdadeira, Patologia 4 — Sem runner (o achado mais grave dos testes) (+6 more)
+Cohesion: 0.18
+Nodes (11): Estado dos testes, Fragilidades adicionais dos testes, Números com denominador, Patologia 1 — Teste-espelho (reimplementa o alvo localmente), Patologia 1b — Teste-grep (asserção sobre o *texto* do fonte, não sobre comportamento), Patologia 2 — Suíte desligada, Patologia 4 — Sem runner (o achado mais grave dos testes), Patologia 5 — Alvo inexistente (+3 more)
 
 ### Community 516 - "RPC `get_contact_sidebar_by_phone(p_phone text)`"
 Cohesion: 0.20
@@ -3806,9 +4553,9 @@ Nodes (7): Compliance, Decisões pendentes, Migração Supabase — Brief Execut
 Cohesion: 0.25
 Nodes (8): Checklist final (10/10), Checklist final (11/10 — Rodada Final++), Checklist final (12/10 — Defense-in-Depth), Migration Master Runbook — Supabase → Supabase, Rollback, Rollback total (snapshot pré-migração), Timing estimado (janela 4h), Índice de runbooks
 
-### Community 519 - "🔴 Oportunidades Críticas"
-Cohesion: 0.22
-Nodes (9): 7.1 Hierarquia Visual Fraca em Algumas Telas, 7.2 Falta de Ilustrações Personalizadas, 7.3 Inconsistência em Badge Colors, 7.4 Falta de Microanimações em Números, 7.5 Gradientes Underutilized, 🔴 Oportunidades Críticas, 🟠 Oportunidades Importantes, 🎨 PILAR 7: VISUAL DESIGN & BRANDING (+1 more)
+### Community 519 - "MorphingNumber"
+Cohesion: 0.15
+Nodes (13): 4.9 Componentes de Microinterações, 7.1 Hierarquia Visual Fraca em Algumas Telas, 7.2 Falta de Ilustrações Personalizadas, 7.3 Inconsistência em Badge Colors, 7.4 Falta de Microanimações em Números, 7.5 Gradientes Underutilized, 🔴 Oportunidades Críticas, 🟠 Oportunidades Importantes (+5 more)
 
 ### Community 520 - "3. Cenários complementares"
 Cohesion: 0.22
@@ -3819,12 +4566,12 @@ Cohesion: 0.25
 Nodes (7): 1. Segurança e Hardening (Infraestrutura), 2. Integridade de Dados e Resiliência, 3. Garantia de Qualidade (QA), 4. Documentação Viva, 🛠️ Melhorias Implementadas (Rodada Final), 🏆 SINGU CRM — Estado de Excelência Técnica 10/10, 📈 Status das Dimensões Auditadas
 
 ### Community 522 - "2. 👤 Gestão de Contatos (Contacts)"
-Cohesion: 0.25
-Nodes (8): 2.1 Relacionamento, 2.2 Perfil Comportamental Estendido (`ContactBehavior`), 2.4 Eventos de Vida (`LifeEvent`), 2.5 Parentes/Relacionados (`contact_relatives`), 2.6 Preferências de Contato (`contact_preferences`), 2.7 Cadência de Contato (`contact_cadence`), 2.8 Análise Temporal (`contact_time_analysis`), 2. 👤 Gestão de Contatos (Contacts)
+Cohesion: 0.12
+Nodes (14): 2.1 Relacionamento, 2.2 Perfil Comportamental Estendido (`ContactBehavior`), 2.3 Frameworks de Personalidade, 2.4 Eventos de Vida (`LifeEvent`), 2.5 Parentes/Relacionados (`contact_relatives`), 2.6 Preferências de Contato (`contact_preferences`), 2.7 Cadência de Contato (`contact_cadence`), 2.8 Análise Temporal (`contact_time_analysis`) (+6 more)
 
-### Community 523 - "sales_team_members"
-Cohesion: 0.25
-Nodes (8): lead_routing_rules, sales_team_members, public.handoff_requests, public.lead_assignments, public.lead_routing_rules, public.redistribution_log, public.sales_team_members, public.support_tickets
+### Community 523 - "dados.sql"
+Cohesion: 0.10
+Nodes (20): public.mv_totais, public.tg_toca, clientes_nome_norm_idx, clientes_toca, mv_totais_pk, pedidos_abertos_idx, pedidos_cliente_dup_idx, pedidos_cliente_idx (+12 more)
 
 ### Community 524 - "Arquitetura"
 Cohesion: 0.25
@@ -3834,9 +4581,9 @@ Nodes (7): Arquitetura, Edge Function: `lead-routing`, Functions (DB), Hooks, Ta
 Cohesion: 0.25
 Nodes (7): Coexistência, Edge Functions, Hooks (`src/hooks/useLeadScoring.ts`), Lead Scoring Server-Side, Navegação, Schema, UI
 
-### Community 526 - "useSmartNotifications.ts"
-Cohesion: 0.14
-Nodes (12): 1. DLQ + Retry exponencial, 3. Alertas automáticos, 4. Status público, 5. Documentação, Critério 10/10 atingido, Entrega (5 melhorias → 55/55), EnqueueInput, NotifStatus (+4 more)
+### Community 526 - "check-test-inventory.mjs"
+Cohesion: 0.17
+Nodes (22): ref_child_process, ref_url, ALLOWLIST_DENO, ALLOWLIST_NODE, casaPadrao(), gitLsFilesOuDisco(), listarArquivosNoDisco(), visitar() (+14 more)
 
 ### Community 527 - "Entregáveis"
 Cohesion: 0.25
@@ -3866,9 +4613,9 @@ Nodes (7): ref_config, clearAppliedCanais(), readAppliedCanais(), scopedKey(), S
 Cohesion: 0.17
 Nodes (11): @lovable.dev/cloud-auth-js, @supabase/supabase-js, lovable, lovableAuth, SignInOptions, supabase, ComponentCheck, HealthResponse (+3 more)
 
-### Community 534 - "Contexto para agentes de IA — como ler o estado real do Singu V2"
-Cohesion: 0.12
-Nodes (13): Antes de qualquer tarefa, Contexto para agentes de IA — como ler o estado real do Singu V2, Edge functions de outro sistema no mesmo projeto, Quem é dono de cada fato, Regras de uso, Rodar local, Secrets, 1. Vinte e três aceitam chamada sem autenticação (+5 more)
+### Community 534 - "20260321125738_salespro_mig_004_playbooks_cadences_leads.sql"
+Cohesion: 0.16
+Nodes (24): idx_sales_activities_sale, idx_sales_activities_sp, idx_sales_activities_type, idx_sales_tasks_due, idx_sales_tasks_sp, idx_sales_tasks_status, public.activity_goals, public.cadence_steps (+16 more)
 
 ### Community 535 - "public.interactions"
 Cohesion: 0.25
@@ -3878,17 +4625,17 @@ Nodes (8): idx_interactions_company_id, idx_interactions_contact_id, idx_interac
 Cohesion: 0.19
 Nodes (23): Amostra, caminhos, carregarTabelas(), comparar(), esc(), relatorioHtml(), ErroEntrada, gerarSql() (+15 more)
 
-### Community 537 - "Auditoria técnica total — SINGU CRM"
-Cohesion: 0.12
-Nodes (16): 1. Estado geral, 2. Contexto e escopo observado, 3. Mapa de conexões, 4. Achados, 5. Não verificado, 6. Reprodutibilidade, A-001 · [P1] · segurança/backend — `migrate-helper` pode devolver credenciais administrativas, A-002 · [P1] · infra — CI da `main` falha antes de criar jobs (+8 more)
+### Community 537 - "20260405205155_huggingface_improvements_m01_m40.sql"
+Cohesion: 0.13
+Nodes (20): embedding_configs, guardrail_ml_logs, idx_embedding_configs_ws, idx_guardrail_ml_blocked, idx_guardrail_ml_date, idx_guardrail_ml_ws, idx_nlp_extractions_entities, idx_nlp_extractions_sentiment (+12 more)
 
-### Community 538 - "NextBestAction.tsx"
-Cohesion: 0.33
-Nodes (4): mocks, NextBestAction(), PredictiveRoadmapItem, Props
+### Community 538 - "zapp_history.master_dashboard"
+Cohesion: 0.08
+Nodes (24): public.companies, public.contacts, zapp_history.async_request_log, zapp_history.conversations, zapp_history.messages, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_dashboard_atendimento (+16 more)
 
-### Community 539 - "AgendarReuniaoForm.tsx"
-Cohesion: 0.32
-Nodes (7): AgendarReuniaoForm, AgendarReuniaoFormComponent(), DURATION_OPTIONS, formatPtBr(), MODALITY_OPTIONS, nextBusinessDay(), Props
+### Community 539 - "zapp_history.master_dashboard"
+Cohesion: 0.08
+Nodes (24): zapp_history.async_request_log, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_complexity_distribution, zapp_history.v_dashboard_atendimento, zapp_history.v_demanda_geografica, zapp_history.v_demanda_por_cidade, zapp_history.v_disc_distribution (+16 more)
 
 ### Community 540 - "ProximaAcaoCTA.tsx"
 Cohesion: 0.16
@@ -3898,25 +4645,25 @@ Nodes (11): resposta(), channelMeta, channelToTipo(), ContactProximaAcaoCTA(), g
 Cohesion: 0.36
 Nodes (7): ActiveFiltersBar, CHANNEL_META, fmtDate(), pad2(), prettifyChannel(), Props, SENTIMENTO_META
 
-### Community 542 - "SortChips.tsx"
-Cohesion: 0.29
-Nodes (4): Props, SORT_CONFIG, SortChips, SortConfigItem
+### Community 542 - "20260720135515_bd2_company_contact_ownership_checks.sql"
+Cohesion: 0.08
+Nodes (7): public.bulk_reassign_companies(), public.definir_como_filial(), public.move_to_pipeline_stage(), public.respond_to_proposal(), pipeline_stages, proposals, user_roles
 
-### Community 544 - "uniq"
-Cohesion: 0.20
-Nodes (17): baseOf(), byCount(), convencoes, flags, git(), gitInfo, gitInfoCommit(), graphify (+9 more)
+### Community 544 - "20260720145939_db_perf_indexes_rls_cleanup.sql"
+Cohesion: 0.08
+Nodes (24): idx_cadence_enrollments_cadence_id, idx_carrier_score_history_carrier_id, idx_deal_competitors_deal_id, idx_lead_score_history_company_id, idx_pipeline_stages_pipeline_id, idx_product_novelties_supplier_id, idx_reminders_user_id, idx_sales_opportunities_assigned_to (+16 more)
 
 ### Community 545 - "SequenceFormDialog.tsx"
 Cohesion: 0.32
 Nodes (7): CHANNELS, CONDITION_OPTIONS, emptyStep(), nextSeqStepId(), Props, SequenceFormDialog(), StepDraft
 
-### Community 546 - "gerar.unit.mjs"
-Cohesion: 0.16
-Nodes (9): fixture(), GERADOR, isolatedFixture(), miniRepo(), out, root, ROTAS_NAMESPACE, spawnGerador() (+1 more)
+### Community 546 - "20261011195900_company_relations_baseline.sql"
+Cohesion: 0.14
+Nodes (20): company_emails_company_id_email_ci_unique, idx_company_addresses_cep, idx_company_addresses_cidade, idx_company_addresses_cidade_ibge, idx_company_addresses_company, idx_company_addresses_created_at, idx_company_addresses_primary, idx_company_addresses_tipo_logradouro (+12 more)
 
-### Community 547 - "MATRIZ_RECONCILIADA_20261012.md"
-Cohesion: 0.12
-Nodes (12): Atualização após as revisões — 12/10/2026, Escopo e evidência, Matriz de execução reconciliada — Singu V2, Matrizes por área, Ordem de execução, Documentos raiz e memória Lovable: matriz completa, Evidências e limites, Prioridades confirmadas para o pai (+4 more)
+### Community 547 - "view-mode-switcher.tsx"
+Cohesion: 0.25
+Nodes (5): columnOptions, GridColumns, modes, ViewMode, ViewModeSwitcherProps
 
 ### Community 548 - "DensityContext.tsx"
 Cohesion: 0.29
@@ -3946,17 +4693,17 @@ Nodes (4): INTEL_NOTES_PREFIX, INTEL_STORAGE_KEYS, INTEL_TELEMETRY_KEY, IntelSto
 Cohesion: 0.32
 Nodes (7): AdminKnowledgeExport(), CATEGORIES, CATEGORY_LABELS, generateJSON(), generateMarkdown(), KNOWLEDGE_SECTIONS, KnowledgeSection
 
-### Community 555 - "PublicSurvey.tsx"
-Cohesion: 0.29
-Nodes (5): PublicSurvey(), Survey, surveySchema, { rpc, toastError }, survey
+### Community 555 - "20260321125922_salespro_mig_007_security_bi_supply_remaining.sql"
+Cohesion: 0.14
+Nodes (23): public.access_denied_logs, public.active_sessions, public.blocked_ips, public.circuit_breaker_events, public.ip_whitelist, public.known_devices, public.login_alerts, public.login_attempts (+15 more)
 
 ### Community 557 - "emotional-intelligence.ts"
 Cohesion: 0.25
 Nodes (7): EQAnalysisResult, EQIndicator, EQLevel, EQPillar, EQPillarInfo, EQPillarScore, EQProfile
 
-### Community 558 - "error-budget/index.ts"
-Cohesion: 0.25
-Nodes (5): ActiveAlert, ALERT_THRESHOLDS, DailyPoint, limiter, Snapshot
+### Community 558 - "SnapshotAgainstPostgres"
+Cohesion: 0.17
+Nodes (8): 📋 Tabela: `whatsapp_instances`, 🚀 Setup para Desenvolvimento, admin(), available(), Path, skipIf, SnapshotAgainstPostgres, settings()
 
 ### Community 559 - "public.score_history"
 Cohesion: 0.43
@@ -4002,29 +4749,29 @@ Nodes (6): public.psychographic_audit_log, public.social_sync_queue, auth.users,
 Cohesion: 0.36
 Nodes (7): idx_rpc_plan_snapshots_changed, public.get_rpc_plan_change_counts(), public.get_rpc_plan_snapshots(), public.set_rpc_plan_changed(), public.rpc_plan_snapshots, public.set_rpc_plan_changed, trg_rpc_plan_changed
 
-### Community 570 - "MFAEnrollmentBanner.tsx"
-Cohesion: 0.09
+### Community 570 - "5. `docs/TECH_DEBT.md`"
+Cohesion: 0.10
 Nodes (17): 10. `docs/ux_improvement_strategy.md`, 5. `docs/TECH_DEBT.md`, Limites e diferenças posteriores, Matriz C1 restante — produto, documentação e limites cruzados, Matriz D, frontend e duplicações C1, Primeiro: lacunas graves e tarefas concretas, Singu V2 — reconciliação UX/frontend, UX, navegação e acessibilidade (+9 more)
 
 ### Community 571 - "ADR-009: Rate Limiting em Múltiplas Camadas"
 Cohesion: 0.29
 Nodes (6): ADR-009: Rate Limiting em Múltiplas Camadas, Backend (Edge Functions), Consequências, Contexto, Decisão, Frontend (Auth)
 
-### Community 572 - "readText"
-Cohesion: 0.15
-Nodes (16): allMatches(), changelogTopo, composes, countLines(), dockerfiles, docsRaiz, docTitle(), envExample (+8 more)
+### Community 572 - "useFicha360DeeplinkToast.ts"
+Cohesion: 0.33
+Nodes (6): [MÉDIO] TQ-5. Testes: suíte REAL e verde — número da doc desatualizado, Patologia 3 — Asserção vacuamente verdadeira, CHANNEL_LABELS, describe(), Options, useFicha360DeeplinkToast()
 
-### Community 573 - "useContactCadence.ts"
-Cohesion: 0.29
-Nodes (6): 3.6 Hooks de Comunicação, useBehaviorAlerts(), CADENCE_PRESETS, CadenceAlert, ContactCadence, useContactCadence()
+### Community 573 - "7. Descoberta e navegação"
+Cohesion: 0.10
+Nodes (23): 7. Descoberta e navegação, ✅ Resolvidos nesta rodada, useContactTimeline(), ABM(), ABMAccountDetail(), ABMCampaigns(), Analytics(), BattleCardDetail() (+15 more)
 
 ### Community 574 - "DR Drills & Game Days — Índice"
 Cohesion: 0.29
 Nodes (7): 📅 Calendário Anual de Game Days, DR Drills & Game Days — Índice, 📊 Métricas de Maturidade, Passos, 🔁 Protocolo de Verificação de Backup (Mensal), 🔗 Referências, Template do relatório mensal
 
-### Community 575 - "verificar-citacoes.mjs"
-Cohesion: 0.24
-Nodes (13): BASELINE_REL, CITACAO, comparar(), conferir(), EXT_CITADA, extrairCitacoes(), IGNORAR_DIR, lerBaseline() (+5 more)
+### Community 575 - "B3 — "Envio de e-mail é encenado em 3 lugares""
+Cohesion: 0.29
+Nodes (7): B3 — "Envio de e-mail é encenado em 3 lugares", Evidência — não existe caminho alternativo de envio, O que fiz para derrubar, Quarto sítio, não listado no achado original, Sítio 1 — `src/hooks/useEmailCampaigns.ts`, Sítio 2 — `supabase/functions/sequence-processor/index.ts`, Sítio 3 — `supabase/functions/nurturing-runner/index.ts`
 
 ### Community 576 - "🛡️ Hardening Phase 2 — BD Físico pgxfvjmuubtbowutlide"
 Cohesion: 0.29
@@ -4034,9 +4781,9 @@ Nodes (6): Estado pós-hardening, 🛡️ Hardening Phase 2 — BD Físico pgxfv
 Cohesion: 0.29
 Nodes (7): Boas práticas, Cenários, Execução, Interpretação de resultados, Load Testing — k6, Setup, Variáveis de ambiente
 
-### Community 578 - "NLPAnalysisCard.tsx"
-Cohesion: 0.17
-Nodes (10): 🔴 Críticos, 🟡 Funcionais / técnicos (planejados para próxima rodada), Ondas de execução, 🔵 Polimento (backlog), QA Findings — Rodada 27/10, MetaprogramProfile, NLPAnalysisCard(), Props (+2 more)
+### Community 578 - "QA Findings — Rodada 27/10"
+Cohesion: 0.29
+Nodes (6): 🔴 Críticos, 🟡 Funcionais / técnicos (planejados para próxima rodada), Ondas de execução, 🔵 Polimento (backlog), QA Findings — Rodada 27/10, NLPAnalysisCard()
 
 ### Community 579 - "Auditoria SECURITY DEFINER — Rodada 01/11"
 Cohesion: 0.18
@@ -4054,21 +4801,21 @@ Nodes (7): 5.1 Análise Automática (`useNLPAutoAnalysis`), 5.2 Componentes UI, 
 Cohesion: 0.29
 Nodes (6): Barreiras (cadeado físico), Comandos usuais, Identidade, Padrão de Chat (Hermes) — subpasta por sessão, Regra de Ouro (casa do Joaquim), Singu_V2 — Regras da Casa (Hermes) — suplemento
 
-### Community 583 - ".lovable/memory/architecture/*.md (4) + standards (1) + technical (1)"
-Cohesion: 0.17
-Nodes (8): .lovable/memory/architecture/*.md (4) + standards (1) + technical (1), RouteAnnouncer(), routeTitles, SkipNav(), assertProviderOrder(), PROVIDER_ORDER, ProviderDependency, validateProviderOrder()
+### Community 583 - "providerGuard.ts"
+Cohesion: 0.33
+Nodes (4): assertProviderOrder(), PROVIDER_ORDER, ProviderDependency, validateProviderOrder()
 
-### Community 584 - "useDuplicateContacts.ts"
-Cohesion: 0.29
-Nodes (4): DuplicateContact, useDuplicateContacts(), OrphanContact, useOrphanContacts()
+### Community 584 - "G — Camada de banco: funcionalidades planejadas e não executadas"
+Cohesion: 0.09
+Nodes (23): A. Sem nenhum leitor nem escritor (⬛ MORTO) — 15, B. Lidas por tela viva, mas sem nenhum produtor no repositório (🔌 painel sem produtor) — 26, C. Lidas por tela viva, produtor só em caminho morto (⏰ edge com gate de cron sem agendador / hook morto) — 9, Cobertura de testes SQL, D. Só leitura/escrita em caminho morto (⬛) — 10, E. Escritas em produção, sem leitor vivo (dado coletado e nunca exibido) — 29, Edge functions de "cron" sem agendador, Funções sem chamador (+15 more)
 
 ### Community 585 - "intent-data-module.md"
 Cohesion: 0.29
 Nodes (6): Edge Functions, Hooks (`src/hooks/useIntent.ts`), Navegação, Snippet de uso, Tabelas, UI
 
-### Community 586 - "Lead Score Threshold Automations + Behavioral Bridge"
-Cohesion: 0.29
-Nodes (6): Coexistência, Hooks `src/hooks/useScoreAutomations.ts`, Lead Score Threshold Automations + Behavioral Bridge, Navegação, Schema, UI
+### Community 586 - "Componentes (`src/components/intel/`)"
+Cohesion: 0.10
+Nodes (20): Componentes (`src/components/intel/`), Página (`src/pages/Intelligence.tsx`), GraphLegend(), GraphLegendProps, LegendItem, IntelCommandPalette(), IntelDensityToggle(), IntelPresentationToggle() (+12 more)
 
 ### Community 587 - "RpcPlanDiffDialog.tsx"
 Cohesion: 0.29
@@ -4098,21 +4845,21 @@ Nodes (6): public.sequence_pause_on_interaction_reply, idx_sequence_enrollments_
 Cohesion: 0.33
 Nodes (5): public.set_user_ui_preferences_updated_at, idx_user_ui_preferences_user_scope, public.user_ui_preferences, auth.users, trg_user_ui_preferences_updated_at
 
-### Community 594 - "GeradoresComBanco"
-Cohesion: 0.20
-Nodes (5): blocos_mermaid(), celulas(), GeradoresComBanco, skipIf, Divide uma linha de tabela GFM nos `|` não escapados.
+### Community 594 - "ReportWidgets.tsx"
+Cohesion: 0.14
+Nodes (20): WIDGET_COMPONENTS, WidgetComponentId, BestTimeWidget(), ChurnRiskWidget(), CompaniesCountWidget(), ContactsCountWidget(), DealsByStageWidget(), DIAS (+12 more)
 
-### Community 595 - "check-rls-baseline.test.mjs"
-Cohesion: 0.07
-Nodes (33): ref_node_dns, ref_node_http, ref_node_https, argumentos(), chaveTs(), destino(), ehView(), ErroDeUso (+25 more)
-
-### Community 596 - "useReportWidgets.ts"
+### Community 595 - "gen-supabase-types.test.mjs"
 Cohesion: 0.12
-Nodes (7): AtividadeRecente, ContatoEmRisco, ContatoPorScore, DistribuicaoSentimento, GRUPOS_SENTIMENTO, InteracoesSemana, ResumoPipeline
+Nodes (21): ref_node_dns, ref_node_https, argumentos(), chaveTs(), destino(), ehView(), ErroDeUso, extractColumnTypes() (+13 more)
 
-### Community 597 - "Detalhe"
-Cohesion: 0.13
-Nodes (14): Automação local (`automation-local.yml`), Contexto para agentes de IA (10 min) (`contexto.yml`), Detalhe, Documentação sem drift (`docs-ci.yml`), Estado real do repositório (`estado-real.yml`), Fix JWT proxies externas (`fix-jwt-proxies-externas.yml`), Higiene semanal do repositório (`higiene-semanal.yml`), Inventário do estado real (semanal) (`inventario-estado-semanal.yml`) (+6 more)
+### Community 596 - "20260110000001_compat_colunas_producao.sql"
+Cohesion: 0.09
+Nodes (8): idx_companies_search, public.alert_rules, public.config_regras_negocio, public.pipeline_stages, public.pipelines, public.companies, _stg_pac_nums, storage.buckets
+
+### Community 597 - "carrier_evaluations"
+Cohesion: 0.11
+Nodes (18): carrier_evaluations, idx_carrier_evaluations_avaliador, idx_carrier_evaluations_carrier, idx_carrier_evaluations_carrier_data, idx_carrier_evaluations_data, carriers, users, carrier_score_history (+10 more)
 
 ### Community 598 - "sequences"
 Cohesion: 0.33
@@ -4122,33 +4869,37 @@ Nodes (7): public.sequence_enrollments, public.sequence_events, public.sequence_
 Cohesion: 0.29
 Nodes (11): CheckResult, Config, ErroConfig, imprimir(), laco(), lerConfig(), reportSentry(), rodada() (+3 more)
 
-### Community 600 - "E — Camada de dados do front × contratos de backend (SINGU CRM v2)"
-Cohesion: 0.14
-Nodes (13): Drift types.ts × migrations, E — Camada de dados do front × contratos de backend (SINGU CRM v2), Edge functions invocadas e ausentes, Fontes de verdade usadas e como interpretar, Observações fora do escopo (registradas por relevância), Resumo numérico, Tabelas/views chamadas pelo front e ausentes no backend, Top 10 lacunas de maior impacto (+5 more)
+### Community 600 - "zapp_history.master_dashboard"
+Cohesion: 0.09
+Nodes (22): zapp_history.async_request_log, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_dashboard_atendimento, zapp_history.v_demanda_geografica, zapp_history.v_demanda_por_cidade, zapp_history.v_disc_distribution, zapp_history.v_disc_funnel_matrix (+14 more)
 
 ### Community 601 - "ContactTimeHeatmap.tsx"
 Cohesion: 0.38
 Nodes (6): ContactTimeHeatmap(), DAYS, formatHour(), getIntensityClass(), HOURS_DISPLAY, Props
 
-### Community 602 - "CadenceRulesConfig.tsx"
-Cohesion: 0.33
-Nodes (6): CadencePriority, CadenceRule, CadenceRulesConfig(), CadenceStep, CadenceStepType, nextStepId()
-
-### Community 603 - "Categorias"
+### Community 602 - "20260416221418_singu_create_security_auth_module.sql"
 Cohesion: 0.13
-Nodes (13): Allowlist — Funções `public.*` executáveis por `authenticated`, 📊 Analytics/KPIs por usuário (authenticated) — 6, 🔐 Auth helper (authenticated) — 1, 🔎 Busca full-text (authenticated) — 4, Categorias, 🌐 Endpoints públicos (anon + authenticated) — 9, 🧠 Gaps comportamentais (authenticated) — 4, Governança (+5 more)
+Nodes (22): idx_access_blocked_ip, idx_access_blocked_user, idx_device_login_notif_user, idx_geo_allowed_user, idx_ip_whitelist_user_active, idx_login_attempts_email_time, idx_login_attempts_failures, idx_login_attempts_ip (+14 more)
 
-### Community 604 - "RecentActivityCard.tsx"
-Cohesion: 0.43
-Nodes (6): deduplicateActivities(), getActivityVisual(), getTimeColor(), RecentActivityCard, RecentActivityCardProps, StaggerAnimation
+### Community 603 - "20261013033433_sequence_write_fences.sql"
+Cohesion: 0.11
+Nodes (17): public.guard_contact_sequence_archive, public.guard_sequence_enrollment_write, public.guard_sequence_status_while_send, public.sequence_email_reservations, public.settle_sequence_email_reservation, contact_sequence_archive_guard, public.enroll_lead_score_contact(), public.guard_sequence_enrollment_write() (+9 more)
 
-### Community 605 - "Intelligence Hub (`/intelligence`)"
+### Community 604 - "20260321123232_salespro_batch3_security_quotes_competitive.sql"
+Cohesion: 0.16
+Nodes (21): public.dashboard_layouts, public.email_tracking_events, public.feed_comments, public.feed_reactions, public.known_devices, public.login_alerts, public.mfa_verification_attempts, public.password_reset_requests (+13 more)
+
+### Community 605 - "zapp_history.master_dashboard"
+Cohesion: 0.10
+Nodes (21): public.companies, public.contacts, zapp_history.async_request_log, zapp_history.conversations, zapp_history.messages, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_dashboard_atendimento (+13 more)
+
+### Community 606 - "20261012194307_recover_atomic_queue_claims.sql"
 Cohesion: 0.13
-Nodes (12): Acessibilidade, Constraints, Intelligence Hub (`/intelligence`), Persistência, Tabs (`src/components/intelligence/`), Tokens (`src/index.css`), NetworkVisualization(), AskCrmMessage (+4 more)
+Nodes (15): anon, authenticated, public.claim_behavioral_profile_retry(), public.claim_behavioral_profile_sla_batch(), public.claim_regen_batch(), public.complete_validation_queue_item(), PUBLIC, public.behavioral_insight_feedback (+7 more)
 
-### Community 606 - "TopContactsCard.tsx"
-Cohesion: 0.38
-Nodes (5): getAvatarRing(), getScoreVisual(), StaggerAnimation, TopContactsCard(), TopContactsCardProps
+### Community 607 - "push.ts"
+Cohesion: 0.12
+Nodes (16): RFC-8030, SendPayload, buildPayload(), deliver(), isAllowedPushEndpoint(), PUSH_HOST_SUFFIXES, PushOutcome, PushPayload (+8 more)
 
 ### Community 608 - "ErrorState.tsx"
 Cohesion: 0.29
@@ -4158,33 +4909,33 @@ Nodes (6): errorConfigs, ErrorState(), ErrorStateProps, ErrorType, InlineError()
 Cohesion: 0.48
 Nodes (6): daysBetween(), formatDate(), formatRelative(), FrequenciaContatoCard, Intelligence, Props
 
-### Community 610 - "ProximoPassoQuickForm.tsx"
-Cohesion: 0.33
-Nodes (6): CHANNEL_OPTIONS, formatDateBr(), PRIORITY_OPTIONS, Props, ProximoPassoQuickForm, ProximoPassoQuickFormComponent()
+### Community 610 - "Fatia H — CI/CD, testes, infra, observabilidade e tooling"
+Cohesion: 0.10
+Nodes (21): Check externo "Supabase Preview" (integração GitHub do Supabase, projeto `pgxfvjmuubtbowutlide`), CI — jobs e gates (prometido × real), `ci.yml` — job único `build-and-test` (gatilho: push/PR em `main`, `ci.yml:3-7`), Deploy (front, edge functions, migrations), DR, Edge Functions — sem pipeline, Env vars (código × `.env.example`), Estado real do CI em `main` (+13 more)
 
-### Community 611 - "contact-cache-revalidation.test.tsx"
-Cohesion: 0.13
-Nodes (6): created, key, listKey, old, saved, state
+### Community 611 - "mudou-conteudo.test.mjs"
+Cohesion: 0.15
+Nodes (17): CARIMBOS, IGNORADOS, limparHistoricoCron(), mudou(), normalizarAlerta(), PADRAO, semCarimbos(), TELEMETRIA (+9 more)
 
-### Community 612 - "public.get_contact_sidebar_by_phone"
-Cohesion: 0.13
-Nodes (14): public.get_contact_sidebar_by_phone(), public.companies, public.contact_behavior, public.contact_business_context, public.contact_decision_making, public.contact_emails, public.contact_influence, public.contact_metaprograms (+6 more)
+### Community 612 - "20260321123053_salespro_batch1b_playbooks_cadences_achievements.sql"
+Cohesion: 0.17
+Nodes (20): public.achievements, public.activity_goals, public.cadence_steps, public.cadence_tasks, public.cadences, public.icp_data, public.lead_routing_log, public.lead_scores (+12 more)
 
-### Community 613 - "3.8 Hooks de UX/UI"
+### Community 613 - "20260321123133_salespro_batch2_bi_chat_challenges_supply.sql"
 Cohesion: 0.14
-Nodes (10): 3.8 Hooks de UX/UI, useDebounce(), useDebouncedCallback(), LazyOptions, useLazySection(), useOnlineStatus(), UseOnlineStatusOptions, UseOnlineStatusReturn (+2 more)
+Nodes (20): public.bitrix24_sync_logs, public.challenge_progress, public.chat_conversations, public.chat_messages, public.client_portfolio, public.daily_challenge_progress, public.daily_challenges, public.daily_streak_achievements (+12 more)
 
 ### Community 614 - "ChannelShortcutsHelpOverlay.tsx"
 Cohesion: 0.33
 Nodes (5): CHANNELS, ChannelShortcutsHelpOverlay, KeyChipProps, Props, readPending()
 
 ### Community 615 - "PrefetchLink.tsx"
-Cohesion: 0.07
+Cohesion: 0.06
 Nodes (6): prefetched, PrefetchLink(), PrefetchLinkProps, prefetchRoute(), routeChunks, usePrefetch()
 
-### Community 616 - "SocialIntelligencePanel.tsx"
+### Community 616 - "20260321123201_salespro_batch2b_supply_security.sql"
 Cohesion: 0.16
-Nodes (9): Hooks stub/mock/incompletos, Props, SocialInsightsError(), PLATFORM_ICONS, Props, SocialIntelligencePanel(), Props, SocialMatchDetails() (+1 more)
+Nodes (20): public.active_sessions, public.blocked_ips, public.digital_signatures, public.document_signers, public.ip_whitelist, public.login_attempts, public.price_alerts, public.price_history (+12 more)
 
 ### Community 617 - "emotionalIntelligenceData.ts"
 Cohesion: 0.33
@@ -4198,25 +4949,25 @@ Nodes (5): getBundleByScenario(), getBundlesForProfile(), getRecommendedBundle()
 Cohesion: 0.38
 Nodes (4): asArr(), BehavioralProfileVersion, normalize(), useBehavioralProfileVersions()
 
-### Community 620 - "AskTab.tsx"
-Cohesion: 0.14
-Nodes (11): Página (`src/pages/Intelligence.tsx`), IntelTourOverlay(), STEPS, TourStep, KeyboardMapOverlay(), Shortcut, SHORTCUTS, RecentSnapshotsPanel() (+3 more)
+### Community 620 - "zapp_history.master_dashboard"
+Cohesion: 0.10
+Nodes (20): zapp_history.async_request_log, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts, zapp_history.v_dashboard_atendimento, zapp_history.v_demanda_geografica, zapp_history.v_demanda_por_cidade, zapp_history.v_disc_distribution, zapp_history.v_disc_funnel_matrix (+12 more)
 
-### Community 621 - "RELATORIO_CI.md — Correção dos workflows com falha (Singu_V2)"
-Cohesion: 0.14
-Nodes (13): 1. Inventário (última execução de cada workflow na `main`), 2. Baseline pré-correção, 3. Diagnóstico — causa raiz, 4. Correção aplicada — PR #136, 5. Comparação baseline × final (anti-regressão), 6. Prova de conclusão, 7. Workflows antes verdes — seguem verdes, Baseline CI pré-PR #136 (run 39838063160, SHA pré-merge PR #134) (+5 more)
+### Community 621 - "useSavedViews.ts"
+Cohesion: 0.48
+Nodes (6): decodeState(), encodeState(), readAll(), SavedView, useSavedViews(), writeAll()
 
-### Community 622 - "useSentimentAnnotations.ts"
-Cohesion: 0.33
-Nodes (6): AnnotationCategory, CreateAnnotationInput, QK(), SentimentAnnotation, UpdateAnnotationInput, useSentimentAnnotations()
+### Community 622 - "public.contacts"
+Cohesion: 0.13
+Nodes (20): idx_activities_created_at, idx_activities_user_id, idx_alerts_dismissed, idx_alerts_user_id, idx_companies_search, idx_companies_user_id, idx_contacts_company_id, idx_contacts_user_id (+12 more)
 
 ### Community 623 - "computeIsolatedFilterCounts.ts"
 Cohesion: 0.33
 Nodes (5): CHANNEL_LABELS, computeIsolatedFilterCounts(), IsolatedFilterCount, IsolatedFilterKey, normalize()
 
-### Community 624 - "AdminFieldMapping.tsx"
-Cohesion: 0.29
-Nodes (5): COMPANY_MAPPINGS, Discrepancy, FieldMapping, RPC_LIST, SchemaResult
+### Community 624 - "20260321123026_salespro_batch1_core_sales.sql"
+Cohesion: 0.17
+Nodes (19): public.category_metrics, public.clients, public.daily_metrics, public.deal_chat_history, public.deal_outcomes, public.deal_stage_history, public.entity_versions, public.permissions (+11 more)
 
 ### Community 625 - "auth-flow.test.ts"
 Cohesion: 0.25
@@ -4367,20 +5118,20 @@ Cohesion: 0.29
 Nodes (4): 🔐 Autenticação, 🔄 Códigos de Resposta, ⚠️ Rate Limiting, SINGU CRM — Edge Functions API Reference
 
 ### Community 665 - "Drift: repo × tipos gerados — quantificado"
-Cohesion: 0.22
+Cohesion: 0.25
 Nodes (8): 📋 Tabela: `contact_relatives`, A explicação, com evidência, Consequência mensurável no código, Drift: repo × tipos gerados — quantificado, Os números, 19. `docs/DATABASE_ANALYSIS.md` (gaps e recomendações, `:1144-1234`), RFMSegmentDashboard(), company()
 
 ### Community 666 - "Reconstruibilidade do ambiente a partir do repositório"
 Cohesion: 0.33
 Nodes (6): Prova 1 — statements não-guardados contra tabelas que nenhuma migration cria, Prova 2 — objetos referenciados que nada cria, Prova 3 — ordenação destrutiva no histórico, Prova 4 — o próprio repositório admite o problema, Reconstruibilidade do ambiente a partir do repositório, Veredito
 
-### Community 667 - "weekly-digest/index.ts"
-Cohesion: 0.16
-Nodes (8): ResendEmail, sendResendEmail(), BirthdayRow, deliverDigest(), ProfileRow, RecentRow, userLimiter, WeeklyDigestData
+### Community 667 - "20260321125846_salespro_mig_006_competitive_security_supply.sql"
+Cohesion: 0.20
+Nodes (19): public.active_power_ups, public.available_spins, public.battle_participants, public.competitive_chat_messages, public.competitive_seasons, public.kudos, public.performance_bets, public.prize_wheel_spins (+11 more)
 
-### Community 669 - "public.vw_contacts_sem_apelido"
-Cohesion: 0.29
-Nodes (13): _dormant.inactivity_alerts, public.vw_active_alerts, public.vw_contacts_sem_apelido, public.vw_interacoes_sem_apelido, public.vw_pending_followups, public.companies, public.company_addresses, public.contact_emails (+5 more)
+### Community 669 - "💰 Error Budget Policy"
+Cohesion: 0.33
+Nodes (6): Alertas automáticos de Error Budget, Cálculo, 💰 Error Budget Policy, Política de Freeze, Retenção e cleanup, Tracking
 
 ### Community 670 - "healthy"
 Cohesion: 0.13
@@ -4395,8 +5146,8 @@ Cohesion: 0.33
 Nodes (5): Edge Function, Hooks, Navegação, Schema, UI
 
 ### Community 673 - "useTasks.ts"
-Cohesion: 0.09
-Nodes (17): Fixed, LazyPage(), LazySection(), LazySectionProps, ARGS_DA_RPC, Company360, useInteractionHistory(), montarArgsCriarTarefa() (+9 more)
+Cohesion: 0.11
+Nodes (16): Fixed, LazyPage(), LazySection(), ARGS_DA_RPC, Company360, useInteractionHistory(), montarArgsCriarTarefa(), Task (+8 more)
 
 ### Community 674 - "Rodada 13/10 — Excelência Sustentada"
 Cohesion: 0.33
@@ -4430,13 +5181,13 @@ Nodes (4): public.touch_system_config, public.get_system_config_num(), public.sy
 Cohesion: 0.33
 Nodes (4): public.trigger_aggregate_nlp_to_company, public.aggregate_nlp_to_company(), public.contacts, tr_aggregate_nlp_on_contact_change
 
-### Community 682 - "create-drill-backup.mjs"
+### Community 682 - "graphify-local.mjs"
 Cohesion: 0.18
-Nodes (6): problemas, tables, blockEnd, blockStart, deployScript, noJwtFunctions
+Nodes (37): ref_node_crypto, runtime(), status(), validateGraph(), adoptInitial(), generate(), atomic(), canonical() (+29 more)
 
-### Community 683 - "☁️ MÓDULO 5: EDGE FUNCTIONS (12)"
-Cohesion: 0.15
-Nodes (13): 5.10 template-success-notifications, 5.11 voice-to-text, 5.12 weekly-digest, 5.1 ai-writing-assistant, 5.2 check-health-alerts, 5.3 check-notifications, 5.4 client-notifications, 5.5 generate-insights (+5 more)
+### Community 683 - "zapp_history.health_check"
+Cohesion: 0.10
+Nodes (19): cron.job, pg_extension, public.connector_log, public.embedding_configs, storage.buckets, zapp_history.admin_grants, zapp_history.ai_cost_log, zapp_history.ai_training_dataset (+11 more)
 
 ### Community 684 - "DNS Flip — Checklist da Janela de Cutover"
 Cohesion: 0.33
@@ -4458,105 +5209,113 @@ Nodes (6): idx_vak_analysis_contact, idx_vak_analysis_user, idx_vak_auditory_sco
 Cohesion: 0.53
 Nodes (4): check(), finish(), http_code(), post-cutover-watch.sh script
 
-### Community 689 - "useEmotionalIntelligence.ts"
-Cohesion: 0.23
-Nodes (11): Dados sem produtor ou sem consumidor, forcaPorEvidencia(), generateProfileSummary(), getClosingStrategy(), getDecisionMakingStyle(), getObjectionHandling(), getPersuasionApproach(), Interaction (+3 more)
+### Community 689 - "zapp_history.health_check"
+Cohesion: 0.10
+Nodes (19): cron.job, pg_extension, public.connector_log, public.embedding_configs, storage.buckets, zapp_history.admin_grants, zapp_history.ai_cost_log, zapp_history.ai_training_dataset (+11 more)
 
-### Community 690 - "PENDENCIAS.md — Bloqueios e itens fora do escopo (Singu_V2)"
-Cohesion: 0.15
-Nodes (12): Lição para o próximo agente, O que estava escondido atrás disso, P0 — RESOLVIDO (2026-11-18) — PR `fix/ci-workflows` foi mergeada, P1 — react-router-dom 6 → 7 (2 vulnerabilidades moderadas), P2 — zod 3.23.8 pinado nas edge functions (Deno), P3 — Vulnerabilidades em devDependencies (vitest/tinypool crítica, @vitest/mocker, postcss-selector-parser), P4 — Tokens Supabase da org inválidos, P5 — RESOLVIDO (2026-11-18) — projeto canônico travado por teste de CI (+4 more)
+### Community 690 - "AuditDiffViewer.tsx"
+Cohesion: 0.47
+Nodes (4): AuditDiffViewer(), AuditDiffViewerProps, formatValue(), getChangedFields()
 
-### Community 691 - "check-edge-cors.mjs"
-Cohesion: 0.28
-Nodes (12): acharWildcards(), ehWildcard(), escapar(), fimDoBloco(), lerAllowlist(), lerExpressao(), listarArquivos(), main() (+4 more)
+### Community 691 - "ReportsTab.tsx"
+Cohesion: 0.12
+Nodes (7): CohortAnalysisWidget, COLORS, formatCurrency(), MonthlyReportWidget, ParetoList(), PeriodComparisonCards(), YoyComparisonWidget
 
-### Community 692 - "ContactEmailThreadsSection.tsx"
-Cohesion: 0.40
-Nodes (5): ContactEmailThreadsSection(), EmailRow, normalizeSubject(), Props, ThreadGroup
+### Community 692 - "20260721214918_fix_secdef_remaining_guards.sql"
+Cohesion: 0.13
+Nodes (10): company_cadences, sales_opportunities, public.assert_cadence_access(), public.assert_opportunity_access(), public.resolve_alerts_batch(), public.upsert_company(), nps_surveys, pg_language (+2 more)
 
-### Community 693 - "contact-cache-concurrency.test.tsx"
-Cohesion: 0.15
-Nodes (5): key, listKey, old, saved, state
+### Community 693 - "Achados"
+Cohesion: 0.11
+Nodes (19): Achados, [ALTO] EF-3. Nenhum timeout em chamadas externas (AI Gateway, Firecrawl, EnrichLayer, Evolution, ElevenLabs, Twilio), [ALTO] EF-4. `evolution-webhook` — sem verificação de assinatura + fallback perigoso de `user_id`, [ALTO] EF-5. `nurturing-runner` — `completed_count` sempre gravado como 1 + duplo incremento, [ALTO] EF-6. Crons/workers sem claim atômico — double-processing sob concorrência, [ALTO] EF-7. `send-sms-campaign` — envio síncrono, sem atomicidade, sem paginação, sem timeout, [BAIXO] EF-15. Inconsistência de CORS/imports/auth entre funções, [BAIXO] EF-16. `bulk-revalidate` — teto de 5000 contatos silencioso (+11 more)
 
 ### Community 694 - "NotificationGroup.tsx"
 Cohesion: 0.33
 Nodes (5): GroupedNotifications(), GroupedNotificationsProps, NotificationGroup(), NotificationGroupProps, NotificationItem
 
-### Community 695 - "useActivityOverview.ts"
+### Community 695 - "CopiarLinkFiltrosButton.tsx"
+Cohesion: 0.47
+Nodes (5): CHANNEL_LABELS, CopiarLinkFiltrosButton(), copyText(), describeFilters(), Props
+
+### Community 696 - "contact-relation-concurrency.mjs"
+Cohesion: 0.11
+Nodes (12): pg, A, actors, ADMIN, B, clients, connect(), counters (+4 more)
+
+### Community 697 - "collect_and_render"
 Cohesion: 0.18
-Nodes (12): BUCKET, buscar(), DIAS, janelaDoPeriodo(), PeriodoAtividade, PontoSerie, RelacionamentoTopo, ResumoAtividade (+4 more)
+Nodes (18): api_section(), collect_and_render(), diff_fingerprints(), introspect_api(), introspect_db(), log(), mask_secrets(), Exception (+10 more)
 
-### Community 696 - "Como ler a matriz"
-Cohesion: 0.17
-Nodes (11): Auditoria EF-1–EF-17, B2: administração, integração, dados, infraestrutura e reverificação, B2: riscos e plano, sem duplicar causas, Como ler a matriz, Edge Functions, Inventário completo e cron sem novos IDs, Lacunas F01–F68 e inventário correspondente, Lacunas F: causas sistêmicas (+3 more)
+### Community 698 - "20260409230707_audit_fix_02_fk_indexes.sql"
+Cohesion: 0.13
+Nodes (18): idx_ai_cost_contact, idx_ai_training_contact, idx_ai_training_conv, idx_audio_conv, idx_conv_wpp_conn, idx_daily_summaries_company, idx_daily_summaries_conv, idx_daily_summaries_interaction (+10 more)
 
-### Community 697 - "ProximosPassosFiltersBar.tsx"
-Cohesion: 0.33
-Nodes (4): CHANNELS, PRIORITIES, Props, ProximosPassosFiltersBar
+### Community 699 - "zapp_history.audit_dashboard_v13"
+Cohesion: 0.11
+Nodes (18): cron.job, cron.job_run_details, information_schema.role_table_grants, pg_class, pg_constraint, pg_indexes, pg_policies, pg_proc (+10 more)
 
-### Community 698 - "DateRangePopover.tsx"
-Cohesion: 0.40
-Nodes (5): DateRangePopover, fmt(), Preset, PRESETS, Props
+### Community 700 - "20260416221307_singu_create_email_sms_campaigns.sql"
+Cohesion: 0.16
+Nodes (18): idx_campaign_recipients_campaign, idx_campaign_recipients_contact, idx_email_campaigns_scheduled, idx_email_campaigns_user_status, idx_landing_pages_slug_public, idx_landing_pages_user_status, idx_lp_submissions_lp, idx_sms_campaign_recipients_campaign (+10 more)
 
-### Community 699 - "ViewModeChips.tsx"
-Cohesion: 0.33
-Nodes (5): Props, VIEW_CONFIG, ViewConfigItem, ViewMode, ViewModeChips
-
-### Community 700 - "storage-public-guard.ts"
-Cohesion: 0.26
-Nodes (9): ref_node_process, BucketInfo, listarBuckets(), main(), parseAllowlist(), violacoes(), applyEdits(), prepareSql() (+1 more)
-
-### Community 701 - "render-workflow-docs.mjs"
-Cohesion: 0.36
-Nodes (9): CAMPOS, desencapar(), extrairDocs(), extrairNaoEBug(), lerWorkflows(), main(), nomeDe(), RAIZ_PADRAO (+1 more)
+### Community 701 - "Histórico de versões 1.0.0 a 1.5.0"
+Cohesion: 0.11
+Nodes (17): [1.0.0] - 2026-03-15, [1.1.0] - 2026-03-22, [1.2.0] - 2026-03-28, [1.3.0] - 2026-04-02, [1.4.0] - 2026-04-05, [1.5.0] - 2026-04-08, Adicionado, Adicionado (+9 more)
 
 ### Community 702 - "DealConfidenceBadge.tsx"
 Cohesion: 0.40
 Nodes (5): DealConfidenceBadge(), formatCurrency(), LEVEL_LABEL, LEVEL_STYLES, Props
 
-### Community 703 - "workflow-invariants.mjs"
-Cohesion: 0.18
-Nodes (8): CI_YML, coverageMatches, distArtifactGuard, distArtifactStepHasIf(), jobs, missingRequiredJobs, REQUIRED_JOBS, workflowStepBlocks()
+### Community 703 - "relationship-score.tsx"
+Cohesion: 0.53
+Nodes (5): getScoreBg(), getScoreLabel(), getTrend(), RelationshipScore(), RelationshipScoreProps
 
 ### Community 704 - "channelPersistence.config.ts"
 Cohesion: 0.33
 Nodes (5): CHANNEL_PERSISTENCE_KEY, CHANNEL_PERSISTENCE_TTL_DAYS, CHANNEL_PERSISTENCE_TTL_MS, CHANNEL_PERSISTENCE_VALID_VALUES, PersistedChannel
 
-### Community 705 - "gerar-repo.mjs"
-Cohesion: 0.32
-Nodes (11): esc(), executarRg(), FDIR, inventariarEdges(), inventariarTabelas(), lerStdin(), main(), RAIZ (+3 more)
+### Community 705 - "SnapshotDBStatsTests"
+Cohesion: 0.20
+Nodes (5): 📋 Tabela: `slow_queries_audit`, OfflineConnection, Catálogo e resultados sintéticos; nenhum driver, socket ou banco real., SnapshotDBStatsTests, query()
 
-### Community 706 - "lint-providers.cjs"
-Cohesion: 0.24
-Nodes (11): analisar(), DEPENDENCIES, fimDaTag(), fs, importsLocais(), main(), OBRIGATORIOS, path (+3 more)
+### Community 706 - "modulos"
+Cohesion: 0.18
+Nodes (18): aggregate(), anyFile(), camadaDe(), cap(), closure(), componentes, dominioDe(), enrich() (+10 more)
 
-### Community 707 - "contact-relation-concurrency.mjs"
-Cohesion: 0.07
-Nodes (21): 📋 Tabela: `proximo_passo_feedback`, 📋 Tabela: `win_loss_records`, Colunas inexistentes (amostra), pg, CrossRefInput, CrossRefInteraction, CrossRefInteractionWithMatches, CrossRefResult (+13 more)
+### Community 707 - "useCrossReference.ts"
+Cohesion: 0.22
+Nodes (9): 📋 Tabela: `proximo_passo_feedback`, 📋 Tabela: `win_loss_records`, Colunas inexistentes (amostra), CrossRefInput, CrossRefInteraction, CrossRefInteractionWithMatches, CrossRefResult, useCrossReference() (+1 more)
 
-### Community 708 - "dr.test.sh"
-Cohesion: 0.26
-Nodes (11): ago(), alvo(), call(), chk(), CRITICAL_TABLES, drill(), GNUPGHOME, prod() (+3 more)
+### Community 708 - "useDeviceDetection.ts"
+Cohesion: 0.53
+Nodes (5): DeviceInfo, generateFingerprint(), getBrowser(), getOS(), useDeviceDetection()
 
-### Community 709 - "useEmailThreadSummary.ts"
-Cohesion: 0.40
-Nodes (5): computeThreadKey(), EmailThreadSummary, GenerateInput, ThreadActionItem, useEmailThreadSummary()
+### Community 709 - "supabase-stubs.sql"
+Cohesion: 0.13
+Nodes (9): auth.identities, auth.refresh_tokens, auth.users, cron.job, cron.job_run_details, storage.buckets, storage.objects, vault.decrypted_secrets (+1 more)
 
-### Community 710 - "dual-write-diverge.ts"
-Cohesion: 0.24
-Nodes (8): comparar(), Deteccao, detectar(), Leitor, lerRecentes(), LinhaResumo, normalizarTs(), par()
+### Community 710 - "useEvidenceForLabel.ts"
+Cohesion: 0.47
+Nodes (5): EvidenceHit, EvidenceSource, highlight(), ilikeEscape(), useEvidenceForLabel()
 
-### Community 711 - "exporters.test.sh"
-Cohesion: 0.42
-Nodes (10): afirma(), falha(), nao_tem(), ok(), PGDATABASE, sai(), exporters.test.sh script, tem() (+2 more)
+### Community 711 - "VoiceSearchOverlay.tsx"
+Cohesion: 0.22
+Nodes (14): getThemeHSL(), hsl(), hsla(), PhaseColors, usePhaseColors(), VoiceOrb(), FlowingWaveRing(), LightRays() (+6 more)
 
 ### Community 712 - "contactBehaviorAudit.test.ts"
 Cohesion: 0.40
 Nodes (3): BehavioralAuditLog, fetchContactBehaviorAudit(), mocks
 
-### Community 717 - "contact-detail-external-retry.test.tsx"
-Cohesion: 0.18
-Nodes (8): company, contact, key, load(), mocks, otherKey, saved, wrapper()
+### Community 715 - "useAdvancedTriggers.ts"
+Cohesion: 0.16
+Nodes (15): chaveDoPar(), chaves(), ALTERNATIVAS, chaveDoPar(), CONFLITOS, SATURATION_CONFIG, SINERGIAS, unir() (+7 more)
+
+### Community 716 - "zapp_history.audit_dashboard_v13"
+Cohesion: 0.11
+Nodes (17): cron.job, cron.job_run_details, information_schema.role_table_grants, pg_class, pg_constraint, pg_indexes, pg_policies, pg_proc (+9 more)
+
+### Community 717 - "MATRIZ_RECONCILIADA_20261012.md"
+Cohesion: 0.12
+Nodes (12): Atualização após as revisões — 12/10/2026, Escopo e evidência, Matriz de execução reconciliada — Singu V2, Matrizes por área, Ordem de execução, Documentos raiz e memória Lovable: matriz completa, Evidências e limites, Prioridades confirmadas para o pai (+4 more)
 
 ### Community 718 - "public.vak_analysis_history"
 Cohesion: 0.47
@@ -4682,13 +5441,13 @@ Nodes (5): `disc_analysis_history` (23 colunas), 🎯 DISC - Análise Comportame
 Cohesion: 0.40
 Nodes (4): Cenário, Conclusão, 📂 Disaster Recovery Drill — 2026 Q2, Procedimentos Realizados
 
-### Community 750 - "useEntityBookmarks.ts"
-Cohesion: 0.24
-Nodes (8): GENERIC, BookmarkType, EntityBookmark, read(), useEntityBookmarks(), write(), HistoryEntry, State
+### Community 750 - "uniq"
+Cohesion: 0.20
+Nodes (17): baseOf(), byCount(), convencoes, flags, git(), gitInfo, gitInfoCommit(), graphify (+9 more)
 
-### Community 751 - "public.vw_singu_data_health"
-Cohesion: 0.17
-Nodes (11): public.vw_singu_data_health, pg_catalog.pg_constraint, pg_catalog.pg_namespace, pg_catalog.pg_tables, pg_catalog.pg_views, public.automation_rules, public.companies, public.compatibility_settings (+3 more)
+### Community 751 - "Gates de CI"
+Cohesion: 0.40
+Nodes (5): `ci.yml` — job único `build-and-test`, Dois pipelines concorrendo pelo mesmo alvo?, Existe pipeline de DEPLOY?, Gates de CI, Riscos que anulam gates
 
 ### Community 752 - "Graphify"
 Cohesion: 0.40
@@ -4774,9 +5533,9 @@ Nodes (4): @radix-ui/react-accordion, AccordionContent, AccordionItem, Accordion
 Cohesion: 0.40
 Nodes (4): @radix-ui/react-tabs, TabsContent, TabsList, TabsTrigger
 
-### Community 774 - "Regras de negócio — preencha o que o código não diz"
-Cohesion: 0.18
-Nodes (10): 1. O que o sistema faz e para quem (1 parágrafo), 2. Atores / perfis e o que cada um pode fazer, 3. Entidades principais e o que significam (glossário do negócio), 4. Ciclo de vida / estados e transições permitidas, 5. Regras de cálculo (fórmulas, arredondamento, moeda, impostos, comissões, descontos máximos), 6. Prazos, limites e quotas (ex.: expira em 7 dias, máximo 3 tentativas, limite por plano), 7. Integrações: o que entra, o que sai, o que acontece se falhar, 8. Exceções comerciais e decisões já tomadas (o que NÃO mudar e por quê) (+2 more)
+### Community 774 - "SequenceDetailDrawer.tsx"
+Cohesion: 0.12
+Nodes (9): EVENT_COLORS, EVENT_ICONS, Props, SequenceManualSteps(), mocks, task, SequencePausedEmails(), mocks (+1 more)
 
 ### Community 775 - "CDC / Replay Layer — RPO=0"
 Cohesion: 0.29
@@ -4838,65 +5597,69 @@ Nodes (8): public.ensure_audit_log_partition(), public.get_marketing_funnel_stat
 Cohesion: 0.33
 Nodes (5): Como ler o baseline, Códigos de saída e ajustes, Estado medido em 2026-09-24 (antes da Fase 3), Rodar, Suíte de exposição RLS (etapa 84 do plano banco-único)
 
-### Community 811 - "useDealVelocity.ts"
-Cohesion: 0.22
-Nodes (10): 10. Dados fictícios (`Math.random`) em hooks de inteligência, CONVERTED_STAGES, DealVelocityMetrics, INACTIVE_STAGES, median(), MonthlyTrend, STAGE_CONFIG, stageLabel() (+2 more)
+### Community 811 - "useForecasting.ts"
+Cohesion: 0.12
+Nodes (14): DealForecast, ForecastCategory, ForecastPeriod, ForecastSnapshot, QuotaSettings, useCreatePeriod(), useCurrentPeriod(), useDealForecasts() (+6 more)
 
 ### Community 812 - "DailySummaryWidget.tsx"
 Cohesion: 0.50
 Nodes (4): DailySummaryWidget, formatCurrency(), MetricRow, MetricRowProps
 
-### Community 813 - "useHapticFeedback.ts"
-Cohesion: 0.20
-Nodes (10): FUNCIONALIDADES_SISTEMA.md, 11. `docs/PRODUCT_DESIGN_STRATEGY_ANALYSIS_V6.md` (76 itens: 66 numerados + 9 subproblemas do pilar 12 + métricas), 21.1 AppLayout, 21.2 Engajamento & Retenção, 21. 🎨 Layout & UX, useFormDraft(), HapticPattern, hapticPatterns (+2 more)
+### Community 813 - "20260321123300_salespro_batch3b_gamification_competitive.sql"
+Cohesion: 0.22
+Nodes (16): public.active_power_ups, public.available_spins, public.battle_participants, public.collectible_badges, public.competitive_chat_messages, public.competitive_seasons, public.kudos, public.prize_wheel_spins (+8 more)
 
-### Community 814 - "CopyScriptMenu.tsx"
-Cohesion: 0.40
-Nodes (3): channelMeta, CopyScriptMenu, Props
+### Community 814 - "20260321125811_salespro_mig_005_gamification.sql"
+Cohesion: 0.23
+Nodes (16): public.achievements, public.challenge_progress, public.collectible_badges, public.daily_challenge_progress, public.daily_challenges, public.daily_streak_achievements, public.feed_comments, public.feed_reactions (+8 more)
 
-### Community 815 - "ProximosPassosPresets.tsx"
-Cohesion: 0.50
-Nodes (4): presetMatchesCurrent(), Props, ProximosPassosPresets, ProximosPassosPresetsComponent()
+### Community 815 - "20260326115100_ensure_company_rfm_scores.sql"
+Cohesion: 0.21
+Nodes (16): idx_alerts_user_status_created, idx_company_addresses_cep, idx_company_addresses_cidade, idx_company_addresses_cidade_ibge, idx_company_addresses_company, idx_company_addresses_created_at, idx_company_addresses_primary, idx_company_addresses_tipo_logradouro (+8 more)
 
 ### Community 816 - "CompanyAddressesForm.tsx"
 Cohesion: 0.50
 Nodes (4): addressTypes, CompanyAddressesForm(), emptyAddress(), Props
 
-### Community 817 - "Prod Readiness ? Singu_V2"
-Cohesion: 0.18
-Nodes (10): 1. Qualidade t?cnica (build / typecheck / lint / testes), 2. Banco de dados, 3. Rotas (App) ? 114 rotas em src/app/AppRoutes.tsx, 4. Edge Functions ? 109 slugs no repo (152 deployed em prod, todas ACTIVE), 5. Workflows GitHub Actions, 6. Produ??o ? logs e deploy, 7. Sem perda / sem pela-metade, 8. Corre??es desta sess?o (+2 more)
+### Community 817 - "vw_supplier_homologation_queue"
+Cohesion: 0.12
+Nodes (13): suppliers, vw_supplier_qualification_dashboard, company_addresses, company_emails, company_phones, suppliers, vw_supplier_homologation_queue, company_addresses (+5 more)
 
-### Community 818 - "Next-Best-Action (NBA) por Contato"
-Cohesion: 0.20
-Nodes (10): Arquitetura, Backend, Frontend, Next-Best-Action (NBA) por Contato, Sinais agregados, Tabela `contact_next_actions`, UX, Visão geral (+2 more)
+### Community 818 - "CompanySocialMediaForm.tsx"
+Cohesion: 0.50
+Nodes (4): CompanySocialMediaForm(), emptyItem(), platforms, Props
 
-### Community 819 - "DirecaoQuickFilter.tsx"
-Cohesion: 0.40
-Nodes (4): DirecaoQuickFilter, DirecaoValue, OPTIONS, Props
+### Community 819 - "gerar.unit.mjs"
+Cohesion: 0.16
+Nodes (9): fixture(), GERADOR, isolatedFixture(), miniRepo(), out, root, ROTAS_NAMESPACE, spawnGerador() (+1 more)
 
-### Community 820 - "bump-toolchain.mjs"
-Cohesion: 0.25
-Nodes (9): ref_node_module, FERRAMENTAS, headers, latestRelease(), main(), maisNova(), semver(), toolchain (+1 more)
+### Community 820 - "_sqlseguro.py"
+Cohesion: 0.22
+Nodes (15): dataclasses, carregar(), Comando, dividir(), fechar(), _ler(), Divisão e validação de SQL somente-leitura para o run_explain_analyze.py.…, Separa o texto em comandos (ignora comandos vazios). Levanta SqlInvalido se… (+7 more)
 
-### Community 821 - "exists"
-Cohesion: 0.18
-Nodes (11): aliasesFor(), componentFile(), dirOf(), edges, exists(), isAliasSpec(), isCurrentSql(), migDir (+3 more)
+### Community 821 - "StakeholderInfluenceNetwork.tsx"
+Cohesion: 0.29
+Nodes (13): react-force-graph-2d, getQuadrantIcon(), getQuadrantLabel(), getSupportIcon(), getSupportLabel(), getSupportType(), NetworkLink, NetworkNode (+5 more)
 
-### Community 822 - "sql.test.mjs"
-Cohesion: 0.27
-Nodes (8): AQUI, arquivo(), comBanco(), PG, prox(), psql(), sql(), STUBS
+### Community 822 - "readText"
+Cohesion: 0.15
+Nodes (16): allMatches(), changelogTopo, composes, countLines(), dockerfiles, docsRaiz, docTitle(), envExample (+8 more)
 
 ### Community 823 - "nlpTrainingScenarios.ts"
 Cohesion: 0.40
 Nodes (4): Difficulty, TRAINING_SCENARIOS, TrainingScenario, TrainingType
 
-### Community 825 - "useMarkObjectionHandled.ts"
-Cohesion: 0.50
-Nodes (4): AnalysisObjection, normalize(), useMarkObjectionHandled(), Vars
+### Community 824 - "verificar-citacoes.mjs"
+Cohesion: 0.24
+Nodes (13): BASELINE_REL, CITACAO, comparar(), conferir(), EXT_CITADA, extrairCitacoes(), IGNORAR_DIR, lerBaseline() (+5 more)
 
-### Community 826 - "useNeuromarketing.ts"
-Cohesion: 0.40
-Nodes (3): BRAIN_SYSTEM_KEYWORDS, DISCProfile, STIMULUS_PATTERNS
+### Community 825 - "build_function_callers"
+Cohesion: 0.12
+Nodes (16): build_function_callers(), is_caller_source(), lock_output_directory(), main(), prepare_output_directory(), Path, Histórico, testes e fixtures não demonstram uso atual pela aplicação., Ignora nomes em assinaturas DDL sem apagar chamadas no corpo de CREATE FUNCTION. (+8 more)
+
+### Community 826 - "useReportWidgets.ts"
+Cohesion: 0.12
+Nodes (7): AtividadeRecente, ContatoEmRisco, ContatoPorScore, DistribuicaoSentimento, GRUPOS_SENTIMENTO, InteracoesSemana, ResumoPipeline
 
 ### Community 827 - "ipMasking.ts"
 Cohesion: 0.60
@@ -5006,37 +5769,37 @@ Nodes (4): public.rodizio_reverter_execucao(), public.customer_events, public.ro
 Cohesion: 0.40
 Nodes (4): public.rodizio_aplicar_onda(), public.customers, public.rodizio_distribuicao_staging, public.users
 
-### Community 858 - "CelebrationProvider.tsx"
-Cohesion: 0.18
-Nodes (8): CelebrationConfig, CelebrationContext, CelebrationContextType, CelebrationOverlayProps, CelebrationProviderProps, celebrationStyles, CelebrationType, ConfettiPieceProps
+### Community 858 - "20260326115101_add_composite_performance_indices.sql"
+Cohesion: 0.15
+Nodes (15): idx_activities_user_created, idx_alerts_user_status_created, idx_company_addresses_primary, idx_company_rfm_user_company, idx_contacts_company_user, idx_contacts_user_created, idx_interactions_company_created, idx_interactions_contact_created (+7 more)
 
-### Community 860 - "EntityMonthlyTimeline.tsx"
+### Community 860 - "20260330122025_create_carrier_triggers.sql"
+Cohesion: 0.17
+Nodes (15): config_regras_negocio, update_updated_at_column, trg_carrier_evaluation_recalc_score, trg_carrier_homologation_insert_update_flag, trg_carrier_homologation_update_update_flag, trg_carrier_homologations_updated_at, trg_carrier_qualification_config_updated_at, trg_carrier_scores_updated_at (+7 more)
+
+### Community 861 - "20260408200032_zapp_history_05_links_and_embeddings.sql"
 Cohesion: 0.20
-Nodes (9): EntityMonthlyTimeline(), EntityMonthlyTimelineProps, FILTERS, KindFilter, matchesKind(), MonthGroup, IntelBadgeProps, Severity (+1 more)
+Nodes (15): idx_me_contact, idx_me_vector, idx_ml_contact, idx_ml_domain, idx_ml_message, idx_ml_pending, idx_ml_url_hash, public (+7 more)
 
-### Community 861 - "BundlesTab.tsx"
-Cohesion: 0.20
-Nodes (7): BundlesTab(), BundlesTabProps, DIFICULDADE, METAPROGRAMAS, PERFIS_DISC, PERFIS_VAK, precoObjecao
+### Community 862 - "zapp_history.health_check"
+Cohesion: 0.12
+Nodes (14): cron.job, pg_extension, public.connector_log, zapp_history.admin_grants, zapp_history.async_request_log, zapp_history.conversations, zapp_history.message_audio, zapp_history.message_links (+6 more)
 
-### Community 862 - "proactiveIntelligence.ts"
-Cohesion: 0.18
-Nodes (10): ActionCategory, ActionPriority, ApproachScript, CARNEGIE_PRINCIPLES, DISC_APPROACH_STYLE, IntelligenceInsight, NEURO_BRAIN_HOOKS, NextBestAction (+2 more)
+### Community 863 - "zapp_history.master_dashboard"
+Cohesion: 0.12
+Nodes (15): zapp_history.async_request_log, zapp_history.v_dashboard_atendimento, zapp_history.v_demanda_geografica, zapp_history.v_demanda_por_cidade, zapp_history.v_eventos_demanda, zapp_history.v_funil_origem, zapp_history.v_funil_vendas, zapp_history.v_intelligence_360 (+7 more)
 
-### Community 863 - "MapaEmpresas.tsx"
-Cohesion: 0.35
-Nodes (7): buildLocationString(), geocode(), geocodeCache, CompanyWithScore, MapaEmpresas(), syncMappedCompanies(), toMappable()
-
-### Community 864 - "Texto-mestre adm01-debug (2026-11-02) — íntegra"
-Cohesion: 0.20
-Nodes (9): 1. Contexto, 2. Como trabalhar, 3. Bugs, 4. Funcionalidades, 5. Comunicação, 6. Nunca, 7. Fluxo Git (vários agentes nos mesmos repos ao mesmo tempo), Sempre feche com 3 próximos passos (+1 more)
+### Community 864 - "Contexto para agentes de IA — como ler o estado real do Singu V2"
+Cohesion: 0.13
+Nodes (13): Antes de qualquer tarefa, Contexto para agentes de IA — como ler o estado real do Singu V2, Edge functions de outro sistema no mesmo projeto, Quem é dono de cada fato, Regras de uso, Rodar local, Secrets, 1. Vinte e três aceitam chamada sem autenticação (+5 more)
 
 ### Community 865 - "ADR-007: CORS Scoped por Origem"
 Cohesion: 0.50
 Nodes (3): ADR-007: CORS Scoped por Origem, Consequências, Contexto
 
-### Community 866 - "Banco, migrations, CI e operação"
-Cohesion: 0.20
-Nodes (10): ADRs, migração e recuperação: complementos sem duplicação, Auditoria de banco e testes, Banco, contratos e produtores, Banco, migrations, CI e operação, Base e significado dos estados, CI, deploy e experiência operacional, Lacunas graves e tarefas concretas, Limites finais (+2 more)
+### Community 866 - "🧪 Achados — Testes, Build, Config, CI & Docs-vs-Realidade"
+Cohesion: 0.50
+Nodes (3): 🧪 Achados — Testes, Build, Config, CI & Docs-vs-Realidade, Ponto mais importante, Resumo dos veredictos
 
 ### Community 867 - "Gaps e Problemas"
 Cohesion: 0.50
@@ -5054,13 +5817,17 @@ Nodes (4): Prioridade 1 - Urgente, Prioridade 2 - Importante, Prioridade 3 - Mel
 Cohesion: 0.50
 Nodes (3): Backup Encryption Verification, Frequência, Script de verificação
 
-### Community 871 - "parseEnv"
-Cohesion: 0.33
-Nodes (7): cena(), par(), par(), parseEnv(), env(), par(), par()
+### Community 871 - "Tabelas sem RLS / sem política"
+Cohesion: 0.50
+Nodes (4): Achado inverso — RLS habilitada em tabela que o repositório NÃO cria — 3, Criadas sem `ENABLE ROW LEVEL SECURITY` — 1, Criadas sem nenhuma `CREATE POLICY` — 1, Tabelas sem RLS / sem política
 
-### Community 872 - "cutover-cdc.test.sh"
-Cohesion: 0.27
-Nodes (7): can(), CDC_OUT_DIR, dry(), FREEZE_STATE_DIR, o(), cutover-cdc.test.sh script, STAGING_CONFIRM
+### Community 872 - "Detalhe"
+Cohesion: 0.13
+Nodes (14): Automação local (`automation-local.yml`), Contexto para agentes de IA (10 min) (`contexto.yml`), Detalhe, Documentação sem drift (`docs-ci.yml`), Estado real do repositório (`estado-real.yml`), Fix JWT proxies externas (`fix-jwt-proxies-externas.yml`), Higiene semanal do repositório (`higiene-semanal.yml`), Inventário do estado real (semanal) (`inventario-estado-semanal.yml`) (+6 more)
+
+### Community 873 - "Monitoring"
+Cohesion: 0.50
+Nodes (4): Estão conectados a algo real? **Não.**, Monitoring, O que existe, Veredito
 
 ### Community 874 - "🚨 Procedimento de Hotfix"
 Cohesion: 0.50
@@ -5082,9 +5849,9 @@ Nodes (4): enqueue_behavioral_profile_regen, trg_enqueue_bpr_calls, trg_enqueue_
 Cohesion: 0.50
 Nodes (3): information_schema.columns, public._migration_schema_fingerprint(), public._migration_schema_snapshot
 
-### Community 879 - "_pgdocs.py"
-Cohesion: 0.04
-Nodes (97): ArgumentParser, csv, difflib, errno, Namespace, principal(), renderizar(), pares_relacionados() (+89 more)
+### Community 879 - "test_snapshot.py"
+Cohesion: 0.06
+Nodes (42): contextlib, copy, importlib_util, io, json, os, pathlib, PathLike (+34 more)
 
 ### Community 880 - "security.md"
 Cohesion: 0.50
@@ -5110,21 +5877,21 @@ Nodes (3): Escopo, Impacto, Riscos mitigados
 Cohesion: 0.50
 Nodes (3): Escopo, Impacto, Riscos mitigados
 
-### Community 889 - "progress.tsx"
+### Community 889 - "E — Camada de dados do front × contratos de backend (SINGU CRM v2)"
+Cohesion: 0.14
+Nodes (14): Drift types.ts × migrations, E — Camada de dados do front × contratos de backend (SINGU CRM v2), Edge functions invocadas e ausentes, Fontes de verdade usadas e como interpretar, Hooks stub/mock/incompletos, Observações fora do escopo (registradas por relevância), Resumo numérico, Top 10 lacunas de maior impacto (+6 more)
+
+### Community 890 - "Categorias"
+Cohesion: 0.13
+Nodes (13): Allowlist — Funções `public.*` executáveis por `authenticated`, 📊 Analytics/KPIs por usuário (authenticated) — 6, 🔐 Auth helper (authenticated) — 1, 🔎 Busca full-text (authenticated) — 4, Categorias, 🌐 Endpoints públicos (anon + authenticated) — 9, 🧠 Gaps comportamentais (authenticated) — 4, Governança (+5 more)
+
+### Community 891 - "scroll-area.tsx"
 Cohesion: 0.50
-Nodes (3): @radix-ui/react-progress, Progress, ProgressProps
+Nodes (3): @radix-ui/react-scroll-area, ScrollArea, ScrollBar
 
-### Community 890 - "SoftDeletePanel.test.tsx"
-Cohesion: 0.22
-Nodes (5): Props, SoftDeletePanel(), detailKey, otherContactKey, otherUserKey
-
-### Community 891 - "useAdvancedTriggers.ts"
-Cohesion: 0.31
-Nodes (8): chaveDoPar(), chaves(), ALTERNATIVAS, chaveDoPar(), CONFLITOS, SATURATION_CONFIG, SINERGIAS, unir()
-
-### Community 893 - "useContactRelationalData.ts"
-Cohesion: 0.20
-Nodes (5): ContactRelationalData, ExternalAddress, ExternalEmail, ExternalPhone, ExternalSocialMedia
+### Community 892 - "20260611130820_create_product_novelties_table_v2.sql"
+Cohesion: 0.17
+Nodes (12): public.fn_set_novelty_updated_at, public.fn_sync_novelty_to_product, idx_pn_detected_at, idx_pn_expires_at, idx_pn_is_active, idx_pn_supplier_code, public.product_novelties, public (+4 more)
 
 ### Community 894 - "dry-run.sh"
 Cohesion: 0.62
@@ -5254,33 +6021,33 @@ Nodes (5): cleanup(), load_env(), log(), pgc(), restore-drill.sh script
 Cohesion: 0.08
 Nodes (53): compare-counts.sh script, skip_match(), draw(), section(), dashboard.sh script, verify-extensions.sh script, cols_of(), export_one() (+45 more)
 
-### Community 927 - "useSemanticSearch.ts"
-Cohesion: 0.20
-Nodes (8): EMPTY, SearchOpts, SemanticCompanyRow, SemanticContactRow, SemanticEntity, SemanticInteractionRow, SemanticProductRow, SemanticSearchResults
+### Community 927 - "EntityMonthlyTimeline.tsx"
+Cohesion: 0.16
+Nodes (12): EntityCard(), EntityCardProps, EntityMonthlyTimeline(), EntityMonthlyTimelineProps, FILTERS, KindFilter, matchesKind(), MonthGroup (+4 more)
 
-### Community 928 - "useSocialInsights.test.tsx"
-Cohesion: 0.24
-Nodes (7): SocialInsight, SocialInsightsQuery, SupabaseWithDynamicTables, denied, insight, mocks, useSocialInsights()
+### Community 928 - "contact-cache-revalidation.test.tsx"
+Cohesion: 0.13
+Nodes (6): created, key, listKey, old, saved, state
 
-### Community 929 - "headers"
-Cohesion: 0.22
-Nodes (8): 📋 Tabela: `lux_webhook_config`, A6 — Jobs pg_cron, Afirmação original, Headers — ✅ CONFIRMADO, Lista completa reproduzida — 15/15, Números que devem ser corrigidos no `ESTADO_ATUAL.md`, headers(), TEST_JWT
+### Community 929 - "weekly-digest/index.ts"
+Cohesion: 0.15
+Nodes (9): ResendEmail, sendResendEmail(), authorizeCaller(), BirthdayRow, deliverDigest(), ProfileRow, RecentRow, userLimiter (+1 more)
 
-### Community 930 - "pg_temp.db01_snapshot"
-Cohesion: 0.22
-Nodes (7): pg_temp.db01_company_compat, a_db01_company_compat, pg_temp.db01_snapshot(), public.companies, public.company_emails, public.company_phones, public.contacts
+### Community 930 - "zapp_history.message_audio"
+Cohesion: 0.19
+Nodes (14): idx_ma_contact_created, idx_ma_embedding, idx_ma_pending_transcription, idx_ma_speaker, idx_ma_training_eligible, idx_ma_transcription_fts, public, public.contacts (+6 more)
 
-### Community 931 - "merge_records_atomic.sql"
-Cohesion: 0.22
-Nodes (7): pg_temp.reject_merge_audit, merge_contract_reject_audit, public.merge_contract_conflicts, public.merge_nullable_scope_polymorph, public.merge_unscoped_polymorph, public.companies, public.contacts
+### Community 931 - "zapp_history.conversation_daily_summaries"
+Cohesion: 0.19
+Nodes (14): idx_cds_contact_date, idx_cds_date, idx_cds_embedding, idx_cds_high_intent, idx_cds_pending_sync, idx_cds_sentiment, public, public.companies (+6 more)
 
-### Community 932 - "CoalitionDetectionPanel.tsx"
-Cohesion: 0.33
-Nodes (7): COALITION_TYPE_CONFIG, CoalitionCard(), CoalitionDetail(), InfluenceClusterCard(), PowerBalanceIndicator(), RISK_CONFIG, CoalitionDetectionPanelProps
+### Community 932 - "20260408200248_zapp_history_09_observability.sql"
+Cohesion: 0.19
+Nodes (14): idx_acl_function_date, idx_acl_occurred, idx_acl_reference, public.companies, public.contacts, zapp_history.conversation_daily_summaries, zapp_history.message_audio, zapp_history.message_links (+6 more)
 
-### Community 933 - "table.tsx"
-Cohesion: 0.22
-Nodes (8): Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow
+### Community 933 - "20260416224009_singu_create_missing_functions_fixed.sql"
+Cohesion: 0.13
+Nodes (10): public.execute_readonly_query(), public.search_companies_unaccent(), public.search_contacts_unaccent(), public.search_interactions_unaccent(), public.search_products_semantic(), public.companies, public.contacts, public.interactions (+2 more)
 
 ### Community 934 - "anchorTrackingData.ts"
 Cohesion: 0.50
@@ -5410,13 +6177,13 @@ Nodes (3): forecast_periods, public.deal_forecasts, public.forecast_snapshots
 Cohesion: 0.67
 Nodes (3): increment_version_column, companies_increment_version, contacts_increment_version
 
-### Community 973 - "public.nurturing_enrollments"
-Cohesion: 0.67
-Nodes (3): nurturing_workflows, public.nurturing_enrollments, public.nurturing_executions
+### Community 973 - "20260721222911_idx_user_id_missing_tables.sql"
+Cohesion: 0.13
+Nodes (14): idx_activities_user_id, idx_alerts_user_id, idx_documents_user_id, idx_meetings_user_id, idx_proposals_user_id, idx_quick_notes_user_id, idx_user_goals_user_id, public.activities (+6 more)
 
-### Community 975 - "process_contact_relatives_audit"
-Cohesion: 0.67
-Nodes (3): process_contact_relatives_audit, on_contact_relatives_change, tr_contact_relatives_audit
+### Community 975 - "public.get_contact_sidebar_by_phone"
+Cohesion: 0.13
+Nodes (14): public.get_contact_sidebar_by_phone(), public.companies, public.contact_behavior, public.contact_business_context, public.contact_decision_making, public.contact_emails, public.contact_influence, public.contact_metaprograms (+6 more)
 
 ### Community 976 - "public.audit_log_2026_07"
 Cohesion: 0.67
@@ -5450,9 +6217,9 @@ Nodes (7): hours_since(), jwks_kids(), log(), read_stamp(), rotate-jwt.sh script
 Cohesion: 0.83
 Nodes (3): dry(), log(), inject.sh script
 
-### Community 987 - "filterProximosPassos.ts"
-Cohesion: 0.31
-Nodes (8): filterAndSortPassos(), FilterOpts, normalizeChannel(), OUTCOME_PENALTY, PRIORITY_RANK, PRIORITY_SCORE, RecommendationContext, scorePasso()
+### Community 987 - "public.get_contact_sidebar_by_phone"
+Cohesion: 0.13
+Nodes (14): public.get_contact_sidebar_by_phone(), public.companies, public.contact_behavior, public.contact_business_context, public.contact_decision_making, public.contact_emails, public.contact_influence, public.contact_metaprograms (+6 more)
 
 ### Community 988 - "freeze-origin.sh"
 Cohesion: 0.47
@@ -5686,21 +6453,25 @@ Nodes (3): public.validate_behavioral_consistency(), public.contact_behavior, pu
 Cohesion: 0.67
 Nodes (3): tr_sync_meta_to_contact, tr_sync_vak_to_contact, sync_nlp_to_contact
 
-### Community 1047 - "triggerPlaybook.ts"
-Cohesion: 0.31
-Nodes (7): montarRoteiro(), nomeDoGatilho(), PassoDoRoteiro, PerfilDisc, PerfilDoCliente, PerfilVak, RoteiroDeGatilhos
+### Community 1047 - "RELATORIO_CI.md — Correção dos workflows com falha (Singu_V2)"
+Cohesion: 0.14
+Nodes (13): 1. Inventário (última execução de cada workflow na `main`), 2. Baseline pré-correção, 3. Diagnóstico — causa raiz, 4. Correção aplicada — PR #136, 5. Comparação baseline × final (anti-regressão), 6. Prova de conclusão, 7. Workflows antes verdes — seguem verdes, Baseline CI pré-PR #136 (run 39838063160, SHA pré-merge PR #134) (+5 more)
 
-### Community 1050 - "20261012040000_legacy_sales_owner_scope.sql"
-Cohesion: 0.44
-Nodes (8): legacy_sales_activities_sale_scope_idx, legacy_sales_activities_salesperson_scope_idx, legacy_sales_salesperson_scope_idx, public.sales, public.sales_activities, public.salespeople, salespeople_auth_user_id_key, auth.users
+### Community 1048 - "ddl.test.mjs"
+Cohesion: 0.20
+Nodes (12): AQUI, bancoLimpo(), contar(), copiaDoDdl(), DEFEITOS_DO_DUMP, ORDEM, PG, psql() (+4 more)
 
-### Community 1051 - "Automação local — Singu_V2"
-Cohesion: 0.25
-Nodes (7): Automação local — Singu_V2, Comandos, Gatilhos e ativação, Hooks e workflows anteriores, Módulos dos kits e seus chamadores, Registro exato dos demais scripts, Suites efetivamente executadas
+### Community 1050 - "check-rls-baseline.test.mjs"
+Cohesion: 0.16
+Nodes (11): AQUI, BASELINE_REAL, BASELINES_RUINS, DOIS, fiel(), INCOMPLETAS, linhas(), mock() (+3 more)
 
-### Community 1053 - "Contratos frontend/backend"
-Cohesion: 0.25
-Nodes (7): Atualização local de E-R03 — 28/10/2026, Base e limites, Contratos frontend/backend, Contratos — reconciliação E + B1, Matriz B1 — 117 IDs, Matriz E — 101 IDs, Pendências não verificadas
+### Community 1051 - "20260321123327_salespro_batch4_tournaments_territories_final.sql"
+Cohesion: 0.24
+Nodes (13): public.access_denied_logs, public.circuit_breaker_events, public.migration_log, public.performance_bets, public.sales_territories, public.security_alert_history, public.security_alert_settings, public.territory_history (+5 more)
+
+### Community 1053 - "20260321125638_salespro_mig_002_core_sales_complete.sql"
+Cohesion: 0.23
+Nodes (13): idx_sales_created, idx_sales_salesperson, idx_sales_source, idx_sales_status, idx_salespeople_active, idx_salespeople_auth_user, idx_salespeople_role, public.category_metrics (+5 more)
 
 ### Community 1054 - "dns-multi-region.sh"
 Cohesion: 0.80
@@ -5722,45 +6493,53 @@ Nodes (4): LC_ALL, log(), PGCONNECT_TIMEOUT, planner-stats-freshness.sh script
 Cohesion: 0.60
 Nodes (4): extrai(), log(), PGCONNECT_TIMEOUT, triggers-parity.sh script
 
-### Community 1061 - "temperament.ts"
-Cohesion: 0.25
-Nodes (6): 2.3 Frameworks de Personalidade, ContactBehavior, TEMPERAMENT_TYPES, TemperamentInfo, TemperamentProfile, TemperamentType
+### Community 1061 - "20260416221150_singu_create_helpdesk_module.sql"
+Cohesion: 0.23
+Nodes (13): idx_canned_responses_user, idx_csat_surveys_ticket, idx_kb_articles_search, idx_kb_articles_status, idx_support_tickets_assigned, idx_support_tickets_sla, idx_support_tickets_user_status, idx_ticket_comments_ticket (+5 more)
 
-### Community 1089 - "20261013033427_dashboard_source_contract.sql"
-Cohesion: 0.29
-Nodes (6): public.dashboard_normalize_contact_phone, contact_phones_contact_id_idx, dashboard_normalize_contact_phone, public.contact_phones, public, public.contacts
+### Community 1077 - "20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql"
+Cohesion: 0.28
+Nodes (12): public.access_blocked_log, public.access_security_settings, public.city_whitelist, public.device_login_notifications, public.geo_allowed_countries, public.login_attempts, public.password_reset_requests, public.permissions (+4 more)
+
+### Community 1089 - "20260721210234_fix_secdef_crlf_unguarded.sql"
+Cohesion: 0.14
+Nodes (8): public.create_notification(), public.log_activity(), inactivity_alerts, notifications, pg_language, pg_namespace, pg_proc, smart_reminders
 
 ### Community 1105 - "generate.py"
 Cohesion: 0.07
-Nodes (83): argparse, collections, hashlib, alter_policy(), analyze_code_file(), balanced(), build_access(), build_audit() (+75 more)
+Nodes (80): collections, alter_policy(), analyze_code_file(), balanced(), build_access(), build_audit(), build_dataflow(), chain() (+72 more)
 
-### Community 1147 - "AccountHierarchyTree.tsx"
-Cohesion: 0.32
-Nodes (5): AccountHierarchyTree(), buildTree(), TreeNode, AccountTierBadge(), tierConfig
-
-### Community 1207 - "SequenceEnrollDialog.contract.test.tsx"
+### Community 1111 - "public.vw_contacts_sem_apelido"
 Cohesion: 0.29
-Nodes (5): ContactOption, contact, sequence, Props, SequenceEnrollDialog()
+Nodes (13): _dormant.inactivity_alerts, public.vw_active_alerts, public.vw_contacts_sem_apelido, public.vw_interacoes_sem_apelido, public.vw_pending_followups, public.companies, public.company_addresses, public.contact_emails (+5 more)
 
-### Community 1229 - "SkeletonPrimitives.tsx"
-Cohesion: 0.25
-Nodes (7): ChartCardSkeleton(), DashboardStatsSkeleton(), PageSkeleton(), SkeletonPageContainer(), SkeletonPageHeader(), SkeletonStatsGrid(), StatCardSkeleton()
+### Community 1147 - "indice.py"
+Cohesion: 0.27
+Nodes (11): argparse, datetime, entry_file(), git(), main(), parse_dt(), producer_health(), Path (+3 more)
 
-### Community 1231 - "DesignSystem.tsx"
-Cohesion: 0.25
-Nodes (5): entityTokens, motionCards, nexusPalette, surfaceLevels, utilityCards
+### Community 1207 - "Metas.tsx"
+Cohesion: 0.15
+Nodes (6): BadgesWidget, GoalsDashboardWidget, LeaderboardWidget, Metas(), QuotaStatusWidget, UserGoalsWidget
 
-### Community 1232 - "sequence-contract_test.ts"
-Cohesion: 0.39
-Nodes (7): atomicResponse(), json(), mockRead(), Operation, pendingReservations, Scenario, withProcessor()
+### Community 1229 - "3.8 Hooks de UX/UI"
+Cohesion: 0.15
+Nodes (10): 3.8 Hooks de UX/UI, useDebounce(), useDebouncedCallback(), useEasterEggs(), LazyOptions, useLazySection(), useOnlineStatus(), UseOnlineStatusOptions (+2 more)
 
-### Community 1233 - "Backend e integrações"
-Cohesion: 0.29
-Nodes (7): A-009 · [P1] · segurança/integrações — assinatura HMAC de webhook é opcional por registro, A-010 · [P1] · segurança/integrações — pixel de intenção permite forjar sinais e atribuir e-mail sem prova de origem, A-011 · [P2] · observabilidade/backend — health check converte falha interna em zero alertas, A-012 · [P1] · frontend/observabilidade — página pública de status fica verde quando não há resposta, A-013 · [P0] · segurança/backend — JWT forjado assume `service_role` na função `external-data` implantada, A-014 · [P1] · segurança/backend — proxy externo permite mass assignment de `user_id` em updates, Backend e integrações
+### Community 1231 - "☁️ MÓDULO 5: EDGE FUNCTIONS (12)"
+Cohesion: 0.15
+Nodes (13): 5.10 template-success-notifications, 5.11 voice-to-text, 5.12 weekly-digest, 5.1 ai-writing-assistant, 5.2 check-health-alerts, 5.3 check-notifications, 5.4 client-notifications, 5.5 generate-insights (+5 more)
 
-### Community 1234 - "Automações de estado real"
-Cohesion: 0.29
-Nodes (6): Automações de estado real, `estado-real.yml` — na PR e no push em `main`, `higiene-semanal.yml` — segunda 08:41 UTC, O que este conjunto acrescenta, O que já existia neste repo, Rodar na mão
+### Community 1232 - "useCompanies"
+Cohesion: 0.23
+Nodes (13): FIELD_MAPPING.md, Campos EXTERNO-ONLY (não existem no local), Campos LOCAL-ONLY (não existem no externo), Fluxo de dados:, Tabela: companies, OverviewTab(), extractLocationFromName(), fetchCompaniesPage() (+5 more)
+
+### Community 1233 - "Intelligence Hub (`/intelligence`)"
+Cohesion: 0.15
+Nodes (11): Acessibilidade, Constraints, Intelligence Hub (`/intelligence`), Persistência, Tabs (`src/components/intelligence/`), Tokens (`src/index.css`), NetworkVisualization(), AskCrmMessage (+3 more)
+
+### Community 1234 - "PENDENCIAS.md — Bloqueios e itens fora do escopo (Singu_V2)"
+Cohesion: 0.15
+Nodes (12): Lição para o próximo agente, O que estava escondido atrás disso, P0 — RESOLVIDO (2026-11-18) — PR `fix/ci-workflows` foi mergeada, P1 — react-router-dom 6 → 7 (2 vulnerabilidades moderadas), P2 — zod 3.23.8 pinado nas edge functions (Deno), P3 — Vulnerabilidades em devDependencies (vitest/tinypool crítica, @vitest/mocker, postcss-selector-parser), P4 — Tokens Supabase da org inválidos, P5 — RESOLVIDO (2026-11-18) — projeto canônico travado por teste de CI (+4 more)
 
 ### Community 1237 - "full-audit-exporter.sh"
 Cohesion: 0.40
@@ -5786,277 +6565,1597 @@ Nodes (3): gera(), LC_ALL, rpc-perf-exporter.sh script
 Cohesion: 0.60
 Nodes (4): escapa(), gera(), LC_ALL, rpc-plan-exporter.sh script
 
-### Community 1248 - "Inscrições e reservas de email"
-Cohesion: 0.29
-Nodes (6): Confirmação e falhas, Diagnóstico e reconciliação, Envio e arquivamento, Inscrição, Inscrições e reservas de email, Validação e rollback
+### Community 1248 - "check-edge-cors.mjs"
+Cohesion: 0.28
+Nodes (12): acharWildcards(), ehWildcard(), escapar(), fimDoBloco(), lerAllowlist(), lerExpressao(), listarArquivos(), main() (+4 more)
 
-### Community 1290 - "useLandingPages.ts"
-Cohesion: 0.29
-Nodes (5): LandingPage, LandingPageBlock, LandingPageSubmission, useLandingPages(), useLandingPageSubmissions()
+### Community 1259 - "20260511185221_db922848-ea45-492c-b3f4-f40bf8f2b6db.sql"
+Cohesion: 0.40
+Nodes (3): public.process_interactions_audit, on_interaction_change, public.interactions_audit
 
-### Community 1291 - "useEasterEggs.ts"
-Cohesion: 0.29
-Nodes (4): canvas-confetti, EasterEgg, useEasterEggs(), CelebrationType
+### Community 1290 - "contact-cache-concurrency.test.tsx"
+Cohesion: 0.15
+Nodes (5): key, listKey, old, saved, state
 
-### Community 1292 - "check-edge-imports.mjs"
-Cohesion: 0.48
-Nodes (5): acharEsmShEmImportMap(), acharImportsEsmSh(), listarArquivos(), main(), semLinhasDeComentario()
+### Community 1291 - "zapp_history.master_dashboard"
+Cohesion: 0.15
+Nodes (12): zapp_history.async_request_log, zapp_history.v_dashboard_atendimento, zapp_history.v_demanda_geografica, zapp_history.v_demanda_por_cidade, zapp_history.v_funil_origem, zapp_history.v_funil_vendas, zapp_history.v_intelligence_360, zapp_history.v_objecoes_recorrentes (+4 more)
+
+### Community 1292 - "20260416221043_singu_create_lead_scoring_tables.sql"
+Cohesion: 0.27
+Nodes (12): idx_churn_risk_company, idx_churn_risk_contact, idx_churn_risk_level, idx_churn_risk_user_current, idx_lead_score_config_user, idx_lead_scores_contact, idx_lead_scores_total_desc, idx_lead_scores_trend (+4 more)
 
 ### Community 1300 - "_mock_supabase.ts"
 Cohesion: 0.07
 Nodes (26): 📋 Tabela: `push_subscriptions`, Inventário, erros(), dec, enc, Falha, md5Hex(), MockBucket (+18 more)
 
-### Community 1310 - "functions.test.sh"
+### Community 1310 - "20260416221116_singu_create_sequences_nurturing.sql"
+Cohesion: 0.24
+Nodes (12): idx_nurturing_enrollments_active, idx_nurturing_workflows_user_active, idx_sequence_enrollments_contact, idx_sequence_enrollments_next_step, idx_sequence_enrollments_user_status, idx_sequence_steps_seq, idx_sequences_user_active, public.nurturing_enrollments (+4 more)
+
+### Community 1311 - "20260721213727_fix_secdef_entity_ownership_guard_2.sql"
+Cohesion: 0.15
+Nodes (5): public.assert_customer_access(), customers, pg_language, pg_namespace, pg_proc
+
+### Community 1312 - "20260721221440_idx_user_id_rls_tables.sql"
+Cohesion: 0.15
+Nodes (12): idx_ai_chat_threads_user_id, idx_csat_surveys_user_id, idx_disc_analysis_history_user_id, idx_lead_score_history_user_id, idx_meeting_summaries_user_id, idx_purchase_history_user_id, public.ai_chat_threads, public.csat_surveys (+4 more)
+
+### Community 1318 - "public.get_contact_360_by_phone"
+Cohesion: 0.17
+Nodes (11): company_stakeholder_map, public.get_contact_360_by_phone(), company_addresses, company_emails, company_phones, company_rfm_scores, company_social_media, contact_emails (+3 more)
+
+### Community 1319 - "Como ler a matriz"
+Cohesion: 0.17
+Nodes (11): Auditoria EF-1–EF-17, B2: administração, integração, dados, infraestrutura e reverificação, B2: riscos e plano, sem duplicar causas, Como ler a matriz, Edge Functions, Inventário completo e cron sem novos IDs, Lacunas F01–F68 e inventário correspondente, Lacunas F: causas sistêmicas (+3 more)
+
+### Community 1321 - "AIEmailComposer.tsx"
+Cohesion: 0.17
+Nodes (10): ref_store, AIEmailComposer(), MESSAGE_TYPES, MessageType, REFINE_CHIPS, SuggestionState, Tone, TONES (+2 more)
+
+### Community 1324 - "render-workflow-docs.mjs"
+Cohesion: 0.36
+Nodes (9): CAMPOS, desencapar(), extrairDocs(), extrairNaoEBug(), lerWorkflows(), main(), nomeDe(), RAIZ_PADRAO (+1 more)
+
+### Community 1325 - "workflow-invariants.mjs"
+Cohesion: 0.18
+Nodes (8): CI_YML, coverageMatches, distArtifactGuard, distArtifactStepHasIf(), jobs, missingRequiredJobs, REQUIRED_JOBS, workflowStepBlocks()
+
+### Community 1326 - "gerar-repo.mjs"
+Cohesion: 0.32
+Nodes (11): esc(), executarRg(), FDIR, inventariarEdges(), inventariarTabelas(), lerStdin(), main(), RAIZ (+3 more)
+
+### Community 1329 - "dr.test.sh"
+Cohesion: 0.26
+Nodes (11): ago(), alvo(), call(), chk(), CRITICAL_TABLES, drill(), GNUPGHOME, prod() (+3 more)
+
+### Community 1330 - "dual-write-diverge.ts"
+Cohesion: 0.24
+Nodes (8): comparar(), Deteccao, detectar(), Leitor, lerRecentes(), LinhaResumo, normalizarTs(), par()
+
+### Community 1331 - "exporters.test.sh"
+Cohesion: 0.42
+Nodes (10): afirma(), falha(), nao_tem(), ok(), PGDATABASE, sai(), exporters.test.sh script, tem() (+2 more)
+
+### Community 1336 - "contact-detail-external-retry.test.tsx"
+Cohesion: 0.18
+Nodes (8): company, contact, key, load(), mocks, otherKey, saved, wrapper()
+
+### Community 1337 - "public.cadence_enrollments"
+Cohesion: 0.17
+Nodes (12): idx_cadence_enrollments_cadence_id, idx_cadence_enrollments_company_id_fk, idx_cadence_enrollments_contact_id_fk, idx_cadence_enrollments_user_id, idx_company_cadences_cadence_id, idx_company_cadences_company, idx_company_cadences_status, idx_company_cadences_user_id (+4 more)
+
+### Community 1338 - "20260321125705_salespro_mig_003_teams_clients_products.sql"
+Cohesion: 0.27
+Nodes (11): public.clients, public.deal_chat_history, public.deal_outcomes, public.deal_stage_history, public.products, public.sales_goals, public.team_closers, public.teams (+3 more)
+
+### Community 1339 - "vw_carrier_data_quality"
+Cohesion: 0.21
+Nodes (9): alerts, carriers, company_addresses, company_emails, company_phones, vw_carrier_alerts, vw_carrier_by_state, vw_carrier_data_quality (+1 more)
+
+### Community 1340 - "zapp_history.message_media"
+Cohesion: 0.24
+Nodes (11): idx_mm_contact_created, idx_mm_hash, idx_mm_message, idx_mm_pending_download, idx_mm_type, public.contacts, zapp_history.conversations, zapp_history.messages (+3 more)
+
+### Community 1344 - "_pgdocs.py"
+Cohesion: 0.06
+Nodes (67): ArgumentParser, csv, difflib, errno, Namespace, principal(), Dicionário de dados — RESUMO por tabela (seção "Resumo por tabela" de…, renderizar() (+59 more)
+
+### Community 1345 - "_pgdocs_catalogo.py"
+Cohesion: 0.10
+Nodes (29): pares_relacionados(), Agrupa as FKs por par (pai, filho): uma linha por par, sem perder nenhuma FK no…, renderizar(), _bloco_entidade(), colunas_chave(), Diagrama ER — DETALHE das chaves estrangeiras (seção "Relacionamentos em…, Colunas que participam de PK, FK ou chave única, na ordem do banco, com seus…, renderizar() (+21 more)
+
+### Community 1887 - "20260408200123_zapp_history_07_training_dataset_and_pii.sql"
+Cohesion: 0.24
+Nodes (10): idx_atd_pii, idx_atd_quality, idx_atd_source, idx_atd_unreviewed, idx_atd_unused, public.contacts, zapp_history.conversations, zapp_history.update_updated_at_column (+2 more)
+
+### Community 1888 - "20260409110014_zapp_history_38_integrate_singu_pipelines.sql"
+Cohesion: 0.18
+Nodes (8): idx_cds_embedding_1024, idx_ma_embedding_1024, idx_me_vector_1024, zapp_history.conversation_daily_summaries, zapp_history.message_audio, zapp_history.message_embeddings, zapp_history.messages, zapp_history.search_messages_hybrid_v2()
+
+### Community 1916 - "20260416221224_singu_create_ai_chat_and_meetings.sql"
+Cohesion: 0.27
+Nodes (11): idx_ai_chat_messages_thread, idx_ai_chat_threads_user, idx_meeting_summaries_company, idx_meeting_summaries_contact, idx_meeting_summaries_user_date, idx_visit_checkins_company, idx_visit_checkins_user_date, public.ai_chat_messages (+3 more)
+
+### Community 1917 - "20260416230608_singu_indexes_batch_2.sql"
+Cohesion: 0.27
+Nodes (11): document_signatures_signature_token_key, idx_assignments_assigned_to, idx_assignments_contact, idx_assignments_created, idx_assignments_status, idx_assignments_type, idx_document_signatures_status, idx_document_signatures_token (+3 more)
+
+### Community 1918 - "20260417005040_singu_fix_6b_functional_trigram_indexes.sql"
+Cohesion: 0.24
+Nodes (11): idx_companies_city_unaccent_trgm, idx_companies_industry_unaccent_trgm, idx_companies_name_unaccent_trgm, idx_contacts_email_unaccent_trgm, idx_contacts_first_name_unaccent_trgm, idx_contacts_last_name_unaccent_trgm, idx_interactions_content_unaccent_trgm, idx_interactions_title_unaccent_trgm (+3 more)
+
+### Community 1919 - "public.vw_singu_data_health"
+Cohesion: 0.17
+Nodes (11): public.vw_singu_data_health, pg_catalog.pg_constraint, pg_catalog.pg_namespace, pg_catalog.pg_tables, pg_catalog.pg_views, public.automation_rules, public.companies, public.compatibility_settings (+3 more)
+
+### Community 1920 - "Regras de negócio — preencha o que o código não diz"
+Cohesion: 0.18
+Nodes (10): 1. O que o sistema faz e para quem (1 parágrafo), 2. Atores / perfis e o que cada um pode fazer, 3. Entidades principais e o que significam (glossário do negócio), 4. Ciclo de vida / estados e transições permitidas, 5. Regras de cálculo (fórmulas, arredondamento, moeda, impostos, comissões, descontos máximos), 6. Prazos, limites e quotas (ex.: expira em 7 dias, máximo 3 tentativas, limite por plano), 7. Integrações: o que entra, o que sai, o que acontece se falhar, 8. Exceções comerciais e decisões já tomadas (o que NÃO mudar e por quê) (+2 more)
+
+### Community 1921 - "useDealVelocity.ts"
+Cohesion: 0.22
+Nodes (10): 10. Dados fictícios (`Math.random`) em hooks de inteligência, CONVERTED_STAGES, DealVelocityMetrics, INACTIVE_STAGES, median(), MonthlyTrend, STAGE_CONFIG, stageLabel() (+2 more)
+
+### Community 1922 - "Prod Readiness ? Singu_V2"
+Cohesion: 0.18
+Nodes (10): 1. Qualidade t?cnica (build / typecheck / lint / testes), 2. Banco de dados, 3. Rotas (App) ? 114 rotas em src/app/AppRoutes.tsx, 4. Edge Functions ? 109 slugs no repo (152 deployed em prod, todas ACTIVE), 5. Workflows GitHub Actions, 6. Produ??o ? logs e deploy, 7. Sem perda / sem pela-metade, 8. Corre??es desta sess?o (+2 more)
+
+### Community 1923 - "bump-toolchain.mjs"
+Cohesion: 0.25
+Nodes (9): ref_node_module, FERRAMENTAS, headers, latestRelease(), main(), maisNova(), semver(), toolchain (+1 more)
+
+### Community 1924 - "check-bundle-size.mjs"
+Cohesion: 0.18
+Nodes (9): ref_node_zlib, argv, DIST_DIR, entries, files, iDist, listJavaScriptFiles(), report (+1 more)
+
+### Community 1925 - "exists"
+Cohesion: 0.18
+Nodes (11): aliasesFor(), componentFile(), dirOf(), edges, exists(), isAliasSpec(), isCurrentSql(), migDir (+3 more)
+
+### Community 1926 - "sql.test.mjs"
+Cohesion: 0.27
+Nodes (8): AQUI, arquivo(), comBanco(), PG, prox(), psql(), sql(), STUBS
+
+### Community 1928 - "BundlesTab.tsx"
+Cohesion: 0.20
+Nodes (7): BundlesTab(), BundlesTabProps, DIFICULDADE, METAPROGRAMAS, PERFIS_DISC, PERFIS_VAK, precoObjecao
+
+### Community 1929 - "carnegieTalkRatio.ts"
+Cohesion: 0.18
+Nodes (7): IDEAL_TALK_RATIOS, INTERRUPTION_INDICATORS, LISTENING_INDICATORS, QUESTION_PATTERNS, SILENCE_TECHNIQUES, TALK_RATIO_QUALITY, TALK_RATIO_RECOMMENDATIONS
+
+### Community 1930 - "proactiveIntelligence.ts"
+Cohesion: 0.18
+Nodes (10): ActionCategory, ActionPriority, ApproachScript, CARNEGIE_PRINCIPLES, DISC_APPROACH_STYLE, IntelligenceInsight, NEURO_BRAIN_HOOKS, NextBestAction (+2 more)
+
+### Community 1931 - "MapaEmpresas.tsx"
+Cohesion: 0.35
+Nodes (7): buildLocationString(), geocode(), geocodeCache, CompanyWithScore, MapaEmpresas(), syncMappedCompanies(), toMappable()
+
+### Community 1932 - "20260309231822_create_lalamove_plus_tables.sql"
+Cohesion: 0.33
+Nodes (10): idx_deadletter_unresolved, idx_drivers_banned, idx_drivers_service_times, idx_position_order, idx_position_recent, lalamove_dead_letter, lalamove_drivers, lalamove_position_log (+2 more)
+
+### Community 1933 - "20260321134401_remove_google_maps_enum_v2.sql"
+Cohesion: 0.22
+Nodes (5): company_social_media, contact_social_media, vw_company_social_media, vw_contact_social_media, vw_social_media_stats
+
+### Community 1934 - "zapp_history.master_dashboard"
+Cohesion: 0.18
+Nodes (10): zapp_history.async_request_log, zapp_history.v_dashboard_atendimento, zapp_history.v_funil_origem, zapp_history.v_funil_vendas, zapp_history.v_intelligence_360, zapp_history.v_objecoes_recorrentes, zapp_history.v_sla_atendimento, zapp_history.v_top_contatos_potencial (+2 more)
+
+### Community 1935 - "20260721002547_add_missing_indexes_pipeline_notifications.sql"
+Cohesion: 0.18
+Nodes (10): idx_alerts_user_not_dismissed, idx_deals_pipeline_stage, idx_health_alerts_not_dismissed, idx_insights_not_dismissed, idx_stakeholder_alerts_company_id, public.alerts, public.deals, public.health_alerts (+2 more)
+
+### Community 1936 - "20260721212539_fix_secdef_entity_ownership_guard.sql"
+Cohesion: 0.18
+Nodes (5): public.assert_task_access(), pg_language, pg_namespace, pg_proc, tasks
+
+### Community 1937 - "Infra, deploy e configuração"
+Cohesion: 0.20
+Nodes (10): 4. Achados, A-001 · [P1] · segurança/backend — `migrate-helper` pode devolver credenciais administrativas, A-002 · [P1] · infra — CI da `main` falha antes de criar jobs, A-003 · [P1] · infra/backend — deploy em massa desabilita JWT para todas as Edge Functions, A-004 · [P1] · configuração — referência Supabase versionada diverge do banco canônico, A-005 · [P1] · infra — pipeline não contém deploy versionado nem prova de produção, A-006 · [P1] · frontend/UX — MFA de administrador bloqueia a própria tela de habilitação, A-008 · [P1] · observabilidade/frontend — relator de erros usa variável inexistente e descarta falhas (+2 more)
+
+### Community 1938 - "AnomaliesWidget"
+Cohesion: 0.24
+Nodes (9): [2.6.0] - 2026-04-20 — Rodada N: Connections AI & Self-Healing (70/70), Added, Notes, ADR-017 — IA nas Conexões e self-healing, Capacidades, Contratos IA, Hooks/Componentes, AnomaliesWidget() (+1 more)
+
+### Community 1939 - "Texto-mestre adm01-debug (2026-11-02) — íntegra"
+Cohesion: 0.20
+Nodes (9): 1. Contexto, 2. Como trabalhar, 3. Bugs, 4. Funcionalidades, 5. Comunicação, 6. Nunca, 7. Fluxo Git (vários agentes nos mesmos repos ao mesmo tempo), Sempre feche com 3 próximos passos (+1 more)
+
+### Community 1940 - "Banco, migrations, CI e operação"
+Cohesion: 0.20
+Nodes (10): ADRs, migração e recuperação: complementos sem duplicação, Auditoria de banco e testes, Banco, contratos e produtores, Banco, migrations, CI e operação, Base e significado dos estados, CI, deploy e experiência operacional, Lacunas graves e tarefas concretas, Limites finais (+2 more)
+
+### Community 1941 - "Next-Best-Action (NBA) por Contato"
+Cohesion: 0.22
+Nodes (9): Arquitetura, Backend, Frontend, Next-Best-Action (NBA) por Contato, Sinais agregados, Tabela `contact_next_actions`, UX, Visão geral (+1 more)
+
+### Community 1942 - "20260319185913_create_pix_accounts_table.sql"
+Cohesion: 0.31
+Nodes (8): public.trg_pix_accounts_updated_at, idx_pix_active, idx_pix_company, pix_accounts_set_updated_at, public.pix_accounts, public.vw_pix_accounts, public.companies, uq_pix_chave_ativa
+
+### Community 1943 - "parseEnv"
+Cohesion: 0.33
+Nodes (7): cena(), par(), par(), parseEnv(), env(), par(), par()
+
+### Community 1944 - "cutover-cdc.test.sh"
+Cohesion: 0.27
+Nodes (7): can(), CDC_OUT_DIR, dry(), FREEZE_STATE_DIR, o(), cutover-cdc.test.sh script, STAGING_CONFIRM
+
+### Community 1946 - "SuccessCheckmark.tsx"
+Cohesion: 0.20
+Nodes (9): easeOut, ErrorXMark(), ErrorXMarkProps, LoadingDots(), LoadingDotsProps, ProgressRing(), ProgressRingProps, sizeConfig (+1 more)
+
+### Community 1947 - "carnegieAppreciation.ts"
+Cohesion: 0.20
+Nodes (6): APPRECIATION_BY_DISC, APPRECIATION_FORMULAS, APPRECIATION_GAP_THRESHOLDS, APPRECIATION_TEMPLATES, APPRECIATION_TIMING, RECIPROCITY_INDICATORS
+
+### Community 1948 - "triggersAdvancedData.ts"
+Cohesion: 0.36
+Nodes (8): ADVANCED_MENTAL_TRIGGERS, ALL_TRIGGER_IDS, INTENSITY_LEVELS, NEUROCHEMICAL_TIMING, TRIGGER_CONFLICTS, TRIGGER_FALLBACKS, TRIGGER_SYNERGIES, VALIDATED_TRIGGER_CHAINS
+
+### Community 1949 - "useSocialInsights.test.tsx"
+Cohesion: 0.24
+Nodes (7): SocialInsight, SocialInsightsQuery, SupabaseWithDynamicTables, denied, insight, mocks, useSocialInsights()
+
+### Community 1950 - "20260321184838_create_indexes_fk_high_volume.sql"
+Cohesion: 0.22
+Nodes (9): idx_companies_created_by_id, idx_company_rfm_scores_segment_id, idx_contacts_assigned_by_id, idx_contacts_duplicate_of, idx_customers_sdr_id, public.companies, public.company_rfm_scores, public.contacts (+1 more)
+
+### Community 1951 - "20260330173636_fix_audit_gaps_g1_g2_g3_g4.sql"
+Cohesion: 0.24
+Nodes (9): idx_carriers_homologado_score, idx_carriers_score_geral, alerts, carriers, suppliers, update_updated_at_column, trg_carriers_updated_at, trg_suppliers_updated_at (+1 more)
+
+### Community 1952 - "20260408200858_zapp_history_13_auto_flag_messages.sql"
+Cohesion: 0.20
+Nodes (6): trg_ma_set_flag, trg_ml_increment, trg_mm_set_flag, zapp_history.trg_increment_link_count, zapp_history.trg_set_has_audio, zapp_history.trg_set_has_media
+
+### Community 1953 - "20260409133917_zapp_history_49_auto_invoke_triggers.sql"
+Cohesion: 0.24
+Nodes (7): idx_arl_entity, idx_arl_kind_time, trg_auto_embed_message, trg_auto_enqueue_audio, zapp_history.async_request_log, zapp_history.trg_auto_enqueue_transcription, zapp_history.trg_auto_request_embedding
+
+### Community 1954 - "zapp_history.v_dashboard_atendimento"
+Cohesion: 0.24
+Nodes (9): public.connector_log, zapp_history.async_request_log, zapp_history.conversations, zapp_history.message_audio, zapp_history.message_media, zapp_history.messages, zapp_history.v_pedidos_detectados, zapp_history.dashboard_summary() (+1 more)
+
+### Community 1955 - "20260416232129_singu_indexes_batch_4.sql"
+Cohesion: 0.31
+Nodes (9): idx_social_life_events_contact, idx_social_life_events_date, idx_social_life_events_type, idx_whatsapp_messages_instance, idx_whatsapp_messages_remote_jid, idx_whatsapp_messages_timestamp, idx_whatsapp_messages_user_contact, public.social_life_events (+1 more)
+
+### Community 1956 - "Hooks (`src/hooks/`)"
+Cohesion: 0.25
+Nodes (7): Hooks (`src/hooks/`), useEntityHistory(), TAB_BY_KEY, useIntelHotkeys(), read(), useIntelPresentation(), useIntelSnapshots()
+
+### Community 1957 - "pg_temp.db01_snapshot"
+Cohesion: 0.22
+Nodes (7): pg_temp.db01_company_compat, a_db01_company_compat, pg_temp.db01_snapshot(), public.companies, public.company_emails, public.company_phones, public.contacts
+
+### Community 1958 - "merge_records_atomic.sql"
+Cohesion: 0.22
+Nodes (7): pg_temp.reject_merge_audit, merge_contract_reject_audit, public.merge_contract_conflicts, public.merge_nullable_scope_polymorph, public.merge_unscoped_polymorph, public.companies, public.contacts
+
+### Community 1959 - "20260417004914_singu_fix_5_sync_contact_emails_phones.sql"
+Cohesion: 0.22
+Nodes (8): public.singu_sync_contact_email, public.singu_sync_contact_phone, public.singu_sync_contact_email(), public.singu_sync_contact_phone(), public.contact_emails, public.contact_phones, trg_singu_sync_contact_email, trg_singu_sync_contact_phone
+
+### Community 1960 - "AppChrome.tsx"
+Cohesion: 0.22
+Nodes (7): DeferredAppChrome(), EasterEggsProvider, KeyboardShortcutsDialogEnhanced, PWAShell, SchemaDriftBannerLazy, SessionExpiryHandler, WhatsNewModal
+
+### Community 1961 - "ProntidaoFactorBreakdownChart.tsx"
+Cohesion: 0.25
+Nodes (7): buildRows(), ChartRow, FACTOR_META, FactorKey, ProntidaoFactorBreakdownChart, ProntidaoFactorBreakdownChartImpl(), Props
+
+### Community 1962 - "table.tsx"
+Cohesion: 0.22
+Nodes (8): Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow
+
+### Community 1963 - "copywritingData.ts"
+Cohesion: 0.22
+Nodes (8): AIDA_TEMPLATES, CTA_TEMPLATES, DEFAULT_SEGMENTS, FAB_TEMPLATES, HEADLINE_FORMULAS, PERSUASIVE_CONNECTORS, POWER_WORDS_CATEGORIES, TRANSITION_WORDS
+
+### Community 1964 - "neuromarketingData.ts"
+Cohesion: 0.22
+Nodes (8): BIAS_BRAIN_MAPPING, BRAIN_SYSTEM_INFO, DISC_BRAIN_CORRELATION, GAIN_KEYWORDS, NEUROCHEMICAL_INFO, PAIN_KEYWORDS, PRIMAL_STIMULUS_INFO, TRIGGER_BRAIN_MAPPING
+
+### Community 1965 - "company-contracts.test.ts"
+Cohesion: 0.22
+Nodes (7): api, Page, queryKey, raw, rawWithRelations, Company, prepareCompanyWrite()
+
+### Community 1966 - "useAIWritingAssistant.ts"
+Cohesion: 0.22
+Nodes (7): AISuggestion, ContactProfile, InteractionSummary, MessageTone, MessageType, PersuasionFramework, UseAIWritingAssistantResult
+
+### Community 1967 - "filterProximosPassos.ts"
+Cohesion: 0.31
+Nodes (8): filterAndSortPassos(), FilterOpts, normalizeChannel(), OUTCOME_PENALTY, PRIORITY_RANK, PRIORITY_SCORE, RecommendationContext, scorePasso()
+
+### Community 1968 - "prontidaoTrendMilestones.ts"
+Cohesion: 0.28
+Nodes (7): CHANNEL_TO_KIND, computeTrendMilestones(), findWeekPoint(), KIND_LABEL, MilestoneKind, refDate(), TrendMilestone
+
+### Community 1969 - "triggerPlaybook.ts"
+Cohesion: 0.31
+Nodes (7): montarRoteiro(), nomeDoGatilho(), PassoDoRoteiro, PerfilDisc, PerfilDoCliente, PerfilVak, RoteiroDeGatilhos
+
+### Community 1970 - "public.campaign_members"
+Cohesion: 0.22
+Nodes (9): idx_campaign_members_campaign_id, idx_campaign_members_company_id_fk, idx_campaign_members_contact_id_fk, idx_campaign_members_status, idx_campaigns_created_by, idx_campaigns_status, public.campaign_members, public.campaigns (+1 more)
+
+### Community 1971 - "public.vw_suppliers"
+Cohesion: 0.31
+Nodes (8): public.vw_carriers, public.vw_suppliers, carriers, company_addresses, company_emails, company_phones, pix_accounts, suppliers
+
+### Community 1972 - "20260321125604_salespro_mig_001_saved_filters.sql"
+Cohesion: 0.39
+Nodes (8): idx_saved_filters_entity_type, idx_saved_filters_user_entity, idx_saved_filters_user_id, idx_versions_entity, public.entity_versions, public.saved_filters, auth, auth.users
+
+### Community 1973 - "zapp_history.v_contact_360"
+Cohesion: 0.22
+Nodes (8): public.companies, public.contacts, public.disc_analysis_history, public.eq_analysis_history, zapp_history.contact_message_stats, zapp_history.conversation_daily_summaries, zapp_history.conversations, zapp_history.v_contact_360
+
+### Community 1974 - "20260409135049_zapp_history_53_nlp_pipeline_integration.sql"
+Cohesion: 0.31
+Nodes (6): idx_messages_nlp_entities, idx_messages_nlp_order, idx_messages_nlp_sentiment, net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 1975 - "20260416230539_singu_indexes_batch_1.sql"
+Cohesion: 0.39
+Nodes (8): idx_companies_cnpj, idx_companies_cnpj_base, idx_companies_coords, idx_companies_grupo_economico, idx_companies_search_vector, idx_companies_status, idx_companies_user_id, public.companies
+
+### Community 1976 - "20261012040000_legacy_sales_owner_scope.sql"
+Cohesion: 0.44
+Nodes (8): legacy_sales_activities_sale_scope_idx, legacy_sales_activities_salesperson_scope_idx, legacy_sales_salesperson_scope_idx, public.sales, public.sales_activities, public.salespeople, salespeople_auth_user_id_key, auth.users
+
+### Community 1977 - "public.get_contact_intelligence_by_phone"
+Cohesion: 0.25
+Nodes (7): contact_time_analysis, disc_profile_config, public.get_contact_intelligence_by_phone(), company_rfm_scores, contact_phones, customers, trigger_types
+
+### Community 1978 - "Automação local — Singu_V2"
+Cohesion: 0.25
+Nodes (7): Automação local — Singu_V2, Comandos, Gatilhos e ativação, Hooks e workflows anteriores, Módulos dos kits e seus chamadores, Registro exato dos demais scripts, Suites efetivamente executadas
+
+### Community 1979 - "Lacunas: o que NÃO verifiquei e por quê"
+Cohesion: 0.25
+Nodes (8): Lacunas: o que NÃO verifiquei e por quê, Automacoes(), Ficha360(), MarketingHub(), slugify(), NLPAnalytics(), Pipeline(), Sequencias()
+
+### Community 1980 - "gap-modules-smoke.spec.ts"
+Cohesion: 0.25
+Nodes (5): assertRouteLoads(), Entregas, Métricas, Próximas ondas, Rodada 28/10 — Onda B: Gap Coverage & ESLint Test Hygiene
+
+### Community 1981 - "20261013033427_dashboard_source_contract.sql"
+Cohesion: 0.29
+Nodes (6): public.dashboard_normalize_contact_phone, contact_phones_contact_id_idx, dashboard_normalize_contact_phone, public.contact_phones, public, public.contacts
+
+### Community 1982 - "20260411012403_harden_pks_policies_fk_indexes.sql"
+Cohesion: 0.36
+Nodes (7): public.sales_tasks, idx_contact_addresses_created_by, idx_contact_addresses_updated_by, idx_sales_tasks_client_id, idx_sales_tasks_deleted_by, idx_sales_tasks_sale_id, public.contact_addresses
+
+### Community 1983 - "20260417103206_singu_fix_14_sync_company_address_to_city_state.sql"
+Cohesion: 0.29
+Nodes (7): public.singu_reverse_sync_company_address, public.singu_sync_company_address, public.singu_reverse_sync_company_address(), public.singu_sync_company_address(), public.company_addresses, trg_singu_reverse_sync_company_address, trg_singu_sync_company_address
+
+### Community 1985 - "run"
+Cohesion: 0.25
+Nodes (6): db_stats_case(), recovery_case(), run(), section(), source_freshness_case(), run()
+
+### Community 1986 - "AccountHierarchyTree.tsx"
+Cohesion: 0.32
+Nodes (5): AccountHierarchyTree(), buildTree(), TreeNode, AccountTierBadge(), tierConfig
+
+### Community 1987 - "SearchLocalGroups.tsx"
+Cohesion: 0.32
+Nodes (7): getColorClass(), getTypeIcon(), NavItem, Props, QuickAction, RecentItem, SearchLocalGroups()
+
+### Community 1988 - "copywritingAdvancedData.ts"
+Cohesion: 0.25
+Nodes (7): CHANNEL_LIMITS, EMOJI_CONTEXTS, FOUR_PS_TEMPLATES, PAS_TEMPLATES, READABILITY_LEVELS, STORYTELLING_TEMPLATES, TRIGGER_DETECTION_WORDS
+
+### Community 1989 - "nlpAdvancedData.ts"
+Cohesion: 0.25
+Nodes (7): EMOTIONAL_STATE_INFO, EMOTIONAL_STATE_KEYWORDS, OBJECTION_PATTERNS, POWER_WORDS, RAPPORT_TEMPLATES, SALES_STAGE_INFO, VALUE_CATEGORY_INFO
+
+### Community 1990 - "triggerTemplatesMetaprograms.ts"
+Cohesion: 0.25
+Nodes (3): METAPROGRAM_TRIGGER_TEMPLATES, MetaprogramTriggerTemplate, MetaprogramType
+
+### Community 1991 - "forecastSimulation.ts"
+Cohesion: 0.25
+Nodes (5): IntelligenceShape, ProfileShape, SIMULATION_PRESETS, SimulationPreset, SimulationResult
+
+### Community 1992 - "useSequences.ts"
+Cohesion: 0.25
+Nodes (5): CreateSequenceData, pendingManualStepSchema, Sequence, SequenceEnrollment, SequenceStep
+
+### Community 1993 - "DesignSystem.tsx"
+Cohesion: 0.25
+Nodes (5): entityTokens, motionCards, nexusPalette, surfaceLevels, utilityCards
+
+### Community 1994 - "Pipeline.tsx"
+Cohesion: 0.43
+Nodes (7): DealCard, formatCurrency(), PipelineColumn(), STAGES, StalledDealsPanel(), SummaryCards(), VelocityPanel()
+
+### Community 1995 - "sequence-contract_test.ts"
+Cohesion: 0.39
+Nodes (7): atomicResponse(), json(), mockRead(), Operation, pendingReservations, Scenario, withProcessor()
+
+### Community 1996 - "public.company_addresses"
+Cohesion: 0.25
+Nodes (8): idx_company_addresses_cep, idx_company_addresses_cidade, idx_company_addresses_cidade_ibge, idx_company_addresses_company, idx_company_addresses_created_at, idx_company_addresses_primary, idx_company_addresses_tipo_logradouro, public.company_addresses
+
+### Community 1997 - "public.company_addresses"
+Cohesion: 0.25
+Nodes (8): idx_company_addresses_cep, idx_company_addresses_cidade, idx_company_addresses_cidade_ibge, idx_company_addresses_company, idx_company_addresses_created_at, idx_company_addresses_primary, idx_company_addresses_tipo_logradouro, public.company_addresses
+
+### Community 1998 - "public.customers"
+Cohesion: 0.25
+Nodes (8): idx_customers_active, idx_customers_ativado, idx_customers_ja_comprou, idx_customers_sdr_id, idx_customers_updated_at, idx_customers_vendedor, idx_customers_vendedor_ativo, public.customers
+
+### Community 1999 - "20260409133339_zapp_history_45b_runtime_config_table.sql"
+Cohesion: 0.32
+Nodes (3): zapp_history.get_config(), zapp_history.runtime_config, zapp_history.v_runtime_config_safe
+
+### Community 2000 - "zapp_history.v_dashboard_atendimento"
+Cohesion: 0.25
+Nodes (7): public.connector_log, zapp_history.conversations, zapp_history.message_audio, zapp_history.message_media, zapp_history.messages, zapp_history.v_pedidos_detectados, zapp_history.v_dashboard_atendimento
+
+### Community 2001 - "20260409211334_zapp_history_165_priority_matrix.sql"
+Cohesion: 0.29
+Nodes (5): idx_messages_priority_quad, zapp_history.messages, trg_priority_quadrant, zapp_history.v_priority_matrix, zapp_history.trg_set_priority_quadrant
+
+### Community 2002 - "20260409234406_zapp_audit_m13_partial_indexes_dashboard.sql"
+Cohesion: 0.43
+Nodes (7): idx_msg_bant_classification, idx_msg_churn_risk, idx_msg_primary_intent, idx_msg_quarantined, idx_msg_sql_qualified_recent, idx_msg_unprocessed, zapp_history.messages
+
+### Community 2003 - "20260416221330_singu_create_documents_module.sql"
+Cohesion: 0.39
+Nodes (7): idx_doc_signatures_doc, idx_doc_signatures_pending, idx_doc_templates_user_active, idx_doc_views_doc, public.document_signatures, public.document_templates, public.document_views
+
+### Community 2004 - "20260417005015_singu_fix_6_trigram_indexes_search.sql"
+Cohesion: 0.36
+Nodes (7): idx_contacts_email_trgm, idx_contacts_first_name_trgm, idx_contacts_last_name_trgm, idx_interactions_content_trgm, idx_interactions_title_trgm, public.contacts, public.interactions
+
+### Community 2005 - "20260503002114_create_contact_notes_for_zapp_web.sql"
+Cohesion: 0.39
+Nodes (7): fn_update_contact_notes_updated_at(), idx_contact_notes_contact_id, idx_contact_notes_created_at, idx_contact_notes_user_id, public.contact_notes, public.contacts, trg_contact_notes_updated_at
+
+### Community 2006 - "20260609124546_create_xbz_asia_upload_mapping_tables.sql"
+Cohesion: 0.43
+Nodes (7): idx_asia_upload_mapping_request_id, idx_asia_upload_mapping_status, idx_xbz_upload_mapping_created_at, idx_xbz_upload_mapping_request_id, idx_xbz_upload_mapping_status, public.asia_upload_mapping, public.xbz_upload_mapping
+
+### Community 2007 - "20260720145800_create_production_baseline_tables.sql"
+Cohesion: 0.25
+Nodes (7): public.automation_executions, public.inactivity_alerts, public.integrations, public.message_templates, public.sales_forecasts, public.sales_opportunities, public.smart_segments
+
+### Community 2008 - "Auditoria técnica total — SINGU CRM"
+Cohesion: 0.29
+Nodes (6): 1. Estado geral, 2. Contexto e escopo observado, 3. Mapa de conexões, 5. Não verificado, 6. Reprodutibilidade, Auditoria técnica total — SINGU CRM
+
+### Community 2009 - "Backend e integrações"
+Cohesion: 0.29
+Nodes (7): A-009 · [P1] · segurança/integrações — assinatura HMAC de webhook é opcional por registro, A-010 · [P1] · segurança/integrações — pixel de intenção permite forjar sinais e atribuir e-mail sem prova de origem, A-011 · [P2] · observabilidade/backend — health check converte falha interna em zero alertas, A-012 · [P1] · frontend/observabilidade — página pública de status fica verde quando não há resposta, A-013 · [P0] · segurança/backend — JWT forjado assume `service_role` na função `external-data` implantada, A-014 · [P1] · segurança/backend — proxy externo permite mass assignment de `user_id` em updates, Backend e integrações
+
+### Community 2010 - "Automações de estado real"
+Cohesion: 0.29
+Nodes (6): Automações de estado real, `estado-real.yml` — na PR e no push em `main`, `higiene-semanal.yml` — segunda 08:41 UTC, O que este conjunto acrescenta, O que já existia neste repo, Rodar na mão
+
+### Community 2011 - "Estado — Core CRM"
+Cohesion: 0.29
+Nodes (6): Arquivos que inspecionei, Contexto arquitetural que condiciona todas as classificações, Contradições com a documentação existente, Estado — Core CRM, Lacunas: o que NÃO consegui verificar e por quê, Resumo
+
+### Community 2012 - "Inscrições e reservas de email"
+Cohesion: 0.29
+Nodes (6): Confirmação e falhas, Diagnóstico e reconciliação, Envio e arquivamento, Inscrição, Inscrições e reservas de email, Validação e rollback
+
+### Community 2013 - "Mapeamento Campo-a-Campo: Banco Local ↔ Banco Externo"
+Cohesion: 0.29
+Nodes (6): Arquitetura do Proxy, Mapeamento Campo-a-Campo: Banco Local ↔ Banco Externo, Tabela: contacts, Tabela: interactions, Tabelas Externas Auxiliares (sem mapeamento local direto), Views Materializadas (Externo)
+
+### Community 2014 - "useLandingPages.ts"
+Cohesion: 0.29
+Nodes (5): LandingPage, LandingPageBlock, LandingPageSubmission, useLandingPages(), useLandingPageSubmissions()
+
+### Community 2015 - "check-edge-imports.mjs"
+Cohesion: 0.48
+Nodes (5): acharEsmShEmImportMap(), acharImportsEsmSh(), listarArquivos(), main(), semLinhasDeComentario()
+
+### Community 2016 - "functions.test.sh"
 Cohesion: 0.33
 Nodes (6): DEPLOY_LOG, DEPLOY_SLEEP_SEC, FUNCTIONS_DIR, leak(), functions.test.sh script, STORAGE_ENV_FILE
 
-### Community 1324 - "PipelineFilterBar.tsx"
+### Community 2022 - "PipelineFilterBar.tsx"
 Cohesion: 0.52
 Nodes (5): PipelineFilterBar(), Props, countActiveFilters(), EMPTY_PIPELINE_FILTERS, PipelineFilters
 
-### Community 1325 - "canonical-competitor-save-contract.test.tsx"
-Cohesion: 0.33
-Nodes (4): mocks, renderMutation(), saved, useUpsertCompetitor()
+### Community 2023 - "StakeholderSimulator.tsx"
+Cohesion: 0.43
+Nodes (5): getSupportLabel(), SimulationResultPanel(), StakeholderSelector(), SUPPORT_LABELS, StakeholderSimulatorProps
 
-### Community 1330 - "useActivityLogger.ts"
+### Community 2024 - "relationship-stage.tsx"
+Cohesion: 0.29
+Nodes (4): RelationshipFunnelProps, RelationshipStageBadgeProps, stageColors, stageOrder
+
+### Community 2025 - "typography.tsx"
+Cohesion: 0.29
+Nodes (6): DisplayText, Heading, Typography, TypographyProps, TypographyVariant, variantMap
+
+### Community 2026 - "carnegieNobleCauses.ts"
+Cohesion: 0.29
+Nodes (3): NOBLE_CAUSE_INTENSIFIERS, NOBLE_CAUSE_KEYWORDS, NOBLE_CAUSES
+
+### Community 2027 - "triggersExtendedData.ts"
+Cohesion: 0.29
+Nodes (6): ALL_EXTENDED_TRIGGER_IDS, EXTENDED_MENTAL_TRIGGERS, EXTENDED_TRIGGER_CONFLICTS, EXTENDED_TRIGGER_FALLBACKS, EXTENDED_TRIGGER_SYNERGIES, ExtendedTriggerType
+
+### Community 2028 - "useActivityLogger.ts"
 Cohesion: 0.33
 Nodes (5): ActivityType, EntityType, LogActivityParams, mocks, useActivityLogger()
 
-### Community 1334 - "useClosingScoreRanking.ts"
+### Community 2029 - "useClosingScoreRanking.ts"
 Cohesion: 0.38
 Nodes (6): defaultStats(), getScoreProbability(), PeriodFilter, ProbabilityFilter, RankingItem, useClosingScoreRanking()
 
-### Community 1336 - "useKeyboardShortcutsEnhanced.ts"
-Cohesion: 0.29
-Nodes (5): ShortcutCategory, shortcutCategoryLabels, ShortcutConfig, UseKeyboardShortcutsOptions, useVimNavigation()
-
-### Community 1337 - "usePortfolioHealth.ts"
+### Community 2030 - "usePortfolioHealth.ts"
 Cohesion: 0.33
 Nodes (6): ClientHealthSummary, HealthStatus, isValidContactName(), PortfolioAlert, PortfolioHealthMetrics, usePortfolioHealth()
 
-### Community 1344 - "test_snapshot.py"
-Cohesion: 0.06
-Nodes (50): contextlib, copy, datetime, fcntl, importlib_util, io, json, os (+42 more)
-
-### Community 1345 - "useReducedMotion.ts"
+### Community 2031 - "useReducedMotion.ts"
 Cohesion: 0.43
 Nodes (4): useMotionSafe(), useReducedMotion(), StaggerConfig, useStaggerAnimation()
 
-### Community 1887 - "useTerritoryOptimization.ts"
+### Community 2032 - "public.search_contacts_advanced"
 Cohesion: 0.29
-Nodes (5): EMPTY, TerritoryChartPoint, TerritoryOptimizationResult, TerritoryRecommendation, TerritoryStatusRow
+Nodes (6): public.search_contacts_advanced(), company_addresses, company_rfm_scores, contact_emails, contact_phones, customers
 
-### Community 1888 - "architecture-compliance.test.ts"
+### Community 2033 - "20260408200918_zapp_history_14_contact_stats_mat_view.sql"
+Cohesion: 0.43
+Nodes (5): idx_cms_company, idx_cms_contact_id, idx_cms_last_message, idx_cms_total_messages, zapp_history.contact_message_stats
+
+### Community 2034 - "20260409143212_zapp_history_75_lead_scoring.sql"
+Cohesion: 0.33
+Nodes (5): idx_messages_lead_score, zapp_history.messages, trg_lead_score_calc, zapp_history.calculate_lead_score(), zapp_history.trg_calculate_lead_score
+
+### Community 2035 - "zapp_history.v_churn_alerts"
+Cohesion: 0.33
+Nodes (6): public.companies, public.contacts, zapp_history.conversations, zapp_history.messages, zapp_history.v_buying_triggers, zapp_history.v_churn_alerts
+
+### Community 2036 - "zapp_history.v_competitor_alerts"
+Cohesion: 0.38
+Nodes (6): public.companies, public.contacts, zapp_history.messages, zapp_history.v_budget_sensitivity, zapp_history.v_competitor_alerts, zapp_history.v_payment_preferences
+
+### Community 2037 - "20260416221435_singu_create_cache_tables.sql"
+Cohesion: 0.48
+Nodes (6): idx_search_products_cache_expires, idx_search_products_cache_hash, idx_semantic_cache_expires, idx_semantic_cache_hash, public.search_products_cache, public.semantic_search_cache
+
+### Community 2038 - "20260416230644_singu_indexes_batch_3.sql"
+Cohesion: 0.48
+Nodes (6): idx_rfm_analysis_contact, idx_rfm_analysis_scores, idx_rfm_analysis_segment, idx_rfm_analysis_user, rfm_analysis_user_id_contact_id_key, public.rfm_analysis
+
+### Community 2039 - "20260417005153_singu_fix_6c_search_drop_recreate.sql"
 Cohesion: 0.29
-Nodes (5): allFiles, allTs, allTsx, getFilesRecursive(), srcRoot
+Nodes (6): public.search_companies_unaccent(), public.search_contacts_unaccent(), public.search_interactions_unaccent(), public.companies, public.contacts, public.interactions
 
-### Community 1916 - "public.rodizio_sugerir_distribuicao"
+### Community 2041 - "20260721223203_idx_user_id_wave173_tables.sql"
+Cohesion: 0.29
+Nodes (6): idx_churn_predictions_user_id, idx_deal_velocity_analysis_user_id, idx_search_products_cache_user_id, public.churn_predictions, public.deal_velocity_analysis, public.search_products_cache
+
+### Community 2042 - "20260722005234_wave179_partial_indexes_followup_alerts_insights.sql"
+Cohesion: 0.29
+Nodes (6): idx_alerts_active, idx_insights_active, idx_interactions_followup_required_modern, public.alerts, public.insights, public.interactions
+
+### Community 2043 - "public.rodizio_sugerir_distribuicao"
 Cohesion: 0.29
 Nodes (5): public.rodizio_sugerir_distribuicao(), public.company_addresses, public.customer_rotation_state, public.customers, public.rodizio_distribuicao_staging
 
-### Community 1917 - "public.confirm_sequence_manual_step"
+### Community 2044 - "public.confirm_sequence_manual_step"
 Cohesion: 0.29
 Nodes (6): public.confirm_sequence_manual_step(), public.contacts, public.sequence_enrollments, public.sequence_events, public.sequence_steps, public.sequences
 
-### Community 1918 - "check-backend-linter-baseline.mjs"
+### Community 2045 - "27. 📊 Dashboard — ✅ IMPLEMENTADO"
+Cohesion: 0.53
+Nodes (6): 27. 📊 Dashboard — ✅ IMPLEMENTADO, 4.6 Componentes de Dashboard, HealthAlertsPanel(), PortfolioHealthDashboard(), WeeklyReportPanel(), YourDaySection()
+
+### Community 2046 - "check-backend-linter-baseline.mjs"
 Cohesion: 0.33
 Nodes (5): ADR-0022, args, contagens, current, strict
 
-### Community 1919 - "🗄️ MÓDULO 6: BANCO DE DADOS (25+ tabelas)"
-Cohesion: 0.33
-Nodes (6): 6.1 Tabelas Core, 6.2 Tabelas de Comportamento, 6.3 Tabelas de Preferências, 6.4 Tabelas de Alertas/Saúde, 6.5 Tabelas de Suporte, 🗄️ MÓDULO 6: BANCO DE DADOS (25+ tabelas)
-
-### Community 1920 - "Rodada 28/10 — Onda B: Gap Coverage & ESLint Test Hygiene"
-Cohesion: 0.33
-Nodes (5): assertRouteLoads(), Entregas, Métricas, Próximas ondas, Rodada 28/10 — Onda B: Gap Coverage & ESLint Test Hygiene
-
-### Community 1921 - "17. 🔔 Sistema de Alertas"
+### Community 2047 - "17. 🔔 Sistema de Alertas"
 Cohesion: 0.33
 Nodes (6): 17.1 Alertas Gerais (`alerts`), 17.2 Alertas de Compatibilidade (`compatibility_alerts`), 17.3 Alertas de Saúde (`health_alerts`), 17.4 Configurações de Alerta de Saúde (`health_alert_settings`), 17.5 Configurações de Compatibilidade (`compatibility_settings`), 17. 🔔 Sistema de Alertas
 
-### Community 1923 - "behavioral-retry-contract_test.ts"
-Cohesion: 0.40
-Nodes (5): ref_jsr_std, json(), Operation, Scenario, withRetry()
+### Community 2048 - "public.singu_reverse_sync_contact"
+Cohesion: 0.33
+Nodes (5): public.singu_reverse_sync_contact, public.singu_reverse_sync_contact(), public.contact_emails, public.contact_phones, trg_singu_reverse_sync_contact
 
-### Community 1924 - "TwoFactorSetup.test.tsx"
-Cohesion: 0.40
-Nodes (4): qrcode.react, auth, mfa, TwoFactorSetup()
-
-### Community 1935 - "alerts.test.sh"
+### Community 2059 - "alerts.test.sh"
 Cohesion: 0.80
 Nodes (5): afirma(), falha(), ok(), alerts.test.sh script, veredito()
 
-### Community 1937 - "DataHealthWidget.tsx"
+### Community 2061 - "InsightFeedbackTrendChart.tsx"
 Cohesion: 0.47
-Nodes (3): query, DataHealthWidget(), toPercent()
+Nodes (5): buildWeeks(), InsightFeedbackTrendChart(), Row, startOfWeekISO(), WeekPoint
 
-### Community 1938 - "PendingFollowupsWidget.tsx"
-Cohesion: 0.40
-Nodes (3): query, PendingFollowupsWidget(), PRIORITY_CONFIG
+### Community 2062 - "IntelBookmarksNotesBadge.tsx"
+Cohesion: 0.47
+Nodes (3): countBookmarks(), countNotes(), IntelBookmarksNotesBadge()
 
-### Community 1939 - "RecentChannelCombos.tsx"
+### Community 2063 - "RecentChannelCombos.tsx"
 Cohesion: 0.47
 Nodes (5): CHANNEL_LABELS, comboLabel(), Props, RecentChannelCombos, sameCombo()
 
-### Community 1940 - "useAccountChurnPrediction.ts"
+### Community 2064 - "FloatingParticles.tsx"
+Cohesion: 0.40
+Nodes (5): FloatingParticles, FloatingParticlesProps, lerp(), Particle, PHASE_CONFIG
+
+### Community 2065 - "nlpAnalyticsConstants.ts"
+Cohesion: 0.33
+Nodes (5): CHART_COLORS, discColors, emotionColors, periodOptions, vakColors
+
+### Community 2067 - "vakTemplates.ts"
+Cohesion: 0.33
+Nodes (3): VAK_ADAPTED_TEMPLATES, VAKAdaptedTemplate, VAKTemplateVariation
+
+### Community 2068 - "useAccountChurnPrediction.ts"
 Cohesion: 0.33
 Nodes (5): AccountChurnRisk, AccountRiskFactor, ContactRiskSummary, StakeholderHealthMetrics, useAccountChurnPrediction()
 
-### Community 1941 - "useEnrichSocialProfiles.ts"
-Cohesion: 0.47
-Nodes (5): buildUrl(), EnrichResult, normalizePlatform(), Platform, useEnrichSocialProfiles()
+### Community 2069 - "useExternalInteractions.ts"
+Cohesion: 0.53
+Nodes (4): Options, useExternalInteractions(), normalize(), useFicha360ChannelCounts()
 
-### Community 1944 - "ADR 023: Serialização de relações e transferência de contato"
+### Community 2070 - "useIntelTelemetry.ts"
+Cohesion: 0.47
+Nodes (5): IntelTelemetryEvent, readEvents(), useIntelTabView(), useIntelTelemetry(), writeEvents()
+
+### Community 2071 - "public.company_rfm_scores"
+Cohesion: 0.33
+Nodes (6): idx_company_rfm_scores_created_at, idx_company_rfm_scores_segment_id, idx_company_rfm_segment, idx_company_rfm_unique, idx_company_rfm_user, public.company_rfm_scores
+
+### Community 2072 - "public.proposals"
+Cohesion: 0.33
+Nodes (6): idx_proposals_company_id, idx_proposals_contact_id, idx_proposals_deal, idx_proposals_status, idx_proposals_user_id, public.proposals
+
+### Community 2073 - "public.campaign_members"
+Cohesion: 0.33
+Nodes (6): idx_campaign_members_campaign_id, idx_campaign_members_company_id_fk, idx_campaign_members_contact_id_fk, idx_campaign_members_status, public.campaign_members, uq_campaign_members_campaign_contact
+
+### Community 2074 - "public.company_rfm_scores"
+Cohesion: 0.33
+Nodes (6): idx_company_rfm_scores_created_at, idx_company_rfm_scores_segment_id, idx_company_rfm_segment, idx_company_rfm_unique, idx_company_rfm_user, public.company_rfm_scores
+
+### Community 2075 - "public.proposals"
+Cohesion: 0.33
+Nodes (6): idx_proposals_company_id, idx_proposals_contact_id, idx_proposals_deal, idx_proposals_status, idx_proposals_user_id, public.proposals
+
+### Community 2077 - "20260408205105_zapp_history_31_connector_log_bridge.sql"
+Cohesion: 0.60
+Nodes (5): idx_cl_created, idx_cl_direction, idx_cl_phone, idx_cl_unprocessed, public.connector_log
+
+### Community 2078 - "20260408205750_zapp_history_34_phone_lookup_atomic.sql"
+Cohesion: 0.40
+Nodes (5): idx_ptc_contact, public.contacts, zapp_history.messages, zapp_history.parse_connector_log_to_messages(), zapp_history.phone_to_contact
+
+### Community 2079 - "zapp_history.v_pedidos_detectados"
+Cohesion: 0.33
+Nodes (5): public.companies, public.contacts, zapp_history.conversations, zapp_history.messages, zapp_history.v_pedidos_detectados
+
+### Community 2080 - "20260409141648_zapp_history_67_product_dictionary_postprocessor.sql"
+Cohesion: 0.40
+Nodes (5): net._http_response, zapp_history.messages, zapp_history.extract_product_from_text(), zapp_history.product_dictionary, zapp_history.reconcile_nlp_responses()
+
+### Community 2081 - "zapp_history.v_pedidos_detectados"
+Cohesion: 0.33
+Nodes (5): public.companies, public.contacts, zapp_history.conversations, zapp_history.messages, zapp_history.v_pedidos_detectados
+
+### Community 2082 - "zapp_history.v_conversas_aguardando"
+Cohesion: 0.40
+Nodes (5): public.contacts, zapp_history.conversations, zapp_history.messages, zapp_history.get_priority_queue(), zapp_history.v_conversas_aguardando
+
+### Community 2083 - "20260409174431_zapp_history_104_business_hours.sql"
+Cohesion: 0.33
+Nodes (4): idx_messages_business_hours, zapp_history.messages, trg_set_business_hours, zapp_history.trg_set_business_hours
+
+### Community 2084 - "zapp_history.v_top_contatos_potencial"
+Cohesion: 0.33
+Nodes (5): public.companies, public.contacts, zapp_history.conversations, zapp_history.messages, zapp_history.v_top_contatos_potencial
+
+### Community 2085 - "zapp_history.v_intelligence_360"
+Cohesion: 0.33
+Nodes (5): public.companies, public.contacts, zapp_history.conversations, zapp_history.messages, zapp_history.v_intelligence_360
+
+### Community 2086 - "zapp_history.get_conversation_intelligence"
+Cohesion: 0.33
+Nodes (5): public.companies, public.contacts, zapp_history.conversations, zapp_history.messages, zapp_history.get_conversation_intelligence()
+
+### Community 2087 - "20260409221006_zapp_history_188_language_spam_views.sql"
+Cohesion: 0.47
+Nodes (5): zapp_history.conversations, zapp_history.messages, zapp_history.v_hesitation_funnel, zapp_history.v_language_distribution, zapp_history.v_spam_log
+
+### Community 2088 - "20260416220523_singu_create_lead_assignments.sql"
+Cohesion: 0.60
+Nodes (5): idx_lead_assignments_assigned_to_active, idx_lead_assignments_rule, idx_lead_assignments_sla, idx_lead_assignments_user_contact, public.lead_assignments
+
+### Community 2089 - "20260416220539_singu_create_handoff_requests.sql"
+Cohesion: 0.60
+Nodes (5): idx_handoff_requests_contact, idx_handoff_requests_sla, idx_handoff_requests_to_user_pending, idx_handoff_requests_user_status, public.handoff_requests
+
+### Community 2090 - "20260416220553_singu_create_redistribution_log.sql"
+Cohesion: 0.60
+Nodes (5): idx_redistribution_log_contact, idx_redistribution_log_from_to, idx_redistribution_log_reason, idx_redistribution_log_user_created, public.redistribution_log
+
+### Community 2091 - "20260416220628_singu_create_trigger_intensity_history.sql"
+Cohesion: 0.60
+Nodes (5): idx_trigger_intensity_contact, idx_trigger_intensity_conversions, idx_trigger_intensity_type, idx_trigger_intensity_user, public.trigger_intensity_history
+
+### Community 2092 - "20260416220648_singu_create_rfm_analysis.sql"
+Cohesion: 0.60
+Nodes (5): idx_rfm_analysis_churn_risk, idx_rfm_analysis_company, idx_rfm_analysis_score_total, idx_rfm_analysis_user_segment, public.rfm_analysis
+
+### Community 2093 - "public.score_history"
+Cohesion: 0.33
+Nodes (6): idx_score_history_calculated_at, idx_score_history_composite, idx_score_history_contact_id, idx_score_history_score_type, idx_score_history_user_id, public.score_history
+
+### Community 2094 - "20260417004419_singu_fix_1_companies_compat_retry.sql"
+Cohesion: 0.33
+Nodes (4): idx_companies_name_trgm, public.companies, public.singu_companies_compat_sync, trg_singu_companies_compat
+
+### Community 2095 - "public.get_instant_kpis"
+Cohesion: 0.33
+Nodes (5): public.get_duplicate_contacts(), public.get_instant_kpis(), alerts, contact_emails, customers
+
+### Community 2096 - "public.assert_contact_access"
+Cohesion: 0.33
+Nodes (4): public.assert_contact_access(), pg_language, pg_namespace, pg_proc
+
+### Community 2099 - "fn_cf_collect_sm_legacy_harvest"
+Cohesion: 0.40
+Nodes (3): cf_sm_legacy, fn_cf_collect_sm_legacy_harvest(), net._http_response
+
+### Community 2100 - "ADR 023: Serialização de relações e transferência de contato"
 Cohesion: 0.40
 Nodes (4): ADR 023: Serialização de relações e transferência de contato, Consequências e validação, Contexto, Decisão
 
-### Community 1945 - "7. ✍️ Copywriting & Sales Tools (Enterprise)"
+### Community 2101 - "Testes — inventário, skips, fora do CI"
+Cohesion: 0.40
+Nodes (5): Fora do CI / ambiente de teste, Inventário por tipo (HEAD), Skips / only / todo / asserções vazias, Testes — inventário, skips, fora do CI, Testes que não testam produção
+
+### Community 2102 - "4. Casos de borda"
+Cohesion: 0.40
+Nodes (5): 4.1 Período inválido, 4.2 Canais vazios, 4.3 Case misto, 4.4 Canal desconhecido, 4. Casos de borda
+
+### Community 2103 - "7. ✍️ Copywriting & Sales Tools (Enterprise)"
 Cohesion: 0.40
 Nodes (5): 7.1 Frameworks de Persuasão, 7.2 Analisador de Copy, 7.3 Previews Multi-Canal, 7.4 Gerador de Scripts de Vendas com IA, 7. ✍️ Copywriting & Sales Tools (Enterprise)
 
-### Community 1946 - "CompaniesInlineMap.tsx"
+### Community 2104 - "public.fn_sm_promote_images_to_gold"
+Cohesion: 0.40
+Nodes (4): product_images, product_variants, sm_images_staging, public.fn_sm_promote_images_to_gold()
+
+### Community 2105 - "CompaniesInlineMap.tsx"
 Cohesion: 0.40
 Nodes (3): leaflet, react-leaflet, CompaniesInlineMapProps
 
-### Community 1964 - "FiscalDataCard.tsx"
-Cohesion: 0.50
-Nodes (4): FiscalDataCard(), FiscalDataCardProps, FiscalFields, formatCnpj()
+### Community 2122 - "DataHealthWidget.contract.test.tsx"
+Cohesion: 0.40
+Nodes (3): query, DataHealthWidget(), toPercent()
 
-### Community 1965 - "MultiDiffPanel.tsx"
+### Community 2123 - "CompanyEmailsForm.tsx"
+Cohesion: 0.50
+Nodes (4): CompanyEmailsForm(), emailTypes, emptyEmail(), Props
+
+### Community 2124 - "MultiDiffPanel.tsx"
 Cohesion: 0.50
 Nodes (4): MultiDiffEntity, MultiDiffPanel(), MultiDiffPanelProps, normalize()
 
-### Community 1966 - "ActiveFiltersBar.onAfterRemove.test.tsx"
+### Community 2125 - "ActivityHeatmapChart.tsx"
+Cohesion: 0.50
+Nodes (4): ActivityHeatmapChart, DAYS, HOURS, intensityClass()
+
+### Community 2126 - "ActiveFiltersBar.onAfterRemove.test.tsx"
 Cohesion: 0.50
 Nodes (3): baseFilters(), renderBar(), RenderOpts
 
-### Community 1967 - "useEntityNotes.ts"
+### Community 2127 - "ReportResultView.tsx"
+Cohesion: 0.50
+Nodes (3): DataTable(), formatCell(), Props
+
+### Community 2128 - "VoiceSearchOverlayConnected.tsx"
+Cohesion: 0.40
+Nodes (4): LazyVoiceOverlay, VoiceSearchOverlay, Props, VoiceSearchOverlayConnected()
+
+### Community 2129 - "surface.tsx"
+Cohesion: 0.40
+Nodes (4): levelMap, roundedMap, Surface, SurfaceProps
+
+### Community 2132 - "demoEntities.ts"
+Cohesion: 0.40
+Nodes (4): DEMO_BEHAVIOR, DEMO_CONTACT, DEMO_TEMPERAMENT, DEMO_TEMPERAMENT_PROFILE
+
+### Community 2133 - "useClientHealth.ts"
+Cohesion: 0.40
+Nodes (4): ClientHealth, HealthIndicator, HealthStatus, useClientHealth()
+
+### Community 2134 - "useContactValidationStatus.ts"
+Cohesion: 0.40
+Nodes (3): EmailStatus, PhoneStatus, ValidationStatus
+
+### Community 2135 - "useEntityNotes.ts"
 Cohesion: 0.60
 Nodes (4): EntityNote, readNote(), useEntityNotes(), writeNote()
 
-### Community 1968 - "useGraphLayout.ts"
+### Community 2136 - "useGraphLayout.ts"
 Cohesion: 0.60
 Nodes (4): GraphLayoutState, read(), useGraphLayout(), write()
 
-### Community 1969 - "useIntelTheme.ts"
+### Community 2137 - "useInfiniteList.ts"
+Cohesion: 0.50
+Nodes (4): readPersistedCount(), useInfiniteList(), UseInfiniteListOptions, UseInfiniteListResult
+
+### Community 2138 - "useIntelTheme.ts"
 Cohesion: 0.60
 Nodes (4): applyClass(), IntelTheme, read(), useIntelTheme()
 
-### Community 1970 - "useIntelTour.ts"
+### Community 2139 - "useIntelTour.ts"
 Cohesion: 0.60
 Nodes (4): read(), StoredTour, useIntelTour(), write()
 
-### Community 1971 - "useSavedAskViews.ts"
+### Community 2140 - "usePurchasePatterns.ts"
+Cohesion: 0.40
+Nodes (4): CategoryPattern, PurchasePattern, PurchasePrediction, usePurchasePatterns()
+
+### Community 2141 - "useRecentlyViewed.ts"
+Cohesion: 0.60
+Nodes (4): getStoredItems(), RecentlyViewedItem, saveItems(), useRecentlyViewed()
+
+### Community 2142 - "useReportInfiniteScrollProgress.ts"
+Cohesion: 0.40
+Nodes (3): INFINITE_SCROLL_CLEAR_EVENT, INFINITE_SCROLL_PROGRESS_EVENT, InfiniteScrollProgress
+
+### Community 2143 - "useSavedAskViews.ts"
 Cohesion: 0.60
 Nodes (4): read(), SavedView, useSavedAskViews(), write()
 
-### Community 1973 - "prontidaoWeightsHealth.ts"
+### Community 2144 - "useWhyScoreDrawerPreference.ts"
+Cohesion: 0.60
+Nodes (4): readFlag(), useWhyScoreDrawerPreference(), WhyScoreDrawerPreference, writeFlag()
+
+### Community 2146 - "prontidaoWeightsHealth.ts"
 Cohesion: 0.50
 Nodes (4): evaluateWeightsHealth(), round1(), WeightsHealth, WeightsHealthInfo
 
-### Community 1974 - "Observability.tsx"
-Cohesion: 0.50
-Nodes (4): diaCurto(), Observability(), SlowQuery, Snapshot
+### Community 2148 - "NPS.contract.test.tsx"
+Cohesion: 0.40
+Nodes (3): mocks, NPS(), npsCategory()
 
-### Community 1976 - "public.resume_sequence_email"
+### Community 2149 - "public.calendar_events"
+Cohesion: 0.40
+Nodes (5): idx_calendar_company, idx_calendar_events_contact_id_fk, idx_calendar_events_deal_id, idx_calendar_events_user_id, public.calendar_events
+
+### Community 2150 - "public.commissions"
+Cohesion: 0.40
+Nodes (5): idx_commissions_deal_id, idx_commissions_rule_id, idx_commissions_user_id, public.commission_rules, public.commissions
+
+### Community 2151 - "public.company_phones"
+Cohesion: 0.40
+Nodes (5): idx_company_phones_created_at, idx_company_phones_e164, idx_company_phones_normalizado, idx_company_phones_whatsapp, public.company_phones
+
+### Community 2152 - "public.company_social_media"
+Cohesion: 0.40
+Nodes (5): idx_company_social_active, idx_company_social_company, idx_company_social_media_created_at, idx_company_social_plataforma, public.company_social_media
+
+### Community 2153 - "public.economic_group_members"
+Cohesion: 0.40
+Nodes (5): idx_econ_group_members_company, idx_economic_group_members_group_id, idx_economic_groups_main_company_id_fk, public.economic_group_members, public.economic_groups
+
+### Community 2154 - "public.meetings"
+Cohesion: 0.40
+Nodes (5): idx_meetings_company, idx_meetings_contact_id_fk, idx_meetings_deal_id, idx_meetings_user_id, public.meetings
+
+### Community 2155 - "public.territory_assignments"
+Cohesion: 0.40
+Nodes (5): idx_territories_manager_id, idx_territory_assignments_territory_id, idx_territory_assignments_user_id, public.territories, public.territory_assignments
+
+### Community 2156 - "public.calendar_events"
+Cohesion: 0.40
+Nodes (5): idx_calendar_company, idx_calendar_events_contact_id_fk, idx_calendar_events_deal_id, idx_calendar_events_user_id, public.calendar_events
+
+### Community 2157 - "public.company_cadences"
+Cohesion: 0.40
+Nodes (5): idx_company_cadences_cadence_id, idx_company_cadences_company, idx_company_cadences_status, idx_company_cadences_user_id, public.company_cadences
+
+### Community 2158 - "public.company_social_media"
+Cohesion: 0.40
+Nodes (5): idx_company_social_active, idx_company_social_company, idx_company_social_media_created_at, idx_company_social_plataforma, public.company_social_media
+
+### Community 2159 - "public.company_stakeholder_map"
+Cohesion: 0.40
+Nodes (5): idx_company_stakeholder_map_access_via_contact_id, idx_company_stakeholder_map_company_id, idx_company_stakeholder_map_contact_id, idx_company_stakeholder_map_user_id, public.company_stakeholder_map
+
+### Community 2160 - "public.customer_ownership_history"
+Cohesion: 0.40
+Nodes (5): idx_customer_ownership_history_company_id, idx_customer_ownership_history_customer_id, idx_customer_ownership_history_registrado_por_id, idx_customer_ownership_history_vendedor_id, public.customer_ownership_history
+
+### Community 2161 - "public.customer_sdr_history"
+Cohesion: 0.40
+Nodes (5): idx_customer_sdr_history_closer_destino_id, idx_customer_sdr_history_customer_id, idx_customer_sdr_history_sdr_id, idx_sdr_history_company, public.customer_sdr_history
+
+### Community 2162 - "public.meetings"
+Cohesion: 0.40
+Nodes (5): idx_meetings_company, idx_meetings_contact_id_fk, idx_meetings_deal_id, idx_meetings_user_id, public.meetings
+
+### Community 2163 - "20260315172339_create_uapi_sessions.sql"
+Cohesion: 0.60
+Nodes (4): idx_uapi_sessions_active, public.uapi_sessions, trg_uapi_sessions_updated_at, update_uapi_sessions_updated_at()
+
+### Community 2164 - "20260321172813_fix_unique_constraints_and_not_null.sql"
+Cohesion: 0.40
+Nodes (4): company_emails_company_id_email_ci_unique, contact_emails_contact_id_email_ci_unique, public.company_emails, public.contact_emails
+
+### Community 2166 - "20260408195848_zapp_history_01_extensions_and_schema.sql"
+Cohesion: 0.50
+Nodes (3): public.contacts, zapp_history.admin_grants, zapp_history.user_can_access_contact()
+
+### Community 2167 - "20260408205204_zapp_history_32_connector_log_parser_trigger.sql"
+Cohesion: 0.40
+Nodes (4): public.profiles, zapp_history.parse_connector_log_to_messages, trg_parse_connector_log, zapp_history.parse_connector_log_to_messages()
+
+### Community 2168 - "20260409133202_zapp_history_42_propagate_raw_payload_from_bitrix_response.sql"
+Cohesion: 0.50
+Nodes (3): idx_cl_effective_payload, idx_cl_message_text_fts, public.connector_log
+
+### Community 2170 - "zapp_history.dashboard_summary"
+Cohesion: 0.40
+Nodes (4): zapp_history.async_request_log, zapp_history.v_dashboard_atendimento, zapp_history.v_pedidos_detectados, zapp_history.dashboard_summary()
+
+### Community 2171 - "20260409144048_zapp_history_82_discovery_channel_detector.sql"
+Cohesion: 0.50
+Nodes (3): idx_messages_budget, idx_messages_discovery, zapp_history.messages
+
+### Community 2172 - "zapp_history.v_top_produtos_demanda"
+Cohesion: 0.50
+Nodes (4): zapp_history.messages, zapp_history.product_dictionary, zapp_history.normalize_product_name(), zapp_history.v_top_produtos_demanda
+
+### Community 2173 - "20260409174349_zapp_history_101_response_time_sla.sql"
+Cohesion: 0.50
+Nodes (3): idx_conv_first_response, idx_conv_sla_status, zapp_history.conversations
+
+### Community 2174 - "20260409180819_zapp_history_112_location_extractor.sql"
+Cohesion: 0.40
+Nodes (3): idx_messages_location_gin, zapp_history.messages, zapp_history.location_dictionary
+
+### Community 2175 - "20260409183312_zapp_history_125_segmentacao_clientes.sql"
+Cohesion: 0.60
+Nodes (4): zapp_history.messages, zapp_history.v_eventos_demanda, zapp_history.v_segmentacao_clientes, zapp_history.v_tom_comunicacao
+
+### Community 2176 - "20260409205351_zapp_history_145_disc_payment_custom_views.sql"
+Cohesion: 0.60
+Nodes (4): zapp_history.messages, zapp_history.v_customization_demand, zapp_history.v_disc_distribution, zapp_history.v_payment_preferences
+
+### Community 2177 - "20260409205720_zapp_history_144_disc_journey_views_v2.sql"
+Cohesion: 0.60
+Nodes (4): zapp_history.messages, zapp_history.v_disc_distribution, zapp_history.v_disc_funnel_matrix, zapp_history.v_journey_funnel
+
+### Community 2178 - "zapp_history.v_proximas_respostas"
+Cohesion: 0.40
+Nodes (4): public.contacts, zapp_history.conversations, zapp_history.messages, zapp_history.v_proximas_respostas
+
+### Community 2179 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.40
+Nodes (4): net._http_response, zapp_history.conversations, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2180 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.40
+Nodes (4): net._http_response, zapp_history.conversations, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2181 - "20260409222328_zapp_history_195_new_views.sql"
+Cohesion: 0.60
+Nodes (4): zapp_history.messages, zapp_history.v_company_sizes, zapp_history.v_relationship_funnel, zapp_history.v_seasonality_demand
+
+### Community 2182 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.40
+Nodes (4): net._http_response, zapp_history.conversations, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2183 - "zapp_history.v_full_intelligence_stream"
+Cohesion: 0.40
+Nodes (4): public.companies, public.contacts, zapp_history.messages, zapp_history.v_full_intelligence_stream
+
+### Community 2184 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.40
+Nodes (4): net._http_response, zapp_history.conversations, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2185 - "20260409225140_zapp_history_215_new_views.sql"
+Cohesion: 0.60
+Nodes (4): zapp_history.messages, zapp_history.v_delivery_distribution, zapp_history.v_referral_sources, zapp_history.v_units_distribution
+
+### Community 2186 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.40
+Nodes (4): net._http_response, zapp_history.conversations, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2187 - "zapp_history.v_routing_queue"
+Cohesion: 0.40
+Nodes (4): public.companies, public.contacts, zapp_history.messages, zapp_history.v_routing_queue
+
+### Community 2188 - "20260409234045_zapp_audit_m03_dedup_evolution_msg_id.sql"
+Cohesion: 0.40
+Nodes (4): public.connector_log, trg_dedup_connector_log, zapp_history.trg_connector_log_dedup(), zapp_history.trg_connector_log_dedup
+
+### Community 2189 - "20260409234102_zapp_audit_m04_webhook_secret_validation.sql"
+Cohesion: 0.40
+Nodes (4): zapp_history.runtime_config, trg_validate_secret_connector_log, zapp_history.trg_connector_log_validate_secret(), zapp_history.trg_connector_log_validate_secret
+
+### Community 2191 - "20260416220453_singu_create_sales_team_members.sql"
+Cohesion: 0.70
+Nodes (4): idx_sales_team_members_last_assigned, idx_sales_team_members_role, idx_sales_team_members_user_active, public.sales_team_members
+
+### Community 2192 - "20260416220612_singu_create_vak_analysis_history.sql"
+Cohesion: 0.70
+Nodes (4): idx_vak_analysis_history_contact, idx_vak_analysis_history_interaction, idx_vak_analysis_history_user, public.vak_analysis_history
+
+### Community 2193 - "public.handoff_requests"
+Cohesion: 0.40
+Nodes (5): idx_handoff_created, idx_handoff_from, idx_handoff_status, idx_handoff_to, public.handoff_requests
+
+### Community 2194 - "public.lead_scores"
+Cohesion: 0.40
+Nodes (5): idx_lead_scores_contact, idx_lead_scores_grade, idx_lead_scores_total, idx_lead_scores_user, public.lead_scores
+
+### Community 2196 - "public.assert_self_user_id"
+Cohesion: 0.40
+Nodes (4): public.assert_self_user_id(), pg_language, pg_namespace, pg_proc
+
+### Community 2197 - "public.assert_self_user_id"
+Cohesion: 0.40
+Nodes (4): public.assert_self_user_id(), pg_language, pg_namespace, pg_proc
+
+### Community 2198 - "public.resume_sequence_email"
 Cohesion: 0.40
 Nodes (4): public.resume_sequence_email(), public.contacts, public.sequence_enrollments, public.sequences
 
-### Community 1977 - "20261108200000_fix_contact_phones_trigger_primary_indexes.sql"
+### Community 2199 - "20261108200000_fix_contact_phones_trigger_primary_indexes.sql"
 Cohesion: 0.40
 Nodes (4): idx_contact_emails_primary, idx_contact_phones_primary, public.contact_emails, public.contact_phones
 
-### Community 1978 - "A4 — Órfãos"
-Cohesion: 0.50
-Nodes (4): A4 — Órfãos, Afirmação original, Funções — 75 é 70; 56 é 52, Tabelas — 24 reproduz, mas o rótulo "sem qualquer consumidor" não
+### Community 2200 - "20261108203932_fix_contact_phones_trigger_primary_indexes.sql"
+Cohesion: 0.40
+Nodes (4): idx_contact_emails_primary, idx_contact_phones_primary, public.contact_emails, public.contact_phones
 
-### Community 1979 - "Reconciliação do histórico de pesquisas"
+### Community 2201 - "Scripts — inventário por finalidade"
+Cohesion: 0.50
+Nodes (4): Os 7 scripts VIVOS (invocados por package.json ou CI), Por pasta e finalidade, Scripts — inventário por finalidade, Órfãos — 40 scripts com ZERO referência em todo o repositório
+
+### Community 2202 - "useSequences"
+Cohesion: 0.67
+Nodes (4): B5 — "`enrollContact` (`useSequences.ts:167-190`) é código morto: nenhum .tsx chama", O que fiz para derrubar, Parte confirmada — o objeto é morto, useSequences()
+
+### Community 2203 - "Reconciliação do histórico de pesquisas"
 Cohesion: 0.50
 Nodes (3): Banco canônico, Pré-condição da primeira aplicação, Reconciliação do histórico de pesquisas
 
-### Community 1980 - "🚩 TECH DEBT BACKLOG — SINGU CRM"
+### Community 2204 - "🚩 TECH DEBT BACKLOG — SINGU CRM"
 Cohesion: 0.50
 Nodes (3): ⏳ Pendentes (exigem decisão fora deste sandbox), 📊 Score de excelência, 🚩 TECH DEBT BACKLOG — SINGU CRM
 
-### Community 1981 - "inventario/estado — o que existe de verdade, medido"
+### Community 2205 - "inventario/estado — o que existe de verdade, medido"
 Cohesion: 0.50
 Nodes (3): inventario/estado — o que existe de verdade, medido, Limites, Rodar na mão
 
-### Community 1982 - "Componentes"
+### Community 2211 - "public.fn_spot_gold_enrich"
 Cohesion: 0.50
-Nodes (3): Componentes, Fluxo, EmailFinderDialog()
+Nodes (3): public.produtos_padronizacao, public.supplier_subtype_category_map, public.fn_spot_gold_enrich()
 
-### Community 1988 - "isSrc"
+### Community 2213 - "public.fn_spot_silver_enrich"
+Cohesion: 0.50
+Nodes (3): public.spot_typecode_map, public.supplier_products_raw, public.fn_spot_silver_enrich()
+
+### Community 2214 - "isSrc"
 Cohesion: 0.50
 Nodes (4): appFiles, envUsadas, isSrc(), routeFiles
 
-### Community 1989 - "public.validate_entity_relationship"
+### Community 2215 - "public.validate_entity_relationship"
 Cohesion: 0.50
 Nodes (4): public.search_companies_semantic(), public.search_companies_unaccent(), public.validate_entity_relationship(), public.companies
 
-### Community 2010 - "check-runbook-coverage.test.sh"
+### Community 2236 - "check-runbook-coverage.test.sh"
 Cohesion: 0.83
 Nodes (3): caso(), monta(), check-runbook-coverage.test.sh script
 
-### Community 2011 - "DataGrid.tsx"
+### Community 2237 - "StrategicAccountsWidget.tsx"
+Cohesion: 0.83
+Nodes (3): formatCurrency(), healthColor(), StrategicAccountsWidget
+
+### Community 2238 - "DataGrid.tsx"
 Cohesion: 0.50
 Nodes (3): Column, DataGrid(), DataGridProps
 
-### Community 2012 - "ExportFormatMenu.tsx"
+### Community 2239 - "EntityNotesPanel.tsx"
+Cohesion: 0.67
+Nodes (3): EntityNotesPanel(), EntityNotesPanelProps, formatRelative()
+
+### Community 2240 - "ExportFormatMenu.tsx"
 Cohesion: 0.50
 Nodes (3): ExportFormatMenu(), ExportFormatMenuProps, FORMATS
 
-### Community 2013 - "GraphLegend.tsx"
+### Community 2241 - "IntelHealthPanel.tsx"
 Cohesion: 0.50
-Nodes (3): GraphLegend(), GraphLegendProps, LegendItem
+Nodes (3): HOOKS_TRACKED, HookStatus, IntelHealthPanel()
 
-### Community 2014 - "useChurnPrediction.ts"
+### Community 2242 - "TemporalHeatmap.tsx"
 Cohesion: 0.50
-Nodes (3): ChurnFactor, ChurnRisk, useChurnPrediction()
+Nodes (3): HeatPoint, TemporalHeatmap, TemporalHeatmapProps
 
-### Community 2015 - "useConnectionAnomalies.ts"
+### Community 2246 - "persuasionTemplates.ts"
 Cohesion: 0.50
-Nodes (3): AnomalySeverity, AnomalyType, ConnectionAnomaly
+Nodes (3): DISC_TRIGGER_PRIORITY, PERSUASION_TEMPLATES, STAGE_TRIGGER_PRIORITY
 
-### Community 2016 - "useIntelDensity.ts"
+### Community 2248 - "useIntelDensity.ts"
 Cohesion: 0.67
 Nodes (3): IntelDensity, read(), useIntelDensity()
 
-### Community 2017 - "public.check_mtta_auto_ack_heartbeat"
+### Community 2250 - "public.churn_predictions"
+Cohesion: 0.50
+Nodes (4): idx_churn_predictions_company_id, idx_churn_predictions_contact, idx_churn_predictions_user_id, public.churn_predictions
+
+### Community 2251 - "public.coop_sistemas"
+Cohesion: 0.50
+Nodes (4): idx_coop_sistemas_grupo_economico_id, idx_grupo_nome, public.coop_sistemas, public.grupos_economicos
+
+### Community 2252 - "public.deal_velocity_analysis"
+Cohesion: 0.50
+Nodes (4): idx_deal_velocity_analysis_company_id, idx_deal_velocity_analysis_contact_id, idx_deal_velocity_analysis_user_id, public.deal_velocity_analysis
+
+### Community 2253 - "public.relationship_score_history"
+Cohesion: 0.50
+Nodes (4): idx_relationship_score_history_contact_id, idx_relationship_score_history_contact_measured, idx_relationship_score_history_user_id, public.relationship_score_history
+
+### Community 2254 - "public.reminders"
+Cohesion: 0.50
+Nodes (4): idx_reminders_company, idx_reminders_user_date, idx_reminders_user_id, public.reminders
+
+### Community 2255 - "public.scheduled_visits"
+Cohesion: 0.50
+Nodes (4): idx_scheduled_visits_company_id, idx_scheduled_visits_user_id, idx_visits_user_date, public.scheduled_visits
+
+### Community 2256 - "public.sync_log"
+Cohesion: 0.50
+Nodes (4): idx_sync_log_created, idx_sync_log_status, idx_sync_log_type, public.sync_log
+
+### Community 2257 - "public.company_emails"
+Cohesion: 0.50
+Nodes (4): company_emails_company_id_lower_email_unique, idx_company_emails_company_id, idx_company_emails_email_lower, public.company_emails
+
+### Community 2258 - "public.contact_addresses"
+Cohesion: 0.50
+Nodes (4): idx_ca_contact, idx_contact_addresses_created_by, idx_contact_addresses_updated_by, public.contact_addresses
+
+### Community 2259 - "public.churn_predictions"
+Cohesion: 0.50
+Nodes (4): idx_churn_predictions_company_id, idx_churn_predictions_contact, idx_churn_predictions_user_id, public.churn_predictions
+
+### Community 2260 - "public.commissions"
+Cohesion: 0.50
+Nodes (4): idx_commissions_deal_id, idx_commissions_rule_id, idx_commissions_user_id, public.commissions
+
+### Community 2261 - "public.deal_velocity_analysis"
+Cohesion: 0.50
+Nodes (4): idx_deal_velocity_analysis_company_id, idx_deal_velocity_analysis_contact_id, idx_deal_velocity_analysis_user_id, public.deal_velocity_analysis
+
+### Community 2262 - "public.relationship_score_history"
+Cohesion: 0.50
+Nodes (4): idx_relationship_score_history_contact_id, idx_relationship_score_history_contact_measured, idx_relationship_score_history_user_id, public.relationship_score_history
+
+### Community 2263 - "public.reminders"
+Cohesion: 0.50
+Nodes (4): idx_reminders_company, idx_reminders_user_date, idx_reminders_user_id, public.reminders
+
+### Community 2264 - "public.scheduled_visits"
+Cohesion: 0.50
+Nodes (4): idx_scheduled_visits_company_id, idx_scheduled_visits_user_id, idx_visits_user_date, public.scheduled_visits
+
+### Community 2265 - "public.sdr_closer_assignments"
+Cohesion: 0.50
+Nodes (4): idx_sdr_closer_assignments_criado_por_id, idx_sdr_closer_closer, idx_sdr_closer_sdr, public.sdr_closer_assignments
+
+### Community 2266 - "public.sync_log"
+Cohesion: 0.50
+Nodes (4): idx_sync_log_created, idx_sync_log_status, idx_sync_log_type, public.sync_log
+
+### Community 2267 - "public.update_updated_at_column"
+Cohesion: 0.50
+Nodes (4): public.update_updated_at_column, update_companies_updated_at, update_contacts_updated_at, update_profiles_updated_at
+
+### Community 2269 - "public.companies"
+Cohesion: 0.50
+Nodes (4): public.companies, public.company_addresses, public.company_emails, public.company_phones
+
+### Community 2270 - "public.companies"
+Cohesion: 0.50
+Nodes (4): public.carriers, public.companies, public.customers, public.suppliers
+
+### Community 2271 - "20260329175449_alter_suppliers_add_homologation_fields_and_config.sql"
+Cohesion: 0.67
+Nodes (3): idx_suppliers_homologado, idx_suppliers_score_geral, suppliers
+
+### Community 2272 - "fn_homologar_fornecedor"
+Cohesion: 0.50
+Nodes (3): fn_homologar_fornecedor(), suppliers, users
+
+### Community 2273 - "20260329203616_create_trigger_auto_sync_company_supplier.sql"
+Cohesion: 0.83
+Nodes (3): trg_company_insert_sync_supplier, trg_company_sync_supplier, trg_fn_sync_company_supplier()
+
+### Community 2274 - "20260330120931_create_carrier_company_sync_trigger.sql"
+Cohesion: 0.83
+Nodes (3): trg_company_insert_sync_carrier, trg_company_sync_carrier, trg_fn_sync_company_carrier()
+
+### Community 2275 - "20260330121409_alter_carriers_add_qualification_fields.sql"
+Cohesion: 0.67
+Nodes (3): idx_carriers_homologado, idx_carriers_score_geral, carriers
+
+### Community 2276 - "fn_homologar_carrier"
+Cohesion: 0.50
+Nodes (3): fn_homologar_carrier(), carriers, users
+
+### Community 2277 - "public.sync_interaction_from_zapp"
+Cohesion: 0.50
+Nodes (3): public.sync_interaction_from_zapp(), company_phones, contact_phones
+
+### Community 2279 - "zapp_history.search_messages_hybrid"
+Cohesion: 0.50
+Nodes (3): zapp_history.message_embeddings, zapp_history.messages, zapp_history.search_messages_hybrid()
+
+### Community 2280 - "zapp_history.search_messages_hybrid"
+Cohesion: 0.50
+Nodes (3): zapp_history.message_embeddings, zapp_history.messages, zapp_history.search_messages_hybrid()
+
+### Community 2284 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2285 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2286 - "zapp_history.v_top_produtos_demanda"
+Cohesion: 0.50
+Nodes (3): zapp_history.messages, zapp_history.product_dictionary, zapp_history.v_top_produtos_demanda
+
+### Community 2289 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2291 - "20260409174444_zapp_history_105_volume_heatmap.sql"
+Cohesion: 0.67
+Nodes (3): zapp_history.messages, zapp_history.v_melhores_horarios, zapp_history.v_volume_por_hora
+
+### Community 2293 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2294 - "20260409180909_zapp_history_115_geographic_demand.sql"
+Cohesion: 0.67
+Nodes (3): zapp_history.messages, zapp_history.v_demanda_geografica, zapp_history.v_demanda_por_cidade
+
+### Community 2298 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2301 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2305 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2308 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2309 - "20260409205757_zapp_history_145_disc_playbook.sql"
+Cohesion: 0.50
+Nodes (3): zapp_history.messages, zapp_history.disc_playbook, zapp_history.get_playbook_for_message()
+
+### Community 2312 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2313 - "20260409210523_zapp_history_154_topics_intents_views.sql"
+Cohesion: 0.67
+Nodes (3): zapp_history.messages, zapp_history.v_intents_distribution, zapp_history.v_topicos_recorrentes
+
+### Community 2316 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2317 - "20260409211312_zapp_history_164_speaker_complexity_views.sql"
+Cohesion: 0.67
+Nodes (3): zapp_history.messages, zapp_history.v_complexity_distribution, zapp_history.v_speaker_roles
+
+### Community 2320 - "zapp_history.reconcile_nlp_responses"
+Cohesion: 0.50
+Nodes (3): net._http_response, zapp_history.messages, zapp_history.reconcile_nlp_responses()
+
+### Community 2321 - "20260409212043_zapp_history_174_emotional_question_views.sql"
+Cohesion: 0.67
+Nodes (3): zapp_history.messages, zapp_history.v_emotional_states, zapp_history.v_question_topics
+
+### Community 2329 - "zapp_history.get_full_intelligence_report"
+Cohesion: 0.50
+Nodes (3): zapp_history.disc_playbook, zapp_history.messages, zapp_history.get_full_intelligence_report()
+
+### Community 2337 - "20260409225658_zapp_history_222_bant_score.sql"
+Cohesion: 0.67
+Nodes (3): idx_messages_bant, zapp_history.messages, zapp_history.calculate_bant_score()
+
+### Community 2338 - "20260409225800_zapp_history_224_bant_views.sql"
+Cohesion: 0.67
+Nodes (3): zapp_history.messages, zapp_history.v_authority_funnel, zapp_history.v_bant_distribution
+
+### Community 2340 - "20260409230953_audit_fix_07_smart_routing_and_bant.sql"
+Cohesion: 0.67
+Nodes (3): zapp_history.messages, zapp_history.calculate_bant_score(), zapp_history.smart_routing()
+
+### Community 2341 - "20260416213501_create_singu_migration_staging.sql"
+Cohesion: 0.50
+Nodes (3): singu_migration._checklist, singu_migration._errors, singu_migration._source_schema
+
+### Community 2342 - "20260416220708_singu_create_lux_webhook_config.sql"
+Cohesion: 0.83
+Nodes (3): idx_lux_webhook_config_one_default_per_user, idx_lux_webhook_config_user_active, public.lux_webhook_config
+
+### Community 2343 - "public.churn_risk_scores"
+Cohesion: 0.50
+Nodes (4): idx_churn_risk_contact, idx_churn_risk_level, idx_churn_risk_user, public.churn_risk_scores
+
+### Community 2344 - "public.cognitive_bias_history"
+Cohesion: 0.50
+Nodes (4): idx_cognitive_bias_history_analyzed_at, idx_cognitive_bias_history_contact_id, idx_cognitive_bias_history_user_id, public.cognitive_bias_history
+
+### Community 2345 - "public.disc_analysis_history"
+Cohesion: 0.50
+Nodes (4): idx_disc_analysis_history_analyzed_at, idx_disc_analysis_history_contact, idx_disc_analysis_history_user, public.disc_analysis_history
+
+### Community 2346 - "public.favorite_templates"
+Cohesion: 0.50
+Nodes (4): favorite_templates_user_id_template_id_key, idx_favorite_templates_template_id, idx_favorite_templates_user_id, public.favorite_templates
+
+### Community 2347 - "public.eq_analysis_history"
+Cohesion: 0.50
+Nodes (4): idx_eq_analysis_history_analyzed_at, idx_eq_analysis_history_contact_id, idx_eq_analysis_history_user_id, public.eq_analysis_history
+
+### Community 2348 - "public.interactions"
+Cohesion: 0.50
+Nodes (4): idx_interactions_contact_id, idx_interactions_created_at, idx_interactions_user_id, public.interactions
+
+### Community 2349 - "public.landing_pages"
+Cohesion: 0.50
+Nodes (4): idx_landing_pages_slug, idx_landing_pages_user, landing_pages_slug_key, public.landing_pages
+
+### Community 2350 - "public.query_telemetry"
+Cohesion: 0.50
+Nodes (4): idx_query_telemetry_created_at, idx_query_telemetry_severity, idx_query_telemetry_user_id, public.query_telemetry
+
+### Community 2351 - "public.sales_team_members"
+Cohesion: 0.50
+Nodes (4): idx_sales_team_active, idx_sales_team_role, idx_sales_team_user, public.sales_team_members
+
+### Community 2352 - "public.search_products_cache"
+Cohesion: 0.50
+Nodes (4): idx_search_products_desc_trgm, idx_search_products_name_trgm, idx_search_products_user, public.search_products_cache
+
+### Community 2353 - "public.trigger_ab_tests"
+Cohesion: 0.50
+Nodes (4): idx_trigger_ab_tests_active, idx_trigger_ab_tests_disc, idx_trigger_ab_tests_user_contact, public.trigger_ab_tests
+
+### Community 2354 - "public.trigger_channel_effectiveness"
+Cohesion: 0.50
+Nodes (4): idx_trigger_channel_effectiveness_trigger_channel, idx_trigger_channel_effectiveness_user_contact, public.trigger_channel_effectiveness, trigger_channel_effectiveness_user_id_contact_id_trigger_ty_key
+
+### Community 2355 - "public.trigger_usage_history"
+Cohesion: 0.50
+Nodes (4): idx_trigger_usage_history_contact_id, idx_trigger_usage_history_used_at, idx_trigger_usage_history_user_id, public.trigger_usage_history
+
+### Community 2359 - "20260607214628_sm_upload_pipeline_v1.sql"
+Cohesion: 0.83
+Nodes (3): idx_sm_upload_mapping_staging, idx_sm_upload_mapping_status, sm_upload_mapping
+
+### Community 2360 - "public.check_mtta_auto_ack_heartbeat"
 Cohesion: 0.50
 Nodes (3): public.check_mtta_auto_ack_heartbeat(), public.system_alerts, public.system_health_snapshots
 
-### Community 2018 - "log"
+### Community 2361 - "public.incoming_webhook_nonces"
+Cohesion: 0.67
+Nodes (3): idx_incoming_webhook_nonces_expires_at, public.incoming_webhook_nonces, public.incoming_webhooks
+
+### Community 2363 - "log"
 Cohesion: 0.67
 Nodes (3): CFG, log(), secao()
 
-### Community 2019 - "tname"
+### Community 2364 - "tname"
 Cohesion: 0.67
 Nodes (3): parseCols(), T(), tname()
 
-### Community 2021 - "public.compute_account_health"
+### Community 2366 - "public.compute_account_health"
 Cohesion: 0.67
 Nodes (3): public.compute_account_health(), public.cs_accounts, public.cs_health_signals
 
+### Community 2386 - "public.deal_competitors"
+Cohesion: 0.67
+Nodes (3): idx_deal_competitors_competitor_id, idx_deal_competitors_deal_id, public.deal_competitors
+
+### Community 2387 - "public.campaigns"
+Cohesion: 0.67
+Nodes (3): idx_campaigns_created_by, idx_campaigns_status, public.campaigns
+
+### Community 2388 - "public.company_cnaes"
+Cohesion: 0.67
+Nodes (3): idx_company_cnaes_cnae, idx_company_cnaes_company, public.company_cnaes
+
+### Community 2389 - "public.contact_emails"
+Cohesion: 0.67
+Nodes (3): idx_contact_emails_contact_id, idx_contact_emails_primary, public.contact_emails
+
+### Community 2390 - "public.economic_group_members"
+Cohesion: 0.67
+Nodes (3): idx_econ_group_members_company, idx_economic_group_members_group_id, public.economic_group_members
+
+### Community 2391 - "public.quick_notes"
+Cohesion: 0.67
+Nodes (3): idx_quick_notes_company, idx_quick_notes_user_id, public.quick_notes
+
+### Community 2392 - "public.sla_violations"
+Cohesion: 0.67
+Nodes (3): idx_sla_violations_sla_rule_id, idx_sla_violations_user_id, public.sla_violations
+
+### Community 2393 - "public.user_badges"
+Cohesion: 0.67
+Nodes (3): idx_user_badges_badge_id, idx_user_badges_user, public.user_badges
+
+### Community 2394 - "public.user_goals"
+Cohesion: 0.67
+Nodes (3): idx_user_goals_period, idx_user_goals_user_id, public.user_goals
+
+### Community 2398 - "public.contacts"
+Cohesion: 0.67
+Nodes (3): public.contact_emails, public.contact_phones, public.contacts
+
+### Community 2435 - "client_values_user_id_contact_id_category_value_name_key"
+Cohesion: 0.67
+Nodes (3): client_values_user_id_contact_id_category_value_name_key, idx_client_values_contact, public.client_values
+
+### Community 2436 - "communication_preferences_user_id_contact_id_key"
+Cohesion: 0.67
+Nodes (3): communication_preferences_user_id_contact_id_key, idx_communication_preferences_contact, public.communication_preferences
+
+### Community 2437 - "contact_time_analysis_user_id_contact_id_day_of_week_hour_o_key"
+Cohesion: 0.67
+Nodes (3): contact_time_analysis_user_id_contact_id_day_of_week_hour_o_key, idx_contact_time_analysis_contact, public.contact_time_analysis
+
+### Community 2438 - "disc_conversion_metrics_user_id_disc_profile_period_start_p_key"
+Cohesion: 0.67
+Nodes (3): disc_conversion_metrics_user_id_disc_profile_period_start_p_key, idx_disc_conversion_metrics_user, public.disc_conversion_metrics
+
+### Community 2439 - "idx_activities_created_at"
+Cohesion: 0.67
+Nodes (3): idx_activities_created_at, idx_activities_user_id, public.activities
+
+### Community 2440 - "idx_alerts_dismissed"
+Cohesion: 0.67
+Nodes (3): idx_alerts_dismissed, idx_alerts_user_id, public.alerts
+
+### Community 2441 - "idx_audit_log_entity"
+Cohesion: 0.67
+Nodes (3): idx_audit_log_entity, idx_audit_log_user, public.audit_log
+
+### Community 2442 - "idx_contact_relatives_contact_id"
+Cohesion: 0.67
+Nodes (3): idx_contact_relatives_contact_id, idx_contact_relatives_user_id, public.contact_relatives
+
+### Community 2443 - "idx_contacts_company_id"
+Cohesion: 0.67
+Nodes (3): idx_contacts_company_id, idx_contacts_user_id, public.contacts
+
+### Community 2444 - "idx_emotional_states_contact"
+Cohesion: 0.67
+Nodes (3): idx_emotional_states_contact, idx_emotional_states_created, public.emotional_states_history
+
+### Community 2445 - "idx_hidden_objections_contact"
+Cohesion: 0.67
+Nodes (3): idx_hidden_objections_contact, idx_hidden_objections_resolved, public.hidden_objections
+
+### Community 2446 - "idx_insights_contact_id"
+Cohesion: 0.67
+Nodes (3): idx_insights_contact_id, idx_insights_user_id, public.insights
+
+### Community 2447 - "idx_lp_submissions_lp"
+Cohesion: 0.67
+Nodes (3): idx_lp_submissions_lp, idx_lp_submissions_user, public.landing_page_submissions
+
+### Community 2448 - "idx_routing_rules_active"
+Cohesion: 0.67
+Nodes (3): idx_routing_rules_active, idx_routing_rules_priority, public.lead_routing_rules
+
+### Community 2449 - "idx_life_events_contact"
+Cohesion: 0.67
+Nodes (3): idx_life_events_contact, idx_life_events_date, public.life_events
+
+### Community 2450 - "idx_metaprogram_analysis_contact"
+Cohesion: 0.67
+Nodes (3): idx_metaprogram_analysis_contact, idx_metaprogram_analysis_user, public.metaprogram_analysis
+
+### Community 2451 - "idx_offer_suggestions_contact"
+Cohesion: 0.67
+Nodes (3): idx_offer_suggestions_contact, idx_offer_suggestions_status, public.offer_suggestions
+
+### Community 2452 - "idx_purchase_history_contact"
+Cohesion: 0.67
+Nodes (3): idx_purchase_history_contact, idx_purchase_history_user, public.purchase_history
+
+### Community 2453 - "idx_rfm_history_contact"
+Cohesion: 0.67
+Nodes (3): idx_rfm_history_contact, idx_rfm_history_recorded, public.rfm_history
+
+### Community 2454 - "idx_semantic_cache_lookup"
+Cohesion: 0.67
+Nodes (3): idx_semantic_cache_lookup, semantic_search_cache_user_id_query_hash_key, public.semantic_search_cache
+
+### Community 2455 - "idx_sms_opt_outs_user_phone"
+Cohesion: 0.67
+Nodes (3): idx_sms_opt_outs_user_phone, sms_opt_outs_user_id_phone_key, public.sms_opt_outs
+
+### Community 2456 - "idx_sms_recipients_campaign"
+Cohesion: 0.67
+Nodes (3): idx_sms_recipients_campaign, sms_campaign_recipients_campaign_id_contact_id_key, public.sms_campaign_recipients
+
+### Community 2457 - "idx_social_profiles_contact"
+Cohesion: 0.67
+Nodes (3): idx_social_profiles_contact, idx_social_profiles_platform, public.social_profiles
+
+### Community 2458 - "idx_social_scraping_schedule_next"
+Cohesion: 0.67
+Nodes (3): idx_social_scraping_schedule_next, social_scraping_schedule_contact_id_platform_key, public.social_scraping_schedule
+
+### Community 2459 - "idx_stakeholder_alerts_dismissed"
+Cohesion: 0.67
+Nodes (3): idx_stakeholder_alerts_dismissed, idx_stakeholder_alerts_user_contact, public.stakeholder_alerts
+
+### Community 2460 - "idx_trigger_bundles_scenario"
+Cohesion: 0.67
+Nodes (3): idx_trigger_bundles_scenario, idx_trigger_bundles_system, public.trigger_bundles
+
+### Community 2461 - "idx_trigger_intensity_history_trigger"
+Cohesion: 0.67
+Nodes (3): idx_trigger_intensity_history_trigger, idx_trigger_intensity_history_user_contact, public.trigger_intensity_history
+
+### Community 2462 - "idx_vak_analysis_contact"
+Cohesion: 0.67
+Nodes (3): idx_vak_analysis_contact, idx_vak_analysis_user, public.vak_analysis_history
+
+### Community 2463 - "idx_whatsapp_instances_user"
+Cohesion: 0.67
+Nodes (3): idx_whatsapp_instances_user, public.whatsapp_instances, whatsapp_instances_user_id_instance_name_key
+
 ## Knowledge Gaps
-- **7080 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+7075 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 11189 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **1046 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7162 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+7157 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 13286 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **1711 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `ref_components`, `ref_types`, `ref_lib`, `date-fns`, `Estado dos testes`, `useAuth`, `ref_hooks`, `ref_domain`, `TimelineGroupCard.tsx`, `sonner`, `@tanstack/react-query`, `recharts`, `ref_integrations`, `SectionFrame.tsx`, `useSmartNotifications.ts`, `lucide-react`, `ContactBehavioralTab.tsx`, `framer-motion`, `Tabela de evidências`, `lazyPages.tsx`, `package.json`, `NextBestAction.tsx`, `AgendarReuniaoForm.tsx`, `ProximaAcaoCTA.tsx`, `ActiveFiltersBar.tsx`, `SortChips.tsx`, `ScrollToTopButton.tsx`, `TriggerAnalyticsTabs.tsx`, `SequenceFormDialog.tsx`, `ContactOverviewTab.tsx`, `DensityContext.tsx`, `GlobalSearch.tsx`, `useChannelHistory.ts`, `Hooks (`src/hooks/`)`, `vitest`, `ContactDataTab.tsx`, `StakeholderMap.tsx`, `AdminKnowledgeExport.tsx`, `PublicSurvey.tsx`, `useCompanies.ts`, `useConversationIntel.ts`, `CompanyInsightsTab.tsx`, `@testing-library/react`, `useBIAdvanced.ts`, `MFAEnrollmentBanner.tsx`, `useChurnRisk.ts`, `useCustomerSuccess.ts`, `useContactCadence.ts`, `3.4 Hooks de Analytics`, `useTriggerHistory.ts`, `✅ Resolvidos nesta rodada`, `NLPAnalysisCard.tsx`, `useInteractionsRpc.ts`, `.lovable/memory/architecture/*.md (4) + standards (1) + technical (1)`, `AccountChurnPredictionPanel.tsx`, `micro-interactions/index.ts`, `CopywritingSalesTools.tsx`, `RpcPlanDiffDialog.tsx`, `useRealtimeNotifications.ts`, `CompanyForm.tsx`, `SalesTeamTab.tsx`, `sidebar.tsx`, `ContactTimeHeatmap.tsx`, `CadenceRulesConfig.tsx`, `WhyScoreDrawer.tsx`, `RecentActivityCard.tsx`, `PageSkeletons.tsx`, `canonical-delivery-retry-contract.test.tsx`, `Intelligence Hub (`/intelligence`)`, `E — Camada de dados do front × contratos de backend (SINGU CRM v2)`, `FrequenciaContatoCard.tsx`, `ProximoPassoQuickForm.tsx`, `insights/SentimentTrendChart.tsx`, `contact-cache-revalidation.test.tsx`, `3.8 Hooks de UX/UI`, `ChannelShortcutsHelpOverlay.tsx`, `PrefetchLink.tsx`, `useCompanyCommercial.ts`, `MapMarkerCluster.tsx`, `feedback/index.ts`, `AskTab.tsx`, `useRFMAnalysis.ts`, `useSentimentAnnotations.ts`, `PortfolioHealthDashboard.tsx`, `AdminFieldMapping.tsx`, `DashboardCharts.tsx`, `useContacts.ts`, `InsightsPanel.tsx`, `useInteractionsAdvancedFilter.ts`, `AppProviders.tsx`, `AccountHierarchyTree.tsx`, `SchemaDiscoveryCard.tsx`, `.lovable/memory/features/*.md (57 arquivos)`, `company-health-score.tsx`, `severity`, `MiniCelebration.tsx`, `useApproachRecommendation.ts`, `useFicha360FilterFavorites.ts`, `useFicha360PreferencesSync.ts`, `BulkActionsBar.tsx`, `IncomingWebhookCard.tsx`, `LuxIntelligencePanel.tsx`, `usePipeline.ts`, `IncomingWebhookFormDialog.tsx`, `canonical-side-effect-contracts.test.tsx`, `zod`, `SentimentChartTooltip.tsx`, `masked-input.tsx`, `useBulkRevalidate.ts`, `useTasks.ts`, `CompanyCardWithContext.tsx`, `C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado`, `EmailBuilder.tsx`, `celebrate.ts`, `useEmotionalIntelligence.ts`, `ContactEmailThreadsSection.tsx`, `contact-cache-concurrency.test.tsx`, `NotificationGroup.tsx`, `PWAComponents.tsx`, `SequenceEnrollDialog.contract.test.tsx`, `ProximosPassosFiltersBar.tsx`, `DateRangePopover.tsx`, `ObjectionExamplesModal.tsx`, `ObjectionsSpotlight.tsx`, `ViewModeChips.tsx`, `DealConfidenceBadge.tsx`, `rpcPlanDiff.ts`, `AriaLiveRegion.tsx`, `optimized-avatar.tsx`, `command.tsx`, `DailyBriefingCard.tsx`, `SkeletonPrimitives.tsx`, `contact-detail-external-retry.test.tsx`, `useStakeholderAnalysis.ts`, `keyboardShortcutRegistry.ts`, `useChannelPerformanceMatrix.ts`, `useVoiceAgent.ts`, `ContactDetailHeader.tsx`, `usePreContactBriefing.ts`, `useStakeholderSimulator.ts`, `PessoaForm.tsx`, `Insights.tsx`, `ContextualHelp.tsx`, `useEntityBookmarks.ts`, `PreContactBriefing.tsx`, `CompanyInteractionsTab.tsx`, `EvidenceDrillDownSheet.tsx`, `SentimentDistributionChart.tsx`, `ThemeExamplesDrawer.tsx`, `lead-score/LeadScoreCard.tsx`, `ThemeProvider.tsx`, `canonical-mutation-contracts.test.tsx`, `use-toast.ts`, `useCompanyFilterOptions.ts`, `useNLPAutoAnalysis.ts`, `accordion.tsx`, `tabs.tsx`, `OnboardingTour.tsx`, `useEasterEggs.ts`, `error-budget-dashboard.md`, `StrategicNextStepsCard.tsx`, `GlobalCommandBar.tsx`, `ForecastConfidencePanel.tsx`, `PresetFiltersDiff.tsx`, `useCompanyProfileAnalytics.ts`, `useFicha360.ts`, `useContactDetail.presence.test.tsx`, `PlaybookSectionRenderer.tsx`, `AdminDashboard.tsx`, `Fatia H — CI/CD, testes, infra, observabilidade e tooling`, `ResumoConversaIADialog.tsx`, `useCoalitionDetection.ts`, `InsightFeedbackAnalytics.tsx`, `DailySummaryWidget.tsx`, `canonical-competitor-save-contract.test.tsx`, `CopyScriptMenu.tsx`, `ProximosPassosPresets.tsx`, `CompanyAddressesForm.tsx`, `useHapticFeedback.ts`, `useActivityLogger.ts`, `DirecaoQuickFilter.tsx`, `RelationshipKPIsDashboard.tsx`, `InteracoesContent.tsx`, `useClosingScoreRanking.ts`, `11. Nove páginas do escopo renderizam sem `AppLayout``, `useKeyboardShortcutsEnhanced.ts`, `usePortfolioHealth.ts`, `useNeuromarketing.ts`, `Pipeline.tsx`, `Componentes (`src/components/intel/`)`, `useReducedMotion.ts`, `useBulkImport.ts`, `ErrorBoundary.tsx`, `RelatoriosFixosBar.tsx`, `InfiniteScrollSentinel.tsx`, `badge.tsx`, `form.tsx`, `empty-state.tsx`, `CelebrationProvider.tsx`, `EntityMonthlyTimeline.tsx`, `BundlesTab.tsx`, `useErpData.ts`, `MapaEmpresas.tsx`, `useDISCAutoAnalysis.ts`, `context-menu.tsx`, `dropdown-menu.tsx`, `toast.tsx`, `ImportantDatesCalendar.tsx`, `ContextualLoader.tsx`, `PassoFeedbackMenu.tsx`, `CanaisQuickFilter.tsx`, `useConversationalSearch.ts`, `useFicha360Filters.ts`, `progress.tsx`, `SoftDeletePanel.test.tsx`, `contact-detail-partial-failures.test.tsx`, `calendar.tsx`, `useAdvancedTriggers.ts`, `TwoFactorSetup.test.tsx`, `useSearchPresets.ts`, `company-form-exhaustive.test.tsx`, `RecentChannelCombos.tsx`, `ReportWidgets.tsx`, `alert-dialog.tsx`, `useAccountChurnPrediction.ts`, `LifeEventsTab.tsx`, `ProviderErrorBoundary`, `CompaniesInlineMap.tsx`, `AdvancedSearchBar.tsx`, `ObjectionsTrendChart.tsx`, `responsive-dialog.tsx`, `NavigationStackContext.tsx`, `useSemanticSearch.ts`, `useSocialInsights.test.tsx`, `useFicha360Domain.ts`, `CoalitionDetectionPanel.tsx`, `table.tsx`, `useNLPAnalyticsData.ts`, `BehavioralRegenAudit.tsx`, `AdminTelemetria.tsx`, `MultiDiffPanel.tsx`, `useEntityNotes.ts`, `useGraphLayout.ts`, `useIntelTheme.ts`, `useIntelTour.ts`, `useSavedAskViews.ts`, `useNetworkGraph.ts`, `MapaEmpresas.batch.test.tsx`, `InboundActivityHeatmapCard.tsx`, `StakeholderInfluenceNetwork.tsx`, `select.tsx`, `drawer.tsx`, `SequenceDetailDrawer.tsx`, `AiGatewayHealthCard.tsx`, `CustomFieldsManager.tsx`, `ReportsTab.tsx`, `DashboardErrorBoundary`, `ProximosPassosCard.tsx`, `InteracoesPresetsMenu.tsx`, `AutomationWizard.tsx`, `Categorias`, `DataGrid.tsx`, `ExportFormatMenu.tsx`, `Contatos.tsx`, `useChurnPrediction.ts`, `useDedupEngine.ts`, `useIntelDensity.ts`, `useDailyKpis.test.tsx`, `IntelStatusBar.tsx`, `useLuxIntelligence.ts`, `useNextPagePrefetch.ts`, `Inbox.tsx`, `useIntelPresentation.ts`?**
-  _High betweenness centrality (0.126) - this node is a cross-community bridge._
-- **Why does `vitest` connect `vitest` to `date-fns`, `react`, `ref_domain`, `_shared/auth.ts`, `sonner`, `@tanstack/react-query`, `lucide-react`, `@supabase/supabase-js`, `triggerPlaybook.ts`, `package.json`, `NextBestAction.tsx`, `ProximaAcaoCTA.tsx`, `SortChips.tsx`, `ScrollToTopButton.tsx`, `ContactOverviewTab.tsx`, `behavioralAlertStats.ts`, `PublicSurvey.tsx`, `telemetry-data-integrity.test.ts`, `useCompanies.ts`, `useConversationIntel.ts`, `@testing-library/react`, `useBIAdvanced.ts`, `✅ Resolvidos nesta rodada`, `external-data/index.ts`, `useInteractionsRpc.ts`, `AccountChurnPredictionPanel.tsx`, `design-system-audit.test.ts`, `externalData.ts`, `CompanyForm.tsx`, `canonical-delivery-retry-contract.test.tsx`, `contact-cache-revalidation.test.tsx`, `MapMarkerCluster.tsx`, `carnegieProgressStorytellingQuestions.test.ts`, `useRFMAnalysis.ts`, `auth-flow.test.ts`, `carnegieVulnerabilityYesLadderInterest.test.ts`, `useContacts.ts`, `IncomingWebhookCard.tsx`, `usePipeline.ts`, `canonical-side-effect-contracts.test.tsx`, `zod`, `SentimentChartTooltip.tsx`, `useTasks.ts`, `create-drill-backup.mjs`, `extractExcerpts.ts`, `pushNotifications.ts`, `contact-cache-concurrency.test.tsx`, `SequenceEnrollDialog.contract.test.tsx`, `circuitBreaker.ts`, `contactBehaviorAudit.test.ts`, `contact-detail-external-retry.test.tsx`, `carnegieCriticismEmpathy.test.ts`, `carnegieEncouragementFaceSaving.test.ts`, `ContactDetailHeader.tsx`, `carnegieIdentityOwnership.test.ts`, `SentimentDistributionChart.tsx`, `canonical-mutation-contracts.test.tsx`, `company-filters-audit.test.ts`, `useNLPAutoAnalysis.ts`, `ForecastConfidencePanel.tsx`, `useContactDetail.presence.test.tsx`, `voice-system-exhaustive.test.ts`, `errorReporting.ts`, `PlaybookSectionRenderer.tsx`, `resilientFetch`, `canonical-competitor-save-contract.test.tsx`, `companyQueries.ts`, `useActivityLogger.ts`, `telemetry-charts.test.ts`, `useBulkImport.ts`, `InfiniteScrollSentinel.tsx`, `useErpData.ts`, `BundlesTab.tsx`, `MapaEmpresas.tsx`, `architecture-compliance.test.ts`, `contact-detail-partial-failures.test.tsx`, `SoftDeletePanel.test.tsx`, `useAdvancedTriggers.ts`, `TwoFactorSetup.test.tsx`, `WebhookSnippetsSheet`, `company-form-exhaustive.test.tsx`, `DataHealthWidget.tsx`, `PendingFollowupsWidget.tsx`, `lead-scorer/index.ts`, `LifeEventsTab.tsx`, `NavigationStackContext.tsx`, `useSocialInsights.test.tsx`, `push.ts`, `AdminTelemetria.tsx`, `ActiveFiltersBar.onAfterRemove.test.tsx`, `MapaEmpresas.batch.test.tsx`, `SequenceDetailDrawer.tsx`, `CompanyCommercialTab.tsx`, `Contatos.tsx`, `useDedupEngine.ts`, `useDailyKpis.test.tsx`, `external-data-telemetry.test.ts`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
-- **Why does `lucide-react` connect `lucide-react` to `ref_components`, `ref_types`, `ref_lib`, `date-fns`, `react`, `ref_hooks`, `ref_domain`, `TimelineGroupCard.tsx`, `sonner`, `@tanstack/react-query`, `recharts`, `ref_integrations`, `SectionFrame.tsx`, `ContactBehavioralTab.tsx`, `framer-motion`, `Tabela de evidências`, `package.json`, `NextBestAction.tsx`, `AgendarReuniaoForm.tsx`, `ProximaAcaoCTA.tsx`, `ActiveFiltersBar.tsx`, `SortChips.tsx`, `ScrollToTopButton.tsx`, `TriggerAnalyticsTabs.tsx`, `ContactCommercialTab.tsx`, `SequenceFormDialog.tsx`, `ContactOverviewTab.tsx`, `GlobalSearch.tsx`, `ContactDataTab.tsx`, `StakeholderMap.tsx`, `AdminKnowledgeExport.tsx`, `PublicSurvey.tsx`, `CompanyInsightsTab.tsx`, `@testing-library/react`, `useChurnRisk.ts`, `MFAEnrollmentBanner.tsx`, `useCustomerSuccess.ts`, `✅ Resolvidos nesta rodada`, `NLPAnalysisCard.tsx`, `useInteractionsRpc.ts`, `CopywritingSalesTools.tsx`, `AccountChurnPredictionPanel.tsx`, `RpcPlanDiffDialog.tsx`, `externalData.ts`, `CompanyForm.tsx`, `SalesTeamTab.tsx`, `sidebar.tsx`, `ContactTimeHeatmap.tsx`, `CadenceRulesConfig.tsx`, `WhyScoreDrawer.tsx`, `RecentActivityCard.tsx`, `TopContactsCard.tsx`, `ErrorState.tsx`, `FrequenciaContatoCard.tsx`, `ProximoPassoQuickForm.tsx`, `insights/SentimentTrendChart.tsx`, `ChannelShortcutsHelpOverlay.tsx`, `SocialIntelligencePanel.tsx`, `feedback/index.ts`, `AskTab.tsx`, `PortfolioHealthDashboard.tsx`, `AdminFieldMapping.tsx`, `DashboardCharts.tsx`, `InsightsPanel.tsx`, `AccountHierarchyTree.tsx`, `SchemaDiscoveryCard.tsx`, `.lovable/memory/features/*.md (57 arquivos)`, `company-health-score.tsx`, `ConversationAnalysisCard.tsx`, `severity`, `MiniCelebration.tsx`, `BulkActionsBar.tsx`, `IncomingWebhookCard.tsx`, `LuxIntelligencePanel.tsx`, `IncomingWebhookFormDialog.tsx`, `Riscos residuais`, `Drift: repo × tipos gerados — quantificado`, `zod`, `SentimentChartTooltip.tsx`, `useBulkRevalidate.ts`, `CompanyCardWithContext.tsx`, `priority-indicator.tsx`, `EmailBuilder.tsx`, `ContactEmailThreadsSection.tsx`, `NotificationGroup.tsx`, `PWAComponents.tsx`, `ProximosPassosFiltersBar.tsx`, `DateRangePopover.tsx`, `ObjectionExamplesModal.tsx`, `ObjectionsSpotlight.tsx`, `ViewModeChips.tsx`, `DealConfidenceBadge.tsx`, `rpcPlanDiff.ts`, `command.tsx`, `CompanyProfileCard.tsx`, `DailyBriefingCard.tsx`, `DesignSystem.tsx`, `useChannelPerformanceMatrix.ts`, `ContactDetailHeader.tsx`, `PessoaForm.tsx`, `Insights.tsx`, `ContextualHelp.tsx`, `PreContactBriefing.tsx`, `CompanyInteractionsTab.tsx`, `EvidenceDrillDownSheet.tsx`, `SentimentDistributionChart.tsx`, `ThemeExamplesDrawer.tsx`, `lead-score/LeadScoreCard.tsx`, `useCompanyFilterOptions.ts`, `accordion.tsx`, `OnboardingTour.tsx`, `StrategicNextStepsCard.tsx`, `GlobalCommandBar.tsx`, `ForecastConfidencePanel.tsx`, `PresetFiltersDiff.tsx`, `PlaybookSectionRenderer.tsx`, `AdminDashboard.tsx`, `Fatia H — CI/CD, testes, infra, observabilidade e tooling`, `ResumoConversaIADialog.tsx`, `InsightFeedbackAnalytics.tsx`, `DailySummaryWidget.tsx`, `PipelineFilterBar.tsx`, `CopyScriptMenu.tsx`, `ProximosPassosPresets.tsx`, `CompanyAddressesForm.tsx`, `InteracoesContent.tsx`, `DirecaoQuickFilter.tsx`, `RelationshipKPIsDashboard.tsx`, `11. Nove páginas do escopo renderizam sem `AppLayout``, `Pipeline.tsx`, `Fatia A — Documentos da raiz + memória Lovable (.lovable/plan.md + 98 arquivos de .lovable/memory) + .devin/.windsurf`, `Componentes (`src/components/intel/`)`, `ErrorBoundary.tsx`, `RelatoriosFixosBar.tsx`, `InfiniteScrollSentinel.tsx`, `badge.tsx`, `empty-state.tsx`, `CelebrationProvider.tsx`, `EntityMonthlyTimeline.tsx`, `BundlesTab.tsx`, `MapaEmpresas.tsx`, `context-menu.tsx`, `dropdown-menu.tsx`, `toast.tsx`, `ImportantDatesCalendar.tsx`, `ContextualLoader.tsx`, `PassoFeedbackMenu.tsx`, `CanaisQuickFilter.tsx`, `SoftDeletePanel.test.tsx`, `calendar.tsx`, `TwoFactorSetup.test.tsx`, `company-form-exhaustive.test.tsx`, `DataHealthWidget.tsx`, `PendingFollowupsWidget.tsx`, `RecentChannelCombos.tsx`, `ReportWidgets.tsx`, `LifeEventsTab.tsx`, `ProviderErrorBoundary`, `CompaniesInlineMap.tsx`, `AdvancedSearchBar.tsx`, `ObjectionsTrendChart.tsx`, `CoalitionDetectionPanel.tsx`, `BehavioralRegenAudit.tsx`, `RpcPerfCard.tsx`, `FiscalDataCard.tsx`, `MultiDiffPanel.tsx`, `AdminTelemetria.tsx`, `Observability.tsx`, `InboundActivityHeatmapCard.tsx`, `StakeholderInfluenceNetwork.tsx`, `UnifiedNotificationsBell.tsx`, `select.tsx`, `SequenceDetailDrawer.tsx`, `AiGatewayHealthCard.tsx`, `CompanyCommercialTab.tsx`, `CustomFieldsManager.tsx`, `ReportsTab.tsx`, `DashboardErrorBoundary`, `ProximosPassosCard.tsx`, `InteracoesPresetsMenu.tsx`, `AutomationWizard.tsx`, `Contatos.tsx`, `ExportFormatMenu.tsx`, `IntelStatusBar.tsx`, `Inbox.tsx`?**
-  _High betweenness centrality (0.040) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `ref_components`, `ref_types`, `useInfiniteList.ts`, `ref_lib`, `date-fns`, `useAuth`, `ref_hooks`, `ref_domain`, `TimelineGroupCard.tsx`, `useSemanticSearch.ts`, `ContactOverviewTab.tsx`, `recharts`, `@tanstack/react-query`, `InsightFeedbackTrendChart.tsx`, `SectionFrame.tsx`, `IntelBookmarksNotesBadge.tsx`, `lucide-react`, `RecentChannelCombos.tsx`, `ContactBehavioralTab.tsx`, `framer-motion`, `FloatingParticles.tsx`, `useAccountChurnPrediction.ts`, `Componentes e features órfãs`, `package.json`, `useExternalInteractions.ts`, `useIntelTelemetry.ts`, `ProximaAcaoCTA.tsx`, `ActiveFiltersBar.tsx`, `Tabela de evidências`, `ProfileBasedSuggestions.tsx`, `useReportInfiniteScrollProgress.ts`, `SequenceFormDialog.tsx`, `useSavedAskViews.ts`, `ContactDetailHeader.tsx`, `DensityContext.tsx`, `GlobalSearch.tsx`, `useChannelHistory.ts`, `useWhyScoreDrawerPreference.ts`, `useEntityBookmarks.ts`, `vitest`, `ContactDataTab.tsx`, `StakeholderMap.tsx`, `AdminKnowledgeExport.tsx`, `lazyPages.tsx`, `useCompanies.ts`, `useConversationIntel.ts`, `CompanyInsightsTab.tsx`, `@testing-library/react`, `useBIAdvanced.ts`, `NPS.contract.test.tsx`, `CompaniesInlineMap.tsx`, `5. `docs/TECH_DEBT.md``, `useChurnRisk.ts`, `useFicha360DeeplinkToast.ts`, `useDashboardStats.ts`, `3.4 Hooks de Analytics`, `canonical-communication-contracts.test.tsx`, `CopywritingSalesTools.tsx`, `micro-interactions/index.ts`, `Componentes (`src/components/intel/`)`, `RpcPlanDiffDialog.tsx`, `CompanyEmailsForm.tsx`, `MultiDiffPanel.tsx`, `ActivityHeatmapChart.tsx`, `useRealtimeNotifications.ts`, `VoiceSearchOverlayConnected.tsx`, `surface.tsx`, `ReportWidgets.tsx`, `externalData.ts`, `useClientHealth.ts`, `CompanyForm.tsx`, `SalesTeamTab.tsx`, `sidebar.tsx`, `AppProviders.tsx`, `ContactTimeHeatmap.tsx`, `WhyScoreDrawer.tsx`, `useContactValidationStatus.ts`, `PageSkeletons.tsx`, `canonical-delivery-retry-contract.test.tsx`, `useEntityNotes.ts`, `DISCCompatibilityAlerts.tsx`, `FrequenciaContatoCard.tsx`, `insights/SentimentTrendChart.tsx`, `useIntelTheme.ts`, `useIntelTour.ts`, `usePurchasePatterns.ts`, `ChannelShortcutsHelpOverlay.tsx`, `PrefetchLink.tsx`, `useCompanyCommercial.ts`, `useRecentlyViewed.ts`, `MapMarkerCluster.tsx`, `MapaEmpresas.batch.test.tsx`, `feedback/index.ts`, `useSavedViews.ts`, `useRFMAnalysis.ts`, `WeeklyReportPanel.tsx`, `DashboardCharts.tsx`, `useContacts.ts`, `InsightsPanel.tsx`, `useInteractionsAdvancedFilter.ts`, `company-health-score.tsx`, `CelebrationProvider.tsx`, `useApproachRecommendation.ts`, `useFicha360FilterFavorites.ts`, `useFicha360PreferencesSync.ts`, `useKeyboardShortcutsEnhanced.ts`, `LuxIntelligencePanel.tsx`, `IncomingWebhookFormDialog.tsx`, `canonical-side-effect-contracts.test.tsx`, `SentimentChartTooltip.tsx`, `masked-input.tsx`, `CompanyCardWithContext.tsx`, `InteractionForm.tsx`, `Fatia A — Documentos da raiz + memória Lovable (.lovable/plan.md + 98 arquivos de .lovable/memory) + .devin/.windsurf`, `EmailBuilder.tsx`, `celebrate.ts`, `AuditDiffViewer.tsx`, `ReportsTab.tsx`, `NotificationGroup.tsx`, `PWAComponents.tsx`, `useTouchpointSequences.ts`, `Ficha360FilterPanel.tsx`, `ObjectionExamplesModal.tsx`, `ObjectionsSpotlight.tsx`, `Metas.tsx`, `StrategicAccountsWidget.tsx`, `DataGrid.tsx`, `EntityNotesPanel.tsx`, `ExportFormatMenu.tsx`, `IntelHealthPanel.tsx`, `TemporalHeatmap.tsx`, `DealConfidenceBadge.tsx`, `useDeviceDetection.ts`, `VoiceSearchOverlay.tsx`, `AriaLiveRegion.tsx`, `useFocusTrap.ts`, `optimized-avatar.tsx`, `command.tsx`, `useAdvancedTriggers.ts`, `3.8 Hooks de UX/UI`, `useIntelDensity.ts`, `Intelligence Hub (`/intelligence`)`, `useStakeholderAnalysis.ts`, `keyboardShortcutRegistry.ts`, `useVoiceAgent.ts`, `NavigationPatterns.tsx`, `usePreContactBriefing.ts`, `useStakeholderSimulator.ts`, `PessoaForm.tsx`, `Insights.tsx`, `ContextualHelp.tsx`, `PreContactBriefing.tsx`, `CompanyInteractionsTab.tsx`, `EvidenceDrillDownSheet.tsx`, `SentimentDistributionChart.tsx`, `ThemeExamplesDrawer.tsx`, `lead-score/LeadScoreCard.tsx`, `ThemeProvider.tsx`, `canonical-mutation-contracts.test.tsx`, `use-toast.ts`, `useCompanyFilterOptions.ts`, `useNLPAutoAnalysis.ts`, `accordion.tsx`, `tabs.tsx`, `useHapticFeedback.ts`, `contact-cache-concurrency.test.tsx`, `error-budget-dashboard.md`, `AccountChurnPredictionPanel.tsx`, `GlobalCommandBar.tsx`, `ForecastConfidencePanel.tsx`, `PresetFiltersDiff.tsx`, `useCompanyProfileAnalytics.ts`, `useFicha360.ts`, `useStakeholderAlerts.ts`, `AdminSidebar.tsx`, `ResumoConversaIADialog.tsx`, `useCoalitionDetection.ts`, `AIEmailComposer.tsx`, `InsightFeedbackAnalytics.tsx`, `DailySummaryWidget.tsx`, `CompanyAddressesForm.tsx`, `CompanySocialMediaForm.tsx`, `StakeholderInfluenceNetwork.tsx`, `Achados`, `contact-detail-external-retry.test.tsx`, `useBulkImport.ts`, `DISCAnalyticsPanel.tsx`, `ErrorBoundary.tsx`, `RelatoriosFixosBar.tsx`, `InfiniteScrollSentinel.tsx`, `form.tsx`, `empty-state.tsx`, `context-menu.tsx`, `dropdown-menu.tsx`, `toast.tsx`, `ImportantDatesCalendar.tsx`, `ContextualLoader.tsx`, `ProximosPassosCard.tsx`, `AdvancedSearchBar.tsx`, `company-form-exhaustive.test.tsx`, `useAutomationRules.ts`, `useConversationalSearch.ts`, `useFicha360Filters.ts`, `Categorias`, `scroll-area.tsx`, `BundlesTab.tsx`, `MapaEmpresas.tsx`, `useSearchPresets.ts`, `alert-dialog.tsx`, `useWinLoss.ts`, `ProviderErrorBoundary`, `ObjectionsTrendChart.tsx`, `responsive-dialog.tsx`, `useSocialInsights.test.tsx`, `NavigationStackContext.tsx`, `EntityMonthlyTimeline.tsx`, `contact-cache-revalidation.test.tsx`, `useFicha360Domain.ts`, `Hooks (`src/hooks/`)`, `useNLPAnalyticsData.ts`, `AppChrome.tsx`, `ProntidaoFactorBreakdownChart.tsx`, `table.tsx`, `PLANEJADO × EXECUTADO — SINGU CRM v2`, `BehavioralRegenAudit.tsx`, `company-contracts.test.ts`, `useAIWritingAssistant.ts`, `useNetworkGraph.ts`, `AccountHierarchyTree.tsx`, `InboundActivityHeatmapCard.tsx`, `Pipeline.tsx`, `select.tsx`, `drawer.tsx`, `useContactDetail.presence.test.tsx`, `AiGatewayHealthCard.tsx`, `AutomationWizard.tsx`, `contact-detail-partial-failures.test.tsx`, `useDedupEngine.ts`, `useDailyKpis.test.tsx`, `useDealForecastConfidence.ts`, `useNextPagePrefetch.ts`, `StakeholderSimulator.tsx`, `typography.tsx`, `useActivityLogger.ts`, `useClosingScoreRanking.ts`, `usePortfolioHealth.ts`, `useReducedMotion.ts`, `Inbox.tsx`, `useGraphLayout.ts`, `AppLayout.tsx`?**
+  _High betweenness centrality (0.095) - this node is a cross-community bridge._
+- **Why does `vitest` connect `vitest` to `ref_components`, `ref_types`, `ref_lib`, `date-fns`, `ref_hooks`, `_shared/auth.ts`, `ContactOverviewTab.tsx`, `@tanstack/react-query`, `lucide-react`, `@supabase/supabase-js`, `package.json`, `ProximaAcaoCTA.tsx`, `ScrollToTopButton.test.tsx`, `ContactDetailHeader.tsx`, `behavioralAlertStats.ts`, `telemetry-data-integrity.test.ts`, `useCompanies.ts`, `useConversationIntel.ts`, `@testing-library/react`, `useBIAdvanced.ts`, `rfm.ts`, `external-data/index.ts`, `canonical-communication-contracts.test.tsx`, `DataHealthWidget.contract.test.tsx`, `ActiveFiltersBar.onAfterRemove.test.tsx`, `externalData.ts`, `lint-providers.cjs`, `CompanyForm.tsx`, `canonical-delivery-retry-contract.test.tsx`, `push.ts`, `MapaEmpresas.batch.test.tsx`, `NPS.contract.test.tsx`, `MapMarkerCluster.tsx`, `carnegieProgressStorytellingQuestions.test.ts`, `useRFMAnalysis.ts`, `auth-flow.test.ts`, `carnegieVulnerabilityYesLadderInterest.test.ts`, `useContacts.ts`, `ref_node_fs`, `canonical-side-effect-contracts.test.tsx`, `SentimentChartTooltip.tsx`, `useTasks.ts`, `extractExcerpts.ts`, `pushNotifications.ts`, `contactBehaviorAudit.test.ts`, `useAdvancedTriggers.ts`, `carnegieCriticismEmpathy.test.ts`, `carnegieEncouragementFaceSaving.test.ts`, `carnegieIdentityOwnership.test.ts`, `SentimentDistributionChart.tsx`, `canonical-mutation-contracts.test.tsx`, `company-filters-audit.test.ts`, `useNLPAutoAnalysis.ts`, `SequenceDetailDrawer.tsx`, `contact-cache-concurrency.test.tsx`, `ForecastConfidencePanel.tsx`, `voice-system-exhaustive.test.ts`, `errorReporting.ts`, `sanitize.ts`, `resilientFetch`, `companyQueries.ts`, `contact-detail-external-retry.test.tsx`, `telemetry-charts.test.ts`, `useBulkImport.ts`, `InfiniteScrollSentinel.tsx`, `company-form-exhaustive.test.tsx`, `WebhookSnippetsSheet`, `BundlesTab.tsx`, `MapaEmpresas.tsx`, `lead-scorer/index.ts`, `useWinLoss.ts`, `useSocialInsights.test.tsx`, `contact-cache-revalidation.test.tsx`, `telemetry-helpers.test.ts`, `company-contracts.test.ts`, `triggerPlaybook.ts`, `useContactDetail.presence.test.tsx`, `CompanyCommercialTab.tsx`, `contact-detail-partial-failures.test.tsx`, `useDedupEngine.ts`, `useDailyKpis.test.tsx`, `useActivityLogger.ts`, `external-data-telemetry.test.ts`?**
+  _High betweenness centrality (0.039) - this node is a cross-community bridge._
+- **Why does `lucide-react` connect `lucide-react` to `ref_components`, `ref_types`, `ref_lib`, `date-fns`, `react`, `ref_hooks`, `ref_domain`, `TimelineGroupCard.tsx`, `ContactOverviewTab.tsx`, `recharts`, `@tanstack/react-query`, `SectionFrame.tsx`, `IntelBookmarksNotesBadge.tsx`, `RecentChannelCombos.tsx`, `ContactBehavioralTab.tsx`, `framer-motion`, `Componentes e features órfãs`, `package.json`, `ProximaAcaoCTA.tsx`, `ActiveFiltersBar.tsx`, `C2 — ADRs, Migração, DR, Hardening e Operação: o que foi planejado e não está executado`, `ProfileBasedSuggestions.tsx`, `ContactCommercialTab.tsx`, `SequenceFormDialog.tsx`, `ContactDetailHeader.tsx`, `view-mode-switcher.tsx`, `GlobalSearch.tsx`, `ContactDataTab.tsx`, `StakeholderMap.tsx`, `AdminKnowledgeExport.tsx`, `CompanyInsightsTab.tsx`, `@testing-library/react`, `CompaniesInlineMap.tsx`, `useChurnRisk.ts`, `5. `docs/TECH_DEBT.md``, `Hooks mortos`, `CopywritingSalesTools.tsx`, `RpcPlanDiffDialog.tsx`, `CompanyEmailsForm.tsx`, `MultiDiffPanel.tsx`, `ActivityHeatmapChart.tsx`, `ReportWidgets.tsx`, `CompanyForm.tsx`, `SalesTeamTab.tsx`, `sidebar.tsx`, `ContactTimeHeatmap.tsx`, `WhyScoreDrawer.tsx`, `AppProviders.tsx`, `DISCCompatibilityAlerts.tsx`, `ErrorState.tsx`, `FrequenciaContatoCard.tsx`, `insights/SentimentTrendChart.tsx`, `ChannelShortcutsHelpOverlay.tsx`, `feedback/index.ts`, `WeeklyReportPanel.tsx`, `DashboardCharts.tsx`, `InsightsPanel.tsx`, `company-health-score.tsx`, `ConversationAnalysisCard.tsx`, `CelebrationProvider.tsx`, `LuxIntelligencePanel.tsx`, `IncomingWebhookFormDialog.tsx`, `TelemetryTable.tsx`, `SentimentChartTooltip.tsx`, `CompanyCardWithContext.tsx`, `InteractionForm.tsx`, `EmailBuilder.tsx`, `AuditDiffViewer.tsx`, `ReportsTab.tsx`, `NotificationGroup.tsx`, `CopiarLinkFiltrosButton.tsx`, `useTouchpointSequences.ts`, `Ficha360FilterPanel.tsx`, `ObjectionExamplesModal.tsx`, `ObjectionsSpotlight.tsx`, `PWAComponents.tsx`, `StrategicAccountsWidget.tsx`, `DealConfidenceBadge.tsx`, `EntityNotesPanel.tsx`, `ExportFormatMenu.tsx`, `IntelHealthPanel.tsx`, `relationship-score.tsx`, `VoiceSearchOverlay.tsx`, `command.tsx`, `CompanyProfileCard.tsx`, `PortfolioContactCard.tsx`, `NavigationPatterns.tsx`, `PessoaForm.tsx`, `Insights.tsx`, `ContextualHelp.tsx`, `PreContactBriefing.tsx`, `CompanyInteractionsTab.tsx`, `EvidenceDrillDownSheet.tsx`, `SentimentDistributionChart.tsx`, `ThemeExamplesDrawer.tsx`, `lead-score/LeadScoreCard.tsx`, `useCompanyFilterOptions.ts`, `accordion.tsx`, `SequenceDetailDrawer.tsx`, `AccountChurnPredictionPanel.tsx`, `GlobalCommandBar.tsx`, `ForecastConfidencePanel.tsx`, `PresetFiltersDiff.tsx`, `AdminSidebar.tsx`, `ResumoConversaIADialog.tsx`, `AIEmailComposer.tsx`, `InsightFeedbackAnalytics.tsx`, `DailySummaryWidget.tsx`, `CompanyAddressesForm.tsx`, `CompanySocialMediaForm.tsx`, `StakeholderInfluenceNetwork.tsx`, `Achados`, `DISCAnalyticsPanel.tsx`, `ErrorBoundary.tsx`, `RelatoriosFixosBar.tsx`, `InfiniteScrollSentinel.tsx`, `IntelErrorState.tsx`, `empty-state.tsx`, `context-menu.tsx`, `dropdown-menu.tsx`, `toast.tsx`, `ImportantDatesCalendar.tsx`, `ContextualLoader.tsx`, `ProximosPassosCard.tsx`, `AdvancedSearchBar.tsx`, `company-form-exhaustive.test.tsx`, `BundlesTab.tsx`, `MapaEmpresas.tsx`, `ObjectionsTrendChart.tsx`, `EntityMonthlyTimeline.tsx`, `ProntidaoFactorBreakdownChart.tsx`, `BehavioralRegenAudit.tsx`, `AccountHierarchyTree.tsx`, `SearchLocalGroups.tsx`, `InboundActivityHeatmapCard.tsx`, `DesignSystem.tsx`, `Pipeline.tsx`, `select.tsx`, `AiGatewayHealthCard.tsx`, `CompanyCommercialTab.tsx`, `AutomationWizard.tsx`, `PipelineFilterBar.tsx`, `StakeholderSimulator.tsx`, `Inbox.tsx`, `AppLayout.tsx`?**
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _7080 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _7162 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ref_components` be split into smaller, more focused modules?**
-  _Cohesion score 0.01357409713574097 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.014349988160075775 - nodes in this community are weakly interconnected._
 - **Should `ref_types` be split into smaller, more focused modules?**
-  _Cohesion score 0.0073056541647373565 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.011502008032128514 - nodes in this community are weakly interconnected._
 - **Should `📖 Dicionário de Dados — SINGU CRM` be split into smaller, more focused modules?**
   _Cohesion score 0.00881057268722467 - nodes in this community are weakly interconnected._

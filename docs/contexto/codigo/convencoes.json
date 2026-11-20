@@ -42,7 +42,7 @@
   "hooks": "use + PascalCase",
   "servicos": "camelCase (89%)",
   "edge_functions": "kebab-case (99%)",
-  "tabelas": "snake_case (90%)"
+  "tabelas": "snake_case (91%)"
  },
  "barrels_index": 8,
  "extensao_componentes": [
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(migrations): recupera da produção as 607 migrations que faltavam no repositório (#267)",
    "ci(security): dependency review barra CVE novo high/critical nos PRs (#273)",
    "feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)",
    "feat(gatilhos): liga conflitos, sinergias e alternativas dos gatilhos estendidos (#271)",
-   "fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)",
-   "feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)"
+   "fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)"
   ]
  },
  "pr_template": null,

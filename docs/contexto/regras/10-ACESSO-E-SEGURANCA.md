@@ -1,16 +1,16 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `62b6b2a183` · branch `main` · 2026-11-19 18:34 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0418f640eb` · branch `main` · 2026-11-20 11:03 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
 
-`admin`, `assistant`, `buyer`, `champion`, `closer`, `contact`, `decision_maker`, `default`, `denied`, `employee_of`, `granted`, `hybrid`, `influencer`, `manager`, `moderator`, `other`, `owner`, `parent`, `partner`, `role`, `sdr`, `sponsor`, `subsidiary`, `supplier`, `user`
+`admin`, `assistant`, `buyer`, `champion`, `closer`, `comprador`, `contact`, `decision_maker`, `default`, `denied`, `dono`, `employee_of`, `granted`, `hybrid`, `influencer`, `manager`, `moderator`, `other`, `owner`, `parent`, `partner`, `role`, `salesperson`, `sdr`, `sponsor`, `subsidiary`, `supplier`, `user`
 
-- Tabelas de perfil/permissão: `permissions`, `role_permissions`, `sales_team_members`, `user_roles`
-- Colunas de perfil: `ai_chat_messages.role` (TEXT NOT NULL CHECK (role IN ('user', 'assistant', 'system'))), `contacts.role` (TEXT CHECK (role IN ('owner', 'manager', 'buyer', 'contact', 'decision_maker', 'influencer')) DEFAULT 'contact'), `entity_relationships.role` (public.entity_relationship_role NOT NULL), `role_permissions.role` (app_role NOT NULL), `sales_team_members.role` (TEXT NOT NULL DEFAULT 'sdr' CHECK (role IN ('sdr', 'closer', 'manager'))), `user_roles.role` (app_role NOT NULL), `salespeople.role` (public.salesperson_role NOT NULL DEFAULT 'hybrid')
+- Tabelas de perfil/permissão: `sales_team_members`, `campaign_members`, `economic_group_members`, `user_roles`, `permissions`, `role_permissions`
+- Colunas de perfil: `ai_chat_messages.role` (text NOT NULL CHECK (role IN ('user','assistant','system','function','tool'))), `contacts.role` (TEXT CHECK (role IN ('owner', 'manager', 'buyer', 'contact', 'decision_maker', 'influencer')) DEFAULT 'contact'), `entity_relationships.role` (public.entity_relationship_role NOT NULL), `sales_team_members.role` (text NOT NULL CHECK (role IN ('sdr','closer','manager','admin'))), `workspace_accounts.is_admin` (bool NOT NULL DEFAULT false), `economic_group_members.role` (text DEFAULT 'member'::text), `salespeople.role` (public.salesperson_role NOT NULL DEFAULT 'hybrid'), `user_roles.role` (app_role NOT NULL), `role_permissions.role` (app_role NOT NULL), `chat_messages.role` (TEXT NOT NULL CHECK (role IN ('user','assistant')))
 - Claims do JWT usados em políticas/funções: `aal`
-- Funções usadas dentro de políticas RLS (a regra real está no corpo delas — veja `06`): `has_role`
+- Funções usadas dentro de políticas RLS (a regra real está no corpo delas — veja `06`): `has_role`, `user_can_access_contact`
 
 ## Matriz tabela × operação → quem pode (derivada das políticas RLS)
 
@@ -21,14 +21,21 @@
 | `_migration_cdc_checkpoint` | enabled | service_role: true | service_role: true | service_role: true | service_role: true |
 | `_migration_schema_snapshot` | enabled | — | — | — | — |
 | `_seq_gap_report` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `_stg_pac_nums` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `abm_account_plans` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: auth.uid() = user_id |
 | `abm_accounts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `abm_buying_committee` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `abm_campaigns` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `abm_whitespace_opportunities` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `access_blocked_log` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: false | — | — |
+| `access_denied_logs` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `access_security_settings` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
-| `activities` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `achievements` | enabled | public: true | public: true | public: true | public: true |
+| `active_power_ups` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `active_sessions` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `activities` | enabled | public: ((select auth.uid()) = user_id)<br>public: true | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `activity_feed` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
+| `activity_goals` | enabled | public: true | public: true | public: true | public: true |
 | `ai_chat_messages` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `ai_chat_threads` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `ai_gateway_metrics` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role)<br>service_role: true | service_role: true | service_role: true | service_role: true |
@@ -36,38 +43,82 @@
 | `ai_recommendation_audit_logs_v2` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `ai_recommendation_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
 | `ai_tone_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `alert_rules` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `alerts` | enabled | public: auth.uid() = user_id | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `applied_objection_responses` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: auth.uid() = user_id | authenticated: ((select auth.uid()) = user_id) |
+| `asia_upload_mapping` | enabled | — | — | — | — |
 | `attribution_models_cache` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `attribution_touchpoints` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `audit_log` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | — | — |
+| `automation_executions` | enabled | — | — | — | — |
 | `automation_logs` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
 | `automation_rules` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `automations` | não encontrado | public: auth.uid() = created_by | public: auth.uid() = created_by | public: auth.uid() = created_by | public: auth.uid() = created_by |
+| `available_spins` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `badges` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `battle_cards` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `battle_participants` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `behavioral_insight_feedback` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
 | `behavioral_profile_regen_queue` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — |
+| `bitrix24_sync_logs` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `blocked_ips` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `brain_dominance_analysis` | enabled | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = brain_dominance_analysis.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = brain_dominance_analysis.contact_id) AND (c.user_id = (select auth.uid())) | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = brain_dominance_analysis.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = brain_dominance_analysis.contact_id AND c.user_id = auth.uid() ) |
+| `cadence_enrollments` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
+| `cadence_steps` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `cadence_tasks` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `cadences` | enabled | public: true | public: true | public: true | public: true |
+| `calendar_events` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `call_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `campaign_members` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `campaign_recipients` | enabled | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) |
+| `campaigns` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `canned_responses` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `churn_risk_scores` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `carrier_evaluations` | enabled | public: true | public: true | public: true | public: true |
+| `carrier_homologations` | enabled | public: true | public: true | public: true | public: true |
+| `carrier_qualification_config` | enabled | public: true | public: true | public: true | public: true |
+| `carrier_score_history` | enabled | public: true | public: true | public: true | public: true |
+| `carrier_scores` | enabled | public: true | public: true | public: true | public: true |
+| `carriers` | enabled | public: true | public: true | public: true | public: true |
+| `category_metrics` | enabled | public: true | — | — | — |
+| `challenge_progress` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `chat_conversations` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `chat_messages` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `churn_predictions` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | sem RLS | sem RLS | sem RLS |
+| `churn_risk_scores` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | public: ((select auth.uid()) = user_id)<br>service_role: true | public: ((select auth.uid()) = user_id)<br>service_role: true |
 | `cidades` | enabled | authenticated: true | — | — | — |
+| `circuit_breaker_events` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `city_whitelist` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `client_portfolio` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `client_values` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `clients` | enabled | public: true | public: true | public: true | public: true |
+| `cnaes` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `coaching_scorecards` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `cognitive_bias_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `collectible_badges` | enabled | public: true | public: true | public: true | public: true |
+| `commission_rules` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `commissions` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
 | `communication_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `companies` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) |
-| `company_addresses` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
-| `company_emails` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
-| `company_phones` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `companies` | enabled | public: ((select auth.uid()) = user_id)<br>public: true<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>public: true<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>public: true<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) |
+| `company_addresses` | enabled | public: true<br>public: true | public: true | public: true | public: true |
+| `company_cadences` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
+| `company_cnaes` | enabled | public: true | public: true | public: true | public: true |
+| `company_emails` | enabled | public: true<br>public: true | public: true | public: true | public: true |
+| `company_phones` | enabled | public: true<br>public: true | public: true | public: true | public: true |
+| `company_rfm_scores` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
+| `company_social_media` | enabled | public: true | public: true | public: true | public: true |
+| `company_stakeholder_map` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
 | `compatibility_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `compatibility_settings` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `competitive_chat_messages` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `competitive_seasons` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `competitors` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
+| `config_regras_negocio` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `connection_anomalies` | enabled | public: has_role((select auth.uid()), 'admin'::app_role) | service_role: true | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) |
 | `connection_configs` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
 | `connection_quotas` | enabled | public: has_role((select auth.uid()), 'admin'::app_role)<br>authenticated: (EXISTS ( SELECT 1 FROM incoming_webhooks w WHERE ((w.id = connection_quotas.webhook_id) AND (w.created_by = (select auth.uid | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) |
 | `connection_test_logs` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — | — |
+| `connector_log` | enabled | authenticated: EXISTS (SELECT 1 FROM zapp_history.admin_grants g WHERE g.user_id = auth.uid()) | — | — | — |
+| `contact_addresses` | enabled | public: true | public: true | public: true | public: true |
 | `contact_analytical_profile_versions` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | — | — |
 | `contact_analytical_profiles` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `contact_automation_settings` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
@@ -76,14 +127,15 @@
 | `contact_cadence` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `contact_cadence_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
 | `contact_decision_making` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid())))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid())))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid())))<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = (select auth.uid())))<br>authenticated: true |
-| `contact_emails` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `contact_emails` | enabled | public: true<br>public: true | public: true | public: true | public: true |
 | `contact_family_history` | enabled | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | — | — |
 | `contact_influence` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = (select auth.uid()))))) OR <br>authenticated: true |
 | `contact_metaprograms` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) <br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_metaprograms.contact_id) AND (c.user_id = (select auth.uid()))))) <br>authenticated: true |
 | `contact_next_actions` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `contact_notes` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
 | `contact_objection_scripts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
 | `contact_personality` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = auth.uid())))) OR has_rol<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) O<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) O<br>authenticated: true | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_personality.contact_id) AND (c.user_id = (select auth.uid()))))) O<br>authenticated: true |
-| `contact_phones` | não encontrado | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del |
+| `contact_phones` | enabled | public: true<br>public: true<br>authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del | public: true<br>authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del | public: true<br>authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del | public: true<br>authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_phones.contact_id AND c.user_id = (SELECT auth.uid()) AND c.del |
 | `contact_predictive_roadmap` | enabled | public: ((select auth.uid()) = user_id)<br>public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_predictive_roadmap.contact_id) AND ((c.user_id = (select auth.uid())) OR (<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) |
 | `contact_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `contact_preferences_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
@@ -91,12 +143,14 @@
 | `contact_relatives` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `contact_relatives_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
 | `contact_report_overrides` | enabled | public: ((select auth.uid()) IS NOT NULL) | public: ((select auth.uid()) IS NOT NULL) | public: ((select auth.uid()) IS NOT NULL) | — |
+| `contact_social_media` | enabled | public: true | public: true | public: true | public: true |
 | `contact_time_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `contact_time_analysis_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
-| `contacts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `contacts` | enabled | public: ((select auth.uid()) = user_id)<br>public: true<br>public: true | public: ((select auth.uid()) = user_id)<br>public: true<br>public: true | public: ((select auth.uid()) = user_id)<br>public: true<br>public: true | public: ((select auth.uid()) = user_id)<br>public: true |
 | `conversation_analyses` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `conversation_topics_catalog` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `conversational_search_cache` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `coop_sistemas` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `crm_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `crm_automation_logs` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
 | `crm_automation_reprocess_queue` | enabled | public: ((select auth.uid()) IN ( SELECT crm_automation_logs.user_id FROM crm_automation_logs WHERE (crm_automation_logs.id = crm_automation | — | — | — |
@@ -112,44 +166,69 @@
 | `cs_qbrs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `cs_renewals` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `csat_surveys` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: public_token IS NOT NULL AND (expires_at IS NULL OR expires_at > now())<br>anon, authenticated: public_token IS NOT NULL<br>authenticated: (SELECT auth.uid()) = user_id | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id | public: ((select auth.uid()) = user_id)<br>anon, authenticated: public_token IS NOT NULL AND status = 'sent' AND (expires_at IS NULL OR expires_at > now())<br>anon: public_token IS NOT NULL AND status = 'pending'<br>authenticated: (SELECT auth.uid()) = user_id | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id |
-| `custom_field_values` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: user_id IS NULL OR user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `custom_fields` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: user_id IS NULL OR user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `custom_field_values` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: user_id IS NULL OR user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id |
+| `custom_fields` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: user_id IS NULL OR user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id |
 | `customer_ownership_history` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `customer_purchases` | enabled | — | — | — | — |
 | `customer_rotation_state` | enabled | — | — | — | — |
 | `customer_sdr_history` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `customers` | enabled | public: true<br>public: true | public: true | public: true | public: true |
+| `daily_challenge_progress` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `daily_challenges` | enabled | public: true | public: true | public: true | public: true |
+| `daily_metrics` | enabled | public: true | — | — | — |
+| `daily_streak_achievements` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `dashboard_layouts` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `data_quality_audits` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `data_retention_policies` | enabled | authenticated: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin')<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin')<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin')<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin')<br>service_role: true |
+| `deal_chat_history` | enabled | public: true | public: true | public: true | public: true |
+| `deal_competitors` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `deal_forecasts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `deal_outcomes` | enabled | public: true | public: true | public: true | public: true |
 | `deal_room_activities` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id)<br>anon, authenticated: actor_side = 'buyer' AND activity_type = 'view' AND EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND  | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `deal_room_comments` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `deal_room_documents` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `deal_room_milestones` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `deal_room_stakeholders` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: EXISTS (SELECT 1 FROM public.deal_rooms r WHERE r.id = room_id AND r.share_enabled = true) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `deal_rooms` | enabled | public: ((select auth.uid()) = user_id)<br>anon, authenticated: share_enabled = true | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>anon, authenticated: share_enabled = true | public: ((select auth.uid()) = user_id) |
+| `deal_stage_history` | enabled | public: true | public: true | public: true | public: true |
+| `deal_velocity_analysis` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | sem RLS | sem RLS | sem RLS |
 | `deals` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
 | `decision_criteria` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `demand_forecasts` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `device_login_notifications` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
+| `digital_signatures` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `disc_analysis_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `disc_analysis_history_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
 | `disc_communication_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
 | `disc_conversion_metrics` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
-| `disc_profile_config` | enabled | authenticated: true | — | — | — |
+| `disc_profile_config` | enabled | authenticated: true<br>service_role: true | service_role: true | service_role: true | service_role: true |
+| `disc_templates` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `document_signatures` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `document_signers` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `document_templates` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `document_views` | enabled | public: (EXISTS ( SELECT 1 FROM document_signatures s WHERE ((s.id = document_views.signature_id) AND (s.user_id = (select auth.uid()))))) | authenticated: false | — | — |
-| `documents` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `documents` | enabled | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id |
+| `economic_group_members` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `economic_groups` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `email_campaigns` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `email_finder_results` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `email_logs` | enabled | public: true | public: true | — | — |
 | `email_thread_summaries` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `email_tracking_events` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `email_verifications` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `embedding_configs` | enabled | authenticated: true | authenticated: true | authenticated: true | authenticated: true |
 | `emotional_anchors` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `emotional_states_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `entity_relationships` | enabled | authenticated: created_by = auth.uid() | authenticated: ((select auth.uid()) IS NOT NULL) | authenticated: ((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role)) | authenticated: ((created_by = (select auth.uid())) OR has_role((select auth.uid()), 'admin'::app_role)) |
+| `entity_versions` | enabled | public: true | — | — | — |
 | `eq_analysis_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `error_logs` | enabled | public: has_role((select auth.uid()), 'admin'::app_role) | authenticated: auth.uid() IS NOT NULL AND user_id = auth.uid() | — | authenticated: public.has_role(auth.uid(), 'admin') |
 | `estados` | enabled | authenticated: true | — | — | — |
 | `favorite_templates` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
+| `favorites` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
 | `feature_flags` | enabled | authenticated: true | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `feed_comments` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `feed_reactions` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `ficha360_conversation_summaries` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
 | `follow_up_approvals` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) |
 | `follow_up_approvals_v2` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) |
@@ -160,52 +239,74 @@
 | `form_submissions` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: EXISTS (SELECT 1 FROM public.forms f WHERE f.id = form_id AND f.is_published = true AND f.user_id = form_submissions.user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `forms` | enabled | public: ((select auth.uid()) = user_id)<br>public: is_published = true<br>anon, authenticated: is_published = true | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>anon, authenticated: is_published = true | public: ((select auth.uid()) = user_id) |
 | `geo_allowed_countries` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
-| `handoff_requests` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `grupos_economicos` | enabled | public: true | public: true | public: true | public: true |
+| `guardrail_ml_logs` | enabled | authenticated: true | authenticated: true | — | — |
+| `handoff_requests` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true |
 | `health_alert_settings` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
 | `health_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `hidden_objections` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `icp_data` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `inactivity_alerts` | enabled | — | — | — | — |
 | `incoming_webhook_dlq` | enabled | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) | public: has_role((select auth.uid()), 'admin'::app_role) |
 | `incoming_webhook_logs` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: false | — | — |
-| `incoming_webhook_nonces` | enabled | — | — | — | — |
+| `incoming_webhook_nonces` | enabled | service_role: true | service_role: true | service_role: true | service_role: true |
 | `incoming_webhooks` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
-| `insights` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `insights` | enabled | public: ((select auth.uid()) = user_id)<br>public: true | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `integrations` | enabled | — | — | — | — |
 | `intent_scores` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `intent_signals` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `intent_tracking_pixels` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `interaction_summaries` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `interactions` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) |
+| `interaction_templates` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
+| `interactions` | enabled | public: ((select auth.uid()) = user_id)<br>public: true<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: true<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) |
 | `interactions_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
+| `inventory_levels` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `ip_whitelist` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
 | `knowledge_base_articles` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `known_devices` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `kudos` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `lalamove_dead_letter` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `lalamove_drivers` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `lalamove_position_log` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `lalamove_route_cache` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `landing_page_submissions` | enabled | authenticated: ((select auth.uid()) = user_id) | anon, authenticated: EXISTS (SELECT 1 FROM public.landing_pages lp WHERE lp.id = landing_page_id AND lp.is_published = true AND lp.user_id = | — | — |
 | `landing_pages` | enabled | authenticated: ((select auth.uid()) = user_id)<br>anon, authenticated: is_published = true<br>anon, authenticated: is_published = true | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
-| `lead_assignments` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
+| `lead_assignments` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true |
 | `lead_magnet_downloads` | enabled | public: ((select auth.uid()) = user_id) | public: EXISTS (SELECT 1 FROM public.lead_magnets m WHERE m.id = magnet_id AND m.is_published = true AND m.user_id = lead_magnet_downloads.u | — | — |
 | `lead_magnets` | enabled | public: ((select auth.uid()) = user_id)<br>public: is_published = true | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>anon, authenticated: is_published = true | public: ((select auth.uid()) = user_id) |
-| `lead_routing_rules` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
-| `lead_score_config` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
+| `lead_routing_log` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `lead_routing_rules` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true |
+| `lead_score_config` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: (SELECT auth.uid()) = user_id<br>service_role: true |
 | `lead_score_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
 | `lead_score_recompute_queue` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
 | `lead_score_rules` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `lead_score_threshold_automations` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `lead_score_threshold_log` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
 | `lead_score_thresholds` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `lead_scores` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `lead_scores` | enabled | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | public: ((select auth.uid()) = user_id)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true |
+| `lead_sources` | não encontrado | public: true | sem RLS | sem RLS | sem RLS |
 | `life_events` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `life_events_history` | enabled | authenticated: ((select auth.uid()) = user_id) | — | — | — |
+| `login_alerts` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `login_attempts` | enabled | authenticated: (user_id = (select auth.uid()))<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | service_role: true | — | — |
+| `loss_reasons` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `lux_intelligence` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `lux_webhook_config` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
+| `lux_webhook_config` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: has_role((select auth.uid()), 'admin'::app_role)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: has_role((select auth.uid()), 'admin'::app_role)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true | authenticated: has_role((select auth.uid()), 'admin'::app_role)<br>authenticated: (SELECT auth.uid()) = user_id<br>service_role: true |
 | `marketing_campaign_stats` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
 | `marketing_roi_data` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
 | `mcp_tool_calls` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | service_role: true | — | — |
 | `meeting_summaries` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `meetings` | não encontrado | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
+| `message_templates` | enabled | — | — | — | — |
 | `metaprogram_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `mfa_verification_attempts` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `migration_password_reset_log` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | — | — | — |
+| `model_pricing_v2` | enabled | authenticated: true | — | — | — |
 | `mql_classifications` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `mql_criteria` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `neuro_behavioral_history` | enabled | public: EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid()) | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid()))))) | — | — |
+| `neuro_behavioral_history` | enabled | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid()))))) | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid())))) | — | — |
 | `neuro_pnl_sessions` | enabled | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_pnl_sessions.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_pnl_sessions.contact_id) AND (c.user_id = (select auth.uid()))))) OR | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_pnl_sessions.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = neuro_pnl_sessions.contact_id AND c.user_id = auth.uid() ) |
+| `nlp_extractions` | enabled | authenticated: true | authenticated: true | — | — |
 | `nlp_feedback` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
 | `notification_logs` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
 | `notification_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
@@ -213,104 +314,13 @@
 | `nurturing_enrollments` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `nurturing_executions` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `nurturing_workflows` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `oauth_tokens` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `objection_example_feedback` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `offer_suggestions` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `ops_backup.acl_snapshot` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
-| `password_reset_requests` | enabled | authenticated: (user_id = (select auth.uid()))<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
-| `people_intelligence_events` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
-| `permissions` | enabled | authenticated: true<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
-| `phone_validations` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `pipeline_stage_transitions` | enabled | public: true<br>authenticated: true | — | — | — |
-| `pipeline_stages` | enabled | public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid())<br>public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid()) | public: EXISTS (SELECT 1 FROM public.pipelines p WHERE p.id = pipeline_id AND p.user_id = auth.uid()) |
-| `pipelines` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `playbook_usage_log` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
-| `profiles` | enabled | public: ((select auth.uid()) = id) | public: ((select auth.uid()) = id) | public: ((select auth.uid()) = id) | authenticated: id = auth.uid() |
-| `proximo_passo_feedback` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | — | authenticated: (user_id = (select auth.uid())) |
-| `psychographic_audit_log` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = psychographic_audit_log.contact_id) AND (c.user_id = (select auth.uid()))) | — | — | — |
-| `purchase_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `push_subscriptions` | enabled | authenticated: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>authenticated: user_id = (SELECT auth.uid()) |
-| `query_telemetry` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | — | authenticated: ((select auth.uid()) = user_id)<br>authenticated: public.has_role(auth.uid(), 'admin') |
-| `redistribution_log` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | — | — |
-| `reframing_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
-| `reframing_analysis_audit` | enabled | public: ((select auth.uid()) = user_id) | — | — | — |
-| `revops_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `revops_benchmarks` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `revops_snapshots` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
-| `rfm_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `rfm_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `rfm_metrics` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `rfm_segment_config` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `rodizio_distribuicao_staging` | enabled | — | — | — | — |
-| `rodizio_execucoes` | enabled | — | — | — | — |
-| `role_permissions` | enabled | authenticated: true<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
-| `rpc_perf_samples` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | — | — | — |
-| `rpc_plan_snapshots` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role)<br>service_role: true | service_role: true | service_role: true | service_role: true |
-| `sales` | não encontrado | authenticated: EXISTS ( SELECT 1 FROM public.salespeople sp WHERE sp.id = sales.salesperson_id AND sp.auth_user_id = (SELECT auth.uid()) ) | sem RLS | sem RLS | sem RLS |
-| `sales_activities` | não encontrado | authenticated: EXISTS ( SELECT 1 FROM public.salespeople sp WHERE sp.id = sales_activities.salesperson_id AND sp.auth_user_id = (SELECT auth | sem RLS | sem RLS | sem RLS |
-| `sales_playbooks` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `sales_team_members` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
-| `salespeople` | não encontrado | authenticated: auth_user_id = (SELECT auth.uid()) | sem RLS | sem RLS | sem RLS |
-| `schema_drift_alerts` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: ((select auth.uid()) = user_id) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — |
-| `score_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `search_products_cache` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `secret_rotation_log` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
-| `semantic_search_cache` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `sentiment_annotations` | enabled | authenticated: (((select auth.uid()) = created_by) OR (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = sentiment_annotations.contact_id) AN | authenticated: ((select auth.uid()) = created_by) | authenticated: (((select auth.uid()) = created_by) OR has_role((select auth.uid()), 'admin'::app_role)) | authenticated: (((select auth.uid()) = created_by) OR has_role((select auth.uid()), 'admin'::app_role)) |
-| `sequence_email_reservations` | enabled | authenticated: user_id = (SELECT auth.uid()) OR ( (SELECT public.has_role(auth.uid(), 'admin'::public.app_role)) AND (SELECT auth.jwt()->>'a | — | — | — |
-| `sequence_enrollments` | enabled | authenticated: (user_id = (select auth.uid()))<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX | authenticated: (user_id = (select auth.uid()))<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX | authenticated: (user_id = (select auth.uid()))<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX | authenticated: (user_id = (select auth.uid()))<br>authenticated: user_id = auth.uid() AND EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()) AND EX |
-| `sequence_events` | enabled | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) |
-| `sequence_send_log` | enabled | public: ((select auth.uid()) = user_id)<br>public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) | public: (((select auth.jwt()) ->> 'role'::text) = 'service_role'::text) |
-| `sequence_steps` | enabled | authenticated: (EXISTS ( SELECT 1 FROM sequences s WHERE ((s.id = sequence_steps.sequence_id) AND (s.user_id = (select auth.uid()))))) | authenticated: (EXISTS ( SELECT 1 FROM sequences s WHERE ((s.id = sequence_steps.sequence_id) AND (s.user_id = (select auth.uid()))))) | authenticated: (EXISTS ( SELECT 1 FROM sequences s WHERE ((s.id = sequence_steps.sequence_id) AND (s.user_id = (select auth.uid()))))) | authenticated: (EXISTS ( SELECT 1 FROM sequences s WHERE ((s.id = sequence_steps.sequence_id) AND (s.user_id = (select auth.uid()))))) |
-| `sequences` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
-| `smart_notifications` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `sms_campaign_recipients` | enabled | public: (EXISTS ( SELECT 1 FROM sms_campaigns c WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = (select auth.uid()))))) | public: (EXISTS ( SELECT 1 FROM sms_campaigns c WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = (select auth.uid()))))) | public: (EXISTS ( SELECT 1 FROM sms_campaigns c WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = (select auth.uid()))))) | public: (EXISTS ( SELECT 1 FROM sms_campaigns c WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = (select auth.uid()))))) |
-| `sms_campaigns` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `sms_opt_outs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `sms_templates` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `social_behavior_analysis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `social_consent_audit` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
-| `social_insights` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `social_life_events` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `social_profiles` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `social_scraping_schedule` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `social_sync_queue` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = social_sync_queue.contact_id) AND (c.user_id = (select auth.uid()))))) OR  | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid() ) | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid() ) | — |
-| `stakeholder_alerts` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `suggested_life_events` | enabled | service_role: true<br>authenticated: (((select auth.uid()) = user_id) OR has_role((select auth.uid()), 'admin'::app_role)) | service_role: true<br>authenticated: (((select auth.uid()) = user_id) OR has_role((select auth.uid()), 'admin'::app_role)) | service_role: true<br>authenticated: (((select auth.uid()) = user_id) OR has_role((select auth.uid()), 'admin'::app_role)) | service_role: true<br>authenticated: (((select auth.uid()) = user_id) OR has_role((select auth.uid()), 'admin'::app_role)) |
-| `suggested_rapport_intel` | enabled | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | public: EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `support_tickets` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `system_alerts` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — |
-| `system_config` | enabled | authenticated: true<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
-| `system_health_snapshots` | enabled | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | — | — |
-| `tasks` | enabled | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id | public: auth.uid() = user_id<br>public: auth.uid() = user_id |
-| `ticket_comments` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `trigger_ab_tests` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `trigger_bundles` | enabled | authenticated: (((select auth.uid()) = user_id) OR (is_system_bundle = true)) | authenticated: (((select auth.uid()) = user_id) AND (COALESCE(is_system_bundle, false) = false)) | authenticated: (((select auth.uid()) = user_id) AND (is_system_bundle = false)) | authenticated: (((select auth.uid()) = user_id) AND (is_system_bundle = false)) |
-| `trigger_channel_effectiveness` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `trigger_intensity_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `trigger_usage_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `user_known_devices` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
-| `user_roles` | enabled | authenticated: ((select auth.uid()) = user_id)<br>authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
-| `user_ui_preferences` | enabled | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
-| `users` | não encontrado | authenticated: has_role(auth.uid(), 'admin'::app_role) | sem RLS | authenticated: has_role(auth.uid(), 'admin'::app_role) | sem RLS |
-| `vak_analysis_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `validation_queue` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
-| `visit_checkins` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `webauthn_credentials` | enabled | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) | authenticated: (user_id = (select auth.uid())) |
-| `weekly_report_settings` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
-| `weekly_reports` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) |
-| `whatsapp_ingestion_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
-| `whatsapp_instances` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `whatsapp_kpis` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `whatsapp_messages` | enabled | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id)<br>public: ((select auth.uid()) = user_id) |
-| `whatsapp_messages_index` | enabled | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = whatsapp_messages_index.contact_id) AND (c.user_id = (select auth.uid()))) | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = whatsapp_messages_index.contact_id) AND (c.user_id = (select auth.uid()))) | — | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = whatsapp_messages_index.contact_id AND c.user_id = auth.uid() ) |
-| `whatsapp_transcriptions` | enabled | public: (EXISTS ( SELECT 1 FROM whatsapp_messages m WHERE ((m.id = whatsapp_transcriptions.whatsapp_message_id) AND (m.user_id = (select aut | — | — | — |
-| `win_loss_insights` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
-| `win_loss_reasons` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `win_loss_records` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| … +201 linhas — lista completa em `context.json` | | | | | |
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 290 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 424 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.unit.mjs`
@@ -462,13 +472,17 @@
 - `supabase/functions/voice-to-text/index.ts`
 - `supabase/functions/weekly-digest/index.ts`
 - `supabase/functions/whatsapp-import/index.ts`
-- … +140 (lista completa em `context.json`)
+- … +274 (lista completa em `context.json`)
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
 - `_connection_encryption_key`
+- `activate_v6_enforcement`
+- `add_item_to_deal`
 - `add_tag`
 - `aggregate_nlp_to_company`
+- `alert_churn_critical`
+- `alert_urgent_order_via_bitrix`
 - `apply_retention_policies`
 - `assert_alert_access`
 - `assert_cadence_access`
@@ -489,16 +503,22 @@
 - `assert_violation_access`
 - `assert_visit_access`
 - `audit_connection_changes`
+- `audit_dashboard_v13`
 - `audit_life_events`
 - `audit_trigger_fn`
 - `auto_ack_stale_mtta_sla_breaches`
+- `auto_enrich_contact`
 - `auto_resolve_ai_gateway_alerts`
+- `auto_tag_contact_from_nlp`
 - `bulk_add_tag`
 - `bulk_update_companies`
 - `bulk_update_status`
 - `buyer_add_comment`
 - `buyer_toggle_milestone`
+- `calculate_bant_score`
+- `calculate_conversion_probability`
 - `calculate_interaction_response_time`
+- `calculate_lead_score`
 - `calculate_next_contact_due`
 - `check_behavioral_regen_cron_staleness`
 - `check_mtta_auto_ack_heartbeat`
@@ -514,15 +534,18 @@
 - `compute_revops_kpis`
 - `confirm_sequence_manual_step`
 - `connection_configs_encrypt_trigger`
+- `connector_log_search`
 - `create_economic_group`
 - `create_notification`
 - `create_smart_reminder`
 - `create_template`
 - `create_webhook`
+- `dashboard_summary`
 - `decrypt_connection_config`
 - `definir_como_filial`
 - `definir_hierarquia_cooperativa`
 - `detect_contact_intel_changes`
+- `detect_relationship_status`
 - `dismiss_revops_alert`
 - `drop_old_ai_gateway_metrics_partitions`
 - `encrypt_connection_config`
@@ -532,35 +555,65 @@
 - `enroll_contact_in_workflow`
 - `ensure_ai_gateway_metrics_partition`
 - `ensure_audit_log_partition`
+- `estimate_cost`
 - `evaluate_ai_gateway_alerts`
 - `evaluate_mql`
+- `find_cheapest_model`
+- `fn_apply_auto_tag_rules`
+- `fn_cf_collect_sm_legacy_dispatch`
+- `fn_cf_collect_sm_legacy_harvest`
+- `fn_get_product_ai_context`
+- `fn_ingest_asia_hg_batch`
+- `fn_promote_kit_components_batch`
+- `fn_set_novelty_updated_at`
+- `fn_sm_promote_images_to_gold`
+- `fn_sync_novelty_to_product`
 - `fn_valida_dominio_signup`
+- `gc_zombie_messages`
 - `generate_daily_digest`
 - `generate_pre_contact_briefing`
 - `generate_rapport_suggestions`
 - `get_ai_gateway_health`
 - `get_ai_gateway_partition_stats`
 - `get_behavioral_regen_cron_health`
+- `get_companies_by_phones_batch`
+- `get_config`
 - `get_connection_metrics`
+- `get_contact_360_by_phone`
+- `get_contact_intelligence_by_phone`
+- `get_contact_intelligence_v2`
+- `get_contact_messages_for_summary`
 - `get_contact_sidebar_by_phone`
+- `get_contacts_with_activity`
+- `get_conversation_intelligence`
+- `get_duplicate_contacts`
+- `get_full_intelligence_report`
+- `get_instant_kpis`
 - `get_marketing_funnel_stats`
 - `get_notification_summary`
+- `get_playbook_for_message`
 - `get_public_csat_survey`
+- `get_ragas_avg`
+- `get_runtime_secret`
 - `get_score_explicability`
 - `get_system_config_num`
 - `get_team_member_ids`
 - `guard_contact_relation_write`
 - `handle_new_user`
 - `has_role`
+- `health_check`
 - `increment_landing_page_view`
 - `increment_playbook_usage`
 - `increment_version_column`
 - `increment_webhook_quota`
+- `ingest_evolution_event`
+- `invoke_edge_function`
 - `log_activity`
 - `log_behavioral_change`
 - `log_contact_tag_changes`
 - `log_deal_forecast_category_change`
 - `mark_deal_lost`
+- `master_dashboard`
 - `merge_companies`
 - `merge_contacts`
 - `merge_duplicate_companies`
@@ -580,6 +633,7 @@
 - `notify_critical_next_action`
 - `notify_webhook_errors`
 - `onboard_new_company`
+- `parse_connector_log_to_messages`
 - `process_contact_cadence_audit`
 - `process_contact_preferences_audit`
 - `process_contact_relatives_audit`
@@ -588,21 +642,35 @@
 - `process_interactions_audit`
 - `process_reframing_audit`
 - `publish_mtta_sla_breach_alert`
+- `recalculate_rfm_for_company`
+- `reconcile_nlp_responses`
 - `record_family_history`
 - `record_nps_response`
 - `record_rpc_perf_sample`
+- `refresh_contact_stats`
 - `refresh_daily_kpis`
 - `refresh_daily_stats`
 - `remove_company_tag`
 - `remove_tag`
+- `reprocess_connector_log`
+- `request_classify`
+- `request_embedding`
+- `request_nlp`
+- `request_transcription`
 - `reset_daily_lead_counts`
 - `resolve_alerts_batch`
+- `resolve_company_from_cnpj`
 - `respond_to_proposal`
 - `restore_company`
+- `rollback_v6_enforcement`
 - `search_companies_semantic`
+- `search_contact_messages_semantic`
+- `search_contacts_advanced`
 - `search_contacts_by_nlp`
 - `search_contacts_semantic`
 - `search_interactions_semantic`
+- `search_messages_hybrid`
+- `search_messages_hybrid_v2`
 - `seed_conversation_topics`
 - `seed_deal_room`
 - `seed_forecast_period`
@@ -615,22 +683,46 @@
 - `singu_insert`
 - `singu_query`
 - `singu_update`
+- `smart_routing`
 - `soft_delete_company`
 - `soft_delete_contact`
 - `submit_public_csat_survey`
 - `submit_public_form`
 - `sync_contact_last_interaction`
+- `sync_interaction_from_zapp`
+- `sync_message_nlp_to_interaction`
 - `sync_nlp_to_contact`
+- `sync_summary_to_interaction`
 - `tg_mprl_touch_updated_at`
 - `track_magnet_download`
+- `trg_auto_enqueue_transcription`
+- `trg_auto_request_embedding`
+- `trg_calculate_lead_score`
+- `trg_connector_log_dedup`
+- `trg_connector_log_rate_limit`
+- `trg_connector_log_validate_secret`
+- `trg_detect_content_flood`
+- `trg_periodic_reconcile`
+- `trg_set_priority_quadrant`
+- `trg_set_response_window`
+- `trg_set_technical_interest`
+- `trg_short_message_auto_process`
+- `trg_spam_quarantine`
+- `trg_supplement_urgency`
+- `trg_sync_summary_to_interaction`
+- `trg_update_response_time`
 - `trigger_aggregate_nlp_to_company`
+- `trigger_backfill_summaries`
 - `trigger_lead_score_recompute`
 - `update_company_partial`
 - `update_company_status`
 - `update_deal_amount`
 - `update_deal_status`
 - `upsert_company`
+- `upsert_company_google_maps`
+- `user_can_access_contact`
 - `vincular_empresa_grupo`
+- `webhook_log_message`
 
 ## Edge functions públicas (sem JWT — qualquer um chama)
 
@@ -721,31 +813,34 @@ Middleware matcher (Next.js): nenhum
 | Ação | Para/De | Privilégios | Objetos |
 |---|---|---|---|
 | grant | PUBLIC, anon | execute | `submit_public_form`, `get_deal_room_by_token`, `record_buyer_view`, `buyer_add_comment`, `buyer_toggle_milestone`, `get_buyer_document_path`, `increment_form_view`, `increment_magnet_view`, `immutable_unaccent` |
-| grant | anon | execute | `get_deal_room_by_token`, `get_buyer_document_path`, `buyer_add_comment`, `buyer_toggle_milestone`, `record_buyer_view`, `submit_public_form`, `track_magnet_download`, `increment_form_view`, `increment_magnet_view`, `increment_landing_page_view` |
+| grant | anon | execute | `get_contact_360_by_phone`, `search_contacts_advanced`, `get_companies_by_phones_batch`, `sync_interaction_from_zapp`, `get_contact_intelligence_by_phone`, `recalculate_rfm_for_company`, `get_deal_room_by_token`, `get_buyer_document_path`, `buyer_add_comment`, `buyer_toggle_milestone`, `record_buyer_view`, `submit_public_form`, `track_magnet_download`, `increment_form_view`, `increment_magnet_view` … +1 |
 | grant | anon | insert | `deal_room_activities`, `landing_page_submissions`, `landing_page_submissions` |
-| grant | anon | select | `csat_surveys`, `document_signatures`, `forms`, `landing_page_submissions`, `landing_pages`, `deal_rooms`, `deal_room_milestones`, `deal_room_stakeholders`, `deal_room_documents`, `deal_room_comments`, `deal_room_activities`, `deal_room_comments`, `deal_room_documents`, `deal_room_milestones`, `deal_room_stakeholders` … +6 |
+| grant | anon | select | `csat_surveys`, `document_signatures`, `forms`, `landing_page_submissions`, `landing_pages`, `_dormant`, `deal_rooms`, `deal_room_milestones`, `deal_room_stakeholders`, `deal_room_documents`, `deal_room_comments`, `deal_room_activities`, `deal_room_comments`, `deal_room_documents`, `deal_room_milestones` … +7 |
 | grant | anon | select, insert | `deal_room_activities` |
 | grant | anon | select, update | `csat_surveys` |
-| grant | anon, authenticated | execute | `get_deal_room_by_token`, `record_buyer_view`, `buyer_toggle_milestone`, `buyer_add_comment`, `get_buyer_document_path`, `increment_magnet_view`, `track_magnet_download`, `increment_form_view`, `submit_public_form` |
-| grant | anon, authenticated | select | `csat_surveys_public`, `forms_public`, `landing_pages_public`, `document_signatures_public` |
+| grant | anon, authenticated | all | `coop003_pending` |
+| grant | anon, authenticated | execute | `coop003_batch_update`, `get_deal_room_by_token`, `record_buyer_view`, `buyer_toggle_milestone`, `buyer_add_comment`, `get_buyer_document_path`, `increment_magnet_view`, `track_magnet_download`, `increment_form_view`, `submit_public_form` |
+| grant | anon, authenticated | select | `csat_surveys_public`, `forms_public`, `landing_pages_public`, `document_signatures_public`, `product_novelties` |
 | grant | anon, authenticated, service_role | execute | `get_public_csat_survey`, `submit_public_csat_survey`, `increment_landing_page_view`, `get_public_csat_survey`, `submit_public_csat_survey` |
-| grant | authenticated | execute | `seed_deal_room`, `encrypt_connection_config`, `decrypt_connection_config`, `get_connection_metrics`, `compute_attribution`, `check_relationship_consistency`, `get_contact_behavior_gaps`, `validate_behavioral_consistency`, `get_contact_framework_gaps`, `get_contact_life_event_gaps`, `get_connection_metrics`, `seed_conversation_topics`, `compute_account_health`, `cs_renewal_pipeline`, `seed_forecast_period` … +36 |
-| grant | authenticated | select | `v_life_events_audit`, `slow_queries_audit`, `v_entities`, `behavioral_profile_regen_queue`, `contact_analytical_profile_versions`, `system_config`, `document_signatures_public`, `csat_surveys_public`, `mv_daily_kpis`, `mv_daily_stats`, `data_retention_policies`, `ai_gateway_metrics`, `rpc_perf_samples`, `rpc_plan_snapshots`, `users_public` … +7 |
+| grant | authenticated | execute | `get_contact_360_by_phone`, `search_contacts_advanced`, `get_companies_by_phones_batch`, `sync_interaction_from_zapp`, `get_contact_intelligence_by_phone`, `recalculate_rfm_for_company`, `zapp_history.get_contact_intelligence_v2`, `zapp_history.trigger_backfill_summaries`, `zapp_history.user_can_access_contact`, `zapp_history.get_contact_messages_for_summary`, `zapp_history.get_contact_intelligence_v2`, `zapp_history.trigger_backfill_summaries`, `zapp_history.get_embedding_config`, `zapp_history.detect_pii`, `zapp_history.connector_log_search` … +52 |
+| grant | authenticated | select | `_dormant`, `zapp_history`, `connector_log`, `zapp_history.v_runtime_config_safe`, `zapp_history.v_pedidos_detectados`, `zapp_history.v_dashboard_atendimento`, `zapp_history.v_pedidos_detectados`, `zapp_history.v_dashboard_atendimento`, `zapp_history.v_funil_origem`, `zapp_history.v_top_produtos_demanda`, `zapp_history.v_top_produtos_demanda`, `zapp_history.v_funil_vendas`, `zapp_history.v_objecoes_recorrentes`, `zapp_history.v_sla_atendimento`, `zapp_history.v_conversas_aguardando` … +69 |
 | grant | authenticated | select, insert | `audit_log`, `rfm_history` |
 | grant | authenticated | select, insert, update | `migration_password_reset_log` |
 | grant | authenticated | select, insert, update, delete | `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences`, `alerts` … +246 |
-| grant | authenticated, service_role | execute | `get_system_config_num`, `assert_self_user_id`, `assert_self_user_id`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access` … +17 |
+| grant | authenticated, service_role | execute | `zapp_history.webhook_log_message`, `zapp_history.health_check`, `zapp_history.get_config`, `zapp_history.ingest_evolution_event`, `zapp_history.request_nlp`, `zapp_history.reconcile_nlp_responses`, `zapp_history.dashboard_summary`, `zapp_history.extract_quantity_from_text`, `zapp_history.extract_deadline_from_text`, `zapp_history.dashboard_summary`, `zapp_history.extract_budget_from_text`, `zapp_history.extract_discovery_channel`, `zapp_history.normalize_product_name`, `zapp_history.extract_objections`, `zapp_history.detect_funnel_stage` … +97 |
 | grant | authenticated, service_role | select | `vw_rodizio_carga_closers`, `vw_rodizio_carga_sdrs`, `vw_rodizio_execucoes`, `vw_rodizio_bloqueios`, `vw_rodizio_kpis`, `vw_rodizio_execucoes`, `vw_singu_data_health`, `_dormant.inactivity_alerts` |
-| grant | service_role | all | `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences` … +263 |
-| grant | service_role | execute | `increment_webhook_quota`, `execute_readonly_query`, `cleanup_behavioral_regen_queue`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `auto_ack_stale_mtta_sla_breaches`, `check_mtta_auto_ack_heartbeat`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access` … +63 |
-| grant | service_role | select, insert, delete | `incoming_webhook_nonces` |
-| grant | service_role, authenticated | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition` |
-| revoke | PUBLIC | all | `_migration_schema_snapshot`, `get_connection_metrics`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `assert_self_user_id`, `assert_self_user_id`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `record_rpc_perf_sample`, `get_rpc_perf_stats`, `cleanup_rpc_perf_samples` … +11 |
-| revoke | PUBLIC | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `net` |
-| revoke | PUBLIC | select | `mv_daily_kpis`, `mv_daily_stats` |
-| revoke | PUBLIC, anon | all | `auto_ack_stale_mtta_sla_breaches`, `get_system_config_num`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access`, `assert_violation_access` … +29 |
+| grant | service_role | all | `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences` … +267 |
+| grant | service_role | execute | `zapp_history`, `zapp_history.request_embedding`, `zapp_history.request_transcription`, `zapp_history.request_classify`, `zapp_history.get_runtime_secret`, `increment_webhook_quota`, `execute_readonly_query`, `redistribute_admin_portfolio`, `fn_cf_collect_sm_legacy`, `fn_cf_collect_sm_legacy_dispatch`, `fn_cf_collect_sm_legacy_harvest`, `fn_get_product_ai_context`, `fn_promote_kit_components_batch`, `cleanup_behavioral_regen_queue`, `check_behavioral_regen_cron_staleness` … +96 |
+| grant | service_role | insert | `connector_log` |
+| grant | service_role | select, insert, delete | `incoming_webhook_nonces`, `incoming_webhook_nonces` |
+| grant | service_role, authenticated | execute | `fn_apply_auto_tag_rules`, `ensure_audit_log_partition`, `ensure_audit_log_partition` |
+| grant | service_role, authenticated | select | `zapp_history.v_audit_intelligence` |
+| revoke | PUBLIC | all | `_migration_schema_snapshot`, `zapp_history.get_runtime_secret`, `get_connection_metrics`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `assert_self_user_id`, `assert_self_user_id`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_self_user_id`, `assert_self_user_id` … +21 |
+| revoke | PUBLIC | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `net`, `net`, `update_company_fields`, `update_company_fields` |
+| revoke | PUBLIC | select | `mv_daily_kpis`, `mv_daily_stats`, `mv_daily_kpis`, `mv_daily_stats` |
+| revoke | PUBLIC, anon | all | `fn_apply_auto_tag_rules`, `auto_ack_stale_mtta_sla_breaches`, `get_system_config_num`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access` … +48 |
 | revoke | PUBLIC, anon | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition`, `get_ai_gateway_health`, `has_role` |
-| revoke | PUBLIC, anon, authenticated | all | `_connection_encryption_key`, `check_mtta_auto_ack_heartbeat`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access`, `assert_deal_access`, `assert_event_access`, `assert_goal_access`, `assert_interaction_access`, `assert_note_access`, `assert_notification_access`, `assert_opportunity_access`, `assert_proposal_access` … +75 |
+| revoke | PUBLIC, anon, authenticated | all | `_connection_encryption_key`, `fn_get_product_ai_context`, `fn_promote_kit_components_batch`, `check_mtta_auto_ack_heartbeat`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access`, `assert_deal_access`, `assert_event_access`, `assert_goal_access`, `assert_interaction_access`, `assert_note_access`, `assert_notification_access` … +97 |
 | revoke | PUBLIC, anon, authenticated | execute | `evaluate_ai_gateway_alerts`, `set_updated_at`, `trg_normalizar_telefone`, `trg_normalizar_email`, `singu_sync_company_address`, `singu_sync_legacy_company_name` |
 | revoke | PUBLIC, anon, authenticated | truncate, references, trigger | `public` |
 | revoke | PUBLIC, anon, authenticated | update | `validation_queue`, `behavioral_profile_regen_queue` |
@@ -754,18 +849,19 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC, authenticated | all | `cron_secrets` |
 | revoke | PUBLIC, authenticated | insert, update, delete | `login_attempts` |
 | revoke | PUBLIC, authenticated, anon | execute | `public` |
-| revoke | anon | all | `public`, `assert_self_user_id`, `assert_self_user_id`, `get_contact_sidebar_by_phone`, `public`, `public`, `get_contact_sidebar_by_phone` |
-| revoke | anon | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `net`, `check_behavioral_regen_cron_staleness`, `cleanup_behavioral_regen_queue`, `cleanup_simulated_alerts`, `enqueue_behavioral_profile_regen`, `get_behavioral_regen_cron_health`, `notify_admins_on_critical_behavioral_alert`, `simulate_behavioral_regen_alert`, `cleanup_cron_job_run_details` |
+| revoke | anon | all | `_dormant`, `public`, `assert_self_user_id`, `assert_self_user_id`, `public`, `assert_self_user_id`, `assert_self_user_id`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `public`, `public`, `get_contact_sidebar_by_phone` |
+| revoke | anon | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `net`, `create_deal`, `fn_cf_collect_sm_legacy_dispatch`, `fn_cf_collect_sm_legacy_harvest`, `fn_ingest_asia_hg_batch`, `fn_set_novelty_updated_at`, `fn_sm_promote_images_to_gold`, `fn_sync_novelty_to_product`, `net`, `check_behavioral_regen_cron_staleness`, `cleanup_behavioral_regen_queue` … +6 |
 | revoke | anon | insert, update, delete | `deal_rooms`, `deal_room_milestones`, `deal_room_stakeholders`, `deal_room_documents`, `deal_room_comments`, `forms`, `lead_magnets`, `landing_pages` |
 | revoke | anon | select | `document_signatures_public`, `csat_surveys_public` |
 | revoke | anon | select, insert, update, delete | `form_submissions`, `lead_magnet_downloads`, `deal_room_activities` |
 | revoke | anon | select, update, delete | `landing_page_submissions` |
 | revoke | anon | update, delete | `deal_room_activities` |
-| revoke | anon, authenticated | all | `incoming_webhook_nonces` |
+| revoke | anon, authenticated | all | `incoming_webhook_nonces`, `incoming_webhook_nonces` |
 | revoke | anon, authenticated, PUBLIC | execute | `tg_set_updated_at`, `touch_system_config`, `update_bpr_queue_updated_at`, `validate_entity_relationship`, `cleanup_behavioral_regen_queue`, `execute_readonly_query`, `increment_webhook_quota`, `publish_mtta_sla_breach_alert`, `reset_daily_lead_counts`, `compute_attribution` |
-| revoke | authenticated | all | `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone` |
-| revoke | authenticated | execute | `execute_readonly_query`, `handle_new_user`, `execute_readonly_query`, `net`, `cleanup_cron_job_run_details` |
-| revoke | authenticated | update | `public` |
+| revoke | anon, authenticated, public | all | `zapp_history`, `zapp_history`, `zapp_history` |
+| revoke | authenticated | all | `_dormant`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone` |
+| revoke | authenticated | execute | `execute_readonly_query`, `handle_new_user`, `redistribute_admin_portfolio`, `execute_readonly_query`, `net`, `fn_cf_collect_sm_legacy_dispatch`, `fn_cf_collect_sm_legacy_harvest`, `fn_ingest_asia_hg_batch`, `fn_set_novelty_updated_at`, `fn_sm_promote_images_to_gold`, `fn_sync_novelty_to_product`, `fn_promote_kit_components_batch`, `fn_apply_auto_tag_rules`, `redistribute_admin_portfolio`, `validate_data_batch` … +14 |
+| revoke | authenticated | update | `public`, `public` |
 | revoke | authenticated, PUBLIC | execute | `enqueue_behavioral_profile_regen`, `notify_admins_on_critical_behavioral_alert`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `get_behavioral_regen_cron_health`, `simulate_behavioral_regen_alert` |
 | revoke | authenticated, anon, PUBLIC | execute | `audit_life_events`, `audit_trigger_fn`, `audit_connection_changes`, `calculate_interaction_response_time`, `calculate_next_contact_due`, `connection_configs_encrypt_trigger`, `detect_contact_intel_changes`, `enqueue_contact_validation`, `handle_new_user`, `increment_playbook_usage`, `increment_version_column`, `log_behavioral_change`, `log_contact_tag_changes`, `log_deal_forecast_category_change`, `notify_connection_failures` … +42 |
 | revoke | service_role | execute | `confirm_sequence_manual_step` |
@@ -774,25 +870,22 @@ Middleware matcher (Next.js): nenhum
 
 | Tabela | Problema | Arquivos |
 |---|---|---|
-| `company_addresses` | acessada do front (3 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useBIAdvanced.ts`<br>`src/hooks/useConversationalSearch.ts`<br>`src/pages/MapaEmpresas.tsx` |
-| `company_emails` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useDedupEngine.ts` |
-| `company_phones` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useDedupEngine.ts` |
+| `config_regras_negocio` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useRodizioEquipe.ts` |
 | `crm_automation_logs` | front faz UPDATE mas nenhuma política RLS permite UPDATE → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
 | `crm_automation_reprocess_queue` | front faz INSERT mas nenhuma política RLS permite INSERT → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
-| `incoming_webhook_nonces` | RLS ligado sem nenhuma política → só service_role acessa |  |
 | `rodizio_distribuicao_staging` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useRodizioOndas.ts` |
+| `territories` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useTerritories.ts` |
 | `users` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useRodizioEquipe.ts` |
 
 ## Multi-tenancy
 
-- Chave de tenant: **`company_id`** presente em 25 tabela(s): `ai_tone_preferences`, `call_logs`, `contacts`, `cs_accounts`, `deal_forecasts`, `deal_rooms`, `document_signatures`, `handoff_requests`, `intent_signals`, `interaction_summaries`, `interactions`, `lead_assignments`, `neuro_pnl_sessions`, `redistribution_log`, `rfm_analysis`, `stakeholder_alerts`, `support_tickets`, `visit_checkins`, `whatsapp_messages`, `deals`, `customer_purchases`, `company_phones`, `company_emails`, `company_addresses`, `_dormant.inactivity_alerts`
-- Cobertura: 9% das tabelas. Abaixo de 60% — isolamento provavelmente por usuário (auth.uid()) ou misto; não flagado por tabela.
+- Chave de tenant: **`company_id`** presente em 62 tabela(s): `ai_tone_preferences`, `alerts`, `call_logs`, `churn_risk_scores`, `contacts`, `cs_accounts`, `csat_surveys`, `deal_forecasts`, `deal_rooms`, `handoff_requests`, `intent_signals`, `interaction_summaries`, `interactions`, `lead_assignments`, `lead_score_history`, `meeting_summaries`, `neuro_pnl_sessions`, `redistribution_log`, `rfm_analysis`, `stakeholder_alerts`, `support_tickets`, `visit_checkins`, `whatsapp_messages`, `calendar_events`, `carriers`, `churn_predictions`, `company_addresses`, `company_cnaes`, `company_emails`, `company_phones`, `company_rfm_scores`, `company_social_media`, `company_stakeholder_map`, `deal_velocity_analysis`, `meetings`, `proposals`, `quick_notes`, `reminders`, `scheduled_visits`, `suppliers`, `workspace_accounts`, `cadence_enrollments`, `campaign_members`, `company_cadences`, `customers`, `economic_group_members`, `customer_ownership_history`, `customer_sdr_history`, `stg_portal_sicoob`, `stg_bcb_sicoob`, `stg_site_sicoob_pacs`, `pix_accounts`, `stg_pesquisa_singulares`, `staging_portal_sicoob`, `zapp_history.conversations`, `zapp_history.messages`, `zapp_history.conversation_daily_summaries`, `deals`, `inactivity_alerts`, `sales_opportunities`, `customer_purchases`, `_dormant.inactivity_alerts`
+- Cobertura: 12% das tabelas. Abaixo de 60% — isolamento provavelmente por usuário (auth.uid()) ou misto; não flagado por tabela.
 
 ## Soft delete (registros 'apagados' continuam na tabela — filtre!)
 
 | Tabela | Coluna |
 |---|---|
-| `ai_chat_threads` | `archived` |
 | `automation_rules` | `is_active` |
 | `battle_cards` | `active` |
 | `city_whitelist` | `is_active` |
@@ -806,7 +899,6 @@ Middleware matcher (Next.js): nenhum
 | `geo_allowed_countries` | `is_active` |
 | `incoming_webhooks` | `is_active` |
 | `intent_tracking_pixels` | `active` |
-| `ip_whitelist` | `is_active` |
 | `lead_routing_rules` | `is_active` |
 | `lead_score_rules` | `active` |
 | `lead_score_threshold_automations` | `active` |
@@ -816,12 +908,51 @@ Middleware matcher (Next.js): nenhum
 | `phone_validations` | `is_active` |
 | `sales_playbooks` | `active` |
 | `sales_team_members` | `is_active` |
+| `sequence_steps` | `is_active` |
+| `sequences` | `is_active` |
+| `sms_templates` | `is_active` |
 | `trigger_ab_tests` | `is_active` |
 | `win_loss_reasons` | `active` |
-| `data_retention_policies` | `is_active` |
+| `automations` | `is_active` |
+| `commission_rules` | `is_active` |
+| `company_social_media` | `is_active` |
+| `contact_social_media` | `is_active` |
+| `disc_templates` | `is_active` |
+| `lead_sources` | `is_active` |
+| `loss_reasons` | `is_active` |
+| `sales_cadences` | `is_active` |
+| `sla_rules` | `is_active` |
+| `territories` | `is_active` |
+| `users` | `is_active` |
+| `workspace_accounts` | `is_active` |
+| `coop_sistemas` | `is_active` |
+| `customers` | `deleted_at` |
+| `sdr_closer_assignments` | `ativo` |
+| `alert_rules` | `is_active` |
+| `uapi_sessions` | `is_active` |
+| `pix_accounts` | `is_active` |
 | `salespeople` | `is_active` |
 | `sales` | `deleted_at` |
+| `clients` | `deleted_at` |
+| `teams` | `is_active` |
 | `sales_activities` | `deleted_at` |
+| `sales_tasks` | `deleted_at` |
+| `cadences` | `is_active` |
+| `weekly_challenges` | `is_active` |
+| `daily_challenges` | `is_active` |
+| `active_power_ups` | `is_active` |
+| `sales_territories` | `is_active` |
+| `ip_whitelist` | `is_active` |
+| `rate_limit_settings` | `is_active` |
+| `webauthn_credentials` | `is_active` |
+| `dashboard_layouts` | `is_active` |
+| `workflow_rules` | `is_active` |
+| `supplier_qualification_config` | `is_active` |
+| `carrier_qualification_config` | `is_active` |
+| `product_novelties` | `is_active` |
+| `integrations` | `is_active` |
+| `message_templates` | `is_active` |
+| `data_retention_policies` | `is_active` |
 
 ## Auditoria (colunas de rastreio)
 
@@ -852,7 +983,7 @@ Middleware matcher (Next.js): nenhum
 | `call_logs` | `created_at` |
 | `campaign_recipients` | `created_at` |
 | `canned_responses` | `created_at`, `updated_at` |
-| `churn_risk_scores` | `created_at`, `updated_at` |
+| `churn_risk_scores` | `created_at` |
 | `city_whitelist` | `created_at` |
 | `client_values` | `created_at`, `updated_at` |
 | `coaching_scorecards` | `created_at`, `updated_at` |
@@ -903,7 +1034,7 @@ Middleware matcher (Next.js): nenhum
 | `cs_nps_responses` | `created_at` |
 | `cs_qbrs` | `created_at`, `updated_at` |
 | `cs_renewals` | `created_at`, `updated_at` |
-| `csat_surveys` | `created_at`, `updated_at` |
+| `csat_surveys` | `created_at` |
 | `custom_field_values` | `created_at`, `updated_at` |
 | `custom_fields` | `created_at`, `updated_at` |
 | `deal_forecasts` | `created_at`, `updated_at` |
@@ -922,7 +1053,6 @@ Middleware matcher (Next.js): nenhum
 | `disc_profile_config` | `created_at`, `updated_at` |
 | `document_signatures` | `created_at`, `updated_at` |
 | `document_templates` | `created_at`, `updated_at` |
-| `document_views` | `created_at` |
 | `documents` | `created_at`, `updated_at` |
 | `email_campaigns` | `created_at`, `updated_at` |
 | `email_finder_results` | `created_at`, `updated_at` |
@@ -958,7 +1088,6 @@ Middleware matcher (Next.js): nenhum
 | `interaction_summaries` | `created_at`, `updated_at` |
 | `interactions` | `created_at` |
 | `interactions_audit` | `created_at` |
-| `ip_whitelist` | `created_at`, `updated_at` |
 | `knowledge_base_articles` | `created_at`, `updated_at` |
 | `landing_page_submissions` | `created_at` |
 | `landing_pages` | `created_at`, `updated_at` |
@@ -969,9 +1098,7 @@ Middleware matcher (Next.js): nenhum
 | `lead_score_rules` | `created_at`, `updated_at` |
 | `lead_score_threshold_automations` | `created_at`, `updated_at` |
 | `lead_score_thresholds` | `created_at`, `updated_at` |
-| `lead_scores` | `created_at`, `updated_at` |
 | `life_events` | `created_at`, `updated_at` |
-| `login_attempts` | `created_at` |
 | `lux_intelligence` | `created_at`, `updated_at` |
 | `lux_webhook_config` | `created_at`, `updated_at` |
 | `marketing_campaign_stats` | `created_at` |
@@ -984,23 +1111,17 @@ Middleware matcher (Next.js): nenhum
 | `neuro_behavioral_history` | `created_at` |
 | `neuro_pnl_sessions` | `created_at`, `updated_at` |
 | `nlp_feedback` | `created_at` |
-| `notification_preferences` | `created_at`, `updated_at` |
-| `nurturing_enrollments` | `created_at` |
+| `nurturing_enrollments` | `created_at`, `updated_at` |
 | `nurturing_executions` | `created_at`, `updated_at` |
 | `nurturing_workflows` | `created_at`, `updated_at` |
 | `objection_example_feedback` | `created_at`, `updated_at` |
 | `offer_suggestions` | `created_at` |
-| `password_reset_requests` | `created_at` |
 | `people_intelligence_events` | `created_at` |
-| `permissions` | `created_at` |
 | `phone_validations` | `created_at`, `updated_at` |
-| `pipeline_stages` | `created_at`, `updated_at` |
-| `pipelines` | `created_at`, `updated_at` |
 | `profiles` | `created_at`, `updated_at` |
 | `proximo_passo_feedback` | `created_at` |
 | `psychographic_audit_log` | `created_at` |
 | `purchase_history` | `created_at`, `updated_at` |
-| `push_subscriptions` | `created_at`, `updated_at` |
 | `query_telemetry` | `created_at` |
 | `redistribution_log` | `created_at` |
 | `reframing_analysis` | `created_at` |
@@ -1012,12 +1133,11 @@ Middleware matcher (Next.js): nenhum
 | `rfm_history` | `created_at` |
 | `rfm_metrics` | `created_at` |
 | `rfm_segment_config` | `created_at`, `updated_at` |
-| `role_permissions` | `created_at` |
 | `sales_playbooks` | `created_at`, `updated_at` |
 | `sales_team_members` | `created_at`, `updated_at` |
 | `schema_drift_alerts` | `created_at` |
 | `score_history` | `created_at` |
-| `search_products_cache` | `created_at`, `updated_at` |
+| `search_products_cache` | `created_at` |
 | `secret_rotation_log` | `created_at` |
 | `semantic_search_cache` | `created_at` |
 | `sentiment_annotations` | `created_at`, `created_by`, `updated_at` |
@@ -1029,6 +1149,7 @@ Middleware matcher (Next.js): nenhum
 | `smart_notifications` | `created_at` |
 | `sms_campaign_recipients` | `created_at` |
 | `sms_campaigns` | `created_at`, `updated_at` |
+| `sms_opt_outs` | `created_at` |
 | `sms_templates` | `created_at`, `updated_at` |
 | `social_behavior_analysis` | `created_at` |
 | `social_consent_audit` | `created_at` |
@@ -1043,18 +1164,17 @@ Middleware matcher (Next.js): nenhum
 | `system_alerts` | `created_at` |
 | `system_config` | `updated_at`, `updated_by` |
 | `system_health_snapshots` | `created_at` |
-| `ticket_comments` | `created_at` |
+| `ticket_comments` | `created_at`, `updated_at` |
 | `trigger_ab_tests` | `created_at`, `updated_at` |
 | `trigger_bundles` | `created_at`, `updated_at` |
 | `trigger_channel_effectiveness` | `created_at`, `updated_at` |
 | `trigger_intensity_history` | `created_at` |
 | `trigger_usage_history` | `created_at` |
-| `user_known_devices` | `created_at` |
+| `user_known_devices` | `created_at`, `updated_at` |
 | `user_ui_preferences` | `created_at`, `updated_at` |
 | `vak_analysis_history` | `created_at` |
 | `validation_queue` | `created_at` |
-| `visit_checkins` | `created_at` |
-| `webauthn_credentials` | `created_at` |
+| `visit_checkins` | `created_at`, `updated_at` |
 | `weekly_report_settings` | `created_at`, `updated_at` |
 | `weekly_reports` | `created_at` |
 | `whatsapp_ingestion_logs` | `created_at` |
@@ -1067,36 +1187,86 @@ Middleware matcher (Next.js): nenhum
 | `win_loss_reasons` | `created_at`, `updated_at` |
 | `win_loss_records` | `created_at`, `updated_at` |
 | `migration_password_reset_log` | `created_at`, `updated_at` |
-| `deals` | `created_at`, `updated_at` |
-| `pipeline_stage_transitions` | `created_at` |
-| `audit_log` | `created_at` |
-| `notifications` | `created_at` |
-| `tasks` | `created_at`, `updated_at` |
-| `social_insights` | `created_at`, `updated_at` |
-| `data_retention_policies` | `created_at`, `updated_at` |
-| `ai_gateway_metrics` | `created_at` |
-| `rpc_perf_samples` | `created_at` |
-| `customer_purchases` | `created_at` |
-| `customer_rotation_state` | `updated_at` |
-| `incoming_webhook_nonces` | `created_at` |
-| `estados` | `created_at` |
-| `cidades` | `created_at` |
-| `company_phones` | `created_at`, `updated_at` |
-| `company_emails` | `created_at`, `updated_at` |
+| `activity_feed` | `created_at` |
+| `automations` | `created_at`, `created_by`, `updated_at` |
+| `badges` | `created_at` |
+| `calendar_events` | `created_at`, `updated_at` |
+| `campaigns` | `created_at`, `created_by`, `updated_at` |
+| `carriers` | `created_at`, `updated_at` |
+| `churn_predictions` | `created_at`, `updated_at` |
+| `cnaes` | `created_at` |
+| `commission_rules` | `created_at` |
+| `commissions` | `created_at` |
 | `company_addresses` | `created_at`, `updated_at` |
-| `salespeople` | `created_at`, `updated_at` |
-| `sales` | `created_at`, `deleted_by`, `updated_at` |
-| `sales_activities` | `created_at`, `deleted_by` |
+| `company_cnaes` | `created_at`, `updated_at` |
+| `company_emails` | `created_at`, `updated_at` |
+| `company_phones` | `created_at`, `updated_at` |
+| `company_rfm_scores` | `created_at`, `updated_at` |
+| `company_social_media` | `created_at`, `created_by`, `updated_at`, `updated_by` |
+| `company_stakeholder_map` | `created_at`, `updated_at` |
 | `contact_emails` | `created_at`, `updated_at` |
 | `contact_phones` | `created_at`, `updated_at` |
-| `_dormant.inactivity_alerts` | `created_at` |
-| `sequence_email_reservations` | `created_at` |
+| `contact_social_media` | `created_at`, `created_by`, `updated_at`, `updated_by` |
+| `deal_competitors` | `created_at` |
+| `deal_velocity_analysis` | `created_at`, `updated_at` |
+| `disc_templates` | `created_at`, `created_by`, `updated_at` |
+| `economic_groups` | `created_at`, `updated_at` |
+| `favorites` | `created_at` |
+| `grupos_economicos` | `created_at`, `updated_at` |
+| `interaction_templates` | `created_at`, `updated_at` |
+| `lead_sources` | `created_at` |
+| `loss_reasons` | `created_at` |
+| `meetings` | `created_at` |
+| `proposals` | `created_at`, `updated_at` |
+| `quick_notes` | `created_at`, `updated_at` |
+| `relationship_score_history` | `created_at` |
+| `reminders` | `created_at` |
+| `sales_cadences` | `created_at`, `created_by`, `updated_at` |
+| `scheduled_visits` | `created_at` |
+| `seller_daily_metrics` | `created_at` |
+| `sla_rules` | `created_at` |
+| `sla_violations` | `created_at` |
+| `suppliers` | `created_at`, `updated_at` |
+| `sync_log` | `created_at` |
+| `territories` | `created_at` |
+| `user_goals` | `created_at`, `updated_at` |
+| `users` | `created_at`, `updated_at` |
+| `workspace_accounts` | `created_at`, `updated_at` |
+| `campaign_members` | `created_at` |
+| `company_cadences` | `created_at`, `updated_at` |
+| `contact_addresses` | `created_at`, `created_by`, `updated_at`, `updated_by` |
+| `coop_sistemas` | `created_at`, `updated_at` |
+| `customers` | `created_at`, `updated_at` |
+| `sdr_closer_assignments` | `created_at`, `updated_at` |
+| `customer_ownership_history` | `created_at`, `updated_at` |
+| `customer_sdr_history` | `created_at`, `updated_at` |
+| `config_regras_negocio` | `updated_at` |
+| `alert_rules` | `created_at`, `created_by`, `updated_at` |
+| `lalamove_drivers` | `created_at`, `updated_at` |
+| `lalamove_position_log` | `created_at` |
+| `lalamove_route_cache` | `created_at` |
+| `lalamove_dead_letter` | `created_at` |
+| `stg_portal_sicoob` | `created_at` |
+| `stg_bcb_sicoob` | `created_at` |
+| `uapi_sessions` | `created_at`, `updated_at` |
+| `oauth_tokens` | `updated_at` |
+| `connector_log` | `created_at` |
+| `pix_accounts` | `created_at`, `created_by`, `updated_at`, `updated_by` |
+| `saved_filters` | `created_at`, `updated_at` |
+| `salespeople` | `created_at`, `updated_at` |
+| `sales` | `created_at`, `deleted_by`, `updated_at` |
+| `daily_metrics` | `created_at` |
+| `category_metrics` | `created_at` |
+| `sales_goals` | `created_at` |
+| … +152 linhas — lista completa em `context.json` | |
 
 ## Dados pessoais / sensíveis (LGPD — cuidado em logs, exports, prompts de IA)
 
 | Tabela | Coluna |
 |---|---|
+| `access_blocked_log` | `email` |
 | `access_blocked_log` | `ip_address` |
+| `activities` | `ip_address` |
 | `campaign_recipients` | `email` |
 | `companies` | `phone` |
 | `companies` | `email` |
@@ -1110,82 +1280,170 @@ Middleware matcher (Next.js): nenhum
 | `crm_consent_audit_logs` | `ip_address` |
 | `deal_room_stakeholders` | `email` |
 | `device_login_notifications` | `ip_address` |
+| `document_signatures` | `ip_address` |
+| `document_views` | `ip_address` |
 | `email_verifications` | `email` |
-| `ip_whitelist` | `ip_address` |
-| `landing_page_submissions` | `email` |
-| `landing_page_submissions` | `phone` |
 | `landing_page_submissions` | `ip_address` |
 | `lead_magnet_downloads` | `email` |
-| `login_attempts` | `email` |
-| `login_attempts` | `ip_address` |
-| `password_reset_requests` | `email` |
 | `profiles` | `phone` |
 | `profiles` | `email` |
-| `sales_team_members` | `email` |
 | `sms_campaign_recipients` | `phone` |
 | `sms_opt_outs` | `phone` |
 | `social_consent_audit` | `ip_address` |
 | `visit_checkins` | `latitude` |
 | `visit_checkins` | `longitude` |
 | `visit_checkins` | `address` |
-| `cidades` | `latitude` |
-| `cidades` | `longitude` |
-| `company_emails` | `email` |
 | `company_addresses` | `cep` |
 | `company_addresses` | `logradouro` |
 | `company_addresses` | `latitude` |
 | `company_addresses` | `longitude` |
-| `salespeople` | `email` |
+| `company_emails` | `email` |
 | `contact_emails` | `email` |
+| `users` | `email` |
+| `workspace_accounts` | `email` |
+| `contact_addresses` | `cep` |
+| `contact_addresses` | `logradouro` |
+| `contact_addresses` | `latitude` |
+| `contact_addresses` | `longitude` |
+| `staging_bitrix_companies` | `phone` |
+| `staging_bitrix_companies` | `email` |
+| `stg_portal_sicoob` | `logradouro` |
+| `stg_portal_sicoob` | `cep` |
+| `stg_portal_sicoob` | `email` |
+| `stg_portal_sicoob` | `latitude` |
+| `stg_portal_sicoob` | `longitude` |
+| `stg_bcb_sicoob` | `cnpj` |
+| `stg_bcb_sicoob` | `endereco` |
+| `stg_bcb_sicoob` | `cep` |
+| `stg_bcb_sicoob` | `telefone` |
+| `stg_bcb_sicoob` | `email` |
+| `stg_site_sicoob_pacs` | `endereco` |
+| `stg_site_sicoob_pacs` | `cep` |
+| `stg_site_sicoob_pacs` | `telefone` |
+| `salespeople` | `email` |
+| `clients` | `email` |
+| `clients` | `phone` |
+| `login_attempts` | `email` |
+| `login_attempts` | `ip_address` |
+| `blocked_ips` | `ip_address` |
+| `ip_whitelist` | `ip_address` |
+| `active_sessions` | `ip_address` |
+| `login_alerts` | `ip_address` |
+| `access_denied_logs` | `ip_address` |
+| `security_alert_history` | `ip_address` |
+| `mfa_verification_attempts` | `ip_address` |
+| `reauthentication_requests` | `ip_address` |
+| `password_reset_requests` | `email` |
+| `password_reset_requests` | `ip_address` |
+| `document_signers` | `email` |
+| `staging_portal_sicoob` | `endereco` |
+| `staging_portal_sicoob` | `cep` |
+| `staging_portal_sicoob` | `email` |
+| `staging_portal_sicoob` | `latitude` |
+| `staging_portal_sicoob` | `longitude` |
+| `cidades` | `latitude` |
+| `cidades` | `longitude` |
 
 ## Colunas de dinheiro (tipo importa: numeric ✅ / float ❌)
 
 | Tabela | Coluna | Tipo |
 |---|---|---|
+| `ai_chat_threads` | `total_messages` | `integer` |
+| `ai_chat_threads` | `total_tokens` | `integer` |
 | `attribution_models_cache` | `total_value` | `NUMERIC` |
 | `contact_report_overrides` | `custom_scripts` | `JSONB` |
 | `contact_time_analysis` | `total_attempts` | `INTEGER` |
-| `csat_surveys` | `feedback` | `TEXT` |
+| `csat_surveys` | `feedback` | `text` |
 | `disc_conversion_metrics` | `total_contacts` | `INTEGER` |
 | `disc_conversion_metrics` | `total_opportunities` | `INTEGER` |
-| `email_campaigns` | `total_recipients` | `INTEGER` |
-| `email_campaigns` | `total_opened` | `INTEGER` |
-| `email_campaigns` | `total_clicked` | `INTEGER` |
-| `email_campaigns` | `total_bounced` | `INTEGER` |
+| `email_campaigns` | `total_recipients` | `integer` |
+| `email_campaigns` | `total_sent` | `integer` |
+| `email_campaigns` | `total_delivered` | `integer` |
+| `email_campaigns` | `total_opened` | `integer` |
+| `email_campaigns` | `total_clicked` | `integer` |
+| `email_campaigns` | `total_bounced` | `integer` |
+| `email_campaigns` | `total_complained` | `integer` |
+| `email_campaigns` | `total_unsubscribed` | `integer` |
 | `incoming_webhooks` | `total_calls` | `BIGINT` |
 | `incoming_webhooks` | `total_errors` | `BIGINT` |
+| `landing_pages` | `total_views` | `integer` |
+| `landing_pages` | `total_submissions` | `integer` |
+| `lead_score_config` | `custom_factors` | `jsonb` |
 | `lead_score_history` | `total_score` | `NUMERIC(5,2)` |
-| `lead_scores` | `total_score` | `NUMERIC(5,2)` |
+| `lux_webhook_config` | `custom_headers` | `jsonb` |
+| `lux_webhook_config` | `total_calls` | `integer` |
+| `lux_webhook_config` | `total_successes` | `integer` |
+| `lux_webhook_config` | `total_failures` | `integer` |
 | `marketing_roi_data` | `customers_acquired` | `INTEGER` |
 | `nlp_feedback` | `feedback_notes` | `TEXT` |
+| `nurturing_workflows` | `total_enrolled` | `integer` |
 | `purchase_history` | `amount` | `DECIMAL(12,2)` |
 | `reframing_analysis` | `feedback` | `TEXT` |
 | `revops_snapshots` | `total_value` | `NUMERIC(14,2)` |
-| `rfm_analysis` | `total_score` | `INTEGER` |
-| `rfm_analysis` | `total_purchases` | `INTEGER` |
-| `rfm_analysis` | `total_interactions` | `INTEGER` |
-| `rfm_analysis` | `total_monetary_value` | `DECIMAL(12,2)` |
+| `rfm_analysis` | `total_revenue` | `numeric(15,2)` |
 | `rfm_history` | `total_monetary_value` | `DECIMAL(12,2)` |
 | `rfm_metrics` | `total_contacts_analyzed` | `INTEGER` |
 | `rfm_metrics` | `total_revenue` | `DECIMAL(12,2)` |
-| `search_products_cache` | `price` | `NUMERIC` |
+| `sales_team_members` | `total_cap` | `integer` |
+| `sequences` | `total_steps` | `integer` |
 | `sequences` | `total_enrolled` | `integer` |
-| `sequences` | `total_completed` | `integer` |
-| `sequences` | `total_replied` | `integer` |
-| `sms_campaign_recipients` | `cost_cents` | `integer` |
+| `sms_campaign_recipients` | `cost` | `numeric(10,4)` |
 | `sms_campaigns` | `total_recipients` | `integer` |
 | `sms_campaigns` | `total_sent` | `integer` |
 | `sms_campaigns` | `total_delivered` | `integer` |
 | `sms_campaigns` | `total_failed` | `integer` |
-| `sms_campaigns` | `total_replies` | `integer` |
 | `sms_campaigns` | `total_opt_outs` | `integer` |
-| `sms_campaigns` | `cost_estimate_cents` | `integer` |
+| `sms_campaigns` | `cost` | `numeric(10,4)` |
+| `sms_campaigns` | `total_replies` | `integer` |
 | `system_health_snapshots` | `total_latency_ms` | `INTEGER` |
 | `trigger_bundles` | `total_uses` | `INTEGER` |
+| `commissions` | `commission_pct` | `numeric` |
+| `commissions` | `commission_value` | `numeric` |
+| `company_rfm_scores` | `total_value` | `numeric` |
+| `economic_groups` | `total_revenue` | `numeric` |
+| `economic_groups` | `total_companies` | `int4` |
+| `lead_sources` | `custo_por_lead` | `numeric` |
+| `proposals` | `valor_total` | `numeric` |
+| `proposals` | `desconto_percentual` | `numeric` |
+| `proposals` | `valor_final` | `numeric` |
+| `proposals` | `discount_type` | `text` |
+| `coop_sistemas` | `total_cooperados` | `int4` |
+| `coop_sistemas` | `total_singulares` | `int4` |
+| `coop_sistemas` | `total_centrais` | `int4` |
+| `customers` | `total_pedidos` | `int4` |
+| `customers` | `valor_total_compras` | `numeric` |
+| `config_regras_negocio` | `valor` | `text` |
+| `salespeople` | `commission_rate` | `numeric(5,2)` |
+| `sales` | `amount` | `numeric(12,2)` |
+| `daily_metrics` | `total_sales` | `INTEGER` |
+| `clients` | `total_value` | `NUMERIC` |
+| `products` | `price` | `NUMERIC` |
+| `lead_scores` | `total_score` | `integer` |
+| `salesperson_xp` | `total_xp` | `INTEGER` |
+| `tournament_participants` | `total_score` | `NUMERIC(12,2)` |
+| `sales_territories` | `total_revenue` | `NUMERIC(12,2)` |
+| `quotes` | `subtotal` | `NUMERIC(12,2)` |
+| `quotes` | `discount_percent` | `NUMERIC(5,2)` |
+| `quotes` | `discount_amount` | `NUMERIC(12,2)` |
+| `quotes` | `total` | `NUMERIC(12,2)` |
+| `supplier_orders` | `total_amount` | `NUMERIC(12,2)` |
+| `supplier_order_items` | `total_price` | `NUMERIC(12,2)` |
+| `price_alerts` | `price_change_percent` | `NUMERIC` |
+| `data_quality_audits` | `total_entidades` | `int` |
+| `supplier_scores` | `total_avaliacoes` | `INTEGER` |
+| `carrier_scores` | `total_avaliacoes` | `integer` |
+| `model_pricing_v2` | `total_params` | `TEXT` |
+| `zapp_history.conversations` | `total_messages` | `INTEGER` |
+| `zapp_history.messages` | `customer_type` | `TEXT` |
+| `zapp_history.messages` | `customization_extracted` | `JSONB` |
+| `zapp_history.conversation_daily_summaries` | `total_chars` | `BIGINT` |
+| `zapp_history.conversation_daily_summaries` | `total_audio_seconds` | `NUMERIC(10,2)` |
+| `zapp_history.conversation_daily_summaries` | `customer_mood` | `TEXT` |
+| `zapp_history.conversation_daily_summaries` | `customer_pain_points` | `TEXT[]` |
+| `zapp_history.ai_cost_log` | `total_tokens` | `INTEGER` |
+| `zapp_history.ai_cost_log` | `cost_cents` | `NUMERIC(10,4)` |
 | `deals` | `valor` | `numeric` |
 | `rpc_plan_snapshots` | `total_cost` | `numeric` |
 | `customer_purchases` | `valor` | `numeric(14,2)` |
 | `rodizio_execucoes` | `total_elegiveis` | `integer` |
 | `rodizio_execucoes` | `total_rotacionados` | `integer` |
-| `salespeople` | `commission_rate` | `numeric(5,2)` |
-| `sales` | `amount` | `numeric(12,2)` |

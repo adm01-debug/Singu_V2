@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `62b6b2a183cced5f15d38b030d437e8da90949eb` (2026-11-19T15:34:02-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `0418f640ebd51128e4db626721191112d0bdea14` (2026-11-20T08:02:18-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2074), SQL (661), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
+- linguagens: TypeScript (2074), SQL (1277), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3266 |
+| arquivos_total | 3882 |
 | arquivos_codigo | 2237 |
 | linhas_codigo | 417496 |
 | rotas | 115 |
@@ -45,9 +45,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | componentes | 1063 |
 | hooks | 411 |
 | edge_functions | 109 |
-| tabelas | 418 |
-| migrations | 488 |
-| cron_jobs | 34 |
+| tabelas | 541 |
+| migrations | 1104 |
+| cron_jobs | 44 |
 | testes | 277 |
 | workflows | 12 |
 | scripts | 296 |
@@ -63,7 +63,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - migrations: supabase/migrations
 - scripts: scripts/migration (177), scripts/maintenance (15), scripts/hardening (10)
 - docs: docs (41), (raiz) (17)
-- nomenclatura: {"componentes":"PascalCase (93%)","hooks":"use + PascalCase","servicos":"camelCase (89%)","edge_functions":"kebab-case (99%)","tabelas":"snake_case (90%)"}
+- nomenclatura: {"componentes":"PascalCase (93%)","hooks":"use + PascalCase","servicos":"camelCase (89%)","edge_functions":"kebab-case (99%)","tabelas":"snake_case (91%)"}
 - instruções para agentes no repo: AGENTS.md, CLAUDE.md
 
 ## Módulos (menu → domínio)
@@ -404,6 +404,16 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `singu-rodizio-segmentar` 0 1 * * * (20260924213115_t213_rodizio_pg_cron_jobs.sql)
 - `smart-notify-automation` 0 */4 * * * → edge smart-notify (20260512105729_9e0ffd45-400f-45c7-b371-7437029a5de3.sql)
 - `validation-queue-drain` */5 * * * * → edge validation-queue-worker (20260417120721_823eaa43-3b8a-4ea7-a046-ad763d7c5f03.sql)
+- `zapp-cleanup-expired-media` 0 5 * * * (20260408200316_zapp_history_10_pg_cron_jobs.sql)
+- `zapp-curate-training-dataset` 0 4 * * 0 (20260408200316_zapp_history_10_pg_cron_jobs.sql)
+- `zapp-embed-pending-messages` */30 * * * * (20260408200316_zapp_history_10_pg_cron_jobs.sql)
+- `zapp-gc-zombie-messages` */15 * * * * (20260409232926_zapp_history_audit_fix_17_gc_zombies.sql)
+- `zapp-generate-daily-summaries` 0 2 * * * (20260408200316_zapp_history_10_pg_cron_jobs.sql)
+- `zapp-process-pending-media` */15 * * * * (20260408200316_zapp_history_10_pg_cron_jobs.sql)
+- `zapp-reconcile-nlp` * * * * * (20260409135739_zapp_history_56_faster_reconcile.sql)
+- `zapp-reconcile-nlp-30s` * * * * * (20260409135739_zapp_history_56_faster_reconcile.sql)
+- `zapp-refresh-contact-stats` 0 3 * * * (20260408200918_zapp_history_14_contact_stats_mat_view.sql)
+- `zapp-sync-pending-summaries` 30 * * * * (20260408200316_zapp_history_10_pg_cron_jobs.sql)
 
 ## Integrações externas
 - SDKs: ElevenLabs, Supabase, react-query, zod
@@ -413,7 +423,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 
 ## Permissões / papéis
 - papéis no código: user (38), system (32), status (30), alert (27), group (19), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), tab (1), tablist (1)
-- enums de papel: app_role: admin|moderator|user; entity_relationship_role: buyer|manager|owner|decision_maker|influencer|user|sponsor|partner|supplier|subsidiary|parent|employee_of|other; salesperson_role: sdr|closer|hybrid
+- enums de papel: salesperson_role: sdr|closer|hybrid; app_role: admin|manager|salesperson|moderator|user|moderator|user|moderator|user; entity_relationship_role: buyer|manager|owner|decision_maker|influencer|user|sponsor|partner|supplier|subsidiary|parent|employee_of|other
 - guards: src/app/lazyPages.tsx, src/components/auth/MFAGuard.tsx, src/hooks/useAuth.tsx · rotas protegidas: 103 · públicas: /*, /auth, /design-system, /dr/:token, /f/:slug, /lm/:slug, /lp/:slug, /reset-password, /signature/:token, /sso/callback, /status, /survey/:token
 - feature flags: nenhuma
 
@@ -423,9 +433,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
 - edges_orfas: 28 — ex.: attribution-calculator, auto-rebatch-behavioral, auto-regen-behavioral-profiles
 - edges_chamadas_sem_pasta: 0
-- tabelas_sem_rls: 9 — ex.: audit_log_default, company_addresses, company_emails
+- tabelas_sem_rls: 131 — ex.: _stg_pac_nums, access_denied_logs, active_power_ups
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
-- tabelas_com_drift_migration_vs_types: 88 — ex.: access_blocked_log, access_security_settings, activities
+- tabelas_com_drift_migration_vs_types: 43 — ex.: audit_log, automation_logs, behavioral_profile_regen_queue
 - rpcs_sem_definicao: 2 — ex.: get_territories, get_territory_performance
 - componentes_orfaos: 39 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/admin/SystemHealthWidget.tsx
 - componentes_com_nome_duplicado: 107 — ex.: ABM, ABMAccountDetail, ABMCampaigns
@@ -435,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 21309 nós · 36110 arestas · 2118 comunidades · grafo do commit `62b6b2a1`
-- comunidades maiores: ref_types (342), lucide-react (342), _shared/auth.ts (299), useAuth (268), react (263), 02_tables.sql (259), framer-motion (252), ref_lib (246), ref_hooks (242), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (220), date-fns (192)
+- 25709 nós · 41006 arestas · 3120 comunidades · grafo do commit `0418f640`
+- comunidades maiores: @tanstack/react-query (497), lucide-react (348), ref_lib (311), _shared/auth.ts (295), react (272), framer-motion (266), 02_tables.sql (259), ref_hooks (257), ref_types (250), date-fns (234), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (206)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -573,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-20 `0418f64` fix(migrations): recupera da produção as 607 migrations que faltavam no repositório (#267)
 - 2026-11-19 `62b6b2a` ci(security): dependency review barra CVE novo high/critical nos PRs (#273)
 - 2026-11-19 `677b193` feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)
 - 2026-11-19 `097e860` feat(gatilhos): liga conflitos, sinergias e alternativas dos gatilhos estendidos (#271)
@@ -587,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `185ce78` fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)
 - 2026-11-18 `b2d6c1a` fix(analytics): avisa que as abas PNL e Gatilhos usam contato fictício (#260)
 - 2026-11-18 `213464a` fix(carnegie): score deixa de ser número fixo e passa a refletir a análise real (#259)
-- 2026-11-18 `6917cfd` fix(intelligence): troca N consultas por uma na aba de referência cruzada (#258)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
