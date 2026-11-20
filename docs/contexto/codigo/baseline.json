@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "fae89a5e3c312d6224cbcd08dd96bdcfbf788b84",
+  "commit": "70d97b43253abda2d8cdf2f10f078073f5a043ad",
   "branch": "main",
-  "data_commit": "2026-11-20T09:32:27-03:00",
+  "data_commit": "2026-11-20T09:35:20-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "70d97b4",
+    "data": "2026-11-20",
+    "assunto": "Merge pull request #281 from adm01-debug/claude/chore-limpa-temp-supabase-261120-1105"
+   },
+   {
+    "sha": "105e30e",
+    "data": "2026-11-20",
+    "assunto": "chore: remove artefato local supabase/.temp/ do versionamento (gitignore)"
+   },
    {
     "sha": "fae89a5",
     "data": "2026-11-20",
@@ -121,19 +131,9 @@
     "sha": "185ce78",
     "data": "2026-11-18",
     "assunto": "fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)"
-   },
-   {
-    "sha": "b2d6c1a",
-    "data": "2026-11-18",
-    "assunto": "fix(analytics): avisa que as abas PNL e Gatilhos usam contato fictício (#260)"
-   },
-   {
-    "sha": "213464a",
-    "data": "2026-11-18",
-    "assunto": "fix(carnegie): score deixa de ser número fixo e passa a refletir a análise real (#259)"
    }
   ],
-  "arquivos_mudados_7d": 936,
+  "arquivos_mudados_7d": 938,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 122
+    "commits": 123
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -317,7 +317,7 @@
    },
    {
     "autor": "Joaquim Ataides",
-    "commits": 2
+    "commits": 3
    },
    {
     "autor": "github-actions[bot]",

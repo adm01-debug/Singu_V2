@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "fae89a5e3c312d6224cbcd08dd96bdcfbf788b84",
+  "sha": "70d97b43253abda2d8cdf2f10f078073f5a043ad",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 12:33 UTC",
-  "files_total": 3990,
+  "generated_at": "2026-11-20 12:36 UTC",
+  "files_total": 3988,
   "code_files": 3517,
   "code_lines": 472887
  },
@@ -305647,10 +305647,28 @@
   }
  },
  "git": {
-  "sha": "fae89a5e3c312d6224cbcd08dd96bdcfbf788b84",
+  "sha": "70d97b43253abda2d8cdf2f10f078073f5a043ad",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "70d97b4",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "Merge pull request #281 from adm01-debug/claude/chore-limpa-temp-supabase-261120-1105",
+    "files": []
+   },
+   {
+    "sha": "105e30e",
+    "date": "2026-11-20",
+    "author": "Joaquim Ataides",
+    "subject": "chore: remove artefato local supabase/.temp/ do versionamento (gitignore)",
+    "files": [
+     ".gitignore",
+     "supabase/.temp/cli-latest",
+     "supabase/.temp/linked-project.json"
+    ]
+   },
    {
     "sha": "fae89a5",
     "date": "2026-11-20",
@@ -306573,28 +306591,13 @@
      "src/hooks/useReportWidgets.ts",
      "src/pages/ReportBuilder.tsx"
     ]
-   },
-   {
-    "sha": "72976e7",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(analytics): chama a RPC de agregação direto, sem passar pelo gateway (#256)",
-    "files": [
-     "src/hooks/useActivityOverview.ts"
-    ]
-   },
-   {
-    "sha": "217bbf0",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "feat(admin): termina e publica a página de Observabilidade (#254)",
-    "files": [
-     "src/app/AppRoutes.tsx",
-     "src/pages/admin/Observability.tsx"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "supabase/.temp/cli-latest",
+    2
+   ],
    [
     ".github/workflows/migracao-temporaria.yml",
     2
@@ -306620,7 +306623,11 @@
     2
    ],
    [
-    "supabase/.temp/cli-latest",
+    ".gitignore",
+    1
+   ],
+   [
+    "supabase/.temp/linked-project.json",
     1
    ],
    [
@@ -306665,14 +306672,6 @@
    ],
    [
     "supabase/migrations/20260306191832_add_phone_length_validation_both_tables.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260306191849_update_trigger_functions_phone_validation.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260306192037_add_fonte_contexto_confiabilidade_contact_social_media.sql",
     1
    ]
   ]
