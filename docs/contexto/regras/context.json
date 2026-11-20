@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "7cbda37d8da15446e18b89ea85526a9dc78c50bc",
+  "sha": "6ba0fb92ec9a1f2fc8589e377f4f018f810714c5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 13:48 UTC",
-  "files_total": 3989,
-  "code_files": 3517,
-  "code_lines": 472916
+  "generated_at": "2026-11-20 16:16 UTC",
+  "files_total": 3990,
+  "code_files": 3518,
+  "code_lines": 472940
  },
  "version": "1.3.2",
- "facts_hash": "db255f9064805837",
+ "facts_hash": "71dfb6cf37e35d35",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -258,7 +258,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1278,
+   ".sql": 1279,
    ".tsx": 1166,
    ".ts": 909,
    ".mjs": 123,
@@ -63768,7 +63768,7 @@
     "args": "",
     "returns": "trigger",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20260924195108_t208_fix_handle_new_user_missing_email.sql",
+    "src": "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
     "security_definer": true,
     "search_path": true,
     "body": "BEGIN INSERT INTO public.profiles (id, email, first_name, last_name) VALUES ( NEW.id, NEW.email, NEW.raw_user_meta_data ->> 'first_name', NEW.raw_user_meta_data ->> 'last_name' ); RETURN NEW; END;",
@@ -87434,7 +87434,8 @@
    "supabase/migrations/20261118182619_get_activity_overview.sql",
    "supabase/migrations/20261118182753_get_activity_overview.sql",
    "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql",
-   "supabase/migrations/20261119000000_external_data_audit_log.sql"
+   "supabase/migrations/20261119000000_external_data_audit_log.sql",
+   "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -112197,8 +112198,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1105,
-   "lines": 102712,
+   "files": 1106,
+   "lines": 102736,
    "tables": [
     "users"
    ],
@@ -199570,7 +199571,7 @@
     "args": "",
     "returns": "trigger",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20260924195108_t208_fix_handle_new_user_missing_email.sql",
+    "src": "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
     "security_definer": true,
     "search_path": true,
     "body": "BEGIN INSERT INTO public.profiles (id, email, first_name, last_name) VALUES ( NEW.id, NEW.email, NEW.raw_user_meta_data ->> 'first_name', NEW.raw_user_meta_data ->> 'last_name' ); RETURN NEW; END;",
@@ -304974,6 +304975,10 @@
    "lines": 44,
    "uses_service_role": true
   },
+  "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql": {
+   "path": "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
+   "lines": 24
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -305647,10 +305652,19 @@
   }
  },
  "git": {
-  "sha": "7cbda37d8da15446e18b89ea85526a9dc78c50bc",
+  "sha": "6ba0fb92ec9a1f2fc8589e377f4f018f810714c5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "6ba0fb9",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "fix(migrations): força handle_new_user com email (drift de produção) (#285)",
+    "files": [
+     "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql"
+    ]
+   },
    {
     "sha": "7cbda37",
     "date": "2026-11-20",
@@ -306572,19 +306586,6 @@
      "src/components/analytics/DemoContactNotice.tsx",
      "src/pages/Analytics.tsx"
     ]
-   },
-   {
-    "sha": "213464a",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(carnegie): score deixa de ser número fixo e passa a refletir a análise real (#259)",
-    "files": [
-     "src/components/carnegie/CarnegieDashboard.tsx",
-     "src/components/carnegie/CarnegieQuickAccess.tsx",
-     "src/components/carnegie/CarnegieScorePanel.tsx",
-     "src/hooks/useCarnegieAnalysis.ts",
-     "src/types/carnegie.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306613,16 +306614,8 @@
     2
    ],
    [
-    "src/components/carnegie/CarnegieDashboard.tsx",
-    2
-   ],
-   [
-    "src/hooks/useCarnegieAnalysis.ts",
-    2
-   ],
-   [
-    "src/types/carnegie.ts",
-    2
+    "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
+    1
    ],
    [
     "supabase/migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
@@ -306666,6 +306659,14 @@
    ],
    [
     "supabase/migrations/20260306191225_fix_company_phones_triggers_and_fase2_cols.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20260306191832_add_phone_length_validation_both_tables.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20260306191849_update_trigger_functions_phone_validation.sql",
     1
    ]
   ]

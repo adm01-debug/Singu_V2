@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "7cbda37d8da15446e18b89ea85526a9dc78c50bc",
+  "commit": "6ba0fb92ec9a1f2fc8589e377f4f018f810714c5",
   "branch": "main",
-  "data_commit": "2026-11-20T10:48:15-03:00",
+  "data_commit": "2026-11-20T13:15:26-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "6ba0fb9",
+    "data": "2026-11-20",
+    "assunto": "fix(migrations): força handle_new_user com email (drift de produção) (#285)"
+   },
    {
     "sha": "7cbda37",
     "data": "2026-11-20",
@@ -126,14 +131,9 @@
     "sha": "679cafa",
     "data": "2026-11-18",
     "assunto": "fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)"
-   },
-   {
-    "sha": "12454df",
-    "data": "2026-11-18",
-    "assunto": "fix(territorios): módulo inteiro estava fora de contrato com o banco (#265)"
    }
   ],
-  "arquivos_mudados_7d": 939,
+  "arquivos_mudados_7d": 940,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 125
+    "commits": 126
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3884,
+  "arquivos_total": 3885,
   "arquivos_codigo": 2238,
   "linhas_codigo": 417555,
   "rotas": 115,
@@ -338,7 +338,7 @@
   "hooks": 411,
   "edge_functions": 109,
   "tabelas": 542,
-  "migrations": 1105,
+  "migrations": 1106,
   "cron_jobs": 44,
   "testes": 277,
   "workflows": 12,
