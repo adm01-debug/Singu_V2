@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "70d97b43253abda2d8cdf2f10f078073f5a043ad",
+  "commit": "e9d33fde7f4dd032f683ccb5d082882be5c40c3a",
   "branch": "main",
-  "data_commit": "2026-11-20T09:35:20-03:00",
+  "data_commit": "2026-11-20T09:39:22-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "e9d33fd",
+    "data": "2026-11-20",
+    "assunto": "Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110"
+   },
+   {
+    "sha": "ad9f3c0",
+    "data": "2026-11-20",
+    "assunto": "fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)"
+   },
    {
     "sha": "70d97b4",
     "data": "2026-11-20",
@@ -121,16 +131,6 @@
     "sha": "15e29cf",
     "data": "2026-11-18",
     "assunto": "fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)"
-   },
-   {
-    "sha": "485bd33",
-    "data": "2026-11-18",
-    "assunto": "fix(gamificacao): três RPCs eram chamadas sem o p_user_id obrigatório (#263)"
-   },
-   {
-    "sha": "185ce78",
-    "data": "2026-11-18",
-    "assunto": "fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)"
    }
   ],
   "arquivos_mudados_7d": 938,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 123
+    "commits": 124
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -317,7 +317,7 @@
    },
    {
     "autor": "Joaquim Ataides",
-    "commits": 3
+    "commits": 4
    },
    {
     "autor": "github-actions[bot]",

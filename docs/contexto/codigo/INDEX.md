@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `70d97b43253abda2d8cdf2f10f078073f5a043ad` (2026-11-20T09:35:20-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e9d33fde7f4dd032f683ccb5d082882be5c40c3a` (2026-11-20T09:39:22-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -445,7 +445,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25719 nós · 41023 arestas · 3128 comunidades · grafo do commit `70d97b43`
+- 25719 nós · 41023 arestas · 3128 comunidades · grafo do commit `e9d33fde`
 - comunidades maiores: @tanstack/react-query (682), ref_hooks (456), framer-motion (314), ref_types (282), ref_lib (266), 02_tables.sql (259), _shared/auth.ts (255), date-fns (229), 📖 Dicionário de Dados — SINGU CRM (227), react (224), ref_components (220), withAuth (155)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -583,6 +583,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-20 `e9d33fd` Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110
+- 2026-11-20 `ad9f3c0` fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)
 - 2026-11-20 `70d97b4` Merge pull request #281 from adm01-debug/claude/chore-limpa-temp-supabase-261120-1105
 - 2026-11-20 `105e30e` chore: remove artefato local supabase/.temp/ do versionamento (gitignore)
 - 2026-11-20 `fae89a5` Merge pull request #280 from adm01-debug/claude/chore-remove-workflow-temp-261120-1100
@@ -596,8 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-20 `64be234` feat(audit): cria external_data_audit_log com RLS admin-only (resgate hardening Singu 2026-04-09)
 - 2026-11-20 `6a2064b` feat(audit): resgata auditoria de escrita do external-data — modulo logAudit
 - 2026-11-20 `0418f64` fix(migrations): recupera da produção as 607 migrations que faltavam no repositório (#267)
-- 2026-11-19 `62b6b2a` ci(security): dependency review barra CVE novo high/critical nos PRs (#273)
-- 2026-11-19 `677b193` feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

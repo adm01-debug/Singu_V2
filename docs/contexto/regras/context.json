@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "70d97b43253abda2d8cdf2f10f078073f5a043ad",
+  "sha": "e9d33fde7f4dd032f683ccb5d082882be5c40c3a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 12:36 UTC",
-  "files_total": 3988,
+  "generated_at": "2026-11-20 12:40 UTC",
+  "files_total": 3989,
   "code_files": 3517,
   "code_lines": 472887
  },
@@ -305647,10 +305647,27 @@
   }
  },
  "git": {
-  "sha": "70d97b43253abda2d8cdf2f10f078073f5a043ad",
+  "sha": "e9d33fde7f4dd032f683ccb5d082882be5c40c3a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "e9d33fd",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110",
+    "files": []
+   },
+   {
+    "sha": "ad9f3c0",
+    "date": "2026-11-20",
+    "author": "Joaquim Ataides",
+    "subject": "fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)",
+    "files": [
+     ".gitignore",
+     "supabase/.temp/linked-project.json"
+    ]
+   },
    {
     "sha": "70d97b4",
     "date": "2026-11-20",
@@ -306568,32 +306585,17 @@
     "files": [
      "src/components/intelligence/CrossRefTab.tsx"
     ]
-   },
-   {
-    "sha": "28bc93d",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "feat(ui): entrada de Observabilidade no menu de administração (#257)",
-    "files": [
-     "src/components/layout/AppSidebar.tsx"
-    ]
-   },
-   {
-    "sha": "22f664c",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "feat(reports): os 12 widgets do Report Builder passam a mostrar dado real (#250)",
-    "files": [
-     "docs/estado/03_MARKETING_AUTOMACAO.md",
-     "src/components/reports/widgets/ReportWidgets.tsx",
-     "src/components/reports/widgets/WidgetShell.tsx",
-     "src/components/reports/widgets/index.ts",
-     "src/hooks/useReportWidgets.ts",
-     "src/pages/ReportBuilder.tsx"
-    ]
    }
   ],
   "hot_files": [
+   [
+    ".gitignore",
+    2
+   ],
+   [
+    "supabase/.temp/linked-project.json",
+    2
+   ],
    [
     "supabase/.temp/cli-latest",
     2
@@ -306621,14 +306623,6 @@
    [
     "src/types/carnegie.ts",
     2
-   ],
-   [
-    ".gitignore",
-    1
-   ],
-   [
-    "supabase/.temp/linked-project.json",
-    1
    ],
    [
     "supabase/migrations/20261119000000_external_data_audit_log.sql",

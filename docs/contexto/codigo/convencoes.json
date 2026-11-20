@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110",
+   "fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)",
    "Merge pull request #281 from adm01-debug/claude/chore-limpa-temp-supabase-261120-1105",
    "chore: remove artefato local supabase/.temp/ do versionamento (gitignore)",
-   "Merge pull request #280 from adm01-debug/claude/chore-remove-workflow-temp-261120-1100",
-   "chore: remove workflow temporario de aplicacao de migration em producao (tabela aplicada e verificada)",
-   "Merge pull request #279 from adm01-debug/claude/infra-aplica-migracao-audit-261120-1032"
+   "Merge pull request #280 from adm01-debug/claude/chore-remove-workflow-temp-261120-1100"
   ]
  },
  "pr_template": null,
