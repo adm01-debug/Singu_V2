@@ -5,6 +5,7 @@ import { databaseWriteError } from "../_shared/write-error.ts";
 import type { tracedLogger } from "../_shared/tracing.ts";
 import { getExternalClient, getRelationIdForRecord, hasRelationAccess } from "./database.ts";
 import type { AllowedTable } from "./tables.ts";
+import { logAudit } from "./audit.ts";
 
 type MutationContext = {
   operation: string; body: Record<string, unknown>; table: AllowedTable;
@@ -25,6 +26,7 @@ async function insertRecord(context: MutationContext): Promise<Response> {
       typeof relationId !== 'string' ||
       !await hasRelationAccess(client, relationScope, relationId, userId)
     ) {
+      await logAudit(userId, table, 'insert', 'denied', { id: String(relationId) });
       return jsonError('Forbidden', 403, req);
     }
   }
@@ -36,6 +38,7 @@ async function insertRecord(context: MutationContext): Promise<Response> {
       };
   const { data, error } = await client.from(table).insert(safeRecord).select().single();
   if (error) return databaseWriteError(error, req);
+  await logAudit(userId, table, 'insert', 'success', { id: (data as { id?: string } | null)?.id ?? null });
   return jsonOk({ data }, req);
 }
 
@@ -57,10 +60,12 @@ async function updateRecord(context: MutationContext): Promise<Response> {
       !relationId ||
       !await hasRelationAccess(client, relationScope, relationId, userId)
     ) {
+      await logAudit(userId, table, 'update', 'denied', { id, reason: 'no_relation_access' });
       return jsonError('Forbidden', 403, req);
     }
     const requestedRelationId = (updates as Record<string, unknown>)[relationScope.foreignKey];
     if (requestedRelationId !== undefined && requestedRelationId !== relationId) {
+      await logAudit(userId, table, 'update', 'denied', { id, reason: 'relation_change_blocked' });
       return jsonError(`${relationScope.foreignKey} cannot be changed`, 400, req);
     }
     authorizedRelationId = relationId;
@@ -75,6 +80,7 @@ async function updateRecord(context: MutationContext): Promise<Response> {
   }
   const { data, error } = await q.select().single();
   if (error) return databaseWriteError(error, req);
+  await logAudit(userId, table, 'update', 'success', { id, updated: (data as { id?: string } | null)?.id ?? null });
   return jsonOk({ data }, req);
 }
 
@@ -98,10 +104,12 @@ async function updateRecordWithVersion(context: MutationContext): Promise<Respon
       !relationId ||
       !await hasRelationAccess(client, relationScope, relationId, userId)
     ) {
+      await logAudit(userId, table, 'update', 'denied', { id, version, reason: 'no_relation_access' });
       return jsonError('Forbidden', 403, req);
     }
     const requestedRelationId = (updates as Record<string, unknown>)[relationScope.foreignKey];
     if (requestedRelationId !== undefined && requestedRelationId !== relationId) {
+      await logAudit(userId, table, 'update', 'denied', { id, version, reason: 'relation_change_blocked' });
       return jsonError(`${relationScope.foreignKey} cannot be changed`, 400, req);
     }
     authorizedRelationId = relationId;
@@ -122,8 +130,10 @@ async function updateRecordWithVersion(context: MutationContext): Promise<Respon
   const conflict = assertVersionMatch(rows, { entity: table, id, attemptedVersion: version, req });
   if (conflict) {
     log.warn("concurrent_edit_detected", { table, id, attemptedVersion: version });
+    await logAudit(userId, table, 'update', 'denied', { id, version, reason: 'concurrent_edit' });
     return conflict;
   }
+  await logAudit(userId, table, 'update', 'success', { id, version });
   return jsonOk({ data: rows[0] }, req);
 }
 
@@ -143,6 +153,7 @@ async function deleteRecord(context: MutationContext): Promise<Response> {
       !relationId ||
       !await hasRelationAccess(client, relationScope, relationId, userId)
     ) {
+      await logAudit(userId, table, 'delete', 'denied', { id, reason: 'no_relation_access' });
       return jsonError('Forbidden', 403, req);
     }
     authorizedRelationId = relationId;
@@ -154,7 +165,11 @@ async function deleteRecord(context: MutationContext): Promise<Response> {
   }
   const { data, error } = await (isSvc ? q : q.select('id'));
   if (error) return databaseWriteError(error, req);
-  if (!isSvc && (!Array.isArray(data) || data.length === 0)) return jsonError('Forbidden', 403, req);
+  if (!isSvc && (!Array.isArray(data) || data.length === 0)) {
+    await logAudit(userId, table, 'delete', 'denied', { id, reason: 'record_not_found' });
+    return jsonError('Forbidden', 403, req);
+  }
+  await logAudit(userId, table, 'delete', 'success', { id });
   return jsonOk({ success: true }, req);
 }
 
