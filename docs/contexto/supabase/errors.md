@@ -1,3 +1,5 @@
 # Erros da última coleta
 
-_nenhum_
+| seção | erro |
+|---|---|
+| indexes | canceling statement due to lock timeout |
