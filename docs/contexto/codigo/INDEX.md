@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `c256a5e32a076713c950785959ad4143cff321ce` (2026-11-20T09:26:09-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `fae89a5e3c312d6224cbcd08dd96bdcfbf788b84` (2026-11-20T09:32:27-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2075), SQL (1278), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (19)
+- linguagens: TypeScript (2075), SQL (1278), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3885 |
+| arquivos_total | 3884 |
 | arquivos_codigo | 2238 |
 | linhas_codigo | 417555 |
 | rotas | 115 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | migrations | 1105 |
 | cron_jobs | 44 |
 | testes | 277 |
-| workflows | 13 |
+| workflows | 12 |
 | scripts | 296 |
 | docs_md | 156 |
 
@@ -445,7 +445,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25719 nós · 41023 arestas · 3128 comunidades · grafo do commit `c256a5e3`
+- 25719 nós · 41023 arestas · 3128 comunidades · grafo do commit `fae89a5e`
 - comunidades maiores: @tanstack/react-query (682), ref_hooks (456), framer-motion (314), ref_types (282), ref_lib (266), 02_tables.sql (259), _shared/auth.ts (255), date-fns (229), 📖 Dicionário de Dados — SINGU CRM (227), react (224), ref_components (220), withAuth (155)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -477,7 +477,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `fix-jwt-proxies-externas.yml` — Fix JWT proxies externas (workflow_dispatch)
 - `higiene-semanal.yml` — Higiene semanal do repositório (schedule, workflow_dispatch; cron 41 8 * * 1)
 - `inventario-estado-semanal.yml` — Inventário do estado real (semanal) (schedule, workflow_dispatch; cron 23 10 * * 1)
-- `migracao-temporaria.yml` — Temp: aplicar migration em producao (workflow_dispatch)
 - `monitoring-lint.yml` — monitoring-lint (pull_request, push)
 - `restore-drill.yml` — Teste de restauração lógica (pull_request, workflow_dispatch)
 - `rls-exposure-guard.yml` — RLS exposure guard (pull_request, push, schedule, workflow_dispatch; cron 0 6 * * 1)
@@ -584,6 +583,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-20 `fae89a5` Merge pull request #280 from adm01-debug/claude/chore-remove-workflow-temp-261120-1100
+- 2026-11-20 `469bcda` chore: remove workflow temporario de aplicacao de migration em producao (tabela aplicada e verificada)
 - 2026-11-20 `c256a5e` Merge pull request #279 from adm01-debug/claude/infra-aplica-migracao-audit-261120-1032
 - 2026-11-20 `1cd9342` infra: workflow temporario para aplicar migration de auditoria em producao
 - 2026-11-20 `b70f89e` Merge pull request #278 from adm01-debug/claude/fix-resgate-auditoria-external-data-20261119-1501
@@ -597,8 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-19 `677b193` feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)
 - 2026-11-19 `097e860` feat(gatilhos): liga conflitos, sinergias e alternativas dos gatilhos estendidos (#271)
 - 2026-11-19 `f746393` fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)
-- 2026-11-19 `16da53a` feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)
-- 2026-11-18 `f76d507` feat(gatilhos): liga a matriz completa de conflitos e sinergias que estava desligada (#268)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

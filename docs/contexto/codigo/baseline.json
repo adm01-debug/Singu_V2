@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "c256a5e32a076713c950785959ad4143cff321ce",
+  "commit": "fae89a5e3c312d6224cbcd08dd96bdcfbf788b84",
   "branch": "main",
-  "data_commit": "2026-11-20T09:26:09-03:00",
+  "data_commit": "2026-11-20T09:32:27-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "fae89a5",
+    "data": "2026-11-20",
+    "assunto": "Merge pull request #280 from adm01-debug/claude/chore-remove-workflow-temp-261120-1100"
+   },
+   {
+    "sha": "469bcda",
+    "data": "2026-11-20",
+    "assunto": "chore: remove workflow temporario de aplicacao de migration em producao (tabela aplicada e verificada)"
+   },
    {
     "sha": "c256a5e",
     "data": "2026-11-20",
@@ -121,19 +131,9 @@
     "sha": "213464a",
     "data": "2026-11-18",
     "assunto": "fix(carnegie): score deixa de ser número fixo e passa a refletir a análise real (#259)"
-   },
-   {
-    "sha": "6917cfd",
-    "data": "2026-11-18",
-    "assunto": "fix(intelligence): troca N consultas por uma na aba de referência cruzada (#258)"
-   },
-   {
-    "sha": "28bc93d",
-    "data": "2026-11-18",
-    "assunto": "feat(ui): entrada de Observabilidade no menu de administração (#257)"
    }
   ],
-  "arquivos_mudados_7d": 935,
+  "arquivos_mudados_7d": 936,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 121
+    "commits": 122
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -316,17 +316,17 @@
     "commits": 4
    },
    {
-    "autor": "github-actions[bot]",
+    "autor": "Joaquim Ataides",
     "commits": 2
    },
    {
-    "autor": "Joaquim Ataides",
-    "commits": 1
+    "autor": "github-actions[bot]",
+    "commits": 2
    }
   ]
  },
  "contagens": {
-  "arquivos_total": 3885,
+  "arquivos_total": 3884,
   "arquivos_codigo": 2238,
   "linhas_codigo": 417555,
   "rotas": 115,
@@ -341,7 +341,7 @@
   "migrations": 1105,
   "cron_jobs": 44,
   "testes": 277,
-  "workflows": 13,
+  "workflows": 12,
   "scripts": 296,
   "docs_md": 156
  },
