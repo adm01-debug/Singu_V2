@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6ba0fb92ec` · branch `main` · 2026-11-20 16:16 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `df6e5c636b` · branch `main` · 2026-11-20 16:37 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -305,7 +305,7 @@
 | `model_pricing_v2` | enabled | authenticated: true | — | — | — |
 | `mql_classifications` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `mql_criteria` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `neuro_behavioral_history` | enabled | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid()))))) | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid())))) | — | — |
+| `neuro_behavioral_history` | enabled | — | public: auth.uid() = user_id | — | — |
 | `neuro_pnl_sessions` | enabled | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_pnl_sessions.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: ((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_pnl_sessions.contact_id) AND (c.user_id = (select auth.uid()))))) OR | public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_pnl_sessions.contact_id) AND (c.user_id = (select auth.uid()))))) | authenticated: EXISTS ( SELECT 1 FROM public.contacts c WHERE c.id = neuro_pnl_sessions.contact_id AND c.user_id = auth.uid() ) |
 | `nlp_extractions` | enabled | authenticated: true | authenticated: true | — | — |
 | `nlp_feedback` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | — |
@@ -873,6 +873,7 @@ Middleware matcher (Next.js): nenhum
 | `config_regras_negocio` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useRodizioEquipe.ts` |
 | `crm_automation_logs` | front faz UPDATE mas nenhuma política RLS permite UPDATE → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
 | `crm_automation_reprocess_queue` | front faz INSERT mas nenhuma política RLS permite INSERT → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
+| `neuro_behavioral_history` | front faz SELECT mas nenhuma política RLS permite SELECT → vai falhar/retornar vazio para usuários | `src/components/contact-detail/NeuroEvolutionChart.tsx`<br>`src/components/crm/behavior/NeuromarketingTimeline.tsx`<br>`src/hooks/useUnifiedTimeline.ts` |
 | `rodizio_distribuicao_staging` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useRodizioOndas.ts` |
 | `territories` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useTerritories.ts` |
 | `users` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useRodizioEquipe.ts` |

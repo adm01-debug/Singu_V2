@@ -11,7 +11,7 @@
  "migrations": 1106,
  "seeds": [],
  "avisos": [
-  "195 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
+  "211 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
  ],
  "extensoes": [
   "http",
@@ -109,19 +109,6 @@
   "entity_type": [
    "company",
    "contact"
-  ],
-  "error_severity": [
-   "info",
-   "warning",
-   "error",
-   "critical"
-  ],
-  "passo_outcome": [
-   "respondeu_positivo",
-   "respondeu_neutro",
-   "nao_respondeu",
-   "nao_atendeu",
-   "pulou"
   ],
   "phone_type": [
    "celular_corporativo",

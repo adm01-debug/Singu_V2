@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(migrations): torna 154 migrations idempotentes para reaplicação no preview (#284)",
    "fix(migrations): força handle_new_user com email (drift de produção) (#285)",
    "fix(migrations): torne a Foundation 1cfd4579 totalmente idempotente (#283)",
    "Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110",
-   "fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)",
-   "Merge pull request #281 from adm01-debug/claude/chore-limpa-temp-supabase-261120-1105"
+   "fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)"
   ]
  },
  "pr_template": null,

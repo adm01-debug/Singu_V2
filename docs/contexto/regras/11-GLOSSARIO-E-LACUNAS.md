@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6ba0fb92ec` · branch `main` · 2026-11-20 16:16 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `df6e5c636b` · branch `main` · 2026-11-20 16:37 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -122,7 +122,7 @@
 | `contact_family_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | migration |
 | `contact_influence` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `contact_metaprograms` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
-| `contact_next_actions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 18 colunas | migration |
+| `contact_next_actions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 16 colunas | migration |
 | `contact_notes` | ZAPP WEB: Notas rápidas de contato. Criadas pelo painel Contact 360° durante atendimento. FK contacts(id). | 9 colunas | migration |
 | `contact_objection_scripts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `contact_personality` | _(sem COMMENT ON TABLE — significado não documentado)_ | 21 colunas | migration |
@@ -575,6 +575,7 @@ _nenhum item encontrado_
 | rls | `config_regras_negocio`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useRodizioEquipe.ts` |
 | rls | `crm_automation_logs`: front faz UPDATE mas nenhuma política RLS permite UPDATE → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
 | rls | `crm_automation_reprocess_queue`: front faz INSERT mas nenhuma política RLS permite INSERT → vai falhar/retornar vazio para usuários | `src/components/crm/CRMAutomationAuditLog.tsx` |
+| rls | `neuro_behavioral_history`: front faz SELECT mas nenhuma política RLS permite SELECT → vai falhar/retornar vazio para usuários | `src/components/contact-detail/NeuroEvolutionChart.tsx`<br>`src/components/crm/behavior/NeuromarketingTimeline.tsx`<br>`src/hooks/useUnifiedTimeline.ts` |
 | rls | `rodizio_distribuicao_staging`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useRodizioOndas.ts` |
 | rls | `territories`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useTerritories.ts` |
 | rls | `users`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useRodizioEquipe.ts` |
@@ -618,8 +619,7 @@ _nenhum item encontrado_
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/components/data-export/AdvancedDataExporter.tsx` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useBIAdvanced.ts` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useRealtimeNotifications.ts` |
-| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/bulk-revalidate/index.ts` |
-| … +56 linhas — lista completa em `context.json` | | |
+| … +57 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

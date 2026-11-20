@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6ba0fb92ec` · branch `main` · 2026-11-20 16:16 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `df6e5c636b` · branch `main` · 2026-11-20 16:37 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -49,7 +49,8 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `contact_rapport_strategy` | Owner or admin can select contact_rapport_strategy | SELECT | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |  |
 | `contact_rapport_strategy` | Owner or admin can update contact_rapport_strategy | UPDATE | authenticated | permissive | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` | `((EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = contact_rapport_strategy.contact_id) AND (c.user_id = (select auth.uid()))))) OR has_role((select auth.uid()), 'admin'::app_role))` |
 | `follow_up_approvals_v2` | Users can manage their own follow-up approvals v2 | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
-| `neuro_behavioral_history` | Users can insert their own contact's neuro history | INSERT | public | permissive | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid()))))` | `(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))` |
+| `social_consent_audit` | Users can insert consent logs | INSERT | public | permissive |  | `((select auth.uid()) = user_id)` |
+| `social_consent_audit` | Users can view their own consent logs | SELECT | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `whatsapp_messages` | Users can manage their own whatsapp messages | ALL | public | permissive | `((select auth.uid()) = user_id)` |  |
 | `migration_password_reset_log` | mprl_admin_read | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` |  |
 | `profiles` | Users can view their own profile | SELECT | public | permissive | `((select auth.uid()) = id)` |  |
@@ -310,8 +311,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `company_social_media` | company_social_media_update | UPDATE | public | permissive | `true` |  |
 | `company_social_media` | company_social_media_delete | DELETE | public | permissive | `true` |  |
 | `contact_phones` | contact_phones_select | SELECT | public | permissive | `true` |  |
-| `contact_phones` | contact_phones_insert | INSERT | public | permissive |  | `true` |
-| … +951 linhas — lista completa em `context.json` | | | | | | |
+| … +950 linhas — lista completa em `context.json` | | | | | | |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 

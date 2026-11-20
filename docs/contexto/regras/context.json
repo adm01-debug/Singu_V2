@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "6ba0fb92ec9a1f2fc8589e377f4f018f810714c5",
+  "sha": "df6e5c636b7517205e871e22fc6605d674b46da1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 16:16 UTC",
+  "generated_at": "2026-11-20 16:37 UTC",
   "files_total": 3990,
   "code_files": 3518,
-  "code_lines": 472940
+  "code_lines": 473788
  },
  "version": "1.3.2",
- "facts_hash": "71dfb6cf37e35d35",
+ "facts_hash": "7eeb7323d0935f30",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -5318,20 +5318,6 @@
       "fk": "",
       "generated": "",
       "src": "supabase/migrations/20260417172946_13ae67cd-3e29-4bcb-9b52-c045f69cad82.sql"
-     },
-     {
-      "name": "suggested_date",
-      "type": "TIMESTAMP WITH TIME ZONE",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
-     },
-     {
-      "name": "script_context",
-      "type": "JSONB",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
      },
      {
       "name": "status",
@@ -15433,10 +15419,7 @@
     ],
     "constraints": [
      "constraint life_events_event_type_check CHECK (event_type IN ('birthday', 'anniversary', 'promotion', 'travel', 'family', 'achievement', 'other'))",
-     "constraint check_event_type CHECK (event_type IN ('birthday', 'anniversary', 'promotion', 'travel', 'family', 'achievement', 'other'))",
-     "constraint check_reminder_days CHECK (reminder_days_before >= 0)",
-     "constraint life_events_type_check CHECK (event_type IN ('birthday', 'anniversary', 'promotion', 'travel', 'family', 'achievement', 'other'))",
-     "constraint life_events_reminder_days_before_check CHECK (reminder_days_before >= 0)"
+     "constraint life_events_type_check CHECK (event_type IN ('birthday', 'anniversary', 'promotion', 'travel', 'family', 'achievement', 'other'))"
     ],
     "src": "supabase/migrations/20260111183305_a7554561-ed71-4a77-a1b5-2ad2436f5356.sql",
     "comment": "",
@@ -21317,70 +21300,74 @@
     "columns": [
      {
       "name": "id",
-      "type": "UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY",
+      "type": "uuid DEFAULT gen_random_uuid() NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
+      "src": "scripts/migration/ddl/02_tables.sql"
      },
      {
       "name": "contact_id",
-      "type": "UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE",
+      "type": "uuid NOT NULL",
       "fk": "contacts.id ON DELETE CASCADE",
       "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
+      "src": "scripts/migration/ddl/02_tables.sql"
      },
      {
       "name": "user_id",
-      "type": "UUID NOT NULL REFERENCES auth.users(id)",
+      "type": "uuid NOT NULL",
       "fk": "users.id",
       "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
+      "src": "scripts/migration/ddl/02_tables.sql"
      },
      {
       "name": "network",
-      "type": "TEXT NOT NULL",
+      "type": "text NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
+      "src": "scripts/migration/ddl/02_tables.sql"
      },
      {
       "name": "source_url",
-      "type": "TEXT",
+      "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
+      "src": "scripts/migration/ddl/02_tables.sql"
      },
      {
       "name": "consent_type",
-      "type": "TEXT DEFAULT 'public_data_osint'",
+      "type": "text DEFAULT 'public_data_osint'::text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
+      "src": "scripts/migration/ddl/02_tables.sql"
      },
      {
       "name": "ip_address",
-      "type": "TEXT",
+      "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
+      "src": "scripts/migration/ddl/02_tables.sql"
      },
      {
       "name": "user_agent",
-      "type": "TEXT",
+      "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
+      "src": "scripts/migration/ddl/02_tables.sql"
      },
      {
       "name": "created_at",
-      "type": "TIMESTAMP WITH TIME ZONE DEFAULT now()",
+      "type": "timestamp with time zone DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
+      "src": "scripts/migration/ddl/02_tables.sql"
      }
     ],
-    "constraints": [],
-    "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql",
+    "constraints": [
+     "CONSTRAINT social_consent_audit_pkey PRIMARY KEY (id)",
+     "constraint social_consent_audit_contact_id_fkey FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE",
+     "constraint social_consent_audit_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)"
+    ],
+    "src": "scripts/migration/ddl/02_tables.sql",
     "comment": "",
     "origin": "migration"
    },
@@ -48105,14 +48092,24 @@
     "src": "supabase/migrations/20260926200322_wave_rls_initplan_batch4.sql"
    },
    {
-    "name": "Users can insert their own contact's neuro history",
-    "table": "neuro_behavioral_history",
+    "name": "Users can insert consent logs",
+    "table": "social_consent_audit",
     "cmd": "INSERT",
     "roles": "public",
     "mode": "permissive",
-    "using": "(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid()))))",
-    "check": "(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))",
-    "src": "supabase/migrations/20260926200541_wave_rls_initplan_batch6.sql"
+    "using": "",
+    "check": "((select auth.uid()) = user_id)",
+    "src": "supabase/migrations/20260926200630_wave_rls_initplan_batch7.sql"
+   },
+   {
+    "name": "Users can view their own consent logs",
+    "table": "social_consent_audit",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "((select auth.uid()) = user_id)",
+    "check": "",
+    "src": "supabase/migrations/20260926200630_wave_rls_initplan_batch7.sql"
    },
    {
     "name": "Users can manage their own whatsapp messages",
@@ -56685,34 +56682,14 @@
     "src": "supabase/migrations/20260926200541_wave_rls_initplan_batch6.sql"
    },
    {
-    "name": "Users can view their own contact's neuro history",
+    "name": "Users can insert their own contact's neuro history",
     "table": "neuro_behavioral_history",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))",
-    "check": "EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid())",
-    "src": "supabase/migrations/20260926200541_wave_rls_initplan_batch6.sql"
-   },
-   {
-    "name": "Users can view their own consent logs",
-    "table": "social_consent_audit",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "((select auth.uid()) = user_id)",
-    "check": "",
-    "src": "supabase/migrations/20260926200630_wave_rls_initplan_batch7.sql"
-   },
-   {
-    "name": "Users can insert consent logs",
-    "table": "social_consent_audit",
     "cmd": "INSERT",
     "roles": "public",
     "mode": "permissive",
-    "using": "",
-    "check": "((select auth.uid()) = user_id)",
-    "src": "supabase/migrations/20260926200630_wave_rls_initplan_batch7.sql"
+    "using": "auth.uid() = user_id",
+    "check": "(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))",
+    "src": "supabase/migrations/20260926200541_wave_rls_initplan_batch6.sql"
    },
    {
     "name": "Users can manage their own contact automation settings",
@@ -83624,22 +83601,6 @@
     "unique": false,
     "where": "",
     "src": "supabase/migrations/20260511200945_d86acef4-cdef-4e40-8420-4610dffa9a89.sql"
-   },
-   {
-    "name": "idx_neuro_history_contact",
-    "table": "neuro_behavioral_history",
-    "columns": "contact_id",
-    "unique": false,
-    "where": "",
-    "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
-   },
-   {
-    "name": "idx_consent_audit_contact",
-    "table": "social_consent_audit",
-    "columns": "contact_id",
-    "unique": false,
-    "where": "",
-    "src": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql"
    },
    {
     "name": "idx_crm_consent_audit_contact_id",
@@ -112199,7 +112160,7 @@
   {
    "module": "supabase/migrations",
    "files": 1106,
-   "lines": 102736,
+   "lines": 103584,
    "tables": [
     "users"
    ],
@@ -136599,22 +136560,7 @@
    {
     "table": "life_events",
     "column": "(tabela)",
-    "rule": "constraint check_event_type CHECK (event_type IN ('birthday', 'anniversary', 'promotion', 'travel', 'family', 'achievement', 'other'))"
-   },
-   {
-    "table": "life_events",
-    "column": "(tabela)",
-    "rule": "constraint check_reminder_days CHECK (reminder_days_before >= 0)"
-   },
-   {
-    "table": "life_events",
-    "column": "(tabela)",
     "rule": "constraint life_events_type_check CHECK (event_type IN ('birthday', 'anniversary', 'promotion', 'travel', 'family', 'achievement', 'other'))"
-   },
-   {
-    "table": "life_events",
-    "column": "(tabela)",
-    "rule": "constraint life_events_reminder_days_before_check CHECK (reminder_days_before >= 0)"
    },
    {
     "table": "life_events_history",
@@ -139469,7 +139415,7 @@
    {
     "table": "social_consent_audit",
     "column": "id",
-    "rule": "PK; default gen_random_uuid()"
+    "rule": "default gen_random_uuid()"
    },
    {
     "table": "social_consent_audit",
@@ -139489,12 +139435,27 @@
    {
     "table": "social_consent_audit",
     "column": "consent_type",
-    "rule": "default 'public_data_osint'"
+    "rule": "default 'public_data_osint'::text"
    },
    {
     "table": "social_consent_audit",
     "column": "created_at",
     "rule": "default now()"
+   },
+   {
+    "table": "social_consent_audit",
+    "column": "(tabela)",
+    "rule": "CONSTRAINT social_consent_audit_pkey PRIMARY KEY (id)"
+   },
+   {
+    "table": "social_consent_audit",
+    "column": "(tabela)",
+    "rule": "constraint social_consent_audit_contact_id_fkey FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE"
+   },
+   {
+    "table": "social_consent_audit",
+    "column": "(tabela)",
+    "rule": "constraint social_consent_audit_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)"
    },
    {
     "table": "social_life_events",
@@ -183908,14 +183869,24 @@
     "src": "supabase/migrations/20260926200322_wave_rls_initplan_batch4.sql"
    },
    {
-    "name": "Users can insert their own contact's neuro history",
-    "table": "neuro_behavioral_history",
+    "name": "Users can insert consent logs",
+    "table": "social_consent_audit",
     "cmd": "INSERT",
     "roles": "public",
     "mode": "permissive",
-    "using": "(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid()))))",
-    "check": "(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))",
-    "src": "supabase/migrations/20260926200541_wave_rls_initplan_batch6.sql"
+    "using": "",
+    "check": "((select auth.uid()) = user_id)",
+    "src": "supabase/migrations/20260926200630_wave_rls_initplan_batch7.sql"
+   },
+   {
+    "name": "Users can view their own consent logs",
+    "table": "social_consent_audit",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "((select auth.uid()) = user_id)",
+    "check": "",
+    "src": "supabase/migrations/20260926200630_wave_rls_initplan_batch7.sql"
    },
    {
     "name": "Users can manage their own whatsapp messages",
@@ -192488,34 +192459,14 @@
     "src": "supabase/migrations/20260926200541_wave_rls_initplan_batch6.sql"
    },
    {
-    "name": "Users can view their own contact's neuro history",
+    "name": "Users can insert their own contact's neuro history",
     "table": "neuro_behavioral_history",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))",
-    "check": "EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid())",
-    "src": "supabase/migrations/20260926200541_wave_rls_initplan_batch6.sql"
-   },
-   {
-    "name": "Users can view their own consent logs",
-    "table": "social_consent_audit",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "((select auth.uid()) = user_id)",
-    "check": "",
-    "src": "supabase/migrations/20260926200630_wave_rls_initplan_batch7.sql"
-   },
-   {
-    "name": "Users can insert consent logs",
-    "table": "social_consent_audit",
     "cmd": "INSERT",
     "roles": "public",
     "mode": "permissive",
-    "using": "",
-    "check": "((select auth.uid()) = user_id)",
-    "src": "supabase/migrations/20260926200630_wave_rls_initplan_batch7.sql"
+    "using": "auth.uid() = user_id",
+    "check": "(EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))",
+    "src": "supabase/migrations/20260926200541_wave_rls_initplan_batch6.sql"
    },
    {
     "name": "Users can manage their own contact automation settings",
@@ -217688,11 +217639,9 @@
    },
    "neuro_behavioral_history": {
     "rls": "enabled",
-    "SELECT": [
-     "public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = (select auth.uid())))))"
-    ],
+    "SELECT": [],
     "INSERT": [
-     "public: (EXISTS ( SELECT 1 FROM contacts c WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = auth.uid()))))"
+     "public: auth.uid() = user_id"
     ],
     "UPDATE": [],
     "DELETE": []
@@ -220347,6 +220296,15 @@
     "issue": "front faz INSERT mas nenhuma política RLS permite INSERT → vai falhar/retornar vazio para usuários",
     "files": [
      "src/components/crm/CRMAutomationAuditLog.tsx"
+    ]
+   },
+   {
+    "table": "neuro_behavioral_history",
+    "issue": "front faz SELECT mas nenhuma política RLS permite SELECT → vai falhar/retornar vazio para usuários",
+    "files": [
+     "src/components/contact-detail/NeuroEvolutionChart.tsx",
+     "src/components/crm/behavior/NeuromarketingTimeline.tsx",
+     "src/hooks/useUnifiedTimeline.ts"
     ]
    },
    {
@@ -237600,6 +237558,15 @@
     "msg": "`crm_automation_reprocess_queue`: front faz INSERT mas nenhuma política RLS permite INSERT → vai falhar/retornar vazio para usuários",
     "where": [
      "src/components/crm/CRMAutomationAuditLog.tsx"
+    ]
+   },
+   {
+    "kind": "rls",
+    "msg": "`neuro_behavioral_history`: front faz SELECT mas nenhuma política RLS permite SELECT → vai falhar/retornar vazio para usuários",
+    "where": [
+     "src/components/contact-detail/NeuroEvolutionChart.tsx",
+     "src/components/crm/behavior/NeuromarketingTimeline.tsx",
+     "src/hooks/useUnifiedTimeline.ts"
     ]
    },
    {
@@ -299767,7 +299734,7 @@
   },
   "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql": {
    "path": "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql",
-   "lines": 41
+   "lines": 46
   },
   "supabase/migrations/20260110000000_baseline_tabelas_base.sql": {
    "path": "supabase/migrations/20260110000000_baseline_tabelas_base.sql",
@@ -299792,19 +299759,19 @@
   },
   "supabase/migrations/20260111010914_d0b0ab7c-31d9-4a05-99c5-bbd77320bdd8.sql": {
    "path": "supabase/migrations/20260111010914_d0b0ab7c-31d9-4a05-99c5-bbd77320bdd8.sql",
-   "lines": 46
+   "lines": 50
   },
   "supabase/migrations/20260111011309_3cf6eaa0-1797-40c2-88e3-ecf1283452bd.sql": {
    "path": "supabase/migrations/20260111011309_3cf6eaa0-1797-40c2-88e3-ecf1283452bd.sql",
-   "lines": 31
+   "lines": 34
   },
   "supabase/migrations/20260111013310_bda03f4c-4db1-499d-ad48-29fee85f88a0.sql": {
    "path": "supabase/migrations/20260111013310_bda03f4c-4db1-499d-ad48-29fee85f88a0.sql",
-   "lines": 46
+   "lines": 49
   },
   "supabase/migrations/20260111014845_9ce8adb5-376f-4e58-aa9e-da013720eb79.sql": {
    "path": "supabase/migrations/20260111014845_9ce8adb5-376f-4e58-aa9e-da013720eb79.sql",
-   "lines": 48
+   "lines": 51
   },
   "supabase/migrations/20260111021244_1393f33a-ed3d-437a-aef4-63f3d002af52.sql": {
    "path": "supabase/migrations/20260111021244_1393f33a-ed3d-437a-aef4-63f3d002af52.sql",
@@ -299812,23 +299779,23 @@
   },
   "supabase/migrations/20260111024043_59300762-e425-469a-9e34-35f8ba7ca1e3.sql": {
    "path": "supabase/migrations/20260111024043_59300762-e425-469a-9e34-35f8ba7ca1e3.sql",
-   "lines": 66
+   "lines": 74
   },
   "supabase/migrations/20260111130846_783060ff-715f-4433-b3e4-1c0ef5409533.sql": {
    "path": "supabase/migrations/20260111130846_783060ff-715f-4433-b3e4-1c0ef5409533.sql",
-   "lines": 172
+   "lines": 193
   },
   "supabase/migrations/20260111162422_931d8ea9-50f0-4793-b167-51ddb862bc64.sql": {
    "path": "supabase/migrations/20260111162422_931d8ea9-50f0-4793-b167-51ddb862bc64.sql",
-   "lines": 103
+   "lines": 109
   },
   "supabase/migrations/20260111164638_38eff8c4-2221-4951-83a6-fd9f3bef0574.sql": {
    "path": "supabase/migrations/20260111164638_38eff8c4-2221-4951-83a6-fd9f3bef0574.sql",
-   "lines": 45
+   "lines": 49
   },
   "supabase/migrations/20260111181309_0d3ec51c-0121-4afe-a635-9223c46d26aa.sql": {
    "path": "supabase/migrations/20260111181309_0d3ec51c-0121-4afe-a635-9223c46d26aa.sql",
-   "lines": 74,
+   "lines": 82,
    "side_effects": [
     "notify_on_critical",
     "notify_on_warning"
@@ -299836,47 +299803,47 @@
   },
   "supabase/migrations/20260111182124_be853165-a33d-4677-93dd-3ea9ebd15b45.sql": {
    "path": "supabase/migrations/20260111182124_be853165-a33d-4677-93dd-3ea9ebd15b45.sql",
-   "lines": 62
+   "lines": 68
   },
   "supabase/migrations/20260111183305_a7554561-ed71-4a77-a1b5-2ad2436f5356.sql": {
    "path": "supabase/migrations/20260111183305_a7554561-ed71-4a77-a1b5-2ad2436f5356.sql",
-   "lines": 126
+   "lines": 146
   },
   "supabase/migrations/20260111191156_64673555-e916-4e23-8303-a4c31c5fe62a.sql": {
    "path": "supabase/migrations/20260111191156_64673555-e916-4e23-8303-a4c31c5fe62a.sql",
-   "lines": 76
+   "lines": 86
   },
   "supabase/migrations/20260111220436_a5d10e89-1bd9-4e98-9367-d7e2dfa44a71.sql": {
    "path": "supabase/migrations/20260111220436_a5d10e89-1bd9-4e98-9367-d7e2dfa44a71.sql",
-   "lines": 7
+   "lines": 43
   },
   "supabase/migrations/20260111230911_1d2d2507-a502-4d61-80f4-bf0d61d668e2.sql": {
    "path": "supabase/migrations/20260111230911_1d2d2507-a502-4d61-80f4-bf0d61d668e2.sql",
-   "lines": 42
+   "lines": 45
   },
   "supabase/migrations/20260124175308_b3969198-77f8-4de4-abb9-1ef9475dd1d7.sql": {
    "path": "supabase/migrations/20260124175308_b3969198-77f8-4de4-abb9-1ef9475dd1d7.sql",
-   "lines": 145
+   "lines": 163
   },
   "supabase/migrations/20260124180842_985d82f1-0e31-443c-8d84-c7ab79bc4e10.sql": {
    "path": "supabase/migrations/20260124180842_985d82f1-0e31-443c-8d84-c7ab79bc4e10.sql",
-   "lines": 172
+   "lines": 178
   },
   "supabase/migrations/20260124184935_7462f0ba-52a4-4ded-a9a4-316446a8223f.sql": {
    "path": "supabase/migrations/20260124184935_7462f0ba-52a4-4ded-a9a4-316446a8223f.sql",
-   "lines": 204
+   "lines": 212
   },
   "supabase/migrations/20260125155610_a5f0704f-a377-42c0-8849-bc49b5254e28.sql": {
    "path": "supabase/migrations/20260125155610_a5f0704f-a377-42c0-8849-bc49b5254e28.sql",
-   "lines": 190
+   "lines": 209
   },
   "supabase/migrations/20260205224849_9096778e-9234-41f5-be21-6790b6a9e42d.sql": {
    "path": "supabase/migrations/20260205224849_9096778e-9234-41f5-be21-6790b6a9e42d.sql",
-   "lines": 49
+   "lines": 53
   },
   "supabase/migrations/20260305204447_d9a65b36-83ab-434e-9699-aac2341f11e1.sql": {
    "path": "supabase/migrations/20260305204447_d9a65b36-83ab-434e-9699-aac2341f11e1.sql",
-   "lines": 83
+   "lines": 91
   },
   "supabase/migrations/20260306190655_recreate_trigger_contact_phones_normalizar.sql": {
    "path": "supabase/migrations/20260306190655_recreate_trigger_contact_phones_normalizar.sql",
@@ -299960,7 +299927,7 @@
   },
   "supabase/migrations/20260309024746_83988e36-095a-4f11-8875-1992bccce2c2.sql": {
    "path": "supabase/migrations/20260309024746_83988e36-095a-4f11-8875-1992bccce2c2.sql",
-   "lines": 67
+   "lines": 71
   },
   "supabase/migrations/20260309024803_b85b4f96-cade-4d3e-a631-06c52da3228c.sql": {
    "path": "supabase/migrations/20260309024803_b85b4f96-cade-4d3e-a631-06c52da3228c.sql",
@@ -300006,7 +299973,7 @@
   },
   "supabase/migrations/20260314201306_fe0903bc-8d63-4141-86c9-a20941525b3f.sql": {
    "path": "supabase/migrations/20260314201306_fe0903bc-8d63-4141-86c9-a20941525b3f.sql",
-   "lines": 65
+   "lines": 79
   },
   "supabase/migrations/20260314201812_a721a7a7-e51e-4f7d-8f7a-acb690d68d75.sql": {
    "path": "supabase/migrations/20260314201812_a721a7a7-e51e-4f7d-8f7a-acb690d68d75.sql",
@@ -300014,7 +299981,7 @@
   },
   "supabase/migrations/20260314203053_cc715c39-87a7-4a90-8de7-ec50b3db3318.sql": {
    "path": "supabase/migrations/20260314203053_cc715c39-87a7-4a90-8de7-ec50b3db3318.sql",
-   "lines": 8
+   "lines": 9
   },
   "supabase/migrations/20260314204440_8523bdc6-d40a-4196-82cc-47fbb891b3ed.sql": {
    "path": "supabase/migrations/20260314204440_8523bdc6-d40a-4196-82cc-47fbb891b3ed.sql",
@@ -300058,11 +300025,11 @@
   },
   "supabase/migrations/20260317195052_91a69f5c-0ce8-4b32-be8d-cf6d9ccb9151.sql": {
    "path": "supabase/migrations/20260317195052_91a69f5c-0ce8-4b32-be8d-cf6d9ccb9151.sql",
-   "lines": 86
+   "lines": 93
   },
   "supabase/migrations/20260317213221_22e14932-8ba7-4c40-9374-6d7c077b4387.sql": {
    "path": "supabase/migrations/20260317213221_22e14932-8ba7-4c40-9374-6d7c077b4387.sql",
-   "lines": 35
+   "lines": 44
   },
   "supabase/migrations/20260317213904_b7db91ad-c01a-4755-b51f-34df9b789799.sql": {
    "path": "supabase/migrations/20260317213904_b7db91ad-c01a-4755-b51f-34df9b789799.sql",
@@ -300070,7 +300037,7 @@
   },
   "supabase/migrations/20260317221952_73349a79-72fb-4292-892f-fa03b2977368.sql": {
    "path": "supabase/migrations/20260317221952_73349a79-72fb-4292-892f-fa03b2977368.sql",
-   "lines": 6
+   "lines": 7
   },
   "supabase/migrations/20260319185913_create_pix_accounts_table.sql": {
    "path": "supabase/migrations/20260319185913_create_pix_accounts_table.sql",
@@ -300427,11 +300394,11 @@
   },
   "supabase/migrations/20260323120657_a64efbcc-88c7-46fd-b522-372e63edc23d.sql": {
    "path": "supabase/migrations/20260323120657_a64efbcc-88c7-46fd-b522-372e63edc23d.sql",
-   "lines": 27
+   "lines": 29
   },
   "supabase/migrations/20260323155106_4e591bd9-2acd-4735-a4f7-2f6008e560f8.sql": {
    "path": "supabase/migrations/20260323155106_4e591bd9-2acd-4735-a4f7-2f6008e560f8.sql",
-   "lines": 58
+   "lines": 59
   },
   "supabase/migrations/20260326115100_ensure_company_rfm_scores.sql": {
    "path": "supabase/migrations/20260326115100_ensure_company_rfm_scores.sql",
@@ -300866,7 +300833,7 @@
   },
   "supabase/migrations/20260405111318_2ac22269-ca81-4578-a660-bfacd831c1a5.sql": {
    "path": "supabase/migrations/20260405111318_2ac22269-ca81-4578-a660-bfacd831c1a5.sql",
-   "lines": 51
+   "lines": 56
   },
   "supabase/migrations/20260405111331_79236437-6f2d-4585-97c9-19986a622a6b.sql": {
    "path": "supabase/migrations/20260405111331_79236437-6f2d-4585-97c9-19986a622a6b.sql",
@@ -300874,7 +300841,7 @@
   },
   "supabase/migrations/20260405164938_6b232cf1-324d-4c28-88e7-3a339ac2d23e.sql": {
    "path": "supabase/migrations/20260405164938_6b232cf1-324d-4c28-88e7-3a339ac2d23e.sql",
-   "lines": 30
+   "lines": 34
   },
   "supabase/migrations/20260405205155_huggingface_improvements_m01_m40.sql": {
    "path": "supabase/migrations/20260405205155_huggingface_improvements_m01_m40.sql",
@@ -301994,7 +301961,7 @@
   },
   "supabase/migrations/20260411212046_c6a8c367-17de-4bf5-b40f-9c435f0288f4.sql": {
    "path": "supabase/migrations/20260411212046_c6a8c367-17de-4bf5-b40f-9c435f0288f4.sql",
-   "lines": 68
+   "lines": 73
   },
   "supabase/migrations/20260412151802_5e3b71db-9c2a-4886-a09f-795123523359.sql": {
    "path": "supabase/migrations/20260412151802_5e3b71db-9c2a-4886-a09f-795123523359.sql",
@@ -302010,35 +301977,35 @@
   },
   "supabase/migrations/20260415120833_e55f2b97-efe3-44bf-8627-f4fb7980a9d0.sql": {
    "path": "supabase/migrations/20260415120833_e55f2b97-efe3-44bf-8627-f4fb7980a9d0.sql",
-   "lines": 41
+   "lines": 44
   },
   "supabase/migrations/20260415120848_cd0e6e2d-0913-4a78-aeba-56acdb32308c.sql": {
    "path": "supabase/migrations/20260415120848_cd0e6e2d-0913-4a78-aeba-56acdb32308c.sql",
-   "lines": 8
+   "lines": 9
   },
   "supabase/migrations/20260415123115_30dcc732-370f-4502-9f70-69eb4b3c43bb.sql": {
    "path": "supabase/migrations/20260415123115_30dcc732-370f-4502-9f70-69eb4b3c43bb.sql",
-   "lines": 43
+   "lines": 47
   },
   "supabase/migrations/20260415123945_043eaf7c-59eb-49a1-b8f2-fe67fa10deba.sql": {
    "path": "supabase/migrations/20260415123945_043eaf7c-59eb-49a1-b8f2-fe67fa10deba.sql",
-   "lines": 32
+   "lines": 34
   },
   "supabase/migrations/20260415233816_bf8ddb84-c73e-4d23-a2b0-c3c0f8fdfcc8.sql": {
    "path": "supabase/migrations/20260415233816_bf8ddb84-c73e-4d23-a2b0-c3c0f8fdfcc8.sql",
-   "lines": 241
+   "lines": 267
   },
   "supabase/migrations/20260415235103_6d9257c6-3b63-4b05-a35a-384e81da7994.sql": {
    "path": "supabase/migrations/20260415235103_6d9257c6-3b63-4b05-a35a-384e81da7994.sql",
-   "lines": 45
+   "lines": 46
   },
   "supabase/migrations/20260415235526_4b3e9bdb-f907-4460-a16a-ffe6fa89f2c8.sql": {
    "path": "supabase/migrations/20260415235526_4b3e9bdb-f907-4460-a16a-ffe6fa89f2c8.sql",
-   "lines": 1
+   "lines": 7
   },
   "supabase/migrations/20260416005302_557a4633-8c05-46e2-9b4a-31f1341c9540.sql": {
    "path": "supabase/migrations/20260416005302_557a4633-8c05-46e2-9b4a-31f1341c9540.sql",
-   "lines": 152
+   "lines": 162
   },
   "supabase/migrations/20260416010445_9a3f6954-e1af-452c-88a4-c32d997a2865.sql": {
    "path": "supabase/migrations/20260416010445_9a3f6954-e1af-452c-88a4-c32d997a2865.sql",
@@ -302046,30 +302013,30 @@
   },
   "supabase/migrations/20260416010854_953141e5-cb6c-41fc-b6f3-4d6cd22f434d.sql": {
    "path": "supabase/migrations/20260416010854_953141e5-cb6c-41fc-b6f3-4d6cd22f434d.sql",
-   "lines": 73
+   "lines": 75
   },
   "supabase/migrations/20260416013658_9e847ea5-9b59-4ccf-8b48-631aa6cb2539.sql": {
    "path": "supabase/migrations/20260416013658_9e847ea5-9b59-4ccf-8b48-631aa6cb2539.sql",
-   "lines": 43
+   "lines": 47
   },
   "supabase/migrations/20260416025140_c0179f4c-b812-4504-8844-d344c80d5496.sql": {
    "path": "supabase/migrations/20260416025140_c0179f4c-b812-4504-8844-d344c80d5496.sql",
-   "lines": 40,
+   "lines": 44,
    "temporal": [
     "expires_at TIMESTAMPTZ NOT NULL DEFAULT (now() + interval '7 days'),"
    ]
   },
   "supabase/migrations/20260416104818_95605e2c-6ea2-4fb3-a68a-6940936df0d9.sql": {
    "path": "supabase/migrations/20260416104818_95605e2c-6ea2-4fb3-a68a-6940936df0d9.sql",
-   "lines": 36
+   "lines": 37
   },
   "supabase/migrations/20260416105042_5b9c5d2b-01c4-4835-9445-d798c67a0f5f.sql": {
    "path": "supabase/migrations/20260416105042_5b9c5d2b-01c4-4835-9445-d798c67a0f5f.sql",
-   "lines": 34
+   "lines": 37
   },
   "supabase/migrations/20260416105216_a793748a-fb4a-4903-b69e-2e220cf9070a.sql": {
    "path": "supabase/migrations/20260416105216_a793748a-fb4a-4903-b69e-2e220cf9070a.sql",
-   "lines": 35
+   "lines": 36
   },
   "supabase/migrations/20260416105501_572d12be-d75d-4844-98cb-1ef31eb0677b.sql": {
    "path": "supabase/migrations/20260416105501_572d12be-d75d-4844-98cb-1ef31eb0677b.sql",
@@ -302084,7 +302051,7 @@
   },
   "supabase/migrations/20260416105859_9f65dcc0-4b5c-473d-8e4d-344970052c9b.sql": {
    "path": "supabase/migrations/20260416105859_9f65dcc0-4b5c-473d-8e4d-344970052c9b.sql",
-   "lines": 44
+   "lines": 45
   },
   "supabase/migrations/20260416110201_c1adf6d7-f6b3-43f6-b96c-cb2ce89a4afd.sql": {
    "path": "supabase/migrations/20260416110201_c1adf6d7-f6b3-43f6-b96c-cb2ce89a4afd.sql",
@@ -302100,7 +302067,7 @@
   },
   "supabase/migrations/20260416110653_39ecceba-43ea-409e-8b70-b83376e9e57f.sql": {
    "path": "supabase/migrations/20260416110653_39ecceba-43ea-409e-8b70-b83376e9e57f.sql",
-   "lines": 36
+   "lines": 37
   },
   "supabase/migrations/20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql": {
    "path": "supabase/migrations/20260416180426_f322a48e-3a70-4ae3-a335-c840263904bf.sql",
@@ -302111,11 +302078,11 @@
   },
   "supabase/migrations/20260416181200_6d3557ca-038e-4e4c-b64e-bc3a706f929f.sql": {
    "path": "supabase/migrations/20260416181200_6d3557ca-038e-4e4c-b64e-bc3a706f929f.sql",
-   "lines": 129
+   "lines": 137
   },
   "supabase/migrations/20260416181618_cf783015-8b5c-48a9-8de2-acbf3d4a9fc0.sql": {
    "path": "supabase/migrations/20260416181618_cf783015-8b5c-48a9-8de2-acbf3d4a9fc0.sql",
-   "lines": 109
+   "lines": 122
   },
   "supabase/migrations/20260416181640_2dcc95b8-c008-418b-b57a-8356a6b6f6a9.sql": {
    "path": "supabase/migrations/20260416181640_2dcc95b8-c008-418b-b57a-8356a6b6f6a9.sql",
@@ -302127,7 +302094,7 @@
   },
   "supabase/migrations/20260416183013_d2d67858-eca4-40cf-b4ef-ed32abbfb00a.sql": {
    "path": "supabase/migrations/20260416183013_d2d67858-eca4-40cf-b4ef-ed32abbfb00a.sql",
-   "lines": 38
+   "lines": 41
   },
   "supabase/migrations/20260416184010_a98c1594-efe3-4433-b571-a1c4ba2aeb75.sql": {
    "path": "supabase/migrations/20260416184010_a98c1594-efe3-4433-b571-a1c4ba2aeb75.sql",
@@ -302135,11 +302102,11 @@
   },
   "supabase/migrations/20260416193918_2ab4e7fb-e095-44c9-aad7-00fcff26517d.sql": {
    "path": "supabase/migrations/20260416193918_2ab4e7fb-e095-44c9-aad7-00fcff26517d.sql",
-   "lines": 44
+   "lines": 49
   },
   "supabase/migrations/20260416200246_1d21f8b8-a860-4bc1-a79b-6bc3f319f128.sql": {
    "path": "supabase/migrations/20260416200246_1d21f8b8-a860-4bc1-a79b-6bc3f319f128.sql",
-   "lines": 87
+   "lines": 96
   },
   "supabase/migrations/20260416213501_create_singu_migration_staging.sql": {
    "path": "supabase/migrations/20260416213501_create_singu_migration_staging.sql",
@@ -302287,7 +302254,7 @@
   },
   "supabase/migrations/20260416224850_94abbf44-14e8-4a42-8402-1899595fe9c2.sql": {
    "path": "supabase/migrations/20260416224850_94abbf44-14e8-4a42-8402-1899595fe9c2.sql",
-   "lines": 69,
+   "lines": 74,
    "uses_service_role": true
   },
   "supabase/migrations/20260416230402_singu_triggers_batch_a.sql": {
@@ -302329,11 +302296,11 @@
   },
   "supabase/migrations/20260416232800_aca98b93-9185-4f06-99ae-dd1cd5abafff.sql": {
    "path": "supabase/migrations/20260416232800_aca98b93-9185-4f06-99ae-dd1cd5abafff.sql",
-   "lines": 150
+   "lines": 177
   },
   "supabase/migrations/20260416233829_14fcc07a-6773-4d98-aada-f86fa6a13e98.sql": {
    "path": "supabase/migrations/20260416233829_14fcc07a-6773-4d98-aada-f86fa6a13e98.sql",
-   "lines": 104
+   "lines": 119
   },
   "supabase/migrations/20260416234628_b8308aff-93ad-4104-a929-e8c91d30137c.sql": {
    "path": "supabase/migrations/20260416234628_b8308aff-93ad-4104-a929-e8c91d30137c.sql",
@@ -302341,22 +302308,22 @@
   },
   "supabase/migrations/20260416235533_dfd48be7-fc61-445f-ab80-f484fa00dc41.sql": {
    "path": "supabase/migrations/20260416235533_dfd48be7-fc61-445f-ab80-f484fa00dc41.sql",
-   "lines": 155,
+   "lines": 165,
    "errors": [
     ")),\n  title text NOT NULL,\n  description text NOT NULL,\n  severity text NOT NULL DEFAULT "
    ]
   },
   "supabase/migrations/20260417000551_4e28ff77-21ba-433e-8628-55418356e7b7.sql": {
    "path": "supabase/migrations/20260417000551_4e28ff77-21ba-433e-8628-55418356e7b7.sql",
-   "lines": 123
+   "lines": 139
   },
   "supabase/migrations/20260417001337_e3b9438d-89c9-4f77-a877-8feab6e00231.sql": {
    "path": "supabase/migrations/20260417001337_e3b9438d-89c9-4f77-a877-8feab6e00231.sql",
-   "lines": 167
+   "lines": 188
   },
   "supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql": {
    "path": "supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql",
-   "lines": 384,
+   "lines": 397,
    "rule_comments": [
     "INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1;",
     "FROM public.deal_room_activities WHERE room_id = _room.id ORDER BY created_at DESC LIMIT 50) a",
@@ -302368,7 +302335,7 @@
   },
   "supabase/migrations/20260417004129_55991427-8b13-48b9-a9ac-702dec46887e.sql": {
    "path": "supabase/migrations/20260417004129_55991427-8b13-48b9-a9ac-702dec46887e.sql",
-   "lines": 151,
+   "lines": 160,
    "side_effects": [
     "notify"
    ]
@@ -302403,7 +302370,7 @@
   },
   "supabase/migrations/20260417005023_6d2d8ea7-c2c8-4caa-88d3-9a3cc518bb31.sql": {
    "path": "supabase/migrations/20260417005023_6d2d8ea7-c2c8-4caa-88d3-9a3cc518bb31.sql",
-   "lines": 463,
+   "lines": 478,
    "rule_comments": [
     "*Urgência real**: \"Esse desconto é até sexta porque fechamos lote aqui\"',"
    ]
@@ -302418,7 +302385,7 @@
   },
   "supabase/migrations/20260417011613_40e57206-6feb-4bd8-a3f0-110e3a2cb8e1.sql": {
    "path": "supabase/migrations/20260417011613_40e57206-6feb-4bd8-a3f0-110e3a2cb8e1.sql",
-   "lines": 558,
+   "lines": 576,
    "rule_comments": [
     "INTO _form FROM public.forms WHERE slug = _slug AND is_published = true LIMIT 1;",
     "INTO _magnet FROM public.lead_magnets WHERE slug = _slug AND is_published = true LIMIT 1;"
@@ -302484,15 +302451,15 @@
   },
   "supabase/migrations/20260417105530_03a1c9e4-218e-4962-a9e5-145c3627b96c.sql": {
    "path": "supabase/migrations/20260417105530_03a1c9e4-218e-4962-a9e5-145c3627b96c.sql",
-   "lines": 175
+   "lines": 187
   },
   "supabase/migrations/20260417110650_9365a2d8-59c4-4df0-ae02-81957728485f.sql": {
    "path": "supabase/migrations/20260417110650_9365a2d8-59c4-4df0-ae02-81957728485f.sql",
-   "lines": 253
+   "lines": 276
   },
   "supabase/migrations/20260417115542_4bb5855a-4b86-464e-bc7f-8618bc3e8a67.sql": {
    "path": "supabase/migrations/20260417115542_4bb5855a-4b86-464e-bc7f-8618bc3e8a67.sql",
-   "lines": 160
+   "lines": 179
   },
   "supabase/migrations/20260417120525_77793804-e251-41ff-9378-c39b06b5145c.sql": {
    "path": "supabase/migrations/20260417120525_77793804-e251-41ff-9378-c39b06b5145c.sql",
@@ -302507,11 +302474,11 @@
   },
   "supabase/migrations/20260417162926_50432a8a-3b4a-448c-b413-4a6854e59406.sql": {
    "path": "supabase/migrations/20260417162926_50432a8a-3b4a-448c-b413-4a6854e59406.sql",
-   "lines": 41
+   "lines": 46
   },
   "supabase/migrations/20260417172946_13ae67cd-3e29-4bcb-9b52-c045f69cad82.sql": {
    "path": "supabase/migrations/20260417172946_13ae67cd-3e29-4bcb-9b52-c045f69cad82.sql",
-   "lines": 48
+   "lines": 52
   },
   "supabase/migrations/20260417193714_f801257e-ab8e-472d-a10a-488718c0c4d6.sql": {
    "path": "supabase/migrations/20260417193714_f801257e-ab8e-472d-a10a-488718c0c4d6.sql",
@@ -302519,14 +302486,14 @@
   },
   "supabase/migrations/20260417194749_5cd8905d-b137-47f4-8a00-ad3764f982c3.sql": {
    "path": "supabase/migrations/20260417194749_5cd8905d-b137-47f4-8a00-ad3764f982c3.sql",
-   "lines": 34,
+   "lines": 38,
    "temporal": [
     "expires_at TIMESTAMPTZ NOT NULL DEFAULT (now() + interval '5 minutes'),"
    ]
   },
   "supabase/migrations/20260417195323_b84a83b6-e3b8-4d98-be74-9c37a1bdfc21.sql": {
    "path": "supabase/migrations/20260417195323_b84a83b6-e3b8-4d98-be74-9c37a1bdfc21.sql",
-   "lines": 158,
+   "lines": 173,
    "side_effects": [
     "notify_critical_next_action"
    ]
@@ -302537,7 +302504,7 @@
   },
   "supabase/migrations/20260420115057_db3a83d8-00a2-415e-9126-17ba7ba6c80d.sql": {
    "path": "supabase/migrations/20260420115057_db3a83d8-00a2-415e-9126-17ba7ba6c80d.sql",
-   "lines": 115
+   "lines": 122
   },
   "supabase/migrations/20260420120250_19397a25-edf3-4939-854a-9d4fdc534f65.sql": {
    "path": "supabase/migrations/20260420120250_19397a25-edf3-4939-854a-9d4fdc534f65.sql",
@@ -302546,7 +302513,7 @@
   },
   "supabase/migrations/20260420121651_b36d3337-3bfe-4477-b87d-9b3a39c72679.sql": {
    "path": "supabase/migrations/20260420121651_b36d3337-3bfe-4477-b87d-9b3a39c72679.sql",
-   "lines": 166,
+   "lines": 170,
    "errors": [
     ",\n      "
    ],
@@ -302561,30 +302528,30 @@
   },
   "supabase/migrations/20260420122559_cbe81a51-13f5-42a6-8cd6-d892ca9f2028.sql": {
    "path": "supabase/migrations/20260420122559_cbe81a51-13f5-42a6-8cd6-d892ca9f2028.sql",
-   "lines": 131,
+   "lines": 133,
    "uses_service_role": true
   },
   "supabase/migrations/20260420125536_bb83da3a-a9cf-42d0-8a60-d1110c7a999f.sql": {
    "path": "supabase/migrations/20260420125536_bb83da3a-a9cf-42d0-8a60-d1110c7a999f.sql",
-   "lines": 32
+   "lines": 33
   },
   "supabase/migrations/20260420131635_46932a41-732e-4a34-83dc-ec6584ce4631.sql": {
    "path": "supabase/migrations/20260420131635_46932a41-732e-4a34-83dc-ec6584ce4631.sql",
-   "lines": 40
+   "lines": 44
   },
   "supabase/migrations/20260420131656_838cdcdc-3f02-4be8-8d54-f41f765252ea.sql": {
    "path": "supabase/migrations/20260420131656_838cdcdc-3f02-4be8-8d54-f41f765252ea.sql",
-   "lines": 6,
+   "lines": 7,
    "uses_service_role": true
   },
   "supabase/migrations/20260420161848_3c2ff3b2-701f-4b80-86e1-7f6e884e504a.sql": {
    "path": "supabase/migrations/20260420161848_3c2ff3b2-701f-4b80-86e1-7f6e884e504a.sql",
-   "lines": 15,
+   "lines": 17,
    "uses_service_role": true
   },
   "supabase/migrations/20260420162044_c08b185e-609a-470a-8546-5c93290e3b34.sql": {
    "path": "supabase/migrations/20260420162044_c08b185e-609a-470a-8546-5c93290e3b34.sql",
-   "lines": 75
+   "lines": 79
   },
   "supabase/migrations/20260420163323_5af39c4d-bd55-4bd4-963f-2b48aadf5e64.sql": {
    "path": "supabase/migrations/20260420163323_5af39c4d-bd55-4bd4-963f-2b48aadf5e64.sql",
@@ -302601,7 +302568,7 @@
   },
   "supabase/migrations/20260420211439_86dd2e38-5985-4465-9f0a-bb770155a426.sql": {
    "path": "supabase/migrations/20260420211439_86dd2e38-5985-4465-9f0a-bb770155a426.sql",
-   "lines": 57,
+   "lines": 58,
    "uses_service_role": true
   },
   "supabase/migrations/20260421115417_8822bf70-0a05-4ea5-afe2-8fc7b2e4af45.sql": {
@@ -302610,15 +302577,15 @@
   },
   "supabase/migrations/20260421141000_65788b86-514c-4614-95b8-c7fd0d6726c9.sql": {
    "path": "supabase/migrations/20260421141000_65788b86-514c-4614-95b8-c7fd0d6726c9.sql",
-   "lines": 42
+   "lines": 51
   },
   "supabase/migrations/20260421194349_c661667c-ea56-4174-b4c8-fdca4a86093b.sql": {
    "path": "supabase/migrations/20260421194349_c661667c-ea56-4174-b4c8-fdca4a86093b.sql",
-   "lines": 47
+   "lines": 51
   },
   "supabase/migrations/20260422122247_0cef7762-004b-44dd-b43d-fa51b631f00f.sql": {
    "path": "supabase/migrations/20260422122247_0cef7762-004b-44dd-b43d-fa51b631f00f.sql",
-   "lines": 29
+   "lines": 32
   },
   "supabase/migrations/20260422165633_c28b4fde-cb8f-4e41-b247-bdb2e17199de.sql": {
    "path": "supabase/migrations/20260422165633_c28b4fde-cb8f-4e41-b247-bdb2e17199de.sql",
@@ -302630,11 +302597,11 @@
   },
   "supabase/migrations/20260425112649_c82c364c-c465-4a9a-b57c-08ce2baa2e9f.sql": {
    "path": "supabase/migrations/20260425112649_c82c364c-c465-4a9a-b57c-08ce2baa2e9f.sql",
-   "lines": 50
+   "lines": 55
   },
   "supabase/migrations/20260425114641_3c164f23-70c4-454f-a278-2bab6a9aaa0d.sql": {
    "path": "supabase/migrations/20260425114641_3c164f23-70c4-454f-a278-2bab6a9aaa0d.sql",
-   "lines": 37
+   "lines": 42
   },
   "supabase/migrations/20260425172007_add_status_enum_webhook_events_does_not_apply_here.sql": {
    "path": "supabase/migrations/20260425172007_add_status_enum_webhook_events_does_not_apply_here.sql",
@@ -302656,7 +302623,7 @@
   },
   "supabase/migrations/20260507194929_8a897147-414a-4dff-ad62-bf627f7d8dad.sql": {
    "path": "supabase/migrations/20260507194929_8a897147-414a-4dff-ad62-bf627f7d8dad.sql",
-   "lines": 32
+   "lines": 39
   },
   "supabase/migrations/20260509105231_7512f767-3ce6-4daa-b9ac-f58967e8bf26.sql": {
    "path": "supabase/migrations/20260509105231_7512f767-3ce6-4daa-b9ac-f58967e8bf26.sql",
@@ -302685,19 +302652,19 @@
   },
   "supabase/migrations/20260509115357_40a94b7c-1a20-49cd-b0a7-53f4d35ab3af.sql": {
    "path": "supabase/migrations/20260509115357_40a94b7c-1a20-49cd-b0a7-53f4d35ab3af.sql",
-   "lines": 54
+   "lines": 59
   },
   "supabase/migrations/20260509115734_ef006f0a-d94e-43d2-9b73-a1760e17b259.sql": {
    "path": "supabase/migrations/20260509115734_ef006f0a-d94e-43d2-9b73-a1760e17b259.sql",
-   "lines": 59
+   "lines": 62
   },
   "supabase/migrations/20260509120024_229eca8e-97fb-4c6a-8a2a-bdc7070c4592.sql": {
    "path": "supabase/migrations/20260509120024_229eca8e-97fb-4c6a-8a2a-bdc7070c4592.sql",
-   "lines": 73
+   "lines": 79
   },
   "supabase/migrations/20260509123119_8d1dd77f-3e2d-412e-8e20-0eff30420cbc.sql": {
    "path": "supabase/migrations/20260509123119_8d1dd77f-3e2d-412e-8e20-0eff30420cbc.sql",
-   "lines": 31
+   "lines": 32
   },
   "supabase/migrations/20260509124633_95a0afe5-d4ce-4cab-8d2a-631b77a66e23.sql": {
    "path": "supabase/migrations/20260509124633_95a0afe5-d4ce-4cab-8d2a-631b77a66e23.sql",
@@ -302713,7 +302680,7 @@
   },
   "supabase/migrations/20260509152256_96488346-886a-44cc-90bb-48df5bc85660.sql": {
    "path": "supabase/migrations/20260509152256_96488346-886a-44cc-90bb-48df5bc85660.sql",
-   "lines": 76
+   "lines": 81
   },
   "supabase/migrations/20260509152315_75cd6994-1647-4d5d-9160-a321018f1ffa.sql": {
    "path": "supabase/migrations/20260509152315_75cd6994-1647-4d5d-9160-a321018f1ffa.sql",
@@ -302721,7 +302688,7 @@
   },
   "supabase/migrations/20260509152638_b3581ab3-1770-47d0-a2f7-73f0581a78e1.sql": {
    "path": "supabase/migrations/20260509152638_b3581ab3-1770-47d0-a2f7-73f0581a78e1.sql",
-   "lines": 83
+   "lines": 89
   },
   "supabase/migrations/20260509154007_718149db-b920-48fb-8d2d-677c9f437fa1.sql": {
    "path": "supabase/migrations/20260509154007_718149db-b920-48fb-8d2d-677c9f437fa1.sql",
@@ -302729,11 +302696,11 @@
   },
   "supabase/migrations/20260509170538_45b95e4b-470c-4067-af3c-7502d9b60532.sql": {
    "path": "supabase/migrations/20260509170538_45b95e4b-470c-4067-af3c-7502d9b60532.sql",
-   "lines": 125
+   "lines": 126
   },
   "supabase/migrations/20260509172946_b942797e-e913-40cd-8d27-9adb110a2adf.sql": {
    "path": "supabase/migrations/20260509172946_b942797e-e913-40cd-8d27-9adb110a2adf.sql",
-   "lines": 159,
+   "lines": 160,
    "status_values": [
     {
      "field": "v_stage",
@@ -302767,7 +302734,7 @@
   },
   "supabase/migrations/20260509174220_bc03af22-cc70-44a5-9149-dbfcbc31a350.sql": {
    "path": "supabase/migrations/20260509174220_bc03af22-cc70-44a5-9149-dbfcbc31a350.sql",
-   "lines": 90
+   "lines": 92
   },
   "supabase/migrations/20260509174414_1a93f861-94c2-4e08-80c5-0ac7aa631af9.sql": {
    "path": "supabase/migrations/20260509174414_1a93f861-94c2-4e08-80c5-0ac7aa631af9.sql",
@@ -302782,7 +302749,7 @@
   },
   "supabase/migrations/20260509180917_b4306156-1d1c-4efd-b41f-571c86e0d338.sql": {
    "path": "supabase/migrations/20260509180917_b4306156-1d1c-4efd-b41f-571c86e0d338.sql",
-   "lines": 100
+   "lines": 101
   },
   "supabase/migrations/20260509181659_1ce9d81b-4945-4553-aba3-535b84fd5841.sql": {
    "path": "supabase/migrations/20260509181659_1ce9d81b-4945-4553-aba3-535b84fd5841.sql",
@@ -302790,11 +302757,11 @@
   },
   "supabase/migrations/20260509182655_a5c2040f-a8c8-4762-98a2-5f52795cff5d.sql": {
    "path": "supabase/migrations/20260509182655_a5c2040f-a8c8-4762-98a2-5f52795cff5d.sql",
-   "lines": 90
+   "lines": 97
   },
   "supabase/migrations/20260509182935_407cd40a-4165-45a2-804f-cb193bd77b94.sql": {
    "path": "supabase/migrations/20260509182935_407cd40a-4165-45a2-804f-cb193bd77b94.sql",
-   "lines": 38
+   "lines": 41
   },
   "supabase/migrations/20260509183034_00f06abb-0610-4e38-9083-9d1534ebda7e.sql": {
    "path": "supabase/migrations/20260509183034_00f06abb-0610-4e38-9083-9d1534ebda7e.sql",
@@ -302802,11 +302769,11 @@
   },
   "supabase/migrations/20260509183503_41efba5a-8f2d-4af9-b26f-d633454b3969.sql": {
    "path": "supabase/migrations/20260509183503_41efba5a-8f2d-4af9-b26f-d633454b3969.sql",
-   "lines": 45
+   "lines": 47
   },
   "supabase/migrations/20260509183909_89987358-c50f-4cdb-8bb3-d92c70b6a0c4.sql": {
    "path": "supabase/migrations/20260509183909_89987358-c50f-4cdb-8bb3-d92c70b6a0c4.sql",
-   "lines": 42
+   "lines": 44
   },
   "supabase/migrations/20260509184028_891f643e-bbbf-48fb-bb2d-a52c5f22ab78.sql": {
    "path": "supabase/migrations/20260509184028_891f643e-bbbf-48fb-bb2d-a52c5f22ab78.sql",
@@ -302814,11 +302781,11 @@
   },
   "supabase/migrations/20260509184111_637bda7b-3924-43cf-80cb-cc4d3094c09d.sql": {
    "path": "supabase/migrations/20260509184111_637bda7b-3924-43cf-80cb-cc4d3094c09d.sql",
-   "lines": 73
+   "lines": 74
   },
   "supabase/migrations/20260509184422_a64513bc-1ffa-4b71-962c-a34316211387.sql": {
    "path": "supabase/migrations/20260509184422_a64513bc-1ffa-4b71-962c-a34316211387.sql",
-   "lines": 40
+   "lines": 42
   },
   "supabase/migrations/20260509184605_f72b06c7-eaaf-4267-98be-3defd15ed223.sql": {
    "path": "supabase/migrations/20260509184605_f72b06c7-eaaf-4267-98be-3defd15ed223.sql",
@@ -302834,7 +302801,7 @@
   },
   "supabase/migrations/20260510111850_c4f05e17-5aaf-4034-924b-1002fab6643d.sql": {
    "path": "supabase/migrations/20260510111850_c4f05e17-5aaf-4034-924b-1002fab6643d.sql",
-   "lines": 86
+   "lines": 101
   },
   "supabase/migrations/20260510112012_611ae0f0-86ec-4530-afc7-ae325729e024.sql": {
    "path": "supabase/migrations/20260510112012_611ae0f0-86ec-4530-afc7-ae325729e024.sql",
@@ -302850,15 +302817,15 @@
   },
   "supabase/migrations/20260511160219_72bfccf7-6f3a-4a44-a83e-2915c3be4c20.sql": {
    "path": "supabase/migrations/20260511160219_72bfccf7-6f3a-4a44-a83e-2915c3be4c20.sql",
-   "lines": 3
+   "lines": 9
   },
   "supabase/migrations/20260511171829_49dbb797-809f-41c0-a69c-83762df523ee.sql": {
    "path": "supabase/migrations/20260511171829_49dbb797-809f-41c0-a69c-83762df523ee.sql",
-   "lines": 48
+   "lines": 52
   },
   "supabase/migrations/20260511172410_0b23f30a-e264-4a5d-85c5-2e1bbcd4f576.sql": {
    "path": "supabase/migrations/20260511172410_0b23f30a-e264-4a5d-85c5-2e1bbcd4f576.sql",
-   "lines": 64
+   "lines": 66
   },
   "supabase/migrations/20260511182642_76dd53f7-1dfa-48d0-b05b-83c96c1a01ea.sql": {
    "path": "supabase/migrations/20260511182642_76dd53f7-1dfa-48d0-b05b-83c96c1a01ea.sql",
@@ -302870,15 +302837,15 @@
   },
   "supabase/migrations/20260511184817_6fcb48d7-fb1b-460e-b8d1-be59fe1babd7.sql": {
    "path": "supabase/migrations/20260511184817_6fcb48d7-fb1b-460e-b8d1-be59fe1babd7.sql",
-   "lines": 43
+   "lines": 44
   },
   "supabase/migrations/20260511184933_6a317244-47fb-4f40-bcef-124087073da5.sql": {
    "path": "supabase/migrations/20260511184933_6a317244-47fb-4f40-bcef-124087073da5.sql",
-   "lines": 43
+   "lines": 44
   },
   "supabase/migrations/20260511185007_82ddf7eb-7630-4eec-a42c-a3b38828f0dc.sql": {
    "path": "supabase/migrations/20260511185007_82ddf7eb-7630-4eec-a42c-a3b38828f0dc.sql",
-   "lines": 43
+   "lines": 44
   },
   "supabase/migrations/20260511185111_1b0fce9e-8228-40ff-9451-7273de1d925f.sql": {
    "path": "supabase/migrations/20260511185111_1b0fce9e-8228-40ff-9451-7273de1d925f.sql",
@@ -302886,7 +302853,7 @@
   },
   "supabase/migrations/20260511185221_db922848-ea45-492c-b3f4-f40bf8f2b6db.sql": {
    "path": "supabase/migrations/20260511185221_db922848-ea45-492c-b3f4-f40bf8f2b6db.sql",
-   "lines": 65
+   "lines": 70
   },
   "supabase/migrations/20260511185450_36a92af7-3123-4180-b5cd-32b6964463dd.sql": {
    "path": "supabase/migrations/20260511185450_36a92af7-3123-4180-b5cd-32b6964463dd.sql",
@@ -302894,11 +302861,11 @@
   },
   "supabase/migrations/20260511185757_4c83c69c-de91-439f-9c13-7b92d4c14142.sql": {
    "path": "supabase/migrations/20260511185757_4c83c69c-de91-439f-9c13-7b92d4c14142.sql",
-   "lines": 83
+   "lines": 84
   },
   "supabase/migrations/20260511190139_affdb8bf-798b-4f2b-bf9c-f8c9898717e0.sql": {
    "path": "supabase/migrations/20260511190139_affdb8bf-798b-4f2b-bf9c-f8c9898717e0.sql",
-   "lines": 74
+   "lines": 78
   },
   "supabase/migrations/20260511190722_390b5ee7-617b-489a-a007-6c4e386e4cac.sql": {
    "path": "supabase/migrations/20260511190722_390b5ee7-617b-489a-a007-6c4e386e4cac.sql",
@@ -302930,23 +302897,23 @@
   },
   "supabase/migrations/20260511200945_d86acef4-cdef-4e40-8420-4610dffa9a89.sql": {
    "path": "supabase/migrations/20260511200945_d86acef4-cdef-4e40-8420-4610dffa9a89.sql",
-   "lines": 44
+   "lines": 45
   },
   "supabase/migrations/20260511204700_6ffd9ae7-4ef1-4244-88ba-babdb95dbba0.sql": {
    "path": "supabase/migrations/20260511204700_6ffd9ae7-4ef1-4244-88ba-babdb95dbba0.sql",
-   "lines": 88
+   "lines": 97
   },
   "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql": {
    "path": "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql",
-   "lines": 60
+   "lines": 62
   },
   "supabase/migrations/20260511211501_21bdb968-dc70-4e04-9c18-4a69e9551cca.sql": {
    "path": "supabase/migrations/20260511211501_21bdb968-dc70-4e04-9c18-4a69e9551cca.sql",
-   "lines": 35
+   "lines": 36
   },
   "supabase/migrations/20260512103942_3651ffbb-f3e3-45ee-8592-a28934e55df6.sql": {
    "path": "supabase/migrations/20260512103942_3651ffbb-f3e3-45ee-8592-a28934e55df6.sql",
-   "lines": 34
+   "lines": 37
   },
   "supabase/migrations/20260512104213_27c60b18-b251-47bd-8606-97b9a5d50223.sql": {
    "path": "supabase/migrations/20260512104213_27c60b18-b251-47bd-8606-97b9a5d50223.sql",
@@ -302970,24 +302937,24 @@
   },
   "supabase/migrations/20260512121618_b41875e6-c8b3-41e4-91e7-3085de33a31d.sql": {
    "path": "supabase/migrations/20260512121618_b41875e6-c8b3-41e4-91e7-3085de33a31d.sql",
-   "lines": 36
+   "lines": 38
   },
   "supabase/migrations/20260512121726_0afc1e96-70d1-4cc5-8798-450a489b420c.sql": {
    "path": "supabase/migrations/20260512121726_0afc1e96-70d1-4cc5-8798-450a489b420c.sql",
-   "lines": 27
+   "lines": 28
   },
   "supabase/migrations/20260512122055_69277fab-87fb-40a6-bbec-1f520a0677ce.sql": {
    "path": "supabase/migrations/20260512122055_69277fab-87fb-40a6-bbec-1f520a0677ce.sql",
-   "lines": 43
+   "lines": 45
   },
   "supabase/migrations/20260512124918_c4be5da8-3ce2-4822-90dc-2194d3f8b75a.sql": {
    "path": "supabase/migrations/20260512124918_c4be5da8-3ce2-4822-90dc-2194d3f8b75a.sql",
-   "lines": 80,
+   "lines": 84,
    "uses_service_role": true
   },
   "supabase/migrations/20260512132827_7f60209b-d5d6-49bb-80d5-117e8298aea5.sql": {
    "path": "supabase/migrations/20260512132827_7f60209b-d5d6-49bb-80d5-117e8298aea5.sql",
-   "lines": 59
+   "lines": 63
   },
   "supabase/migrations/20260512135658_341c8f6d-6067-44ca-8add-d3c167140f53.sql": {
    "path": "supabase/migrations/20260512135658_341c8f6d-6067-44ca-8add-d3c167140f53.sql",
@@ -302995,7 +302962,7 @@
   },
   "supabase/migrations/20260512151247_371fdb19-5fa5-459c-87d3-7bbac407fd35.sql": {
    "path": "supabase/migrations/20260512151247_371fdb19-5fa5-459c-87d3-7bbac407fd35.sql",
-   "lines": 53
+   "lines": 55
   },
   "supabase/migrations/20260512162254_14f1c89e-03c0-4320-85ab-15c199fa3d1a.sql": {
    "path": "supabase/migrations/20260512162254_14f1c89e-03c0-4320-85ab-15c199fa3d1a.sql",
@@ -303011,7 +302978,7 @@
   },
   "supabase/migrations/20260512175533_60e5a2d8-6ef2-428b-8a15-4a3c550f2003.sql": {
    "path": "supabase/migrations/20260512175533_60e5a2d8-6ef2-428b-8a15-4a3c550f2003.sql",
-   "lines": 128
+   "lines": 132
   },
   "supabase/migrations/20260512184042_fccf5358-81d7-4eae-9083-d92055f150d1.sql": {
    "path": "supabase/migrations/20260512184042_fccf5358-81d7-4eae-9083-d92055f150d1.sql",
@@ -303059,7 +303026,7 @@
   },
   "supabase/migrations/20260513143103_c834a03b-5b1e-41c7-a213-eea176782e00.sql": {
    "path": "supabase/migrations/20260513143103_c834a03b-5b1e-41c7-a213-eea176782e00.sql",
-   "lines": 61
+   "lines": 63
   },
   "supabase/migrations/20260513143152_9983253d-7e38-4999-9527-7c674cb1172c.sql": {
    "path": "supabase/migrations/20260513143152_9983253d-7e38-4999-9527-7c674cb1172c.sql",
@@ -303098,7 +303065,7 @@
   },
   "supabase/migrations/20260522202232_758fea13-f74f-474c-80f0-ad05dfcdceca.sql": {
    "path": "supabase/migrations/20260522202232_758fea13-f74f-474c-80f0-ad05dfcdceca.sql",
-   "lines": 30
+   "lines": 31
   },
   "supabase/migrations/20260607145537_fix_asia_hg_batch_int_cast.sql": {
    "path": "supabase/migrations/20260607145537_fix_asia_hg_batch_int_cast.sql",
@@ -303200,7 +303167,7 @@
   },
   "supabase/migrations/20260711145839_f975d6cc-cb77-4466-b7f5-23fff3ca9f06.sql": {
    "path": "supabase/migrations/20260711145839_f975d6cc-cb77-4466-b7f5-23fff3ca9f06.sql",
-   "lines": 145,
+   "lines": 156,
    "uses_service_role": true
   },
   "supabase/migrations/20260711145934_2a6e17ce-fe99-4c3b-8753-396c60229448.sql": {
@@ -303224,7 +303191,7 @@
   },
   "supabase/migrations/20260712211918_2c56b265-da7b-4c01-85d0-4e1e04306995.sql": {
    "path": "supabase/migrations/20260712211918_2c56b265-da7b-4c01-85d0-4e1e04306995.sql",
-   "lines": 4
+   "lines": 5
   },
   "supabase/migrations/20260712214843_b232442d-1b58-4dc7-b610-25efd0eef9a7.sql": {
    "path": "supabase/migrations/20260712214843_b232442d-1b58-4dc7-b610-25efd0eef9a7.sql",
@@ -303233,7 +303200,7 @@
   },
   "supabase/migrations/20260712215719_930fd99a-437f-423c-a6ce-9a3c5c065106.sql": {
    "path": "supabase/migrations/20260712215719_930fd99a-437f-423c-a6ce-9a3c5c065106.sql",
-   "lines": 150,
+   "lines": 156,
    "uses_service_role": true
   },
   "supabase/migrations/20260712215737_68e7d807-8006-458b-bd45-99f30a9ad26c.sql": {
@@ -303250,17 +303217,17 @@
   },
   "supabase/migrations/20260712221610_4c6bd7d1-8599-4798-a055-a56e9e3f0f5c.sql": {
    "path": "supabase/migrations/20260712221610_4c6bd7d1-8599-4798-a055-a56e9e3f0f5c.sql",
-   "lines": 82,
+   "lines": 86,
    "uses_service_role": true
   },
   "supabase/migrations/20260712221944_e2a7b947-777b-4eaf-8ea4-fe2e542d605e.sql": {
    "path": "supabase/migrations/20260712221944_e2a7b947-777b-4eaf-8ea4-fe2e542d605e.sql",
-   "lines": 40,
+   "lines": 41,
    "uses_service_role": true
   },
   "supabase/migrations/20260712222427_ee56845c-c59a-4009-9501-0aebddd7412c.sql": {
    "path": "supabase/migrations/20260712222427_ee56845c-c59a-4009-9501-0aebddd7412c.sql",
-   "lines": 48,
+   "lines": 52,
    "uses_service_role": true
   },
   "supabase/migrations/20260712223208_00845b35-c2fa-4378-b2e8-2649a03c4c92.sql": {
@@ -303274,7 +303241,7 @@
   },
   "supabase/migrations/20260712223938_a84b0840-83e9-41b3-ad97-a7c3cbd31c7c.sql": {
    "path": "supabase/migrations/20260712223938_a84b0840-83e9-41b3-ad97-a7c3cbd31c7c.sql",
-   "lines": 14
+   "lines": 15
   },
   "supabase/migrations/20260712224050_0a56b8ef-d1d1-43ae-b7f8-52af074e62cf.sql": {
    "path": "supabase/migrations/20260712224050_0a56b8ef-d1d1-43ae-b7f8-52af074e62cf.sql",
@@ -303357,7 +303324,7 @@
   },
   "supabase/migrations/20260715190421_5c51ba03-2b4a-4802-9896-a835854471e8.sql": {
    "path": "supabase/migrations/20260715190421_5c51ba03-2b4a-4802-9896-a835854471e8.sql",
-   "lines": 54,
+   "lines": 56,
    "uses_service_role": true
   },
   "supabase/migrations/20260717133758_622b2a1a-0506-4edf-9804-503573980eeb.sql": {
@@ -303486,7 +303453,7 @@
   },
   "supabase/migrations/20260720000023_create_phantom_tables.sql": {
    "path": "supabase/migrations/20260720000023_create_phantom_tables.sql",
-   "lines": 134
+   "lines": 145
   },
   "supabase/migrations/20260720000024_cron_notification_indexes.sql": {
    "path": "supabase/migrations/20260720000024_cron_notification_indexes.sql",
@@ -303564,7 +303531,7 @@
   },
   "supabase/migrations/20260721000031_fix_functional_bugs_rls.sql": {
    "path": "supabase/migrations/20260721000031_fix_functional_bugs_rls.sql",
-   "lines": 50
+   "lines": 53
   },
   "supabase/migrations/20260721000032_fix_auth_rls_initplan.sql": {
    "path": "supabase/migrations/20260721000032_fix_auth_rls_initplan.sql",
@@ -303802,7 +303769,7 @@
   },
   "supabase/migrations/20260721000081_fix_push_subscriptions_and_shared_fields.sql": {
    "path": "supabase/migrations/20260721000081_fix_push_subscriptions_and_shared_fields.sql",
-   "lines": 109
+   "lines": 114
   },
   "supabase/migrations/20260721000082_idx_user_id_rls_tables.sql": {
    "path": "supabase/migrations/20260721000082_idx_user_id_rls_tables.sql",
@@ -304158,7 +304125,7 @@
   },
   "supabase/migrations/20260723112943_04c3b77d-d9d6-4d99-bbf5-3840c2f21707.sql": {
    "path": "supabase/migrations/20260723112943_04c3b77d-d9d6-4d99-bbf5-3840c2f21707.sql",
-   "lines": 129,
+   "lines": 132,
    "uses_service_role": true
   },
   "supabase/migrations/20260723120839_8d1857f8-929d-453c-9f9b-9ede9fef5d41.sql": {
@@ -304195,7 +304162,7 @@
   },
   "supabase/migrations/20260723132318_35e7a45e-dd21-4ae8-8880-f6462f12ff5c.sql": {
    "path": "supabase/migrations/20260723132318_35e7a45e-dd21-4ae8-8880-f6462f12ff5c.sql",
-   "lines": 166,
+   "lines": 173,
    "rule_comments": [
     "INTO _room FROM public.deal_rooms WHERE share_token = _token AND share_enabled = true LIMIT 1;",
     "FROM public.deal_room_activities WHERE room_id = _room.id ORDER BY created_at DESC LIMIT 50) a",
@@ -304228,7 +304195,7 @@
   },
   "supabase/migrations/20260723152549_8bc9afc3-f45a-4520-a892-d019c4d56cc4.sql": {
    "path": "supabase/migrations/20260723152549_8bc9afc3-f45a-4520-a892-d019c4d56cc4.sql",
-   "lines": 95,
+   "lines": 96,
    "uses_service_role": true
   },
   "supabase/migrations/20260723152932_9ebcb761-6420-4de9-8bed-a2faa40d9998.sql": {
@@ -304463,7 +304430,7 @@
   },
   "supabase/migrations/20260925100043_t217_fecha_escrita_users_public_e_admin_update.sql": {
    "path": "supabase/migrations/20260925100043_t217_fecha_escrita_users_public_e_admin_update.sql",
-   "lines": 27
+   "lines": 30
   },
   "supabase/migrations/20260925100600_t218_views_rodizio_usam_cache_segmento.sql": {
    "path": "supabase/migrations/20260925100600_t218_views_rodizio_usam_cache_segmento.sql",
@@ -304903,7 +304870,7 @@
   },
   "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql": {
    "path": "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql",
-   "lines": 4
+   "lines": 9
   },
   "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql": {
    "path": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
@@ -305652,10 +305619,172 @@
   }
  },
  "git": {
-  "sha": "6ba0fb92ec9a1f2fc8589e377f4f018f810714c5",
+  "sha": "df6e5c636b7517205e871e22fc6605d674b46da1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "df6e5c6",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "fix(migrations): torna 154 migrations idempotentes para reaplicação no preview (#284)",
+    "files": [
+     "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql",
+     "supabase/migrations/20260111010914_d0b0ab7c-31d9-4a05-99c5-bbd77320bdd8.sql",
+     "supabase/migrations/20260111011309_3cf6eaa0-1797-40c2-88e3-ecf1283452bd.sql",
+     "supabase/migrations/20260111013310_bda03f4c-4db1-499d-ad48-29fee85f88a0.sql",
+     "supabase/migrations/20260111014845_9ce8adb5-376f-4e58-aa9e-da013720eb79.sql",
+     "supabase/migrations/20260111024043_59300762-e425-469a-9e34-35f8ba7ca1e3.sql",
+     "supabase/migrations/20260111130846_783060ff-715f-4433-b3e4-1c0ef5409533.sql",
+     "supabase/migrations/20260111162422_931d8ea9-50f0-4793-b167-51ddb862bc64.sql",
+     "supabase/migrations/20260111164638_38eff8c4-2221-4951-83a6-fd9f3bef0574.sql",
+     "supabase/migrations/20260111181309_0d3ec51c-0121-4afe-a635-9223c46d26aa.sql",
+     "supabase/migrations/20260111182124_be853165-a33d-4677-93dd-3ea9ebd15b45.sql",
+     "supabase/migrations/20260111183305_a7554561-ed71-4a77-a1b5-2ad2436f5356.sql",
+     "supabase/migrations/20260111191156_64673555-e916-4e23-8303-a4c31c5fe62a.sql",
+     "supabase/migrations/20260111220436_a5d10e89-1bd9-4e98-9367-d7e2dfa44a71.sql",
+     "supabase/migrations/20260111230911_1d2d2507-a502-4d61-80f4-bf0d61d668e2.sql",
+     "supabase/migrations/20260124175308_b3969198-77f8-4de4-abb9-1ef9475dd1d7.sql",
+     "supabase/migrations/20260124180842_985d82f1-0e31-443c-8d84-c7ab79bc4e10.sql",
+     "supabase/migrations/20260124184935_7462f0ba-52a4-4ded-a9a4-316446a8223f.sql",
+     "supabase/migrations/20260125155610_a5f0704f-a377-42c0-8849-bc49b5254e28.sql",
+     "supabase/migrations/20260205224849_9096778e-9234-41f5-be21-6790b6a9e42d.sql",
+     "supabase/migrations/20260305204447_d9a65b36-83ab-434e-9699-aac2341f11e1.sql",
+     "supabase/migrations/20260309024746_83988e36-095a-4f11-8875-1992bccce2c2.sql",
+     "supabase/migrations/20260314201306_fe0903bc-8d63-4141-86c9-a20941525b3f.sql",
+     "supabase/migrations/20260314203053_cc715c39-87a7-4a90-8de7-ec50b3db3318.sql",
+     "supabase/migrations/20260317195052_91a69f5c-0ce8-4b32-be8d-cf6d9ccb9151.sql",
+     "supabase/migrations/20260317213221_22e14932-8ba7-4c40-9374-6d7c077b4387.sql",
+     "supabase/migrations/20260317221952_73349a79-72fb-4292-892f-fa03b2977368.sql",
+     "supabase/migrations/20260323120657_a64efbcc-88c7-46fd-b522-372e63edc23d.sql",
+     "supabase/migrations/20260323155106_4e591bd9-2acd-4735-a4f7-2f6008e560f8.sql",
+     "supabase/migrations/20260405111318_2ac22269-ca81-4578-a660-bfacd831c1a5.sql",
+     "supabase/migrations/20260405164938_6b232cf1-324d-4c28-88e7-3a339ac2d23e.sql",
+     "supabase/migrations/20260411212046_c6a8c367-17de-4bf5-b40f-9c435f0288f4.sql",
+     "supabase/migrations/20260415120833_e55f2b97-efe3-44bf-8627-f4fb7980a9d0.sql",
+     "supabase/migrations/20260415120848_cd0e6e2d-0913-4a78-aeba-56acdb32308c.sql",
+     "supabase/migrations/20260415123115_30dcc732-370f-4502-9f70-69eb4b3c43bb.sql",
+     "supabase/migrations/20260415123945_043eaf7c-59eb-49a1-b8f2-fe67fa10deba.sql",
+     "supabase/migrations/20260415233816_bf8ddb84-c73e-4d23-a2b0-c3c0f8fdfcc8.sql",
+     "supabase/migrations/20260415235103_6d9257c6-3b63-4b05-a35a-384e81da7994.sql",
+     "supabase/migrations/20260415235526_4b3e9bdb-f907-4460-a16a-ffe6fa89f2c8.sql",
+     "supabase/migrations/20260416005302_557a4633-8c05-46e2-9b4a-31f1341c9540.sql",
+     "supabase/migrations/20260416010854_953141e5-cb6c-41fc-b6f3-4d6cd22f434d.sql",
+     "supabase/migrations/20260416013658_9e847ea5-9b59-4ccf-8b48-631aa6cb2539.sql",
+     "supabase/migrations/20260416025140_c0179f4c-b812-4504-8844-d344c80d5496.sql",
+     "supabase/migrations/20260416104818_95605e2c-6ea2-4fb3-a68a-6940936df0d9.sql",
+     "supabase/migrations/20260416105042_5b9c5d2b-01c4-4835-9445-d798c67a0f5f.sql",
+     "supabase/migrations/20260416105216_a793748a-fb4a-4903-b69e-2e220cf9070a.sql",
+     "supabase/migrations/20260416105623_ee42e946-9c48-4f1c-9a43-b2c2c2fdcfa8.sql",
+     "supabase/migrations/20260416105859_9f65dcc0-4b5c-473d-8e4d-344970052c9b.sql",
+     "supabase/migrations/20260416110201_c1adf6d7-f6b3-43f6-b96c-cb2ce89a4afd.sql",
+     "supabase/migrations/20260416110334_13a365f2-2ff1-4015-af55-f845f5c3171d.sql",
+     "supabase/migrations/20260416110447_2588d10f-f092-4372-b34f-5ba45fbeb833.sql",
+     "supabase/migrations/20260416110653_39ecceba-43ea-409e-8b70-b83376e9e57f.sql",
+     "supabase/migrations/20260416181200_6d3557ca-038e-4e4c-b64e-bc3a706f929f.sql",
+     "supabase/migrations/20260416181618_cf783015-8b5c-48a9-8de2-acbf3d4a9fc0.sql",
+     "supabase/migrations/20260416183013_d2d67858-eca4-40cf-b4ef-ed32abbfb00a.sql",
+     "supabase/migrations/20260416193918_2ab4e7fb-e095-44c9-aad7-00fcff26517d.sql",
+     "supabase/migrations/20260416200246_1d21f8b8-a860-4bc1-a79b-6bc3f319f128.sql",
+     "supabase/migrations/20260416224850_94abbf44-14e8-4a42-8402-1899595fe9c2.sql",
+     "supabase/migrations/20260416232800_aca98b93-9185-4f06-99ae-dd1cd5abafff.sql",
+     "supabase/migrations/20260416233829_14fcc07a-6773-4d98-aada-f86fa6a13e98.sql",
+     "supabase/migrations/20260416235533_dfd48be7-fc61-445f-ab80-f484fa00dc41.sql",
+     "supabase/migrations/20260417000551_4e28ff77-21ba-433e-8628-55418356e7b7.sql",
+     "supabase/migrations/20260417001337_e3b9438d-89c9-4f77-a877-8feab6e00231.sql",
+     "supabase/migrations/20260417003149_4ff2385c-d333-41c5-9f8f-6a640545f215.sql",
+     "supabase/migrations/20260417004129_55991427-8b13-48b9-a9ac-702dec46887e.sql",
+     "supabase/migrations/20260417005023_6d2d8ea7-c2c8-4caa-88d3-9a3cc518bb31.sql",
+     "supabase/migrations/20260417011613_40e57206-6feb-4bd8-a3f0-110e3a2cb8e1.sql",
+     "supabase/migrations/20260417105530_03a1c9e4-218e-4962-a9e5-145c3627b96c.sql",
+     "supabase/migrations/20260417110650_9365a2d8-59c4-4df0-ae02-81957728485f.sql",
+     "supabase/migrations/20260417115542_4bb5855a-4b86-464e-bc7f-8618bc3e8a67.sql",
+     "supabase/migrations/20260417162926_50432a8a-3b4a-448c-b413-4a6854e59406.sql",
+     "supabase/migrations/20260417172946_13ae67cd-3e29-4bcb-9b52-c045f69cad82.sql",
+     "supabase/migrations/20260417194749_5cd8905d-b137-47f4-8a00-ad3764f982c3.sql",
+     "supabase/migrations/20260417195323_b84a83b6-e3b8-4d98-be74-9c37a1bdfc21.sql",
+     "supabase/migrations/20260420115057_db3a83d8-00a2-415e-9126-17ba7ba6c80d.sql",
+     "supabase/migrations/20260420121651_b36d3337-3bfe-4477-b87d-9b3a39c72679.sql",
+     "supabase/migrations/20260420122559_cbe81a51-13f5-42a6-8cd6-d892ca9f2028.sql",
+     "supabase/migrations/20260420125536_bb83da3a-a9cf-42d0-8a60-d1110c7a999f.sql",
+     "supabase/migrations/20260420131635_46932a41-732e-4a34-83dc-ec6584ce4631.sql",
+     "supabase/migrations/20260420131656_838cdcdc-3f02-4be8-8d54-f41f765252ea.sql",
+     "supabase/migrations/20260420161848_3c2ff3b2-701f-4b80-86e1-7f6e884e504a.sql",
+     "supabase/migrations/20260420162044_c08b185e-609a-470a-8546-5c93290e3b34.sql",
+     "supabase/migrations/20260420211439_86dd2e38-5985-4465-9f0a-bb770155a426.sql",
+     "supabase/migrations/20260421141000_65788b86-514c-4614-95b8-c7fd0d6726c9.sql",
+     "supabase/migrations/20260421194349_c661667c-ea56-4174-b4c8-fdca4a86093b.sql",
+     "supabase/migrations/20260422122247_0cef7762-004b-44dd-b43d-fa51b631f00f.sql",
+     "supabase/migrations/20260425112649_c82c364c-c465-4a9a-b57c-08ce2baa2e9f.sql",
+     "supabase/migrations/20260425114641_3c164f23-70c4-454f-a278-2bab6a9aaa0d.sql",
+     "supabase/migrations/20260507194929_8a897147-414a-4dff-ad62-bf627f7d8dad.sql",
+     "supabase/migrations/20260509115357_40a94b7c-1a20-49cd-b0a7-53f4d35ab3af.sql",
+     "supabase/migrations/20260509115734_ef006f0a-d94e-43d2-9b73-a1760e17b259.sql",
+     "supabase/migrations/20260509120024_229eca8e-97fb-4c6a-8a2a-bdc7070c4592.sql",
+     "supabase/migrations/20260509123119_8d1dd77f-3e2d-412e-8e20-0eff30420cbc.sql",
+     "supabase/migrations/20260509152256_96488346-886a-44cc-90bb-48df5bc85660.sql",
+     "supabase/migrations/20260509152638_b3581ab3-1770-47d0-a2f7-73f0581a78e1.sql",
+     "supabase/migrations/20260509170538_45b95e4b-470c-4067-af3c-7502d9b60532.sql",
+     "supabase/migrations/20260509172946_b942797e-e913-40cd-8d27-9adb110a2adf.sql",
+     "supabase/migrations/20260509174220_bc03af22-cc70-44a5-9149-dbfcbc31a350.sql",
+     "supabase/migrations/20260509175700_0768fff6-0a9e-41b2-8042-0f5a6823c284.sql",
+     "supabase/migrations/20260509180917_b4306156-1d1c-4efd-b41f-571c86e0d338.sql",
+     "supabase/migrations/20260509182655_a5c2040f-a8c8-4762-98a2-5f52795cff5d.sql",
+     "supabase/migrations/20260509182935_407cd40a-4165-45a2-804f-cb193bd77b94.sql",
+     "supabase/migrations/20260509183034_00f06abb-0610-4e38-9083-9d1534ebda7e.sql",
+     "supabase/migrations/20260509183503_41efba5a-8f2d-4af9-b26f-d633454b3969.sql",
+     "supabase/migrations/20260509183909_89987358-c50f-4cdb-8bb3-d92c70b6a0c4.sql",
+     "supabase/migrations/20260509184111_637bda7b-3924-43cf-80cb-cc4d3094c09d.sql",
+     "supabase/migrations/20260509184422_a64513bc-1ffa-4b71-962c-a34316211387.sql",
+     "supabase/migrations/20260510111850_c4f05e17-5aaf-4034-924b-1002fab6643d.sql",
+     "supabase/migrations/20260511160219_72bfccf7-6f3a-4a44-a83e-2915c3be4c20.sql",
+     "supabase/migrations/20260511171829_49dbb797-809f-41c0-a69c-83762df523ee.sql",
+     "supabase/migrations/20260511172410_0b23f30a-e264-4a5d-85c5-2e1bbcd4f576.sql",
+     "supabase/migrations/20260511184817_6fcb48d7-fb1b-460e-b8d1-be59fe1babd7.sql",
+     "supabase/migrations/20260511184933_6a317244-47fb-4f40-bcef-124087073da5.sql",
+     "supabase/migrations/20260511185007_82ddf7eb-7630-4eec-a42c-a3b38828f0dc.sql",
+     "supabase/migrations/20260511185221_db922848-ea45-492c-b3f4-f40bf8f2b6db.sql",
+     "supabase/migrations/20260511185757_4c83c69c-de91-439f-9c13-7b92d4c14142.sql",
+     "supabase/migrations/20260511190139_affdb8bf-798b-4f2b-bf9c-f8c9898717e0.sql",
+     "supabase/migrations/20260511190940_034a7088-80fd-4c62-8178-664172cc66d2.sql",
+     "supabase/migrations/20260511200945_d86acef4-cdef-4e40-8420-4610dffa9a89.sql",
+     "supabase/migrations/20260511204700_6ffd9ae7-4ef1-4244-88ba-babdb95dbba0.sql",
+     "supabase/migrations/20260511210108_aa50bc4d-c2a8-4cb3-b641-3280c677cd05.sql",
+     "supabase/migrations/20260511211501_21bdb968-dc70-4e04-9c18-4a69e9551cca.sql",
+     "supabase/migrations/20260512103942_3651ffbb-f3e3-45ee-8592-a28934e55df6.sql",
+     "supabase/migrations/20260512104213_27c60b18-b251-47bd-8606-97b9a5d50223.sql",
+     "supabase/migrations/20260512121618_b41875e6-c8b3-41e4-91e7-3085de33a31d.sql",
+     "supabase/migrations/20260512121726_0afc1e96-70d1-4cc5-8798-450a489b420c.sql",
+     "supabase/migrations/20260512122055_69277fab-87fb-40a6-bbec-1f520a0677ce.sql",
+     "supabase/migrations/20260512124918_c4be5da8-3ce2-4822-90dc-2194d3f8b75a.sql",
+     "supabase/migrations/20260512132827_7f60209b-d5d6-49bb-80d5-117e8298aea5.sql",
+     "supabase/migrations/20260512135658_341c8f6d-6067-44ca-8add-d3c167140f53.sql",
+     "supabase/migrations/20260512151247_371fdb19-5fa5-459c-87d3-7bbac407fd35.sql",
+     "supabase/migrations/20260512175533_60e5a2d8-6ef2-428b-8a15-4a3c550f2003.sql",
+     "supabase/migrations/20260513143103_c834a03b-5b1e-41c7-a213-eea176782e00.sql",
+     "supabase/migrations/20260522202232_758fea13-f74f-474c-80f0-ad05dfcdceca.sql",
+     "supabase/migrations/20260711145839_f975d6cc-cb77-4466-b7f5-23fff3ca9f06.sql",
+     "supabase/migrations/20260712211918_2c56b265-da7b-4c01-85d0-4e1e04306995.sql",
+     "supabase/migrations/20260712215719_930fd99a-437f-423c-a6ce-9a3c5c065106.sql",
+     "supabase/migrations/20260712221610_4c6bd7d1-8599-4798-a055-a56e9e3f0f5c.sql",
+     "supabase/migrations/20260712221944_e2a7b947-777b-4eaf-8ea4-fe2e542d605e.sql",
+     "supabase/migrations/20260712222427_ee56845c-c59a-4009-9501-0aebddd7412c.sql",
+     "supabase/migrations/20260712223208_00845b35-c2fa-4378-b2e8-2649a03c4c92.sql",
+     "supabase/migrations/20260712223559_48270f50-e9ba-483a-ac1d-9b88f4081c0a.sql",
+     "supabase/migrations/20260712223938_a84b0840-83e9-41b3-ad97-a7c3cbd31c7c.sql",
+     "supabase/migrations/20260712224050_0a56b8ef-d1d1-43ae-b7f8-52af074e62cf.sql",
+     "supabase/migrations/20260715190421_5c51ba03-2b4a-4802-9896-a835854471e8.sql",
+     "supabase/migrations/20260720000023_create_phantom_tables.sql",
+     "supabase/migrations/20260721000030_tighten_entity_relationships_rls.sql",
+     "supabase/migrations/20260721000031_fix_functional_bugs_rls.sql",
+     "supabase/migrations/20260721000081_fix_push_subscriptions_and_shared_fields.sql",
+     "supabase/migrations/20260723112943_04c3b77d-d9d6-4d99-bbf5-3840c2f21707.sql",
+     "supabase/migrations/20260723132318_35e7a45e-dd21-4ae8-8880-f6462f12ff5c.sql",
+     "supabase/migrations/20260723152549_8bc9afc3-f45a-4520-a892-d019c4d56cc4.sql",
+     "supabase/migrations/20260925100043_t217_fecha_escrita_users_public_e_admin_update.sql",
+     "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql"
+    ]
+   },
    {
     "sha": "6ba0fb9",
     "date": "2026-11-20",
@@ -306576,19 +306705,29 @@
      "src/hooks/__tests__/create-task-contract.test.ts",
      "src/hooks/useTasks.ts"
     ]
-   },
-   {
-    "sha": "b2d6c1a",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(analytics): avisa que as abas PNL e Gatilhos usam contato fictício (#260)",
-    "files": [
-     "src/components/analytics/DemoContactNotice.tsx",
-     "src/pages/Analytics.tsx"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "supabase/migrations/20260323155106_4e591bd9-2acd-4735-a4f7-2f6008e560f8.sql",
+    2
+   ],
+   [
+    "supabase/migrations/20260416005302_557a4633-8c05-46e2-9b4a-31f1341c9540.sql",
+    2
+   ],
+   [
+    "supabase/migrations/20260416105042_5b9c5d2b-01c4-4835-9445-d798c67a0f5f.sql",
+    2
+   ],
+   [
+    "supabase/migrations/20260417195323_b84a83b6-e3b8-4d98-be74-9c37a1bdfc21.sql",
+    2
+   ],
+   [
+    "supabase/migrations/20260511185221_db922848-ea45-492c-b3f4-f40bf8f2b6db.sql",
+    2
+   ],
    [
     ".gitignore",
     2
@@ -306614,59 +306753,39 @@
     2
    ],
    [
-    "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
+    "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql",
     1
    ],
    [
-    "supabase/migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
+    "supabase/migrations/20260111010914_d0b0ab7c-31d9-4a05-99c5-bbd77320bdd8.sql",
     1
    ],
    [
-    "supabase/migrations/20261119000000_external_data_audit_log.sql",
+    "supabase/migrations/20260111011309_3cf6eaa0-1797-40c2-88e3-ecf1283452bd.sql",
     1
    ],
    [
-    "supabase/functions/external-data/audit.ts",
+    "supabase/migrations/20260111013310_bda03f4c-4db1-499d-ad48-29fee85f88a0.sql",
     1
    ],
    [
-    "supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql",
+    "supabase/migrations/20260111014845_9ce8adb5-376f-4e58-aa9e-da013720eb79.sql",
     1
    ],
    [
-    "supabase/migrations/20260110000000_baseline_tabelas_base.sql",
+    "supabase/migrations/20260111024043_59300762-e425-469a-9e34-35f8ba7ca1e3.sql",
     1
    ],
    [
-    "supabase/migrations/20260110000001_compat_colunas_producao.sql",
+    "supabase/migrations/20260111130846_783060ff-715f-4433-b3e4-1c0ef5409533.sql",
     1
    ],
    [
-    "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "supabase/migrations/20260111162422_931d8ea9-50f0-4793-b167-51ddb862bc64.sql",
     1
    ],
    [
-    "supabase/migrations/20260111000000_garante_colunas_homologacao_suppliers.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260306190655_recreate_trigger_contact_phones_normalizar.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260306190956_add_numero_raw_contact_phones.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260306191225_fix_company_phones_triggers_and_fase2_cols.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260306191832_add_phone_length_validation_both_tables.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260306191849_update_trigger_functions_phone_validation.sql",
+    "supabase/migrations/20260111164638_38eff8c4-2221-4951-83a6-fd9f3bef0574.sql",
     1
    ]
   ]
