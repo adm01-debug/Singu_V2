@@ -18,9 +18,9 @@ interface AIInsight {
   confidence: number; actionable: boolean; contact_id?: string; priority: string;
 }
 
-const categoryIcons: Record<string, React.ElementType> = { personality: Brain, preference: Target, behavior: TrendingUp, opportunity: Sparkles, risk: AlertTriangle, relationship: Heart, sentiment: Lightbulb, action: Zap };
-const categoryColors: Record<string, string> = { personality: 'bg-secondary/10 text-secondary border-secondary/20', preference: 'bg-info/10 text-info border-info/20', behavior: 'bg-success/10 text-success border-success/20', opportunity: 'bg-warning/10 text-warning border-amber-500/20', risk: 'bg-destructive/10 text-destructive border-destructive/20', relationship: 'bg-accent/10 text-accent border-accent/20', sentiment: 'bg-info/10 text-info border-info/20', action: 'bg-primary/10 text-primary border-primary/20' };
-const categoryLabels: Record<string, string> = { personality: 'Personalidade', preference: 'Preferência', behavior: 'Comportamento', opportunity: 'Oportunidade', risk: 'Risco', relationship: 'Relacionamento', sentiment: 'Sentimento', action: 'Ação' };
+const categoryIcons: Record<string, React.ElementType> = { personality: Brain, preference: Target, behavior: TrendingUp, opportunity: Sparkles, risk: AlertTriangle, relationship: Heart, sentiment: Lightbulb, action: Zap, pattern: TrendingUp, suggestion: Lightbulb };
+const categoryColors: Record<string, string> = { personality: 'bg-secondary/10 text-secondary border-secondary/20', preference: 'bg-info/10 text-info border-info/20', behavior: 'bg-success/10 text-success border-success/20', opportunity: 'bg-warning/10 text-warning border-amber-500/20', risk: 'bg-destructive/10 text-destructive border-destructive/20', relationship: 'bg-accent/10 text-accent border-accent/20', sentiment: 'bg-info/10 text-info border-info/20', action: 'bg-primary/10 text-primary border-primary/20', pattern: 'bg-success/10 text-success border-success/20', suggestion: 'bg-primary/10 text-primary border-primary/20' };
+const categoryLabels: Record<string, string> = { personality: 'Personalidade', preference: 'Preferência', behavior: 'Comportamento', opportunity: 'Oportunidade', risk: 'Risco', relationship: 'Relacionamento', sentiment: 'Sentimento', action: 'Ação', pattern: 'Padrão', suggestion: 'Sugestão' };
 const priorityColors: Record<string, string> = { high: 'bg-destructive/10 text-destructive border-destructive/30', medium: 'bg-warning/10 text-warning border-warning/30', low: 'bg-success/10 text-success border-success/30' };
 
 interface Props {

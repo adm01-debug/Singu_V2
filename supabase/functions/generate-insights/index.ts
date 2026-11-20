@@ -1,5 +1,7 @@
+import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
+import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
@@ -28,6 +30,7 @@ Deno.serve(async (req) => {
   // 🔒 Authenticate — userId from JWT
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+  const userId = authResult;
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
@@ -140,7 +143,51 @@ Gere entre 3 e 8 insights relevantes baseados nestes dados. Retorne um JSON com 
     }
 
     log.info("generation_complete", { count: insights.length });
-    return jsonOk({ insights, traceId }, req);
+
+    // ── Persistência dos insights gerados ──
+    // Categorias da IA (relationship|sentiment|action|opportunity|risk) não
+    // correspondem ao CHECK da tabela (opportunity|risk|pattern|suggestion):
+    // normaliza para o enum do banco preservando o valor original na UI.
+    const CATEGORY_MAP: Record<string, string> = {
+      relationship: "pattern",
+      sentiment: "pattern",
+      action: "suggestion",
+    };
+    // Categorias válidas no CHECK da tabela — um valor fora disso derruba o
+    // insert inteiro (constraint), então filtra antes de persistir.
+    const VALID_CATEGORIES = new Set(["opportunity", "risk", "pattern", "suggestion"]);
+    const latest = new Date().toISOString();
+    const rows = insights
+      .filter((i: { contact_id?: string; category?: string }) =>
+        typeof i.contact_id === "string" &&
+        VALID_CATEGORIES.has(CATEGORY_MAP[i.category ?? ""] ?? i.category ?? ""))
+      .map((i: { category: string; title: string; description?: string; action_suggestion?: string; confidence?: number; actionable?: boolean; contact_id: string }) => ({
+        user_id: userId,
+        contact_id: i.contact_id,
+        title: i.title,
+        description: i.description ?? null,
+        category: CATEGORY_MAP[i.category] ?? i.category,
+        confidence: Number.isFinite(i.confidence) ? i.confidence : null,
+        actionable: i.actionable ?? false,
+        action_suggestion: i.action_suggestion ?? null,
+        source: "generate-insights",
+        expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        created_at: latest,
+      }));
+    if (rows.length > 0) {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      );
+      // bestEffortWrite: falha de persistência não derruba a resposta (a IA já
+      // retornou). Duplicata de re-geração é evitada pela UI (limite de recentes).
+      await bestEffortWrite(
+        supabase.from("insights").insert(rows),
+        "generate-insights persist error:",
+      );
+    }
+
+    return jsonOk({ insights, traceId, persisted: rows.length }, req);
   } catch (error) {
     log.error("fatal_error", { error: error instanceof Error ? error.message : String(error) });
     return jsonError("Internal server error", 500, req);
