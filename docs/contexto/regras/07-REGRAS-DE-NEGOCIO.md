@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0418f640eb` · branch `main` · 2026-11-20 11:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b70f89e461` · branch `main` · 2026-11-20 11:51 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -311,7 +311,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `company_social_media` | company_social_media_delete | DELETE | public | permissive | `true` |  |
 | `contact_phones` | contact_phones_select | SELECT | public | permissive | `true` |  |
 | `contact_phones` | contact_phones_insert | INSERT | public | permissive |  | `true` |
-| … +950 linhas — lista completa em `context.json` | | | | | | |
+| … +951 linhas — lista completa em `context.json` | | | | | | |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -617,7 +617,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `communication_preferences` | `contact_id` | obrigatório; FK → contacts.id ON DELETE CASCADE |
 | `communication_preferences` | `preferred_channel` | default 'whatsapp' |
 | `communication_preferences` | `preferred_days` | default '{}' |
-| … +4176 linhas — lista completa em `context.json` | | |
+| … +4182 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -1885,6 +1885,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | StoredLeadGrade | cold \| warm \| hot \| on_fire | `supabase/functions/_shared/lead-score-contract.ts` |
 | DisplayLeadGrade | A \| B \| C \| D | `supabase/functions/_shared/lead-score-contract.ts` |
 | PushOutcome | sent \| gone \| rejected \| error \| blocked | `supabase/functions/_shared/push.ts` |
+| AuditOperation | select \| insert \| update \| delete \| distinct \| schema \| list_tables | `supabase/functions/external-data/audit.ts` |
+| AuditOutcome | success \| denied \| error | `supabase/functions/external-data/audit.ts` |
 | UserScopedUnavailableReason | missing_env \| invalid_url \| origin_mismatch | `supabase/functions/external-data/database.ts` |
 
 ## F. Validações de entrada
@@ -3761,6 +3763,7 @@ _nenhum item encontrado_
 | `SLO_TARGET` | `99.5` | `supabase/functions/error-budget/index.ts` |
 | `WINDOW_HOURS` | `720` | `supabase/functions/error-budget/index.ts` |
 | `SAMPLE_INTERVAL_MIN` | `5` | `supabase/functions/error-budget/index.ts` |
+| `SERVICE_ROLE_SENTINEL` | `"__SERVICE_ROLE__"` | `supabase/functions/external-data/audit.ts` |
 | `MAX_PAGE_SIZE` | `500` | `supabase/functions/external-data/index.ts` |
 | `DEFAULT_PAGE_SIZE` | `50` | `supabase/functions/external-data/index.ts` |
 | `DAY_MS` | `86` | `supabase/functions/lead-scorer/index.ts` |

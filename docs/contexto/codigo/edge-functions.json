@@ -1607,14 +1607,16 @@
   {
    "nome": "external-data",
    "entrada": "supabase/functions/external-data/index.ts",
-   "arquivos": 7,
-   "linhas": 1044,
+   "arquivos": 8,
+   "linhas": 1103,
    "verify_jwt": true,
    "metodos": [
     "DELETE",
     "GET"
    ],
-   "tabelas": [],
+   "tabelas": [
+    "external_data_audit_log"
+   ],
    "rpcs": [
     "has_role"
    ],

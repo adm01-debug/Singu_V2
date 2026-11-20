@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "0418f640ebd51128e4db626721191112d0bdea14",
+  "sha": "b70f89e461a72e51236ba718e5bddf2e456a45ef",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 11:03 UTC",
-  "files_total": 3987,
-  "code_files": 3515,
-  "code_lines": 472784
+  "generated_at": "2026-11-20 11:51 UTC",
+  "files_total": 3989,
+  "code_files": 3517,
+  "code_lines": 472887
  },
  "version": "1.3.2",
- "facts_hash": "438f8232f7b069a2",
+ "facts_hash": "bdd79882301e62bf",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -258,9 +258,9 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1277,
+   ".sql": 1278,
    ".tsx": 1166,
-   ".ts": 908,
+   ".ts": 909,
    ".mjs": 123,
    ".py": 21,
    ".js": 18,
@@ -47664,6 +47664,63 @@
     "src": "supabase/migrations/20261013033433_sequence_write_fences.sql",
     "comment": "",
     "origin": "migration"
+   },
+   "external_data_audit_log": {
+    "columns": [
+     {
+      "name": "id",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+     },
+     {
+      "name": "user_id",
+      "type": "uuid REFERENCES auth.users(id) ON DELETE SET NULL",
+      "fk": "users.id ON DELETE SET NULL",
+      "generated": "",
+      "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+     },
+     {
+      "name": "operation",
+      "type": "text NOT NULL CHECK (operation IN ('select','insert','update','delete','distinct','schema','list_tables'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+     },
+     {
+      "name": "table_name",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+     },
+     {
+      "name": "payload",
+      "type": "jsonb",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+     },
+     {
+      "name": "outcome",
+      "type": "text NOT NULL CHECK (outcome IN ('success','denied','error'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+     },
+     {
+      "name": "created_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/migrations/20261119000000_external_data_audit_log.sql",
+    "comment": "",
+    "origin": "migration"
    }
   },
   "policies": [
@@ -60166,6 +60223,16 @@
     "using": "true",
     "check": "true",
     "src": "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql"
+   },
+   {
+    "name": "admin_only_select_external_data_audit",
+    "table": "external_data_audit_log",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
    }
   ],
   "triggers": [
@@ -85613,6 +85680,22 @@
     "unique": false,
     "where": "",
     "src": "supabase/migrations/20261118181543_incoming_webhook_nonces.sql"
+   },
+   {
+    "name": "idx_external_data_audit_user",
+    "table": "external_data_audit_log",
+    "columns": "user_id, created_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+   },
+   {
+    "name": "idx_external_data_audit_outcome",
+    "table": "external_data_audit_log",
+    "columns": "outcome, created_at DESC",
+    "unique": false,
+    "where": "WHERE outcome IN ('denied','error')",
+    "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
    }
   ],
   "cron_jobs": [
@@ -87350,7 +87433,8 @@
    "supabase/migrations/20261118182317_serialize_contact_relation_write_triggers.sql",
    "supabase/migrations/20261118182619_get_activity_overview.sql",
    "supabase/migrations/20261118182753_get_activity_overview.sql",
-   "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql"
+   "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql",
+   "supabase/migrations/20261119000000_external_data_audit_log.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -87719,7 +87803,8 @@
    "estados": "enabled",
    "cidades": "enabled",
    "_dormant.inactivity_alerts": "enabled",
-   "sequence_email_reservations": "enabled"
+   "sequence_email_reservations": "enabled",
+   "external_data_audit_log": "enabled"
   },
   "grants": [
    {
@@ -104198,7 +104283,9 @@
      "POST?"
     ],
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
-    "tables": [],
+    "tables": [
+     "external_data_audit_log"
+    ],
     "env": [
      "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
      "EXTERNAL_SUPABASE_URL"
@@ -111832,8 +111919,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 174,
-   "lines": 26834,
+   "files": 175,
+   "lines": 26893,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -111884,6 +111971,7 @@
     "email_logs",
     "email_thread_summaries",
     "email_verifications",
+    "external_data_audit_log",
     "favorite_templates",
     "ficha360_conversation_summaries",
     "forecast_periods",
@@ -111996,6 +112084,7 @@
     "helpers.ts: SupabaseAdminClient, jsonResponse, resolveInstanceOwner, findContactByPhone",
     "messages.ts: handleMessageUpsert, handleMessageUpdate, handleSendMessage",
     "payload.ts: messageUpsertData, messageUpdateData, connectionUpdateData, contactsUpsertData, presenceUpdateData, callData",
+    "audit.ts: AuditOperation, AuditOutcome, logAudit",
     "database.ts: getExternalClient, UserScopedUnavailableReason, userScopedUnavailableReason, getUserScopedClient, hasRelationAccess, getRelationIdForRecord",
     "mutations.ts: handleMutation",
     "tables.ts: ALLOWED_RPCS, AllowedRpc, isAllowedRpc, ALLOWED_TABLES, AllowedTable, USER_RLS_READ_ONLY_TABLES"
@@ -112108,8 +112197,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1104,
-   "lines": 102639,
+   "files": 1105,
+   "lines": 102683,
    "tables": [
     "users"
    ],
@@ -113654,6 +113743,11 @@
     ],
     "insert": [
      "src/lib/logger.ts"
+    ]
+   },
+   "external_data_audit_log": {
+    "insert": [
+     "supabase/functions/external-data/audit.ts"
     ]
    },
    "fantasma": {
@@ -118473,6 +118567,7 @@
     "supabase/functions/error-budget/index.ts",
     "supabase/functions/evolution-bitrix-connector/index.ts",
     "supabase/functions/evolution-webhook/index.ts",
+    "supabase/functions/external-data/audit.ts",
     "supabase/functions/external-data/database.ts",
     "supabase/functions/ficha360-conversation-summary/index.ts",
     "supabase/functions/forecast-analyzer/index.ts",
@@ -118570,6 +118665,7 @@
     "supabase/functions/error-budget/index.ts",
     "supabase/functions/evolution-bitrix-connector/index.ts",
     "supabase/functions/evolution-webhook/index.ts",
+    "supabase/functions/external-data/audit.ts",
     "supabase/functions/external-data/database.ts",
     "supabase/functions/external-data/optimistic-locking_test.ts",
     "supabase/functions/ficha360-conversation-summary/index.ts",
@@ -123170,6 +123266,16 @@
     "file": "supabase/functions/_shared/push.ts",
     "name": "PushOutcome",
     "values": "sent | gone | rejected | error | blocked"
+   },
+   {
+    "file": "supabase/functions/external-data/audit.ts",
+    "name": "AuditOperation",
+    "values": "select | insert | update | delete | distinct | schema | list_tables"
+   },
+   {
+    "file": "supabase/functions/external-data/audit.ts",
+    "name": "AuditOutcome",
+    "values": "success | denied | error"
    },
    {
     "file": "supabase/functions/external-data/database.ts",
@@ -151423,6 +151529,36 @@
     "table": "sequence_email_reservations",
     "column": "created_at",
     "rule": "default now()"
+   },
+   {
+    "table": "external_data_audit_log",
+    "column": "id",
+    "rule": "PK; default gen_random_uuid()"
+   },
+   {
+    "table": "external_data_audit_log",
+    "column": "user_id",
+    "rule": "FK → users.id ON DELETE SET NULL"
+   },
+   {
+    "table": "external_data_audit_log",
+    "column": "operation",
+    "rule": "obrigatório; CHECK operation IN ('select','insert','update','delete','distinct','schema','list_tables')"
+   },
+   {
+    "table": "external_data_audit_log",
+    "column": "table_name",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "external_data_audit_log",
+    "column": "outcome",
+    "rule": "obrigatório; CHECK outcome IN ('success','denied','error')"
+   },
+   {
+    "table": "external_data_audit_log",
+    "column": "created_at",
+    "rule": "default now()"
    }
   ],
   "params": [
@@ -152280,6 +152416,11 @@
     "file": "supabase/functions/error-budget/index.ts",
     "name": "SAMPLE_INTERVAL_MIN",
     "value": "5"
+   },
+   {
+    "file": "supabase/functions/external-data/audit.ts",
+    "name": "SERVICE_ROLE_SENTINEL",
+    "value": "\"__SERVICE_ROLE__\""
    },
    {
     "file": "supabase/functions/external-data/index.ts",
@@ -195884,6 +196025,16 @@
     "using": "true",
     "check": "true",
     "src": "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql"
+   },
+   {
+    "name": "admin_only_select_external_data_audit",
+    "table": "external_data_audit_log",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
    }
   ],
   "db_triggers": [
@@ -216470,6 +216621,15 @@
     "UPDATE": [],
     "DELETE": []
    },
+   "external_data_audit_log": {
+    "rls": "enabled",
+    "SELECT": [
+     "public: public.has_role(auth.uid(), 'admin'::app_role)"
+    ],
+    "INSERT": [],
+    "UPDATE": [],
+    "DELETE": []
+   },
    "favorite_templates": {
     "rls": "enabled",
     "SELECT": [
@@ -220311,6 +220471,7 @@
    "supabase/functions/evolution-webhook/helpers.ts",
    "supabase/functions/evolution-webhook/index.ts",
    "supabase/functions/external-data/actor-writes_test.ts",
+   "supabase/functions/external-data/audit.ts",
    "supabase/functions/external-data/database.ts",
    "supabase/functions/external-data/index.ts",
    "supabase/functions/ficha360-conversation-summary/index.ts",
@@ -220618,6 +220779,7 @@
    "supabase/migrations/20261118181543_incoming_webhook_nonces.sql",
    "supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql",
    "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql",
+   "supabase/migrations/20261119000000_external_data_audit_log.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -235089,6 +235251,9 @@
    ],
    "sequence_email_reservations": [
     "created_at"
+   ],
+   "external_data_audit_log": [
+    "created_at"
    ]
   },
   "pii": [
@@ -238312,7 +238477,7 @@
    "`_dormant.inactivity_alerts.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`sequence_email_reservations.current_step` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`sequence_email_reservations.step_order` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
-   "421/501 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `activities`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences`, `alerts` …",
+   "422/502 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `activities`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences`, `alerts` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -293665,6 +293830,42 @@
    "lines": 91,
    "uses_service_role": true
   },
+  "supabase/functions/external-data/audit.ts": {
+   "path": "supabase/functions/external-data/audit.ts",
+   "lines": 44,
+   "exports": [
+    "type AuditOperation",
+    "type AuditOutcome",
+    "function logAudit"
+   ],
+   "tables": [
+    {
+     "table": "external_data_audit_log",
+     "op": "insert"
+    }
+   ],
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "enums": [
+    {
+     "name": "AuditOperation",
+     "values": "select | insert | update | delete | distinct | schema | list_tables"
+    },
+    {
+     "name": "AuditOutcome",
+     "values": "success | denied | error"
+    }
+   ],
+   "params": [
+    {
+     "name": "SERVICE_ROLE_SENTINEL",
+     "value": "\"__SERVICE_ROLE__\""
+    }
+   ],
+   "uses_service_role": true
+  },
   "supabase/functions/external-data/cloudflare-fallback_test.ts": {
    "path": "supabase/functions/external-data/cloudflare-fallback_test.ts",
    "lines": 45,
@@ -293763,7 +293964,7 @@
   },
   "supabase/functions/external-data/mutations.ts": {
    "path": "supabase/functions/external-data/mutations.ts",
-   "lines": 169,
+   "lines": 184,
    "exports": [
     "function handleMutation"
    ],
@@ -304768,6 +304969,11 @@
    "lines": 23,
    "uses_service_role": true
   },
+  "supabase/migrations/20261119000000_external_data_audit_log.sql": {
+   "path": "supabase/migrations/20261119000000_external_data_audit_log.sql",
+   "lines": 44,
+   "uses_service_role": true
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -305441,10 +305647,60 @@
   }
  },
  "git": {
-  "sha": "0418f640ebd51128e4db626721191112d0bdea14",
+  "sha": "b70f89e461a72e51236ba718e5bddf2e456a45ef",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "b70f89e",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "Merge pull request #278 from adm01-debug/claude/fix-resgate-auditoria-external-data-20261119-1501",
+    "files": []
+   },
+   {
+    "sha": "6bfdba5",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "chore(ci): forca nova rodada do Supabase Preview pos-merge 267",
+    "files": []
+   },
+   {
+    "sha": "e6f4c68",
+    "date": "2026-11-19",
+    "author": "adm01-debug",
+    "subject": "chore(audit): newline final em mutations.ts",
+    "files": [
+     "supabase/functions/external-data/mutations.ts"
+    ]
+   },
+   {
+    "sha": "c51bc5f",
+    "date": "2026-11-19",
+    "author": "adm01-debug",
+    "subject": "feat(audit): injeta logAudit nas 4 escritas do external-data (resgate hardening Singu)",
+    "files": [
+     "supabase/functions/external-data/mutations.ts"
+    ]
+   },
+   {
+    "sha": "64be234",
+    "date": "2026-11-19",
+    "author": "adm01-debug",
+    "subject": "feat(audit): cria external_data_audit_log com RLS admin-only (resgate hardening Singu 2026-04-09)",
+    "files": [
+     "supabase/migrations/20261119000000_external_data_audit_log.sql"
+    ]
+   },
+   {
+    "sha": "6a2064b",
+    "date": "2026-11-19",
+    "author": "adm01-debug",
+    "subject": "feat(audit): resgata auditoria de escrita do external-data — modulo logAudit",
+    "files": [
+     "supabase/functions/external-data/audit.ts"
+    ]
+   },
    {
     "sha": "0418f64",
     "date": "2026-11-20",
@@ -306345,97 +306601,12 @@
      "src/components/pipeline/NLPProbabilityBadge.tsx",
      "src/hooks/useNLPClosingProbability.ts"
     ]
-   },
-   {
-    "sha": "1735cf3",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "feat: agregação real por período em /analytics e painel de relacionamento (#253)",
-    "files": [
-     "ESTADO_ATUAL.md",
-     "PLANEJADO_NAO_EXECUTADO.md",
-     "docs/estado/04_REVOPS_VENDAS.md",
-     "docs/lacunas/B1_reverificacao_estado_01_04.md",
-     "docs/lacunas/B2_reverificacao_estado_05_10.md",
-     "docs/lacunas/D_ui_rotas_componentes.md",
-     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_CONTRATOS.md",
-     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_UX.md",
-     "docs/qa/security-definer-audit.md",
-     "scripts/docs/citacoes-baseline.json",
-     "src/components/dashboard/RelationshipStatsPanel.tsx",
-     "src/data/analyticsData.ts",
-     "src/hooks/useActivityOverview.ts",
-     "src/pages/Analytics.tsx",
-     "src/pages/analytics/AnalyticsEngagementTab.tsx",
-     "src/pages/analytics/AnalyticsSentimentTab.tsx",
-     "supabase/functions/external-data/tables.ts",
-     "supabase/migrations/20261118182753_get_activity_overview.sql",
-     "tests/rls/security_definer_hardening.sql"
-    ]
-   },
-   {
-    "sha": "e3b8d5a",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(nlp): confianca de objecao e forca de indicador saem da evidencia (#249)",
-    "files": [
-     "src/hooks/useEmotionalIntelligence.ts",
-     "src/hooks/useHiddenObjections.ts"
-    ]
-   },
-   {
-    "sha": "7dcac42",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(ui): filtros do Pipeline passam a filtrar e 3 botoes mortos ganham acao (#248)",
-    "files": [
-     "src/components/dashboard/TopContactsCard.tsx",
-     "src/components/import/BulkImportDialog.tsx",
-     "src/components/pipeline/PipelineFilterBar.tsx",
-     "src/components/pipeline/pipelineFilters.ts",
-     "src/pages/Contatos.tsx",
-     "src/pages/Pipeline.tsx",
-     "src/pages/contatos/ContatosContent.tsx"
-    ]
-   },
-   {
-    "sha": "602a7f8",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(edge): roadmap preditivo para de sortear a previsao gravada no banco (#246)",
-    "files": [
-     "supabase/functions/suggest-next-action/index.ts"
-    ]
-   },
-   {
-    "sha": "775c89c",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "feat(ui): liga a recuperacao de senha e 8 telas sem entrada na navegacao (#245)",
-    "files": [
-     "src/components/layout/AppSidebar.tsx",
-     "src/pages/Auth.tsx"
-    ]
-   },
-   {
-    "sha": "f6ec6ec",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(ui): telas deixam de mostrar \"vazio\" quando a consulta falhou (#244)",
-    "files": [
-     "src/hooks/useSequences.ts",
-     "src/pages/Contatos.tsx",
-     "src/pages/Deduplicacao.tsx",
-     "src/pages/Interacoes.tsx",
-     "src/pages/MarketingFormDetail.tsx",
-     "src/pages/Sequencias.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
-    "src/pages/Analytics.tsx",
-    3
+    "supabase/functions/external-data/mutations.ts",
+    2
    ],
    [
     "src/hooks/useAdvancedTriggers.ts",
@@ -306454,16 +306625,16 @@
     2
    ],
    [
-    "src/components/layout/AppSidebar.tsx",
+    "src/pages/Analytics.tsx",
     2
    ],
    [
-    "src/hooks/useActivityOverview.ts",
-    2
+    "supabase/migrations/20261119000000_external_data_audit_log.sql",
+    1
    ],
    [
-    "src/pages/Contatos.tsx",
-    2
+    "supabase/functions/external-data/audit.ts",
+    1
    ],
    [
     "supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql",

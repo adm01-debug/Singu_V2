@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0418f640eb` · branch `main` · 2026-11-20 11:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b70f89e461` · branch `main` · 2026-11-20 11:51 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -224,6 +224,7 @@
 | `eq_analysis_history` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | authenticated: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `error_logs` | enabled | public: has_role((select auth.uid()), 'admin'::app_role) | authenticated: auth.uid() IS NOT NULL AND user_id = auth.uid() | — | authenticated: public.has_role(auth.uid(), 'admin') |
 | `estados` | enabled | authenticated: true | — | — | — |
+| `external_data_audit_log` | enabled | public: public.has_role(auth.uid(), 'admin'::app_role) | — | — | — |
 | `favorite_templates` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — | public: ((select auth.uid()) = user_id) |
 | `favorites` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
 | `feature_flags` | enabled | authenticated: true | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) | authenticated: has_role((select auth.uid()), 'admin'::app_role) |
@@ -315,12 +316,11 @@
 | `nurturing_executions` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `nurturing_workflows` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `oauth_tokens` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
-| `objection_example_feedback` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| … +201 linhas — lista completa em `context.json` | | | | | |
+| … +202 linhas — lista completa em `context.json` | | | | | |
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 424 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 426 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.unit.mjs`
@@ -422,6 +422,7 @@
 - `supabase/functions/evolution-webhook/helpers.ts`
 - `supabase/functions/evolution-webhook/index.ts`
 - `supabase/functions/external-data/actor-writes_test.ts`
+- `supabase/functions/external-data/audit.ts`
 - `supabase/functions/external-data/database.ts`
 - `supabase/functions/external-data/index.ts`
 - `supabase/functions/ficha360-conversation-summary/index.ts`
@@ -471,8 +472,7 @@
 - `supabase/functions/validation-queue-worker/index.ts`
 - `supabase/functions/voice-to-text/index.ts`
 - `supabase/functions/weekly-digest/index.ts`
-- `supabase/functions/whatsapp-import/index.ts`
-- … +274 (lista completa em `context.json`)
+- … +276 (lista completa em `context.json`)
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -1258,7 +1258,7 @@ Middleware matcher (Next.js): nenhum
 | `daily_metrics` | `created_at` |
 | `category_metrics` | `created_at` |
 | `sales_goals` | `created_at` |
-| … +152 linhas — lista completa em `context.json` | |
+| … +153 linhas — lista completa em `context.json` | |
 
 ## Dados pessoais / sensíveis (LGPD — cuidado em logs, exports, prompts de IA)
 

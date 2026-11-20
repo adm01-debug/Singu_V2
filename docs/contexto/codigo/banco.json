@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1104,
+ "migrations": 1105,
  "seeds": [],
  "avisos": [
   "195 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -34209,6 +34209,91 @@
    "triggers": [],
    "sem_rls": false,
    "nao_usada": true
+  },
+  "external_data_audit_log": {
+   "colunas": {
+    "created_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "id": {
+     "tipo": "uuid",
+     "nn": true,
+     "pk": true,
+     "default": "gen_random_uuid()",
+     "ref": null
+    },
+    "operation": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "outcome": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "payload": {
+     "tipo": "jsonb",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "table_name": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "user_id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": "auth.users"
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "admin_only_select_external_data_audit",
+     "comando": "select",
+     "para": "public",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [
+    {
+     "nome": "idx_external_data_audit_outcome",
+     "colunas": "outcome, created_at DESC",
+     "unico": false
+    },
+    {
+     "nome": "idx_external_data_audit_user",
+     "colunas": "user_id, created_at DESC",
+     "unico": false
+    }
+   ],
+   "fks": [
+    "user_id->auth.users"
+   ],
+   "criada_em": "20261119000000_external_data_audit_log.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [
+    "external-data"
+   ],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": false
   },
   "favorite_templates": {
    "colunas": {

@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `0418f640ebd51128e4db626721191112d0bdea14` (2026-11-20T08:02:18-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `b70f89e461a72e51236ba718e5bddf2e456a45ef` (2026-11-20T08:49:02-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2074), SQL (1277), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
+- linguagens: TypeScript (2075), SQL (1278), Markdown (156), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3882 |
-| arquivos_codigo | 2237 |
-| linhas_codigo | 417496 |
+| arquivos_total | 3884 |
+| arquivos_codigo | 2238 |
+| linhas_codigo | 417555 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -45,8 +45,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | componentes | 1063 |
 | hooks | 411 |
 | edge_functions | 109 |
-| tabelas | 541 |
-| migrations | 1104 |
+| tabelas | 542 |
+| migrations | 1105 |
 | cron_jobs | 44 |
 | testes | 277 |
 | workflows | 12 |
@@ -304,7 +304,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `evolution-api` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `evolution-bitrix-connector` — tabelas: connector_log, oauth_tokens; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `evolution-webhook` — tabelas: contacts, interactions, whatsapp_ingestion_logs, whatsapp_instances, whatsapp_messages; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `external-data` — tabelas: -; chamada por 3 arquivo(s) do front
+- `external-data` — tabelas: external_data_audit_log; chamada por 3 arquivo(s) do front
 - `ficha360-conversation-summary` — tabelas: ficha360_conversation_summaries; chamada por 1 arquivo(s) do front
 - `firecrawl-scrape` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `forecast-analyzer` — tabelas: deal_forecasts, forecast_quota_settings; chamada por 1 arquivo(s) do front
@@ -445,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25709 nós · 41006 arestas · 3120 comunidades · grafo do commit `0418f640`
-- comunidades maiores: @tanstack/react-query (497), lucide-react (348), ref_lib (311), _shared/auth.ts (295), react (272), framer-motion (266), 02_tables.sql (259), ref_hooks (257), ref_types (250), date-fns (234), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (206)
+- 25719 nós · 41023 arestas · 3128 comunidades · grafo do commit `b70f89e4`
+- comunidades maiores: @tanstack/react-query (682), ref_hooks (456), framer-motion (314), ref_types (282), ref_lib (266), 02_tables.sql (259), _shared/auth.ts (255), date-fns (229), 📖 Dicionário de Dados — SINGU CRM (227), react (224), ref_components (220), withAuth (155)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -583,6 +583,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-20 `b70f89e` Merge pull request #278 from adm01-debug/claude/fix-resgate-auditoria-external-data-20261119-1501
+- 2026-11-20 `6bfdba5` chore(ci): forca nova rodada do Supabase Preview pos-merge 267
+- 2026-11-20 `e6f4c68` chore(audit): newline final em mutations.ts
+- 2026-11-20 `c51bc5f` feat(audit): injeta logAudit nas 4 escritas do external-data (resgate hardening Singu)
+- 2026-11-20 `64be234` feat(audit): cria external_data_audit_log com RLS admin-only (resgate hardening Singu 2026-04-09)
+- 2026-11-20 `6a2064b` feat(audit): resgata auditoria de escrita do external-data — modulo logAudit
 - 2026-11-20 `0418f64` fix(migrations): recupera da produção as 607 migrations que faltavam no repositório (#267)
 - 2026-11-19 `62b6b2a` ci(security): dependency review barra CVE novo high/critical nos PRs (#273)
 - 2026-11-19 `677b193` feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)
@@ -592,12 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-18 `f76d507` feat(gatilhos): liga a matriz completa de conflitos e sinergias que estava desligada (#268)
 - 2026-11-18 `5e72a50` fix(carnegie): analise de fala/escuta passa a ler o texto em vez de inventar (#266)
 - 2026-11-18 `679cafa` fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)
-- 2026-11-18 `12454df` fix(territorios): módulo inteiro estava fora de contrato com o banco (#265)
-- 2026-11-18 `15e29cf` fix(empresa): ficha da empresa passa a mostrar dado real no lugar de inventado (#264)
-- 2026-11-18 `485bd33` fix(gamificacao): três RPCs eram chamadas sem o p_user_id obrigatório (#263)
-- 2026-11-18 `185ce78` fix(tarefas): criar tarefa e adiar lembrete usavam argumentos de RPC sem prefixo (#261)
-- 2026-11-18 `b2d6c1a` fix(analytics): avisa que as abas PNL e Gatilhos usam contato fictício (#260)
-- 2026-11-18 `213464a` fix(carnegie): score deixa de ser número fixo e passa a refletir a análise real (#259)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

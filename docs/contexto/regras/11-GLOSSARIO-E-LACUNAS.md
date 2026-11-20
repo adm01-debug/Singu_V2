@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0418f640eb` · branch `main` · 2026-11-20 11:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b70f89e461` · branch `main` · 2026-11-20 11:51 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -215,6 +215,7 @@
 | `eq_analysis_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 16 colunas | migration |
 | `error_logs` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
 | `estados` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
+| `external_data_audit_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
 | `favorite_templates` | _(sem COMMENT ON TABLE — significado não documentado)_ | 4 colunas | migration |
 | `favorites` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | migration |
 | `feature_flags` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
@@ -306,8 +307,7 @@
 | `nurturing_executions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
 | `nurturing_workflows` | SINGU: Fluxos de nutrição long-term (mais complexos que sequences). Trigger-based (score/segment/inactivity/event). | 14 colunas | migration |
 | `oauth_tokens` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | migration |
-| `objection_example_feedback` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
-| … +456 linhas — lista completa em `context.json` | | | |
+| … +459 linhas — lista completa em `context.json` | | | |
 
 ## Dados de referência (seed — planos, categorias, perfis fixos)
 
@@ -796,7 +796,7 @@ _nenhum item encontrado_
 - `_dormant.inactivity_alerts.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `sequence_email_reservations.current_step` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `sequence_email_reservations.step_order` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- 421/501 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `activities`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences`, `alerts` …
+- 422/502 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `activities`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences`, `alerts` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes
