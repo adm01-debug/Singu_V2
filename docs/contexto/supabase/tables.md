@@ -409,6 +409,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.eq_assessment_questions](tables/public/eq_assessment_questions.md) | table | sim | 2 | 12 | não | Perguntas para avaliação de EQ |
 | [public.error_logs](tables/public/error_logs.md) | table | sim | 2 | 9 | não |  |
 | [public.estados](tables/public/estados.md) | table | sim | 2 | 6 | não | Catálogo oficial de estados brasileiros. Fonte: IBGE. |
+| [public.external_data_audit_log](tables/public/external_data_audit_log.md) | table | sim | 1 | 7 | não |  |
 | [public.favorite_templates](tables/public/favorite_templates.md) | table | sim | 7 | 4 | não | SINGU: Templates de mensagem favoritos do usuário. Unique(user_id, template_id). |
 | [public.favorites](tables/public/favorites.md) | table | sim | 4 | 5 | não |  |
 | [public.feature_flags](tables/public/feature_flags.md) | table | sim | 4 | 6 | não |  |

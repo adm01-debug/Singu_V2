@@ -841,6 +841,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.error_logs | Authenticated users can insert error logs | INSERT | PERMISSIVE | authenticated |  | `((auth.uid() IS NOT NULL) AND (user_id = auth.uid()))` |
 | public.estados | read_only_auth | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.estados | service_full | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.external_data_audit_log | admin_only_select_external_data_audit | SELECT | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.favorite_templates | Users can delete own | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.favorite_templates | Users can delete their own favorites | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.favorite_templates | Users can insert own | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |

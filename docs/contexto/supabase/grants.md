@@ -1026,6 +1026,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.error_logs | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.estados | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.estados | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.external_data_audit_log | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.external_data_audit_log | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.favorite_templates | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.favorite_templates | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.favorites | authenticated | DELETE, INSERT, SELECT, UPDATE |

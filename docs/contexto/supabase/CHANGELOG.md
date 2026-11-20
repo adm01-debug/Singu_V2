@@ -2,6 +2,16 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-20 13:14 UTC
+
+- **colunas** adicionado (7): `public.external_data_audit_log.created_at`, `public.external_data_audit_log.id`, `public.external_data_audit_log.operation`, `public.external_data_audit_log.outcome`, `public.external_data_audit_log.payload`, `public.external_data_audit_log.table_name`, `public.external_data_audit_log.user_id`
+- **constraints** adicionado (4): `public.external_data_audit_log.external_data_audit_log_operation_check`, `public.external_data_audit_log.external_data_audit_log_outcome_check`, `public.external_data_audit_log.external_data_audit_log_pkey`, `public.external_data_audit_log.external_data_audit_log_user_id_fkey`
+- **grants** adicionado (2): `public.external_data_audit_log:authenticated`, `public.external_data_audit_log:service_role`
+- **indexes** adicionado (3): `public.external_data_audit_log_pkey`, `public.idx_external_data_audit_outcome`, `public.idx_external_data_audit_user`
+- **lints** adicionado (1): `policy_auth_fn_not_wrapped:public.external_data_audit_log.admin_only_select_external_data_audit`
+- **policies (RLS)** adicionado (1): `public.external_data_audit_log.admin_only_select_external_data_audit`
+- **tabelas** adicionado (1): `public.external_data_audit_log`
+
 ## 2026-11-20 12:18 UTC
 
 - **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`

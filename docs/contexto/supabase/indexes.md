@@ -914,6 +914,9 @@ Uso e tamanho em `stats.md`.
 | public.error_logs | error_logs_pkey | btree | id | sim | sim |  |
 | public.estados | estados_pkey | btree | ibge_code | sim | sim |  |
 | public.estados | estados_uf_key | btree | uf | sim | sim |  |
+| public.external_data_audit_log | external_data_audit_log_pkey | btree | id | sim | sim |  |
+| public.external_data_audit_log | idx_external_data_audit_outcome | btree | outcome, created_at | não | sim | `(outcome = ANY (ARRAY['denied'::text, 'error'::text]))` |
+| public.external_data_audit_log | idx_external_data_audit_user | btree | user_id, created_at | não | sim |  |
 | public.favorite_templates | favorite_templates_pkey | btree | id | sim | sim |  |
 | public.favorite_templates | idx_fav_templates_unique | btree | user_id, template_id | sim | sim |  |
 | public.favorites | favorites_pkey | btree | id | sim | sim |  |

@@ -517,6 +517,7 @@
 | public.emotional_states_history | interaction_id | public.interactions | id | NO ACTION | NO ACTION |
 | public.eq_analysis_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.eq_analysis_history | interaction_id | public.interactions | id | NO ACTION | NO ACTION |
+| public.external_data_audit_log | user_id | auth.users | id | SET NULL | NO ACTION |
 | public.favorites | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.health_alerts | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.hidden_objections | contact_id | public.contacts | id | CASCADE | NO ACTION |
