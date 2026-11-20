@@ -2,6 +2,13 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-20 17:11 UTC
+
+- **lints** adicionado (4): `policy_auth_fn_not_wrapped:public.push_subscriptions.Users can create their own subscriptions`, `policy_auth_fn_not_wrapped:public.push_subscriptions.Users can delete their own subscriptions`, `policy_auth_fn_not_wrapped:public.push_subscriptions.Users can update their own subscriptions`, `policy_auth_fn_not_wrapped:public.push_subscriptions.Users can view their own subscriptions`
+- **migrations** adicionado (1): `20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a`
+- **policies (RLS)** adicionado (1): `public.push_subscriptions.Users can view their own subscriptions`
+- **policies (RLS)** alterado (3): `public.push_subscriptions.Users can create their own subscriptions`, `public.push_subscriptions.Users can delete their own subscriptions`, `public.push_subscriptions.Users can update their own subscriptions`
+
 ## 2026-11-20 14:14 UTC
 
 - **functions** alterado (2): `public.handle_new_user()`, `public.update_updated_at_column()`

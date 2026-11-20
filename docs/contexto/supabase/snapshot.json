@@ -275344,6 +275344,30 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.push_subscriptions.Users can create their own subscriptions",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.push_subscriptions.Users can delete their own subscriptions",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.push_subscriptions.Users can update their own subscriptions",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.push_subscriptions.Users can view their own subscriptions",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.rpc_perf_samples.Admins read perf samples",
         "severity": "BAIXA"
       },
@@ -275468,6 +275492,12 @@
         "statements": 86,
         "statements_sha": "d3af0efc1c789539",
         "version": "20260109144945"
+      },
+      {
+        "name": "f27798ce-ebf4-4249-9a8f-9514c71cea4a",
+        "statements": 12,
+        "statements_sha": "69dc042ea10dd439",
+        "version": "20260109173224"
       },
       {
         "name": "recreate_trigger_contact_phones_normalizar",
@@ -294074,23 +294104,23 @@
         "name": "Users can create their own subscriptions",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "push_subscriptions",
         "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+        "with_check": "(auth.uid() = user_id)"
       },
       {
         "cmd": "DELETE",
         "name": "Users can delete their own subscriptions",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "push_subscriptions",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -294098,11 +294128,11 @@
         "name": "Users can update their own subscriptions",
         "permissive": "PERMISSIVE",
         "roles": [
-          "authenticated"
+          "public"
         ],
         "schema": "public",
         "table": "push_subscriptions",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {
@@ -294127,6 +294157,18 @@
         "schema": "public",
         "table": "push_subscriptions",
         "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "Users can view their own subscriptions",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "public"
+        ],
+        "schema": "public",
+        "table": "push_subscriptions",
+        "using": "(auth.uid() = user_id)",
         "with_check": null
       },
       {

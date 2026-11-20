@@ -6,7 +6,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 9 |
+| policies | 10 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -50,9 +50,9 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | authenticated |
+| roles | public |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can delete their own subscriptions`
 
@@ -60,8 +60,8 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can update their own subscriptions`
@@ -70,8 +70,8 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own push subscriptions`
@@ -92,6 +92,16 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK |  |
+
+### `Users can view their own subscriptions`
+
+| campo | valor |
+|---|---|
+| comando | SELECT |
+| tipo | PERMISSIVE |
+| roles | public |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `push_subscriptions_user_delete`

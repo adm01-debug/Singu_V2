@@ -1209,11 +1209,12 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.purchase_history | purchase_history_insert | INSERT | PERMISSIVE | public |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.purchase_history | purchase_history_select | SELECT | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.purchase_history | purchase_history_update | UPDATE | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` | `(( SELECT auth.uid() AS uid) = user_id)` |
-| public.push_subscriptions | Users can create their own subscriptions | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
-| public.push_subscriptions | Users can delete their own subscriptions | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| public.push_subscriptions | Users can update their own subscriptions | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.push_subscriptions | Users can create their own subscriptions | INSERT | PERMISSIVE | public |  | `(auth.uid() = user_id)` |
+| public.push_subscriptions | Users can delete their own subscriptions | DELETE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.push_subscriptions | Users can update their own subscriptions | UPDATE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.push_subscriptions | Users can view own push subscriptions | SELECT | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.push_subscriptions | Users can view own subscriptions limited | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.push_subscriptions | Users can view their own subscriptions | SELECT | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
 | public.push_subscriptions | push_subscriptions_user_delete | DELETE | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` |  |
 | public.push_subscriptions | push_subscriptions_user_insert | INSERT | PERMISSIVE | authenticated |  | `(user_id = ( SELECT auth.uid() AS uid))` |
 | public.push_subscriptions | push_subscriptions_user_select | SELECT | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` |  |

@@ -508,7 +508,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.proximo_passo_feedback](tables/public/proximo_passo_feedback.md) | table | sim | 3 | 9 | não |  |
 | [public.psychographic_audit_log](tables/public/psychographic_audit_log.md) | table | sim | 1 | 8 | não |  |
 | [public.purchase_history](tables/public/purchase_history.md) | table | sim | 8 | 17 | não |  |
-| [public.push_subscriptions](tables/public/push_subscriptions.md) | table | sim | 9 | 7 | não |  |
+| [public.push_subscriptions](tables/public/push_subscriptions.md) | table | sim | 10 | 7 | não |  |
 | [public.query_telemetry](tables/public/query_telemetry.md) | table | sim | 7 | 13 | não |  |
 | [public.quick_notes](tables/public/quick_notes.md) | table | sim | 4 | 9 | não |  |
 | [public.ragas_scores](tables/public/ragas_scores.md) | table | sim | 2 | 15 | não |  |
