@@ -3,7 +3,7 @@
 -- =============================================
 
 -- 1. PROFILES TABLE (User profiles with company association)
-CREATE TABLE public.profiles (
+CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   first_name TEXT,
   last_name TEXT,
@@ -18,14 +18,17 @@ CREATE TABLE public.profiles (
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own profile" ON public.profiles;
 CREATE POLICY "Users can view their own profile"
   ON public.profiles FOR SELECT
   USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
 CREATE POLICY "Users can insert their own profile"
   ON public.profiles FOR INSERT
   WITH CHECK (auth.uid() = id);
@@ -47,12 +50,13 @@ BEGIN
 END;
 $$;
 
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- 2. COMPANIES TABLE
-CREATE TABLE public.companies (
+CREATE TABLE IF NOT EXISTS public.companies (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   name TEXT NOT NULL,
@@ -77,24 +81,28 @@ CREATE TABLE public.companies (
 
 ALTER TABLE public.companies ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own companies" ON public.companies;
 CREATE POLICY "Users can view their own companies"
   ON public.companies FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own companies" ON public.companies;
 CREATE POLICY "Users can insert their own companies"
   ON public.companies FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own companies" ON public.companies;
 CREATE POLICY "Users can update their own companies"
   ON public.companies FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own companies" ON public.companies;
 CREATE POLICY "Users can delete their own companies"
   ON public.companies FOR DELETE
   USING (auth.uid() = user_id);
 
 -- 3. CONTACTS TABLE
-CREATE TABLE public.contacts (
+CREATE TABLE IF NOT EXISTS public.contacts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   company_id UUID REFERENCES public.companies(id) ON DELETE SET NULL,
@@ -141,24 +149,28 @@ CREATE TABLE public.contacts (
 
 ALTER TABLE public.contacts ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own contacts" ON public.contacts;
 CREATE POLICY "Users can view their own contacts"
   ON public.contacts FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own contacts" ON public.contacts;
 CREATE POLICY "Users can insert their own contacts"
   ON public.contacts FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own contacts" ON public.contacts;
 CREATE POLICY "Users can update their own contacts"
   ON public.contacts FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own contacts" ON public.contacts;
 CREATE POLICY "Users can delete their own contacts"
   ON public.contacts FOR DELETE
   USING (auth.uid() = user_id);
 
 -- 4. INTERACTIONS TABLE
-CREATE TABLE public.interactions (
+CREATE TABLE IF NOT EXISTS public.interactions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE NOT NULL,
@@ -183,24 +195,28 @@ CREATE TABLE public.interactions (
 
 ALTER TABLE public.interactions ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own interactions" ON public.interactions;
 CREATE POLICY "Users can view their own interactions"
   ON public.interactions FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own interactions" ON public.interactions;
 CREATE POLICY "Users can insert their own interactions"
   ON public.interactions FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own interactions" ON public.interactions;
 CREATE POLICY "Users can update their own interactions"
   ON public.interactions FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own interactions" ON public.interactions;
 CREATE POLICY "Users can delete their own interactions"
   ON public.interactions FOR DELETE
   USING (auth.uid() = user_id);
 
 -- 5. INSIGHTS TABLE
-CREATE TABLE public.insights (
+CREATE TABLE IF NOT EXISTS public.insights (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE NOT NULL,
@@ -218,24 +234,28 @@ CREATE TABLE public.insights (
 
 ALTER TABLE public.insights ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own insights" ON public.insights;
 CREATE POLICY "Users can view their own insights"
   ON public.insights FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own insights" ON public.insights;
 CREATE POLICY "Users can insert their own insights"
   ON public.insights FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own insights" ON public.insights;
 CREATE POLICY "Users can update their own insights"
   ON public.insights FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own insights" ON public.insights;
 CREATE POLICY "Users can delete their own insights"
   ON public.insights FOR DELETE
   USING (auth.uid() = user_id);
 
 -- 6. ALERTS TABLE
-CREATE TABLE public.alerts (
+CREATE TABLE IF NOT EXISTS public.alerts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -251,24 +271,28 @@ CREATE TABLE public.alerts (
 
 ALTER TABLE public.alerts ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own alerts" ON public.alerts;
 CREATE POLICY "Users can view their own alerts"
   ON public.alerts FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own alerts" ON public.alerts;
 CREATE POLICY "Users can insert their own alerts"
   ON public.alerts FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own alerts" ON public.alerts;
 CREATE POLICY "Users can update their own alerts"
   ON public.alerts FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own alerts" ON public.alerts;
 CREATE POLICY "Users can delete their own alerts"
   ON public.alerts FOR DELETE
   USING (auth.uid() = user_id);
 
 -- 7. ACTIVITIES TABLE (Audit log)
-CREATE TABLE public.activities (
+CREATE TABLE IF NOT EXISTS public.activities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   type TEXT CHECK (type IN ('company_created', 'contact_created', 'interaction_added', 'insight_generated', 'tag_added', 'profile_updated', 'alert_triggered')) NOT NULL,
@@ -281,10 +305,12 @@ CREATE TABLE public.activities (
 
 ALTER TABLE public.activities ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own activities" ON public.activities;
 CREATE POLICY "Users can view their own activities"
   ON public.activities FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own activities" ON public.activities;
 CREATE POLICY "Users can insert their own activities"
   ON public.activities FOR INSERT
   WITH CHECK (auth.uid() = user_id);
@@ -313,14 +339,17 @@ END;
 $$ LANGUAGE plpgsql SET search_path = public;
 
 -- Apply updated_at triggers
+DROP TRIGGER IF EXISTS update_profiles_updated_at ON public.profiles;
 CREATE TRIGGER update_profiles_updated_at
   BEFORE UPDATE ON public.profiles
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_companies_updated_at ON public.companies;
 CREATE TRIGGER update_companies_updated_at
   BEFORE UPDATE ON public.companies
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_contacts_updated_at ON public.contacts;
 CREATE TRIGGER update_contacts_updated_at
   BEFORE UPDATE ON public.contacts
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
