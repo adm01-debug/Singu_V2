@@ -1357,6 +1357,16 @@ CREATE TABLE IF NOT EXISTS public.suppliers (
   CONSTRAINT suppliers_pkey PRIMARY KEY (id),
   CONSTRAINT suppliers_company_id_key UNIQUE (company_id)
 );
+-- ============ SUPPLIERS HOMOLOGACAO ============
+-- PROTETOR (preview): colunas de homologacao/qualificacao foram adicionadas
+-- por migrations recuperadas de producao (20260329175449 e adjacentes) que no
+-- preview ficaram registradas-sem-aplicar; a 0002 garante a base para as views
+-- recriadas por essas migrations. Idempotente: no replay completo as colunas
+-- ja existem quando a 0002 roda -> no-op.
+ALTER TABLE public.suppliers
+  ADD COLUMN IF NOT EXISTS homologado BOOLEAN NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS data_homologacao DATE,
+  ADD COLUMN IF NOT EXISTS score_geral NUMERIC(5,2);
 CREATE TABLE IF NOT EXISTS public.sync_log (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   sync_type varchar NOT NULL,
