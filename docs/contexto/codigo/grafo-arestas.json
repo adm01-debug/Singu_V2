@@ -11671,6 +11671,7 @@
   ],
   "supabase/functions/generate-insights/index.ts": [
    "supabase/functions/_shared/auth.ts",
+   "supabase/functions/_shared/best-effort-write.ts",
    "supabase/functions/_shared/fetch-utils.ts",
    "supabase/functions/_shared/rate-limit.ts",
    "supabase/functions/_shared/tracing.ts"

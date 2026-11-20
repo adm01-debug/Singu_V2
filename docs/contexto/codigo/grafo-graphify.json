@@ -4,19 +4,19 @@
  "presente": true,
  "como_gerar": "uvx --from \"graphifyy[sql]\" graphify update .  (ou: bun run graph:update); saída em graphify-out/ — graph.json e graph.html NÃO são versionados (dezenas de MB); use `graphify query/path/explain` localmente",
  "relatorio": null,
- "commit_do_grafo": "3e6b290ffe7f96da4705006477a258239fc7a976",
+ "commit_do_grafo": "2020e5bc7e5afc31ccff8d3d078972482663ba32",
  "grafo_atual": true,
  "nos": 25769,
- "arestas": 41115,
- "comunidades_total": 3041,
+ "arestas": 41118,
+ "comunidades_total": 3042,
  "relacoes": {
   "calls": 3261,
   "cites": 11,
   "contains": 17433,
   "defines": 473,
   "dynamic_import": 294,
-  "imports": 2728,
-  "imports_from": 9438,
+  "imports": 2729,
+  "imports_from": 9440,
   "indexes": 1860,
   "indirect_call": 252,
   "inherits": 30,
@@ -28,16 +28,16 @@
   "triggers": 586
  },
  "origem": {
-  "EXTRACTED": 39517,
+  "EXTRACTED": 39520,
   "INFERRED": 1598
  },
  "comunidades": [
   {
    "id": 10,
    "nome": "_shared/auth.ts",
-   "nos": 321,
+   "nos": 320,
    "callables": 97,
-   "arquivos": 89,
+   "arquivos": 88,
    "exemplos_arquivos": [
     "docs/adr/007-scoped-cors.md",
     "docs/lacunas/C2_adrs_migracao_dr_operacao.md",
@@ -554,23 +554,6 @@
    ]
   },
   {
-   "id": 32,
-   "nome": "tracedLogger",
-   "nos": 82,
-   "callables": 42,
-   "arquivos": 21,
-   "exemplos_arquivos": [
-    ".lovable/plan.md",
-    "CHANGELOG.md",
-    "docs/lacunas/C2_adrs_migracao_dr_operacao.md",
-    "src/lib/logger.ts",
-    "supabase/functions/_shared/pagination.ts",
-    "supabase/functions/_shared/pagination_test.ts",
-    "supabase/functions/_shared/tracing.ts",
-    "supabase/functions/_shared/webhook-signature.ts"
-   ]
-  },
-  {
    "id": 89,
    "nome": "generate.py",
    "nos": 81,
@@ -588,6 +571,23 @@
    "arquivos": 1,
    "exemplos_arquivos": [
     "scripts/ai-context/gerar.mjs"
+   ]
+  },
+  {
+   "id": 32,
+   "nome": "tracedLogger",
+   "nos": 79,
+   "callables": 42,
+   "arquivos": 20,
+   "exemplos_arquivos": [
+    ".lovable/plan.md",
+    "CHANGELOG.md",
+    "docs/lacunas/C2_adrs_migracao_dr_operacao.md",
+    "src/lib/logger.ts",
+    "supabase/functions/_shared/pagination.ts",
+    "supabase/functions/_shared/pagination_test.ts",
+    "supabase/functions/_shared/tracing.ts",
+    "supabase/functions/_shared/webhook-signature.ts"
    ]
   },
   {
@@ -659,23 +659,6 @@
    "arquivos": 1,
    "exemplos_arquivos": [
     "package.json"
-   ]
-  },
-  {
-   "id": 101,
-   "nome": "ref_https",
-   "nos": 76,
-   "callables": 34,
-   "arquivos": 29,
-   "exemplos_arquivos": [
-    "docs/lacunas/C2_adrs_migracao_dr_operacao.md",
-    "supabase/functions/_shared/aiGatewayLogger.ts",
-    "supabase/functions/_shared/edge-test-harness.ts",
-    "supabase/functions/_shared/edge-types-contract_test.ts",
-    "supabase/functions/_shared/email-verify.ts",
-    "supabase/functions/_shared/email-verify_test.ts",
-    "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
-    "supabase/functions/_shared/evolution-ownership-contract_test.ts"
    ]
   },
   {
@@ -916,6 +899,23 @@
    "arquivos": 1,
    "exemplos_arquivos": [
     "scripts/migration/ddl/03_indexes.sql"
+   ]
+  },
+  {
+   "id": 101,
+   "nome": "ref_https",
+   "nos": 59,
+   "callables": 25,
+   "arquivos": 24,
+   "exemplos_arquivos": [
+    "docs/lacunas/C2_adrs_migracao_dr_operacao.md",
+    "supabase/functions/_shared/aiGatewayLogger.ts",
+    "supabase/functions/_shared/edge-test-harness.ts",
+    "supabase/functions/_shared/edge-types-contract_test.ts",
+    "supabase/functions/_shared/evolution-dispatch-contract_test.ts",
+    "supabase/functions/_shared/evolution-ownership-contract_test.ts",
+    "supabase/functions/_shared/lead-score-threshold-runner_test.ts",
+    "supabase/functions/_shared/notification-delivery.ts"
    ]
   },
   {
@@ -1473,7 +1473,7 @@
    "id": "ref_npm_supabase",
    "rotulo": "ref_npm_supabase",
    "arquivo": null,
-   "grau": 107,
+   "grau": 108,
    "comunidade": "_shared/auth.ts"
   },
   {
@@ -4890,12 +4890,12 @@
   "supabase/functions/_shared/edge-test-harness.ts": "ref_https",
   "supabase/functions/_shared/edge-types-contract_test.ts": "ref_https",
   "supabase/functions/_shared/email-templates/password-migration-reset.tsx": "password-migration-reset.tsx",
-  "supabase/functions/_shared/email-verify.ts": "ref_https",
-  "supabase/functions/_shared/email-verify_test.ts": "ref_https",
+  "supabase/functions/_shared/email-verify.ts": "email-finder/index.ts",
+  "supabase/functions/_shared/email-verify_test.ts": "email-finder/index.ts",
   "supabase/functions/_shared/evolution-dispatch-contract_test.ts": "ref_https",
   "supabase/functions/_shared/evolution-ownership-contract_test.ts": "ref_https",
   "supabase/functions/_shared/fetch-utils.ts": "_shared/auth.ts",
-  "supabase/functions/_shared/fetch-utils_test.ts": "ref_https",
+  "supabase/functions/_shared/fetch-utils_test.ts": "auto-regen-behavioral-profiles/index.ts",
   "supabase/functions/_shared/lead-score-contract.ts": "lead-scorer/index.ts",
   "supabase/functions/_shared/lead-score-threshold-runner_test.ts": "ref_https",
   "supabase/functions/_shared/notification-delivery.ts": "ref_https",
@@ -4904,7 +4904,7 @@
   "supabase/functions/_shared/pagination_test.ts": "tracedLogger",
   "supabase/functions/_shared/push.ts": "push.ts",
   "supabase/functions/_shared/rate-limit.ts": "_shared/auth.ts",
-  "supabase/functions/_shared/rate-limit_test.ts": "_shared/auth.ts",
+  "supabase/functions/_shared/rate-limit_test.ts": "ref_https",
   "supabase/functions/_shared/resend.ts": "weekly-digest/index.ts",
   "supabase/functions/_shared/safe-http.ts": "connection-tester/index.ts",
   "supabase/functions/_shared/safe-http_test.ts": "Achados",
@@ -4937,7 +4937,7 @@
   "supabase/functions/attribution-calculator/index.ts": "_shared/auth.ts",
   "supabase/functions/audit-analytics/index.ts": "tracedLogger",
   "supabase/functions/auto-rebatch-behavioral/index.ts": "weekly-digest/index.ts",
-  "supabase/functions/auto-regen-behavioral-profiles/index.ts": "ref_https",
+  "supabase/functions/auto-regen-behavioral-profiles/index.ts": "auto-regen-behavioral-profiles/index.ts",
   "supabase/functions/bitrix24-webhook/index.ts": "tracedLogger",
   "supabase/functions/bulk-revalidate/index.ts": "bulk-revalidate/index.ts",
   "supabase/functions/check-health-alerts/index.ts": "tracedLogger",
@@ -4963,7 +4963,7 @@
   "supabase/functions/dual-write-proxy/index.ts": "_shared/auth.ts",
   "supabase/functions/elevenlabs-scribe-token/index.ts": "_shared/auth.ts",
   "supabase/functions/elevenlabs-tts/index.ts": "_shared/auth.ts",
-  "supabase/functions/email-finder/index.ts": "normalize",
+  "supabase/functions/email-finder/index.ts": "email-finder/index.ts",
   "supabase/functions/email-pipeline-health/index.ts": "weekly-digest/index.ts",
   "supabase/functions/email-thread-summary/index.ts": "_shared/auth.ts",
   "supabase/functions/email-verifier/index.ts": "_shared/auth.ts",
@@ -4994,7 +4994,7 @@
   "supabase/functions/form-submit-handler/index.ts": "_shared/auth.ts",
   "supabase/functions/generate-behavioral-profile/index.ts": "_shared/auth.ts",
   "supabase/functions/generate-insights/index.test.ts": "ref_https",
-  "supabase/functions/generate-insights/index.ts": "tracedLogger",
+  "supabase/functions/generate-insights/index.ts": "_shared/auth.ts",
   "supabase/functions/generate-offer-suggestions/index.ts": "_shared/auth.ts",
   "supabase/functions/get-signature/index.ts": "_shared/auth.ts",
   "supabase/functions/health-aggregate/index.ts": "health-aggregate/index.ts",
@@ -5019,7 +5019,7 @@
   "supabase/functions/phone-validator/index.ts": "_shared/auth.ts",
   "supabase/functions/playbook-generator/index.ts": "_shared/auth.ts",
   "supabase/functions/playbook-recommender/index.ts": "_shared/auth.ts",
-  "supabase/functions/process-behavioral-regen-queue/index.ts": "ref_https",
+  "supabase/functions/process-behavioral-regen-queue/index.ts": "auto-regen-behavioral-profiles/index.ts",
   "supabase/functions/process-webhook-dlq/index.ts": "_shared/auth.ts",
   "supabase/functions/retry-behavioral-profile/index.ts": "_shared/auth.ts",
   "supabase/functions/revops-snapshot-builder/index.ts": "tracedLogger",

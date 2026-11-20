@@ -38065,7 +38065,8 @@
    },
    "usada_no_front": 3,
    "usada_em_edges": [
-    "check-notifications"
+    "check-notifications",
+    "generate-insights"
    ],
    "triggers": [],
    "sem_rls": false,

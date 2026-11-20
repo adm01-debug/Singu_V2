@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(insights): persiste insights gerados por IA na tabela insights (#288)",
    "fix(deps): bump react-router 7.18.6 e vitest 5.1.1 (alerts dependabot) (#286)",
    "fix(migrations): torna 154 migrations idempotentes para reaplicação no preview (#284)",
    "fix(migrations): força handle_new_user com email (drift de produção) (#285)",
-   "fix(migrations): torne a Foundation 1cfd4579 totalmente idempotente (#283)",
-   "Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110"
+   "fix(migrations): torne a Foundation 1cfd4579 totalmente idempotente (#283)"
   ]
  },
  "pr_template": null,

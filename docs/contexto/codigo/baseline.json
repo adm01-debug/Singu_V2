@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "3e6b290ffe7f96da4705006477a258239fc7a976",
+  "commit": "2020e5bc7e5afc31ccff8d3d078972482663ba32",
   "branch": "main",
-  "data_commit": "2026-11-20T14:38:52-03:00",
+  "data_commit": "2026-11-20T16:49:13-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "2020e5b",
+    "data": "2026-11-20",
+    "assunto": "fix(insights): persiste insights gerados por IA na tabela insights (#288)"
+   },
    {
     "sha": "3e6b290",
     "data": "2026-11-20",
@@ -126,14 +131,9 @@
     "sha": "16da53a",
     "data": "2026-11-19",
     "assunto": "feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)"
-   },
-   {
-    "sha": "f76d507",
-    "data": "2026-11-18",
-    "assunto": "feat(gatilhos): liga a matriz completa de conflitos e sinergias que estava desligada (#268)"
    }
   ],
-  "arquivos_mudados_7d": 1091,
+  "arquivos_mudados_7d": 1093,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 128
+    "commits": 129
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3885,
   "arquivos_codigo": 2238,
-  "linhas_codigo": 417555,
+  "linhas_codigo": 417602,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 26893
+   "linhas": 26940
   },
   "tailwind.config.ts": {
    "arquivos": 1,

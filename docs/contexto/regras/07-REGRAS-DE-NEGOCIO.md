@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3e6b290ffe` · branch `main` · 2026-11-20 17:39 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2020e5bc7e` · branch `main` · 2026-11-20 19:50 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4078,7 +4078,7 @@ _nenhum item encontrado_
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 3 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +230 linhas — lista completa em `context.json` | |
+| … +231 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -5352,6 +5352,7 @@ _nenhum item encontrado_
 | o teste valida apenas o contrato de erro 401. | `supabase/functions/external-data/optimistic-locking_test.ts` |
 | ").eq("period_id", period_id).order("forecasted_amount", { ascending: false }).limit(50); | `supabase/functions/forecast-narrative/index.ts` |
 | ── Rate limit ── | `supabase/functions/generate-insights/index.ts` |
+| retornou). Duplicata de re-geração é evitada pela UI (limite de recentes). | `supabase/functions/generate-insights/index.ts` |
 | ').in('contact_id', contactIds).order('created_at', { ascending: false }).limit(100), | `supabase/functions/generate-offer-suggestions/index.ts` |
 | Modos: { contact_id } -> recalcula 1, { batch: true, limit?: n } -> processa fila. | `supabase/functions/lead-scorer/index.ts` |
 | Number(s.weight ?? 1) * decayFactor(ageDays, rule.decay_days); | `supabase/functions/lead-scorer/index.ts` |
@@ -5455,5 +5456,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| … +43 linhas — lista completa em `context.json` | |
+| … +44 linhas — lista completa em `context.json` | |

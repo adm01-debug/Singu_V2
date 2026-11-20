@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `3e6b290ffe7f96da4705006477a258239fc7a976` (2026-11-20T14:38:52-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `2020e5bc7e5afc31ccff8d3d078972482663ba32` (2026-11-20T16:49:13-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3885 |
 | arquivos_codigo | 2238 |
-| linhas_codigo | 417555 |
+| linhas_codigo | 417602 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -312,7 +312,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `forecast-snapshot-cron` — tabelas: deal_forecasts, forecast_periods, forecast_snapshots; chamada por 0 arquivo(s) do front, por SQL/cron
 - `form-submit-handler` — tabelas: -; chamada por 1 arquivo(s) do front
 - `generate-behavioral-profile` — tabelas: behavioral_insight_feedback, call_logs, contacts, interactions, whatsapp_messages; chamada por 1 arquivo(s) do front
-- `generate-insights` — tabelas: -; chamada por 1 arquivo(s) do front
+- `generate-insights` — tabelas: insights; chamada por 1 arquivo(s) do front
 - `generate-offer-suggestions` — tabelas: contact_analytical_profiles, contacts, interactions, offer_suggestions, purchase_history, social_behavior_analysis, social_insights; chamada por 1 arquivo(s) do front
 - `get-signature` — tabelas: document_signatures, document_views; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `health` — tabelas: companies, profiles; chamada por 1 arquivo(s) do front
@@ -445,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25769 nós · 41115 arestas · 3041 comunidades · grafo do commit `3e6b290f`
-- comunidades maiores: _shared/auth.ts (321), ref_lib (285), useAuth (274), framer-motion (271), lucide-react (267), 02_tables.sql (259), 📖 Dicionário de Dados — SINGU CRM (227), @tanstack/react-query (227), react-router-dom (227), react (221), ref_components (220), ref_hooks (218)
+- 25769 nós · 41118 arestas · 3042 comunidades · grafo do commit `2020e5bc`
+- comunidades maiores: _shared/auth.ts (320), ref_lib (285), useAuth (274), framer-motion (271), lucide-react (267), 02_tables.sql (259), 📖 Dicionário de Dados — SINGU CRM (227), @tanstack/react-query (227), react-router-dom (227), react (221), ref_components (220), ref_hooks (218)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-20 `2020e5b` fix(insights): persiste insights gerados por IA na tabela insights (#288)
 - 2026-11-20 `3e6b290` fix(deps): bump react-router 7.18.6 e vitest 5.1.1 (alerts dependabot) (#286)
 - 2026-11-20 `df6e5c6` fix(migrations): torna 154 migrations idempotentes para reaplicação no preview (#284)
 - 2026-11-20 `6ba0fb9` fix(migrations): força handle_new_user com email (drift de produção) (#285)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-20 `1cd9342` infra: workflow temporario para aplicar migration de auditoria em producao
 - 2026-11-20 `b70f89e` Merge pull request #278 from adm01-debug/claude/fix-resgate-auditoria-external-data-20261119-1501
 - 2026-11-20 `6bfdba5` chore(ci): forca nova rodada do Supabase Preview pos-merge 267
-- 2026-11-20 `e6f4c68` chore(audit): newline final em mutations.ts
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

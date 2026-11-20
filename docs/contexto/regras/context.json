@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "3e6b290ffe7f96da4705006477a258239fc7a976",
+  "sha": "2020e5bc7e5afc31ccff8d3d078972482663ba32",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 17:39 UTC",
+  "generated_at": "2026-11-20 19:50 UTC",
   "files_total": 3990,
   "code_files": 3518,
-  "code_lines": 473788
+  "code_lines": 473835
  },
  "version": "1.3.2",
- "facts_hash": "a3d0b5dfcc4052be",
+ "facts_hash": "1067b9b9b38a37e5",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -104438,9 +104438,13 @@
      "OPTIONS"
     ],
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
-    "tables": [],
+    "tables": [
+     "insights"
+    ],
     "env": [
-     "DEEPSEEK_API_KEY"
+     "DEEPSEEK_API_KEY",
+     "SUPABASE_SERVICE_ROLE_KEY",
+     "SUPABASE_URL"
     ],
     "external": [],
     "invokes": [],
@@ -111882,7 +111886,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 26893,
+   "lines": 26940,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113922,6 +113926,9 @@
     ],
     "update": [
      "src/hooks/useContactDetail.ts"
+    ],
+    "insert": [
+     "supabase/functions/generate-insights/index.ts"
     ]
    },
    "intent_scores": {
@@ -118537,6 +118544,7 @@
     "supabase/functions/forecast-snapshot-cron/index.ts",
     "supabase/functions/form-submit-handler/index.ts",
     "supabase/functions/generate-behavioral-profile/index.ts",
+    "supabase/functions/generate-insights/index.ts",
     "supabase/functions/generate-offer-suggestions/index.ts",
     "supabase/functions/get-signature/index.ts",
     "supabase/functions/health-aggregate/index.ts",
@@ -118636,6 +118644,7 @@
     "supabase/functions/forecast-snapshot-cron/index.ts",
     "supabase/functions/form-submit-handler/index.ts",
     "supabase/functions/generate-behavioral-profile/index.ts",
+    "supabase/functions/generate-insights/index.ts",
     "supabase/functions/generate-offer-suggestions/index.ts",
     "supabase/functions/get-signature/index.ts",
     "supabase/functions/health-aggregate/index.ts",
@@ -128521,6 +128530,10 @@
    {
     "file": "supabase/functions/generate-insights/index.ts",
     "text": "── Rate limit ──"
+   },
+   {
+    "file": "supabase/functions/generate-insights/index.ts",
+    "text": "retornou). Duplicata de re-geração é evitada pela UI (limite de recentes)."
    },
    {
     "file": "supabase/functions/generate-offer-suggestions/index.ts",
@@ -168641,6 +168654,10 @@
    {
     "file": "supabase/functions/evolution-bitrix-connector/index.ts",
     "line": "setTimeout(() => { btn.disabled = false; }, 2000);"
+   },
+   {
+    "file": "supabase/functions/generate-insights/index.ts",
+    "line": "expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),"
    },
    {
     "file": "supabase/functions/generate-offer-suggestions/index.ts",
@@ -220439,6 +220456,7 @@
    "supabase/functions/forecast-snapshot-cron/index.ts",
    "supabase/functions/form-submit-handler/index.ts",
    "supabase/functions/generate-behavioral-profile/index.ts",
+   "supabase/functions/generate-insights/index.ts",
    "supabase/functions/generate-offer-suggestions/index.ts",
    "supabase/functions/get-signature/index.ts",
    "supabase/functions/health-aggregate/index.ts",
@@ -294589,9 +294607,17 @@
   },
   "supabase/functions/generate-insights/index.ts": {
    "path": "supabase/functions/generate-insights/index.ts",
-   "lines": 149,
+   "lines": 196,
+   "tables": [
+    {
+     "table": "insights",
+     "op": "insert"
+    }
+   ],
    "env": [
-    "DEEPSEEK_API_KEY"
+    "DEEPSEEK_API_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
    ],
    "errors": [
     "DEEPSEEK_API_KEY is not configured"
@@ -294618,8 +294644,13 @@
     }
    ],
    "rule_comments": [
-    "── Rate limit ──"
-   ]
+    "── Rate limit ──",
+    "retornou). Duplicata de re-geração é evitada pela UI (limite de recentes)."
+   ],
+   "temporal": [
+    "expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),"
+   ],
+   "uses_service_role": true
   },
   "supabase/functions/generate-offer-suggestions/index.ts": {
    "path": "supabase/functions/generate-offer-suggestions/index.ts",
@@ -305619,10 +305650,20 @@
   }
  },
  "git": {
-  "sha": "3e6b290ffe7f96da4705006477a258239fc7a976",
+  "sha": "2020e5bc7e5afc31ccff8d3d078972482663ba32",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "2020e5b",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "fix(insights): persiste insights gerados por IA na tabela insights (#288)",
+    "files": [
+     "src/pages/insights/InsightsContent.tsx",
+     "supabase/functions/generate-insights/index.ts"
+    ]
+   },
    {
     "sha": "3e6b290",
     "date": "2026-11-20",
@@ -306696,17 +306737,6 @@
      "src/components/company-detail/QuickFollowUpGenerator.tsx",
      "src/hooks/useCompanyIntelligence.ts"
     ]
-   },
-   {
-    "sha": "485bd33",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(gamificacao): três RPCs eram chamadas sem o p_user_id obrigatório (#263)",
-    "files": [
-     "src/components/gamification/BadgesWidget.tsx",
-     "src/components/gamification/QuotaStatusWidget.tsx",
-     "src/hooks/useGamification.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306755,6 +306785,14 @@
     2
    ],
    [
+    "src/pages/insights/InsightsContent.tsx",
+    1
+   ],
+   [
+    "supabase/functions/generate-insights/index.ts",
+    1
+   ],
+   [
     "package-lock.json",
     1
    ],
@@ -306780,14 +306818,6 @@
    ],
    [
     "supabase/migrations/20260111011309_3cf6eaa0-1797-40c2-88e3-ecf1283452bd.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260111013310_bda03f4c-4db1-499d-ad48-29fee85f88a0.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260111014845_9ce8adb5-376f-4e58-aa9e-da013720eb79.sql",
     1
    ]
   ]
