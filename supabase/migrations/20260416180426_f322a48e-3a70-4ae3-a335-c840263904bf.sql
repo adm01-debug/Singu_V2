@@ -2,20 +2,17 @@
 -- Tables for security module
 
 -- IP Whitelist
-CREATE TABLE public.ip_whitelist (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  ip_address TEXT NOT NULL,
-  label TEXT,
-  is_active BOOLEAN DEFAULT true,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
+-- Tabela pré-existente (salespro) pode não ter o shape novo: compat de colunas
+ALTER TABLE public.ip_whitelist ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+ALTER TABLE public.ip_whitelist ADD COLUMN IF NOT EXISTS label TEXT;
+ALTER TABLE public.ip_whitelist ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
+ALTER TABLE public.ip_whitelist ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
 ALTER TABLE public.ip_whitelist ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own IPs" ON public.ip_whitelist;
 CREATE POLICY "Users manage own IPs" ON public.ip_whitelist FOR ALL TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
 -- Login Attempts
-CREATE TABLE public.login_attempts (
+CREATE TABLE IF NOT EXISTS public.login_attempts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL,
@@ -25,12 +22,16 @@ CREATE TABLE public.login_attempts (
   blocked_reason TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
+-- login_attempts pode pre-existir da salespro (marco) sem user_id.
+ALTER TABLE public.login_attempts ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
 ALTER TABLE public.login_attempts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users read own attempts" ON public.login_attempts;
 CREATE POLICY "Users read own attempts" ON public.login_attempts FOR SELECT TO authenticated USING (user_id = auth.uid());
+DROP POLICY IF EXISTS "Admins read all attempts" ON public.login_attempts;
 CREATE POLICY "Admins read all attempts" ON public.login_attempts FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'));
 
 -- Geo-blocking: allowed countries
-CREATE TABLE public.geo_allowed_countries (
+CREATE TABLE IF NOT EXISTS public.geo_allowed_countries (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   country_code TEXT NOT NULL,
@@ -39,10 +40,11 @@ CREATE TABLE public.geo_allowed_countries (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 ALTER TABLE public.geo_allowed_countries ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own geo countries" ON public.geo_allowed_countries;
 CREATE POLICY "Users manage own geo countries" ON public.geo_allowed_countries FOR ALL TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
 -- City whitelist
-CREATE TABLE public.city_whitelist (
+CREATE TABLE IF NOT EXISTS public.city_whitelist (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   city TEXT NOT NULL,
@@ -52,10 +54,11 @@ CREATE TABLE public.city_whitelist (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 ALTER TABLE public.city_whitelist ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own cities" ON public.city_whitelist;
 CREATE POLICY "Users manage own cities" ON public.city_whitelist FOR ALL TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
 -- Access blocked log
-CREATE TABLE public.access_blocked_log (
+CREATE TABLE IF NOT EXISTS public.access_blocked_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   ip_address TEXT,
@@ -66,10 +69,11 @@ CREATE TABLE public.access_blocked_log (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 ALTER TABLE public.access_blocked_log ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Admins read blocked logs" ON public.access_blocked_log;
 CREATE POLICY "Admins read blocked logs" ON public.access_blocked_log FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'));
 
 -- Access security settings
-CREATE TABLE public.access_security_settings (
+CREATE TABLE IF NOT EXISTS public.access_security_settings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE,
   enable_ip_restriction BOOLEAN DEFAULT false,
@@ -82,10 +86,11 @@ CREATE TABLE public.access_security_settings (
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 ALTER TABLE public.access_security_settings ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own security settings" ON public.access_security_settings;
 CREATE POLICY "Users manage own security settings" ON public.access_security_settings FOR ALL TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
 -- Known devices
-CREATE TABLE public.user_known_devices (
+CREATE TABLE IF NOT EXISTS public.user_known_devices (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   device_fingerprint TEXT NOT NULL,
@@ -97,10 +102,11 @@ CREATE TABLE public.user_known_devices (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 ALTER TABLE public.user_known_devices ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own devices" ON public.user_known_devices;
 CREATE POLICY "Users manage own devices" ON public.user_known_devices FOR ALL TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
 -- Device login notifications
-CREATE TABLE public.device_login_notifications (
+CREATE TABLE IF NOT EXISTS public.device_login_notifications (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   device_id UUID REFERENCES public.user_known_devices(id) ON DELETE CASCADE,
@@ -110,10 +116,11 @@ CREATE TABLE public.device_login_notifications (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 ALTER TABLE public.device_login_notifications ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users read own device notifications" ON public.device_login_notifications;
 CREATE POLICY "Users read own device notifications" ON public.device_login_notifications FOR ALL TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
 -- Password reset requests (admin approval flow)
-CREATE TABLE public.password_reset_requests (
+CREATE TABLE IF NOT EXISTS public.password_reset_requests (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL,
@@ -124,11 +131,13 @@ CREATE TABLE public.password_reset_requests (
   resolved_at TIMESTAMPTZ
 );
 ALTER TABLE public.password_reset_requests ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users read own reset requests" ON public.password_reset_requests;
 CREATE POLICY "Users read own reset requests" ON public.password_reset_requests FOR SELECT TO authenticated USING (user_id = auth.uid());
+DROP POLICY IF EXISTS "Admins manage reset requests" ON public.password_reset_requests;
 CREATE POLICY "Admins manage reset requests" ON public.password_reset_requests FOR ALL TO authenticated USING (public.has_role(auth.uid(), 'admin')) WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
 -- WebAuthn credentials
-CREATE TABLE public.webauthn_credentials (
+CREATE TABLE IF NOT EXISTS public.webauthn_credentials (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   credential_id TEXT NOT NULL UNIQUE,
@@ -140,10 +149,11 @@ CREATE TABLE public.webauthn_credentials (
   last_used_at TIMESTAMPTZ
 );
 ALTER TABLE public.webauthn_credentials ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own webauthn" ON public.webauthn_credentials;
 CREATE POLICY "Users manage own webauthn" ON public.webauthn_credentials FOR ALL TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
 -- Permissions table for granular RBAC
-CREATE TABLE public.permissions (
+CREATE TABLE IF NOT EXISTS public.permissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL UNIQUE,
   description TEXT,
@@ -151,12 +161,17 @@ CREATE TABLE public.permissions (
   action TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
+-- Compat: tabela ja existia (mig_007) sem a coluna module; garante o shape de producao.
+ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS "module" TEXT;
+
 ALTER TABLE public.permissions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Authenticated read permissions" ON public.permissions;
 CREATE POLICY "Authenticated read permissions" ON public.permissions FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS "Admins manage permissions" ON public.permissions;
 CREATE POLICY "Admins manage permissions" ON public.permissions FOR ALL TO authenticated USING (public.has_role(auth.uid(), 'admin')) WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
 -- Role-permission mapping
-CREATE TABLE public.role_permissions (
+CREATE TABLE IF NOT EXISTS public.role_permissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   role app_role NOT NULL,
   permission_id UUID NOT NULL REFERENCES public.permissions(id) ON DELETE CASCADE,
@@ -164,24 +179,26 @@ CREATE TABLE public.role_permissions (
   UNIQUE(role, permission_id)
 );
 ALTER TABLE public.role_permissions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Authenticated read role_permissions" ON public.role_permissions;
 CREATE POLICY "Authenticated read role_permissions" ON public.role_permissions FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS "Admins manage role_permissions" ON public.role_permissions;
 CREATE POLICY "Admins manage role_permissions" ON public.role_permissions FOR ALL TO authenticated USING (public.has_role(auth.uid(), 'admin')) WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
 -- Seed default permissions
-INSERT INTO public.permissions (name, description, module, action) VALUES
-  ('contacts.read', 'Visualizar contatos', 'contacts', 'read'),
-  ('contacts.write', 'Criar e editar contatos', 'contacts', 'write'),
-  ('contacts.delete', 'Excluir contatos', 'contacts', 'delete'),
-  ('companies.read', 'Visualizar empresas', 'companies', 'read'),
-  ('companies.write', 'Criar e editar empresas', 'companies', 'write'),
-  ('companies.delete', 'Excluir empresas', 'companies', 'delete'),
-  ('deals.read', 'Visualizar negócios', 'deals', 'read'),
-  ('deals.write', 'Criar e editar negócios', 'deals', 'write'),
-  ('interactions.read', 'Visualizar interações', 'interactions', 'read'),
-  ('interactions.write', 'Criar interações', 'interactions', 'write'),
-  ('analytics.read', 'Visualizar analytics', 'analytics', 'read'),
-  ('admin.access', 'Acesso ao painel administrativo', 'admin', 'access'),
-  ('admin.users', 'Gerenciar usuários', 'admin', 'users'),
-  ('admin.settings', 'Gerenciar configurações', 'admin', 'settings'),
-  ('security.manage', 'Gerenciar segurança', 'security', 'manage')
+INSERT INTO public.permissions (name, description, module, action, resource) VALUES
+  ('contacts.read', 'Visualizar contatos', 'contacts', 'read', 'contacts'),
+  ('contacts.write', 'Criar e editar contatos', 'contacts', 'write', 'contacts'),
+  ('contacts.delete', 'Excluir contatos', 'contacts', 'delete', 'contacts'),
+  ('companies.read', 'Visualizar empresas', 'companies', 'read', 'companies'),
+  ('companies.write', 'Criar e editar empresas', 'companies', 'write', 'companies'),
+  ('companies.delete', 'Excluir empresas', 'companies', 'delete', 'companies'),
+  ('deals.read', 'Visualizar negócios', 'deals', 'read', 'deals'),
+  ('deals.write', 'Criar e editar negócios', 'deals', 'write', 'deals'),
+  ('interactions.read', 'Visualizar interações', 'interactions', 'read', 'interactions'),
+  ('interactions.write', 'Criar interações', 'interactions', 'write', 'interactions'),
+  ('analytics.read', 'Visualizar analytics', 'analytics', 'read', 'analytics'),
+  ('admin.access', 'Acesso ao painel administrativo', 'admin', 'access', 'admin'),
+  ('admin.users', 'Gerenciar usuários', 'admin', 'users', 'admin'),
+  ('admin.settings', 'Gerenciar configurações', 'admin', 'settings', 'admin'),
+  ('security.manage', 'Gerenciar segurança', 'security', 'manage', 'security')
 ON CONFLICT (name) DO NOTHING;

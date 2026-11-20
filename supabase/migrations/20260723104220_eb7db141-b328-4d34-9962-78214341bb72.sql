@@ -1,3 +1,5 @@
+DROP FUNCTION IF EXISTS public.search_companies_unaccent(uuid, text, integer);
+DROP FUNCTION IF EXISTS public.search_companies_unaccent(uuid, text, integer, real);
 CREATE OR REPLACE FUNCTION public.search_companies_unaccent(p_user_id uuid, p_query text, p_limit integer DEFAULT 5)
  RETURNS TABLE(id uuid, name text, industry text, city text, state text)
  LANGUAGE sql STABLE SECURITY INVOKER
@@ -14,6 +16,8 @@ AS $function$
   LIMIT p_limit;
 $function$;
 
+DROP FUNCTION IF EXISTS public.search_contacts_unaccent(uuid, text, integer);
+DROP FUNCTION IF EXISTS public.search_contacts_unaccent(uuid, text, integer, real);
 CREATE OR REPLACE FUNCTION public.search_contacts_unaccent(p_user_id uuid, p_query text, p_limit integer DEFAULT 5)
  RETURNS TABLE(id uuid, first_name text, last_name text, email text, phone text, role_title text, company_id uuid)
  LANGUAGE sql STABLE SECURITY INVOKER
@@ -31,6 +35,8 @@ AS $function$
   LIMIT p_limit;
 $function$;
 
+DROP FUNCTION IF EXISTS public.search_interactions_unaccent(uuid, text, integer);
+DROP FUNCTION IF EXISTS public.search_interactions_unaccent(uuid, text, integer, real);
 CREATE OR REPLACE FUNCTION public.search_interactions_unaccent(p_user_id uuid, p_query text, p_limit integer DEFAULT 5)
  RETURNS TABLE(id uuid, title text, type text, created_at timestamp with time zone, contact_id uuid)
  LANGUAGE sql STABLE SECURITY INVOKER
@@ -47,6 +53,8 @@ AS $function$
   LIMIT p_limit;
 $function$;
 
+DROP FUNCTION IF EXISTS public.search_products_semantic(uuid, text, integer);
+DROP FUNCTION IF EXISTS public.search_products_semantic(uuid, text, integer, real);
 CREATE OR REPLACE FUNCTION public.search_products_semantic(p_user_id uuid, p_query text, p_limit integer DEFAULT 20, p_min_similarity real DEFAULT 0.1)
  RETURNS TABLE(id uuid, external_id text, name text, description text, category text, tags text[], image_url text, price numeric, metadata jsonb, similarity real)
  LANGUAGE sql STABLE SECURITY INVOKER

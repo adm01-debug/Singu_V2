@@ -3,6 +3,7 @@ DROP POLICY IF EXISTS "Authenticated users can delete their company logos" ON st
 DROP POLICY IF EXISTS "Authenticated users can update their company logos" ON storage.objects;
 
 -- Add INSERT policy scoped to user folder
+DROP POLICY IF EXISTS "Users can upload logos to their folder" ON storage.objects;
 CREATE POLICY "Users can upload logos to their folder"
 ON storage.objects FOR INSERT TO authenticated
 WITH CHECK (
@@ -11,6 +12,7 @@ WITH CHECK (
 );
 
 -- Add UPDATE policy scoped to user folder
+DROP POLICY IF EXISTS "Users can update logos in their folder" ON storage.objects;
 CREATE POLICY "Users can update logos in their folder"
 ON storage.objects FOR UPDATE TO authenticated
 USING (
@@ -23,6 +25,7 @@ WITH CHECK (
 );
 
 -- Add DELETE policy scoped to user folder
+DROP POLICY IF EXISTS "Users can delete logos in their folder" ON storage.objects;
 CREATE POLICY "Users can delete logos in their folder"
 ON storage.objects FOR DELETE TO authenticated
 USING (

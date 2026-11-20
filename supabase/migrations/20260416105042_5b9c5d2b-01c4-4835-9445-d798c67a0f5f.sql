@@ -18,12 +18,16 @@ CREATE TABLE public.documents (
 );
 
 ALTER TABLE public.documents ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own documents" ON public.documents;
 CREATE POLICY "Users manage own documents" ON public.documents FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Storage bucket for documents
 INSERT INTO storage.buckets (id, name, public) VALUES ('documents', 'documents', false)
 ON CONFLICT DO NOTHING;
 
+DROP POLICY IF EXISTS "Users upload own docs" ON storage.objects;
 CREATE POLICY "Users upload own docs" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'documents' AND (storage.foldername(name))[1] = auth.uid()::text);
+DROP POLICY IF EXISTS "Users read own docs" ON storage.objects;
 CREATE POLICY "Users read own docs" ON storage.objects FOR SELECT USING (bucket_id = 'documents' AND (storage.foldername(name))[1] = auth.uid()::text);
+DROP POLICY IF EXISTS "Users delete own docs" ON storage.objects;
 CREATE POLICY "Users delete own docs" ON storage.objects FOR DELETE USING (bucket_id = 'documents' AND (storage.foldername(name))[1] = auth.uid()::text);

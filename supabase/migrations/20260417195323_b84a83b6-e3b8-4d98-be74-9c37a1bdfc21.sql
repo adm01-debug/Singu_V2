@@ -1,5 +1,8 @@
 -- Preferences
-CREATE TABLE IF NOT EXISTS public.notification_preferences (
+-- Causa raiz: salespro (20260321125738) recria notification_preferences com shape legado
+-- (id/email/frequency); shape final de producao e user_id. Drop+recreate para alinhar.
+DROP TABLE IF EXISTS public.notification_preferences CASCADE;
+CREATE TABLE public.notification_preferences (
   user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   quiet_hours_start SMALLINT NOT NULL DEFAULT 22 CHECK (quiet_hours_start BETWEEN 0 AND 23),
   quiet_hours_end SMALLINT NOT NULL DEFAULT 8 CHECK (quiet_hours_end BETWEEN 0 AND 23),

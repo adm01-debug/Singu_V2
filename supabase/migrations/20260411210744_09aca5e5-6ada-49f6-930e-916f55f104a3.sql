@@ -2,6 +2,7 @@
 DROP POLICY IF EXISTS "Authenticated users can use realtime" ON realtime.messages;
 
 -- Create a scoped policy: users can only access channels containing their own user ID
+DROP POLICY IF EXISTS "Users can only access their own realtime channels" ON realtime.messages;
 CREATE POLICY "Users can only access their own realtime channels"
 ON realtime.messages
 FOR ALL

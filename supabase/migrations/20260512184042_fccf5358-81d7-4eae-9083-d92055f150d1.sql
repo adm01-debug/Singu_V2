@@ -1,3 +1,13 @@
+-- ============================================================
+-- Compat de replay: a 20260110000001_compat criou pipelines e
+-- pipeline_stages com shape antigo (nome/descricao/tipo). Producao
+-- real usa o shape abaixo (user_id/name/is_default). Remover e
+-- recriar no replay para reproduzir o estado de producao.
+-- ============================================================
+DROP TABLE IF EXISTS public.pipeline_stages CASCADE;
+DROP TABLE IF EXISTS public.pipelines CASCADE;
+DROP TABLE IF EXISTS public.deals CASCADE;
+
 -- Tabela de Pipelines
 CREATE TABLE public.pipelines (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
