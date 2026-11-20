@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "Merge pull request #279 from adm01-debug/claude/infra-aplica-migracao-audit-261120-1032",
+   "infra: workflow temporario para aplicar migration de auditoria em producao",
    "Merge pull request #278 from adm01-debug/claude/fix-resgate-auditoria-external-data-20261119-1501",
    "chore(ci): forca nova rodada do Supabase Preview pos-merge 267",
-   "chore(audit): newline final em mutations.ts",
-   "feat(audit): injeta logAudit nas 4 escritas do external-data (resgate hardening Singu)",
-   "feat(audit): cria external_data_audit_log com RLS admin-only (resgate hardening Singu 2026-04-09)"
+   "chore(audit): newline final em mutations.ts"
   ]
  },
  "pr_template": null,

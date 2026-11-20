@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "b70f89e461a72e51236ba718e5bddf2e456a45ef",
+  "sha": "c256a5e32a076713c950785959ad4143cff321ce",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 11:51 UTC",
-  "files_total": 3989,
+  "generated_at": "2026-11-20 12:27 UTC",
+  "files_total": 3990,
   "code_files": 3517,
   "code_lines": 472887
  },
  "version": "1.3.2",
- "facts_hash": "bdd79882301e62bf",
+ "facts_hash": "7e5507ff41e6c9cb",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -226,6 +226,13 @@
     "name": "Inventário do estado real (semanal)",
     "triggers": [
      "schedule",
+     "workflow_dispatch"
+    ]
+   },
+   {
+    "file": ".github/workflows/migracao-temporaria.yml",
+    "name": "\"Temp: aplicar migration em producao\"",
+    "triggers": [
      "workflow_dispatch"
     ]
    },
@@ -305647,10 +305654,26 @@
   }
  },
  "git": {
-  "sha": "b70f89e461a72e51236ba718e5bddf2e456a45ef",
+  "sha": "c256a5e32a076713c950785959ad4143cff321ce",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "c256a5e",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "Merge pull request #279 from adm01-debug/claude/infra-aplica-migracao-audit-261120-1032",
+    "files": []
+   },
+   {
+    "sha": "1cd9342",
+    "date": "2026-11-20",
+    "author": "Joaquim Ataides",
+    "subject": "infra: workflow temporario para aplicar migration de auditoria em producao",
+    "files": [
+     ".github/workflows/migracao-temporaria.yml"
+    ]
+   },
    {
     "sha": "b70f89e",
     "date": "2026-11-20",
@@ -306581,26 +306604,6 @@
      "src/components/pipeline/DealDetailDrawer.tsx",
      "src/pages/Analytics.tsx"
     ]
-   },
-   {
-    "sha": "d05b650",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(analytics): velocidade do pipeline deixa de sortear os dias por estágio (#247)",
-    "files": [
-     "src/components/analytics/DealVelocityPanel.tsx",
-     "src/hooks/useDealVelocity.ts"
-    ]
-   },
-   {
-    "sha": "a5987fd",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(pipeline): badge de probabilidade para de inflar todo deal com dado inventado (#252)",
-    "files": [
-     "src/components/pipeline/NLPProbabilityBadge.tsx",
-     "src/hooks/useNLPClosingProbability.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306627,6 +306630,10 @@
    [
     "src/pages/Analytics.tsx",
     2
+   ],
+   [
+    ".github/workflows/migracao-temporaria.yml",
+    1
    ],
    [
     "supabase/migrations/20261119000000_external_data_audit_log.sql",
@@ -306678,10 +306685,6 @@
    ],
    [
     "supabase/migrations/20260306192037_add_fonte_contexto_confiabilidade_contact_social_media.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260306192439_add_length_validation_phone_triggers.sql",
     1
    ]
   ]

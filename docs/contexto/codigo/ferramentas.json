@@ -10,7 +10,7 @@
    "JavaScript (143)",
    "JSON (22)",
    "Python (21)",
-   "YAML (18)"
+   "YAML (19)"
   ],
   "linguagem_principal": "TypeScript",
   "framework": "React",
@@ -424,6 +424,30 @@
     "actions/setup-node",
     "actions/upload-artifact",
     "peter-evans/create-pull-request"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/migracao-temporaria.yml",
+   "nome": "Temp: aplicar migration em producao",
+   "gatilhos": [
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "apply"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "PGDATABASE",
+    "PGHOST",
+    "PGPASSWORD",
+    "PGUSER"
+   ],
+   "actions": [
+    "actions/checkout"
    ]
   },
   {
