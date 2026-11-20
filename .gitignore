@@ -65,4 +65,6 @@ __pycache__/
 /.tools/graphify/.venv/
 
 # Supabase CLI — artefatos de link local
-supabase/.temp/
+
+# Supabase CLI — artefato de versao local
+supabase/.temp/cli-latest
