@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e9d33fde7f4dd032f683ccb5d082882be5c40c3a",
+  "sha": "7cbda37d8da15446e18b89ea85526a9dc78c50bc",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 12:40 UTC",
+  "generated_at": "2026-11-20 13:48 UTC",
   "files_total": 3989,
   "code_files": 3517,
-  "code_lines": 472887
+  "code_lines": 472916
  },
  "version": "1.3.2",
- "facts_hash": "bdd79882301e62bf",
+ "facts_hash": "db255f9064805837",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112198,7 +112198,7 @@
   {
    "module": "supabase/migrations",
    "files": 1105,
-   "lines": 102683,
+   "lines": 102712,
    "tables": [
     "users"
    ],
@@ -299755,7 +299755,7 @@
   },
   "supabase/migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql": {
    "path": "supabase/migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
-   "lines": 326
+   "lines": 355
   },
   "supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql": {
    "path": "supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql",
@@ -305647,10 +305647,19 @@
   }
  },
  "git": {
-  "sha": "e9d33fde7f4dd032f683ccb5d082882be5c40c3a",
+  "sha": "7cbda37d8da15446e18b89ea85526a9dc78c50bc",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "7cbda37",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "fix(migrations): torne a Foundation 1cfd4579 totalmente idempotente (#283)",
+    "files": [
+     "supabase/migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql"
+    ]
+   },
    {
     "sha": "e9d33fd",
     "date": "2026-11-20",
@@ -306576,15 +306585,6 @@
      "src/hooks/useCarnegieAnalysis.ts",
      "src/types/carnegie.ts"
     ]
-   },
-   {
-    "sha": "6917cfd",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(intelligence): troca N consultas por uma na aba de referência cruzada (#258)",
-    "files": [
-     "src/components/intelligence/CrossRefTab.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -306625,6 +306625,10 @@
     2
    ],
    [
+    "supabase/migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
+    1
+   ],
+   [
     "supabase/migrations/20261119000000_external_data_audit_log.sql",
     1
    ],
@@ -306662,10 +306666,6 @@
    ],
    [
     "supabase/migrations/20260306191225_fix_company_phones_triggers_and_fase2_cols.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260306191832_add_phone_length_validation_both_tables.sql",
     1
    ]
   ]
