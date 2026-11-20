@@ -1,5 +1,5 @@
 -- Create trigger_usage_history table to track which triggers and templates were used with each client
-CREATE TABLE public.trigger_usage_history (
+CREATE TABLE IF NOT EXISTS public.trigger_usage_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL,
@@ -20,21 +20,25 @@ CREATE TABLE public.trigger_usage_history (
 ALTER TABLE public.trigger_usage_history ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for user access
+DROP POLICY IF EXISTS "Users can view their own trigger usage history" ON public.trigger_usage_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own trigger usage history" 
 ON public.trigger_usage_history 
 FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own trigger usage history" ON public.trigger_usage_history;  -- [singu-idem]
 CREATE POLICY "Users can insert their own trigger usage history" 
 ON public.trigger_usage_history 
 FOR INSERT 
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own trigger usage history" ON public.trigger_usage_history;  -- [singu-idem]
 CREATE POLICY "Users can update their own trigger usage history" 
 ON public.trigger_usage_history 
 FOR UPDATE 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own trigger usage history" ON public.trigger_usage_history;  -- [singu-idem]
 CREATE POLICY "Users can delete their own trigger usage history" 
 ON public.trigger_usage_history 
 FOR DELETE 

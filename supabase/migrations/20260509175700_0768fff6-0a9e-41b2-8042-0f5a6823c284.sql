@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS public.crm_automation_reprocess_queue (
 -- Habilitar RLS na nova tabela
 ALTER TABLE public.crm_automation_reprocess_queue ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own reprocess queue" ON public.crm_automation_reprocess_queue;  -- [singu-idem]
 CREATE POLICY "Users can view their own reprocess queue" 
 ON public.crm_automation_reprocess_queue 
 FOR SELECT 

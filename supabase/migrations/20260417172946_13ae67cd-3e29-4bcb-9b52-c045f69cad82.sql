@@ -25,22 +25,27 @@ CREATE INDEX IF NOT EXISTS idx_contact_next_actions_generated_at
 
 ALTER TABLE public.contact_next_actions ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own next actions" ON public.contact_next_actions;  -- [singu-idem]
 CREATE POLICY "Users can view their own next actions"
   ON public.contact_next_actions FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own next actions" ON public.contact_next_actions;  -- [singu-idem]
 CREATE POLICY "Users can insert their own next actions"
   ON public.contact_next_actions FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own next actions" ON public.contact_next_actions;  -- [singu-idem]
 CREATE POLICY "Users can update their own next actions"
   ON public.contact_next_actions FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own next actions" ON public.contact_next_actions;  -- [singu-idem]
 CREATE POLICY "Users can delete their own next actions"
   ON public.contact_next_actions FOR DELETE
   USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS update_contact_next_actions_updated_at ON public.contact_next_actions;  -- [singu-idem]
 CREATE TRIGGER update_contact_next_actions_updated_at
   BEFORE UPDATE ON public.contact_next_actions
   FOR EACH ROW

@@ -26,16 +26,19 @@ CREATE TABLE IF NOT EXISTS public.vak_analysis_history (
 ALTER TABLE public.vak_analysis_history ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view their own VAK analysis" ON public.vak_analysis_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own VAK analysis"
 ON public.vak_analysis_history
 FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own VAK analysis" ON public.vak_analysis_history;  -- [singu-idem]
 CREATE POLICY "Users can insert their own VAK analysis"
 ON public.vak_analysis_history
 FOR INSERT
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own VAK analysis" ON public.vak_analysis_history;  -- [singu-idem]
 CREATE POLICY "Users can delete their own VAK analysis"
 ON public.vak_analysis_history
 FOR DELETE

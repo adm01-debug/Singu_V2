@@ -1,5 +1,5 @@
 
-CREATE TABLE public.ai_gateway_metrics (
+CREATE TABLE IF NOT EXISTS public.ai_gateway_metrics (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   function_name TEXT NOT NULL,
   model TEXT,
@@ -14,19 +14,21 @@ CREATE TABLE public.ai_gateway_metrics (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_ai_gateway_metrics_created ON public.ai_gateway_metrics (created_at DESC);
-CREATE INDEX idx_ai_gateway_metrics_fn_created ON public.ai_gateway_metrics (function_name, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_ai_gateway_metrics_created ON public.ai_gateway_metrics (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_ai_gateway_metrics_fn_created ON public.ai_gateway_metrics (function_name, created_at DESC);
 
 GRANT ALL ON public.ai_gateway_metrics TO service_role;
 -- authenticated/anon: no direct access. Reads via RPC below (admin-only).
 
 ALTER TABLE public.ai_gateway_metrics ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins can view ai_gateway_metrics" ON public.ai_gateway_metrics;  -- [singu-idem]
 CREATE POLICY "Admins can view ai_gateway_metrics"
   ON public.ai_gateway_metrics FOR SELECT
   TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Service role manages ai_gateway_metrics" ON public.ai_gateway_metrics;  -- [singu-idem]
 CREATE POLICY "Service role manages ai_gateway_metrics"
   ON public.ai_gateway_metrics FOR ALL
   TO service_role

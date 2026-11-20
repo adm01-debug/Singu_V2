@@ -1,5 +1,5 @@
 
-CREATE TABLE public.email_campaigns (
+CREATE TABLE IF NOT EXISTS public.email_campaigns (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   name TEXT NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE public.email_campaigns (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE public.campaign_recipients (
+CREATE TABLE IF NOT EXISTS public.campaign_recipients (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   campaign_id UUID REFERENCES public.email_campaigns(id) ON DELETE CASCADE NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE NOT NULL,
@@ -35,7 +35,9 @@ CREATE TABLE public.campaign_recipients (
 ALTER TABLE public.email_campaigns ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.campaign_recipients ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users manage own campaigns" ON public.email_campaigns;  -- [singu-idem]
 CREATE POLICY "Users manage own campaigns" ON public.email_campaigns FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users manage campaign recipients" ON public.campaign_recipients;  -- [singu-idem]
 CREATE POLICY "Users manage campaign recipients" ON public.campaign_recipients FOR ALL USING (
   EXISTS (SELECT 1 FROM public.email_campaigns ec WHERE ec.id = campaign_recipients.campaign_id AND ec.user_id = auth.uid())
 ) WITH CHECK (

@@ -1,5 +1,5 @@
 -- Create stakeholder_alerts table to track significant changes
-CREATE TABLE public.stakeholder_alerts (
+CREATE TABLE IF NOT EXISTS public.stakeholder_alerts (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -20,21 +20,25 @@ CREATE TABLE public.stakeholder_alerts (
 ALTER TABLE public.stakeholder_alerts ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view their own stakeholder alerts" ON public.stakeholder_alerts;  -- [singu-idem]
 CREATE POLICY "Users can view their own stakeholder alerts"
 ON public.stakeholder_alerts
 FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own stakeholder alerts" ON public.stakeholder_alerts;  -- [singu-idem]
 CREATE POLICY "Users can create their own stakeholder alerts"
 ON public.stakeholder_alerts
 FOR INSERT
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own stakeholder alerts" ON public.stakeholder_alerts;  -- [singu-idem]
 CREATE POLICY "Users can update their own stakeholder alerts"
 ON public.stakeholder_alerts
 FOR UPDATE
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own stakeholder alerts" ON public.stakeholder_alerts;  -- [singu-idem]
 CREATE POLICY "Users can delete their own stakeholder alerts"
 ON public.stakeholder_alerts
 FOR DELETE

@@ -20,11 +20,13 @@ CREATE INDEX IF NOT EXISTS idx_mcp_tool_calls_tool ON public.mcp_tool_calls(tool
 
 ALTER TABLE public.mcp_tool_calls ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins read mcp_tool_calls" ON public.mcp_tool_calls;  -- [singu-idem]
 CREATE POLICY "Admins read mcp_tool_calls"
   ON public.mcp_tool_calls FOR SELECT
   TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Service role insert mcp_tool_calls" ON public.mcp_tool_calls;  -- [singu-idem]
 CREATE POLICY "Service role insert mcp_tool_calls"
   ON public.mcp_tool_calls FOR INSERT
   TO authenticated

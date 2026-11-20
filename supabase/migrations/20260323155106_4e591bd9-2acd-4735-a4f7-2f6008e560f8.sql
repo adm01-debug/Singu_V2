@@ -47,10 +47,12 @@ AS $$
 $$;
 
 -- RLS: admins can see all roles, users can see their own
+DROP POLICY IF EXISTS "Users can view their own roles" ON public.user_roles;  -- [singu-idem]
 CREATE POLICY "Users can view their own roles"
   ON public.user_roles FOR SELECT TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins can manage all roles" ON public.user_roles;  -- [singu-idem]
 CREATE POLICY "Admins can manage all roles"
   ON public.user_roles FOR ALL TO authenticated
   USING (public.has_role(auth.uid(), 'admin'))

@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS public.follow_up_approvals_v2 (
 -- Enable RLS for follow_up_approvals_v2
 ALTER TABLE public.follow_up_approvals_v2 ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can manage their own follow-up approvals" ON public.follow_up_approvals_v2;  -- [singu-idem]
 CREATE POLICY "Users can manage their own follow-up approvals"
 ON public.follow_up_approvals_v2
 FOR ALL

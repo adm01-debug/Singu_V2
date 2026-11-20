@@ -13,10 +13,12 @@ GRANT ALL ON public.system_config TO service_role;
 
 ALTER TABLE public.system_config ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Authenticated reads system_config" ON public.system_config;  -- [singu-idem]
 CREATE POLICY "Authenticated reads system_config"
   ON public.system_config FOR SELECT
   TO authenticated USING (true);
 
+DROP POLICY IF EXISTS "Admins manage system_config" ON public.system_config;  -- [singu-idem]
 CREATE POLICY "Admins manage system_config"
   ON public.system_config FOR ALL
   TO authenticated
@@ -32,6 +34,7 @@ BEGIN
 END $$;
 
 DROP TRIGGER IF EXISTS system_config_touch ON public.system_config;
+DROP TRIGGER IF EXISTS system_config_touch ON public.system_config;  -- [singu-idem]
 CREATE TRIGGER system_config_touch
 BEFORE UPDATE ON public.system_config
 FOR EACH ROW EXECUTE FUNCTION public.touch_system_config();

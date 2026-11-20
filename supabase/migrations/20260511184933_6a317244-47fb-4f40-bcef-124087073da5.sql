@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.contact_cadence_audit (
 
 -- Enable RLS on audit table
 ALTER TABLE public.contact_cadence_audit ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view their own cadence audit" ON public.contact_cadence_audit;  -- [singu-idem]
 CREATE POLICY "Users can view their own cadence audit" ON public.contact_cadence_audit
     FOR SELECT USING (auth.uid() = user_id);
 

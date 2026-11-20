@@ -1,5 +1,5 @@
 -- Create rapport strategy table
-CREATE TABLE public.contact_rapport_strategy (
+CREATE TABLE IF NOT EXISTS public.contact_rapport_strategy (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
     
@@ -30,10 +30,13 @@ CREATE TABLE public.contact_rapport_strategy (
 
 -- Enable RLS
 ALTER TABLE public.contact_rapport_strategy ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow all for authenticated users on rapport" ON public.contact_rapport_strategy;  -- [singu-idem]
 CREATE POLICY "Allow all for authenticated users on rapport" ON public.contact_rapport_strategy FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 -- Register for audit
+DROP TRIGGER IF EXISTS log_contact_rapport_change ON public.contact_rapport_strategy;  -- [singu-idem]
 CREATE TRIGGER log_contact_rapport_change AFTER UPDATE ON public.contact_rapport_strategy FOR EACH ROW EXECUTE FUNCTION public.log_behavioral_change();
 
 -- Update updated_at trigger
+DROP TRIGGER IF EXISTS update_contact_rapport_updated_at ON public.contact_rapport_strategy;  -- [singu-idem]
 CREATE TRIGGER update_contact_rapport_updated_at BEFORE UPDATE ON public.contact_rapport_strategy FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

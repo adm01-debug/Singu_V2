@@ -1,6 +1,6 @@
 
 -- Sequences (cadence templates)
-CREATE TABLE public.sequences (
+CREATE TABLE IF NOT EXISTS public.sequences (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   name text NOT NULL,
@@ -18,13 +18,14 @@ CREATE TABLE public.sequences (
 
 ALTER TABLE public.sequences ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users manage own sequences" ON public.sequences;  -- [singu-idem]
 CREATE POLICY "Users manage own sequences" ON public.sequences
   FOR ALL TO authenticated
   USING (user_id = auth.uid())
   WITH CHECK (user_id = auth.uid());
 
 -- Sequence Steps
-CREATE TABLE public.sequence_steps (
+CREATE TABLE IF NOT EXISTS public.sequence_steps (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   sequence_id uuid REFERENCES public.sequences(id) ON DELETE CASCADE NOT NULL,
   step_order integer NOT NULL DEFAULT 1,
@@ -41,13 +42,14 @@ CREATE TABLE public.sequence_steps (
 
 ALTER TABLE public.sequence_steps ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users manage own sequence steps" ON public.sequence_steps;  -- [singu-idem]
 CREATE POLICY "Users manage own sequence steps" ON public.sequence_steps
   FOR ALL TO authenticated
   USING (EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()))
   WITH CHECK (EXISTS (SELECT 1 FROM public.sequences s WHERE s.id = sequence_id AND s.user_id = auth.uid()));
 
 -- Sequence Enrollments
-CREATE TABLE public.sequence_enrollments (
+CREATE TABLE IF NOT EXISTS public.sequence_enrollments (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   sequence_id uuid REFERENCES public.sequences(id) ON DELETE CASCADE NOT NULL,
   contact_id uuid REFERENCES public.contacts(id) ON DELETE CASCADE NOT NULL,
@@ -66,6 +68,7 @@ CREATE TABLE public.sequence_enrollments (
 
 ALTER TABLE public.sequence_enrollments ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users manage own enrollments" ON public.sequence_enrollments;  -- [singu-idem]
 CREATE POLICY "Users manage own enrollments" ON public.sequence_enrollments
   FOR ALL TO authenticated
   USING (user_id = auth.uid())

@@ -1,5 +1,5 @@
 -- ============= CONNECTION CONFIGS =============
-CREATE TABLE public.connection_configs (
+CREATE TABLE IF NOT EXISTS public.connection_configs (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   connection_type TEXT NOT NULL CHECK (connection_type IN ('supabase_external','bitrix24','n8n','mcp_claude','custom')),
@@ -21,18 +21,20 @@ CREATE INDEX IF NOT EXISTS idx_connection_configs_active ON public.connection_co
 
 ALTER TABLE public.connection_configs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "admins manage connection_configs" ON public.connection_configs;  -- [singu-idem]
 CREATE POLICY "admins manage connection_configs"
   ON public.connection_configs FOR ALL
   TO authenticated
   USING (public.has_role(auth.uid(), 'admin'))
   WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
+DROP TRIGGER IF EXISTS trg_connection_configs_updated_at ON public.connection_configs;  -- [singu-idem]
 CREATE TRIGGER trg_connection_configs_updated_at
   BEFORE UPDATE ON public.connection_configs
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ============= CONNECTION TEST LOGS =============
-CREATE TABLE public.connection_test_logs (
+CREATE TABLE IF NOT EXISTS public.connection_test_logs (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   connection_id UUID NOT NULL REFERENCES public.connection_configs(id) ON DELETE CASCADE,
   status TEXT NOT NULL,
@@ -47,18 +49,20 @@ CREATE INDEX IF NOT EXISTS idx_connection_test_logs_conn ON public.connection_te
 
 ALTER TABLE public.connection_test_logs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "admins read connection_test_logs" ON public.connection_test_logs;  -- [singu-idem]
 CREATE POLICY "admins read connection_test_logs"
   ON public.connection_test_logs FOR SELECT
   TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "admins insert connection_test_logs" ON public.connection_test_logs;  -- [singu-idem]
 CREATE POLICY "admins insert connection_test_logs"
   ON public.connection_test_logs FOR INSERT
   TO authenticated
   WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
 -- ============= INCOMING WEBHOOKS =============
-CREATE TABLE public.incoming_webhooks (
+CREATE TABLE IF NOT EXISTS public.incoming_webhooks (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   description TEXT,
@@ -80,18 +84,20 @@ CREATE INDEX IF NOT EXISTS idx_incoming_webhooks_active ON public.incoming_webho
 
 ALTER TABLE public.incoming_webhooks ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "admins manage incoming_webhooks" ON public.incoming_webhooks;  -- [singu-idem]
 CREATE POLICY "admins manage incoming_webhooks"
   ON public.incoming_webhooks FOR ALL
   TO authenticated
   USING (public.has_role(auth.uid(), 'admin'))
   WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
+DROP TRIGGER IF EXISTS trg_incoming_webhooks_updated_at ON public.incoming_webhooks;  -- [singu-idem]
 CREATE TRIGGER trg_incoming_webhooks_updated_at
   BEFORE UPDATE ON public.incoming_webhooks
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ============= INCOMING WEBHOOK LOGS =============
-CREATE TABLE public.incoming_webhook_logs (
+CREATE TABLE IF NOT EXISTS public.incoming_webhook_logs (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   webhook_id UUID NOT NULL REFERENCES public.incoming_webhooks(id) ON DELETE CASCADE,
   status TEXT NOT NULL,
@@ -109,6 +115,7 @@ CREATE INDEX IF NOT EXISTS idx_incoming_webhook_logs_wh ON public.incoming_webho
 
 ALTER TABLE public.incoming_webhook_logs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "admins read incoming_webhook_logs" ON public.incoming_webhook_logs;  -- [singu-idem]
 CREATE POLICY "admins read incoming_webhook_logs"
   ON public.incoming_webhook_logs FOR SELECT
   TO authenticated

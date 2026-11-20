@@ -1,5 +1,5 @@
 
-CREATE TABLE public.nurturing_workflows (
+CREATE TABLE IF NOT EXISTS public.nurturing_workflows (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   name TEXT NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE public.nurturing_workflows (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE public.nurturing_enrollments (
+CREATE TABLE IF NOT EXISTS public.nurturing_enrollments (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   workflow_id UUID REFERENCES public.nurturing_workflows(id) ON DELETE CASCADE NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE CASCADE NOT NULL,
@@ -31,5 +31,7 @@ CREATE TABLE public.nurturing_enrollments (
 ALTER TABLE public.nurturing_workflows ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.nurturing_enrollments ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users manage own nurturing workflows" ON public.nurturing_workflows;  -- [singu-idem]
 CREATE POLICY "Users manage own nurturing workflows" ON public.nurturing_workflows FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users manage own nurturing enrollments" ON public.nurturing_enrollments;  -- [singu-idem]
 CREATE POLICY "Users manage own nurturing enrollments" ON public.nurturing_enrollments FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);

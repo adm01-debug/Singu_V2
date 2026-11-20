@@ -1,5 +1,5 @@
 -- Table for contact cadence settings (frequency of contact)
-CREATE TABLE public.contact_cadence (
+CREATE TABLE IF NOT EXISTS public.contact_cadence (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -18,20 +18,24 @@ CREATE TABLE public.contact_cadence (
 ALTER TABLE public.contact_cadence ENABLE ROW LEVEL SECURITY;
 
 -- RLS policies
+DROP POLICY IF EXISTS "Users can view their own contact cadence" ON public.contact_cadence;  -- [singu-idem]
 CREATE POLICY "Users can view their own contact cadence" 
 ON public.contact_cadence FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own contact cadence" ON public.contact_cadence;  -- [singu-idem]
 CREATE POLICY "Users can create their own contact cadence" 
 ON public.contact_cadence FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own contact cadence" ON public.contact_cadence;  -- [singu-idem]
 CREATE POLICY "Users can update their own contact cadence" 
 ON public.contact_cadence FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own contact cadence" ON public.contact_cadence;  -- [singu-idem]
 CREATE POLICY "Users can delete their own contact cadence" 
 ON public.contact_cadence FOR DELETE USING (auth.uid() = user_id);
 
 -- Table for contact preferences and restrictions
-CREATE TABLE public.contact_preferences (
+CREATE TABLE IF NOT EXISTS public.contact_preferences (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -52,24 +56,30 @@ CREATE TABLE public.contact_preferences (
 ALTER TABLE public.contact_preferences ENABLE ROW LEVEL SECURITY;
 
 -- RLS policies
+DROP POLICY IF EXISTS "Users can view their own contact preferences" ON public.contact_preferences;  -- [singu-idem]
 CREATE POLICY "Users can view their own contact preferences" 
 ON public.contact_preferences FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own contact preferences" ON public.contact_preferences;  -- [singu-idem]
 CREATE POLICY "Users can create their own contact preferences" 
 ON public.contact_preferences FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own contact preferences" ON public.contact_preferences;  -- [singu-idem]
 CREATE POLICY "Users can update their own contact preferences" 
 ON public.contact_preferences FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own contact preferences" ON public.contact_preferences;  -- [singu-idem]
 CREATE POLICY "Users can delete their own contact preferences" 
 ON public.contact_preferences FOR DELETE USING (auth.uid() = user_id);
 
 -- Triggers for updated_at
+DROP TRIGGER IF EXISTS update_contact_cadence_updated_at ON public.contact_cadence;  -- [singu-idem]
 CREATE TRIGGER update_contact_cadence_updated_at
 BEFORE UPDATE ON public.contact_cadence
 FOR EACH ROW
 EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_contact_preferences_updated_at ON public.contact_preferences;  -- [singu-idem]
 CREATE TRIGGER update_contact_preferences_updated_at
 BEFORE UPDATE ON public.contact_preferences
 FOR EACH ROW

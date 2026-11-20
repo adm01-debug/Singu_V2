@@ -31,9 +31,11 @@ ALTER TABLE public.social_sync_queue ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.psychographic_audit_log ENABLE ROW LEVEL SECURITY;
 
 -- Políticas
+DROP POLICY IF EXISTS "Users can view their own social sync queue" ON public.social_sync_queue;  -- [singu-idem]
 CREATE POLICY "Users can view their own social sync queue" 
 ON public.social_sync_queue FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Users can view psychographic audit logs" ON public.psychographic_audit_log;  -- [singu-idem]
 CREATE POLICY "Users can view psychographic audit logs" 
 ON public.psychographic_audit_log FOR SELECT USING (true);
 
@@ -46,6 +48,7 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+DROP TRIGGER IF EXISTS update_social_sync_queue_updated_at ON public.social_sync_queue;  -- [singu-idem]
 CREATE TRIGGER update_social_sync_queue_updated_at
     BEFORE UPDATE ON public.social_sync_queue
     FOR EACH ROW

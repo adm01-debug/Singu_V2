@@ -19,19 +19,23 @@ GRANT ALL ON public.data_retention_policies TO service_role;
 
 ALTER TABLE public.data_retention_policies ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins view retention policies" ON public.data_retention_policies;  -- [singu-idem]
 CREATE POLICY "Admins view retention policies"
   ON public.data_retention_policies FOR SELECT TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Admins manage retention policies" ON public.data_retention_policies;  -- [singu-idem]
 CREATE POLICY "Admins manage retention policies"
   ON public.data_retention_policies FOR ALL TO authenticated
   USING (public.has_role(auth.uid(), 'admin'))
   WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Service role manages retention policies" ON public.data_retention_policies;  -- [singu-idem]
 CREATE POLICY "Service role manages retention policies"
   ON public.data_retention_policies FOR ALL TO service_role
   USING (true) WITH CHECK (true);
 
+DROP TRIGGER IF EXISTS update_data_retention_policies_updated_at ON public.data_retention_policies;  -- [singu-idem]
 CREATE TRIGGER update_data_retention_policies_updated_at
   BEFORE UPDATE ON public.data_retention_policies
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

@@ -1,3 +1,4 @@
+DROP POLICY IF EXISTS "Users can only update own automation logs" ON public.automation_logs;  -- [singu-idem]
 CREATE POLICY "Users can only update own automation logs"
 ON public.automation_logs
 FOR UPDATE

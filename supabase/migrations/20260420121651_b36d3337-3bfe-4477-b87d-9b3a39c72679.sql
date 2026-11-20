@@ -24,11 +24,13 @@ CREATE INDEX IF NOT EXISTS idx_dlq_webhook_id ON public.incoming_webhook_dlq(web
 
 ALTER TABLE public.incoming_webhook_dlq ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins manage DLQ" ON public.incoming_webhook_dlq;  -- [singu-idem]
 CREATE POLICY "Admins manage DLQ"
 ON public.incoming_webhook_dlq FOR ALL
 USING (public.has_role(auth.uid(), 'admin'))
 WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
+DROP TRIGGER IF EXISTS trg_dlq_updated_at ON public.incoming_webhook_dlq;  -- [singu-idem]
 CREATE TRIGGER trg_dlq_updated_at
 BEFORE UPDATE ON public.incoming_webhook_dlq
 FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
@@ -116,6 +118,7 @@ END;
 $$;
 
 DROP TRIGGER IF EXISTS trg_notify_connection_failures ON public.connection_test_logs;
+DROP TRIGGER IF EXISTS trg_notify_connection_failures ON public.connection_test_logs;  -- [singu-idem]
 CREATE TRIGGER trg_notify_connection_failures
 AFTER INSERT ON public.connection_test_logs
 FOR EACH ROW EXECUTE FUNCTION public.notify_connection_failures();
@@ -161,6 +164,7 @@ END;
 $$;
 
 DROP TRIGGER IF EXISTS trg_notify_webhook_errors ON public.incoming_webhook_logs;
+DROP TRIGGER IF EXISTS trg_notify_webhook_errors ON public.incoming_webhook_logs;  -- [singu-idem]
 CREATE TRIGGER trg_notify_webhook_errors
 AFTER INSERT ON public.incoming_webhook_logs
 FOR EACH ROW EXECUTE FUNCTION public.notify_webhook_errors();

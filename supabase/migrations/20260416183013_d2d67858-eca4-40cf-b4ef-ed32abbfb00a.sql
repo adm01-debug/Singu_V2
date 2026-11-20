@@ -1,6 +1,6 @@
 -- AI Assistant: conversational threads with persistent history
 
-CREATE TABLE public.ai_chat_threads (
+CREATE TABLE IF NOT EXISTS public.ai_chat_threads (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   title TEXT NOT NULL DEFAULT 'Nova conversa',
@@ -13,7 +13,7 @@ CREATE TABLE public.ai_chat_threads (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE public.ai_chat_messages (
+CREATE TABLE IF NOT EXISTS public.ai_chat_messages (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   thread_id UUID NOT NULL REFERENCES public.ai_chat_threads(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -30,9 +30,12 @@ CREATE INDEX IF NOT EXISTS idx_ai_chat_messages_thread ON public.ai_chat_message
 ALTER TABLE public.ai_chat_threads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ai_chat_messages ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users manage own threads" ON public.ai_chat_threads;  -- [singu-idem]
 CREATE POLICY "Users manage own threads" ON public.ai_chat_threads FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users manage own messages" ON public.ai_chat_messages;  -- [singu-idem]
 CREATE POLICY "Users manage own messages" ON public.ai_chat_messages FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS update_ai_chat_threads_updated_at ON public.ai_chat_threads;  -- [singu-idem]
 CREATE TRIGGER update_ai_chat_threads_updated_at
   BEFORE UPDATE ON public.ai_chat_threads
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

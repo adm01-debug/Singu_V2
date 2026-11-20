@@ -1,7 +1,7 @@
 -- =========================
 -- FORMS
 -- =========================
-CREATE TABLE public.forms (
+CREATE TABLE IF NOT EXISTS public.forms (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   name TEXT NOT NULL,
@@ -20,19 +20,22 @@ CREATE TABLE public.forms (
 );
 ALTER TABLE public.forms ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "forms_owner_all" ON public.forms;  -- [singu-idem]
 CREATE POLICY "forms_owner_all" ON public.forms FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "forms_public_read_published" ON public.forms;  -- [singu-idem]
 CREATE POLICY "forms_public_read_published" ON public.forms FOR SELECT
   USING (is_published = true);
 
 CREATE INDEX IF NOT EXISTS idx_forms_user ON public.forms(user_id);
 CREATE INDEX IF NOT EXISTS idx_forms_slug ON public.forms(slug);
+DROP TRIGGER IF EXISTS trg_forms_updated ON public.forms;  -- [singu-idem]
 CREATE TRIGGER trg_forms_updated BEFORE UPDATE ON public.forms FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================
 -- FORM SUBMISSIONS
 -- =========================
-CREATE TABLE public.form_submissions (
+CREATE TABLE IF NOT EXISTS public.form_submissions (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   form_id UUID NOT NULL REFERENCES public.forms(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -51,8 +54,10 @@ CREATE TABLE public.form_submissions (
 );
 ALTER TABLE public.form_submissions ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "fs_owner_all" ON public.form_submissions;  -- [singu-idem]
 CREATE POLICY "fs_owner_all" ON public.form_submissions FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "fs_public_insert" ON public.form_submissions;  -- [singu-idem]
 CREATE POLICY "fs_public_insert" ON public.form_submissions FOR INSERT
   WITH CHECK (
     EXISTS (SELECT 1 FROM public.forms f WHERE f.id = form_id AND f.is_published = true AND f.user_id = form_submissions.user_id)
@@ -65,7 +70,7 @@ CREATE INDEX IF NOT EXISTS idx_fs_contact ON public.form_submissions(contact_id)
 -- =========================
 -- LEAD MAGNETS
 -- =========================
-CREATE TABLE public.lead_magnets (
+CREATE TABLE IF NOT EXISTS public.lead_magnets (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   title TEXT NOT NULL,
@@ -85,19 +90,22 @@ CREATE TABLE public.lead_magnets (
 );
 ALTER TABLE public.lead_magnets ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "lm_owner_all" ON public.lead_magnets;  -- [singu-idem]
 CREATE POLICY "lm_owner_all" ON public.lead_magnets FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "lm_public_read" ON public.lead_magnets;  -- [singu-idem]
 CREATE POLICY "lm_public_read" ON public.lead_magnets FOR SELECT
   USING (is_published = true);
 
 CREATE INDEX IF NOT EXISTS idx_lm_user ON public.lead_magnets(user_id);
 CREATE INDEX IF NOT EXISTS idx_lm_slug ON public.lead_magnets(slug);
+DROP TRIGGER IF EXISTS trg_lm_updated ON public.lead_magnets;  -- [singu-idem]
 CREATE TRIGGER trg_lm_updated BEFORE UPDATE ON public.lead_magnets FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================
 -- LEAD MAGNET DOWNLOADS
 -- =========================
-CREATE TABLE public.lead_magnet_downloads (
+CREATE TABLE IF NOT EXISTS public.lead_magnet_downloads (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   magnet_id UUID NOT NULL REFERENCES public.lead_magnets(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -111,8 +119,10 @@ CREATE TABLE public.lead_magnet_downloads (
 );
 ALTER TABLE public.lead_magnet_downloads ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "lmd_owner_read" ON public.lead_magnet_downloads;  -- [singu-idem]
 CREATE POLICY "lmd_owner_read" ON public.lead_magnet_downloads FOR SELECT
   USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "lmd_public_insert" ON public.lead_magnet_downloads;  -- [singu-idem]
 CREATE POLICY "lmd_public_insert" ON public.lead_magnet_downloads FOR INSERT
   WITH CHECK (
     EXISTS (SELECT 1 FROM public.lead_magnets m WHERE m.id = magnet_id AND m.is_published = true AND m.user_id = lead_magnet_downloads.user_id)
@@ -124,7 +134,7 @@ CREATE INDEX IF NOT EXISTS idx_lmd_user ON public.lead_magnet_downloads(user_id)
 -- =========================
 -- MQL CRITERIA
 -- =========================
-CREATE TABLE public.mql_criteria (
+CREATE TABLE IF NOT EXISTS public.mql_criteria (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   name TEXT NOT NULL,
@@ -138,15 +148,17 @@ CREATE TABLE public.mql_criteria (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 ALTER TABLE public.mql_criteria ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "mqlc_owner_all" ON public.mql_criteria;  -- [singu-idem]
 CREATE POLICY "mqlc_owner_all" ON public.mql_criteria FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 CREATE INDEX IF NOT EXISTS idx_mqlc_user ON public.mql_criteria(user_id);
+DROP TRIGGER IF EXISTS trg_mqlc_updated ON public.mql_criteria;  -- [singu-idem]
 CREATE TRIGGER trg_mqlc_updated BEFORE UPDATE ON public.mql_criteria FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================
 -- MQL CLASSIFICATIONS
 -- =========================
-CREATE TABLE public.mql_classifications (
+CREATE TABLE IF NOT EXISTS public.mql_classifications (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL,
@@ -163,17 +175,19 @@ CREATE TABLE public.mql_classifications (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 ALTER TABLE public.mql_classifications ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "mqlcls_owner_all" ON public.mql_classifications;  -- [singu-idem]
 CREATE POLICY "mqlcls_owner_all" ON public.mql_classifications FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 CREATE INDEX IF NOT EXISTS idx_mqlcls_user ON public.mql_classifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_mqlcls_contact ON public.mql_classifications(contact_id);
 CREATE INDEX IF NOT EXISTS idx_mqlcls_status ON public.mql_classifications(status);
+DROP TRIGGER IF EXISTS trg_mqlcls_updated ON public.mql_classifications;  -- [singu-idem]
 CREATE TRIGGER trg_mqlcls_updated BEFORE UPDATE ON public.mql_classifications FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================
 -- ATTRIBUTION TOUCHPOINTS
 -- =========================
-CREATE TABLE public.attribution_touchpoints (
+CREATE TABLE IF NOT EXISTS public.attribution_touchpoints (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID,
@@ -191,6 +205,7 @@ CREATE TABLE public.attribution_touchpoints (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 ALTER TABLE public.attribution_touchpoints ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "atp_owner_all" ON public.attribution_touchpoints;  -- [singu-idem]
 CREATE POLICY "atp_owner_all" ON public.attribution_touchpoints FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 CREATE INDEX IF NOT EXISTS idx_atp_user ON public.attribution_touchpoints(user_id);
@@ -201,7 +216,7 @@ CREATE INDEX IF NOT EXISTS idx_atp_occurred ON public.attribution_touchpoints(oc
 -- =========================
 -- ATTRIBUTION CACHE
 -- =========================
-CREATE TABLE public.attribution_models_cache (
+CREATE TABLE IF NOT EXISTS public.attribution_models_cache (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   deal_id TEXT NOT NULL,
@@ -212,6 +227,7 @@ CREATE TABLE public.attribution_models_cache (
   UNIQUE(user_id, deal_id, model)
 );
 ALTER TABLE public.attribution_models_cache ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "amc_owner_all" ON public.attribution_models_cache;  -- [singu-idem]
 CREATE POLICY "amc_owner_all" ON public.attribution_models_cache FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 CREATE INDEX IF NOT EXISTS idx_amc_user_deal ON public.attribution_models_cache(user_id, deal_id);
@@ -219,7 +235,7 @@ CREATE INDEX IF NOT EXISTS idx_amc_user_deal ON public.attribution_models_cache(
 -- =========================
 -- NURTURING EXECUTIONS
 -- =========================
-CREATE TABLE public.nurturing_executions (
+CREATE TABLE IF NOT EXISTS public.nurturing_executions (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   workflow_id UUID NOT NULL REFERENCES public.nurturing_workflows(id) ON DELETE CASCADE,
@@ -237,11 +253,13 @@ CREATE TABLE public.nurturing_executions (
   UNIQUE(workflow_id, contact_id)
 );
 ALTER TABLE public.nurturing_executions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "ne_owner_all" ON public.nurturing_executions;  -- [singu-idem]
 CREATE POLICY "ne_owner_all" ON public.nurturing_executions FOR ALL
   USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 CREATE INDEX IF NOT EXISTS idx_ne_user ON public.nurturing_executions(user_id);
 CREATE INDEX IF NOT EXISTS idx_ne_workflow ON public.nurturing_executions(workflow_id);
 CREATE INDEX IF NOT EXISTS idx_ne_next_action ON public.nurturing_executions(next_action_at) WHERE status = 'active';
+DROP TRIGGER IF EXISTS trg_ne_updated ON public.nurturing_executions;  -- [singu-idem]
 CREATE TRIGGER trg_ne_updated BEFORE UPDATE ON public.nurturing_executions FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- =========================

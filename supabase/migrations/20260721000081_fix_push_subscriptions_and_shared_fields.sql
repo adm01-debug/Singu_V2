@@ -22,16 +22,20 @@
 DROP POLICY IF EXISTS "push_subscriptions_all" ON public.push_subscriptions;
 
 -- Create proper user-scoped CRUD policies
+DROP POLICY IF EXISTS "push_subscriptions_user_select" ON public.push_subscriptions;  -- [singu-idem]
 CREATE POLICY "push_subscriptions_user_select" ON public.push_subscriptions
   FOR SELECT TO authenticated USING (user_id = auth.uid());
 
+DROP POLICY IF EXISTS "push_subscriptions_user_insert" ON public.push_subscriptions;  -- [singu-idem]
 CREATE POLICY "push_subscriptions_user_insert" ON public.push_subscriptions
   FOR INSERT TO authenticated WITH CHECK (user_id = auth.uid());
 
+DROP POLICY IF EXISTS "push_subscriptions_user_update" ON public.push_subscriptions;  -- [singu-idem]
 CREATE POLICY "push_subscriptions_user_update" ON public.push_subscriptions
   FOR UPDATE TO authenticated
   USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
 
+DROP POLICY IF EXISTS "push_subscriptions_user_delete" ON public.push_subscriptions;  -- [singu-idem]
 CREATE POLICY "push_subscriptions_user_delete" ON public.push_subscriptions
   FOR DELETE TO authenticated USING (user_id = auth.uid());
 
@@ -40,6 +44,7 @@ CREATE POLICY "push_subscriptions_user_delete" ON public.push_subscriptions
 -- authenticated users (they define field schemas for the whole application).
 DROP POLICY IF EXISTS "custom_fields_select" ON public.custom_fields;
 
+DROP POLICY IF EXISTS "custom_fields_select" ON public.custom_fields;  -- [singu-idem]
 CREATE POLICY "custom_fields_select" ON public.custom_fields
   FOR SELECT TO authenticated
   USING (user_id IS NULL OR user_id = auth.uid());
@@ -47,6 +52,7 @@ CREATE POLICY "custom_fields_select" ON public.custom_fields
 -- ── 3. custom_field_values — same nullable user_id fix ────────────────────────
 DROP POLICY IF EXISTS "custom_field_values_select" ON public.custom_field_values;
 
+DROP POLICY IF EXISTS "custom_field_values_select" ON public.custom_field_values;  -- [singu-idem]
 CREATE POLICY "custom_field_values_select" ON public.custom_field_values
   FOR SELECT TO authenticated
   USING (user_id IS NULL OR user_id = auth.uid());

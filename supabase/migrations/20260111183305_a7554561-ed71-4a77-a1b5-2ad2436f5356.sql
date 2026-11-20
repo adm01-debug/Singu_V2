@@ -1,5 +1,5 @@
 -- Create table for purchase history
-CREATE TABLE public.purchase_history (
+CREATE TABLE IF NOT EXISTS public.purchase_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -15,7 +15,7 @@ CREATE TABLE public.purchase_history (
 );
 
 -- Create table for communication preferences
-CREATE TABLE public.communication_preferences (
+CREATE TABLE IF NOT EXISTS public.communication_preferences (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -33,7 +33,7 @@ CREATE TABLE public.communication_preferences (
 );
 
 -- Create table for life events tracking
-CREATE TABLE public.life_events (
+CREATE TABLE IF NOT EXISTS public.life_events (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -49,7 +49,7 @@ CREATE TABLE public.life_events (
 );
 
 -- Create table for best contact time analysis
-CREATE TABLE public.contact_time_analysis (
+CREATE TABLE IF NOT EXISTS public.contact_time_analysis (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -63,7 +63,7 @@ CREATE TABLE public.contact_time_analysis (
 );
 
 -- Create table for personalized offer suggestions
-CREATE TABLE public.offer_suggestions (
+CREATE TABLE IF NOT EXISTS public.offer_suggestions (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -86,33 +86,53 @@ ALTER TABLE public.contact_time_analysis ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.offer_suggestions ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for purchase_history
+DROP POLICY IF EXISTS "Users can view their own purchase history" ON public.purchase_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own purchase history" ON public.purchase_history FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own purchase history" ON public.purchase_history;  -- [singu-idem]
 CREATE POLICY "Users can insert their own purchase history" ON public.purchase_history FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own purchase history" ON public.purchase_history;  -- [singu-idem]
 CREATE POLICY "Users can update their own purchase history" ON public.purchase_history FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can delete their own purchase history" ON public.purchase_history;  -- [singu-idem]
 CREATE POLICY "Users can delete their own purchase history" ON public.purchase_history FOR DELETE USING (auth.uid() = user_id);
 
 -- RLS Policies for communication_preferences
+DROP POLICY IF EXISTS "Users can view their own communication preferences" ON public.communication_preferences;  -- [singu-idem]
 CREATE POLICY "Users can view their own communication preferences" ON public.communication_preferences FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own communication preferences" ON public.communication_preferences;  -- [singu-idem]
 CREATE POLICY "Users can insert their own communication preferences" ON public.communication_preferences FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own communication preferences" ON public.communication_preferences;  -- [singu-idem]
 CREATE POLICY "Users can update their own communication preferences" ON public.communication_preferences FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can delete their own communication preferences" ON public.communication_preferences;  -- [singu-idem]
 CREATE POLICY "Users can delete their own communication preferences" ON public.communication_preferences FOR DELETE USING (auth.uid() = user_id);
 
 -- RLS Policies for life_events
+DROP POLICY IF EXISTS "Users can view their own life events" ON public.life_events;  -- [singu-idem]
 CREATE POLICY "Users can view their own life events" ON public.life_events FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own life events" ON public.life_events;  -- [singu-idem]
 CREATE POLICY "Users can insert their own life events" ON public.life_events FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own life events" ON public.life_events;  -- [singu-idem]
 CREATE POLICY "Users can update their own life events" ON public.life_events FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can delete their own life events" ON public.life_events;  -- [singu-idem]
 CREATE POLICY "Users can delete their own life events" ON public.life_events FOR DELETE USING (auth.uid() = user_id);
 
 -- RLS Policies for contact_time_analysis
+DROP POLICY IF EXISTS "Users can view their own contact time analysis" ON public.contact_time_analysis;  -- [singu-idem]
 CREATE POLICY "Users can view their own contact time analysis" ON public.contact_time_analysis FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own contact time analysis" ON public.contact_time_analysis;  -- [singu-idem]
 CREATE POLICY "Users can insert their own contact time analysis" ON public.contact_time_analysis FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own contact time analysis" ON public.contact_time_analysis;  -- [singu-idem]
 CREATE POLICY "Users can update their own contact time analysis" ON public.contact_time_analysis FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can delete their own contact time analysis" ON public.contact_time_analysis;  -- [singu-idem]
 CREATE POLICY "Users can delete their own contact time analysis" ON public.contact_time_analysis FOR DELETE USING (auth.uid() = user_id);
 
 -- RLS Policies for offer_suggestions
+DROP POLICY IF EXISTS "Users can view their own offer suggestions" ON public.offer_suggestions;  -- [singu-idem]
 CREATE POLICY "Users can view their own offer suggestions" ON public.offer_suggestions FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own offer suggestions" ON public.offer_suggestions;  -- [singu-idem]
 CREATE POLICY "Users can insert their own offer suggestions" ON public.offer_suggestions FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own offer suggestions" ON public.offer_suggestions;  -- [singu-idem]
 CREATE POLICY "Users can update their own offer suggestions" ON public.offer_suggestions FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can delete their own offer suggestions" ON public.offer_suggestions;  -- [singu-idem]
 CREATE POLICY "Users can delete their own offer suggestions" ON public.offer_suggestions FOR DELETE USING (auth.uid() = user_id);
 
 -- Create indexes for performance

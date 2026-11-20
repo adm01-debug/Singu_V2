@@ -1,5 +1,5 @@
 -- 1. conversation_analyses
-CREATE TABLE public.conversation_analyses (
+CREATE TABLE IF NOT EXISTS public.conversation_analyses (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   interaction_id UUID NOT NULL REFERENCES public.interactions(id) ON DELETE CASCADE,
@@ -32,21 +32,27 @@ CREATE INDEX IF NOT EXISTS idx_conv_analyses_score ON public.conversation_analys
 
 ALTER TABLE public.conversation_analyses ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "conv_analyses_select_own" ON public.conversation_analyses;  -- [singu-idem]
 CREATE POLICY "conv_analyses_select_own" ON public.conversation_analyses FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "conv_analyses_insert_own" ON public.conversation_analyses;  -- [singu-idem]
 CREATE POLICY "conv_analyses_insert_own" ON public.conversation_analyses FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "conv_analyses_update_own" ON public.conversation_analyses;  -- [singu-idem]
 CREATE POLICY "conv_analyses_update_own" ON public.conversation_analyses FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "conv_analyses_delete_own" ON public.conversation_analyses;  -- [singu-idem]
 CREATE POLICY "conv_analyses_delete_own" ON public.conversation_analyses FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_conv_analyses_updated_at ON public.conversation_analyses;  -- [singu-idem]
 CREATE TRIGGER trg_conv_analyses_updated_at
   BEFORE UPDATE ON public.conversation_analyses
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS trg_conv_analyses_audit ON public.conversation_analyses;  -- [singu-idem]
 CREATE TRIGGER trg_conv_analyses_audit
   AFTER INSERT OR UPDATE OR DELETE ON public.conversation_analyses
   FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- 2. conversation_topics_catalog
-CREATE TABLE public.conversation_topics_catalog (
+CREATE TABLE IF NOT EXISTS public.conversation_topics_catalog (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   topic_key TEXT NOT NULL,
@@ -63,17 +69,22 @@ CREATE TABLE public.conversation_topics_catalog (
 CREATE INDEX IF NOT EXISTS idx_conv_topics_user ON public.conversation_topics_catalog(user_id, active, category);
 
 ALTER TABLE public.conversation_topics_catalog ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "conv_topics_select_own" ON public.conversation_topics_catalog;  -- [singu-idem]
 CREATE POLICY "conv_topics_select_own" ON public.conversation_topics_catalog FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "conv_topics_insert_own" ON public.conversation_topics_catalog;  -- [singu-idem]
 CREATE POLICY "conv_topics_insert_own" ON public.conversation_topics_catalog FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "conv_topics_update_own" ON public.conversation_topics_catalog;  -- [singu-idem]
 CREATE POLICY "conv_topics_update_own" ON public.conversation_topics_catalog FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "conv_topics_delete_own" ON public.conversation_topics_catalog;  -- [singu-idem]
 CREATE POLICY "conv_topics_delete_own" ON public.conversation_topics_catalog FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_conv_topics_updated_at ON public.conversation_topics_catalog;  -- [singu-idem]
 CREATE TRIGGER trg_conv_topics_updated_at
   BEFORE UPDATE ON public.conversation_topics_catalog
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- 3. coaching_scorecards
-CREATE TABLE public.coaching_scorecards (
+CREATE TABLE IF NOT EXISTS public.coaching_scorecards (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   name TEXT NOT NULL,
@@ -88,11 +99,16 @@ CREATE TABLE public.coaching_scorecards (
 CREATE INDEX IF NOT EXISTS idx_coaching_scorecards_user ON public.coaching_scorecards(user_id, active);
 
 ALTER TABLE public.coaching_scorecards ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "coaching_scorecards_select_own" ON public.coaching_scorecards;  -- [singu-idem]
 CREATE POLICY "coaching_scorecards_select_own" ON public.coaching_scorecards FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "coaching_scorecards_insert_own" ON public.coaching_scorecards;  -- [singu-idem]
 CREATE POLICY "coaching_scorecards_insert_own" ON public.coaching_scorecards FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "coaching_scorecards_update_own" ON public.coaching_scorecards;  -- [singu-idem]
 CREATE POLICY "coaching_scorecards_update_own" ON public.coaching_scorecards FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "coaching_scorecards_delete_own" ON public.coaching_scorecards;  -- [singu-idem]
 CREATE POLICY "coaching_scorecards_delete_own" ON public.coaching_scorecards FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_coaching_scorecards_updated_at ON public.coaching_scorecards;  -- [singu-idem]
 CREATE TRIGGER trg_coaching_scorecards_updated_at
   BEFORE UPDATE ON public.coaching_scorecards
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

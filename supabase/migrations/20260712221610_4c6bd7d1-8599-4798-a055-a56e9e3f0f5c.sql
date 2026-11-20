@@ -1,5 +1,5 @@
 
-CREATE TABLE public.behavioral_profile_regen_queue (
+CREATE TABLE IF NOT EXISTS public.behavioral_profile_regen_queue (
   contact_id UUID PRIMARY KEY REFERENCES public.contacts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
   enqueued_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -19,6 +19,7 @@ GRANT ALL ON public.behavioral_profile_regen_queue TO service_role;
 
 ALTER TABLE public.behavioral_profile_regen_queue ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users read own queue items" ON public.behavioral_profile_regen_queue;  -- [singu-idem]
 CREATE POLICY "Users read own queue items"
 ON public.behavioral_profile_regen_queue
 FOR SELECT
@@ -59,14 +60,17 @@ BEGIN
 END;
 $$;
 
+DROP TRIGGER IF EXISTS trg_enqueue_bpr_whatsapp ON public.whatsapp_messages;  -- [singu-idem]
 CREATE TRIGGER trg_enqueue_bpr_whatsapp
 AFTER INSERT ON public.whatsapp_messages
 FOR EACH ROW EXECUTE FUNCTION public.enqueue_behavioral_profile_regen();
 
+DROP TRIGGER IF EXISTS trg_enqueue_bpr_calls ON public.call_logs;  -- [singu-idem]
 CREATE TRIGGER trg_enqueue_bpr_calls
 AFTER INSERT ON public.call_logs
 FOR EACH ROW EXECUTE FUNCTION public.enqueue_behavioral_profile_regen();
 
+DROP TRIGGER IF EXISTS trg_enqueue_bpr_interactions ON public.interactions;  -- [singu-idem]
 CREATE TRIGGER trg_enqueue_bpr_interactions
 AFTER INSERT ON public.interactions
 FOR EACH ROW EXECUTE FUNCTION public.enqueue_behavioral_profile_regen();
@@ -76,6 +80,7 @@ RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN NEW.updated_at = now(); RETURN NEW; END;
 $$;
 
+DROP TRIGGER IF EXISTS trg_bpr_queue_updated_at ON public.behavioral_profile_regen_queue;  -- [singu-idem]
 CREATE TRIGGER trg_bpr_queue_updated_at
 BEFORE UPDATE ON public.behavioral_profile_regen_queue
 FOR EACH ROW EXECUTE FUNCTION public.update_bpr_queue_updated_at();

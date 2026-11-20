@@ -1,5 +1,5 @@
 
-CREATE TABLE public.visit_checkins (
+CREATE TABLE IF NOT EXISTS public.visit_checkins (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE SET NULL,
@@ -17,4 +17,5 @@ CREATE TABLE public.visit_checkins (
 );
 
 ALTER TABLE public.visit_checkins ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own visit checkins" ON public.visit_checkins;  -- [singu-idem]
 CREATE POLICY "Users manage own visit checkins" ON public.visit_checkins FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);

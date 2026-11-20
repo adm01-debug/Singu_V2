@@ -4,7 +4,7 @@
 -- =============================================
 
 -- 1. sales_team_members
-CREATE TABLE public.sales_team_members (
+CREATE TABLE IF NOT EXISTS public.sales_team_members (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   profile_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
@@ -29,22 +29,27 @@ CREATE TABLE public.sales_team_members (
 
 ALTER TABLE public.sales_team_members ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own team members" ON public.sales_team_members;  -- [singu-idem]
 CREATE POLICY "Users can view their own team members"
   ON public.sales_team_members FOR SELECT TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins can view all team members" ON public.sales_team_members;  -- [singu-idem]
 CREATE POLICY "Admins can view all team members"
   ON public.sales_team_members FOR SELECT TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Users can insert their own team members" ON public.sales_team_members;  -- [singu-idem]
 CREATE POLICY "Users can insert their own team members"
   ON public.sales_team_members FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own team members" ON public.sales_team_members;  -- [singu-idem]
 CREATE POLICY "Users can update their own team members"
   ON public.sales_team_members FOR UPDATE TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own team members" ON public.sales_team_members;  -- [singu-idem]
 CREATE POLICY "Users can delete their own team members"
   ON public.sales_team_members FOR DELETE TO authenticated
   USING (auth.uid() = user_id);
@@ -53,12 +58,13 @@ CREATE INDEX IF NOT EXISTS idx_sales_team_role ON public.sales_team_members(role
 CREATE INDEX IF NOT EXISTS idx_sales_team_active ON public.sales_team_members(is_active);
 CREATE INDEX IF NOT EXISTS idx_sales_team_user ON public.sales_team_members(user_id);
 
+DROP TRIGGER IF EXISTS update_sales_team_members_updated_at ON public.sales_team_members;  -- [singu-idem]
 CREATE TRIGGER update_sales_team_members_updated_at
   BEFORE UPDATE ON public.sales_team_members
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- 2. lead_routing_rules
-CREATE TABLE public.lead_routing_rules (
+CREATE TABLE IF NOT EXISTS public.lead_routing_rules (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   name TEXT NOT NULL,
@@ -76,22 +82,27 @@ CREATE TABLE public.lead_routing_rules (
 
 ALTER TABLE public.lead_routing_rules ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own routing rules" ON public.lead_routing_rules;  -- [singu-idem]
 CREATE POLICY "Users can view their own routing rules"
   ON public.lead_routing_rules FOR SELECT TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins can view all routing rules" ON public.lead_routing_rules;  -- [singu-idem]
 CREATE POLICY "Admins can view all routing rules"
   ON public.lead_routing_rules FOR SELECT TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Users can insert their own routing rules" ON public.lead_routing_rules;  -- [singu-idem]
 CREATE POLICY "Users can insert their own routing rules"
   ON public.lead_routing_rules FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own routing rules" ON public.lead_routing_rules;  -- [singu-idem]
 CREATE POLICY "Users can update their own routing rules"
   ON public.lead_routing_rules FOR UPDATE TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own routing rules" ON public.lead_routing_rules;  -- [singu-idem]
 CREATE POLICY "Users can delete their own routing rules"
   ON public.lead_routing_rules FOR DELETE TO authenticated
   USING (auth.uid() = user_id);
@@ -99,12 +110,13 @@ CREATE POLICY "Users can delete their own routing rules"
 CREATE INDEX IF NOT EXISTS idx_routing_rules_priority ON public.lead_routing_rules(priority);
 CREATE INDEX IF NOT EXISTS idx_routing_rules_active ON public.lead_routing_rules(is_active);
 
+DROP TRIGGER IF EXISTS update_lead_routing_rules_updated_at ON public.lead_routing_rules;  -- [singu-idem]
 CREATE TRIGGER update_lead_routing_rules_updated_at
   BEFORE UPDATE ON public.lead_routing_rules
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- 3. lead_assignments
-CREATE TABLE public.lead_assignments (
+CREATE TABLE IF NOT EXISTS public.lead_assignments (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID,
@@ -125,22 +137,27 @@ CREATE TABLE public.lead_assignments (
 
 ALTER TABLE public.lead_assignments ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own assignments" ON public.lead_assignments;  -- [singu-idem]
 CREATE POLICY "Users can view their own assignments"
   ON public.lead_assignments FOR SELECT TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins can view all assignments" ON public.lead_assignments;  -- [singu-idem]
 CREATE POLICY "Admins can view all assignments"
   ON public.lead_assignments FOR SELECT TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Users can insert their own assignments" ON public.lead_assignments;  -- [singu-idem]
 CREATE POLICY "Users can insert their own assignments"
   ON public.lead_assignments FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own assignments" ON public.lead_assignments;  -- [singu-idem]
 CREATE POLICY "Users can update their own assignments"
   ON public.lead_assignments FOR UPDATE TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own assignments" ON public.lead_assignments;  -- [singu-idem]
 CREATE POLICY "Users can delete their own assignments"
   ON public.lead_assignments FOR DELETE TO authenticated
   USING (auth.uid() = user_id);
@@ -151,12 +168,13 @@ CREATE INDEX IF NOT EXISTS idx_assignments_status ON public.lead_assignments(sta
 CREATE INDEX IF NOT EXISTS idx_assignments_type ON public.lead_assignments(assignment_type);
 CREATE INDEX IF NOT EXISTS idx_assignments_created ON public.lead_assignments(created_at DESC);
 
+DROP TRIGGER IF EXISTS update_lead_assignments_updated_at ON public.lead_assignments;  -- [singu-idem]
 CREATE TRIGGER update_lead_assignments_updated_at
   BEFORE UPDATE ON public.lead_assignments
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- 4. handoff_requests
-CREATE TABLE public.handoff_requests (
+CREATE TABLE IF NOT EXISTS public.handoff_requests (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID,
@@ -178,22 +196,27 @@ CREATE TABLE public.handoff_requests (
 
 ALTER TABLE public.handoff_requests ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own handoff requests" ON public.handoff_requests;  -- [singu-idem]
 CREATE POLICY "Users can view their own handoff requests"
   ON public.handoff_requests FOR SELECT TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins can view all handoff requests" ON public.handoff_requests;  -- [singu-idem]
 CREATE POLICY "Admins can view all handoff requests"
   ON public.handoff_requests FOR SELECT TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Users can insert their own handoff requests" ON public.handoff_requests;  -- [singu-idem]
 CREATE POLICY "Users can insert their own handoff requests"
   ON public.handoff_requests FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own handoff requests" ON public.handoff_requests;  -- [singu-idem]
 CREATE POLICY "Users can update their own handoff requests"
   ON public.handoff_requests FOR UPDATE TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own handoff requests" ON public.handoff_requests;  -- [singu-idem]
 CREATE POLICY "Users can delete their own handoff requests"
   ON public.handoff_requests FOR DELETE TO authenticated
   USING (auth.uid() = user_id);
@@ -203,12 +226,13 @@ CREATE INDEX IF NOT EXISTS idx_handoff_from ON public.handoff_requests(from_memb
 CREATE INDEX IF NOT EXISTS idx_handoff_to ON public.handoff_requests(to_member_id);
 CREATE INDEX IF NOT EXISTS idx_handoff_created ON public.handoff_requests(created_at DESC);
 
+DROP TRIGGER IF EXISTS update_handoff_requests_updated_at ON public.handoff_requests;  -- [singu-idem]
 CREATE TRIGGER update_handoff_requests_updated_at
   BEFORE UPDATE ON public.handoff_requests
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- 5. redistribution_log
-CREATE TABLE public.redistribution_log (
+CREATE TABLE IF NOT EXISTS public.redistribution_log (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID,
@@ -224,14 +248,17 @@ CREATE TABLE public.redistribution_log (
 
 ALTER TABLE public.redistribution_log ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own redistribution logs" ON public.redistribution_log;  -- [singu-idem]
 CREATE POLICY "Users can view their own redistribution logs"
   ON public.redistribution_log FOR SELECT TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins can view all redistribution logs" ON public.redistribution_log;  -- [singu-idem]
 CREATE POLICY "Admins can view all redistribution logs"
   ON public.redistribution_log FOR SELECT TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Users can insert their own redistribution logs" ON public.redistribution_log;  -- [singu-idem]
 CREATE POLICY "Users can insert their own redistribution logs"
   ON public.redistribution_log FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id);

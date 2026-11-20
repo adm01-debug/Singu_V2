@@ -1,5 +1,5 @@
 -- Create table for emotional states history
-CREATE TABLE public.emotional_states_history (
+CREATE TABLE IF NOT EXISTS public.emotional_states_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -12,7 +12,7 @@ CREATE TABLE public.emotional_states_history (
 );
 
 -- Create table for emotional anchors
-CREATE TABLE public.emotional_anchors (
+CREATE TABLE IF NOT EXISTS public.emotional_anchors (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -26,7 +26,7 @@ CREATE TABLE public.emotional_anchors (
 );
 
 -- Create table for client values
-CREATE TABLE public.client_values (
+CREATE TABLE IF NOT EXISTS public.client_values (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -42,7 +42,7 @@ CREATE TABLE public.client_values (
 );
 
 -- Create table for decision criteria
-CREATE TABLE public.decision_criteria (
+CREATE TABLE IF NOT EXISTS public.decision_criteria (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -56,7 +56,7 @@ CREATE TABLE public.decision_criteria (
 );
 
 -- Create table for hidden objections
-CREATE TABLE public.hidden_objections (
+CREATE TABLE IF NOT EXISTS public.hidden_objections (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -81,64 +81,83 @@ ALTER TABLE public.decision_criteria ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.hidden_objections ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for emotional_states_history
+DROP POLICY IF EXISTS "Users can view their own emotional states history" ON public.emotional_states_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own emotional states history" 
 ON public.emotional_states_history FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own emotional states history" ON public.emotional_states_history;  -- [singu-idem]
 CREATE POLICY "Users can create their own emotional states history" 
 ON public.emotional_states_history FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own emotional states history" ON public.emotional_states_history;  -- [singu-idem]
 CREATE POLICY "Users can delete their own emotional states history" 
 ON public.emotional_states_history FOR DELETE USING (auth.uid() = user_id);
 
 -- RLS Policies for emotional_anchors
+DROP POLICY IF EXISTS "Users can view their own emotional anchors" ON public.emotional_anchors;  -- [singu-idem]
 CREATE POLICY "Users can view their own emotional anchors" 
 ON public.emotional_anchors FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own emotional anchors" ON public.emotional_anchors;  -- [singu-idem]
 CREATE POLICY "Users can create their own emotional anchors" 
 ON public.emotional_anchors FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own emotional anchors" ON public.emotional_anchors;  -- [singu-idem]
 CREATE POLICY "Users can update their own emotional anchors" 
 ON public.emotional_anchors FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own emotional anchors" ON public.emotional_anchors;  -- [singu-idem]
 CREATE POLICY "Users can delete their own emotional anchors" 
 ON public.emotional_anchors FOR DELETE USING (auth.uid() = user_id);
 
 -- RLS Policies for client_values
+DROP POLICY IF EXISTS "Users can view their own client values" ON public.client_values;  -- [singu-idem]
 CREATE POLICY "Users can view their own client values" 
 ON public.client_values FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own client values" ON public.client_values;  -- [singu-idem]
 CREATE POLICY "Users can create their own client values" 
 ON public.client_values FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own client values" ON public.client_values;  -- [singu-idem]
 CREATE POLICY "Users can update their own client values" 
 ON public.client_values FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own client values" ON public.client_values;  -- [singu-idem]
 CREATE POLICY "Users can delete their own client values" 
 ON public.client_values FOR DELETE USING (auth.uid() = user_id);
 
 -- RLS Policies for decision_criteria
+DROP POLICY IF EXISTS "Users can view their own decision criteria" ON public.decision_criteria;  -- [singu-idem]
 CREATE POLICY "Users can view their own decision criteria" 
 ON public.decision_criteria FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own decision criteria" ON public.decision_criteria;  -- [singu-idem]
 CREATE POLICY "Users can create their own decision criteria" 
 ON public.decision_criteria FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own decision criteria" ON public.decision_criteria;  -- [singu-idem]
 CREATE POLICY "Users can update their own decision criteria" 
 ON public.decision_criteria FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own decision criteria" ON public.decision_criteria;  -- [singu-idem]
 CREATE POLICY "Users can delete their own decision criteria" 
 ON public.decision_criteria FOR DELETE USING (auth.uid() = user_id);
 
 -- RLS Policies for hidden_objections
+DROP POLICY IF EXISTS "Users can view their own hidden objections" ON public.hidden_objections;  -- [singu-idem]
 CREATE POLICY "Users can view their own hidden objections" 
 ON public.hidden_objections FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own hidden objections" ON public.hidden_objections;  -- [singu-idem]
 CREATE POLICY "Users can create their own hidden objections" 
 ON public.hidden_objections FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own hidden objections" ON public.hidden_objections;  -- [singu-idem]
 CREATE POLICY "Users can update their own hidden objections" 
 ON public.hidden_objections FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own hidden objections" ON public.hidden_objections;  -- [singu-idem]
 CREATE POLICY "Users can delete their own hidden objections" 
 ON public.hidden_objections FOR DELETE USING (auth.uid() = user_id);
 
@@ -161,11 +180,13 @@ END;
 $$ LANGUAGE plpgsql SET search_path = public;
 
 -- Create triggers for automatic timestamp updates
+DROP TRIGGER IF EXISTS update_client_values_updated_at ON public.client_values;  -- [singu-idem]
 CREATE TRIGGER update_client_values_updated_at
 BEFORE UPDATE ON public.client_values
 FOR EACH ROW
 EXECUTE FUNCTION public.update_nlp_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_decision_criteria_updated_at ON public.decision_criteria;  -- [singu-idem]
 CREATE TRIGGER update_decision_criteria_updated_at
 BEFORE UPDATE ON public.decision_criteria
 FOR EACH ROW

@@ -1,5 +1,5 @@
 -- Create contact_behavior table
-CREATE TABLE public.contact_behavior (
+CREATE TABLE IF NOT EXISTS public.contact_behavior (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
     -- DISC
@@ -27,7 +27,7 @@ CREATE TABLE public.contact_behavior (
 );
 
 -- Create contact_decision_making table
-CREATE TABLE public.contact_decision_making (
+CREATE TABLE IF NOT EXISTS public.contact_decision_making (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
     decision_speed TEXT,
@@ -42,7 +42,7 @@ CREATE TABLE public.contact_decision_making (
 );
 
 -- Create contact_influence table
-CREATE TABLE public.contact_influence (
+CREATE TABLE IF NOT EXISTS public.contact_influence (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
     decision_role TEXT,
@@ -56,7 +56,7 @@ CREATE TABLE public.contact_influence (
 );
 
 -- Create contact_business_context table
-CREATE TABLE public.contact_business_context (
+CREATE TABLE IF NOT EXISTS public.contact_business_context (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
     financial_health TEXT,
@@ -77,13 +77,21 @@ ALTER TABLE public.contact_influence ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_business_context ENABLE ROW LEVEL SECURITY;
 
 -- Policies (Simplified for development, assuming auth user can access their data)
+DROP POLICY IF EXISTS "Allow all for authenticated users on behavior" ON public.contact_behavior;  -- [singu-idem]
 CREATE POLICY "Allow all for authenticated users on behavior" ON public.contact_behavior FOR ALL TO authenticated USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow all for authenticated users on decision" ON public.contact_decision_making;  -- [singu-idem]
 CREATE POLICY "Allow all for authenticated users on decision" ON public.contact_decision_making FOR ALL TO authenticated USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow all for authenticated users on influence" ON public.contact_influence;  -- [singu-idem]
 CREATE POLICY "Allow all for authenticated users on influence" ON public.contact_influence FOR ALL TO authenticated USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow all for authenticated users on business_context" ON public.contact_business_context;  -- [singu-idem]
 CREATE POLICY "Allow all for authenticated users on business_context" ON public.contact_business_context FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 -- Timestamps triggers
+DROP TRIGGER IF EXISTS update_contact_behavior_updated_at ON public.contact_behavior;  -- [singu-idem]
 CREATE TRIGGER update_contact_behavior_updated_at BEFORE UPDATE ON public.contact_behavior FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS update_contact_decision_making_updated_at ON public.contact_decision_making;  -- [singu-idem]
 CREATE TRIGGER update_contact_decision_making_updated_at BEFORE UPDATE ON public.contact_decision_making FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS update_contact_influence_updated_at ON public.contact_influence;  -- [singu-idem]
 CREATE TRIGGER update_contact_influence_updated_at BEFORE UPDATE ON public.contact_influence FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS update_contact_business_context_updated_at ON public.contact_business_context;  -- [singu-idem]
 CREATE TRIGGER update_contact_business_context_updated_at BEFORE UPDATE ON public.contact_business_context FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

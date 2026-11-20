@@ -16,26 +16,31 @@ CREATE TABLE IF NOT EXISTS public.lux_webhook_config (
 
 ALTER TABLE public.lux_webhook_config ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins can view lux_webhook_config" ON public.lux_webhook_config;  -- [singu-idem]
 CREATE POLICY "Admins can view lux_webhook_config"
   ON public.lux_webhook_config FOR SELECT
   TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Admins can insert lux_webhook_config" ON public.lux_webhook_config;  -- [singu-idem]
 CREATE POLICY "Admins can insert lux_webhook_config"
   ON public.lux_webhook_config FOR INSERT
   TO authenticated
   WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Admins can update lux_webhook_config" ON public.lux_webhook_config;  -- [singu-idem]
 CREATE POLICY "Admins can update lux_webhook_config"
   ON public.lux_webhook_config FOR UPDATE
   TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Admins can delete lux_webhook_config" ON public.lux_webhook_config;  -- [singu-idem]
 CREATE POLICY "Admins can delete lux_webhook_config"
   ON public.lux_webhook_config FOR DELETE
   TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP TRIGGER IF EXISTS update_lux_webhook_config_updated_at ON public.lux_webhook_config;  -- [singu-idem]
 CREATE TRIGGER update_lux_webhook_config_updated_at
   BEFORE UPDATE ON public.lux_webhook_config
   FOR EACH ROW

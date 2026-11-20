@@ -1,5 +1,5 @@
 -- ============ CS Accounts ============
-CREATE TABLE public.cs_accounts (
+CREATE TABLE IF NOT EXISTS public.cs_accounts (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE SET NULL,
@@ -25,16 +25,21 @@ CREATE INDEX IF NOT EXISTS idx_cs_accounts_health ON public.cs_accounts(user_id,
 CREATE INDEX IF NOT EXISTS idx_cs_accounts_lifecycle ON public.cs_accounts(user_id, lifecycle_stage);
 
 ALTER TABLE public.cs_accounts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "cs_accounts_select" ON public.cs_accounts;  -- [singu-idem]
 CREATE POLICY "cs_accounts_select" ON public.cs_accounts FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_accounts_insert" ON public.cs_accounts;  -- [singu-idem]
 CREATE POLICY "cs_accounts_insert" ON public.cs_accounts FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_accounts_update" ON public.cs_accounts;  -- [singu-idem]
 CREATE POLICY "cs_accounts_update" ON public.cs_accounts FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_accounts_delete" ON public.cs_accounts;  -- [singu-idem]
 CREATE POLICY "cs_accounts_delete" ON public.cs_accounts FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_cs_accounts_updated ON public.cs_accounts;  -- [singu-idem]
 CREATE TRIGGER trg_cs_accounts_updated BEFORE UPDATE ON public.cs_accounts
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ============ Health Signals ============
-CREATE TABLE public.cs_health_signals (
+CREATE TABLE IF NOT EXISTS public.cs_health_signals (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   account_id UUID NOT NULL REFERENCES public.cs_accounts(id) ON DELETE CASCADE,
@@ -51,13 +56,17 @@ CREATE INDEX IF NOT EXISTS idx_cs_signals_account ON public.cs_health_signals(ac
 CREATE INDEX IF NOT EXISTS idx_cs_signals_captured ON public.cs_health_signals(user_id, captured_at DESC);
 
 ALTER TABLE public.cs_health_signals ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "cs_signals_select" ON public.cs_health_signals;  -- [singu-idem]
 CREATE POLICY "cs_signals_select" ON public.cs_health_signals FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_signals_insert" ON public.cs_health_signals;  -- [singu-idem]
 CREATE POLICY "cs_signals_insert" ON public.cs_health_signals FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_signals_update" ON public.cs_health_signals;  -- [singu-idem]
 CREATE POLICY "cs_signals_update" ON public.cs_health_signals FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_signals_delete" ON public.cs_health_signals;  -- [singu-idem]
 CREATE POLICY "cs_signals_delete" ON public.cs_health_signals FOR DELETE USING (auth.uid() = user_id);
 
 -- ============ NPS Responses ============
-CREATE TABLE public.cs_nps_responses (
+CREATE TABLE IF NOT EXISTS public.cs_nps_responses (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   account_id UUID NOT NULL REFERENCES public.cs_accounts(id) ON DELETE CASCADE,
@@ -73,13 +82,17 @@ CREATE INDEX IF NOT EXISTS idx_cs_nps_account ON public.cs_nps_responses(account
 CREATE INDEX IF NOT EXISTS idx_cs_nps_user ON public.cs_nps_responses(user_id, surveyed_at DESC);
 
 ALTER TABLE public.cs_nps_responses ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "cs_nps_select" ON public.cs_nps_responses;  -- [singu-idem]
 CREATE POLICY "cs_nps_select" ON public.cs_nps_responses FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_nps_insert" ON public.cs_nps_responses;  -- [singu-idem]
 CREATE POLICY "cs_nps_insert" ON public.cs_nps_responses FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_nps_update" ON public.cs_nps_responses;  -- [singu-idem]
 CREATE POLICY "cs_nps_update" ON public.cs_nps_responses FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_nps_delete" ON public.cs_nps_responses;  -- [singu-idem]
 CREATE POLICY "cs_nps_delete" ON public.cs_nps_responses FOR DELETE USING (auth.uid() = user_id);
 
 -- ============ QBRs ============
-CREATE TABLE public.cs_qbrs (
+CREATE TABLE IF NOT EXISTS public.cs_qbrs (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   account_id UUID NOT NULL REFERENCES public.cs_accounts(id) ON DELETE CASCADE,
@@ -100,16 +113,21 @@ CREATE INDEX IF NOT EXISTS idx_cs_qbrs_account ON public.cs_qbrs(account_id, sch
 CREATE INDEX IF NOT EXISTS idx_cs_qbrs_user_status ON public.cs_qbrs(user_id, status, scheduled_at);
 
 ALTER TABLE public.cs_qbrs ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "cs_qbrs_select" ON public.cs_qbrs;  -- [singu-idem]
 CREATE POLICY "cs_qbrs_select" ON public.cs_qbrs FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_qbrs_insert" ON public.cs_qbrs;  -- [singu-idem]
 CREATE POLICY "cs_qbrs_insert" ON public.cs_qbrs FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_qbrs_update" ON public.cs_qbrs;  -- [singu-idem]
 CREATE POLICY "cs_qbrs_update" ON public.cs_qbrs FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_qbrs_delete" ON public.cs_qbrs;  -- [singu-idem]
 CREATE POLICY "cs_qbrs_delete" ON public.cs_qbrs FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_cs_qbrs_updated ON public.cs_qbrs;  -- [singu-idem]
 CREATE TRIGGER trg_cs_qbrs_updated BEFORE UPDATE ON public.cs_qbrs
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ============ Renewals ============
-CREATE TABLE public.cs_renewals (
+CREATE TABLE IF NOT EXISTS public.cs_renewals (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   account_id UUID NOT NULL REFERENCES public.cs_accounts(id) ON DELETE CASCADE,
@@ -129,11 +147,16 @@ CREATE INDEX IF NOT EXISTS idx_cs_renewals_account ON public.cs_renewals(account
 CREATE INDEX IF NOT EXISTS idx_cs_renewals_status ON public.cs_renewals(user_id, status);
 
 ALTER TABLE public.cs_renewals ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "cs_renewals_select" ON public.cs_renewals;  -- [singu-idem]
 CREATE POLICY "cs_renewals_select" ON public.cs_renewals FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_renewals_insert" ON public.cs_renewals;  -- [singu-idem]
 CREATE POLICY "cs_renewals_insert" ON public.cs_renewals FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_renewals_update" ON public.cs_renewals;  -- [singu-idem]
 CREATE POLICY "cs_renewals_update" ON public.cs_renewals FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "cs_renewals_delete" ON public.cs_renewals;  -- [singu-idem]
 CREATE POLICY "cs_renewals_delete" ON public.cs_renewals FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_cs_renewals_updated ON public.cs_renewals;  -- [singu-idem]
 CREATE TRIGGER trg_cs_renewals_updated BEFORE UPDATE ON public.cs_renewals
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 

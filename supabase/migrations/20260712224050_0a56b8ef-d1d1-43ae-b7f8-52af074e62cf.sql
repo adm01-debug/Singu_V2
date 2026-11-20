@@ -1,4 +1,5 @@
 
+DROP POLICY IF EXISTS "Admins read all insight feedback" ON public.behavioral_insight_feedback;  -- [singu-idem]
 CREATE POLICY "Admins read all insight feedback"
 ON public.behavioral_insight_feedback
 FOR SELECT

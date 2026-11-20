@@ -1,5 +1,5 @@
 
-CREATE TABLE public.churn_risk_scores (
+CREATE TABLE IF NOT EXISTS public.churn_risk_scores (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -18,15 +18,19 @@ CREATE TABLE public.churn_risk_scores (
 
 ALTER TABLE public.churn_risk_scores ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own churn risks" ON public.churn_risk_scores;  -- [singu-idem]
 CREATE POLICY "Users can view their own churn risks"
   ON public.churn_risk_scores FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own churn risks" ON public.churn_risk_scores;  -- [singu-idem]
 CREATE POLICY "Users can create their own churn risks"
   ON public.churn_risk_scores FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own churn risks" ON public.churn_risk_scores;  -- [singu-idem]
 CREATE POLICY "Users can update their own churn risks"
   ON public.churn_risk_scores FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own churn risks" ON public.churn_risk_scores;  -- [singu-idem]
 CREATE POLICY "Users can delete their own churn risks"
   ON public.churn_risk_scores FOR DELETE USING (auth.uid() = user_id);
 
@@ -34,6 +38,7 @@ CREATE INDEX IF NOT EXISTS idx_churn_risk_contact ON public.churn_risk_scores(co
 CREATE INDEX IF NOT EXISTS idx_churn_risk_user ON public.churn_risk_scores(user_id);
 CREATE INDEX IF NOT EXISTS idx_churn_risk_level ON public.churn_risk_scores(risk_level);
 
+DROP TRIGGER IF EXISTS update_churn_risk_scores_updated_at ON public.churn_risk_scores;  -- [singu-idem]
 CREATE TRIGGER update_churn_risk_scores_updated_at
   BEFORE UPDATE ON public.churn_risk_scores
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

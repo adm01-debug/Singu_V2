@@ -1,5 +1,5 @@
 
-CREATE TABLE public.canned_responses (
+CREATE TABLE IF NOT EXISTS public.canned_responses (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   title TEXT NOT NULL,
@@ -12,4 +12,5 @@ CREATE TABLE public.canned_responses (
 );
 
 ALTER TABLE public.canned_responses ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own canned responses" ON public.canned_responses;  -- [singu-idem]
 CREATE POLICY "Users manage own canned responses" ON public.canned_responses FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);

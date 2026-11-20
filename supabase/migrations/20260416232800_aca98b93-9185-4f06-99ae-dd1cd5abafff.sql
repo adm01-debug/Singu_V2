@@ -1,5 +1,5 @@
 -- ABM Accounts
-CREATE TABLE public.abm_accounts (
+CREATE TABLE IF NOT EXISTS public.abm_accounts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL,
   external_company_id TEXT NOT NULL,
@@ -23,18 +23,24 @@ CREATE INDEX IF NOT EXISTS idx_abm_accounts_tier ON public.abm_accounts(user_id,
 CREATE INDEX IF NOT EXISTS idx_abm_accounts_external ON public.abm_accounts(external_company_id);
 
 ALTER TABLE public.abm_accounts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "abm_accounts_select" ON public.abm_accounts;  -- [singu-idem]
 CREATE POLICY "abm_accounts_select" ON public.abm_accounts FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_accounts_insert" ON public.abm_accounts;  -- [singu-idem]
 CREATE POLICY "abm_accounts_insert" ON public.abm_accounts FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_accounts_update" ON public.abm_accounts;  -- [singu-idem]
 CREATE POLICY "abm_accounts_update" ON public.abm_accounts FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_accounts_delete" ON public.abm_accounts;  -- [singu-idem]
 CREATE POLICY "abm_accounts_delete" ON public.abm_accounts FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS abm_accounts_updated_at ON public.abm_accounts;  -- [singu-idem]
 CREATE TRIGGER abm_accounts_updated_at BEFORE UPDATE ON public.abm_accounts
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS abm_accounts_audit ON public.abm_accounts;  -- [singu-idem]
 CREATE TRIGGER abm_accounts_audit AFTER INSERT OR UPDATE OR DELETE ON public.abm_accounts
   FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- ABM Account Plans
-CREATE TABLE public.abm_account_plans (
+CREATE TABLE IF NOT EXISTS public.abm_account_plans (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   account_id UUID NOT NULL REFERENCES public.abm_accounts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -55,18 +61,24 @@ CREATE INDEX IF NOT EXISTS idx_abm_plans_account ON public.abm_account_plans(acc
 CREATE INDEX IF NOT EXISTS idx_abm_plans_user ON public.abm_account_plans(user_id);
 
 ALTER TABLE public.abm_account_plans ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "abm_plans_select" ON public.abm_account_plans;  -- [singu-idem]
 CREATE POLICY "abm_plans_select" ON public.abm_account_plans FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_plans_insert" ON public.abm_account_plans;  -- [singu-idem]
 CREATE POLICY "abm_plans_insert" ON public.abm_account_plans FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_plans_update" ON public.abm_account_plans;  -- [singu-idem]
 CREATE POLICY "abm_plans_update" ON public.abm_account_plans FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_plans_delete" ON public.abm_account_plans;  -- [singu-idem]
 CREATE POLICY "abm_plans_delete" ON public.abm_account_plans FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS abm_plans_updated_at ON public.abm_account_plans;  -- [singu-idem]
 CREATE TRIGGER abm_plans_updated_at BEFORE UPDATE ON public.abm_account_plans
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS abm_plans_audit ON public.abm_account_plans;  -- [singu-idem]
 CREATE TRIGGER abm_plans_audit AFTER INSERT OR UPDATE OR DELETE ON public.abm_account_plans
   FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- ABM Buying Committee
-CREATE TABLE public.abm_buying_committee (
+CREATE TABLE IF NOT EXISTS public.abm_buying_committee (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   account_id UUID NOT NULL REFERENCES public.abm_accounts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -85,16 +97,21 @@ CREATE INDEX IF NOT EXISTS idx_abm_committee_account ON public.abm_buying_commit
 CREATE INDEX IF NOT EXISTS idx_abm_committee_user ON public.abm_buying_committee(user_id);
 
 ALTER TABLE public.abm_buying_committee ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "abm_committee_select" ON public.abm_buying_committee;  -- [singu-idem]
 CREATE POLICY "abm_committee_select" ON public.abm_buying_committee FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_committee_insert" ON public.abm_buying_committee;  -- [singu-idem]
 CREATE POLICY "abm_committee_insert" ON public.abm_buying_committee FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_committee_update" ON public.abm_buying_committee;  -- [singu-idem]
 CREATE POLICY "abm_committee_update" ON public.abm_buying_committee FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_committee_delete" ON public.abm_buying_committee;  -- [singu-idem]
 CREATE POLICY "abm_committee_delete" ON public.abm_buying_committee FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS abm_committee_updated_at ON public.abm_buying_committee;  -- [singu-idem]
 CREATE TRIGGER abm_committee_updated_at BEFORE UPDATE ON public.abm_buying_committee
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ABM Whitespace Opportunities
-CREATE TABLE public.abm_whitespace_opportunities (
+CREATE TABLE IF NOT EXISTS public.abm_whitespace_opportunities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   account_id UUID NOT NULL REFERENCES public.abm_accounts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -112,16 +129,21 @@ CREATE INDEX IF NOT EXISTS idx_abm_whitespace_account ON public.abm_whitespace_o
 CREATE INDEX IF NOT EXISTS idx_abm_whitespace_user ON public.abm_whitespace_opportunities(user_id);
 
 ALTER TABLE public.abm_whitespace_opportunities ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "abm_whitespace_select" ON public.abm_whitespace_opportunities;  -- [singu-idem]
 CREATE POLICY "abm_whitespace_select" ON public.abm_whitespace_opportunities FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_whitespace_insert" ON public.abm_whitespace_opportunities;  -- [singu-idem]
 CREATE POLICY "abm_whitespace_insert" ON public.abm_whitespace_opportunities FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_whitespace_update" ON public.abm_whitespace_opportunities;  -- [singu-idem]
 CREATE POLICY "abm_whitespace_update" ON public.abm_whitespace_opportunities FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_whitespace_delete" ON public.abm_whitespace_opportunities;  -- [singu-idem]
 CREATE POLICY "abm_whitespace_delete" ON public.abm_whitespace_opportunities FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS abm_whitespace_updated_at ON public.abm_whitespace_opportunities;  -- [singu-idem]
 CREATE TRIGGER abm_whitespace_updated_at BEFORE UPDATE ON public.abm_whitespace_opportunities
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- ABM Campaigns
-CREATE TABLE public.abm_campaigns (
+CREATE TABLE IF NOT EXISTS public.abm_campaigns (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL,
   name TEXT NOT NULL,
@@ -141,10 +163,15 @@ CREATE INDEX IF NOT EXISTS idx_abm_campaigns_user ON public.abm_campaigns(user_i
 CREATE INDEX IF NOT EXISTS idx_abm_campaigns_status ON public.abm_campaigns(user_id, status);
 
 ALTER TABLE public.abm_campaigns ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "abm_campaigns_select" ON public.abm_campaigns;  -- [singu-idem]
 CREATE POLICY "abm_campaigns_select" ON public.abm_campaigns FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_campaigns_insert" ON public.abm_campaigns;  -- [singu-idem]
 CREATE POLICY "abm_campaigns_insert" ON public.abm_campaigns FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_campaigns_update" ON public.abm_campaigns;  -- [singu-idem]
 CREATE POLICY "abm_campaigns_update" ON public.abm_campaigns FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "abm_campaigns_delete" ON public.abm_campaigns;  -- [singu-idem]
 CREATE POLICY "abm_campaigns_delete" ON public.abm_campaigns FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS abm_campaigns_updated_at ON public.abm_campaigns;  -- [singu-idem]
 CREATE TRIGGER abm_campaigns_updated_at BEFORE UPDATE ON public.abm_campaigns
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

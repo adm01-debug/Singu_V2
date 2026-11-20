@@ -15,11 +15,13 @@ CREATE TABLE IF NOT EXISTS public.contact_objection_scripts (
 ALTER TABLE public.contact_objection_scripts ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view objection scripts for their contacts" ON public.contact_objection_scripts;  -- [singu-idem]
 CREATE POLICY "Users can view objection scripts for their contacts" 
 ON public.contact_objection_scripts 
 FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert objection scripts for their contacts" ON public.contact_objection_scripts;  -- [singu-idem]
 CREATE POLICY "Users can insert objection scripts for their contacts" 
 ON public.contact_objection_scripts 
 FOR INSERT 

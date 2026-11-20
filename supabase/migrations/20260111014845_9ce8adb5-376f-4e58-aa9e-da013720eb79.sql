@@ -1,5 +1,5 @@
 -- Create metaprogram_analysis table
-CREATE TABLE public.metaprogram_analysis (
+CREATE TABLE IF NOT EXISTS public.metaprogram_analysis (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users NOT NULL,
   contact_id UUID NOT NULL,
@@ -31,14 +31,17 @@ CREATE TABLE public.metaprogram_analysis (
 ALTER TABLE public.metaprogram_analysis ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view their own metaprogram analysis" ON public.metaprogram_analysis;  -- [singu-idem]
 CREATE POLICY "Users can view their own metaprogram analysis"
 ON public.metaprogram_analysis FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own metaprogram analysis" ON public.metaprogram_analysis;  -- [singu-idem]
 CREATE POLICY "Users can create their own metaprogram analysis"
 ON public.metaprogram_analysis FOR INSERT
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own metaprogram analysis" ON public.metaprogram_analysis;  -- [singu-idem]
 CREATE POLICY "Users can delete their own metaprogram analysis"
 ON public.metaprogram_analysis FOR DELETE
 USING (auth.uid() = user_id);

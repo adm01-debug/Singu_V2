@@ -18,10 +18,12 @@ CREATE TABLE IF NOT EXISTS public.contact_analytical_profiles (
 -- Habilitar RLS
 ALTER TABLE public.contact_analytical_profiles ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view analytical profiles of their contacts" ON public.contact_analytical_profiles;  -- [singu-idem]
 CREATE POLICY "Users can view analytical profiles of their contacts" 
 ON public.contact_analytical_profiles FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can manage analytical profiles of their contacts" ON public.contact_analytical_profiles;  -- [singu-idem]
 CREATE POLICY "Users can manage analytical profiles of their contacts" 
 ON public.contact_analytical_profiles FOR ALL 
 USING (auth.uid() = user_id);
@@ -43,15 +45,18 @@ CREATE TABLE IF NOT EXISTS public.interaction_summaries (
 
 ALTER TABLE public.interaction_summaries ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view summaries of their entities" ON public.interaction_summaries;  -- [singu-idem]
 CREATE POLICY "Users can view summaries of their entities" 
 ON public.interaction_summaries FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can manage summaries of their entities" ON public.interaction_summaries;  -- [singu-idem]
 CREATE POLICY "Users can manage summaries of their entities" 
 ON public.interaction_summaries FOR ALL 
 USING (auth.uid() = user_id);
 
 -- Trigger para atualizar timestamps em interaction_summaries
+DROP TRIGGER IF EXISTS update_interaction_summaries_updated_at ON public.interaction_summaries;  -- [singu-idem]
 CREATE TRIGGER update_interaction_summaries_updated_at
 BEFORE UPDATE ON public.interaction_summaries
 FOR EACH ROW

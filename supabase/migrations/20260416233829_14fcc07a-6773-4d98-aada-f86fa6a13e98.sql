@@ -1,7 +1,7 @@
 -- Intent Data Module: tabelas para rastreamento de sinais de intenção first-party
 
 -- 1. intent_signals: cada evento de intenção capturado
-CREATE TABLE public.intent_signals (
+CREATE TABLE IF NOT EXISTS public.intent_signals (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE SET NULL,
@@ -25,21 +25,26 @@ CREATE INDEX IF NOT EXISTS idx_intent_signals_type ON public.intent_signals(sign
 
 ALTER TABLE public.intent_signals ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users view own intent signals" ON public.intent_signals;  -- [singu-idem]
 CREATE POLICY "Users view own intent signals" ON public.intent_signals
   FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users insert own intent signals" ON public.intent_signals;  -- [singu-idem]
 CREATE POLICY "Users insert own intent signals" ON public.intent_signals
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users update own intent signals" ON public.intent_signals;  -- [singu-idem]
 CREATE POLICY "Users update own intent signals" ON public.intent_signals
   FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users delete own intent signals" ON public.intent_signals;  -- [singu-idem]
 CREATE POLICY "Users delete own intent signals" ON public.intent_signals
   FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS audit_intent_signals ON public.intent_signals;  -- [singu-idem]
 CREATE TRIGGER audit_intent_signals
   AFTER INSERT OR UPDATE OR DELETE ON public.intent_signals
   FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- 2. intent_scores: score agregado por contact ou account
-CREATE TABLE public.intent_scores (
+CREATE TABLE IF NOT EXISTS public.intent_scores (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   scope TEXT NOT NULL CHECK (scope IN ('contact','account')),
@@ -58,21 +63,26 @@ CREATE INDEX IF NOT EXISTS idx_intent_scores_user_score ON public.intent_scores(
 
 ALTER TABLE public.intent_scores ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users view own intent scores" ON public.intent_scores;  -- [singu-idem]
 CREATE POLICY "Users view own intent scores" ON public.intent_scores
   FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users insert own intent scores" ON public.intent_scores;  -- [singu-idem]
 CREATE POLICY "Users insert own intent scores" ON public.intent_scores
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users update own intent scores" ON public.intent_scores;  -- [singu-idem]
 CREATE POLICY "Users update own intent scores" ON public.intent_scores
   FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users delete own intent scores" ON public.intent_scores;  -- [singu-idem]
 CREATE POLICY "Users delete own intent scores" ON public.intent_scores
   FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS update_intent_scores_updated_at ON public.intent_scores;  -- [singu-idem]
 CREATE TRIGGER update_intent_scores_updated_at
   BEFORE UPDATE ON public.intent_scores
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- 3. intent_tracking_pixels: pixels de rastreamento por domínio
-CREATE TABLE public.intent_tracking_pixels (
+CREATE TABLE IF NOT EXISTS public.intent_tracking_pixels (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   pixel_key TEXT NOT NULL UNIQUE,
@@ -90,15 +100,20 @@ CREATE INDEX IF NOT EXISTS idx_intent_pixels_key ON public.intent_tracking_pixel
 
 ALTER TABLE public.intent_tracking_pixels ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users view own pixels" ON public.intent_tracking_pixels;  -- [singu-idem]
 CREATE POLICY "Users view own pixels" ON public.intent_tracking_pixels
   FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users insert own pixels" ON public.intent_tracking_pixels;  -- [singu-idem]
 CREATE POLICY "Users insert own pixels" ON public.intent_tracking_pixels
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users update own pixels" ON public.intent_tracking_pixels;  -- [singu-idem]
 CREATE POLICY "Users update own pixels" ON public.intent_tracking_pixels
   FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users delete own pixels" ON public.intent_tracking_pixels;  -- [singu-idem]
 CREATE POLICY "Users delete own pixels" ON public.intent_tracking_pixels
   FOR DELETE USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS update_intent_pixels_updated_at ON public.intent_tracking_pixels;  -- [singu-idem]
 CREATE TRIGGER update_intent_pixels_updated_at
   BEFORE UPDATE ON public.intent_tracking_pixels
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS public.neuro_behavioral_history (
 -- Enable RLS for neuro_behavioral_history
 ALTER TABLE public.neuro_behavioral_history ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own contact's neuro history" ON public.neuro_behavioral_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own contact's neuro history"
 ON public.neuro_behavioral_history FOR SELECT
 USING (EXISTS (SELECT 1 FROM public.contacts c WHERE c.id = contact_id AND c.user_id = auth.uid()));
@@ -36,10 +37,12 @@ CREATE TABLE IF NOT EXISTS public.social_consent_audit (
 -- Enable RLS for social_consent_audit
 ALTER TABLE public.social_consent_audit ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own consent logs" ON public.social_consent_audit;  -- [singu-idem]
 CREATE POLICY "Users can view their own consent logs"
 ON public.social_consent_audit FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert consent logs" ON public.social_consent_audit;  -- [singu-idem]
 CREATE POLICY "Users can insert consent logs"
 ON public.social_consent_audit FOR INSERT
 WITH CHECK (auth.uid() = user_id);

@@ -58,20 +58,24 @@ GRANT ALL ON public.entity_relationships TO service_role;
 -- 5. RLS
 ALTER TABLE public.entity_relationships ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "auth users read entity_relationships" ON public.entity_relationships;  -- [singu-idem]
 CREATE POLICY "auth users read entity_relationships"
   ON public.entity_relationships FOR SELECT
   TO authenticated USING (true);
 
+DROP POLICY IF EXISTS "auth users insert entity_relationships" ON public.entity_relationships;  -- [singu-idem]
 CREATE POLICY "auth users insert entity_relationships"
   ON public.entity_relationships FOR INSERT
   TO authenticated WITH CHECK (auth.uid() IS NOT NULL);
 
+DROP POLICY IF EXISTS "creator or admin updates entity_relationships" ON public.entity_relationships;  -- [singu-idem]
 CREATE POLICY "creator or admin updates entity_relationships"
   ON public.entity_relationships FOR UPDATE
   TO authenticated
   USING (created_by = auth.uid() OR public.has_role(auth.uid(), 'admin'))
   WITH CHECK (created_by = auth.uid() OR public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "creator or admin deletes entity_relationships" ON public.entity_relationships;  -- [singu-idem]
 CREATE POLICY "creator or admin deletes entity_relationships"
   ON public.entity_relationships FOR DELETE
   TO authenticated
@@ -83,6 +87,7 @@ RETURNS TRIGGER LANGUAGE plpgsql SET search_path = public AS $$
 BEGIN NEW.updated_at = now(); RETURN NEW; END $$;
 
 DROP TRIGGER IF EXISTS trg_entity_relationships_updated_at ON public.entity_relationships;
+DROP TRIGGER IF EXISTS trg_entity_relationships_updated_at ON public.entity_relationships;  -- [singu-idem]
 CREATE TRIGGER trg_entity_relationships_updated_at
 BEFORE UPDATE ON public.entity_relationships
 FOR EACH ROW EXECUTE FUNCTION public.tg_set_updated_at();
@@ -123,12 +128,14 @@ BEGIN
 END $$;
 
 DROP TRIGGER IF EXISTS trg_validate_entity_relationship ON public.entity_relationships;
+DROP TRIGGER IF EXISTS trg_validate_entity_relationship ON public.entity_relationships;  -- [singu-idem]
 CREATE TRIGGER trg_validate_entity_relationship
 BEFORE INSERT OR UPDATE ON public.entity_relationships
 FOR EACH ROW EXECUTE FUNCTION public.validate_entity_relationship();
 
 -- 8. View unificada de entidades (Empresa/Pessoa como "Entidade")
-CREATE OR REPLACE VIEW public.v_entities AS
+DROP VIEW IF EXISTS public.v_entities CASCADE;  -- [singu-idem]
+CREATE VIEW public.v_entities AS
   SELECT
     'company'::public.entity_type AS entity_type,
     c.id,

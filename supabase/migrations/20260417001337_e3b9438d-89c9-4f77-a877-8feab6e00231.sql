@@ -1,5 +1,5 @@
 -- forecast_periods
-CREATE TABLE public.forecast_periods (
+CREATE TABLE IF NOT EXISTS public.forecast_periods (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   period_type TEXT NOT NULL CHECK (period_type IN ('month','quarter')),
@@ -16,14 +16,19 @@ CREATE TABLE public.forecast_periods (
 );
 CREATE INDEX IF NOT EXISTS idx_forecast_periods_user ON public.forecast_periods(user_id, status, period_start DESC);
 ALTER TABLE public.forecast_periods ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "own forecast_periods select" ON public.forecast_periods;  -- [singu-idem]
 CREATE POLICY "own forecast_periods select" ON public.forecast_periods FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own forecast_periods insert" ON public.forecast_periods;  -- [singu-idem]
 CREATE POLICY "own forecast_periods insert" ON public.forecast_periods FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own forecast_periods update" ON public.forecast_periods;  -- [singu-idem]
 CREATE POLICY "own forecast_periods update" ON public.forecast_periods FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own forecast_periods delete" ON public.forecast_periods;  -- [singu-idem]
 CREATE POLICY "own forecast_periods delete" ON public.forecast_periods FOR DELETE USING (auth.uid() = user_id);
+DROP TRIGGER IF EXISTS trg_forecast_periods_updated ON public.forecast_periods;  -- [singu-idem]
 CREATE TRIGGER trg_forecast_periods_updated BEFORE UPDATE ON public.forecast_periods FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- deal_forecasts
-CREATE TABLE public.deal_forecasts (
+CREATE TABLE IF NOT EXISTS public.deal_forecasts (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   deal_id TEXT NOT NULL,
@@ -50,15 +55,21 @@ CREATE TABLE public.deal_forecasts (
 CREATE INDEX IF NOT EXISTS idx_deal_forecasts_period ON public.deal_forecasts(period_id, category);
 CREATE INDEX IF NOT EXISTS idx_deal_forecasts_user ON public.deal_forecasts(user_id, period_id);
 ALTER TABLE public.deal_forecasts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "own deal_forecasts select" ON public.deal_forecasts;  -- [singu-idem]
 CREATE POLICY "own deal_forecasts select" ON public.deal_forecasts FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own deal_forecasts insert" ON public.deal_forecasts;  -- [singu-idem]
 CREATE POLICY "own deal_forecasts insert" ON public.deal_forecasts FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own deal_forecasts update" ON public.deal_forecasts;  -- [singu-idem]
 CREATE POLICY "own deal_forecasts update" ON public.deal_forecasts FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own deal_forecasts delete" ON public.deal_forecasts;  -- [singu-idem]
 CREATE POLICY "own deal_forecasts delete" ON public.deal_forecasts FOR DELETE USING (auth.uid() = user_id);
+DROP TRIGGER IF EXISTS trg_deal_forecasts_updated ON public.deal_forecasts;  -- [singu-idem]
 CREATE TRIGGER trg_deal_forecasts_updated BEFORE UPDATE ON public.deal_forecasts FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS trg_deal_forecasts_audit ON public.deal_forecasts;  -- [singu-idem]
 CREATE TRIGGER trg_deal_forecasts_audit AFTER INSERT OR UPDATE OR DELETE ON public.deal_forecasts FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- forecast_snapshots
-CREATE TABLE public.forecast_snapshots (
+CREATE TABLE IF NOT EXISTS public.forecast_snapshots (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   period_id UUID NOT NULL REFERENCES public.forecast_periods(id) ON DELETE CASCADE,
@@ -74,12 +85,15 @@ CREATE TABLE public.forecast_snapshots (
 );
 CREATE INDEX IF NOT EXISTS idx_forecast_snapshots_period ON public.forecast_snapshots(period_id, snapshot_date DESC);
 ALTER TABLE public.forecast_snapshots ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "own forecast_snapshots select" ON public.forecast_snapshots;  -- [singu-idem]
 CREATE POLICY "own forecast_snapshots select" ON public.forecast_snapshots FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own forecast_snapshots insert" ON public.forecast_snapshots;  -- [singu-idem]
 CREATE POLICY "own forecast_snapshots insert" ON public.forecast_snapshots FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own forecast_snapshots delete" ON public.forecast_snapshots;  -- [singu-idem]
 CREATE POLICY "own forecast_snapshots delete" ON public.forecast_snapshots FOR DELETE USING (auth.uid() = user_id);
 
 -- forecast_categories_history
-CREATE TABLE public.forecast_categories_history (
+CREATE TABLE IF NOT EXISTS public.forecast_categories_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   deal_forecast_id UUID NOT NULL REFERENCES public.deal_forecasts(id) ON DELETE CASCADE,
@@ -91,11 +105,13 @@ CREATE TABLE public.forecast_categories_history (
 );
 CREATE INDEX IF NOT EXISTS idx_forecast_cat_history_df ON public.forecast_categories_history(deal_forecast_id, changed_at DESC);
 ALTER TABLE public.forecast_categories_history ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "own forecast_cat_history select" ON public.forecast_categories_history;  -- [singu-idem]
 CREATE POLICY "own forecast_cat_history select" ON public.forecast_categories_history FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own forecast_cat_history insert" ON public.forecast_categories_history;  -- [singu-idem]
 CREATE POLICY "own forecast_cat_history insert" ON public.forecast_categories_history FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- forecast_quota_settings
-CREATE TABLE public.forecast_quota_settings (
+CREATE TABLE IF NOT EXISTS public.forecast_quota_settings (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL UNIQUE,
   default_monthly_quota NUMERIC NOT NULL DEFAULT 0,
@@ -110,9 +126,13 @@ CREATE TABLE public.forecast_quota_settings (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 ALTER TABLE public.forecast_quota_settings ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "own quota_settings select" ON public.forecast_quota_settings;  -- [singu-idem]
 CREATE POLICY "own quota_settings select" ON public.forecast_quota_settings FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own quota_settings insert" ON public.forecast_quota_settings;  -- [singu-idem]
 CREATE POLICY "own quota_settings insert" ON public.forecast_quota_settings FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "own quota_settings update" ON public.forecast_quota_settings;  -- [singu-idem]
 CREATE POLICY "own quota_settings update" ON public.forecast_quota_settings FOR UPDATE USING (auth.uid() = user_id);
+DROP TRIGGER IF EXISTS trg_quota_settings_updated ON public.forecast_quota_settings;  -- [singu-idem]
 CREATE TRIGGER trg_quota_settings_updated BEFORE UPDATE ON public.forecast_quota_settings FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 -- RPC: seed_forecast_period — cria período atual baseado no tipo
@@ -164,4 +184,5 @@ BEGIN
   RETURN NEW;
 END;
 $$;
+DROP TRIGGER IF EXISTS trg_deal_forecasts_cat_history ON public.deal_forecasts;  -- [singu-idem]
 CREATE TRIGGER trg_deal_forecasts_cat_history AFTER UPDATE ON public.deal_forecasts FOR EACH ROW EXECUTE FUNCTION public.log_deal_forecast_category_change();

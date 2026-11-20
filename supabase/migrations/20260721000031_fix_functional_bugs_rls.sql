@@ -1,17 +1,20 @@
 -- Fix #1: error_logs — missing admin DELETE policy
 -- clearLogsMutation was silently returning success with 0 rows deleted
+DROP POLICY IF EXISTS "Admins can delete error_logs" ON public.error_logs;  -- [singu-idem]
 CREATE POLICY "Admins can delete error_logs"
   ON public.error_logs FOR DELETE TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
 -- Fix #2: query_telemetry — admin purge was restricted to own rows by existing user policy
 -- Add an additive admin policy so admins can purge all tenants' old telemetry
+DROP POLICY IF EXISTS "Admins can delete any telemetry" ON public.query_telemetry;  -- [singu-idem]
 CREATE POLICY "Admins can delete any telemetry"
   ON public.query_telemetry FOR DELETE TO authenticated
   USING (public.has_role(auth.uid(), 'admin'));
 
 -- Fix #3: social_sync_queue — missing INSERT + UPDATE policies caused 42501 errors
 -- The entire social sync feature was non-functional (INSERT threw RLS violation)
+DROP POLICY IF EXISTS "Users can insert own sync queue" ON public.social_sync_queue;  -- [singu-idem]
 CREATE POLICY "Users can insert own sync queue"
   ON public.social_sync_queue FOR INSERT TO authenticated
   WITH CHECK (
@@ -21,6 +24,7 @@ CREATE POLICY "Users can insert own sync queue"
     )
   );
 
+DROP POLICY IF EXISTS "Users can update own sync queue" ON public.social_sync_queue;  -- [singu-idem]
 CREATE POLICY "Users can update own sync queue"
   ON public.social_sync_queue FOR UPDATE TO authenticated
   USING (

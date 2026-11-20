@@ -1,5 +1,5 @@
 -- Create suggested_life_events table
-CREATE TABLE public.suggested_life_events (
+CREATE TABLE IF NOT EXISTS public.suggested_life_events (
     id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -19,18 +19,22 @@ CREATE TABLE public.suggested_life_events (
 ALTER TABLE public.suggested_life_events ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view their own suggested life events" ON public.suggested_life_events;  -- [singu-idem]
 CREATE POLICY "Users can view their own suggested life events"
 ON public.suggested_life_events FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own suggested life events" ON public.suggested_life_events;  -- [singu-idem]
 CREATE POLICY "Users can update their own suggested life events"
 ON public.suggested_life_events FOR UPDATE
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own suggested life events" ON public.suggested_life_events;  -- [singu-idem]
 CREATE POLICY "Users can delete their own suggested life events"
 ON public.suggested_life_events FOR DELETE
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Service role can manage suggested life events" ON public.suggested_life_events;  -- [singu-idem]
 CREATE POLICY "Service role can manage suggested life events"
 ON public.suggested_life_events FOR ALL
 USING (true)
@@ -41,6 +45,7 @@ CREATE INDEX IF NOT EXISTS idx_suggested_life_events_contact_id ON public.sugges
 CREATE INDEX IF NOT EXISTS idx_suggested_life_events_status ON public.suggested_life_events(status);
 
 -- Add trigger for updated_at
+DROP TRIGGER IF EXISTS update_suggested_life_events_updated_at ON public.suggested_life_events;  -- [singu-idem]
 CREATE TRIGGER update_suggested_life_events_updated_at
 BEFORE UPDATE ON public.suggested_life_events
 FOR EACH ROW

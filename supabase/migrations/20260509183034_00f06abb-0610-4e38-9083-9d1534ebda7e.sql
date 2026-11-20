@@ -49,7 +49,8 @@ END;
 $$ LANGUAGE plpgsql STABLE;
 
 -- 3. Audit View (Adjusted to real table structure)
-CREATE OR REPLACE VIEW public.v_contact_behavior_audit AS
+DROP VIEW IF EXISTS public.v_contact_behavior_audit CASCADE;  -- [singu-idem]
+CREATE VIEW public.v_contact_behavior_audit AS
 SELECT 
     l.id,
     l.contact_id,

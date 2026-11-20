@@ -1,5 +1,5 @@
 
-CREATE TABLE public.behavioral_insight_feedback (
+CREATE TABLE IF NOT EXISTS public.behavioral_insight_feedback (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   contact_id UUID NOT NULL,
@@ -21,27 +21,32 @@ GRANT ALL ON public.behavioral_insight_feedback TO service_role;
 
 ALTER TABLE public.behavioral_insight_feedback ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users read own insight feedback" ON public.behavioral_insight_feedback;  -- [singu-idem]
 CREATE POLICY "Users read own insight feedback"
   ON public.behavioral_insight_feedback FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users insert own insight feedback" ON public.behavioral_insight_feedback;  -- [singu-idem]
 CREATE POLICY "Users insert own insight feedback"
   ON public.behavioral_insight_feedback FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users update own insight feedback" ON public.behavioral_insight_feedback;  -- [singu-idem]
 CREATE POLICY "Users update own insight feedback"
   ON public.behavioral_insight_feedback FOR UPDATE
   TO authenticated
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users delete own insight feedback" ON public.behavioral_insight_feedback;  -- [singu-idem]
 CREATE POLICY "Users delete own insight feedback"
   ON public.behavioral_insight_feedback FOR DELETE
   TO authenticated
   USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS trg_bif_updated_at ON public.behavioral_insight_feedback;  -- [singu-idem]
 CREATE TRIGGER trg_bif_updated_at
   BEFORE UPDATE ON public.behavioral_insight_feedback
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

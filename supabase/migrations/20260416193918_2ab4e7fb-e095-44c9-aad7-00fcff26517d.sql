@@ -16,8 +16,11 @@ CREATE TABLE IF NOT EXISTS public.landing_pages (
 CREATE INDEX IF NOT EXISTS idx_landing_pages_user ON public.landing_pages(user_id);
 CREATE INDEX IF NOT EXISTS idx_landing_pages_slug ON public.landing_pages(slug) WHERE is_published = true;
 ALTER TABLE public.landing_pages ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "owners manage landing pages" ON public.landing_pages;  -- [singu-idem]
 CREATE POLICY "owners manage landing pages" ON public.landing_pages FOR ALL TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "public can read published landing pages" ON public.landing_pages;  -- [singu-idem]
 CREATE POLICY "public can read published landing pages" ON public.landing_pages FOR SELECT TO anon, authenticated USING (is_published = true);
+DROP TRIGGER IF EXISTS set_landing_pages_updated_at ON public.landing_pages;  -- [singu-idem]
 CREATE TRIGGER set_landing_pages_updated_at BEFORE UPDATE ON public.landing_pages FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 CREATE TABLE IF NOT EXISTS public.landing_page_submissions (
@@ -38,7 +41,9 @@ CREATE TABLE IF NOT EXISTS public.landing_page_submissions (
 CREATE INDEX IF NOT EXISTS idx_lp_submissions_lp ON public.landing_page_submissions(landing_page_id);
 CREATE INDEX IF NOT EXISTS idx_lp_submissions_user ON public.landing_page_submissions(user_id);
 ALTER TABLE public.landing_page_submissions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "owners read submissions" ON public.landing_page_submissions;  -- [singu-idem]
 CREATE POLICY "owners read submissions" ON public.landing_page_submissions FOR SELECT TO authenticated USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "public can insert submissions to published pages" ON public.landing_page_submissions;  -- [singu-idem]
 CREATE POLICY "public can insert submissions to published pages" ON public.landing_page_submissions FOR INSERT TO anon, authenticated WITH CHECK (
   EXISTS (SELECT 1 FROM public.landing_pages lp WHERE lp.id = landing_page_id AND lp.is_published = true AND lp.user_id = landing_page_submissions.user_id)
 );

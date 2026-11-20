@@ -1,5 +1,5 @@
 -- Tabela principal de análise RFM
-CREATE TABLE public.rfm_analysis (
+CREATE TABLE IF NOT EXISTS public.rfm_analysis (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -51,7 +51,7 @@ CREATE TABLE public.rfm_analysis (
 );
 
 -- Histórico de RFM para tracking de evolução
-CREATE TABLE public.rfm_history (
+CREATE TABLE IF NOT EXISTS public.rfm_history (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -67,7 +67,7 @@ CREATE TABLE public.rfm_history (
 );
 
 -- Configurações de segmentos RFM personalizáveis
-CREATE TABLE public.rfm_segment_config (
+CREATE TABLE IF NOT EXISTS public.rfm_segment_config (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   
@@ -97,7 +97,7 @@ CREATE TABLE public.rfm_segment_config (
 );
 
 -- Métricas agregadas de RFM por período
-CREATE TABLE public.rfm_metrics (
+CREATE TABLE IF NOT EXISTS public.rfm_metrics (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   
@@ -148,24 +148,30 @@ ALTER TABLE public.rfm_segment_config ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.rfm_metrics ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
+DROP POLICY IF EXISTS "Users can manage their own RFM analysis" ON public.rfm_analysis;  -- [singu-idem]
 CREATE POLICY "Users can manage their own RFM analysis" ON public.rfm_analysis
   FOR ALL USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can view their own RFM history" ON public.rfm_history;  -- [singu-idem]
 CREATE POLICY "Users can view their own RFM history" ON public.rfm_history
   FOR ALL USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can manage their RFM segment config" ON public.rfm_segment_config;  -- [singu-idem]
 CREATE POLICY "Users can manage their RFM segment config" ON public.rfm_segment_config
   FOR ALL USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can view their RFM metrics" ON public.rfm_metrics;  -- [singu-idem]
 CREATE POLICY "Users can view their RFM metrics" ON public.rfm_metrics
   FOR ALL USING (auth.uid() = user_id);
 
 -- Trigger para updated_at
+DROP TRIGGER IF EXISTS update_rfm_analysis_updated_at ON public.rfm_analysis;  -- [singu-idem]
 CREATE TRIGGER update_rfm_analysis_updated_at
   BEFORE UPDATE ON public.rfm_analysis
   FOR EACH ROW
   EXECUTE FUNCTION public.update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_rfm_segment_config_updated_at ON public.rfm_segment_config;  -- [singu-idem]
 CREATE TRIGGER update_rfm_segment_config_updated_at
   BEFORE UPDATE ON public.rfm_segment_config
   FOR EACH ROW

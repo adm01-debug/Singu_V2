@@ -23,18 +23,22 @@ CREATE INDEX IF NOT EXISTS idx_connection_anomalies_severity ON public.connectio
 
 ALTER TABLE public.connection_anomalies ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins can view anomalies" ON public.connection_anomalies;  -- [singu-idem]
 CREATE POLICY "Admins can view anomalies"
   ON public.connection_anomalies FOR SELECT
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Admins can update anomalies" ON public.connection_anomalies;  -- [singu-idem]
 CREATE POLICY "Admins can update anomalies"
   ON public.connection_anomalies FOR UPDATE
   USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Service role can insert anomalies" ON public.connection_anomalies;  -- [singu-idem]
 CREATE POLICY "Service role can insert anomalies"
   ON public.connection_anomalies FOR INSERT
   WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Admins can delete anomalies" ON public.connection_anomalies;  -- [singu-idem]
 CREATE POLICY "Admins can delete anomalies"
   ON public.connection_anomalies FOR DELETE
   USING (public.has_role(auth.uid(), 'admin'));

@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.ai_tone_preferences (
 ALTER TABLE public.ai_tone_preferences ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can manage their own tone preferences" ON public.ai_tone_preferences;  -- [singu-idem]
 CREATE POLICY "Users can manage their own tone preferences"
 ON public.ai_tone_preferences
 FOR ALL
@@ -23,6 +24,7 @@ WITH CHECK (auth.uid() = user_id);
 CREATE INDEX IF NOT EXISTS idx_ai_tone_prefs_user_company ON public.ai_tone_preferences(user_id, company_id);
 
 -- Update trigger for updated_at
+DROP TRIGGER IF EXISTS update_ai_tone_preferences_updated_at ON public.ai_tone_preferences;  -- [singu-idem]
 CREATE TRIGGER update_ai_tone_preferences_updated_at
 BEFORE UPDATE ON public.ai_tone_preferences
 FOR EACH ROW

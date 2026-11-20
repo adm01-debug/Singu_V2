@@ -17,8 +17,11 @@ CREATE TABLE IF NOT EXISTS public.brain_dominance_analysis (
 ALTER TABLE public.brain_dominance_analysis ENABLE ROW LEVEL SECURITY;
 
 -- Policies for brain_dominance_analysis
+DROP POLICY IF EXISTS "Users can view brain dominance analysis" ON public.brain_dominance_analysis;  -- [singu-idem]
 CREATE POLICY "Users can view brain dominance analysis" ON public.brain_dominance_analysis FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Users can insert brain dominance analysis" ON public.brain_dominance_analysis;  -- [singu-idem]
 CREATE POLICY "Users can insert brain dominance analysis" ON public.brain_dominance_analysis FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "Users can update brain dominance analysis" ON public.brain_dominance_analysis;  -- [singu-idem]
 CREATE POLICY "Users can update brain dominance analysis" ON public.brain_dominance_analysis FOR UPDATE USING (true);
 
 -- Neuro-PNL Sessions Table
@@ -42,8 +45,11 @@ CREATE TABLE IF NOT EXISTS public.neuro_pnl_sessions (
 ALTER TABLE public.neuro_pnl_sessions ENABLE ROW LEVEL SECURITY;
 
 -- Policies for neuro_pnl_sessions
+DROP POLICY IF EXISTS "Users can view neuro pnl sessions" ON public.neuro_pnl_sessions;  -- [singu-idem]
 CREATE POLICY "Users can view neuro pnl sessions" ON public.neuro_pnl_sessions FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Users can insert neuro pnl sessions" ON public.neuro_pnl_sessions;  -- [singu-idem]
 CREATE POLICY "Users can insert neuro pnl sessions" ON public.neuro_pnl_sessions FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "Users can update neuro pnl sessions" ON public.neuro_pnl_sessions;  -- [singu-idem]
 CREATE POLICY "Users can update neuro pnl sessions" ON public.neuro_pnl_sessions FOR UPDATE USING (true);
 
 -- WhatsApp Messages & Transcriptions Index
@@ -65,7 +71,9 @@ CREATE TABLE IF NOT EXISTS public.whatsapp_messages_index (
 ALTER TABLE public.whatsapp_messages_index ENABLE ROW LEVEL SECURITY;
 
 -- Policies for whatsapp_messages_index
+DROP POLICY IF EXISTS "Users can view whatsapp messages index" ON public.whatsapp_messages_index;  -- [singu-idem]
 CREATE POLICY "Users can view whatsapp messages index" ON public.whatsapp_messages_index FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Users can insert whatsapp messages index" ON public.whatsapp_messages_index;  -- [singu-idem]
 CREATE POLICY "Users can insert whatsapp messages index" ON public.whatsapp_messages_index FOR INSERT WITH CHECK (true);
 
 -- Function to update updated_at
@@ -78,10 +86,12 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Triggers for updated_at
+DROP TRIGGER IF EXISTS set_updated_at_brain_dominance ON public.brain_dominance_analysis;  -- [singu-idem]
 CREATE TRIGGER set_updated_at_brain_dominance
 BEFORE UPDATE ON public.brain_dominance_analysis
 FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 
+DROP TRIGGER IF EXISTS set_updated_at_neuro_pnl_sessions ON public.neuro_pnl_sessions;  -- [singu-idem]
 CREATE TRIGGER set_updated_at_neuro_pnl_sessions
 BEFORE UPDATE ON public.neuro_pnl_sessions
 FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();

@@ -1,5 +1,5 @@
 -- Create table for health alerts settings
-CREATE TABLE public.health_alert_settings (
+CREATE TABLE IF NOT EXISTS public.health_alert_settings (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   email_notifications BOOLEAN DEFAULT true,
@@ -19,20 +19,23 @@ CREATE TABLE public.health_alert_settings (
 ALTER TABLE public.health_alert_settings ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view their own health settings" ON public.health_alert_settings;  -- [singu-idem]
 CREATE POLICY "Users can view their own health settings"
 ON public.health_alert_settings FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own health settings" ON public.health_alert_settings;  -- [singu-idem]
 CREATE POLICY "Users can create their own health settings"
 ON public.health_alert_settings FOR INSERT
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own health settings" ON public.health_alert_settings;  -- [singu-idem]
 CREATE POLICY "Users can update their own health settings"
 ON public.health_alert_settings FOR UPDATE
 USING (auth.uid() = user_id);
 
 -- Create table for health alerts history
-CREATE TABLE public.health_alerts (
+CREATE TABLE IF NOT EXISTS public.health_alerts (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
@@ -51,23 +54,28 @@ CREATE TABLE public.health_alerts (
 ALTER TABLE public.health_alerts ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
+DROP POLICY IF EXISTS "Users can view their own health alerts" ON public.health_alerts;  -- [singu-idem]
 CREATE POLICY "Users can view their own health alerts"
 ON public.health_alerts FOR SELECT
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create their own health alerts" ON public.health_alerts;  -- [singu-idem]
 CREATE POLICY "Users can create their own health alerts"
 ON public.health_alerts FOR INSERT
 WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own health alerts" ON public.health_alerts;  -- [singu-idem]
 CREATE POLICY "Users can update their own health alerts"
 ON public.health_alerts FOR UPDATE
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own health alerts" ON public.health_alerts;  -- [singu-idem]
 CREATE POLICY "Users can delete their own health alerts"
 ON public.health_alerts FOR DELETE
 USING (auth.uid() = user_id);
 
 -- Add trigger for updated_at on settings
+DROP TRIGGER IF EXISTS update_health_alert_settings_updated_at ON public.health_alert_settings;  -- [singu-idem]
 CREATE TRIGGER update_health_alert_settings_updated_at
 BEFORE UPDATE ON public.health_alert_settings
 FOR EACH ROW

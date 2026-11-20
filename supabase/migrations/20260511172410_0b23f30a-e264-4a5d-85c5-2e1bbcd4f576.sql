@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS public.contact_relatives_audit (
 ALTER TABLE public.contact_relatives_audit ENABLE ROW LEVEL SECURITY;
 
 -- Policies
+DROP POLICY IF EXISTS "Users can view their own relatives audit" ON public.contact_relatives_audit;  -- [singu-idem]
 CREATE POLICY "Users can view their own relatives audit"
 ON public.contact_relatives_audit FOR SELECT
 USING (auth.uid() = user_id);
@@ -42,12 +43,14 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Create trigger
 DROP TRIGGER IF EXISTS tr_contact_relatives_audit ON public.contact_relatives;
+DROP TRIGGER IF EXISTS tr_contact_relatives_audit ON public.contact_relatives;  -- [singu-idem]
 CREATE TRIGGER tr_contact_relatives_audit
 AFTER INSERT OR UPDATE OR DELETE ON public.contact_relatives
 FOR EACH ROW EXECUTE FUNCTION public.process_contact_relatives_audit();
 
 -- Create view for easier consumption
-CREATE OR REPLACE VIEW public.v_contact_relatives_audit AS
+DROP VIEW IF EXISTS public.v_contact_relatives_audit CASCADE;  -- [singu-idem]
+CREATE VIEW public.v_contact_relatives_audit AS
 SELECT 
     a.id,
     a.relative_id,

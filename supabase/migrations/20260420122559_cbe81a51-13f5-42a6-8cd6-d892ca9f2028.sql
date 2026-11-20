@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS public.connection_quotas (
 
 ALTER TABLE public.connection_quotas ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins manage connection quotas" ON public.connection_quotas;  -- [singu-idem]
 CREATE POLICY "Admins manage connection quotas"
   ON public.connection_quotas
   FOR ALL
@@ -88,11 +89,13 @@ END;
 $$;
 
 DROP TRIGGER IF EXISTS trg_audit_connection_configs ON public.connection_configs;
+DROP TRIGGER IF EXISTS trg_audit_connection_configs ON public.connection_configs;  -- [singu-idem]
 CREATE TRIGGER trg_audit_connection_configs
   AFTER INSERT OR UPDATE OR DELETE ON public.connection_configs
   FOR EACH ROW EXECUTE FUNCTION public.audit_connection_changes();
 
 DROP TRIGGER IF EXISTS trg_audit_incoming_webhooks ON public.incoming_webhooks;
+DROP TRIGGER IF EXISTS trg_audit_incoming_webhooks ON public.incoming_webhooks;  -- [singu-idem]
 CREATE TRIGGER trg_audit_incoming_webhooks
   AFTER INSERT OR UPDATE OR DELETE ON public.incoming_webhooks
   FOR EACH ROW EXECUTE FUNCTION public.audit_connection_changes();

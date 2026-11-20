@@ -88,6 +88,7 @@ $$ LANGUAGE plpgsql SET search_path = public;
 
 -- Trigger para atualizar métricas sempre que houver nova interação
 DROP TRIGGER IF EXISTS tr_update_contact_metrics ON public.interactions;
+DROP TRIGGER IF EXISTS tr_update_contact_metrics ON public.interactions;  -- [singu-idem]
 CREATE TRIGGER tr_update_contact_metrics
 AFTER INSERT OR UPDATE OR DELETE ON public.interactions
 FOR EACH ROW
@@ -109,6 +110,7 @@ CREATE TABLE IF NOT EXISTS public.crm_alerts (
 
 ALTER TABLE public.crm_alerts ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can manage their own alerts" ON public.crm_alerts;  -- [singu-idem]
 CREATE POLICY "Users can manage their own alerts"
 ON public.crm_alerts
 FOR ALL

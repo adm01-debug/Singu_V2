@@ -1,5 +1,5 @@
 -- Audit log table
-CREATE TABLE public.audit_log (
+CREATE TABLE IF NOT EXISTS public.audit_log (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   entity_type TEXT NOT NULL,
   entity_id UUID NOT NULL,
@@ -17,11 +17,13 @@ CREATE INDEX IF NOT EXISTS idx_audit_log_user ON public.audit_log (user_id, crea
 -- RLS
 ALTER TABLE public.audit_log ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their own audit logs" ON public.audit_log;  -- [singu-idem]
 CREATE POLICY "Users can view their own audit logs"
 ON public.audit_log FOR SELECT
 TO authenticated
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "System can insert audit logs" ON public.audit_log;  -- [singu-idem]
 CREATE POLICY "System can insert audit logs"
 ON public.audit_log FOR INSERT
 TO authenticated
@@ -53,16 +55,19 @@ END;
 $$;
 
 -- Attach to contacts
+DROP TRIGGER IF EXISTS audit_contacts ON public.contacts;  -- [singu-idem]
 CREATE TRIGGER audit_contacts
 AFTER INSERT OR UPDATE OR DELETE ON public.contacts
 FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- Attach to companies
+DROP TRIGGER IF EXISTS audit_companies ON public.companies;  -- [singu-idem]
 CREATE TRIGGER audit_companies
 AFTER INSERT OR UPDATE OR DELETE ON public.companies
 FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();
 
 -- Attach to interactions
+DROP TRIGGER IF EXISTS audit_interactions ON public.interactions;  -- [singu-idem]
 CREATE TRIGGER audit_interactions
 AFTER INSERT OR UPDATE OR DELETE ON public.interactions
 FOR EACH ROW EXECUTE FUNCTION public.audit_trigger_fn();

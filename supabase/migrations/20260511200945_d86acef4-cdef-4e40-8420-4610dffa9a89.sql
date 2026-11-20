@@ -30,10 +30,12 @@ CREATE TABLE IF NOT EXISTS public.nlp_feedback (
 ALTER TABLE public.nlp_feedback ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for nlp_feedback
+DROP POLICY IF EXISTS "Users can view their own feedback" ON public.nlp_feedback;  -- [singu-idem]
 CREATE POLICY "Users can view their own feedback" 
 ON public.nlp_feedback FOR SELECT 
 USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own feedback" ON public.nlp_feedback;  -- [singu-idem]
 CREATE POLICY "Users can insert their own feedback" 
 ON public.nlp_feedback FOR INSERT 
 WITH CHECK (auth.uid() = user_id);

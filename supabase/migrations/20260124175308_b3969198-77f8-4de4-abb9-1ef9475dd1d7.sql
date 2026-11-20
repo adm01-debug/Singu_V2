@@ -1,5 +1,5 @@
 -- Tabela para armazenar dados de perfis sociais coletados
-CREATE TABLE public.social_profiles (
+CREATE TABLE IF NOT EXISTS public.social_profiles (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE public.social_profiles (
 );
 
 -- Tabela para histórico de mudanças detectadas (eventos de vida)
-CREATE TABLE public.social_life_events (
+CREATE TABLE IF NOT EXISTS public.social_life_events (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE public.social_life_events (
 );
 
 -- Tabela para análise comportamental baseada em redes sociais
-CREATE TABLE public.social_behavior_analysis (
+CREATE TABLE IF NOT EXISTS public.social_behavior_analysis (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE public.social_behavior_analysis (
 );
 
 -- Tabela para agendamento de scraping
-CREATE TABLE public.social_scraping_schedule (
+CREATE TABLE IF NOT EXISTS public.social_scraping_schedule (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   contact_id UUID NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL,
@@ -108,27 +108,43 @@ ALTER TABLE public.social_behavior_analysis ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.social_scraping_schedule ENABLE ROW LEVEL SECURITY;
 
 -- Policies for social_profiles
+DROP POLICY IF EXISTS "Users can view their own social profiles" ON public.social_profiles;  -- [singu-idem]
 CREATE POLICY "Users can view their own social profiles" ON public.social_profiles FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own social profiles" ON public.social_profiles;  -- [singu-idem]
 CREATE POLICY "Users can insert their own social profiles" ON public.social_profiles FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own social profiles" ON public.social_profiles;  -- [singu-idem]
 CREATE POLICY "Users can update their own social profiles" ON public.social_profiles FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can delete their own social profiles" ON public.social_profiles;  -- [singu-idem]
 CREATE POLICY "Users can delete their own social profiles" ON public.social_profiles FOR DELETE USING (auth.uid() = user_id);
 
 -- Policies for social_life_events
+DROP POLICY IF EXISTS "Users can view their own social life events" ON public.social_life_events;  -- [singu-idem]
 CREATE POLICY "Users can view their own social life events" ON public.social_life_events FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own social life events" ON public.social_life_events;  -- [singu-idem]
 CREATE POLICY "Users can insert their own social life events" ON public.social_life_events FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own social life events" ON public.social_life_events;  -- [singu-idem]
 CREATE POLICY "Users can update their own social life events" ON public.social_life_events FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can delete their own social life events" ON public.social_life_events;  -- [singu-idem]
 CREATE POLICY "Users can delete their own social life events" ON public.social_life_events FOR DELETE USING (auth.uid() = user_id);
 
 -- Policies for social_behavior_analysis
+DROP POLICY IF EXISTS "Users can view their own social behavior analysis" ON public.social_behavior_analysis;  -- [singu-idem]
 CREATE POLICY "Users can view their own social behavior analysis" ON public.social_behavior_analysis FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own social behavior analysis" ON public.social_behavior_analysis;  -- [singu-idem]
 CREATE POLICY "Users can insert their own social behavior analysis" ON public.social_behavior_analysis FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own social behavior analysis" ON public.social_behavior_analysis;  -- [singu-idem]
 CREATE POLICY "Users can update their own social behavior analysis" ON public.social_behavior_analysis FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can delete their own social behavior analysis" ON public.social_behavior_analysis;  -- [singu-idem]
 CREATE POLICY "Users can delete their own social behavior analysis" ON public.social_behavior_analysis FOR DELETE USING (auth.uid() = user_id);
 
 -- Policies for social_scraping_schedule
+DROP POLICY IF EXISTS "Users can view their own scraping schedule" ON public.social_scraping_schedule;  -- [singu-idem]
 CREATE POLICY "Users can view their own scraping schedule" ON public.social_scraping_schedule FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own scraping schedule" ON public.social_scraping_schedule;  -- [singu-idem]
 CREATE POLICY "Users can insert their own scraping schedule" ON public.social_scraping_schedule FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own scraping schedule" ON public.social_scraping_schedule;  -- [singu-idem]
 CREATE POLICY "Users can update their own scraping schedule" ON public.social_scraping_schedule FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can delete their own scraping schedule" ON public.social_scraping_schedule;  -- [singu-idem]
 CREATE POLICY "Users can delete their own scraping schedule" ON public.social_scraping_schedule FOR DELETE USING (auth.uid() = user_id);
 
 -- Índices para performance
@@ -141,5 +157,7 @@ CREATE INDEX IF NOT EXISTS idx_social_behavior_analysis_contact ON public.social
 CREATE INDEX IF NOT EXISTS idx_social_scraping_schedule_next ON public.social_scraping_schedule(next_run_at) WHERE enabled = true;
 
 -- Trigger para updated_at
+DROP TRIGGER IF EXISTS update_social_profiles_updated_at ON public.social_profiles;  -- [singu-idem]
 CREATE TRIGGER update_social_profiles_updated_at BEFORE UPDATE ON public.social_profiles FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+DROP TRIGGER IF EXISTS update_social_scraping_schedule_updated_at ON public.social_scraping_schedule;  -- [singu-idem]
 CREATE TRIGGER update_social_scraping_schedule_updated_at BEFORE UPDATE ON public.social_scraping_schedule FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

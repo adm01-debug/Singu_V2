@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS public.disc_analysis_history_audit (
 
 -- Enable RLS on audit table
 ALTER TABLE public.disc_analysis_history_audit ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view their own DISC audit" ON public.disc_analysis_history_audit;  -- [singu-idem]
 CREATE POLICY "Users can view their own DISC audit" ON public.disc_analysis_history_audit
     FOR SELECT USING (auth.uid() = user_id);
 

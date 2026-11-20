@@ -1,5 +1,5 @@
 
-CREATE TABLE public.support_tickets (
+CREATE TABLE IF NOT EXISTS public.support_tickets (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   contact_id UUID REFERENCES public.contacts(id) ON DELETE SET NULL,
@@ -18,7 +18,7 @@ CREATE TABLE public.support_tickets (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE public.ticket_comments (
+CREATE TABLE IF NOT EXISTS public.ticket_comments (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   ticket_id UUID REFERENCES public.support_tickets(id) ON DELETE CASCADE NOT NULL,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
@@ -30,5 +30,7 @@ CREATE TABLE public.ticket_comments (
 ALTER TABLE public.support_tickets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ticket_comments ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users manage own tickets" ON public.support_tickets;  -- [singu-idem]
 CREATE POLICY "Users manage own tickets" ON public.support_tickets FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users manage own ticket comments" ON public.ticket_comments;  -- [singu-idem]
 CREATE POLICY "Users manage own ticket comments" ON public.ticket_comments FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);

@@ -1,6 +1,7 @@
 -- Drop overly permissive INSERT policy and replace with scoped one
 DROP POLICY IF EXISTS "System can insert schema drift alerts" ON public.schema_drift_alerts;
 
+DROP POLICY IF EXISTS "Users can insert their own schema drift alerts" ON public.schema_drift_alerts;  -- [singu-idem]
 CREATE POLICY "Users can insert their own schema drift alerts"
 ON public.schema_drift_alerts
 FOR INSERT

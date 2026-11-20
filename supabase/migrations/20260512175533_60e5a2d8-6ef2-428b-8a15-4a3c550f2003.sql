@@ -19,10 +19,13 @@ CREATE TABLE IF NOT EXISTS public.marketing_campaign_stats (
 ALTER TABLE public.marketing_campaign_stats ENABLE ROW LEVEL SECURITY;
 
 -- Policies
+DROP POLICY IF EXISTS "Users can view their own marketing stats" ON public.marketing_campaign_stats;  -- [singu-idem]
 CREATE POLICY "Users can view their own marketing stats" ON public.marketing_campaign_stats
     FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own marketing stats" ON public.marketing_campaign_stats;  -- [singu-idem]
 CREATE POLICY "Users can insert their own marketing stats" ON public.marketing_campaign_stats
     FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update their own marketing stats" ON public.marketing_campaign_stats;  -- [singu-idem]
 CREATE POLICY "Users can update their own marketing stats" ON public.marketing_campaign_stats
     FOR UPDATE USING (auth.uid() = user_id);
 
@@ -44,8 +47,10 @@ CREATE TABLE IF NOT EXISTS public.marketing_roi_data (
 ALTER TABLE public.marketing_roi_data ENABLE ROW LEVEL SECURITY;
 
 -- Policies
+DROP POLICY IF EXISTS "Users can view their own ROI data" ON public.marketing_roi_data;  -- [singu-idem]
 CREATE POLICY "Users can view their own ROI data" ON public.marketing_roi_data
     FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert their own ROI data" ON public.marketing_roi_data;  -- [singu-idem]
 CREATE POLICY "Users can insert their own ROI data" ON public.marketing_roi_data
     FOR INSERT WITH CHECK (auth.uid() = user_id);
 

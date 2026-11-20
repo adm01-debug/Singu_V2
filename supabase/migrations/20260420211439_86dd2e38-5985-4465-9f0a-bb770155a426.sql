@@ -18,10 +18,12 @@ CREATE INDEX IF NOT EXISTS idx_system_alerts_unack ON public.system_alerts (crea
 
 ALTER TABLE public.system_alerts ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins can view system alerts" ON public.system_alerts;  -- [singu-idem]
 CREATE POLICY "Admins can view system alerts"
 ON public.system_alerts FOR SELECT TO authenticated
 USING (public.has_role(auth.uid(), 'admin'));
 
+DROP POLICY IF EXISTS "Admins can acknowledge system alerts" ON public.system_alerts;  -- [singu-idem]
 CREATE POLICY "Admins can acknowledge system alerts"
 ON public.system_alerts FOR UPDATE TO authenticated
 USING (public.has_role(auth.uid(), 'admin'))

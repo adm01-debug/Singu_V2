@@ -13,24 +13,28 @@ CREATE TABLE IF NOT EXISTS public.applied_objection_responses (
 
 ALTER TABLE public.applied_objection_responses ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view own applied responses" ON public.applied_objection_responses;  -- [singu-idem]
 CREATE POLICY "Users can view own applied responses"
   ON public.applied_objection_responses
   FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can create own applied responses" ON public.applied_objection_responses;  -- [singu-idem]
 CREATE POLICY "Users can create own applied responses"
   ON public.applied_objection_responses
   FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update own applied responses" ON public.applied_objection_responses;  -- [singu-idem]
 CREATE POLICY "Users can update own applied responses"
   ON public.applied_objection_responses
   FOR UPDATE
   TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete own applied responses" ON public.applied_objection_responses;  -- [singu-idem]
 CREATE POLICY "Users can delete own applied responses"
   ON public.applied_objection_responses
   FOR DELETE
@@ -44,6 +48,7 @@ CREATE INDEX IF NOT EXISTS applied_objection_responses_user_applied_at_idx
 CREATE INDEX IF NOT EXISTS applied_objection_responses_user_objection_lower_idx
   ON public.applied_objection_responses (user_id, lower(objection));
 
+DROP TRIGGER IF EXISTS update_applied_objection_responses_updated_at ON public.applied_objection_responses;  -- [singu-idem]
 CREATE TRIGGER update_applied_objection_responses_updated_at
   BEFORE UPDATE ON public.applied_objection_responses
   FOR EACH ROW

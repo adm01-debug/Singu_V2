@@ -1,4 +1,4 @@
-CREATE TABLE public.objection_example_feedback (
+CREATE TABLE IF NOT EXISTS public.objection_example_feedback (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL DEFAULT auth.uid(),
   objection TEXT NOT NULL,
@@ -15,22 +15,27 @@ CREATE INDEX IF NOT EXISTS idx_objection_example_feedback_user_objection
 
 ALTER TABLE public.objection_example_feedback ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users view own objection feedback" ON public.objection_example_feedback;  -- [singu-idem]
 CREATE POLICY "Users view own objection feedback"
   ON public.objection_example_feedback FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users insert own objection feedback" ON public.objection_example_feedback;  -- [singu-idem]
 CREATE POLICY "Users insert own objection feedback"
   ON public.objection_example_feedback FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users update own objection feedback" ON public.objection_example_feedback;  -- [singu-idem]
 CREATE POLICY "Users update own objection feedback"
   ON public.objection_example_feedback FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users delete own objection feedback" ON public.objection_example_feedback;  -- [singu-idem]
 CREATE POLICY "Users delete own objection feedback"
   ON public.objection_example_feedback FOR DELETE
   USING (auth.uid() = user_id);
 
+DROP TRIGGER IF EXISTS update_objection_example_feedback_updated_at ON public.objection_example_feedback;  -- [singu-idem]
 CREATE TRIGGER update_objection_example_feedback_updated_at
   BEFORE UPDATE ON public.objection_example_feedback
   FOR EACH ROW

@@ -24,27 +24,32 @@ ALTER TABLE public.suggested_rapport_intel ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_family_history ENABLE ROW LEVEL SECURITY;
 
 -- Policies for suggested_rapport_intel
+DROP POLICY IF EXISTS "Users can view suggested rapport for their contacts" ON public.suggested_rapport_intel;  -- [singu-idem]
 CREATE POLICY "Users can view suggested rapport for their contacts"
 ON public.suggested_rapport_intel
 FOR SELECT
 USING (EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id));
 
+DROP POLICY IF EXISTS "Users can update status of suggested rapport" ON public.suggested_rapport_intel;  -- [singu-idem]
 CREATE POLICY "Users can update status of suggested rapport"
 ON public.suggested_rapport_intel
 FOR UPDATE
 USING (EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id));
 
+DROP POLICY IF EXISTS "System/Users can insert suggested rapport" ON public.suggested_rapport_intel;  -- [singu-idem]
 CREATE POLICY "System/Users can insert suggested rapport"
 ON public.suggested_rapport_intel
 FOR INSERT
 WITH CHECK (EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id));
 
 -- Policies for contact_family_history
+DROP POLICY IF EXISTS "Users can view family history for their contacts" ON public.contact_family_history;  -- [singu-idem]
 CREATE POLICY "Users can view family history for their contacts"
 ON public.contact_family_history
 FOR SELECT
 USING (EXISTS (SELECT 1 FROM public.contacts WHERE id = contact_id));
 
+DROP POLICY IF EXISTS "Users can insert family history" ON public.contact_family_history;  -- [singu-idem]
 CREATE POLICY "Users can insert family history"
 ON public.contact_family_history
 FOR INSERT
@@ -59,6 +64,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS tr_suggested_rapport_updated_at ON public.suggested_rapport_intel;  -- [singu-idem]
 CREATE TRIGGER tr_suggested_rapport_updated_at
 BEFORE UPDATE ON public.suggested_rapport_intel
 FOR EACH ROW
@@ -76,6 +82,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS tr_contact_family_history_versioning ON public.contacts;  -- [singu-idem]
 CREATE TRIGGER tr_contact_family_history_versioning
 AFTER UPDATE OF family_info ON public.contacts
 FOR EACH ROW
