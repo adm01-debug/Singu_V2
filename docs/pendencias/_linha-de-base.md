@@ -43,28 +43,50 @@
 | Total | 109 |
 | Sem chamador no repo | 14 |
 
-### Edges sem chamador no repo (candidatas a código morto / documentação)
+### Classificação das 14 edges sem chamador no repo (auditoria 2026-11)
 
-```txt
-attribution-calculator
-audit-analytics
-auto-rebatch-behavioral
-bitrix24-webhook
-conversation-coaching-digest
-crm-automation-monitor
-detect-new-device
-enrich-contacts
-evolution-bitrix-connector
-health-aggregate
-mcp-server
-sequence-track
-submit-signature
-win-loss-record-deal
-```
+> Método: auditoria adversarial (`docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md`,
+> 27 alvos, 10+1 testes/edge) cruzada com chamadores reais no front/hooks e datas de
+> criação. Nenhuma é cron ativo (40 jobs auditados no mesmo ciclo).
 
-Nenhuma delas é cron ativo (40 jobs auditados no mesmo ciclo) → não há
-consumidor por agendamento; se também não houver chamador externo (webhook,
-bitrix, etc.) estão operacionalmente mortas.
+**VIVAS — mantidas (chamador real ou único caminho):**
+
+| Edge | Veredito | Evidência |
+| --- | --- | --- |
+| `audit-analytics` | VIVA | hook `useAuditAnalytics.ts` → `functions.invoke`; montado em `AdminAuditTrail.tsx` via `AuditAnalyticsPanel` (#255, 18/nov, pós-auditoria) |
+| `attribution-calculator` | VIVA | único caminho funcional: `compute_attribution` com EXECUTE revogado de `authenticated` (só `service_role`) |
+| `crm-automation-monitor` | VIVA | único escritor de `crm_automation_logs`; widget na home (`Index.tsx`) |
+| `submit-signature` | VIVA | `PublicSignaturePage.tsx` |
+| `mcp-server` | VIVA | `McpInstructionsCard.tsx` |
+
+**Webhooks / crons externos — mantidas (consumo fora do repo):**
+
+| Edge | Veredito | Evidência |
+| --- | --- | --- |
+| `bitrix24-webhook` | externa por design | assinatura/secret de integração |
+| `evolution-bitrix-connector` | externa por design | 16 refs de secret; conector |
+| `sequence-track` | possivelmente pixel público | endpoint público de tracking |
+| `auto-rebatch-behavioral` | INCONCLUSIVO (cron externo) | valida `x-cron-key` |
+| `health-aggregate` | INCONCLUSIVO (monitor/uptime) | índices nomeiam suas queries; endpoint público |
+
+**Auxiliar — mantida (sem perda funcional):**
+
+| Edge | Veredito | Evidência |
+| --- | --- | --- |
+| `win-loss-record-deal` | CONFIRMADO sem chamador, mas `win_loss_records` tem escritor alternativo (upsert `useWinLoss`) | não remover sem decisão de negócio |
+
+**CONFIRMADAS mortas (candidatas a remoção — decisão de negócio):**
+
+| Edge | Veredito | Evidência |
+| --- | --- | --- |
+| `enrich-contacts` | CONFIRMADO morta | 10/10 testes da auditoria; sem produtor exclusivo |
+| `conversation-coaching-digest` | CONFIRMADO morta | usa `withAuth`, não escreve nada; sem chamador |
+| `detect-new-device` | CONFIRMADO sem chamador | escreve tabelas sem leitor; endpoint público (verificar antes de remover) |
+
+**Regra de remoção:** nada é apagado sem certeza absoluta (byte a byte) do destino
+do chamador. `enrich-contacts` e `conversation-coaching-digest` são as únicas com
+morte provada de ponta a ponta; remoção fica **como decisão de negócio** (risco:
+existir cron externo que as chame).
 
 ## Regras de negócio — fonte
 
