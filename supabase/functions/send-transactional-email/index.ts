@@ -10,6 +10,23 @@ function escapeHtml(text: string): string {
   return text.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 }
 
+// Transforma o corpo em HTML quando há tracking_token: cada URL https:// vira um
+// link de clique que passa pelo sequence-track (registra 'clicked' e redireciona),
+// e um pixel 1x1 de abertura registra 'opened' quando o cliente carrega imagens.
+export function buildHtmlBody(text: string, trackBase: string | null, trackingToken: string | null): string {
+  let htmlText = escapeHtml(text);
+  if (trackBase && trackingToken) {
+    const trackUrl = `${trackBase}/functions/v1/sequence-track`;
+    htmlText = htmlText.replace(/(https:\/\/[^\s<>"']+)/g, (m) => {
+      const u = encodeURIComponent(m.replace(/&amp;/g, "&"));
+      return `<a href="${trackUrl}?a=click&amp;t=${encodeURIComponent(trackingToken)}&amp;u=${u}">${m}</a>`;
+    });
+    const openUrl = `${trackUrl}?a=open&amp;t=${encodeURIComponent(trackingToken)}`;
+    htmlText += `<img src="${openUrl}" width="1" height="1" alt="" style="border:0;display:block;outline:none;text-decoration:none;width:1px;height:1px;max-width:1px;min-width:1px" />`;
+  }
+  return `<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.5;white-space:pre-wrap">${htmlText}</div>`;
+}
+
 Deno.serve(async (req) => {
   const guard = handleCorsAndMethod(req);
   if (guard) return guard;
@@ -37,11 +54,15 @@ Deno.serve(async (req) => {
   const { recipientEmail, idempotencyKey, templateData } = v.data as {
     recipientEmail: string;
     idempotencyKey: string;
-    templateData: { subject?: unknown; body?: unknown };
+    templateData: { subject?: unknown; body?: unknown; trackingToken?: unknown };
   };
   const subject = typeof templateData.subject === "string" && templateData.subject.trim() ? templateData.subject.slice(0, 300) : "Mensagem";
   const text = typeof templateData.body === "string" ? templateData.body : "";
   if (!text.trim()) return jsonError("templateData.body vazio", 400, req);
+  const trackingToken = typeof templateData.trackingToken === "string" && templateData.trackingToken.trim()
+    ? templateData.trackingToken.slice(0, 64)
+    : null;
+  const trackBase = trackingToken ? (Deno.env.get("SUPABASE_URL") || "") : null;
 
   const res = await fetchAPI(RESEND_URL, {
     method: "POST",
@@ -56,7 +77,7 @@ Deno.serve(async (req) => {
       to: [recipientEmail],
       subject,
       text,
-      html: `<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.5;white-space:pre-wrap">${escapeHtml(text)}</div>`,
+      html: buildHtmlBody(text, trackBase, trackingToken),
     }),
   });
 
