@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "5b8ee5bc1c310c8867170e07dc2bdc6c9d96f709",
+  "commit": "403fb97e73adabda112a34af7b36cd13a7a5ea8b",
   "branch": "main",
-  "data_commit": "2026-11-21T15:47:11-03:00",
+  "data_commit": "2026-11-21T15:47:17-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "403fb97",
+    "data": "2026-11-21",
+    "assunto": "infra(db): versiona ai_recommendation_audit_logs_v2 (DDL idempotente + RLS) (#295)"
+   },
    {
     "sha": "5b8ee5b",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "fae89a5",
     "data": "2026-11-20",
     "assunto": "Merge pull request #280 from adm01-debug/claude/chore-remove-workflow-temp-261120-1100"
-   },
-   {
-    "sha": "469bcda",
-    "data": "2026-11-20",
-    "assunto": "chore: remove workflow temporario de aplicacao de migration em producao (tabela aplicada e verificada)"
    }
   ],
-  "arquivos_mudados_7d": 940,
+  "arquivos_mudados_7d": 941,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 140
+    "commits": 141
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3888,
+  "arquivos_total": 3889,
   "arquivos_codigo": 2240,
   "linhas_codigo": 418149,
   "rotas": 115,
@@ -338,7 +338,7 @@
   "hooks": 411,
   "edge_functions": 109,
   "tabelas": 542,
-  "migrations": 1106,
+  "migrations": 1107,
   "cron_jobs": 44,
   "testes": 278,
   "workflows": 12,

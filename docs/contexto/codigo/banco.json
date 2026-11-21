@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1106,
+ "migrations": 1107,
  "seeds": [],
  "avisos": [
   "211 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -6146,12 +6146,98 @@
    "nao_usada": true
   },
   "ai_recommendation_audit_logs_v2": {
-   "colunas": {},
-   "rls": false,
-   "policies": [],
+   "colunas": {
+    "contact_id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": "contacts"
+    },
+    "created_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "data_used": {
+     "tipo": "jsonb",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "id": {
+     "tipo": "uuid",
+     "nn": true,
+     "pk": true,
+     "default": "gen_random_uuid()",
+     "ref": null
+    },
+    "reasons": {
+     "tipo": "text[]",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "recommendation_type": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "score": {
+     "tipo": "double precision",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "user_action": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "user_id": {
+     "tipo": "uuid",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": "auth.users"
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "Users can create their own recommendation logs v2",
+     "comando": "insert",
+     "para": "public",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "Users can update their own recommendation logs v2",
+     "comando": "update",
+     "para": "public",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "Users can view their own recommendation logs v2",
+     "comando": "select",
+     "para": "public",
+     "tipo": "permissive"
+    }
+   ],
    "indices": [],
-   "fks": [],
-   "criada_em": null,
+   "fks": [
+    "contact_id->contacts",
+    "user_id->auth.users"
+   ],
+   "criada_em": "20261121120000_create_ai_recommendation_audit_logs_v2.sql",
    "colunas_types": {
     "contact_id": "string | null",
     "created_at": "string | null",
@@ -6162,6 +6248,10 @@
     "score": "number | null",
     "user_action": "string | null",
     "user_id": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
    },
    "usada_no_front": 2,
    "usada_em_edges": [],

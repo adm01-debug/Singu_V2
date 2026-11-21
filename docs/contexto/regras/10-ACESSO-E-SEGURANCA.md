@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5b8ee5bc1c` · branch `main` · 2026-11-21 18:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `403fb97e73` · branch `main` · 2026-11-21 18:50 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -40,7 +40,7 @@
 | `ai_chat_threads` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `ai_gateway_metrics` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role)<br>service_role: true | service_role: true | service_role: true | service_role: true |
 | `ai_recommendation_audit_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
-| `ai_recommendation_audit_logs_v2` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
+| `ai_recommendation_audit_logs_v2` | enabled | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id)<br>public: auth.uid() = user_id | public: ((select auth.uid()) = user_id) |
 | `ai_recommendation_logs` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | — |
 | `ai_tone_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
 | `alert_rules` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |

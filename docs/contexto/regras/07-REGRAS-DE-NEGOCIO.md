@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5b8ee5bc1c` · branch `main` · 2026-11-21 18:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `403fb97e73` · branch `main` · 2026-11-21 18:50 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -311,7 +311,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `company_social_media` | company_social_media_update | UPDATE | public | permissive | `true` |  |
 | `company_social_media` | company_social_media_delete | DELETE | public | permissive | `true` |  |
 | `contact_phones` | contact_phones_select | SELECT | public | permissive | `true` |  |
-| … +950 linhas — lista completa em `context.json` | | | | | | |
+| … +953 linhas — lista completa em `context.json` | | | | | | |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -426,12 +426,11 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `ai_recommendation_audit_logs` | `reasons` | default '{}' |
 | `ai_recommendation_audit_logs` | `data_used` | default '{}'::jsonb |
 | `ai_recommendation_audit_logs` | `created_at` | default now() |
-| `ai_recommendation_audit_logs_v2` | `id` | default gen_random_uuid() |
-| `ai_recommendation_audit_logs_v2` | `user_id` | obrigatório |
+| `ai_recommendation_audit_logs_v2` | `id` | PK; default gen_random_uuid() |
+| `ai_recommendation_audit_logs_v2` | `user_id` | obrigatório; FK → users.id ON DELETE CASCADE |
+| `ai_recommendation_audit_logs_v2` | `contact_id` | FK → contacts.id ON DELETE SET NULL |
 | `ai_recommendation_audit_logs_v2` | `recommendation_type` | obrigatório |
-| `ai_recommendation_audit_logs_v2` | `data_used` | default '{}'::jsonb |
 | `ai_recommendation_audit_logs_v2` | `created_at` | default now() |
-| `ai_recommendation_audit_logs_v2` | `(tabela)` | CONSTRAINT ai_recommendation_audit_logs_v2_pkey PRIMARY KEY (id) |
 | `ai_recommendation_logs` | `id` | PK; default gen_random_uuid() |
 | `ai_recommendation_logs` | `user_id` | obrigatório; FK → users.id ON DELETE CASCADE |
 | `ai_recommendation_logs` | `contact_id` | obrigatório |
@@ -617,7 +616,8 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `communication_preferences` | `contact_id` | obrigatório; FK → contacts.id ON DELETE CASCADE |
 | `communication_preferences` | `preferred_channel` | default 'whatsapp' |
 | `communication_preferences` | `preferred_days` | default '{}' |
-| … +4182 linhas — lista completa em `context.json` | | |
+| `communication_preferences` | `contact_frequency` | default 'weekly' |
+| … +4181 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 

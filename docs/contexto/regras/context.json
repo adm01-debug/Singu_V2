@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "5b8ee5bc1c310c8867170e07dc2bdc6c9d96f709",
+  "sha": "403fb97e73adabda112a34af7b36cd13a7a5ea8b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 18:48 UTC",
-  "files_total": 3993,
-  "code_files": 3520,
-  "code_lines": 474810
+  "generated_at": "2026-11-21 18:50 UTC",
+  "files_total": 3994,
+  "code_files": 3521,
+  "code_lines": 474843
  },
  "version": "1.3.2",
- "facts_hash": "e2609f790bb6ab96",
+ "facts_hash": "69c0532ae14a8450",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -258,7 +258,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1279,
+   ".sql": 1280,
    ".tsx": 1168,
    ".ts": 909,
    ".mjs": 123,
@@ -1456,72 +1456,70 @@
     "columns": [
      {
       "name": "id",
-      "type": "uuid DEFAULT gen_random_uuid() NOT NULL",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "scripts/migration/ddl/02_tables.sql"
-     },
-     {
-      "name": "contact_id",
-      "type": "text",
-      "fk": "",
-      "generated": "",
-      "src": "scripts/migration/ddl/02_tables.sql"
+      "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
      },
      {
       "name": "user_id",
-      "type": "uuid NOT NULL",
-      "fk": "",
+      "type": "uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE",
+      "fk": "users.id ON DELETE CASCADE",
       "generated": "",
-      "src": "scripts/migration/ddl/02_tables.sql"
+      "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
+     },
+     {
+      "name": "contact_id",
+      "type": "uuid REFERENCES public.contacts(id) ON DELETE SET NULL",
+      "fk": "contacts.id ON DELETE SET NULL",
+      "generated": "",
+      "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
      },
      {
       "name": "score",
-      "type": "integer",
+      "type": "double precision",
       "fk": "",
       "generated": "",
-      "src": "scripts/migration/ddl/02_tables.sql"
+      "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
      },
      {
       "name": "recommendation_type",
       "type": "text NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "scripts/migration/ddl/02_tables.sql"
+      "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
      },
      {
       "name": "reasons",
       "type": "text[]",
       "fk": "",
       "generated": "",
-      "src": "scripts/migration/ddl/02_tables.sql"
+      "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
      },
      {
       "name": "data_used",
-      "type": "jsonb DEFAULT '{}'::jsonb",
+      "type": "jsonb",
       "fk": "",
       "generated": "",
-      "src": "scripts/migration/ddl/02_tables.sql"
+      "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
      },
      {
       "name": "user_action",
       "type": "text",
       "fk": "",
       "generated": "",
-      "src": "scripts/migration/ddl/02_tables.sql"
+      "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
      },
      {
       "name": "created_at",
-      "type": "timestamp with time zone DEFAULT now()",
+      "type": "timestamptz DEFAULT now() NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "scripts/migration/ddl/02_tables.sql"
+      "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
      }
     ],
-    "constraints": [
-     "CONSTRAINT ai_recommendation_audit_logs_v2_pkey PRIMARY KEY (id)"
-    ],
-    "src": "scripts/migration/ddl/02_tables.sql",
+    "constraints": [],
+    "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql",
     "comment": "",
     "origin": "migration"
    },
@@ -60210,6 +60208,36 @@
     "using": "public.has_role(auth.uid(), 'admin'::app_role)",
     "check": "",
     "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+   },
+   {
+    "name": "Users can view their own recommendation logs v2",
+    "table": "ai_recommendation_audit_logs_v2",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "",
+    "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
+   },
+   {
+    "name": "Users can create their own recommendation logs v2",
+    "table": "ai_recommendation_audit_logs_v2",
+    "cmd": "INSERT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "",
+    "check": "auth.uid() = user_id",
+    "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
+   },
+   {
+    "name": "Users can update their own recommendation logs v2",
+    "table": "ai_recommendation_audit_logs_v2",
+    "cmd": "UPDATE",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "auth.uid() = user_id",
+    "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
    }
   ],
   "triggers": [
@@ -87396,7 +87424,8 @@
    "supabase/migrations/20261118182753_get_activity_overview.sql",
    "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql",
    "supabase/migrations/20261119000000_external_data_audit_log.sql",
-   "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql"
+   "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
+   "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -112176,8 +112205,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1106,
-   "lines": 104012,
+   "files": 1107,
+   "lines": 104045,
    "tables": [
     "users"
    ],
@@ -119491,6 +119520,7 @@
    "users": [
     "activities",
     "ai_recommendation_audit_logs",
+    "ai_recommendation_audit_logs_v2",
     "ai_recommendation_logs",
     "ai_tone_preferences",
     "alerts",
@@ -129715,12 +129745,17 @@
    {
     "table": "ai_recommendation_audit_logs_v2",
     "column": "id",
-    "rule": "default gen_random_uuid()"
+    "rule": "PK; default gen_random_uuid()"
    },
    {
     "table": "ai_recommendation_audit_logs_v2",
     "column": "user_id",
-    "rule": "obrigatório"
+    "rule": "obrigatório; FK → users.id ON DELETE CASCADE"
+   },
+   {
+    "table": "ai_recommendation_audit_logs_v2",
+    "column": "contact_id",
+    "rule": "FK → contacts.id ON DELETE SET NULL"
    },
    {
     "table": "ai_recommendation_audit_logs_v2",
@@ -129729,18 +129764,8 @@
    },
    {
     "table": "ai_recommendation_audit_logs_v2",
-    "column": "data_used",
-    "rule": "default '{}'::jsonb"
-   },
-   {
-    "table": "ai_recommendation_audit_logs_v2",
     "column": "created_at",
     "rule": "default now()"
-   },
-   {
-    "table": "ai_recommendation_audit_logs_v2",
-    "column": "(tabela)",
-    "rule": "CONSTRAINT ai_recommendation_audit_logs_v2_pkey PRIMARY KEY (id)"
    },
    {
     "table": "ai_recommendation_logs",
@@ -196082,6 +196107,36 @@
     "using": "public.has_role(auth.uid(), 'admin'::app_role)",
     "check": "",
     "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+   },
+   {
+    "name": "Users can view their own recommendation logs v2",
+    "table": "ai_recommendation_audit_logs_v2",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "",
+    "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
+   },
+   {
+    "name": "Users can create their own recommendation logs v2",
+    "table": "ai_recommendation_audit_logs_v2",
+    "cmd": "INSERT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "",
+    "check": "auth.uid() = user_id",
+    "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
+   },
+   {
+    "name": "Users can update their own recommendation logs v2",
+    "table": "ai_recommendation_audit_logs_v2",
+    "cmd": "UPDATE",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "auth.uid() = user_id",
+    "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
    }
   ],
   "db_triggers": [
@@ -214250,13 +214305,16 @@
    "ai_recommendation_audit_logs_v2": {
     "rls": "enabled",
     "SELECT": [
-     "public: ((select auth.uid()) = user_id)"
+     "public: ((select auth.uid()) = user_id)",
+     "public: auth.uid() = user_id"
     ],
     "INSERT": [
-     "public: ((select auth.uid()) = user_id)"
+     "public: ((select auth.uid()) = user_id)",
+     "public: auth.uid() = user_id"
     ],
     "UPDATE": [
-     "public: ((select auth.uid()) = user_id)"
+     "public: ((select auth.uid()) = user_id)",
+     "public: auth.uid() = user_id"
     ],
     "DELETE": [
      "public: ((select auth.uid()) = user_id)"
@@ -305148,6 +305206,10 @@
    "path": "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
    "lines": 24
   },
+  "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql": {
+   "path": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql",
+   "lines": 33
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -305821,10 +305883,19 @@
   }
  },
  "git": {
-  "sha": "5b8ee5bc1c310c8867170e07dc2bdc6c9d96f709",
+  "sha": "403fb97e73adabda112a34af7b36cd13a7a5ea8b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "403fb97",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "infra(db): versiona ai_recommendation_audit_logs_v2 (DDL idempotente + RLS) (#295)",
+    "files": [
+     "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
+    ]
+   },
    {
     "sha": "5b8ee5b",
     "date": "2026-11-21",
@@ -306248,15 +306319,6 @@
     "author": "adm01-debug",
     "subject": "chore(ci): forca nova rodada do Supabase Preview pos-merge 267",
     "files": []
-   },
-   {
-    "sha": "e6f4c68",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "chore(audit): newline final em mutations.ts",
-    "files": [
-     "supabase/functions/external-data/mutations.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306283,6 +306345,10 @@
    [
     ".github/workflows/migracao-temporaria.yml",
     2
+   ],
+   [
+    "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql",
+    1
    ],
    [
     "supabase/migrations/20260110000001_compat_colunas_producao.sql",
@@ -306334,10 +306400,6 @@
    ],
    [
     "supabase/functions/send-sms-campaign/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/smart-notify/index.ts",
     1
    ]
   ]
