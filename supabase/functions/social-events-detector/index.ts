@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecretOrAuth } from "../_shared/auth.ts";
 import { fetchScrape } from "../_shared/fetch-utils.ts";
 
 interface ScrapeResult {
@@ -32,8 +32,8 @@ Deno.serve(async (req) => {
   }
 
   // 🔒 Cron secret validation
-  const cronError = await requireCronSecret(req);
-  if (cronError) return cronError;
+  const guard = await requireCronSecretOrAuth(req);
+  if (guard instanceof Response) return guard;
 
   try {
     const FIRECRAWL_API_KEY = Deno.env.get("FIRECRAWL_API_KEY");

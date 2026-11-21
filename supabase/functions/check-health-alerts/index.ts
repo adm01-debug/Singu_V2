@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import {
-  scopedCorsHeaders, requireCronSecret,
+  scopedCorsHeaders, requireCronSecretOrAuth,
   jsonError,
   jsonOk,
 } from "../_shared/auth.ts";
@@ -104,10 +104,10 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: scopedCorsHeaders(req) });
   }
 
-  const cronError = await requireCronSecret(req);
-  if (cronError) {
-    log.warn("unauthorized_cron_access");
-    return cronError;
+  const guard = await requireCronSecretOrAuth(req);
+  if (guard instanceof Response) {
+    log.warn("unauthorized_access");
+    return guard;
   }
 
   try {

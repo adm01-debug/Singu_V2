@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecretOrAuth } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 
@@ -22,8 +22,8 @@ Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
+  const guard = await requireCronSecretOrAuth(req);
+  if (guard instanceof Response) return guard;
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "worker";
   const limited = limiter.check(ip, req);

@@ -1,7 +1,7 @@
 // Edge function: revops-snapshot-builder
 // Cron diário 04:00 UTC. Consolida funil ponta-a-ponta por usuário ativo, gera snapshots e alertas.
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecretOrAuth } from "../_shared/auth.ts";
 import { validate } from "../_shared/validate.ts";
 import { fetchAllPages } from "../_shared/pagination.ts";
 
@@ -17,8 +17,8 @@ Deno.serve(async (req: Request) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
+  const guard = await requireCronSecretOrAuth(req);
+  if (guard instanceof Response) return guard;
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
   if (bodyError) return bodyError;

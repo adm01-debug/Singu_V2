@@ -1,6 +1,6 @@
 import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret} from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecretOrAuth } from "../_shared/auth.ts";
 
 interface Step {
   type: "email" | "whatsapp" | "task" | "wait";
@@ -20,8 +20,8 @@ Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
+  const guard = await requireCronSecretOrAuth(req);
+  if (guard instanceof Response) return guard;
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
