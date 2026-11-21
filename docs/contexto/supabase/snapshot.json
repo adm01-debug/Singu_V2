@@ -2,9 +2,7 @@
   "api": {
     "enabled": false
   },
-  "carried": [
-    "lints"
-  ],
+  "carried": [],
   "db": {
     "columns": [
       {
@@ -320146,11 +320144,6 @@
     ],
     "webhooks": []
   },
-  "errors": [
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "lints"
-    }
-  ],
+  "errors": [],
   "format_version": 2
 }

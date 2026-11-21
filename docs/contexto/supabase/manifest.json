@@ -1,15 +1,8 @@
 {
-  "carried": [
-    "lints"
-  ],
+  "carried": [],
   "entrada": "README.md",
-  "erros": [
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "lints"
-    }
-  ],
-  "gerado_em": "2026-11-21T12:18:13Z",
+  "erros": [],
+  "gerado_em": "2026-11-21T13:11:54Z",
   "gerador": "scripts/supabase_snapshot/snapshot.py",
   "produtor": "supabase-snapshot"
 }

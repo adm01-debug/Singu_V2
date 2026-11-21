@@ -1,7 +1,5 @@
 # Lints de segurança e performance
 
-> ⚠️ Seção `lints` não pôde ser atualizada nesta coleta (ver errors.md); mostrando a versão anterior.
-
 Verificações objetivas feitas no catálogo. Um agente deve ler isto antes de propor mudanças em RLS, functions ou índices.
 
 | severidade | código | objeto | detalhe |
