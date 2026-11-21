@@ -2576,12 +2576,13 @@
    "nome": "nurturing-runner",
    "entrada": "supabase/functions/nurturing-runner/index.ts",
    "arquivos": 1,
-   "linhas": 161,
+   "linhas": 319,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
    ],
    "tabelas": [
+    "contacts",
     "interactions",
     "nurturing_executions",
     "nurturing_workflows",

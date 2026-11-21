@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `8677d6880746b9ff21ce8ddd586007dd9414eec5` (2026-11-21T13:10:42-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `08dc7979ca36e3fb1bedf4340fc3cee8d6c0e09b` (2026-11-21T15:19:17-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3888 |
 | arquivos_codigo | 2240 |
-| linhas_codigo | 417989 |
+| linhas_codigo | 418149 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -330,7 +330,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `meeting-summary` — tabelas: interactions, meeting_summaries; chamada por 1 arquivo(s) do front
 - `mql-evaluator` — tabelas: contacts, mql_classifications, mql_criteria; chamada por 0 arquivo(s) do front, por SQL/cron
 - `next-best-action` — tabelas: contact_analytical_profiles, contact_next_actions, contacts, interactions, neuro_behavioral_history, whatsapp_messages; chamada por 1 arquivo(s) do front
-- `nurturing-runner` — tabelas: interactions, nurturing_executions, nurturing_workflows, tasks; chamada por 1 arquivo(s) do front, por SQL/cron
+- `nurturing-runner` — tabelas: contacts, interactions, nurturing_executions, nurturing_workflows, tasks; chamada por 1 arquivo(s) do front, por SQL/cron
 - `objection-context-summary` — tabelas: interactions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `objection-handler` — tabelas: contact_objection_scripts, contacts, crm_objection_intelligence; chamada por 1 arquivo(s) do front
 - `phone-validator` — tabelas: phone_validations; chamada por 0 arquivo(s) do front — **ÓRFÃ**
@@ -445,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25787 nós · 41134 arestas · 3054 comunidades · grafo do commit `8677d688`
-- comunidades maiores: ref_components (290), ref_lib (289), ref_types (280), framer-motion (259), 02_tables.sql (259), useAuth (253), _shared/auth.ts (252), 📖 Dicionário de Dados — SINGU CRM (227), react-router-dom (222), react (221), date-fns (213), lucide-react (203)
+- 25793 nós · 41140 arestas · 3081 comunidades · grafo do commit `08dc7979`
+- comunidades maiores: ref_hooks (321), sonner (296), framer-motion (294), ref_lib (288), 02_tables.sql (259), useAuth (246), react (242), date-fns (239), react-router-dom (237), lucide-react (229), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (209)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-21 `08dc797` feat(nurturing): envia email real via send-transactional-email (#302)
 - 2026-11-21 `8677d68` feat: inscrição de contato em workflow de nurturing pela UI (#300)
 - 2026-11-21 `6b9a9e4` feat(sequencias): tracking de abertura e clique no email transacional (#299)
 - 2026-11-21 `d1e1811` fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-20 `b5d2431` docs(auditoria): linha de base do estado real em docs/pendencias (#289)
 - 2026-11-20 `2020e5b` fix(insights): persiste insights gerados por IA na tabela insights (#288)
 - 2026-11-20 `3e6b290` fix(deps): bump react-router 7.18.6 e vitest 5.1.1 (alerts dependabot) (#286)
-- 2026-11-20 `df6e5c6` fix(migrations): torna 154 migrations idempotentes para reaplicação no preview (#284)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

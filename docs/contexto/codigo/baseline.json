@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "8677d6880746b9ff21ce8ddd586007dd9414eec5",
+  "commit": "08dc7979ca36e3fb1bedf4340fc3cee8d6c0e09b",
   "branch": "main",
-  "data_commit": "2026-11-21T13:10:42-03:00",
+  "data_commit": "2026-11-21T15:19:17-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "08dc797",
+    "data": "2026-11-21",
+    "assunto": "feat(nurturing): envia email real via send-transactional-email (#302)"
+   },
    {
     "sha": "8677d68",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "c256a5e",
     "data": "2026-11-20",
     "assunto": "Merge pull request #279 from adm01-debug/claude/infra-aplica-migracao-audit-261120-1032"
-   },
-   {
-    "sha": "1cd9342",
-    "data": "2026-11-20",
-    "assunto": "infra: workflow temporario para aplicar migration de auditoria em producao"
    }
   ],
   "arquivos_mudados_7d": 940,
@@ -144,20 +144,16 @@
     "mudancas": 22
    },
    {
-    "pasta": "src/components/triggers",
-    "mudancas": 21
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 22
    },
    {
-    "pasta": "supabase/functions/_shared",
+    "pasta": "src/components/triggers",
     "mudancas": 21
    },
    {
     "pasta": "scripts/migration/storage",
     "mudancas": 20
-   },
-   {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 15
    },
    {
     "pasta": "CHANGELOG.md",
@@ -170,6 +166,10 @@
    {
     "pasta": "src/hooks/__tests__",
     "mudancas": 15
+   },
+   {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 14
    },
    {
     "pasta": "docs/prod-readiness.md",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3888,
   "arquivos_codigo": 2240,
-  "linhas_codigo": 417989,
+  "linhas_codigo": 418149,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 26997
+   "linhas": 27157
   },
   "tailwind.config.ts": {
    "arquivos": 1,

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "8677d6880746b9ff21ce8ddd586007dd9414eec5",
+  "sha": "08dc7979ca36e3fb1bedf4340fc3cee8d6c0e09b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 16:11 UTC",
+  "generated_at": "2026-11-21 18:20 UTC",
   "files_total": 3993,
   "code_files": 3520,
-  "code_lines": 474636
+  "code_lines": 474796
  },
  "version": "1.3.2",
- "facts_hash": "97b97d3ed4fbed69",
+ "facts_hash": "d20cf0f2dc450cba",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -104918,6 +104918,7 @@
     ],
     "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
     "tables": [
+     "contacts",
      "interactions",
      "nurturing_executions",
      "nurturing_workflows",
@@ -104930,10 +104931,14 @@
     "external": [],
     "invokes": [],
     "doc": "",
-    "errors": [],
+    "errors": [
+     "Contato sem email para envio no nurturing",
+     "Envio transacional não confirmado pelo provedor",
+     "send-transactional-email não disponível (NOT_FOUND)"
+    ],
     "side_effects": [],
     "webhook_events": [],
-    "idempotency": false
+    "idempotency": true
    },
    {
     "name": "objection-context-summary",
@@ -111893,7 +111898,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 26997,
+   "lines": 27157,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113190,6 +113195,7 @@
      "supabase/functions/mcp-server/index.ts",
      "supabase/functions/mql-evaluator/index.ts",
      "supabase/functions/next-best-action/index.ts",
+     "supabase/functions/nurturing-runner/index.ts",
      "supabase/functions/objection-handler/index.ts",
      "supabase/functions/revops-snapshot-builder/index.ts",
      "supabase/functions/rfm-analyzer/index.ts",
@@ -127392,6 +127398,18 @@
     "msg": "Não foi possível persistir a próxima ação"
    },
    {
+    "file": "supabase/functions/nurturing-runner/index.ts",
+    "msg": "Contato sem email para envio no nurturing"
+   },
+   {
+    "file": "supabase/functions/nurturing-runner/index.ts",
+    "msg": "Envio transacional não confirmado pelo provedor"
+   },
+   {
+    "file": "supabase/functions/nurturing-runner/index.ts",
+    "msg": "send-transactional-email não disponível (NOT_FOUND)"
+   },
+   {
     "file": "supabase/functions/objection-handler/index.ts",
     "msg": "AI did not return expected tool call"
    },
@@ -128582,6 +128600,10 @@
    {
     "file": "supabase/functions/next-best-action/index.ts",
     "text": "').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(5),"
+   },
+   {
+    "file": "supabase/functions/nurturing-runner/index.ts",
+    "text": "Idempotência: este step de e-mail já foi enviado; registra apenas a interação"
    },
    {
     "file": "supabase/functions/objection-context-summary/index.ts",
@@ -164041,14 +164063,32 @@
    },
    {
     "file": "supabase/functions/nurturing-runner/index.ts",
+    "field": "type",
+    "value": "email",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/nurturing-runner/index.ts",
+    "field": "type",
+    "value": "email",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/nurturing-runner/index.ts",
     "field": "status",
     "value": "pending",
     "kind": "escreve"
    },
    {
     "file": "supabase/functions/nurturing-runner/index.ts",
+    "field": "type",
+    "value": "whatsapp",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/nurturing-runner/index.ts",
     "field": "status",
-    "value": "failed",
+    "value": "paused",
     "kind": "escreve"
    },
    {
@@ -164073,12 +164113,6 @@
     "file": "supabase/functions/nurturing-runner/index.ts",
     "field": "type",
     "value": "whatsapp",
-    "kind": "compara"
-   },
-   {
-    "file": "supabase/functions/nurturing-runner/index.ts",
-    "field": "type",
-    "value": "email",
     "kind": "compara"
    },
    {
@@ -211666,6 +211700,7 @@
       "compara:src/hooks/useUnifiedTimeline.ts",
       "compara:supabase/functions/nurturing-runner/index.ts",
       "escreve:supabase/functions/evolution-webhook/messages.ts",
+      "escreve:supabase/functions/nurturing-runner/index.ts",
       "escreve:supabase/functions/voice-to-text/index.ts"
      ],
      "relative_suggestion": [
@@ -212896,7 +212931,6 @@
       "escreve:src/hooks/commercial/useSocialSync.ts",
       "escreve:supabase/functions/_shared/webhook-dlq-contract_test.ts",
       "escreve:supabase/functions/crm-automation-monitor/index.ts",
-      "escreve:supabase/functions/nurturing-runner/index.ts",
       "escreve:supabase/functions/process-webhook-dlq/index.ts",
       "escreve:supabase/functions/send-sms-campaign/index.ts",
       "escreve:supabase/functions/sequence-processor/index.ts"
@@ -213234,6 +213268,7 @@
      ],
      "paused": [
       "compara:src/pages/MarketingHub.tsx",
+      "escreve:supabase/functions/nurturing-runner/index.ts",
       "escreve:supabase/functions/sequence-processor/index.ts",
       "filtra:src/hooks/useSequences.ts"
      ],
@@ -289241,7 +289276,7 @@
   },
   "supabase/functions/_shared/edge-types-contract_test.ts": {
    "path": "supabase/functions/_shared/edge-types-contract_test.ts",
-   "lines": 270,
+   "lines": 272,
    "errors": [
     "Consulta inesperada: ${table}",
     "Simulação de indisponibilidade"
@@ -296330,7 +296365,7 @@
   },
   "supabase/functions/nurturing-runner/index.ts": {
    "path": "supabase/functions/nurturing-runner/index.ts",
-   "lines": 161,
+   "lines": 319,
    "tables": [
     {
      "table": "nurturing_executions",
@@ -296338,6 +296373,10 @@
     },
     {
      "table": "nurturing_workflows",
+     "op": "select"
+    },
+    {
+     "table": "contacts",
      "op": "select"
     },
     {
@@ -296376,6 +296415,12 @@
      "completed_count",
      "id",
      "steps"
+    ],
+    "contacts": [
+     "email",
+     "first_name",
+     "id",
+     "last_name"
     ]
    },
    "rpc": [
@@ -296385,7 +296430,22 @@
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
+   "errors": [
+    "Contato sem email para envio no nurturing",
+    "Envio transacional não confirmado pelo provedor",
+    "send-transactional-email não disponível (NOT_FOUND)"
+   ],
    "status_values": [
+    {
+     "field": "type",
+     "value": "email",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "email",
+     "kind": "escreve"
+    },
     {
      "field": "type",
      "value": "email",
@@ -296397,8 +296457,13 @@
      "kind": "escreve"
     },
     {
+     "field": "type",
+     "value": "whatsapp",
+     "kind": "escreve"
+    },
+    {
      "field": "status",
-     "value": "failed",
+     "value": "paused",
      "kind": "escreve"
     },
     {
@@ -296422,15 +296487,13 @@
      "kind": "compara"
     },
     {
-     "field": "type",
-     "value": "email",
-     "kind": "compara"
-    },
-    {
      "field": "status",
      "value": "active",
      "kind": "filtra"
     }
+   ],
+   "rule_comments": [
+    "Idempotência: este step de e-mail já foi enviado; registra apenas a interação"
    ],
    "pagination": [
     "100"
@@ -305758,10 +305821,20 @@
   }
  },
  "git": {
-  "sha": "8677d6880746b9ff21ce8ddd586007dd9414eec5",
+  "sha": "08dc7979ca36e3fb1bedf4340fc3cee8d6c0e09b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "08dc797",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(nurturing): envia email real via send-transactional-email (#302)",
+    "files": [
+     "supabase/functions/_shared/edge-types-contract_test.ts",
+     "supabase/functions/nurturing-runner/index.ts"
+    ]
+   },
    {
     "sha": "8677d68",
     "date": "2026-11-21",
@@ -306183,18 +306256,13 @@
     "files": [
      "supabase/functions/external-data/mutations.ts"
     ]
-   },
-   {
-    "sha": "64be234",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "feat(audit): cria external_data_audit_log com RLS admin-only (resgate hardening Singu 2026-04-09)",
-    "files": [
-     "supabase/migrations/20261119000000_external_data_audit_log.sql"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "supabase/functions/nurturing-runner/index.ts",
+    2
+   ],
    [
     "docs/pendencias/_linha-de-base.md",
     2
@@ -306218,6 +306286,10 @@
    [
     "supabase/functions/external-data/mutations.ts",
     2
+   ],
+   [
+    "supabase/functions/_shared/edge-types-contract_test.ts",
+    1
    ],
    [
     "src/components/enroll/EnrollContactDialog.contract.test.tsx",
@@ -306248,10 +306320,6 @@
     1
    ],
    [
-    "supabase/functions/nurturing-runner/index.ts",
-    1
-   ],
-   [
     "supabase/functions/process-webhook-dlq/index.ts",
     1
    ],
@@ -306269,10 +306337,6 @@
    ],
    [
     "supabase/functions/social-events-detector/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/sync-social-interests/index.ts",
     1
    ]
   ]

@@ -22599,6 +22599,7 @@
     "mcp-server",
     "mql-evaluator",
     "next-best-action",
+    "nurturing-runner",
     "objection-handler",
     "revops-snapshot-builder",
     "rfm-analyzer",

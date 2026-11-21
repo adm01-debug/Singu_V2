@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8677d68807` · branch `main` · 2026-11-21 16:11 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `08dc7979ca` · branch `main` · 2026-11-21 18:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4690,7 +4690,7 @@ _nenhum item encontrado_
 | Comando desconhecido: ${cmd} | `src/components/intelligence/AskTab.tsx` |
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
 | Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
-| … +797 linhas — lista completa em `context.json` | |
+| … +800 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -5361,6 +5361,7 @@ _nenhum item encontrado_
 | Null guard: created_by must exist — system-created configs without an owner cannot execute tools | `supabase/functions/mcp-server/index.ts` |
 | ').eq('contact_id', contactId).eq('user_id', userId).order('created_at', { ascending: false }).limit(10), | `supabase/functions/next-best-action/index.ts` |
 | ').eq('contact_id', contactId).order('created_at', { ascending: false }).limit(5), | `supabase/functions/next-best-action/index.ts` |
+| Idempotência: este step de e-mail já foi enviado; registra apenas a interação | `supabase/functions/nurturing-runner/index.ts` |
 | Rate limit por IP | `supabase/functions/objection-context-summary/index.ts` |
 | ").eq("active", true).limit(100), | `supabase/functions/playbook-recommender/index.ts` |
 | ").eq("active", true).ilike("competitor_name", `%${escapedCompetitor}%`).limit(1).maybeSingle() | `supabase/functions/playbook-recommender/index.ts` |
@@ -5456,5 +5457,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| … +44 linhas — lista completa em `context.json` | |
+| … +45 linhas — lista completa em `context.json` | |
