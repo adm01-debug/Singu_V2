@@ -3077,17 +3077,20 @@
    "nome": "send-transactional-email",
    "entrada": "supabase/functions/send-transactional-email/index.ts",
    "arquivos": 1,
-   "linhas": 70,
+   "linhas": 91,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [],
    "rpcs": [],
    "env": [
     "RESEND_API_KEY",
-    "RESEND_FROM"
+    "RESEND_FROM",
+    "SUPABASE_URL"
    ],
    "buckets": [],
-   "chama_edges": [],
+   "chama_edges": [
+    "sequence-track"
+   ],
    "hosts_externos": [
     "api.resend.com"
    ],
@@ -3169,9 +3172,11 @@
     "rate-limit.ts"
    ],
    "chamada_pelo_front": [],
-   "chamada_por_edges": [],
+   "chamada_por_edges": [
+    "send-transactional-email"
+   ],
    "chamada_por_sql_ou_cron": false,
-   "orfa": true,
+   "orfa": false,
    "testes": 0
   },
   {

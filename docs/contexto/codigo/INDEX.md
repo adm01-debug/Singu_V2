@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d1e1811b8b5630f0f1cd9bdf3123732c3727a6e9` (2026-11-21T11:45:35-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `6b9a9e4ba839af70733daf38caf57c6f72e0d19e` (2026-11-21T12:20:07-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3886 |
 | arquivos_codigo | 2238 |
-| linhas_codigo | 417740 |
+| linhas_codigo | 417761 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -346,7 +346,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `send-sms-campaign` — tabelas: contacts, sms_campaign_recipients, sms_campaigns, sms_opt_outs; chamada por 1 arquivo(s) do front
 - `send-transactional-email` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `sequence-processor` — tabelas: contacts, sequence_email_reservations, sequence_enrollments, sequence_events, sequence_send_log, sequence_steps, sequences; chamada por 1 arquivo(s) do front, por SQL/cron
-- `sequence-track` — tabelas: sequence_events, sequence_send_log; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `sequence-track` — tabelas: sequence_events, sequence_send_log; chamada por 0 arquivo(s) do front
 - `smart-notify` — tabelas: contact_automation_settings, contact_next_actions, notification_logs, profiles; chamada por 1 arquivo(s) do front, por SQL/cron
 - `smart-reminders` — tabelas: contact_automation_settings, contact_next_actions, contacts, interactions, life_events; chamada por 1 arquivo(s) do front
 - `social-behavior-analyzer` — tabelas: contact_analytical_profiles, contacts, interactions, social_behavior_analysis, social_profiles; chamada por 0 arquivo(s) do front
@@ -431,7 +431,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rotas_sem_arquivo: 0
 - componentes_ambiguos: 0
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
-- edges_orfas: 28 — ex.: attribution-calculator, auto-rebatch-behavioral, auto-regen-behavioral-profiles
+- edges_orfas: 27 — ex.: attribution-calculator, auto-rebatch-behavioral, auto-regen-behavioral-profiles
 - edges_chamadas_sem_pasta: 0
 - tabelas_sem_rls: 131 — ex.: _stg_pac_nums, access_denied_logs, active_power_ups
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
@@ -445,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25779 nós · 41116 arestas · 3065 comunidades · grafo do commit `d1e1811b`
-- comunidades maiores: ref_hooks (398), ref_types (349), ref_lib (280), _shared/auth.ts (278), useAuth (269), framer-motion (261), 02_tables.sql (259), ref_components (251), react-router-dom (234), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (226), react (208)
+- 25780 nós · 41118 arestas · 3100 comunidades · grafo do commit `6b9a9e4b`
+- comunidades maiores: ref_components (297), useAuth (290), ref_lib (262), 02_tables.sql (259), react (254), framer-motion (248), 📖 Dicionário de Dados — SINGU CRM (227), ref_hooks (222), react-router-dom (217), _shared/auth.ts (209), Tabela de evidências (201), date-fns (196)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-21 `6b9a9e4` feat(sequencias): tracking de abertura e clique no email transacional (#299)
 - 2026-11-21 `d1e1811` fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)
 - 2026-11-21 `4bc4a7c` fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)
 - 2026-11-21 `d83acfb` fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-20 `3e6b290` fix(deps): bump react-router 7.18.6 e vitest 5.1.1 (alerts dependabot) (#286)
 - 2026-11-20 `df6e5c6` fix(migrations): torna 154 migrations idempotentes para reaplicação no preview (#284)
 - 2026-11-20 `6ba0fb9` fix(migrations): força handle_new_user com email (drift de produção) (#285)
-- 2026-11-20 `7cbda37` fix(migrations): torne a Foundation 1cfd4579 totalmente idempotente (#283)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
