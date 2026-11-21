@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `fe5d8c1175d02f983dc4071f16980ba617b2e868` (2026-11-21T09:31:00-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `84b1bdd53234a8e4d0d651e1019c2591d8adce93` (2026-11-21T10:31:45-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3886 |
 | arquivos_codigo | 2238 |
-| linhas_codigo | 417673 |
+| linhas_codigo | 417679 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -69,7 +69,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 653 | 69 | 232 |
+| app | 0 | 0 | 6 | 653 | 70 | 232 |
 | components/abm | 0 | 0 | 8 | 19 | 2 | 6 |
 | components/admin | 0 | 0 | 45 | 36 | 13 | 19 |
 | components/analytics | 0 | 0 | 43 | 81 | 2 | 26 |
@@ -121,7 +121,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 0 | 0 | 378 | 640 | 54 | 209 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 70 | 16 | 2 | 13 |
-| pages | 51 | 105 | 105 | 630 | 67 | 226 |
+| pages | 51 | 105 | 105 | 630 | 68 | 226 |
 | pages/admin | 7 | 8 | 9 | 355 | 29 | 105 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
@@ -437,7 +437,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
 - tabelas_com_drift_migration_vs_types: 43 — ex.: audit_log, automation_logs, behavioral_profile_regen_queue
 - rpcs_sem_definicao: 2 — ex.: get_territories, get_territory_performance
-- componentes_orfaos: 39 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/admin/SystemHealthWidget.tsx
+- componentes_orfaos: 38 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/admin/SystemHealthWidget.tsx
 - componentes_com_nome_duplicado: 107 — ex.: ABM, ABMAccountDetail, ABMCampaigns
 - scripts_orfaos: 8 — ex.: scripts/hardening/check-client-tls.sql, scripts/hardening/check-extensions-hardening.sql, scripts/hardening/check-indexes-duplicated.sql
 - env_usadas_nao_declaradas: 4 — ex.: DEV, PROD, VITE_APP_VERSION
@@ -445,7 +445,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25778 nós · 41111 arestas · 3064 comunidades · grafo do commit `fe5d8c11`
+- 25778 nós · 41111 arestas · 3064 comunidades · grafo do commit `84b1bdd5`
 - comunidades maiores: sonner (303), ref_components (302), ref_lib (283), 02_tables.sql (259), framer-motion (257), useAuth (255), date-fns (253), react (246), react-router-dom (245), 📖 Dicionário de Dados — SINGU CRM (227), _shared/auth.ts (226), lucide-react (223)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-21 `84b1bdd` feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)
 - 2026-11-21 `fe5d8c1` fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)
 - 2026-11-21 `e453c9f` feat(insights): carrega insights persistidos ao abrir a tela (#291)
 - 2026-11-21 `62379b7` chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-20 `ad9f3c0` fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)
 - 2026-11-20 `70d97b4` Merge pull request #281 from adm01-debug/claude/chore-limpa-temp-supabase-261120-1105
 - 2026-11-20 `105e30e` chore: remove artefato local supabase/.temp/ do versionamento (gitignore)
-- 2026-11-20 `fae89a5` Merge pull request #280 from adm01-debug/claude/chore-remove-workflow-temp-261120-1100
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

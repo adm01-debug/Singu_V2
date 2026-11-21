@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "fe5d8c1175d02f983dc4071f16980ba617b2e868",
+  "sha": "84b1bdd53234a8e4d0d651e1019c2591d8adce93",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 12:33 UTC",
+  "generated_at": "2026-11-21 13:32 UTC",
   "files_total": 3991,
   "code_files": 3518,
-  "code_lines": 474320
+  "code_lines": 474326
  },
  "version": "1.3.2",
- "facts_hash": "07f174201a6557d1",
+ "facts_hash": "ca6f39b243e87b47",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -101534,9 +101534,11 @@
      "activities",
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "visual-search"
+    ],
     "rpc_transitive": [],
-    "deps_count": 14
+    "deps_count": 18
    },
    {
     "path": "",
@@ -110507,7 +110509,7 @@
   {
    "module": "src/components",
    "files": 995,
-   "lines": 149713,
+   "lines": 149711,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -111528,7 +111530,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28758,
+   "lines": 28766,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -256146,7 +256148,7 @@
   },
   "src/components/nlp/CommunicationCoherencePanel.tsx": {
    "path": "src/components/nlp/CommunicationCoherencePanel.tsx",
-   "lines": 396,
+   "lines": 394,
    "exports": [
     "default CommunicationCoherencePanel"
    ],
@@ -285175,7 +285177,7 @@
   },
   "src/pages/ErpViewer.tsx": {
    "path": "src/pages/ErpViewer.tsx",
-   "lines": 218,
+   "lines": 226,
    "exports": [
     "function ErpViewer"
    ]
@@ -305674,10 +305676,20 @@
   }
  },
  "git": {
-  "sha": "fe5d8c1175d02f983dc4071f16980ba617b2e868",
+  "sha": "84b1bdd53234a8e4d0d651e1019c2591d8adce93",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "84b1bdd",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)",
+    "files": [
+     "src/components/nlp/CommunicationCoherencePanel.tsx",
+     "src/pages/ErpViewer.tsx"
+    ]
+   },
    {
     "sha": "fe5d8c1",
     "date": "2026-11-21",
@@ -306732,21 +306744,6 @@
      "src/hooks/useMetaprogramAnalysis.ts",
      "src/hooks/useNLPAutoAnalysis.ts"
     ]
-   },
-   {
-    "sha": "16da53a",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "feat(carnegie): aba Revisor de mensagem liga nove detectores que estavam sem tela (#270)",
-    "files": [
-     "src/components/carnegie/CarnegieDashboard.tsx",
-     "src/components/carnegie/MessageReviewPanel.tsx",
-     "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx",
-     "src/components/carnegie/index.ts",
-     "src/data/carnegieEmpathyTemplates.ts",
-     "src/lib/__tests__/carnegieMessageReview.test.ts",
-     "src/lib/carnegieMessageReview.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306799,6 +306796,14 @@
     2
    ],
    [
+    "src/components/nlp/CommunicationCoherencePanel.tsx",
+    1
+   ],
+   [
+    "src/pages/ErpViewer.tsx",
+    1
+   ],
+   [
     "src/components/nlp/MetaProgramsProfiler.tsx",
     1
    ],
@@ -306820,14 +306825,6 @@
    ],
    [
     "package.json",
-    1
-   ],
-   [
-    "src/app/AppProviders.tsx",
-    1
-   ],
-   [
-    "src/test/setup.ts",
     1
    ]
   ]

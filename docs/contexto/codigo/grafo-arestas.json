@@ -10114,6 +10114,7 @@
    "src/hooks/useEnrichmentSuite.ts"
   ],
   "src/pages/ErpViewer.tsx": [
+   "src/components/search/VisualSearchButton.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",

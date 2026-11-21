@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "total": 1063,
- "orfaos": 39,
+ "orfaos": 38,
  "nomes_duplicados": {
   "ABM": [
    "src/app/lazyPages.tsx",
@@ -11291,7 +11291,7 @@
     "CommunicationCoherencePanel"
    ],
    "export_default": "CommunicationCoherencePanel",
-   "linhas": 396,
+   "linhas": 394,
    "dominio": "components/nlp",
    "hooks_locais": [],
    "tabelas": [],
@@ -12569,8 +12569,8 @@
    "edges": [
     "visual-search"
    ],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/search/voice/FloatingParticles.tsx",
@@ -16492,7 +16492,7 @@
     "ErpViewer"
    ],
    "export_default": "ErpViewer",
-   "linhas": 218,
+   "linhas": 226,
    "dominio": "pages",
    "hooks_locais": [
     "useErpProducts",

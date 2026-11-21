@@ -24956,12 +24956,13 @@
    ],
    "rpcs": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "visual-search"
    ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 15
+   "arquivos_puxados": 19
   },
   {
    "protegida": false,

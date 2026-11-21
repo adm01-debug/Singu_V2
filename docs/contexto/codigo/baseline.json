@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "fe5d8c1175d02f983dc4071f16980ba617b2e868",
+  "commit": "84b1bdd53234a8e4d0d651e1019c2591d8adce93",
   "branch": "main",
-  "data_commit": "2026-11-21T09:31:00-03:00",
+  "data_commit": "2026-11-21T10:31:45-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "84b1bdd",
+    "data": "2026-11-21",
+    "assunto": "feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)"
+   },
    {
     "sha": "fe5d8c1",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "6a2064b",
     "data": "2026-11-20",
     "assunto": "feat(audit): resgata auditoria de escrita do external-data — modulo logAudit"
-   },
-   {
-    "sha": "0418f64",
-    "data": "2026-11-20",
-    "assunto": "fix(migrations): recupera da produção as 607 migrations que faltavam no repositório (#267)"
    }
   ],
-  "arquivos_mudados_7d": 1095,
+  "arquivos_mudados_7d": 1097,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3886,
   "arquivos_codigo": 2238,
-  "linhas_codigo": 417673,
+  "linhas_codigo": 417679,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -652,7 +652,7 @@
   },
   "src/components": {
    "arquivos": 995,
-   "linhas": 149713
+   "linhas": 149711
   },
   "src/config": {
    "arquivos": 1,
@@ -688,7 +688,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28758
+   "linhas": 28766
   },
   "src/store": {
    "arquivos": 1,
@@ -1186,7 +1186,6 @@
    "src/components/interactions/DensityChips.tsx",
    "src/components/interactions/InteractionCardMemo.tsx",
    "src/components/lead-scoring/LeadScoreCard.tsx",
-   "src/components/search/VisualSearchButton.tsx",
    "src/components/security/MFAEnrollmentBanner.tsx",
    "src/components/triggers/CompatibilityScore.tsx",
    "src/components/triggers/ProfileBasedSuggestions.tsx",

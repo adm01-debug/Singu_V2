@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "nos": 1963,
- "arestas": 8498,
+ "arestas": 8499,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -247,7 +247,6 @@
   "src/components/interactions/DensityChips.tsx",
   "src/components/interactions/InteractionCardMemo.tsx",
   "src/components/lead-scoring/LeadScoreCard.tsx",
-  "src/components/search/VisualSearchButton.tsx",
   "src/components/security/MFAEnrollmentBanner.tsx",
   "src/components/triggers/CompatibilityScore.tsx",
   "src/components/triggers/ProfileBasedSuggestions.tsx",
@@ -296,7 +295,7 @@
   },
   {
    "modulo": "pages",
-   "depende_de": 97,
+   "depende_de": 98,
    "importado_por": 3
   },
   {

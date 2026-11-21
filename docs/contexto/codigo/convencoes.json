@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)",
    "fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)",
    "feat(insights): carrega insights persistidos ao abrir a tela (#291)",
    "chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)",
-   "fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)",
-   "docs(auditoria): linha de base do estado real em docs/pendencias (#289)"
+   "fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)"
   ]
  },
  "pr_template": null,
