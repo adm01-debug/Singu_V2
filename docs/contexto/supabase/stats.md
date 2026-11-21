@@ -40,7 +40,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.contact_emails | ~3.1k | 1.5 MB | 552.0 KB | 976.0 KB | ~190 | ~190 | ~2.5M | 2026-11-20 |
 | public.staging_portal_sicoob | ~4.4k | 1.5 MB | 1.1 MB | 296.0 KB | 0 | ~1.7k | ~9.9k | 2026-03-22 |
 | public.contact_phones | ~3.1k | 1.3 MB | 488.0 KB | 816.0 KB | ~280 | ~7k | ~355.9k | 2026-11-18 |
-| zapp_history.messages | 0 | 1.2 MB | 0 B | 1.1 MB | 0 | ~671.8k | ~1.3M | 2026-04-10 |
+| zapp_history.messages | 0 | 1.2 MB | 0 B | 1.1 MB | 0 | ~672.1k | ~1.3M | 2026-04-10 |
 | public.cidades | ~5.6k | 1.1 MB | 720.0 KB | 344.0 KB | 0 | ~30 | ~33.4k |  |
 | public.sync_log | ~1.5k | 688.0 KB | 360.0 KB | 232.0 KB | 4 | ~30 | ~30 |  |
 | public.customer_events | ~40 | 608.0 KB | 24.0 KB | 544.0 KB | 3 | ~10.4k | ~6.4k | 2026-09-27 |
@@ -52,10 +52,10 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.grupos_economicos | ~1.3k | 336.0 KB | 136.0 KB | 160.0 KB | ~60 | ~200 | ~4.3k |  |
 | public.cnaes | ~1.3k | 280.0 KB | 184.0 KB | 56.0 KB | 2 | ~20 | ~589k |  |
 | public.interactions_audit | ~20 | 224.0 KB | 96.0 KB | 16.0 KB | ~20 | ~6.4k | ~10 | 2026-11-20 |
-| public.rpc_plan_snapshots | 5 | 224.0 KB | 72.0 KB | 48.0 KB | ~20 | ~4.2k | ~28.1k | 2026-11-20 |
+| public.rpc_plan_snapshots | 5 | 224.0 KB | 72.0 KB | 48.0 KB | ~20 | ~4.2k | ~28.2k | 2026-11-20 |
 | public.deals | 3 | 160.0 KB | 8.0 KB | 112.0 KB | 5 | ~110.5M | ~30 | 2026-11-20 |
 | public.disc_profile_config | 4 | 160.0 KB | 48.0 KB | 32.0 KB | ~20 | ~370 | 1 |  |
-| public.system_health_snapshots | ~210 | 160.0 KB | 56.0 KB | 64.0 KB | ~20 | ~190 | ~700 | 2026-11-20 |
+| public.system_health_snapshots | ~210 | 160.0 KB | 56.0 KB | 64.0 KB | ~20 | ~190 | ~710 | 2026-11-20 |
 | public.lead_score_history | 0 | 152.0 KB | 16.0 KB | 96.0 KB | ~20 | ~9k | ~2.3k | 2026-11-20 |
 | public.rfm_analysis | 0 | 144.0 KB | 8.0 KB | 112.0 KB | ~40 | ~7.8k | ~2k | 2026-11-20 |
 | public.tasks | 0 | 144.0 KB | 8.0 KB | 128.0 KB | ~10 | ~80 | ~7.5k |  |
@@ -80,7 +80,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.sales_activities | 5 | 112.0 KB | 8.0 KB | 64.0 KB | ~50 | ~2.1k | ~1.3k | 2026-11-20 |
 | public.sequence_send_log | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~20 | ~10.4k | ~170 | 2026-11-20 |
 | public.system_alerts | 0 | 112.0 KB | 0 B | 88.0 KB | 0 | ~9.6k | ~160 | 2026-11-20 |
-| public.validation_queue | 2 | 112.0 KB | 8.0 KB | 64.0 KB | ~30 | ~20.9k | ~790 | 2026-11-20 |
+| public.validation_queue | 2 | 112.0 KB | 8.0 KB | 64.0 KB | ~30 | ~21k | ~790 | 2026-11-20 |
 | public.workspace_accounts | ~30 | 112.0 KB | 32.0 KB | 48.0 KB | ~30 | ~3.8k | ~310 |  |
 | zapp_history.message_links | 2 | 112.0 KB | 8.0 KB | 96.0 KB | ~10 | ~620 | ~910 |  |
 | zapp_history.message_media | 0 | 112.0 KB | 8.0 KB | 96.0 KB | 9 | ~640 | ~680 |  |
@@ -148,7 +148,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.external_data_audit_log | 0 | 64.0 KB | 8.0 KB | 48.0 KB | 0 | ~10 | 0 |  |
 | public.landing_pages | 0 | 64.0 KB | 8.0 KB | 48.0 KB | 1 | ~680 | ~2.8k |  |
 | public.lead_score_threshold_automations | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~20 | ~2.3k | ~150 | 2026-11-20 |
-| public.mql_criteria | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~30 | ~1.2k | ~100 | 2026-11-19 |
+| public.mql_criteria | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~30 | ~1.3k | ~100 | 2026-11-19 |
 | public.notification_logs | 0 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~3.7k | ~20 |  |
 | public.nurturing_workflows | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~30 | ~3.2k | ~260 | 2026-11-20 |
 | public.permissions | 0 | 64.0 KB | 8.0 KB | 48.0 KB | 0 | ~360 | ~100 |  |
@@ -156,7 +156,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.quick_notes | 1 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~3.5k | 1 |  |
 | public.rfm_segment_config | ~10 | 64.0 KB | 8.0 KB | 48.0 KB | 2 | ~60 | 0 |  |
 | public.rodizio_distribuicao_staging | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~40 | ~4.5k | ~1.8k | 2026-11-20 |
-| public.rpc_perf_samples | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~20 | ~19.5k | ~2k | 2026-11-20 |
+| public.rpc_perf_samples | 0 | 64.0 KB | 8.0 KB | 32.0 KB | ~20 | ~19.6k | ~2k | 2026-11-20 |
 | public.sales_team_members | 0 | 64.0 KB | 8.0 KB | 48.0 KB | 3 | ~1.3k | ~50 |  |
 | public.user_goals | 6 | 64.0 KB | 8.0 KB | 48.0 KB | ~10 | ~150 | ~310 |  |
 | singu_migration._checklist | ~50 | 64.0 KB | 16.0 KB | 16.0 KB | 7 | ~50 | ~20 |  |
@@ -302,10 +302,10 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.eq_assessment_questions | ~10 | 32.0 KB | 8.0 KB | 16.0 KB | 0 | ~40 | 0 |  |
 | public.follow_up_approvals | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 8 | ~6.4k | 8 |  |
 | public.forecast_snapshots | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~40 | 0 |  |
-| public.incoming_webhook_dlq | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~2.6k |  |
+| public.incoming_webhook_dlq | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~2.7k |  |
 | public.lead_magnet_downloads | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~4.3k | ~2.1k |  |
 | public.lead_score_rules | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | 0 |  |
-| public.life_events | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~280 | ~7.5k |  |
+| public.life_events | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~290 | ~7.5k |  |
 | public.lux_intelligence | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~9k |  |
 | public.lux_webhook_config | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | 4 |  |
 | public.nurturing_enrollments | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~50 | ~3.2k |  |
@@ -709,13 +709,13 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | service_role | ~15.7M | ~320.2M | 20.34 | `WITH pgrst_source AS (UPDATE "public"."companies" SET "cnpj_normalizado_em" = "pgrst_body"."cnpj_normalizado_em" FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "cnpj_normalizado_em" FROM json_to_record(pgrs` |
 | service_role | ~15.8M | ~308.6M | 19.56 | `WITH pgrst_source AS (UPDATE "public"."companies" SET "address" = "pgrst_body"."address", "city" = "pgrst_body"."city", "email" = "pgrst_body"."email", "phone" = "pgrst_body"."phone", "state" = "pgrst_body"."state" FROM ` |
 | postgres | ~21.3k | ~27.3M | 1284.96 | `SELECT pg_advisory_xact_lock(hashtext($1))` |
-| postgres | ~650k | ~10.7M | 16.43 | `SELECT zapp_history.reconcile_nlp_responses()` |
+| postgres | ~650.2k | ~10.7M | 16.43 | `SELECT zapp_history.reconcile_nlp_responses()` |
 | postgres | ~5.5k | ~6.4M | 1171.32 | `with f as ( -- CTE with sane arg_modes, arg_names, and arg_types. -- All three are always of the same length. -- All three include all args, including OUT and TABLE args. with functions as ( select *, -- proargmodes is n` |
 | service_role | ~4.2k | ~6.1M | 1458.34 | `WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_phones" FROM json_to_record(pgrst_payload.json_data) AS _("p_phones" text[]) LIMIT $4) pgrst_body , LAT` |
 | postgres | ~5.6k | ~4.9M | 877.68 | `SELECT tbl.schemaname, tbl.tablename, tbl.quoted_name, tbl.is_table, json_agg(a) as columns FROM ( SELECT n.nspname as schemaname, c.relname as tablename, (quote_ident(n.nspname) \|\| $1 \|\| quote_ident(c.relname)) as quote` |
 | service_role | ~13.1k | ~3.6M | 272.12 | `WITH pgrst_source AS ( SELECT "public"."companies".* FROM "public"."companies" WHERE "public"."companies"."is_customer" = $1 AND "public"."companies"."deleted_at" IS NULL ORDER BY "public"."companies"."razao_social" ASC ` |
 | postgres | ~120 | ~3.4M | 29461.80 | `SELECT string_agg( format($1, id, table_name, record_id, action, CASE WHEN old_data IS NULL THEN $2 ELSE quote_literal(old_data::text) \|\|$3 END, CASE WHEN new_data IS NULL THEN $4 ELSE quote_literal(new_data::text) \|\|$5 ` |
-| postgres | ~54.8k | ~2.6M | 48.00 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
+| postgres | ~55k | ~2.6M | 47.81 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
 | service_role | ~11.1k | ~2.3M | 210.76 | `WITH pgrst_source AS ( SELECT "public"."companies"."id", "public"."companies"."razao_social", "public"."companies"."nome_fantasia", "public"."companies"."ramo_atividade", "public"."companies"."cnpj", "public"."companies"` |
 | service_role | ~64M | ~2M | 0.03 | `select set_config('?', $1, true), set_config($2, $3, true), set_config('?', $4, true), set_config('?', $5, true), set_config('?', $6, true), set_config('?', $7, true)` |
 | service_role | ~5.7k | ~2M | 347.56 | `WITH pgrst_source AS ( SELECT "public"."companies".*, row_to_json("companies_customers_1".*)::jsonb AS "customers", COALESCE( "companies_contacts_1"."companies_contacts_1", $9) AS "contacts" FROM "public"."companies" LEF` |
