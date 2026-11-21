@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `62379b79b4a6f10f01983cfd07a34ebfdf055ef1` (2026-11-21T08:56:01-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e453c9f60dbb925d272796699fca4d9be0020022` (2026-11-21T09:30:56-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3886 |
 | arquivos_codigo | 2238 |
-| linhas_codigo | 417602 |
+| linhas_codigo | 417629 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -445,7 +445,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25778 nós · 41111 arestas · 3064 comunidades · grafo do commit `62379b79`
+- 25778 nós · 41111 arestas · 3064 comunidades · grafo do commit `e453c9f6`
 - comunidades maiores: sonner (303), ref_components (302), ref_lib (283), 02_tables.sql (259), framer-motion (257), useAuth (255), date-fns (253), react (246), react-router-dom (245), 📖 Dicionário de Dados — SINGU CRM (227), _shared/auth.ts (226), lucide-react (223)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-21 `e453c9f` feat(insights): carrega insights persistidos ao abrir a tela (#291)
 - 2026-11-21 `62379b7` chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)
 - 2026-11-21 `4e69959` fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)
 - 2026-11-20 `b5d2431` docs(auditoria): linha de base do estado real em docs/pendencias (#289)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-20 `105e30e` chore: remove artefato local supabase/.temp/ do versionamento (gitignore)
 - 2026-11-20 `fae89a5` Merge pull request #280 from adm01-debug/claude/chore-remove-workflow-temp-261120-1100
 - 2026-11-20 `469bcda` chore: remove workflow temporario de aplicacao de migration em producao (tabela aplicada e verificada)
-- 2026-11-20 `c256a5e` Merge pull request #279 from adm01-debug/claude/infra-aplica-migracao-audit-261120-1032
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

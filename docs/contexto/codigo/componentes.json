@@ -16640,7 +16640,7 @@
     "Insights"
    ],
    "export_default": "Insights",
-   "linhas": 178,
+   "linhas": 205,
    "dominio": "pages",
    "hooks_locais": [
     "useAccessibleToast",
@@ -16651,6 +16651,7 @@
    "tabelas": [
     "companies",
     "contacts",
+    "insights",
     "interactions"
    ],
    "edges": [

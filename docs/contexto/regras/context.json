@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "62379b79b4a6f10f01983cfd07a34ebfdf055ef1",
+  "sha": "e453c9f60dbb925d272796699fca4d9be0020022",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 12:16 UTC",
+  "generated_at": "2026-11-21 12:31 UTC",
   "files_total": 3991,
   "code_files": 3518,
-  "code_lines": 474249
+  "code_lines": 474276
  },
  "version": "1.3.2",
- "facts_hash": "2ccaa903ab9bf81a",
+ "facts_hash": "6c8d55727209d11d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -101680,7 +101680,6 @@
      "emotional_states_history",
      "error_logs",
      "health_alerts",
-     "insights",
      "metaprogram_analysis",
      "objection_example_feedback",
      "profiles",
@@ -111529,7 +111528,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28731,
+   "lines": 28758,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -111548,6 +111547,7 @@
     "forms",
     "incoming_webhook_logs",
     "incoming_webhooks",
+    "insights",
     "interactions",
     "landing_page_submissions",
     "landing_pages",
@@ -113922,6 +113922,7 @@
      "src/hooks/useContactDetail.ts",
      "src/hooks/useRealtimeNotifications.ts",
      "src/hooks/useYourDay.ts",
+     "src/pages/Insights.tsx",
      "supabase/functions/check-notifications/index.ts"
     ],
     "update": [
@@ -116674,13 +116675,17 @@
     "webhook_secret"
    ],
    "insights": [
+    "action_suggestion",
     "actionable",
     "category",
+    "confidence",
     "contact_id",
     "created_at",
     "description",
     "dismissed",
+    "expires_at",
     "id",
+    "source",
     "title",
     "user_id"
    ],
@@ -285246,11 +285251,15 @@
   },
   "src/pages/Insights.tsx": {
    "path": "src/pages/Insights.tsx",
-   "lines": 178,
+   "lines": 205,
    "exports": [
     "default Insights"
    ],
    "tables": [
+    {
+     "table": "insights",
+     "op": "select"
+    },
     {
      "table": "contacts",
      "op": "select"
@@ -285277,6 +285286,21 @@
     }
    ],
    "table_cols": {
+    "insights": [
+     "action_suggestion",
+     "actionable",
+     "category",
+     "confidence",
+     "contact_id",
+     "created_at",
+     "description",
+     "dismissed",
+     "expires_at",
+     "id",
+     "source",
+     "title",
+     "user_id"
+    ],
     "contacts": [
      "user_id"
     ],
@@ -305650,10 +305674,19 @@
   }
  },
  "git": {
-  "sha": "62379b79b4a6f10f01983cfd07a34ebfdf055ef1",
+  "sha": "e453c9f60dbb925d272796699fca4d9be0020022",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "e453c9f",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(insights): carrega insights persistidos ao abrir a tela (#291)",
+    "files": [
+     "src/pages/Insights.tsx"
+    ]
+   },
    {
     "sha": "62379b7",
     "date": "2026-11-21",
@@ -306715,18 +306748,6 @@
      "src/hooks/__tests__/matriz-conflitos-gatilhos.test.ts",
      "src/hooks/useAdvancedTriggers.ts"
     ]
-   },
-   {
-    "sha": "5e72a50",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(carnegie): analise de fala/escuta passa a ler o texto em vez de inventar (#266)",
-    "files": [
-     "src/components/carnegie/TalkRatioPanel.tsx",
-     "src/hooks/__tests__/talk-ratio-medicao.test.ts",
-     "src/hooks/useCarnegieAnalysis.ts",
-     "src/types/carnegie.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306783,6 +306804,10 @@
     2
    ],
    [
+    "src/pages/Insights.tsx",
+    1
+   ],
+   [
     "src/pages/insights/InsightsContent.tsx",
     1
    ],
@@ -306804,10 +306829,6 @@
    ],
    [
     "src/test/setup.ts",
-    1
-   ],
-   [
-    "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql",
     1
    ]
   ]

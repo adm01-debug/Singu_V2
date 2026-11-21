@@ -12163,7 +12163,7 @@
    "modulo": "pages",
    "arquivos": 105,
    "testes": 6,
-   "linhas": 20989,
+   "linhas": 21016,
    "itens_menu": [
     "ABM",
     "Análise PNL",
@@ -13366,6 +13366,7 @@
      "forms",
      "incoming_webhook_logs",
      "incoming_webhooks",
+     "insights",
      "interactions",
      "landing_page_submissions",
      "landing_pages",
