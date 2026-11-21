@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "d4ea4a11ddb03b4d654759a1971f7893e5a6c458",
+  "commit": "d83acfb909752a41d096f728616a9810c2043a2f",
   "branch": "main",
-  "data_commit": "2026-11-21T10:31:52-03:00",
+  "data_commit": "2026-11-21T11:22:36-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "d83acfb",
+    "data": "2026-11-21",
+    "assunto": "fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)"
+   },
    {
     "sha": "d4ea4a1",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "c51bc5f",
     "data": "2026-11-20",
     "assunto": "feat(audit): injeta logAudit nas 4 escritas do external-data (resgate hardening Singu)"
-   },
-   {
-    "sha": "64be234",
-    "data": "2026-11-20",
-    "assunto": "feat(audit): cria external_data_audit_log com RLS admin-only (resgate hardening Singu 2026-04-09)"
    }
   ],
-  "arquivos_mudados_7d": 922,
+  "arquivos_mudados_7d": 923,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 134
+    "commits": 135
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3886,
   "arquivos_codigo": 2238,
-  "linhas_codigo": 417679,
+  "linhas_codigo": 417699,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 26940
+   "linhas": 26960
   },
   "tailwind.config.ts": {
    "arquivos": 1,
