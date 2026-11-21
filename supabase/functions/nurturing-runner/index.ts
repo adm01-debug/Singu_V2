@@ -119,6 +119,113 @@ Deno.serve(async (req) => {
     const failedExecRows: Array<{ id: string; status: string; error_message: string }> = [];
     const completedWorkflowIds: string[] = [];
 
+    const markCompleted = (exec: ExecutionRow): void => {
+      completedExecIds.push(exec.id);
+      completedWorkflowIds.push(exec.workflow_id);
+      stats.completed++;
+    };
+
+    const advance = (
+      exec: ExecutionRow,
+      steps: Step[],
+      context?: Record<string, unknown>,
+      shouldComplete = true,
+    ): void => {
+      const isLastStep = !steps[exec.current_step + 1];
+      advanceExecRows.push({
+        id: exec.id,
+        current_step: exec.current_step + 1,
+        last_action_at: now,
+        next_action_at: buildNextActionAt(steps, exec.current_step),
+        status: buildNextStatus(steps, exec.current_step),
+        completed_at: steps[exec.current_step + 1] ? null : now,
+        ...(context ? { context } : {}),
+      });
+      if (shouldComplete && isLastStep) {
+        completedWorkflowIds.push(exec.workflow_id);
+        stats.completed++;
+      }
+      stats.advanced++;
+    };
+
+    const processEmailStep = async (exec: ExecutionRow, step: Step, steps: Step[]): Promise<void> => {
+      const context: Record<string, unknown> =
+        exec.context && typeof exec.context === "object" ? { ...exec.context } : {};
+      const newContext: Record<string, unknown> = {
+        ...context,
+        email_sent_step: context.email_sent_step ?? null,
+        email_message_id: context.email_message_id ?? null,
+        email_tracking_token: context.email_tracking_token ?? null,
+      };
+
+      if (context.email_sent_step === exec.current_step) {
+        // Idempotência: este step de e-mail já foi enviado; registra apenas a interação
+        interactionRows.push({
+          user_id: exec.user_id,
+          contact_id: exec.contact_id,
+          type: "email",
+          title: step.subject || "Nurturing email",
+          content: step.content || "",
+          initiated_by: "us",
+        } as never);
+      } else {
+        const contact = contactMap.get(exec.contact_id) as ContactRow | undefined;
+        if (!contact?.email || !contact.email.trim()) {
+          throw new Error("Contato sem email para envio no nurturing");
+        }
+
+        const idempotencyKey = `nur-${exec.id}-step-${exec.current_step}`;
+        const digest = await crypto.subtle.digest(
+          "SHA-256",
+          new TextEncoder().encode(idempotencyKey)
+        );
+        const trackingToken = Array.from(new Uint8Array(digest), (byte) =>
+          byte.toString(16).padStart(2, "0")
+        ).join("").slice(0, 32);
+
+        const { data: delivery, error: deliveryError } = await supabase.functions.invoke<{
+          ok: boolean;
+          messageId: string;
+        }>("send-transactional-email", {
+          signal: AbortSignal.timeout(20_000),
+          body: {
+            templateName: "nurturing-step",
+            recipientEmail: contact.email.trim(),
+            idempotencyKey,
+            templateData: {
+              subject: step.subject || "Mensagem",
+              body: step.content || "",
+              trackingToken,
+            },
+          },
+        });
+
+        if (deliveryError) {
+          const missing = await isMissingEmailFunction(deliveryError);
+          if (!missing) throw new Error("Envio transacional não confirmado pelo provedor");
+          throw new Error("send-transactional-email não disponível (NOT_FOUND)");
+        }
+        if (delivery?.ok !== true || typeof delivery.messageId !== "string" || !delivery.messageId.trim()) {
+          throw new Error("Envio transacional não confirmado pelo provedor");
+        }
+
+        newContext.email_sent_step = exec.current_step;
+        newContext.email_message_id = delivery.messageId;
+        newContext.email_tracking_token = trackingToken;
+
+        interactionRows.push({
+          user_id: exec.user_id,
+          contact_id: exec.contact_id,
+          type: "email",
+          title: step.subject || "Nurturing email",
+          content: step.content || "",
+          initiated_by: "us",
+        } as never);
+      }
+
+      advance(exec, steps, newContext);
+    };
+
     for (const exec of execs as ExecutionRow[]) {
       stats.processed++;
       try {
@@ -127,13 +234,9 @@ Deno.serve(async (req) => {
         const step = steps[exec.current_step];
 
         if (!step) {
-          completedExecIds.push(exec.id);
-          completedWorkflowIds.push(exec.workflow_id);
-          stats.completed++;
+          markCompleted(exec);
           continue;
         }
-
-        const isLastStep = !steps[exec.current_step + 1];
 
         if (step.type === "task") {
           taskRows.push({
@@ -144,110 +247,9 @@ Deno.serve(async (req) => {
             status: "pending",
             priority: "medium",
           } as never);
-
-          advanceExecRows.push({
-            id: exec.id,
-            current_step: exec.current_step + 1,
-            last_action_at: now,
-            next_action_at: buildNextActionAt(steps, exec.current_step),
-            status: buildNextStatus(steps, exec.current_step),
-            completed_at: steps[exec.current_step + 1] ? null : now,
-          });
-          if (isLastStep) {
-            completedWorkflowIds.push(exec.workflow_id);
-            stats.completed++;
-          }
-          stats.advanced++;
+          advance(exec, steps);
         } else if (step.type === "email") {
-          // M14: envio de e-mail REAL via send-transactional-email (padrão sequence-processor).
-          const context: Record<string, unknown> =
-            exec.context && typeof exec.context === "object" ? { ...exec.context } : {};
-          const newContext: Record<string, unknown> = {
-            ...context,
-            email_sent_step: context.email_sent_step ?? null,
-            email_message_id: context.email_message_id ?? null,
-            email_tracking_token: context.email_tracking_token ?? null,
-          };
-
-          if (context.email_sent_step === exec.current_step) {
-            // Idempotência: este step de e-mail já foi enviado; registra apenas a interação
-            interactionRows.push({
-              user_id: exec.user_id,
-              contact_id: exec.contact_id,
-              type: "email",
-              title: step.subject || "Nurturing email",
-              content: step.content || "",
-              initiated_by: "us",
-            } as never);
-          } else {
-            const contact = contactMap.get(exec.contact_id) as ContactRow | undefined;
-            if (!contact?.email || !contact.email.trim()) {
-              throw new Error("Contato sem email para envio no nurturing");
-            }
-
-            const idempotencyKey = `nur-${exec.id}-step-${exec.current_step}`;
-            const digest = await crypto.subtle.digest(
-              "SHA-256",
-              new TextEncoder().encode(idempotencyKey)
-            );
-            const trackingToken = Array.from(new Uint8Array(digest), (byte) =>
-              byte.toString(16).padStart(2, "0")
-            ).join("").slice(0, 32);
-
-            const { data: delivery, error: deliveryError } = await supabase.functions.invoke<{
-              ok: boolean;
-              messageId: string;
-            }>("send-transactional-email", {
-              signal: AbortSignal.timeout(20_000),
-              body: {
-                templateName: "nurturing-step",
-                recipientEmail: contact.email.trim(),
-                idempotencyKey,
-                templateData: {
-                  subject: step.subject || "Mensagem",
-                  body: step.content || "",
-                  trackingToken,
-                },
-              },
-            });
-
-            if (deliveryError) {
-              const missing = await isMissingEmailFunction(deliveryError);
-              if (!missing) throw new Error("Envio transacional não confirmado pelo provedor");
-              throw new Error("send-transactional-email não disponível (NOT_FOUND)");
-            }
-            if (delivery?.ok !== true || typeof delivery.messageId !== "string" || !delivery.messageId.trim()) {
-              throw new Error("Envio transacional não confirmado pelo provedor");
-            }
-
-            newContext.email_sent_step = exec.current_step;
-            newContext.email_message_id = delivery.messageId;
-            newContext.email_tracking_token = trackingToken;
-
-            interactionRows.push({
-              user_id: exec.user_id,
-              contact_id: exec.contact_id,
-              type: "email",
-              title: step.subject || "Nurturing email",
-              content: step.content || "",
-              initiated_by: "us",
-            } as never);
-          }
-
-          advanceExecRows.push({
-            id: exec.id,
-            current_step: exec.current_step + 1,
-            last_action_at: now,
-            next_action_at: buildNextActionAt(steps, exec.current_step),
-            status: buildNextStatus(steps, exec.current_step),
-            completed_at: steps[exec.current_step + 1] ? null : now,
-            context: newContext,
-          });
-          if (isLastStep) {
-            completedWorkflowIds.push(exec.workflow_id);
-            stats.completed++;
-          }
-          stats.advanced++;
+          await processEmailStep(exec, step, steps);
         } else if (step.type === "whatsapp") {
           interactionRows.push({
             user_id: exec.user_id,
@@ -257,31 +259,10 @@ Deno.serve(async (req) => {
             content: step.content || "",
             initiated_by: "us",
           } as never);
-
-          advanceExecRows.push({
-            id: exec.id,
-            current_step: exec.current_step + 1,
-            last_action_at: now,
-            next_action_at: buildNextActionAt(steps, exec.current_step),
-            status: buildNextStatus(steps, exec.current_step),
-            completed_at: steps[exec.current_step + 1] ? null : now,
-          });
-          if (isLastStep) {
-            completedWorkflowIds.push(exec.workflow_id);
-            stats.completed++;
-          }
-          stats.advanced++;
+          advance(exec, steps);
         } else {
-          // wait step: delay já foi respeitado via next_action_at; avança imediatamente
-          advanceExecRows.push({
-            id: exec.id,
-            current_step: exec.current_step + 1,
-            last_action_at: now,
-            next_action_at: buildNextActionAt(steps, exec.current_step),
-            status: buildNextStatus(steps, exec.current_step),
-            completed_at: steps[exec.current_step + 1] ? null : now,
-          });
-          stats.advanced++;
+          // wait step: delay já foi respeitado via next_action_at; avanca imediatamente
+          advance(exec, steps, undefined, false);
         }
       } catch (stepErr) {
         // Falha de envio: mantém execution ativa para retry no próximo tick; contato sem email
