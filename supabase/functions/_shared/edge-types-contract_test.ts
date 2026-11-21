@@ -245,7 +245,7 @@ Deno.test("error budget persiste os três limiares uma única vez", async () => 
   });
 });
 
-Deno.test("nurturing aguarda builders e RPC mesmo com falhas best-effort", async () => {
+Deno.test("nurturing envia email real e aguarda builders e RPC mesmo com falhas best-effort", async () => {
   const writes: string[] = [];
   await withHandler("nurturing-runner", req => {
     const table = new URL(req.url).pathname.split("/").pop()!;
@@ -254,16 +254,18 @@ Deno.test("nurturing aguarda builders e RPC mesmo com falhas best-effort", async
       { id: "exec-interacao", user_id: owner, contact_id: contact, workflow_id: "interacao", current_step: 0 },
       { id: "exec-concluida", user_id: owner, contact_id: contact, workflow_id: "concluida", current_step: 0 },
     ]);
-    if (req.method === "GET") return Response.json([
+    if (req.method === "GET" && table === "nurturing_workflows") return Response.json([
       { id: "tarefa", steps: [{ type: "task" }] }, { id: "interacao", steps: [{ type: "email" }] }, { id: "concluida", steps: [] },
     ]);
+    if (req.method === "GET" && table === "contacts") return Response.json([{ id: contact, first_name: "Maria", last_name: null, email: "maria@example.test" }]);
+    if (req.method === "POST" && table === "send-transactional-email") { writes.push(table); return Response.json({ ok: true, messageId: "message-nurturing-1" }); }
     writes.push(table);
     return table === "nurturing_executions" ? new Response(null, { status: 204 }) : denied();
   }, async submit => {
     const response = await submit({}, { "x-cron-secret": "cron-teste" });
     assertEquals(response.status, 200);
-    assertEquals((await response.json()).stats, { processed: 3, advanced: 2, completed: 1, failed: 0 });
-    assertEquals(writes.filter(table => ["tasks", "interactions", "increment_workflow_completed"].includes(table)).sort(),
-      ["increment_workflow_completed", "interactions", "tasks"]);
+    assertEquals((await response.json()).stats, { processed: 3, advanced: 2, completed: 3, failed: 0 });
+    assertEquals(writes.filter(table => ["tasks", "interactions", "increment_workflow_completed", "send-transactional-email"].includes(table)).sort(),
+      ["increment_workflow_completed", "increment_workflow_completed", "increment_workflow_completed", "interactions", "send-transactional-email", "tasks"]);
   });
 });

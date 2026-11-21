@@ -144,6 +144,20 @@ Deno.serve(async (req) => {
             status: "pending",
             priority: "medium",
           } as never);
+
+          advanceExecRows.push({
+            id: exec.id,
+            current_step: exec.current_step + 1,
+            last_action_at: now,
+            next_action_at: buildNextActionAt(steps, exec.current_step),
+            status: buildNextStatus(steps, exec.current_step),
+            completed_at: steps[exec.current_step + 1] ? null : now,
+          });
+          if (isLastStep) {
+            completedWorkflowIds.push(exec.workflow_id);
+            stats.completed++;
+          }
+          stats.advanced++;
         } else if (step.type === "email") {
           // M14: envio de e-mail REAL via send-transactional-email (padrão sequence-processor).
           const context: Record<string, unknown> =
