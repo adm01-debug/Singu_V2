@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "84b1bdd53234a8e4d0d651e1019c2591d8adce93",
+  "sha": "d4ea4a11ddb03b4d654759a1971f7893e5a6c458",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 13:32 UTC",
+  "generated_at": "2026-11-21 14:10 UTC",
   "files_total": 3991,
   "code_files": 3518,
   "code_lines": 474326
@@ -305676,10 +305676,17 @@
   }
  },
  "git": {
-  "sha": "84b1bdd53234a8e4d0d651e1019c2591d8adce93",
+  "sha": "d4ea4a11ddb03b4d654759a1971f7893e5a6c458",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "d4ea4a1",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)",
+    "files": []
+   },
    {
     "sha": "84b1bdd",
     "date": "2026-11-21",
@@ -306732,17 +306739,6 @@
     "files": [
      "src/hooks/__tests__/relacoes-estendidas-gatilhos.test.ts",
      "src/hooks/useAdvancedTriggers.ts"
-    ]
-   },
-   {
-    "sha": "f746393",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)",
-    "files": [
-     "src/hooks/__tests__/confianca-metaprogramas.test.ts",
-     "src/hooks/useMetaprogramAnalysis.ts",
-     "src/hooks/useNLPAutoAnalysis.ts"
     ]
    }
   ],

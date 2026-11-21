@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)",
    "feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)",
    "fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)",
    "feat(insights): carrega insights persistidos ao abrir a tela (#291)",
-   "chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)",
-   "fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)"
+   "chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)"
   ]
  },
  "pr_template": null,
