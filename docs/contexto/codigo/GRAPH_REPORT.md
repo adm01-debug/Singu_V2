@@ -1,7 +1,7 @@
 # Graph Report - Singu_V2  (2026-11-21)
 
 ## Corpus Check
-- 3945 files · ~2,653,660 words
+- 3945 files · ~2,653,845 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 18 file(s) not represented in the graph (top: (none) 8, .example 3, .lock 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d83acfb9`
+- Built from commit: `4bc4a7c7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

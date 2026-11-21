@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "d83acfb909752a41d096f728616a9810c2043a2f",
+  "commit": "4bc4a7c732851574d80bf7db42413ea1444bf6c5",
   "branch": "main",
-  "data_commit": "2026-11-21T11:22:36-03:00",
+  "data_commit": "2026-11-21T11:28:52-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "4bc4a7c",
+    "data": "2026-11-21",
+    "assunto": "fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)"
+   },
    {
     "sha": "d83acfb",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "e6f4c68",
     "data": "2026-11-20",
     "assunto": "chore(audit): newline final em mutations.ts"
-   },
-   {
-    "sha": "c51bc5f",
-    "data": "2026-11-20",
-    "assunto": "feat(audit): injeta logAudit nas 4 escritas do external-data (resgate hardening Singu)"
    }
   ],
-  "arquivos_mudados_7d": 923,
+  "arquivos_mudados_7d": 924,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 135
+    "commits": 136
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3886,
   "arquivos_codigo": 2238,
-  "linhas_codigo": 417699,
+  "linhas_codigo": 417724,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -688,7 +688,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28766
+   "linhas": 28791
   },
   "src/store": {
    "arquivos": 1,

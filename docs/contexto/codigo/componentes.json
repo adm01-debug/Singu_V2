@@ -16910,7 +16910,7 @@
     "MarketingHub"
    ],
    "export_default": "MarketingHub",
-   "linhas": 546,
+   "linhas": 571,
    "dominio": "pages",
    "hooks_locais": [
     "useAttribution",
@@ -16920,6 +16920,7 @@
     "useMQLClassifications",
     "useMQLCriteria",
     "useMarketingBehavioralInsights",
+    "useMarketingCampaignStats",
     "useMarketingFunnel",
     "useNurturingExecutions",
     "useNurturingWorkflows",

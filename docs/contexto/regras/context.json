@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d83acfb909752a41d096f728616a9810c2043a2f",
+  "sha": "4bc4a7c732851574d80bf7db42413ea1444bf6c5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 14:23 UTC",
+  "generated_at": "2026-11-21 14:29 UTC",
   "files_total": 3991,
   "code_files": 3518,
-  "code_lines": 474346
+  "code_lines": 474371
  },
  "version": "1.3.2",
- "facts_hash": "df3e02301cdd64a0",
+ "facts_hash": "df4c15e2e8c697ee",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -111532,7 +111532,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28766,
+   "lines": 28791,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -285519,7 +285519,7 @@
   },
   "src/pages/MarketingHub.tsx": {
    "path": "src/pages/MarketingHub.tsx",
-   "lines": 546,
+   "lines": 571,
    "exports": [
     "function MarketingHub"
    ],
@@ -305688,10 +305688,19 @@
   }
  },
  "git": {
-  "sha": "d83acfb909752a41d096f728616a9810c2043a2f",
+  "sha": "4bc4a7c732851574d80bf7db42413ea1444bf6c5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "4bc4a7c",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)",
+    "files": [
+     "src/pages/MarketingHub.tsx"
+    ]
+   },
    {
     "sha": "d83acfb",
     "date": "2026-11-21",
@@ -306738,19 +306747,6 @@
      ".github/workflows/dependency-review.yml",
      "docs/ci/README.md"
     ]
-   },
-   {
-    "sha": "677b193",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)",
-    "files": [
-     "src/components/triggers/AdvancedTriggersPanel.tsx",
-     "src/components/triggers/advanced-triggers/BundlesTab.tsx",
-     "src/components/triggers/advanced-triggers/__tests__/BundlesTab.test.tsx",
-     "src/lib/__tests__/triggerPlaybook.test.ts",
-     "src/lib/triggerPlaybook.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306803,6 +306799,10 @@
     2
    ],
    [
+    "src/pages/MarketingHub.tsx",
+    1
+   ],
+   [
     "supabase/functions/evolution-api/index.ts",
     1
    ],
@@ -306828,10 +306828,6 @@
    ],
    [
     "supabase/functions/generate-insights/index.ts",
-    1
-   ],
-   [
-    "package-lock.json",
     1
    ]
   ]
