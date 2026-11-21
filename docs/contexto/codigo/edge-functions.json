@@ -3037,7 +3037,7 @@
    "nome": "send-sms-campaign",
    "entrada": "supabase/functions/send-sms-campaign/index.ts",
    "arquivos": 1,
-   "linhas": 186,
+   "linhas": 176,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -3051,7 +3051,6 @@
    "rpcs": [],
    "env": [
     "LOVABLE_API_KEY",
-    "SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL",
     "TWILIO_API_KEY"

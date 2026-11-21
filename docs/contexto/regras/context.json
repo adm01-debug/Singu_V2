@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "4bc4a7c732851574d80bf7db42413ea1444bf6c5",
+  "sha": "d1e1811b8b5630f0f1cd9bdf3123732c3727a6e9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 14:29 UTC",
+  "generated_at": "2026-11-21 14:46 UTC",
   "files_total": 3991,
   "code_files": 3518,
-  "code_lines": 474371
+  "code_lines": 474387
  },
  "version": "1.3.2",
- "facts_hash": "df4c15e2e8c697ee",
+ "facts_hash": "da9410b1f88f9636",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -105249,7 +105249,6 @@
     ],
     "env": [
      "LOVABLE_API_KEY",
-     "SUPABASE_ANON_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL",
      "TWILIO_API_KEY"
@@ -111890,7 +111889,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 26960,
+   "lines": 26976,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -118485,7 +118484,6 @@
     "supabase/functions/playbook-recommender/index.ts",
     "supabase/functions/retry-behavioral-profile/index.ts",
     "supabase/functions/semantic-search/index.ts",
-    "supabase/functions/send-sms-campaign/index.ts",
     "supabase/functions/social-behavior-analyzer/index.ts",
     "supabase/functions/social-profile-scraper/index.ts",
     "supabase/functions/visual-search/index.ts",
@@ -289049,7 +289047,7 @@
   },
   "supabase/functions/_shared/auth.ts": {
    "path": "supabase/functions/_shared/auth.ts",
-   "lines": 318,
+   "lines": 344,
    "exports": [
     "function timingSafeStringEqual",
     "const corsHeaders",
@@ -289064,6 +289062,7 @@
     "function withAuthOrServiceRole",
     "function requireCronSecret",
     "function guardBody",
+    "function requireCronSecretOrAuth",
     "function requireWebhookSecret"
    ],
    "env": [
@@ -297277,7 +297276,7 @@
   },
   "supabase/functions/send-sms-campaign/index.ts": {
    "path": "supabase/functions/send-sms-campaign/index.ts",
-   "lines": 186,
+   "lines": 176,
    "tables": [
     {
      "table": "sms_campaigns",
@@ -297350,7 +297349,6 @@
    },
    "env": [
     "LOVABLE_API_KEY",
-    "SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL",
     "TWILIO_API_KEY"
@@ -305688,10 +305686,29 @@
   }
  },
  "git": {
-  "sha": "4bc4a7c732851574d80bf7db42413ea1444bf6c5",
+  "sha": "d1e1811b8b5630f0f1cd9bdf3123732c3727a6e9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "d1e1811",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)",
+    "files": [
+     "supabase/functions/_shared/auth.ts",
+     "supabase/functions/check-health-alerts/index.ts",
+     "supabase/functions/nurturing-runner/index.ts",
+     "supabase/functions/process-webhook-dlq/index.ts",
+     "supabase/functions/revops-snapshot-builder/index.ts",
+     "supabase/functions/send-sms-campaign/index.ts",
+     "supabase/functions/smart-notify/index.ts",
+     "supabase/functions/social-events-detector/index.ts",
+     "supabase/functions/sync-social-interests/index.ts",
+     "supabase/functions/template-success-notifications/index.ts",
+     "supabase/functions/validation-queue-worker/index.ts"
+    ]
+   },
    {
     "sha": "4bc4a7c",
     "date": "2026-11-21",
@@ -306737,16 +306754,6 @@
      "supabase/migrations/20261118182619_get_activity_overview.sql",
      "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql"
     ]
-   },
-   {
-    "sha": "62b6b2a",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "ci(security): dependency review barra CVE novo high/critical nos PRs (#273)",
-    "files": [
-     ".github/workflows/dependency-review.yml",
-     "docs/ci/README.md"
-    ]
    }
   ],
   "hot_files": [
@@ -306799,35 +306806,35 @@
     2
    ],
    [
-    "src/pages/MarketingHub.tsx",
+    "supabase/functions/_shared/auth.ts",
     1
    ],
    [
-    "supabase/functions/evolution-api/index.ts",
+    "supabase/functions/check-health-alerts/index.ts",
     1
    ],
    [
-    "src/components/nlp/CommunicationCoherencePanel.tsx",
+    "supabase/functions/nurturing-runner/index.ts",
     1
    ],
    [
-    "src/pages/ErpViewer.tsx",
+    "supabase/functions/process-webhook-dlq/index.ts",
     1
    ],
    [
-    "src/components/nlp/MetaProgramsProfiler.tsx",
+    "supabase/functions/revops-snapshot-builder/index.ts",
     1
    ],
    [
-    "src/pages/Insights.tsx",
+    "supabase/functions/send-sms-campaign/index.ts",
     1
    ],
    [
-    "src/pages/insights/InsightsContent.tsx",
+    "supabase/functions/smart-notify/index.ts",
     1
    ],
    [
-    "supabase/functions/generate-insights/index.ts",
+    "supabase/functions/social-events-detector/index.ts",
     1
    ]
   ]

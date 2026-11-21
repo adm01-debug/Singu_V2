@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)",
    "fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)",
    "fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)",
    "fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)",
-   "feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)",
-   "fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)"
+   "feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)"
   ]
  },
  "pr_template": null,

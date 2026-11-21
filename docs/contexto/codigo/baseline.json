@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "4bc4a7c732851574d80bf7db42413ea1444bf6c5",
+  "commit": "d1e1811b8b5630f0f1cd9bdf3123732c3727a6e9",
   "branch": "main",
-  "data_commit": "2026-11-21T11:28:52-03:00",
+  "data_commit": "2026-11-21T11:45:35-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "d1e1811",
+    "data": "2026-11-21",
+    "assunto": "fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)"
+   },
    {
     "sha": "4bc4a7c",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "6bfdba5",
     "data": "2026-11-20",
     "assunto": "chore(ci): forca nova rodada do Supabase Preview pos-merge 267"
-   },
-   {
-    "sha": "e6f4c68",
-    "data": "2026-11-20",
-    "assunto": "chore(audit): newline final em mutations.ts"
    }
   ],
-  "arquivos_mudados_7d": 924,
+  "arquivos_mudados_7d": 935,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -148,11 +148,11 @@
     "mudancas": 21
    },
    {
-    "pasta": "scripts/migration/storage",
-    "mudancas": 20
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 21
    },
    {
-    "pasta": "supabase/functions/_shared",
+    "pasta": "scripts/migration/storage",
     "mudancas": 20
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 136
+    "commits": 137
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3886,
   "arquivos_codigo": 2238,
-  "linhas_codigo": 417724,
+  "linhas_codigo": 417740,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 26960
+   "linhas": 26976
   },
   "tailwind.config.ts": {
    "arquivos": 1,
