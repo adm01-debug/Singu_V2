@@ -4,11 +4,11 @@
  "presente": true,
  "como_gerar": "uvx --from \"graphifyy[sql]\" graphify update .  (ou: bun run graph:update); saída em graphify-out/ — graph.json e graph.html NÃO são versionados (dezenas de MB); use `graphify query/path/explain` localmente",
  "relatorio": null,
- "commit_do_grafo": "b5d24314be213a1cbefbb0cbb3367833bc2b69e2",
+ "commit_do_grafo": "4e6995911bff12cf35d29cf2d045f638c23395d6",
  "grafo_atual": true,
  "nos": 25778,
- "arestas": 41126,
- "comunidades_total": 3057,
+ "arestas": 41109,
+ "comunidades_total": 3064,
  "relacoes": {
   "calls": 3261,
   "cites": 11,
@@ -24,11 +24,11 @@
   "rationale_for": 85,
   "re_exports": 313,
   "reads_from": 1587,
-  "references": 2512,
+  "references": 2495,
   "triggers": 586
  },
  "origem": {
-  "EXTRACTED": 39528,
+  "EXTRACTED": 39511,
   "INFERRED": 1598
  },
  "comunidades": [
@@ -909,6 +909,16 @@
    ]
   },
   {
+   "id": 144,
+   "nome": "20260110000000_baseline_tabelas_base.sql",
+   "nos": 61,
+   "callables": 0,
+   "arquivos": 1,
+   "exemplos_arquivos": [
+    "supabase/migrations/20260110000000_baseline_tabelas_base.sql"
+   ]
+  },
+  {
    "id": 316,
    "nome": "C1 — Documentos de produto, UX, QA, dívida técnica e auditorias × código real",
    "nos": 61,
@@ -959,7 +969,7 @@
    ]
   },
   {
-   "id": 144,
+   "id": 153,
    "nome": "_pgdocs.py",
    "nos": 58,
    "callables": 30,
@@ -1003,16 +1013,6 @@
     "src/lib/resilientFetch.test.ts",
     "src/lib/resilientFetch.ts",
     "supabase/functions/sequence-processor/index.ts"
-   ]
-  },
-  {
-   "id": 153,
-   "nome": "20260110000000_baseline_tabelas_base.sql",
-   "nos": 56,
-   "callables": 0,
-   "arquivos": 1,
-   "exemplos_arquivos": [
-    "supabase/migrations/20260110000000_baseline_tabelas_base.sql"
    ]
   },
   {
@@ -5064,7 +5064,7 @@
   "supabase/migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql": "20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql",
   "supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql": "20260109144945_baseline_tabelas_fundadoras.sql",
   "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql": "20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql",
-  "supabase/migrations/20260110000000_baseline_tabelas_base.sql": "public.cadence_enrollments",
+  "supabase/migrations/20260110000000_baseline_tabelas_base.sql": "20260110000000_baseline_tabelas_base.sql",
   "supabase/migrations/20260110000001_compat_colunas_producao.sql": "20260110000001_compat_colunas_producao.sql",
   "supabase/migrations/20260110000002_baseline_compat_idempotente.sql": "public.company_addresses",
   "supabase/migrations/20260111000000_garante_colunas_homologacao_suppliers.sql": "20260111000000_garante_colunas_homologacao_suppliers.sql",

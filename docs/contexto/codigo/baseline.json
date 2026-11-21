@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "b5d24314be213a1cbefbb0cbb3367833bc2b69e2",
+  "commit": "4e6995911bff12cf35d29cf2d045f638c23395d6",
   "branch": "main",
-  "data_commit": "2026-11-20T17:13:53-03:00",
+  "data_commit": "2026-11-21T08:28:29-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "4e69959",
+    "data": "2026-11-21",
+    "assunto": "fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)"
+   },
    {
     "sha": "b5d2431",
     "data": "2026-11-20",
@@ -126,14 +131,9 @@
     "sha": "097e860",
     "data": "2026-11-19",
     "assunto": "feat(gatilhos): liga conflitos, sinergias e alternativas dos gatilhos estendidos (#271)"
-   },
-   {
-    "sha": "f746393",
-    "data": "2026-11-19",
-    "assunto": "fix(pnl): confiança de metaprogramas passa a ser medida em vez de fixa em 75 (#269)"
    }
   ],
-  "arquivos_mudados_7d": 1094,
+  "arquivos_mudados_7d": 1093,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 130
+    "commits": 131
    },
    {
     "autor": "devin-ai-integration[bot]",

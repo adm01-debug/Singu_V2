@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "b5d24314be213a1cbefbb0cbb3367833bc2b69e2",
+  "sha": "4e6995911bff12cf35d29cf2d045f638c23395d6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-20 21:10 UTC",
+  "generated_at": "2026-11-21 11:29 UTC",
   "files_total": 3991,
   "code_files": 3518,
-  "code_lines": 473835
+  "code_lines": 474249
  },
  "version": "1.3.2",
- "facts_hash": "1067b9b9b38a37e5",
+ "facts_hash": "2ccaa903ab9bf81a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112164,7 +112164,7 @@
   {
    "module": "supabase/migrations",
    "files": 1106,
-   "lines": 103584,
+   "lines": 103998,
    "tables": [
     "users"
    ],
@@ -299769,7 +299769,7 @@
   },
   "supabase/migrations/20260110000000_baseline_tabelas_base.sql": {
    "path": "supabase/migrations/20260110000000_baseline_tabelas_base.sql",
-   "lines": 1450
+   "lines": 1864
   },
   "supabase/migrations/20260110000001_compat_colunas_producao.sql": {
    "path": "supabase/migrations/20260110000001_compat_colunas_producao.sql",
@@ -305650,10 +305650,19 @@
   }
  },
  "git": {
-  "sha": "b5d24314be213a1cbefbb0cbb3367833bc2b69e2",
+  "sha": "4e6995911bff12cf35d29cf2d045f638c23395d6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "4e69959",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)",
+    "files": [
+     "supabase/migrations/20260110000000_baseline_tabelas_base.sql"
+    ]
+   },
    {
     "sha": "b5d2431",
     "date": "2026-11-20",
@@ -306721,22 +306730,13 @@
      "src/hooks/useContactDaysWithout.ts",
      "src/hooks/useInteractionsRpc.ts"
     ]
-   },
-   {
-    "sha": "12454df",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(territorios): módulo inteiro estava fora de contrato com o banco (#265)",
-    "files": [
-     "src/components/territories/TerritoryCard.tsx",
-     "src/components/territories/TerritoryForm.tsx",
-     "src/components/territories/TerritoryMap.tsx",
-     "src/hooks/useTerritories.ts",
-     "src/pages/Territorios.tsx"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "supabase/migrations/20260110000000_baseline_tabelas_base.sql",
+    2
+   ],
    [
     "supabase/migrations/20260323155106_4e591bd9-2acd-4735-a4f7-2f6008e560f8.sql",
     2
@@ -306811,10 +306811,6 @@
    ],
    [
     "supabase/migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20260111010914_d0b0ab7c-31d9-4a05-99c5-bbd77320bdd8.sql",
     1
    ]
   ]
