@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(db): baseline idempotente para stubs com defaults (42P13) (#301)",
    "feat(nurturing): envia email real via send-transactional-email (#302)",
    "feat: inscrição de contato em workflow de nurturing pela UI (#300)",
    "feat(sequencias): tracking de abertura e clique no email transacional (#299)",
-   "fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)",
-   "fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)"
+   "fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)"
   ]
  },
  "pr_template": null,

@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `08dc7979ca36e3fb1bedf4340fc3cee8d6c0e09b` (2026-11-21T15:19:17-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `5b8ee5bc1c310c8867170e07dc2bdc6c9d96f709` (2026-11-21T15:47:11-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -445,7 +445,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25793 nós · 41140 arestas · 3081 comunidades · grafo do commit `08dc7979`
+- 25793 nós · 41140 arestas · 3081 comunidades · grafo do commit `5b8ee5bc`
 - comunidades maiores: ref_hooks (321), sonner (296), framer-motion (294), ref_lib (288), 02_tables.sql (259), useAuth (246), react (242), date-fns (239), react-router-dom (237), lucide-react (229), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (209)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-21 `5b8ee5b` fix(db): baseline idempotente para stubs com defaults (42P13) (#301)
 - 2026-11-21 `08dc797` feat(nurturing): envia email real via send-transactional-email (#302)
 - 2026-11-21 `8677d68` feat: inscrição de contato em workflow de nurturing pela UI (#300)
 - 2026-11-21 `6b9a9e4` feat(sequencias): tracking de abertura e clique no email transacional (#299)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-21 `4e69959` fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)
 - 2026-11-20 `b5d2431` docs(auditoria): linha de base do estado real em docs/pendencias (#289)
 - 2026-11-20 `2020e5b` fix(insights): persiste insights gerados por IA na tabela insights (#288)
-- 2026-11-20 `3e6b290` fix(deps): bump react-router 7.18.6 e vitest 5.1.1 (alerts dependabot) (#286)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "08dc7979ca36e3fb1bedf4340fc3cee8d6c0e09b",
+  "sha": "5b8ee5bc1c310c8867170e07dc2bdc6c9d96f709",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 18:20 UTC",
+  "generated_at": "2026-11-21 18:48 UTC",
   "files_total": 3993,
   "code_files": 3520,
-  "code_lines": 474796
+  "code_lines": 474810
  },
  "version": "1.3.2",
- "facts_hash": "d20cf0f2dc450cba",
+ "facts_hash": "e2609f790bb6ab96",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -64640,61 +64640,6 @@
     "raises": [],
     "tables": []
    },
-   "ativar_cliente": {
-    "args": "p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
-   "inativar_cliente": {
-    "args": "p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
-   "transferir_cliente": {
-    "args": "p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
-   "registrar_compra": {
-    "args": "p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
-   "sdr_qualificar_cliente": {
-    "args": "p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
    "auto_preencher_nomes_contato": {
     "args": "",
     "returns": "trigger",
@@ -64758,6 +64703,61 @@
     "security_definer": false,
     "search_path": false,
     "body": "BEGIN RETURN '{\"status\":\"ok\"}'::json; END;",
+    "raises": [],
+    "tables": []
+   },
+   "ativar_cliente": {
+    "args": "p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
+    "raises": [],
+    "tables": []
+   },
+   "inativar_cliente": {
+    "args": "p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
+    "raises": [],
+    "tables": []
+   },
+   "transferir_cliente": {
+    "args": "p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
+    "raises": [],
+    "tables": []
+   },
+   "registrar_compra": {
+    "args": "p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
+    "raises": [],
+    "tables": []
+   },
+   "sdr_qualificar_cliente": {
+    "args": "p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
     "raises": [],
     "tables": []
    },
@@ -112177,7 +112177,7 @@
   {
    "module": "supabase/migrations",
    "files": 1106,
-   "lines": 103998,
+   "lines": 104012,
    "tables": [
     "users"
    ],
@@ -200512,61 +200512,6 @@
     "raises": [],
     "tables": []
    },
-   "ativar_cliente": {
-    "args": "p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
-   "inativar_cliente": {
-    "args": "p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
-   "transferir_cliente": {
-    "args": "p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
-   "registrar_compra": {
-    "args": "p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
-   "sdr_qualificar_cliente": {
-    "args": "p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text",
-    "returns": "jsonb",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
-    "raises": [],
-    "tables": []
-   },
    "auto_preencher_nomes_contato": {
     "args": "",
     "returns": "trigger",
@@ -200630,6 +200575,61 @@
     "security_definer": false,
     "search_path": false,
     "body": "BEGIN RETURN '{\"status\":\"ok\"}'::json; END;",
+    "raises": [],
+    "tables": []
+   },
+   "ativar_cliente": {
+    "args": "p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
+    "raises": [],
+    "tables": []
+   },
+   "inativar_cliente": {
+    "args": "p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
+    "raises": [],
+    "tables": []
+   },
+   "transferir_cliente": {
+    "args": "p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
+    "raises": [],
+    "tables": []
+   },
+   "registrar_compra": {
+    "args": "p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
+    "raises": [],
+    "tables": []
+   },
+   "sdr_qualificar_cliente": {
+    "args": "p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN RETURN jsonb_build_object('ok', true); END;",
     "raises": [],
     "tables": []
    },
@@ -299944,12 +299944,12 @@
   },
   "supabase/migrations/20260110000001_compat_colunas_producao.sql": {
    "path": "supabase/migrations/20260110000001_compat_colunas_producao.sql",
-   "lines": 582,
+   "lines": 589,
    "uses_service_role": true
   },
   "supabase/migrations/20260110000002_baseline_compat_idempotente.sql": {
    "path": "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
-   "lines": 2879,
+   "lines": 2886,
    "rule_comments": [
     "267: o Supabase Preview aplica APENAS as migrations novas"
    ],
@@ -305821,10 +305821,20 @@
   }
  },
  "git": {
-  "sha": "08dc7979ca36e3fb1bedf4340fc3cee8d6c0e09b",
+  "sha": "5b8ee5bc1c310c8867170e07dc2bdc6c9d96f709",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "5b8ee5b",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(db): baseline idempotente para stubs com defaults (42P13) (#301)",
+    "files": [
+     "supabase/migrations/20260110000001_compat_colunas_producao.sql",
+     "supabase/migrations/20260110000002_baseline_compat_idempotente.sql"
+    ]
+   },
    {
     "sha": "08dc797",
     "date": "2026-11-21",
@@ -306247,15 +306257,6 @@
     "files": [
      "supabase/functions/external-data/mutations.ts"
     ]
-   },
-   {
-    "sha": "c51bc5f",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "feat(audit): injeta logAudit nas 4 escritas do external-data (resgate hardening Singu)",
-    "files": [
-     "supabase/functions/external-data/mutations.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -306284,8 +306285,12 @@
     2
    ],
    [
-    "supabase/functions/external-data/mutations.ts",
-    2
+    "supabase/migrations/20260110000001_compat_colunas_producao.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20260110000002_baseline_compat_idempotente.sql",
+    1
    ],
    [
     "supabase/functions/_shared/edge-types-contract_test.ts",
@@ -306333,10 +306338,6 @@
    ],
    [
     "supabase/functions/smart-notify/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/social-events-detector/index.ts",
     1
    ]
   ]
