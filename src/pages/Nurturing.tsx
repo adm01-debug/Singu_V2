@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Workflow, Plus, Play, Pause, Trash2, Users, ArrowRight, Mail, MessageSquare, Clock, CheckSquare } from 'lucide-react';
+import { Workflow, Plus, Play, Pause, Trash2, Users, UserPlus, ArrowRight, Mail, MessageSquare, Clock, CheckSquare } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { PageHeader } from '@/components/navigation/PageHeader';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,6 +12,8 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useNurturingWorkflows, NurturingStep } from '@/hooks/useNurturingWorkflows';
+import { useEnrollContact } from '@/hooks/useNurturingExecutions';
+import { EnrollContactDialog } from '@/components/enroll/EnrollContactDialog';
 
 const STEP_ICONS: Record<string, typeof Mail> = { email: Mail, whatsapp: MessageSquare, task: CheckSquare, wait: Clock };
 const STEP_LABELS: Record<string, string> = { email: 'Email', whatsapp: 'WhatsApp', task: 'Tarefa', wait: 'Aguardar' };
@@ -19,7 +21,9 @@ const TRIGGER_LABELS: Record<string, string> = { manual: 'Manual', tag_added: 'T
 
 export default function NurturingPage() {
   const { workflows, isLoading, create, remove, toggleActive } = useNurturingWorkflows();
+  const enroll = useEnrollContact();
   const [showNew, setShowNew] = useState(false);
+  const [enrollWfId, setEnrollWfId] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [triggerType, setTriggerType] = useState('manual');
@@ -77,6 +81,9 @@ export default function NurturingPage() {
                     {wf.description && <p className="text-[10px] text-muted-foreground mt-0.5">{wf.description}</p>}
                   </div>
                   <div className="flex gap-1">
+                    <Button variant="outline" size="sm" className="h-7 w-7 p-0" aria-label="Inscrever contato" onClick={() => setEnrollWfId(wf.id)}>
+                      <UserPlus className="h-3 w-3" />
+                    </Button>
                     <Button variant="outline" size="sm" className="h-7 w-7 p-0" aria-label={wf.is_active ? 'Pausar fluxo' : 'Ativar fluxo'} onClick={() => toggleActive.mutate({ id: wf.id, is_active: !wf.is_active })}>
                       {wf.is_active ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
                     </Button>
@@ -181,6 +188,18 @@ export default function NurturingPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* Enroll Contact Dialog */}
+        <EnrollContactDialog
+          title="Inscrever contato no workflow"
+          description="O contato entra no fluxo e passa a receber as etapas automaticamente."
+          enrollLabel="Inscrever contato"
+          cachePrefix="nurturing-enroll-contacts"
+          open={!!enrollWfId}
+          onOpenChange={nextOpen => { if (!nextOpen) setEnrollWfId(null); }}
+          onEnroll={contactId => enroll.mutateAsync({ workflow_id: enrollWfId!, contact_id: contactId })}
+          loading={enroll.isPending}
+        />
       </div>
     </AppLayout>
   );
