@@ -218681,6 +218681,10 @@
               "hits": 1
             },
             {
+              "file": "supabase/functions/evolution-api/index.ts",
+              "hits": 1
+            },
+            {
               "file": "supabase/functions/external-data/database.ts",
               "hits": 1
             },
@@ -218763,13 +218767,9 @@
             {
               "file": "supabase/migrations/20260421194349_c661667c-ea56-4174-b4c8-fdca4a86093b.sql",
               "hits": 2
-            },
-            {
-              "file": "supabase/migrations/20260507194929_8a897147-414a-4dff-ad62-bf627f7d8dad.sql",
-              "hits": 1
             }
           ],
-          "code_total_files": 83,
+          "code_total_files": 84,
           "cron": [],
           "db": [
             "public.claim_behavioral_profile_retry",
