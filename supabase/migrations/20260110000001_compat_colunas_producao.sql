@@ -357,18 +357,23 @@ CREATE INDEX IF NOT EXISTS idx_companies_search ON public.companies USING gin (s
 -- Corpo neutro; implementacao real destas rotinas vive em
 -- migrations posteriores ou fora do repo.
 -- ============================================================
+DROP FUNCTION IF EXISTS public.ativar_cliente(uuid, integer, text);
 CREATE OR REPLACE FUNCTION public.ativar_cliente(p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text)
 RETURNS jsonb LANGUAGE plpgsql AS $$ BEGIN RETURN jsonb_build_object('ok', true); END; $$;
 
+DROP FUNCTION IF EXISTS public.inativar_cliente(uuid, text, integer, text);
 CREATE OR REPLACE FUNCTION public.inativar_cliente(p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text)
 RETURNS jsonb LANGUAGE plpgsql AS $$ BEGIN RETURN jsonb_build_object('ok', true); END; $$;
 
+DROP FUNCTION IF EXISTS public.transferir_cliente(uuid, integer, text, integer, text);
 CREATE OR REPLACE FUNCTION public.transferir_cliente(p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text)
 RETURNS jsonb LANGUAGE plpgsql AS $$ BEGIN RETURN jsonb_build_object('ok', true); END; $$;
 
+DROP FUNCTION IF EXISTS public.registrar_compra(uuid, numeric, text, text);
 CREATE OR REPLACE FUNCTION public.registrar_compra(p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text)
 RETURNS jsonb LANGUAGE plpgsql AS $$ BEGIN RETURN jsonb_build_object('ok', true); END; $$;
 
+DROP FUNCTION IF EXISTS public.sdr_qualificar_cliente(uuid, integer, integer, text, text);
 CREATE OR REPLACE FUNCTION public.sdr_qualificar_cliente(p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text)
 RETURNS jsonb LANGUAGE plpgsql AS $$ BEGIN RETURN jsonb_build_object('ok', true); END; $$;
 
@@ -390,12 +395,14 @@ RETURNS json LANGUAGE plpgsql AS $$ BEGIN RETURN '{}'::json; END; $$;
 CREATE OR REPLACE FUNCTION public.get_health_check()
 RETURNS json LANGUAGE plpgsql AS $$ BEGIN RETURN '{"status":"ok"}'::json; END; $$;
 
+DROP FUNCTION IF EXISTS public.search_companies(text, integer);
 CREATE OR REPLACE FUNCTION public.search_companies(search_term text, max_results integer)
 RETURNS TABLE(id uuid, nome_fantasia text, razao_social text, cnpj text, status text, is_customer boolean)
 LANGUAGE plpgsql AS $$ BEGIN
   RETURN QUERY SELECT NULL::uuid AS id, NULL::text AS nome_fantasia, NULL::text AS razao_social, NULL::text AS cnpj, NULL::text AS status, NULL::boolean AS is_customer LIMIT 0;
 END; $$;
 
+DROP FUNCTION IF EXISTS public.search_contacts(text, integer);
 CREATE OR REPLACE FUNCTION public.search_contacts(search_term text, max_results integer)
 RETURNS TABLE(id uuid, full_name text, first_name text, last_name text, company_id uuid)
 LANGUAGE plpgsql AS $$ BEGIN
