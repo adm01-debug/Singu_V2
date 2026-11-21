@@ -1248,202 +1248,616 @@ CREATE TABLE IF NOT EXISTS public.customer_sdr_history (
   CONSTRAINT customer_sdr_history_pkey PRIMARY KEY (id)
 );
 
-ALTER TABLE ONLY public.automations ADD CONSTRAINT automations_trigger_type_check CHECK ((trigger_type = ANY (ARRAY['event'::text, 'schedule'::text, 'condition'::text])));
-ALTER TABLE ONLY public.badges ADD CONSTRAINT badges_category_check CHECK ((category = ANY (ARRAY['sales'::text, 'engagement'::text, 'productivity'::text, 'milestone'::text, 'special'::text])));
-ALTER TABLE ONLY public.calendar_events ADD CONSTRAINT chk_calendar_events_status CHECK ((status = ANY (ARRAY['scheduled'::text, 'confirmed'::text, 'completed'::text, 'cancelled'::text, 'tentative'::text])));
-ALTER TABLE ONLY public.campaigns ADD CONSTRAINT chk_campaigns_status CHECK ((status = ANY (ARRAY['draft'::text, 'active'::text, 'paused'::text, 'completed'::text, 'cancelled'::text, 'archived'::text])));
-ALTER TABLE ONLY public.campaigns ADD CONSTRAINT chk_campaigns_type CHECK ((type = ANY (ARRAY['email'::text, 'sms'::text, 'whatsapp'::text, 'push'::text, 'in_app'::text])));
-ALTER TABLE ONLY public.commission_rules ADD CONSTRAINT commission_rules_applies_to_check CHECK ((applies_to = ANY (ARRAY['all'::text, 'new_customers'::text, 'existing_customers'::text])));
-ALTER TABLE ONLY public.commission_rules ADD CONSTRAINT commission_rules_rule_type_check CHECK ((rule_type = ANY (ARRAY['percentage'::text, 'fixed'::text, 'tiered'::text])));
-ALTER TABLE ONLY public.commissions ADD CONSTRAINT commissions_status_check CHECK ((status = ANY (ARRAY['pending'::text, 'approved'::text, 'paid'::text, 'cancelled'::text])));
-ALTER TABLE ONLY public.commissions ADD CONSTRAINT commissions_rule_id_fkey FOREIGN KEY (rule_id) REFERENCES commission_rules(id);
-ALTER TABLE ONLY public.company_cnaes ADD CONSTRAINT company_cnaes_cnae_codigo_fkey FOREIGN KEY (cnae_codigo) REFERENCES cnaes(codigo);
-ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_combined_score_check CHECK (((combined_score >= (1)::numeric) AND (combined_score <= (5)::numeric)));
-ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_frequency_score_check CHECK (((frequency_score >= 1) AND (frequency_score <= 5)));
-ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_monetary_score_check CHECK (((monetary_score >= 1) AND (monetary_score <= 5)));
-ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_overall_trend_check CHECK ((overall_trend = ANY (ARRAY['improving'::text, 'stable'::text, 'declining'::text])));
-ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_recency_score_check CHECK (((recency_score >= 1) AND (recency_score <= 5)));
-ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_access_level_check CHECK ((access_level = ANY (ARRAY['direct'::text, 'indirect'::text, 'no_access'::text, 'pending'::text])));
-ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_buying_role_check CHECK ((buying_role = ANY (ARRAY['economic_buyer'::text, 'technical_buyer'::text, 'user_buyer'::text, 'coach'::text, 'gatekeeper'::text, 'influencer'::text, 'blocker'::text, 'champion'::text, 'unknown'::text])));
-ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_engagement_priority_check CHECK ((engagement_priority = ANY (ARRAY['critical'::text, 'high'::text, 'medium'::text, 'low'::text, 'monitor'::text])));
-ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_interest_level_check CHECK (((interest_level >= 0) AND (interest_level <= 10)));
-ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_power_level_check CHECK (((power_level >= 0) AND (power_level <= 10)));
-ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_stance_check CHECK ((stance = ANY (ARRAY['strong_advocate'::text, 'advocate'::text, 'neutral'::text, 'skeptic'::text, 'blocker'::text])));
-ALTER TABLE ONLY public.deal_competitors ADD CONSTRAINT deal_competitors_status_check CHECK ((status = ANY (ARRAY['competing'::text, 'won_against'::text, 'lost_to'::text])));
-ALTER TABLE ONLY public.disc_templates ADD CONSTRAINT disc_templates_disc_type_check CHECK (((disc_type)::text = ANY (ARRAY[('D'::character varying)::text, ('I'::character varying)::text, ('S'::character varying)::text, ('C'::character varying)::text])));
-ALTER TABLE ONLY public.grupos_economicos ADD CONSTRAINT grupos_economicos_tipo_check CHECK ((tipo = ANY (ARRAY['HOLDING'::text, 'COOPERATIVA_CREDITO'::text, 'COOPERATIVA_AGRO'::text, 'REDE_FRANQUIAS'::text, 'GRUPO_FAMILIAR'::text, 'GRUPO_EMPRESARIAL'::text, 'MATRIZ_FILIAIS'::text])));
-ALTER TABLE ONLY public.meetings ADD CONSTRAINT meetings_meeting_type_check CHECK ((meeting_type = ANY (ARRAY['call'::text, 'video'::text, 'presencial'::text])));
-ALTER TABLE ONLY public.meetings ADD CONSTRAINT meetings_status_check CHECK ((status = ANY (ARRAY['scheduled'::text, 'confirmed'::text, 'completed'::text, 'cancelled'::text, 'no_show'::text])));
-ALTER TABLE ONLY public.proposals ADD CONSTRAINT proposals_discount_type_check CHECK ((discount_type = ANY (ARRAY['percentage'::text, 'fixed'::text])));
-ALTER TABLE ONLY public.proposals ADD CONSTRAINT proposals_status_check CHECK ((status = ANY (ARRAY['rascunho'::text, 'enviada'::text, 'visualizada'::text, 'aceita'::text, 'rejeitada'::text, 'expirada'::text])));
-ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_depth_score_check CHECK (((depth_score >= 0) AND (depth_score <= 100)));
-ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_engagement_score_check CHECK (((engagement_score >= 0) AND (engagement_score <= 100)));
-ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_frequency_score_check CHECK (((frequency_score >= 0) AND (frequency_score <= 100)));
-ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_recency_score_check CHECK (((recency_score >= 0) AND (recency_score <= 100)));
-ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_score_check CHECK (((score >= 0) AND (score <= 100)));
-ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_sentiment_score_check CHECK (((sentiment_score >= 0) AND (sentiment_score <= 100)));
-ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_trend_check CHECK ((trend = ANY (ARRAY['improving'::text, 'stable'::text, 'declining'::text])));
-ALTER TABLE ONLY public.reminders ADD CONSTRAINT chk_reminders_priority CHECK ((priority = ANY (ARRAY['alta'::text, 'media'::text, 'baixa'::text, 'urgente'::text])));
-ALTER TABLE ONLY public.scheduled_visits ADD CONSTRAINT chk_scheduled_visits_status CHECK ((status = ANY (ARRAY['scheduled'::text, 'completed'::text, 'cancelled'::text, 'no_show'::text, 'rescheduled'::text])));
-ALTER TABLE ONLY public.sla_rules ADD CONSTRAINT sla_rules_entity_type_check CHECK ((entity_type = ANY (ARRAY['company'::text, 'deal'::text, 'interaction'::text, 'proposal'::text])));
-ALTER TABLE ONLY public.sla_violations ADD CONSTRAINT sla_violations_sla_rule_id_fkey FOREIGN KEY (sla_rule_id) REFERENCES sla_rules(id);
-ALTER TABLE ONLY public.territory_assignments ADD CONSTRAINT territory_assignments_territory_id_fkey FOREIGN KEY (territory_id) REFERENCES territories(id) ON DELETE CASCADE;
-ALTER TABLE ONLY public.user_badges ADD CONSTRAINT user_badges_badge_id_fkey FOREIGN KEY (badge_id) REFERENCES badges(id) ON DELETE CASCADE;
-ALTER TABLE ONLY public.user_goals ADD CONSTRAINT user_goals_goal_type_check CHECK ((goal_type = ANY (ARRAY['deals_count'::text, 'deals_value'::text, 'interactions'::text, 'new_companies'::text, 'proposals'::text])));
-ALTER TABLE ONLY public.user_goals ADD CONSTRAINT user_goals_period_type_check CHECK ((period_type = ANY (ARRAY['daily'::text, 'weekly'::text, 'monthly'::text, 'quarterly'::text, 'yearly'::text])));
-ALTER TABLE ONLY public.cadence_enrollments ADD CONSTRAINT cadence_enrollments_status_check CHECK ((status = ANY (ARRAY['active'::text, 'paused'::text, 'completed'::text, 'replied'::text, 'bounced'::text, 'opted_out'::text])));
-ALTER TABLE ONLY public.cadence_enrollments ADD CONSTRAINT cadence_enrollments_cadence_id_fkey FOREIGN KEY (cadence_id) REFERENCES sales_cadences(id) ON DELETE CASCADE;
-ALTER TABLE ONLY public.campaign_members ADD CONSTRAINT chk_campaign_members_status CHECK ((status = ANY (ARRAY['pending'::text, 'active'::text, 'completed'::text, 'bounced'::text, 'unsubscribed'::text, 'opted_out'::text])));
-ALTER TABLE ONLY public.campaign_members ADD CONSTRAINT campaign_members_campaign_id_fkey FOREIGN KEY (campaign_id) REFERENCES campaigns(id) ON DELETE CASCADE;
-ALTER TABLE ONLY public.company_cadences ADD CONSTRAINT chk_company_cadences_status CHECK ((status = ANY (ARRAY['active'::text, 'paused'::text, 'completed'::text, 'archived'::text])));
-ALTER TABLE ONLY public.company_cadences ADD CONSTRAINT company_cadences_cadence_id_fkey FOREIGN KEY (cadence_id) REFERENCES sales_cadences(id);
-ALTER TABLE ONLY public.contact_addresses ADD CONSTRAINT contact_addresses_tipo_check CHECK ((tipo = ANY (ARRAY['residencial'::text, 'profissional'::text, 'cobranca'::text, 'outro'::text])));
-ALTER TABLE ONLY public.contact_addresses ADD CONSTRAINT contact_addresses_created_by_fkey FOREIGN KEY (created_by) REFERENCES users(id);
-ALTER TABLE ONLY public.contact_addresses ADD CONSTRAINT contact_addresses_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES users(id);
-ALTER TABLE ONLY public.coop_sistemas ADD CONSTRAINT coop_sistemas_grupo_economico_id_fkey FOREIGN KEY (grupo_economico_id) REFERENCES grupos_economicos(id);
-ALTER TABLE ONLY public.customers ADD CONSTRAINT chk_customers_ticket_medio CHECK (((ticket_medio IS NULL) OR (ticket_medio >= (0)::numeric)));
-ALTER TABLE ONLY public.customers ADD CONSTRAINT chk_customers_valor_total CHECK (((valor_total_compras IS NULL) OR (valor_total_compras >= (0)::numeric)));
-ALTER TABLE ONLY public.customers ADD CONSTRAINT customers_sdr_id_fkey FOREIGN KEY (sdr_id) REFERENCES users(id);
-ALTER TABLE ONLY public.customers ADD CONSTRAINT customers_vendedor_id_fkey FOREIGN KEY (vendedor_id) REFERENCES users(id);
-ALTER TABLE ONLY public.economic_group_members ADD CONSTRAINT economic_group_members_group_id_fkey FOREIGN KEY (group_id) REFERENCES economic_groups(id) ON DELETE CASCADE;
-ALTER TABLE ONLY public.sdr_closer_assignments ADD CONSTRAINT check_sdr_closer_different CHECK ((sdr_id <> closer_id));
-ALTER TABLE ONLY public.sdr_closer_assignments ADD CONSTRAINT sdr_closer_assignments_closer_id_fkey FOREIGN KEY (closer_id) REFERENCES users(id);
-ALTER TABLE ONLY public.sdr_closer_assignments ADD CONSTRAINT sdr_closer_assignments_criado_por_id_fkey FOREIGN KEY (criado_por_id) REFERENCES users(id);
-ALTER TABLE ONLY public.sdr_closer_assignments ADD CONSTRAINT sdr_closer_assignments_sdr_id_fkey FOREIGN KEY (sdr_id) REFERENCES users(id);
-ALTER TABLE ONLY public.customer_ownership_history ADD CONSTRAINT customer_ownership_history_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE;
-ALTER TABLE ONLY public.customer_ownership_history ADD CONSTRAINT customer_ownership_history_registrado_por_id_fkey FOREIGN KEY (registrado_por_id) REFERENCES users(id);
-ALTER TABLE ONLY public.customer_ownership_history ADD CONSTRAINT customer_ownership_history_vendedor_id_fkey FOREIGN KEY (vendedor_id) REFERENCES users(id);
-ALTER TABLE ONLY public.customer_sdr_history ADD CONSTRAINT customer_sdr_history_resultado_check CHECK ((resultado = ANY (ARRAY['EM_ANDAMENTO'::text, 'QUALIFICADO'::text, 'REATIVADO'::text, 'SEM_INTERESSE'::text, 'SEM_CONTATO'::text, 'TRANSFERIDO'::text])));
-ALTER TABLE ONLY public.customer_sdr_history ADD CONSTRAINT customer_sdr_history_closer_destino_id_fkey FOREIGN KEY (closer_destino_id) REFERENCES users(id);
-ALTER TABLE ONLY public.customer_sdr_history ADD CONSTRAINT customer_sdr_history_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE;
-ALTER TABLE ONLY public.customer_sdr_history ADD CONSTRAINT customer_sdr_history_sdr_id_fkey FOREIGN KEY (sdr_id) REFERENCES users(id);
+-- automations_trigger_type_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'automations_trigger_type_check') THEN
+    ALTER TABLE ONLY public.automations ADD CONSTRAINT automations_trigger_type_check CHECK ((trigger_type = ANY (ARRAY['event'::text, 'schedule'::text, 'condition'::text])));
+  END IF;
+END $cons$;
+-- badges_category_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'badges_category_check') THEN
+    ALTER TABLE ONLY public.badges ADD CONSTRAINT badges_category_check CHECK ((category = ANY (ARRAY['sales'::text, 'engagement'::text, 'productivity'::text, 'milestone'::text, 'special'::text])));
+  END IF;
+END $cons$;
+-- chk_calendar_events_status (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_calendar_events_status') THEN
+    ALTER TABLE ONLY public.calendar_events ADD CONSTRAINT chk_calendar_events_status CHECK ((status = ANY (ARRAY['scheduled'::text, 'confirmed'::text, 'completed'::text, 'cancelled'::text, 'tentative'::text])));
+  END IF;
+END $cons$;
+-- chk_campaigns_status (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_campaigns_status') THEN
+    ALTER TABLE ONLY public.campaigns ADD CONSTRAINT chk_campaigns_status CHECK ((status = ANY (ARRAY['draft'::text, 'active'::text, 'paused'::text, 'completed'::text, 'cancelled'::text, 'archived'::text])));
+  END IF;
+END $cons$;
+-- chk_campaigns_type (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_campaigns_type') THEN
+    ALTER TABLE ONLY public.campaigns ADD CONSTRAINT chk_campaigns_type CHECK ((type = ANY (ARRAY['email'::text, 'sms'::text, 'whatsapp'::text, 'push'::text, 'in_app'::text])));
+  END IF;
+END $cons$;
+-- commission_rules_applies_to_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'commission_rules_applies_to_check') THEN
+    ALTER TABLE ONLY public.commission_rules ADD CONSTRAINT commission_rules_applies_to_check CHECK ((applies_to = ANY (ARRAY['all'::text, 'new_customers'::text, 'existing_customers'::text])));
+  END IF;
+END $cons$;
+-- commission_rules_rule_type_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'commission_rules_rule_type_check') THEN
+    ALTER TABLE ONLY public.commission_rules ADD CONSTRAINT commission_rules_rule_type_check CHECK ((rule_type = ANY (ARRAY['percentage'::text, 'fixed'::text, 'tiered'::text])));
+  END IF;
+END $cons$;
+-- commissions_status_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'commissions_status_check') THEN
+    ALTER TABLE ONLY public.commissions ADD CONSTRAINT commissions_status_check CHECK ((status = ANY (ARRAY['pending'::text, 'approved'::text, 'paid'::text, 'cancelled'::text])));
+  END IF;
+END $cons$;
+-- commissions_rule_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'commissions_rule_id_fkey') THEN
+    ALTER TABLE ONLY public.commissions ADD CONSTRAINT commissions_rule_id_fkey FOREIGN KEY (rule_id) REFERENCES commission_rules(id);
+  END IF;
+END $cons$;
+-- company_cnaes_cnae_codigo_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_cnaes_cnae_codigo_fkey') THEN
+    ALTER TABLE ONLY public.company_cnaes ADD CONSTRAINT company_cnaes_cnae_codigo_fkey FOREIGN KEY (cnae_codigo) REFERENCES cnaes(codigo);
+  END IF;
+END $cons$;
+-- company_rfm_scores_combined_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_rfm_scores_combined_score_check') THEN
+    ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_combined_score_check CHECK (((combined_score >= (1)::numeric) AND (combined_score <= (5)::numeric)));
+  END IF;
+END $cons$;
+-- company_rfm_scores_frequency_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_rfm_scores_frequency_score_check') THEN
+    ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_frequency_score_check CHECK (((frequency_score >= 1) AND (frequency_score <= 5)));
+  END IF;
+END $cons$;
+-- company_rfm_scores_monetary_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_rfm_scores_monetary_score_check') THEN
+    ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_monetary_score_check CHECK (((monetary_score >= 1) AND (monetary_score <= 5)));
+  END IF;
+END $cons$;
+-- company_rfm_scores_overall_trend_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_rfm_scores_overall_trend_check') THEN
+    ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_overall_trend_check CHECK ((overall_trend = ANY (ARRAY['improving'::text, 'stable'::text, 'declining'::text])));
+  END IF;
+END $cons$;
+-- company_rfm_scores_recency_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_rfm_scores_recency_score_check') THEN
+    ALTER TABLE ONLY public.company_rfm_scores ADD CONSTRAINT company_rfm_scores_recency_score_check CHECK (((recency_score >= 1) AND (recency_score <= 5)));
+  END IF;
+END $cons$;
+-- company_stakeholder_map_access_level_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_stakeholder_map_access_level_check') THEN
+    ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_access_level_check CHECK ((access_level = ANY (ARRAY['direct'::text, 'indirect'::text, 'no_access'::text, 'pending'::text])));
+  END IF;
+END $cons$;
+-- company_stakeholder_map_buying_role_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_stakeholder_map_buying_role_check') THEN
+    ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_buying_role_check CHECK ((buying_role = ANY (ARRAY['economic_buyer'::text, 'technical_buyer'::text, 'user_buyer'::text, 'coach'::text, 'gatekeeper'::text, 'influencer'::text, 'blocker'::text, 'champion'::text, 'unknown'::text])));
+  END IF;
+END $cons$;
+-- company_stakeholder_map_engagement_priority_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_stakeholder_map_engagement_priority_check') THEN
+    ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_engagement_priority_check CHECK ((engagement_priority = ANY (ARRAY['critical'::text, 'high'::text, 'medium'::text, 'low'::text, 'monitor'::text])));
+  END IF;
+END $cons$;
+-- company_stakeholder_map_interest_level_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_stakeholder_map_interest_level_check') THEN
+    ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_interest_level_check CHECK (((interest_level >= 0) AND (interest_level <= 10)));
+  END IF;
+END $cons$;
+-- company_stakeholder_map_power_level_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_stakeholder_map_power_level_check') THEN
+    ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_power_level_check CHECK (((power_level >= 0) AND (power_level <= 10)));
+  END IF;
+END $cons$;
+-- company_stakeholder_map_stance_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_stakeholder_map_stance_check') THEN
+    ALTER TABLE ONLY public.company_stakeholder_map ADD CONSTRAINT company_stakeholder_map_stance_check CHECK ((stance = ANY (ARRAY['strong_advocate'::text, 'advocate'::text, 'neutral'::text, 'skeptic'::text, 'blocker'::text])));
+  END IF;
+END $cons$;
+-- deal_competitors_status_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'deal_competitors_status_check') THEN
+    ALTER TABLE ONLY public.deal_competitors ADD CONSTRAINT deal_competitors_status_check CHECK ((status = ANY (ARRAY['competing'::text, 'won_against'::text, 'lost_to'::text])));
+  END IF;
+END $cons$;
+-- disc_templates_disc_type_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'disc_templates_disc_type_check') THEN
+    ALTER TABLE ONLY public.disc_templates ADD CONSTRAINT disc_templates_disc_type_check CHECK (((disc_type)::text = ANY (ARRAY[('D'::character varying)::text, ('I'::character varying)::text, ('S'::character varying)::text, ('C'::character varying)::text])));
+  END IF;
+END $cons$;
+-- grupos_economicos_tipo_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'grupos_economicos_tipo_check') THEN
+    ALTER TABLE ONLY public.grupos_economicos ADD CONSTRAINT grupos_economicos_tipo_check CHECK ((tipo = ANY (ARRAY['HOLDING'::text, 'COOPERATIVA_CREDITO'::text, 'COOPERATIVA_AGRO'::text, 'REDE_FRANQUIAS'::text, 'GRUPO_FAMILIAR'::text, 'GRUPO_EMPRESARIAL'::text, 'MATRIZ_FILIAIS'::text])));
+  END IF;
+END $cons$;
+-- meetings_meeting_type_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'meetings_meeting_type_check') THEN
+    ALTER TABLE ONLY public.meetings ADD CONSTRAINT meetings_meeting_type_check CHECK ((meeting_type = ANY (ARRAY['call'::text, 'video'::text, 'presencial'::text])));
+  END IF;
+END $cons$;
+-- meetings_status_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'meetings_status_check') THEN
+    ALTER TABLE ONLY public.meetings ADD CONSTRAINT meetings_status_check CHECK ((status = ANY (ARRAY['scheduled'::text, 'confirmed'::text, 'completed'::text, 'cancelled'::text, 'no_show'::text])));
+  END IF;
+END $cons$;
+-- proposals_discount_type_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'proposals_discount_type_check') THEN
+    ALTER TABLE ONLY public.proposals ADD CONSTRAINT proposals_discount_type_check CHECK ((discount_type = ANY (ARRAY['percentage'::text, 'fixed'::text])));
+  END IF;
+END $cons$;
+-- proposals_status_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'proposals_status_check') THEN
+    ALTER TABLE ONLY public.proposals ADD CONSTRAINT proposals_status_check CHECK ((status = ANY (ARRAY['rascunho'::text, 'enviada'::text, 'visualizada'::text, 'aceita'::text, 'rejeitada'::text, 'expirada'::text])));
+  END IF;
+END $cons$;
+-- relationship_score_history_depth_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'relationship_score_history_depth_score_check') THEN
+    ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_depth_score_check CHECK (((depth_score >= 0) AND (depth_score <= 100)));
+  END IF;
+END $cons$;
+-- relationship_score_history_engagement_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'relationship_score_history_engagement_score_check') THEN
+    ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_engagement_score_check CHECK (((engagement_score >= 0) AND (engagement_score <= 100)));
+  END IF;
+END $cons$;
+-- relationship_score_history_frequency_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'relationship_score_history_frequency_score_check') THEN
+    ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_frequency_score_check CHECK (((frequency_score >= 0) AND (frequency_score <= 100)));
+  END IF;
+END $cons$;
+-- relationship_score_history_recency_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'relationship_score_history_recency_score_check') THEN
+    ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_recency_score_check CHECK (((recency_score >= 0) AND (recency_score <= 100)));
+  END IF;
+END $cons$;
+-- relationship_score_history_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'relationship_score_history_score_check') THEN
+    ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_score_check CHECK (((score >= 0) AND (score <= 100)));
+  END IF;
+END $cons$;
+-- relationship_score_history_sentiment_score_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'relationship_score_history_sentiment_score_check') THEN
+    ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_sentiment_score_check CHECK (((sentiment_score >= 0) AND (sentiment_score <= 100)));
+  END IF;
+END $cons$;
+-- relationship_score_history_trend_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'relationship_score_history_trend_check') THEN
+    ALTER TABLE ONLY public.relationship_score_history ADD CONSTRAINT relationship_score_history_trend_check CHECK ((trend = ANY (ARRAY['improving'::text, 'stable'::text, 'declining'::text])));
+  END IF;
+END $cons$;
+-- chk_reminders_priority (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_reminders_priority') THEN
+    ALTER TABLE ONLY public.reminders ADD CONSTRAINT chk_reminders_priority CHECK ((priority = ANY (ARRAY['alta'::text, 'media'::text, 'baixa'::text, 'urgente'::text])));
+  END IF;
+END $cons$;
+-- chk_scheduled_visits_status (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_scheduled_visits_status') THEN
+    ALTER TABLE ONLY public.scheduled_visits ADD CONSTRAINT chk_scheduled_visits_status CHECK ((status = ANY (ARRAY['scheduled'::text, 'completed'::text, 'cancelled'::text, 'no_show'::text, 'rescheduled'::text])));
+  END IF;
+END $cons$;
+-- sla_rules_entity_type_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'sla_rules_entity_type_check') THEN
+    ALTER TABLE ONLY public.sla_rules ADD CONSTRAINT sla_rules_entity_type_check CHECK ((entity_type = ANY (ARRAY['company'::text, 'deal'::text, 'interaction'::text, 'proposal'::text])));
+  END IF;
+END $cons$;
+-- sla_violations_sla_rule_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'sla_violations_sla_rule_id_fkey') THEN
+    ALTER TABLE ONLY public.sla_violations ADD CONSTRAINT sla_violations_sla_rule_id_fkey FOREIGN KEY (sla_rule_id) REFERENCES sla_rules(id);
+  END IF;
+END $cons$;
+-- territory_assignments_territory_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'territory_assignments_territory_id_fkey') THEN
+    ALTER TABLE ONLY public.territory_assignments ADD CONSTRAINT territory_assignments_territory_id_fkey FOREIGN KEY (territory_id) REFERENCES territories(id) ON DELETE CASCADE;
+  END IF;
+END $cons$;
+-- user_badges_badge_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_badges_badge_id_fkey') THEN
+    ALTER TABLE ONLY public.user_badges ADD CONSTRAINT user_badges_badge_id_fkey FOREIGN KEY (badge_id) REFERENCES badges(id) ON DELETE CASCADE;
+  END IF;
+END $cons$;
+-- user_goals_goal_type_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_goals_goal_type_check') THEN
+    ALTER TABLE ONLY public.user_goals ADD CONSTRAINT user_goals_goal_type_check CHECK ((goal_type = ANY (ARRAY['deals_count'::text, 'deals_value'::text, 'interactions'::text, 'new_companies'::text, 'proposals'::text])));
+  END IF;
+END $cons$;
+-- user_goals_period_type_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_goals_period_type_check') THEN
+    ALTER TABLE ONLY public.user_goals ADD CONSTRAINT user_goals_period_type_check CHECK ((period_type = ANY (ARRAY['daily'::text, 'weekly'::text, 'monthly'::text, 'quarterly'::text, 'yearly'::text])));
+  END IF;
+END $cons$;
+-- cadence_enrollments_status_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'cadence_enrollments_status_check') THEN
+    ALTER TABLE ONLY public.cadence_enrollments ADD CONSTRAINT cadence_enrollments_status_check CHECK ((status = ANY (ARRAY['active'::text, 'paused'::text, 'completed'::text, 'replied'::text, 'bounced'::text, 'opted_out'::text])));
+  END IF;
+END $cons$;
+-- cadence_enrollments_cadence_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'cadence_enrollments_cadence_id_fkey') THEN
+    ALTER TABLE ONLY public.cadence_enrollments ADD CONSTRAINT cadence_enrollments_cadence_id_fkey FOREIGN KEY (cadence_id) REFERENCES sales_cadences(id) ON DELETE CASCADE;
+  END IF;
+END $cons$;
+-- chk_campaign_members_status (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_campaign_members_status') THEN
+    ALTER TABLE ONLY public.campaign_members ADD CONSTRAINT chk_campaign_members_status CHECK ((status = ANY (ARRAY['pending'::text, 'active'::text, 'completed'::text, 'bounced'::text, 'unsubscribed'::text, 'opted_out'::text])));
+  END IF;
+END $cons$;
+-- campaign_members_campaign_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'campaign_members_campaign_id_fkey') THEN
+    ALTER TABLE ONLY public.campaign_members ADD CONSTRAINT campaign_members_campaign_id_fkey FOREIGN KEY (campaign_id) REFERENCES campaigns(id) ON DELETE CASCADE;
+  END IF;
+END $cons$;
+-- chk_company_cadences_status (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_company_cadences_status') THEN
+    ALTER TABLE ONLY public.company_cadences ADD CONSTRAINT chk_company_cadences_status CHECK ((status = ANY (ARRAY['active'::text, 'paused'::text, 'completed'::text, 'archived'::text])));
+  END IF;
+END $cons$;
+-- company_cadences_cadence_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'company_cadences_cadence_id_fkey') THEN
+    ALTER TABLE ONLY public.company_cadences ADD CONSTRAINT company_cadences_cadence_id_fkey FOREIGN KEY (cadence_id) REFERENCES sales_cadences(id);
+  END IF;
+END $cons$;
+-- contact_addresses_tipo_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'contact_addresses_tipo_check') THEN
+    ALTER TABLE ONLY public.contact_addresses ADD CONSTRAINT contact_addresses_tipo_check CHECK ((tipo = ANY (ARRAY['residencial'::text, 'profissional'::text, 'cobranca'::text, 'outro'::text])));
+  END IF;
+END $cons$;
+-- contact_addresses_created_by_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'contact_addresses_created_by_fkey') THEN
+    ALTER TABLE ONLY public.contact_addresses ADD CONSTRAINT contact_addresses_created_by_fkey FOREIGN KEY (created_by) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- contact_addresses_updated_by_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'contact_addresses_updated_by_fkey') THEN
+    ALTER TABLE ONLY public.contact_addresses ADD CONSTRAINT contact_addresses_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- coop_sistemas_grupo_economico_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'coop_sistemas_grupo_economico_id_fkey') THEN
+    ALTER TABLE ONLY public.coop_sistemas ADD CONSTRAINT coop_sistemas_grupo_economico_id_fkey FOREIGN KEY (grupo_economico_id) REFERENCES grupos_economicos(id);
+  END IF;
+END $cons$;
+-- chk_customers_ticket_medio (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_customers_ticket_medio') THEN
+    ALTER TABLE ONLY public.customers ADD CONSTRAINT chk_customers_ticket_medio CHECK (((ticket_medio IS NULL) OR (ticket_medio >= (0)::numeric)));
+  END IF;
+END $cons$;
+-- chk_customers_valor_total (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'chk_customers_valor_total') THEN
+    ALTER TABLE ONLY public.customers ADD CONSTRAINT chk_customers_valor_total CHECK (((valor_total_compras IS NULL) OR (valor_total_compras >= (0)::numeric)));
+  END IF;
+END $cons$;
+-- customers_sdr_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'customers_sdr_id_fkey') THEN
+    ALTER TABLE ONLY public.customers ADD CONSTRAINT customers_sdr_id_fkey FOREIGN KEY (sdr_id) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- customers_vendedor_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'customers_vendedor_id_fkey') THEN
+    ALTER TABLE ONLY public.customers ADD CONSTRAINT customers_vendedor_id_fkey FOREIGN KEY (vendedor_id) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- economic_group_members_group_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'economic_group_members_group_id_fkey') THEN
+    ALTER TABLE ONLY public.economic_group_members ADD CONSTRAINT economic_group_members_group_id_fkey FOREIGN KEY (group_id) REFERENCES economic_groups(id) ON DELETE CASCADE;
+  END IF;
+END $cons$;
+-- check_sdr_closer_different (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'check_sdr_closer_different') THEN
+    ALTER TABLE ONLY public.sdr_closer_assignments ADD CONSTRAINT check_sdr_closer_different CHECK ((sdr_id <> closer_id));
+  END IF;
+END $cons$;
+-- sdr_closer_assignments_closer_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'sdr_closer_assignments_closer_id_fkey') THEN
+    ALTER TABLE ONLY public.sdr_closer_assignments ADD CONSTRAINT sdr_closer_assignments_closer_id_fkey FOREIGN KEY (closer_id) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- sdr_closer_assignments_criado_por_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'sdr_closer_assignments_criado_por_id_fkey') THEN
+    ALTER TABLE ONLY public.sdr_closer_assignments ADD CONSTRAINT sdr_closer_assignments_criado_por_id_fkey FOREIGN KEY (criado_por_id) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- sdr_closer_assignments_sdr_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'sdr_closer_assignments_sdr_id_fkey') THEN
+    ALTER TABLE ONLY public.sdr_closer_assignments ADD CONSTRAINT sdr_closer_assignments_sdr_id_fkey FOREIGN KEY (sdr_id) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- customer_ownership_history_customer_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'customer_ownership_history_customer_id_fkey') THEN
+    ALTER TABLE ONLY public.customer_ownership_history ADD CONSTRAINT customer_ownership_history_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE;
+  END IF;
+END $cons$;
+-- customer_ownership_history_registrado_por_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'customer_ownership_history_registrado_por_id_fkey') THEN
+    ALTER TABLE ONLY public.customer_ownership_history ADD CONSTRAINT customer_ownership_history_registrado_por_id_fkey FOREIGN KEY (registrado_por_id) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- customer_ownership_history_vendedor_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'customer_ownership_history_vendedor_id_fkey') THEN
+    ALTER TABLE ONLY public.customer_ownership_history ADD CONSTRAINT customer_ownership_history_vendedor_id_fkey FOREIGN KEY (vendedor_id) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- customer_sdr_history_resultado_check (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'customer_sdr_history_resultado_check') THEN
+    ALTER TABLE ONLY public.customer_sdr_history ADD CONSTRAINT customer_sdr_history_resultado_check CHECK ((resultado = ANY (ARRAY['EM_ANDAMENTO'::text, 'QUALIFICADO'::text, 'REATIVADO'::text, 'SEM_INTERESSE'::text, 'SEM_CONTATO'::text, 'TRANSFERIDO'::text])));
+  END IF;
+END $cons$;
+-- customer_sdr_history_closer_destino_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'customer_sdr_history_closer_destino_id_fkey') THEN
+    ALTER TABLE ONLY public.customer_sdr_history ADD CONSTRAINT customer_sdr_history_closer_destino_id_fkey FOREIGN KEY (closer_destino_id) REFERENCES users(id);
+  END IF;
+END $cons$;
+-- customer_sdr_history_customer_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'customer_sdr_history_customer_id_fkey') THEN
+    ALTER TABLE ONLY public.customer_sdr_history ADD CONSTRAINT customer_sdr_history_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE;
+  END IF;
+END $cons$;
+-- customer_sdr_history_sdr_id_fkey (idempotente)
+DO $cons$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'customer_sdr_history_sdr_id_fkey') THEN
+    ALTER TABLE ONLY public.customer_sdr_history ADD CONSTRAINT customer_sdr_history_sdr_id_fkey FOREIGN KEY (sdr_id) REFERENCES users(id);
+  END IF;
+END $cons$;
 
-CREATE INDEX idx_activity_feed_user_id ON public.activity_feed USING btree (user_id);
-CREATE INDEX idx_automations_created_by ON public.automations USING btree (created_by);
-CREATE INDEX idx_calendar_company ON public.calendar_events USING btree (company_id);
-CREATE INDEX idx_calendar_events_contact_id_fk ON public.calendar_events USING btree (contact_id);
-CREATE INDEX idx_calendar_events_deal_id ON public.calendar_events USING btree (deal_id);
-CREATE INDEX idx_calendar_events_user_id ON public.calendar_events USING btree (user_id);
-CREATE INDEX idx_campaigns_created_by ON public.campaigns USING btree (created_by);
-CREATE INDEX idx_campaigns_status ON public.campaigns USING btree (status);
-CREATE INDEX idx_churn_predictions_company_id ON public.churn_predictions USING btree (company_id);
-CREATE INDEX idx_churn_predictions_contact ON public.churn_predictions USING btree (contact_id);
-CREATE INDEX idx_churn_predictions_user_id ON public.churn_predictions USING btree (user_id);
-CREATE INDEX idx_commissions_deal_id ON public.commissions USING btree (deal_id);
-CREATE INDEX idx_commissions_rule_id ON public.commissions USING btree (rule_id);
-CREATE INDEX idx_commissions_user_id ON public.commissions USING btree (user_id);
-CREATE INDEX idx_company_addresses_cep ON public.company_addresses USING btree (cep);
-CREATE INDEX idx_company_addresses_cidade ON public.company_addresses USING btree (cidade, estado);
-CREATE INDEX idx_company_addresses_cidade_ibge ON public.company_addresses USING btree (cidade_ibge);
-CREATE INDEX idx_company_addresses_company ON public.company_addresses USING btree (company_id);
-CREATE INDEX idx_company_addresses_created_at ON public.company_addresses USING btree (created_at);
-CREATE INDEX idx_company_addresses_primary ON public.company_addresses USING btree (company_id, is_primary);
-CREATE INDEX idx_company_addresses_tipo_logradouro ON public.company_addresses USING btree (tipo_logradouro);
-CREATE INDEX idx_company_cnaes_cnae ON public.company_cnaes USING btree (cnae_codigo);
-CREATE INDEX idx_company_cnaes_company ON public.company_cnaes USING btree (company_id);
-CREATE UNIQUE INDEX company_emails_company_id_lower_email_unique ON public.company_emails USING btree (company_id, lower((email)::text));
-CREATE INDEX idx_company_emails_company_id ON public.company_emails USING btree (company_id);
-CREATE INDEX idx_company_emails_email_lower ON public.company_emails USING btree (lower((email)::text));
-CREATE INDEX idx_company_phones_created_at ON public.company_phones USING btree (created_at);
-CREATE INDEX idx_company_phones_e164 ON public.company_phones USING btree (numero_e164) WHERE (numero_e164 IS NOT NULL);
-CREATE INDEX idx_company_phones_normalizado ON public.company_phones USING btree (numero_normalizado);
-CREATE INDEX idx_company_phones_whatsapp ON public.company_phones USING btree (company_id) WHERE (is_whatsapp = true);
-CREATE INDEX idx_company_rfm_scores_created_at ON public.company_rfm_scores USING btree (created_at);
-CREATE INDEX idx_company_rfm_scores_segment_id ON public.company_rfm_scores USING btree (segment_id);
-CREATE INDEX idx_company_rfm_segment ON public.company_rfm_scores USING btree (segment_code);
-CREATE UNIQUE INDEX idx_company_rfm_unique ON public.company_rfm_scores USING btree (company_id);
-CREATE INDEX idx_company_rfm_user ON public.company_rfm_scores USING btree (user_id);
-CREATE INDEX idx_company_social_active ON public.company_social_media USING btree (company_id, plataforma) WHERE (is_active = true);
-CREATE INDEX idx_company_social_company ON public.company_social_media USING btree (company_id);
-CREATE INDEX idx_company_social_media_created_at ON public.company_social_media USING btree (created_at);
-CREATE INDEX idx_company_social_plataforma ON public.company_social_media USING btree (plataforma);
-CREATE INDEX idx_company_stakeholder_map_access_via_contact_id ON public.company_stakeholder_map USING btree (access_via_contact_id);
-CREATE INDEX idx_company_stakeholder_map_company_id ON public.company_stakeholder_map USING btree (company_id);
-CREATE INDEX idx_company_stakeholder_map_contact_id ON public.company_stakeholder_map USING btree (contact_id);
-CREATE INDEX idx_company_stakeholder_map_user_id ON public.company_stakeholder_map USING btree (user_id);
-CREATE INDEX idx_contact_emails_contact_id ON public.contact_emails USING btree (contact_id);
-CREATE INDEX idx_contact_emails_primary ON public.contact_emails USING btree (contact_id) WHERE (is_primary = true);
-CREATE INDEX idx_contact_phones_primary ON public.contact_phones USING btree (contact_id) WHERE (is_primary = true);
-CREATE INDEX idx_contact_phones_whatsapp ON public.contact_phones USING btree (contact_id) WHERE (is_whatsapp = true);
-CREATE INDEX idx_contact_social_contact ON public.contact_social_media USING btree (contact_id);
-CREATE INDEX idx_deal_competitors_competitor_id ON public.deal_competitors USING btree (competitor_id);
-CREATE INDEX idx_deal_competitors_deal_id ON public.deal_competitors USING btree (deal_id);
-CREATE INDEX idx_deal_velocity_analysis_company_id ON public.deal_velocity_analysis USING btree (company_id);
-CREATE INDEX idx_deal_velocity_analysis_contact_id ON public.deal_velocity_analysis USING btree (contact_id);
-CREATE INDEX idx_deal_velocity_analysis_user_id ON public.deal_velocity_analysis USING btree (user_id);
-CREATE INDEX idx_disc_templates_created_by ON public.disc_templates USING btree (created_by);
-CREATE INDEX idx_economic_groups_main_company_id_fk ON public.economic_groups USING btree (main_company_id);
-CREATE INDEX idx_favorites_user_id ON public.favorites USING btree (user_id);
-CREATE UNIQUE INDEX idx_grupo_nome ON public.grupos_economicos USING btree (nome);
-CREATE INDEX idx_interaction_templates_user_id ON public.interaction_templates USING btree (user_id);
-CREATE INDEX idx_meetings_company ON public.meetings USING btree (company_id);
-CREATE INDEX idx_meetings_contact_id_fk ON public.meetings USING btree (contact_id);
-CREATE INDEX idx_meetings_deal_id ON public.meetings USING btree (deal_id);
-CREATE INDEX idx_meetings_user_id ON public.meetings USING btree (user_id);
-CREATE INDEX idx_proposals_company_id ON public.proposals USING btree (company_id);
-CREATE INDEX idx_proposals_contact_id ON public.proposals USING btree (contact_id);
-CREATE INDEX idx_proposals_deal ON public.proposals USING btree (deal_id);
-CREATE INDEX idx_proposals_status ON public.proposals USING btree (status);
-CREATE INDEX idx_proposals_user_id ON public.proposals USING btree (user_id);
-CREATE INDEX idx_quick_notes_company ON public.quick_notes USING btree (company_id);
-CREATE INDEX idx_quick_notes_user_id ON public.quick_notes USING btree (user_id);
-CREATE INDEX idx_relationship_score_history_contact_id ON public.relationship_score_history USING btree (contact_id);
-CREATE INDEX idx_relationship_score_history_contact_measured ON public.relationship_score_history USING btree (contact_id, measured_at DESC);
-CREATE INDEX idx_relationship_score_history_user_id ON public.relationship_score_history USING btree (user_id);
-CREATE INDEX idx_reminders_company ON public.reminders USING btree (company_id);
-CREATE INDEX idx_reminders_user_date ON public.reminders USING btree (user_id, reminder_date);
-CREATE INDEX idx_reminders_user_id ON public.reminders USING btree (user_id);
-CREATE INDEX idx_sales_cadences_created_by ON public.sales_cadences USING btree (created_by);
-CREATE INDEX idx_scheduled_visits_company_id ON public.scheduled_visits USING btree (company_id);
-CREATE INDEX idx_scheduled_visits_user_id ON public.scheduled_visits USING btree (user_id);
-CREATE INDEX idx_visits_user_date ON public.scheduled_visits USING btree (user_id, visit_date);
-CREATE INDEX idx_seller_daily_metrics_user_id ON public.seller_daily_metrics USING btree (user_id);
-CREATE INDEX idx_sla_violations_sla_rule_id ON public.sla_violations USING btree (sla_rule_id);
-CREATE INDEX idx_sla_violations_user_id ON public.sla_violations USING btree (user_id);
-CREATE INDEX idx_sync_log_created ON public.sync_log USING btree (created_at DESC);
-CREATE INDEX idx_sync_log_status ON public.sync_log USING btree (status);
-CREATE INDEX idx_sync_log_type ON public.sync_log USING btree (sync_type, direction);
-CREATE INDEX idx_territories_manager_id ON public.territories USING btree (manager_id);
-CREATE INDEX idx_territory_assignments_territory_id ON public.territory_assignments USING btree (territory_id);
-CREATE INDEX idx_territory_assignments_user_id ON public.territory_assignments USING btree (user_id);
-CREATE INDEX idx_user_badges_badge_id ON public.user_badges USING btree (badge_id);
-CREATE INDEX idx_user_badges_user ON public.user_badges USING btree (user_id);
-CREATE INDEX idx_user_goals_period ON public.user_goals USING btree (period_start, period_end);
-CREATE INDEX idx_user_goals_user_id ON public.user_goals USING btree (user_id);
-CREATE INDEX idx_cadence_enrollments_cadence_id ON public.cadence_enrollments USING btree (cadence_id);
-CREATE INDEX idx_cadence_enrollments_company_id_fk ON public.cadence_enrollments USING btree (company_id);
-CREATE INDEX idx_cadence_enrollments_contact_id_fk ON public.cadence_enrollments USING btree (contact_id);
-CREATE INDEX idx_cadence_enrollments_user_id ON public.cadence_enrollments USING btree (user_id);
-CREATE INDEX idx_campaign_members_campaign_id ON public.campaign_members USING btree (campaign_id);
-CREATE INDEX idx_campaign_members_company_id_fk ON public.campaign_members USING btree (company_id);
-CREATE INDEX idx_campaign_members_contact_id_fk ON public.campaign_members USING btree (contact_id);
-CREATE INDEX idx_campaign_members_status ON public.campaign_members USING btree (status);
-CREATE UNIQUE INDEX uq_campaign_members_campaign_contact ON public.campaign_members USING btree (campaign_id, contact_id) WHERE (contact_id IS NOT NULL);
-CREATE INDEX idx_company_cadences_cadence_id ON public.company_cadences USING btree (cadence_id);
-CREATE INDEX idx_company_cadences_company ON public.company_cadences USING btree (company_id);
-CREATE INDEX idx_company_cadences_status ON public.company_cadences USING btree (status);
-CREATE INDEX idx_company_cadences_user_id ON public.company_cadences USING btree (user_id);
-CREATE INDEX idx_ca_contact ON public.contact_addresses USING btree (contact_id);
-CREATE INDEX idx_contact_addresses_created_by ON public.contact_addresses USING btree (created_by);
-CREATE INDEX idx_contact_addresses_updated_by ON public.contact_addresses USING btree (updated_by);
-CREATE INDEX idx_coop_sistemas_grupo_economico_id ON public.coop_sistemas USING btree (grupo_economico_id);
-CREATE INDEX idx_customers_active ON public.customers USING btree (id) WHERE (deleted_at IS NULL);
-CREATE INDEX idx_customers_ativado ON public.customers USING btree (id) WHERE (cliente_ativado = true);
-CREATE INDEX idx_customers_ja_comprou ON public.customers USING btree (id) WHERE (ja_comprou = true);
-CREATE INDEX idx_customers_sdr_id ON public.customers USING btree (sdr_id);
-CREATE INDEX idx_customers_updated_at ON public.customers USING btree (updated_at);
-CREATE INDEX idx_customers_vendedor ON public.customers USING btree (vendedor_id);
-CREATE INDEX idx_customers_vendedor_ativo ON public.customers USING btree (vendedor_id, cliente_ativado) WHERE (deleted_at IS NULL);
-CREATE INDEX idx_econ_group_members_company ON public.economic_group_members USING btree (company_id);
-CREATE INDEX idx_economic_group_members_group_id ON public.economic_group_members USING btree (group_id);
-CREATE INDEX idx_sdr_closer_assignments_criado_por_id ON public.sdr_closer_assignments USING btree (criado_por_id);
-CREATE INDEX idx_sdr_closer_closer ON public.sdr_closer_assignments USING btree (closer_id);
-CREATE INDEX idx_sdr_closer_sdr ON public.sdr_closer_assignments USING btree (sdr_id);
-CREATE INDEX idx_customer_ownership_history_company_id ON public.customer_ownership_history USING btree (company_id);
-CREATE INDEX idx_customer_ownership_history_customer_id ON public.customer_ownership_history USING btree (customer_id);
-CREATE INDEX idx_customer_ownership_history_registrado_por_id ON public.customer_ownership_history USING btree (registrado_por_id);
-CREATE INDEX idx_customer_ownership_history_vendedor_id ON public.customer_ownership_history USING btree (vendedor_id);
-CREATE INDEX idx_customer_sdr_history_closer_destino_id ON public.customer_sdr_history USING btree (closer_destino_id);
-CREATE INDEX idx_customer_sdr_history_customer_id ON public.customer_sdr_history USING btree (customer_id);
-CREATE INDEX idx_customer_sdr_history_sdr_id ON public.customer_sdr_history USING btree (sdr_id);
-CREATE INDEX idx_sdr_history_company ON public.customer_sdr_history USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_activity_feed_user_id ON public.activity_feed USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_automations_created_by ON public.automations USING btree (created_by);
+CREATE INDEX IF NOT EXISTS idx_calendar_company ON public.calendar_events USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_calendar_events_contact_id_fk ON public.calendar_events USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_calendar_events_deal_id ON public.calendar_events USING btree (deal_id);
+CREATE INDEX IF NOT EXISTS idx_calendar_events_user_id ON public.calendar_events USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_campaigns_created_by ON public.campaigns USING btree (created_by);
+CREATE INDEX IF NOT EXISTS idx_campaigns_status ON public.campaigns USING btree (status);
+CREATE INDEX IF NOT EXISTS idx_churn_predictions_company_id ON public.churn_predictions USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_churn_predictions_contact ON public.churn_predictions USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_churn_predictions_user_id ON public.churn_predictions USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_commissions_deal_id ON public.commissions USING btree (deal_id);
+CREATE INDEX IF NOT EXISTS idx_commissions_rule_id ON public.commissions USING btree (rule_id);
+CREATE INDEX IF NOT EXISTS idx_commissions_user_id ON public.commissions USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_company_addresses_cep ON public.company_addresses USING btree (cep);
+CREATE INDEX IF NOT EXISTS idx_company_addresses_cidade ON public.company_addresses USING btree (cidade, estado);
+CREATE INDEX IF NOT EXISTS idx_company_addresses_cidade_ibge ON public.company_addresses USING btree (cidade_ibge);
+CREATE INDEX IF NOT EXISTS idx_company_addresses_company ON public.company_addresses USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_company_addresses_created_at ON public.company_addresses USING btree (created_at);
+CREATE INDEX IF NOT EXISTS idx_company_addresses_primary ON public.company_addresses USING btree (company_id, is_primary);
+CREATE INDEX IF NOT EXISTS idx_company_addresses_tipo_logradouro ON public.company_addresses USING btree (tipo_logradouro);
+CREATE INDEX IF NOT EXISTS idx_company_cnaes_cnae ON public.company_cnaes USING btree (cnae_codigo);
+CREATE INDEX IF NOT EXISTS idx_company_cnaes_company ON public.company_cnaes USING btree (company_id);
+CREATE UNIQUE INDEX IF NOT EXISTS company_emails_company_id_lower_email_unique ON public.company_emails USING btree (company_id, lower((email)::text));
+CREATE INDEX IF NOT EXISTS idx_company_emails_company_id ON public.company_emails USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_company_emails_email_lower ON public.company_emails USING btree (lower((email)::text));
+CREATE INDEX IF NOT EXISTS idx_company_phones_created_at ON public.company_phones USING btree (created_at);
+CREATE INDEX IF NOT EXISTS idx_company_phones_e164 ON public.company_phones USING btree (numero_e164) WHERE (numero_e164 IS NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_company_phones_normalizado ON public.company_phones USING btree (numero_normalizado);
+CREATE INDEX IF NOT EXISTS idx_company_phones_whatsapp ON public.company_phones USING btree (company_id) WHERE (is_whatsapp = true);
+CREATE INDEX IF NOT EXISTS idx_company_rfm_scores_created_at ON public.company_rfm_scores USING btree (created_at);
+CREATE INDEX IF NOT EXISTS idx_company_rfm_scores_segment_id ON public.company_rfm_scores USING btree (segment_id);
+CREATE INDEX IF NOT EXISTS idx_company_rfm_segment ON public.company_rfm_scores USING btree (segment_code);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_company_rfm_unique ON public.company_rfm_scores USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_company_rfm_user ON public.company_rfm_scores USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_company_social_active ON public.company_social_media USING btree (company_id, plataforma) WHERE (is_active = true);
+CREATE INDEX IF NOT EXISTS idx_company_social_company ON public.company_social_media USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_company_social_media_created_at ON public.company_social_media USING btree (created_at);
+CREATE INDEX IF NOT EXISTS idx_company_social_plataforma ON public.company_social_media USING btree (plataforma);
+CREATE INDEX IF NOT EXISTS idx_company_stakeholder_map_access_via_contact_id ON public.company_stakeholder_map USING btree (access_via_contact_id);
+CREATE INDEX IF NOT EXISTS idx_company_stakeholder_map_company_id ON public.company_stakeholder_map USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_company_stakeholder_map_contact_id ON public.company_stakeholder_map USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_company_stakeholder_map_user_id ON public.company_stakeholder_map USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_contact_emails_contact_id ON public.contact_emails USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_contact_emails_primary ON public.contact_emails USING btree (contact_id) WHERE (is_primary = true);
+CREATE INDEX IF NOT EXISTS idx_contact_phones_primary ON public.contact_phones USING btree (contact_id) WHERE (is_primary = true);
+CREATE INDEX IF NOT EXISTS idx_contact_phones_whatsapp ON public.contact_phones USING btree (contact_id) WHERE (is_whatsapp = true);
+CREATE INDEX IF NOT EXISTS idx_contact_social_contact ON public.contact_social_media USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_deal_competitors_competitor_id ON public.deal_competitors USING btree (competitor_id);
+CREATE INDEX IF NOT EXISTS idx_deal_competitors_deal_id ON public.deal_competitors USING btree (deal_id);
+CREATE INDEX IF NOT EXISTS idx_deal_velocity_analysis_company_id ON public.deal_velocity_analysis USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_deal_velocity_analysis_contact_id ON public.deal_velocity_analysis USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_deal_velocity_analysis_user_id ON public.deal_velocity_analysis USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_disc_templates_created_by ON public.disc_templates USING btree (created_by);
+CREATE INDEX IF NOT EXISTS idx_economic_groups_main_company_id_fk ON public.economic_groups USING btree (main_company_id);
+CREATE INDEX IF NOT EXISTS idx_favorites_user_id ON public.favorites USING btree (user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_grupo_nome ON public.grupos_economicos USING btree (nome);
+CREATE INDEX IF NOT EXISTS idx_interaction_templates_user_id ON public.interaction_templates USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_meetings_company ON public.meetings USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_meetings_contact_id_fk ON public.meetings USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_meetings_deal_id ON public.meetings USING btree (deal_id);
+CREATE INDEX IF NOT EXISTS idx_meetings_user_id ON public.meetings USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_proposals_company_id ON public.proposals USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_proposals_contact_id ON public.proposals USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_proposals_deal ON public.proposals USING btree (deal_id);
+CREATE INDEX IF NOT EXISTS idx_proposals_status ON public.proposals USING btree (status);
+CREATE INDEX IF NOT EXISTS idx_proposals_user_id ON public.proposals USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_quick_notes_company ON public.quick_notes USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_quick_notes_user_id ON public.quick_notes USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_relationship_score_history_contact_id ON public.relationship_score_history USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_relationship_score_history_contact_measured ON public.relationship_score_history USING btree (contact_id, measured_at DESC);
+CREATE INDEX IF NOT EXISTS idx_relationship_score_history_user_id ON public.relationship_score_history USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_reminders_company ON public.reminders USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_reminders_user_date ON public.reminders USING btree (user_id, reminder_date);
+CREATE INDEX IF NOT EXISTS idx_reminders_user_id ON public.reminders USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_sales_cadences_created_by ON public.sales_cadences USING btree (created_by);
+CREATE INDEX IF NOT EXISTS idx_scheduled_visits_company_id ON public.scheduled_visits USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_scheduled_visits_user_id ON public.scheduled_visits USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_visits_user_date ON public.scheduled_visits USING btree (user_id, visit_date);
+CREATE INDEX IF NOT EXISTS idx_seller_daily_metrics_user_id ON public.seller_daily_metrics USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_sla_violations_sla_rule_id ON public.sla_violations USING btree (sla_rule_id);
+CREATE INDEX IF NOT EXISTS idx_sla_violations_user_id ON public.sla_violations USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_sync_log_created ON public.sync_log USING btree (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_sync_log_status ON public.sync_log USING btree (status);
+CREATE INDEX IF NOT EXISTS idx_sync_log_type ON public.sync_log USING btree (sync_type, direction);
+CREATE INDEX IF NOT EXISTS idx_territories_manager_id ON public.territories USING btree (manager_id);
+CREATE INDEX IF NOT EXISTS idx_territory_assignments_territory_id ON public.territory_assignments USING btree (territory_id);
+CREATE INDEX IF NOT EXISTS idx_territory_assignments_user_id ON public.territory_assignments USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_user_badges_badge_id ON public.user_badges USING btree (badge_id);
+CREATE INDEX IF NOT EXISTS idx_user_badges_user ON public.user_badges USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_user_goals_period ON public.user_goals USING btree (period_start, period_end);
+CREATE INDEX IF NOT EXISTS idx_user_goals_user_id ON public.user_goals USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_cadence_enrollments_cadence_id ON public.cadence_enrollments USING btree (cadence_id);
+CREATE INDEX IF NOT EXISTS idx_cadence_enrollments_company_id_fk ON public.cadence_enrollments USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_cadence_enrollments_contact_id_fk ON public.cadence_enrollments USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_cadence_enrollments_user_id ON public.cadence_enrollments USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_campaign_members_campaign_id ON public.campaign_members USING btree (campaign_id);
+CREATE INDEX IF NOT EXISTS idx_campaign_members_company_id_fk ON public.campaign_members USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_campaign_members_contact_id_fk ON public.campaign_members USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_campaign_members_status ON public.campaign_members USING btree (status);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_campaign_members_campaign_contact ON public.campaign_members USING btree (campaign_id, contact_id) WHERE (contact_id IS NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_company_cadences_cadence_id ON public.company_cadences USING btree (cadence_id);
+CREATE INDEX IF NOT EXISTS idx_company_cadences_company ON public.company_cadences USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_company_cadences_status ON public.company_cadences USING btree (status);
+CREATE INDEX IF NOT EXISTS idx_company_cadences_user_id ON public.company_cadences USING btree (user_id);
+CREATE INDEX IF NOT EXISTS idx_ca_contact ON public.contact_addresses USING btree (contact_id);
+CREATE INDEX IF NOT EXISTS idx_contact_addresses_created_by ON public.contact_addresses USING btree (created_by);
+CREATE INDEX IF NOT EXISTS idx_contact_addresses_updated_by ON public.contact_addresses USING btree (updated_by);
+CREATE INDEX IF NOT EXISTS idx_coop_sistemas_grupo_economico_id ON public.coop_sistemas USING btree (grupo_economico_id);
+CREATE INDEX IF NOT EXISTS idx_customers_active ON public.customers USING btree (id) WHERE (deleted_at IS NULL);
+CREATE INDEX IF NOT EXISTS idx_customers_ativado ON public.customers USING btree (id) WHERE (cliente_ativado = true);
+CREATE INDEX IF NOT EXISTS idx_customers_ja_comprou ON public.customers USING btree (id) WHERE (ja_comprou = true);
+CREATE INDEX IF NOT EXISTS idx_customers_sdr_id ON public.customers USING btree (sdr_id);
+CREATE INDEX IF NOT EXISTS idx_customers_updated_at ON public.customers USING btree (updated_at);
+CREATE INDEX IF NOT EXISTS idx_customers_vendedor ON public.customers USING btree (vendedor_id);
+CREATE INDEX IF NOT EXISTS idx_customers_vendedor_ativo ON public.customers USING btree (vendedor_id, cliente_ativado) WHERE (deleted_at IS NULL);
+CREATE INDEX IF NOT EXISTS idx_econ_group_members_company ON public.economic_group_members USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_economic_group_members_group_id ON public.economic_group_members USING btree (group_id);
+CREATE INDEX IF NOT EXISTS idx_sdr_closer_assignments_criado_por_id ON public.sdr_closer_assignments USING btree (criado_por_id);
+CREATE INDEX IF NOT EXISTS idx_sdr_closer_closer ON public.sdr_closer_assignments USING btree (closer_id);
+CREATE INDEX IF NOT EXISTS idx_sdr_closer_sdr ON public.sdr_closer_assignments USING btree (sdr_id);
+CREATE INDEX IF NOT EXISTS idx_customer_ownership_history_company_id ON public.customer_ownership_history USING btree (company_id);
+CREATE INDEX IF NOT EXISTS idx_customer_ownership_history_customer_id ON public.customer_ownership_history USING btree (customer_id);
+CREATE INDEX IF NOT EXISTS idx_customer_ownership_history_registrado_por_id ON public.customer_ownership_history USING btree (registrado_por_id);
+CREATE INDEX IF NOT EXISTS idx_customer_ownership_history_vendedor_id ON public.customer_ownership_history USING btree (vendedor_id);
+CREATE INDEX IF NOT EXISTS idx_customer_sdr_history_closer_destino_id ON public.customer_sdr_history USING btree (closer_destino_id);
+CREATE INDEX IF NOT EXISTS idx_customer_sdr_history_customer_id ON public.customer_sdr_history USING btree (customer_id);
+CREATE INDEX IF NOT EXISTS idx_customer_sdr_history_sdr_id ON public.customer_sdr_history USING btree (sdr_id);
+CREATE INDEX IF NOT EXISTS idx_sdr_history_company ON public.customer_sdr_history USING btree (company_id);
