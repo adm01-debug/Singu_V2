@@ -2,6 +2,12 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-21 12:18 UTC
+
+- **functions** alterado (1): `public.trg_normalizar_email()`
+- **migrations** adicionado (1): `20260110000000_baseline_tabelas_base`
+- **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_24`
+
 ## 2026-11-20 17:11 UTC
 
 - **lints** adicionado (4): `policy_auth_fn_not_wrapped:public.push_subscriptions.Users can create their own subscriptions`, `policy_auth_fn_not_wrapped:public.push_subscriptions.Users can delete their own subscriptions`, `policy_auth_fn_not_wrapped:public.push_subscriptions.Users can update their own subscriptions`, `policy_auth_fn_not_wrapped:public.push_subscriptions.Users can view their own subscriptions`

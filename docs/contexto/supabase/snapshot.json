@@ -2,7 +2,9 @@
   "api": {
     "enabled": false
   },
-  "carried": [],
+  "carried": [
+    "lints"
+  ],
   "db": {
     "columns": [
       {
@@ -229380,7 +229382,7 @@
           "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "f617a4825abca38b",
+        "definition_sha": "fde48141ce84018a",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -275500,6 +275502,12 @@
         "version": "20260109173224"
       },
       {
+        "name": "baseline_tabelas_base",
+        "statements": 263,
+        "statements_sha": "df8d243b2499fb52",
+        "version": "20260110000000"
+      },
+      {
         "name": "recreate_trigger_contact_phones_normalizar",
         "statements": 1,
         "statements_sha": "62817e145bab6cc6",
@@ -300222,6 +300230,11 @@
           "publication": "supabase_realtime_messages_publication",
           "schema": "realtime",
           "table": "messages_2026_11_23"
+        },
+        {
+          "publication": "supabase_realtime_messages_publication",
+          "schema": "realtime",
+          "table": "messages_2026_11_24"
         }
       ]
     },
@@ -320133,6 +320146,11 @@
     ],
     "webhooks": []
   },
-  "errors": [],
+  "errors": [
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "lints"
+    }
+  ],
   "format_version": 2
 }

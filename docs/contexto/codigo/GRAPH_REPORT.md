@@ -1,17 +1,17 @@
 # Graph Report - Singu_V2  (2026-11-21)
 
 ## Corpus Check
-- 3945 files · ~2,652,846 words
+- 3945 files · ~2,653,151 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 18 file(s) not represented in the graph (top: (none) 8, .example 3, .lock 1)
 
 ## Summary
-- 25778 nodes · 41109 edges · 3064 communities (1369 shown, 1695 thin omitted)
-- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 1598 edges (avg confidence: 0.93)
+- 25778 nodes · 41111 edges · 3064 communities (1369 shown, 1695 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 1600 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4e699591`
+- Built from commit: `62379b79`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -6721,7 +6721,7 @@ Nodes (9): idx_social_life_events_contact, idx_social_life_events_date, idx_soci
 
 ### Community 1930 - "Linha de base do estado real — Singu_V2"
 Cohesion: 0.22
-Nodes (8): Banco (produção / preview do main), Edge functions, Edges sem chamador no repo (candidatas a código morto / documentação), Front, Linha de base do estado real — Singu_V2, Pendências registradas nesta rodada, Problema de rota conhecido, Regras de negócio — fonte
+Nodes (8): Banco (produção / preview do main), Classificação das 14 edges sem chamador no repo (auditoria 2026-11), Edge functions, Front, Linha de base do estado real — Singu_V2, Pendências registradas nesta rodada, Problema de rota conhecido, Regras de negócio — fonte
 
 ### Community 1931 - "pg_temp.db01_snapshot"
 Cohesion: 0.22
@@ -7924,8 +7924,8 @@ Cohesion: 0.67
 Nodes (3): idx_whatsapp_instances_user, public.whatsapp_instances, whatsapp_instances_user_id_instance_name_key
 
 ## Knowledge Gaps
-- **7175 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+7170 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 13293 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **7174 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+7169 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 13292 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **1695 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -7938,7 +7938,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `lucide-react` connect `lucide-react` to `ref_components`, `sonner`, `ref_lib`, `date-fns`, `react`, `ref_hooks`, `ref_domain`, `CompaniesInlineMap.tsx`, `@tanstack/react-query`, `recharts`, `ref_integrations`, `EntityMonthlyTimeline.tsx`, `react-router-dom`, `ContactBehavioralTab.tsx`, `framer-motion`, `Tabela de evidências`, `Componentes e features órfãs`, `package.json`, `Componentes (`src/components/intel/`)`, `BehavioralRegenCronHealth.tsx`, `RpcPerfCard.tsx`, `ProximaAcaoCTA.tsx`, `MultiDiffPanel.tsx`, `ActiveFiltersBar.tsx`, `ActivityHeatmapChart.tsx`, `TriggerAnalyticsTabs.tsx`, `ContactDetailHeader.tsx`, `view-mode-switcher.tsx`, `GlobalSearch.tsx`, `prontidaoTrendMilestones.ts`, `vitest`, `ContactDataTab.tsx`, `StakeholderMap.tsx`, `Observability.tsx`, `ContactOverviewTab.tsx`, `AdminKnowledgeExport.tsx`, `AdminSchemaDrift.tsx`, `CompanyInsightsTab.tsx`, `@testing-library/react`, `5. `docs/TECH_DEBT.md``, `Pipeline.tsx`, `ApproachRecommendationPanel.tsx`, `RpcPlanDiffDialog.tsx`, `CompanyForm.tsx`, `SalesTeamTab.tsx`, `sidebar.tsx`, `ReportsTab.tsx`, `WhyScoreDrawer.tsx`, `CSATPanel.tsx`, `BackButton.tsx`, `TopContactsCard.tsx`, `IntelStatusBar.tsx`, `DISCCompatibilityAlerts.tsx`, `ErrorState.tsx`, `FrequenciaContatoCard.tsx`, `UltimasInteracoesCard.tsx`, `insights/SentimentTrendChart.tsx`, `ChannelShortcutsHelpOverlay.tsx`, `feedback/index.ts`, `WeeklyReportPanel.tsx`, `DashboardCharts.tsx`, `InsightsPanel.tsx`, `useInteractionsAdvancedFilter.ts`, `ConnectionCard.tsx`, `ContactForm.tsx`, `company-health-score.tsx`, `ConversationAnalysisCard.tsx`, `EntityNotesPanel.tsx`, `ExportFormatMenu.tsx`, `CelebrationProvider.tsx`, `MapaEmpresas.tsx`, `IncomingWebhookCard.tsx`, `LuxIntelligencePanel.tsx`, `IncomingWebhookFormDialog.tsx`, `zod`, `SentimentChartTooltip.tsx`, `CompanyCardWithContext.tsx`, `InteractionForm.tsx`, `4.12 Componentes UI (shadcn + customizados)`, `EmailBuilder.tsx`, `AuditDiffViewer.tsx`, `BehavioralRegenAlertsTrend.tsx`, `ContactEmailThreadsSection.tsx`, `SequenceDetailDrawer.tsx`, `NotificationGroup.tsx`, `CopiarLinkFiltrosButton.tsx`, `PWAComponents.tsx`, `ObjectionExamplesModal.tsx`, `ObjectionsSpotlight.tsx`, `DealConfidenceBadge.tsx`, `Calendario.tsx`, `command.tsx`, `useChurnRisk.ts`, `CompanyProfileCard.tsx`, `PortfolioContactCard.tsx`, `CRMRelationshipAuditPage.tsx`, `PessoaForm.tsx`, `Insights.tsx`, `ContextualHelp.tsx`, `PreContactBriefing.tsx`, `CompanyInteractionsTab.tsx`, `EvidenceDrillDownSheet.tsx`, `SentimentDistributionChart.tsx`, `ThemeExamplesDrawer.tsx`, `lead-score/LeadScoreCard.tsx`, `useCompanyFilterOptions.ts`, `accordion.tsx`, `OnboardingTour.tsx`, `IntelErrorState.tsx`, `GlobalCommandBar.tsx`, `IntelHealthPanel.tsx`, `MetadataDiffPanel.tsx`, `ForecastConfidencePanel.tsx`, `PresetFiltersDiff.tsx`, `AdminSidebar.tsx`, `ResumoConversaIADialog.tsx`, `InsightFeedbackAnalytics.tsx`, `InteracoesContent.tsx`, `CompanyAddressesForm.tsx`, `C1 — Documentos de produto, UX, QA, dívida técnica e auditorias × código real`, `BundlesTab.tsx`, `ErrorBoundary.tsx`, `RelatoriosFixosBar.tsx`, `InfiniteScrollSentinel.tsx`, `badge.tsx`, `empty-state.tsx`, `context-menu.tsx`, `dropdown-menu.tsx`, `toast.tsx`, `ImportantDatesCalendar.tsx`, `ContextualLoader.tsx`, `ProximosPassosCard.tsx`, `AdvancedSearchBar.tsx`, `SocialIntelligencePanel.tsx`, `AppLayout.tsx`, `ObjectionsTrendChart.tsx`, `TimelineGroupCard.tsx`, `DesignSystem.tsx`, `BehavioralRegenAudit.tsx`, `AppSidebar.tsx`, `PipelineFilterBar.tsx`, `priority-indicator.tsx`, `InboundActivityHeatmapCard.tsx`, `select.tsx`, `AiGatewayHealthCard.tsx`, `CompanyCommercialTab.tsx`, `InteracoesPresetsMenu.tsx`, `AutomationWizard.tsx`, `DataHealthWidget.tsx`, `ReportWidgets.tsx`, `Inbox.tsx`?**
   _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _7175 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _7174 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ref_components` be split into smaller, more focused modules?**
   _Cohesion score 0.009812765395700866 - nodes in this community are weakly interconnected._
 - **Should `sonner` be split into smaller, more focused modules?**

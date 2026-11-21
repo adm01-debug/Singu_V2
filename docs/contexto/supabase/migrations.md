@@ -7,6 +7,7 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20260109144944 | [1cfd4579-a713-4b94-89fc-38494c14566f](migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql) | 86 |
 | 20260109144945 | [baseline_tabelas_fundadoras](migrations/20260109144945_baseline_tabelas_fundadoras.sql) | 86 |
 | 20260109173224 | [f27798ce-ebf4-4249-9a8f-9514c71cea4a](migrations/20260109173224_f27798ce-ebf4-4249-9a8f-9514c71cea4a.sql) | 12 |
+| 20260110000000 | [baseline_tabelas_base](migrations/20260110000000_baseline_tabelas_base.sql) | 263 |
 | 20260306190655 | [recreate_trigger_contact_phones_normalizar](migrations/20260306190655_recreate_trigger_contact_phones_normalizar.sql) | 1 |
 | 20260306190956 | [add_numero_raw_contact_phones](migrations/20260306190956_add_numero_raw_contact_phones.sql) | 1 |
 | 20260306191225 | [fix_company_phones_triggers_and_fase2_cols](migrations/20260306191225_fix_company_phones_triggers_and_fase2_cols.sql) | 1 |

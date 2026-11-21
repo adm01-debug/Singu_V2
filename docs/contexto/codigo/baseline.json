@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "4e6995911bff12cf35d29cf2d045f638c23395d6",
+  "commit": "62379b79b4a6f10f01983cfd07a34ebfdf055ef1",
   "branch": "main",
-  "data_commit": "2026-11-21T08:28:29-03:00",
+  "data_commit": "2026-11-21T08:56:01-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "62379b7",
+    "data": "2026-11-21",
+    "assunto": "chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)"
+   },
    {
     "sha": "4e69959",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "677b193",
     "data": "2026-11-19",
     "assunto": "feat(gatilhos): aba Roteiros liga pacotes por cenário e frases por perfil (#272)"
-   },
-   {
-    "sha": "097e860",
-    "data": "2026-11-19",
-    "assunto": "feat(gatilhos): liga conflitos, sinergias e alternativas dos gatilhos estendidos (#271)"
    }
   ],
   "arquivos_mudados_7d": 1093,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 131
+    "commits": 132
    },
    {
     "autor": "devin-ai-integration[bot]",

@@ -30,7 +30,7 @@ Gerado automaticamente a cada 10 min pelo workflow `contexto` (job `banco`). **N
 | extensões | 12 |
 | cron jobs | 40 |
 | filas pgmq | 0 |
-| migrations | 695 |
+| migrations | 696 |
 | buckets | 5 |
 | edge functions | n/d |
 | webhooks | 0 |
@@ -88,3 +88,11 @@ Cada fonte é atualizada independentemente; referências anteriores não comprov
 | `manifest.json` | data UTC da coleta concluída, erros e seções reaproveitadas; usado pelo índice de contexto |
 | `CHANGELOG.md` | diff semântico a cada mudança |
 | `errors.md` | seções que falharam na última coleta |
+
+## ⚠️ Problemas na última coleta
+
+Seções reaproveitadas da coleta anterior: `lints`.
+
+| seção | erro |
+|---|---|
+| lints | canceling statement due to lock timeout |

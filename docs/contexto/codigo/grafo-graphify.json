@@ -4,10 +4,10 @@
  "presente": true,
  "como_gerar": "uvx --from \"graphifyy[sql]\" graphify update .  (ou: bun run graph:update); saída em graphify-out/ — graph.json e graph.html NÃO são versionados (dezenas de MB); use `graphify query/path/explain` localmente",
  "relatorio": null,
- "commit_do_grafo": "4e6995911bff12cf35d29cf2d045f638c23395d6",
+ "commit_do_grafo": "62379b79b4a6f10f01983cfd07a34ebfdf055ef1",
  "grafo_atual": true,
  "nos": 25778,
- "arestas": 41109,
+ "arestas": 41111,
  "comunidades_total": 3064,
  "relacoes": {
   "calls": 3261,
@@ -24,12 +24,12 @@
   "rationale_for": 85,
   "re_exports": 313,
   "reads_from": 1587,
-  "references": 2495,
+  "references": 2497,
   "triggers": 586
  },
  "origem": {
   "EXTRACTED": 39511,
-  "INFERRED": 1598
+  "INFERRED": 1600
  },
  "comunidades": [
   {
@@ -1523,18 +1523,18 @@
    "comunidade": "@testing-library/react"
   },
   {
+   "id": "supabase_functions_shared_auth_withauth",
+   "rotulo": "withAuth()",
+   "arquivo": "supabase/functions/_shared/auth.ts",
+   "grau": 95,
+   "comunidade": "withAuth"
+  },
+  {
    "id": "supabase_functions_shared_rate_limit",
    "rotulo": "rate-limit.ts",
    "arquivo": "supabase/functions/_shared/rate-limit.ts",
    "grau": 95,
    "comunidade": "_shared/auth.ts"
-  },
-  {
-   "id": "supabase_functions_shared_auth_withauth",
-   "rotulo": "withAuth()",
-   "arquivo": "supabase/functions/_shared/auth.ts",
-   "grau": 94,
-   "comunidade": "withAuth"
   },
   {
    "id": "ref_data",

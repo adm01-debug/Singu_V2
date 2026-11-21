@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "4e6995911bff12cf35d29cf2d045f638c23395d6",
+  "sha": "62379b79b4a6f10f01983cfd07a34ebfdf055ef1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 11:29 UTC",
+  "generated_at": "2026-11-21 12:16 UTC",
   "files_total": 3991,
   "code_files": 3518,
   "code_lines": 474249
@@ -305650,10 +305650,19 @@
   }
  },
  "git": {
-  "sha": "4e6995911bff12cf35d29cf2d045f638c23395d6",
+  "sha": "62379b79b4a6f10f01983cfd07a34ebfdf055ef1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "62379b7",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)",
+    "files": [
+     "docs/pendencias/_linha-de-base.md"
+    ]
+   },
    {
     "sha": "4e69959",
     "date": "2026-11-21",
@@ -306718,21 +306727,13 @@
      "src/hooks/useCarnegieAnalysis.ts",
      "src/types/carnegie.ts"
     ]
-   },
-   {
-    "sha": "679cafa",
-    "date": "2026-11-18",
-    "author": "adm01-debug",
-    "subject": "fix(interacoes): quatro chamadas de RPC usavam argumentos que não existem (#262)",
-    "files": [
-     "src/components/company-detail/OptimalContactWindowsWidget.tsx",
-     "src/components/ficha-360/ProximaAcaoCTA.contract.test.tsx",
-     "src/hooks/useContactDaysWithout.ts",
-     "src/hooks/useInteractionsRpc.ts"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "docs/pendencias/_linha-de-base.md",
+    2
+   ],
    [
     "supabase/migrations/20260110000000_baseline_tabelas_base.sql",
     2
@@ -306780,10 +306781,6 @@
    [
     "src/hooks/useAdvancedTriggers.ts",
     2
-   ],
-   [
-    "docs/pendencias/_linha-de-base.md",
-    1
    ],
    [
     "src/pages/insights/InsightsContent.tsx",
