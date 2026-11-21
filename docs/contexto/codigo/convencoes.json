@@ -6,7 +6,7 @@
    "src/pages (114)"
   ],
   "componentes": [
-   "src/components (914)",
+   "src/components (915)",
    "src/pages (140)",
    "src/app (4)"
   ],
@@ -21,7 +21,7 @@
    "src/domain (8)"
   ],
   "testes": [
-   "co-localizado (*.test) (126)",
+   "co-localizado (*.test) (127)",
    "co-localizado (__tests__) (99)",
    "tests/ (23)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1063)"
+  ".tsx (1064)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat: inscrição de contato em workflow de nurturing pela UI (#300)",
    "feat(sequencias): tracking de abertura e clique no email transacional (#299)",
    "fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)",
    "fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)",
-   "fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)",
-   "fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)"
+   "fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)"
   ]
  },
  "pr_template": null,

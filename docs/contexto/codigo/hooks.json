@@ -1264,7 +1264,7 @@
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 336,
+   "usado_por": 337,
    "usado_por_arquivos": [
     "src/app/AppChrome.tsx",
     "src/app/AppProviders.tsx",
@@ -7310,7 +7310,7 @@
     "useNurturingExecutions",
     "useRunNurturing"
    ],
-   "linhas": 62,
+   "linhas": 66,
    "dominio": "hooks",
    "tabelas": [
     "nurturing_executions"
@@ -7328,9 +7328,10 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_arquivos": [
-    "src/pages/MarketingHub.tsx"
+    "src/pages/MarketingHub.tsx",
+    "src/pages/Nurturing.tsx"
    ],
    "coberto_por_testes": 0
   },

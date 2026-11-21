@@ -4155,6 +4155,59 @@
    ]
   },
   {
+   "modulo": "components/enroll",
+   "arquivos": 1,
+   "testes": 1,
+   "linhas": 125,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [
+    "useAuth",
+    "useErrorReporter"
+   ],
+   "hooks_definidos": [],
+   "edges": [
+    "external-data"
+   ],
+   "tabelas": [
+    "activities",
+    "error_logs"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "VITE_APP_VERSION",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "alert",
+    "group",
+    "status"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks",
+    "lib"
+   ],
+   "pacotes_externos": [
+    "@tanstack/react-query"
+   ]
+  },
+  {
    "modulo": "components/erp",
    "arquivos": 1,
    "testes": 1,
@@ -8875,6 +8928,7 @@
     "components/documents",
     "components/email-builder",
     "components/enrichment",
+    "components/enroll",
     "components/erp",
     "components/features",
     "components/feedback",
@@ -9515,7 +9569,7 @@
    "modulo": "hooks",
    "arquivos": 378,
    "testes": 23,
-   "linhas": 50984,
+   "linhas": 50988,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -11475,6 +11529,7 @@
     "components/disc",
     "components/documents",
     "components/enrichment",
+    "components/enroll",
     "components/erp",
     "components/features",
     "components/feedback",
@@ -11974,6 +12029,7 @@
     "components/docs",
     "components/email-builder",
     "components/enrichment",
+    "components/enroll",
     "components/features",
     "components/feedback",
     "components/ficha-360",
@@ -12165,7 +12221,7 @@
    "modulo": "pages",
    "arquivos": 105,
    "testes": 6,
-   "linhas": 21049,
+   "linhas": 21068,
    "itens_menu": [
     "ABM",
     "Análise PNL",
@@ -13424,6 +13480,7 @@
     "components/documents",
     "components/email-builder",
     "components/enrichment",
+    "components/enroll",
     "components/erp",
     "components/feedback",
     "components/ficha-360",

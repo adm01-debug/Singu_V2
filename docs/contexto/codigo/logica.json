@@ -2767,7 +2767,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 119,
+   "usado_por": 120,
    "usado_por_modulos": [
     "components/admin",
     "components/bulk-actions",
@@ -2777,6 +2777,7 @@
     "components/dashboard",
     "components/data-export",
     "components/deal-rooms",
+    "components/enroll",
     "components/ficha-360",
     "components/interactions",
     "components/lead-routing",
@@ -2886,11 +2887,12 @@
    "zod_schemas": 1,
    "flags": [],
    "papeis": [],
-   "usado_por": 105,
+   "usado_por": 106,
    "usado_por_modulos": [
     "components/contact-detail",
     "components/contacts",
     "components/dashboard",
+    "components/enroll",
     "components/intelligence",
     "components/pipeline",
     "components/search",
@@ -2899,7 +2901,7 @@
     "pages",
     "pages/cadastro"
    ],
-   "coberto_por_testes": 23,
+   "coberto_por_testes": 24,
    "orfao": false
   },
   {

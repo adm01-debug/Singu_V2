@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1063,
+ "total": 1064,
  "orfaos": 38,
  "nomes_duplicados": {
   "ABM": [
@@ -7417,6 +7417,22 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/enroll/EnrollContactDialog.tsx",
+   "exports": [
+    "EnrollContactDialog"
+   ],
+   "export_default": null,
+   "linhas": 125,
+   "dominio": "components/enroll",
+   "hooks_locais": [
+    "useAuth"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/erp/CompanyErpProposalsWidget.tsx",
    "exports": [
     "CompanyErpProposalsWidget"
@@ -13983,7 +13999,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 514,
+   "usado_por": 515,
    "orfao": false
   },
   {
@@ -14148,7 +14164,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 85,
+   "usado_por": 86,
    "orfao": false
   },
   {
@@ -14297,7 +14313,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 197,
+   "usado_por": 198,
    "orfao": false
   },
   {
@@ -14339,7 +14355,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 136,
+   "usado_por": 137,
    "orfao": false
   },
   {
@@ -15310,7 +15326,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 336,
+   "usado_por": 337,
    "orfao": false
   },
   {
@@ -17102,9 +17118,10 @@
     "NurturingPage"
    ],
    "export_default": "NurturingPage",
-   "linhas": 188,
+   "linhas": 207,
    "dominio": "pages",
    "hooks_locais": [
+    "useEnrollContact",
     "useNurturingWorkflows"
    ],
    "tabelas": [],

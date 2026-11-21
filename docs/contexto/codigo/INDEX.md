@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `6b9a9e4ba839af70733daf38caf57c6f72e0d19e` (2026-11-21T12:20:07-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `8677d6880746b9ff21ce8ddd586007dd9414eec5` (2026-11-21T13:10:42-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2075), SQL (1279), Markdown (157), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
+- linguagens: TypeScript (2077), SQL (1279), Markdown (157), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,31 +34,31 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3886 |
-| arquivos_codigo | 2238 |
-| linhas_codigo | 417761 |
+| arquivos_total | 3888 |
+| arquivos_codigo | 2240 |
+| linhas_codigo | 417989 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
 | itens_menu | 65 |
-| modulos | 141 |
-| componentes | 1063 |
+| modulos | 142 |
+| componentes | 1064 |
 | hooks | 411 |
 | edge_functions | 109 |
 | tabelas | 542 |
 | migrations | 1106 |
 | cron_jobs | 44 |
-| testes | 277 |
+| testes | 278 |
 | workflows | 12 |
 | scripts | 296 |
 | docs_md | 157 |
 
 ## Onde ficam as coisas
 - telas: src/pages (114)
-- componentes: src/components (914), src/pages (140), src/app (4)
+- componentes: src/components (915), src/pages (140), src/app (4)
 - hooks: src/hooks (380), src/components (20), src/stores (5)
 - servicos_logica: src/lib (74), src/data (46), src/domain (8)
-- testes: co-localizado (*.test) (126), co-localizado (__tests__) (99), tests/ (23)
+- testes: co-localizado (*.test) (127), co-localizado (__tests__) (99), tests/ (23)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/migration (177), scripts/maintenance (15), scripts/hardening (10)
@@ -422,7 +422,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, DEEPSEEK_API_KEY, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, N8N_LUX_WEBHOOK_URL, RESEND_API_KEY, RESEND_FROM, TWILIO_API_KEY
 
 ## Permissões / papéis
-- papéis no código: user (38), system (32), status (30), alert (27), group (19), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), tab (1), tablist (1)
+- papéis no código: user (38), system (32), status (30), alert (28), group (20), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), tab (1), tablist (1)
 - enums de papel: salesperson_role: sdr|closer|hybrid; app_role: admin|manager|salesperson|moderator|user|moderator|user|moderator|user; entity_relationship_role: buyer|manager|owner|decision_maker|influencer|user|sponsor|partner|supplier|subsidiary|parent|employee_of|other
 - guards: src/app/lazyPages.tsx, src/components/auth/MFAGuard.tsx, src/hooks/useAuth.tsx · rotas protegidas: 103 · públicas: /*, /auth, /design-system, /dr/:token, /f/:slug, /lm/:slug, /lp/:slug, /reset-password, /signature/:token, /sso/callback, /status, /survey/:token
 - feature flags: nenhuma
@@ -445,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25780 nós · 41118 arestas · 3100 comunidades · grafo do commit `6b9a9e4b`
-- comunidades maiores: ref_components (297), useAuth (290), ref_lib (262), 02_tables.sql (259), react (254), framer-motion (248), 📖 Dicionário de Dados — SINGU CRM (227), ref_hooks (222), react-router-dom (217), _shared/auth.ts (209), Tabela de evidências (201), date-fns (196)
+- 25787 nós · 41134 arestas · 3054 comunidades · grafo do commit `8677d688`
+- comunidades maiores: ref_components (290), ref_lib (289), ref_types (280), framer-motion (259), 02_tables.sql (259), useAuth (253), _shared/auth.ts (252), 📖 Dicionário de Dados — SINGU CRM (227), react-router-dom (222), react (221), date-fns (213), lucide-react (203)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-21 `8677d68` feat: inscrição de contato em workflow de nurturing pela UI (#300)
 - 2026-11-21 `6b9a9e4` feat(sequencias): tracking de abertura e clique no email transacional (#299)
 - 2026-11-21 `d1e1811` fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)
 - 2026-11-21 `4bc4a7c` fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-20 `2020e5b` fix(insights): persiste insights gerados por IA na tabela insights (#288)
 - 2026-11-20 `3e6b290` fix(deps): bump react-router 7.18.6 e vitest 5.1.1 (alerts dependabot) (#286)
 - 2026-11-20 `df6e5c6` fix(migrations): torna 154 migrations idempotentes para reaplicação no preview (#284)
-- 2026-11-20 `6ba0fb9` fix(migrations): força handle_new_user com email (drift de produção) (#285)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

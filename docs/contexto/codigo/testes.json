@@ -5,9 +5,9 @@
   "vitest",
   "playwright"
  ],
- "total": 277,
+ "total": 278,
  "por_tipo": {
-  "contrato": 40,
+  "contrato": 41,
   "e2e": 12,
   "pytest": 9,
   "unit": 214
@@ -15,7 +15,7 @@
  "onde_ficam": [
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 126
+   "arquivos": 127
   },
   {
    "padrao": "co-localizado (__tests__)",
@@ -783,6 +783,16 @@
    "testa": [
     "src/components/dashboard/widgets/PendingFollowupsWidget.tsx",
     "src/hooks/usePendingFollowups.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/components/enroll/EnrollContactDialog.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 80,
+   "testa": [
+    "src/components/enroll/EnrollContactDialog.tsx",
+    "src/lib/externalData.ts"
    ],
    "casos": 2
   },
@@ -2578,6 +2588,7 @@
   "src/components/csat/CSATPanel.tsx": 1,
   "src/components/dashboard/YourDaySection.tsx": 1,
   "src/components/dashboard/widgets/PendingFollowupsWidget.tsx": 1,
+  "src/components/enroll/EnrollContactDialog.tsx": 1,
   "src/components/erp/CompanyErpProposalsWidget.tsx": 1,
   "src/components/ficha-360/ProximaAcaoCTA.tsx": 1,
   "src/components/forms/CompanyForm.tsx": 1,
@@ -2704,7 +2715,7 @@
   "src/lib/circuitBreaker.ts": 4,
   "src/lib/contactBehaviorAudit.ts": 1,
   "src/lib/errorReporting.ts": 2,
-  "src/lib/externalData.ts": 23,
+  "src/lib/externalData.ts": 24,
   "src/lib/formatters.ts": 1,
   "src/lib/insights/extractExcerpts.ts": 1,
   "src/lib/insights/pickTopPassages.ts": 1,

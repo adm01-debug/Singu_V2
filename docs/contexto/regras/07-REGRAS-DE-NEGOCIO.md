@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6b9a9e4ba8` · branch `main` · 2026-11-21 15:20 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8677d68807` · branch `main` · 2026-11-21 16:11 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1431,7 +1431,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `empathy` | compara | `src/hooks/useCarnegieAnalysis.ts` |
 | `type` | `enroll_in_sequence` | escreve | `src/components/automation/AutomationTemplates.tsx` |
 | `type` | `enum` | escreve | `src/lib/reports/reportEngine.ts` |
-| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +63 |
+| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +64 |
 | `type` | `error` | compara | `src/lib/queryErrorReporter.ts` |
 | `type` | `error_budget_100` | escreve | `supabase/functions/error-budget/index.ts` |
 | `type` | `error_budget_50` | escreve | `supabase/functions/error-budget/index.ts` |
@@ -1476,7 +1476,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `interaction` | compara, escreve | `src/components/contact-detail/RelationshipTimeline.tsx`<br>`src/components/crm/RelationshipKPIsDashboard.tsx`<br>`src/components/quick-add/QuickAddButton.tsx`<br>`src/components/search/GlobalSearch.tsx`<br>`src/components/search/global-search/SearchLocalGroups.tsx` |
 | `type` | `interest` | escreve | `src/components/ficha-360/TagsInteresseCard.tsx`<br>`src/hooks/useSocialIntelligence.ts`<br>`supabase/functions/social-profile-scraper/index.ts` |
 | `type` | `invalido` | compara | `src/components/contact-detail/data-tab/PhonesCard.tsx` |
-| `type` | `is` | escreve | `src/components/sequences/SequenceEnrollDialog.tsx`<br>`src/hooks/useCompanies.ts`<br>`src/hooks/useContacts.ts` |
+| `type` | `is` | escreve | `src/components/enroll/EnrollContactDialog.tsx`<br>`src/components/sequences/SequenceEnrollDialog.tsx`<br>`src/hooks/useCompanies.ts`<br>`src/hooks/useContacts.ts` |
 | `type` | `json_object` | escreve | `supabase/functions/ai-email-refine/index.ts`<br>`supabase/functions/email-thread-summary/index.ts` |
 | `type` | `latency_degradation` | escreve | `supabase/functions/connection-anomaly-detector/index.ts` |
 | `type` | `lead_score_threshold` | escreve | `supabase/functions/lead-score-threshold-runner/index.ts` |
@@ -4643,6 +4643,7 @@ _nenhum item encontrado_
 | Não foi possível copiar | `src/components/deal-rooms/ShareDialog.tsx` |
 | Não foi possível copiar | `src/components/disc/DISCSalesScriptGenerator.tsx` |
 | Não foi possível copiar | `src/components/disc/DISCTemplateLibrary.tsx` |
+|  className= | `src/components/enroll/EnrollContactDialog.tsx` |
 |  className= | `src/components/erp/CompanyErpProposalsWidget.tsx` |
 |          aria-live= | `src/components/feedback/AriaLiveRegion.tsx` |
 | useAriaLiveRegion must be used within an AriaLiveProvider | `src/components/feedback/AriaLiveRegion.tsx` |
@@ -4689,8 +4690,7 @@ _nenhum item encontrado_
 | Comando desconhecido: ${cmd} | `src/components/intelligence/AskTab.tsx` |
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
 | Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
-| Nada para exportar no bundle. | `src/components/intelligence/CrossRefTab.tsx` |
-| … +796 linhas — lista completa em `context.json` | |
+| … +797 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4723,7 +4723,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 
-## K. Testes como especificação (3239 testes em 252 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3242 testes em 253 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4927,6 +4927,7 @@ _nenhum item encontrado_
 | `src/components/admin/RequireAdmin.test.tsx` | 3 | Banner MFA administrativo · não anuncia ausência de MFA quando a consulta dos fatores está indisponível · mostra o aviso quando a ausência de fatores verificados foi confirmada |
 | `src/components/contact-detail/ContactDetailHeader.test.tsx` | 3 | confirmação de estágio na ficha · não anuncia sucesso após uma atualização rejeitada e permite nova tentativa · libera o controle e mostra erro se a atualização lançar uma exceção |
 | `src/components/dashboard/widgets/PendingFollowupsWidget.contract.test.tsx` | 3 | Prioridade canônica das pendências · distingue as quatro prioridades numéricas sem rebaixar as críticas · não apresenta falha de consulta como ausência de pendências |
+| `src/components/enroll/EnrollContactDialog.contract.test.tsx` | 3 | Inscrição com busca e cache da carteira (dialógo genérico) · impede fechar pelo X ou Escape durante uma inscrição pendente · não inscreve um contato selecionado que desapareceu do cache após arquivamento |
 | `src/components/erp/CompanyErpProposalsWidget.test.tsx` | 3 | Propostas ERP da empresa · propaga a falha de todas as origens e recupera os dados ao repetir · confirma ausência somente após uma consulta bem-sucedida, inclusive no fallback |
 | `src/components/forms/company/CompanyFormSchema.contract.test.ts` | 3 | cores da marca no formulário canônico · valida o texto do formulário e grava o enum em lista · permite limpar as cores e rejeita valores fora do enum antes do envio |
 | `src/components/pipeline/ForecastConfidencePanel.contract.test.tsx` | 3 | Previsão com duração de estágio desconhecida · não inventa duração nem receita prevista quando todos os negócios estão sem histórico · marca a estimativa como parcial e exclui apenas os dados sem duração |

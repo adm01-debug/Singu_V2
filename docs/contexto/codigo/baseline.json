@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "6b9a9e4ba839af70733daf38caf57c6f72e0d19e",
+  "commit": "8677d6880746b9ff21ce8ddd586007dd9414eec5",
   "branch": "main",
-  "data_commit": "2026-11-21T12:20:07-03:00",
+  "data_commit": "2026-11-21T13:10:42-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "8677d68",
+    "data": "2026-11-21",
+    "assunto": "feat: inscrição de contato em workflow de nurturing pela UI (#300)"
+   },
    {
     "sha": "6b9a9e4",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "1cd9342",
     "data": "2026-11-20",
     "assunto": "infra: workflow temporario para aplicar migration de auditoria em producao"
-   },
-   {
-    "sha": "b70f89e",
-    "data": "2026-11-20",
-    "assunto": "Merge pull request #278 from adm01-debug/claude/fix-resgate-auditoria-external-data-20261119-1501"
    }
   ],
-  "arquivos_mudados_7d": 936,
+  "arquivos_mudados_7d": 940,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 138
+    "commits": 139
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,21 +326,21 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3886,
-  "arquivos_codigo": 2238,
-  "linhas_codigo": 417761,
+  "arquivos_total": 3888,
+  "arquivos_codigo": 2240,
+  "linhas_codigo": 417989,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 65,
-  "modulos": 141,
-  "componentes": 1063,
+  "modulos": 142,
+  "componentes": 1064,
   "hooks": 411,
   "edge_functions": 109,
   "tabelas": 542,
   "migrations": 1106,
   "cron_jobs": 44,
-  "testes": 277,
+  "testes": 278,
   "workflows": 12,
   "scripts": 296,
   "docs_md": 157
@@ -651,8 +651,8 @@
    "linhas": 591
   },
   "src/components": {
-   "arquivos": 995,
-   "linhas": 149711
+   "arquivos": 997,
+   "linhas": 149916
   },
   "src/config": {
    "arquivos": 1,
@@ -672,7 +672,7 @@
   },
   "src/hooks": {
    "arquivos": 443,
-   "linhas": 58408
+   "linhas": 58412
   },
   "src/integrations": {
    "arquivos": 3,
@@ -688,7 +688,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28791
+   "linhas": 28810
   },
   "src/store": {
    "arquivos": 1,
