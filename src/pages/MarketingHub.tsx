@@ -14,7 +14,7 @@ import { useNurturingWorkflows } from '@/hooks/useNurturingWorkflows';
 import { useNurturingExecutions, useRunNurturing } from '@/hooks/useNurturingExecutions';
 import { useMQLCriteria, useMQLClassifications, useHandoffMQL } from '@/hooks/useMQL';
  import { useAttribution, type AttributionModel } from '@/hooks/useAttribution';
-  import { useMarketingFunnel, useMarketingBehavioralInsights } from '@/hooks/useMarketingInsights';
+  import { useMarketingFunnel, useMarketingBehavioralInsights, useMarketingCampaignStats } from '@/hooks/useMarketingInsights';
  import { AttributionBreakdownChart } from '@/components/marketing/AttributionBreakdownChart';
  import { MarketingStats } from '@/components/crm/marketing/components/MarketingStats';
  import { FormList } from '@/components/crm/marketing/components/FormList';
@@ -48,6 +48,78 @@ export default function MarketingHub() {
    const { data: attribution } = useAttribution(attDealId || undefined, attModel, attValue);
     const { data: funnel = [] } = useMarketingFunnel();
     const { data: behaviorInsights } = useMarketingBehavioralInsights();
+    const { data: campaignStats = [] } = useMarketingCampaignStats();
+    const campaign = campaignStats.reduce((acc, s) => ({
+      spend: acc.spend + (Number(s.spend) || 0),
+      revenue: acc.revenue + (Number(s.revenue) || 0),
+      submissions: acc.submissions + (Number(s.submissions) || 0),
+      conversions: acc.conversions + (Number(s.conversions) || 0),
+    }), { spend: 0, revenue: 0, submissions: 0, conversions: 0 });
+    const cpl = campaign.submissions > 0 ? campaign.spend / campaign.submissions : null;
+    const cac = campaign.conversions > 0 ? campaign.spend / campaign.conversions : null;
+    const ltv = campaign.conversions > 0 ? campaign.revenue / campaign.conversions : null;
+    const fmtBRL = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+   const copyUrl = (slug: string, prefix: 'f' | 'lm' | 'lp') => {
+    const url = `${window.location.origin}/${prefix}/${slug}`;
+    navigator.clipboard.writeText(url)
+      .then(() => toast.success('URL copiada!'))
+      .catch(() => toast.error('Não foi possível copiar'));
+  };
+
+  return (
+    <div className="container max-w-7xl py-6 space-y-6">
+      <Helmet>
+        <title>Marketing Automation — Suite</title>
+        <meta name="description" content="Forms, lead magnets, nurturing, MQL e attribution multi-touch em um só lugar." />
+      </Helmet>
+
+       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/40 pb-6">
+         <div className="space-y-1">
+           <div className="flex items-center gap-2 mb-1">
+             <div className="p-1.5 rounded-lg bg-primary/10">
+               <Megaphone className="w-5 h-5 text-primary" />
+             </div>
+             <h1 className="text-2xl font-bold tracking-tight">Marketing & Campanhas</h1>
+           </div>
+           <p className="text-sm text-muted-foreground max-w-2xl">
+             Ecossistema integrado para geração de demanda, automação de nutrição e análise multi-touch.
+             Converta leads em SQLs com precisão cirúrgica.
+           </p>
+         </div>
+         <div className="flex items-center gap-2">
+           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
+             <Link to="/campanhas">
+               <Megaphone className="w-4 h-4" /> Email Marketing
+             </Link>
+           </Button>
+           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
+             <Link to="/landing-pages">
+               <Layout className="w-4 h-4" /> Landing Pages
+             </Link>
+           </Button>
+           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
+             <Link to="/sequencias">
+               <ListFilter className="w-4 h-4" /> Sequências
+             </Link>
+           </Button>
+         </div>
+       </div>
+
+       <Tabs defaultValue="overview" className="space-y-6">
+         <div className="flex overflow-x-auto pb-1 -mx-2 px-2 scrollbar-none">
+           <TabsList className="flex-nowrap bg-muted/50 p-1">
+             <TabsTrigger value="overview" className="gap-2 px-4"><Layout className="w-4 h-4" /> Overview</TabsTrigger>
+             <TabsTrigger value="forms" className="gap-2 px-4"><Target className="w-4 h-4" /> Formulários</TabsTrigger>
+             <TabsTrigger value="magnets" className="gap-2 px-4"><Eye className="w-4 h-4" /> Lead Magnets</TabsTrigger>
+             <TabsTrigger value="nurturing" className="gap-2 px-4"><Workflow className="w-4 h-4" /> Nurturing</TabsTrigger>
+              <TabsTrigger value="segmentation" className="gap-2 px-4"><Users className="w-4 h-4" /> Segmentação</TabsTrigger>
+              <TabsTrigger value="mql" className="gap-2 px-4"><Target className="w-4 h-4" /> MQL → SQL</TabsTrigger>
+              <TabsTrigger value="attribution" className="gap-2 px-4"><BarChart3 className="w-4 h-4" /> Attribution</TabsTrigger>
+           </TabsList>
+         </div>
+ 
+           <TabsContent value="overview" className="space-y-6">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                <Card>
                  <CardHeader className="pb-2">
@@ -140,70 +212,6 @@ export default function MarketingHub() {
              </div>
  
 
-   const copyUrl = (slug: string, prefix: 'f' | 'lm' | 'lp') => {
-    const url = `${window.location.origin}/${prefix}/${slug}`;
-    navigator.clipboard.writeText(url)
-      .then(() => toast.success('URL copiada!'))
-      .catch(() => toast.error('Não foi possível copiar'));
-  };
-
-  return (
-    <div className="container max-w-7xl py-6 space-y-6">
-      <Helmet>
-        <title>Marketing Automation — Suite</title>
-        <meta name="description" content="Forms, lead magnets, nurturing, MQL e attribution multi-touch em um só lugar." />
-      </Helmet>
-
-       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/40 pb-6">
-         <div className="space-y-1">
-           <div className="flex items-center gap-2 mb-1">
-             <div className="p-1.5 rounded-lg bg-primary/10">
-               <Megaphone className="w-5 h-5 text-primary" />
-             </div>
-             <h1 className="text-2xl font-bold tracking-tight">Marketing & Campanhas</h1>
-           </div>
-           <p className="text-sm text-muted-foreground max-w-2xl">
-             Ecossistema integrado para geração de demanda, automação de nutrição e análise multi-touch.
-             Converta leads em SQLs com precisão cirúrgica.
-           </p>
-         </div>
-         <div className="flex items-center gap-2">
-           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
-             <Link to="/campanhas">
-               <Megaphone className="w-4 h-4" /> Email Marketing
-             </Link>
-           </Button>
-           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
-             <Link to="/landing-pages">
-               <Layout className="w-4 h-4" /> Landing Pages
-             </Link>
-           </Button>
-           <Button asChild variant="outline" size="sm" className="gap-2 h-9">
-             <Link to="/sequencias">
-               <ListFilter className="w-4 h-4" /> Sequências
-             </Link>
-           </Button>
-         </div>
-       </div>
-
-       <Tabs defaultValue="overview" className="space-y-6">
-         <div className="flex overflow-x-auto pb-1 -mx-2 px-2 scrollbar-none">
-           <TabsList className="flex-nowrap bg-muted/50 p-1">
-             <TabsTrigger value="overview" className="gap-2 px-4"><Layout className="w-4 h-4" /> Overview</TabsTrigger>
-             <TabsTrigger value="forms" className="gap-2 px-4"><Target className="w-4 h-4" /> Formulários</TabsTrigger>
-             <TabsTrigger value="magnets" className="gap-2 px-4"><Eye className="w-4 h-4" /> Lead Magnets</TabsTrigger>
-             <TabsTrigger value="nurturing" className="gap-2 px-4"><Workflow className="w-4 h-4" /> Nurturing</TabsTrigger>
-              <TabsTrigger value="segmentation" className="gap-2 px-4"><Users className="w-4 h-4" /> Segmentação</TabsTrigger>
-              <TabsTrigger value="mql" className="gap-2 px-4"><Target className="w-4 h-4" /> MQL → SQL</TabsTrigger>
-              <TabsTrigger value="attribution" className="gap-2 px-4"><BarChart3 className="w-4 h-4" /> Attribution</TabsTrigger>
-           <TabsContent value="segmentation" className="space-y-6">
-             <BehavioralSegmentation />
-           </TabsContent>
- 
-           </TabsList>
-         </div>
- 
-           <TabsContent value="overview" className="space-y-6">
              <MarketingStats 
                totalViews={magnets.reduce((acc, m) => acc + (m.view_count || 0), 0)}
                totalSubmissions={forms.reduce((acc, f) => acc + (f.submission_count || 0), 0)}
@@ -249,18 +257,26 @@ export default function MarketingHub() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
-                      <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Custo por Lead (CPL)</p>
-                      <p className="text-2xl font-bold">R$ 14,30</p>
-                    </div>
-                    <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
-                      <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">CAC Estimado</p>
-                      <p className="text-2xl font-bold">R$ 452,00</p>
-                    </div>
-                    <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/10">
-                      <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">LTV Sugerido</p>
-                      <p className="text-2xl font-bold">R$ 8.900,00</p>
-                    </div>
+                    {campaign.spend > 0 ? (
+                      <>
+                        <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
+                          <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Custo por Lead (CPL)</p>
+                          <p className="text-2xl font-bold">{cpl !== null ? fmtBRL(cpl) : '—'}</p>
+                        </div>
+                        <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                          <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">CAC Estimado</p>
+                          <p className="text-2xl font-bold">{cac !== null ? fmtBRL(cac) : '—'}</p>
+                        </div>
+                        <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/10">
+                          <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">LTV Sugerido</p>
+                          <p className="text-2xl font-bold">{ltv !== null ? fmtBRL(ltv) : '—'}</p>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="h-[120px] flex items-center justify-center text-muted-foreground text-sm border-2 border-dashed rounded-lg text-center px-4">
+                        Sem campanhas registradas. Vincule investimento em Formulários e Magnets para ver CPL, CAC e LTV reais.
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -292,17 +308,22 @@ export default function MarketingHub() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {workflows.slice(0, 3).map(w => (
-                      <div key={w.id} className="space-y-1">
-                        <div className="flex justify-between text-xs">
-                          <span className="font-medium">{w.name}</span>
-                          <span className="text-muted-foreground">{executions.filter(e => e.workflow_id === w.id && e.status === 'completed').length} concluídos</span>
+                    {workflows.slice(0, 3).map(w => {
+                      const wfTotal = executions.filter(e => e.workflow_id === w.id).length;
+                      const wfDone = executions.filter(e => e.workflow_id === w.id && e.status === 'completed').length;
+                      const wfPct = wfTotal > 0 ? Math.round((wfDone / wfTotal) * 100) : 0;
+                      return (
+                        <div key={w.id} className="space-y-1">
+                          <div className="flex justify-between text-xs">
+                            <span className="font-medium">{w.name}</span>
+                            <span className="text-muted-foreground">{wfDone} concluídos</span>
+                          </div>
+                          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                            <div className="h-full bg-primary" style={{ width: `${wfPct}%` }} />
+                          </div>
                         </div>
-                        <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full bg-primary" style={{ width: '65%' }} />
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                     {workflows.length === 0 && (
                       <p className="text-xs text-muted-foreground text-center py-4 italic">Sem fluxos de nutrição configurados.</p>
                     )}
@@ -444,6 +465,10 @@ export default function MarketingHub() {
                 </Button>
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="segmentation" className="space-y-6">
+            <BehavioralSegmentation />
           </TabsContent>
 
         {/* NURTURING */}
