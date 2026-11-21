@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "e453c9f60dbb925d272796699fca4d9be0020022",
+  "commit": "fe5d8c1175d02f983dc4071f16980ba617b2e868",
   "branch": "main",
-  "data_commit": "2026-11-21T09:30:56-03:00",
+  "data_commit": "2026-11-21T09:31:00-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "fe5d8c1",
+    "data": "2026-11-21",
+    "assunto": "fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)"
+   },
    {
     "sha": "e453c9f",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "0418f64",
     "data": "2026-11-20",
     "assunto": "fix(migrations): recupera da produção as 607 migrations que faltavam no repositório (#267)"
-   },
-   {
-    "sha": "62b6b2a",
-    "data": "2026-11-19",
-    "assunto": "ci(security): dependency review barra CVE novo high/critical nos PRs (#273)"
    }
   ],
-  "arquivos_mudados_7d": 1094,
+  "arquivos_mudados_7d": 1095,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 132
+    "commits": 133
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3886,
   "arquivos_codigo": 2238,
-  "linhas_codigo": 417629,
+  "linhas_codigo": 417673,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -652,7 +652,7 @@
   },
   "src/components": {
    "arquivos": 995,
-   "linhas": 149669
+   "linhas": 149713
   },
   "src/config": {
    "arquivos": 1,

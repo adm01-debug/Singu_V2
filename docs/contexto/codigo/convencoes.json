@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)",
    "feat(insights): carrega insights persistidos ao abrir a tela (#291)",
    "chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)",
    "fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)",
-   "docs(auditoria): linha de base do estado real em docs/pendencias (#289)",
-   "fix(insights): persiste insights gerados por IA na tabela insights (#288)"
+   "docs(auditoria): linha de base do estado real em docs/pendencias (#289)"
   ]
  },
  "pr_template": null,

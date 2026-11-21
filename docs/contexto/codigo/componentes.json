@@ -11442,7 +11442,7 @@
     "MetaProgramsProfiler"
    ],
    "export_default": "MetaProgramsProfiler",
-   "linhas": 158,
+   "linhas": 202,
    "dominio": "components/nlp",
    "hooks_locais": [],
    "tabelas": [],
