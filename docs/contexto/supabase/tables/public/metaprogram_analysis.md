@@ -55,7 +55,9 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | idx_meta_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_meta_contact ON public.metaprogram_analysis USING btree (contact_id)` |
+| idx_metaprogram_analysis_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_metaprogram_analysis_contact ON public.metaprogram_analysis USING btree (contact_id)` |
 | idx_metaprogram_analysis_interaction_id | btree | interaction_id | não | sim |  | `CREATE INDEX idx_metaprogram_analysis_interaction_id ON public.metaprogram_analysis USING btree (interaction_id)` |
+| idx_metaprogram_analysis_user | btree | user_id | não | sim |  | `CREATE INDEX idx_metaprogram_analysis_user ON public.metaprogram_analysis USING btree (user_id)` |
 | idx_metaprogram_analysis_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_metaprogram_analysis_user_id ON public.metaprogram_analysis USING btree (user_id)` |
 | metaprogram_analysis_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX metaprogram_analysis_pkey ON public.metaprogram_analysis USING btree (id)` |
 
@@ -70,7 +72,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can delete own`
 
@@ -89,7 +91,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert own`
@@ -119,7 +121,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own`
@@ -139,7 +141,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 

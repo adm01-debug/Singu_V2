@@ -53,7 +53,7 @@
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `((( SELECT auth.jwt() AS jwt) ->> 'role'::text) = 'service_role'::text)` |
 | WITH CHECK |  |
 
@@ -63,7 +63,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
 
@@ -73,7 +73,7 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
@@ -83,7 +83,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_predictive_roadmap.contact_id) AND ((c.user_id = ( SELECT auth.uid() AS uid)) OR ((( SELECT auth.jwt() AS jwt) ->> 'role'::text) = 'service_role'::text)))))` |
 | WITH CHECK |  |
 
@@ -93,7 +93,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 

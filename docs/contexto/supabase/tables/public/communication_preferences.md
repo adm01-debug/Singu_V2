@@ -49,6 +49,7 @@
 | communication_preferences_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX communication_preferences_pkey ON public.communication_preferences USING btree (id)` |
 | communication_preferences_user_id_contact_id_key | btree | user_id, contact_id | sim | sim |  | `CREATE UNIQUE INDEX communication_preferences_user_id_contact_id_key ON public.communication_preferences USING btree (user_id, contact_id)` |
 | idx_comm_pref_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_comm_pref_contact ON public.communication_preferences USING btree (contact_id)` |
+| idx_communication_preferences_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_communication_preferences_contact ON public.communication_preferences USING btree (contact_id)` |
 
 
 ## Policies (RLS)
@@ -70,7 +71,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert own`
@@ -91,7 +92,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update own`
 
@@ -110,7 +111,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own`
@@ -130,7 +131,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 

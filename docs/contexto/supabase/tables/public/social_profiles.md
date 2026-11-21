@@ -71,7 +71,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert their own social profiles`
@@ -82,7 +82,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update their own social profiles`
 
@@ -91,7 +91,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view their own social profiles`
@@ -101,7 +101,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `social_profiles_delete`
@@ -150,7 +150,6 @@
 | nome | timing | eventos | nível | status | função |
 |---|---|---|---|---|---|
 | set_updated_at_social_profiles | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
-| update_social_profiles_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 
 
 ## Grants

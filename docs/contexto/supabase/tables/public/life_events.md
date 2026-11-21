@@ -47,6 +47,7 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | idx_life_events_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_life_events_contact ON public.life_events USING btree (contact_id)` |
+| idx_life_events_date | btree | event_date | não | sim |  | `CREATE INDEX idx_life_events_date ON public.life_events USING btree (event_date)` |
 | idx_life_events_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_life_events_user_id ON public.life_events USING btree (user_id)` |
 | life_events_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX life_events_pkey ON public.life_events USING btree (id)` |
 
@@ -70,7 +71,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert own`
@@ -91,7 +92,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update own`
 
@@ -110,7 +111,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own`
@@ -130,7 +131,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 

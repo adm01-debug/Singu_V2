@@ -52,6 +52,7 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
+| idx_rfm_metrics_period | btree | user_id, period_start, period_end | não | sim |  | `CREATE INDEX idx_rfm_metrics_period ON public.rfm_metrics USING btree (user_id, period_start, period_end)` |
 | rfm_metrics_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX rfm_metrics_pkey ON public.rfm_metrics USING btree (id)` |
 | rfm_metrics_user_id_period_start_period_end_period_type_key | btree | user_id, period_start, period_end, period_type | sim | sim |  | `CREATE UNIQUE INDEX rfm_metrics_user_id_period_start_period_end_period_type_key ON public.rfm_metrics USING btree (user_id, period_start, period_end, period_type)` |
 
@@ -65,7 +66,7 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `rfm_metrics_delete`

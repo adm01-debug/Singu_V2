@@ -53,7 +53,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
@@ -63,7 +63,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(EXISTS ( SELECT 1    FROM lead_magnets m   WHERE ((m.id = lead_magnet_downloads.magnet_id) AND (m.is_published = true) AND (m.user_id = lead_magnet_downloads.user_id))))` |
 

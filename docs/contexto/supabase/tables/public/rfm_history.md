@@ -41,6 +41,7 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | idx_rfm_history_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_rfm_history_contact ON public.rfm_history USING btree (contact_id)` |
+| idx_rfm_history_recorded | btree | recorded_at | não | sim |  | `CREATE INDEX idx_rfm_history_recorded ON public.rfm_history USING btree (recorded_at)` |
 | idx_rfm_history_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_rfm_history_user_id ON public.rfm_history USING btree (user_id)` |
 | rfm_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX rfm_history_pkey ON public.rfm_history USING btree (id)` |
 
@@ -54,7 +55,7 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `rfm_history_delete`

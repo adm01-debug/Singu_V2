@@ -59,7 +59,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can delete their own weekly_report_settings`
 
@@ -68,7 +68,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can update their own report settings`
@@ -78,7 +78,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view their own report settings`
@@ -88,7 +88,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `weekly_report_settings_delete`
@@ -137,7 +137,6 @@
 | nome | timing | eventos | nível | status | função |
 |---|---|---|---|---|---|
 | set_updated_at_weekly_report_settings | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
-| update_weekly_report_settings_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 
 
 ## Grants

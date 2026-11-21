@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 8 |
+| policies | 9 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -96,6 +96,16 @@
 | USING |  |
 | WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
 
+### `Users can manage their own DISC conversion metrics`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(auth.uid() = user_id)` |
+| WITH CHECK |  |
+
 ### `Users can update own`
 
 | campo | valor |
@@ -133,7 +143,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 

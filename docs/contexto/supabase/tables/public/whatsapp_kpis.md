@@ -56,8 +56,8 @@
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `whatsapp_kpis_delete`
 

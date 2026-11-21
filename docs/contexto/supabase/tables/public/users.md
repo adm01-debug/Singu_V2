@@ -12,7 +12,7 @@
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
-| usada por views | public.users_public, public.vw_carrier_evaluations_history, public.vw_carrier_homologation_control, public.vw_carriers_completo, public.vw_carteira_vendedores, public.vw_customers_completo, public.vw_dashboard_sdr, public.vw_dashboard_vendedor, public.vw_dashboard_vendedor_v2, public.vw_historico_prospects, public.vw_historico_sdr_closer, public.vw_historico_sdr_empresa, public.vw_resumo_diario_vendedor, public.vw_risco_inativacao, public.vw_rodizio_bloqueios, public.vw_rodizio_carga_closers, public.vw_rodizio_carga_sdrs, public.vw_rodizio_execucoes, public.vw_rodizio_kpis, public.vw_sdr_closer_atual, public.vw_sdr_qtd_closers, public.vw_status_clientes, public.vw_supplier_evaluations_history, public.vw_supplier_homologation_control, public.vw_suppliers_completo |
+| usada por views | public.users_public, public.vw_carrier_evaluations_history, public.vw_carrier_homologation_control, public.vw_carriers_completo, public.vw_carteira_vendedores, public.vw_customers_completo, public.vw_dashboard_sdr, public.vw_dashboard_vendedor, public.vw_dashboard_vendedor_v2, public.vw_historico_prospects, public.vw_historico_sdr_closer, public.vw_historico_sdr_empresa, public.vw_resumo_diario_vendedor, public.vw_risco_inativacao, public.vw_rodizio_bloqueios, public.vw_rodizio_carga_closers, public.vw_rodizio_carga_sdrs, public.vw_rodizio_execucoes, public.vw_rodizio_kpis, public.vw_sdr_closer_atual, public.vw_sdr_qtd_closers, public.vw_status_clientes, public.vw_supplier_evaluations_history, public.vw_supplier_homologation_control |
 
 
 ## Colunas

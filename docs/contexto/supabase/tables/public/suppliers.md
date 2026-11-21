@@ -12,7 +12,7 @@
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
-| usada por views | public.vw_supplier_alerts, public.vw_supplier_by_state, public.vw_supplier_data_quality, public.vw_supplier_evaluations_history, public.vw_supplier_homologation_control, public.vw_supplier_homologation_queue, public.vw_supplier_qualification_dashboard, public.vw_supplier_ranking, public.vw_suppliers, public.vw_suppliers_completo |
+| usada por views | public.vw_supplier_alerts, public.vw_supplier_by_state, public.vw_supplier_data_quality, public.vw_supplier_evaluations_history, public.vw_supplier_homologation_control, public.vw_supplier_homologation_queue, public.vw_supplier_qualification_dashboard, public.vw_supplier_ranking |
 
 
 ## Colunas

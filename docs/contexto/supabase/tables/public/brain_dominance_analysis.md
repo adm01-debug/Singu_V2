@@ -63,7 +63,7 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = brain_dominance_analysis.contact_id) AND (c.user_id = ( SELECT auth.uid() AS uid)))))` |
 | WITH CHECK |  |
 
@@ -73,7 +73,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = brain_dominance_analysis.contact_id) AND (c.user_id = ( SELECT auth.uid() AS uid)))))` |
 | WITH CHECK |  |
 

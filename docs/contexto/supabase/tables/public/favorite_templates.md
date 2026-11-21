@@ -38,6 +38,8 @@
 |---|---|---|---|---|---|---|
 | favorite_templates_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX favorite_templates_pkey ON public.favorite_templates USING btree (id)` |
 | idx_fav_templates_unique | btree | user_id, template_id | sim | sim |  | `CREATE UNIQUE INDEX idx_fav_templates_unique ON public.favorite_templates USING btree (user_id, template_id)` |
+| idx_favorite_templates_template_id | btree | template_id | não | sim |  | `CREATE INDEX idx_favorite_templates_template_id ON public.favorite_templates USING btree (template_id)` |
+| idx_favorite_templates_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_favorite_templates_user_id ON public.favorite_templates USING btree (user_id)` |
 
 
 ## Policies (RLS)
@@ -59,7 +61,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert own`
@@ -80,7 +82,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update own`
 
@@ -109,7 +111,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 

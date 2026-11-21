@@ -64,7 +64,7 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = created_by)` |
 | WITH CHECK |  |
 
@@ -74,7 +74,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(( SELECT auth.uid() AS uid) = created_by)` |
 
@@ -84,7 +84,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = created_by)` |
 | WITH CHECK |  |
 
@@ -94,7 +94,7 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = created_by)` |
 | WITH CHECK | `(( SELECT auth.uid() AS uid) = created_by)` |
 

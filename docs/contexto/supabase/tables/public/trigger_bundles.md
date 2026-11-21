@@ -78,7 +78,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `((( SELECT auth.uid() AS uid) = user_id) AND (COALESCE(is_system_bundle, false) = false))` |
+| WITH CHECK | `((auth.uid() = user_id) AND (COALESCE(is_system_bundle, false) = false))` |
 
 ### `Users can delete their own bundles`
 
@@ -87,7 +87,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `((( SELECT auth.uid() AS uid) = user_id) AND (is_system_bundle = false))` |
+| USING | `((auth.uid() = user_id) AND (is_system_bundle = false))` |
 | WITH CHECK |  |
 
 ### `Users can update their own bundles`
@@ -97,7 +97,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `((( SELECT auth.uid() AS uid) = user_id) AND (is_system_bundle = false))` |
+| USING | `((auth.uid() = user_id) AND (is_system_bundle = false))` |
 | WITH CHECK |  |
 
 ### `Users can view their own bundles`
@@ -107,7 +107,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `((( SELECT auth.uid() AS uid) = user_id) OR (is_system_bundle = true))` |
+| USING | `((auth.uid() = user_id) OR (is_system_bundle = true))` |
 | WITH CHECK |  |
 
 ### `trigger_bundles_delete`

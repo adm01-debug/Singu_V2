@@ -9,7 +9,7 @@
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
 | policies | 10 |
-| realtime (publication) | não |
+| realtime (publication) | sim |
 | replica identity | default |
 | vem de extensão | não |
 | usada por views | public.v_companies_metrics, public.v_contact_summary, public.v_daily_kpis, public.v_dashboard_kpis, public.v_entities, public.vw_active_alerts, public.vw_apelidos_progresso, public.vw_best_closing_moments, public.vw_carrier_data_quality, public.vw_churn_risk_ranking, public.vw_closing_score_alerts, public.vw_closing_score_ranking, public.vw_communication_dashboard, public.vw_companies_completo, public.vw_companies_duplicatas, public.vw_companies_stats, public.vw_contact_social_media, public.vw_contacts_completo, public.vw_contacts_contato, public.vw_contacts_full, public.vw_contacts_sem_apelido, public.vw_deal_velocity_benchmark, public.vw_deals_full, public.vw_disc_compatibility, public.vw_emotional_trend_by_contact, public.vw_eq_dashboard, public.vw_eq_evolution, public.vw_interacoes_sem_apelido, public.vw_interaction_timeline, public.vw_leads_full, public.vw_notification_dashboard, public.vw_pending_followups, public.vw_pending_notifications, public.vw_rapport_points, public.vw_satisfaction_trend, public.vw_search_contacts, public.vw_singu_communication_intel, public.vw_singu_contact_360, public.vw_singu_data_health, public.vw_singu_emotional_trend, public.vw_singu_lux_status, public.vw_singu_rapport_intel, public.vw_singu_readiness, public.vw_singu_usage_kpis, public.vw_social_media_stats, public.vw_supplier_data_quality, public.vw_todays_reminders, reporting.mv_daily_kpis, reporting.mv_daily_stats, zapp_history.contact_message_stats, zapp_history.v_churn_alerts, zapp_history.v_competitor_alerts, zapp_history.v_contact_360, zapp_history.v_conversas_aguardando, zapp_history.v_full_intelligence_stream, zapp_history.v_intelligence_360, zapp_history.v_pedidos_detectados, zapp_history.v_proximas_respostas, zapp_history.v_recent_summaries, zapp_history.v_routing_queue, zapp_history.v_top_contatos_potencial |
@@ -321,7 +321,7 @@
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
@@ -331,7 +331,7 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -341,7 +341,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(auth.uid() = user_id)` |
 
@@ -351,7 +351,7 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -361,7 +361,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -439,7 +439,6 @@
 | trg_record_family_history | AFTER | INSERT OR UPDATE | ROW | enabled | public.record_family_history |
 | trg_singu_reverse_sync_contact | AFTER | INSERT OR UPDATE | ROW | enabled | public.singu_reverse_sync_contact |
 | trigger_log_contact_relationship_changes | AFTER | UPDATE | ROW | enabled | public.log_contact_relationship_changes |
-| update_contacts_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 
 
 ## Grants

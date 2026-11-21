@@ -52,7 +52,7 @@
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.role() AS role) = 'authenticated'::text)` |
 | WITH CHECK |  |
 
@@ -62,7 +62,7 @@
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `((( SELECT auth.jwt() AS jwt) ->> 'role'::text) = 'service_role'::text)` |
 | WITH CHECK |  |
 
@@ -72,7 +72,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = crm_objection_intelligence.contact_id) AND ((c.user_id = ( SELECT auth.uid() AS uid)) OR ((( SELECT auth.jwt() AS jwt) ->> 'role'::text) = 'service_role'::text)))))` |
 | WITH CHECK |  |
 
@@ -82,7 +82,7 @@
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.role() AS role) = 'authenticated'::text)` |
 | WITH CHECK |  |
 
@@ -92,7 +92,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.role() AS role) = 'authenticated'::text)` |
 | WITH CHECK |  |
 

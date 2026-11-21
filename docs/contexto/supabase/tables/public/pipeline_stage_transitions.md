@@ -48,7 +48,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `true` |
 | WITH CHECK |  |
 

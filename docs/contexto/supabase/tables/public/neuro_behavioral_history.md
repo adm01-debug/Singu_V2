@@ -52,7 +52,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = ( SELECT auth.uid() AS uid)))))` |
 
@@ -62,7 +62,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = neuro_behavioral_history.contact_id) AND (c.user_id = ( SELECT auth.uid() AS uid)))))` |
 | WITH CHECK |  |
 

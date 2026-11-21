@@ -53,7 +53,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(EXISTS ( SELECT 1    FROM contacts   WHERE (contacts.id = suggested_rapport_intel.contact_id)))` |
 
@@ -63,7 +63,7 @@
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
 
@@ -73,7 +73,7 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM contacts   WHERE (contacts.id = suggested_rapport_intel.contact_id)))` |
 | WITH CHECK |  |
 
@@ -83,7 +83,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM contacts   WHERE (contacts.id = suggested_rapport_intel.contact_id)))` |
 | WITH CHECK |  |
 

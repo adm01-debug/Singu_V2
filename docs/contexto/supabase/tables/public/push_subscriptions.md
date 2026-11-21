@@ -50,7 +50,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(auth.uid() = user_id)` |
 
@@ -60,7 +60,7 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -70,7 +70,7 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -80,7 +80,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) = user_id)` |
 | WITH CHECK |  |
 
@@ -100,7 +100,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -150,7 +150,6 @@
 | nome | timing | eventos | nível | status | função |
 |---|---|---|---|---|---|
 | set_updated_at_push_subscriptions | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
-| update_push_subscriptions_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 
 
 ## Grants

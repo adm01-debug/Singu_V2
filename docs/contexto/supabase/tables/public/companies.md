@@ -9,10 +9,10 @@
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
 | policies | 9 |
-| realtime (publication) | não |
+| realtime (publication) | sim |
 | replica identity | default |
 | vem de extensão | não |
-| usada por views | public.v_companies_metrics, public.v_company_summary, public.v_contact_summary, public.v_daily_kpis, public.v_dashboard_kpis, public.v_deal_summary, public.v_entities, public.v_recent_interactions, public.vw_active_alerts, public.vw_alertas_pendentes_vendedor, public.vw_alertas_vendedor, public.vw_apelidos_progresso, public.vw_best_closing_moments, public.vw_carrier_alerts, public.vw_carrier_by_state, public.vw_carrier_data_quality, public.vw_carrier_evaluations_history, public.vw_carrier_homologation_control, public.vw_carrier_homologation_queue, public.vw_carrier_qualification_dashboard, public.vw_carrier_ranking, public.vw_carriers, public.vw_carriers_completo, public.vw_carteira_sdr, public.vw_churn_risk_ranking, public.vw_cliente_completo, public.vw_clientes_prioridade, public.vw_closing_score_alerts, public.vw_closing_score_ranking, public.vw_communication_dashboard, public.vw_companies_completo, public.vw_companies_contato, public.vw_companies_cores, public.vw_companies_duplicatas, public.vw_companies_stats, public.vw_company_addresses, public.vw_company_social_media, public.vw_contact_social_media, public.vw_contacts_completo, public.vw_contacts_full, public.vw_contacts_sem_apelido, public.vw_cooperativas_estrutura, public.vw_customers, public.vw_customers_ativos, public.vw_customers_completo, public.vw_deal_velocity_benchmark, public.vw_deals_full, public.vw_emotional_trend_by_contact, public.vw_empresa_historico_completo, public.vw_empresa_timeline_completa, public.vw_empresas_hierarquia, public.vw_eq_dashboard, public.vw_eq_evolution, public.vw_grupos_economicos_resumo, public.vw_historico_alertas, public.vw_historico_carteira, public.vw_historico_carteira_empresa, public.vw_historico_prospects, public.vw_historico_sdr_empresa, public.vw_interacoes_sem_apelido, public.vw_interaction_timeline, public.vw_leads_full, public.vw_matriz_filiais, public.vw_pending_followups, public.vw_pending_notifications, public.vw_pix_accounts, public.vw_primeiro_ativador, public.vw_quem_ativou, public.vw_quem_inativou, public.vw_rapport_points, public.vw_risco_inativacao, public.vw_rodizio_bloqueios, public.vw_satisfaction_trend, public.vw_search_contacts, public.vw_singu_contact_360, public.vw_singu_data_health, public.vw_singu_lux_status, public.vw_singu_readiness, public.vw_social_media_stats, public.vw_status_clientes, public.vw_supplier_alerts, public.vw_supplier_by_state, public.vw_supplier_data_quality, public.vw_supplier_evaluations_history, public.vw_supplier_homologation_control, public.vw_supplier_homologation_queue, public.vw_supplier_qualification_dashboard, public.vw_supplier_ranking, public.vw_suppliers, public.vw_suppliers_completo, public.vw_timeline_cliente, public.vw_timeline_empresa, public.vw_todays_reminders, public.vw_top_clientes_vendedor, public.vw_ultimo_inativador, reporting.mv_daily_kpis, reporting.mv_daily_stats, zapp_history.contact_message_stats, zapp_history.v_churn_alerts, zapp_history.v_competitor_alerts, zapp_history.v_contact_360, zapp_history.v_full_intelligence_stream, zapp_history.v_intelligence_360, zapp_history.v_pedidos_detectados, zapp_history.v_recent_summaries, zapp_history.v_routing_queue, zapp_history.v_top_contatos_potencial |
+| usada por views | public.v_companies_metrics, public.v_company_summary, public.v_contact_summary, public.v_daily_kpis, public.v_dashboard_kpis, public.v_deal_summary, public.v_entities, public.v_recent_interactions, public.vw_active_alerts, public.vw_alertas_pendentes_vendedor, public.vw_alertas_vendedor, public.vw_apelidos_progresso, public.vw_best_closing_moments, public.vw_carrier_alerts, public.vw_carrier_by_state, public.vw_carrier_data_quality, public.vw_carrier_evaluations_history, public.vw_carrier_homologation_control, public.vw_carrier_homologation_queue, public.vw_carrier_qualification_dashboard, public.vw_carrier_ranking, public.vw_carriers, public.vw_carriers_completo, public.vw_carteira_sdr, public.vw_churn_risk_ranking, public.vw_cliente_completo, public.vw_clientes_prioridade, public.vw_closing_score_alerts, public.vw_closing_score_ranking, public.vw_communication_dashboard, public.vw_companies_completo, public.vw_companies_contato, public.vw_companies_cores, public.vw_companies_duplicatas, public.vw_companies_stats, public.vw_company_addresses, public.vw_company_social_media, public.vw_contact_social_media, public.vw_contacts_completo, public.vw_contacts_full, public.vw_contacts_sem_apelido, public.vw_cooperativas_estrutura, public.vw_customers, public.vw_customers_ativos, public.vw_customers_completo, public.vw_deal_velocity_benchmark, public.vw_deals_full, public.vw_emotional_trend_by_contact, public.vw_empresa_historico_completo, public.vw_empresa_timeline_completa, public.vw_empresas_hierarquia, public.vw_eq_dashboard, public.vw_eq_evolution, public.vw_grupos_economicos_resumo, public.vw_historico_alertas, public.vw_historico_carteira, public.vw_historico_carteira_empresa, public.vw_historico_prospects, public.vw_historico_sdr_empresa, public.vw_interacoes_sem_apelido, public.vw_interaction_timeline, public.vw_leads_full, public.vw_matriz_filiais, public.vw_pending_followups, public.vw_pending_notifications, public.vw_pix_accounts, public.vw_primeiro_ativador, public.vw_quem_ativou, public.vw_quem_inativou, public.vw_rapport_points, public.vw_risco_inativacao, public.vw_rodizio_bloqueios, public.vw_satisfaction_trend, public.vw_search_contacts, public.vw_singu_contact_360, public.vw_singu_data_health, public.vw_singu_lux_status, public.vw_singu_readiness, public.vw_social_media_stats, public.vw_status_clientes, public.vw_supplier_alerts, public.vw_supplier_by_state, public.vw_supplier_data_quality, public.vw_supplier_evaluations_history, public.vw_supplier_homologation_control, public.vw_supplier_homologation_queue, public.vw_supplier_qualification_dashboard, public.vw_supplier_ranking, public.vw_timeline_cliente, public.vw_timeline_empresa, public.vw_todays_reminders, public.vw_top_clientes_vendedor, public.vw_ultimo_inativador, reporting.mv_daily_kpis, reporting.mv_daily_stats, zapp_history.contact_message_stats, zapp_history.v_churn_alerts, zapp_history.v_competitor_alerts, zapp_history.v_contact_360, zapp_history.v_full_intelligence_stream, zapp_history.v_intelligence_360, zapp_history.v_pedidos_detectados, zapp_history.v_recent_summaries, zapp_history.v_routing_queue, zapp_history.v_top_contatos_potencial |
 
 
 ## Colunas
@@ -235,7 +235,7 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -245,7 +245,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(auth.uid() = user_id)` |
 
@@ -255,7 +255,7 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -265,7 +265,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -337,7 +337,6 @@
 | trg_company_sync_carrier | AFTER | UPDATE | ROW | enabled | public.trg_fn_sync_company_carrier |
 | trg_company_sync_supplier | AFTER | UPDATE | ROW | enabled | public.trg_fn_sync_company_supplier |
 | trg_create_deal_on_qualification | AFTER | UPDATE | ROW | enabled | public.trigger_create_deal_on_qualification |
-| update_companies_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 
 
 ## Grants

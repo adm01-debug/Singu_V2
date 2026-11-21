@@ -10,7 +10,7 @@
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
-| usada por views | public.v_company_summary, public.vw_alertas_pendentes_vendedor, public.vw_carrier_by_state, public.vw_carrier_data_quality, public.vw_carrier_homologation_queue, public.vw_carriers, public.vw_carriers_completo, public.vw_cliente_completo, public.vw_clientes_prioridade, public.vw_companies_completo, public.vw_company_addresses, public.vw_contacts_sem_apelido, public.vw_customers, public.vw_supplier_by_state, public.vw_supplier_data_quality, public.vw_supplier_homologation_queue, public.vw_suppliers, public.vw_suppliers_completo, public.vw_top_clientes_vendedor |
+| usada por views | public.v_company_summary, public.vw_alertas_pendentes_vendedor, public.vw_carrier_by_state, public.vw_carrier_data_quality, public.vw_carrier_homologation_queue, public.vw_carriers, public.vw_carriers_completo, public.vw_cliente_completo, public.vw_clientes_prioridade, public.vw_companies_completo, public.vw_company_addresses, public.vw_contacts_sem_apelido, public.vw_customers, public.vw_supplier_by_state, public.vw_supplier_data_quality, public.vw_supplier_homologation_queue, public.vw_top_clientes_vendedor |
 
 
 ## Colunas

@@ -55,6 +55,7 @@
 | eq_analysis_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX eq_analysis_history_pkey ON public.eq_analysis_history USING btree (id)` |
 | idx_eq_analysis_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_eq_analysis_contact ON public.eq_analysis_history USING btree (contact_id)` |
 | idx_eq_analysis_history_analyzed_at | btree | analyzed_at | não | sim |  | `CREATE INDEX idx_eq_analysis_history_analyzed_at ON public.eq_analysis_history USING btree (analyzed_at DESC)` |
+| idx_eq_analysis_history_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_eq_analysis_history_contact_id ON public.eq_analysis_history USING btree (contact_id)` |
 | idx_eq_analysis_history_interaction_id | btree | interaction_id | não | sim |  | `CREATE INDEX idx_eq_analysis_history_interaction_id ON public.eq_analysis_history USING btree (interaction_id)` |
 | idx_eq_analysis_history_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_eq_analysis_history_user_id ON public.eq_analysis_history USING btree (user_id)` |
 
@@ -69,7 +70,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can delete own`
 
@@ -88,7 +89,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert own`
@@ -118,7 +119,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own`
@@ -138,7 +139,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 

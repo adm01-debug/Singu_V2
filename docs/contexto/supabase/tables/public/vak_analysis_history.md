@@ -69,7 +69,9 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
+| idx_vak_analysis_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_vak_analysis_contact ON public.vak_analysis_history USING btree (contact_id)` |
 | idx_vak_analysis_history_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_vak_analysis_history_user_id ON public.vak_analysis_history USING btree (user_id)` |
+| idx_vak_analysis_user | btree | user_id | não | sim |  | `CREATE INDEX idx_vak_analysis_user ON public.vak_analysis_history USING btree (user_id)` |
 | idx_vak_kinesthetic_score | btree | kinesthetic_score | não | sim |  | `CREATE INDEX idx_vak_kinesthetic_score ON public.vak_analysis_history USING btree (kinesthetic_score)` |
 | idx_vak_visual_score | btree | visual_score | não | sim |  | `CREATE INDEX idx_vak_visual_score ON public.vak_analysis_history USING btree (visual_score)` |
 | vak_analysis_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX vak_analysis_history_pkey ON public.vak_analysis_history USING btree (id)` |
@@ -94,7 +96,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert own`
@@ -115,7 +117,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update own`
 
@@ -134,7 +136,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own`
@@ -154,7 +156,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 

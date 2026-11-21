@@ -9,7 +9,7 @@
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
 | policies | 9 |
-| realtime (publication) | não |
+| realtime (publication) | sim |
 | replica identity | default |
 | vem de extensão | não |
 | usada por views | public.vw_carrier_alerts, public.vw_singu_readiness, public.vw_supplier_alerts |
@@ -78,7 +78,7 @@
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -88,7 +88,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(auth.uid() = user_id)` |
 
@@ -98,7 +98,7 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
@@ -108,7 +108,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 

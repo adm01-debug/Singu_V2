@@ -49,6 +49,7 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | contact_relatives_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX contact_relatives_pkey ON public.contact_relatives USING btree (id)` |
+| idx_contact_relatives_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_contact_relatives_contact_id ON public.contact_relatives USING btree (contact_id)` |
 | idx_contact_relatives_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_contact_relatives_user_id ON public.contact_relatives USING btree (user_id)` |
 | idx_relatives_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_relatives_contact ON public.contact_relatives USING btree (contact_id)` |
 
@@ -72,7 +73,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert own`
@@ -93,7 +94,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update own`
 
@@ -112,7 +113,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own`
@@ -132,7 +133,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 
@@ -145,7 +146,6 @@
 | set_updated_at_contact_relatives | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 | tr_contact_relatives_audit | AFTER | INSERT OR DELETE OR UPDATE | ROW | enabled | public.process_contact_relatives_audit |
 | trg_set_updated_at | BEFORE | UPDATE | ROW | enabled | public.set_updated_at |
-| update_contact_relatives_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 
 
 ## Grants

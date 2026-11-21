@@ -222,6 +222,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.workflows](tables/dormant/workflows.md) | table | não | 0 | 11 | não |  |
 | [_dormant.xp_history](tables/dormant/xp_history.md) | table | sim | 1 | 7 | não |  |
 | [ops_backup.acl_snapshot](tables/ops_backup/acl_snapshot.md) | table | não | 0 | 5 | não |  |
+| [public._stg_pac_nums](tables/public/stg_pac_nums.md) | table | não | 0 | 2 | não |  |
 | [public.abm_account_plans](tables/public/abm_account_plans.md) | table | sim | 3 | 15 | não |  |
 | [public.abm_accounts](tables/public/abm_accounts.md) | table | sim | 4 | 15 | não |  |
 | [public.abm_buying_committee](tables/public/abm_buying_committee.md) | table | sim | 4 | 13 | não |  |
@@ -246,7 +247,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.ai_recommendation_logs](tables/public/ai_recommendation_logs.md) | table | sim | 3 | 9 | não |  |
 | [public.ai_tone_preferences](tables/public/ai_tone_preferences.md) | table | sim | 1 | 6 | não |  |
 | [public.alert_rules](tables/public/alert_rules.md) | table | sim | 2 | 18 | não | Regras configuráveis de alerta |
-| [public.alerts](tables/public/alerts.md) | table | sim | 9 | 22 | não | Sistema de alertas e notificações |
+| [public.alerts](tables/public/alerts.md) | table | sim | 9 | 22 | sim | Sistema de alertas e notificações |
 | [public.applied_objection_responses](tables/public/applied_objection_responses.md) | table | sim | 3 | 10 | não |  |
 | [public.asia_upload_mapping](tables/public/asia_upload_mapping.md) | table | sim | 1 | 8 | não | Rastreia requisições pg_net para upload de imagens Asia Import ao Cloudflare Images |
 | [public.attribution_models_cache](tables/public/attribution_models_cache.md) | table | sim | 1 | 7 | não |  |
@@ -289,7 +290,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.commission_rules](tables/public/commission_rules.md) | table | sim | 1 | 10 | não |  |
 | [public.commissions](tables/public/commissions.md) | table | sim | 4 | 11 | não |  |
 | [public.communication_preferences](tables/public/communication_preferences.md) | table | sim | 8 | 13 | não | SINGU: Dados analíticos de comunicação com taxas de resposta por canal. |
-| [public.companies](tables/public/companies.md) | table | sim | 9 | 81 | não | Cadastro de empresas (clientes, fornecedores, transportadoras) |
+| [public.companies](tables/public/companies.md) | table | sim | 9 | 81 | sim | Cadastro de empresas (clientes, fornecedores, transportadoras) |
 | [public.company_addresses](tables/public/company_addresses.md) | table | sim | 6 | 24 | não |  |
 | [public.company_cadences](tables/public/company_cadences.md) | table | sim | 4 | 11 | não |  |
 | [public.company_cnaes](tables/public/company_cnaes.md) | table | sim | 1 | 7 | não | Vínculo empresa ↔ CNAEs. Cada empresa tem 1 principal (is_principal=true) e N secundários. |
@@ -337,7 +338,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_social_media](tables/public/contact_social_media.md) | table | sim | 4 | 17 | não |  |
 | [public.contact_time_analysis](tables/public/contact_time_analysis.md) | table | sim | 8 | 9 | não | SINGU: Heatmap de melhores horários/dias para contatar cada lead. Grid 7x24. |
 | [public.contact_time_analysis_audit](tables/public/contact_time_analysis_audit.md) | table | sim | 1 | 9 | não |  |
-| [public.contacts](tables/public/contacts.md) | table | sim | 10 | 65 | não | Contatos vinculados a empresas |
+| [public.contacts](tables/public/contacts.md) | table | sim | 10 | 65 | sim | Contatos vinculados a empresas |
 | [public.conversation_analyses](tables/public/conversation_analyses.md) | table | sim | 4 | 23 | não |  |
 | [public.conversation_topics_catalog](tables/public/conversation_topics_catalog.md) | table | sim | 4 | 10 | não |  |
 | [public.conversational_search_cache](tables/public/conversational_search_cache.md) | table | sim | 4 | 8 | não |  |
@@ -386,7 +387,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.disc_analysis_history_audit](tables/public/disc_analysis_history_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.disc_approach_recommendations](tables/public/disc_approach_recommendations.md) | table | sim | 2 | 13 | não | Recomendações estratégicas de abordagem por perfil DISC |
 | [public.disc_communication_logs](tables/public/disc_communication_logs.md) | table | sim | 8 | 12 | não | SINGU: Logs de comunicação adaptada ao perfil DISC. Registra se vendedor seguiu as dicas. |
-| [public.disc_conversion_metrics](tables/public/disc_conversion_metrics.md) | table | sim | 8 | 17 | não | SINGU: Métricas agregadas de conversão por perfil DISC. Dados periódicos. |
+| [public.disc_conversion_metrics](tables/public/disc_conversion_metrics.md) | table | sim | 9 | 17 | não | SINGU: Métricas agregadas de conversão por perfil DISC. Dados periódicos. |
 | [public.disc_profile_config](tables/public/disc_profile_config.md) | table | sim | 2 | 51 | não | SINGU: Configuração e características de cada perfil DISC |
 | [public.disc_templates](tables/public/disc_templates.md) | table | sim | 2 | 15 | não | Templates de comunicação adaptados por perfil DISC |
 | [public.document_signatures](tables/public/document_signatures.md) | table | sim | 8 | 36 | não | SINGU: Assinaturas eletrônicas de documentos com multi-signer, ordering, tracking completo (IP, device, location) e métodos variados. |
@@ -427,7 +428,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.guardrail_ml_logs](tables/public/guardrail_ml_logs.md) | table | sim | 2 | 10 | não |  |
 | [public.handoff_requests](tables/public/handoff_requests.md) | table | sim | 9 | 31 | não | SINGU: Fila de handoff SDR→Closer com qualificação BANT (Budget/Authority/Need/Timing), SLA de aceite de 4h (configurável) e tracking completo. Estados: pending → accepted/rejected/expired. |
 | [public.health_alert_settings](tables/public/health_alert_settings.md) | table | sim | 8 | 12 | não | SINGU: Config de alertas de saúde por usuário. Thresholds e canais de notificação. |
-| [public.health_alerts](tables/public/health_alerts.md) | table | sim | 8 | 12 | não | SINGU: Alertas quando saúde do relacionamento com contato cai (score drop). |
+| [public.health_alerts](tables/public/health_alerts.md) | table | sim | 8 | 12 | sim | SINGU: Alertas quando saúde do relacionamento com contato cai (score drop). |
 | [public.hidden_objections](tables/public/hidden_objections.md) | table | sim | 8 | 14 | não | SINGU: Objeções não verbalizadas detectadas por IA. Inclui sonda sugerida e templates de resolução. |
 | [public.import_jobs](tables/public/import_jobs.md) | table | sim | 1 | 17 | não |  |
 | [public.inactivity_alerts](tables/public/inactivity_alerts.md) | table | sim | 1 | 16 | não |  |
@@ -435,7 +436,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.incoming_webhook_logs](tables/public/incoming_webhook_logs.md) | table | sim | 2 | 11 | não |  |
 | [public.incoming_webhook_nonces](tables/public/incoming_webhook_nonces.md) | table | sim | 1 | 4 | não |  |
 | [public.incoming_webhooks](tables/public/incoming_webhooks.md) | table | sim | 1 | 17 | não |  |
-| [public.insights](tables/public/insights.md) | table | sim | 8 | 13 | não | Insights de IA sobre contatos/empresas |
+| [public.insights](tables/public/insights.md) | table | sim | 8 | 13 | sim | Insights de IA sobre contatos/empresas |
 | [public.integration_logs](tables/public/integration_logs.md) | table | sim | 1 | 10 | não |  |
 | [public.integrations](tables/public/integrations.md) | table | sim | 1 | 13 | não |  |
 | [public.intent_scores](tables/public/intent_scores.md) | table | sim | 4 | 11 | não |  |
@@ -544,7 +545,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.scheduled_reports](tables/public/scheduled_reports.md) | table | sim | 1 | 12 | não |  |
 | [public.scheduled_visits](tables/public/scheduled_visits.md) | table | sim | 4 | 12 | não |  |
 | [public.schema_drift_alerts](tables/public/schema_drift_alerts.md) | table | sim | 7 | 11 | não |  |
-| [public.score_history](tables/public/score_history.md) | table | sim | 8 | 10 | não |  |
+| [public.score_history](tables/public/score_history.md) | table | sim | 8 | 10 | não | Historical record of all calculated scores for contacts |
 | [public.script_sections](tables/public/script_sections.md) | table | sim | 2 | 18 | não |  |
 | [public.sdr_alert_history](tables/public/sdr_alert_history.md) | table | sim | 2 | 8 | não |  |
 | [public.sdr_closer_assignments](tables/public/sdr_closer_assignments.md) | table | sim | 2 | 13 | não | Histórico de vínculo SDR ↔ CLOSER |
@@ -622,7 +623,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.whatsapp_ingestion_logs](tables/public/whatsapp_ingestion_logs.md) | table | sim | 2 | 8 | não |  |
 | [public.whatsapp_instances](tables/public/whatsapp_instances.md) | table | sim | 5 | 15 | não |  |
 | [public.whatsapp_kpis](tables/public/whatsapp_kpis.md) | table | sim | 5 | 14 | não |  |
-| [public.whatsapp_messages](tables/public/whatsapp_messages.md) | table | sim | 6 | 25 | não |  |
+| [public.whatsapp_messages](tables/public/whatsapp_messages.md) | table | sim | 6 | 25 | sim |  |
 | [public.whatsapp_messages_index](tables/public/whatsapp_messages_index.md) | table | sim | 2 | 11 | não |  |
 | [public.whatsapp_transcriptions](tables/public/whatsapp_transcriptions.md) | table | sim | 1 | 7 | não |  |
 | [public.win_loss_insights](tables/public/win_loss_insights.md) | table | sim | 3 | 11 | não |  |

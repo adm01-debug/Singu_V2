@@ -8,7 +8,7 @@
 | public.carrier_homologation_status | enum | pendente, em_analise, homologado, reprovado, suspenso, vencido | public.carrier_homologations.status, public.vw_carrier_homologation_control.ultimo_status, public.vw_carrier_homologation_queue.ultimo_status, public.vw_carriers.homologation_status, public.vw_carriers_completo.homologation_status |
 | public.channel_type | enum | whatsapp, email, telefone, sms, reuniao_presencial, reuniao_online, chat_site, redes_sociais, bitrix_chat |  |
 | public.company_size | enum | mei, micro, pequena, media, grande, enterprise |  |
-| public.company_status | enum | ativo, inativo, suspenso | public.companies.status, public.v_companies_metrics.status, public.vw_carriers_completo.company_status, public.vw_companies_completo.status, public.vw_companies_cores.status, public.vw_companies_stats.status, public.vw_company_social_media.company_status, public.vw_contacts_full.empresa_status, public.vw_customers.status, public.vw_customers_ativos.company_status, public.vw_empresa_historico_completo.status_empresa, public.vw_empresas_hierarquia.status, public.vw_suppliers_completo.company_status |
+| public.company_status | enum | ativo, inativo, suspenso | public.companies.status, public.v_companies_metrics.status, public.vw_carriers_completo.company_status, public.vw_companies_completo.status, public.vw_companies_cores.status, public.vw_companies_stats.status, public.vw_company_social_media.company_status, public.vw_contacts_full.empresa_status, public.vw_customers.status, public.vw_customers_ativos.company_status, public.vw_empresa_historico_completo.status_empresa, public.vw_empresas_hierarquia.status |
 | public.company_type | enum | cliente, fornecedor, parceiro, transportadora, grafica, prospect, inativo |  |
 | public.contact_role | enum | decisor, comprador, financeiro, operacional, marketing, ti, juridico, recepcao, outros |  |
 | public.cor_grupo | enum | branco, preto, cinza, prata, dourado, vermelho, laranja, amarelo, verde, azul, azul_marinho, roxo, rosa, marrom, bege, transparente, multicolor |  |
@@ -30,7 +30,7 @@
 | public.salesperson_role | enum | sdr, closer, hybrid | public.salespeople.role |
 | public.social_media_platform | enum | linkedin, instagram, facebook, x, youtube, tiktok, whatsapp, google_business, website | public.company_social_media.plataforma, public.contact_social_media.plataforma |
 | public.supplier_alert_severity | enum | info, atencao, critico |  |
-| public.supplier_homologation_status | enum | pendente, em_analise, homologado, reprovado, suspenso, vencido | public.supplier_homologations.status, public.vw_supplier_homologation_control.ultimo_status, public.vw_supplier_homologation_queue.ultimo_status, public.vw_suppliers.homologation_status, public.vw_suppliers_completo.homologation_status |
+| public.supplier_homologation_status | enum | pendente, em_analise, homologado, reprovado, suspenso, vencido | public.supplier_homologations.status, public.vw_supplier_homologation_control.ultimo_status, public.vw_supplier_homologation_queue.ultimo_status |
 | public.task_priority | enum | high, medium, low | public.sales_tasks.priority |
 | public.task_status | enum | pending, in_progress, completed, cancelled | public.sales_tasks.status |
 | public.task_type | enum | call, meeting, follow_up, email, proposal, other | public.sales_tasks.type |

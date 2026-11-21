@@ -53,6 +53,8 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
+| idx_trigger_usage_history_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_trigger_usage_history_contact_id ON public.trigger_usage_history USING btree (contact_id)` |
+| idx_trigger_usage_history_used_at | btree | used_at | não | sim |  | `CREATE INDEX idx_trigger_usage_history_used_at ON public.trigger_usage_history USING btree (used_at DESC)` |
 | idx_trigger_usage_history_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_trigger_usage_history_user_id ON public.trigger_usage_history USING btree (user_id)` |
 | trigger_usage_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX trigger_usage_history_pkey ON public.trigger_usage_history USING btree (id)` |
 
@@ -66,7 +68,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert their own trigger usage history`
@@ -77,7 +79,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update their own trigger usage history`
 
@@ -86,7 +88,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view their own trigger usage history`
@@ -96,7 +98,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `trigger_usage_history_delete`

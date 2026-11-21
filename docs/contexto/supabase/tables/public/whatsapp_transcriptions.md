@@ -47,7 +47,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM whatsapp_messages m   WHERE ((m.id = whatsapp_transcriptions.whatsapp_message_id) AND (m.user_id = ( SELECT auth.uid() AS uid)))))` |
 | WITH CHECK |  |
 

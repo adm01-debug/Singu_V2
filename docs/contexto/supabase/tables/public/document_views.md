@@ -65,7 +65,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM document_signatures s   WHERE ((s.id = document_views.signature_id) AND (s.user_id = ( SELECT auth.uid() AS uid)))))` |
 | WITH CHECK |  |
 

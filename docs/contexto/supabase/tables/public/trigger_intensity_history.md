@@ -59,6 +59,7 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | idx_trigger_intensity_history_trigger | btree | trigger_type | não | sim |  | `CREATE INDEX idx_trigger_intensity_history_trigger ON public.trigger_intensity_history USING btree (trigger_type)` |
+| idx_trigger_intensity_history_user_contact | btree | user_id, contact_id | não | sim |  | `CREATE INDEX idx_trigger_intensity_history_user_contact ON public.trigger_intensity_history USING btree (user_id, contact_id)` |
 | idx_trigger_intensity_history_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_trigger_intensity_history_user_id ON public.trigger_intensity_history USING btree (user_id)` |
 | trigger_intensity_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX trigger_intensity_history_pkey ON public.trigger_intensity_history USING btree (id)` |
 
@@ -73,7 +74,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can delete their own intensity history`
 
@@ -82,7 +83,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert own`
@@ -102,7 +103,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view own`
@@ -122,7 +123,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 

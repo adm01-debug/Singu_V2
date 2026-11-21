@@ -108,7 +108,7 @@
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(EXISTS ( SELECT 1    FROM email_campaigns ec   WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = ( SELECT auth.uid() AS uid)))))` |
 | WITH CHECK | `(EXISTS ( SELECT 1    FROM email_campaigns ec   WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = ( SELECT auth.uid() AS uid)))))` |
 

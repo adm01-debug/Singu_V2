@@ -41,7 +41,7 @@
 | 20 | `last_login_at` | `timestamp with time zone` | sim |  |  |  |
 | 21 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
 | 22 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 23 | `nlp_profile` | `jsonb` | sim | `'{"vakProfile": null, "discProfile": null, "metaprograms": {"chunkSize": null, "actionFilter": null, "workingStyle": null, "referenceFrame": null, "comparisonStyle": null, "motivationDirection": null}}'::jsonb` |  |  |
+| 23 | `nlp_profile` | `jsonb` | sim | `'{"vakProfile": null, "discProfile": null, "metaprograms": {"chunkSize": null, "actionFilter": null, "workingStyle": null, "referenceFrame": null, "comparisonStyle": null, "motivationDirection": null}}'::jsonb` |  | Stores the salesperson NLP profile including VAK, DISC and Metaprograms for compatibility scoring |
 | 24 | `preferences` | `jsonb` | sim | `'{"theme": "light", "language": "pt-BR", "notifications": true}'::jsonb` |  |  |
 | 25 | `role_title` | `text` | sim |  |  |  |
 | 26 | `bitrix_user_id` | `integer` | sim |  |  |  |
@@ -186,7 +186,7 @@
 |---|---|
 | comando | INSERT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING |  |
 | WITH CHECK | `(auth.uid() = id)` |
 
@@ -196,7 +196,7 @@
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = id)` |
 | WITH CHECK |  |
 
@@ -206,7 +206,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(auth.uid() = id)` |
 | WITH CHECK |  |
 
@@ -259,7 +259,6 @@
 | set_updated_at | BEFORE | UPDATE | ROW | enabled | public.set_updated_at |
 | set_updated_at_profiles | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 | tr_profiles_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_profiles_updated_at |
-| update_profiles_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 
 
 ## Grants

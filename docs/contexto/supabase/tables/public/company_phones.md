@@ -10,7 +10,7 @@
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
-| usada por views | public.v_company_summary, public.v_entities, public.vw_alertas_pendentes_vendedor, public.vw_alertas_vendedor, public.vw_carrier_data_quality, public.vw_carrier_homologation_queue, public.vw_carriers, public.vw_carriers_completo, public.vw_carteira_sdr, public.vw_cliente_completo, public.vw_clientes_prioridade, public.vw_companies_completo, public.vw_companies_contato, public.vw_companies_duplicatas, public.vw_companies_stats, public.vw_contacts_full, public.vw_customers, public.vw_customers_completo, public.vw_supplier_data_quality, public.vw_supplier_homologation_queue, public.vw_suppliers, public.vw_suppliers_completo |
+| usada por views | public.v_company_summary, public.v_entities, public.vw_alertas_pendentes_vendedor, public.vw_alertas_vendedor, public.vw_carrier_data_quality, public.vw_carrier_homologation_queue, public.vw_carriers, public.vw_carriers_completo, public.vw_carteira_sdr, public.vw_cliente_completo, public.vw_clientes_prioridade, public.vw_companies_completo, public.vw_companies_contato, public.vw_companies_duplicatas, public.vw_companies_stats, public.vw_contacts_full, public.vw_customers, public.vw_customers_completo, public.vw_supplier_data_quality, public.vw_supplier_homologation_queue |
 
 
 ## Colunas

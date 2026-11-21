@@ -1,5 +1,7 @@
 # public.score_history
 
+> Historical record of all calculated scores for contacts
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -39,6 +41,10 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
+| idx_score_history_calculated_at | btree | calculated_at | não | sim |  | `CREATE INDEX idx_score_history_calculated_at ON public.score_history USING btree (calculated_at DESC)` |
+| idx_score_history_composite | btree | contact_id, score_type, calculated_at | não | sim |  | `CREATE INDEX idx_score_history_composite ON public.score_history USING btree (contact_id, score_type, calculated_at DESC)` |
+| idx_score_history_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_score_history_contact_id ON public.score_history USING btree (contact_id)` |
+| idx_score_history_score_type | btree | score_type | não | sim |  | `CREATE INDEX idx_score_history_score_type ON public.score_history USING btree (score_type)` |
 | idx_score_history_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_score_history_user_id ON public.score_history USING btree (user_id)` |
 | score_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX score_history_pkey ON public.score_history USING btree (id)` |
 
@@ -52,7 +58,7 @@
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can insert their own score history`
@@ -63,7 +69,7 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
+| WITH CHECK | `(auth.uid() = user_id)` |
 
 ### `Users can update their own score_history`
 
@@ -72,7 +78,7 @@
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `Users can view their own score history`
@@ -82,7 +88,7 @@
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
 
 ### `score_history_delete`

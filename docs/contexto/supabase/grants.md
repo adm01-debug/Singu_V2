@@ -658,6 +658,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.xp_history | anon | SELECT |
 | _dormant.xp_history | authenticated | SELECT |
 | _dormant.xp_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public._stg_pac_nums | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public._stg_pac_nums | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.abm_account_plans | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.abm_account_plans | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.abm_accounts | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1694,10 +1696,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_supplier_qualification_dashboard | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_supplier_ranking | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_supplier_ranking | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_suppliers | authenticated | DELETE, INSERT, SELECT, UPDATE |
-| public.vw_suppliers | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_suppliers_completo | authenticated | DELETE, INSERT, SELECT, UPDATE |
-| public.vw_suppliers_completo | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_timeline_cliente | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_timeline_cliente | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_timeline_empresa | authenticated | DELETE, INSERT, SELECT, UPDATE |

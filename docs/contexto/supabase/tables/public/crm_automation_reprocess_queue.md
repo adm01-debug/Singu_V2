@@ -49,7 +49,7 @@
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
-| roles | public |
+| roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) IN ( SELECT crm_automation_logs.user_id    FROM crm_automation_logs   WHERE (crm_automation_logs.id = crm_automation_reprocess_queue.log_id)))` |
 | WITH CHECK |  |
 

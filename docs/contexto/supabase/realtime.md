@@ -11,8 +11,14 @@
 
 | publication | tabela | replica identity |
 |---|---|---|
+| supabase_realtime | public.alerts | default |
+| supabase_realtime | public.companies | default |
+| supabase_realtime | public.contacts | default |
+| supabase_realtime | public.health_alerts | default |
+| supabase_realtime | public.insights | default |
 | supabase_realtime | public.interactions | default |
 | supabase_realtime | public.smart_notifications | default |
+| supabase_realtime | public.whatsapp_messages | default |
 | supabase_realtime | zapp_history.conversation_daily_summaries | full |
 | supabase_realtime | zapp_history.conversations | full |
 | supabase_realtime | zapp_history.message_audio | full |
