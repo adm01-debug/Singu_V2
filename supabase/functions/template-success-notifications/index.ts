@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { guardBody, scopedCorsHeaders, requireCronSecret } from "../_shared/auth.ts";
+import { guardBody, scopedCorsHeaders, requireCronSecretOrAuth } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 import { validate } from "../_shared/validate.ts";
 
@@ -30,8 +30,8 @@ Deno.serve(async (req) => {
   }
 
   // 🔒 Cron secret validation
-  const cronError = await requireCronSecret(req);
-  if (cronError) return cronError;
+  const guard = await requireCronSecretOrAuth(req);
+  if (guard instanceof Response) return guard;
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
   if (bodyError) return bodyError;

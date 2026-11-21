@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { sendTrackedNotification } from "../_shared/notification-delivery.ts";
-import { scopedCorsHeaders, jsonError, jsonOk, requireCronSecret } from "../_shared/auth.ts";
+import { scopedCorsHeaders, jsonError, jsonOk, requireCronSecretOrAuth } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -8,8 +8,8 @@ Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
+  const guard = await requireCronSecretOrAuth(req);
+  if (guard instanceof Response) return guard;
 
   const supabaseClient = createClient(
     Deno.env.get('SUPABASE_URL') ?? '',

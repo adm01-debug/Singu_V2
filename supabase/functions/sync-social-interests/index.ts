@@ -1,13 +1,13 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret, guardBody, jsonError, jsonOk } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecretOrAuth, guardBody, jsonError, jsonOk } from "../_shared/auth.ts";
 import { validate } from "../_shared/validate.ts";
 
 Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
+  const guard = await requireCronSecretOrAuth(req);
+  if (guard instanceof Response) return guard;
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
   if (bodyError) return bodyError;

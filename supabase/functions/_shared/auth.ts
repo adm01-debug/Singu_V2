@@ -299,6 +299,32 @@ export async function guardBody(
  * Async because the underlying secret comparison uses crypto.subtle.
  * Callers must await this function.
  */
+
+/**
+ * requireCronSecretOrAuth — accepts EITHER a valid x-cron-secret (scheduled
+ * runs) OR an authenticated user JWT (manual button in the dashboard).
+ * Fixes CR1: cron-only edges were returning 401 to the frontend buttons,
+ * while scheduled runs still work unchanged.
+ *
+ * Returns { ok: true, userId?: string } with a verified user id when the
+ * JWT path was used (cron callers pass no user). On failure returns a
+ * 401 Response to send.
+ */
+export async function requireCronSecretOrAuth(
+  req: Request,
+): Promise<{ ok: true; userId?: string } | Response> {
+  const secret = Deno.env.get("CRON_SECRET");
+  if (secret) {
+    const provided = req.headers.get("x-cron-secret") ?? "";
+    if (await timingSafeStringEqual(provided, secret)) {
+      return { ok: true };
+    }
+  }
+  const user = await withAuth(req);
+  if (typeof user === "string") return { ok: true, userId: user };
+  return jsonError("Unauthorized", 401, req);
+}
+
 export async function requireWebhookSecret(
   req: Request,
   envName: string,

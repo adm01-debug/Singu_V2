@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { scopedCorsHeaders, requireCronSecret, guardBody } from "../_shared/auth.ts";
+import { scopedCorsHeaders, requireCronSecretOrAuth, guardBody } from "../_shared/auth.ts";
 import { fetchAPI } from "../_shared/fetch-utils.ts";
 import { validate } from "../_shared/validate.ts";
 
@@ -24,25 +24,15 @@ Deno.serve(async (req) => {
   const cors = scopedCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
-  const cronCheck = await requireCronSecret(req);
-  if (cronCheck) return cronCheck;
+  const guard = await requireCronSecretOrAuth(req);
+  if (guard instanceof Response) return guard;
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 32 * 1024);
   if (bodyError) return bodyError;
 
   try {
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
-    }
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
-    );
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    const userId = guard.userId;
+    if (!userId) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
@@ -60,7 +50,7 @@ Deno.serve(async (req) => {
     );
 
     const { data: campaign, error: cErr } = await admin
-      .from("sms_campaigns").select("*").eq("id", campaignId).eq("user_id", user.id).single();
+      .from("sms_campaigns").select("*").eq("id", campaignId).eq("user_id", userId).single();
     if (cErr || !campaign) {
       return new Response(JSON.stringify({ error: "Campaign not found" }), { status: 404, headers: { ...cors, "Content-Type": "application/json" } });
     }
@@ -70,8 +60,8 @@ Deno.serve(async (req) => {
 
     // Materialize recipients from contacts with phone, excluding opt-outs (parallel reads)
     const [{ data: contacts }, { data: optOuts }] = await Promise.all([
-      admin.from("contacts").select("id, first_name, last_name, phone, whatsapp").eq("user_id", user.id),
-      admin.from("sms_opt_outs").select("phone").eq("user_id", user.id),
+      admin.from("contacts").select("id, first_name, last_name, phone, whatsapp").eq("user_id", userId),
+      admin.from("sms_opt_outs").select("phone").eq("user_id", userId),
     ]);
     const optedOut = new Set((optOuts || []).map(o => o.phone));
 
