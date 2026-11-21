@@ -43,7 +43,11 @@ export function useEnrollContact() {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['nurturing-executions'] }); toast.success('Contato enrolado no workflow'); },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['nurturing-executions'] });
+      qc.invalidateQueries({ queryKey: ['nurturing-workflows'] });
+      toast.success('Contato enrolado no workflow');
+    },
     onError: (e: Error) => toast.error(parseApiError(e)),
   });
 }
