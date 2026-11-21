@@ -1,4 +1,5 @@
 import { z } from "npm:zod@3.23.8";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import {
   handleCorsAndMethod,
   withAuth,
@@ -45,6 +46,25 @@ Deno.serve(async (req) => {
 
   const authResult = await withAuth(req);
   if (authResult instanceof Response) return authResult;
+
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!supabaseUrl || !serviceRoleKey) {
+    return jsonError("Credentials not configured", 500, req);
+  }
+  const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+    auth: { persistSession: false },
+  });
+  const { data: isAdmin, error: roleErr } = await adminClient.rpc("has_role", {
+    _user_id: authResult,
+    _role: "admin",
+  });
+  if (roleErr) {
+    return jsonError("Falha ao verificar perfil de acesso", 500, req);
+  }
+  if (!isAdmin) {
+    return jsonError("Acesso negado: requer admin", 403, req);
+  }
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 128 * 1024);
   if (bodyError) return bodyError;
