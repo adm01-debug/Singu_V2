@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/table';
 import { Package, FileText, Search, RefreshCw, ShieldAlert, DollarSign, Boxes, Inbox } from 'lucide-react';
 import { useErpProducts, useErpProposals, useErpStats } from '@/hooks/useErpData';
+import { VisualSearchButton } from '@/components/search/VisualSearchButton';
 
 function formatBRL(value: number | null | undefined) {
   if (value == null) return '—';
@@ -50,10 +51,17 @@ function ProductsTab() {
             </CardTitle>
             <CardDescription className="text-xs">Visualização somente leitura — gerenciado no ERP</CardDescription>
           </div>
-          <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
-            <RefreshCw className={`h-3.5 w-3.5 mr-2 ${isFetching ? 'animate-spin' : ''}`} />
-            Atualizar
-          </Button>
+          <div className="flex items-center gap-2">
+            <VisualSearchButton
+              variant="outline"
+              size="sm"
+              onResultClick={(result) => setSearch(result.name.split(' — ')[0] ?? '')}
+            />
+            <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
+              <RefreshCw className={`h-3.5 w-3.5 mr-2 ${isFetching ? 'animate-spin' : ''}`} />
+              Atualizar
+            </Button>
+          </div>
         </div>
         <div className="relative mt-2">
           <Search className="h-3.5 w-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
