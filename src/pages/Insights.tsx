@@ -51,12 +51,39 @@ const Insights = () => {
 
   const abortRef = useRef<AbortController | null>(null);
 
+  const loadPersistedInsights = useCallback(async () => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from('insights')
+      .select('id, user_id, contact_id, category, title, description, action_suggestion, confidence, actionable, source, created_at, expires_at, dismissed')
+      .eq('user_id', user.id)
+      .eq('dismissed', false)
+      .order('created_at', { ascending: false })
+      .limit(50);
+    if (error) { logger.error('Erro ao carregar insights persistidos:', error); return; }
+    if (data?.length) {
+      setInsights(data.map((i) => ({
+        category: i.category,
+        title: i.title,
+        description: i.description ?? '',
+        action_suggestion: i.action_suggestion ?? '',
+        confidence: i.confidence ?? 0,
+        actionable: i.actionable ?? false,
+        contact_id: i.contact_id ?? undefined,
+        priority: '',
+      })));
+    }
+  }, [user]);
+
   const fetchData = useCallback(async () => {
     if (!user) return;
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
     setLoading(true);
+    // Os insights gerados nas visitas anteriores agora ficam persistidos
+    // (PR #288) — carrega-os primeiro para a tela nunca abrir vazia.
+    await loadPersistedInsights();
     try {
       const [contactsRes, interactionsRes, companiesRes] = await Promise.all([
         supabase.from('contacts').select('*').eq('user_id', user.id).limit(50),
