@@ -87,8 +87,7 @@ const CommunicationCoherencePanel: React.FC<CommunicationCoherencePanelProps> = 
       VAK_PREDICATES[wrongType].slice(0, 15).forEach(word => {
         if (lowerMessage.includes(word.toLowerCase())) {
           wrongVakMatches++;
-          // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-          const replacement = vakWords[Math.floor(Math.random() * Math.min(5, vakWords.length))];
+          const replacement = vakWords[wrongVakMatches % vakWords.length];
           issues.push({
             type: 'vak',
             severity: 'warning',
@@ -149,8 +148,7 @@ const CommunicationCoherencePanel: React.FC<CommunicationCoherencePanelProps> = 
     wrongMetaKeywords.forEach(word => {
       if (lowerMessage.includes(word.toLowerCase())) {
         wrongMetaMatches++;
-        // eslint-disable-next-line sonarjs/pseudo-random -- non-security UI/animation/mock/test randomness
-        const replacement = metaKeywords[Math.floor(Math.random() * Math.min(5, metaKeywords.length))];
+        const replacement = metaKeywords[wrongMetaMatches % metaKeywords.length];
         issues.push({
           type: 'metaprogram',
           severity: 'warning',
