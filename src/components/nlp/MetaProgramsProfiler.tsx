@@ -9,13 +9,57 @@ interface MetaProgramsProfilerProps {
 }
 
 const MetaProgramsProfiler: React.FC<MetaProgramsProfilerProps> = ({ contact }) => {
-  const getScore = (seed: string, offset: number) => {
-    const combined = seed + offset;
-    let hash = 0;
-    for (let i = 0; i < combined.length; i++) {
-      hash = combined.charCodeAt(i) + ((hash << 5) - hash);
+  // Cada eixo de metaprograma é derivado de dados reais do contato (nunca
+  // de hash do id nem de aleatório). Quando o contato não tem o dado, o
+  // valor cai no meio da escala (sem tendência). Escala final: 0-100.
+  const getScore = (key: 'direction' | 'reference' | 'options' | 'reaction' | 'comparison') => {
+    const b = contact.behavior ?? ({} as Contact['behavior']);
+    const dentro = (v: number | undefined, max: number) =>
+      typeof v === 'number' && Number.isFinite(v) ? Math.max(0, Math.min(max, v)) : null;
+
+    switch (key) {
+      case 'direction': {
+        // Aproximação (Toward) quando há objetivo/profissional motivação explícita; Afastamento quando há receio/pressão.
+        const tieneEast = (b.professionalGoals ?? '').length > 0 || (contact.interests ?? []).length > 0;
+        const avoid = (b.primaryFear ?? '').length > 0;
+        if (tieneEast && !avoid) return 75;
+        if (avoid && !tieneEast) return 25;
+        return 50;
+      }
+      case 'reference': {
+        // Internal (Self) quando decide sozinho; External (Feedback) quando precisa de aprovação/consenso.
+        const needsApproval = b.needsApproval;
+        const criteria = (b.decisionCriteria ?? []).length;
+        if (typeof needsApproval === 'boolean') return needsApproval ? 25 : 70;
+        if (criteria > 0) return 45;
+        return 50;
+      }
+      case 'options': {
+        // Opções quando processo é rico/custom (tags/interesses); Procedimentos quando repetitivo/formal.
+        const richness = (contact.tags ?? []).length + (contact.interests ?? []).length + (b.currentChallenges ?? []).length;
+        return richness >= 5 ? 70 : richness >= 2 ? 55 : 50;
+      }
+      case 'reaction': {
+        // Proativo quando responde rápido; Reativo quando decisão é lenta/analítica.
+        const speed = b.decisionSpeed;
+        const resp = dentro(b.avgResponseTimeHours, 168);
+        const respScore = resp === null ? 50 : resp <= 24 ? 70 : resp <= 72 ? 50 : 35;
+        if (speed === 'fast') return 70;
+        if (speed === 'slow') return 35;
+        return respScore;
+      }
+      case 'comparison': {
+        // Semelhança (Estabilidade) quando alto suporte/força já estabelecidos; Diferença (Novidade) em carreira/desafio.
+        const power = dentro(b.decisionPower, 10);
+        const suporte = dentro(b.supportLevel, 10);
+        const majority = (contact.relationshipScore ?? 0);
+        const novelScore = (power ?? 5) * 10 + (suporte ?? 5) * 5;
+        if (majority >= 60) return 40; // estabilidade preferida
+        return novelScore >= 90 ? 70 : novelScore >= 55 ? 55 : 45;
+      }
+      default:
+        return 50;
     }
-    return Math.abs(hash % 100);
   };
 
   const programs = [
@@ -24,7 +68,7 @@ const MetaProgramsProfiler: React.FC<MetaProgramsProfilerProps> = ({ contact }) 
       label: 'Direção de Motivação',
       left: 'Afastamento (Away From)',
       right: 'Aproximação (Toward)',
-      score: getScore(contact.id, 1),
+      score: getScore('direction'),
       description: 'Como o cliente se motiva: fugindo de problemas ou buscando objetivos.',
       icon: Target
     },
@@ -33,7 +77,7 @@ const MetaProgramsProfiler: React.FC<MetaProgramsProfilerProps> = ({ contact }) 
       label: 'Referência de Decisão',
       left: 'Externa (Feedback)',
       right: 'Interna (Self)',
-      score: getScore(contact.id, 2),
+      score: getScore('reference'),
       description: 'Onde o cliente busca validação: nele mesmo ou em opiniões externas.',
       icon: Users
     },
@@ -42,7 +86,7 @@ const MetaProgramsProfiler: React.FC<MetaProgramsProfilerProps> = ({ contact }) 
       label: 'Foco de Ação',
       left: 'Procedimentos',
       right: 'Opções',
-      score: getScore(contact.id, 3),
+      score: getScore('options'),
       description: 'Prefere seguir um passo-a-passo ou ter múltiplas alternativas.',
       icon: Workflow
     },
@@ -51,7 +95,7 @@ const MetaProgramsProfiler: React.FC<MetaProgramsProfilerProps> = ({ contact }) 
       label: 'Tempo de Reação',
       left: 'Reativo (Analítico)',
       right: 'Proativo (Ação)',
-      score: getScore(contact.id, 4),
+      score: getScore('reaction'),
       description: 'O cliente age imediatamente ou espera para analisar a situação.',
       icon: Zap
     },
@@ -60,7 +104,7 @@ const MetaProgramsProfiler: React.FC<MetaProgramsProfilerProps> = ({ contact }) 
       label: 'Padrão de Comparação',
       left: 'Diferença (Novidade)',
       right: 'Semelhança (Estabilidade)',
-      score: getScore(contact.id, 5),
+      score: getScore('comparison'),
       description: 'Busca o que é novo e diferente ou o que é familiar e seguro.',
       icon: Compass
     }
