@@ -15,6 +15,8 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { CompanyForm } from '@/components/forms/CompanyForm';
+import { PipelineSummaryCard } from '@/components/companies/PipelineSummaryCard';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { useCompanies, type Company } from '@/hooks/useCompanies';
 import { useContacts } from '@/hooks/useContacts';
 import { useInteractions } from '@/hooks/useInteractions';
@@ -223,6 +225,12 @@ const Empresas = () => {
             if (s.multiSort) setMultiSort(s.multiSort);
           }}
         />
+      </div>
+
+      <div className="px-4 md:px-6 mb-3">
+        <DashboardErrorBoundary sectionName="Resumo da base">
+          <PipelineSummaryCard />
+        </DashboardErrorBoundary>
       </div>
 
       {queryError && (
