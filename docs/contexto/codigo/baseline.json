@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "d57e85c9431b019afb020356cfdeb90fe0d3380e",
+  "commit": "e6085982a243acde5569cf952ee42463c777304d",
   "branch": "main",
-  "data_commit": "2026-11-22T08:39:36-03:00",
+  "data_commit": "2026-11-22T09:20:32-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "e608598",
+    "data": "2026-11-22",
+    "assunto": "chore(deps): bump minimatch 10->11 e postcss-selector-parser 6.0.10->6.1.5 via overrides (#305)"
+   },
+   {
+    "sha": "86259d6",
+    "data": "2026-11-22",
+    "assunto": "chore(inventario): regenera edges.json pós-#300 e consolida auditoria de edges órfãs (doc 13) (#304)"
+   },
    {
     "sha": "d57e85c",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "ad9f3c0",
     "data": "2026-11-20",
     "assunto": "fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)"
-   },
-   {
-    "sha": "70d97b4",
-    "data": "2026-11-20",
-    "assunto": "Merge pull request #281 from adm01-debug/claude/chore-limpa-temp-supabase-261120-1105"
-   },
-   {
-    "sha": "105e30e",
-    "data": "2026-11-20",
-    "assunto": "chore: remove artefato local supabase/.temp/ do versionamento (gitignore)"
    }
   ],
-  "arquivos_mudados_7d": 942,
+  "arquivos_mudados_7d": 944,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -207,11 +207,11 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 20
+    "mudancas": 21
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 15
+    "mudancas": 16
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
@@ -242,11 +242,11 @@
     "mudancas": 9
    },
    {
-    "arquivo": ".github/workflows/rls-exposure-guard.yml",
-    "mudancas": 8
+    "arquivo": "inventario/estado/edges.json",
+    "mudancas": 9
    },
    {
-    "arquivo": "inventario/estado/edges.json",
+    "arquivo": ".github/workflows/rls-exposure-guard.yml",
     "mudancas": 8
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 140
+    "commits": 142
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3890,
+  "arquivos_total": 3891,
   "arquivos_codigo": 2240,
   "linhas_codigo": 418149,
   "rotas": 115,
@@ -343,7 +343,7 @@
   "testes": 278,
   "workflows": 12,
   "scripts": 296,
-  "docs_md": 157
+  "docs_md": 158
  },
  "por_pasta": {
   "commitlint.config.cjs": {

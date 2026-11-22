@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "d57e85c9431b019afb020356cfdeb90fe0d3380e",
+  "sha": "e6085982a243acde5569cf952ee42463c777304d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-22 11:40 UTC",
-  "files_total": 3995,
+  "generated_at": "2026-11-22 12:21 UTC",
+  "files_total": 3996,
   "code_files": 3522,
   "code_lines": 474869
  },
@@ -306112,10 +306112,30 @@
   }
  },
  "git": {
-  "sha": "d57e85c9431b019afb020356cfdeb90fe0d3380e",
+  "sha": "e6085982a243acde5569cf952ee42463c777304d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "e608598",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "chore(deps): bump minimatch 10->11 e postcss-selector-parser 6.0.10->6.1.5 via overrides (#305)",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
+   {
+    "sha": "86259d6",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "chore(inventario): regenera edges.json pós-#300 e consolida auditoria de edges órfãs (doc 13) (#304)",
+    "files": [
+     "docs/estado/13_AUDITORIA_EDGES_ORFAS_POS_300.md",
+     "inventario/estado/edges.json"
+    ]
+   },
    {
     "sha": "d57e85c",
     "date": "2026-11-22",
@@ -306534,25 +306554,17 @@
     "author": "adm01-debug",
     "subject": "Merge pull request #279 from adm01-debug/claude/infra-aplica-migracao-audit-261120-1032",
     "files": []
-   },
-   {
-    "sha": "1cd9342",
-    "date": "2026-11-20",
-    "author": "Joaquim Ataides",
-    "subject": "infra: workflow temporario para aplicar migration de auditoria em producao",
-    "files": [
-     ".github/workflows/migracao-temporaria.yml"
-    ]
-   },
-   {
-    "sha": "b70f89e",
-    "date": "2026-11-20",
-    "author": "adm01-debug",
-    "subject": "Merge pull request #278 from adm01-debug/claude/fix-resgate-auditoria-external-data-20261119-1501",
-    "files": []
    }
   ],
   "hot_files": [
+   [
+    "package-lock.json",
+    2
+   ],
+   [
+    "package.json",
+    2
+   ],
    [
     "supabase/functions/nurturing-runner/index.ts",
     2
@@ -306574,8 +306586,12 @@
     2
    ],
    [
-    ".github/workflows/migracao-temporaria.yml",
-    2
+    "docs/estado/13_AUDITORIA_EDGES_ORFAS_POS_300.md",
+    1
+   ],
+   [
+    "inventario/estado/edges.json",
+    1
    ],
    [
     "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql",
@@ -306619,18 +306635,6 @@
    ],
    [
     "supabase/functions/_shared/auth.ts",
-    1
-   ],
-   [
-    "supabase/functions/check-health-alerts/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/process-webhook-dlq/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/revops-snapshot-builder/index.ts",
     1
    ]
   ]

@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d57e85c9431b019afb020356cfdeb90fe0d3380e` (2026-11-22T08:39:36-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e6085982a243acde5569cf952ee42463c777304d` (2026-11-22T09:20:32-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2077), SQL (1281), Markdown (157), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
+- linguagens: TypeScript (2077), SQL (1281), Markdown (158), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3890 |
+| arquivos_total | 3891 |
 | arquivos_codigo | 2240 |
 | linhas_codigo | 418149 |
 | rotas | 115 |
@@ -51,7 +51,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | testes | 278 |
 | workflows | 12 |
 | scripts | 296 |
-| docs_md | 157 |
+| docs_md | 158 |
 
 ## Onde ficam as coisas
 - telas: src/pages (114)
@@ -445,16 +445,16 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25798 nós · 41143 arestas · 3108 comunidades · grafo do commit `d57e85c9`
-- comunidades maiores: @tanstack/react-query (475), react (403), lucide-react (371), ref_types (338), _shared/auth.ts (293), framer-motion (278), 02_tables.sql (259), ref_lib (236), date-fns (235), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (226), sonner (210)
+- 25808 nós · 41153 arestas · 3101 comunidades · grafo do commit `e6085982`
+- comunidades maiores: @tanstack/react-query (676), lucide-react (313), _shared/auth.ts (294), framer-motion (287), ref_types (276), ref_lib (268), 02_tables.sql (259), date-fns (249), 📖 Dicionário de Dados — SINGU CRM (227), react (225), ref_hooks (217), ref_components (212)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - CHANGELOG.md (48)
 - .github/workflows/ci.yml (23)
-- package.json (20)
-- package-lock.json (15)
+- package.json (21)
+- package-lock.json (16)
 - supabase/functions/external-data/index.ts (15)
 - docs/prod-readiness.md (14)
 - docs/qa/security-definer-audit.md (13)
@@ -462,8 +462,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
 - inventario/estado/banco.json (9)
+- inventario/estado/edges.json (9)
 - .github/workflows/rls-exposure-guard.yml (8)
-- inventario/estado/edges.json (8)
 - inventario/estado/tabelas-uso.json (8)
 - src/pages/Contatos.tsx (7)
 
@@ -579,10 +579,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/postmortem-template.md` — Post-Mortem — {Título do Incidente} (96 linhas)
 - `docs/prod-readiness.md` — Prod Readiness ? Singu_V2 (328 linhas)
 - `docs/ux_improvement_strategy.md` (73 linhas)
-- subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (12), docs/auditoria (8), docs/qa (8), docs/agentes (5), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/ci (1), docs/pendencias (1), docs/perf (1)
+- subpastas de docs/: docs/adr (25), docs/lacunas (17), docs/estado (13), docs/auditoria (8), docs/qa (8), docs/agentes (5), docs/contexto (2), docs/dr (2), docs/dr-drills (2), docs/runbooks (2), docs/ci (1), docs/pendencias (1), docs/perf (1)
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-22 `e608598` chore(deps): bump minimatch 10->11 e postcss-selector-parser 6.0.10->6.1.5 via overrides (#305)
+- 2026-11-22 `86259d6` chore(inventario): regenera edges.json pós-#300 e consolida auditoria de edges órfãs (doc 13) (#304)
 - 2026-11-22 `d57e85c` fix(rls): revoga EXECUTE anon das 7 stubs CRM/search recriadas pelas baselines (destrava gate allowlist) (#303)
 - 2026-11-21 `403fb97` infra(db): versiona ai_recommendation_audit_logs_v2 (DDL idempotente + RLS) (#295)
 - 2026-11-21 `5b8ee5b` fix(db): baseline idempotente para stubs com defaults (42P13) (#301)
@@ -596,8 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-21 `84b1bdd` feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)
 - 2026-11-21 `fe5d8c1` fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)
 - 2026-11-21 `e453c9f` feat(insights): carrega insights persistidos ao abrir a tela (#291)
-- 2026-11-21 `62379b7` chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)
-- 2026-11-21 `4e69959` fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
