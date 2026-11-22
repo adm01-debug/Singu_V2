@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { useContactBehavior } from '@/hooks/useContactBehavior';
 import type { ContactPersonality } from '@/hooks/useContactBehavior';
 import { useState, useEffect } from 'react';
+import { PersonalityFrameworkInsights } from './PersonalityFrameworkInsights';
 
 interface Props {
   contactId: string;
@@ -301,6 +302,8 @@ export function PersonalitySubTab({ contactId }: Props) {
           </CardContent>
         </Card>
       </div>
+
+      <PersonalityFrameworkInsights personality={formData} />
 
       <div className="flex justify-end pt-4 border-t">
         <Button onClick={handleSave} className="gap-2 px-8 h-11 font-bold uppercase tracking-wider shadow-lg hover:shadow-primary/20 transition-all">
