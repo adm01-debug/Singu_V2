@@ -3,6 +3,7 @@ import { SmartBackButton } from '@/components/navigation/SmartBackButton';
 import { useScoreRules, useScoreThresholds } from '@/hooks/useLeadScoring';
 import { ScoreRulesEditor } from '@/components/lead-scoring/ScoreRulesEditor';
 import { ThresholdsEditor } from '@/components/lead-scoring/ThresholdsEditor';
+import { LeadScoreWeightsEditor } from '@/components/lead-score/LeadScoreWeightsEditor';
 
 export default function LeadScoringConfigPage() {
   const { data: rules = [] } = useScoreRules();
@@ -23,8 +24,9 @@ export default function LeadScoringConfigPage() {
           <p className="text-sm text-muted-foreground">Ajuste pesos, decay e faixas de grade. Mudanças aplicam-se no próximo recálculo.</p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-4">
             <ScoreRulesEditor rules={rules} />
+            <LeadScoreWeightsEditor />
           </div>
           <ThresholdsEditor thresholds={thresholds} />
         </div>

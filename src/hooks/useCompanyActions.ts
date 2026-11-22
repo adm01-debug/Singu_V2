@@ -3,6 +3,7 @@ import { callExternalRpc } from '@/lib/externalData';
 import { toast } from 'sonner';
 import { parseApiError } from '@/lib/errorMessages';
 import { areUuidsEqual } from '@/lib/utils';
+import { exportToCSV } from '@/lib/export-utils';
 
 export function useMergeCompanies() {
   const qc = useQueryClient();
@@ -33,22 +34,32 @@ export function useMergeCompanies() {
 export function useExportCompaniesCsv() {
   return useMutation({
     mutationFn: async (filters?: Record<string, unknown>) => {
-      const { data, error } = await callExternalRpc<string>('export_companies_csv', {
+      const { data, error } = await callExternalRpc<string | Array<Record<string, unknown>>>('export_companies_csv', {
         p_filters: filters ?? {},
       });
       if (error) throw error;
       return data;
     },
-    onSuccess: (csvContent) => {
-      if (!csvContent) {
+    onSuccess: (result) => {
+      const fileName = `empresas_export_${new Date().toISOString().slice(0, 10)}.csv`;
+      if (Array.isArray(result)) {
+        if (result.length === 0) {
+          toast.error('Nenhum dado para exportar');
+          return;
+        }
+        exportToCSV(result, fileName);
+        toast.success('Exportação concluída');
+        return;
+      }
+      if (!result) {
         toast.error('Nenhum dado para exportar');
         return;
       }
-      const blob = new Blob([csvContent as string], { type: 'text/csv;charset=utf-8;' });
+      const blob = new Blob([result], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `empresas_export_${new Date().toISOString().slice(0, 10)}.csv`;
+      link.download = fileName;
       link.click();
       URL.revokeObjectURL(url);
       toast.success('Exportação concluída');
