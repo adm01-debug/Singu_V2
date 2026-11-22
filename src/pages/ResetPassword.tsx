@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { Lock, Eye, EyeOff, CheckCircle, ShieldAlert } from 'lucide-react';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
+import { usePasswordBreachCheck } from '@/hooks/usePasswordBreachCheck';
 
 const pwSchema = z.string().min(6, 'Mínimo 6 caracteres');
 
@@ -23,6 +24,7 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const forced = searchParams.get('forced') === 'true';
+  const { checkPassword, isChecking: isCheckingBreach } = usePasswordBreachCheck();
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -39,6 +41,17 @@ export default function ResetPassword() {
 
     setIsLoading(true);
     try {
+      // Confere a base pública de senhas vazadas (k-anonymity: só 5 chars do SHA-1
+      // saem da máquina). Falha de rede devolve 0 e nunca barra o usuário.
+      const breaches = await checkPassword(password);
+      if (breaches > 0) {
+        toast.error(
+          'Esta senha já apareceu em vazamentos públicos. Escolha outra para proteger sua conta.'
+        );
+        setIsLoading(false);
+        return;
+      }
+
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
 
@@ -102,8 +115,12 @@ export default function ResetPassword() {
                   <Label>Confirmar senha</Label>
                   <Input type="password" value={confirm} onChange={e => setConfirm(e.target.value)} required />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Salvando...' : 'Redefinir senha'}
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isLoading || isCheckingBreach}
+                >
+                  {isLoading || isCheckingBreach ? 'Salvando...' : 'Redefinir senha'}
                 </Button>
               </form>
             )}
