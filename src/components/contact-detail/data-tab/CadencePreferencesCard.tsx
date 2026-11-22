@@ -10,6 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type { Tables, Json } from '@/integrations/supabase/types';
+import { useCommunicationPreferences } from '@/hooks/useCommunicationPreferences';
 
 function ResponseRateChart({ rates }: { rates: Json }) {
   if (!rates || typeof rates !== 'object' || Array.isArray(rates)) return null;
@@ -42,9 +43,18 @@ interface Props {
   onSavePreferences?: (data: Record<string, unknown>) => void;
 }
 
-export const CadencePreferencesCard = memo(function CadencePreferencesCard({ cadence, preferences, commPreferences, onSaveCadence, onSavePreferences }: Props) {
+export const CadencePreferencesCard = memo(function CadencePreferencesCard({ cadence, preferences, commPreferences, contactId, onSaveCadence, onSavePreferences }: Props) {
   const [editingCadence, setEditingCadence] = useState(false);
   const [editingPrefs, setEditingPrefs] = useState(false);
+  const [editingComm, setEditingComm] = useState(false);
+  const { upsert: commUpsert } = useCommunicationPreferences(contactId ?? '');
+  const [commForm, setCommForm] = useState({
+    preferred_channel: commPreferences?.preferred_channel ?? 'email',
+    contact_frequency: commPreferences?.contact_frequency ?? 'weekly',
+    preferred_time_start: commPreferences?.preferred_time_start ?? '',
+    preferred_time_end: commPreferences?.preferred_time_end ?? '',
+    notes: commPreferences?.notes ?? '',
+  });
   const [cadenceForm, setCadenceForm] = useState({
     cadence_days: cadence?.cadence_days ?? 14,
     priority: cadence?.priority ?? 'medium',
@@ -414,10 +424,121 @@ export const CadencePreferencesCard = memo(function CadencePreferencesCard({ cad
               )}
               <ResponseRateChart rates={commPreferences.response_rate_by_channel} />
             </div>
+            {contactId && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 px-2 text-xs w-full"
+                onClick={() => setEditingComm(true)}
+              >
+                <Edit2 className="h-3 w-3 mr-1" /> Editar preferências de comunicação
+              </Button>
+            )}
           </>
         )}
 
-        {!cadence && !preferences && !commPreferences && !editingCadence && (
+        {!commPreferences && contactId && (
+          <>
+            <Separator />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-xs w-full"
+              onClick={() => setEditingComm(true)}
+            >
+              <Clock className="h-3 w-3 mr-1" /> Definir preferências de comunicação
+            </Button>
+          </>
+        )}
+
+        {editingComm && contactId && (
+          <div className="space-y-2 border-t pt-2">
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <span className="text-xs text-muted-foreground">Canal preferido</span>
+                <Select
+                  value={commForm.preferred_channel}
+                  onValueChange={(v) => setCommForm((p) => ({ ...p, preferred_channel: v }))}
+                >
+                  <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {['email', 'whatsapp', 'phone', 'sms'].map((c) => (
+                      <SelectItem key={c} value={c} className="text-xs capitalize">{c}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <span className="text-xs text-muted-foreground">Frequência</span>
+                <Select
+                  value={commForm.contact_frequency}
+                  onValueChange={(v) => setCommForm((p) => ({ ...p, contact_frequency: v }))}
+                >
+                  <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {['daily', 'weekly', 'biweekly', 'monthly', 'quarterly'].map((f) => (
+                      <SelectItem key={f} value={f} className="text-xs capitalize">{f}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <span className="text-xs text-muted-foreground">Início da janela</span>
+                <Input
+                  type="time"
+                  className="h-8 text-xs"
+                  value={commForm.preferred_time_start}
+                  onChange={(e) => setCommForm((p) => ({ ...p, preferred_time_start: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1">
+                <span className="text-xs text-muted-foreground">Fim da janela</span>
+                <Input
+                  type="time"
+                  className="h-8 text-xs"
+                  value={commForm.preferred_time_end}
+                  onChange={(e) => setCommForm((p) => ({ ...p, preferred_time_end: e.target.value }))}
+                />
+              </div>
+            </div>
+            <Input
+              placeholder="Observações"
+              className="h-8 text-xs"
+              value={commForm.notes}
+              onChange={(e) => setCommForm((p) => ({ ...p, notes: e.target.value }))}
+            />
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                className="h-7 px-2 text-xs flex-1"
+                onClick={() => {
+                  commUpsert({
+                    preferred_channel: commForm.preferred_channel,
+                    contact_frequency: commForm.contact_frequency || null,
+                    preferred_time_start: commForm.preferred_time_start || null,
+                    preferred_time_end: commForm.preferred_time_end || null,
+                    notes: commForm.notes || null,
+                  });
+                  setEditingComm(false);
+                }}
+              >
+                <Save className="h-3 w-3 mr-1" /> Salvar
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-xs"
+                onClick={() => setEditingComm(false)}
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {!cadence && !preferences && !commPreferences && !editingCadence && !editingComm && (
           <p className="text-xs text-muted-foreground text-center py-2">Sem preferências configuradas</p>
         )}
       </CardContent>
