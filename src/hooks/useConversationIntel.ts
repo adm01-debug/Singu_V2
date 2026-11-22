@@ -321,3 +321,33 @@ export function useCoachingMetrics(periodDays: number = 30) {
     },
   });
 }
+
+export interface CoachingDigest {
+  ok: boolean;
+  narrative: string;
+  stats: {
+    total_conversations: number;
+    avg_coaching_score: number;
+    avg_talk_ratio_rep: number;
+    sentiment_distribution: Record<string, number>;
+    top_objections: Array<[string, number]>;
+    unhandled_objections: number;
+    period_days: number;
+  } | null;
+}
+
+export function useCoachingDigest(periodDays: number = 7) {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ["coaching-digest", user?.id, periodDays],
+    enabled: !!user?.id,
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const { data, error } = await supabase.functions.invoke("conversation-coaching-digest", {
+        body: { period_days: periodDays },
+      });
+      if (error) throw error;
+      return data as CoachingDigest;
+    },
+  });
+}

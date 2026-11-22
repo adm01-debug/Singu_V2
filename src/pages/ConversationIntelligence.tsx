@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Brain, Mic, AlertTriangle, MessageSquare, Settings, TrendingUp } from "lucide-react";
-import { useCoachingMetrics, useConversationAnalyses } from "@/hooks/useConversationIntel";
+import { useCoachingMetrics, useConversationAnalyses, useCoachingDigest } from "@/hooks/useConversationIntel";
 import { ConversationAnalysesTable } from "@/components/conversation-intel/ConversationAnalysesTable";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -16,6 +16,7 @@ export default function ConversationIntelligence() {
   const [days, setDays] = useState(30);
   const { data: metrics, isLoading: loadingMetrics } = useCoachingMetrics(days);
   const { data: analyses, isLoading: loadingAnalyses } = useConversationAnalyses({ days });
+  const { data: digest, isLoading: loadingDigest } = useCoachingDigest(days > 7 ? 7 : days);
 
   return (
     <AppLayout>
@@ -108,22 +109,46 @@ export default function ConversationIntelligence() {
           </TabsContent>
 
           <TabsContent value="coaching">
-            <Card>
-              <CardHeader><CardTitle className="text-base">Tendência de Coaching Score</CardTitle></CardHeader>
-              <CardContent>
-                <div className="h-72">
-                  <ResponsiveContainer>
-                    <LineChart data={metrics?.trend ?? []}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={11} />
-                      <YAxis domain={[0, 100]} stroke="hsl(var(--muted-foreground))" fontSize={11} />
-                      <Tooltip contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 6, fontSize: 11 }} />
-                      <Line type="monotone" dataKey="score" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <Card>
+                <CardHeader><CardTitle className="text-base flex items-center gap-2"><Brain className="h-4 w-4 text-primary" /> Digest de Coaching</CardTitle></CardHeader>
+                <CardContent>
+                  {loadingDigest ? <Skeleton className="h-28 w-full" /> : (
+                    <div className="space-y-3">
+                      {digest?.narrative ? (
+                        <p className="text-sm whitespace-pre-line text-muted-foreground">{digest.narrative}</p>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">Sem conversas analisadas no período.</p>
+                      )}
+                      {digest?.stats && (
+                        <div className="flex flex-wrap gap-4 pt-2 text-xs text-muted-foreground">
+                          <span>Conversas: <strong className="text-foreground">{digest.stats.total_conversations}</strong></span>
+                          <span>Score médio: <strong className="text-foreground">{digest.stats.avg_coaching_score}/100</strong></span>
+                          <span>Talk ratio: <strong className="text-foreground">{digest.stats.avg_talk_ratio_rep}%</strong></span>
+                          <span>Objeções não tratadas: <strong className="text-foreground">{digest.stats.unhandled_objections}</strong></span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader><CardTitle className="text-base">Tendência de Coaching Score</CardTitle></CardHeader>
+                <CardContent>
+                  <div className="h-72">
+                    <ResponsiveContainer>
+                      <LineChart data={metrics?.trend ?? []}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={11} />
+                        <YAxis domain={[0, 100]} stroke="hsl(var(--muted-foreground))" fontSize={11} />
+                        <Tooltip contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 6, fontSize: 11 }} />
+                        <Line type="monotone" dataKey="score" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
