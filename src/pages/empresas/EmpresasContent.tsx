@@ -14,6 +14,7 @@ import { ViewModeSwitcher, type ViewMode, type GridColumns } from '@/components/
 import { BulkActionsBar } from '@/components/bulk-actions/BulkActionsBar';
 import { SearchPresetsMenu } from '@/components/search/SearchPresetsMenu';
 import { BulkImportDialog } from '@/components/import/BulkImportDialog';
+import { KeyboardListHint } from '@/components/ui/keyboard-list-hint';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { MergeCompaniesDialog } from '@/components/company-detail/MergeCompaniesDialog';
 import { RecentlyViewedSection } from '@/components/recently-viewed/RecentlyViewedSection';
@@ -206,7 +207,6 @@ export function EmpresasContent(props: Props) {
                   actions={[{ label: 'Cadastrar Empresa', onClick: () => onSetIsFormOpen(true), icon: Plus }]}
                   tips={['Adicione dados como segmento e porte para análises mais precisas', 'Vincule contatos às empresas para contexto nas interações', 'Use tags para agrupar empresas por oportunidade ou projeto']} />
           )}
-
           {hasMore && (
             <div ref={sentinelRef} className="flex items-center justify-center py-6 text-sm text-muted-foreground">
               {isFetchingNextPage ? (
@@ -218,6 +218,8 @@ export function EmpresasContent(props: Props) {
           )}
         </>
       )}
+
+      <KeyboardListHint showSelect={false} />
 
       <BulkActionsBar selectedIds={Array.from(selectedIds)} totalCount={filteredAndSortedCompanies.length} entityType="companies" onSelectAll={onSelectAll} onClearSelection={() => onSelect('__clear__', false)} onDelete={onBulkDelete} onAddTag={onBulkAddTag} />
     </div>
