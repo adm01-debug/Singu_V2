@@ -122,14 +122,24 @@ export function useUpsertWinLossRecord() {
   return useMutation({
     mutationFn: async (payload: Partial<WinLossRecord> & { deal_id: string; outcome: WinLossOutcome }) => {
       if (!user) throw new Error('Not authenticated');
-      const { data, error } = await supabase
-        .from('win_loss_records')
-        .upsert({ ...payload, user_id: user.id }, { onConflict: 'user_id,deal_id' })
-        .select()
-        .maybeSingle();
+      const { data, error } = await supabase.functions.invoke('win-loss-record-deal', {
+        body: {
+          deal_id: payload.deal_id,
+          outcome: payload.outcome,
+          deal_value: payload.deal_value ?? null,
+          sales_cycle_days: payload.sales_cycle_days ?? null,
+          decision_maker_contact_id: payload.decision_maker_contact_id ?? null,
+          primary_reason_id: payload.primary_reason_id ?? null,
+          competitor_id: payload.competitor_id ?? null,
+          lessons_learned: payload.lessons_learned ?? null,
+          notes: payload.notes ?? null,
+          secondary_reasons: payload.secondary_reasons ?? null,
+        },
+      });
       if (error) throw error;
-      if (!data) throw new Error("Falha ao registrar Win/Loss");
-      return data as WinLossRecord;
+      const record = (data as { record?: WinLossRecord })?.record;
+      if (!record) throw new Error("Falha ao registrar Win/Loss");
+      return record as WinLossRecord;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['win-loss-records'] });
