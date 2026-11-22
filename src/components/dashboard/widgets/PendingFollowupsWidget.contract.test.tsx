@@ -5,6 +5,9 @@ import type { PendingFollowup } from '@/hooks/usePendingFollowups';
 
 const query = vi.hoisted(() => ({ data: [] as PendingFollowup[], isLoading: false, error: null as Error | null }));
 vi.mock('@/hooks/usePendingFollowups', () => ({ usePendingFollowups: () => query }));
+vi.mock('@/hooks/useInteractionsRpc', () => ({
+  useCompleteFollowup: () => ({ mutate: vi.fn(), isPending: false }),
+}));
 
 function followup(priority: number): PendingFollowup {
   return {
