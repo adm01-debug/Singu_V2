@@ -40,6 +40,13 @@ import type {
 } from '@/types';
 import { ContactFamilyInterestsCard } from './behavioral-tab/ContactFamilyInterestsCard';
 import { RapportStrategySubTab } from './behavioral-tab/RapportStrategySubTab';
+import { NeuroDominanceTab } from './behavioral-tab/NeuroDominanceTab';
+import { ConsentAuditLog } from '@/components/crm/consent/ConsentAuditLog';
+import { RelationshipReportExport } from '@/components/crm/relationship/RelationshipReportExport';
+import { ProfileBasedSuggestions } from '@/components/triggers/ProfileBasedSuggestions';
+import { CompatibilityScore } from '@/components/triggers/CompatibilityScore';
+import { TemplateHistoryByProfile } from '@/components/triggers/TemplateHistoryByProfile';
+import { useFicha360NLP } from '@/hooks/useFicha360NLP';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
 const EmotionalTrendWidget = lazy(() => import('./EmotionalTrendWidget'));
 const EmotionalTrendByContactWidget = lazy(() => import('./EmotionalTrendByContactWidget'));
@@ -74,6 +81,7 @@ import type { Contact } from '@/hooks/useContactDetail';
  
  export function ContactBehavioralTab({ contact, interactions = [] }: Props) {
    const { user } = useAuth();
+   const { vakProfile, metaprogramProfile } = useFicha360NLP(contact.id);
   // O painel de Abordagem IA consome o modelo de dominio legado (Contact de @/types),
   // que difere do shape cru de `contacts`. Mapeamos apenas o que os hooks leem,
   // sem validadores que possam lancar durante o render.
@@ -237,7 +245,11 @@ import type { Contact } from '@/hooks/useContactDetail';
            <TabsTrigger value="reframing" className="text-xs">Sleight of Mouth</TabsTrigger>
            <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
            <TabsTrigger value="approach" className="text-xs">Abordagem IA</TabsTrigger>
+           <TabsTrigger value="sugestoes" className="text-xs">Sugestões por Perfil</TabsTrigger>
+           <TabsTrigger value="compatibilidade" className="text-xs">Compatibilidade</TabsTrigger>
            <TabsTrigger value="health" className="text-xs">Saúde do Cliente</TabsTrigger>
+           <TabsTrigger value="neuro" className="text-xs">Neuro</TabsTrigger>
+           <TabsTrigger value="lgpd" className="text-xs">Consentimento & Export</TabsTrigger>
          </TabsList>
          <ModuleHelp {...moduleHelpContent.disc} />
        </div>
@@ -319,6 +331,41 @@ import type { Contact } from '@/hooks/useContactDetail';
         {panelContact && (
           <ClientHealthPanel contact={panelContact} interactions={mappedInteractions} />
         )}
+      </TabsContent>
+
+      <TabsContent value="neuro">
+        <NeuroDominanceTab contactId={contact.id} />
+      </TabsContent>
+
+      <TabsContent value="sugestoes">
+        {panelContact && (
+          <ProfileBasedSuggestions
+            contact={panelContact}
+            vakProfile={vakProfile ?? null}
+            metaprogramProfile={metaprogramProfile ?? null}
+          />
+        )}
+      </TabsContent>
+
+      <TabsContent value="compatibilidade">
+        {panelContact && (
+          <div className="space-y-6">
+            <CompatibilityScore
+              contact={panelContact}
+              vakProfile={vakProfile ?? null}
+              metaprogramProfile={metaprogramProfile ?? null}
+            />
+            <TemplateHistoryByProfile />
+          </div>
+        )}
+      </TabsContent>
+
+      <TabsContent value="lgpd" className="space-y-4">
+        <ConsentAuditLog contactId={contact.id} />
+        <RelationshipReportExport
+          contactId={contact.id}
+          contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+        />
       </TabsContent>
     </Tabs>
 

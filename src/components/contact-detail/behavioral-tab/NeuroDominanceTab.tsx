@@ -1,4 +1,6 @@
- import { Brain, Target, Zap, Waves, Sparkles, MessageSquare, ShieldCheck, Trophy } from 'lucide-react';
+ import { Brain, Target, Zap, Waves, Sparkles, MessageSquare, ShieldCheck, Trophy, Copy } from 'lucide-react';
+ import { useState } from 'react';
+ import { toast } from 'sonner';
  import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
  import { Button } from '@/components/ui/button';
  import { Progress } from '@/components/ui/progress';
@@ -14,6 +16,7 @@
  
  export function NeuroDominanceTab({ contactId }: NeuroDominanceTabProps) {
    const { user } = useAuth();
+   const [rapportScript, setRapportScript] = useState<string | null>(null);
    const { data: analysis, isLoading } = useQuery({
      queryKey: ['brain-dominance', contactId, user?.id],
      queryFn: async () => {
@@ -181,10 +184,39 @@
                  Com base na dominância cerebral detectada, o estilo de comunicação recomendado para o próximo contato é 
                  <span className="text-primary-foreground font-bold mx-1">Analítico-Consultivo</span> com ênfase em benefícios futuros.
                </p>
-               <Button variant="outline" className="bg-white/5 border-white/20 hover:bg-white/10 text-primary-foreground gap-2">
+               <Button
+                 variant="outline"
+                 className="bg-white/5 border-white/20 hover:bg-white/10 text-primary-foreground gap-2"
+                 onClick={() => {
+                   const dominant = [...systems].sort((a, b) => b.score - a.score)[0];
+                   const script = [
+                     `Abertura: ${recommendations[0] ?? 'Mantenha uma comunicação clara e direta.'}`,
+                     `Conexão: ${negotiationTips[0] ?? 'Forneça um roadmap detalhado dos próximos passos.'}`,
+                     `Fechamento: ${dominant.strategy}`,
+                   ].join('\n');
+                   setRapportScript(script);
+                   void navigator.clipboard?.writeText(script).then(
+                     () => toast.success('Script de rapport copiado'),
+                     () => toast.info('Script gerado abaixo'),
+                   );
+                 }}
+               >
                  <MessageSquare className="h-4 w-4" />
                  Gerar Script de Rapport
                </Button>
+               {rapportScript && (
+                 <div className="mt-4 rounded-lg bg-white/10 p-3 text-xs whitespace-pre-line text-indigo-50">
+                   {rapportScript}
+                   <Button
+                     variant="ghost"
+                     size="sm"
+                     className="mt-2 h-7 gap-1 text-primary-foreground"
+                     onClick={() => { void navigator.clipboard?.writeText(rapportScript); toast.success('Copiado'); }}
+                   >
+                     <Copy className="h-3 w-3" /> Copiar
+                   </Button>
+                 </div>
+               )}
              </div>
            </div>
          </CardContent>
