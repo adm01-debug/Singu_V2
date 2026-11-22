@@ -25,6 +25,7 @@ import { BehavioralAuditSubTab } from '../crm/behavior/BehavioralAuditSubTab';
  import { PredictiveRoadmap } from '../crm/behavior/PredictiveRoadmap';
 import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
 import { ApproachRecommendationPanel } from '@/components/analytics/ApproachRecommendationPanel';
+import { AIMessageGenerator } from '@/components/ai/AIMessageGenerator';
 import { CognitiveBiasesPanel } from '@/components/analytics/CognitiveBiasesPanel';
 import { ClientHealthPanel } from '@/components/analytics/ClientHealthPanel';
 import { SmartTemplateSuggestions } from '@/components/triggers/SmartTemplateSuggestions';
@@ -342,6 +343,7 @@ import type { Contact } from '@/hooks/useContactDetail';
         {panelContact && (
           <div className="space-y-6">
             <ApproachRecommendationPanel contact={panelContact} interactions={panelInteractions} />
+            <AIMessageGenerator contact={panelContact} companyName={panelContact.companyName} discProfile={discProfile} />
             <SmartTemplateSuggestions contact={panelContact} />
             <TemplatePerformanceComparison contact={panelContact} />
           </div>
