@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "e6085982a243acde5569cf952ee42463c777304d",
+  "commit": "1f88d85038109da88b4bcd0d1503eb055e913a14",
   "branch": "main",
-  "data_commit": "2026-11-22T09:20:32-03:00",
+  "data_commit": "2026-11-22T11:18:54-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "1f88d85",
+    "data": "2026-11-22",
+    "assunto": "feat: integra EF win-loss-record-deal e religa digest de coaching (#306)"
+   },
    {
     "sha": "e608598",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "e9d33fd",
     "data": "2026-11-20",
     "assunto": "Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110"
-   },
-   {
-    "sha": "ad9f3c0",
-    "data": "2026-11-20",
-    "assunto": "fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)"
    }
   ],
-  "arquivos_mudados_7d": 944,
+  "arquivos_mudados_7d": 948,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 142
+    "commits": 143
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3891,
   "arquivos_codigo": 2240,
-  "linhas_codigo": 418149,
+  "linhas_codigo": 418223,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -672,7 +672,7 @@
   },
   "src/hooks": {
    "arquivos": 443,
-   "linhas": 58412
+   "linhas": 58452
   },
   "src/integrations": {
    "arquivos": 3,
@@ -688,7 +688,7 @@
   },
   "src/pages": {
    "arquivos": 154,
-   "linhas": 28810
+   "linhas": 28835
   },
   "src/store": {
    "arquivos": 1,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 27157
+   "linhas": 27166
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -943,7 +943,6 @@
    "auto-rebatch-behavioral",
    "auto-regen-behavioral-profiles",
    "bitrix24-webhook",
-   "conversation-coaching-digest",
    "crm-automation-monitor",
    "detect-new-device",
    "dual-write-proxy",
@@ -964,8 +963,7 @@
    "submit-signature",
    "suggest-next-action",
    "validate-access",
-   "whatsapp-import",
-   "win-loss-record-deal"
+   "whatsapp-import"
   ],
   "edges_chamadas_sem_pasta": [],
   "tabelas_sem_rls": [

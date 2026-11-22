@@ -3453,6 +3453,7 @@
    "arquivo": "src/hooks/useConversationIntel.ts",
    "hooks_exportados": [
     "useAnalyzeConversation",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useConversationAnalyses",
@@ -3463,7 +3464,7 @@
     "useUpsertScorecard",
     "useUpsertTopic"
    ],
-   "linhas": 324,
+   "linhas": 354,
    "dominio": "hooks",
    "tabelas": [
     "coaching_scorecards",
@@ -3475,7 +3476,8 @@
     "seed_conversation_topics"
    ],
    "edges": [
-    "conversation-analyzer"
+    "conversation-analyzer",
+    "conversation-coaching-digest"
    ],
    "hooks_internos": [
     "useAuth",
@@ -10312,7 +10314,7 @@
     "useWinLossRecordByDeal",
     "useWinLossRecords"
    ],
-   "linhas": 480,
+   "linhas": 490,
    "dominio": "hooks",
    "tabelas": [
     "competitors",
@@ -10324,7 +10326,8 @@
     "seed_win_loss_defaults"
    ],
    "edges": [
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "hooks_internos": [
     "useAuth",

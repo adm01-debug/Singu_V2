@@ -16188,9 +16188,10 @@
     "ConversationIntelligence"
    ],
    "export_default": "ConversationIntelligence",
-   "linhas": 144,
+   "linhas": 169,
    "dominio": "pages",
    "hooks_locais": [
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useConversationAnalyses"
    ],

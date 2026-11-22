@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e6085982a243acde5569cf952ee42463c777304d` (2026-11-22T09:20:32-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `1f88d85038109da88b4bcd0d1503eb055e913a14` (2026-11-22T11:18:54-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3891 |
 | arquivos_codigo | 2240 |
-| linhas_codigo | 418149 |
+| linhas_codigo | 418223 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -69,7 +69,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 653 | 70 | 232 |
+| app | 0 | 0 | 6 | 654 | 72 | 232 |
 | components/abm | 0 | 0 | 8 | 19 | 2 | 6 |
 | components/admin | 0 | 0 | 45 | 36 | 13 | 19 |
 | components/analytics | 0 | 0 | 43 | 81 | 2 | 26 |
@@ -77,9 +77,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/carnegie | 0 | 0 | 13 | 1 | 0 | 0 |
 | components/companies | 0 | 0 | 5 | 7 | 1 | 2 |
 | components/company-detail | 0 | 0 | 29 | 76 | 3 | 11 |
-| components/contact-detail | 0 | 0 | 110 | 123 | 14 | 75 |
+| components/contact-detail | 0 | 0 | 110 | 124 | 15 | 75 |
 | components/contacts | 0 | 0 | 10 | 15 | 2 | 10 |
-| components/conversation-intel | 0 | 0 | 11 | 12 | 1 | 5 |
+| components/conversation-intel | 0 | 0 | 11 | 13 | 2 | 5 |
 | components/crm | 0 | 0 | 34 | 17 | 1 | 37 |
 | components/customer-success | 0 | 0 | 8 | 14 | 0 | 6 |
 | components/dashboard | 0 | 0 | 46 | 102 | 6 | 38 |
@@ -94,17 +94,17 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/intel | 0 | 0 | 34 | 13 | 1 | 4 |
 | components/intelligence | 0 | 0 | 5 | 15 | 2 | 7 |
 | components/intent | 0 | 0 | 5 | 11 | 2 | 4 |
-| components/interactions | 0 | 0 | 42 | 44 | 3 | 17 |
-| components/layout | 0 | 0 | 6 | 339 | 27 | 98 |
+| components/interactions | 0 | 0 | 42 | 45 | 4 | 17 |
+| components/layout | 0 | 0 | 6 | 340 | 29 | 98 |
 | components/lead-routing | 0 | 0 | 6 | 16 | 0 | 10 |
 | components/lead-scoring | 0 | 0 | 13 | 17 | 1 | 7 |
 | components/lux | 0 | 0 | 6 | 3 | 1 | 3 |
 | components/micro-interactions | 0 | 0 | 6 | 0 | 0 | 0 |
-| components/navigation | 0 | 0 | 12 | 339 | 27 | 98 |
+| components/navigation | 0 | 0 | 12 | 340 | 29 | 98 |
 | components/neuromarketing | 0 | 0 | 17 | 1 | 0 | 0 |
 | components/nlp | 0 | 0 | 33 | 10 | 2 | 9 |
 | components/onboarding | 0 | 0 | 8 | 5 | 0 | 3 |
-| components/pipeline | 0 | 0 | 10 | 41 | 4 | 14 |
+| components/pipeline | 0 | 0 | 10 | 41 | 5 | 14 |
 | components/playbooks | 0 | 0 | 6 | 14 | 2 | 4 |
 | components/reports | 0 | 0 | 5 | 16 | 1 | 9 |
 | components/revops | 0 | 0 | 5 | 9 | 1 | 4 |
@@ -115,14 +115,14 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/stakeholders | 0 | 0 | 10 | 6 | 0 | 3 |
 | components/triggers | 0 | 0 | 34 | 12 | 1 | 10 |
 | components/ui | 0 | 0 | 72 | 10 | 0 | 2 |
-| components/win-loss | 0 | 0 | 8 | 17 | 1 | 5 |
+| components/win-loss | 0 | 0 | 8 | 17 | 2 | 5 |
 | data | 0 | 0 | 46 | 5 | 0 | 6 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
-| hooks | 0 | 0 | 378 | 640 | 54 | 209 |
+| hooks | 0 | 0 | 378 | 641 | 56 | 209 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 70 | 16 | 2 | 13 |
-| pages | 51 | 105 | 105 | 630 | 68 | 226 |
-| pages/admin | 7 | 8 | 9 | 355 | 29 | 105 |
+| pages | 51 | 105 | 105 | 631 | 70 | 226 |
+| pages/admin | 7 | 8 | 9 | 356 | 31 | 105 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 5 | 1 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
@@ -280,7 +280,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `connection-introspect` — tabelas: connection_configs, information_schema.columns, information_schema.tables; chamada por 1 arquivo(s) do front
 - `connection-tester` — tabelas: connection_configs, connection_test_logs; chamada por 1 arquivo(s) do front
 - `conversation-analyzer` — tabelas: conversation_analyses, conversation_topics_catalog, interactions, reframing_analysis, suggested_life_events; chamada por 2 arquivo(s) do front
-- `conversation-coaching-digest` — tabelas: conversation_analyses; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `conversation-coaching-digest` — tabelas: conversation_analyses; chamada por 1 arquivo(s) do front
 - `conversational-search` — tabelas: conversational_search_cache; chamada por 1 arquivo(s) do front
 - `crm-automation-monitor` — tabelas: contacts, crm_automation_logs; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `cs-health-recalc` — tabelas: alerts, cs_accounts, cs_health_signals; chamada por 0 arquivo(s) do front, por SQL/cron
@@ -367,7 +367,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `weekly-digest` — tabelas: contacts, interactions, profiles, weekly_report_settings, weekly_reports; chamada por 1 arquivo(s) do front, por SQL/cron
 - `whatsapp-import` — tabelas: companies, contacts, whatsapp_ingestion_logs, whatsapp_messages, whatsapp_transcriptions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `win-loss-analyzer` — tabelas: win_loss_insights, win_loss_records; chamada por 1 arquivo(s) do front
-- `win-loss-record-deal` — tabelas: win_loss_records; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `win-loss-record-deal` — tabelas: win_loss_records; chamada por 1 arquivo(s) do front
 
 ## Cron jobs (pg_cron / vercel)
 - `ai-gateway-alerts-eval` */5 * * * * (20260723152932_9ebcb761-6420-4de9-8bed-a2faa40d9998.sql)
@@ -431,7 +431,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rotas_sem_arquivo: 0
 - componentes_ambiguos: 0
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
-- edges_orfas: 27 — ex.: attribution-calculator, auto-rebatch-behavioral, auto-regen-behavioral-profiles
+- edges_orfas: 25 — ex.: attribution-calculator, auto-rebatch-behavioral, auto-regen-behavioral-profiles
 - edges_chamadas_sem_pasta: 0
 - tabelas_sem_rls: 131 — ex.: _stg_pac_nums, access_denied_logs, active_power_ups
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
@@ -445,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25808 nós · 41153 arestas · 3101 comunidades · grafo do commit `e6085982`
-- comunidades maiores: @tanstack/react-query (676), lucide-react (313), _shared/auth.ts (294), framer-motion (287), ref_types (276), ref_lib (268), 02_tables.sql (259), date-fns (249), 📖 Dicionário de Dados — SINGU CRM (227), react (225), ref_hooks (217), ref_components (212)
+- 25810 nós · 41155 arestas · 3090 comunidades · grafo do commit `1f88d850`
+- comunidades maiores: sonner (328), _shared/auth.ts (291), ref_hooks (289), framer-motion (287), ref_lib (281), 02_tables.sql (259), ref_integrations (245), react (244), react-router-dom (239), date-fns (228), ref_components (227), 📖 Dicionário de Dados — SINGU CRM (227)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-22 `1f88d85` feat: integra EF win-loss-record-deal e religa digest de coaching (#306)
 - 2026-11-22 `e608598` chore(deps): bump minimatch 10->11 e postcss-selector-parser 6.0.10->6.1.5 via overrides (#305)
 - 2026-11-22 `86259d6` chore(inventario): regenera edges.json pós-#300 e consolida auditoria de edges órfãs (doc 13) (#304)
 - 2026-11-22 `d57e85c` fix(rls): revoga EXECUTE anon das 7 stubs CRM/search recriadas pelas baselines (destrava gate allowlist) (#303)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-21 `d4ea4a1` fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)
 - 2026-11-21 `84b1bdd` feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)
 - 2026-11-21 `fe5d8c1` fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)
-- 2026-11-21 `e453c9f` feat(insights): carrega insights persistidos ao abrir a tela (#291)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

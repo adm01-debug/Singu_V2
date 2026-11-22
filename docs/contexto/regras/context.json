@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e6085982a243acde5569cf952ee42463c777304d",
+  "sha": "1f88d85038109da88b4bcd0d1503eb055e913a14",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-22 12:21 UTC",
+  "generated_at": "2026-11-22 14:20 UTC",
   "files_total": 3996,
   "code_files": 3522,
-  "code_lines": 474869
+  "code_lines": 474943
  },
  "version": "1.3.2",
- "facts_hash": "b6fe037c59c1c384",
+ "facts_hash": "0656a26f50a1fd3d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -101287,6 +101287,7 @@
     ],
     "invokes_transitive": [
      "conversation-analyzer",
+     "conversation-coaching-digest",
      "disc-analyzer",
      "voice-to-text"
     ],
@@ -101321,6 +101322,7 @@
     ],
     "invokes_transitive": [
      "conversation-analyzer",
+     "conversation-coaching-digest",
      "disc-analyzer",
      "voice-to-text"
     ],
@@ -102547,7 +102549,8 @@
      "playbook-generator",
      "playbook-recommender",
      "voice-to-text",
-     "win-loss-analyzer"
+     "win-loss-analyzer",
+     "win-loss-record-deal"
     ],
     "rpc_transitive": [
      "has_role",
@@ -103015,7 +103018,8 @@
      "win_loss_records"
     ],
     "invokes_transitive": [
-     "win-loss-analyzer"
+     "win-loss-analyzer",
+     "win-loss-record-deal"
     ],
     "rpc_transitive": [
      "seed_win_loss_defaults"
@@ -103034,7 +103038,8 @@
      "win_loss_records"
     ],
     "invokes_transitive": [
-     "win-loss-analyzer"
+     "win-loss-analyzer",
+     "win-loss-record-deal"
     ],
     "rpc_transitive": [
      "seed_win_loss_defaults"
@@ -103216,6 +103221,7 @@
     ],
     "invokes_transitive": [
      "conversation-analyzer",
+     "conversation-coaching-digest",
      "detect-churn-risk",
      "disc-analyzer",
      "email-finder",
@@ -107996,6 +108002,10 @@
     "file": "src/hooks/useConversationIntel.ts"
    },
    {
+    "name": "useCoachingDigest",
+    "file": "src/hooks/useConversationIntel.ts"
+   },
+   {
     "name": "useConversationalSearch",
     "file": "src/hooks/useConversationalSearch.ts"
    },
@@ -111108,7 +111118,7 @@
   {
    "module": "src/hooks",
    "files": 443,
-   "lines": 58412,
+   "lines": 58452,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -111682,7 +111692,7 @@
   {
    "module": "src/pages",
    "files": 154,
-   "lines": 28810,
+   "lines": 28835,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -112040,7 +112050,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 27157,
+   "lines": 27166,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -115525,12 +115535,11 @@
      "supabase/functions/win-loss-analyzer/index.ts",
      "supabase/functions/win-loss-record-deal/index.ts"
     ],
-    "upsert": [
-     "src/hooks/useWinLoss.ts",
-     "supabase/functions/win-loss-record-deal/index.ts"
-    ],
     "delete": [
      "src/hooks/useWinLoss.ts"
+    ],
+    "upsert": [
+     "supabase/functions/win-loss-record-deal/index.ts"
     ]
    },
    "x": {
@@ -119247,6 +119256,9 @@
     "src/components/contact-detail/ContactInteractionsTab.tsx",
     "src/hooks/useConversationIntel.ts"
    ],
+   "conversation-coaching-digest": [
+    "src/hooks/useConversationIntel.ts"
+   ],
    "conversational-search": [
     "src/hooks/useConversationalSearch.ts"
    ],
@@ -119451,6 +119463,9 @@
     "src/hooks/useWeeklyReport.ts"
    ],
    "win-loss-analyzer": [
+    "src/hooks/useWinLoss.ts"
+   ],
+   "win-loss-record-deal": [
     "src/hooks/useWinLoss.ts"
    ]
   },
@@ -122144,7 +122159,7 @@
     "file": "supabase/functions/win-loss-record-deal/index.ts",
     "name": "BodySchema",
     "kind": "object",
-    "body": "{ deal_id: z.string().min(1).max(255), outcome: z.enum([\"won\", \"lost\", \"no_decision\", \"pending\"]).default(\"pending\"), deal_value: z.number().nullable().optional(), sales_cycle_days: z.number().int().nullable().optional(), decision_maker_contact_id: z.string().uuid().nullable().optional(), }",
+    "body": "{ deal_id: z.string().min(1).max(255), outcome: z.enum([\"won\", \"lost\", \"no_decision\", \"pending\"]).default(\"pending\"), deal_value: z.number().nullable().optional(), sales_cycle_days: z.number().int().nullable().optional(), decision_maker_contact_id: z.string().uuid().nullable().optional(), primary_reason_id: z.string().uuid().nullable().optional(), competitor_id: z.string().uuid().nullable().optional(), lessons_learned: z.string().max(4000).nullable().optional(), notes: z.string().max(4000).nullable().optional(), secondary_reasons: z.array(z.string()).nullable().optional(), }",
     "refines": [],
     "chain": []
    }
@@ -268519,7 +268534,7 @@
   },
   "src/hooks/useConversationIntel.ts": {
    "path": "src/hooks/useConversationIntel.ts",
-   "lines": 324,
+   "lines": 354,
    "exports": [
     "type SentimentOverall",
     "interface ConversationAnalysis",
@@ -268534,7 +268549,9 @@
     "function useSeedTopics",
     "function useCoachingScorecards",
     "function useUpsertScorecard",
-    "function useCoachingMetrics"
+    "function useCoachingMetrics",
+    "interface CoachingDigest",
+    "function useCoachingDigest"
    ],
    "tables": [
     {
@@ -268619,7 +268636,8 @@
     "seed_conversation_topics"
    ],
    "invokes": [
-    "conversation-analyzer"
+    "conversation-analyzer",
+    "conversation-coaching-digest"
    ],
    "errors": [
     "Erro ao criar tópicos padrão",
@@ -268715,7 +268733,8 @@
     "useSeedTopics",
     "useCoachingScorecards",
     "useUpsertScorecard",
-    "useCoachingMetrics"
+    "useCoachingMetrics",
+    "useCoachingDigest"
    ],
    "side_effects": [
     "invoke("
@@ -280868,7 +280887,7 @@
   },
   "src/hooks/useWinLoss.ts": {
    "path": "src/hooks/useWinLoss.ts",
-   "lines": 480,
+   "lines": 490,
    "exports": [
     "type WinLossOutcome",
     "type ReasonCategory",
@@ -280904,10 +280923,6 @@
     {
      "table": "win_loss_records",
      "op": "select"
-    },
-    {
-     "table": "win_loss_records",
-     "op": "select,upsert"
     },
     {
      "table": "win_loss_records",
@@ -281020,7 +281035,8 @@
     "seed_win_loss_defaults"
    ],
    "invokes": [
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "errors": [
     ";\nexport type InsightSeverity = ",
@@ -285325,7 +285341,7 @@
   },
   "src/pages/ConversationIntelligence.tsx": {
    "path": "src/pages/ConversationIntelligence.tsx",
-   "lines": 144,
+   "lines": 169,
    "exports": [
     "function ConversationIntelligence"
    ]
@@ -300185,7 +300201,7 @@
   },
   "supabase/functions/win-loss-record-deal/index.ts": {
    "path": "supabase/functions/win-loss-record-deal/index.ts",
-   "lines": 89,
+   "lines": 98,
    "tables": [
     {
      "table": "win_loss_records",
@@ -300200,7 +300216,7 @@
     {
      "name": "BodySchema",
      "kind": "object",
-     "body": "{ deal_id: z.string().min(1).max(255), outcome: z.enum([\"won\", \"lost\", \"no_decision\", \"pending\"]).default(\"pending\"), deal_value: z.number().nullable().optional(), sales_cycle_days: z.number().int().nullable().optional(), decision_maker_contact_id: z.string().uuid().nullable().optional(), }",
+     "body": "{ deal_id: z.string().min(1).max(255), outcome: z.enum([\"won\", \"lost\", \"no_decision\", \"pending\"]).default(\"pending\"), deal_value: z.number().nullable().optional(), sales_cycle_days: z.number().int().nullable().optional(), decision_maker_contact_id: z.string().uuid().nullable().optional(), primary_reason_id: z.string().uuid().nullable().optional(), competitor_id: z.string().uuid().nullable().optional(), lessons_learned: z.string().max(4000).nullable().optional(), notes: z.string().max(4000).nullable().optional(), secondary_reasons: z.array(z.string()).nullable().optional(), }",
      "refines": [],
      "chain": []
     }
@@ -306112,10 +306128,22 @@
   }
  },
  "git": {
-  "sha": "e6085982a243acde5569cf952ee42463c777304d",
+  "sha": "1f88d85038109da88b4bcd0d1503eb055e913a14",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "1f88d85",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: integra EF win-loss-record-deal e religa digest de coaching (#306)",
+    "files": [
+     "src/hooks/useConversationIntel.ts",
+     "src/hooks/useWinLoss.ts",
+     "src/pages/ConversationIntelligence.tsx",
+     "supabase/functions/win-loss-record-deal/index.ts"
+    ]
+   },
    {
     "sha": "e608598",
     "date": "2026-11-22",
@@ -306547,13 +306575,6 @@
      ".github/workflows/migracao-temporaria.yml",
      "supabase/.temp/cli-latest"
     ]
-   },
-   {
-    "sha": "c256a5e",
-    "date": "2026-11-20",
-    "author": "adm01-debug",
-    "subject": "Merge pull request #279 from adm01-debug/claude/infra-aplica-migracao-audit-261120-1032",
-    "files": []
    }
   ],
   "hot_files": [
@@ -306584,6 +306605,22 @@
    [
     "supabase/.temp/cli-latest",
     2
+   ],
+   [
+    "src/hooks/useConversationIntel.ts",
+    1
+   ],
+   [
+    "src/hooks/useWinLoss.ts",
+    1
+   ],
+   [
+    "src/pages/ConversationIntelligence.tsx",
+    1
+   ],
+   [
+    "supabase/functions/win-loss-record-deal/index.ts",
+    1
    ],
    [
     "docs/estado/13_AUDITORIA_EDGES_ORFAS_POS_300.md",
@@ -306619,22 +306656,6 @@
    ],
    [
     "src/components/enroll/EnrollContactDialog.tsx",
-    1
-   ],
-   [
-    "src/hooks/useNurturingExecutions.ts",
-    1
-   ],
-   [
-    "src/pages/Nurturing.tsx",
-    1
-   ],
-   [
-    "supabase/functions/send-transactional-email/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/_shared/auth.ts",
     1
    ]
   ]

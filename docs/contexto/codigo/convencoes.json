@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat: integra EF win-loss-record-deal e religa digest de coaching (#306)",
    "chore(deps): bump minimatch 10->11 e postcss-selector-parser 6.0.10->6.1.5 via overrides (#305)",
    "chore(inventario): regenera edges.json pós-#300 e consolida auditoria de edges órfãs (doc 13) (#304)",
    "fix(rls): revoga EXECUTE anon das 7 stubs CRM/search recriadas pelas baselines (destrava gate allowlist) (#303)",
-   "infra(db): versiona ai_recommendation_audit_logs_v2 (DDL idempotente + RLS) (#295)",
-   "fix(db): baseline idempotente para stubs com defaults (42P13) (#301)"
+   "infra(db): versiona ai_recommendation_audit_logs_v2 (DDL idempotente + RLS) (#295)"
   ]
  },
  "pr_template": null,

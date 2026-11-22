@@ -128,6 +128,7 @@
     "useClosingScoreAlertsView",
     "useClosingScoreRanking",
     "useClosingScoreView",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useCoalitionDetection",
@@ -712,6 +713,7 @@
     "connection-introspect",
     "connection-tester",
     "conversation-analyzer",
+    "conversation-coaching-digest",
     "conversational-search",
     "deal-room-buyer-view",
     "deal-room-health",
@@ -766,7 +768,8 @@
     "voice-ai-health",
     "voice-to-text",
     "weekly-digest",
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "tabelas": [
     "abm_account_plans",
@@ -2695,6 +2698,7 @@
     "useChurnRisk",
     "useClosingScoreAlertsView",
     "useClosingScoreView",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useCommunicationDashboard",
@@ -2804,6 +2808,7 @@
    "hooks_definidos": [],
    "edges": [
     "conversation-analyzer",
+    "conversation-coaching-digest",
     "detect-churn-risk",
     "disc-analyzer",
     "email-finder",
@@ -3122,6 +3127,7 @@
    "hooks_locais": [
     "useAnalyzeConversation",
     "useAuth",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useConversationAnalyses",
@@ -3135,7 +3141,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "conversation-analyzer"
+    "conversation-analyzer",
+    "conversation-coaching-digest"
    ],
    "tabelas": [
     "coaching_scorecards",
@@ -5199,6 +5206,7 @@
     "useAuth",
     "useChannelHistory",
     "useChannelSyncMode",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useCompleteFollowup",
@@ -5240,6 +5248,7 @@
    "hooks_definidos": [],
    "edges": [
     "conversation-analyzer",
+    "conversation-coaching-digest",
     "disc-analyzer",
     "external-data"
    ],
@@ -5417,6 +5426,7 @@
     "useChurnRiskReport",
     "useClientTriggers",
     "useClosingScoreRanking",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useCohortAnalysis",
@@ -5721,6 +5731,7 @@
     "ask-crm",
     "bulk-revalidate",
     "conversation-analyzer",
+    "conversation-coaching-digest",
     "conversational-search",
     "demand-forecast",
     "disc-analyzer",
@@ -5740,7 +5751,8 @@
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "tabelas": [
     "abm_account_plans",
@@ -6424,6 +6436,7 @@
     "useChurnRiskReport",
     "useClientTriggers",
     "useClosingScoreRanking",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useCohortAnalysis",
@@ -6731,6 +6744,7 @@
     "ask-crm",
     "bulk-revalidate",
     "conversation-analyzer",
+    "conversation-coaching-digest",
     "conversational-search",
     "demand-forecast",
     "disc-analyzer",
@@ -6750,7 +6764,8 @@
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "tabelas": [
     "abm_account_plans",
@@ -7374,7 +7389,8 @@
     "external-data",
     "playbook-generator",
     "playbook-recommender",
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "tabelas": [
     "activities",
@@ -9288,7 +9304,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "tabelas": [
     "competitors",
@@ -9569,7 +9586,7 @@
    "modulo": "hooks",
    "arquivos": 378,
    "testes": 23,
-   "linhas": 50988,
+   "linhas": 51028,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -9664,6 +9681,7 @@
     "useClosingScoreAlertsView",
     "useClosingScoreRanking",
     "useClosingScoreView",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useCoalitionDetection",
@@ -10392,6 +10410,7 @@
     "useContextualSuggestions",
     "useConversationalSearch",
     "useAnalyzeConversation",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useConversationAnalyses",
@@ -10884,6 +10903,7 @@
     "connection-anomaly-detector",
     "connection-tester",
     "conversation-analyzer",
+    "conversation-coaching-digest",
     "conversational-search",
     "deal-room-buyer-view",
     "deal-room-health",
@@ -10925,7 +10945,8 @@
     "validation-queue-worker",
     "voice-ai-health",
     "weekly-digest",
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "tabelas": [
     "abm_account_plans",
@@ -11211,6 +11232,7 @@
      "connection-anomaly-detector",
      "connection-tester",
      "conversation-analyzer",
+     "conversation-coaching-digest",
      "conversational-search",
      "deal-room-buyer-view",
      "deal-room-health",
@@ -11251,7 +11273,8 @@
      "validation-queue-worker",
      "voice-ai-health",
      "weekly-digest",
-     "win-loss-analyzer"
+     "win-loss-analyzer",
+     "win-loss-record-deal"
     ],
     "tabelas": [
      "abm_account_plans",
@@ -12221,7 +12244,7 @@
    "modulo": "pages",
    "arquivos": 105,
    "testes": 6,
-   "linhas": 21068,
+   "linhas": 21093,
    "itens_menu": [
     "ABM",
     "Análise PNL",
@@ -12469,6 +12492,7 @@
     "useClosingScoreAlertsView",
     "useClosingScoreRanking",
     "useClosingScoreView",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useCoalitionDetection",
@@ -13033,6 +13057,7 @@
     "connection-introspect",
     "connection-tester",
     "conversation-analyzer",
+    "conversation-coaching-digest",
     "conversational-search",
     "deal-room-buyer-view",
     "deal-room-health",
@@ -13085,7 +13110,8 @@
     "voice-ai-health",
     "voice-to-text",
     "weekly-digest",
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "tabelas": [
     "abm_account_plans",
@@ -13644,6 +13670,7 @@
     "useChurnRiskReport",
     "useClientTriggers",
     "useClosingScoreRanking",
+    "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
     "useCohortAnalysis",
@@ -13962,6 +13989,7 @@
     "ask-crm",
     "bulk-revalidate",
     "conversation-analyzer",
+    "conversation-coaching-digest",
     "conversational-search",
     "demand-forecast",
     "disc-analyzer",
@@ -13983,7 +14011,8 @@
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
-    "win-loss-analyzer"
+    "win-loss-analyzer",
+    "win-loss-record-deal"
    ],
    "tabelas": [
     "abm_account_plans",

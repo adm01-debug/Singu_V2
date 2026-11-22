@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e6085982a2` · branch `main` · 2026-11-22 12:21 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1f88d85038` · branch `main` · 2026-11-22 14:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2435,7 +2435,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```
 - **BodySchema** (`supabase/functions/win-loss-record-deal/index.ts`, z.object):
   ```ts
-  { deal_id: z.string().min(1).max(255), outcome: z.enum(["won", "lost", "no_decision", "pending"]).default("pending"), deal_value: z.number().nullable().optional(), sales_cycle_days: z.number().int().nullable().optional(), decision_maker_contact_id: z.string().uuid().nullable().optional(), }
+  { deal_id: z.string().min(1).max(255), outcome: z.enum(["won", "lost", "no_decision", "pending"]).default("pending"), deal_value: z.number().nullable().optional(), sales_cycle_days: z.number().int().nullable().optional(), decision_maker_contact_id: z.string().uuid().nullable().optional(), primary_reason_id: z.string().uuid().nullable().optional(), competitor_id: z.string().uuid().nullable().optional(), lessons_learned: z.string().max(4000).nullable().optional(), notes: z.string().max(4000).nullable().optional(), secondary_reasons: z.array(z.string()).nullable().optional(), }
   ```
 
 ### F.2 react-hook-form (register/rules)

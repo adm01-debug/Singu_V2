@@ -816,10 +816,12 @@
     "rate-limit.ts",
     "validate.ts"
    ],
-   "chamada_pelo_front": [],
+   "chamada_pelo_front": [
+    "src/hooks/useConversationIntel.ts"
+   ],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
-   "orfa": true,
+   "orfa": false,
    "testes": 0
   },
   {
@@ -3938,7 +3940,7 @@
    "nome": "win-loss-record-deal",
    "entrada": "supabase/functions/win-loss-record-deal/index.ts",
    "arquivos": 1,
-   "linhas": 89,
+   "linhas": 98,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -3958,10 +3960,12 @@
     "auth.ts",
     "rate-limit.ts"
    ],
-   "chamada_pelo_front": [],
+   "chamada_pelo_front": [
+    "src/hooks/useWinLoss.ts"
+   ],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
-   "orfa": true,
+   "orfa": false,
    "testes": 0
   }
  ],
