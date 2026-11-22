@@ -47,7 +47,7 @@ import { ProfileBasedSuggestions } from '@/components/triggers/ProfileBasedSugge
 import { CompatibilityScore } from '@/components/triggers/CompatibilityScore';
 import { TemplateHistoryByProfile } from '@/components/triggers/TemplateHistoryByProfile';
 import { useFicha360NLP } from '@/hooks/useFicha360NLP';
-import { NeuroDecisionPath, NeuroScore, NeuroAlerts, NeuroObjectionHandler, NeuroCompatibilityAnalysis } from '@/components/neuromarketing';
+import { NeuroDecisionPath, NeuroScore, NeuroAlerts, NeuroObjectionHandler, NeuroCompatibilityAnalysis, NeuroScriptGenerator, PainClaimGainBuilder } from '@/components/neuromarketing';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
 const EmotionalTrendWidget = lazy(() => import('./EmotionalTrendWidget'));
 const EmotionalTrendByContactWidget = lazy(() => import('./EmotionalTrendByContactWidget'));
@@ -377,6 +377,17 @@ import type { Contact } from '@/hooks/useContactDetail';
               contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
               discProfile={discProfile}
               interactions={neuroInteractions}
+            />
+            <NeuroScriptGenerator
+              contactId={contact.id}
+              contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+              discProfile={discProfile}
+              vakProfile={vakProfile?.primary ?? null}
+              interactions={neuroInteractions}
+            />
+            <PainClaimGainBuilder
+              contactId={contact.id}
+              contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
             />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <NeuroCompatibilityAnalysis
