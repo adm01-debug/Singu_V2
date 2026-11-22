@@ -106,6 +106,11 @@ export function OverviewTab({
             <YourDaySection />
           </Suspense>
         </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Resumo do Dia">
+          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
+            <DailySummaryWidget />
+          </Suspense>
+        </DashboardErrorBoundary>
         <DashboardErrorBoundary sectionName="Próximos Passos (IA)">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-32 w-full" />}>
             <StrategicNextStepsCard contacts={useMemo(() => stats.topContacts.map(c => ({
@@ -183,8 +188,8 @@ export function OverviewTab({
         </DashboardErrorBoundary>
       </div>
 
-      {/* 3bb. Portfolio Health + Important Dates */}
-      <div className="grid gap-4 md:grid-cols-2">
+      {/* 3bb. Portfolio Health + Important Dates + Follow-ups pendentes */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <DashboardErrorBoundary sectionName="Saúde do Portfólio">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-48 w-full" />}>
             <PortfolioHealthDashboard contacts={contacts} interactions={interactions} compact />
@@ -193,6 +198,11 @@ export function OverviewTab({
         <DashboardErrorBoundary sectionName="Datas Importantes">
           <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-48 w-full" />}>
             <ImportantDatesCalendar contacts={mappedContacts} interactions={mappedInteractions} compact />
+          </Suspense>
+        </DashboardErrorBoundary>
+        <DashboardErrorBoundary sectionName="Follow-ups Pendentes">
+          <Suspense fallback={<Surface level={1} rounded="lg" className="animate-pulse h-48 w-full" />}>
+            <PendingFollowupsWidget />
           </Suspense>
         </DashboardErrorBoundary>
       </div>
