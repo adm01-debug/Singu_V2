@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
  import { PersonalityExecutiveSummary } from './behavioral-tab/PersonalityExecutiveSummary';
@@ -24,6 +24,15 @@ import { BusinessContextSubTab } from './behavioral-tab/BusinessContextSubTab';
 import { BehavioralAuditSubTab } from '../crm/behavior/BehavioralAuditSubTab';
  import { PredictiveRoadmap } from '../crm/behavior/PredictiveRoadmap';
 import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
+import { ApproachRecommendationPanel } from '@/components/analytics/ApproachRecommendationPanel';
+import { getBehavior } from '@/types/behavior';
+import type {
+  Contact as LegacyContact,
+  ContactBehavior,
+  ContactRole,
+  RelationshipStage,
+  SentimentType,
+} from '@/types';
 import { ContactFamilyInterestsCard } from './behavioral-tab/ContactFamilyInterestsCard';
 import { RapportStrategySubTab } from './behavioral-tab/RapportStrategySubTab';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
@@ -41,6 +50,7 @@ import type { Contact } from '@/hooks/useContactDetail';
 
  interface Props {
    contact: Contact;
+   interactions?: Array<{ id: string; content?: string | null; transcription?: string | null; created_at?: string | null }>;
  }
  
  async function fetchWithFallback<T>(
@@ -57,8 +67,52 @@ import type { Contact } from '@/hooks/useContactDetail';
    return Array.isArray(local) ? ([] as unknown as T) : null;
  }
  
- export function ContactBehavioralTab({ contact }: Props) {
+ export function ContactBehavioralTab({ contact, interactions = [] }: Props) {
    const { user } = useAuth();
+  // O painel de Abordagem IA consome o modelo de dominio legado (Contact de @/types),
+  // que difere do shape cru de `contacts`. Mapeamos apenas o que os hooks leem,
+  // sem validadores que possam lancar durante o render.
+  const panelContact = useMemo((): LegacyContact | null => {
+    if (!contact) return null;
+    const typedBehavior = getBehavior(contact.behavior) as ContactBehavior | null;
+    const lastInteraction = contact.last_interaction_at ? new Date(contact.last_interaction_at) : undefined;
+    const daysSinceContact = lastInteraction && !Number.isNaN(lastInteraction.getTime())
+      ? Math.floor((Date.now() - lastInteraction.getTime()) / 86_400_000)
+      : undefined;
+    return {
+      id: contact.id,
+      companyId: contact.company_id ?? '',
+      companyName: '',
+      firstName: contact.first_name ?? '',
+      lastName: contact.last_name ?? '',
+      role: (contact.role as ContactRole) ?? 'contact',
+      roleTitle: contact.role_title ?? '',
+      email: contact.email ?? undefined,
+      phone: contact.phone ?? undefined,
+      tags: contact.tags ?? [],
+      hobbies: contact.hobbies ?? [],
+      interests: contact.interests ?? [],
+      relationshipStage: (contact.relationship_stage as RelationshipStage) ?? 'unknown',
+      relationshipScore: contact.relationship_score ?? 0,
+      interactionCount: interactions.length,
+      lastInteraction,
+      daysSinceContact,
+      sentiment: (contact.sentiment as SentimentType) ?? 'neutral',
+      behavior: typedBehavior ?? ({ discProfile: null, discConfidence: 0 } as unknown as ContactBehavior),
+      lifeEvents: [],
+      createdAt: contact.created_at ? new Date(contact.created_at) : new Date(0),
+      updatedAt: contact.updated_at ? new Date(contact.updated_at) : new Date(0),
+    } as LegacyContact;
+  }, [contact, interactions]);
+  const panelInteractions = useMemo(
+    () => interactions.map(i => ({
+      id: i.id,
+      content: i.content ?? undefined,
+      transcription: i.transcription ?? undefined,
+      createdAt: i.created_at ?? undefined,
+    })),
+    [interactions],
+  );
   const behavior = contact.behavior as Record<string, unknown> | null;
 
   const { data: behavioralData } = useQuery({
@@ -176,6 +230,7 @@ import type { Contact } from '@/hooks/useContactDetail';
            <TabsTrigger value="metaprograms" className="text-xs">Meta</TabsTrigger>
            <TabsTrigger value="reframing" className="text-xs">Sleight of Mouth</TabsTrigger>
            <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
+           <TabsTrigger value="approach" className="text-xs">Abordagem IA</TabsTrigger>
          </TabsList>
          <ModuleHelp {...moduleHelpContent.disc} />
        </div>
@@ -238,6 +293,12 @@ import type { Contact } from '@/hooks/useContactDetail';
 
       <TabsContent value="reframing">
         <SleightOfMouthPanel contactId={contact.id} />
+      </TabsContent>
+
+      <TabsContent value="approach">
+        {panelContact && (
+          <ApproachRecommendationPanel contact={panelContact} interactions={panelInteractions} />
+        )}
       </TabsContent>
     </Tabs>
 

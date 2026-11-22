@@ -296,7 +296,7 @@ const ContatoDetalhe = () => {
            <TabsContent value="comportamental" className="space-y-4">
              <DashboardErrorBoundary sectionName="Comportamental">
                <NeuromarketingTimeline contactId={contact.id} />
-               <ContactBehavioralTab contact={contact} />
+               <ContactBehavioralTab contact={contact} interactions={interactions} />
              </DashboardErrorBoundary>
            </TabsContent>
 
