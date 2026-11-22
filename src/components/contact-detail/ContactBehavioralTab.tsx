@@ -25,6 +25,9 @@ import { BehavioralAuditSubTab } from '../crm/behavior/BehavioralAuditSubTab';
  import { PredictiveRoadmap } from '../crm/behavior/PredictiveRoadmap';
 import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
 import { ApproachRecommendationPanel } from '@/components/analytics/ApproachRecommendationPanel';
+import { CognitiveBiasesPanel } from '@/components/analytics/CognitiveBiasesPanel';
+import { ClientHealthPanel } from '@/components/analytics/ClientHealthPanel';
+import { useDashboardMappedData } from '@/hooks/useDashboardMappedData';
 import { getBehavior } from '@/types/behavior';
 import type {
   Contact as LegacyContact,
@@ -50,7 +53,7 @@ import type { Contact } from '@/hooks/useContactDetail';
 
  interface Props {
    contact: Contact;
-   interactions?: Array<{ id: string; content?: string | null; transcription?: string | null; created_at?: string | null }>;
+   interactions?: Tables<'interactions'>[];
  }
  
  async function fetchWithFallback<T>(
@@ -113,6 +116,7 @@ import type { Contact } from '@/hooks/useContactDetail';
     })),
     [interactions],
   );
+  const { mappedInteractions } = useDashboardMappedData([], [], interactions, true);
   const behavior = contact.behavior as Record<string, unknown> | null;
 
   const { data: behavioralData } = useQuery({
@@ -231,6 +235,7 @@ import type { Contact } from '@/hooks/useContactDetail';
            <TabsTrigger value="reframing" className="text-xs">Sleight of Mouth</TabsTrigger>
            <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
            <TabsTrigger value="approach" className="text-xs">Abordagem IA</TabsTrigger>
+           <TabsTrigger value="health" className="text-xs">Saúde do Cliente</TabsTrigger>
          </TabsList>
          <ModuleHelp {...moduleHelpContent.disc} />
        </div>
@@ -279,8 +284,11 @@ import type { Contact } from '@/hooks/useContactDetail';
         <EqSubTab eqAnalysis={eqAnalysis} />
       </TabsContent>
 
-      <TabsContent value="biases">
+      <TabsContent value="biases" className="space-y-4">
         <BiasesSubTab biases={biases} />
+        {panelContact && (
+          <CognitiveBiasesPanel contact={panelContact} interactions={panelInteractions} />
+        )}
       </TabsContent>
 
       <TabsContent value="metaprograms">
@@ -298,6 +306,12 @@ import type { Contact } from '@/hooks/useContactDetail';
       <TabsContent value="approach">
         {panelContact && (
           <ApproachRecommendationPanel contact={panelContact} interactions={panelInteractions} />
+        )}
+      </TabsContent>
+
+      <TabsContent value="health">
+        {panelContact && (
+          <ClientHealthPanel contact={panelContact} interactions={mappedInteractions} />
         )}
       </TabsContent>
     </Tabs>
