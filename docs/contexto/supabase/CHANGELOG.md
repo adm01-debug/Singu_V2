@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-22 13:12 UTC
+
+- **realtime** removido (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_18`
+
 ## 2026-11-22 12:17 UTC
 
 - **functions** alterado (1): `public.ativar_cliente(p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text)`
