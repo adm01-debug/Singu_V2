@@ -1,17 +1,11 @@
 # docs:
 #   gatilho: so manual (workflow_dispatch) -- Actions, Smoke das edges pendentes, Run workflow
-#   prova: as tres validacoes fim-a-fim que estavam registradas como bloqueadas por credencial rodam
-#          contra o projeto real e cada uma confirma o EFEITO no banco, nao so o status HTTP:
-#          1) generate-insights: responde persisted>0 E existe linha em public.insights com user_id do token
-#          2) external-data: resposta 403 E existe linha outcome=denied em external_data_audit_log
-#          3) send-push-notification: responde 200 (503 = par VAPID ausente)
-#          A conferencia das linhas usa psql com os secrets PG* (role postgres), porque a policy de SELECT
-#          de external_data_audit_log e admin_only e nao deixa o usuario de teste ler o log.
-#   falha: qualquer uma das tres nao comprova o efeito real -> step vermelho com o motivo
-#   avisa: quem disparou, lendo o resumo do run
-#   nao-e-bug:
-#     - push 200 sem entrega: o usuario de teste QA nao tem assinatura push registrada; o que se prova aqui
-#       e que o par VAPID esta configurado (503 = ausente) e que a edge aceita a chamada autenticada
+#   prova: as tres validacoes fim-a-fim antes bloqueadas rodam contra o projeto real e cada uma confirma o EFEITO no banco -- generate-insights (persisted>0 e linha em public.insights), external-data (403 e outcome=denied em external_data_audit_log) e send-push-notification (200 com VAPID configurado, 503 quando ausente)
+#   falha: qualquer uma das tres nao comprova o efeito real no banco; o step fica vermelho com o motivo e o valor observado
+#   avisa: quem disparou o workflow, lendo o resumo do run
+# nao-e-bug:
+#   - push-200-sem-entrega: o usuario de teste QA nao tem assinatura push registrada; aqui se prova que o par VAPID esta configurado (503 = ausente) e que a edge aceita a chamada autenticada
+#   - leitura-por-psql: a policy de SELECT de external_data_audit_log e admin_only, entao a conferencia das linhas usa psql com os secrets PG* (role postgres) e nao o token do usuario
 name: Smoke das edges pendentes
 
 on:
@@ -65,7 +59,6 @@ jobs:
 
       - name: "1/3 generate-insights -- persisted>0 e linha em public.insights"
         run: |
-          # contact_id tem FK para contacts(id): usar um contato REAL do usuario.
           CID=$(curl -sS "$SUPABASE_URL/rest/v1/contacts?select=id&limit=1" \
             -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SB_TOKEN" \
             | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const j=JSON.parse(d);if(!Array.isArray(j)||!j.length){console.error('sem contato para o usuario de teste');process.exit(1)}console.log(j[0].id)})")

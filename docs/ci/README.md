@@ -4,7 +4,7 @@
 > este arquivo divergir do bloco `# docs:` de cada workflow. Para mudar o texto daqui, mude o
 > bloco no YAML.
 
-**12 workflows, 10 com bloco `# docs:`.**
+**13 workflows, 11 com bloco `# docs:`.**
 
 | Workflow | Arquivo | Gatilho | O que prova | Quando falha | Quem é avisado | Custo/sem (min) | Falha (7 d) |
 |---|---|---|---|---|---|---|---|
@@ -18,6 +18,7 @@
 | monitoring-lint | [`monitoring-lint.yml`](../../.github/workflows/monitoring-lint.yml) | push e pull_request que toquem monitoring/, docs/runbooks/, scripts/monitoring/ ou este workflow | regras do Prometheus (promtool) e config do Alertmanager (amtool) validas, todo alerta com runbook e nenhum segredo no exporter | PR vermelha no job correspondente (promtool, amtool, runbook-coverage ou secret-leak-scan) | ninguem — o proprio check da PR e o aviso | — | — |
 | Teste de restauração lógica | [`restore-drill.yml`](../../.github/workflows/restore-drill.yml) | pull_request que toque o workflow, os scripts de DR ou o teste de integracao; e dispatch | copia logica do banco restaura em PostgreSQL efemero, os bloqueios funcionam e a instancia e removida no fim | o job fica vermelho; a evidencia e preservada inclusive nas falhas de preparacao e a instancia efemera nao removida tambem derruba o run | ninguem — evidencia fica no artifact do run, sem dados do banco | — | — |
 | RLS exposure guard | [`rls-exposure-guard.yml`](../../.github/workflows/rls-exposure-guard.yml) | pull_request e push em main que toquem supabase/migrations/ ou scripts/rls-matrix/; agendado (seg 06:00 UTC); dispatch | a exposicao real de RLS medida com a anon key e com um usuario logado sem role bate com scripts/rls-matrix/rls-baseline.json | o job fica vermelho e aponta a tabela que passou a expor mais do que o baseline | ninguem — o check da PR e o run agendado vermelho sao o aviso | — | — |
+| Smoke das edges pendentes | [`smoke-edges-pendentes.yml`](../../.github/workflows/smoke-edges-pendentes.yml) | so manual (workflow_dispatch) -- Actions, Smoke das edges pendentes, Run workflow | as tres validacoes fim-a-fim antes bloqueadas rodam contra o projeto real e cada uma confirma o EFEITO no banco -- generate-insights (persisted>0 e linha em public.insights), external-data (403 e outcome=denied em external_data_audit_log) e send-push-notification (200 com VAPID configurado, 503 quando ausente) | qualquer uma das tres nao comprova o efeito real no banco; o step fica vermelho com o motivo e o valor observado | quem disparou o workflow, lendo o resumo do run | — | — |
 
 ## Detalhe
 
@@ -91,6 +92,13 @@
 - **Quando falha:** o job fica vermelho e aponta a tabela que passou a expor mais do que o baseline
 - **Quem é avisado:** ninguem — o check da PR e o run agendado vermelho sao o aviso
 
+### Smoke das edges pendentes (`smoke-edges-pendentes.yml`)
+
+- **Gatilho:** so manual (workflow_dispatch) -- Actions, Smoke das edges pendentes, Run workflow
+- **O que prova:** as tres validacoes fim-a-fim antes bloqueadas rodam contra o projeto real e cada uma confirma o EFEITO no banco -- generate-insights (persisted>0 e linha em public.insights), external-data (403 e outcome=denied em external_data_audit_log) e send-push-notification (200 com VAPID configurado, 503 quando ausente)
+- **Quando falha:** qualquer uma das tres nao comprova o efeito real no banco; o step fica vermelho com o motivo e o valor observado
+- **Quem é avisado:** quem disparou o workflow, lendo o resumo do run
+
 ## O que NÃO é bug
 
 > Comportamento que parece erro mas é intencional. Cada item vem do bloco `# nao-e-bug:` do YAML.
@@ -104,6 +112,8 @@
 | [`estado-real.yml`](../../.github/workflows/estado-real.yml) | **allowlist-deno** | os 15 testes Deno que ja estavam fora do CI em 2026-11-08 estao na ALLOWLIST_DENO de check-test-inventory.mjs e nao reprovam ninguem; a lista so pode encolher |
 | [`higiene-semanal.yml`](../../.github/workflows/higiene-semanal.yml) | **nada-apagado** | o bloco `git push origin --delete` e so texto na issue; nenhum passo apaga branch |
 | [`higiene-semanal.yml`](../../.github/workflows/higiene-semanal.yml) | **sem-comando** | entrada indisponivel (lista de PRs ou de branches protegidas) faz o script recusar gerar comando, de proposito |
+| [`smoke-edges-pendentes.yml`](../../.github/workflows/smoke-edges-pendentes.yml) | **push-200-sem-entrega** | o usuario de teste QA nao tem assinatura push registrada; aqui se prova que o par VAPID esta configurado (503 = ausente) e que a edge aceita a chamada autenticada |
+| [`smoke-edges-pendentes.yml`](../../.github/workflows/smoke-edges-pendentes.yml) | **leitura-por-psql** | a policy de SELECT de external_data_audit_log e admin_only, entao a conferencia das linhas usa psql com os secrets PG* (role postgres) e nao o token do usuario |
 
 ## Sem bloco `# docs:`
 
