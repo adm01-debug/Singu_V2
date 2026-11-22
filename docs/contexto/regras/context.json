@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "403fb97e73adabda112a34af7b36cd13a7a5ea8b",
+  "sha": "d57e85c9431b019afb020356cfdeb90fe0d3380e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-21 18:50 UTC",
-  "files_total": 3994,
-  "code_files": 3521,
-  "code_lines": 474843
+  "generated_at": "2026-11-22 11:40 UTC",
+  "files_total": 3995,
+  "code_files": 3522,
+  "code_lines": 474869
  },
  "version": "1.3.2",
- "facts_hash": "69c0532ae14a8450",
+ "facts_hash": "b6fe037c59c1c384",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -258,7 +258,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1280,
+   ".sql": 1281,
    ".tsx": 1168,
    ".ts": 909,
    ".mjs": 123,
@@ -87425,7 +87425,8 @@
    "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql",
    "supabase/migrations/20261119000000_external_data_audit_log.sql",
    "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
-   "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
+   "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql",
+   "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -99117,6 +99118,118 @@
     "objkind": "function",
     "roles": "authenticated",
     "src": "supabase/migrations/20261118182753_get_activity_overview.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "ativar_cliente",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "inativar_cliente",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "transferir_cliente",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "registrar_compra",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "sdr_qualificar_cliente",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "search_companies",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "search_contacts",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "ativar_cliente",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "inativar_cliente",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "transferir_cliente",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "registrar_compra",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "sdr_qualificar_cliente",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "search_companies",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "search_contacts",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
    }
   ],
   "raises": [
@@ -112205,8 +112318,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1107,
-   "lines": 104045,
+   "files": 1108,
+   "lines": 104071,
    "tables": [
     "users"
    ],
@@ -232486,6 +232599,118 @@
     "objkind": "function",
     "roles": "authenticated",
     "src": "supabase/migrations/20261118182753_get_activity_overview.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "ativar_cliente",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "inativar_cliente",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "transferir_cliente",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "registrar_compra",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "sdr_qualificar_cliente",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "search_companies",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "search_contacts",
+    "objkind": "function",
+    "roles": "PUBLIC, anon",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "ativar_cliente",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "inativar_cliente",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "transferir_cliente",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "registrar_compra",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "sdr_qualificar_cliente",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "search_companies",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "search_contacts",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
    }
   ],
   "guards": [
@@ -305210,6 +305435,10 @@
    "path": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql",
    "lines": 33
   },
+  "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql": {
+   "path": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql",
+   "lines": 26
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -305883,10 +306112,19 @@
   }
  },
  "git": {
-  "sha": "403fb97e73adabda112a34af7b36cd13a7a5ea8b",
+  "sha": "d57e85c9431b019afb020356cfdeb90fe0d3380e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "d57e85c",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix(rls): revoga EXECUTE anon das 7 stubs CRM/search recriadas pelas baselines (destrava gate allowlist) (#303)",
+    "files": [
+     "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+    ]
+   },
    {
     "sha": "403fb97",
     "date": "2026-11-21",
@@ -306312,13 +306550,6 @@
     "author": "adm01-debug",
     "subject": "Merge pull request #278 from adm01-debug/claude/fix-resgate-auditoria-external-data-20261119-1501",
     "files": []
-   },
-   {
-    "sha": "6bfdba5",
-    "date": "2026-11-20",
-    "author": "adm01-debug",
-    "subject": "chore(ci): forca nova rodada do Supabase Preview pos-merge 267",
-    "files": []
    }
   ],
   "hot_files": [
@@ -306345,6 +306576,10 @@
    [
     ".github/workflows/migracao-temporaria.yml",
     2
+   ],
+   [
+    "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql",
+    1
    ],
    [
     "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql",
@@ -306396,10 +306631,6 @@
    ],
    [
     "supabase/functions/revops-snapshot-builder/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/send-sms-campaign/index.ts",
     1
    ]
   ]

@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `403fb97e73adabda112a34af7b36cd13a7a5ea8b` (2026-11-21T15:47:17-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d57e85c9431b019afb020356cfdeb90fe0d3380e` (2026-11-22T08:39:36-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2077), SQL (1280), Markdown (157), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
+- linguagens: TypeScript (2077), SQL (1281), Markdown (157), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (18)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3889 |
+| arquivos_total | 3890 |
 | arquivos_codigo | 2240 |
 | linhas_codigo | 418149 |
 | rotas | 115 |
@@ -46,7 +46,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 411 |
 | edge_functions | 109 |
 | tabelas | 542 |
-| migrations | 1107 |
+| migrations | 1108 |
 | cron_jobs | 44 |
 | testes | 278 |
 | workflows | 12 |
@@ -445,7 +445,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25797 nós · 41143 arestas · 3107 comunidades · grafo do commit `403fb97e`
+- 25798 nós · 41143 arestas · 3108 comunidades · grafo do commit `d57e85c9`
 - comunidades maiores: @tanstack/react-query (475), react (403), lucide-react (371), ref_types (338), _shared/auth.ts (293), framer-motion (278), 02_tables.sql (259), ref_lib (236), date-fns (235), 📖 Dicionário de Dados — SINGU CRM (227), ref_components (226), sonner (210)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-22 `d57e85c` fix(rls): revoga EXECUTE anon das 7 stubs CRM/search recriadas pelas baselines (destrava gate allowlist) (#303)
 - 2026-11-21 `403fb97` infra(db): versiona ai_recommendation_audit_logs_v2 (DDL idempotente + RLS) (#295)
 - 2026-11-21 `5b8ee5b` fix(db): baseline idempotente para stubs com defaults (42P13) (#301)
 - 2026-11-21 `08dc797` feat(nurturing): envia email real via send-transactional-email (#302)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-21 `e453c9f` feat(insights): carrega insights persistidos ao abrir a tela (#291)
 - 2026-11-21 `62379b7` chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)
 - 2026-11-21 `4e69959` fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)
-- 2026-11-20 `b5d2431` docs(auditoria): linha de base do estado real em docs/pendencias (#289)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

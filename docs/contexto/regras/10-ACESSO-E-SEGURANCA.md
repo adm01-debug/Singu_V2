@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `403fb97e73` · branch `main` · 2026-11-21 18:50 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d57e85c943` · branch `main` · 2026-11-22 11:40 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -822,7 +822,7 @@ Middleware matcher (Next.js): nenhum
 | grant | anon, authenticated | execute | `coop003_batch_update`, `get_deal_room_by_token`, `record_buyer_view`, `buyer_toggle_milestone`, `buyer_add_comment`, `get_buyer_document_path`, `increment_magnet_view`, `track_magnet_download`, `increment_form_view`, `submit_public_form` |
 | grant | anon, authenticated | select | `csat_surveys_public`, `forms_public`, `landing_pages_public`, `document_signatures_public`, `product_novelties` |
 | grant | anon, authenticated, service_role | execute | `get_public_csat_survey`, `submit_public_csat_survey`, `increment_landing_page_view`, `get_public_csat_survey`, `submit_public_csat_survey` |
-| grant | authenticated | execute | `get_contact_360_by_phone`, `search_contacts_advanced`, `get_companies_by_phones_batch`, `sync_interaction_from_zapp`, `get_contact_intelligence_by_phone`, `recalculate_rfm_for_company`, `zapp_history.get_contact_intelligence_v2`, `zapp_history.trigger_backfill_summaries`, `zapp_history.user_can_access_contact`, `zapp_history.get_contact_messages_for_summary`, `zapp_history.get_contact_intelligence_v2`, `zapp_history.trigger_backfill_summaries`, `zapp_history.get_embedding_config`, `zapp_history.detect_pii`, `zapp_history.connector_log_search` … +52 |
+| grant | authenticated | execute | `get_contact_360_by_phone`, `search_contacts_advanced`, `get_companies_by_phones_batch`, `sync_interaction_from_zapp`, `get_contact_intelligence_by_phone`, `recalculate_rfm_for_company`, `zapp_history.get_contact_intelligence_v2`, `zapp_history.trigger_backfill_summaries`, `zapp_history.user_can_access_contact`, `zapp_history.get_contact_messages_for_summary`, `zapp_history.get_contact_intelligence_v2`, `zapp_history.trigger_backfill_summaries`, `zapp_history.get_embedding_config`, `zapp_history.detect_pii`, `zapp_history.connector_log_search` … +59 |
 | grant | authenticated | select | `_dormant`, `zapp_history`, `connector_log`, `zapp_history.v_runtime_config_safe`, `zapp_history.v_pedidos_detectados`, `zapp_history.v_dashboard_atendimento`, `zapp_history.v_pedidos_detectados`, `zapp_history.v_dashboard_atendimento`, `zapp_history.v_funil_origem`, `zapp_history.v_top_produtos_demanda`, `zapp_history.v_top_produtos_demanda`, `zapp_history.v_funil_vendas`, `zapp_history.v_objecoes_recorrentes`, `zapp_history.v_sla_atendimento`, `zapp_history.v_conversas_aguardando` … +69 |
 | grant | authenticated | select, insert | `audit_log`, `rfm_history` |
 | grant | authenticated | select, insert, update | `migration_password_reset_log` |
@@ -839,7 +839,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `claim_validation_batch`, `claim_regen_batch`, `net`, `net`, `update_company_fields`, `update_company_fields` |
 | revoke | PUBLIC | select | `mv_daily_kpis`, `mv_daily_stats`, `mv_daily_kpis`, `mv_daily_stats` |
 | revoke | PUBLIC, anon | all | `fn_apply_auto_tag_rules`, `auto_ack_stale_mtta_sla_breaches`, `get_system_config_num`, `assert_company_access`, `assert_contact_access`, `assert_deal_access`, `assert_event_access`, `assert_interaction_access`, `assert_note_access`, `assert_reminder_access`, `assert_task_access`, `assert_visit_access`, `assert_notification_access`, `assert_proposal_access`, `assert_goal_access` … +48 |
-| revoke | PUBLIC, anon | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition`, `get_ai_gateway_health`, `has_role` |
+| revoke | PUBLIC, anon | execute | `ensure_audit_log_partition`, `ensure_audit_log_partition`, `get_ai_gateway_health`, `has_role`, `ativar_cliente`, `inativar_cliente`, `transferir_cliente`, `registrar_compra`, `sdr_qualificar_cliente`, `search_companies`, `search_contacts` |
 | revoke | PUBLIC, anon, authenticated | all | `_connection_encryption_key`, `fn_get_product_ai_context`, `fn_promote_kit_components_batch`, `check_mtta_auto_ack_heartbeat`, `assert_alert_access`, `assert_cadence_access`, `assert_company_access`, `assert_contact_access`, `assert_customer_access`, `assert_deal_access`, `assert_event_access`, `assert_goal_access`, `assert_interaction_access`, `assert_note_access`, `assert_notification_access` … +97 |
 | revoke | PUBLIC, anon, authenticated | execute | `evaluate_ai_gateway_alerts`, `set_updated_at`, `trg_normalizar_telefone`, `trg_normalizar_email`, `singu_sync_company_address`, `singu_sync_legacy_company_name` |
 | revoke | PUBLIC, anon, authenticated | truncate, references, trigger | `public` |
