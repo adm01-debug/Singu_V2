@@ -27,6 +27,8 @@ import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutive
 import { ApproachRecommendationPanel } from '@/components/analytics/ApproachRecommendationPanel';
 import { CognitiveBiasesPanel } from '@/components/analytics/CognitiveBiasesPanel';
 import { ClientHealthPanel } from '@/components/analytics/ClientHealthPanel';
+import { SmartTemplateSuggestions } from '@/components/triggers/SmartTemplateSuggestions';
+import { TemplatePerformanceComparison } from '@/components/triggers/TemplatePerformanceComparison';
 import { useDashboardMappedData } from '@/hooks/useDashboardMappedData';
 import { getBehavior } from '@/types/behavior';
 import type {
@@ -305,7 +307,11 @@ import type { Contact } from '@/hooks/useContactDetail';
 
       <TabsContent value="approach">
         {panelContact && (
-          <ApproachRecommendationPanel contact={panelContact} interactions={panelInteractions} />
+          <div className="space-y-6">
+            <ApproachRecommendationPanel contact={panelContact} interactions={panelInteractions} />
+            <SmartTemplateSuggestions contact={panelContact} />
+            <TemplatePerformanceComparison contact={panelContact} />
+          </div>
         )}
       </TabsContent>
 

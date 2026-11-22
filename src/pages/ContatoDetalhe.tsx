@@ -40,6 +40,7 @@ import { ValidateAllButton } from '@/components/enrichment/ValidateAllButton';
 import { PeopleIntelTimeline } from '@/components/enrichment/PeopleIntelTimeline';
 import { ContactEmailThreadsSection } from '@/components/contact-detail/ContactEmailThreadsSection';
 import { BehavioralInsightsCard } from '@/components/contacts/BehavioralInsightsCard';
+import { FeatureSpotlight } from '@/components/feedback/FeatureSpotlight';
    import { SentimentTrendChart } from '@/components/contact-detail/SentimentTrendChart';
    import { NextBestAction } from '@/components/crm/NextBestAction';
    import { SocialMediaIntelligenceCard } from '@/components/contact-detail/SocialMediaIntelligenceCard';
@@ -193,15 +194,21 @@ const ContatoDetalhe = () => {
 
         {/* Meeting Mode Button */}
         <div className="flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setMeetingMode(true)}
-            className="gap-2"
+          <FeatureSpotlight
+            featureId="contact-meeting-mode"
+            title="Modo Reunião"
+            description="Gravado e transcrito aqui: o Copilot acompanha a conversa em tempo real e sugere respostas."
           >
-            <Video className="w-4 h-4" />
-            Modo Reunião
-          </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setMeetingMode(true)}
+              className="gap-2"
+            >
+              <Video className="w-4 h-4" />
+              Modo Reunião
+            </Button>
+          </FeatureSpotlight>
         </div>
 
         {/* Proactive Intelligence Panel */}
