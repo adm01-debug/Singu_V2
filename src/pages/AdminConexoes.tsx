@@ -3,7 +3,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Database, Plug, Workflow, Bot, Webhook, Plus } from 'lucide-react';
+import { Database, Plug, Workflow, Bot, Webhook, Plus, Activity } from 'lucide-react';
 import { useConnections, type ConnectionType } from '@/hooks/useConnections';
 import { useIncomingWebhooks } from '@/hooks/useIncomingWebhooks';
 import { ConnectionFormDialog } from '@/components/admin/conexoes/ConnectionFormDialog';
@@ -11,6 +11,8 @@ import { ConnectionCard } from '@/components/admin/conexoes/ConnectionCard';
 import { IncomingWebhookCard } from '@/components/admin/conexoes/IncomingWebhookCard';
 import { IncomingWebhookFormDialog } from '@/components/admin/conexoes/IncomingWebhookFormDialog';
 import { McpInstructionsCard } from '@/components/admin/conexoes/McpInstructionsCard';
+import { WebhookDlqPanel } from '@/components/admin/conexoes/WebhookDlqPanel';
+import { AnomaliesWidget } from '@/components/admin/conexoes/AnomaliesWidget';
 
 const TYPE_META: Record<ConnectionType, { label: string; icon: typeof Database; description: string }> = {
   supabase_external: { label: 'Supabase Externo', icon: Database, description: 'Bancos Supabase externos com chaves de serviço' },
@@ -74,6 +76,7 @@ export default function AdminConexoes() {
             <TabsTrigger value="n8n"><Workflow className="w-4 h-4 mr-2" />n8n</TabsTrigger>
             <TabsTrigger value="mcp_claude"><Bot className="w-4 h-4 mr-2" />MCP Claude</TabsTrigger>
             <TabsTrigger value="webhooks"><Webhook className="w-4 h-4 mr-2" />Webhooks Entrantes</TabsTrigger>
+            <TabsTrigger value="observabilidade"><Activity className="w-4 h-4 mr-2" />Observabilidade</TabsTrigger>
           </TabsList>
 
           {(['supabase_external', 'bitrix24', 'n8n', 'mcp_claude'] as ConnectionType[]).map(t => {
@@ -139,6 +142,11 @@ export default function AdminConexoes() {
                 ))}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="observabilidade" className="space-y-4">
+            <WebhookDlqPanel />
+            <AnomaliesWidget />
           </TabsContent>
         </Tabs>
 
