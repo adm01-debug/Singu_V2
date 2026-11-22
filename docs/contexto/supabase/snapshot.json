@@ -187829,9 +187829,13 @@
             {
               "file": "supabase/migrations/20260924153509_rodizio_bloco1_erp_contract.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "public.trg_after_purchase"
@@ -300807,6 +300811,11 @@
           "publication": "supabase_realtime_messages_publication",
           "schema": "realtime",
           "table": "messages_2026_11_24"
+        },
+        {
+          "publication": "supabase_realtime_messages_publication",
+          "schema": "realtime",
+          "table": "messages_2026_11_25"
         }
       ]
     },
