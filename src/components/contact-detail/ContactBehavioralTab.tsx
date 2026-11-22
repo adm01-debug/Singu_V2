@@ -47,6 +47,7 @@ import { ProfileBasedSuggestions } from '@/components/triggers/ProfileBasedSugge
 import { CompatibilityScore } from '@/components/triggers/CompatibilityScore';
 import { TemplateHistoryByProfile } from '@/components/triggers/TemplateHistoryByProfile';
 import { useFicha360NLP } from '@/hooks/useFicha360NLP';
+import { NeuroDecisionPath, NeuroScore, NeuroAlerts, NeuroObjectionHandler, NeuroCompatibilityAnalysis } from '@/components/neuromarketing';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
 const EmotionalTrendWidget = lazy(() => import('./EmotionalTrendWidget'));
 const EmotionalTrendByContactWidget = lazy(() => import('./EmotionalTrendByContactWidget'));
@@ -127,6 +128,12 @@ import type { Contact } from '@/hooks/useContactDetail';
     [interactions],
   );
   const { mappedInteractions } = useDashboardMappedData([], [], interactions, true);
+  const neuroInteractions = useMemo(
+    () => panelInteractions
+      .filter((i): i is typeof i & { content: string } => typeof i.content === 'string' && i.content.length > 0)
+      .map(i => ({ content: i.content, transcription: i.transcription, created_at: i.createdAt })),
+    [panelInteractions],
+  );
   const behavior = contact.behavior as Record<string, unknown> | null;
 
   const { data: behavioralData } = useQuery({
@@ -186,6 +193,20 @@ import type { Contact } from '@/hooks/useContactDetail';
 
   const eqAnalysis = behavioralData?.eqAnalysis || null;
   const biases = behavioralData?.biases || null;
+
+  const { data: salespersonDisc } = useQuery({
+    queryKey: ['salesperson-disc', user?.id],
+    enabled: !!user,
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const { data, error } = await supabase.from('profiles').select('nlp_profile').eq('id', user!.id).maybeSingle();
+      if (error) throw error;
+      const raw = data?.nlp_profile as { discProfile?: string } | null;
+      const value = raw?.discProfile;
+      return value === 'D' || value === 'I' || value === 'S' || value === 'C' ? value : null;
+    },
+  });
 
   const discProfile = behavior?.discProfile as string | null;
   const discConfidence = (behavior?.discConfidence as number) || 0;
@@ -333,8 +354,43 @@ import type { Contact } from '@/hooks/useContactDetail';
         )}
       </TabsContent>
 
-      <TabsContent value="neuro">
+      <TabsContent value="neuro" className="space-y-6">
         <NeuroDominanceTab contactId={contact.id} />
+        {panelContact && (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <NeuroScore
+                contactId={contact.id}
+                contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+                discProfile={discProfile}
+                interactions={neuroInteractions}
+              />
+              <NeuroAlerts
+                contactId={contact.id}
+                contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+                discProfile={discProfile}
+                interactions={neuroInteractions}
+              />
+            </div>
+            <NeuroDecisionPath
+              contactId={contact.id}
+              contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+              discProfile={discProfile}
+              interactions={neuroInteractions}
+            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <NeuroCompatibilityAnalysis
+                salespersonDISC={salespersonDisc ?? (discProfile as 'D' | 'I' | 'S' | 'C' | null) ?? 'S'}
+                contactDISC={discProfile as 'D' | 'I' | 'S' | 'C' | null}
+                contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+              />
+              <NeuroObjectionHandler
+                contactId={contact.id}
+                contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+              />
+            </div>
+          </>
+        )}
       </TabsContent>
 
       <TabsContent value="sugestoes">
