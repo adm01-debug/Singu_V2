@@ -1,7 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
 import { scopedCorsHeaders, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
-import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { extractTraceId, tracedLogger } from "../_shared/tracing.ts";
@@ -174,6 +173,12 @@ Gere entre 3 e 8 insights relevantes baseados nestes dados. Retorne um JSON com 
         expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         created_at: latest,
       }));
+    // persisted reflete o que o banco REALMENTE gravou, nao o que foi tentado:
+    // com bestEffortWrite o insert pode falhar (FK de contact_id, CHECK de
+    // categoria) e a resposta ainda diria persisted>0. Aqui o erro e capturado
+    // e a contagem so avanca quando o insert passa.
+    let persisted = 0;
+    let persistError: string | null = null;
     if (rows.length > 0) {
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL")!,
@@ -181,13 +186,16 @@ Gere entre 3 e 8 insights relevantes baseados nestes dados. Retorne um JSON com 
       );
       // bestEffortWrite: falha de persistência não derruba a resposta (a IA já
       // retornou). Duplicata de re-geração é evitada pela UI (limite de recentes).
-      await bestEffortWrite(
-        supabase.from("insights").insert(rows),
-        "generate-insights persist error:",
-      );
+      const write = await supabase.from("insights").insert(rows);
+      if (write.error) {
+        persistError = write.error.message ?? String(write.error);
+        console.error("generate-insights persist error:", write.error);
+      } else {
+        persisted = rows.length;
+      }
     }
 
-    return jsonOk({ insights, traceId, persisted: rows.length }, req);
+    return jsonOk({ insights, traceId, persisted, ...(persistError ? { persistError } : {}) }, req);
   } catch (error) {
     log.error("fatal_error", { error: error instanceof Error ? error.message : String(error) });
     return jsonError("Internal server error", 500, req);

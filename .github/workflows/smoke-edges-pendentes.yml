@@ -1,14 +1,17 @@
 # docs:
-#   gatilho: só manual (workflow_dispatch) -- Actions, Smoke das edges pendentes, Run workflow
-#   prova: as tres validacoes fim-a-fim que estavam bloqueadas por credencial rodam contra o projeto real:
-#          generate-insights (persisted>0 na tabela insights), external-data (outcome=denied gravado em
-#          external_data_audit_log) e send-push-notification (sem assinatura real, prova que o par VAPID
-#          responde 200 e nao 503). Cada uma deixa a linha/registro conferido no log.
+#   gatilho: so manual (workflow_dispatch) -- Actions, Smoke das edges pendentes, Run workflow
+#   prova: as tres validacoes fim-a-fim que estavam registradas como bloqueadas por credencial rodam
+#          contra o projeto real e cada uma confirma o EFEITO no banco, nao so o status HTTP:
+#          1) generate-insights: responde persisted>0 E existe linha em public.insights com user_id do token
+#          2) external-data: resposta 403 E existe linha outcome=denied em external_data_audit_log
+#          3) send-push-notification: responde 200 (503 = par VAPID ausente)
+#          A conferencia das linhas usa psql com os secrets PG* (role postgres), porque a policy de SELECT
+#          de external_data_audit_log e admin_only e nao deixa o usuario de teste ler o log.
 #   falha: qualquer uma das tres nao comprova o efeito real -> step vermelho com o motivo
 #   avisa: quem disparou, lendo o resumo do run
 #   nao-e-bug:
-#     - push 200 sem entrega: o usuario de teste QA nao tem assinatura push registrada; o que se prova aqui e
-#       que o par VAPID esta configurado (503 = ausente) e que a edge aceita a chamada autenticada
+#     - push 200 sem entrega: o usuario de teste QA nao tem assinatura push registrada; o que se prova aqui
+#       e que o par VAPID esta configurado (503 = ausente) e que a edge aceita a chamada autenticada
 name: Smoke das edges pendentes
 
 on:
@@ -30,6 +33,11 @@ jobs:
       SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
       TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
       TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      PGHOST: ${{ secrets.PGHOST }}
+      PGPORT: ${{ secrets.PGPORT }}
+      PGUSER: ${{ secrets.PGUSER }}
+      PGPASSWORD: ${{ secrets.PGPASSWORD }}
+      PGDATABASE: ${{ secrets.PGDATABASE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -37,7 +45,7 @@ jobs:
       - name: Validar credenciais
         run: |
           missing=0
-          for name in SUPABASE_URL SUPABASE_ANON_KEY TEST_USER_EMAIL TEST_USER_PASSWORD; do
+          for name in SUPABASE_URL SUPABASE_ANON_KEY TEST_USER_EMAIL TEST_USER_PASSWORD PGHOST PGUSER PGPASSWORD PGDATABASE; do
             if [[ -z "${!name}" ]]; then echo "::error::Ausente: $name"; missing=1; fi
           done
           exit $missing
@@ -50,32 +58,54 @@ jobs:
             | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const j=JSON.parse(d);if(!j.access_token){console.error(JSON.stringify(j));process.exit(1)}console.log(j.access_token)})")
           echo "::add-mask::$TOKEN"
           echo "SB_TOKEN=$TOKEN" >> "$GITHUB_ENV"
+          UID=$(node -e "const p=JSON.parse(Buffer.from(process.argv[1].split('.')[1],'base64url').toString());console.log(p.sub)" "$TOKEN")
+          echo "::add-mask::$UID"
+          echo "SB_UID=$UID" >> "$GITHUB_ENV"
           echo "login ok"
 
-      - name: "1/3 generate-insights -- persisted > 0"
+      - name: "1/3 generate-insights -- persisted>0 e linha em public.insights"
         run: |
-          BODY='{"contacts":[{"id":"smoke-contact","name":"Smoke QA","company":"Smoke Ltda","role":"Diretor","last_interaction":"2026-11-20T12:00:00Z","interaction_count":7}],"interactions":[{"contact_id":"smoke-contact","type":"email","created_at":"2026-11-20T12:00:00Z","summary":"Primeiro contato"},{"contact_id":"smoke-contact","type":"call","created_at":"2026-11-19T09:00:00Z","summary":"Ligacao de follow-up"}],"companies":[]}'
+          # contact_id tem FK para contacts(id): usar um contato REAL do usuario.
+          CID=$(curl -sS "$SUPABASE_URL/rest/v1/contacts?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SB_TOKEN" \
+            | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const j=JSON.parse(d);if(!Array.isArray(j)||!j.length){console.error('sem contato para o usuario de teste');process.exit(1)}console.log(j[0].id)})")
+          echo "contato=$CID"
+          BODY=$(node -e "console.log(JSON.stringify({contacts:[{id:process.argv[1],name:'Smoke QA',company:'Smoke Ltda',role:'Diretor',interaction_count:7}],interactions:[{contact_id:process.argv[1],type:'email',created_at:new Date().toISOString(),summary:'Primeiro contato'}],companies:[]}))" "$CID")
           CODE=$(curl -sS -o /tmp/insights.json -w '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/generate-insights" \
             -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SB_TOKEN" -H "Content-Type: application/json" -d "$BODY")
           echo "http=$CODE"
-          head -c 600 /tmp/insights.json; echo
+          head -c 800 /tmp/insights.json; echo
           if [ "$CODE" != "200" ]; then echo "::error::generate-insights respondeu $CODE"; exit 1; fi
-          PERSISTED=$(node -e "const j=require('/tmp/insights.json');console.log(j.persisted??-1)" 2>/dev/null || echo -1)
+          PERSISTED=$(node -e "const j=require('/tmp/insights.json');console.log(j.persisted??-1)")
           echo "persisted=$PERSISTED"
-          if [ "$PERSISTED" -lt 1 ]; then echo "::error::persisted=$PERSISTED -- nada gravado em insights"; exit 1; fi
-          echo "OK: $PERSISTED insight(s) gravado(s) em public.insights"
+          if [ "$PERSISTED" -lt 1 ]; then
+            echo "::error::persisted=$PERSISTED -- nada gravado. persistError: $(node -e "const j=require('/tmp/insights.json');console.log(j.persistError||'(nenhum)')")"
+            exit 1
+          fi
+          sleep 3
+          N=$(psql -X -q -At -c "SELECT count(*) FROM public.insights WHERE user_id = '$SB_UID'::uuid AND source = 'generate-insights' AND created_at > now() - interval '10 minutes'")
+          echo "linhas no banco: $N"
+          if [ "${N:-0}" -lt 1 ]; then echo "::error::persisted>0 mas nenhuma linha em public.insights"; exit 1; fi
+          psql -X -q -c "SELECT title, category, source, created_at FROM public.insights WHERE user_id = '$SB_UID'::uuid AND source = 'generate-insights' ORDER BY created_at DESC LIMIT 3"
+          echo "OK: insight gravado e visivel em public.insights"
 
-      - name: "2/3 external-data -- outcome=denied auditado"
+      - name: "2/3 external-data -- 403 e outcome=denied em external_data_audit_log"
         run: |
+          FAKE=00000000-0000-0000-0000-000000000000
           CODE=$(curl -sS -o /tmp/extdata.json -w '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/external-data" \
             -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SB_TOKEN" -H "Content-Type: application/json" \
-            -d '{"table":"contact_phones","operation":"delete","filters":[{"column":"contact_id","operator":"eq","value":"00000000-0000-0000-0000-000000000000"}]}')
+            -d "{\"table\":\"contact_phones\",\"operation\":\"insert\",\"record\":{\"contact_id\":\"$FAKE\",\"phone\":\"+5511999999999\"}}")
           echo "http=$CODE"
           head -c 600 /tmp/extdata.json; echo
-          if [ "$CODE" = "200" ]; then echo "::error::delete deveria ter sido negado (403), veio 200"; exit 1; fi
-          echo "OK: chamada negada com http=$CODE (caminho de denied exercitado)"
+          if [ "$CODE" != "403" ]; then echo "::error::esperado 403 no caminho denied, veio $CODE"; exit 1; fi
+          sleep 3
+          N=$(psql -X -q -At -c "SELECT count(*) FROM public.external_data_audit_log WHERE table_name = 'contact_phones' AND operation = 'insert' AND outcome = 'denied' AND created_at > now() - interval '10 minutes'")
+          echo "linhas denied: $N"
+          if [ "${N:-0}" -lt 1 ]; then echo "::error::403 retornado mas nenhuma linha denied em external_data_audit_log"; exit 1; fi
+          psql -X -q -c "SELECT table_name, operation, outcome, payload, created_at FROM public.external_data_audit_log WHERE outcome = 'denied' ORDER BY created_at DESC LIMIT 3"
+          echo "OK: negacao auditada (outcome=denied) em external_data_audit_log"
 
-      - name: "3/3 send-push-notification -- VAPID configurado"
+      - name: "3/3 send-push-notification -- par VAPID configurado"
         run: |
           CODE=$(curl -sS -o /tmp/push.json -w '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/send-push-notification" \
             -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SB_TOKEN" -H "Content-Type: application/json" \
@@ -85,3 +115,8 @@ jobs:
           if [ "$CODE" = "503" ]; then echo "::error::VAPID nao configurado (503) -- secrets VAPID_PUBLIC_KEY/VAPID_PRIVATE_KEY ausentes"; exit 1; fi
           if [ "$CODE" != "200" ]; then echo "::error::send-push-notification respondeu $CODE"; exit 1; fi
           echo "OK: par VAPID configurado e edge autenticada respondeu 200"
+
+      - name: Limpar linhas de smoke
+        if: always()
+        run: |
+          psql -X -q -c "DELETE FROM public.insights WHERE source = 'generate-insights' AND title = 'Smoke QA' AND created_at > now() - interval '15 minutes'" || true
