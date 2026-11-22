@@ -11,6 +11,11 @@ const BodySchema = z.object({
   deal_value: z.number().nullable().optional(),
   sales_cycle_days: z.number().int().nullable().optional(),
   decision_maker_contact_id: z.string().uuid().nullable().optional(),
+  primary_reason_id: z.string().uuid().nullable().optional(),
+  competitor_id: z.string().uuid().nullable().optional(),
+  lessons_learned: z.string().max(4000).nullable().optional(),
+  notes: z.string().max(4000).nullable().optional(),
+  secondary_reasons: z.array(z.string()).nullable().optional(),
 });
 
 Deno.serve(async (req) => {
@@ -56,7 +61,6 @@ Deno.serve(async (req) => {
 
     const body = parsed.data;
 
-    // Upsert placeholder
     const { data, error } = await supabase
       .from("win_loss_records")
       .upsert(
@@ -67,6 +71,11 @@ Deno.serve(async (req) => {
           deal_value: body.deal_value ?? null,
           sales_cycle_days: body.sales_cycle_days ?? null,
           decision_maker_contact_id: body.decision_maker_contact_id ?? null,
+          primary_reason_id: body.primary_reason_id ?? null,
+          competitor_id: body.competitor_id ?? null,
+          lessons_learned: body.lessons_learned ?? null,
+          notes: body.notes ?? null,
+          secondary_reasons: body.secondary_reasons ?? null,
         },
         { onConflict: "user_id,deal_id" },
       )
