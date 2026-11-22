@@ -32,6 +32,7 @@ import {
    ContactCommercialTab,
    ContactDataTab,
    LifeEventsTab,
+   ContactTasksPanel,
  } from '@/components/contact-detail';
  import { NeuromarketingTimeline } from '@/components/crm/behavior/NeuromarketingTimeline';
 import { RelationshipTimeline } from '@/components/contact-detail/RelationshipTimeline';
@@ -228,6 +229,7 @@ const ContatoDetalhe = () => {
             <TabsTrigger value="comportamental" className="text-xs sm:text-sm">Comportamental</TabsTrigger>
             <TabsTrigger value="inteligencia" className="text-xs sm:text-sm">Inteligência</TabsTrigger>
             <TabsTrigger value="comercial" className="text-xs sm:text-sm">Comercial</TabsTrigger>
+            <TabsTrigger value="tarefas" className="text-xs sm:text-sm">Tarefas</TabsTrigger>
             <TabsTrigger value="lux" className="text-xs sm:text-sm">Lux Intelligence</TabsTrigger>
             <TabsTrigger value="touchpoints" className="text-xs sm:text-sm">Touchpoints</TabsTrigger>
             <TabsTrigger value="life-events" className="text-xs sm:text-sm">Marcos de Vida</TabsTrigger>
@@ -329,6 +331,12 @@ const ContatoDetalhe = () => {
                 <CSATPanel contactId={contact.id} />
                 <VisitCheckinPanel contactId={contact.id} entityType="contact" />
               </div>
+            </DashboardErrorBoundary>
+          </TabsContent>
+
+          <TabsContent value="tarefas">
+            <DashboardErrorBoundary sectionName="Tarefas">
+              <ContactTasksPanel contactId={contact.id} />
             </DashboardErrorBoundary>
           </TabsContent>
 

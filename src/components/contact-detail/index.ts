@@ -6,3 +6,4 @@ export { ContactIntelligenceTab } from './ContactIntelligenceTab';
 export { ContactCommercialTab } from './ContactCommercialTab';
 export { ContactDataTab } from './ContactDataTab';
 export { LifeEventsTab } from './LifeEventsTab';
+export { ContactTasksPanel } from './ContactTasksPanel';

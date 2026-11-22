@@ -107,6 +107,7 @@ export const AppRoutes = () => {
       <Route path="/metas" element={<Protected><P.Metas /></Protected>} />
       <Route path="/performance" element={<Protected><P.Performance /></Protected>} />
       <Route path="/territorios" element={<Protected><P.Territorios /></Protected>} />
+      <Route path="/aprovacoes-follow-up" element={<Protected><P.AprovacoesFollowUp /></Protected>} />
       <Route path="/territory-optimization" element={<Protected><P.TerritoryOptimization /></Protected>} />
       <Route path="/abm" element={<Protected><P.ABM /></Protected>} />
       <Route path="/abm/campanhas" element={<Protected><P.ABMCampaigns /></Protected>} />

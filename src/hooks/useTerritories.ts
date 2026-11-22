@@ -36,6 +36,8 @@ export interface Territory {
   states: string[];
   cities: string[];
   manager_name?: string | null;
+  manager_id?: string | null;
+  is_active?: boolean;
   company_count?: number;
   total_revenue?: number;
 }
@@ -65,6 +67,8 @@ interface LinhaTabelaTerritorio {
   id: string;
   description: string | null;
   cities: string[] | null;
+  manager_id: string | null;
+  is_active: boolean | null;
   metadata: { region?: string } | null;
 }
 
@@ -78,7 +82,7 @@ export function useTerritories() {
       // tem; a tabela traz descrição, cidades e região, que a RPC não devolve.
       const [{ data: rpc, error: rpcError }, tabela] = await Promise.all([
         callExternalRpc<LinhaRpcTerritorio[]>('get_territories', {}),
-        supabase.from('territories').select('id, description, cities, metadata').eq('is_active', true),
+        supabase.from('territories').select('id, description, cities, manager_id, is_active, metadata').eq('is_active', true),
       ]);
       if (rpcError) {
         logger.warn('[Territories] RPC error:', rpcError);
@@ -100,6 +104,8 @@ export function useTerritories() {
           states: l.states ?? [],
           cities: extra?.cities ?? [],
           manager_name: l.manager_name,
+          manager_id: extra?.manager_id ?? null,
+          is_active: extra?.is_active ?? true,
           company_count: Number(l.company_count ?? 0),
           total_revenue: Number(l.total_revenue ?? 0),
         };
@@ -173,6 +179,82 @@ export function useCreateTerritory() {
     onError: (err) => {
       logger.error('[Territories] criação falhou:', err);
       toast.error('Erro ao criar território');
+    },
+  });
+}
+
+/**
+ * Edição de território.
+ *
+ * `update_territory(p_territory_id, p_name, ...)` existe, mas exige
+ * `manager_id = auth.uid()` e aborta com `insufficient_privilege` para quem
+ * administra o território de outro gestor — o que quebraria a tela de admin.
+ * A policy `territories_all` (ALL para qualquer autenticado) permite o UPDATE
+ * direto, então é por aí que a edição sai.
+ */
+export function useUpdateTerritory() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (territory: {
+      id: string;
+      name: string;
+      description?: string;
+      state?: string;
+      city?: string;
+      region?: string;
+      assigned_to?: string;
+      is_active: boolean;
+    }) => {
+      const lista = (v?: string) => (v ?? '').split(',').map(s => s.trim()).filter(Boolean);
+      const { data, error } = await supabase
+        .from('territories')
+        .update({
+          name: territory.name,
+          description: territory.description ?? null,
+          states: lista(territory.state),
+          cities: lista(territory.city),
+          manager_id: territory.assigned_to ?? null,
+          is_active: territory.is_active,
+          metadata: territory.region ? { region: territory.region } : {},
+        })
+        .eq('id', territory.id)
+        .select('id')
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['territories'] });
+      qc.invalidateQueries({ queryKey: ['territory-performance'] });
+      toast.success('Território atualizado com sucesso');
+    },
+    onError: (err) => {
+      logger.error('[Territories] edição falhou:', err);
+      toast.error('Erro ao atualizar território');
+    },
+  });
+}
+
+/**
+ * Exclusão de território. `company_territories.territory_id` tem
+ * `ON DELETE CASCADE`, então os vínculos de empresa saem junto.
+ */
+export function useDeleteTerritory() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('territories').delete().eq('id', id);
+      if (error) throw error;
+      return id;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['territories'] });
+      qc.invalidateQueries({ queryKey: ['territory-performance'] });
+      toast.success('Território excluído');
+    },
+    onError: (err) => {
+      logger.error('[Territories] exclusão falhou:', err);
+      toast.error('Erro ao excluir território');
     },
   });
 }
