@@ -1,8 +1,15 @@
+import { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { OutcomeBadge } from './OutcomeBadge';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useWinLossRecords, useWinLossReasons, useCompetitors } from '@/hooks/useWinLoss';
-import type { WinLossOutcome } from '@/hooks/useWinLoss';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { useWinLossRecords, useWinLossReasons, useCompetitors, useDeleteWinLossRecord } from '@/hooks/useWinLoss';
+import type { WinLossOutcome, WinLossRecord } from '@/hooks/useWinLoss';
+import { Trash2 } from 'lucide-react';
 import { useMemo } from 'react';
 
 interface Props {
@@ -19,6 +26,8 @@ export function WinLossRecordsTable({ outcomeFilter, competitorFilter, fromDate 
   });
   const { data: reasons } = useWinLossReasons();
   const { data: competitors } = useCompetitors();
+  const del = useDeleteWinLossRecord();
+  const [pendingDelete, setPendingDelete] = useState<WinLossRecord | null>(null);
 
   const reasonMap = useMemo(() => new Map((reasons ?? []).map(r => [r.id, r.label])), [reasons]);
   const compMap = useMemo(() => new Map((competitors ?? []).map(c => [c.id, c.name])), [competitors]);
@@ -44,6 +53,7 @@ export function WinLossRecordsTable({ outcomeFilter, competitorFilter, fromDate 
             <TableHead className="text-right">Valor</TableHead>
             <TableHead className="text-right">Ciclo (d)</TableHead>
             <TableHead>Data</TableHead>
+            <TableHead className="w-10" />
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -60,10 +70,42 @@ export function WinLossRecordsTable({ outcomeFilter, competitorFilter, fromDate 
               <TableCell className="text-xs text-muted-foreground">
                 {new Date(r.recorded_at).toLocaleDateString('pt-BR')}
               </TableCell>
+              <TableCell>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Excluir registro"
+                  onClick={() => setPendingDelete(r)}
+                >
+                  <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+
+      <AlertDialog open={!!pendingDelete} onOpenChange={(o) => { if (!o) setPendingDelete(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir registro de Win/Loss?</AlertDialogTitle>
+            <AlertDialogDescription>
+              O registro do deal {pendingDelete?.deal_id.slice(0, 12)} será removido permanentemente e as métricas serão recalculadas.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (pendingDelete) del.mutate(pendingDelete.id, { onSuccess: () => setPendingDelete(null) });
+              }}
+              disabled={del.isPending}
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

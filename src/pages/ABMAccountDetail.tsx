@@ -1,12 +1,18 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, RefreshCw, Building2 } from "lucide-react";
-import { useABMAccount, useABMAccounts, useRescoreAccounts } from "@/hooks/useABM";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { ArrowLeft, RefreshCw, Building2, Pencil, Trash2 } from "lucide-react";
+import { useABMAccount, useABMAccounts, useRescoreAccounts, useDeleteABMAccount } from "@/hooks/useABM";
+import { ABMAccountEditDialog } from "@/components/abm/ABMAccountEditDialog";
 import { AccountTierBadge } from "@/components/abm/AccountTierBadge";
 import { AccountScoreCard } from "@/components/abm/AccountScoreCard";
 import { AccountHierarchyTree } from "@/components/abm/AccountHierarchyTree";
@@ -19,6 +25,10 @@ export default function ABMAccountDetail() {
   const { data: account, isLoading } = useABMAccount(id);
   const { data: allAccounts = [] } = useABMAccounts();
   const rescore = useRescoreAccounts(id);
+  const del = useDeleteABMAccount();
+  const navigate = useNavigate();
+  const [editOpen, setEditOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -58,11 +68,43 @@ export default function ABMAccountDetail() {
               {account.notes && <p className="text-xs text-muted-foreground mt-1 max-w-2xl">{account.notes}</p>}
             </div>
           </div>
-          <Button variant="outline" onClick={() => rescore.mutate()} disabled={rescore.isPending}>
-            <RefreshCw className={`h-4 w-4 mr-1 ${rescore.isPending ? "animate-spin" : ""}`} />
-            Reavaliar score
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => rescore.mutate()} disabled={rescore.isPending}>
+              <RefreshCw className={`h-4 w-4 mr-1 ${rescore.isPending ? "animate-spin" : ""}`} />
+              Reavaliar score
+            </Button>
+            <Button variant="outline" onClick={() => setEditOpen(true)}>
+              <Pencil className="h-4 w-4 mr-1" />
+              Editar
+            </Button>
+            <Button variant="outline" className="text-destructive" onClick={() => setConfirmOpen(true)}>
+              <Trash2 className="h-4 w-4 mr-1" />
+              Excluir
+            </Button>
+          </div>
         </div>
+
+        <ABMAccountEditDialog account={account} open={editOpen} onOpenChange={setEditOpen} />
+
+        <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Excluir conta ABM?</AlertDialogTitle>
+              <AlertDialogDescription>
+                A conta "{account.company_name}" e seus vínculos serão removidos. Esta ação não pode ser desfeita.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => del.mutate(account.id, { onSuccess: () => navigate("/abm") })}
+                disabled={del.isPending}
+              >
+                Excluir
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         <Tabs defaultValue="overview">
           <TabsList>
