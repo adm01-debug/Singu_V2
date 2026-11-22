@@ -36,6 +36,8 @@ vi.mock('@/components/seo/SEOHead', () => ({ SEOHead: () => null }));
 vi.mock('@/components/quick-actions/FloatingQuickActions', () => ({ FloatingQuickActions: () => null }));
 vi.mock('@/components/forms/CompanyForm', () => ({ CompanyForm: () => null }));
 vi.mock('@/components/views/SavedViewsBar', () => ({ SavedViewsBar: () => null }));
+vi.mock('@/components/companies/CompaniesExportButton', () => ({ CompaniesExportButton: () => null }));
+vi.mock('@/components/companies/PipelineSummaryCard', () => ({ PipelineSummaryCard: () => null }));
 vi.mock('./empresas/EmpresasContent', () => ({ EmpresasContent: ({ filteredAndSortedCompanies }: { filteredAndSortedCompanies: Array<{ id: string; name: string }> }) => (
   <section aria-label="Carteira de empresas">
     {filteredAndSortedCompanies.length === 0 ? 'Nenhuma empresa cadastrada' : filteredAndSortedCompanies.map(company => <p key={company.id}>{company.name}</p>)}
