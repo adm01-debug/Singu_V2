@@ -1,8 +1,43 @@
 {
-  "carried": [],
+  "carried": [
+    "columns",
+    "constraints",
+    "indexes",
+    "policies",
+    "lints"
+  ],
   "entrada": "README.md",
-  "erros": [],
-  "gerado_em": "2026-11-22T14:13:46Z",
+  "erros": [
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "columns"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "constraints"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "indexes"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "policies"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "lints"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "table_stats"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "db_stats"
+    }
+  ],
+  "gerado_em": "2026-11-22T16:14:19Z",
   "gerador": "scripts/supabase_snapshot/snapshot.py",
   "produtor": "supabase-snapshot"
 }
