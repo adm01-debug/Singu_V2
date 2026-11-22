@@ -32,6 +32,7 @@ import { LuxButton } from '@/components/lux/LuxButton';
 import { LuxIntelligencePanel } from '@/components/lux/LuxIntelligencePanel';
 import { CompanyProfileCard } from '@/components/company-detail/CompanyProfileCard';
 import { CompanyInsightsTab } from '@/components/company-detail/CompanyInsightsTab';
+import { IntentSignalCard } from '@/components/intent/IntentSignalCard';
 import { CompanyInteractionsTab } from '@/components/company-detail/CompanyInteractionsTab';
 import { useInteractions } from '@/hooks/useInteractions';
 import { CompanyDataTab } from '@/components/company-detail/CompanyDataTab';
@@ -297,7 +298,7 @@ const EmpresaDetalhe = () => {
                 <TabsContent value="stakeholders" className="mt-4"><DashboardErrorBoundary sectionName="Stakeholders"><motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}><StakeholderMap contacts={contacts} interactions={hookInteractions} companyId={id} /></motion.div></DashboardErrorBoundary></TabsContent>
                 <TabsContent value="interactions" className="mt-4"><DashboardErrorBoundary sectionName="Interações"><CompanyInteractionsTab interactions={hookInteractions} contacts={contacts} /></DashboardErrorBoundary></TabsContent>
                 <TabsContent value="commercial" className="mt-4 space-y-4"><DashboardErrorBoundary sectionName="Comercial"><CompanyCommercialTab companyId={id!} /></DashboardErrorBoundary><DashboardErrorBoundary sectionName="Propostas ERP"><CompanyErpProposalsWidget companyId={id!} /></DashboardErrorBoundary></TabsContent>
-                <TabsContent value="insights" className="mt-4"><DashboardErrorBoundary sectionName="Insights"><CompanyInsightsTab companyId={company.id} contacts={contacts} avgRelationshipScore={stats.avgScore} totalInteractions={stats.total} positiveInteractions={stats.positive} pendingFollowUps={stats.pending} /></DashboardErrorBoundary></TabsContent>
+                <TabsContent value="insights" className="mt-4 space-y-4"><DashboardErrorBoundary sectionName="Sinais de Intenção"><IntentSignalCard scope="account" scopeId={id} title="Sinais de Intenção" /></DashboardErrorBoundary><DashboardErrorBoundary sectionName="Insights"><CompanyInsightsTab companyId={company.id} contacts={contacts} avgRelationshipScore={stats.avgScore} totalInteractions={stats.total} positiveInteractions={stats.positive} pendingFollowUps={stats.pending} /></DashboardErrorBoundary></TabsContent>
                  <TabsContent value="lux" className="mt-4">
                    <DashboardErrorBoundary sectionName="Lux Intelligence">
                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>

@@ -8,6 +8,7 @@ import { UnifiedNotificationsBell } from '@/components/notifications/UnifiedNoti
 import { SmartNotificationsBell } from '@/components/notifications/SmartNotificationsBell';
 import { GlobalDensityToggle } from '@/components/ui/global-density-toggle';
 import { SystemStatusBadge } from '@/components/ui/SystemStatusBadge';
+import { SystemHealthWidget } from '@/components/admin/SystemHealthWidget';
 import { Input } from '@/components/ui/input';
 import { getSectionFallback } from '@/lib/navigationLabels';
 
@@ -98,6 +99,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(function Header({
             <SystemStatusBadge />
             <div className="flex items-center gap-1">
               <GlobalDensityToggle />
+              <SystemHealthWidget />
               <SmartNotificationsBell />
               <UnifiedNotificationsBell />
             </div>
