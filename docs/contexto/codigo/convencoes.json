@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)",
    "fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)",
    "fix(FF62): territory-optimization propaga falha de RPC externa (#316)",
    "fix(EF-5): nurturing-runner incrementa completed_count exatamente N vezes (#314)",
-   "fix(edges): corrige AR EF-3/EF-11/EF-13/EF-16 (#309)",
-   "fix(ef14): filtro avatar contacts.upsert IS NULL em vez de IS NOT NULL (#311)"
+   "fix(edges): corrige AR EF-3/EF-11/EF-13/EF-16 (#309)"
   ]
  },
  "pr_template": null,

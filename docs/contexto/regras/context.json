@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d19dec8d0a1aeaa3dc9d91394e149bdfd0aec885",
+  "sha": "fa7b7fbefabd2e07998316bc5749ca9315bea00f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-23 14:31 UTC",
+  "generated_at": "2026-11-23 14:52 UTC",
   "files_total": 3996,
   "code_files": 3522,
-  "code_lines": 475087
+  "code_lines": 475134
  },
  "version": "1.3.2",
- "facts_hash": "797805d5b035c0d4",
+ "facts_hash": "7e25a72c09a95f44",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -104850,7 +104850,8 @@
      "alerts",
      "contacts",
      "lead_score_threshold_automations",
-     "lead_score_threshold_log"
+     "lead_score_threshold_log",
+     "tasks"
     ],
     "env": [
      "SUPABASE_SERVICE_ROLE_KEY",
@@ -104914,6 +104915,7 @@
      "lux_webhook_config"
     ],
     "env": [
+     "LUX_WEBHOOK_SECRET",
      "N8N_LUX_WEBHOOK_URL",
      "SUPABASE_ANON_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
@@ -105012,7 +105014,7 @@
     ],
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [
-     "contacts",
+     "lead_scores",
      "mql_classifications",
      "mql_criteria"
     ],
@@ -112053,7 +112055,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 27309,
+   "lines": 27356,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113348,7 +113350,6 @@
      "supabase/functions/lead-score-threshold-runner/index.ts",
      "supabase/functions/lead-scorer/index.ts",
      "supabase/functions/mcp-server/index.ts",
-     "supabase/functions/mql-evaluator/index.ts",
      "supabase/functions/next-best-action/index.ts",
      "supabase/functions/nurturing-runner/index.ts",
      "supabase/functions/objection-handler/index.ts",
@@ -114381,7 +114382,8 @@
     "select": [
      "src/hooks/useLeadScore.ts",
      "src/hooks/useLeadScoring.ts",
-     "supabase/functions/lead-scorer/index.ts"
+     "supabase/functions/lead-scorer/index.ts",
+     "supabase/functions/mql-evaluator/index.ts"
     ],
     "upsert": [
      "src/hooks/useLeadScore.ts"
@@ -115226,6 +115228,7 @@
    },
    "tasks": {
     "insert": [
+     "supabase/functions/lead-score-threshold-runner/index.ts",
      "supabase/functions/nurturing-runner/index.ts"
     ]
    },
@@ -116199,7 +116202,6 @@
     "interests",
     "last_interaction_at",
     "last_name",
-    "lead_score",
     "linkedin",
     "metaprogram_profile",
     "notes",
@@ -118457,6 +118459,9 @@
    "LOVABLE_API_KEY": [
     "supabase/functions/send-sms-campaign/index.ts"
    ],
+   "LUX_WEBHOOK_SECRET": [
+    "supabase/functions/lux-trigger/index.ts"
+   ],
    "MAINTENANCE_TEST_": [
     "scripts/maintenance/tests/hooks.mjs",
     "scripts/maintenance/tests/transaction.mjs"
@@ -119266,6 +119271,9 @@
    ],
    "conversational-search": [
     "src/hooks/useConversationalSearch.ts"
+   ],
+   "crm-automation-monitor": [
+    "supabase/functions/evolution-webhook/messages.ts"
    ],
    "dashboard-edge": [
     "scripts/ai-context/gerar.unit.mjs"
@@ -120460,10 +120468,6 @@
    {
     "table": "contacts",
     "column": "full_name"
-   },
-   {
-    "table": "contacts",
-    "column": "lead_score"
    },
    {
     "table": "contacts",
@@ -121810,7 +121814,7 @@
     "file": "supabase/functions/disc-analyzer/index.ts",
     "name": "DiscAnalyzerInput",
     "kind": "object",
-    "body": "{ texts: z.array(z.string().min(1).max(5000)).min(1, 'Pelo menos 1 texto é necessário').max(50), contactId: z.string().uuid('contactId deve ser UUID válido'), interactionId: z.string().uuid().optional(), }",
+    "body": "{ texts: z.array(z.string().min(1).max(5000)).min(1, 'Pelo menos 1 texto é necessário').max(50), contactId: z.string().uuid('contactId deve ser UUID válido'), interactionId: z.string().uuid().optional(), userId: z.string().uuid().optional(), // F/F19: interno service-role passa userId no body }",
     "refines": [],
     "chain": []
    },
@@ -128705,6 +128709,10 @@
     "text": "── Rate limit ──"
    },
    {
+    "file": "supabase/functions/disc-analyzer/index.ts",
+    "text": "F/F19: service-role caller deve fornecer userId no body; JWT caller usa userId do token"
+   },
+   {
     "file": "supabase/functions/evolution-webhook/events.ts",
     "text": "Atualiza somente contatos sem avatar personalizado (IS NULL)"
    },
@@ -128799,6 +128807,10 @@
    {
     "file": "supabase/functions/suggest-next-action/index.ts",
     "text": "Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os"
+   },
+   {
+    "file": "supabase/functions/system-health/index.ts",
+    "text": "F/F60: página de status pública — rate limit por IP, sem exigência de autenticação"
    },
    {
     "file": "supabase/functions/template-success-notifications/index.ts",
@@ -162658,6 +162670,12 @@
    },
    {
     "file": "supabase/functions/crm-automation-monitor/index.ts",
+    "field": "type",
+    "value": "string",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/crm-automation-monitor/index.ts",
     "field": "status",
     "value": "success",
     "kind": "escreve"
@@ -163882,8 +163900,8 @@
    },
    {
     "file": "supabase/functions/lead-score-threshold-runner/index.ts",
-    "field": "type",
-    "value": "task",
+    "field": "status",
+    "value": "pending",
     "kind": "escreve"
    },
    {
@@ -212661,8 +212679,7 @@
      "task": [
       "compara:supabase/functions/nurturing-runner/index.ts",
       "escreve:src/hooks/useUnifiedTimeline.ts",
-      "escreve:supabase/functions/_shared/edge-types-contract_test.ts",
-      "escreve:supabase/functions/lead-score-threshold-runner/index.ts"
+      "escreve:supabase/functions/_shared/edge-types-contract_test.ts"
      ],
      "event": [
       "escreve:src/hooks/useUnifiedTimeline.ts"
@@ -213041,6 +213058,7 @@
       "escreve:supabase/functions/conversation-analyzer/index.ts",
       "escreve:supabase/functions/evolution-webhook/messages.ts",
       "escreve:supabase/functions/generate-offer-suggestions/index.ts",
+      "escreve:supabase/functions/lead-score-threshold-runner/index.ts",
       "escreve:supabase/functions/next-best-action/index.ts",
       "escreve:supabase/functions/nurturing-runner/index.ts",
       "escreve:supabase/functions/process-webhook-dlq/index.ts",
@@ -237012,11 +237030,6 @@
    {
     "kind": "coluna",
     "msg": "coluna `full_name` usada no código não existe no schema de `contacts`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `lead_score` usada no código não existe no schema de `contacts`",
     "where": []
    },
    {
@@ -289614,7 +289627,7 @@
   },
   "supabase/functions/_shared/edge-types-contract_test.ts": {
    "path": "supabase/functions/_shared/edge-types-contract_test.ts",
-   "lines": 272,
+   "lines": 274,
    "errors": [
     "Consulta inesperada: ${table}",
     "Simulação de indisponibilidade"
@@ -292800,7 +292813,7 @@
   },
   "supabase/functions/crm-automation-monitor/index.ts": {
    "path": "supabase/functions/crm-automation-monitor/index.ts",
-   "lines": 74,
+   "lines": 85,
    "tables": [
     {
      "table": "contacts",
@@ -292829,6 +292842,11 @@
     "SUPABASE_URL"
    ],
    "status_values": [
+    {
+     "field": "type",
+     "value": "string",
+     "kind": "escreve"
+    },
     {
      "field": "type",
      "value": "string",
@@ -293276,7 +293294,7 @@
   },
   "supabase/functions/disc-analyzer/index.ts": {
    "path": "supabase/functions/disc-analyzer/index.ts",
-   "lines": 313,
+   "lines": 319,
    "tables": [
     {
      "table": "disc_analysis_history",
@@ -293315,7 +293333,7 @@
     {
      "name": "DiscAnalyzerInput",
      "kind": "object",
-     "body": "{ texts: z.array(z.string().min(1).max(5000)).min(1, 'Pelo menos 1 texto é necessário').max(50), contactId: z.string().uuid('contactId deve ser UUID válido'), interactionId: z.string().uuid().optional(), }",
+     "body": "{ texts: z.array(z.string().min(1).max(5000)).min(1, 'Pelo menos 1 texto é necessário').max(50), contactId: z.string().uuid('contactId deve ser UUID válido'), interactionId: z.string().uuid().optional(), userId: z.string().uuid().optional(), // F/F19: interno service-role passa userId no body }",
      "refines": [],
      "chain": []
     }
@@ -293333,7 +293351,8 @@
     }
    ],
    "rule_comments": [
-    "── Rate limit ──"
+    "── Rate limit ──",
+    "F/F19: service-role caller deve fornecer userId no body; JWT caller usa userId do token"
    ],
    "doc": "============================================== DISC Analyzer Edge Function Powered by Lovable AI - Enterprise Level Analysis ==============================================",
    "calc_fns": [
@@ -294066,7 +294085,7 @@
   },
   "supabase/functions/evolution-webhook/messages.ts": {
    "path": "supabase/functions/evolution-webhook/messages.ts",
-   "lines": 295,
+   "lines": 309,
    "exports": [
     "function handleMessageUpsert",
     "function handleMessageUpdate",
@@ -294123,6 +294142,7 @@
     ]
    },
    "invokes": [
+    "crm-automation-monitor",
     "disc-analyzer",
     "social-behavior-analyzer",
     "voice-to-text"
@@ -295829,7 +295849,7 @@
   },
   "supabase/functions/lead-score-threshold-runner/index.ts": {
    "path": "supabase/functions/lead-score-threshold-runner/index.ts",
-   "lines": 276,
+   "lines": 287,
    "tables": [
     {
      "table": "contacts",
@@ -295849,6 +295869,10 @@
     },
     {
      "table": "alerts",
+     "op": "insert"
+    },
+    {
+     "table": "tasks",
      "op": "insert"
     },
     {
@@ -295921,8 +295945,8 @@
      "kind": "escreve"
     },
     {
-     "field": "type",
-     "value": "task",
+     "field": "status",
+     "value": "pending",
      "kind": "escreve"
     }
    ],
@@ -296094,7 +296118,7 @@
   },
   "supabase/functions/lux-trigger/index.ts": {
    "path": "supabase/functions/lux-trigger/index.ts",
-   "lines": 199,
+   "lines": 202,
    "tables": [
     {
      "table": "lux_webhook_config",
@@ -296119,6 +296143,7 @@
     ]
    },
    "env": [
+    "LUX_WEBHOOK_SECRET",
     "N8N_LUX_WEBHOOK_URL",
     "SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
@@ -296515,14 +296540,14 @@
   },
   "supabase/functions/mql-evaluator/index.ts": {
    "path": "supabase/functions/mql-evaluator/index.ts",
-   "lines": 129,
+   "lines": 130,
    "tables": [
     {
      "table": "mql_criteria",
      "op": "select"
     },
     {
-     "table": "contacts",
+     "table": "lead_scores",
      "op": "select"
     },
     {
@@ -296545,9 +296570,9 @@
      "is_active",
      "user_id"
     ],
-    "contacts": [
-     "id",
-     "lead_score",
+    "lead_scores": [
+     "contact_id",
+     "total_score",
      "user_id"
     ],
     "mql_classifications": [
@@ -299120,7 +299145,7 @@
   },
   "supabase/functions/system-health/index.ts": {
    "path": "supabase/functions/system-health/index.ts",
-   "lines": 198,
+   "lines": 197,
    "tables": [
     {
      "table": "profiles",
@@ -299245,6 +299270,9 @@
      "value": "not_configured",
      "kind": "compara"
     }
+   ],
+   "rule_comments": [
+    "F/F60: página de status pública — rate limit por IP, sem exigência de autenticação"
    ],
    "temporal": [
     "const hoursSince = (Date.now() - new Date(lastEmail).getTime()) / (1000 * 60 * 60);"
@@ -306206,10 +306234,26 @@
   }
  },
  "git": {
-  "sha": "d19dec8d0a1aeaa3dc9d91394e149bdfd0aec885",
+  "sha": "fa7b7fbefabd2e07998316bc5749ca9315bea00f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "fa7b7fb",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)",
+    "files": [
+     "supabase/functions/_shared/edge-types-contract_test.ts",
+     "supabase/functions/crm-automation-monitor/index.ts",
+     "supabase/functions/disc-analyzer/index.ts",
+     "supabase/functions/evolution-webhook/messages.ts",
+     "supabase/functions/lead-score-threshold-runner/index.ts",
+     "supabase/functions/lux-trigger/index.ts",
+     "supabase/functions/mql-evaluator/index.ts",
+     "supabase/functions/system-health/index.ts"
+    ]
+   },
    {
     "sha": "d19dec8",
     "date": "2026-11-23",
@@ -306661,21 +306705,20 @@
     "files": [
      "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql"
     ]
-   },
-   {
-    "sha": "7cbda37",
-    "date": "2026-11-20",
-    "author": "adm01-debug",
-    "subject": "fix(migrations): torne a Foundation 1cfd4579 totalmente idempotente (#283)",
-    "files": [
-     "supabase/migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/nurturing-runner/index.ts",
     3
+   ],
+   [
+    "supabase/functions/_shared/edge-types-contract_test.ts",
+    2
+   ],
+   [
+    "supabase/functions/evolution-webhook/messages.ts",
+    2
    ],
    [
     "supabase/functions/send-sms-campaign/index.ts",
@@ -306692,6 +306735,30 @@
    [
     "docs/pendencias/_linha-de-base.md",
     2
+   ],
+   [
+    "supabase/functions/crm-automation-monitor/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/disc-analyzer/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/lead-score-threshold-runner/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/lux-trigger/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/mql-evaluator/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/system-health/index.ts",
+    1
    ],
    [
     "docs/lacunas/B2_reverificacao_estado_05_10.md",
@@ -306719,38 +306786,6 @@
    ],
    [
     "AUDITORIA.md",
-    1
-   ],
-   [
-    "PLANEJADO_NAO_EXECUTADO.md",
-    1
-   ],
-   [
-    "docs/lacunas/G_banco_de_dados.md",
-    1
-   ],
-   [
-    "supabase/functions/abm-whitespace-analyzer/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/bulk-revalidate/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/evolution-bitrix-connector/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/external-data/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/next-best-action/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/abm-account-scorer/index.ts",
     1
    ]
   ]

@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d19dec8d0a1aeaa3dc9d91394e149bdfd0aec885` (2026-11-23T11:21:38-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `fa7b7fbefabd2e07998316bc5749ca9315bea00f` (2026-11-23T11:48:11-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3891 |
 | arquivos_codigo | 2240 |
-| linhas_codigo | 418367 |
+| linhas_codigo | 418414 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -282,7 +282,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `conversation-analyzer` — tabelas: conversation_analyses, conversation_topics_catalog, interactions, reframing_analysis, suggested_life_events; chamada por 2 arquivo(s) do front
 - `conversation-coaching-digest` — tabelas: conversation_analyses; chamada por 1 arquivo(s) do front
 - `conversational-search` — tabelas: conversational_search_cache; chamada por 1 arquivo(s) do front
-- `crm-automation-monitor` — tabelas: contacts, crm_automation_logs; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `crm-automation-monitor` — tabelas: contacts, crm_automation_logs; chamada por 0 arquivo(s) do front
 - `cs-health-recalc` — tabelas: alerts, cs_accounts, cs_health_signals; chamada por 0 arquivo(s) do front, por SQL/cron
 - `deal-room-buyer-view` — tabelas: -; chamada por 1 arquivo(s) do front
 - `deal-room-health` — tabelas: deal_room_milestones, deal_room_stakeholders, deal_rooms; chamada por 1 arquivo(s) do front
@@ -322,13 +322,13 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `intent-pixel-snippet` — tabelas: -; chamada por 1 arquivo(s) do front
 - `intent-tracker` — tabelas: contacts, intent_signals, intent_tracking_pixels; chamada por 0 arquivo(s) do front
 - `lead-score-cron` — tabelas: interactions, lead_score_recompute_queue; chamada por 0 arquivo(s) do front, por SQL/cron
-- `lead-score-threshold-runner` — tabelas: alerts, contacts, lead_score_threshold_automations, lead_score_threshold_log; chamada por 0 arquivo(s) do front
+- `lead-score-threshold-runner` — tabelas: alerts, contacts, lead_score_threshold_automations, lead_score_threshold_log, tasks; chamada por 0 arquivo(s) do front
 - `lead-scorer` — tabelas: contacts, intent_signals, interactions, lead_score_recompute_queue, lead_score_rules, lead_score_thresholds, lead_scores; chamada por 1 arquivo(s) do front
 - `lux-trigger` — tabelas: lux_intelligence, lux_webhook_config; chamada por 1 arquivo(s) do front
 - `lux-webhook` — tabelas: contacts, lux_intelligence; chamada por 0 arquivo(s) do front
 - `mcp-server` — tabelas: companies, connection_configs, contacts, deals, interactions, mcp_tool_calls; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `meeting-summary` — tabelas: interactions, meeting_summaries; chamada por 1 arquivo(s) do front
-- `mql-evaluator` — tabelas: contacts, mql_classifications, mql_criteria; chamada por 0 arquivo(s) do front, por SQL/cron
+- `mql-evaluator` — tabelas: lead_scores, mql_classifications, mql_criteria; chamada por 0 arquivo(s) do front, por SQL/cron
 - `next-best-action` — tabelas: contact_analytical_profiles, contact_next_actions, contacts, interactions, neuro_behavioral_history, whatsapp_messages; chamada por 1 arquivo(s) do front
 - `nurturing-runner` — tabelas: contacts, interactions, nurturing_executions, nurturing_workflows, tasks; chamada por 1 arquivo(s) do front, por SQL/cron
 - `objection-context-summary` — tabelas: interactions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
@@ -419,7 +419,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - SDKs: ElevenLabs, Supabase, react-query, zod
 - hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, x.supabase.co, api.elevenlabs.io, wa.me, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.supabase.com, singu-v2.vercel.app, api.deepseek.com, api.lovable.dev, api.resend.com
 - webhooks recebidos: nenhum
-- env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, DEEPSEEK_API_KEY, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, N8N_LUX_WEBHOOK_URL, RESEND_API_KEY, RESEND_FROM, TWILIO_API_KEY
+- env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, DEEPSEEK_API_KEY, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, LUX_WEBHOOK_SECRET, N8N_LUX_WEBHOOK_URL, RESEND_API_KEY, RESEND_FROM, TWILIO_API_KEY
 
 ## Permissões / papéis
 - papéis no código: user (38), system (32), status (30), alert (28), group (20), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), tab (1), tablist (1)
@@ -431,7 +431,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rotas_sem_arquivo: 0
 - componentes_ambiguos: 0
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
-- edges_orfas: 25 — ex.: attribution-calculator, auto-rebatch-behavioral, auto-regen-behavioral-profiles
+- edges_orfas: 24 — ex.: attribution-calculator, auto-rebatch-behavioral, auto-regen-behavioral-profiles
 - edges_chamadas_sem_pasta: 0
 - tabelas_sem_rls: 131 — ex.: _stg_pac_nums, access_denied_logs, active_power_ups
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
@@ -445,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25812 nós · 41157 arestas · 3056 comunidades · grafo do commit `d19dec8d`
-- comunidades maiores: ref_lib (321), ref_integrations (315), sonner (307), ref_components (296), lucide-react (276), framer-motion (267), 02_tables.sql (259), react (251), react-router-dom (247), ref_hooks (243), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (223)
+- 25813 nós · 41158 arestas · 3044 comunidades · grafo do commit `fa7b7fbe`
+- comunidades maiores: lucide-react (356), ref_integrations (316), sonner (313), ref_lib (299), ref_components (296), react (262), 02_tables.sql (259), _shared/auth.ts (255), ref_hooks (248), framer-motion (247), Tabela de evidências (232), react-router-dom (231)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-23 `fa7b7fb` fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)
 - 2026-11-23 `d19dec8` fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)
 - 2026-11-23 `14096c0` fix(FF62): territory-optimization propaga falha de RPC externa (#316)
 - 2026-11-23 `7e545e5` fix(EF-5): nurturing-runner incrementa completed_count exatamente N vezes (#314)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-21 `5b8ee5b` fix(db): baseline idempotente para stubs com defaults (42P13) (#301)
 - 2026-11-21 `08dc797` feat(nurturing): envia email real via send-transactional-email (#302)
 - 2026-11-21 `8677d68` feat: inscrição de contato em workflow de nurturing pela UI (#300)
-- 2026-11-21 `6b9a9e4` feat(sequencias): tracking de abertura e clique no email transacional (#299)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

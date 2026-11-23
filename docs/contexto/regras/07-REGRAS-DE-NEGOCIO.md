@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d19dec8d0a` · branch `main` · 2026-11-23 14:31 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `fa7b7fbefa` · branch `main` · 2026-11-23 14:52 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1564,7 +1564,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `subtle` | compara | `src/hooks/useSuccessCelebration.ts` |
 | `type` | `support` | compara, escreve | `src/data/carnegieEmpathyTemplates.ts`<br>`src/hooks/useCoalitionDetection.ts` |
 | `type` | `supporter` | compara | `src/components/analytics/churn/ChurnHelpers.tsx` |
-| `type` | `task` | compara, escreve | `src/hooks/useUnifiedTimeline.ts`<br>`supabase/functions/_shared/edge-types-contract_test.ts`<br>`supabase/functions/lead-score-threshold-runner/index.ts`<br>`supabase/functions/nurturing-runner/index.ts` |
+| `type` | `task` | compara, escreve | `src/hooks/useUnifiedTimeline.ts`<br>`supabase/functions/_shared/edge-types-contract_test.ts`<br>`supabase/functions/nurturing-runner/index.ts` |
 | `type` | `template_success` | escreve | `supabase/functions/template-success-notifications/index.ts` |
 | `type` | `test` | escreve | `src/pages/Notificacoes.tsx` |
 | `type` | `testimonial` | escreve | `src/data/carnegieStorytelling.ts`<br>`src/data/copywritingData.ts` |
@@ -2261,7 +2261,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```
 - **DiscAnalyzerInput** (`supabase/functions/disc-analyzer/index.ts`, z.object):
   ```ts
-  { texts: z.array(z.string().min(1).max(5000)).min(1, 'Pelo menos 1 texto é necessário').max(50), contactId: z.string().uuid('contactId deve ser UUID válido'), interactionId: z.string().uuid().optional(), }
+  { texts: z.array(z.string().min(1).max(5000)).min(1, 'Pelo menos 1 texto é necessário').max(50), contactId: z.string().uuid('contactId deve ser UUID válido'), interactionId: z.string().uuid().optional(), userId: z.string().uuid().optional(), // F/F19: interno service-role passa userId no body }
   ```
 - **dualWriteSchema** (`supabase/functions/dual-write-proxy/index.ts`, z.object, encadeia superRefine):
   ```ts
@@ -5346,6 +5346,7 @@ _nenhum item encontrado_
 | 🔒 Cron secret validation | `supabase/functions/check-notifications/index.ts` |
 | clear-must-reset-flag | `supabase/functions/clear-must-reset-flag/index.ts` |
 | ── Rate limit ── | `supabase/functions/disc-analyzer/index.ts` |
+| F/F19: service-role caller deve fornecer userId no body; JWT caller usa userId do token | `supabase/functions/disc-analyzer/index.ts` |
 | Atualiza somente contatos sem avatar personalizado (IS NULL) | `supabase/functions/evolution-webhook/events.ts` |
 | Por que o cliente de usuário não pode ser criado. O JWT do usuário só vale | `supabase/functions/external-data/database.ts` |
 | ─── RPC (call external database functions) — must run BEFORE table validation ─── | `supabase/functions/external-data/index.ts` |
@@ -5370,6 +5371,7 @@ _nenhum item encontrado_
 | 🔒 Cron secret validation | `supabase/functions/social-events-detector/index.ts` |
 | O roadmap e validado a parte, com safeParse: um marco malformado nao pode | `supabase/functions/suggest-next-action/index.ts` |
 | Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os | `supabase/functions/suggest-next-action/index.ts` |
+| F/F60: página de status pública — rate limit por IP, sem exigência de autenticação | `supabase/functions/system-health/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/template-success-notifications/index.ts` |
 | F/F62: falha de RPC externa não pode virar lista vazia (mascara erro real) | `supabase/functions/territory-optimization/index.ts` |
 | * Pela tela, e-mail só quando o usuário pede o teste; chave única por clique (o limite é 3/min). */ | `supabase/functions/weekly-digest/index.ts` |
@@ -5456,6 +5458,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_competitor_alerts LIMIT 15) ca), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| … +45 linhas — lista completa em `context.json` | |
+| … +47 linhas — lista completa em `context.json` | |

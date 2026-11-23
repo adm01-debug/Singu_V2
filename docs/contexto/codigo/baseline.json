@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "d19dec8d0a1aeaa3dc9d91394e149bdfd0aec885",
+  "commit": "fa7b7fbefabd2e07998316bc5749ca9315bea00f",
   "branch": "main",
-  "data_commit": "2026-11-23T11:21:38-03:00",
+  "data_commit": "2026-11-23T11:48:11-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "fa7b7fb",
+    "data": "2026-11-23",
+    "assunto": "fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)"
+   },
    {
     "sha": "d19dec8",
     "data": "2026-11-23",
@@ -126,25 +131,20 @@
     "sha": "4e69959",
     "data": "2026-11-21",
     "assunto": "fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)"
-   },
-   {
-    "sha": "b5d2431",
-    "data": "2026-11-20",
-    "assunto": "docs(auditoria): linha de base do estado real em docs/pendencias (#289)"
    }
   ],
-  "arquivos_mudados_7d": 965,
+  "arquivos_mudados_7d": 971,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
     "mudancas": 197
    },
    {
-    "pasta": "src/components/contact-detail",
-    "mudancas": 22
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 23
    },
    {
-    "pasta": "supabase/functions/_shared",
+    "pasta": "src/components/contact-detail",
     "mudancas": 22
    },
    {
@@ -168,6 +168,10 @@
     "mudancas": 15
    },
    {
+    "pasta": "supabase/functions/evolution-webhook",
+    "mudancas": 15
+   },
+   {
     "pasta": "docs/prod-readiness.md",
     "mudancas": 14
    },
@@ -181,10 +185,6 @@
    },
    {
     "pasta": "src/components/admin",
-    "mudancas": 14
-   },
-   {
-    "pasta": "supabase/functions/evolution-webhook",
     "mudancas": 14
    },
    {
@@ -274,6 +274,10 @@
     "mudancas": 6
    },
    {
+    "arquivo": "supabase/functions/evolution-webhook/messages.ts",
+    "mudancas": 6
+   },
+   {
     "arquivo": ".github/workflows/restore-drill.yml",
     "mudancas": 5
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "scripts/rls-matrix/rls-baseline.json",
     "mudancas": 5
-   },
-   {
-    "arquivo": "src/components/pipeline/DealDetailDrawer.tsx",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 149
+    "commits": 150
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3891,
   "arquivos_codigo": 2240,
-  "linhas_codigo": 418367,
+  "linhas_codigo": 418414,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 27309
+   "linhas": 27356
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -870,7 +870,7 @@
   }
  ],
  "qualidade": {
-  "any": 29,
+  "any": 30,
   "console_log": 187,
   "ts_ignore": 2,
   "eslint_disable": 1,
@@ -943,7 +943,6 @@
    "auto-rebatch-behavioral",
    "auto-regen-behavioral-profiles",
    "bitrix24-webhook",
-   "crm-automation-monitor",
    "detect-new-device",
    "dual-write-proxy",
    "email-verifier",

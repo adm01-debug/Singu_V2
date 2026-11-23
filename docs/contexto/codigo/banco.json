@@ -22687,7 +22687,6 @@
     "lead-scorer",
     "lux-webhook",
     "mcp-server",
-    "mql-evaluator",
     "next-best-action",
     "nurturing-runner",
     "objection-handler",
@@ -43498,7 +43497,8 @@
    },
    "usada_no_front": 2,
    "usada_em_edges": [
-    "lead-scorer"
+    "lead-scorer",
+    "mql-evaluator"
    ],
    "triggers": [
     "tg_lead_scores_audit",
@@ -68009,6 +68009,7 @@
    },
    "usada_no_front": 0,
    "usada_em_edges": [
+    "lead-score-threshold-runner",
     "nurturing-runner"
    ],
    "triggers": [

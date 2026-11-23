@@ -867,7 +867,7 @@
    "nome": "crm-automation-monitor",
    "entrada": "supabase/functions/crm-automation-monitor/index.ts",
    "arquivos": 1,
-   "linhas": 74,
+   "linhas": 85,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [
@@ -891,9 +891,11 @@
     "validate.ts"
    ],
    "chamada_pelo_front": [],
-   "chamada_por_edges": [],
+   "chamada_por_edges": [
+    "evolution-webhook"
+   ],
    "chamada_por_sql_ou_cron": false,
-   "orfa": true,
+   "orfa": false,
    "testes": 0
   },
   {
@@ -1135,7 +1137,7 @@
    "nome": "disc-analyzer",
    "entrada": "supabase/functions/disc-analyzer/index.ts",
    "arquivos": 1,
-   "linhas": 313,
+   "linhas": 319,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -1575,7 +1577,7 @@
    "nome": "evolution-webhook",
    "entrada": "supabase/functions/evolution-webhook/index.ts",
    "arquivos": 5,
-   "linhas": 689,
+   "linhas": 703,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -1596,6 +1598,7 @@
    ],
    "buckets": [],
    "chama_edges": [
+    "crm-automation-monitor",
     "disc-analyzer",
     "social-behavior-analyzer",
     "voice-to-text"
@@ -2281,14 +2284,15 @@
    "nome": "lead-score-threshold-runner",
    "entrada": "supabase/functions/lead-score-threshold-runner/index.ts",
    "arquivos": 1,
-   "linhas": 276,
+   "linhas": 287,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [
     "alerts",
     "contacts",
     "lead_score_threshold_automations",
-    "lead_score_threshold_log"
+    "lead_score_threshold_log",
+    "tasks"
    ],
    "rpcs": [
     "enroll_lead_score_contact"
@@ -2359,7 +2363,7 @@
    "nome": "lux-trigger",
    "entrada": "supabase/functions/lux-trigger/index.ts",
    "arquivos": 1,
-   "linhas": 199,
+   "linhas": 202,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS",
@@ -2371,6 +2375,7 @@
    ],
    "rpcs": [],
    "env": [
+    "LUX_WEBHOOK_SECRET",
     "N8N_LUX_WEBHOOK_URL",
     "SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
@@ -2383,7 +2388,6 @@
    "hosts_externos": [],
    "usa_shared": [
     "auth.ts",
-    "best-effort-write.ts",
     "rate-limit.ts"
    ],
    "chamada_pelo_front": [
@@ -2506,13 +2510,13 @@
    "nome": "mql-evaluator",
    "entrada": "supabase/functions/mql-evaluator/index.ts",
    "arquivos": 1,
-   "linhas": 129,
+   "linhas": 130,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
    ],
    "tabelas": [
-    "contacts",
+    "lead_scores",
     "mql_classifications",
     "mql_criteria"
    ],
@@ -3496,7 +3500,7 @@
    "nome": "system-health",
    "entrada": "supabase/functions/system-health/index.ts",
    "arquivos": 1,
-   "linhas": 198,
+   "linhas": 197,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
