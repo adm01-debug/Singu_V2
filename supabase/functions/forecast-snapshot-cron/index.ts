@@ -11,8 +11,19 @@ Deno.serve(async (req) => {
   const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
   try {
-    const { data: periods } = await admin.from("forecast_periods").select("id, user_id").eq("status", "open");
-    if (!periods?.length) return new Response(JSON.stringify({ snapshots: 0 }), { headers: { ...cors, "Content-Type": "application/json" } });
+    // Paginate open periods (default PostgREST cap = 1000)
+    type PeriodRow = { id: string; user_id: string };
+    const periods: PeriodRow[] = [];
+    let periodPage = 0;
+    while (true) {
+      const { data: batch } = await admin.from("forecast_periods").select("id, user_id").eq("status", "open")
+        .range(periodPage * 1000, (periodPage + 1) * 1000 - 1);
+      if (!batch || batch.length === 0) break;
+      periods.push(...batch);
+      if (batch.length < 1000) break;
+      periodPage++;
+    }
+    if (!periods.length) return new Response(JSON.stringify({ snapshots: 0 }), { headers: { ...cors, "Content-Type": "application/json" } });
 
     const today = new Date().toISOString().split("T")[0];
     const periodIds = periods.map((p) => p.id);
@@ -38,7 +49,7 @@ Deno.serve(async (req) => {
       const commit = forecasts.filter(f => f.category === "commit").reduce((s, f) => s + Number(f.forecasted_amount), 0);
       const bestCase = forecasts.filter(f => f.category === "best_case").reduce((s, f) => s + Number(f.forecasted_amount), 0);
       const pipeline = forecasts.filter(f => f.category === "pipeline").reduce((s, f) => s + Number(f.forecasted_amount), 0);
-      const weighted = forecasts.reduce((s, f) => s + Number(f.forecasted_amount) * (f.confidence_score / 100), 0);
+      const weighted = forecasts.reduce((s, f) => s + Number(f.forecasted_amount) * ((f.confidence_score ?? 0) / 100), 0);
       snapshotRows.push({
         user_id: p.user_id, period_id: p.id, snapshot_date: today,
         commit_total: commit, best_case_total: bestCase, pipeline_total: pipeline,

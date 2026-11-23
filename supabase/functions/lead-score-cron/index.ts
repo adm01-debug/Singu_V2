@@ -16,13 +16,22 @@ Deno.serve(async (req: Request) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
 
-    // Contatos com qualquer atividade nos últimos 60d → enfileira
+    // Contatos com qualquer atividade nos últimos 60d → enfileira (pagina 1000/página)
     const since = new Date(Date.now() - 60 * 86_400_000).toISOString();
-    const { data: actives, error: fetchError } = await supabase
-      .from('interactions').select('contact_id, user_id')
-      .gte('created_at', since).limit(5000);
-
-    if (fetchError) throw fetchError;
+    type ActiveRow = { contact_id: string | null; user_id: string | null };
+    const actives: ActiveRow[] = [];
+    let activePage = 0;
+    while (true) {
+      const { data: batch, error: fetchError } = await supabase
+        .from('interactions').select('contact_id, user_id')
+        .gte('created_at', since)
+        .range(activePage * 1000, (activePage + 1) * 1000 - 1);
+      if (fetchError) throw fetchError;
+      if (!batch || batch.length === 0) break;
+      actives.push(...batch);
+      if (batch.length < 1000) break;
+      activePage++;
+    }
 
     const seen = new Set<string>();
     const rows: Array<{ user_id: string; contact_id: string; reason: string }> = [];
