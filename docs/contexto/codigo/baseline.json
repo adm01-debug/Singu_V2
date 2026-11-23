@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "7e545e5bbb33220a9270c149166dfec974a80e69",
+  "commit": "14096c0073fe35401f79a653aca84de4ce8570b6",
   "branch": "main",
-  "data_commit": "2026-11-23T10:49:53-03:00",
+  "data_commit": "2026-11-23T11:07:12-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "14096c0",
+    "data": "2026-11-23",
+    "assunto": "fix(FF62): territory-optimization propaga falha de RPC externa (#316)"
+   },
    {
     "sha": "7e545e5",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "2020e5b",
     "data": "2026-11-20",
     "assunto": "fix(insights): persiste insights gerados por IA na tabela insights (#288)"
-   },
-   {
-    "sha": "3e6b290",
-    "data": "2026-11-20",
-    "assunto": "fix(deps): bump react-router 7.18.6 e vitest 5.1.1 (alerts dependabot) (#286)"
    }
   ],
-  "arquivos_mudados_7d": 960,
+  "arquivos_mudados_7d": 961,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 147
+    "commits": 148
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3891,
   "arquivos_codigo": 2240,
-  "linhas_codigo": 418348,
+  "linhas_codigo": 418351,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 27291
+   "linhas": 27294
   },
   "tailwind.config.ts": {
    "arquivos": 1,

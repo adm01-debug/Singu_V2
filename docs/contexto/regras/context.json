@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "7e545e5bbb33220a9270c149166dfec974a80e69",
+  "sha": "14096c0073fe35401f79a653aca84de4ce8570b6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-23 13:57 UTC",
+  "generated_at": "2026-11-23 14:12 UTC",
   "files_total": 3996,
   "code_files": 3522,
-  "code_lines": 475068
+  "code_lines": 475071
  },
  "version": "1.3.2",
- "facts_hash": "8a17be2f7fb6ec3d",
+ "facts_hash": "259053a4b60b2509",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112053,7 +112053,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 27291,
+   "lines": 27294,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -128803,6 +128803,10 @@
    {
     "file": "supabase/functions/template-success-notifications/index.ts",
     "text": "🔒 Cron secret validation"
+   },
+   {
+    "file": "supabase/functions/territory-optimization/index.ts",
+    "text": "F/F62: falha de RPC externa não pode virar lista vazia (mascara erro real)"
    },
    {
     "file": "supabase/functions/weekly-digest/index.ts",
@@ -299339,7 +299343,7 @@
   },
   "supabase/functions/territory-optimization/index.ts": {
    "path": "supabase/functions/territory-optimization/index.ts",
-   "lines": 338,
+   "lines": 341,
    "tables": [
     {
      "table": "sales_team_members",
@@ -299441,6 +299445,9 @@
      "value": "healthy",
      "kind": "escreve"
     }
+   ],
+   "rule_comments": [
+    "F/F62: falha de RPC externa não pode virar lista vazia (mascara erro real)"
    ],
    "calc_fns": [
     {
@@ -306199,10 +306206,19 @@
   }
  },
  "git": {
-  "sha": "7e545e5bbb33220a9270c149166dfec974a80e69",
+  "sha": "14096c0073fe35401f79a653aca84de4ce8570b6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "14096c0",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix(FF62): territory-optimization propaga falha de RPC externa (#316)",
+    "files": [
+     "supabase/functions/territory-optimization/index.ts"
+    ]
+   },
    {
     "sha": "7e545e5",
     "date": "2026-11-23",
@@ -306648,16 +306664,6 @@
     "author": "adm01-debug",
     "subject": "Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110",
     "files": []
-   },
-   {
-    "sha": "ad9f3c0",
-    "date": "2026-11-20",
-    "author": "Joaquim Ataides",
-    "subject": "fix: restaura supabase/.temp/linked-project.json versionado (citado em 8 docs)",
-    "files": [
-     ".gitignore",
-     "supabase/.temp/linked-project.json"
-    ]
    }
   ],
   "hot_files": [
@@ -306680,6 +306686,10 @@
    [
     "docs/pendencias/_linha-de-base.md",
     2
+   ],
+   [
+    "supabase/functions/territory-optimization/index.ts",
+    1
    ],
    [
     "AUDITORIA.md",
@@ -306735,10 +306745,6 @@
    ],
    [
     "src/hooks/useConversationIntel.ts",
-    1
-   ],
-   [
-    "src/hooks/useWinLoss.ts",
     1
    ]
   ]

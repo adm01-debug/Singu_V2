@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7e545e5bbb` · branch `main` · 2026-11-23 13:57 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `14096c0073` · branch `main` · 2026-11-23 14:12 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -5371,6 +5371,7 @@ _nenhum item encontrado_
 | O roadmap e validado a parte, com safeParse: um marco malformado nao pode | `supabase/functions/suggest-next-action/index.ts` |
 | Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os | `supabase/functions/suggest-next-action/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/template-success-notifications/index.ts` |
+| F/F62: falha de RPC externa não pode virar lista vazia (mascara erro real) | `supabase/functions/territory-optimization/index.ts` |
 | * Pela tela, e-mail só quando o usuário pede o teste; chave única por clique (o limite é 3/min). */ | `supabase/functions/weekly-digest/index.ts` |
 | 267: o Supabase Preview aplica APENAS as migrations novas | `supabase/migrations/20260109144945_baseline_tabelas_fundadoras.sql` |
 | 267: o Supabase Preview aplica APENAS as migrations novas | `supabase/migrations/20260110000002_baseline_compat_idempotente.sql` |
@@ -5457,5 +5458,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| … +44 linhas — lista completa em `context.json` | |
+| … +45 linhas — lista completa em `context.json` | |

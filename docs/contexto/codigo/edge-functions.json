@@ -3580,7 +3580,7 @@
    "nome": "territory-optimization",
    "entrada": "supabase/functions/territory-optimization/index.ts",
    "arquivos": 1,
-   "linhas": 338,
+   "linhas": 341,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [
