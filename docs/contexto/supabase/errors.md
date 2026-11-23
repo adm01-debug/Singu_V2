@@ -1,3 +1,6 @@
 # Erros da última coleta
 
-_nenhum_
+| seção | erro |
+|---|---|
+| columns | canceling statement due to lock timeout |
+| constraints | canceling statement due to lock timeout |

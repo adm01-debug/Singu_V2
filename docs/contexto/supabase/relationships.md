@@ -1,5 +1,7 @@
 # Relacionamentos (chaves estrangeiras)
 
+> ⚠️ Seção `constraints` não pôde ser atualizada nesta coleta (ver errors.md); mostrando a versão anterior.
+
 
 | de | colunas | para | colunas | on delete | on update |
 |---|---|---|---|---|---|
