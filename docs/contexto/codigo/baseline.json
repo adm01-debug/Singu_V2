@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "09587759f22a5a59084f968ca2a8f97adf5437e5",
+  "commit": "36d59c2ec969239671e17937a67408d7e3a0c563",
   "branch": "main",
-  "data_commit": "2026-11-23T16:22:28-03:00",
+  "data_commit": "2026-11-23T16:48:29-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "36d59c2",
+    "data": "2026-11-23",
+    "assunto": "build(deps): bump the minor-and-patch group with 13 updates (#315)"
+   },
    {
     "sha": "0958775",
     "data": "2026-11-23",
@@ -126,11 +131,6 @@
     "sha": "84b1bdd",
     "data": "2026-11-21",
     "assunto": "feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)"
-   },
-   {
-    "sha": "fe5d8c1",
-    "data": "2026-11-21",
-    "assunto": "fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)"
    }
   ],
   "arquivos_mudados_7d": 1035,
@@ -192,7 +192,7 @@
     "mudancas": 13
    },
    {
-    "pasta": "scripts/migration/ddl",
+    "pasta": "package.json",
     "mudancas": 12
    }
   ],
@@ -207,11 +207,11 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 21
+    "mudancas": 22
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
@@ -309,7 +309,7 @@
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 8
+    "commits": 9
    },
    {
     "autor": "Copilot App",
