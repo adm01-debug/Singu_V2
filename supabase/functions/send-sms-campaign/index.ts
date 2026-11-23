@@ -49,26 +49,44 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const { data: campaign, error: cErr } = await admin
-      .from("sms_campaigns").select("*").eq("id", campaignId).eq("user_id", userId).single();
-    if (cErr || !campaign) {
-      return new Response(JSON.stringify({ error: "Campaign not found" }), { status: 404, headers: { ...cors, "Content-Type": "application/json" } });
-    }
-    if (campaign.status === "sent" || campaign.status === "sending") {
+    // Atomic claim: only transition draft/scheduled → sending; prevents concurrent double-send
+    const { data: campaign, error: claimErr } = await admin
+      .from("sms_campaigns")
+      .update({ status: "sending" })
+      .eq("id", campaignId)
+      .eq("user_id", userId)
+      .in("status", ["draft", "scheduled"])
+      .select()
+      .single();
+    if (claimErr || !campaign) {
+      // Not found OR already claimed (sent/sending) — distinguish for callers
+      const { data: existing } = await admin.from("sms_campaigns").select("status").eq("id", campaignId).eq("user_id", userId).maybeSingle();
+      if (!existing) return new Response(JSON.stringify({ error: "Campaign not found" }), { status: 404, headers: { ...cors, "Content-Type": "application/json" } });
       return new Response(JSON.stringify({ error: "Campaign already processed" }), { status: 409, headers: { ...cors, "Content-Type": "application/json" } });
     }
 
-    // Materialize recipients from contacts with phone, excluding opt-outs (parallel reads)
-    const [{ data: contacts }, { data: optOuts }] = await Promise.all([
-      admin.from("contacts").select("id, first_name, last_name, phone, whatsapp").eq("user_id", userId),
-      admin.from("sms_opt_outs").select("phone").eq("user_id", userId),
-    ]);
+    // Paginate contacts in batches of 1000 to handle large bases (> default 1000 cap)
+    const contacts: Array<{ id: string; first_name: string | null; last_name: string | null; phone: string | null; whatsapp: string | null }> = [];
+    let contactPage = 0;
+    while (true) {
+      const { data: batch } = await admin.from("contacts")
+        .select("id, first_name, last_name, phone, whatsapp")
+        .eq("user_id", userId)
+        .range(contactPage * 1000, (contactPage + 1) * 1000 - 1);
+      if (!batch || batch.length === 0) break;
+      contacts.push(...batch);
+      if (batch.length < 1000) break;
+      contactPage++;
+    }
+
+    // Materialize opt-outs (parallel with contact pagination is not viable; kept sequential)
+    const { data: optOuts } = await admin.from("sms_opt_outs").select("phone").eq("user_id", userId);
     const optedOut = new Set((optOuts || []).map(o => o.phone));
 
     const recipientRows: Array<{ campaign_id: string; contact_id: string; phone: string; status: string }> = [];
     const renderedByContact = new Map<string, string>();
 
-    for (const c of contacts || []) {
+    for (const c of contacts) {
       const raw = c.phone || c.whatsapp;
       if (!raw) continue;
       const phone = normalizePhone(raw);
