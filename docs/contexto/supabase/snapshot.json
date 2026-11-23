@@ -2,9 +2,7 @@
   "api": {
     "enabled": false
   },
-  "carried": [
-    "policies"
-  ],
+  "carried": [],
   "db": {
     "columns": [
       {
@@ -300782,11 +300780,6 @@
         {
           "publication": "supabase_realtime_messages_publication",
           "schema": "realtime",
-          "table": "messages_2026_11_19"
-        },
-        {
-          "publication": "supabase_realtime_messages_publication",
-          "schema": "realtime",
           "table": "messages_2026_11_20"
         },
         {
@@ -320512,15 +320505,6 @@
     ],
     "webhooks": []
   },
-  "errors": [
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "policies"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "db_stats"
-    }
-  ],
+  "errors": [],
   "format_version": 2
 }
