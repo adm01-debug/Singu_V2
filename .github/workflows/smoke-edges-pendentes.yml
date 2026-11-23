@@ -83,11 +83,12 @@ jobs:
           echo "OK: insight gravado e visivel em public.insights"
 
       - name: "2/3 external-data -- 403 e outcome=denied em external_data_audit_log"
+        if: always()
         run: |
           FAKE=00000000-0000-0000-0000-000000000000
           CODE=$(curl -sS -o /tmp/extdata.json -w '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/external-data" \
             -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SB_TOKEN" -H "Content-Type: application/json" \
-            -d "{\"table\":\"contact_phones\",\"operation\":\"insert\",\"record\":{\"contact_id\":\"$FAKE\",\"phone\":\"+5511999999999\"}}")
+            -d "{\"action\":\"insert\",\"table\":\"contact_phones\",\"record\":{\"contact_id\":\"$FAKE\",\"phone\":\"+5511999999999\"}}")
           echo "http=$CODE"
           head -c 600 /tmp/extdata.json; echo
           if [ "$CODE" != "403" ]; then echo "::error::esperado 403 no caminho denied, veio $CODE"; exit 1; fi
@@ -99,6 +100,7 @@ jobs:
           echo "OK: negacao auditada (outcome=denied) em external_data_audit_log"
 
       - name: "3/3 send-push-notification -- par VAPID configurado"
+        if: always()
         run: |
           CODE=$(curl -sS -o /tmp/push.json -w '%{http_code}' -X POST "$SUPABASE_URL/functions/v1/send-push-notification" \
             -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SB_TOKEN" -H "Content-Type: application/json" \
