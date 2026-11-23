@@ -88,15 +88,3 @@ Cada fonte é atualizada independentemente; referências anteriores não comprov
 | `manifest.json` | data UTC da coleta concluída, erros e seções reaproveitadas; usado pelo índice de contexto |
 | `CHANGELOG.md` | diff semântico a cada mudança |
 | `errors.md` | seções que falharam na última coleta |
-
-## ⚠️ Problemas na última coleta
-
-Seções reaproveitadas da coleta anterior: `indexes`, `policies`, `lints`.
-
-| seção | erro |
-|---|---|
-| indexes | canceling statement due to lock timeout |
-| policies | canceling statement due to lock timeout |
-| lints | canceling statement due to lock timeout |
-| table_stats | canceling statement due to lock timeout |
-| db_stats | canceling statement due to lock timeout |

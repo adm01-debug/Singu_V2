@@ -2,11 +2,7 @@
   "api": {
     "enabled": false
   },
-  "carried": [
-    "indexes",
-    "policies",
-    "lints"
-  ],
+  "carried": [],
   "db": {
     "columns": [
       {
@@ -320509,27 +320505,6 @@
     ],
     "webhooks": []
   },
-  "errors": [
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "indexes"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "policies"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "lints"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "table_stats"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "db_stats"
-    }
-  ],
+  "errors": [],
   "format_version": 2
 }
