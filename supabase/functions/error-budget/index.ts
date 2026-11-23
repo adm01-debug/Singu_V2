@@ -69,7 +69,7 @@ function computeDailySeries(snapshots: Snapshot[]): DailyPoint[] {
 async function maybeFireAlerts(
   supabase: SupabaseClient,
   budgetConsumedPct: number,
-  uptimePct: number,
+  uptimePct: number | null,
   downtimeMinutes: number,
 ): Promise<void> {
   const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -87,12 +87,12 @@ async function maybeFireAlerts(
       severity: t.severity,
       threshold_pct: t.pct,
       consumed_pct: Number(budgetConsumedPct.toFixed(2)),
-      message: `Error budget atingiu ${t.pct}% do orçamento mensal (consumo atual ${budgetConsumedPct.toFixed(1)}%, uptime ${uptimePct.toFixed(2)}%, ${downtimeMinutes.toFixed(0)} min de indisponibilidade nos últimos 30d).`,
+      message: `Error budget atingiu ${t.pct}% do orçamento mensal (consumo atual ${budgetConsumedPct.toFixed(1)}%, uptime ${uptimePct === null ? "desconhecido" : uptimePct.toFixed(2) + "%"}, ${downtimeMinutes.toFixed(0)} min de indisponibilidade nos últimos 30d).`,
       metadata: {
         slo_target_pct: SLO_TARGET,
         window_hours: WINDOW_HOURS,
         downtime_minutes: Number(downtimeMinutes.toFixed(1)),
-        uptime_pct: Number(uptimePct.toFixed(3)),
+        uptime_pct: uptimePct === null ? null : Number(uptimePct.toFixed(3)),
       },
     });
   }
