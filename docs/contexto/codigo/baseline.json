@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "1f88d85038109da88b4bcd0d1503eb055e913a14",
+  "commit": "d2a5777b86a78c53290a21c6bf7864db07e87baa",
   "branch": "main",
-  "data_commit": "2026-11-22T11:18:54-03:00",
+  "data_commit": "2026-11-23T09:13:26-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "d2a5777",
+    "data": "2026-11-23",
+    "assunto": "fix(ef7-ef12): claim atomico sms-campaign, paginacao cron e NaN forecast (#310)"
+   },
    {
     "sha": "1f88d85",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "7cbda37",
     "data": "2026-11-20",
     "assunto": "fix(migrations): torne a Foundation 1cfd4579 totalmente idempotente (#283)"
-   },
-   {
-    "sha": "e9d33fd",
-    "data": "2026-11-20",
-    "assunto": "Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110"
    }
   ],
-  "arquivos_mudados_7d": 948,
+  "arquivos_mudados_7d": 950,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 143
+    "commits": 144
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3891,
   "arquivos_codigo": 2240,
-  "linhas_codigo": 418223,
+  "linhas_codigo": 418261,
   "rotas": 115,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 27166
+   "linhas": 27204
   },
   "tailwind.config.ts": {
    "arquivos": 1,

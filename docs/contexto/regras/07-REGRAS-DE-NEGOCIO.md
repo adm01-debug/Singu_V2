@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1f88d85038` · branch `main` · 2026-11-22 14:20 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d2a5777b86` · branch `main` · 2026-11-23 12:24 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4384,7 +4384,7 @@ _nenhum item encontrado_
 | 1 | `supabase/functions/health/index.ts` |
 | 1 | `supabase/functions/health-aggregate/index.ts` |
 | 5000 | `supabase/functions/intent-aggregator/index.ts` |
-| … +23 linhas — lista completa em `context.json` | |
+| … +22 linhas — lista completa em `context.json` | |
 
 ## I. Regras implícitas em mensagens de erro/validação
 

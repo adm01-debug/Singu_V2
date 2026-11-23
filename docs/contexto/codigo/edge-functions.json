@@ -1808,7 +1808,7 @@
    "nome": "forecast-snapshot-cron",
    "entrada": "supabase/functions/forecast-snapshot-cron/index.ts",
    "arquivos": 1,
-   "linhas": 59,
+   "linhas": 70,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -2248,7 +2248,7 @@
    "nome": "lead-score-cron",
    "entrada": "supabase/functions/lead-score-cron/index.ts",
    "arquivos": 1,
-   "linhas": 52,
+   "linhas": 61,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS",
@@ -3040,7 +3040,7 @@
    "nome": "send-sms-campaign",
    "entrada": "supabase/functions/send-sms-campaign/index.ts",
    "arquivos": 1,
-   "linhas": 176,
+   "linhas": 194,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

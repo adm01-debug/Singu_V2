@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `1f88d85038109da88b4bcd0d1503eb055e913a14` (2026-11-22T11:18:54-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d2a5777b86a78c53290a21c6bf7864db07e87baa` (2026-11-23T09:13:26-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3891 |
 | arquivos_codigo | 2240 |
-| linhas_codigo | 418223 |
+| linhas_codigo | 418261 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -445,8 +445,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25810 nós · 41155 arestas · 3090 comunidades · grafo do commit `1f88d850`
-- comunidades maiores: sonner (328), _shared/auth.ts (291), ref_hooks (289), framer-motion (287), ref_lib (281), 02_tables.sql (259), ref_integrations (245), react (244), react-router-dom (239), date-fns (228), ref_components (227), 📖 Dicionário de Dados — SINGU CRM (227)
+- 25812 nós · 41157 arestas · 3056 comunidades · grafo do commit `d2a5777b`
+- comunidades maiores: ref_lib (321), ref_integrations (315), sonner (307), ref_components (296), lucide-react (276), framer-motion (267), 02_tables.sql (259), react (251), react-router-dom (247), ref_hooks (243), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (223)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -583,6 +583,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-23 `d2a5777` fix(ef7-ef12): claim atomico sms-campaign, paginacao cron e NaN forecast (#310)
 - 2026-11-22 `1f88d85` feat: integra EF win-loss-record-deal e religa digest de coaching (#306)
 - 2026-11-22 `e608598` chore(deps): bump minimatch 10->11 e postcss-selector-parser 6.0.10->6.1.5 via overrides (#305)
 - 2026-11-22 `86259d6` chore(inventario): regenera edges.json pós-#300 e consolida auditoria de edges órfãs (doc 13) (#304)
@@ -597,7 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-21 `d83acfb` fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)
 - 2026-11-21 `d4ea4a1` fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)
 - 2026-11-21 `84b1bdd` feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)
-- 2026-11-21 `fe5d8c1` fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
