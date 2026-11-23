@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 4 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -59,41 +59,21 @@
 
 ## Policies (RLS)
 
-### `sqc_delete`
+### `supplier_qualification_config_admin_write`
 
 | campo | valor |
 |---|---|
-| comando | DELETE |
+| comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| WITH CHECK |  |
+| USING | `( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)` |
+| WITH CHECK | `( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)` |
 
-### `sqc_insert`
-
-| campo | valor |
-|---|---|
-| comando | INSERT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-
-### `sqc_select`
+### `supplier_qualification_config_authenticated_read`
 
 | campo | valor |
 |---|---|
 | comando | SELECT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| WITH CHECK |  |
-
-### `sqc_update`
-
-| campo | valor |
-|---|---|
-| comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |

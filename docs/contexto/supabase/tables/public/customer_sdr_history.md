@@ -68,17 +68,17 @@
 
 ## Policies (RLS)
 
-### `admin_delete`
+### `customer_sdr_history_admin_mfa_delete`
 
 | campo | valor |
 |---|---|
 | comando | DELETE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)` |
+| USING | `(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))` |
 | WITH CHECK |  |
 
-### `admin_insert`
+### `customer_sdr_history_admin_mfa_insert`
 
 | campo | valor |
 |---|---|
@@ -86,26 +86,26 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)` |
+| WITH CHECK | `(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))` |
 
-### `admin_update`
+### `customer_sdr_history_admin_mfa_update`
 
 | campo | valor |
 |---|---|
 | comando | UPDATE |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)` |
-| WITH CHECK | `( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)` |
+| USING | `(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))` |
+| WITH CHECK | `(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))` |
 
-### `read_only_auth`
+### `customer_sdr_history_owner_or_admin_mfa_select`
 
 | campo | valor |
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| USING | `((((customer_id IS NOT NULL) OR (company_id IS NOT NULL)) AND ((customer_id IS NULL) OR (EXISTS ( SELECT 1    FROM (customers cu      JOIN companies co ON ((co.id = cu.company_id)))   WHERE ((cu.id = customer_sdr_history.customer_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid)))))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1    FROM companies co   WHERE ((co.id = customer_sdr_history.company_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 | WITH CHECK |  |
 
 ### `service_full`

@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 4 |
+| policies | 1 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -72,45 +72,15 @@
 
 ## Policies (RLS)
 
-### `carriers_delete`
+### `carriers_owner_or_admin_mfa`
 
 | campo | valor |
 |---|---|
-| comando | DELETE |
+| comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| WITH CHECK |  |
-
-### `carriers_insert`
-
-| campo | valor |
-|---|---|
-| comando | INSERT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-
-### `carriers_select`
-
-| campo | valor |
-|---|---|
-| comando | SELECT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| WITH CHECK |  |
-
-### `carriers_update`
-
-| campo | valor |
-|---|---|
-| comando | UPDATE |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| WITH CHECK |  |
+| USING | `((EXISTS ( SELECT 1    FROM companies c   WHERE ((c.id = carriers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
+| WITH CHECK | `((EXISTS ( SELECT 1    FROM companies c   WHERE ((c.id = carriers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 
 
 ## Triggers

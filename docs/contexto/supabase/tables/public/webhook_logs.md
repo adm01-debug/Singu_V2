@@ -45,15 +45,15 @@
 
 ## Policies (RLS)
 
-### `webhook_logs_all`
+### `webhook_logs_owner_admin_mfa_all`
 
 | campo | valor |
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| USING | `(EXISTS ( SELECT 1    FROM webhooks w   WHERE ((w.id = webhook_logs.webhook_id) AND ((w.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))` |
+| WITH CHECK | `(EXISTS ( SELECT 1    FROM webhooks w   WHERE ((w.id = webhook_logs.webhook_id) AND ((w.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))` |
 
 
 ## Triggers

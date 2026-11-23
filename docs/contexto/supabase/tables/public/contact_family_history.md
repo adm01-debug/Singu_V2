@@ -6,7 +6,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 4 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -41,7 +41,7 @@
 
 ## Policies (RLS)
 
-### `Users can insert family history`
+### `contact_family_history_owner_or_admin_mfa_insert`
 
 | campo | valor |
 |---|---|
@@ -49,36 +49,16 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING |  |
-| WITH CHECK | `(EXISTS ( SELECT 1    FROM contacts   WHERE (contacts.id = contact_family_history.contact_id)))` |
+| WITH CHECK | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_family_history.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 
-### `Users can insert their contact family history`
-
-| campo | valor |
-|---|---|
-| comando | INSERT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING |  |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) = user_id)` |
-
-### `Users can view family history for their contacts`
+### `contact_family_history_owner_or_admin_mfa_select`
 
 | campo | valor |
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(EXISTS ( SELECT 1    FROM contacts   WHERE (contacts.id = contact_family_history.contact_id)))` |
-| WITH CHECK |  |
-
-### `Users can view their contact family history`
-
-| campo | valor |
-|---|---|
-| comando | SELECT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) = user_id)` |
+| USING | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_family_history.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 | WITH CHECK |  |
 
 

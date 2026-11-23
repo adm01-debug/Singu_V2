@@ -1,20 +1,19 @@
 {
   "carried": [
-    "columns",
     "constraints"
   ],
   "entrada": "README.md",
   "erros": [
     {
       "error": "canceling statement due to lock timeout",
-      "section": "columns"
+      "section": "constraints"
     },
     {
       "error": "canceling statement due to lock timeout",
-      "section": "constraints"
+      "section": "db_stats"
     }
   ],
-  "gerado_em": "2026-11-23T22:12:55Z",
+  "gerado_em": "2026-11-23T23:13:31Z",
   "gerador": "scripts/supabase_snapshot/snapshot.py",
   "produtor": "supabase-snapshot"
 }

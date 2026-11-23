@@ -48,15 +48,15 @@
 
 ## Policies (RLS)
 
-### `integration_logs_all`
+### `integration_logs_owner_admin_mfa_all`
 
 | campo | valor |
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| USING | `(EXISTS ( SELECT 1    FROM integrations i   WHERE ((i.id = integration_logs.integration_id) AND ((i.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))` |
+| WITH CHECK | `(EXISTS ( SELECT 1    FROM integrations i   WHERE ((i.id = integration_logs.integration_id) AND ((i.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))` |
 
 
 ## Triggers

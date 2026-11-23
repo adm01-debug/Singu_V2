@@ -222,7 +222,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.workflows](tables/dormant/workflows.md) | table | não | 0 | 11 | não |  |
 | [_dormant.xp_history](tables/dormant/xp_history.md) | table | sim | 1 | 7 | não |  |
 | [ops_backup.acl_snapshot](tables/ops_backup/acl_snapshot.md) | table | não | 0 | 5 | não |  |
-| [public._stg_pac_nums](tables/public/stg_pac_nums.md) | table | não | 0 | 2 | não |  |
+| [public._stg_pac_nums](tables/public/stg_pac_nums.md) | table | sim | 0 | 2 | não |  |
 | [public.abm_account_plans](tables/public/abm_account_plans.md) | table | sim | 3 | 15 | não |  |
 | [public.abm_accounts](tables/public/abm_accounts.md) | table | sim | 4 | 15 | não |  |
 | [public.abm_buying_committee](tables/public/abm_buying_committee.md) | table | sim | 4 | 13 | não |  |
@@ -269,12 +269,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.campaign_recipients](tables/public/campaign_recipients.md) | table | sim | 5 | 19 | não | SINGU: Destinatários individuais de email_campaigns com tracking granular (opens, clicks, bounces). |
 | [public.campaigns](tables/public/campaigns.md) | table | sim | 1 | 12 | não |  |
 | [public.canned_responses](tables/public/canned_responses.md) | table | sim | 5 | 12 | não | SINGU: Respostas prontas/templates curtos acessíveis por shortcut (/ola, /encerrar, etc). is_shared=true para disponibilizar ao time. |
-| [public.carrier_evaluations](tables/public/carrier_evaluations.md) | table | sim | 4 | 13 | não | Avaliações de transportadoras (append-only). 5 critérios: pontualidade, conservação, preço_frete, rastreamento, cobertura. Notas 1-5. |
-| [public.carrier_homologations](tables/public/carrier_homologations.md) | table | sim | 4 | 12 | não | Histórico de homologação de transportadoras. Homologador: Logística (Thiago id=80). Status via enum carrier_homologation_status. |
-| [public.carrier_qualification_config](tables/public/carrier_qualification_config.md) | table | sim | 4 | 13 | não | Segmentos de classificação de transportadoras (Excelente a Crítico) com faixas de score e ações recomendadas |
-| [public.carrier_score_history](tables/public/carrier_score_history.md) | table | sim | 4 | 17 | não | Histórico de evolução do score de transportadoras. Append-only, 1 registro por recálculo. |
-| [public.carrier_scores](tables/public/carrier_scores.md) | table | sim | 4 | 17 | não | Score consolidado de transportadoras (1 registro por carrier). Recalculado via trigger após cada avaliação. |
-| [public.carriers](tables/public/carriers.md) | table | sim | 4 | 19 | não | Transportadoras vinculadas a companies (1:1 via company_id UNIQUE). 112 registros. Campos de qualificação: homologado, data_homologacao, score_geral (caches atualizados por triggers). Homologação: Logística (Thiago id=80). 5 critérios: pontualidade(30%), conservação(25%), preço_frete(20%), cobertura(15%), rastreamento(10%). |
+| [public.carrier_evaluations](tables/public/carrier_evaluations.md) | table | sim | 1 | 13 | não | Avaliações de transportadoras (append-only). 5 critérios: pontualidade, conservação, preço_frete, rastreamento, cobertura. Notas 1-5. |
+| [public.carrier_homologations](tables/public/carrier_homologations.md) | table | sim | 1 | 12 | não | Histórico de homologação de transportadoras. Homologador: Logística (Thiago id=80). Status via enum carrier_homologation_status. |
+| [public.carrier_qualification_config](tables/public/carrier_qualification_config.md) | table | sim | 2 | 13 | não | Segmentos de classificação de transportadoras (Excelente a Crítico) com faixas de score e ações recomendadas |
+| [public.carrier_score_history](tables/public/carrier_score_history.md) | table | sim | 1 | 17 | não | Histórico de evolução do score de transportadoras. Append-only, 1 registro por recálculo. |
+| [public.carrier_scores](tables/public/carrier_scores.md) | table | sim | 1 | 17 | não | Score consolidado de transportadoras (1 registro por carrier). Recalculado via trigger após cada avaliação. |
+| [public.carriers](tables/public/carriers.md) | table | sim | 1 | 19 | não | Transportadoras vinculadas a companies (1:1 via company_id UNIQUE). 112 registros. Campos de qualificação: homologado, data_homologacao, score_geral (caches atualizados por triggers). Homologação: Logística (Thiago id=80). 5 critérios: pontualidade(30%), conservação(25%), preço_frete(20%), cobertura(15%), rastreamento(10%). |
 | [public.churn_predictions](tables/public/churn_predictions.md) | table | sim | 2 | 18 | não | Previsões de probabilidade de churn por contato |
 | [public.churn_risk_factors](tables/public/churn_risk_factors.md) | table | sim | 2 | 12 | não | Configuração dos fatores que indicam risco de churn |
 | [public.churn_risk_scores](tables/public/churn_risk_scores.md) | table | sim | 6 | 22 | não | SINGU: Histórico de scores de risco de churn (análise local, 5 fatores). Espelha feature churn-risk-detection das memories. is_current=true para score atual. |
@@ -297,7 +297,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.company_emails](tables/public/company_emails.md) | table | sim | 6 | 14 | não |  |
 | [public.company_phones](tables/public/company_phones.md) | table | sim | 6 | 16 | não |  |
 | [public.company_rfm_scores](tables/public/company_rfm_scores.md) | table | sim | 4 | 18 | não | SINGU: Scores RFM agregados por empresa |
-| [public.company_social_media](tables/public/company_social_media.md) | table | sim | 4 | 16 | não |  |
+| [public.company_social_media](tables/public/company_social_media.md) | table | sim | 1 | 16 | não |  |
 | [public.company_stakeholder_map](tables/public/company_stakeholder_map.md) | table | sim | 4 | 16 | não | SINGU: Mapa de stakeholders por empresa (poder/interesse) |
 | [public.company_territories](tables/public/company_territories.md) | table | sim | 1 | 4 | não |  |
 | [public.compatibility_alerts](tables/public/compatibility_alerts.md) | table | sim | 8 | 11 | não | SINGU: Alertas quando compatibilidade DISC vendedor↔contato está abaixo do threshold. |
@@ -320,7 +320,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_cadence_audit](tables/public/contact_cadence_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.contact_decision_making](tables/public/contact_decision_making.md) | table | sim | 4 | 9 | não |  |
 | [public.contact_emails](tables/public/contact_emails.md) | table | sim | 5 | 12 | não |  |
-| [public.contact_family_history](tables/public/contact_family_history.md) | table | sim | 4 | 5 | não |  |
+| [public.contact_family_history](tables/public/contact_family_history.md) | table | sim | 2 | 5 | não |  |
 | [public.contact_influence](tables/public/contact_influence.md) | table | sim | 4 | 8 | não |  |
 | [public.contact_metaprograms](tables/public/contact_metaprograms.md) | table | sim | 4 | 15 | não |  |
 | [public.contact_next_actions](tables/public/contact_next_actions.md) | table | sim | 4 | 23 | não |  |
@@ -335,7 +335,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_relatives](tables/public/contact_relatives.md) | table | sim | 8 | 15 | não | SINGU: Familiares e relacionados do contato para estratégias de rapport. |
 | [public.contact_relatives_audit](tables/public/contact_relatives_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.contact_report_overrides](tables/public/contact_report_overrides.md) | table | sim | 3 | 6 | não |  |
-| [public.contact_social_media](tables/public/contact_social_media.md) | table | sim | 4 | 17 | não |  |
+| [public.contact_social_media](tables/public/contact_social_media.md) | table | sim | 1 | 17 | não |  |
 | [public.contact_time_analysis](tables/public/contact_time_analysis.md) | table | sim | 8 | 9 | não | SINGU: Heatmap de melhores horários/dias para contatar cada lead. Grid 7x24. |
 | [public.contact_time_analysis_audit](tables/public/contact_time_analysis_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.contacts](tables/public/contacts.md) | table | sim | 10 | 65 | sim | Contatos vinculados a empresas |
@@ -349,7 +349,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.crm_cadence_rules](tables/public/crm_cadence_rules.md) | table | sim | 1 | 11 | não |  |
 | [public.crm_consent_audit_logs](tables/public/crm_consent_audit_logs.md) | table | sim | 1 | 10 | não |  |
 | [public.crm_metric_overrides](tables/public/crm_metric_overrides.md) | table | sim | 1 | 8 | não |  |
-| [public.crm_objection_intelligence](tables/public/crm_objection_intelligence.md) | table | sim | 5 | 9 | não |  |
+| [public.crm_objection_intelligence](tables/public/crm_objection_intelligence.md) | table | sim | 1 | 9 | não |  |
 | [public.crm_relationship_audit_logs](tables/public/crm_relationship_audit_logs.md) | table | sim | 1 | 10 | não |  |
 | [public.cron_secrets](tables/public/cron_secrets.md) | table | sim | 1 | 4 | não |  |
 | [public.cs_accounts](tables/public/cs_accounts.md) | table | sim | 4 | 17 | não |  |
@@ -550,7 +550,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.sdr_alert_history](tables/public/sdr_alert_history.md) | table | sim | 2 | 8 | não |  |
 | [public.sdr_closer_assignments](tables/public/sdr_closer_assignments.md) | table | sim | 2 | 13 | não | Histórico de vínculo SDR ↔ CLOSER |
 | [public.search_products_cache](tables/public/search_products_cache.md) | table | sim | 5 | 20 | não | SINGU: Cache de buscas de produtos por fornecedor (XBZ/Stricker/SPOT). TTL 6h. query_hash para dedup. |
-| [public.secret_rotation_log](tables/public/secret_rotation_log.md) | table | sim | 4 | 9 | não |  |
+| [public.secret_rotation_log](tables/public/secret_rotation_log.md) | table | sim | 1 | 9 | não |  |
 | [public.seller_daily_metrics](tables/public/seller_daily_metrics.md) | table | sim | 1 | 16 | não |  |
 | [public.semantic_search_cache](tables/public/semantic_search_cache.md) | table | sim | 5 | 13 | não | SINGU: Cache de buscas semânticas (embedding-based) com TTL 24h. query_embedding_hash para matching determinístico. |
 | [public.sentiment_annotations](tables/public/sentiment_annotations.md) | table | sim | 4 | 9 | não |  |
@@ -581,12 +581,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.stakeholder_alerts](tables/public/stakeholder_alerts.md) | table | sim | 8 | 14 | não |  |
 | [public.suggested_life_events](tables/public/suggested_life_events.md) | table | sim | 5 | 13 | não |  |
 | [public.suggested_rapport_intel](tables/public/suggested_rapport_intel.md) | table | sim | 4 | 9 | não |  |
-| [public.supplier_evaluations](tables/public/supplier_evaluations.md) | table | sim | 4 | 12 | não | Avaliações de fornecedores por entrega ou período. Notas de 1-5 em 4 critérios. Trigger recalcula score automaticamente. |
-| [public.supplier_homologations](tables/public/supplier_homologations.md) | table | sim | 4 | 12 | não | Homologação de fornecedores pelo Depto de Compras. Cada registro = uma solicitação/decisão. Histórico completo mantido. |
-| [public.supplier_qualification_config](tables/public/supplier_qualification_config.md) | table | sim | 4 | 13 | não | Configuração dos segmentos de classificação (Excelente/Bom/Regular/Insuficiente/Crítico) com faixas de score e cores. |
+| [public.supplier_evaluations](tables/public/supplier_evaluations.md) | table | sim | 1 | 12 | não | Avaliações de fornecedores por entrega ou período. Notas de 1-5 em 4 critérios. Trigger recalcula score automaticamente. |
+| [public.supplier_homologations](tables/public/supplier_homologations.md) | table | sim | 1 | 12 | não | Homologação de fornecedores pelo Depto de Compras. Cada registro = uma solicitação/decisão. Histórico completo mantido. |
+| [public.supplier_qualification_config](tables/public/supplier_qualification_config.md) | table | sim | 2 | 13 | não | Configuração dos segmentos de classificação (Excelente/Bom/Regular/Insuficiente/Crítico) com faixas de score e cores. |
 | [public.supplier_score_history](tables/public/supplier_score_history.md) | table | sim | 2 | 16 | não | Histórico de evolução do score. Cada recálculo gera 1 registro. Permite rastrear tendências ao longo do tempo. |
-| [public.supplier_scores](tables/public/supplier_scores.md) | table | sim | 4 | 16 | não | Score consolidado do fornecedor (0-100). Atualizado automaticamente a cada avaliação. 1 registro por fornecedor. |
-| [public.suppliers](tables/public/suppliers.md) | table | sim | 4 | 23 | não | Fornecedores vinculados a companies (1:1 via company_id UNIQUE). Campos de qualificação: homologado, data_homologacao, score_geral (caches atualizados por triggers). Homologação: Compras (Thaina id=30, Elen id=31, Stephanie id=32). 4 critérios: preço(25%), prazo(25%), qualidade(30%), entrega(20%). |
+| [public.supplier_scores](tables/public/supplier_scores.md) | table | sim | 1 | 16 | não | Score consolidado do fornecedor (0-100). Atualizado automaticamente a cada avaliação. 1 registro por fornecedor. |
+| [public.suppliers](tables/public/suppliers.md) | table | sim | 1 | 23 | não | Fornecedores vinculados a companies (1:1 via company_id UNIQUE). Campos de qualificação: homologado, data_homologacao, score_geral (caches atualizados por triggers). Homologação: Compras (Thaina id=30, Elen id=31, Stephanie id=32). 4 critérios: preço(25%), prazo(25%), qualidade(30%), entrega(20%). |
 | [public.support_tickets](tables/public/support_tickets.md) | table | sim | 5 | 27 | não | SINGU: Tickets de suporte com SLA automático por prioridade, canal multi (email/whatsapp/phone/chat), categorização e CSAT integrado. ticket_number sequential. |
 | [public.sync_log](tables/public/sync_log.md) | table | sim | 2 | 14 | não | Log de sincronização com Bitrix24 |
 | [public.system_alerts](tables/public/system_alerts.md) | table | sim | 2 | 11 | não |  |

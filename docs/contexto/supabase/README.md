@@ -24,7 +24,7 @@ Gerado automaticamente a cada 10 min pelo workflow `contexto` (job `banco`). **N
 | views | 193 |
 | functions | 1468 |
 | triggers | 499 |
-| policies (RLS) | 1707 |
+| policies (RLS) | 1661 |
 | índices | 1683 |
 | tipos/enums | 37 |
 | extensões | 12 |
@@ -34,7 +34,7 @@ Gerado automaticamente a cada 10 min pelo workflow `contexto` (job `banco`). **N
 | buckets | 5 |
 | edge functions | n/d |
 | webhooks | 0 |
-| lints ALTA | 12 |
+| lints ALTA | 11 |
 | lints total | 569 |
 
 ## Estado das fontes do mapa de referências
@@ -91,9 +91,9 @@ Cada fonte é atualizada independentemente; referências anteriores não comprov
 
 ## ⚠️ Problemas na última coleta
 
-Seções reaproveitadas da coleta anterior: `columns`, `constraints`.
+Seções reaproveitadas da coleta anterior: `constraints`.
 
 | seção | erro |
 |---|---|
-| columns | canceling statement due to lock timeout |
 | constraints | canceling statement due to lock timeout |
+| db_stats | canceling statement due to lock timeout |

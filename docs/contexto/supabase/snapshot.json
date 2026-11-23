@@ -3,7 +3,6 @@
     "enabled": false
   },
   "carried": [
-    "columns",
     "constraints"
   ],
   "db": {
@@ -217864,7 +217863,7 @@
           "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "da6f4b35615b143b",
+        "definition_sha": "3e1e0780c901a3e1",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -227854,7 +227853,7 @@
           "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "1da3b53174af55d4",
+        "definition_sha": "1efbad69ab1ffb88",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -272406,12 +272405,6 @@
     ],
     "lints": [
       {
-        "code": "rls_disabled",
-        "detail": "Tabela exposta pela API sem RLS: qualquer chave anon lê/escreve tudo.",
-        "object": "public._stg_pac_nums",
-        "severity": "ALTA"
-      },
-      {
         "code": "view_security_definer",
         "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
         "object": "public.document_signatures_public",
@@ -272476,6 +272469,12 @@
         "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
         "object": "public.v_life_events_audit",
         "severity": "ALTA"
+      },
+      {
+        "code": "rls_no_policies",
+        "detail": "RLS ligado sem policies: inacessível via API (só service_role).",
+        "object": "public._stg_pac_nums",
+        "severity": "MÉDIA"
       },
       {
         "code": "extension_in_public",
@@ -283437,14 +283436,14 @@
       },
       {
         "cmd": "SELECT",
-        "name": "Authenticated read",
+        "name": "automation_executions_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "automation_executions",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "(EXISTS ( SELECT 1\n   FROM automation_rules r\n  WHERE ((r.id = automation_executions.rule_id) AND ((r.user_id = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))",
         "with_check": null
       },
       {
@@ -284108,104 +284107,44 @@
         "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
-        "cmd": "DELETE",
-        "name": "carrier_evaluations_delete",
+        "cmd": "ALL",
+        "name": "carrier_evaluations_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "carrier_evaluations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_evaluations.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_evaluations.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
-        "cmd": "INSERT",
-        "name": "carrier_evaluations_insert",
+        "cmd": "ALL",
+        "name": "carrier_homologations_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
-        "table": "carrier_evaluations",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "table": "carrier_homologations",
+        "using": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_homologations.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_homologations.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
+      },
+      {
+        "cmd": "ALL",
+        "name": "carrier_qualification_config_admin_write",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "carrier_qualification_config",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)"
       },
       {
         "cmd": "SELECT",
-        "name": "carrier_evaluations_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_evaluations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "carrier_evaluations_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_evaluations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "DELETE",
-        "name": "carrier_homologations_delete",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_homologations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "INSERT",
-        "name": "carrier_homologations_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_homologations",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "carrier_homologations_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_homologations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "carrier_homologations_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_homologations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "DELETE",
-        "name": "carrier_qual_config_delete",
+        "name": "carrier_qualification_config_authenticated_read",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
@@ -284216,184 +284155,40 @@
         "with_check": null
       },
       {
-        "cmd": "INSERT",
-        "name": "carrier_qual_config_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_qualification_config",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "carrier_qual_config_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_qualification_config",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "carrier_qual_config_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_qualification_config",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "DELETE",
-        "name": "carrier_score_history_delete",
+        "cmd": "ALL",
+        "name": "carrier_score_history_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "carrier_score_history",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_score_history.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_score_history.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
-        "cmd": "INSERT",
-        "name": "carrier_score_history_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_score_history",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "carrier_score_history_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_score_history",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "carrier_score_history_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_score_history",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "DELETE",
-        "name": "carrier_scores_delete",
+        "cmd": "ALL",
+        "name": "carrier_scores_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "carrier_scores",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_scores.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_scores.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
-        "cmd": "INSERT",
-        "name": "carrier_scores_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_scores",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "carrier_scores_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_scores",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "carrier_scores_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carrier_scores",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "DELETE",
-        "name": "carriers_delete",
+        "cmd": "ALL",
+        "name": "carriers_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "carriers",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "INSERT",
-        "name": "carriers_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carriers",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "carriers_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carriers",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "carriers_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "carriers",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = carriers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = carriers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "SELECT",
@@ -285500,52 +285295,16 @@
         "with_check": "(user_id = ( SELECT auth.uid() AS uid))"
       },
       {
-        "cmd": "DELETE",
-        "name": "company_social_media_delete",
+        "cmd": "ALL",
+        "name": "company_social_media_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "company_social_media",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "INSERT",
-        "name": "company_social_media_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "company_social_media",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "company_social_media_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "company_social_media",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "company_social_media_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "company_social_media",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = company_social_media.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = company_social_media.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "DELETE",
@@ -285969,15 +285728,15 @@
       },
       {
         "cmd": "ALL",
-        "name": "contact_addresses_all",
+        "name": "contact_addresses_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "contact_addresses",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = contact_addresses.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = contact_addresses.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "INSERT",
@@ -286353,7 +286112,7 @@
       },
       {
         "cmd": "INSERT",
-        "name": "Users can insert family history",
+        "name": "contact_family_history_owner_or_admin_mfa_insert",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
@@ -286361,42 +286120,18 @@
         "schema": "public",
         "table": "contact_family_history",
         "using": null,
-        "with_check": "(EXISTS ( SELECT 1\n   FROM contacts\n  WHERE (contacts.id = contact_family_history.contact_id)))"
-      },
-      {
-        "cmd": "INSERT",
-        "name": "Users can insert their contact family history",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "contact_family_history",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
+        "with_check": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = contact_family_history.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "SELECT",
-        "name": "Users can view family history for their contacts",
+        "name": "contact_family_history_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "contact_family_history",
-        "using": "(EXISTS ( SELECT 1\n   FROM contacts\n  WHERE (contacts.id = contact_family_history.contact_id)))",
-        "with_check": null
-      },
-      {
-        "cmd": "SELECT",
-        "name": "Users can view their contact family history",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "contact_family_history",
-        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "using": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = contact_family_history.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -287084,52 +286819,16 @@
         "with_check": null
       },
       {
-        "cmd": "DELETE",
-        "name": "contact_social_media_delete",
+        "cmd": "ALL",
+        "name": "contact_social_media_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "contact_social_media",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "INSERT",
-        "name": "contact_social_media_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "contact_social_media",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "contact_social_media_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "contact_social_media",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "contact_social_media_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "contact_social_media",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = contact_social_media.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = contact_social_media.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "DELETE",
@@ -287589,63 +287288,15 @@
       },
       {
         "cmd": "ALL",
-        "name": "Enable all for authenticated users",
+        "name": "crm_objection_intelligence_contact_owner_or_admin",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "crm_objection_intelligence",
-        "using": "(( SELECT auth.role() AS role) = 'authenticated'::text)",
-        "with_check": null
-      },
-      {
-        "cmd": "ALL",
-        "name": "System can manage objection intelligence",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "crm_objection_intelligence",
-        "using": "((( SELECT auth.jwt() AS jwt) ->> 'role'::text) = 'service_role'::text)",
-        "with_check": null
-      },
-      {
-        "cmd": "SELECT",
-        "name": "Users can view objection intelligence for their contacts",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "crm_objection_intelligence",
-        "using": "(EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = crm_objection_intelligence.contact_id) AND ((c.user_id = ( SELECT auth.uid() AS uid)) OR ((( SELECT auth.jwt() AS jwt) ->> 'role'::text) = 'service_role'::text)))))",
-        "with_check": null
-      },
-      {
-        "cmd": "ALL",
-        "name": "Usuários podem gerenciar inteligência de objeções",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "crm_objection_intelligence",
-        "using": "(( SELECT auth.role() AS role) = 'authenticated'::text)",
-        "with_check": null
-      },
-      {
-        "cmd": "SELECT",
-        "name": "Usuários podem ver inteligência de objeções",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "crm_objection_intelligence",
-        "using": "(( SELECT auth.role() AS role) = 'authenticated'::text)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = crm_objection_intelligence.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = crm_objection_intelligence.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))"
       },
       {
         "cmd": "SELECT",
@@ -288105,7 +287756,7 @@
       },
       {
         "cmd": "INSERT",
-        "name": "admin_insert",
+        "name": "customer_events_admin_mfa_insert",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
@@ -288113,18 +287764,18 @@
         "schema": "public",
         "table": "customer_events",
         "using": null,
-        "with_check": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)"
+        "with_check": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))"
       },
       {
         "cmd": "SELECT",
-        "name": "read_only_auth",
+        "name": "customer_events_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "customer_events",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "((((customer_id IS NOT NULL) OR (company_id IS NOT NULL)) AND ((customer_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM (customers cu\n     JOIN companies co ON ((co.id = cu.company_id)))\n  WHERE ((cu.id = customer_events.customer_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid)))))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM companies co\n  WHERE ((co.id = customer_events.company_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -288153,19 +287804,19 @@
       },
       {
         "cmd": "DELETE",
-        "name": "admin_delete",
+        "name": "customer_ownership_history_admin_mfa_delete",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "customer_ownership_history",
-        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "using": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))",
         "with_check": null
       },
       {
         "cmd": "INSERT",
-        "name": "admin_insert",
+        "name": "customer_ownership_history_admin_mfa_insert",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
@@ -288173,30 +287824,30 @@
         "schema": "public",
         "table": "customer_ownership_history",
         "using": null,
-        "with_check": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)"
+        "with_check": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))"
       },
       {
         "cmd": "UPDATE",
-        "name": "admin_update",
+        "name": "customer_ownership_history_admin_mfa_update",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "customer_ownership_history",
-        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
-        "with_check": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)"
+        "using": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))",
+        "with_check": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))"
       },
       {
         "cmd": "SELECT",
-        "name": "read_only_auth",
+        "name": "customer_ownership_history_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "customer_ownership_history",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "((((customer_id IS NOT NULL) OR (company_id IS NOT NULL)) AND ((customer_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM (customers cu\n     JOIN companies co ON ((co.id = cu.company_id)))\n  WHERE ((cu.id = customer_ownership_history.customer_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid)))))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM companies co\n  WHERE ((co.id = customer_ownership_history.company_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -288273,19 +287924,19 @@
       },
       {
         "cmd": "DELETE",
-        "name": "admin_delete",
+        "name": "customer_sdr_history_admin_mfa_delete",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "customer_sdr_history",
-        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "using": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))",
         "with_check": null
       },
       {
         "cmd": "INSERT",
-        "name": "admin_insert",
+        "name": "customer_sdr_history_admin_mfa_insert",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
@@ -288293,30 +287944,30 @@
         "schema": "public",
         "table": "customer_sdr_history",
         "using": null,
-        "with_check": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)"
+        "with_check": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))"
       },
       {
         "cmd": "UPDATE",
-        "name": "admin_update",
+        "name": "customer_sdr_history_admin_mfa_update",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "customer_sdr_history",
-        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
-        "with_check": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)"
+        "using": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))",
+        "with_check": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))"
       },
       {
         "cmd": "SELECT",
-        "name": "read_only_auth",
+        "name": "customer_sdr_history_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "customer_sdr_history",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "((((customer_id IS NOT NULL) OR (company_id IS NOT NULL)) AND ((customer_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM (customers cu\n     JOIN companies co ON ((co.id = cu.company_id)))\n  WHERE ((cu.id = customer_sdr_history.customer_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid)))))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM companies co\n  WHERE ((co.id = customer_sdr_history.company_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -291286,15 +290937,15 @@
       },
       {
         "cmd": "ALL",
-        "name": "import_jobs_all",
+        "name": "import_jobs_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "import_jobs",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "ALL",
@@ -291466,27 +291117,27 @@
       },
       {
         "cmd": "ALL",
-        "name": "integration_logs_all",
+        "name": "integration_logs_owner_admin_mfa_all",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "integration_logs",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "(EXISTS ( SELECT 1\n   FROM integrations i\n  WHERE ((i.id = integration_logs.integration_id) AND ((i.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM integrations i\n  WHERE ((i.id = integration_logs.integration_id) AND ((i.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))"
       },
       {
         "cmd": "ALL",
-        "name": "integrations_all",
+        "name": "integrations_owner_admin_mfa_all",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "integrations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "DELETE",
@@ -295143,15 +294794,15 @@
       },
       {
         "cmd": "ALL",
-        "name": "report_executions_all",
+        "name": "report_executions_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "report_executions",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "(EXISTS ( SELECT 1\n   FROM scheduled_reports r\n  WHERE ((r.id = report_executions.scheduled_report_id) AND ((r.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM scheduled_reports r\n  WHERE ((r.id = report_executions.scheduled_report_id) AND ((r.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))"
       },
       {
         "cmd": "DELETE",
@@ -296043,15 +295694,15 @@
       },
       {
         "cmd": "ALL",
-        "name": "scheduled_reports_all",
+        "name": "scheduled_reports_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "scheduled_reports",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "DELETE",
@@ -296414,52 +296065,16 @@
         "with_check": null
       },
       {
-        "cmd": "DELETE",
-        "name": "Admins can delete secret rotation logs",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "secret_rotation_log",
-        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
-        "with_check": null
-      },
-      {
-        "cmd": "INSERT",
-        "name": "Admins can insert secret rotation logs",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "secret_rotation_log",
-        "using": null,
-        "with_check": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "Admins can view secret rotation logs",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "secret_rotation_log",
-        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
-        "with_check": null
-      },
-      {
         "cmd": "ALL",
-        "name": "secret_rotation_all",
+        "name": "secret_rotation_admin_mfa_all",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "secret_rotation_log",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))",
+        "with_check": "(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))"
       },
       {
         "cmd": "ALL",
@@ -297939,104 +297554,44 @@
         "with_check": null
       },
       {
-        "cmd": "DELETE",
-        "name": "supplier_evaluations_delete",
+        "cmd": "ALL",
+        "name": "supplier_evaluations_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "supplier_evaluations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_evaluations.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_evaluations.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
-        "cmd": "INSERT",
-        "name": "supplier_evaluations_insert",
+        "cmd": "ALL",
+        "name": "supplier_homologations_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
-        "table": "supplier_evaluations",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "table": "supplier_homologations",
+        "using": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_homologations.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_homologations.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
+      },
+      {
+        "cmd": "ALL",
+        "name": "supplier_qualification_config_admin_write",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "supplier_qualification_config",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)"
       },
       {
         "cmd": "SELECT",
-        "name": "supplier_evaluations_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_evaluations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "supplier_evaluations_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_evaluations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "DELETE",
-        "name": "supplier_homologations_delete",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_homologations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "INSERT",
-        "name": "supplier_homologations_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_homologations",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "supplier_homologations_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_homologations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "supplier_homologations_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_homologations",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "DELETE",
-        "name": "sqc_delete",
+        "name": "supplier_qualification_config_authenticated_read",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
@@ -298048,43 +297603,7 @@
       },
       {
         "cmd": "INSERT",
-        "name": "sqc_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_qualification_config",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "sqc_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_qualification_config",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "sqc_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_qualification_config",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "INSERT",
-        "name": "ssh_insert",
+        "name": "supplier_score_history_owner_or_admin_mfa_insert",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
@@ -298092,115 +297611,43 @@
         "schema": "public",
         "table": "supplier_score_history",
         "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "with_check": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_score_history.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "SELECT",
-        "name": "ssh_select",
+        "name": "supplier_score_history_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "supplier_score_history",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_score_history.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
-        "cmd": "DELETE",
-        "name": "supplier_scores_delete",
+        "cmd": "ALL",
+        "name": "supplier_scores_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "supplier_scores",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_scores.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_scores.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
-        "cmd": "INSERT",
-        "name": "supplier_scores_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_scores",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "supplier_scores_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_scores",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "supplier_scores_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "supplier_scores",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "DELETE",
-        "name": "suppliers_delete",
+        "cmd": "ALL",
+        "name": "suppliers_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "suppliers",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "INSERT",
-        "name": "suppliers_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "suppliers",
-        "using": null,
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
-      },
-      {
-        "cmd": "SELECT",
-        "name": "suppliers_select",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "suppliers",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "suppliers_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "suppliers",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": null
+        "using": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = suppliers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = suppliers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "DELETE",
@@ -299692,27 +299139,27 @@
       },
       {
         "cmd": "ALL",
-        "name": "webhook_logs_all",
+        "name": "webhook_logs_owner_admin_mfa_all",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "webhook_logs",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "(EXISTS ( SELECT 1\n   FROM webhooks w\n  WHERE ((w.id = webhook_logs.webhook_id) AND ((w.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM webhooks w\n  WHERE ((w.id = webhook_logs.webhook_id) AND ((w.created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))))))"
       },
       {
         "cmd": "ALL",
-        "name": "webhooks_all",
+        "name": "webhooks_owner_admin_mfa_all",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "webhooks",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "ALL",
@@ -304616,7 +304063,7 @@
         "partition_bound": null,
         "partition_key": null,
         "replica_identity": "default",
-        "rls_enabled": false,
+        "rls_enabled": true,
         "rls_forced": false,
         "schema": "public"
       },
@@ -320511,11 +319958,11 @@
   "errors": [
     {
       "error": "canceling statement due to lock timeout",
-      "section": "columns"
+      "section": "constraints"
     },
     {
       "error": "canceling statement due to lock timeout",
-      "section": "constraints"
+      "section": "db_stats"
     }
   ],
   "format_version": 2

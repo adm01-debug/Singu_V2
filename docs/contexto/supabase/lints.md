@@ -4,7 +4,6 @@ Verificações objetivas feitas no catálogo. Um agente deve ler isto antes de p
 
 | severidade | código | objeto | detalhe |
 |---|---|---|---|
-| ALTA | rls_disabled | public._stg_pac_nums | Tabela exposta pela API sem RLS: qualquer chave anon lê/escreve tudo. |
 | ALTA | view_security_definer | public.document_signatures_public | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | ALTA | view_security_definer | public.forms_public | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | ALTA | view_security_definer | public.landing_pages_public | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
@@ -16,6 +15,7 @@ Verificações objetivas feitas no catálogo. Um agente deve ler isto antes de p
 | ALTA | view_security_definer | public.v_contact_personality_audit | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | ALTA | view_security_definer | public.v_contact_relatives_audit | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
 | ALTA | view_security_definer | public.v_life_events_audit | View em public sem security_invoker: executa como owner e ignora RLS das tabelas base. |
+| MÉDIA | rls_no_policies | public._stg_pac_nums | RLS ligado sem policies: inacessível via API (só service_role). |
 | BAIXA | extension_in_public | pg_net | Extensão instalada no schema public (recomendado: schema extensions). |
 | BAIXA | extension_in_public | plpgsql_check | Extensão instalada no schema public (recomendado: schema extensions). |
 | BAIXA | fk_without_index | _dormant.access_denied_logs.access_denied_logs_user_id_fkey | FK sem índice nas colunas ['user_id']: joins e DELETE/UPDATE na tabela pai ficam lentos. |

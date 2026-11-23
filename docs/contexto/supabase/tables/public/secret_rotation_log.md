@@ -6,7 +6,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 4 |
+| policies | 1 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -44,45 +44,15 @@
 
 ## Policies (RLS)
 
-### `Admins can delete secret rotation logs`
-
-| campo | valor |
-|---|---|
-| comando | DELETE |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
-| WITH CHECK |  |
-
-### `Admins can insert secret rotation logs`
-
-| campo | valor |
-|---|---|
-| comando | INSERT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING |  |
-| WITH CHECK | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
-
-### `Admins can view secret rotation logs`
-
-| campo | valor |
-|---|---|
-| comando | SELECT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
-| WITH CHECK |  |
-
-### `secret_rotation_all`
+### `secret_rotation_admin_mfa_all`
 
 | campo | valor |
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| USING | `(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))` |
+| WITH CHECK | `(( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text))` |
 
 
 ## Triggers

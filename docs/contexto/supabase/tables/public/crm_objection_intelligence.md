@@ -6,7 +6,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 5 |
+| policies | 1 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -46,55 +46,15 @@
 
 ## Policies (RLS)
 
-### `Enable all for authenticated users`
+### `crm_objection_intelligence_contact_owner_or_admin`
 
 | campo | valor |
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.role() AS role) = 'authenticated'::text)` |
-| WITH CHECK |  |
-
-### `System can manage objection intelligence`
-
-| campo | valor |
-|---|---|
-| comando | ALL |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `((( SELECT auth.jwt() AS jwt) ->> 'role'::text) = 'service_role'::text)` |
-| WITH CHECK |  |
-
-### `Users can view objection intelligence for their contacts`
-
-| campo | valor |
-|---|---|
-| comando | SELECT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = crm_objection_intelligence.contact_id) AND ((c.user_id = ( SELECT auth.uid() AS uid)) OR ((( SELECT auth.jwt() AS jwt) ->> 'role'::text) = 'service_role'::text)))))` |
-| WITH CHECK |  |
-
-### `Usuários podem gerenciar inteligência de objeções`
-
-| campo | valor |
-|---|---|
-| comando | ALL |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.role() AS role) = 'authenticated'::text)` |
-| WITH CHECK |  |
-
-### `Usuários podem ver inteligência de objeções`
-
-| campo | valor |
-|---|---|
-| comando | SELECT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(( SELECT auth.role() AS role) = 'authenticated'::text)` |
-| WITH CHECK |  |
+| USING | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = crm_objection_intelligence.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))` |
+| WITH CHECK | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = crm_objection_intelligence.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))` |
 
 
 ## Triggers
