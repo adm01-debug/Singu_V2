@@ -25,13 +25,16 @@ export async function logAudit(
 ): Promise<void> {
   try {
     const user_id = callerUserId === SERVICE_ROLE_SENTINEL ? null : callerUserId;
-    await auditClient.from("external_data_audit_log").insert({
+    const { error } = await auditClient.from("external_data_audit_log").insert({
       user_id,
       table_name: table,
       operation,
       outcome,
       payload,
     });
+    if (error) {
+      console.error("audit_log_insert_failed", { operation, table, outcome, error: error.message });
+    }
   } catch (err) {
     console.error("audit_log_insert_failed", {
       operation,
