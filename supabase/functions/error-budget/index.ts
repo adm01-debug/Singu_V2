@@ -138,7 +138,8 @@ Deno.serve(async (req) => {
 
     const downtimeMinutes = downSamples * SAMPLE_INTERVAL_MIN + degradedSamples * SAMPLE_INTERVAL_MIN * 0.5;
     const totalMinutes = WINDOW_HOURS * 60;
-    const uptimePct = totalSamples === 0 ? 100 : Math.max(0, 100 - (downtimeMinutes / totalMinutes) * 100);
+    // F/F25: sem amostras = dados desconhecidos (não assume 100%)
+    const uptimePct: number | null = totalSamples === 0 ? null : Math.max(0, 100 - (downtimeMinutes / totalMinutes) * 100);
 
     const budgetMinutesTotal = totalMinutes * ((100 - SLO_TARGET) / 100);
     const budgetConsumedPct = budgetMinutesTotal === 0 ? 0 : Math.min(150, (downtimeMinutes / budgetMinutesTotal) * 100);
@@ -168,7 +169,8 @@ Deno.serve(async (req) => {
     const response = {
       slo_target_pct: SLO_TARGET,
       window_hours: WINDOW_HOURS,
-      uptime_pct: Number(uptimePct.toFixed(3)),
+      uptime_pct: uptimePct === null ? null : Number(uptimePct.toFixed(3)),
+      no_data: totalSamples === 0,
       downtime_minutes: Number(downtimeMinutes.toFixed(1)),
       budget_total_minutes: Number(budgetMinutesTotal.toFixed(1)),
       budget_consumed_pct: Number(budgetConsumedPct.toFixed(1)),
