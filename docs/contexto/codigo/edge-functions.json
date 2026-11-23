@@ -2580,7 +2580,7 @@
    "nome": "nurturing-runner",
    "entrada": "supabase/functions/nurturing-runner/index.ts",
    "arquivos": 1,
-   "linhas": 319,
+   "linhas": 326,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
