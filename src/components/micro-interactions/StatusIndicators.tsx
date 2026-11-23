@@ -170,5 +170,3 @@ export function ConnectionStatus({ isConnected, className }: ConnectionStatusPro
     </motion.div>
   );
 }
-
-export default { PulsingDot, StatusDot, LiveIndicator, ConnectionStatus };
