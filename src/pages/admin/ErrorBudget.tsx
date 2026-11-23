@@ -81,7 +81,7 @@ export default function ErrorBudget() {
   }
 
   const consumedTone = data.freeze_active ? 'destructive' : data.freeze_warning ? 'warning' : 'success';
-  const uptimeTone = data.uptime_pct >= data.slo_target_pct ? 'success' : 'destructive';
+  const uptimeTone = data.uptime_pct === null ? 'default' : data.uptime_pct >= data.slo_target_pct ? 'success' : 'destructive';
   const freezeBadge = data.freeze_active
     ? { variant: 'destructive' as const, label: '🔴 FREEZE ATIVO', tone: 'destructive' as const }
     : data.freeze_warning
@@ -160,8 +160,8 @@ export default function ErrorBudget() {
         />
         <StatCard
           title="Uptime real (30d)"
-          value={`${data.uptime_pct.toFixed(2)}%`}
-          hint={data.uptime_pct >= data.slo_target_pct ? 'Acima do SLO ✓' : 'Abaixo do SLO'}
+          value={data.uptime_pct === null ? 'Desconhecido' : `${data.uptime_pct.toFixed(2)}%`}
+          hint={data.uptime_pct === null ? 'Sem amostras no período' : data.uptime_pct >= data.slo_target_pct ? 'Acima do SLO ✓' : 'Abaixo do SLO'}
           icon={Activity}
           tone={uptimeTone}
         />

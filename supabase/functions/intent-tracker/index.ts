@@ -79,6 +79,19 @@ Deno.serve(async (req) => {
       });
     }
 
+    // F/F34: verifica origin contra domínio registrado no pixel (impede forjamento de sinais)
+    if (pixel.domain) {
+      const origin = req.headers.get("origin") ?? req.headers.get("referer") ?? "";
+      let originHost = "";
+      try { originHost = new URL(origin).hostname.replace(/^www\./, ""); } catch { /* sem origin */ }
+      const registeredHost = pixel.domain.replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0];
+      if (originHost && registeredHost && originHost !== registeredHost) {
+        return new Response(JSON.stringify({ error: "Origin not permitted" }), {
+          status: 403, headers: { ...cors, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     // Resolve contact_id by email when provided
     let contact_id: string | null = null;
     if (data.contact_email) {
