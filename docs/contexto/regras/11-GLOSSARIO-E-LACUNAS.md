@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d2a5777b86` · branch `main` · 2026-11-23 12:24 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `183969c426` · branch `main` · 2026-11-23 12:37 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -341,6 +341,7 @@ _nenhum item encontrado_
 | status | valor `logged` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`escreve:supabase/functions/evolution-webhook/events.ts` |
 | status | valor `recebida` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts` |
 | status | valor `READ` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/evolution-webhook/messages.ts`<br>`escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`escreve:supabase/functions/_shared/evolution-ownership-contract_test.ts` |
+| status | valor `fechado` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/abm-account-scorer/index.ts` |
 | status | valor `not_found` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/enrich-contacts/index.ts` |
 | status | valor `enriched` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/enrich-contacts/index.ts` |
 | status | valor `already_complete` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/enrich-contacts/index.ts` |
@@ -618,8 +619,7 @@ _nenhum item encontrado_
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/regras_negocio/generate.py` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/components/data-export/AdvancedDataExporter.tsx` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useBIAdvanced.ts` |
-| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useRealtimeNotifications.ts` |
-| … +57 linhas — lista completa em `context.json` | | |
+| … +58 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

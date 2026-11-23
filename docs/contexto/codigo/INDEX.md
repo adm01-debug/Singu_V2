@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d2a5777b86a78c53290a21c6bf7864db07e87baa` (2026-11-23T09:13:26-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `183969c4267a2de972ea7e964884daac7d93943d` (2026-11-23T09:14:21-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3891 |
 | arquivos_codigo | 2240 |
-| linhas_codigo | 418261 |
+| linhas_codigo | 418341 |
 | rotas | 115 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -259,7 +259,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - (nenhum)
 
 ## Edge functions
-- `abm-account-scorer` — tabelas: abm_accounts, abm_buying_committee; chamada por 1 arquivo(s) do front
+- `abm-account-scorer` — tabelas: abm_accounts, abm_buying_committee, deals, interactions; chamada por 1 arquivo(s) do front
 - `abm-whitespace-analyzer` — tabelas: abm_accounts, abm_buying_committee, abm_whitespace_opportunities; chamada por 1 arquivo(s) do front
 - `ai-assistant` — tabelas: ai_chat_messages, ai_chat_threads, companies, contacts; chamada por 1 arquivo(s) do front
 - `ai-email-refine` — tabelas: -; chamada por 1 arquivo(s) do front
@@ -445,7 +445,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25812 nós · 41157 arestas · 3056 comunidades · grafo do commit `d2a5777b`
+- 25812 nós · 41157 arestas · 3056 comunidades · grafo do commit `183969c4`
 - comunidades maiores: ref_lib (321), ref_integrations (315), sonner (307), ref_components (296), lucide-react (276), framer-motion (267), 02_tables.sql (259), react (251), react-router-dom (247), ref_hooks (243), 📖 Dicionário de Dados — SINGU CRM (227), date-fns (223)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -455,7 +455,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - .github/workflows/ci.yml (23)
 - package.json (21)
 - package-lock.json (16)
-- supabase/functions/external-data/index.ts (15)
+- supabase/functions/external-data/index.ts (16)
 - docs/prod-readiness.md (14)
 - docs/qa/security-definer-audit.md (13)
 - tests/rls/security_definer_hardening.sql (12)
@@ -583,6 +583,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-23 `183969c` fix(edges): corrige AR EF-3/EF-11/EF-13/EF-16 (#309)
+- 2026-11-23 `8a6d5a8` fix(ef14): filtro avatar contacts.upsert IS NULL em vez de IS NOT NULL (#311)
 - 2026-11-23 `d2a5777` fix(ef7-ef12): claim atomico sms-campaign, paginacao cron e NaN forecast (#310)
 - 2026-11-22 `1f88d85` feat: integra EF win-loss-record-deal e religa digest de coaching (#306)
 - 2026-11-22 `e608598` chore(deps): bump minimatch 10->11 e postcss-selector-parser 6.0.10->6.1.5 via overrides (#305)
@@ -596,8 +598,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-21 `d1e1811` fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)
 - 2026-11-21 `4bc4a7c` fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)
 - 2026-11-21 `d83acfb` fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)
-- 2026-11-21 `d4ea4a1` fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)
-- 2026-11-21 `84b1bdd` feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -29294,6 +29294,7 @@
    },
    "usada_no_front": 2,
    "usada_em_edges": [
+    "abm-account-scorer",
     "mcp-server"
    ],
    "triggers": [
@@ -39514,6 +39515,7 @@
    },
    "usada_no_front": 50,
    "usada_em_edges": [
+    "abm-account-scorer",
     "bitrix24-webhook",
     "check-health-alerts",
     "check-notifications",

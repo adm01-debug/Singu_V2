@@ -58,12 +58,14 @@
    "nome": "abm-account-scorer",
    "entrada": "supabase/functions/abm-account-scorer/index.ts",
    "arquivos": 1,
-   "linhas": 139,
+   "linhas": 182,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [
     "abm_accounts",
-    "abm_buying_committee"
+    "abm_buying_committee",
+    "deals",
+    "interactions"
    ],
    "rpcs": [],
    "env": [
@@ -91,7 +93,7 @@
    "nome": "abm-whitespace-analyzer",
    "entrada": "supabase/functions/abm-whitespace-analyzer/index.ts",
    "arquivos": 1,
-   "linhas": 181,
+   "linhas": 186,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [
@@ -466,7 +468,7 @@
    "nome": "bulk-revalidate",
    "entrada": "supabase/functions/bulk-revalidate/index.ts",
    "arquivos": 1,
-   "linhas": 195,
+   "linhas": 206,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -1530,7 +1532,7 @@
    "nome": "evolution-bitrix-connector",
    "entrada": "supabase/functions/evolution-bitrix-connector/index.ts",
    "arquivos": 1,
-   "linhas": 481,
+   "linhas": 483,
    "verify_jwt": true,
    "metodos": [
     "GET",
@@ -1573,7 +1575,7 @@
    "nome": "evolution-webhook",
    "entrada": "supabase/functions/evolution-webhook/index.ts",
    "arquivos": 5,
-   "linhas": 685,
+   "linhas": 689,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -1614,7 +1616,7 @@
    "nome": "external-data",
    "entrada": "supabase/functions/external-data/index.ts",
    "arquivos": 8,
-   "linhas": 1103,
+   "linhas": 1113,
    "verify_jwt": true,
    "metodos": [
     "DELETE",
@@ -2538,7 +2540,7 @@
    "nome": "next-best-action",
    "entrada": "supabase/functions/next-best-action/index.ts",
    "arquivos": 1,
-   "linhas": 159,
+   "linhas": 164,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [

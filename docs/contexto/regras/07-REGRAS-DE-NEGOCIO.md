@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d2a5777b86` · branch `main` · 2026-11-23 12:24 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `183969c426` · branch `main` · 2026-11-23 12:37 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1623,9 +1623,9 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `changed` | compara | `src/components/admin/RpcPlanDiffDialog.tsx`<br>`src/components/intel/MetadataDiffPanel.tsx`<br>`src/components/search/PresetFiltersDiff.tsx`<br>`src/lib/rpcPlanDiff.ts` |
 | `status` | `clicked` | compara, escreve | `src/hooks/useSmartNotifications.ts` |
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
-| `status` | `completed` | compara, escreve | `src/components/company-detail/CompanyCommercialTab.tsx`<br>`src/components/contact-detail/commercial-tab/TasksCard.tsx`<br>`src/components/gamification/UserGoalsWidget.tsx`<br>`src/components/lux/LuxHistoryTimeline.tsx`<br>`src/components/lux/LuxIntelligencePanel.tsx`<br>… +9 |
-| `status` | `connected` | compara | `src/components/whatsapp/WhatsAppDashboard.tsx` |
-| … +177 linhas — lista completa em `context.json` | | | |
+| `status` | `closed_lost` | compara | `supabase/functions/abm-account-scorer/index.ts` |
+| `status` | `closed_won` | compara | `supabase/functions/abm-account-scorer/index.ts` |
+| … +180 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -3760,6 +3760,7 @@ _nenhum item encontrado_
 | `ERROR_RATE_THRESHOLD` | `10` | `supabase/functions/auto-regen-behavioral-profiles/index.ts` |
 | `MIN_SAMPLE` | `5` | `supabase/functions/auto-regen-behavioral-profiles/index.ts` |
 | `MAX_BYTES` | `512` | `supabase/functions/bitrix24-webhook/index.ts` |
+| `PAGE` | `1000` | `supabase/functions/bulk-revalidate/index.ts` |
 | `SLO_TARGET` | `99.5` | `supabase/functions/error-budget/index.ts` |
 | `WINDOW_HOURS` | `720` | `supabase/functions/error-budget/index.ts` |
 | `SAMPLE_INTERVAL_MIN` | `5` | `supabase/functions/error-budget/index.ts` |
@@ -4358,7 +4359,6 @@ _nenhum item encontrado_
 | 20 | `supabase/functions/ai-assistant/index.ts` |
 | 1 | `supabase/functions/auto-regen-behavioral-profiles/index.ts` |
 | 1 | `supabase/functions/bitrix24-webhook/index.ts` |
-| 5000 | `supabase/functions/bulk-revalidate/index.ts` |
 | 100 | `supabase/functions/client-notifications/index.ts` |
 | 2000 | `supabase/functions/client-notifications/index.ts` |
 | 100 | `supabase/functions/connection-anomaly-detector/index.ts` |
@@ -4384,7 +4384,8 @@ _nenhum item encontrado_
 | 1 | `supabase/functions/health/index.ts` |
 | 1 | `supabase/functions/health-aggregate/index.ts` |
 | 5000 | `supabase/functions/intent-aggregator/index.ts` |
-| … +22 linhas — lista completa em `context.json` | |
+| 1000 | `supabase/functions/mql-evaluator/index.ts` |
+| … +21 linhas — lista completa em `context.json` | |
 
 ## I. Regras implícitas em mensagens de erro/validação
 
@@ -4690,7 +4691,7 @@ _nenhum item encontrado_
 | Comando desconhecido: ${cmd} | `src/components/intelligence/AskTab.tsx` |
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
 | Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
-| … +800 linhas — lista completa em `context.json` | |
+| … +801 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -5342,11 +5343,10 @@ _nenhum item encontrado_
 | Debounce: só reanalisa se passou intervalo mínimo | `supabase/functions/auto-rebatch-behavioral/index.ts` |
 | Rate-limit gentle entre chamadas de IA | `supabase/functions/auto-rebatch-behavioral/index.ts` |
 | guardBody always calls req.json() so it must not be used for form-urlencoded: | `supabase/functions/bitrix24-webhook/index.ts` |
-| Busca contatos do usuário (limite alto para filtrar localmente) | `supabase/functions/bulk-revalidate/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/check-notifications/index.ts` |
 | clear-must-reset-flag | `supabase/functions/clear-must-reset-flag/index.ts` |
 | ── Rate limit ── | `supabase/functions/disc-analyzer/index.ts` |
-| Atualiza somente contatos sem avatar personalizado | `supabase/functions/evolution-webhook/events.ts` |
+| Atualiza somente contatos sem avatar personalizado (IS NULL) | `supabase/functions/evolution-webhook/events.ts` |
 | Por que o cliente de usuário não pode ser criado. O JWT do usuário só vale | `supabase/functions/external-data/database.ts` |
 | ─── RPC (call external database functions) — must run BEFORE table validation ─── | `supabase/functions/external-data/index.ts` |
 | ─── Table validation (for non-RPC actions) ─── | `supabase/functions/external-data/index.ts` |
@@ -5457,4 +5457,5 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| … +45 linhas — lista completa em `context.json` | |
+| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
+| … +44 linhas — lista completa em `context.json` | |
