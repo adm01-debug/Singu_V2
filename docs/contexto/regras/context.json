@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "9ca4bab54ef7f49e9ed39ec8af24ff9bb694fe69",
+  "sha": "c6d9be5c08e4705c399ba7856572c7d3d398533e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-23 21:51 UTC",
+  "generated_at": "2026-11-23 22:47 UTC",
   "files_total": 4013,
   "code_files": 3538,
   "code_lines": 478079
@@ -306964,10 +306964,19 @@
   }
  },
  "git": {
-  "sha": "9ca4bab54ef7f49e9ed39ec8af24ff9bb694fe69",
+  "sha": "c6d9be5c08e4705c399ba7856572c7d3d398533e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "c6d9be5",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)",
+    "files": [
+     ".github/workflows/smoke-edges-pendentes.yml"
+    ]
+   },
    {
     "sha": "9ca4bab",
     "date": "2026-11-23",
@@ -307346,21 +307355,16 @@
     "files": [
      "src/pages/Insights.tsx"
     ]
-   },
-   {
-    "sha": "62379b7",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)",
-    "files": [
-     "docs/pendencias/_linha-de-base.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/nurturing-runner/index.ts",
     3
+   ],
+   [
+    ".github/workflows/smoke-edges-pendentes.yml",
+    2
    ],
    [
     "package-lock.json",
@@ -307404,10 +307408,6 @@
    ],
    [
     ".github/workflows/dependency-review.yml",
-    1
-   ],
-   [
-    ".github/workflows/smoke-edges-pendentes.yml",
     1
    ],
    [

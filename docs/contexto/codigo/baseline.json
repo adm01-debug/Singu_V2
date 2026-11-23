@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "9ca4bab54ef7f49e9ed39ec8af24ff9bb694fe69",
+  "commit": "c6d9be5c08e4705c399ba7856572c7d3d398533e",
   "branch": "main",
-  "data_commit": "2026-11-23T18:50:27-03:00",
+  "data_commit": "2026-11-23T19:46:25-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "c6d9be5",
+    "data": "2026-11-23",
+    "assunto": "fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)"
+   },
    {
     "sha": "9ca4bab",
     "data": "2026-11-23",
@@ -126,11 +131,6 @@
     "sha": "4bc4a7c",
     "data": "2026-11-21",
     "assunto": "fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)"
-   },
-   {
-    "sha": "d83acfb",
-    "data": "2026-11-21",
-    "assunto": "fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)"
    }
   ],
   "arquivos_mudados_7d": 1036,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 154
+    "commits": 155
    },
    {
     "autor": "devin-ai-integration[bot]",
