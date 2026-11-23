@@ -14,8 +14,12 @@ Deno.serve(async (req) => {
   const auth = await withAuthOrServiceRole(req);
   if (auth instanceof Response) return auth;
 
-  const rl = limiter.check(userId, req);
-  if (rl) return rl;
+  // F/F15: service-role (chamadas internas) n?o ? rate-limitado; JWT usa userId do token
+  const callerUserId = isServiceRoleCaller(auth) ? null : auth;
+  if (callerUserId) {
+    const rl = limiter.check(callerUserId, req);
+    if (rl) return rl;
+  }
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -24,6 +28,7 @@ Deno.serve(async (req) => {
 
   const start = Date.now();
   let result: Record<string, unknown> = {};
+  let userId: string | null = null;
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
   if (bodyError) return bodyError;
@@ -36,7 +41,7 @@ Deno.serve(async (req) => {
     if (!vc.ok) return jsonError(vc.error, 400, req);
     const { contact_id } = vc.data as { contact_id: string };
     // F/F15: service-role caller usa user_id do body; JWT caller usa auth do token
-    const userId = isServiceRoleCaller(auth)
+    userId = isServiceRoleCaller(auth)
       ? (vc.data as { user_id?: string }).user_id ?? null
       : auth;
     if (!userId) return jsonError("user_id obrigatório para chamadas internas service-role", 400, req);

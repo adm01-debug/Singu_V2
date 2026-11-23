@@ -142,6 +142,15 @@ Deno.serve(async (req: Request) => {
 
   type AlertRow = { user_id: string; contact_id: string; type: string; title: string; description: string; priority: string; expires_at?: string };
   const pendingAlerts: AlertRow[] = [];
+  const pendingTasks: Array<{
+    user_id: string;
+    contact_id: string;
+    title: string;
+    description: string;
+    priority: string;
+    status: string;
+    due_date: string;
+  }> = [];
   let accumulatedTags = [...contactCurrentTags];
   let tagsModified = false;
 
