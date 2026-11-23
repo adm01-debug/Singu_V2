@@ -1,0 +1,146 @@
+# docs:
+#   gatilho: so manual (workflow_dispatch) — Actions, Deploy edge functions, Run workflow
+#   prova: as funcoes de supabase/functions ficam publicadas em pgxfvjmuubtbowutlide; apos publicar, voice-ai-health responde com a mensagem do codigo atual (DEEPSEEK_API_KEY) e nao com a antiga (LOVABLE_API_KEY), provando que a defasagem de build acabou
+#   falha: preflight vermelho quando SUPABASE_ACCESS_TOKEN esta ausente, revogado ou sem acesso ao projeto (o log diz o HTTP e como renovar); publicacao parcial fica vermelha e o resumo nomeia quem falhou
+#   avisa: ninguem — quem disparou le o resumo do run
+# nao-e-bug:
+#   - verify_jwt nao vem de flag: e lido de supabase/config.toml (fonte unica), para nao abrir nem fechar funcao por engano
+#   - sem gatilho em push: deploy de edge em producao e sempre manual e deliberado
+name: Deploy edge functions
+
+on:
+  workflow_dispatch:
+    inputs:
+      funcoes:
+        description: "all ou lista de nomes separada por virgula"
+        required: true
+        default: all
+        type: string
+      dry_run:
+        description: "Apenas listar o que seria publicado"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-edge-functions
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_REF: pgxfvjmuubtbowutlide
+      SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Preflight do token e das variaveis
+        run: |
+          set -euo pipefail
+          if [ -z "${SUPABASE_ACCESS_TOKEN}" ]; then
+            echo "::error::SUPABASE_ACCESS_TOKEN nao esta cadastrado. Crie em supabase.com -> Account -> Access Tokens e cadastre em Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          code=$(curl -s -o /tmp/projs.json -w '%{http_code}' https://api.supabase.com/v1/projects -H "Authorization: Bearer ${SUPABASE_ACCESS_TOKEN}")
+          if [ "${code}" != "200" ]; then
+            echo "::error::SUPABASE_ACCESS_TOKEN recusado (HTTP ${code}): $(head -c 200 /tmp/projs.json)"
+            echo "Renove o token em supabase.com -> Account -> Access Tokens e atualize o secret do repositorio."
+            exit 1
+          fi
+          jq -e --arg ref "${PROJECT_REF}" 'any(.[]; .id == $ref)' /tmp/projs.json > /dev/null \
+            || { echo "::error::O token nao tem acesso ao projeto ${PROJECT_REF}."; exit 1; }
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_ANON_KEY}" ]; then
+            echo "::error::As variaveis de repositorio SUPABASE_URL e SUPABASE_ANON_KEY sao necessarias."
+            exit 1
+          fi
+          echo "Preflight OK: token valido e com acesso a ${PROJECT_REF}."
+
+      - name: Selecionar funcoes
+        run: |
+          set -euo pipefail
+          alvo='${{ inputs.funcoes }}'
+          : > /tmp/alvo.txt
+          for d in supabase/functions/*/; do
+            n=$(basename "${d}")
+            [ "${n}" = "_shared" ] && continue
+            [ -f "${d}index.ts" ] && echo "${n}"
+          done | LC_ALL=C sort > /tmp/repo.txt
+          if [ "${alvo}" = "all" ]; then
+            cp /tmp/repo.txt /tmp/alvo.txt
+          else
+            for p in $(echo "${alvo}" | tr ',' ' '); do
+              grep -qx "${p}" /tmp/repo.txt \
+                || { echo "::error::funcao inexistente em supabase/functions: ${p}"; exit 1; }
+              echo "${p}" >> /tmp/alvo.txt
+            done
+          fi
+          echo "no_repo=$(wc -l < /tmp/repo.txt) selecionadas=$(wc -l < /tmp/alvo.txt)"
+          sed 's/^/  - /' /tmp/alvo.txt
+
+      - name: Instalar Supabase CLI
+        if: inputs.dry_run == false
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Dry-run
+        if: inputs.dry_run == true
+        run: |
+          echo "dry_run=true: nada foi publicado. Funcoes que seriam publicadas:"
+          sed 's/^/  - /' /tmp/alvo.txt
+
+      - name: Publicar
+        if: inputs.dry_run == false
+        run: |
+          set -uo pipefail
+          ok=0
+          fail=0
+          falhas=""
+          while IFS= read -r fn; do
+            printf '-> %s ... ' "${fn}"
+            if supabase functions deploy "${fn}" --project-ref "${PROJECT_REF}" > /tmp/saida.txt 2>&1; then
+              echo OK
+              ok=$((ok + 1))
+            else
+              echo FALHOU
+              fail=$((fail + 1))
+              falhas="${falhas} ${fn}"
+              sed -n '1,15p' /tmp/saida.txt | sed 's/^/    /'
+            fi
+          done < /tmp/alvo.txt
+          echo "Resumo: OK=${ok} FALHA=${fail}"
+          if [ "${fail}" -gt 0 ]; then
+            echo "::error::Falharam:${falhas}"
+            exit 1
+          fi
+
+      - name: Prova pos-deploy (fim da defasagem)
+        if: inputs.dry_run == false
+        run: |
+          set -uo pipefail
+          resp=$(curl -sS "${SUPABASE_URL}/functions/v1/voice-ai-health" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+          echo "voice-ai-health: $(printf '%s' "${resp}" | head -c 400)"
+          if printf '%s' "${resp}" | grep -q 'LOVABLE_API_KEY'; then
+            echo "::error::voice-ai-health ainda responde com o build antigo (LOVABLE_API_KEY): a defasagem nao foi encerrada."
+            exit 1
+          fi
+          printf '%s' "${resp}" | grep -q 'DEEPSEEK_API_KEY' \
+            || echo "::warning::Resposta sem DEEPSEEK_API_KEY. Confira o corpo impresso acima."
+
+      - name: Conferencia do verify_jwt
+        if: inputs.dry_run == false
+        run: |
+          set -euo pipefail
+          curl -s "https://api.supabase.com/v1/projects/${PROJECT_REF}/functions" \
+            -H "Authorization: Bearer ${SUPABASE_ACCESS_TOKEN}" \
+            | jq -r '[.[] | select(.verify_jwt == false) | .slug] | sort | @tsv' > /tmp/pub.txt
+          echo "publicas (verify_jwt=false): $(wc -w < /tmp/pub.txt)"
+          tr '\t' '\n' < /tmp/pub.txt | grep . | sed 's/^/  - /'
+          echo "Esperado: as mesmas de supabase/config.toml. Diferenca aqui significa que a politica de JWT divergiu do repositorio."

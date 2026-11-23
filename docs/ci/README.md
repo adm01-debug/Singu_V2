@@ -4,12 +4,13 @@
 > este arquivo divergir do bloco `# docs:` de cada workflow. Para mudar o texto daqui, mude o
 > bloco no YAML.
 
-**13 workflows, 11 com bloco `# docs:`.**
+**14 workflows, 12 com bloco `# docs:`.**
 
 | Workflow | Arquivo | Gatilho | O que prova | Quando falha | Quem é avisado | Custo/sem (min) | Falha (7 d) |
 |---|---|---|---|---|---|---|---|
 | Automação local | [`automation-local.yml`](../../.github/workflows/automation-local.yml) | PR para main, push em main e execução manual. | Contratos estáticos e suites locais de automação em fixtures isoladas. | O job falha; nenhum patch, commit, publicação ou deploy é executado. | O check fica vermelho no GitHub para o autor da PR e mantenedores. | — | — |
 | Contexto para agentes de IA (10 min) | [`contexto.yml`](../../.github/workflows/contexto.yml) | push em main que toque código, banco, scripts das automações ou docs/contexto/regras/manual/; a cada 10 min (minuto 3); dispatch | branch contexto com docs/contexto/{codigo,supabase,regras}/ regerados das três fontes de verdade (código em main, banco oficial, código+migrations+manual/) e docs/contexto/00-INDEX.md montado a partir dos manifests | falha fatal de produtor reprova o workflow; fontes com artefato publicam e as demais mantêm a última versão; erro de download impede a publicação | ninguém (a branch contexto é a prova; errors.md em supabase/ e erros_do_gerador em codigo/ listam seções com falha) | — | — |
+| Deploy edge functions | [`deploy-edge-functions.yml`](../../.github/workflows/deploy-edge-functions.yml) | so manual (workflow_dispatch) — Actions, Deploy edge functions, Run workflow | as funcoes de supabase/functions ficam publicadas em pgxfvjmuubtbowutlide; apos publicar, voice-ai-health responde com a mensagem do codigo atual (DEEPSEEK_API_KEY) e nao com a antiga (LOVABLE_API_KEY), provando que a defasagem de build acabou | preflight vermelho quando SUPABASE_ACCESS_TOKEN esta ausente, revogado ou sem acesso ao projeto (o log diz o HTTP e como renovar); publicacao parcial fica vermelha e o resumo nomeia quem falhou | ninguem — quem disparou le o resumo do run | — | — |
 | Documentação sem drift | [`docs-ci.yml`](../../.github/workflows/docs-ci.yml) | pull_request e push em main que toquem workflows, scripts/ci/, scripts/docs/, qualquer .md, src/ ou supabase/ | docs/ci/README.md e a projecao exata dos blocos "# docs:" dos workflows, e nenhuma citacao arquivo:linha nova quebrada nos .md | PR vermelha nomeando o comando a rodar (render-workflow-docs.mjs ou verificar-citacoes.mjs) | ninguem — o check da PR e o aviso | — | — |
 | Estado real do repositório | [`estado-real.yml`](../../.github/workflows/estado-real.yml) | pull_request e push em main que toquem workflows, scripts/, AGENTS.md, CLAUDE.md, docs/agentes/ ou supabase/functions/ | todo teste do disco e executado por algum workflow, os invariantes do ci.yml valem, e as instrucoes para agentes nao foram esvaziadas | a PR fica vermelha nomeando o arquivo orfao, o invariante violado ou o arquivo de instrucoes que encolheu | ninguem — o check da PR e o aviso | — | — |
 | Fix JWT proxies externas | [`fix-jwt-proxies-externas.yml`](../../.github/workflows/fix-jwt-proxies-externas.yml) | so manual (workflow_dispatch) — Actions, Fix JWT proxies externas, Run workflow | as 23 proxies externas deployadas sem codigo no repositorio ficam com verify_jwt = false fechado, e a conferencia final sai vazia | alguma proxy nao aceitou a mudanca; o job fica vermelho e o estado final lista quem sobrou | ninguem — quem disparou le o resumo do run | — | — |
@@ -35,6 +36,13 @@
 - **O que prova:** branch contexto com docs/contexto/{codigo,supabase,regras}/ regerados das três fontes de verdade (código em main, banco oficial, código+migrations+manual/) e docs/contexto/00-INDEX.md montado a partir dos manifests
 - **Quando falha:** falha fatal de produtor reprova o workflow; fontes com artefato publicam e as demais mantêm a última versão; erro de download impede a publicação
 - **Quem é avisado:** ninguém (a branch contexto é a prova; errors.md em supabase/ e erros_do_gerador em codigo/ listam seções com falha)
+
+### Deploy edge functions (`deploy-edge-functions.yml`)
+
+- **Gatilho:** so manual (workflow_dispatch) — Actions, Deploy edge functions, Run workflow
+- **O que prova:** as funcoes de supabase/functions ficam publicadas em pgxfvjmuubtbowutlide; apos publicar, voice-ai-health responde com a mensagem do codigo atual (DEEPSEEK_API_KEY) e nao com a antiga (LOVABLE_API_KEY), provando que a defasagem de build acabou
+- **Quando falha:** preflight vermelho quando SUPABASE_ACCESS_TOKEN esta ausente, revogado ou sem acesso ao projeto (o log diz o HTTP e como renovar); publicacao parcial fica vermelha e o resumo nomeia quem falhou
+- **Quem é avisado:** ninguem — quem disparou le o resumo do run
 
 ### Documentação sem drift (`docs-ci.yml`)
 
@@ -108,6 +116,8 @@
 | [`contexto.yml`](../../.github/workflows/contexto.yml) | **sem-commit** | "nada mudou" no publicar significa que nenhuma das três fontes mudou desde a última publicação |
 | [`contexto.yml`](../../.github/workflows/contexto.yml) | **metricas** | métricas/manifests do banco aguardam 60 min desde a coleta publicada; commits de código não reiniciam o prazo; data ausente/inválida/futura e mudanças de saúde/estado do índice publicam sem espera |
 | [`contexto.yml`](../../.github/workflows/contexto.yml) | **banco-pulado** | sem o secret SUPABASE_DB_URL o job do banco sai verde com aviso e a pasta supabase/ fica como estava |
+| [`deploy-edge-functions.yml`](../../.github/workflows/deploy-edge-functions.yml) | **verify_jwt nao vem de flag** | e lido de supabase/config.toml (fonte unica), para nao abrir nem fechar funcao por engano |
+| [`deploy-edge-functions.yml`](../../.github/workflows/deploy-edge-functions.yml) | **sem gatilho em push** | deploy de edge em producao e sempre manual e deliberado |
 | [`docs-ci.yml`](../../.github/workflows/docs-ci.yml) | **catraca-citacoes** | as 184 citacoes já quebradas em 2026-11-08 estao no baseline e nao reprovam ninguem; a lista so pode encolher |
 | [`estado-real.yml`](../../.github/workflows/estado-real.yml) | **allowlist-deno** | os 15 testes Deno que ja estavam fora do CI em 2026-11-08 estao na ALLOWLIST_DENO de check-test-inventory.mjs e nao reprovam ninguem; a lista so pode encolher |
 | [`higiene-semanal.yml`](../../.github/workflows/higiene-semanal.yml) | **nada-apagado** | o bloco `git push origin --delete` e so texto na issue; nenhum passo apaga branch |
