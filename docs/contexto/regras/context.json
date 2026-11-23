@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "14096c0073fe35401f79a653aca84de4ce8570b6",
+  "sha": "d19dec8d0a1aeaa3dc9d91394e149bdfd0aec885",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-23 14:12 UTC",
+  "generated_at": "2026-11-23 14:31 UTC",
   "files_total": 3996,
   "code_files": 3522,
-  "code_lines": 475071
+  "code_lines": 475087
  },
  "version": "1.3.2",
- "facts_hash": "259053a4b60b2509",
+ "facts_hash": "797805d5b035c0d4",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -111121,7 +111121,7 @@
   {
    "module": "src/hooks",
    "files": 443,
-   "lines": 58452,
+   "lines": 58453,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -112053,7 +112053,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 27294,
+   "lines": 27309,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -271538,7 +271538,7 @@
   },
   "src/hooks/useErrorBudget.ts": {
    "path": "src/hooks/useErrorBudget.ts",
-   "lines": 50,
+   "lines": 51,
    "exports": [
     "interface DailyUptimePoint",
     "interface ActiveErrorBudgetAlert",
@@ -293670,7 +293670,7 @@
   },
   "supabase/functions/error-budget/index.ts": {
    "path": "supabase/functions/error-budget/index.ts",
-   "lines": 197,
+   "lines": 199,
    "tables": [
     {
      "table": "system_alerts",
@@ -295752,7 +295752,7 @@
   },
   "supabase/functions/intent-tracker/index.ts": {
    "path": "supabase/functions/intent-tracker/index.ts",
-   "lines": 135,
+   "lines": 148,
    "tables": [
     {
      "table": "intent_tracking_pixels",
@@ -306206,10 +306206,23 @@
   }
  },
  "git": {
-  "sha": "14096c0073fe35401f79a653aca84de4ce8570b6",
+  "sha": "d19dec8d0a1aeaa3dc9d91394e149bdfd0aec885",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "d19dec8",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)",
+    "files": [
+     "docs/lacunas/B2_reverificacao_estado_05_10.md",
+     "src/hooks/useErrorBudget.ts",
+     "src/pages/admin/ErrorBudget.tsx",
+     "supabase/functions/error-budget/index.ts",
+     "supabase/functions/intent-tracker/index.ts"
+    ]
+   },
    {
     "sha": "14096c0",
     "date": "2026-11-23",
@@ -306657,13 +306670,6 @@
     "files": [
      "supabase/migrations/20260109144944_1cfd4579-a713-4b94-89fc-38494c14566f.sql"
     ]
-   },
-   {
-    "sha": "e9d33fd",
-    "date": "2026-11-20",
-    "author": "adm01-debug",
-    "subject": "Merge pull request #282 from adm01-debug/claude/fix-restaura-linked-project-261120-1110",
-    "files": []
    }
   ],
   "hot_files": [
@@ -306686,6 +306692,26 @@
    [
     "docs/pendencias/_linha-de-base.md",
     2
+   ],
+   [
+    "docs/lacunas/B2_reverificacao_estado_05_10.md",
+    1
+   ],
+   [
+    "src/hooks/useErrorBudget.ts",
+    1
+   ],
+   [
+    "src/pages/admin/ErrorBudget.tsx",
+    1
+   ],
+   [
+    "supabase/functions/error-budget/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/intent-tracker/index.ts",
+    1
    ],
    [
     "supabase/functions/territory-optimization/index.ts",
@@ -306725,26 +306751,6 @@
    ],
    [
     "supabase/functions/abm-account-scorer/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/evolution-webhook/events.ts",
-    1
-   ],
-   [
-    "supabase/functions/evolution-webhook/messages.ts",
-    1
-   ],
-   [
-    "supabase/functions/forecast-snapshot-cron/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/lead-score-cron/index.ts",
-    1
-   ],
-   [
-    "src/hooks/useConversationIntel.ts",
     1
    ]
   ]

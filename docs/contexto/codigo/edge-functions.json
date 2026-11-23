@@ -1468,7 +1468,7 @@
    "nome": "error-budget",
    "entrada": "supabase/functions/error-budget/index.ts",
    "arquivos": 1,
-   "linhas": 197,
+   "linhas": 199,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -2214,7 +2214,7 @@
    "nome": "intent-tracker",
    "entrada": "supabase/functions/intent-tracker/index.ts",
    "arquivos": 1,
-   "linhas": 135,
+   "linhas": 148,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS",

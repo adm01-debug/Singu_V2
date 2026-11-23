@@ -4899,7 +4899,7 @@
    "hooks_exportados": [
     "useErrorBudget"
    ],
-   "linhas": 50,
+   "linhas": 51,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
