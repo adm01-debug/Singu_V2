@@ -68,15 +68,25 @@ Deno.serve(async (req) => {
     const targetEmail = kind === "email" || kind === "both";
     const targetPhone = kind === "phone" || kind === "both";
 
-    // Busca contatos do usuário (limite alto para filtrar localmente)
-    const { data: contacts, error: cErr } = await admin
-      .from("contacts")
-      .select("id, email, phone")
-      .eq("user_id", userId)
-      .limit(5000);
-    if (cErr) throw cErr;
-
-    const contactList = (contacts ?? []) as ContactRow[];
+    // Busca contatos do usuário com paginação para não truncar
+    const PAGE = 1000;
+    let contactList: ContactRow[] = [];
+    let contactOffset = 0;
+    let contactsUniverseTruncated = false;
+    while (true) {
+      const { data: page, error: cErr } = await admin
+        .from("contacts")
+        .select("id, email, phone")
+        .eq("user_id", userId)
+        .range(contactOffset, contactOffset + PAGE - 1);
+      if (cErr) throw cErr;
+      const rows = (page ?? []) as ContactRow[];
+      contactList = contactList.concat(rows);
+      if (rows.length < PAGE) break;
+      contactOffset += PAGE;
+      // Safety cap: 50k contacts por run
+      if (contactList.length >= 50000) { contactsUniverseTruncated = true; break; }
+    }
 
     const emailItems: Array<{ contactId: string; value: string }> = [];
     const phoneItems: Array<{ contactId: string; value: string }> = [];
@@ -117,6 +127,7 @@ Deno.serve(async (req) => {
       phones: phoneItems.length,
       total: allItems.length,
       cappedAt: limit,
+      ...(contactsUniverseTruncated ? { universe_truncated: true, universe_cap: 50000 } : {}),
     };
 
     if (dryRun) {

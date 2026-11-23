@@ -87,7 +87,12 @@ Para cada oportunidade, retorne tipo, categoria de produto/serviço, valor estim
   const toolCall = data?.choices?.[0]?.message?.tool_calls?.[0];
   if (!toolCall?.function?.arguments) return [];
 
-  const args = JSON.parse(toolCall.function.arguments);
+  let args: Record<string, unknown>;
+  try {
+    args = JSON.parse(toolCall.function.arguments);
+  } catch {
+    return [];
+  }
   return Array.isArray(args.opportunities) ? args.opportunities : [];
 }
 

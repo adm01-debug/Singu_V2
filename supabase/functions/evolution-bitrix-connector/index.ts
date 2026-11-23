@@ -143,7 +143,8 @@ async function getOAuthToken(): Promise<string> {
   if (new Date(tokenData.expires_at).getTime() - Date.now() > 5 * 60 * 1000) return tokenData.access_token;
   const resp = await fetch("https://oauth.bitrix.info/oauth/token/", {
     method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ grant_type: "refresh_token", client_id: BITRIX_CLIENT_ID, client_secret: BITRIX_CLIENT_SECRET, refresh_token: tokenData.refresh_token })
+    body: new URLSearchParams({ grant_type: "refresh_token", client_id: BITRIX_CLIENT_ID, client_secret: BITRIX_CLIENT_SECRET, refresh_token: tokenData.refresh_token }),
+    signal: AbortSignal.timeout(15_000),
   });
   const result = await resp.json();
   if (result.error) throw new Error(`OAuth: ${result.error_description}`);
@@ -152,7 +153,7 @@ async function getOAuthToken(): Promise<string> {
 }
 
 async function b24(method: string, params: Record<string, unknown> = {}) {
-  const resp = await fetch(`${BITRIX_WEBHOOK}/${method}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(params) });
+  const resp = await fetch(`${BITRIX_WEBHOOK}/${method}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(params), signal: AbortSignal.timeout(15_000) });
   return resp.json();
 }
 
@@ -169,6 +170,7 @@ async function callBitrixAsUser<T>(
         method: "POST",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
         body: JSON.stringify(params),
+        signal: AbortSignal.timeout(15_000),
       },
     );
     if (!response.ok) return null;
@@ -267,7 +269,7 @@ async function handleInbound(payload: ConnectorPayload): Promise<Response> {
     { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
       CONNECTOR: CONNECTOR_ID, LINE: LINE_ID,
       MESSAGES: [{ user: { id: number, last_name: "", name: crm.contactName || pushName, picture: { url: "" } }, message: { id: messageId, date: timestamp, text: messageText }, chat: { id: number } }]
-    })}
+    }), signal: AbortSignal.timeout(15_000) }
   );
   const result = await resp.json();
   let transferResult = null;
@@ -275,7 +277,7 @@ async function handleInbound(payload: ConnectorPayload): Promise<Response> {
     const chatId = result?.result?.DATA?.RESULT?.[0]?.session?.CHAT_ID;
     if (chatId) {
       try { transferResult = await fetch(`${BITRIX_PORTAL}/rest/imopenlines.operator.transfer?auth=${accessToken}`,
-        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ CHAT_ID: parseInt(chatId), TRANSFER_ID: crm.responsibleId }) }
+        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ CHAT_ID: parseInt(chatId), TRANSFER_ID: crm.responsibleId }), signal: AbortSignal.timeout(10_000) }
       ).then(r => r.json()); } catch (error) {
         console.warn("Falha ao transferir atendimento no Bitrix", error);
       }
@@ -296,7 +298,7 @@ async function handleOutbound(payload: ConnectorPayload): Promise<Response> {
     const text = msg.message?.text;
     if (!chatId || !text) { results.push({ skip: "missing_data" }); continue; }
     const resp = await fetch(`${EVOLUTION_URL}/message/sendText/${EVOLUTION_INSTANCE}`,
-      { method: "POST", headers: { "Content-Type": "application/json", "apikey": EVOLUTION_APIKEY }, body: JSON.stringify({ number: chatId, text, delay: 1200 }) }
+      { method: "POST", headers: { "Content-Type": "application/json", "apikey": EVOLUTION_APIKEY }, body: JSON.stringify({ number: chatId, text, delay: 1200 }), signal: AbortSignal.timeout(15_000) }
     );
     const result = await resp.json();
     results.push({ chatId, sent: true, evolution: result });
@@ -336,7 +338,7 @@ async function handleOpenChat(
   phone = phone.replace(/\D/g, "");
   let hasWhatsApp = true;
   const checkResp = await fetch(`${EVOLUTION_URL}/chat/whatsappNumbers/${EVOLUTION_INSTANCE}`,
-    { method: "POST", headers: { "Content-Type": "application/json", "apikey": EVOLUTION_APIKEY }, body: JSON.stringify({ numbers: [phone] }) }
+    { method: "POST", headers: { "Content-Type": "application/json", "apikey": EVOLUTION_APIKEY }, body: JSON.stringify({ numbers: [phone] }), signal: AbortSignal.timeout(15_000) }
   );
   if (!checkResp.ok) return json({ error: "Falha ao verificar WhatsApp" }, 502);
   const checkResult = await checkResp.json();
@@ -350,7 +352,7 @@ async function handleOpenChat(
     { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
       CONNECTOR: CONNECTOR_ID, LINE: LINE_ID,
       MESSAGES: [{ user: { id: phone, last_name: "", name: contactName, picture: { url: "" } }, message: { id: "open_" + Date.now(), date: Math.floor(Date.now() / 1000), text: "[Conversa iniciada pelo operador]" }, chat: { id: phone } }]
-    })}
+    }), signal: AbortSignal.timeout(15_000) }
   );
   const result = await resp.json();
   const chatId = result?.result?.DATA?.RESULT?.[0]?.session?.CHAT_ID;
