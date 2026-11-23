@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "36d59c2ec969239671e17937a67408d7e3a0c563",
+  "commit": "76a33c0da4f5704fc75dab3d4ee7d06067ccf916",
   "branch": "main",
-  "data_commit": "2026-11-23T16:48:29-03:00",
+  "data_commit": "2026-11-23T16:55:18-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "76a33c0",
+    "data": "2026-11-23",
+    "assunto": "chore(matriz): marca EF-3/5/7/11/12/13/14/16/17 e F/F15/19/25/34/36/37/40/60/62 como RC (#319)"
+   },
    {
     "sha": "36d59c2",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "d4ea4a1",
     "data": "2026-11-21",
     "assunto": "fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)"
-   },
-   {
-    "sha": "84b1bdd",
-    "data": "2026-11-21",
-    "assunto": "feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)"
    }
   ],
-  "arquivos_mudados_7d": 1035,
+  "arquivos_mudados_7d": 1036,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 152
+    "commits": 153
    },
    {
     "autor": "devin-ai-integration[bot]",

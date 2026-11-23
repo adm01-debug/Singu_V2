@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "36d59c2ec969239671e17937a67408d7e3a0c563",
+  "sha": "76a33c0da4f5704fc75dab3d4ee7d06067ccf916",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-23 19:52 UTC",
+  "generated_at": "2026-11-23 20:11 UTC",
   "files_total": 4013,
   "code_files": 3538,
   "code_lines": 478076
@@ -306964,10 +306964,19 @@
   }
  },
  "git": {
-  "sha": "36d59c2ec969239671e17937a67408d7e3a0c563",
+  "sha": "76a33c0da4f5704fc75dab3d4ee7d06067ccf916",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "76a33c0",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "chore(matriz): marca EF-3/5/7/11/12/13/14/16/17 e F/F15/19/25/34/36/37/40/60/62 como RC (#319)",
+    "files": [
+     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_EDGE.md"
+    ]
+   },
    {
     "sha": "36d59c2",
     "date": "2026-11-23",
@@ -307346,15 +307355,6 @@
     "files": [
      "supabase/migrations/20260110000000_baseline_tabelas_base.sql"
     ]
-   },
-   {
-    "sha": "b5d2431",
-    "date": "2026-11-20",
-    "author": "adm01-debug",
-    "subject": "docs(auditoria): linha de base do estado real em docs/pendencias (#289)",
-    "files": [
-     "docs/pendencias/_linha-de-base.md"
-    ]
    }
   ],
   "hot_files": [
@@ -307387,8 +307387,8 @@
     2
    ],
    [
-    "docs/pendencias/_linha-de-base.md",
-    2
+    "docs/lacunas/MATRIZ_RECONCILIADA_20261012_EDGE.md",
+    1
    ],
    [
     "src/components/feedback/LoadingStates.tsx",
