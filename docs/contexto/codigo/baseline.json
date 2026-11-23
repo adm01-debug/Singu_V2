@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "b177218d1b456dac4167fa06b67a19dbeb146724",
+  "commit": "09587759f22a5a59084f968ca2a8f97adf5437e5",
   "branch": "main",
-  "data_commit": "2026-11-23T12:37:32-03:00",
+  "data_commit": "2026-11-23T16:22:28-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "0958775",
+    "data": "2026-11-23",
+    "assunto": "fix: remove exports default mortos que quebram lint com react-refresh 0.5.8 (#317)"
+   },
    {
     "sha": "b177218",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "fe5d8c1",
     "data": "2026-11-21",
     "assunto": "fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)"
-   },
-   {
-    "sha": "e453c9f",
-    "data": "2026-11-21",
-    "assunto": "feat(insights): carrega insights persistidos ao abrir a tela (#291)"
    }
   ],
-  "arquivos_mudados_7d": 1033,
+  "arquivos_mudados_7d": 1035,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 151
+    "commits": 152
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3908,
   "arquivos_codigo": 2256,
-  "linhas_codigo": 421371,
+  "linhas_codigo": 421356,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -652,7 +652,7 @@
   },
   "src/components": {
    "arquivos": 1010,
-   "linhas": 151971
+   "linhas": 151956
   },
   "src/config": {
    "arquivos": 1,

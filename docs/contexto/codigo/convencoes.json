@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix: remove exports default mortos que quebram lint com react-refresh 0.5.8 (#317)",
    "build(deps): bump actions/dependency-review-action from 5.0.0 to 5.0.1 (#308)",
    "chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)",
    "fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)",
-   "fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)",
-   "fix(FF62): territory-optimization propaga falha de RPC externa (#316)"
+   "fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)"
   ]
  },
  "pr_template": null,
