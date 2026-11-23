@@ -2,11 +2,11 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "resumo": {
-  "urls": 115,
+  "urls": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 65,
-  "lazy": 220
+  "itens_menu": 66,
+  "lazy": 221
  },
  "urls": [
   {
@@ -108,6 +108,7 @@
     "useContactCadence",
     "useContactDetail",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContactsSemApelido",
     "useContext",
@@ -152,9 +153,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -404,6 +407,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -522,6 +526,7 @@
     "useContactCadence",
     "useContactDetail",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContactsSemApelido",
     "useContextualSuggestions",
@@ -565,9 +570,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -788,6 +795,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -976,6 +984,7 @@
     "sequence-processor",
     "smart-notify",
     "smart-reminders",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -1020,7 +1029,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 872
+   "arquivos_puxados": 885
   },
   {
    "protegida": false,
@@ -1139,6 +1148,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -1177,9 +1187,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -1404,6 +1416,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -1509,6 +1522,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -1546,9 +1560,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -1747,6 +1763,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -1915,6 +1932,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -1956,7 +1974,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -2046,6 +2064,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -2084,9 +2103,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -2311,6 +2332,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -2416,6 +2438,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -2453,9 +2476,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -2654,6 +2679,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -2822,6 +2848,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -2863,7 +2890,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 774
+   "arquivos_puxados": 788
   },
   {
    "protegida": true,
@@ -2953,6 +2980,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -2991,9 +3019,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -3218,6 +3248,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -3323,6 +3354,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -3360,9 +3392,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -3561,6 +3595,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -3729,6 +3764,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -3770,7 +3806,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 770
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -3790,10 +3826,12 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -3804,6 +3842,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin",
     "useSecretRotation"
@@ -3826,7 +3865,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 22
+   "arquivos_puxados": 23
   },
   {
    "protegida": true,
@@ -3847,6 +3886,7 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
@@ -3861,6 +3901,7 @@
    "hooks_locais": [
     "useAuditAnalytics",
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin"
    ],
@@ -3879,7 +3920,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 22
+   "arquivos_puxados": 23
   },
   {
    "protegida": true,
@@ -3899,6 +3940,7 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
@@ -3915,6 +3957,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useMttaSlaBreachSnapshot",
     "useMttaSlaThreshold"
@@ -3941,7 +3984,7 @@
     "alert",
     "status"
    ],
-   "arquivos_puxados": 24
+   "arquivos_puxados": 25
   },
   {
    "protegida": true,
@@ -4031,6 +4074,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -4069,9 +4113,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -4296,6 +4342,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -4401,6 +4448,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -4438,9 +4486,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -4639,6 +4689,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -4807,6 +4858,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -4848,7 +4900,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 770
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -4867,40 +4919,49 @@
    "hooks": [
     "useAuth",
     "useCallback",
+    "useConnectionAnomalies",
     "useConnectionMetrics",
     "useConnectionQuota",
     "useConnectionTestLogs",
     "useConnections",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIPMaskingPreference",
     "useIncomingWebhookLogs",
     "useIncomingWebhooks",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
     "useQueryClient",
     "useRef",
-    "useState"
+    "useState",
+    "useWebhookDlq"
    ],
    "hooks_locais": [
     "useAuth",
+    "useConnectionAnomalies",
     "useConnectionMetrics",
     "useConnectionQuota",
     "useConnectionTestLogs",
     "useConnections",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIPMaskingPreference",
     "useIncomingWebhookLogs",
-    "useIncomingWebhooks"
+    "useIncomingWebhooks",
+    "useWebhookDlq"
    ],
    "tabelas": [
+    "connection_anomalies",
     "connection_configs",
     "connection_quotas",
     "connection_test_logs",
     "error_logs",
+    "incoming_webhook_dlq",
     "incoming_webhook_logs",
     "incoming_webhooks"
    ],
@@ -4909,17 +4970,20 @@
    ],
    "edges": [
     "ai-suggest-mapping",
+    "connection-anomaly-detector",
     "connection-introspect",
     "connection-tester",
-    "incoming-webhook"
+    "incoming-webhook",
+    "process-webhook-dlq"
    ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
     "alert",
+    "img",
     "status"
    ],
-   "arquivos_puxados": 49
+   "arquivos_puxados": 56
   },
   {
    "protegida": true,
@@ -4940,6 +5004,7 @@
     "useCallback",
     "useConnectionAnomalies",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
@@ -4955,6 +5020,7 @@
    "hooks_locais": [
     "useAuth",
     "useConnectionAnomalies",
+    "useDeviceDetection",
     "useErrorReporter",
     "useWebhookDlq"
    ],
@@ -4980,7 +5046,7 @@
     "list",
     "status"
    ],
-   "arquivos_puxados": 25
+   "arquivos_puxados": 26
   },
   {
    "protegida": true,
@@ -5001,6 +5067,7 @@
     "useCallback",
     "useContacts",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
@@ -5015,6 +5082,7 @@
    "hooks_locais": [
     "useAuth",
     "useContacts",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin"
    ],
@@ -5033,7 +5101,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 19
+   "arquivos_puxados": 20
   },
   {
    "protegida": true,
@@ -5096,6 +5164,7 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorBudget",
     "useErrorReporter",
@@ -5122,6 +5191,7 @@
     "useAiGatewayPartitionStats",
     "useAriaLiveRegion",
     "useAuth",
+    "useDeviceDetection",
     "useErrorBudget",
     "useErrorReporter",
     "useIsAdmin",
@@ -5160,7 +5230,7 @@
     "figure",
     "status"
    ],
-   "arquivos_puxados": 47
+   "arquivos_puxados": 48
   },
   {
    "protegida": true,
@@ -5180,6 +5250,7 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorLogs",
     "useErrorReporter",
@@ -5195,6 +5266,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorLogs",
     "useErrorReporter",
     "useIsAdmin"
@@ -5211,7 +5283,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 16
+   "arquivos_puxados": 17
   },
   {
    "protegida": true,
@@ -5348,6 +5420,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -5386,9 +5459,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -5613,6 +5688,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -5718,6 +5794,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -5755,9 +5832,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -5956,6 +6035,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -6124,6 +6204,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -6165,7 +6246,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 769
+   "arquivos_puxados": 782
   },
   {
    "protegida": true,
@@ -6219,6 +6300,7 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
@@ -6232,6 +6314,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin"
    ],
@@ -6247,7 +6330,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 17
+   "arquivos_puxados": 18
   },
   {
    "protegida": true,
@@ -6267,11 +6350,13 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
     "useLocation",
     "useLuxWebhookConfig",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -6281,6 +6366,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin",
     "useLuxWebhookConfig"
@@ -6299,7 +6385,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 19
+   "arquivos_puxados": 20
   },
   {
    "protegida": true,
@@ -6389,6 +6475,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -6427,9 +6514,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -6654,6 +6743,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -6759,6 +6849,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -6796,9 +6887,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -6997,6 +7090,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -7167,6 +7261,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -7208,7 +7303,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 769
+   "arquivos_puxados": 782
   },
   {
    "protegida": true,
@@ -7228,10 +7323,12 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
     "useLocation",
+    "useMemo",
     "useNavigate",
     "useQuery",
     "useQueryClient",
@@ -7240,6 +7337,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin"
    ],
@@ -7256,7 +7354,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 12
+   "arquivos_puxados": 13
   },
   {
    "protegida": true,
@@ -7276,10 +7374,12 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
     "useLocation",
+    "useMemo",
     "useNavigate",
     "useQuery",
     "useQueryClient",
@@ -7288,6 +7388,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin"
    ],
@@ -7304,7 +7405,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 12
+   "arquivos_puxados": 13
   },
   {
    "protegida": true,
@@ -7324,10 +7425,12 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
     "useLocation",
+    "useMemo",
     "useNavigate",
     "useQuery",
     "useQueryClient",
@@ -7336,6 +7439,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin"
    ],
@@ -7352,7 +7456,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 12
+   "arquivos_puxados": 13
   },
   {
    "protegida": true,
@@ -7372,10 +7476,12 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -7388,6 +7494,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin",
     "useResolveDriftAlert",
@@ -7407,7 +7514,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 15
+   "arquivos_puxados": 16
   },
   {
    "protegida": true,
@@ -7427,10 +7534,12 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -7441,6 +7550,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin",
     "useSecretRotation"
@@ -7458,7 +7568,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 20
+   "arquivos_puxados": 21
   },
   {
    "protegida": true,
@@ -7478,9 +7588,11 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "usePasswordResetRequests",
@@ -7491,6 +7603,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "usePasswordResetRequests"
    ],
@@ -7505,7 +7618,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 13
+   "arquivos_puxados": 14
   },
   {
    "protegida": true,
@@ -7595,6 +7708,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -7633,9 +7747,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -7861,6 +7977,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -7966,6 +8083,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -8003,9 +8121,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -8205,6 +8325,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -8374,6 +8495,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -8415,7 +8537,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 771
+   "arquivos_puxados": 784
   },
   {
    "protegida": true,
@@ -8548,6 +8670,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -8586,9 +8709,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -8813,6 +8938,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -8918,6 +9044,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -8955,9 +9082,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -9156,6 +9285,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -9324,6 +9454,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -9365,7 +9496,60 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
+  },
+  {
+   "protegida": true,
+   "wrappers": [
+    "Protected"
+   ],
+   "pai": null,
+   "indice": false,
+   "lazy": true,
+   "tipo": "tela",
+   "caminho": "/aprovacoes-follow-up",
+   "componente": "AprovacoesFollowUp",
+   "arquivo": "src/pages/AprovacoesFollowUp.tsx",
+   "definida_em": "src/app/AppRoutes.tsx",
+   "redireciona": null,
+   "hooks": [
+    "useAuth",
+    "useCallback",
+    "useContext",
+    "useDecideFollowUp",
+    "useDeviceDetection",
+    "useEffect",
+    "useErrorReporter",
+    "useFollowUpApprovals",
+    "useLocation",
+    "useMemo",
+    "useMutation",
+    "useNavigate",
+    "useQuery",
+    "useQueryClient",
+    "useRef",
+    "useState"
+   ],
+   "hooks_locais": [
+    "useAuth",
+    "useDecideFollowUp",
+    "useDeviceDetection",
+    "useErrorReporter",
+    "useFollowUpApprovals"
+   ],
+   "tabelas": [
+    "contacts",
+    "error_logs",
+    "follow_up_approvals_v2"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "canais_realtime": [],
+   "flags": [],
+   "papeis": [
+    "status"
+   ],
+   "arquivos_puxados": 14
   },
   {
    "protegida": true,
@@ -9456,6 +9640,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -9494,9 +9679,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -9721,6 +9908,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -9827,6 +10015,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -9864,9 +10053,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -10065,6 +10256,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -10236,6 +10428,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -10277,7 +10470,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 770
+   "arquivos_puxados": 783
   },
   {
    "protegida": false,
@@ -10297,9 +10490,11 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useNavigate",
     "useQueryClient",
     "useRef",
@@ -10307,6 +10502,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter"
    ],
    "tabelas": [
@@ -10320,7 +10516,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 19
+   "arquivos_puxados": 20
   },
   {
    "protegida": true,
@@ -10410,6 +10606,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -10448,9 +10645,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -10675,6 +10874,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -10780,6 +10980,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -10817,9 +11018,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -11018,6 +11221,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -11186,6 +11390,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -11227,7 +11432,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -11317,6 +11522,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -11355,9 +11561,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -11582,6 +11790,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -11687,6 +11896,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -11724,9 +11934,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -11925,6 +12137,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -12093,6 +12306,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -12134,7 +12348,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -12156,11 +12370,14 @@
     "useContext",
     "useCreateEntityRelationship",
     "useDeleteEntityRelationship",
+    "useDeviceDetection",
     "useEffect",
+    "useEntityLabels",
     "useEntityRelationships",
     "useEntitySearch",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -12172,6 +12389,7 @@
     "useAuth",
     "useCreateEntityRelationship",
     "useDeleteEntityRelationship",
+    "useDeviceDetection",
     "useEntityRelationships",
     "useErrorReporter"
    ],
@@ -12190,7 +12408,7 @@
     "combobox",
     "status"
    ],
-   "arquivos_puxados": 28
+   "arquivos_puxados": 32
   },
   {
    "protegida": true,
@@ -12281,6 +12499,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -12319,9 +12538,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -12546,6 +12767,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -12651,6 +12873,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -12688,9 +12911,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -12889,6 +13114,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -13057,6 +13283,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -13098,7 +13325,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -13189,6 +13416,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -13227,9 +13455,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -13455,6 +13685,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -13561,6 +13792,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -13598,9 +13830,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -13800,6 +14034,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -13970,6 +14205,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -14011,7 +14247,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 773
+   "arquivos_puxados": 786
   },
   {
    "protegida": true,
@@ -14102,6 +14338,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -14140,9 +14377,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -14367,6 +14606,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -14472,6 +14712,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -14509,9 +14750,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -14710,6 +14953,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -14878,6 +15122,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -14919,7 +15164,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -15010,6 +15255,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -15048,9 +15294,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -15275,6 +15523,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -15380,6 +15629,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -15417,9 +15667,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -15618,6 +15870,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -15786,6 +16039,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -15827,7 +16081,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -15867,6 +16121,7 @@
     "useAnalyzeConversation",
     "useAppliedResponses",
     "useApplyFoundEmail",
+    "useApproachRecommendation",
     "useAriaLiveRegion",
     "useAskCrm",
     "useAttribution",
@@ -15902,17 +16157,22 @@
     "useChurnPredictions",
     "useChurnRisk",
     "useChurnRiskReport",
+    "useClientHealth",
     "useClientTriggers",
+    "useClientValues",
     "useClosingScoreAlertsView",
     "useClosingScoreRanking",
     "useClosingScoreView",
     "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
+    "useCognitiveBiasPersistence",
+    "useCognitiveBiases",
     "useCohortAnalysis",
     "useCommunicationDashboard",
     "useCommunicationIntel",
     "useCommunicationIntelList",
+    "useCommunicationPreferences",
     "useCompanies",
     "useCompaniesByTag",
     "useCompany360",
@@ -15982,6 +16242,7 @@
     "useDailyInsights",
     "useDailyKpis",
     "useDailyStats",
+    "useDashboardMappedData",
     "useDataHealthView",
     "useDealForecastConfidence",
     "useDealSlipRisk",
@@ -15999,9 +16260,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscCompatibility",
     "useDiscDashboardView",
     "useDocumentSignatures",
@@ -16044,6 +16307,7 @@
     "useFamilyHistory",
     "useFavoriteTemplates",
     "useFeatureDiscovery",
+    "useFicha360NLP",
     "useFieldArray",
     "useFocusTrap",
     "useForm",
@@ -16065,6 +16329,7 @@
     "useGroupExpansion",
     "useHandoffMQL",
     "useHapticFeedback",
+    "useHiddenObjections",
     "useId",
     "useImperativeHandle",
     "useInView",
@@ -16177,6 +16442,7 @@
     "useQuotaStatus",
     "useRFMAnalysis",
     "useRageClickDetector",
+    "useRapportGenerator",
     "useRapportIntel",
     "useRapportIntelList",
     "useRapportPoints",
@@ -16222,6 +16488,7 @@
     "useSidebar",
     "useSlowQueryDetector",
     "useSmartNotifications",
+    "useSmartTemplateSuggestions",
     "useSnoozeReminder",
     "useSocialInsights",
     "useSocialIntelligence",
@@ -16235,6 +16502,7 @@
     "useSubmitInsightFeedback",
     "useSuccessCelebration",
     "useSupportTickets",
+    "useTemplateHistoryMetrics",
     "useTemplateNotifications",
     "useTemplatePerformanceData",
     "useTerritories",
@@ -16263,6 +16531,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -16323,6 +16592,7 @@
     "useAnalyzeConversation",
     "useAppliedResponses",
     "useApplyFoundEmail",
+    "useApproachRecommendation",
     "useAriaLiveRegion",
     "useAskCrm",
     "useAttribution",
@@ -16357,17 +16627,22 @@
     "useChurnPredictions",
     "useChurnRisk",
     "useChurnRiskReport",
+    "useClientHealth",
     "useClientTriggers",
+    "useClientValues",
     "useClosingScoreAlertsView",
     "useClosingScoreRanking",
     "useClosingScoreView",
     "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
+    "useCognitiveBiasPersistence",
+    "useCognitiveBiases",
     "useCohortAnalysis",
     "useCommunicationDashboard",
     "useCommunicationIntel",
     "useCommunicationIntelList",
+    "useCommunicationPreferences",
     "useCompanies",
     "useCompaniesByTag",
     "useCompany360",
@@ -16436,6 +16711,7 @@
     "useDailyInsights",
     "useDailyKpis",
     "useDailyStats",
+    "useDashboardMappedData",
     "useDataHealthView",
     "useDealForecastConfidence",
     "useDealSlipRisk",
@@ -16453,9 +16729,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscCompatibility",
     "useDiscDashboardView",
     "useDocumentSignatures",
@@ -16497,6 +16775,7 @@
     "useFamilyHistory",
     "useFavoriteTemplates",
     "useFeatureDiscovery",
+    "useFicha360NLP",
     "useFocusTrap",
     "useForm",
     "useFormDraft",
@@ -16516,6 +16795,7 @@
     "useGroupExpansion",
     "useHandoffMQL",
     "useHapticFeedback",
+    "useHiddenObjections",
     "useInactivityAlerts",
     "useIndustryAnalysis",
     "useInsightFeedback",
@@ -16610,6 +16890,7 @@
     "useQuotaStatus",
     "useRFMAnalysis",
     "useRageClickDetector",
+    "useRapportGenerator",
     "useRapportIntel",
     "useRapportIntelList",
     "useRapportPoints",
@@ -16652,6 +16933,7 @@
     "useSidebar",
     "useSlowQueryDetector",
     "useSmartNotifications",
+    "useSmartTemplateSuggestions",
     "useSnoozeReminder",
     "useSocialInsights",
     "useSocialIntelligence",
@@ -16663,6 +16945,7 @@
     "useSubmitInsightFeedback",
     "useSuccessCelebration",
     "useSupportTickets",
+    "useTemplateHistoryMetrics",
     "useTemplateNotifications",
     "useTemplatePerformanceData",
     "useTerritories",
@@ -16689,6 +16972,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -16741,6 +17025,7 @@
     "automation_rules",
     "battle_cards",
     "behavioral_insight_feedback",
+    "brain_dominance_analysis",
     "call_logs",
     "canned_responses",
     "churn_risk_scores",
@@ -16777,6 +17062,7 @@
     "crm_automation_logs",
     "crm_automation_reprocess_queue",
     "crm_cadence_rules",
+    "crm_consent_audit_logs",
     "crm_metric_overrides",
     "crm_objection_intelligence",
     "crm_relationship_audit_logs",
@@ -16929,6 +17215,7 @@
     "social-events-detector",
     "social-profile-scraper",
     "sync-social-interests",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -16971,7 +17258,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 1005
+   "arquivos_puxados": 1060
   },
   {
    "protegida": true,
@@ -17066,6 +17353,7 @@
     "useContactIntelligence",
     "useContactSegmentation",
     "useContactTagsHistory",
+    "useContactTasks",
     "useContactView360",
     "useContacts",
     "useContext",
@@ -17107,9 +17395,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -17358,6 +17648,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -17467,6 +17758,7 @@
     "useContactIntelligence",
     "useContactSegmentation",
     "useContactTagsHistory",
+    "useContactTasks",
     "useContactView360",
     "useContacts",
     "useContextualSuggestions",
@@ -17507,9 +17799,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -17732,6 +18026,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -17908,6 +18203,7 @@
     "sequence-processor",
     "smart-notify",
     "social-profile-scraper",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -17951,7 +18247,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 846
+   "arquivos_puxados": 859
   },
   {
    "protegida": true,
@@ -18041,6 +18337,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -18079,9 +18376,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -18306,6 +18605,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -18411,6 +18711,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -18448,9 +18749,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -18649,6 +18952,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -18817,6 +19121,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -18858,7 +19163,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -18948,6 +19253,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -18986,9 +19292,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -19213,6 +19521,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -19318,6 +19627,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -19355,9 +19665,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -19556,6 +19868,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -19724,6 +20037,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -19765,7 +20079,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 771
+   "arquivos_puxados": 784
   },
   {
    "protegida": true,
@@ -19814,6 +20128,7 @@
     "useCSAccounts",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useHealthSignals",
@@ -19839,6 +20154,7 @@
     "useAuth",
     "useCSAccount",
     "useCSAccounts",
+    "useDeviceDetection",
     "useErrorReporter",
     "useHealthSignals",
     "useNPS",
@@ -19869,7 +20185,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 26
+   "arquivos_puxados": 29
   },
   {
    "protegida": true,
@@ -19891,6 +20207,7 @@
     "useCSAccounts",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useHealthSignals",
@@ -19919,6 +20236,7 @@
     "useAuth",
     "useCSAccount",
     "useCSAccounts",
+    "useDeviceDetection",
     "useErrorReporter",
     "useHealthSignals",
     "useNPS",
@@ -19950,7 +20268,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 26
+   "arquivos_puxados": 31
   },
   {
    "protegida": true,
@@ -19978,9 +20296,11 @@
     "useDeleteDocument",
     "useDeleteMilestone",
     "useDeleteStakeholder",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useMilestones",
     "useMutation",
     "useNavigate",
@@ -20010,6 +20330,7 @@
     "useDeleteDocument",
     "useDeleteMilestone",
     "useDeleteStakeholder",
+    "useDeviceDetection",
     "useErrorReporter",
     "useMilestones",
     "usePublicDealRoom",
@@ -20050,7 +20371,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 22
+   "arquivos_puxados": 23
   },
   {
    "protegida": true,
@@ -20078,9 +20399,11 @@
     "useDeleteDocument",
     "useDeleteMilestone",
     "useDeleteStakeholder",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useMilestones",
     "useMutation",
     "useNavigate",
@@ -20113,6 +20436,7 @@
     "useDeleteDocument",
     "useDeleteMilestone",
     "useDeleteStakeholder",
+    "useDeviceDetection",
     "useErrorReporter",
     "useMilestones",
     "useNavigationStack",
@@ -20154,7 +20478,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 32
+   "arquivos_puxados": 35
   },
   {
    "protegida": true,
@@ -20176,6 +20500,7 @@
     "useCallback",
     "useContext",
     "useDedupEngine",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useFeatureDiscovery",
@@ -20196,6 +20521,7 @@
     "useAriaLiveRegion",
     "useAuth",
     "useDedupEngine",
+    "useDeviceDetection",
     "useErrorReporter",
     "useFeatureDiscovery",
     "useMergeRecords",
@@ -20221,7 +20547,7 @@
     "alert",
     "status"
    ],
-   "arquivos_puxados": 38
+   "arquivos_puxados": 39
   },
   {
    "protegida": false,
@@ -20311,6 +20637,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -20349,9 +20676,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -20576,6 +20905,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -20681,6 +21011,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -20718,9 +21049,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -20919,6 +21252,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -21087,6 +21421,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -21128,7 +21463,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 771
+   "arquivos_puxados": 784
   },
   {
    "protegida": true,
@@ -21218,6 +21553,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -21256,9 +21592,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -21483,6 +21821,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -21588,6 +21927,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -21625,9 +21965,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -21826,6 +22168,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -21994,6 +22337,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -22035,7 +22379,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": false,
@@ -22063,9 +22407,11 @@
     "useDeleteDocument",
     "useDeleteMilestone",
     "useDeleteStakeholder",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useMilestones",
     "useMutation",
     "useNavigate",
@@ -22096,6 +22442,7 @@
     "useDeleteDocument",
     "useDeleteMilestone",
     "useDeleteStakeholder",
+    "useDeviceDetection",
     "useErrorReporter",
     "useMilestones",
     "usePublicDealRoom",
@@ -22136,7 +22483,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 18
+   "arquivos_puxados": 19
   },
   {
    "protegida": true,
@@ -22227,6 +22574,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -22265,9 +22613,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -22492,6 +22842,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -22597,6 +22948,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -22634,9 +22986,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -22835,6 +23189,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -23003,6 +23358,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -23044,7 +23400,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -23136,6 +23492,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -23174,9 +23531,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -23405,6 +23764,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -23511,6 +23871,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -23548,9 +23909,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -23753,6 +24116,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -23926,6 +24290,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -23967,7 +24332,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 778
+   "arquivos_puxados": 791
   },
   {
    "protegida": true,
@@ -24085,6 +24450,8 @@
     "useCreateABMAccount",
     "useCreateContactQuickInteraction",
     "useCreateDeal",
+    "useCreateManualSignal",
+    "useCreatePixel",
     "useCreateQuickInteraction",
     "useCreateTask",
     "useCreateTerritory",
@@ -24108,12 +24475,15 @@
     "useDeleteCommitteeMember",
     "useDeleteCompetitor",
     "useDeleteInsight",
+    "useDeletePixel",
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -24181,6 +24551,9 @@
     "useIntelTelemetry",
     "useIntelTheme",
     "useIntelTour",
+    "useIntentPixels",
+    "useIntentScore",
+    "useIntentSignals",
     "useInteractionHistory",
     "useInteractions",
     "useInteractionsAdvancedFilter",
@@ -24280,6 +24653,7 @@
     "useRecordTouchpoint",
     "useReducedMotion",
     "useRef",
+    "useRefreshIntent",
     "useReopenTask",
     "useReportInfiniteScrollProgress",
     "useRescoreAccounts",
@@ -24328,7 +24702,9 @@
     "useTicketComments",
     "useTimelineByEntity",
     "useToast",
+    "useTogglePixel",
     "useTonePersistence",
+    "useTopIntentScores",
     "useTopLeads",
     "useTopRelationships",
     "useTopicsCatalog",
@@ -24346,6 +24722,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -24477,6 +24854,8 @@
     "useCreateABMAccount",
     "useCreateContactQuickInteraction",
     "useCreateDeal",
+    "useCreateManualSignal",
+    "useCreatePixel",
     "useCreateQuickInteraction",
     "useCreateTask",
     "useCreateTerritory",
@@ -24500,12 +24879,15 @@
     "useDeleteCommitteeMember",
     "useDeleteCompetitor",
     "useDeleteInsight",
+    "useDeletePixel",
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -24566,6 +24948,9 @@
     "useIntelTelemetry",
     "useIntelTheme",
     "useIntelTour",
+    "useIntentPixels",
+    "useIntentScore",
+    "useIntentSignals",
     "useInteractionHistory",
     "useInteractions",
     "useInteractionsAdvancedFilter",
@@ -24650,6 +25035,7 @@
     "useRecomputeLead",
     "useRecordTouchpoint",
     "useReducedMotion",
+    "useRefreshIntent",
     "useReopenTask",
     "useReportInfiniteScrollProgress",
     "useRescoreAccounts",
@@ -24694,7 +25080,9 @@
     "useTicketComments",
     "useTimelineByEntity",
     "useToast",
+    "useTogglePixel",
     "useTonePersistence",
+    "useTopIntentScores",
     "useTopLeads",
     "useTopRelationships",
     "useTopicsCatalog",
@@ -24711,6 +25099,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -24793,6 +25182,9 @@
     "health_alerts",
     "hidden_objections",
     "insights",
+    "intent_scores",
+    "intent_signals",
+    "intent_tracking_pixels",
     "interactions",
     "landing_page_submissions",
     "landing_pages",
@@ -24873,6 +25265,7 @@
     "email-finder",
     "external-data",
     "generate-insights",
+    "intent-aggregator",
     "lead-scorer",
     "lux-trigger",
     "nurturing-runner",
@@ -24882,6 +25275,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -24924,7 +25318,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 832
+   "arquivos_puxados": 848
   },
   {
    "protegida": true,
@@ -24949,6 +25343,7 @@
     "useCallback",
     "useContacts",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useEmailFinder",
     "useEmailFinderResults",
@@ -24981,6 +25376,7 @@
     "useBulkRevalidate",
     "useBulkRevalidatePreview",
     "useContacts",
+    "useDeviceDetection",
     "useEmailFinder",
     "useEmailFinderResults",
     "useEmailVerifications",
@@ -25022,7 +25418,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 45
+   "arquivos_puxados": 46
   },
   {
    "protegida": true,
@@ -25082,12 +25478,14 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useForm",
     "useFormSubmissions",
     "useForms",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -25097,6 +25495,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useForm",
     "useFormSubmissions",
@@ -25118,7 +25517,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 19
+   "arquivos_puxados": 20
   },
   {
    "protegida": true,
@@ -25143,6 +25542,7 @@
     "useCreatePeriod",
     "useCurrentPeriod",
     "useDealForecasts",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useForecastNarrative",
@@ -25168,6 +25568,7 @@
     "useCreatePeriod",
     "useCurrentPeriod",
     "useDealForecasts",
+    "useDeviceDetection",
     "useErrorReporter",
     "useForecastNarrative",
     "useForecastPeriods",
@@ -25196,7 +25597,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 26
+   "arquivos_puxados": 27
   },
   {
    "protegida": true,
@@ -25221,6 +25622,7 @@
     "useCreatePeriod",
     "useCurrentPeriod",
     "useDealForecasts",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useForecastNarrative",
@@ -25228,6 +25630,7 @@
     "useForecastSnapshots",
     "useForecastSummary",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -25245,6 +25648,7 @@
     "useCreatePeriod",
     "useCurrentPeriod",
     "useDealForecasts",
+    "useDeviceDetection",
     "useErrorReporter",
     "useForecastNarrative",
     "useForecastPeriods",
@@ -25273,7 +25677,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 16
+   "arquivos_puxados": 17
   },
   {
    "protegida": true,
@@ -25295,6 +25699,7 @@
     "useContext",
     "useCreateEntityRelationship",
     "useDeleteEntityRelationship",
+    "useDeviceDetection",
     "useEffect",
     "useEntityRelationships",
     "useEntitySearch",
@@ -25313,6 +25718,7 @@
     "useAuth",
     "useCreateEntityRelationship",
     "useDeleteEntityRelationship",
+    "useDeviceDetection",
     "useEntityRelationships",
     "useErrorReporter",
     "useUnifiedHistory"
@@ -25335,7 +25741,7 @@
     "combobox",
     "status"
    ],
-   "arquivos_puxados": 26
+   "arquivos_puxados": 27
   },
   {
    "protegida": true,
@@ -25425,6 +25831,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -25463,9 +25870,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -25690,6 +26099,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -25795,6 +26205,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -25832,9 +26243,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -26033,6 +26446,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -26201,6 +26615,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -26242,7 +26657,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 769
+   "arquivos_puxados": 782
   },
   {
    "protegida": true,
@@ -26333,6 +26748,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -26371,9 +26787,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -26598,6 +27016,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -26703,6 +27122,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -26740,9 +27160,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -26941,6 +27363,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -27109,6 +27532,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -27150,7 +27574,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -27240,6 +27664,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -27278,9 +27703,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -27505,6 +27932,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -27610,6 +28038,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -27647,9 +28076,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -27848,6 +28279,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -28016,6 +28448,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -28057,7 +28490,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -28147,6 +28580,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -28185,9 +28619,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -28412,6 +28848,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -28517,6 +28954,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -28554,9 +28992,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -28755,6 +29195,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -28924,6 +29365,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -28965,7 +29407,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 769
+   "arquivos_puxados": 782
   },
   {
    "protegida": true,
@@ -28985,9 +29427,11 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useNavigate",
     "useQuery",
     "useQueryClient",
@@ -28996,6 +29440,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter"
    ],
    "tabelas": [
@@ -29012,7 +29457,7 @@
     "alert",
     "status"
    ],
-   "arquivos_puxados": 11
+   "arquivos_puxados": 12
   },
   {
    "protegida": true,
@@ -29102,6 +29547,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -29143,9 +29589,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -29376,6 +29824,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -29481,6 +29930,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -29521,9 +29971,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -29728,6 +30180,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -29900,6 +30353,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -29941,7 +30395,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 773
+   "arquivos_puxados": 786
   },
   {
    "protegida": true,
@@ -30031,6 +30485,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -30072,9 +30527,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -30305,6 +30762,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -30410,6 +30868,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -30450,9 +30909,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -30657,6 +31118,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -30830,6 +31292,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -30871,7 +31334,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 772
+   "arquivos_puxados": 785
   },
   {
    "protegida": true,
@@ -30962,6 +31425,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -31000,9 +31464,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -31227,6 +31693,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -31332,6 +31799,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -31369,9 +31837,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -31570,6 +32040,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -31738,6 +32209,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -31779,7 +32251,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -31869,6 +32341,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -31907,9 +32380,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -32135,6 +32610,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -32240,6 +32716,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -32277,9 +32754,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -32479,6 +32958,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -32648,6 +33128,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -32689,7 +33170,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 770
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -32779,6 +33260,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -32817,9 +33299,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -33044,6 +33528,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -33149,6 +33634,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -33186,9 +33672,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -33387,6 +33875,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -33555,6 +34044,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -33596,7 +34086,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -33616,12 +34106,14 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLeadScore",
     "useLeadScoreDistribution",
     "useLeadScoreHistory",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -33638,6 +34130,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useLeadScore",
     "useLeadScoreDistribution",
@@ -33668,7 +34161,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 20
+   "arquivos_puxados": 21
   },
   {
    "protegida": true,
@@ -33690,9 +34183,11 @@
     "useCallback",
     "useContext",
     "useDeleteAutomation",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useNavigationStack",
@@ -33709,6 +34204,7 @@
     "useAuth",
     "useAutomationLog",
     "useDeleteAutomation",
+    "useDeviceDetection",
     "useErrorReporter",
     "useNavigationStack",
     "useScoreAutomations",
@@ -33727,7 +34223,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 30
+   "arquivos_puxados": 32
   },
   {
    "protegida": true,
@@ -33744,15 +34240,20 @@
    "definida_em": "src/app/AppRoutes.tsx",
    "redireciona": null,
    "hooks": [
+    "useAllLeadScores",
     "useAuth",
+    "useCalculateLeadScore",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLeadScore",
+    "useLeadScoreConfig",
     "useLeadScoreDistribution",
     "useLeadScoreHistory",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useNavigationStack",
@@ -33770,9 +34271,13 @@
     "useUpdateThreshold"
    ],
    "hooks_locais": [
+    "useAllLeadScores",
     "useAuth",
+    "useCalculateLeadScore",
+    "useDeviceDetection",
     "useErrorReporter",
     "useLeadScore",
+    "useLeadScoreConfig",
     "useLeadScoreDistribution",
     "useLeadScoreHistory",
     "useNavigationStack",
@@ -33786,6 +34291,7 @@
    ],
    "tabelas": [
     "error_logs",
+    "lead_score_config",
     "lead_score_history",
     "lead_score_rules",
     "lead_score_thresholds",
@@ -33802,7 +34308,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 22
+   "arquivos_puxados": 25
   },
   {
    "protegida": false,
@@ -33822,11 +34328,13 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLeadMagnets",
     "useLocation",
     "useMagnetDownloads",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -33836,6 +34344,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useLeadMagnets",
     "useMagnetDownloads"
@@ -33855,7 +34364,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 17
+   "arquivos_puxados": 18
   },
   {
    "protegida": false,
@@ -33983,6 +34492,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -34021,9 +34531,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -34248,6 +34760,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -34353,6 +34866,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -34390,9 +34904,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -34591,6 +35107,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -34759,6 +35276,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -34800,7 +35318,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -34822,6 +35340,7 @@
     "useCallback",
     "useContactSegmentation",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useEnrollContact",
     "useErrorReporter",
@@ -34855,6 +35374,7 @@
     "useAttribution",
     "useAuth",
     "useContactSegmentation",
+    "useDeviceDetection",
     "useEnrollContact",
     "useErrorReporter",
     "useEvaluateMQL",
@@ -34904,7 +35424,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 33
+   "arquivos_puxados": 34
   },
   {
    "protegida": true,
@@ -34925,6 +35445,7 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useFeatureDiscovery",
@@ -34932,6 +35453,7 @@
     "useFormSubmissions",
     "useForms",
     "useLocation",
+    "useMemo",
     "useMotionSafe",
     "useMutation",
     "useNavigate",
@@ -34945,6 +35467,7 @@
    "hooks_locais": [
     "useAriaLiveRegion",
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useFeatureDiscovery",
     "useForm",
@@ -34967,7 +35490,7 @@
     "alert",
     "status"
    ],
-   "arquivos_puxados": 38
+   "arquivos_puxados": 39
   },
   {
    "protegida": true,
@@ -34987,11 +35510,13 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLeadMagnets",
     "useLocation",
     "useMagnetDownloads",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -35001,6 +35526,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useLeadMagnets",
     "useMagnetDownloads"
@@ -35017,7 +35543,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 17
+   "arquivos_puxados": 18
   },
   {
    "protegida": true,
@@ -35107,6 +35633,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -35145,9 +35672,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -35372,6 +35901,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -35477,6 +36007,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -35514,9 +36045,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -35715,6 +36248,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -35883,6 +36417,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -35924,7 +36459,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -36015,6 +36550,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -36053,9 +36589,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -36280,6 +36818,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -36385,6 +36924,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -36422,9 +36962,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -36623,6 +37165,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -36791,6 +37334,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -36832,7 +37376,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -36923,6 +37467,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -36961,9 +37506,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -37188,6 +37735,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -37293,6 +37841,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -37330,9 +37879,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -37531,6 +38082,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -37699,6 +38251,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -37740,7 +38293,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -37830,6 +38383,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -37868,9 +38422,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -38097,6 +38653,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -38202,6 +38759,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -38239,9 +38797,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -38442,6 +39002,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -38611,6 +39172,7 @@
     "sequence-processor",
     "smart-notify",
     "smart-reminders",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -38652,7 +39214,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 775
+   "arquivos_puxados": 788
   },
   {
    "protegida": true,
@@ -38672,9 +39234,11 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useNotificationPreferences",
@@ -38685,6 +39249,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useNotificationPreferences"
    ],
@@ -38699,7 +39264,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 16
+   "arquivos_puxados": 17
   },
   {
    "protegida": true,
@@ -38789,6 +39354,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -38827,9 +39393,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -39054,6 +39622,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -39159,6 +39728,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -39196,9 +39766,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -39397,6 +39969,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -39565,6 +40138,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -39606,7 +40180,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -39696,6 +40270,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -39734,9 +40309,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -39961,6 +40538,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -40066,6 +40644,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -40103,9 +40682,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -40304,6 +40885,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -40472,6 +41054,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -40513,7 +41096,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 770
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -40534,6 +41117,7 @@
     "useCallback",
     "useCelebration",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
@@ -40547,6 +41131,7 @@
    "hooks_locais": [
     "useAuth",
     "useCelebration",
+    "useDeviceDetection",
     "useErrorReporter",
     "useReducedMotion"
    ],
@@ -40563,7 +41148,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 22
+   "arquivos_puxados": 23
   },
   {
    "protegida": true,
@@ -40586,6 +41171,7 @@
     "useBehavioralProfilesList",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useGenerateBehavioralProfile",
@@ -40603,6 +41189,7 @@
     "useBehavioralProfile",
     "useBehavioralProfilesFacets",
     "useBehavioralProfilesList",
+    "useDeviceDetection",
     "useErrorReporter",
     "useGenerateBehavioralProfile"
    ],
@@ -40621,7 +41208,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 19
+   "arquivos_puxados": 20
   },
   {
    "protegida": true,
@@ -40711,6 +41298,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -40749,9 +41337,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -40976,6 +41566,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -41081,6 +41672,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -41118,9 +41710,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -41319,6 +41913,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -41487,6 +42082,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -41528,7 +42124,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -41618,6 +42214,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -41656,9 +42253,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -41883,6 +42482,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -41988,6 +42588,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -42025,9 +42626,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -42226,6 +42829,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -42394,6 +42998,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -42435,7 +43040,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": true,
@@ -42459,11 +43064,13 @@
     "useContext",
     "useDeleteBattleCard",
     "useDeletePlaybook",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useGeneratePlaybook",
     "useLocation",
     "useLogPlaybookUsage",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "usePlaybook",
@@ -42483,6 +43090,7 @@
     "useBattleCards",
     "useDeleteBattleCard",
     "useDeletePlaybook",
+    "useDeviceDetection",
     "useErrorReporter",
     "useGeneratePlaybook",
     "useLogPlaybookUsage",
@@ -42509,7 +43117,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 25
+   "arquivos_puxados": 26
   },
   {
    "protegida": true,
@@ -42533,11 +43141,13 @@
     "useContext",
     "useDeleteBattleCard",
     "useDeletePlaybook",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useGeneratePlaybook",
     "useLocation",
     "useLogPlaybookUsage",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useNavigationStack",
@@ -42559,6 +43169,87 @@
     "useBattleCards",
     "useDeleteBattleCard",
     "useDeletePlaybook",
+    "useDeviceDetection",
+    "useErrorReporter",
+    "useGeneratePlaybook",
+    "useLogPlaybookUsage",
+    "useNavigationStack",
+    "usePlaybook",
+    "usePlaybookUsageLog",
+    "usePlaybooks",
+    "useRecommendPlaybooks",
+    "useUpsertBattleCard",
+    "useUpsertPlaybook"
+   ],
+   "tabelas": [
+    "battle_cards",
+    "error_logs",
+    "playbook_usage_log",
+    "sales_playbooks"
+   ],
+   "rpcs": [],
+   "edges": [
+    "playbook-generator",
+    "playbook-recommender"
+   ],
+   "canais_realtime": [],
+   "flags": [],
+   "papeis": [
+    "status"
+   ],
+   "arquivos_puxados": 21
+  },
+  {
+   "protegida": true,
+   "wrappers": [
+    "Protected"
+   ],
+   "pai": null,
+   "indice": false,
+   "lazy": true,
+   "tipo": "tela",
+   "caminho": "/playbooks/battle-cards/:id",
+   "componente": "BattleCardDetailPage",
+   "arquivo": "src/pages/BattleCardDetail.tsx",
+   "definida_em": "src/app/AppRoutes.tsx",
+   "redireciona": null,
+   "hooks": [
+    "useAuth",
+    "useBattleCard",
+    "useBattleCards",
+    "useCallback",
+    "useContext",
+    "useDeleteBattleCard",
+    "useDeletePlaybook",
+    "useDeviceDetection",
+    "useEffect",
+    "useErrorReporter",
+    "useGeneratePlaybook",
+    "useLocation",
+    "useLogPlaybookUsage",
+    "useMemo",
+    "useMutation",
+    "useNavigate",
+    "useNavigationStack",
+    "useNavigationType",
+    "usePlaybook",
+    "usePlaybookUsageLog",
+    "usePlaybooks",
+    "useQuery",
+    "useQueryClient",
+    "useRecommendPlaybooks",
+    "useRef",
+    "useState",
+    "useUpsertBattleCard",
+    "useUpsertPlaybook"
+   ],
+   "hooks_locais": [
+    "useAuth",
+    "useBattleCard",
+    "useBattleCards",
+    "useDeleteBattleCard",
+    "useDeletePlaybook",
+    "useDeviceDetection",
     "useErrorReporter",
     "useGeneratePlaybook",
     "useLogPlaybookUsage",
@@ -42597,83 +43288,6 @@
    "indice": false,
    "lazy": true,
    "tipo": "tela",
-   "caminho": "/playbooks/battle-cards/:id",
-   "componente": "BattleCardDetailPage",
-   "arquivo": "src/pages/BattleCardDetail.tsx",
-   "definida_em": "src/app/AppRoutes.tsx",
-   "redireciona": null,
-   "hooks": [
-    "useAuth",
-    "useBattleCard",
-    "useBattleCards",
-    "useCallback",
-    "useContext",
-    "useDeleteBattleCard",
-    "useDeletePlaybook",
-    "useEffect",
-    "useErrorReporter",
-    "useGeneratePlaybook",
-    "useLocation",
-    "useLogPlaybookUsage",
-    "useMutation",
-    "useNavigate",
-    "useNavigationStack",
-    "useNavigationType",
-    "usePlaybook",
-    "usePlaybookUsageLog",
-    "usePlaybooks",
-    "useQuery",
-    "useQueryClient",
-    "useRecommendPlaybooks",
-    "useRef",
-    "useState",
-    "useUpsertBattleCard",
-    "useUpsertPlaybook"
-   ],
-   "hooks_locais": [
-    "useAuth",
-    "useBattleCard",
-    "useBattleCards",
-    "useDeleteBattleCard",
-    "useDeletePlaybook",
-    "useErrorReporter",
-    "useGeneratePlaybook",
-    "useLogPlaybookUsage",
-    "useNavigationStack",
-    "usePlaybook",
-    "usePlaybookUsageLog",
-    "usePlaybooks",
-    "useRecommendPlaybooks",
-    "useUpsertBattleCard",
-    "useUpsertPlaybook"
-   ],
-   "tabelas": [
-    "battle_cards",
-    "error_logs",
-    "playbook_usage_log",
-    "sales_playbooks"
-   ],
-   "rpcs": [],
-   "edges": [
-    "playbook-generator",
-    "playbook-recommender"
-   ],
-   "canais_realtime": [],
-   "flags": [],
-   "papeis": [
-    "status"
-   ],
-   "arquivos_puxados": 19
-  },
-  {
-   "protegida": true,
-   "wrappers": [
-    "Protected"
-   ],
-   "pai": null,
-   "indice": false,
-   "lazy": true,
-   "tipo": "tela",
    "caminho": "/relatorio/:id",
    "componente": "RelatorioContato",
    "arquivo": "src/pages/RelatorioContato.tsx",
@@ -42683,6 +43297,7 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
@@ -42697,6 +43312,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useNavigationStack"
    ],
@@ -42719,7 +43335,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 22
+   "arquivos_puxados": 23
   },
   {
    "protegida": true,
@@ -42809,6 +43425,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -42847,9 +43464,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -43075,6 +43694,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -43180,6 +43800,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -43217,9 +43838,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -43419,6 +44042,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -43587,6 +44211,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -43628,7 +44253,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 773
+   "arquivos_puxados": 786
   },
   {
    "protegida": true,
@@ -43721,6 +44346,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContactsCount",
     "useContext",
@@ -43760,9 +44386,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -43992,6 +44620,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -44100,6 +44729,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContactsCount",
     "useContextualSuggestions",
@@ -44138,9 +44768,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -44344,6 +44976,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -44514,6 +45147,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -44555,7 +45189,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 774
+   "arquivos_puxados": 787
   },
   {
    "protegida": false,
@@ -44572,12 +45206,16 @@
    "definida_em": "src/app/AppRoutes.tsx",
    "redireciona": null,
    "hooks": [
+    "useCallback",
     "useEffect",
     "useNavigate",
+    "usePasswordBreachCheck",
     "useSearchParams",
     "useState"
    ],
-   "hooks_locais": [],
+   "hooks_locais": [
+    "usePasswordBreachCheck"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -44590,7 +45228,7 @@
    "papeis": [
     "alert"
    ],
-   "arquivos_puxados": 11
+   "arquivos_puxados": 12
   },
   {
    "protegida": true,
@@ -44610,6 +45248,7 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useDismissAlert",
     "useEffect",
     "useErrorReporter",
@@ -44633,6 +45272,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useDismissAlert",
     "useErrorReporter",
     "useRevOpsAlerts",
@@ -44659,9 +45299,10 @@
    "flags": [],
    "papeis": [
     "alert",
+    "img",
     "status"
    ],
-   "arquivos_puxados": 25
+   "arquivos_puxados": 29
   },
   {
    "protegida": true,
@@ -44686,6 +45327,7 @@
     "useCallback",
     "useContext",
     "useDecidirStaging",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
@@ -44713,6 +45355,7 @@
     "useAuth",
     "useBloquearCliente",
     "useDecidirStaging",
+    "useDeviceDetection",
     "useErrorReporter",
     "useReverterExecucao",
     "useRodizioBloqueios",
@@ -44743,7 +45386,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 34
+   "arquivos_puxados": 35
   },
   {
    "protegida": true,
@@ -44765,12 +45408,14 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useGeoBlocking",
     "useIPMaskingPreference",
     "useIPValidation",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -44783,6 +45428,7 @@
     "useAccessSecurity",
     "useAllowedIPs",
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useGeoBlocking",
     "useIPMaskingPreference",
@@ -44804,7 +45450,7 @@
     "alert",
     "status"
    ],
-   "arquivos_puxados": 33
+   "arquivos_puxados": 34
   },
   {
    "protegida": true,
@@ -44894,6 +45540,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -44932,9 +45579,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -45159,6 +45808,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -45264,6 +45914,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -45301,9 +45952,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -45502,6 +46155,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -45670,6 +46324,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -45711,7 +46366,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": false,
@@ -45758,9 +46413,11 @@
     "useAuth",
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -45773,6 +46430,7 @@
    ],
    "hooks_locais": [
     "useAuth",
+    "useDeviceDetection",
     "useErrorReporter",
     "useSmsCampaignRecipients",
     "useSmsCampaigns",
@@ -45793,7 +46451,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 20
+   "arquivos_puxados": 21
   },
   {
    "protegida": false,
@@ -45942,6 +46600,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContext",
     "useContextualSuggestions",
@@ -45980,9 +46639,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -46207,6 +46868,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -46312,6 +46974,7 @@
     "useCompleteFollowup",
     "useCompleteTask",
     "useContactSegmentation",
+    "useContactTasks",
     "useContacts",
     "useContextualSuggestions",
     "useConversationAnalyses",
@@ -46349,9 +47012,11 @@
     "useDeletePlaybook",
     "useDeleteReason",
     "useDeleteTask",
+    "useDeleteTerritory",
     "useDeleteTopic",
     "useDeleteWinLossRecord",
     "useDemandForecast",
+    "useDeviceDetection",
     "useDiscDashboardView",
     "useDocumentSignatures",
     "useDocumentTemplates",
@@ -46550,6 +47215,7 @@
     "useUpdateABMAccount",
     "useUpdateRule",
     "useUpdateTask",
+    "useUpdateTerritory",
     "useUpdateThreshold",
     "useUpdateWhitespaceStatus",
     "useUpsertAccountPlan",
@@ -46718,6 +47384,7 @@
     "semantic-search",
     "sequence-processor",
     "smart-notify",
+    "system-health",
     "template-success-notifications",
     "validation-queue-worker",
     "voice-to-text",
@@ -46759,7 +47426,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 768
+   "arquivos_puxados": 781
   },
   {
    "protegida": false,
@@ -46814,9 +47481,11 @@
     "useAuth",
     "useCallback",
     "useCompleteTask",
+    "useContactTasks",
     "useContext",
     "useCreateTask",
     "useDeleteTask",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useFormContext",
@@ -46842,8 +47511,10 @@
     "useAriaLiveRegion",
     "useAuth",
     "useCompleteTask",
+    "useContactTasks",
     "useCreateTask",
     "useDeleteTask",
+    "useDeviceDetection",
     "useErrorReporter",
     "useFormField",
     "useOverdueTasks",
@@ -46870,7 +47541,7 @@
     "combobox",
     "status"
    ],
-   "arquivos_puxados": 32
+   "arquivos_puxados": 33
   },
   {
    "protegida": true,
@@ -46891,6 +47562,8 @@
     "useCallback",
     "useContext",
     "useCreateTerritory",
+    "useDeleteTerritory",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useIsAdmin",
@@ -46904,15 +47577,19 @@
     "useRef",
     "useState",
     "useTerritories",
-    "useTerritoriesPerformance"
+    "useTerritoriesPerformance",
+    "useUpdateTerritory"
    ],
    "hooks_locais": [
     "useAuth",
     "useCreateTerritory",
+    "useDeleteTerritory",
+    "useDeviceDetection",
     "useErrorReporter",
     "useIsAdmin",
     "useTerritories",
-    "useTerritoriesPerformance"
+    "useTerritoriesPerformance",
+    "useUpdateTerritory"
    ],
    "tabelas": [
     "activities",
@@ -46931,7 +47608,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 27
+   "arquivos_puxados": 29
   },
   {
    "protegida": true,
@@ -47012,6 +47689,7 @@
     "useContext",
     "useCreateEntityRelationship",
     "useDeleteEntityRelationship",
+    "useDeviceDetection",
     "useEffect",
     "useEntityRelationships",
     "useEntitySearch",
@@ -47031,6 +47709,7 @@
     "useAuth",
     "useCreateEntityRelationship",
     "useDeleteEntityRelationship",
+    "useDeviceDetection",
     "useEntityRelationships",
     "useErrorReporter",
     "useImportWhatsAppMessages",
@@ -47053,7 +47732,7 @@
     "combobox",
     "status"
    ],
-   "arquivos_puxados": 26
+   "arquivos_puxados": 27
   },
   {
    "protegida": true,
@@ -47078,6 +47757,7 @@
     "useDeleteInsight",
     "useDeleteReason",
     "useDeleteWinLossRecord",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useGenerateInsights",
@@ -47106,6 +47786,7 @@
     "useDeleteInsight",
     "useDeleteReason",
     "useDeleteWinLossRecord",
+    "useDeviceDetection",
     "useErrorReporter",
     "useGenerateInsights",
     "useSeedReasons",
@@ -47137,7 +47818,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 22
+   "arquivos_puxados": 24
   },
   {
    "protegida": true,
@@ -47162,10 +47843,12 @@
     "useDeleteInsight",
     "useDeleteReason",
     "useDeleteWinLossRecord",
+    "useDeviceDetection",
     "useEffect",
     "useErrorReporter",
     "useGenerateInsights",
     "useLocation",
+    "useMemo",
     "useMutation",
     "useNavigate",
     "useQuery",
@@ -47189,6 +47872,7 @@
     "useDeleteInsight",
     "useDeleteReason",
     "useDeleteWinLossRecord",
+    "useDeviceDetection",
     "useErrorReporter",
     "useGenerateInsights",
     "useSeedReasons",
@@ -47220,7 +47904,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 18
+   "arquivos_puxados": 19
   }
  ],
  "rotas_http_backend": [
@@ -47358,6 +48042,15 @@
    "papeis_nao_resolvidos": null,
    "definido_em": "src/components/layout/MobileSidebarDrawer.tsx",
    "resolve_para": "src/pages/Analytics.tsx"
+  },
+  {
+   "rotulo": "Aprovações Follow-up",
+   "destino": "/aprovacoes-follow-up",
+   "grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "definido_em": "src/components/layout/AppSidebar.tsx",
+   "resolve_para": "src/pages/AprovacoesFollowUp.tsx"
   },
   {
    "rotulo": "Assistente IA",
@@ -47941,6 +48634,7 @@
   "AdminVoiceDiagnostics": "src/pages/AdminVoiceDiagnostics.tsx",
   "AdvancedAnalyticsTab": "src/components/analytics/AdvancedAnalyticsTab.tsx",
   "Analytics": "src/pages/Analytics.tsx",
+  "AprovacoesFollowUp": "src/pages/AprovacoesFollowUp.tsx",
   "AskCrmChat": "src/components/ask-crm/AskCrmChat.tsx",
   "Assistente": "src/pages/Assistente.tsx",
   "Auth": "src/pages/Auth.tsx",

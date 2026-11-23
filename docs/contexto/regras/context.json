@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "fa7b7fbefabd2e07998316bc5749ca9315bea00f",
+  "sha": "409a5ae9364ed63228bcf1fe6240faf3c299b984",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-23 14:52 UTC",
-  "files_total": 3996,
-  "code_files": 3522,
-  "code_lines": 475134
+  "generated_at": "2026-11-23 15:49 UTC",
+  "files_total": 4013,
+  "code_files": 3538,
+  "code_lines": 478091
  },
  "version": "1.3.2",
- "facts_hash": "7e25a72c09a95f44",
+ "facts_hash": "5081f5bd1cd4c9ff",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -254,13 +254,20 @@
      "schedule",
      "workflow_dispatch"
     ]
+   },
+   {
+    "file": ".github/workflows/smoke-edges-pendentes.yml",
+    "name": "Smoke das edges pendentes",
+    "triggers": [
+     "workflow_dispatch"
+    ]
    }
   ],
   "package_manager": "bun",
   "languages": {
    ".sql": 1281,
-   ".tsx": 1168,
-   ".ts": 909,
+   ".tsx": 1183,
+   ".ts": 910,
    ".mjs": 123,
    ".py": 21,
    ".js": 18,
@@ -100496,9 +100503,11 @@
     "tables_transitive": [
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 14
+    "deps_count": 15
    },
    {
     "path": "",
@@ -100528,13 +100537,14 @@
     "invokes_transitive": [
      "abm-account-scorer",
      "abm-whitespace-analyzer",
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 105
+    "deps_count": 106
    },
    {
     "path": "",
@@ -100564,13 +100574,14 @@
     "invokes_transitive": [
      "abm-account-scorer",
      "abm-whitespace-analyzer",
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 110
+    "deps_count": 113
    },
    {
     "path": "",
@@ -100600,13 +100611,14 @@
     "invokes_transitive": [
      "abm-account-scorer",
      "abm-whitespace-analyzer",
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 103
+    "deps_count": 104
    },
    {
     "path": "",
@@ -100616,34 +100628,40 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "audit-analytics"
+     "audit-analytics",
+     "detect-new-device"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 21
+    "deps_count": 22
    },
    {
     "path": "",
     "file": "src/pages/AdminConexoes.tsx",
     "component": "AdminConexoes",
     "tables_transitive": [
+     "connection_anomalies",
      "connection_configs",
      "connection_quotas",
      "connection_test_logs",
      "error_logs",
+     "incoming_webhook_dlq",
      "incoming_webhook_logs",
      "incoming_webhooks"
     ],
     "invokes_transitive": [
      "ai-suggest-mapping",
+     "connection-anomaly-detector",
      "connection-introspect",
-     "connection-tester"
+     "connection-tester",
+     "detect-new-device",
+     "process-webhook-dlq"
     ],
     "rpc_transitive": [
      "get_connection_metrics"
     ],
-    "deps_count": 48
+    "deps_count": 55
    },
    {
     "path": "",
@@ -100656,10 +100674,11 @@
     ],
     "invokes_transitive": [
      "connection-anomaly-detector",
+     "detect-new-device",
      "process-webhook-dlq"
     ],
     "rpc_transitive": [],
-    "deps_count": 24
+    "deps_count": 25
    },
    {
     "path": "",
@@ -100671,11 +100690,13 @@
      "profiles",
      "secret_rotation_log"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 21
+    "deps_count": 22
    },
    {
     "path": "",
@@ -100711,13 +100732,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 99
+    "deps_count": 100
    },
    {
     "path": "",
@@ -100726,11 +100748,13 @@
     "tables_transitive": [
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 16
+    "deps_count": 17
    },
    {
     "path": "",
@@ -100740,11 +100764,13 @@
      "error_logs",
      "lux_webhook_config"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 18
+    "deps_count": 19
    },
    {
     "path": "",
@@ -100754,11 +100780,13 @@
      "error_logs",
      "schema_drift_alerts"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 14
+    "deps_count": 15
    },
    {
     "path": "",
@@ -100768,11 +100796,13 @@
      "error_logs",
      "secret_rotation_log"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 19
+    "deps_count": 20
    },
    {
     "path": "",
@@ -100795,13 +100825,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 102
+    "deps_count": 103
    },
    {
     "path": "",
@@ -100854,15 +100885,32 @@
     ],
     "invokes_transitive": [
      "ai-writing-assistant",
+     "detect-new-device",
      "disc-analyzer",
      "objection-handler",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 270
+    "deps_count": 273
+   },
+   {
+    "path": "",
+    "file": "src/pages/AprovacoesFollowUp.tsx",
+    "component": "AprovacoesFollowUp",
+    "tables_transitive": [
+     "contacts",
+     "error_logs",
+     "follow_up_approvals_v2"
+    ],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
+    "rpc_transitive": [],
+    "deps_count": 13
    },
    {
     "path": "",
@@ -100887,13 +100935,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 102
+    "deps_count": 103
    },
    {
     "path": "",
@@ -100902,9 +100951,11 @@
     "tables_transitive": [
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 18
+    "deps_count": 19
    },
    {
     "path": "",
@@ -100936,14 +100987,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 127
+    "deps_count": 130
    },
    {
     "path": "",
@@ -100966,13 +101019,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 99
+    "deps_count": 100
    },
    {
     "path": "",
@@ -100985,11 +101039,12 @@
      "sales_playbooks"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "playbook-generator",
      "playbook-recommender"
     ],
     "rpc_transitive": [],
-    "deps_count": 18
+    "deps_count": 19
    },
    {
     "path": "",
@@ -100998,9 +101053,11 @@
     "tables_transitive": [
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 10
+    "deps_count": 11
    },
    {
     "path": "",
@@ -101011,9 +101068,11 @@
      "entity_relationships",
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 27
+    "deps_count": 31
    },
    {
     "path": "",
@@ -101036,14 +101095,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 115
+    "deps_count": 118
    },
    {
     "path": "",
@@ -101069,13 +101130,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 109
+    "deps_count": 110
    },
    {
     "path": "",
@@ -101103,13 +101165,14 @@
      "whatsapp_messages"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 112
+    "deps_count": 113
    },
    {
     "path": "",
@@ -101141,8 +101204,10 @@
      "weekly_reports"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "template-success-notifications",
      "voice-to-text",
      "weekly-digest"
@@ -101150,7 +101215,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 150
+    "deps_count": 157
    },
    {
     "path": "",
@@ -101160,6 +101225,7 @@
      "activities",
      "alerts",
      "attribution_touchpoints",
+     "brain_dominance_analysis",
      "call_logs",
      "client_values",
      "cognitive_bias_history",
@@ -101174,6 +101240,7 @@
      "contact_relatives",
      "contact_time_analysis",
      "contacts",
+     "crm_consent_audit_logs",
      "crm_metric_overrides",
      "crm_relationship_audit_logs",
      "csat_surveys",
@@ -101201,6 +101268,7 @@
      "offer_suggestions",
      "people_intelligence_events",
      "phone_validations",
+     "profiles",
      "proximo_passo_feedback",
      "purchase_history",
      "reframing_analysis",
@@ -101217,6 +101285,7 @@
     ],
     "invokes_transitive": [
      "conversation-analyzer",
+     "detect-new-device",
      "disc-analyzer",
      "email-finder",
      "email-thread-summary",
@@ -101229,7 +101298,7 @@
      "get_score_explicability",
      "has_role"
     ],
-    "deps_count": 253
+    "deps_count": 273
    },
    {
     "path": "",
@@ -101254,13 +101323,15 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
-     "smart-notify"
+     "smart-notify",
+     "system-health"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 169
+    "deps_count": 176
    },
    {
     "path": "",
@@ -101288,6 +101359,7 @@
     "invokes_transitive": [
      "conversation-analyzer",
      "conversation-coaching-digest",
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
@@ -101295,7 +101367,7 @@
      "has_role",
      "seed_conversation_topics"
     ],
-    "deps_count": 104
+    "deps_count": 105
    },
    {
     "path": "",
@@ -101323,6 +101395,7 @@
     "invokes_transitive": [
      "conversation-analyzer",
      "conversation-coaching-digest",
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
@@ -101330,7 +101403,7 @@
      "has_role",
      "seed_conversation_topics"
     ],
-    "deps_count": 104
+    "deps_count": 105
    },
    {
     "path": "",
@@ -101353,13 +101426,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 105
+    "deps_count": 106
    },
    {
     "path": "",
@@ -101373,12 +101447,14 @@
      "cs_renewals",
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "compute_account_health",
      "cs_renewal_pipeline"
     ],
-    "deps_count": 25
+    "deps_count": 28
    },
    {
     "path": "",
@@ -101392,12 +101468,14 @@
      "cs_renewals",
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "compute_account_health",
      "cs_renewal_pipeline"
     ],
-    "deps_count": 25
+    "deps_count": 30
    },
    {
     "path": "",
@@ -101415,7 +101493,8 @@
     "invokes_transitive": [
      "deal-room-buyer-view",
      "deal-room-health",
-     "deal-room-share"
+     "deal-room-share",
+     "detect-new-device"
     ],
     "rpc_transitive": [
      "buyer_add_comment",
@@ -101423,7 +101502,7 @@
      "get_buyer_document_path",
      "get_deal_room_by_token"
     ],
-    "deps_count": 31
+    "deps_count": 34
    },
    {
     "path": "",
@@ -101441,7 +101520,8 @@
     "invokes_transitive": [
      "deal-room-buyer-view",
      "deal-room-health",
-     "deal-room-share"
+     "deal-room-share",
+     "detect-new-device"
     ],
     "rpc_transitive": [
      "buyer_add_comment",
@@ -101449,7 +101529,7 @@
      "get_buyer_document_path",
      "get_deal_room_by_token"
     ],
-    "deps_count": 21
+    "deps_count": 22
    },
    {
     "path": "",
@@ -101463,9 +101543,11 @@
      "contacts",
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 37
+    "deps_count": 38
    },
    {
     "path": "",
@@ -101488,13 +101570,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 100
+    "deps_count": 101
    },
    {
     "path": "",
@@ -101503,11 +101586,13 @@
     "tables_transitive": [
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 18
+    "deps_count": 19
    },
    {
     "path": "",
@@ -101532,13 +101617,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 103
+    "deps_count": 104
    },
    {
     "path": "",
@@ -101557,6 +101643,9 @@
      "error_logs",
      "health_alerts",
      "insights",
+     "intent_scores",
+     "intent_signals",
+     "intent_tracking_pixels",
      "interactions",
      "lux_intelligence",
      "metaprogram_analysis",
@@ -101569,14 +101658,16 @@
     ],
     "invokes_transitive": [
      "ai-writing-assistant",
+     "detect-new-device",
      "disc-analyzer",
+     "intent-aggregator",
      "lux-trigger",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 204
+    "deps_count": 208
    },
    {
     "path": "",
@@ -101602,13 +101693,15 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
-     "smart-notify"
+     "smart-notify",
+     "system-health"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 161
+    "deps_count": 172
    },
    {
     "path": "",
@@ -101635,14 +101728,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 181
+    "deps_count": 191
    },
    {
     "path": "",
@@ -101662,13 +101757,14 @@
     ],
     "invokes_transitive": [
      "bulk-revalidate",
+     "detect-new-device",
      "email-finder",
      "validation-queue-worker"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 44
+    "deps_count": 45
    },
    {
     "path": "",
@@ -101713,6 +101809,7 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "ficha360-conversation-summary",
      "next-best-action",
@@ -101722,7 +101819,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 209
+    "deps_count": 210
    },
    {
     "path": "",
@@ -101736,13 +101833,14 @@
      "forecast_snapshots"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "forecast-analyzer",
      "forecast-narrative"
     ],
     "rpc_transitive": [
      "seed_forecast_period"
     ],
-    "deps_count": 25
+    "deps_count": 26
    },
    {
     "path": "",
@@ -101756,13 +101854,14 @@
      "forecast_snapshots"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "forecast-analyzer",
      "forecast-narrative"
     ],
     "rpc_transitive": [
      "seed_forecast_period"
     ],
-    "deps_count": 15
+    "deps_count": 16
    },
    {
     "path": "",
@@ -101776,9 +101875,11 @@
      "interactions",
      "whatsapp_messages"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 25
+    "deps_count": 26
    },
    {
     "path": "",
@@ -101804,14 +101905,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 124
+    "deps_count": 127
    },
    {
     "path": "",
@@ -101835,14 +101938,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 163
+    "deps_count": 167
    },
    {
     "path": "",
@@ -101867,13 +101972,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 174
+    "deps_count": 175
    },
    {
     "path": "",
@@ -101899,6 +102005,7 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "intent-aggregator",
      "voice-to-text"
@@ -101906,7 +102013,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 105
+    "deps_count": 106
    },
    {
     "path": "",
@@ -101932,6 +102039,7 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "intent-aggregator",
      "voice-to-text"
@@ -101939,7 +102047,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 105
+    "deps_count": 106
    },
    {
     "path": "",
@@ -101966,14 +102074,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 199
+    "deps_count": 202
    },
    {
     "path": "",
@@ -101997,13 +102107,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 104
+    "deps_count": 105
    },
    {
     "path": "",
@@ -102028,13 +102139,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 106
+    "deps_count": 107
    },
    {
     "path": "",
@@ -102048,12 +102160,13 @@
      "lead_scores"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "lead-scorer"
     ],
     "rpc_transitive": [
      "persist_lead_score_results"
     ],
-    "deps_count": 19
+    "deps_count": 20
    },
    {
     "path": "",
@@ -102064,9 +102177,11 @@
      "lead_score_threshold_automations",
      "lead_score_threshold_log"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 29
+    "deps_count": 31
    },
    {
     "path": "",
@@ -102074,18 +102189,20 @@
     "component": "LeadScoringConfig",
     "tables_transitive": [
      "error_logs",
+     "lead_score_config",
      "lead_score_history",
      "lead_score_rules",
      "lead_score_thresholds",
      "lead_scores"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "lead-scorer"
     ],
     "rpc_transitive": [
      "persist_lead_score_results"
     ],
-    "deps_count": 21
+    "deps_count": 24
    },
    {
     "path": "",
@@ -102107,13 +102224,15 @@
      "system_alerts"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
-     "smart-notify"
+     "smart-notify",
+     "system-health"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 89
+    "deps_count": 92
    },
    {
     "path": "",
@@ -102140,14 +102259,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 119
+    "deps_count": 122
    },
    {
     "path": "",
@@ -102157,9 +102278,11 @@
      "error_logs",
      "form_submissions"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 37
+    "deps_count": 38
    },
    {
     "path": "",
@@ -102181,6 +102304,7 @@
      "nurturing_workflows"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "nurturing-runner"
     ],
     "rpc_transitive": [
@@ -102189,7 +102313,7 @@
      "evaluate_mql",
      "get_marketing_funnel_stats"
     ],
-    "deps_count": 32
+    "deps_count": 33
    },
    {
     "path": "",
@@ -102199,9 +102323,11 @@
      "error_logs",
      "lead_magnet_downloads"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 16
+    "deps_count": 17
    },
    {
     "path": "",
@@ -102224,13 +102350,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 98
+    "deps_count": 99
    },
    {
     "path": "",
@@ -102256,15 +102383,17 @@
     ],
     "invokes_transitive": [
      "ai-writing-assistant",
+     "detect-new-device",
      "disc-analyzer",
      "objection-handler",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 171
+    "deps_count": 174
    },
    {
     "path": "",
@@ -102282,12 +102411,13 @@
      "system_alerts"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 78
+    "deps_count": 79
    },
    {
     "path": "",
@@ -102311,13 +102441,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 106
+    "deps_count": 107
    },
    {
     "path": "",
@@ -102343,14 +102474,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 118
+    "deps_count": 121
    },
    {
     "path": "",
@@ -102389,15 +102522,17 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
      "smart-reminders",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 121
+    "deps_count": 124
    },
    {
     "path": "",
@@ -102407,9 +102542,11 @@
      "error_logs",
      "notification_preferences"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 15
+    "deps_count": 16
    },
    {
     "path": "",
@@ -102434,6 +102571,7 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "nurturing-runner",
      "voice-to-text"
@@ -102442,7 +102580,7 @@
      "enroll_contact_in_workflow",
      "has_role"
     ],
-    "deps_count": 106
+    "deps_count": 107
    },
    {
     "path": "",
@@ -102453,9 +102591,11 @@
      "error_logs",
      "profiles"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 21
+    "deps_count": 22
    },
    {
     "path": "",
@@ -102468,10 +102608,11 @@
      "error_logs"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "generate-behavioral-profile"
     ],
     "rpc_transitive": [],
-    "deps_count": 18
+    "deps_count": 19
    },
    {
     "path": "",
@@ -102494,13 +102635,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 107
+    "deps_count": 108
    },
    {
     "path": "",
@@ -102509,11 +102651,13 @@
     "tables_transitive": [
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 11
+    "deps_count": 12
    },
    {
     "path": "",
@@ -102545,6 +102689,7 @@
      "win_loss_records"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "playbook-generator",
      "playbook-recommender",
@@ -102556,7 +102701,7 @@
      "has_role",
      "seed_win_loss_defaults"
     ],
-    "deps_count": 131
+    "deps_count": 132
    },
    {
     "path": "",
@@ -102569,11 +102714,12 @@
      "sales_playbooks"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "playbook-generator",
      "playbook-recommender"
     ],
     "rpc_transitive": [],
-    "deps_count": 19
+    "deps_count": 20
    },
    {
     "path": "",
@@ -102586,11 +102732,12 @@
      "sales_playbooks"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "playbook-generator",
      "playbook-recommender"
     ],
     "rpc_transitive": [],
-    "deps_count": 24
+    "deps_count": 25
    },
    {
     "path": "",
@@ -102608,7 +102755,8 @@
     "invokes_transitive": [
      "deal-room-buyer-view",
      "deal-room-health",
-     "deal-room-share"
+     "deal-room-share",
+     "detect-new-device"
     ],
     "rpc_transitive": [
      "buyer_add_comment",
@@ -102616,7 +102764,7 @@
      "get_buyer_document_path",
      "get_deal_room_by_token"
     ],
-    "deps_count": 17
+    "deps_count": 18
    },
    {
     "path": "",
@@ -102626,9 +102774,11 @@
      "error_logs",
      "form_submissions"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 18
+    "deps_count": 19
    },
    {
     "path": "",
@@ -102649,9 +102799,11 @@
      "error_logs",
      "lead_magnet_downloads"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 16
+    "deps_count": 17
    },
    {
     "path": "",
@@ -102700,14 +102852,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 109
+    "deps_count": 112
    },
    {
     "path": "",
@@ -102718,9 +102872,11 @@
      "error_logs",
      "neuro_behavioral_history"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 21
+    "deps_count": 22
    },
    {
     "path": "",
@@ -102747,13 +102903,14 @@
      "vw_churn_risk_ranking"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 109
+    "deps_count": 110
    },
    {
     "path": "",
@@ -102764,7 +102921,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 10
+    "deps_count": 11
    },
    {
     "path": "",
@@ -102777,13 +102934,14 @@
      "revops_snapshots"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "revops-snapshot-builder"
     ],
     "rpc_transitive": [
      "compute_revops_kpis",
      "dismiss_revops_alert"
     ],
-    "deps_count": 24
+    "deps_count": 28
    },
    {
     "path": "",
@@ -102798,9 +102956,11 @@
      "vw_rodizio_carga_closers",
      "vw_rodizio_carga_sdrs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 19
+    "deps_count": 20
    },
    {
     "path": "",
@@ -102809,11 +102969,13 @@
     "tables_transitive": [
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 11
+    "deps_count": 12
    },
    {
     "path": "",
@@ -102822,11 +102984,13 @@
     "tables_transitive": [
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 11
+    "deps_count": 12
    },
    {
     "path": "",
@@ -102850,9 +103014,11 @@
      "ip_whitelist",
      "webauthn_credentials"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 32
+    "deps_count": 33
    },
    {
     "path": "",
@@ -102880,6 +103046,7 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "sequence-processor",
      "voice-to-text"
@@ -102887,7 +103054,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 128
+    "deps_count": 129
    },
    {
     "path": "",
@@ -102900,10 +103067,11 @@
      "sms_templates"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "send-sms-campaign"
     ],
     "rpc_transitive": [],
-    "deps_count": 19
+    "deps_count": 20
    },
    {
     "path": "",
@@ -102940,13 +103108,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 108
+    "deps_count": 109
    },
    {
     "path": "",
@@ -102959,9 +103128,11 @@
      "contacts",
      "error_logs"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 31
+    "deps_count": 32
    },
    {
     "path": "",
@@ -102972,11 +103143,13 @@
      "error_logs",
      "territories"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 26
+    "deps_count": 28
    },
    {
     "path": "",
@@ -103002,9 +103175,11 @@
      "whatsapp_messages",
      "whatsapp_transcriptions"
     ],
-    "invokes_transitive": [],
+    "invokes_transitive": [
+     "detect-new-device"
+    ],
     "rpc_transitive": [],
-    "deps_count": 25
+    "deps_count": 26
    },
    {
     "path": "",
@@ -103018,13 +103193,14 @@
      "win_loss_records"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "win-loss-analyzer",
      "win-loss-record-deal"
     ],
     "rpc_transitive": [
      "seed_win_loss_defaults"
     ],
-    "deps_count": 21
+    "deps_count": 23
    },
    {
     "path": "",
@@ -103038,13 +103214,14 @@
      "win_loss_records"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "win-loss-analyzer",
      "win-loss-record-deal"
     ],
     "rpc_transitive": [
      "seed_win_loss_defaults"
     ],
-    "deps_count": 16
+    "deps_count": 17
    },
    {
     "path": "/",
@@ -103084,13 +103261,14 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 181
+    "deps_count": 182
    },
    {
     "path": "/contatos",
@@ -103116,14 +103294,16 @@
      "vak_analysis_history"
     ],
     "invokes_transitive": [
+     "detect-new-device",
      "disc-analyzer",
      "smart-notify",
+     "system-health",
      "voice-to-text"
     ],
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 191
+    "deps_count": 198
    },
    {
     "path": "/contatos/:id",
@@ -103134,6 +103314,7 @@
      "alerts",
      "attribution_touchpoints",
      "behavioral_insight_feedback",
+     "brain_dominance_analysis",
      "call_logs",
      "churn_risk_scores",
      "client_values",
@@ -103161,6 +103342,7 @@
      "conversation_analyses",
      "conversation_topics_catalog",
      "crm_alerts",
+     "crm_consent_audit_logs",
      "crm_metric_overrides",
      "crm_relationship_audit_logs",
      "csat_surveys",
@@ -103195,6 +103377,7 @@
      "offer_suggestions",
      "people_intelligence_events",
      "phone_validations",
+     "profiles",
      "proximo_passo_feedback",
      "psychographic_audit_log",
      "purchase_history",
@@ -103210,6 +103393,7 @@
      "suggested_life_events",
      "suggested_rapport_intel",
      "system_alerts",
+     "trigger_usage_history",
      "v_contact_personality_audit",
      "v_life_events_audit",
      "vak_analysis_history",
@@ -103220,9 +103404,11 @@
      "whatsapp_messages_index"
     ],
     "invokes_transitive": [
+     "ai-writing-assistant",
      "conversation-analyzer",
      "conversation-coaching-digest",
      "detect-churn-risk",
+     "detect-new-device",
      "disc-analyzer",
      "email-finder",
      "email-thread-summary",
@@ -103248,7 +103434,7 @@
      "seed_conversation_topics",
      "validate_behavioral_consistency"
     ],
-    "deps_count": 360
+    "deps_count": 426
    },
    {
     "path": "/survey/:token",
@@ -106441,6 +106627,13 @@
     "file": "scripts/ai-context/gerar.unit.mjs"
    },
    {
+    "path": "/aprovacoes-follow-up",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/assistente",
     "component": "P",
     "guard": "Protected",
@@ -107184,7 +107377,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 997,
+  "components_count": 1010,
   "hooks": [
    {
     "name": "useContacts",
@@ -108515,6 +108708,14 @@
     "file": "src/hooks/useFocusTrap.ts"
    },
    {
+    "name": "useFollowUpApprovals",
+    "file": "src/hooks/useFollowUpApprovals.ts"
+   },
+   {
+    "name": "useDecideFollowUp",
+    "file": "src/hooks/useFollowUpApprovals.ts"
+   },
+   {
     "name": "useForecastPeriods",
     "file": "src/hooks/useForecasting.ts"
    },
@@ -109615,6 +109816,10 @@
     "file": "src/hooks/useTasks.ts"
    },
    {
+    "name": "useContactTasks",
+    "file": "src/hooks/useTasks.ts"
+   },
+   {
     "name": "useCreateTask",
     "file": "src/hooks/useTasks.ts"
    },
@@ -109664,6 +109869,14 @@
    },
    {
     "name": "useCreateTerritory",
+    "file": "src/hooks/useTerritories.ts"
+   },
+   {
+    "name": "useUpdateTerritory",
+    "file": "src/hooks/useTerritories.ts"
+   },
+   {
+    "name": "useDeleteTerritory",
     "file": "src/hooks/useTerritories.ts"
    },
    {
@@ -109959,6 +110172,10 @@
    },
    {
     "guard": "RequireAuth",
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "guard": "Protected",
     "file": "src/app/AppRoutes.tsx"
    },
    {
@@ -110639,7 +110856,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 591,
+   "lines": 593,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -110675,8 +110892,8 @@
   },
   {
    "module": "src/components",
-   "files": 997,
-   "lines": 149916,
+   "files": 1010,
+   "lines": 151971,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -110704,6 +110921,7 @@
     "follow_up_approvals_v2",
     "hidden_objections",
     "interactions",
+    "lead_score_config",
     "life_events",
     "metaprogram_analysis",
     "neuro_behavioral_history",
@@ -110727,6 +110945,7 @@
    ],
    "exports": [
     "ScrollToTop.tsx: ScrollToTop",
+    "ABMAccountEditDialog.tsx: ABMAccountEditDialog",
     "ABMCampaignDialog.tsx: ABMCampaignDialog",
     "AccountHierarchyTree.tsx: AccountHierarchyTree",
     "AccountPlanEditor.tsx: AccountPlanEditor",
@@ -110764,16 +110983,15 @@
     "SystemHealthWidget.tsx: SystemHealthWidget",
     "UptimeSparkline.tsx: UptimeSparkline",
     "VoiceAITestPanel.tsx: VoiceAITestPanel",
-    "AnomaliesWidget.tsx: AnomaliesWidget",
-    "ConnectionCard.tsx: ConnectionCard"
+    "AnomaliesWidget.tsx: AnomaliesWidget"
    ],
    "docs": [
     "AppreciationPanel.tsx: ============================================== APPRECIATION TRACKER PANEL Give honest and sincere appreciation ==============================================",
     "CarnegieDashboard.tsx: ============================================== CARNEGIE DASHBOARD Unified view of all Carnegie principles ==============================================",
+    "CarnegieExtendedLibrary.tsx: ============================================== CARNEGIE EXTENDED LIBRARY Biblioteca consultavel das 10 metodologias Carnegie que existiam apenas como dados sem tela. ==============================================",
     "CarnegieQuickAccess.tsx: ============================================== CARNEGIE QUICK ACCESS PANEL Quick access to Carnegie principles from contact page ==============================================",
     "CarnegieScorePanel.tsx: ============================================== CARNEGIE SCORE PANEL Unified visualization of Carnegie principles ==============================================",
-    "FaceSavingPanel.tsx: ============================================== FACE-SAVING TECHNIQUES PANEL Let the other person save face ==============================================",
-    "IdentityLabelingPanel.tsx: ============================================== IDENTITY LABELING PANEL Give people a reputation to live up to =============================================="
+    "FaceSavingPanel.tsx: ============================================== FACE-SAVING TECHNIQUES PANEL Let the other person save face =============================================="
    ],
    "deps": [
     "@hookform/resolvers",
@@ -110815,6 +111033,7 @@
    ],
    "file_list": [
     "src/components/ScrollToTop.tsx",
+    "src/components/abm/ABMAccountEditDialog.tsx",
     "src/components/abm/ABMCampaignDialog.tsx",
     "src/components/abm/AccountHierarchyTree.tsx",
     "src/components/abm/AccountPlanEditor.tsx",
@@ -110857,6 +111076,7 @@
     "src/components/admin/conexoes/ConnectionCard.tsx",
     "src/components/admin/conexoes/ConnectionFormDialog.tsx",
     "src/components/admin/conexoes/ConnectionMetricsSparkline.tsx",
+    "src/components/admin/conexoes/ConnectionTestHistory.tsx",
     "src/components/admin/conexoes/IncomingWebhookCard.tsx",
     "src/components/admin/conexoes/IncomingWebhookFormDialog.tsx",
     "src/components/admin/conexoes/IncomingWebhookLogsDialog.tsx",
@@ -110891,9 +111111,7 @@
     "src/components/analytics/CognitiveBiasesPanel.tsx",
     "src/components/analytics/CohortAnalysisWidget.tsx",
     "src/components/analytics/DISCAnalyticsPanel.tsx",
-    "src/components/analytics/DISCConversionMetricsPanel.tsx",
-    "src/components/analytics/DailyStatsWidget.tsx",
-    "src/components/analytics/DataHealthWidget.contract.test.tsx"
+    "src/components/analytics/DISCConversionMetricsPanel.tsx"
    ]
   },
   {
@@ -111122,8 +111340,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 443,
-   "lines": 58453,
+   "files": 444,
+   "lines": 58704,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -111216,6 +111434,7 @@
     "favorite_templates",
     "feature_flags",
     "ficha360_conversation_summaries",
+    "follow_up_approvals_v2",
     "forecast_periods",
     "forecast_quota_settings",
     "forecast_snapshots",
@@ -111696,8 +111915,8 @@
   },
   {
    "module": "src/pages",
-   "files": 154,
-   "lines": 28835,
+   "files": 156,
+   "lines": 29476,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -111748,6 +111967,7 @@
     "AdminTelemetria.tsx: AdminTelemetriaPage",
     "AdminVoiceDiagnostics.tsx: AdminVoiceDiagnostics",
     "Analytics.tsx: Analytics",
+    "AprovacoesFollowUp.tsx: AprovacoesFollowUp",
     "Assistente.tsx: Assistente",
     "Auth.tsx: Auth",
     "Automacoes.tsx: Automacoes",
@@ -111770,8 +111990,7 @@
     "DealRooms.tsx: DealRooms",
     "Deduplicacao.tsx: Deduplicacao",
     "DesignSystem.tsx: DesignSystem",
-    "DocsPage.tsx: DocsPage",
-    "Documentos.tsx: Documentos"
+    "DocsPage.tsx: DocsPage"
    ],
    "docs": [],
    "deps": [
@@ -111821,6 +112040,7 @@
     "src/pages/AdminTelemetria.tsx",
     "src/pages/AdminVoiceDiagnostics.tsx",
     "src/pages/Analytics.tsx",
+    "src/pages/AprovacoesFollowUp.tsx",
     "src/pages/Assistente.tsx",
     "src/pages/Auth.tsx",
     "src/pages/Automacoes.tsx",
@@ -111883,8 +112103,7 @@
     "src/pages/NotificacoesConfig.tsx",
     "src/pages/Nurturing.tsx",
     "src/pages/Onboarding.tsx",
-    "src/pages/PerfisComportamentais.tsx",
-    "src/pages/Performance.tsx"
+    "src/pages/PerfisComportamentais.tsx"
    ]
   },
   {
@@ -112055,7 +112274,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 27356,
+   "lines": 27364,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113308,6 +113527,7 @@
      "src/hooks/useEmailCampaigns.ts",
      "src/hooks/useEnrichmentCoverage.ts",
      "src/hooks/useEnrichmentExport.ts",
+     "src/hooks/useFollowUpApprovals.ts",
      "src/hooks/useLuxIntelligence.ts",
      "src/hooks/useNLPAnalyticsData.ts",
      "src/hooks/useNLPAutoAnalysis.ts",
@@ -113936,6 +114156,12 @@
    "follow_up_approvals_v2": {
     "insert": [
      "src/components/dashboard/StrategicNextStepsCard.tsx"
+    ],
+    "select": [
+     "src/hooks/useFollowUpApprovals.ts"
+    ],
+    "update": [
+     "src/hooks/useFollowUpApprovals.ts"
     ]
    },
    "forecast_periods": {
@@ -114313,6 +114539,9 @@
     ]
    },
    "lead_score_config": {
+    "upsert": [
+     "src/components/lead-score/LeadScoreWeightsEditor.tsx"
+    ],
     "select": [
      "src/hooks/useLeadScore.ts"
     ]
@@ -114681,6 +114910,7 @@
     "select": [
      "scripts/inventario/gerar-edge-tabela.test.mjs",
      "src/components/admin/AdminQuickActions.tsx",
+     "src/components/contact-detail/ContactBehavioralTab.tsx",
      "src/components/dashboard/WelcomeGreetingPopup.tsx",
      "src/components/triggers/CommunicationTrainingMode.tsx",
      "src/components/triggers/CompatibilityScore.tsx",
@@ -115237,6 +115467,12 @@
      "src/hooks/useTerritories.ts"
     ],
     "insert": [
+     "src/hooks/useTerritories.ts"
+    ],
+    "update": [
+     "src/hooks/useTerritories.ts"
+    ],
+    "delete": [
      "src/hooks/useTerritories.ts"
     ]
    },
@@ -116705,6 +116941,16 @@
     "summary",
     "user_id"
    ],
+   "follow_up_approvals_v2": [
+    "channel",
+    "contact_id",
+    "content",
+    "created_at",
+    "id",
+    "scheduled_at",
+    "status",
+    "user_id"
+   ],
    "forecast_periods": [
     "id",
     "period_end",
@@ -117850,6 +118096,7 @@
     "description",
     "id",
     "is_active",
+    "manager_id",
     "metadata"
    ],
    "ticket_comments": [
@@ -119292,6 +119539,9 @@
    ],
    "detect-churn-risk": [
     "src/hooks/useChurnRisk.ts"
+   ],
+   "detect-new-device": [
+    "src/hooks/useAuth.tsx"
    ],
    "disc-analyzer": [
     "src/components/contact-detail/ContactInteractionsTab.tsx",
@@ -120790,6 +121040,10 @@
     "column": "tags"
    },
    {
+    "table": "follow_up_approvals_v2",
+    "column": "scheduled_at"
+   },
+   {
     "table": "health_alert_settings",
     "column": "check_frequency_hours"
    },
@@ -122186,6 +122440,11 @@
     "rules": "type=email"
    },
    {
+    "file": "src/components/contact-detail/ContactTasksPanel.tsx",
+    "field": "contact-task-due",
+    "rules": "type=date"
+   },
+   {
     "file": "src/components/contact-detail/LifeEventsTab.tsx",
     "field": "date",
     "rules": "type=date"
@@ -122224,6 +122483,11 @@
     "file": "src/components/interactions/insights/ObjectionExamplesModal.tsx",
     "field": "objection-date-to",
     "rules": "type=date, min=dateFrom || undefined"
+   },
+   {
+    "file": "src/components/lead-score/LeadScoreWeightsEditor.tsx",
+    "field": "key",
+    "rules": "type=number, min=0, max=1, step=0.05"
    },
    {
     "file": "src/components/marketing/PublicFormRenderer.tsx",
@@ -122676,6 +122940,11 @@
     "file": "src/hooks/useFicha360Sort.ts",
     "name": "Ficha360Sort",
     "values": "recente | relevante"
+   },
+   {
+    "file": "src/hooks/useFollowUpApprovals.ts",
+    "name": "FollowUpDecision",
+    "values": "approved | rejected"
    },
    {
     "file": "src/hooks/useForecasting.ts",
@@ -124181,6 +124450,10 @@
     "msg": "Não foi possível copiar"
    },
    {
+    "file": "src/components/carnegie/CarnegieExtendedLibrary.tsx",
+    "msg": "Nao foi possivel copiar"
+   },
+   {
     "file": "src/components/carnegie/FaceSavingPanel.tsx",
     "msg": "Não foi possível copiar"
    },
@@ -124731,6 +125004,14 @@
    {
     "file": "src/components/lead-routing/QuickDistributeWidget.tsx",
     "msg": "${result.erros.length} cliente(s) com erro na simulação"
+   },
+   {
+    "file": "src/components/lead-score/LeadScoreWeightsEditor.tsx",
+    "msg": "Falha ao salvar: ${parseApiError(e)}"
+   },
+   {
+    "file": "src/components/lead-score/LeadScoreWeightsEditor.tsx",
+    "msg": "Não autenticado"
    },
    {
     "file": "src/components/lux/CompanyIntelligence.tsx",
@@ -125861,6 +126142,10 @@
     "msg": "Erro ao salvar preferências da Ficha 360"
    },
    {
+    "file": "src/hooks/useFollowUpApprovals.ts",
+    "msg": "Erro ao registrar a decisão"
+   },
+   {
     "file": "src/hooks/useForecasting.ts",
     "msg": "Erro: ${parseApiError(e)}"
    },
@@ -126590,7 +126875,15 @@
    },
    {
     "file": "src/hooks/useTerritories.ts",
+    "msg": "Erro ao atualizar território"
+   },
+   {
+    "file": "src/hooks/useTerritories.ts",
     "msg": "Erro ao criar território"
+   },
+   {
+    "file": "src/hooks/useTerritories.ts",
+    "msg": "Erro ao excluir território"
    },
    {
     "file": "src/hooks/useTerritories.ts",
@@ -127015,6 +127308,10 @@
    {
     "file": "src/pages/ResetPassword.tsx",
     "msg": "Erro ao redefinir senha. Tente novamente."
+   },
+   {
+    "file": "src/pages/ResetPassword.tsx",
+    "msg": "Esta senha já apareceu em vazamentos públicos. Escolha outra para proteger sua conta."
    },
    {
     "file": "src/pages/ResetPassword.tsx",
@@ -128001,8 +128298,16 @@
     "text": "O webhook nativo não calcula HMAC SHA-256 e não deve chamar esta URL diretamente."
    },
    {
+    "file": "src/components/carnegie/CarnegieExtendedLibrary.tsx",
+    "text": "que existiam apenas como dados sem tela."
+   },
+   {
     "file": "src/components/carnegie/IdentityLabelingPanel.tsx",
     "text": "Future Projection & Past Validation */}"
+   },
+   {
+    "file": "src/components/contact-detail/ContactBehavioralTab.tsx",
+    "text": "que difere do shape cru de `contacts`. Mapeamos apenas o que os hooks leem,"
    },
    {
     "file": "src/components/contact-detail/ContactBehavioralTab.tsx",
@@ -128175,6 +128480,10 @@
    {
     "file": "src/hooks/useAdvancedTriggers.ts",
     "text": "* O painel de Gatilhos Avançados (Analytics) detectava conflito entre apenas"
+   },
+   {
+    "file": "src/hooks/useAuth.tsx",
+    "text": "o acesso (a EF é passiva e devolve apenas is_new/is_trusted)."
    },
    {
     "file": "src/hooks/useBestTimeToContact.ts",
@@ -128423,6 +128732,10 @@
    {
     "file": "src/hooks/useStakeholderSimulator.ts",
     "text": "Limit to 3 risks"
+   },
+   {
+    "file": "src/hooks/useTasks.ts",
+    "text": "(`assert_contact_access`) e devolve `SETOF tasks` ordenado por vencimento."
    },
    {
     "file": "src/hooks/useTriggerAnalytics.ts",
@@ -152979,6 +153292,18 @@
     "kind": "escreve"
    },
    {
+    "file": "src/components/admin/conexoes/ConnectionTestHistory.tsx",
+    "field": "status",
+    "value": "success",
+    "kind": "compara"
+   },
+   {
+    "file": "src/components/admin/conexoes/ConnectionTestHistory.tsx",
+    "field": "status",
+    "value": "success",
+    "kind": "compara"
+   },
+   {
     "file": "src/components/admin/conexoes/IncomingWebhookLogsDialog.tsx",
     "field": "status",
     "value": "success",
@@ -153345,6 +153670,24 @@
     "kind": "compara"
    },
    {
+    "file": "src/components/contact-detail/ContactTasksPanel.tsx",
+    "field": "status",
+    "value": "pending",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/contact-detail/ContactTasksPanel.tsx",
+    "field": "status",
+    "value": "completed",
+    "kind": "compara"
+   },
+   {
+    "file": "src/components/contact-detail/ContactTasksPanel.tsx",
+    "field": "status",
+    "value": "done",
+    "kind": "compara"
+   },
+   {
     "file": "src/components/contact-detail/DuplicateManagementPanel.tsx",
     "field": "type",
     "value": "eq",
@@ -153409,6 +153752,12 @@
     "field": "type",
     "value": "eq",
     "kind": "escreve"
+   },
+   {
+    "file": "src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx",
+    "field": "type",
+    "value": "number",
+    "kind": "compara"
    },
    {
     "file": "src/components/contact-detail/behavioral-tab/RapportCard.tsx",
@@ -158397,6 +158746,18 @@
     "kind": "escreve"
    },
    {
+    "file": "src/hooks/useFollowUpApprovals.ts",
+    "field": "status",
+    "value": "pending",
+    "kind": "filtra"
+   },
+   {
+    "file": "src/hooks/useFollowUpApprovals.ts",
+    "field": "status",
+    "value": "pending",
+    "kind": "filtra"
+   },
+   {
     "file": "src/hooks/useForecasting.ts",
     "field": "status",
     "value": "open",
@@ -159264,6 +159625,12 @@
     "file": "src/hooks/useTasks.ts",
     "field": "type",
     "value": "neq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useTasks.ts",
+    "field": "type",
+    "value": "eq",
     "kind": "escreve"
    },
    {
@@ -160257,6 +160624,12 @@
     "kind": "compara"
    },
    {
+    "file": "src/pages/Forecasting.tsx",
+    "field": "status",
+    "value": "open",
+    "kind": "compara"
+   },
+   {
     "file": "src/pages/Index.tsx",
     "field": "type",
     "value": "spring",
@@ -160686,6 +161059,18 @@
     "file": "src/pages/automacoes/RuleFormDialog.tsx",
     "field": "type",
     "value": "create_alert",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/pages/cadastro/RelationshipList.tsx",
+    "field": "type",
+    "value": "in",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/pages/cadastro/RelationshipList.tsx",
+    "field": "type",
+    "value": "in",
     "kind": "escreve"
    },
    {
@@ -167367,6 +167752,10 @@
    {
     "file": "src/components/contact-detail/ContactBehavioralTab.tsx",
     "line": "gcTime: 10 * 60 * 1000,"
+   },
+   {
+    "file": "src/components/contact-detail/ContactBehavioralTab.tsx",
+    "line": "staleTime: 10 * 60 * 1000,"
    },
    {
     "file": "src/components/contact-detail/ContactBehavioralTab.tsx",
@@ -183306,6 +183695,10 @@
    },
    {
     "file": "src/hooks/useAuditAnalytics.ts",
+    "call": "invoke("
+   },
+   {
+    "file": "src/hooks/useAuth.tsx",
     "call": "invoke("
    },
    {
@@ -211948,6 +212341,26 @@
       "compara:src/components/contact-detail/UnifiedTimeline.tsx",
       "escreve:src/hooks/useUnifiedTimeline.ts"
      ],
+     "number": [
+      "compara:src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx",
+      "compara:src/components/crm/marketing/components/BehavioralSegmentation.tsx",
+      "compara:supabase/functions/_shared/validate.ts",
+      "escreve:src/hooks/useContactSegmentation.ts",
+      "escreve:src/lib/reports/reportEngine.ts",
+      "escreve:supabase/functions/_shared/validate.ts",
+      "escreve:supabase/functions/_shared/validate_test.ts",
+      "escreve:supabase/functions/abm-whitespace-analyzer/index.ts",
+      "escreve:supabase/functions/attribution-calculator/index.ts",
+      "escreve:supabase/functions/conversation-analyzer/index.ts",
+      "escreve:supabase/functions/conversational-search/index.ts",
+      "escreve:supabase/functions/demand-forecast/index.ts",
+      "escreve:supabase/functions/ficha360-conversation-summary/index.ts",
+      "escreve:supabase/functions/forecast-analyzer/index.ts",
+      "escreve:supabase/functions/lead-score-threshold-runner/index.ts",
+      "escreve:supabase/functions/mcp-server/index.ts",
+      "escreve:supabase/functions/objection-handler/index.ts",
+      "escreve:supabase/functions/suggest-next-action/index.ts"
+     ],
      "hobby": [
       "compara:src/components/contact-detail/behavioral-tab/RapportCard.tsx",
       "compara:src/components/dashboard/widgets/AIApprovalsWidget.tsx",
@@ -211990,25 +212403,6 @@
      ],
      "behavior": [
       "escreve:src/components/crm/RelationshipKPIsDashboard.tsx"
-     ],
-     "number": [
-      "compara:src/components/crm/marketing/components/BehavioralSegmentation.tsx",
-      "compara:supabase/functions/_shared/validate.ts",
-      "escreve:src/hooks/useContactSegmentation.ts",
-      "escreve:src/lib/reports/reportEngine.ts",
-      "escreve:supabase/functions/_shared/validate.ts",
-      "escreve:supabase/functions/_shared/validate_test.ts",
-      "escreve:supabase/functions/abm-whitespace-analyzer/index.ts",
-      "escreve:supabase/functions/attribution-calculator/index.ts",
-      "escreve:supabase/functions/conversation-analyzer/index.ts",
-      "escreve:supabase/functions/conversational-search/index.ts",
-      "escreve:supabase/functions/demand-forecast/index.ts",
-      "escreve:supabase/functions/ficha360-conversation-summary/index.ts",
-      "escreve:supabase/functions/forecast-analyzer/index.ts",
-      "escreve:supabase/functions/lead-score-threshold-runner/index.ts",
-      "escreve:supabase/functions/mcp-server/index.ts",
-      "escreve:supabase/functions/objection-handler/index.ts",
-      "escreve:supabase/functions/suggest-next-action/index.ts"
      ],
      "select": [
       "compara:src/components/custom-fields/CustomFieldsManager.tsx",
@@ -212132,6 +212526,7 @@
       "escreve:src/components/intelligence/CrossRefTab.tsx",
       "escreve:src/hooks/useCrossReference.ts",
       "escreve:src/hooks/useExternalInteractions.ts",
+      "escreve:src/pages/cadastro/RelationshipList.tsx",
       "escreve:supabase/functions/_shared/tenant-guard_test.ts"
      ],
      "contact": [
@@ -213033,6 +213428,7 @@
       "compara:supabase/functions/_shared/webhook-dlq-contract_test.ts",
       "compara:supabase/functions/get-signature/index.ts",
       "compara:supabase/functions/validation-queue-worker/index.ts",
+      "escreve:src/components/contact-detail/ContactTasksPanel.tsx",
       "escreve:src/components/crm/CRMAutomationAuditLog.tsx",
       "escreve:src/components/dashboard/StrategicNextStepsCard.tsx",
       "escreve:src/components/deal-rooms/MilestoneKanban.tsx",
@@ -213067,6 +213463,7 @@
       "filtra:src/components/contact-detail/LifeEventsTab.tsx",
       "filtra:src/hooks/useAIApprovals.ts",
       "filtra:src/hooks/useCSATSurveys.ts",
+      "filtra:src/hooks/useFollowUpApprovals.ts",
       "filtra:src/hooks/useNpsSurveys.ts",
       "filtra:src/hooks/useSmartNotifications.ts",
       "filtra:src/hooks/useSocialIntelligence.ts",
@@ -213107,6 +213504,7 @@
      ],
      "success": [
       "compara:src/components/admin/conexoes/ConnectionCard.tsx",
+      "compara:src/components/admin/conexoes/ConnectionTestHistory.tsx",
       "compara:src/components/admin/conexoes/IncomingWebhookLogsDialog.tsx",
       "compara:src/components/crm/CRMAutomationAuditLog.tsx",
       "compara:src/components/lead-routing/QuickDistributeWidget.tsx",
@@ -213179,6 +213577,7 @@
      ],
      "completed": [
       "compara:src/components/company-detail/CompanyCommercialTab.tsx",
+      "compara:src/components/contact-detail/ContactTasksPanel.tsx",
       "compara:src/components/contact-detail/commercial-tab/TasksCard.tsx",
       "compara:src/components/gamification/UserGoalsWidget.tsx",
       "compara:src/components/lux/LuxHistoryTimeline.tsx",
@@ -213206,6 +213605,17 @@
       "escreve:src/components/ui/company-health-score.tsx",
       "escreve:src/domain/leadScoring.ts"
      ],
+     "done": [
+      "compara:src/components/contact-detail/ContactTasksPanel.tsx",
+      "compara:src/components/contact-detail/commercial-tab/TasksCard.tsx",
+      "compara:src/components/deal-rooms/DealRoomCard.tsx",
+      "compara:src/pages/DealRoomDetail.tsx",
+      "compara:src/pages/PublicDealRoom.tsx",
+      "compara:src/pages/Tarefas.tsx",
+      "compara:src/pages/tarefas/TaskCard.tsx",
+      "compara:supabase/functions/deal-room-health/index.ts",
+      "escreve:src/components/deal-rooms/MilestoneKanban.tsx"
+     ],
      "accepted": [
       "compara:src/components/crm/commercial/OfferSuggestionsElite.tsx",
       "escreve:src/components/contact-detail/LifeEventsTab.tsx",
@@ -213226,16 +213636,6 @@
       "compara:src/components/contact-detail/commercial-tab/DealsCard.tsx",
       "compara:src/hooks/useDealsAtRisk.ts",
       "compara:src/hooks/useReportWidgets.ts"
-     ],
-     "done": [
-      "compara:src/components/contact-detail/commercial-tab/TasksCard.tsx",
-      "compara:src/components/deal-rooms/DealRoomCard.tsx",
-      "compara:src/pages/DealRoomDetail.tsx",
-      "compara:src/pages/PublicDealRoom.tsx",
-      "compara:src/pages/Tarefas.tsx",
-      "compara:src/pages/tarefas/TaskCard.tsx",
-      "compara:supabase/functions/deal-room-health/index.ts",
-      "escreve:src/components/deal-rooms/MilestoneKanban.tsx"
      ],
      "reprocessing": [
       "compara:src/components/crm/CRMAutomationAuditLog.tsx",
@@ -213474,6 +213874,7 @@
       "filtra:src/hooks/useEnrichmentCoverage.ts"
      ],
      "open": [
+      "compara:src/pages/Forecasting.tsx",
       "compara:src/pages/Suporte.tsx",
       "escreve:src/hooks/useForecasting.ts",
       "escreve:src/hooks/useSupportTickets.ts",
@@ -233136,6 +233537,10 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "guard": "Protected",
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "guard": "RequireAuth",
     "file": "src/app/AppRoutes.tsx"
    },
@@ -233186,6 +233591,13 @@
     "guard": "ProtectedRoute",
     "roles": [],
     "file": "scripts/ai-context/gerar.unit.mjs"
+   },
+   {
+    "path": "/aprovacoes-follow-up",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
    },
    {
     "path": "/assistente",
@@ -237430,6 +237842,11 @@
    {
     "kind": "coluna",
     "msg": "coluna `tags` usada no código não existe no schema de `email_campaigns`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `scheduled_at` usada no código não existe no schema de `follow_up_approvals_v2`",
     "where": []
    },
    {
@@ -245050,7 +245467,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 188,
+   "lines": 189,
    "exports": [
     "const AppRoutes"
    ],
@@ -245240,6 +245657,12 @@
     },
     {
      "path": "/territorios",
+     "component": "P",
+     "guard": "Protected",
+     "roles": []
+    },
+    {
+     "path": "/aprovacoes-follow-up",
      "component": "P",
      "guard": "Protected",
      "roles": []
@@ -245753,6 +246176,7 @@
     "Protected",
     "Protected",
     "Protected",
+    "Protected",
     "RequireAuth",
     "Protected"
    ]
@@ -245767,7 +246191,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 173,
+   "lines": 174,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -245802,6 +246226,7 @@
     "const Tarefas",
     "const Inbox",
     "const Territorios",
+    "const AprovacoesFollowUp",
     "const TerritoryOptimization",
     "const ABM",
     "const ABMAccountDetail",
@@ -245827,8 +246252,7 @@
     "const PublicForm",
     "const PublicLeadMagnet",
     "const AdminTelemetria",
-    "const AdminSchemaDrift",
-    "const AdminFieldMapping"
+    "const AdminSchemaDrift"
    ]
   },
   "src/app/queryClient.ts": {
@@ -245847,6 +246271,13 @@
    "lines": 27,
    "exports": [
     "default ScrollToTop"
+   ]
+  },
+  "src/components/abm/ABMAccountEditDialog.tsx": {
+   "path": "src/components/abm/ABMAccountEditDialog.tsx",
+   "lines": 103,
+   "exports": [
+    "function ABMAccountEditDialog"
    ]
   },
   "src/components/abm/ABMCampaignDialog.tsx": {
@@ -246536,7 +246967,7 @@
   },
   "src/components/admin/conexoes/ConnectionCard.tsx": {
    "path": "src/components/admin/conexoes/ConnectionCard.tsx",
-   "lines": 93,
+   "lines": 99,
    "exports": [
     "function ConnectionCard"
    ],
@@ -246611,6 +247042,25 @@
    "lines": 65,
    "exports": [
     "function ConnectionMetricsSparkline"
+   ]
+  },
+  "src/components/admin/conexoes/ConnectionTestHistory.tsx": {
+   "path": "src/components/admin/conexoes/ConnectionTestHistory.tsx",
+   "lines": 41,
+   "exports": [
+    "function ConnectionTestHistory"
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "success",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "success",
+     "kind": "compara"
+    }
    ]
   },
   "src/components/admin/conexoes/IncomingWebhookCard.tsx": {
@@ -246807,7 +247257,7 @@
   },
   "src/components/ai/AIMessageGenerator.tsx": {
    "path": "src/components/ai/AIMessageGenerator.tsx",
-   "lines": 230,
+   "lines": 235,
    "exports": [
     "function AIMessageGenerator"
    ],
@@ -247669,6 +248119,20 @@
    ],
    "doc": "============================================== CARNEGIE DASHBOARD Unified view of all Carnegie principles =============================================="
   },
+  "src/components/carnegie/CarnegieExtendedLibrary.tsx": {
+   "path": "src/components/carnegie/CarnegieExtendedLibrary.tsx",
+   "lines": 231,
+   "exports": [
+    "function CarnegieExtendedLibrary"
+   ],
+   "errors": [
+    "Nao foi possivel copiar"
+   ],
+   "rule_comments": [
+    "que existiam apenas como dados sem tela."
+   ],
+   "doc": "============================================== CARNEGIE EXTENDED LIBRARY Biblioteca consultavel das 10 metodologias Carnegie que existiam apenas como dados sem tela. =============================================="
+  },
   "src/components/carnegie/CarnegieQuickAccess.tsx": {
    "path": "src/components/carnegie/CarnegieQuickAccess.tsx",
    "lines": 255,
@@ -247769,7 +248233,7 @@
   },
   "src/components/carnegie/index.ts": {
    "path": "src/components/carnegie/index.ts",
-   "lines": 17,
+   "lines": 18,
    "doc": "============================================== CARNEGIE COMPONENTS - BARREL EXPORT =============================================="
   },
   "src/components/carnegie/__tests__/MessageReviewPanel.test.tsx": {
@@ -247869,6 +248333,13 @@
    ],
    "doc": "Catálogo de rotas e ações para a Command Bar global. Mantido fora do componente para facilitar testes e reuso."
   },
+  "src/components/companies/CompaniesExportButton.tsx": {
+   "path": "src/components/companies/CompaniesExportButton.tsx",
+   "lines": 25,
+   "exports": [
+    "function CompaniesExportButton"
+   ]
+  },
   "src/components/companies/CompaniesInlineMap.tsx": {
    "path": "src/components/companies/CompaniesInlineMap.tsx",
    "lines": 94,
@@ -247911,6 +248382,13 @@
    "lines": 145,
    "exports": [
     "const CompanyListItem"
+   ]
+  },
+  "src/components/companies/PipelineSummaryCard.tsx": {
+   "path": "src/components/companies/PipelineSummaryCard.tsx",
+   "lines": 70,
+   "exports": [
+    "function PipelineSummaryCard"
    ]
   },
   "src/components/company-analytics/ActivityTimeline.tsx": {
@@ -248260,7 +248738,7 @@
   },
   "src/components/contact-card/ContactCardWithContext.tsx": {
    "path": "src/components/contact-card/ContactCardWithContext.tsx",
-   "lines": 392,
+   "lines": 399,
    "exports": [
     "const ContactCardWithContext"
    ],
@@ -248368,7 +248846,7 @@
   },
   "src/components/contact-detail/ContactBehavioralTab.tsx": {
    "path": "src/components/contact-detail/ContactBehavioralTab.tsx",
-   "lines": 275,
+   "lines": 472,
    "tables": [
     {
      "table": "disc_analysis_history",
@@ -248384,6 +248862,10 @@
     },
     {
      "table": "metaprogram_analysis",
+     "op": "select"
+    },
+    {
+     "table": "profiles",
      "op": "select"
     },
     {
@@ -248407,6 +248889,10 @@
     "metaprogram_analysis": [
      "contact_id",
      "user_id"
+    ],
+    "profiles": [
+     "id",
+     "nlp_profile"
     ],
     "contacts": [
      "id",
@@ -248434,6 +248920,7 @@
     }
    ],
    "rule_comments": [
+    "que difere do shape cru de `contacts`. Mapeamos apenas o que os hooks leem,",
     "').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(5),",
     "').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1),",
     "').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1),",
@@ -248441,6 +248928,7 @@
    ],
    "temporal": [
     "gcTime: 10 * 60 * 1000,",
+    "staleTime: 10 * 60 * 1000,",
     "staleTime: 5 * 60 * 1000,"
    ],
    "pagination": [
@@ -248707,6 +249195,36 @@
    "lines": 91,
    "exports": [
     "function ContactStatisticsWidget"
+   ]
+  },
+  "src/components/contact-detail/ContactTasksPanel.tsx": {
+   "path": "src/components/contact-detail/ContactTasksPanel.tsx",
+   "lines": 307,
+   "exports": [
+    "function ContactTasksPanel"
+   ],
+   "html_constraints": [
+    {
+     "field": "contact-task-due",
+     "rules": "type=date"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "pending",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "completed",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "done",
+     "kind": "compara"
+    }
    ]
   },
   "src/components/contact-detail/ContactTimeHeatmap.tsx": {
@@ -249156,7 +249674,7 @@
   },
   "src/components/contact-detail/index.ts": {
    "path": "src/components/contact-detail/index.ts",
-   "lines": 9
+   "lines": 10
   },
   "src/components/contact-detail/__tests__/LifeEventsTab.test.tsx": {
    "path": "src/components/contact-detail/__tests__/LifeEventsTab.test.tsx",
@@ -249321,7 +249839,7 @@
   },
   "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx": {
    "path": "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx",
-   "lines": 198,
+   "lines": 230,
    "tables": [
     {
      "table": "brain_dominance_analysis",
@@ -249357,9 +249875,23 @@
     "function PersonalityExecutiveSummary"
    ]
   },
+  "src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx": {
+   "path": "src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx",
+   "lines": 197,
+   "exports": [
+    "function PersonalityFrameworkInsights"
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "number",
+     "kind": "compara"
+    }
+   ]
+  },
   "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx": {
    "path": "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx",
-   "lines": 314,
+   "lines": 317,
    "exports": [
     "function PersonalitySubTab"
    ]
@@ -249600,7 +250132,7 @@
   },
   "src/components/contact-detail/data-tab/CadencePreferencesCard.tsx": {
    "path": "src/components/contact-detail/data-tab/CadencePreferencesCard.tsx",
-   "lines": 427,
+   "lines": 548,
    "exports": [
     "const CadencePreferencesCard"
    ]
@@ -251095,7 +251627,7 @@
   },
   "src/components/customer-success/HealthSignalTimeline.tsx": {
    "path": "src/components/customer-success/HealthSignalTimeline.tsx",
-   "lines": 49,
+   "lines": 52,
    "exports": [
     "function HealthSignalTimeline"
    ]
@@ -251116,16 +251648,37 @@
   },
   "src/components/customer-success/QBRTimeline.tsx": {
    "path": "src/components/customer-success/QBRTimeline.tsx",
-   "lines": 57,
+   "lines": 59,
    "exports": [
     "function QBRTimeline"
    ]
   },
+  "src/components/customer-success/RecordSignalDialog.tsx": {
+   "path": "src/components/customer-success/RecordSignalDialog.tsx",
+   "lines": 80,
+   "exports": [
+    "function RecordSignalDialog"
+   ]
+  },
+  "src/components/customer-success/RenewalEditDialog.tsx": {
+   "path": "src/components/customer-success/RenewalEditDialog.tsx",
+   "lines": 91,
+   "exports": [
+    "function RenewalEditDialog"
+   ]
+  },
   "src/components/customer-success/RenewalPipelineList.tsx": {
    "path": "src/components/customer-success/RenewalPipelineList.tsx",
-   "lines": 63,
+   "lines": 81,
    "exports": [
     "function RenewalPipelineList"
+   ]
+  },
+  "src/components/customer-success/ScheduleQBRDialog.tsx": {
+   "path": "src/components/customer-success/ScheduleQBRDialog.tsx",
+   "lines": 51,
+   "exports": [
+    "function ScheduleQBRDialog"
    ]
   },
   "src/components/dashboard/BestTimeHeatmapCard.tsx": {
@@ -251336,7 +251889,7 @@
   },
   "src/components/dashboard/StrategicNextStepsCard.tsx": {
    "path": "src/components/dashboard/StrategicNextStepsCard.tsx",
-   "lines": 639,
+   "lines": 645,
    "exports": [
     "function StrategicNextStepsCard"
    ],
@@ -251607,7 +252160,7 @@
   },
   "src/components/dashboard/tabs/OverviewTab.tsx": {
    "path": "src/components/dashboard/tabs/OverviewTab.tsx",
-   "lines": 286,
+   "lines": 296,
    "exports": [
     "function OverviewTab"
    ],
@@ -251716,7 +252269,7 @@
   },
   "src/components/dashboard/widgets/PendingFollowupsWidget.contract.test.tsx": {
    "path": "src/components/dashboard/widgets/PendingFollowupsWidget.contract.test.tsx",
-   "lines": 43,
+   "lines": 46,
    "is_test": true,
    "errors": [
     ")).getByText("
@@ -251729,7 +252282,7 @@
   },
   "src/components/dashboard/widgets/PendingFollowupsWidget.tsx": {
    "path": "src/components/dashboard/widgets/PendingFollowupsWidget.tsx",
-   "lines": 103,
+   "lines": 116,
    "exports": [
     "function PendingFollowupsWidget"
    ],
@@ -251838,6 +252391,13 @@
      "value": "done",
      "kind": "compara"
     }
+   ]
+  },
+  "src/components/deal-rooms/DealRoomEditDialog.tsx": {
+   "path": "src/components/deal-rooms/DealRoomEditDialog.tsx",
+   "lines": 86,
+   "exports": [
+    "function DealRoomEditDialog"
    ]
   },
   "src/components/deal-rooms/DocumentsList.tsx": {
@@ -252494,7 +253054,7 @@
   },
   "src/components/feedback/ErrorBoundary.tsx": {
    "path": "src/components/feedback/ErrorBoundary.tsx",
-   "lines": 163,
+   "lines": 165,
    "exports": [
     "class ErrorBoundary",
     "function WithErrorBoundary"
@@ -253594,7 +254154,7 @@
   },
   "src/components/import/BulkImportDialog.tsx": {
    "path": "src/components/import/BulkImportDialog.tsx",
-   "lines": 176,
+   "lines": 183,
    "exports": [
     "function BulkImportDialog"
    ],
@@ -255201,7 +255761,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 315,
+   "lines": 316,
    "exports": [
     "const AppSidebar"
    ],
@@ -255215,7 +255775,7 @@
   },
   "src/components/layout/Header.search.test.tsx": {
    "path": "src/components/layout/Header.search.test.tsx",
-   "lines": 29,
+   "lines": 30,
    "is_test": true,
    "tests": [
     "Pesquisa contextual do cabeçalho",
@@ -255224,7 +255784,7 @@
   },
   "src/components/layout/Header.tsx": {
    "path": "src/components/layout/Header.tsx",
-   "lines": 138,
+   "lines": 140,
    "exports": [
     "const Header",
     "const HeaderMemo"
@@ -255428,6 +255988,29 @@
     "const LeadScoreCard"
    ]
   },
+  "src/components/lead-score/LeadScoreWeightsEditor.tsx": {
+   "path": "src/components/lead-score/LeadScoreWeightsEditor.tsx",
+   "lines": 113,
+   "exports": [
+    "function LeadScoreWeightsEditor"
+   ],
+   "tables": [
+    {
+     "table": "lead_score_config",
+     "op": "upsert"
+    }
+   ],
+   "errors": [
+    "Falha ao salvar: ${parseApiError(e)}",
+    "Não autenticado"
+   ],
+   "html_constraints": [
+    {
+     "field": "key",
+     "rules": "type=number, min=0, max=1, step=0.05"
+    }
+   ]
+  },
   "src/components/lead-score/LeadScoreWidget.tsx": {
    "path": "src/components/lead-score/LeadScoreWidget.tsx",
    "lines": 98,
@@ -255582,7 +256165,7 @@
   },
   "src/components/lead-scoring/AutomationWizard.tsx": {
    "path": "src/components/lead-scoring/AutomationWizard.tsx",
-   "lines": 221,
+   "lines": 233,
    "exports": [
     "function AutomationWizard"
    ],
@@ -255769,7 +256352,7 @@
   },
   "src/components/marketing/ContactTouchpointsTab.tsx": {
    "path": "src/components/marketing/ContactTouchpointsTab.tsx",
-   "lines": 106,
+   "lines": 173,
    "exports": [
     "function ContactTouchpointsTab"
    ],
@@ -256379,7 +256962,7 @@
   },
   "src/components/neuromarketing/NeuroScriptGenerator.tsx": {
    "path": "src/components/neuromarketing/NeuroScriptGenerator.tsx",
-   "lines": 262,
+   "lines": 271,
    "exports": [
     "default NeuroScriptGenerator"
    ],
@@ -258084,6 +258667,13 @@
     }
    ]
   },
+  "src/components/revops/RevOpsSnapshotHistory.tsx": {
+   "path": "src/components/revops/RevOpsSnapshotHistory.tsx",
+   "lines": 78,
+   "exports": [
+    "function RevOpsSnapshotHistory"
+   ]
+  },
   "src/components/revops/RevenueFunnelChart.tsx": {
    "path": "src/components/revops/RevenueFunnelChart.tsx",
    "lines": 69,
@@ -259259,7 +259849,7 @@
   },
   "src/components/territories/TerritoryForm.tsx": {
    "path": "src/components/territories/TerritoryForm.tsx",
-   "lines": 167,
+   "lines": 178,
    "exports": [
     "function TerritoryForm"
    ]
@@ -260603,7 +261193,7 @@
   },
   "src/components/win-loss/WinLossRecordsTable.tsx": {
    "path": "src/components/win-loss/WinLossRecordsTable.tsx",
-   "lines": 70,
+   "lines": 112,
    "exports": [
     "function WinLossRecordsTable"
    ]
@@ -264648,11 +265238,14 @@
   },
   "src/hooks/useAuth.tsx": {
    "path": "src/hooks/useAuth.tsx",
-   "lines": 356,
+   "lines": 372,
    "exports": [
     "function AuthProvider",
     "function useAuth",
     "const RequireAuth"
+   ],
+   "invokes": [
+    "detect-new-device"
    ],
    "env": [
     "DEV"
@@ -264671,11 +265264,17 @@
      "value": "5"
     }
    ],
+   "rule_comments": [
+    "o acesso (a EF é passiva e devolve apenas is_new/is_trusted)."
+   ],
    "hooks": [
     "useAuth"
    ],
    "temporal": [
     "const REFRESH_THRESHOLD_MS = 5 * 60 * 1000;"
+   ],
+   "side_effects": [
+    "invoke("
    ]
   },
   "src/hooks/useAutomationRules.ts": {
@@ -266401,7 +267000,7 @@
   },
   "src/hooks/useCommunicationPreferences.ts": {
    "path": "src/hooks/useCommunicationPreferences.ts",
-   "lines": 61,
+   "lines": 62,
    "exports": [
     "function useCommunicationPreferences"
    ],
@@ -266685,7 +267284,7 @@
   },
   "src/hooks/useCompanyActions.ts": {
    "path": "src/hooks/useCompanyActions.ts",
-   "lines": 59,
+   "lines": 70,
    "exports": [
     "function useMergeCompanies",
     "function useExportCompaniesCsv"
@@ -272154,6 +272753,72 @@
    ],
    "hooks": [
     "useFocusTrap"
+   ]
+  },
+  "src/hooks/useFollowUpApprovals.ts": {
+   "path": "src/hooks/useFollowUpApprovals.ts",
+   "lines": 101,
+   "exports": [
+    "interface FollowUpApproval",
+    "type FollowUpDecision",
+    "function useFollowUpApprovals",
+    "function useDecideFollowUp"
+   ],
+   "tables": [
+    {
+     "table": "follow_up_approvals_v2",
+     "op": "select"
+    },
+    {
+     "table": "contacts",
+     "op": "select"
+    },
+    {
+     "table": "follow_up_approvals_v2",
+     "op": "update"
+    }
+   ],
+   "table_cols": {
+    "follow_up_approvals_v2": [
+     "channel",
+     "contact_id",
+     "content",
+     "created_at",
+     "id",
+     "scheduled_at",
+     "status",
+     "user_id"
+    ],
+    "contacts": [
+     "first_name",
+     "id",
+     "last_name"
+    ]
+   },
+   "errors": [
+    "Erro ao registrar a decisão"
+   ],
+   "enums": [
+    {
+     "name": "FollowUpDecision",
+     "values": "approved | rejected"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "pending",
+     "kind": "filtra"
+    },
+    {
+     "field": "status",
+     "value": "pending",
+     "kind": "filtra"
+    }
+   ],
+   "hooks": [
+    "useFollowUpApprovals",
+    "useDecideFollowUp"
    ]
   },
   "src/hooks/useForecasting.ts": {
@@ -279352,13 +280017,14 @@
   },
   "src/hooks/useTasks.ts": {
    "path": "src/hooks/useTasks.ts",
-   "lines": 312,
+   "lines": 352,
    "exports": [
     "interface Task",
     "function usePendingTasks",
     "function useOverdueTasks",
     "function useAllTasks",
     "function montarArgsCriarTarefa",
+    "function useContactTasks",
     "function useCreateTask",
     "function useUpdateTask",
     "function useDeleteTask",
@@ -279398,6 +280064,11 @@
      "kind": "escreve"
     },
     {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
      "field": "status",
      "value": "completed",
      "kind": "escreve"
@@ -279408,10 +280079,14 @@
      "kind": "escreve"
     }
    ],
+   "rule_comments": [
+    "(`assert_contact_access`) e devolve `SETOF tasks` ordenado por vencimento."
+   ],
    "hooks": [
     "usePendingTasks",
     "useOverdueTasks",
     "useAllTasks",
+    "useContactTasks",
     "useCreateTask",
     "useUpdateTask",
     "useDeleteTask",
@@ -279544,13 +280219,15 @@
   },
   "src/hooks/useTerritories.ts": {
    "path": "src/hooks/useTerritories.ts",
-   "lines": 179,
+   "lines": 261,
    "exports": [
     "interface Territory",
     "interface TerritoryPerformance",
     "function useTerritories",
     "function useTerritoriesPerformance",
-    "function useCreateTerritory"
+    "function useCreateTerritory",
+    "function useUpdateTerritory",
+    "function useDeleteTerritory"
    ],
    "tables": [
     {
@@ -279560,6 +280237,14 @@
     {
      "table": "territories",
      "op": "insert,select"
+    },
+    {
+     "table": "territories",
+     "op": "select,update"
+    },
+    {
+     "table": "territories",
+     "op": "delete"
     }
    ],
    "table_cols": {
@@ -279568,17 +280253,22 @@
      "description",
      "id",
      "is_active",
+     "manager_id",
      "metadata"
     ]
    },
    "errors": [
+    "Erro ao atualizar território",
     "Erro ao criar território",
+    "Erro ao excluir território",
     "Não autenticado"
    ],
    "hooks": [
     "useTerritories",
     "useTerritoriesPerformance",
-    "useCreateTerritory"
+    "useCreateTerritory",
+    "useUpdateTerritory",
+    "useDeleteTerritory"
    ]
   },
   "src/hooks/useTerritoryOptimization.ts": {
@@ -284527,9 +285217,12 @@
   },
   "src/pages/ABMAccountDetail.tsx": {
    "path": "src/pages/ABMAccountDetail.tsx",
-   "lines": 103,
+   "lines": 145,
    "exports": [
     "function ABMAccountDetail"
+   ],
+   "navigates": [
+    "/abm"
    ]
   },
   "src/pages/ABMCampaigns.tsx": {
@@ -284569,7 +285262,7 @@
   },
   "src/pages/AdminConexoes.tsx": {
    "path": "src/pages/AdminConexoes.tsx",
-   "lines": 165,
+   "lines": 173,
    "exports": [
     "function AdminConexoes"
    ],
@@ -285036,6 +285729,13 @@
     ">\n            <p className="
    ]
   },
+  "src/pages/AprovacoesFollowUp.tsx": {
+   "path": "src/pages/AprovacoesFollowUp.tsx",
+   "lines": 157,
+   "exports": [
+    "function AprovacoesFollowUp"
+   ]
+  },
   "src/pages/Assistente.tsx": {
    "path": "src/pages/Assistente.tsx",
    "lines": 183,
@@ -285187,7 +285887,7 @@
   },
   "src/pages/Cadastro.tsx": {
    "path": "src/pages/Cadastro.tsx",
-   "lines": 68,
+   "lines": 79,
    "exports": [
     "function Cadastro"
    ]
@@ -285283,7 +285983,7 @@
   },
   "src/pages/Configuracoes.tsx": {
    "path": "src/pages/Configuracoes.tsx",
-   "lines": 169,
+   "lines": 170,
    "exports": [
     "default Configuracoes"
    ],
@@ -285314,7 +286014,7 @@
   },
   "src/pages/ContatoDetalhe.errors.test.tsx": {
    "path": "src/pages/ContatoDetalhe.errors.test.tsx",
-   "lines": 113,
+   "lines": 114,
    "is_test": true,
    "routes": [
     {
@@ -285337,7 +286037,7 @@
   },
   "src/pages/ContatoDetalhe.tsx": {
    "path": "src/pages/ContatoDetalhe.tsx",
-   "lines": 375,
+   "lines": 390,
    "exports": [
     "default ContatoDetalhe"
    ],
@@ -285359,7 +286059,7 @@
   },
   "src/pages/Contatos.search.test.tsx": {
    "path": "src/pages/Contatos.search.test.tsx",
-   "lines": 107,
+   "lines": 108,
    "is_test": true,
    "routes": [
     {
@@ -285441,9 +286141,12 @@
   },
   "src/pages/DealRoomDetail.tsx": {
    "path": "src/pages/DealRoomDetail.tsx",
-   "lines": 88,
+   "lines": 131,
    "exports": [
     "function DealRoomDetail"
+   ],
+   "navigates": [
+    "/deal-rooms"
    ],
    "status_values": [
     {
@@ -285540,7 +286243,7 @@
   },
   "src/pages/EmpresaDetalhe.tsx": {
    "path": "src/pages/EmpresaDetalhe.tsx",
-   "lines": 371,
+   "lines": 372,
    "exports": [
     "default EmpresaDetalhe"
    ],
@@ -285587,7 +286290,7 @@
   },
   "src/pages/Empresas.errors.test.tsx": {
    "path": "src/pages/Empresas.errors.test.tsx",
-   "lines": 106,
+   "lines": 108,
    "is_test": true,
    "errors": [
     ")).not.toBeInTheDocument();\n    expect(screen.getByText(",
@@ -285603,7 +286306,7 @@
   },
   "src/pages/Empresas.tsx": {
    "path": "src/pages/Empresas.tsx",
-   "lines": 290,
+   "lines": 300,
    "exports": [
     "default Empresas"
    ],
@@ -285616,7 +286319,7 @@
   },
   "src/pages/Enrichment.tsx": {
    "path": "src/pages/Enrichment.tsx",
-   "lines": 76,
+   "lines": 116,
    "exports": [
     "function Enrichment"
    ],
@@ -285666,9 +286369,16 @@
   },
   "src/pages/Forecasting.tsx": {
    "path": "src/pages/Forecasting.tsx",
-   "lines": 105,
+   "lines": 117,
    "exports": [
     "function Forecasting"
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "open",
+     "kind": "compara"
+    }
    ]
   },
   "src/pages/ForecastingSetup.tsx": {
@@ -285711,7 +286421,7 @@
   },
   "src/pages/Insights.tsx": {
    "path": "src/pages/Insights.tsx",
-   "lines": 205,
+   "lines": 208,
    "exports": [
     "default Insights"
    ],
@@ -285831,7 +286541,7 @@
   },
   "src/pages/Intent.tsx": {
    "path": "src/pages/Intent.tsx",
-   "lines": 142,
+   "lines": 198,
    "exports": [
     "function IntentPage"
    ]
@@ -285890,7 +286600,7 @@
   },
   "src/pages/LeadScoringConfig.tsx": {
    "path": "src/pages/LeadScoringConfig.tsx",
-   "lines": 35,
+   "lines": 37,
    "exports": [
     "function LeadScoringConfigPage"
    ]
@@ -286747,7 +287457,7 @@
   },
   "src/pages/ResetPassword.tsx": {
    "path": "src/pages/ResetPassword.tsx",
-   "lines": 116,
+   "lines": 133,
    "exports": [
     "function ResetPassword"
    ],
@@ -286760,6 +287470,7 @@
    "errors": [
     ";\nimport { toast } from ",
     "Erro ao redefinir senha. Tente novamente.",
+    "Esta senha já apareceu em vazamentos públicos. Escolha outra para proteger sua conta.",
     "Link inválido ou expirado.",
     "Senhas não coincidem."
    ],
@@ -286778,7 +287489,7 @@
   },
   "src/pages/RevOps.tsx": {
    "path": "src/pages/RevOps.tsx",
-   "lines": 79,
+   "lines": 85,
    "exports": [
     "function RevOps"
    ]
@@ -287008,7 +287719,7 @@
   },
   "src/pages/Territorios.tsx": {
    "path": "src/pages/Territorios.tsx",
-   "lines": 141,
+   "lines": 212,
    "exports": [
     "function Territorios"
    ]
@@ -287414,6 +288125,25 @@
     }
    ]
   },
+  "src/pages/cadastro/RelationshipList.tsx": {
+   "path": "src/pages/cadastro/RelationshipList.tsx",
+   "lines": 135,
+   "exports": [
+    "function RelationshipList"
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "in",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "in",
+     "kind": "escreve"
+    }
+   ]
+  },
   "src/pages/cadastro/VinculoForm.tsx": {
    "path": "src/pages/cadastro/VinculoForm.tsx",
    "lines": 122,
@@ -287450,14 +288180,14 @@
   },
   "src/pages/configuracoes/ConfigSecurityTab.tsx": {
    "path": "src/pages/configuracoes/ConfigSecurityTab.tsx",
-   "lines": 53,
+   "lines": 55,
    "exports": [
     "function ConfigSecurityTab"
    ]
   },
   "src/pages/contatos/ContatosContent.tsx": {
    "path": "src/pages/contatos/ContatosContent.tsx",
-   "lines": 290,
+   "lines": 293,
    "exports": [
     "function ContatosContent"
    ],
@@ -287491,7 +288221,7 @@
   },
   "src/pages/empresas/EmpresasContent.tsx": {
    "path": "src/pages/empresas/EmpresasContent.tsx",
-   "lines": 226,
+   "lines": 228,
    "exports": [
     "function EmpresasContent"
    ],
@@ -295138,7 +295868,7 @@
   },
   "supabase/functions/generate-insights/index.ts": {
    "path": "supabase/functions/generate-insights/index.ts",
-   "lines": 196,
+   "lines": 204,
    "tables": [
     {
      "table": "insights",
@@ -306234,10 +306964,94 @@
   }
  },
  "git": {
-  "sha": "fa7b7fbefabd2e07998316bc5749ca9315bea00f",
+  "sha": "409a5ae9364ed63228bcf1fe6240faf3c299b984",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "409a5ae",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)",
+    "files": [
+     ".github/workflows/smoke-edges-pendentes.yml",
+     "docs/ci/README.md",
+     "docs/lacunas/D_ui_rotas_componentes.md",
+     "docs/lacunas/E_contratos_front_backend.md",
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/abm/ABMAccountEditDialog.tsx",
+     "src/components/admin/conexoes/ConnectionCard.tsx",
+     "src/components/admin/conexoes/ConnectionTestHistory.tsx",
+     "src/components/ai/AIMessageGenerator.tsx",
+     "src/components/carnegie/CarnegieExtendedLibrary.tsx",
+     "src/components/carnegie/index.ts",
+     "src/components/companies/CompaniesExportButton.tsx",
+     "src/components/companies/PipelineSummaryCard.tsx",
+     "src/components/contact-card/ContactCardWithContext.tsx",
+     "src/components/contact-detail/ContactBehavioralTab.tsx",
+     "src/components/contact-detail/ContactTasksPanel.tsx",
+     "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx",
+     "src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx",
+     "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx",
+     "src/components/contact-detail/data-tab/CadencePreferencesCard.tsx",
+     "src/components/contact-detail/index.ts",
+     "src/components/customer-success/HealthSignalTimeline.tsx",
+     "src/components/customer-success/QBRTimeline.tsx",
+     "src/components/customer-success/RecordSignalDialog.tsx",
+     "src/components/customer-success/RenewalEditDialog.tsx",
+     "src/components/customer-success/RenewalPipelineList.tsx",
+     "src/components/customer-success/ScheduleQBRDialog.tsx",
+     "src/components/dashboard/StrategicNextStepsCard.tsx",
+     "src/components/dashboard/tabs/OverviewTab.tsx",
+     "src/components/dashboard/widgets/PendingFollowupsWidget.contract.test.tsx",
+     "src/components/dashboard/widgets/PendingFollowupsWidget.tsx",
+     "src/components/deal-rooms/DealRoomEditDialog.tsx",
+     "src/components/feedback/ErrorBoundary.tsx",
+     "src/components/import/BulkImportDialog.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/components/layout/Header.search.test.tsx",
+     "src/components/layout/Header.tsx",
+     "src/components/lead-score/LeadScoreWeightsEditor.tsx",
+     "src/components/lead-scoring/AutomationWizard.tsx",
+     "src/components/marketing/ContactTouchpointsTab.tsx",
+     "src/components/neuromarketing/NeuroScriptGenerator.tsx",
+     "src/components/revops/RevOpsSnapshotHistory.tsx",
+     "src/components/territories/TerritoryForm.tsx",
+     "src/components/win-loss/WinLossRecordsTable.tsx",
+     "src/hooks/useAuth.tsx",
+     "src/hooks/useCommunicationPreferences.ts",
+     "src/hooks/useCompanyActions.ts",
+     "src/hooks/useFollowUpApprovals.ts",
+     "src/hooks/useTasks.ts",
+     "src/hooks/useTerritories.ts",
+     "src/pages/ABMAccountDetail.tsx",
+     "src/pages/AdminConexoes.tsx",
+     "src/pages/AprovacoesFollowUp.tsx",
+     "src/pages/Cadastro.tsx",
+     "src/pages/Configuracoes.tsx",
+     "src/pages/ContatoDetalhe.errors.test.tsx",
+     "src/pages/ContatoDetalhe.tsx",
+     "src/pages/Contatos.search.test.tsx",
+     "src/pages/DealRoomDetail.tsx",
+     "src/pages/EmpresaDetalhe.tsx",
+     "src/pages/Empresas.errors.test.tsx",
+     "src/pages/Empresas.tsx",
+     "src/pages/Enrichment.tsx",
+     "src/pages/Forecasting.tsx",
+     "src/pages/Insights.tsx",
+     "src/pages/Intent.tsx",
+     "src/pages/LeadScoringConfig.tsx",
+     "src/pages/ResetPassword.tsx",
+     "src/pages/RevOps.tsx",
+     "src/pages/Territorios.tsx",
+     "src/pages/cadastro/RelationshipList.tsx",
+     "src/pages/configuracoes/ConfigSecurityTab.tsx",
+     "src/pages/contatos/ContatosContent.tsx",
+     "src/pages/empresas/EmpresasContent.tsx",
+     "supabase/functions/generate-insights/index.ts"
+    ]
+   },
    {
     "sha": "fa7b7fb",
     "date": "2026-11-23",
@@ -306696,21 +307510,20 @@
      "supabase/migrations/20260925100043_t217_fecha_escrita_users_public_e_admin_update.sql",
      "supabase/migrations/20261112001000_weekly_digest_cron_horario.sql"
     ]
-   },
-   {
-    "sha": "6ba0fb9",
-    "date": "2026-11-20",
-    "author": "adm01-debug",
-    "subject": "fix(migrations): força handle_new_user com email (drift de produção) (#285)",
-    "files": [
-     "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/nurturing-runner/index.ts",
     3
+   ],
+   [
+    "src/pages/Insights.tsx",
+    2
+   ],
+   [
+    "supabase/functions/generate-insights/index.ts",
+    2
    ],
    [
     "supabase/functions/_shared/edge-types-contract_test.ts",
@@ -306737,55 +307550,47 @@
     2
    ],
    [
-    "supabase/functions/crm-automation-monitor/index.ts",
+    ".github/workflows/smoke-edges-pendentes.yml",
     1
    ],
    [
-    "supabase/functions/disc-analyzer/index.ts",
+    "docs/ci/README.md",
     1
    ],
    [
-    "supabase/functions/lead-score-threshold-runner/index.ts",
+    "docs/lacunas/D_ui_rotas_componentes.md",
     1
    ],
    [
-    "supabase/functions/lux-trigger/index.ts",
+    "docs/lacunas/E_contratos_front_backend.md",
     1
    ],
    [
-    "supabase/functions/mql-evaluator/index.ts",
+    "src/app/AppRoutes.tsx",
     1
    ],
    [
-    "supabase/functions/system-health/index.ts",
+    "src/app/lazyPages.tsx",
     1
    ],
    [
-    "docs/lacunas/B2_reverificacao_estado_05_10.md",
+    "src/components/abm/ABMAccountEditDialog.tsx",
     1
    ],
    [
-    "src/hooks/useErrorBudget.ts",
+    "src/components/admin/conexoes/ConnectionCard.tsx",
     1
    ],
    [
-    "src/pages/admin/ErrorBudget.tsx",
+    "src/components/admin/conexoes/ConnectionTestHistory.tsx",
     1
    ],
    [
-    "supabase/functions/error-budget/index.ts",
+    "src/components/ai/AIMessageGenerator.tsx",
     1
    ],
    [
-    "supabase/functions/intent-tracker/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/territory-optimization/index.ts",
-    1
-   ],
-   [
-    "AUDITORIA.md",
+    "src/components/carnegie/CarnegieExtendedLibrary.tsx",
     1
    ]
   ]

@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 411,
+ "total": 412,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -685,8 +685,9 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 11,
+   "usado_por": 12,
    "usado_por_arquivos": [
+    "src/components/abm/ABMAccountEditDialog.tsx",
     "src/components/abm/ABMCampaignDialog.tsx",
     "src/components/abm/AccountHierarchyTree.tsx",
     "src/components/abm/AccountPlanEditor.tsx",
@@ -1248,7 +1249,7 @@
    "hooks_exportados": [
     "useAuth"
    ],
-   "linhas": 356,
+   "linhas": 372,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -1256,6 +1257,7 @@
    "hooks_internos": [
     "useCallback",
     "useContext",
+    "useDeviceDetection",
     "useEffect",
     "useLocation",
     "useNavigate",
@@ -1264,7 +1266,7 @@
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 337,
+   "usado_por": 339,
    "usado_por_arquivos": [
     "src/app/AppChrome.tsx",
     "src/app/AppProviders.tsx",
@@ -2212,7 +2214,7 @@
    "hooks_exportados": [
     "useCommunicationPreferences"
    ],
-   "linhas": 61,
+   "linhas": 62,
    "dominio": "hooks",
    "tabelas": [
     "communication_preferences"
@@ -2227,8 +2229,10 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 0,
-   "usado_por_arquivos": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/contact-detail/data-tab/CadencePreferencesCard.tsx"
+   ],
    "coberto_por_testes": 0
   },
   {
@@ -2327,7 +2331,7 @@
     "useExportCompaniesCsv",
     "useMergeCompanies"
    ],
-   "linhas": 59,
+   "linhas": 70,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -2337,8 +2341,9 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_arquivos": [
+    "src/components/companies/CompaniesExportButton.tsx",
     "src/components/company-detail/MergeCompaniesDialog.tsx"
    ],
    "coberto_por_testes": 1
@@ -2667,10 +2672,11 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 3,
+   "usado_por": 4,
    "usado_por_arquivos": [
     "src/components/admin/conexoes/ConnectionCard.tsx",
     "src/components/admin/conexoes/ConnectionFormDialog.tsx",
+    "src/components/admin/conexoes/ConnectionTestHistory.tsx",
     "src/pages/AdminConexoes.tsx"
    ],
    "coberto_por_testes": 0
@@ -2706,7 +2712,7 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 18,
+   "usado_por": 19,
    "usado_por_arquivos": [
     "src/components/contact-detail/behavioral-tab/BusinessContextSubTab.tsx",
     "src/components/contact-detail/behavioral-tab/DecisionMakingSubTab.tsx",
@@ -2715,6 +2721,7 @@
     "src/components/contact-detail/behavioral-tab/MetaprogramsSubTab.tsx",
     "src/components/contact-detail/behavioral-tab/MotivationsSubTab.tsx",
     "src/components/contact-detail/behavioral-tab/PersonalityExecutiveSummary.tsx",
+    "src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx",
     "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx",
     "src/components/contact-detail/behavioral-tab/RapportStrategySubTab.tsx",
     "src/components/contact-detail/behavioral-tab/VakSubTab.tsx",
@@ -3056,10 +3063,9 @@
     "useToast"
    ],
    "canais_realtime": [],
-   "usado_por": 27,
+   "usado_por": 26,
    "usado_por_arquivos": [
     "src/components/ai/AIEmailComposer.tsx",
-    "src/components/ai/AIMessageGenerator.tsx",
     "src/components/analytics/AdvancedAnalyticsTab.tsx",
     "src/components/analytics/NeuroPortfolioDashboard.tsx",
     "src/components/contact-card/ContactCardWithContext.tsx",
@@ -3673,7 +3679,7 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 9,
+   "usado_por": 12,
    "usado_por_arquivos": [
     "src/components/customer-success/AccountPortfolioCard.tsx",
     "src/components/customer-success/CreateAccountDialog.tsx",
@@ -3681,7 +3687,10 @@
     "src/components/customer-success/NPSDistributionChart.tsx",
     "src/components/customer-success/NPSResponseDialog.tsx",
     "src/components/customer-success/QBRTimeline.tsx",
+    "src/components/customer-success/RecordSignalDialog.tsx",
+    "src/components/customer-success/RenewalEditDialog.tsx",
     "src/components/customer-success/RenewalPipelineList.tsx",
+    "src/components/customer-success/ScheduleQBRDialog.tsx",
     "src/pages/CustomerSuccess.tsx",
     "src/pages/CustomerSuccessAccount.tsx"
    ],
@@ -3775,8 +3784,9 @@
     "useMemo"
    ],
    "canais_realtime": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_arquivos": [
+    "src/components/contact-detail/ContactBehavioralTab.tsx",
     "src/components/dashboard/tabs/OverviewTab.tsx",
     "src/pages/Index.tsx"
    ],
@@ -3904,11 +3914,12 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 11,
+   "usado_por": 12,
    "usado_por_arquivos": [
     "src/components/deal-rooms/ActivityFeed.tsx",
     "src/components/deal-rooms/CommentsThread.tsx",
     "src/components/deal-rooms/DealRoomCard.tsx",
+    "src/components/deal-rooms/DealRoomEditDialog.tsx",
     "src/components/deal-rooms/DocumentsList.tsx",
     "src/components/deal-rooms/MilestoneKanban.tsx",
     "src/components/deal-rooms/RoomHealthCard.tsx",
@@ -4098,8 +4109,10 @@
     "useMemo"
    ],
    "canais_realtime": [],
-   "usado_por": 0,
-   "usado_por_arquivos": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/useAuth.tsx"
+   ],
    "coberto_por_testes": 0
   },
   {
@@ -4844,9 +4857,10 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_arquivos": [
     "src/pages/cadastro/EntityPicker.tsx",
+    "src/pages/cadastro/RelationshipList.tsx",
     "src/pages/cadastro/VinculoForm.tsx"
    ],
    "coberto_por_testes": 0
@@ -5386,8 +5400,9 @@
     "useVAKAnalysis"
    ],
    "canais_realtime": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_arquivos": [
+    "src/components/contact-detail/ContactBehavioralTab.tsx",
     "src/pages/Ficha360.tsx"
    ],
    "coberto_por_testes": 0
@@ -5458,6 +5473,33 @@
    "canais_realtime": [],
    "usado_por": 0,
    "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useFollowUpApprovals.ts",
+   "hooks_exportados": [
+    "useDecideFollowUp",
+    "useFollowUpApprovals"
+   ],
+   "linhas": 101,
+   "dominio": "hooks",
+   "tabelas": [
+    "contacts",
+    "follow_up_approvals_v2"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AprovacoesFollowUp.tsx"
+   ],
    "coberto_por_testes": 0
   },
   {
@@ -6327,12 +6369,13 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 7,
+   "usado_por": 8,
    "usado_por_arquivos": [
     "src/components/company-detail/InteractionHistoryWidget.tsx",
     "src/components/company-detail/OptimalContactWindowsWidget.tsx",
     "src/components/company-detail/QuickActionsWidget.tsx",
     "src/components/company-detail/timeline/UnifiedTimelineSection.tsx",
+    "src/components/dashboard/widgets/PendingFollowupsWidget.tsx",
     "src/components/ficha-360/ProximaAcaoCTA.tsx",
     "src/components/interactions/ActivityHeatmapChart.tsx",
     "src/components/interactions/UnifiedCommunicationHistory.tsx"
@@ -6585,11 +6628,12 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 3,
+   "usado_por": 4,
    "usado_por_arquivos": [
     "src/components/contact-detail/ConsolidatedHealthPanel.tsx",
     "src/components/lead-score/LeadScoreBadge.tsx",
-    "src/components/lead-score/LeadScoreCard.tsx"
+    "src/components/lead-score/LeadScoreCard.tsx",
+    "src/components/lead-score/LeadScoreWeightsEditor.tsx"
    ],
    "coberto_por_testes": 0
   },
@@ -7500,8 +7544,10 @@
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 0,
-   "usado_por_arquivos": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/ResetPassword.tsx"
+   ],
    "coberto_por_testes": 0
   },
   {
@@ -7641,8 +7687,9 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 12,
+   "usado_por": 13,
    "usado_por_arquivos": [
+    "src/components/companies/PipelineSummaryCard.tsx",
     "src/components/dashboard/DealsAtRiskCard.tsx",
     "src/components/pipeline/CreateDealWidget.tsx",
     "src/components/pipeline/DealDetailDrawer.tsx",
@@ -8319,11 +8366,12 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 5,
+   "usado_por": 6,
    "usado_por_arquivos": [
     "src/components/revops/BenchmarkConfigForm.tsx",
     "src/components/revops/KPIComparisonGrid.tsx",
     "src/components/revops/RevOpsAlertList.tsx",
+    "src/components/revops/RevOpsSnapshotHistory.tsx",
     "src/components/revops/RevenueFunnelChart.tsx",
     "src/pages/RevOps.tsx"
    ],
@@ -9416,6 +9464,7 @@
    "hooks_exportados": [
     "useAllTasks",
     "useCompleteTask",
+    "useContactTasks",
     "useCreateTask",
     "useDeleteTask",
     "useOverdueTasks",
@@ -9424,7 +9473,7 @@
     "useSnoozeReminder",
     "useUpdateTask"
    ],
-   "linhas": 312,
+   "linhas": 352,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -9436,9 +9485,10 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 9,
+   "usado_por": 10,
    "usado_por_arquivos": [
     "src/components/company-detail/QuickFollowUpGenerator.tsx",
+    "src/components/contact-detail/ContactTasksPanel.tsx",
     "src/components/contact-detail/NextBestActionCard.tsx",
     "src/components/ficha-360/ProximaAcaoCTA.tsx",
     "src/components/ficha-360/ProximoPassoQuickForm.tsx",
@@ -9550,10 +9600,12 @@
    "arquivo": "src/hooks/useTerritories.ts",
    "hooks_exportados": [
     "useCreateTerritory",
+    "useDeleteTerritory",
     "useTerritories",
-    "useTerritoriesPerformance"
+    "useTerritoriesPerformance",
+    "useUpdateTerritory"
    ],
-   "linhas": 179,
+   "linhas": 261,
    "dominio": "hooks",
    "tabelas": [
     "territories"
@@ -10454,8 +10506,9 @@
    "edges": [],
    "hooks_internos": [],
    "canais_realtime": [],
-   "usado_por": 4,
+   "usado_por": 5,
    "usado_por_arquivos": [
+    "src/components/feedback/ErrorBoundary.tsx",
     "src/hooks/useAuth.tsx",
     "src/hooks/useWebVitals.ts",
     "src/lib/queryErrorReporter.ts",

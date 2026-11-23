@@ -779,7 +779,7 @@
   {
    "arquivo": "src/components/dashboard/widgets/PendingFollowupsWidget.contract.test.tsx",
    "tipo": "contrato",
-   "linhas": 43,
+   "linhas": 46,
    "testa": [
     "src/components/dashboard/widgets/PendingFollowupsWidget.tsx",
     "src/hooks/usePendingFollowups.ts"
@@ -960,7 +960,7 @@
   {
    "arquivo": "src/components/layout/Header.search.test.tsx",
    "tipo": "unit",
-   "linhas": 29,
+   "linhas": 30,
    "testa": [
     "src/components/layout/Header.tsx"
    ],
@@ -2151,7 +2151,7 @@
   {
    "arquivo": "src/pages/ContatoDetalhe.errors.test.tsx",
    "tipo": "unit",
-   "linhas": 113,
+   "linhas": 114,
    "testa": [
     "src/hooks/useContactDetail.ts",
     "src/hooks/useContacts.ts",
@@ -2162,7 +2162,7 @@
   {
    "arquivo": "src/pages/Contatos.search.test.tsx",
    "tipo": "unit",
-   "linhas": 107,
+   "linhas": 108,
    "testa": [
     "src/components/layout/Header.tsx",
     "src/pages/Contatos.tsx",
@@ -2173,7 +2173,7 @@
   {
    "arquivo": "src/pages/Empresas.errors.test.tsx",
    "tipo": "unit",
-   "linhas": 106,
+   "linhas": 108,
    "testa": [
     "src/pages/Empresas.tsx"
    ],
@@ -2770,6 +2770,7 @@
    "src/pages/AdminTelemetria.tsx",
    "src/pages/AdminVoiceDiagnostics.tsx",
    "src/pages/Analytics.tsx",
+   "src/pages/AprovacoesFollowUp.tsx",
    "src/pages/Assistente.tsx",
    "src/pages/Auth.tsx",
    "src/pages/Automacoes.tsx",
@@ -3053,6 +3054,7 @@
    "src/hooks/useFicha360PreferencesSync.ts",
    "src/hooks/useFicha360Sort.ts",
    "src/hooks/useFocusTrap.ts",
+   "src/hooks/useFollowUpApprovals.ts",
    "src/hooks/useForecasting.ts",
    "src/hooks/useFormDraft.ts",
    "src/hooks/useForms.ts",

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "fa7b7fbefabd2e07998316bc5749ca9315bea00f",
+  "commit": "409a5ae9364ed63228bcf1fe6240faf3c299b984",
   "branch": "main",
-  "data_commit": "2026-11-23T11:48:11-03:00",
+  "data_commit": "2026-11-23T12:35:28-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "409a5ae",
+    "data": "2026-11-23",
+    "assunto": "chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)"
+   },
    {
     "sha": "fa7b7fb",
     "data": "2026-11-23",
@@ -126,26 +131,21 @@
     "sha": "62379b7",
     "data": "2026-11-21",
     "assunto": "chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)"
-   },
-   {
-    "sha": "4e69959",
-    "data": "2026-11-21",
-    "assunto": "fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)"
    }
   ],
-  "arquivos_mudados_7d": 971,
+  "arquivos_mudados_7d": 1033,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
     "mudancas": 197
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 23
+    "pasta": "src/components/contact-detail",
+    "mudancas": 29
    },
    {
-    "pasta": "src/components/contact-detail",
-    "mudancas": 22
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 23
    },
    {
     "pasta": "src/components/triggers",
@@ -154,6 +154,10 @@
    {
     "pasta": "scripts/migration/storage",
     "mudancas": 20
+   },
+   {
+    "pasta": "src/components/admin",
+    "mudancas": 16
    },
    {
     "pasta": "CHANGELOG.md",
@@ -181,10 +185,6 @@
    },
    {
     "pasta": "scripts/migration/tests",
-    "mudancas": 14
-   },
-   {
-    "pasta": "src/components/admin",
     "mudancas": 14
    },
    {
@@ -270,6 +270,14 @@
     "mudancas": 6
    },
    {
+    "arquivo": "src/pages/ContatoDetalhe.tsx",
+    "mudancas": 6
+   },
+   {
+    "arquivo": "src/pages/Empresas.tsx",
+    "mudancas": 6
+   },
+   {
     "arquivo": "supabase/functions/evolution-bitrix-connector/index.ts",
     "mudancas": 6
    },
@@ -288,20 +296,12 @@
    {
     "arquivo": "docs/qa/functions-authenticated-allowlist.md",
     "mudancas": 5
-   },
-   {
-    "arquivo": "scripts/migration/functions/secrets.template.env",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "scripts/rls-matrix/rls-baseline.json",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 150
+    "commits": 151
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,22 +326,22 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3891,
-  "arquivos_codigo": 2240,
-  "linhas_codigo": 418414,
-  "rotas": 115,
+  "arquivos_total": 3908,
+  "arquivos_codigo": 2256,
+  "linhas_codigo": 421371,
+  "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 65,
+  "itens_menu": 66,
   "modulos": 142,
-  "componentes": 1064,
-  "hooks": 411,
+  "componentes": 1079,
+  "hooks": 412,
   "edge_functions": 109,
   "tabelas": 542,
   "migrations": 1108,
   "cron_jobs": 44,
   "testes": 278,
-  "workflows": 12,
+  "workflows": 13,
   "scripts": 296,
   "docs_md": 158
  },
@@ -648,11 +648,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 591
+   "linhas": 593
   },
   "src/components": {
-   "arquivos": 997,
-   "linhas": 149916
+   "arquivos": 1010,
+   "linhas": 151971
   },
   "src/config": {
    "arquivos": 1,
@@ -671,8 +671,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 443,
-   "linhas": 58453
+   "arquivos": 444,
+   "linhas": 58704
   },
   "src/integrations": {
    "arquivos": 3,
@@ -687,8 +687,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 154,
-   "linhas": 28835
+   "arquivos": 156,
+   "linhas": 29476
   },
   "src/store": {
    "arquivos": 1,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 27356
+   "linhas": 27364
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -838,7 +838,7 @@
   },
   {
    "arquivo": "src/components/dashboard/StrategicNextStepsCard.tsx",
-   "linhas": 639
+   "linhas": 645
   },
   {
    "arquivo": "src/data/copywritingData.ts",
@@ -875,7 +875,7 @@
   "ts_ignore": 2,
   "eslint_disable": 1,
   "todos": 8,
-  "arquivos_acima_500_linhas": 45
+  "arquivos_acima_500_linhas": 46
  },
  "todos": [
   {
@@ -1158,41 +1158,24 @@
   "componentes_orfaos": [
    "src/components/admin/AccessSecurityManager.tsx",
    "src/components/admin/EmailPipelineStatus.tsx",
-   "src/components/admin/SystemHealthWidget.tsx",
-   "src/components/ai/AIMessageGenerator.tsx",
-   "src/components/analytics/ApproachRecommendationPanel.tsx",
-   "src/components/analytics/ClientHealthPanel.tsx",
-   "src/components/analytics/CognitiveBiasesPanel.tsx",
    "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
    "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
-   "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx",
    "src/components/conversation-intel/TopicsChart.tsx",
    "src/components/crm/commercial/components/SocialMatchPanel.tsx",
    "src/components/crm/ContactBehaviorExtended.tsx",
    "src/components/crm/copywriting/PerformanceHistory.tsx",
    "src/components/dashboard/SmartNotificationsCard.tsx",
    "src/components/dashboard/your-day/FollowUpItem.tsx",
-   "src/components/data-export/AdvancedDataExporter.tsx",
    "src/components/disc/DISCCompatibilityAlertSettings.tsx",
    "src/components/docs/TechTooltip.tsx",
    "src/components/docs/VersionBadge.tsx",
-   "src/components/feedback/ProgressStepper.tsx",
    "src/components/help/ContextualHelpTooltip.tsx",
-   "src/components/intent/IntentSignalCard.tsx",
    "src/components/interactions/DensityChips.tsx",
    "src/components/interactions/InteractionCardMemo.tsx",
    "src/components/lead-scoring/LeadScoreCard.tsx",
-   "src/components/security/MFAEnrollmentBanner.tsx",
-   "src/components/triggers/CompatibilityScore.tsx",
-   "src/components/triggers/ProfileBasedSuggestions.tsx",
    "src/components/triggers/salesperson/MetaprogramRadioGroup.tsx",
    "src/components/triggers/smart-template/TemplatePreviewContent.tsx",
-   "src/components/triggers/SmartTemplateSuggestions.tsx",
-   "src/components/triggers/TemplateHistoryByProfile.tsx",
    "src/components/ui/density-toggle.tsx",
-   "src/components/ui/keyboard-list-hint.tsx",
-   "src/components/ui/multi-step-progress.tsx",
-   "src/components/ui/priority-indicator.tsx",
    "supabase/functions/_shared/email-templates/password-migration-reset.tsx"
   ],
   "componentes_com_nome_duplicado": [
@@ -1211,6 +1194,7 @@
    "AdminSegurancaPage",
    "AdminVoiceDiagnostics",
    "Analytics",
+   "AprovacoesFollowUp",
    "Assistente",
    "Auth",
    "Automacoes",

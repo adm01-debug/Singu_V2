@@ -1,64 +1,64 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1964,
- "arestas": 8507,
+ "nos": 1980,
+ "arestas": 8669,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
-   "importado_por": 583
+   "importado_por": 590
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 544
+   "importado_por": 553
   },
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 516
+   "importado_por": 532
   },
   {
    "arquivo": "src/lib/utils.ts",
-   "importado_por": 425
+   "importado_por": 426
   },
   {
    "arquivo": "src/hooks/useAuth.tsx",
-   "importado_por": 340
+   "importado_por": 342
   },
   {
    "arquivo": "src/integrations/supabase/client.ts",
-   "importado_por": 335
-  },
-  {
-   "arquivo": "src/components/ui/skeleton.tsx",
-   "importado_por": 199
+   "importado_por": 337
   },
   {
    "arquivo": "src/components/ui/input.tsx",
-   "importado_por": 198
+   "importado_por": 207
+  },
+  {
+   "arquivo": "src/components/ui/skeleton.tsx",
+   "importado_por": 205
   },
   {
    "arquivo": "src/lib/logger.ts",
-   "importado_por": 162
+   "importado_por": 163
   },
   {
    "arquivo": "src/components/ui/label.tsx",
-   "importado_por": 137
+   "importado_por": 144
   },
   {
    "arquivo": "src/lib/externalData.ts",
-   "importado_por": 130
+   "importado_por": 131
   },
   {
    "arquivo": "src/components/ui/select.tsx",
-   "importado_por": 120
+   "importado_por": 127
   },
   {
    "arquivo": "src/lib/errorMessages.ts",
-   "importado_por": 120
+   "importado_por": 121
   },
   {
    "arquivo": "src/types/index.ts",
-   "importado_por": 120
+   "importado_por": 121
   },
   {
    "arquivo": "supabase/functions/_shared/auth.ts",
@@ -74,7 +74,7 @@
   },
   {
    "arquivo": "src/components/ui/textarea.tsx",
-   "importado_por": 95
+   "importado_por": 98
   },
   {
    "arquivo": "src/components/ui/tabs.tsx",
@@ -82,15 +82,15 @@
   },
   {
    "arquivo": "src/components/ui/scroll-area.tsx",
+   "importado_por": 92
+  },
+  {
+   "arquivo": "src/components/ui/dialog.tsx",
    "importado_por": 91
   },
   {
    "arquivo": "supabase/functions/_shared/rate-limit.ts",
    "importado_por": 89
-  },
-  {
-   "arquivo": "src/components/ui/dialog.tsx",
-   "importado_por": 86
   },
   {
    "arquivo": "src/components/ui/tooltip.tsx",
@@ -109,11 +109,11 @@
    "importado_por": 47
   },
   {
-   "arquivo": "src/hooks/useContacts.ts",
-   "importado_por": 40
+   "arquivo": "src/components/ui/separator.tsx",
+   "importado_por": 39
   },
   {
-   "arquivo": "src/components/ui/separator.tsx",
+   "arquivo": "src/hooks/useContacts.ts",
    "importado_por": 39
   },
   {
@@ -133,6 +133,10 @@
    "importado_por": 31
   },
   {
+   "arquivo": "src/components/dashboard/DashboardErrorBoundary.tsx",
+   "importado_por": 27
+  },
+  {
    "arquivo": "src/components/ui/checkbox.tsx",
    "importado_por": 27
   },
@@ -141,15 +145,11 @@
    "importado_por": 27
   },
   {
-   "arquivo": "supabase/functions/_shared/best-effort-write.ts",
-   "importado_por": 27
-  },
-  {
-   "arquivo": "src/components/dashboard/DashboardErrorBoundary.tsx",
+   "arquivo": "src/types/triggers.ts",
    "importado_por": 26
   },
   {
-   "arquivo": "src/types/triggers.ts",
+   "arquivo": "supabase/functions/_shared/best-effort-write.ts",
    "importado_por": 26
   },
   {
@@ -221,50 +221,30 @@
   "public/sw-push.js",
   "src/components/admin/AccessSecurityManager.tsx",
   "src/components/admin/EmailPipelineStatus.tsx",
-  "src/components/admin/SystemHealthWidget.tsx",
-  "src/components/ai/AIMessageGenerator.tsx",
-  "src/components/analytics/ApproachRecommendationPanel.tsx",
-  "src/components/analytics/ClientHealthPanel.tsx",
-  "src/components/analytics/CognitiveBiasesPanel.tsx",
   "src/components/celebrations/index.ts",
   "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
   "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
-  "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx",
   "src/components/conversation-intel/TopicsChart.tsx",
   "src/components/crm/ContactBehaviorExtended.tsx",
   "src/components/crm/commercial/components/SocialMatchPanel.tsx",
   "src/components/crm/copywriting/PerformanceHistory.tsx",
   "src/components/dashboard/SmartNotificationsCard.tsx",
   "src/components/dashboard/your-day/FollowUpItem.tsx",
-  "src/components/data-export/AdvancedDataExporter.tsx",
   "src/components/disc/DISCCompatibilityAlertSettings.tsx",
   "src/components/docs/TechTooltip.tsx",
   "src/components/docs/VersionBadge.tsx",
-  "src/components/feedback/ProgressStepper.tsx",
   "src/components/help/ContextualHelpTooltip.tsx",
   "src/components/hoc/withProviderCheck.tsx",
-  "src/components/intent/IntentSignalCard.tsx",
   "src/components/interactions/DensityChips.tsx",
   "src/components/interactions/InteractionCardMemo.tsx",
   "src/components/lead-scoring/LeadScoreCard.tsx",
-  "src/components/security/MFAEnrollmentBanner.tsx",
-  "src/components/triggers/CompatibilityScore.tsx",
-  "src/components/triggers/ProfileBasedSuggestions.tsx",
-  "src/components/triggers/SmartTemplateSuggestions.tsx",
-  "src/components/triggers/TemplateHistoryByProfile.tsx",
   "src/components/triggers/salesperson/MetaprogramRadioGroup.tsx",
   "src/components/triggers/smart-template/TemplatePreviewContent.tsx",
   "src/components/ui/density-toggle.tsx",
-  "src/components/ui/keyboard-list-hint.tsx",
-  "src/components/ui/multi-step-progress.tsx",
-  "src/components/ui/priority-indicator.tsx",
   "src/domain/closingScore.ts",
   "src/domain/dealState.ts",
   "src/hooks/useBulkSelection.ts",
-  "src/hooks/useCommunicationPreferences.ts",
-  "src/hooks/useDeviceDetection.ts",
   "src/hooks/useFocusTrap.ts",
-  "src/hooks/usePasswordBreachCheck.tsx",
   "src/hooks/useRBAC.tsx",
   "src/hooks/useSavedFilters.ts",
   "src/lib/validationSchemas.ts",
@@ -289,14 +269,14 @@
    "importado_por": 102
   },
   {
-   "modulo": "lib",
-   "depende_de": 7,
-   "importado_por": 96
+   "modulo": "pages",
+   "depende_de": 102,
+   "importado_por": 3
   },
   {
-   "modulo": "pages",
-   "depende_de": 99,
-   "importado_por": 3
+   "modulo": "lib",
+   "depende_de": 7,
+   "importado_por": 97
   },
   {
    "modulo": "integrations/supabase",
@@ -304,14 +284,14 @@
    "importado_por": 40
   },
   {
+   "modulo": "components/contact-detail",
+   "depende_de": 22,
+   "importado_por": 3
+  },
+  {
    "modulo": "types",
    "depende_de": 0,
    "importado_por": 25
-  },
-  {
-   "modulo": "components/contact-detail",
-   "depende_de": 20,
-   "importado_por": 3
   },
   {
    "modulo": "components/dashboard",
@@ -325,7 +305,7 @@
   },
   {
    "modulo": "components/layout",
-   "depende_de": 15,
+   "depende_de": 16,
    "importado_por": 3
   },
   {
@@ -339,6 +319,11 @@
    "importado_por": 1
   },
   {
+   "modulo": "components/feedback",
+   "depende_de": 3,
+   "importado_por": 10
+  },
+  {
    "modulo": "pages/empresas",
    "depende_de": 12,
    "importado_por": 1
@@ -349,14 +334,19 @@
    "importado_por": 5
   },
   {
-   "modulo": "components/feedback",
-   "depende_de": 3,
-   "importado_por": 9
-  },
-  {
    "modulo": "components/interactions",
    "depende_de": 9,
    "importado_por": 3
+  },
+  {
+   "modulo": "components/triggers",
+   "depende_de": 7,
+   "importado_por": 5
+  },
+  {
+   "modulo": "components/admin",
+   "depende_de": 7,
+   "importado_por": 4
   },
   {
    "modulo": "components/crm",
@@ -367,16 +357,6 @@
    "modulo": "components/intelligence",
    "depende_de": 6,
    "importado_por": 5
-  },
-  {
-   "modulo": "components/triggers",
-   "depende_de": 7,
-   "importado_por": 4
-  },
-  {
-   "modulo": "pages/interacoes",
-   "depende_de": 10,
-   "importado_por": 1
   }
  ],
  "arestas_em": "docs/contexto/codigo/grafo-arestas.json"

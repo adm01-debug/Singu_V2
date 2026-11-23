@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1064,
- "orfaos": 38,
+ "total": 1079,
+ "orfaos": 21,
  "nomes_duplicados": {
   "ABM": [
    "src/app/lazyPages.tsx",
@@ -63,6 +63,10 @@
   "Analytics": [
    "src/app/lazyPages.tsx",
    "src/pages/Analytics.tsx"
+  ],
+  "AprovacoesFollowUp": [
+   "src/app/lazyPages.tsx",
+   "src/pages/AprovacoesFollowUp.tsx"
   ],
   "Assistente": [
    "src/app/lazyPages.tsx",
@@ -487,7 +491,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 188,
+   "linhas": 189,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -527,6 +531,7 @@
     "AdminTelemetria",
     "AdminVoiceDiagnostics",
     "Analytics",
+    "AprovacoesFollowUp",
     "Assistente",
     "Auth",
     "Automacoes",
@@ -626,7 +631,7 @@
     "WinLossSetupPage"
    ],
    "export_default": null,
-   "linhas": 173,
+   "linhas": 174,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -634,6 +639,22 @@
    "tabelas": [],
    "edges": [],
    "usado_por": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/abm/ABMAccountEditDialog.tsx",
+   "exports": [
+    "ABMAccountEditDialog"
+   ],
+   "export_default": null,
+   "linhas": 103,
+   "dominio": "components/abm",
+   "hooks_locais": [
+    "useUpdateABMAccount"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
    "orfao": false
   },
   {
@@ -981,7 +1002,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -990,7 +1011,7 @@
     "ConnectionCard"
    ],
    "export_default": null,
-   "linhas": 93,
+   "linhas": 99,
    "dominio": "components/admin",
    "hooks_locais": [
     "useConnections"
@@ -1026,6 +1047,22 @@
    "dominio": "components/admin",
    "hooks_locais": [
     "useConnectionMetrics"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/admin/conexoes/ConnectionTestHistory.tsx",
+   "exports": [
+    "ConnectionTestHistory"
+   ],
+   "export_default": null,
+   "linhas": 41,
+   "dominio": "components/admin",
+   "hooks_locais": [
+    "useConnectionTestLogs"
    ],
    "tabelas": [],
    "edges": [],
@@ -1125,7 +1162,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -1403,8 +1440,8 @@
    "edges": [
     "system-health"
    ],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/admin/telemetry/TelemetryCharts.tsx",
@@ -1493,7 +1530,7 @@
     "AIMessageGenerator"
    ],
    "export_default": null,
-   "linhas": 230,
+   "linhas": 235,
    "dominio": "components/ai",
    "hooks_locais": [
     "useAIWritingAssistant",
@@ -1501,8 +1538,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/ai/EmailThreadSummaryCard.tsx",
@@ -1611,8 +1648,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/analytics/BehaviorAlertsPanel.tsx",
@@ -1723,8 +1760,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/analytics/ClosingScoreAlertsList.tsx",
@@ -1788,8 +1825,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/analytics/CohortAnalysisWidget.tsx",
@@ -2496,6 +2533,20 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/carnegie/CarnegieExtendedLibrary.tsx",
+   "exports": [
+    "CarnegieExtendedLibrary"
+   ],
+   "export_default": null,
+   "linhas": 231,
+   "dominio": "components/carnegie",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/carnegie/CarnegieQuickAccess.tsx",
    "exports": [
     "CarnegieQuickAccess"
@@ -2719,6 +2770,22 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/companies/CompaniesExportButton.tsx",
+   "exports": [
+    "CompaniesExportButton"
+   ],
+   "export_default": null,
+   "linhas": 25,
+   "dominio": "components/companies",
+   "hooks_locais": [
+    "useExportCompaniesCsv"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/companies/CompaniesInlineMap.tsx",
    "exports": [
     "CompaniesInlineMap"
@@ -2786,6 +2853,22 @@
    "linhas": 145,
    "dominio": "components/companies",
    "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/companies/PipelineSummaryCard.tsx",
+   "exports": [
+    "PipelineSummaryCard"
+   ],
+   "export_default": null,
+   "linhas": 70,
+   "dominio": "components/companies",
+   "hooks_locais": [
+    "usePipelineSummary"
+   ],
    "tabelas": [],
    "edges": [],
    "usado_por": 1,
@@ -3359,7 +3442,7 @@
     "ContactCardWithContext"
    ],
    "export_default": null,
-   "linhas": 392,
+   "linhas": 399,
    "dominio": "components/contact-card",
    "hooks_locais": [
     "usePrefetch",
@@ -3642,7 +3725,7 @@
     "NeuroDominanceTab"
    ],
    "export_default": null,
-   "linhas": 198,
+   "linhas": 230,
    "dominio": "components/contact-detail",
    "hooks_locais": [
     "useAuth"
@@ -3651,8 +3734,8 @@
     "brain_dominance_analysis"
    ],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/contact-detail/behavioral-tab/PersonalityExecutiveSummary.tsx",
@@ -3671,12 +3754,26 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx",
+   "exports": [
+    "PersonalityFrameworkInsights"
+   ],
+   "export_default": null,
+   "linhas": 197,
+   "dominio": "components/contact-detail",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx",
    "exports": [
     "PersonalitySubTab"
    ],
    "export_default": null,
-   "linhas": 314,
+   "linhas": 317,
    "dominio": "components/contact-detail",
    "hooks_locais": [
     "useContactBehavior"
@@ -4145,17 +4242,20 @@
     "ContactBehavioralTab"
    ],
    "export_default": null,
-   "linhas": 275,
+   "linhas": 472,
    "dominio": "components/contact-detail",
    "hooks_locais": [
-    "useAuth"
+    "useAuth",
+    "useDashboardMappedData",
+    "useFicha360NLP"
    ],
    "tabelas": [
     "cognitive_bias_history",
     "contacts",
     "disc_analysis_history",
     "eq_analysis_history",
-    "metaprogram_analysis"
+    "metaprogram_analysis",
+    "profiles"
    ],
    "edges": [],
    "usado_por": 1,
@@ -4356,6 +4456,26 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/contact-detail/ContactTasksPanel.tsx",
+   "exports": [
+    "ContactTasksPanel"
+   ],
+   "export_default": null,
+   "linhas": 307,
+   "dominio": "components/contact-detail",
+   "hooks_locais": [
+    "useCompleteTask",
+    "useContactTasks",
+    "useCreateTask",
+    "useDeleteTask",
+    "useReopenTask"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/contact-detail/ContactTimeHeatmap.tsx",
    "exports": [
     "ContactTimeHeatmap"
@@ -4423,9 +4543,11 @@
     "CadencePreferencesCard"
    ],
    "export_default": null,
-   "linhas": 427,
+   "linhas": 548,
    "dominio": "components/contact-detail",
-   "hooks_locais": [],
+   "hooks_locais": [
+    "useCommunicationPreferences"
+   ],
    "tabelas": [],
    "edges": [],
    "usado_por": 1,
@@ -5754,7 +5876,7 @@
     "crm_consent_audit_logs"
    ],
    "edges": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -5989,7 +6111,7 @@
     "interactions"
    ],
    "edges": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -6110,7 +6232,7 @@
     "HealthSignalTimeline"
    ],
    "export_default": null,
-   "linhas": 49,
+   "linhas": 52,
    "dominio": "components/customer-success",
    "hooks_locais": [
     "useHealthSignals"
@@ -6158,7 +6280,7 @@
     "QBRTimeline"
    ],
    "export_default": null,
-   "linhas": 57,
+   "linhas": 59,
    "dominio": "components/customer-success",
    "hooks_locais": [
     "useQBRs"
@@ -6169,15 +6291,63 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/customer-success/RecordSignalDialog.tsx",
+   "exports": [
+    "RecordSignalDialog"
+   ],
+   "export_default": null,
+   "linhas": 80,
+   "dominio": "components/customer-success",
+   "hooks_locais": [
+    "useRecordSignal"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/customer-success/RenewalEditDialog.tsx",
+   "exports": [
+    "RenewalEditDialog"
+   ],
+   "export_default": null,
+   "linhas": 91,
+   "dominio": "components/customer-success",
+   "hooks_locais": [
+    "useUpdateRenewal"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/customer-success/RenewalPipelineList.tsx",
    "exports": [
     "RenewalPipelineList"
    ],
    "export_default": null,
-   "linhas": 63,
+   "linhas": 81,
    "dominio": "components/customer-success",
    "hooks_locais": [
     "useRenewals"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/customer-success/ScheduleQBRDialog.tsx",
+   "exports": [
+    "ScheduleQBRDialog"
+   ],
+   "export_default": null,
+   "linhas": 51,
+   "dominio": "components/customer-success",
+   "hooks_locais": [
+    "useUpsertQBR"
    ],
    "tabelas": [],
    "edges": [],
@@ -6280,7 +6450,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 26,
+   "usado_por": 27,
    "orfao": false
   },
   {
@@ -6506,7 +6676,7 @@
     "StrategicNextStepsCard"
    ],
    "export_default": null,
-   "linhas": 639,
+   "linhas": 645,
    "dominio": "components/dashboard",
    "hooks_locais": [
     "useAuth",
@@ -6556,7 +6726,7 @@
     "OverviewTab"
    ],
    "export_default": null,
-   "linhas": 286,
+   "linhas": 296,
    "dominio": "components/dashboard",
    "hooks_locais": [
     "useDashboardMappedData"
@@ -6810,9 +6980,10 @@
     "PendingFollowupsWidget"
    ],
    "export_default": null,
-   "linhas": 103,
+   "linhas": 116,
    "dominio": "components/dashboard",
    "hooks_locais": [
+    "useCompleteFollowup",
     "usePendingFollowups"
    ],
    "tabelas": [],
@@ -6911,8 +7082,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/deal-rooms/ActivityFeed.tsx",
@@ -6957,6 +7128,22 @@
    "dominio": "components/deal-rooms",
    "hooks_locais": [
     "useMilestones"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/deal-rooms/DealRoomEditDialog.tsx",
+   "exports": [
+    "DealRoomEditDialog"
+   ],
+   "export_default": null,
+   "linhas": 86,
+   "dominio": "components/deal-rooms",
+   "hooks_locais": [
+    "useUpdateDealRoom"
    ],
    "tabelas": [],
    "edges": [],
@@ -7541,7 +7728,7 @@
     "WithErrorBoundary"
    ],
    "export_default": null,
-   "linhas": 163,
+   "linhas": 165,
    "dominio": "components/feedback",
    "hooks_locais": [],
    "tabelas": [],
@@ -7579,7 +7766,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -7661,8 +7848,8 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/feedback/ProviderErrorBoundary.tsx",
@@ -8748,7 +8935,7 @@
     "BulkImportDialog"
    ],
    "export_default": null,
-   "linhas": 176,
+   "linhas": 183,
    "dominio": "components/import",
    "hooks_locais": [
     "useBulkImport"
@@ -9416,8 +9603,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/intent/IntentSignalsTimeline.tsx",
@@ -10139,7 +10326,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 315,
+   "linhas": 316,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -10159,7 +10346,7 @@
     "HeaderMemo"
    ],
    "export_default": null,
-   "linhas": 138,
+   "linhas": 140,
    "dominio": "components/layout",
    "hooks_locais": [],
    "tabelas": [],
@@ -10356,6 +10543,25 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/lead-score/LeadScoreWeightsEditor.tsx",
+   "exports": [
+    "LeadScoreWeightsEditor"
+   ],
+   "export_default": null,
+   "linhas": 113,
+   "dominio": "components/lead-score",
+   "hooks_locais": [
+    "useAuth",
+    "useLeadScoreConfig"
+   ],
+   "tabelas": [
+    "lead_score_config"
+   ],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/lead-score/LeadScoreWidget.tsx",
    "exports": [
     "LeadScoreWidget"
@@ -10432,7 +10638,7 @@
     "AutomationWizard"
    ],
    "export_default": null,
-   "linhas": 221,
+   "linhas": 233,
    "dominio": "components/lead-scoring",
    "hooks_locais": [
     "useUpsertAutomation"
@@ -10669,10 +10875,12 @@
     "ContactTouchpointsTab"
    ],
    "export_default": null,
-   "linhas": 106,
+   "linhas": 173,
    "dominio": "components/marketing",
    "hooks_locais": [
+    "useEvaluateMQL",
     "useMQLClassifications",
+    "useRecordTouchpoint",
     "useTouchpoints"
    ],
    "tabelas": [],
@@ -11200,7 +11408,7 @@
     "NeuroScriptGenerator"
    ],
    "export_default": "NeuroScriptGenerator",
-   "linhas": 262,
+   "linhas": 271,
    "dominio": "components/neuromarketing",
    "hooks_locais": [
     "useNeuromarketing"
@@ -12494,6 +12702,22 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/revops/RevOpsSnapshotHistory.tsx",
+   "exports": [
+    "RevOpsSnapshotHistory"
+   ],
+   "export_default": null,
+   "linhas": 78,
+   "dominio": "components/revops",
+   "hooks_locais": [
+    "useRevOpsSnapshots"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/search/global-search/SearchLocalGroups.tsx",
    "exports": [
     "SearchLocalGroups"
@@ -12729,8 +12953,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/security/PasskeyManager.tsx",
@@ -13374,10 +13598,11 @@
     "TerritoryForm"
    ],
    "export_default": null,
-   "linhas": 167,
+   "linhas": 178,
    "dominio": "components/territories",
    "hooks_locais": [
-    "useCreateTerritory"
+    "useCreateTerritory",
+    "useUpdateTerritory"
    ],
    "tabelas": [],
    "edges": [],
@@ -13582,8 +13807,8 @@
     "profiles"
    ],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/triggers/portfolio/PortfolioContactCard.tsx",
@@ -13655,8 +13880,8 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/triggers/salesperson/MetaprogramRadioGroup.tsx",
@@ -13717,8 +13942,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/triggers/template-history/ProfileCard.tsx",
@@ -13775,8 +14000,8 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/triggers/TemplateNotificationSettings.tsx",
@@ -13807,7 +14032,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -13934,7 +14159,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 15,
+   "usado_por": 20,
    "orfao": false
   },
   {
@@ -13984,7 +14209,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 543,
+   "usado_por": 552,
    "orfao": false
   },
   {
@@ -13999,7 +14224,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 515,
+   "usado_por": 531,
    "orfao": false
   },
   {
@@ -14034,7 +14259,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 583,
+   "usado_por": 590,
    "orfao": false
   },
   {
@@ -14164,7 +14389,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 86,
+   "usado_por": 91,
    "orfao": false
   },
   {
@@ -14247,7 +14472,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 22,
+   "usado_por": 23,
    "orfao": false
   },
   {
@@ -14313,7 +14538,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 198,
+   "usado_por": 207,
    "orfao": false
   },
   {
@@ -14341,8 +14566,8 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 2,
+   "orfao": false
   },
   {
    "arquivo": "src/components/ui/label.tsx",
@@ -14355,7 +14580,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 137,
+   "usado_por": 144,
    "orfao": false
   },
   {
@@ -14416,8 +14641,8 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/ui/optimized-avatar.tsx",
@@ -14475,8 +14700,8 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/ui/progress.tsx",
@@ -14614,7 +14839,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 91,
+   "usado_por": 92,
    "orfao": false
   },
   {
@@ -14659,7 +14884,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 120,
+   "usado_por": 127,
    "orfao": false
   },
   {
@@ -14819,7 +15044,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 199,
+   "usado_por": 205,
    "orfao": false
   },
   {
@@ -14943,7 +15168,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 17,
+   "usado_por": 18,
    "orfao": false
   },
   {
@@ -14989,7 +15214,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 95,
+   "usado_por": 98,
    "orfao": false
   },
   {
@@ -15009,7 +15234,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "orfao": false
   },
   {
@@ -15264,10 +15489,11 @@
     "WinLossRecordsTable"
    ],
    "export_default": null,
-   "linhas": 70,
+   "linhas": 112,
    "dominio": "components/win-loss",
    "hooks_locais": [
     "useCompetitors",
+    "useDeleteWinLossRecord",
     "useWinLossReasons",
     "useWinLossRecords"
    ],
@@ -15319,14 +15545,15 @@
     "RequireAuth"
    ],
    "export_default": null,
-   "linhas": 356,
+   "linhas": 372,
    "dominio": "hooks",
    "hooks_locais": [
-    "useAuth"
+    "useAuth",
+    "useDeviceDetection"
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 337,
+   "usado_por": 339,
    "orfao": false
   },
   {
@@ -15352,11 +15579,12 @@
     "ABMAccountDetail"
    ],
    "export_default": "ABMAccountDetail",
-   "linhas": 103,
+   "linhas": 145,
    "dominio": "pages",
    "hooks_locais": [
     "useABMAccount",
     "useABMAccounts",
+    "useDeleteABMAccount",
     "useRescoreAccounts"
    ],
    "tabelas": [],
@@ -15556,7 +15784,7 @@
     "AdminConexoes"
    ],
    "export_default": "AdminConexoes",
-   "linhas": 165,
+   "linhas": 173,
    "dominio": "pages",
    "hooks_locais": [
     "useConnections",
@@ -15791,6 +16019,23 @@
    "orfao": false
   },
   {
+   "arquivo": "src/pages/AprovacoesFollowUp.tsx",
+   "exports": [
+    "AprovacoesFollowUp"
+   ],
+   "export_default": "AprovacoesFollowUp",
+   "linhas": 157,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useDecideFollowUp",
+    "useFollowUpApprovals"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/pages/Assistente.tsx",
    "exports": [
     "Assistente"
@@ -15918,7 +16163,7 @@
     "Cadastro"
    ],
    "export_default": "Cadastro",
-   "linhas": 68,
+   "linhas": 79,
    "dominio": "pages",
    "hooks_locais": [],
    "tabelas": [],
@@ -15966,6 +16211,23 @@
    "dominio": "pages/cadastro",
    "hooks_locais": [
     "useAuth"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/cadastro/RelationshipList.tsx",
+   "exports": [
+    "RelationshipList"
+   ],
+   "export_default": null,
+   "linhas": 135,
+   "dominio": "pages/cadastro",
+   "hooks_locais": [
+    "useDeleteEntityRelationship",
+    "useEntityRelationships"
    ],
    "tabelas": [],
    "edges": [],
@@ -16077,7 +16339,7 @@
     "Configuracoes"
    ],
    "export_default": "Configuracoes",
-   "linhas": 169,
+   "linhas": 170,
    "dominio": "pages",
    "hooks_locais": [
     "useAccessibleToast",
@@ -16113,7 +16375,7 @@
     "ConfigSecurityTab"
    ],
    "export_default": null,
-   "linhas": 53,
+   "linhas": 55,
    "dominio": "pages/configuracoes",
    "hooks_locais": [],
    "tabelas": [],
@@ -16127,7 +16389,7 @@
     "ContatoDetalhe"
    ],
    "export_default": "ContatoDetalhe",
-   "linhas": 375,
+   "linhas": 390,
    "dominio": "pages",
    "hooks_locais": [
     "useContactDetail",
@@ -16172,7 +16434,7 @@
     "ContatosContent"
    ],
    "export_default": null,
-   "linhas": 290,
+   "linhas": 293,
    "dominio": "pages/contatos",
    "hooks_locais": [
     "useIsAdmin"
@@ -16302,10 +16564,11 @@
     "DealRoomDetail"
    ],
    "export_default": "DealRoomDetail",
-   "linhas": 88,
+   "linhas": 131,
    "dominio": "pages",
    "hooks_locais": [
     "useDealRoom",
+    "useDeleteDealRoom",
     "useMilestones",
     "useStakeholders"
    ],
@@ -16420,7 +16683,7 @@
     "EmpresaDetalhe"
    ],
    "export_default": "EmpresaDetalhe",
-   "linhas": 371,
+   "linhas": 372,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth",
@@ -16449,7 +16712,7 @@
     "Empresas"
    ],
    "export_default": "Empresas",
-   "linhas": 290,
+   "linhas": 300,
    "dominio": "pages",
    "hooks_locais": [
     "useActionToast",
@@ -16474,7 +16737,7 @@
     "EmpresasContent"
    ],
    "export_default": null,
-   "linhas": 226,
+   "linhas": 228,
    "dominio": "pages/empresas",
    "hooks_locais": [
     "useCompanyGroups",
@@ -16492,9 +16755,10 @@
     "Enrichment"
    ],
    "export_default": "Enrichment",
-   "linhas": 76,
+   "linhas": 116,
    "dominio": "pages",
    "hooks_locais": [
+    "useEmailFinderResults",
     "useEmailVerifications",
     "usePhoneValidations"
    ],
@@ -16557,10 +16821,11 @@
     "Forecasting"
    ],
    "export_default": "Forecasting",
-   "linhas": 105,
+   "linhas": 117,
    "dominio": "pages",
    "hooks_locais": [
     "useAnalyzeForecast",
+    "useClosePeriod",
     "useCreatePeriod",
     "useCurrentPeriod",
     "useForecastPeriods",
@@ -16657,7 +16922,7 @@
     "Insights"
    ],
    "export_default": "Insights",
-   "linhas": 205,
+   "linhas": 208,
    "dominio": "pages",
    "hooks_locais": [
     "useAccessibleToast",
@@ -16717,9 +16982,10 @@
     "IntentPage"
    ],
    "export_default": "IntentPage",
-   "linhas": 142,
+   "linhas": 198,
    "dominio": "pages",
    "hooks_locais": [
+    "useCreateManualSignal",
     "useIntentSignals",
     "useRefreshIntent",
     "useTopIntentScores"
@@ -16856,7 +17122,7 @@
     "LeadScoringConfigPage"
    ],
    "export_default": "LeadScoringConfigPage",
-   "linhas": 35,
+   "linhas": 37,
    "dominio": "pages",
    "hooks_locais": [
     "useScoreRules",
@@ -17428,9 +17694,11 @@
     "ResetPassword"
    ],
    "export_default": "ResetPassword",
-   "linhas": 116,
+   "linhas": 133,
    "dominio": "pages",
-   "hooks_locais": [],
+   "hooks_locais": [
+    "usePasswordBreachCheck"
+   ],
    "tabelas": [],
    "edges": [
     "clear-must-reset-flag"
@@ -17444,7 +17712,7 @@
     "RevOps"
    ],
    "export_default": "RevOps",
-   "linhas": 79,
+   "linhas": 85,
    "dominio": "pages",
    "hooks_locais": [
     "useRevOpsKPIs",
@@ -17685,9 +17953,10 @@
     "Territorios"
    ],
    "export_default": "Territorios",
-   "linhas": 141,
+   "linhas": 212,
    "dominio": "pages",
    "hooks_locais": [
+    "useDeleteTerritory",
     "useIsAdmin",
     "useTerritories",
     "useTerritoriesPerformance"

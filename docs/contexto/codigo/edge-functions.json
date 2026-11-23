@@ -1924,7 +1924,7 @@
    "nome": "generate-insights",
    "entrada": "supabase/functions/generate-insights/index.ts",
    "arquivos": 1,
-   "linhas": 196,
+   "linhas": 204,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -1945,7 +1945,6 @@
    ],
    "usa_shared": [
     "auth.ts",
-    "best-effort-write.ts",
     "fetch-utils.ts",
     "rate-limit.ts",
     "tracing.ts"

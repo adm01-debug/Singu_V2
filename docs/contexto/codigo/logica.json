@@ -676,8 +676,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "lib"
    ],
    "coberto_por_testes": 3,
@@ -705,8 +706,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "lib"
    ],
    "coberto_por_testes": 2,
@@ -734,8 +736,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "lib"
    ],
    "coberto_por_testes": 2,
@@ -764,8 +767,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "lib"
    ],
    "coberto_por_testes": 2,
@@ -824,8 +828,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "lib"
    ],
    "coberto_por_testes": 3,
@@ -909,8 +914,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "lib"
    ],
    "coberto_por_testes": 2,
@@ -971,8 +977,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "lib"
    ],
    "coberto_por_testes": 2,
@@ -1000,8 +1007,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "lib"
    ],
    "coberto_por_testes": 2,
@@ -1032,8 +1040,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "hooks"
    ],
    "coberto_por_testes": 1,
@@ -1120,8 +1129,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_modulos": [
+    "components/carnegie",
     "lib"
    ],
    "coberto_por_testes": 3,
@@ -2169,7 +2179,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 333,
+   "usado_por": 335,
    "usado_por_modulos": [
     "components/admin",
     "components/analytics",
@@ -2767,7 +2777,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 120,
+   "usado_por": 121,
    "usado_por_modulos": [
     "components/admin",
     "components/bulk-actions",
@@ -2781,6 +2791,7 @@
     "components/ficha-360",
     "components/interactions",
     "components/lead-routing",
+    "components/lead-score",
     "components/onboarding",
     "components/reports",
     "components/search",
@@ -2823,8 +2834,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 4,
+   "usado_por": 5,
    "usado_por_modulos": [
+    "components/feedback",
     "hooks",
     "lib"
    ],
@@ -2847,9 +2859,10 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_modulos": [
     "components/crm",
+    "hooks",
     "pages/contatos"
    ],
    "coberto_por_testes": 0,
@@ -2887,7 +2900,7 @@
    "zod_schemas": 1,
    "flags": [],
    "papeis": [],
-   "usado_por": 106,
+   "usado_por": 107,
    "usado_por_modulos": [
     "components/contact-detail",
     "components/contacts",
@@ -3449,7 +3462,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 160,
+   "usado_por": 161,
    "usado_por_modulos": [
     "components/admin",
     "components/analytics",
@@ -4338,7 +4351,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 425,
+   "usado_por": 426,
    "usado_por_modulos": [
     "components/abm",
     "components/admin",

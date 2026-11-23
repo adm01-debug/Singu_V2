@@ -3,14 +3,14 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2077)",
+   "TypeScript (2093)",
    "SQL (1281)",
    "Markdown (158)",
    "Shell (147)",
    "JavaScript (143)",
    "JSON (22)",
    "Python (21)",
-   "YAML (18)"
+   "YAML (19)"
   ],
   "linguagem_principal": "TypeScript",
   "framework": "React",
@@ -516,6 +516,35 @@
    "actions": [
     "actions/checkout",
     "actions/setup-node"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/smoke-edges-pendentes.yml",
+   "nome": "Smoke das edges pendentes",
+   "gatilhos": [
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "smoke"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "PGDATABASE",
+    "PGHOST",
+    "PGPASSWORD",
+    "PGPORT",
+    "PGUSER",
+    "TEST_USER_EMAIL",
+    "TEST_USER_PASSWORD"
+   ],
+   "actions": [
+    "actions/checkout"
    ]
   }
  ],
@@ -1554,7 +1583,7 @@
    "src/components/auth/MFAGuard.tsx",
    "src/hooks/useAuth.tsx"
   ],
-  "rotas_protegidas": 103,
+  "rotas_protegidas": 104,
   "rotas_publicas": [
    "/*",
    "/auth",

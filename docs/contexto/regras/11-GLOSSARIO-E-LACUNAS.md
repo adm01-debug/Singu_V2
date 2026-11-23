@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `fa7b7fbefa` · branch `main` · 2026-11-23 14:52 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `409a5ae936` · branch `main` · 2026-11-23 15:49 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -307,7 +307,7 @@
 | `nurturing_executions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
 | `nurturing_workflows` | SINGU: Fluxos de nutrição long-term (mais complexos que sequences). Trigger-based (score/segment/inactivity/event). | 14 colunas | migration |
 | `oauth_tokens` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | migration |
-| … +459 linhas — lista completa em `context.json` | | | |
+| … +460 linhas — lista completa em `context.json` | | | |
 
 ## Dados de referência (seed — planos, categorias, perfis fixos)
 
@@ -476,6 +476,7 @@ _nenhum item encontrado_
 | coluna | coluna `file_type` usada no código não existe no schema de `documents` |  |
 | coluna | coluna `content_text` usada no código não existe no schema de `email_campaigns` |  |
 | coluna | coluna `tags` usada no código não existe no schema de `email_campaigns` |  |
+| coluna | coluna `scheduled_at` usada no código não existe no schema de `follow_up_approvals_v2` |  |
 | coluna | coluna `check_frequency_hours` usada no código não existe no schema de `health_alert_settings` |  |
 | coluna | coluna `replay_window_seconds` usada no código não existe no schema de `incoming_webhooks` |  |
 | coluna | coluna `require_signature` usada no código não existe no schema de `incoming_webhooks` |  |
@@ -618,8 +619,7 @@ _nenhum item encontrado_
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/regras_negocio/generate.py` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/components/data-export/AdvancedDataExporter.tsx` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useBIAdvanced.ts` |
-| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useRealtimeNotifications.ts` |
-| … +57 linhas — lista completa em `context.json` | | |
+| … +58 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

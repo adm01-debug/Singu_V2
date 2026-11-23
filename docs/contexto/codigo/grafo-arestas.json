@@ -370,6 +370,7 @@
    "src/pages/AdminTelemetria.tsx",
    "src/pages/AdminVoiceDiagnostics.tsx",
    "src/pages/Analytics.tsx",
+   "src/pages/AprovacoesFollowUp.tsx",
    "src/pages/Assistente.tsx",
    "src/pages/Auth.tsx",
    "src/pages/Automacoes.tsx",
@@ -470,6 +471,15 @@
   ],
   "src/app/queryClient.ts": [
    "src/lib/queryErrorReporter.ts"
+  ],
+  "src/components/abm/ABMAccountEditDialog.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/hooks/useABM.ts"
   ],
   "src/components/abm/ABMCampaignDialog.tsx": [
    "src/components/ui/button.tsx",
@@ -729,6 +739,7 @@
   ],
   "src/components/admin/conexoes/ConnectionCard.tsx": [
    "src/components/admin/conexoes/ConnectionMetricsSparkline.tsx",
+   "src/components/admin/conexoes/ConnectionTestHistory.tsx",
    "src/components/admin/conexoes/SchemaDiscoveryCard.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
@@ -752,6 +763,11 @@
    "src/components/ui/skeleton.tsx",
    "src/hooks/useConnectionMetrics.ts",
    "src/lib/utils.ts"
+  ],
+  "src/components/admin/conexoes/ConnectionTestHistory.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useConnections.ts"
   ],
   "src/components/admin/conexoes/IncomingWebhookCard.tsx": [
    "src/components/admin/conexoes/IncomingWebhookLogsDialog.tsx",
@@ -856,8 +872,7 @@
    "src/components/ui/select.tsx",
    "src/components/ui/textarea.tsx",
    "src/hooks/use-toast.ts",
-   "src/hooks/useAIWritingAssistant.ts",
-   "src/hooks/useContacts.ts"
+   "src/hooks/useAIWritingAssistant.ts"
   ],
   "src/components/ai/EmailThreadSummaryCard.tsx": [
    "src/components/ui/badge.tsx",
@@ -1357,6 +1372,23 @@
    "src/types/carnegie.ts",
    "src/types/index.ts"
   ],
+  "src/components/carnegie/CarnegieExtendedLibrary.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/components/ui/select.tsx",
+   "src/data/carnegieCriticismDetector.ts",
+   "src/data/carnegieEagerWant.ts",
+   "src/data/carnegieEmpathyTemplates.ts",
+   "src/data/carnegieEncouragement.ts",
+   "src/data/carnegieGenuineInterest.ts",
+   "src/data/carnegieOwnershipTransfer.ts",
+   "src/data/carnegieQuestionInfluence.ts",
+   "src/data/carnegieStorytelling.ts",
+   "src/data/carnegieTalkRatio.ts",
+   "src/data/carnegieYesLadder.ts"
+  ],
   "src/components/carnegie/CarnegieQuickAccess.tsx": [
    "src/components/carnegie/AppreciationPanel.tsx",
    "src/components/carnegie/IdentityLabelingPanel.tsx",
@@ -1466,6 +1498,7 @@
   "src/components/carnegie/index.ts": [
    "src/components/carnegie/AppreciationPanel.tsx",
    "src/components/carnegie/CarnegieDashboard.tsx",
+   "src/components/carnegie/CarnegieExtendedLibrary.tsx",
    "src/components/carnegie/CarnegieQuickAccess.tsx",
    "src/components/carnegie/CarnegieScorePanel.tsx",
    "src/components/carnegie/FaceSavingPanel.tsx",
@@ -1498,6 +1531,10 @@
    "src/hooks/useGlobalDensity.ts",
    "src/lib/utils.ts"
   ],
+  "src/components/companies/CompaniesExportButton.tsx": [
+   "src/components/ui/button.tsx",
+   "src/hooks/useCompanyActions.ts"
+  ],
   "src/components/companies/CompaniesInlineMap.tsx": [
    "src/components/ui/button.tsx",
    "src/hooks/useCompanies.ts",
@@ -1528,6 +1565,12 @@
    "src/hooks/useCompanies.ts",
    "src/lib/formatters.ts",
    "src/lib/utils.ts"
+  ],
+  "src/components/companies/PipelineSummaryCard.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/usePipeline.ts"
   ],
   "src/components/company-analytics/ActivityTimeline.tsx": [
    "src/components/ui/badge.tsx",
@@ -1802,6 +1845,7 @@
    "src/components/ui/disc-badge.tsx",
    "src/components/ui/dropdown-menu.tsx",
    "src/components/ui/optimized-avatar.tsx",
+   "src/components/ui/priority-indicator.tsx",
    "src/components/ui/relationship-score.tsx",
    "src/components/ui/relationship-stage.tsx",
    "src/components/ui/role-badge.tsx",
@@ -1880,6 +1924,10 @@
    "src/lib/utils.ts"
   ],
   "src/components/contact-detail/ContactBehavioralTab.tsx": [
+   "src/components/ai/AIMessageGenerator.tsx",
+   "src/components/analytics/ApproachRecommendationPanel.tsx",
+   "src/components/analytics/ClientHealthPanel.tsx",
+   "src/components/analytics/CognitiveBiasesPanel.tsx",
    "src/components/contact-detail/CommunicationIntelWidget.tsx",
    "src/components/contact-detail/DISCCommunicationLogsPanel.tsx",
    "src/components/contact-detail/EmotionalTrendByContactWidget.tsx",
@@ -1900,6 +1948,7 @@
    "src/components/contact-detail/behavioral-tab/InfluencersSubTab.tsx",
    "src/components/contact-detail/behavioral-tab/MetaprogramsSubTab.tsx",
    "src/components/contact-detail/behavioral-tab/MotivationsSubTab.tsx",
+   "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx",
    "src/components/contact-detail/behavioral-tab/PersonalityExecutiveSummary.tsx",
    "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx",
    "src/components/contact-detail/behavioral-tab/RapportCard.tsx",
@@ -1908,16 +1957,28 @@
    "src/components/contact-detail/behavioral-tab/VakSubTab.tsx",
    "src/components/crm/behavior/BehavioralAuditSubTab.tsx",
    "src/components/crm/behavior/PredictiveRoadmap.tsx",
+   "src/components/crm/consent/ConsentAuditLog.tsx",
+   "src/components/crm/relationship/RelationshipReportExport.tsx",
    "src/components/dashboard/DashboardErrorBoundary.tsx",
+   "src/components/neuromarketing/index.ts",
    "src/components/nlp/SleightOfMouthPanel.tsx",
+   "src/components/triggers/CompatibilityScore.tsx",
+   "src/components/triggers/ProfileBasedSuggestions.tsx",
+   "src/components/triggers/SmartTemplateSuggestions.tsx",
+   "src/components/triggers/TemplateHistoryByProfile.tsx",
+   "src/components/triggers/TemplatePerformanceComparison.tsx",
    "src/components/ui/module-help.tsx",
    "src/components/ui/skeleton.tsx",
    "src/components/ui/tabs.tsx",
    "src/hooks/useAuth.tsx",
    "src/hooks/useContactDetail.ts",
+   "src/hooks/useDashboardMappedData.ts",
+   "src/hooks/useFicha360NLP.ts",
    "src/integrations/supabase/client.ts",
    "src/integrations/supabase/types.ts",
-   "src/lib/externalData.ts"
+   "src/lib/externalData.ts",
+   "src/types/behavior.ts",
+   "src/types/index.ts"
   ],
   "src/components/contact-detail/ContactCommercialTab.tsx": [
    "src/components/contact-detail/commercial-tab/BestClosingMomentsCard.tsx",
@@ -2102,6 +2163,18 @@
    "src/components/ui/card.tsx",
    "src/components/ui/external-data-card.tsx",
    "src/hooks/useContactStatistics.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/contact-detail/ContactTasksPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/hooks/useTasks.ts",
    "src/lib/utils.ts"
   ],
   "src/components/contact-detail/ContactTimeHeatmap.tsx": [
@@ -2467,7 +2540,16 @@
    "src/components/ui/card.tsx",
    "src/hooks/useContactBehavior.ts"
   ],
+  "src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/hooks/useContactBehavior.ts",
+   "src/types/big-five.ts",
+   "src/types/enneagram.ts",
+   "src/types/mbti.ts"
+  ],
   "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx": [
+   "src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
@@ -2649,6 +2731,7 @@
    "src/components/ui/input.tsx",
    "src/components/ui/select.tsx",
    "src/components/ui/separator.tsx",
+   "src/hooks/useCommunicationPreferences.ts",
    "src/integrations/supabase/types.ts"
   ],
   "src/components/contact-detail/data-tab/ConsentAuditCard.tsx": [
@@ -2758,6 +2841,7 @@
    "src/components/contact-detail/ContactIntelligenceTab.tsx",
    "src/components/contact-detail/ContactInteractionsTab.tsx",
    "src/components/contact-detail/ContactOverviewTab.tsx",
+   "src/components/contact-detail/ContactTasksPanel.tsx",
    "src/components/contact-detail/LifeEventsTab.tsx"
   ],
   "src/components/contact-detail/interactions-tab/ExternalInteractionsTimeline.tsx": [
@@ -3247,6 +3331,7 @@
    "src/lib/utils.ts"
   ],
   "src/components/customer-success/HealthSignalTimeline.tsx": [
+   "src/components/customer-success/RecordSignalDialog.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/skeleton.tsx",
@@ -3267,17 +3352,43 @@
    "src/lib/utils.ts"
   ],
   "src/components/customer-success/QBRTimeline.tsx": [
+   "src/components/customer-success/ScheduleQBRDialog.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/skeleton.tsx",
    "src/hooks/useCustomerSuccess.ts"
   ],
+  "src/components/customer-success/RecordSignalDialog.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useCustomerSuccess.ts"
+  ],
+  "src/components/customer-success/RenewalEditDialog.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useCustomerSuccess.ts"
+  ],
   "src/components/customer-success/RenewalPipelineList.tsx": [
+   "src/components/customer-success/RenewalEditDialog.tsx",
    "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/skeleton.tsx",
    "src/hooks/useCustomerSuccess.ts",
    "src/lib/utils.ts"
+  ],
+  "src/components/customer-success/ScheduleQBRDialog.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/hooks/useCustomerSuccess.ts"
   ],
   "src/components/dashboard/BestTimeHeatmapCard.tsx": [
    "src/components/ui/badge.tsx",
@@ -3414,6 +3525,7 @@
    "src/components/ui/scroll-area.tsx",
    "src/components/ui/separator.tsx",
    "src/components/ui/sheet.tsx",
+   "src/components/ui/toast.tsx",
    "src/hooks/use-toast.ts",
    "src/hooks/useAuth.tsx",
    "src/hooks/useContactDetail.ts",
@@ -3625,8 +3737,10 @@
   ],
   "src/components/dashboard/widgets/PendingFollowupsWidget.tsx": [
    "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/scroll-area.tsx",
+   "src/hooks/useInteractionsRpc.ts",
    "src/hooks/usePendingFollowups.ts",
    "src/lib/utils.ts"
   ],
@@ -3685,6 +3799,15 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/progress.tsx",
+   "src/hooks/useDealRooms.ts"
+  ],
+  "src/components/deal-rooms/DealRoomEditDialog.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/textarea.tsx",
    "src/hooks/useDealRooms.ts"
   ],
   "src/components/deal-rooms/DocumentsList.tsx": [
@@ -3951,6 +4074,7 @@
   "src/components/feedback/ErrorBoundary.tsx": [
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/lib/errorReporting.ts",
    "src/lib/logger.ts",
    "src/lib/ux-messages.ts"
   ],
@@ -4581,6 +4705,7 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/dialog.tsx",
+   "src/components/ui/multi-step-progress.tsx",
    "src/components/ui/scroll-area.tsx",
    "src/hooks/useBulkImport.ts",
    "src/lib/utils.ts"
@@ -5212,6 +5337,7 @@
    "src/pages/ConversationIntelligence.tsx"
   ],
   "src/components/layout/Header.tsx": [
+   "src/components/admin/SystemHealthWidget.tsx",
    "src/components/navigation/BackButton.tsx",
    "src/components/notifications/SmartNotificationsBell.tsx",
    "src/components/notifications/UnifiedNotificationsBell.tsx",
@@ -5321,6 +5447,16 @@
    "src/components/ui/tooltip.tsx",
    "src/hooks/useLeadScore.ts"
   ],
+  "src/components/lead-score/LeadScoreWeightsEditor.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useLeadScore.ts",
+   "src/integrations/supabase/client.ts",
+   "src/lib/errorMessages.ts"
+  ],
   "src/components/lead-score/LeadScoreWidget.tsx": [
    "src/components/lead-score/LeadScoreCard.tsx",
    "src/hooks/useAuth.tsx",
@@ -5344,6 +5480,7 @@
    "src/components/ui/card.tsx"
   ],
   "src/components/lead-scoring/AutomationWizard.tsx": [
+   "src/components/feedback/ProgressStepper.tsx",
    "src/components/lead-scoring/automation-templates.ts",
    "src/components/ui/button.tsx",
    "src/components/ui/dialog.tsx",
@@ -5446,7 +5583,10 @@
   ],
   "src/components/marketing/ContactTouchpointsTab.tsx": [
    "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/select.tsx",
    "src/components/ui/skeleton.tsx",
    "src/hooks/useAttribution.ts",
    "src/hooks/useMQL.ts"
@@ -6390,6 +6530,14 @@
   ],
   "src/components/revops/RevOpsPeriodSelector.tsx": [
    "src/components/ui/select.tsx"
+  ],
+  "src/components/revops/RevOpsSnapshotHistory.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/empty-state.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useRevOps.ts"
   ],
   "src/components/revops/RevenueFunnelChart.tsx": [
    "src/components/ui/badge.tsx",
@@ -7502,6 +7650,8 @@
    "src/lib/utils.ts"
   ],
   "src/components/win-loss/WinLossRecordsTable.tsx": [
+   "src/components/ui/alert-dialog.tsx",
+   "src/components/ui/button.tsx",
    "src/components/ui/skeleton.tsx",
    "src/components/ui/table.tsx",
    "src/components/win-loss/OutcomeBadge.tsx",
@@ -7792,6 +7942,7 @@
   ],
   "src/hooks/useAuth.tsx": [
    "src/components/feedback/PageLoadingFallback.tsx",
+   "src/hooks/useDeviceDetection.ts",
    "src/integrations/supabase/client.ts",
    "src/lib/errorReporting.ts",
    "src/lib/logger.ts"
@@ -7998,6 +8149,7 @@
   ],
   "src/hooks/useCompanyActions.ts": [
    "src/lib/errorMessages.ts",
+   "src/lib/export-utils.ts",
    "src/lib/externalData.ts",
    "src/lib/utils.ts"
   ],
@@ -8535,6 +8687,11 @@
    "src/hooks/useProximosPassosFilters.ts",
    "src/integrations/supabase/client.ts",
    "src/integrations/supabase/types.ts"
+  ],
+  "src/hooks/useFollowUpApprovals.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/lib/logger.ts"
   ],
   "src/hooks/useForecasting.ts": [
    "src/hooks/useAuth.tsx",
@@ -9496,6 +9653,7 @@
    "src/hooks/useABM.ts"
   ],
   "src/pages/ABMAccountDetail.tsx": [
+   "src/components/abm/ABMAccountEditDialog.tsx",
    "src/components/abm/AccountHierarchyTree.tsx",
    "src/components/abm/AccountPlanEditor.tsx",
    "src/components/abm/AccountScoreCard.tsx",
@@ -9503,6 +9661,7 @@
    "src/components/abm/BuyingCommitteeBoard.tsx",
    "src/components/abm/WhitespaceOpportunities.tsx",
    "src/components/layout/AppLayout.tsx",
+   "src/components/ui/alert-dialog.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
@@ -9535,11 +9694,13 @@
   ],
   "src/pages/AdminConexoes.tsx": [
    "src/components/admin/AdminLayout.tsx",
+   "src/components/admin/conexoes/AnomaliesWidget.tsx",
    "src/components/admin/conexoes/ConnectionCard.tsx",
    "src/components/admin/conexoes/ConnectionFormDialog.tsx",
    "src/components/admin/conexoes/IncomingWebhookCard.tsx",
    "src/components/admin/conexoes/IncomingWebhookFormDialog.tsx",
    "src/components/admin/conexoes/McpInstructionsCard.tsx",
+   "src/components/admin/conexoes/WebhookDlqPanel.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/tabs.tsx",
@@ -9696,6 +9857,13 @@
    "src/pages/analytics/AnalyticsEngagementTab.tsx",
    "src/pages/analytics/AnalyticsSentimentTab.tsx"
   ],
+  "src/pages/AprovacoesFollowUp.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useFollowUpApprovals.ts"
+  ],
   "src/pages/Assistente.tsx": [
    "src/components/layout/AppLayout.tsx",
    "src/components/navigation/PageHeader.tsx",
@@ -9767,6 +9935,7 @@
    "src/components/ui/tabs.tsx",
    "src/pages/cadastro/EmpresaForm.tsx",
    "src/pages/cadastro/PessoaForm.tsx",
+   "src/pages/cadastro/RelationshipList.tsx",
    "src/pages/cadastro/VinculoForm.tsx"
   ],
   "src/pages/Calendario.tsx": [
@@ -9820,6 +9989,7 @@
   "src/pages/Configuracoes.tsx": [
    "src/components/custom-fields/CustomFieldsManager.tsx",
    "src/components/dashboard/WeeklyReportPanel.tsx",
+   "src/components/data-export/AdvancedDataExporter.tsx",
    "src/components/layout/AppLayout.tsx",
    "src/components/layout/Header.tsx",
    "src/components/seo/SEOHead.tsx",
@@ -9865,6 +10035,7 @@
    "src/components/documents/DocumentsPanel.tsx",
    "src/components/enrichment/PeopleIntelTimeline.tsx",
    "src/components/enrichment/ValidateAllButton.tsx",
+   "src/components/feedback/FeatureSpotlight.tsx",
    "src/components/interactions/UnifiedCommunicationHistory.tsx",
    "src/components/layout/AppLayout.tsx",
    "src/components/lux/LuxButton.tsx",
@@ -9971,13 +10142,16 @@
   "src/pages/DealRoomDetail.tsx": [
    "src/components/deal-rooms/ActivityFeed.tsx",
    "src/components/deal-rooms/CommentsThread.tsx",
+   "src/components/deal-rooms/DealRoomEditDialog.tsx",
    "src/components/deal-rooms/DocumentsList.tsx",
    "src/components/deal-rooms/MilestoneKanban.tsx",
    "src/components/deal-rooms/RoomHealthCard.tsx",
    "src/components/deal-rooms/ShareDialog.tsx",
    "src/components/deal-rooms/StakeholderList.tsx",
    "src/components/navigation/SmartBackButton.tsx",
+   "src/components/ui/alert-dialog.tsx",
    "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/tabs.tsx",
    "src/hooks/useDealRooms.ts"
@@ -10057,6 +10231,7 @@
    "src/components/erp/CompanyErpProposalsWidget.tsx",
    "src/components/forms/CompanyForm.tsx",
    "src/components/forms/ContactForm.tsx",
+   "src/components/intent/IntentSignalCard.tsx",
    "src/components/layout/AppLayout.tsx",
    "src/components/lux/LuxButton.tsx",
    "src/components/lux/LuxIntelligencePanel.tsx",
@@ -10086,6 +10261,9 @@
    "src/pages/empresa-detalhe/ContactsTabContent.tsx"
   ],
   "src/pages/Empresas.tsx": [
+   "src/components/companies/CompaniesExportButton.tsx",
+   "src/components/companies/PipelineSummaryCard.tsx",
+   "src/components/dashboard/DashboardErrorBoundary.tsx",
    "src/components/feedback/ErrorState.tsx",
    "src/components/forms/CompanyForm.tsx",
    "src/components/layout/AppLayout.tsx",
@@ -10119,6 +10297,7 @@
    "src/components/enrichment/PeopleIntelTimeline.tsx",
    "src/components/enrichment/PhoneValidatorWidget.tsx",
    "src/components/enrichment/ValidationQueueCard.tsx",
+   "src/components/ui/badge.tsx",
    "src/components/ui/card.tsx",
    "src/hooks/useEnrichmentSuite.ts"
   ],
@@ -10317,6 +10496,7 @@
    "src/components/layout/AppLayout.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
    "src/components/ui/select.tsx",
    "src/components/ui/tabs.tsx",
    "src/hooks/useIntent.ts"
@@ -10400,6 +10580,7 @@
    "src/hooks/useScoreAutomations.ts"
   ],
   "src/pages/LeadScoringConfig.tsx": [
+   "src/components/lead-score/LeadScoreWeightsEditor.tsx",
    "src/components/lead-scoring/ScoreRulesEditor.tsx",
    "src/components/lead-scoring/ThresholdsEditor.tsx",
    "src/components/navigation/SmartBackButton.tsx",
@@ -10735,6 +10916,7 @@
    "src/components/ui/card.tsx",
    "src/components/ui/input.tsx",
    "src/components/ui/label.tsx",
+   "src/hooks/usePasswordBreachCheck.tsx",
    "src/integrations/supabase/client.ts",
    "src/lib/logger.ts"
   ],
@@ -10743,6 +10925,7 @@
    "src/components/revops/KPIComparisonGrid.tsx",
    "src/components/revops/RevOpsAlertList.tsx",
    "src/components/revops/RevOpsPeriodSelector.tsx",
+   "src/components/revops/RevOpsSnapshotHistory.tsx",
    "src/components/revops/RevenueFunnelChart.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/skeleton.tsx",
@@ -10854,6 +11037,7 @@
    "src/components/territories/TerritoryCard.tsx",
    "src/components/territories/TerritoryForm.tsx",
    "src/components/territories/TerritoryMap.tsx",
+   "src/components/ui/alert-dialog.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/input.tsx",
    "src/components/ui/select.tsx",
@@ -11064,6 +11248,14 @@
    "src/lib/externalData.ts",
    "src/pages/cadastro/EntityPicker.tsx"
   ],
+  "src/pages/cadastro/RelationshipList.tsx": [
+   "src/components/ui/alert-dialog.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useEntityRelationships.ts",
+   "src/lib/externalData.ts"
+  ],
   "src/pages/cadastro/VinculoForm.tsx": [
    "src/components/ui/button.tsx",
    "src/components/ui/input.tsx",
@@ -11098,6 +11290,7 @@
    "src/components/ui/switch.tsx"
   ],
   "src/pages/configuracoes/ConfigSecurityTab.tsx": [
+   "src/components/security/MFAEnrollmentBanner.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx"
   ],
@@ -11118,6 +11311,7 @@
    "src/components/skeletons/PageSkeletons.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/empty-state.tsx",
+   "src/components/ui/keyboard-list-hint.tsx",
    "src/components/ui/pull-to-refresh.tsx",
    "src/components/ui/swipeable-list-item.tsx",
    "src/components/ui/view-mode-switcher.tsx",
@@ -11161,6 +11355,7 @@
    "src/components/ui/button.tsx",
    "src/components/ui/empty-state.tsx",
    "src/components/ui/input.tsx",
+   "src/components/ui/keyboard-list-hint.tsx",
    "src/components/ui/view-mode-switcher.tsx",
    "src/hooks/useCompanies.ts",
    "src/hooks/useIsAdmin.ts",
@@ -11683,7 +11878,6 @@
   ],
   "supabase/functions/generate-insights/index.ts": [
    "supabase/functions/_shared/auth.ts",
-   "supabase/functions/_shared/best-effort-write.ts",
    "supabase/functions/_shared/fetch-utils.ts",
    "supabase/functions/_shared/rate-limit.ts",
    "supabase/functions/_shared/tracing.ts"

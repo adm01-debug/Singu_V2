@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `fa7b7fbefa` · branch `main` · 2026-11-23 14:52 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `409a5ae936` · branch `main` · 2026-11-23 15:49 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1467,7 +1467,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `image_url` | escreve | `supabase/functions/visual-search/index.ts` |
 | `type` | `impersonal` | escreve | `src/data/carnegieWarmth.ts` |
 | `type` | `improvement_noted` | escreve | `src/data/carnegieProgressCelebration.ts` |
-| `type` | `in` | compara, escreve | `src/components/intelligence/CrossRefTab.tsx`<br>`src/hooks/useCrossReference.ts`<br>`src/hooks/useExternalInteractions.ts`<br>`supabase/functions/_shared/tenant-guard_test.ts`<br>`supabase/functions/external-data/index.ts` |
+| `type` | `in` | compara, escreve | `src/components/intelligence/CrossRefTab.tsx`<br>`src/hooks/useCrossReference.ts`<br>`src/hooks/useExternalInteractions.ts`<br>`src/pages/cadastro/RelationshipList.tsx`<br>`supabase/functions/_shared/tenant-guard_test.ts`<br>… +1 |
 | `type` | `influence` | compara, escreve | `src/components/stakeholders/CoalitionDetectionPanel.tsx`<br>`src/components/stakeholders/StakeholderInfluenceNetwork.tsx`<br>`src/components/stakeholders/stakeholder-network/NetworkHelpers.ts`<br>`src/hooks/useCoalitionDetection.ts` |
 | `type` | `input_file` | escreve | `supabase/functions/voice-to-text/index.ts` |
 | `type` | `insight` | compara, escreve | `public/sw-push.js`<br>`src/hooks/useRealtimeNotifications.ts`<br>`supabase/functions/check-notifications/index.ts` |
@@ -1505,7 +1505,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `normalization` | escreve | `src/data/carnegieEmpathyTemplates.ts` |
 | `type` | `notFound` | compara | `src/components/feedback/ErrorState.tsx` |
 | `type` | `note` | escreve | `src/components/dashboard/StrategicNextStepsCard.tsx`<br>`src/components/interactions/insights/SuggestedResponseModal.tsx`<br>`supabase/functions/_shared/validation-contract_test.ts` |
-| `type` | `number` | compara, escreve | `src/components/crm/marketing/components/BehavioralSegmentation.tsx`<br>`src/hooks/useContactSegmentation.ts`<br>`src/lib/reports/reportEngine.ts`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>… +11 |
+| `type` | `number` | compara, escreve | `src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx`<br>`src/components/crm/marketing/components/BehavioralSegmentation.tsx`<br>`src/hooks/useContactSegmentation.ts`<br>`src/lib/reports/reportEngine.ts`<br>`supabase/functions/_shared/validate.ts`<br>… +12 |
 | `type` | `number_list` | escreve | `src/data/copywritingData.ts` |
 | `type` | `object` | compara, escreve | `supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/abm-whitespace-analyzer/index.ts`<br>`supabase/functions/ai-writing-assistant/index.ts`<br>`supabase/functions/connection-tester/index.ts`<br>… +19 |
 | `type` | `objection` | escreve | `src/components/crm/RelationshipKPIsDashboard.tsx`<br>`src/components/triggers/ProfileBasedSuggestions.tsx` |
@@ -1735,6 +1735,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | EntityRelationshipRole | buyer \| manager \| owner \| decision_maker \| influencer \| user \| sponsor \| partner \| supplier \| subsidiary \| parent \| employee_of \| other | `src/hooks/useEntityRelationships.ts` |
 | EvidenceSource | whatsapp \| call \| interaction | `src/hooks/useEvidenceForLabel.ts` |
 | Ficha360Sort | recente \| relevante | `src/hooks/useFicha360Sort.ts` |
+| FollowUpDecision | approved \| rejected | `src/hooks/useFollowUpApprovals.ts` |
 | ForecastCategory | commit \| best_case \| pipeline \| omitted | `src/hooks/useForecasting.ts` |
 | GlobalDensity | comfortable \| compact | `src/hooks/useGlobalDensity.ts` |
 | InboundChannel | all \| whatsapp \| email \| call | `src/hooks/useInboundActivityHeatmap.ts` |
@@ -2448,6 +2449,7 @@ _nenhum item encontrado_
 |---|---|---|
 | `sla-min` | min, type=number, min=1, max=1440 | `src/components/admin/MttaSlaThresholdEditor.tsx` |
 | `reset-email` | type=email | `src/components/auth/ForgotPasswordForm.tsx` |
+| `contact-task-due` | type=date | `src/components/contact-detail/ContactTasksPanel.tsx` |
 | `date` | type=date | `src/components/contact-detail/LifeEventsTab.tsx` |
 | `completion-date` | type=date | `src/components/contact-detail/NextBestActionCard.tsx` |
 | `prontidao-target-input` | type=number, min=0, max=100 | `src/components/ficha-360/ProntidaoTrendChart.tsx` |
@@ -2456,6 +2458,7 @@ _nenhum item encontrado_
 | `saved-view-name` | max | `src/components/interactions/SavedViewsMenu.tsx` |
 | `objection-date-from` | type=date, max=dateTo \|\| undefined | `src/components/interactions/insights/ObjectionExamplesModal.tsx` |
 | `objection-date-to` | type=date, min=dateFrom \|\| undefined | `src/components/interactions/insights/ObjectionExamplesModal.tsx` |
+| `key` | type=number, min=0, max=1, step=0.05 | `src/components/lead-score/LeadScoreWeightsEditor.tsx` |
 | `f.key` | required=f.required | `src/components/marketing/PublicFormRenderer.tsx` |
 | `f.key` | required=f.required | `src/components/marketing/PublicFormRenderer.tsx` |
 | `totp-factor` | disabled=isVerifying | `src/components/security/TwoFactorSetup.tsx` |
@@ -3807,6 +3810,7 @@ _nenhum item encontrado_
 | `const daysSince = Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24));` | `src/components/company-card/company-card-parts/CompanyCardHelpers.tsx` |
 | `const daysSince = Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24));` | `src/components/contact-card/ContactCardWithContext.tsx` |
 | `gcTime: 10 * 60 * 1000,` | `src/components/contact-detail/ContactBehavioralTab.tsx` |
+| `staleTime: 10 * 60 * 1000,` | `src/components/contact-detail/ContactBehavioralTab.tsx` |
 | `staleTime: 5 * 60 * 1000,` | `src/components/contact-detail/ContactBehavioralTab.tsx` |
 | `gcTime: 10 * 60 * 1000,` | `src/components/contact-detail/ContactCommercialTab.tsx` |
 | `staleTime: 5 * 60 * 1000,` | `src/components/contact-detail/ContactCommercialTab.tsx` |
@@ -4078,8 +4082,7 @@ _nenhum item encontrado_
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/usePendingNotifications.ts` |
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| `staleTime: 3 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +231 linhas — lista completa em `context.json` | |
+| … +232 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -4575,6 +4578,7 @@ _nenhum item encontrado_
 | , config: { title:  | `src/components/automation/AutomationTemplates.tsx` |
 | Falha ao copiar | `src/components/bi/EmbeddableDashboards.tsx` |
 | Não foi possível copiar | `src/components/carnegie/AppreciationPanel.tsx` |
+| Nao foi possivel copiar | `src/components/carnegie/CarnegieExtendedLibrary.tsx` |
 | Não foi possível copiar | `src/components/carnegie/FaceSavingPanel.tsx` |
 | Não foi possível copiar | `src/components/carnegie/IdentityLabelingPanel.tsx` |
 | Não foi possível copiar | `src/components/carnegie/NobleCausePanel.tsx` |
@@ -4690,8 +4694,7 @@ _nenhum item encontrado_
 | Falha ao copiar link. | `src/components/intel/RecentSnapshotsPanel.tsx` |
 | Comando desconhecido: ${cmd} | `src/components/intelligence/AskTab.tsx` |
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
-| Falha na busca. | `src/components/intelligence/CrossRefTab.tsx` |
-| … +801 linhas — lista completa em `context.json` | |
+| … +808 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -5034,6 +5037,7 @@ _nenhum item encontrado_
 | `invoke(` | `src/hooks/useAIWritingAssistant.ts` |
 | `notify_new_device` | `src/hooks/useAccessSecurity.ts` |
 | `invoke(` | `src/hooks/useAuditAnalytics.ts` |
+| `invoke(` | `src/hooks/useAuth.tsx` |
 | `invoke(` | `src/hooks/useBIAdvanced.ts` |
 | `invoke(` | `src/hooks/useBehavioralProfile.ts` |
 | `invoke(` | `src/hooks/useBulkRevalidate.ts` |
@@ -5169,7 +5173,9 @@ _nenhum item encontrado_
 | Visível apenas para admins. Atualização propaga em ≤5 min (staleTime do hook). | `src/components/admin/MttaSlaThresholdEditor.tsx` |
 | * Limite de latência aceitável (ms) — alinhado ao alerta RpcPerfDegradation. */ | `src/components/admin/RpcPlanChurnTimelineChart.tsx` |
 | O webhook nativo não calcula HMAC SHA-256 e não deve chamar esta URL diretamente. | `src/components/admin/conexoes/WebhookSnippetsSheet.tsx` |
+| que existiam apenas como dados sem tela. | `src/components/carnegie/CarnegieExtendedLibrary.tsx` |
 | Future Projection & Past Validation */} | `src/components/carnegie/IdentityLabelingPanel.tsx` |
+| que difere do shape cru de `contacts`. Mapeamos apenas o que os hooks leem, | `src/components/contact-detail/ContactBehavioralTab.tsx` |
 | ').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(5), | `src/components/contact-detail/ContactBehavioralTab.tsx` |
 | ').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1), | `src/components/contact-detail/ContactBehavioralTab.tsx` |
 | ').eq('contact_id', contact.id).eq('user_id', user!.id).order('analyzed_at', { ascending: false }).limit(1), | `src/components/contact-detail/ContactBehavioralTab.tsx` |
@@ -5213,6 +5219,7 @@ _nenhum item encontrado_
 | MISSED DEADLINE | `src/data/carnegieFaceSaving.ts` |
 | * Validates if a transition between stages is business-compliant. | `src/domain/dealState.ts` |
 | * O painel de Gatilhos Avançados (Analytics) detectava conflito entre apenas | `src/hooks/useAdvancedTriggers.ts` |
+| o acesso (a EF é passiva e devolve apenas is_new/is_trusted). | `src/hooks/useAuth.tsx` |
 | Business hours | `src/hooks/useBestTimeToContact.ts` |
 | Mantém apenas combinações com >=1 canal (vazio == "todos", já é o default). | `src/hooks/useChannelHistory.ts` |
 | Vencedor por estágio (maior taxa, mínimo 3 interações) | `src/hooks/useChannelPerformanceMatrix.ts` |
@@ -5275,6 +5282,7 @@ _nenhum item encontrado_
 | ').eq('contact_id', contactId).eq('user_id', user!.id).eq('dismissed', false).order('created_at', { ascending: false }).limit(20), | `src/hooks/useSocialIntelligence.ts` |
 | Check if permission is granted | `src/hooks/useStakeholderAlerts.ts` |
 | Limit to 3 risks | `src/hooks/useStakeholderSimulator.ts` |
+| (`assert_contact_access`) e devolve `SETOF tasks` ordenado por vencimento. | `src/hooks/useTasks.ts` |
 | ').eq('user_id', user!.id).eq('contact_id', contactId).order('created_at', { ascending: false }).limit(50) | `src/hooks/useTriggerAnalytics.ts` |
 | ').eq('user_id', user!.id).order('created_at', { ascending: false }).limit(50); | `src/hooks/useTriggerAnalytics.ts` |
 | ').eq('user_id', user!.id).eq('contact_id', contactId).order('created_at', { ascending: false }).limit(50) | `src/hooks/useTriggerAnalytics.ts` |
@@ -5454,8 +5462,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_full_intelligence_stream LIMIT 20) fs), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_competitor_alerts LIMIT 15) ca), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| … +47 linhas — lista completa em `context.json` | |
+| … +51 linhas — lista completa em `context.json` | |
