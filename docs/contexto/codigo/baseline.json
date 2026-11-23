@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "409a5ae9364ed63228bcf1fe6240faf3c299b984",
+  "commit": "b177218d1b456dac4167fa06b67a19dbeb146724",
   "branch": "main",
-  "data_commit": "2026-11-23T12:35:28-03:00",
+  "data_commit": "2026-11-23T12:37:32-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "b177218",
+    "data": "2026-11-23",
+    "assunto": "build(deps): bump actions/dependency-review-action from 5.0.0 to 5.0.1 (#308)"
+   },
    {
     "sha": "409a5ae",
     "data": "2026-11-23",
@@ -126,11 +131,6 @@
     "sha": "e453c9f",
     "data": "2026-11-21",
     "assunto": "feat(insights): carrega insights persistidos ao abrir a tela (#291)"
-   },
-   {
-    "sha": "62379b7",
-    "data": "2026-11-21",
-    "assunto": "chore(docs): classifica as 14 edges sem chamador (vivas, externas e confirmadas mortas) (#290)"
    }
   ],
   "arquivos_mudados_7d": 1033,
@@ -309,7 +309,7 @@
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 7
+    "commits": 8
    },
    {
     "autor": "Copilot App",
