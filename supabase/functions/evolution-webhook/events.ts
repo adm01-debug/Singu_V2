@@ -55,7 +55,7 @@ export async function handleContactsUpsert(supabase: SupabaseAdminClient, payloa
       })
       .eq('user_id', userId)
       .or(`whatsapp.eq.${phoneNumber},phone.eq.${phoneNumber}`)
-      .not('avatar_url', 'is', null); // Atualiza somente contatos sem avatar personalizado
+      .is('avatar_url', null); // Atualiza somente contatos sem avatar personalizado (IS NULL)
 
     if (error) {
       // Contato não encontrado para atualização da presença;
