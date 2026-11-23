@@ -2,9 +2,7 @@
   "api": {
     "enabled": false
   },
-  "carried": [
-    "indexes"
-  ],
+  "carried": [],
   "db": {
     "columns": [
       {
@@ -320508,10 +320506,6 @@
     "webhooks": []
   },
   "errors": [
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "indexes"
-    },
     {
       "error": "canceling statement due to lock timeout",
       "section": "db_stats"
