@@ -34,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isHandling401Ref = useRef(false);
+  const accessCheckedRef = useRef(false);
   const qc = useQueryClient();
 
   useEffect(() => {
@@ -95,6 +96,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [scheduleTokenRefresh]);
 
+  // Política de acesso por conta (IP/geo). Fail-open: se a EF estiver
+  // indisponível, o login segue — bloqueio só quando a política diz não.
+  const enforceAccessPolicy = useCallback(async () => {
+    if (accessCheckedRef.current) return;
+    accessCheckedRef.current = true;
+    try {
+      const { data, error } = await supabase.functions.invoke('validate-access', {
+        body: { user_agent: navigator.userAgent.slice(0, 512) },
+      });
+      if (error) {
+        logger.warn('validate-access indisponível (fail-open):', error);
+        return;
+      }
+      const result = data as { allowed?: boolean } | null;
+      if (result?.allowed === false) {
+        toast.error('Acesso bloqueado pela política de segurança desta conta.');
+        // Fora do callback de auth para não travar o lock do supabase-js.
+        setTimeout(() => { void supabase.auth.signOut(); }, 0);
+      }
+    } catch (err) {
+      logger.warn('validate-access falhou (fail-open):', err);
+    }
+  }, []);
+
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -110,6 +135,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           case 'SIGNED_IN':
             scheduleTokenRefresh(newSession);
             toast.success('Login realizado com sucesso!');
+            void enforceAccessPolicy();
             break;
             
           case 'SIGNED_OUT':
@@ -144,6 +170,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(false);
         if (existingSession) {
           scheduleTokenRefresh(existingSession);
+          void enforceAccessPolicy();
         }
       })
       .catch((err: unknown) => {
@@ -158,7 +185,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         clearTimeout(refreshTimeoutRef.current);
       }
     };
-  }, [scheduleTokenRefresh]);
+  }, [scheduleTokenRefresh, enforceAccessPolicy]);
 
   // Interceptar erros 401 globalmente
   useEffect(() => {
