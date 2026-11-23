@@ -199,6 +199,7 @@ Deno.serve(async (req) => {
       const results: Record<string, string[]> = {};
 
       // Run all distinct queries in parallel
+      const colErrors: Record<string, string> = {};
       const promises = columns.map(async (col: string) => {
         try {
           let query = client
@@ -211,23 +212,32 @@ Deno.serve(async (req) => {
           const { data, error } = await query;
           if (error) {
             log.warn("batch_distinct column failed", { col, error: error.message });
-            return { col, values: [] };
+            return { col, values: null as null, errorMsg: error.message };
           }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic DB query result shape not statically typed
           const unique = [...new Set((data as any[] || []).map((r: any) => r[col]).filter(Boolean))].sort();
-          return { col, values: unique };
+          return { col, values: unique, errorMsg: null as null };
         } catch (err) {
-          log.warn("batch_distinct column threw", { col, error: err instanceof Error ? err.message : String(err) });
-          return { col, values: [] };
+          const msg = err instanceof Error ? err.message : String(err);
+          log.warn("batch_distinct column threw", { col, error: msg });
+          return { col, values: null as null, errorMsg: msg };
         }
       });
 
       const settled = await Promise.all(promises);
-      for (const { col, values } of settled) {
-        results[col] = values;
+      for (const { col, values, errorMsg } of settled) {
+        if (errorMsg !== null) {
+          colErrors[col] = errorMsg;
+        } else {
+          results[col] = values!;
+        }
       }
 
-      return jsonOk({ results }, req);
+      const hasErrors = Object.keys(colErrors).length > 0;
+      if (hasErrors && Object.keys(results).length === 0) {
+        return jsonError(`batch_distinct failed for all columns: ${Object.values(colErrors).join('; ')}`, 502, req);
+      }
+      return jsonOk({ results, ...(hasErrors ? { column_errors: colErrors } : {}) }, req);
     }
 
     const client = getExternalClient();
@@ -248,8 +258,8 @@ Deno.serve(async (req) => {
 
       const { data, error } = await rpcClient.rpc(functionName, params as Record<string, unknown>);
       if (error) {
-        log.warn("RPC failed", { rpc: functionName, error: error.message });
-        return jsonOk({ data: null, error: `RPC ${functionName} failed`, errorCode: error.code }, req);
+        log.warn("RPC failed", { rpc: functionName, error: error.message, code: error.code });
+        return jsonError(`RPC ${functionName} failed: ${error.message}`, 502, req);
       }
       return jsonOk({ data }, req);
     }

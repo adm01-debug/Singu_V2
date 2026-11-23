@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { withAuth, scopedCorsHeaders } from "../_shared/auth.ts";
+import { scopedCorsHeaders } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
 const limiter = rateLimit({ windowMs: 60_000, max: 5 });
@@ -136,10 +136,9 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: cors });
   }
 
-  const authResult = await withAuth(req);
-  if (authResult instanceof Response) return authResult;
-
-  const rl = limiter.check(authResult, req);
+  // F/F60: página de status pública — rate limit por IP, sem exigência de autenticação
+  const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const rl = limiter.check(clientIp, req);
   if (rl) return rl;
 
   const startTime = Date.now();

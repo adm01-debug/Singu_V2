@@ -36,6 +36,7 @@ vi.mock('@/components/notifications/UnifiedNotificationsBell', () => ({ UnifiedN
 vi.mock('@/components/notifications/SmartNotificationsBell', () => ({ SmartNotificationsBell: () => null }));
 vi.mock('@/components/ui/global-density-toggle', () => ({ GlobalDensityToggle: () => null }));
 vi.mock('@/components/ui/SystemStatusBadge', () => ({ SystemStatusBadge: () => null }));
+vi.mock('@/components/admin/SystemHealthWidget', () => ({ SystemHealthWidget: () => null }));
 vi.mock('./contatos/ContatosContent', () => ({
   ContatosContent: ({ searchTerm, onSearchChange, filteredAndSortedContacts }: ComponentProps<typeof ContatosContent>) => <>
     <Header title="Contatos" showSearch searchValue={searchTerm} onSearchChange={onSearchChange} hideBack />

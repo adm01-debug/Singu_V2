@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useHealthSignals } from "@/hooks/useCustomerSuccess";
+import { RecordSignalDialog } from "@/components/customer-success/RecordSignalDialog";
 import { Activity, MessageCircle, LifeBuoy, Heart, CreditCard, Star } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -17,7 +18,9 @@ export function HealthSignalTimeline({ accountId }: { accountId: string }) {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base">Timeline de Sinais (90d)</CardTitle>
+        <CardTitle className="text-base flex items-center justify-between">
+          Timeline de Sinais (90d)
+          <RecordSignalDialog accountId={accountId} /></CardTitle>
       </CardHeader>
       <CardContent className="space-y-2 max-h-96 overflow-y-auto">
         {signals.length === 0 ? (

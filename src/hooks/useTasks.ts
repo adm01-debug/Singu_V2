@@ -163,6 +163,46 @@ export function montarArgsCriarTarefa(task: Partial<Task>): Record<string, unkno
   };
 }
 
+/**
+ * Tarefas de um contato.
+ *
+ * `get_tasks_by_contact(p_contact_id uuid)` já existe, checa acesso ao contato
+ * (`assert_contact_access`) e devolve `SETOF tasks` ordenado por vencimento.
+ * Antes não havia nenhum chamador no front, e a ficha do contato não mostrava
+ * as tarefas daquele contato.
+ */
+export function useContactTasks(contactId?: string) {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ['tasks', 'contact', contactId, user?.id],
+    enabled: !!user && !!contactId,
+    queryFn: async (): Promise<Task[]> => {
+      try {
+        const { data, error } = await callExternalRpc<Task[]>('get_tasks_by_contact', {
+          p_contact_id: contactId,
+        });
+        if (error) {
+          logger.warn('[Tasks] get_tasks_by_contact RPC failed, falling back:', error);
+          const result = await queryExternalData<Task>({
+            table: 'tasks',
+            filters: [{ type: 'eq', column: 'contact_id', value: contactId }],
+            order: { column: 'due_date', ascending: true },
+            range: { from: 0, to: 199 },
+          });
+          if (result.error) throw result.error;
+          return result.data || [];
+        }
+        return (Array.isArray(data) ? data : []) as Task[];
+      } catch (e) {
+        logger.warn('[Tasks] Fetch by contact failed:', e);
+        return [] as Task[];
+      }
+    },
+    staleTime: 60 * 1000,
+    retry: false,
+  });
+}
+
 export function useCreateTask() {
   const qc = useQueryClient();
   return useMutation({

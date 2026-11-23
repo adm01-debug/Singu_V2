@@ -45,6 +45,7 @@ export function useCommunicationPreferences(contactId: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: ['contact-relational-data', contactId] });
       toast.success('Preferências salvas');
     },
     onError: () => {

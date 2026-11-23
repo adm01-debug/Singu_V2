@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PortfolioCompatibilityReport } from '@/components/triggers/PortfolioCompatibilityReport';
 import { CompatibilityAlertsList } from '@/components/triggers/CompatibilityAlertsList';
 import { SmartBreadcrumbs } from '@/components/navigation/SmartBreadcrumbs';
-import { CarnegieDashboard } from '@/components/carnegie';
+import { CarnegieDashboard, CarnegieExtendedLibrary } from '@/components/carnegie';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useFuzzySearch } from '@/hooks/useFuzzySearch';
@@ -187,7 +187,10 @@ const Insights = () => {
               <div><CompatibilityAlertsList maxItems={10} /></div>
             </div>
           </TabsContent>
-          <TabsContent value="carnegie" className="mt-0"><CarnegieDashboard /></TabsContent>
+          <TabsContent value="carnegie" className="mt-0 space-y-6">
+            <CarnegieDashboard />
+            <CarnegieExtendedLibrary />
+          </TabsContent>
           <TabsContent value="insights" className="mt-0 space-y-6">
             <InsightsContent
               insights={insights} contacts={contacts} loading={loading} generating={generating}

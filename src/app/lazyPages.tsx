@@ -40,6 +40,7 @@ export const Metas = lazy(() => import("@/pages/Metas"));
 export const Tarefas = lazy(() => import("@/pages/Tarefas"));
 export const Inbox = lazy(() => import("@/pages/Inbox"));
 export const Territorios = lazy(() => import("@/pages/Territorios"));
+export const AprovacoesFollowUp = lazy(() => import("@/pages/AprovacoesFollowUp"));
 export const TerritoryOptimization = lazy(() => import("@/pages/TerritoryOptimization"));
 export const ABM = lazy(() => import("@/pages/ABM"));
 export const ABMAccountDetail = lazy(() => import("@/pages/ABMAccountDetail"));

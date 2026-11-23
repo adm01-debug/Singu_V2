@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { logger, setLogUser } from "@/lib/logger";
+import { useDeviceDetection } from '@/hooks/useDeviceDetection';
 import { clearUserContext } from '@/lib/errorReporting';
 import { PageLoadingFallback } from '@/components/feedback/PageLoadingFallback';
 
@@ -232,6 +233,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const device = useDeviceDetection();
+
   const signIn = async (email: string, password: string) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -272,6 +275,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           ),
         };
       }
+
+      // Telemetria de dispositivo: registra login em novo device sem bloquear
+      // o acesso (a EF é passiva e devolve apenas is_new/is_trusted).
+      void supabase.functions
+        .invoke('detect-new-device', {
+          body: {
+            fingerprint: device.fingerprint,
+            device_name: device.deviceName,
+            browser: device.browser,
+            os: device.os,
+          },
+        })
+        .catch((err) => logger.warn('detect-new-device falhou:', err));
 
       return { error: null };
     } catch (err) {

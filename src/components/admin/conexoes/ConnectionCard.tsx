@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Edit, Trash2, TestTube2, CheckCircle2, XCircle, Clock } from 'lucide-react';
 import { useConnections, type ConnectionConfig } from '@/hooks/useConnections';
 import { ConnectionMetricsSparkline } from './ConnectionMetricsSparkline';
+import { ConnectionTestHistory } from './ConnectionTestHistory';
 import { SchemaDiscoveryCard } from './SchemaDiscoveryCard';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -77,6 +78,11 @@ export function ConnectionCard({ connection, onEdit }: Props) {
         </div>
         <Separator className="my-3" />
         <ConnectionMetricsSparkline connectionId={connection.id} />
+        {connection.last_tested_at && (
+          <div className="mt-3">
+            <ConnectionTestHistory connectionId={connection.id} />
+          </div>
+        )}
         {connection.connection_type === 'supabase_external' && (
           <div className="mt-3">
             <SchemaDiscoveryCard

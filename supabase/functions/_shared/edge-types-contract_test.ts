@@ -34,6 +34,8 @@ Deno.test("Evolution preserva autenticação e ingestão mesmo quando log best-e
     if (table === "whatsapp_messages") return Response.json({ id: "message-1" });
     if (table === "whatsapp_ingestion_logs") return denied();
     if (table === "interactions") return Response.json({ id: "interaction-1" });
+    // F/F15: webhook dispara crm-automation-monitor via functions.invoke (best-effort, fire-and-forget)
+    if (req.method === "POST" && table === "crm-automation-monitor") return Response.json({ success: true });
     throw new Error(`Consulta inesperada: ${table}`);
   }, async submit => {
     const unauthorized = await submit({ event: "messages.upsert", instance: "teste" });
@@ -51,7 +53,7 @@ Deno.test("Evolution preserva autenticação e ingestão mesmo quando log best-e
     } }, { apikey: "evolution-teste" });
     assertEquals(response.status, 200);
     assertEquals((await response.json()).contactId, contact);
-    assertEquals(writes, ["whatsapp_messages", "whatsapp_ingestion_logs", "interactions"]);
+    assertEquals(writes, ["whatsapp_messages", "whatsapp_ingestion_logs", "interactions", "crm-automation-monitor"]);
   });
 });
 

@@ -19,7 +19,8 @@ export interface ActiveErrorBudgetAlert {
 export interface ErrorBudgetData {
   slo_target_pct: number;
   window_hours: number;
-  uptime_pct: number;
+  uptime_pct: number | null;
+  no_data?: boolean;
   downtime_minutes: number;
   budget_total_minutes: number;
   budget_consumed_pct: number;

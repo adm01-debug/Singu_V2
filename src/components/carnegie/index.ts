@@ -14,3 +14,4 @@ export { AppreciationPanel } from './AppreciationPanel';
 export { MessageReviewPanel } from './MessageReviewPanel';
 export { CarnegieDashboard } from './CarnegieDashboard';
 export { CarnegieQuickAccess } from './CarnegieQuickAccess';
+export { CarnegieExtendedLibrary } from './CarnegieExtendedLibrary';

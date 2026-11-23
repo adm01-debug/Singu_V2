@@ -21,6 +21,7 @@ import { useAccessibleToast } from '@/hooks/useAccessibleToast';
 import { SalespersonProfileSettings } from '@/components/triggers/SalespersonProfileSettings';
 import { CommunicationTrainingMode } from '@/components/triggers/CommunicationTrainingMode';
 import { WeeklyReportPanel } from '@/components/dashboard/WeeklyReportPanel';
+import { AdvancedDataExporter } from '@/components/data-export/AdvancedDataExporter';
 import { TourPreferencesPanel } from '@/components/settings/TourPreferencesPanel';
 import { ThemeCustomizer } from '@/components/settings/ThemeCustomizer';
 import { useUnsavedChangesGuard } from '@/hooks/useUnsavedChangesGuard';
@@ -152,7 +153,7 @@ const Configuracoes = () => {
 
           <TabsContent value="nlp"><motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><SalespersonProfileSettings /></motion.div></TabsContent>
           <TabsContent value="training"><motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><CommunicationTrainingMode /></motion.div></TabsContent>
-          <TabsContent value="reports"><motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><WeeklyReportPanel /></motion.div></TabsContent>
+          <TabsContent value="reports"><motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6"><WeeklyReportPanel /><Card><CardHeader><CardTitle className="text-base">Exportar dados</CardTitle><CardDescription>Baixe sua base em CSV ou JSON, escolhendo as colunas e o período.</CardDescription></CardHeader><CardContent className="flex flex-wrap gap-4"><div className="flex flex-col gap-1"><span className="text-xs font-medium text-muted-foreground">Contatos</span><AdvancedDataExporter entityType="contacts" /></div><div className="flex flex-col gap-1"><span className="text-xs font-medium text-muted-foreground">Empresas</span><AdvancedDataExporter entityType="companies" /></div><div className="flex flex-col gap-1"><span className="text-xs font-medium text-muted-foreground">Interações</span><AdvancedDataExporter entityType="interactions" /></div></CardContent></Card></motion.div></TabsContent>
           <TabsContent value="appearance"><motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6"><ThemeCustomizer /></motion.div></TabsContent>
           <TabsContent value="notifications"><motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><ConfigNotificationsTab notifications={notifications} onChange={setNotifications} /></motion.div></TabsContent>
           <TabsContent value="security"><motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><ConfigSecurityTab /></motion.div></TabsContent>

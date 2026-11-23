@@ -7,6 +7,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useUpsertAutomation, type ScoreAutomation, type AutomationTrigger, type AutomationAction } from '@/hooks/useScoreAutomations';
 import type { AutomationTemplate } from './automation-templates';
+import { ProgressStepper } from '@/components/feedback/ProgressStepper';
+
+const WIZARD_STEPS = [
+  { id: 'trigger', label: 'Gatilho' },
+  { id: 'action', label: 'Ação' },
+  { id: 'details', label: 'Detalhes' },
+];
 
 type GradeTarget = 'A' | 'B' | 'C' | 'D';
 
@@ -72,8 +79,13 @@ export function AutomationWizard({ open, onOpenChange, initial }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>{initial && 'id' in initial ? 'Editar' : 'Nova'} automação · etapa {step + 1}/3</DialogTitle>
+          <DialogTitle>{initial && 'id' in initial ? 'Editar' : 'Nova'} automação</DialogTitle>
         </DialogHeader>
+
+        <ProgressStepper
+          steps={WIZARD_STEPS}
+          currentIndex={step}
+        />
 
         {step === 0 && (
           <div className="space-y-4">

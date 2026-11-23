@@ -142,6 +142,15 @@ Deno.serve(async (req: Request) => {
 
   type AlertRow = { user_id: string; contact_id: string; type: string; title: string; description: string; priority: string; expires_at?: string };
   const pendingAlerts: AlertRow[] = [];
+  const pendingTasks: Array<{
+    user_id: string;
+    contact_id: string;
+    title: string;
+    description: string;
+    priority: string;
+    status: string;
+    due_date: string;
+  }> = [];
   let accumulatedTags = [...contactCurrentTags];
   let tagsModified = false;
 
@@ -172,17 +181,18 @@ Deno.serve(async (req: Request) => {
           const description = (a.action_config.description as string)
             || `Lead atingiu ${body.to_grade ?? body.to_score}. Ação recomendada.`;
           const dueHours = Number(a.action_config.due_in_hours ?? 24);
-          const expiresAt = new Date(Date.now() + dueHours * 3600_000).toISOString();
-          pendingAlerts.push({
+          const dueDate = new Date(Date.now() + dueHours * 3600_000).toISOString();
+          // F/F36: escreve na tabela tasks (não em alerts com type='task')
+          pendingTasks.push({
             user_id: a.user_id,
             contact_id: body.contact_id,
-            type: 'task',
             title,
             description,
             priority: (a.action_config.priority as string) ?? 'high',
-            expires_at: expiresAt,
+            status: 'pending',
+            due_date: dueDate,
           });
-          results.push({ a, success: true, result: { kind: 'create_task', expires_at: expiresAt } });
+          results.push({ a, success: true, result: { kind: 'create_task', due_date: dueDate } });
           fired.push({ automation_id: a.id, name: a.name, success: true });
           break;
         }
@@ -262,6 +272,7 @@ Deno.serve(async (req: Request) => {
   await Promise.all([
     logRows.length > 0 ? supabase.from('lead_score_threshold_log').insert(logRows) : Promise.resolve(),
     pendingAlerts.length > 0 ? supabase.from('alerts').insert(pendingAlerts) : Promise.resolve(),
+    pendingTasks.length > 0 ? supabase.from('tasks').insert(pendingTasks) : Promise.resolve(),
     tagsModified ? supabase.from('contacts').update({ tags: accumulatedTags }).eq('id', body.contact_id) : Promise.resolve(),
     ...successfulAutomations.map(({ a }) =>
       supabase.from('lead_score_threshold_automations').update({

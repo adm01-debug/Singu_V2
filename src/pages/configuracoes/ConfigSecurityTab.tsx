@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Shield } from 'lucide-react';
+import { MFAEnrollmentBanner } from '@/components/security/MFAEnrollmentBanner';
 
 export function ConfigSecurityTab() {
   return (
@@ -15,6 +16,7 @@ export function ConfigSecurityTab() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        <MFAEnrollmentBanner />
         <div className="space-y-4">
           <div className="p-4 rounded-lg border border-border/50 hover:bg-muted/50 transition-colors">
             <div className="flex items-center justify-between">

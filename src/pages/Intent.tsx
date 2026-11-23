@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Radar, RefreshCcw, Settings2, Flame, Activity, TrendingUp } from "lucide-react";
-import { useIntentSignals, useTopIntentScores, useRefreshIntent, SIGNAL_TYPE_LABELS } from "@/hooks/useIntent";
+import { useIntentSignals, useTopIntentScores, useRefreshIntent, useCreateManualSignal, SIGNAL_TYPE_LABELS } from "@/hooks/useIntent";
 import { HotAccountsTable } from "@/components/intent/HotAccountsTable";
 import { IntentSignalsTimeline } from "@/components/intent/IntentSignalsTimeline";
 
@@ -23,6 +24,11 @@ export default function IntentPage() {
   const { data: accountScores = [], isLoading: accLoading } = useTopIntentScores("account", 50);
   const { data: contactScores = [] } = useTopIntentScores("contact", 50);
   const refresh = useRefreshIntent();
+  const createSignal = useCreateManualSignal();
+  const [manualOpen, setManualOpen] = useState(false);
+  const [manualType, setManualType] = useState("page_view");
+  const [manualCompany, setManualCompany] = useState("");
+  const [manualWeight, setManualWeight] = useState("1");
 
   const kpis = useMemo(() => {
     const last24h = signals.filter((s) => Date.now() - new Date(s.occurred_at).getTime() < 86400_000).length;
@@ -52,6 +58,9 @@ export default function IntentPage() {
             </p>
           </div>
           <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setManualOpen((v) => !v)}>
+              <Activity className="h-4 w-4 mr-2" /> Sinal manual
+            </Button>
             <Button variant="outline" onClick={() => refresh.mutate()} disabled={refresh.isPending}>
               <RefreshCcw className={`h-4 w-4 mr-2 ${refresh.isPending ? "animate-spin" : ""}`} />
               Recalcular scores
@@ -61,6 +70,53 @@ export default function IntentPage() {
             </Button>
           </div>
         </header>
+
+        {manualOpen && (
+          <Card>
+            <CardHeader><CardTitle className="text-base">Registrar sinal de intenção</CardTitle></CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-xs text-muted-foreground">
+                Use para lançar manualmente um sinal observado fora do pixel (reunião, evento, indicação).
+              </p>
+              <div className="grid gap-2 sm:grid-cols-4">
+                <Select value={manualType} onValueChange={setManualType}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(SIGNAL_TYPE_LABELS).map(([k, v]) => (
+                      <SelectItem key={k} value={k}>{v}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Input
+                  value={manualCompany}
+                  onChange={(e) => setManualCompany(e.target.value)}
+                  placeholder="ID externo da empresa"
+                />
+                <Input
+                  value={manualWeight}
+                  onChange={(e) => setManualWeight(e.target.value)}
+                  placeholder="Peso"
+                  type="number"
+                  step="0.5"
+                />
+                <Button
+                  disabled={createSignal.isPending}
+                  onClick={() => createSignal.mutate(
+                    {
+                      signal_type: manualType,
+                      weight: Number(manualWeight) || 1,
+                      external_company_id: manualCompany || null,
+                      signal_source: 'manual',
+                    },
+                    { onSuccess: () => { setManualCompany(''); setManualOpen(false); } },
+                  )}
+                >
+                  Registrar
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <KpiCard icon={Activity} label="Sinais 24h" value={kpis.last24h} />

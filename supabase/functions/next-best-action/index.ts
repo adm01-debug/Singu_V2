@@ -123,7 +123,12 @@ Por favor, gere:
     const aiJson = await aiResp.json();
     const toolCall = aiJson.choices?.[0]?.message?.tool_calls?.[0];
     if (!toolCall?.function?.arguments) throw new Error("AI did not return a tool call");
-    const result = JSON.parse(toolCall.function.arguments);
+    let result: Record<string, unknown>;
+    try {
+      result = JSON.parse(toolCall.function.arguments);
+    } catch {
+      throw new Error(`AI returned malformed JSON in tool call arguments: ${String(toolCall.function.arguments).slice(0, 120)}`);
+    }
 
     const nextActionData = {
       user_id: userId,

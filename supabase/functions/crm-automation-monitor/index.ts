@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { handleCorsAndMethod, withAuth, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
+import { handleCorsAndMethod, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, guardBody } from "../_shared/auth.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import { validate } from "../_shared/validate.ts";
 import { bestEffortWrite } from "../_shared/best-effort-write.ts";
@@ -10,12 +10,16 @@ Deno.serve(async (req) => {
   const pre = handleCorsAndMethod(req);
   if (pre) return pre;
 
-  const auth = await withAuth(req);
+  // F/F15: aceita service-role (chamadas internas) ou JWT (UI)
+  const auth = await withAuthOrServiceRole(req);
   if (auth instanceof Response) return auth;
-  const userId = auth;
 
-  const rl = limiter.check(userId, req);
-  if (rl) return rl;
+  // F/F15: service-role (chamadas internas) n?o ? rate-limitado; JWT usa userId do token
+  const callerUserId = isServiceRoleCaller(auth) ? null : auth;
+  if (callerUserId) {
+    const rl = limiter.check(callerUserId, req);
+    if (rl) return rl;
+  }
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -24,6 +28,7 @@ Deno.serve(async (req) => {
 
   const start = Date.now();
   let result: Record<string, unknown> = {};
+  let userId: string | null = null;
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 64 * 1024);
   if (bodyError) return bodyError;
@@ -31,9 +36,15 @@ Deno.serve(async (req) => {
   try {
     const vc = validate(rawBody, {
       contact_id: { type: 'string', required: true, maxLength: 36 },
+      user_id: { type: 'string', maxLength: 36 }, // F/F15: service-role passa user_id no body
     });
     if (!vc.ok) return jsonError(vc.error, 400, req);
     const { contact_id } = vc.data as { contact_id: string };
+    // F/F15: service-role caller usa user_id do body; JWT caller usa auth do token
+    userId = isServiceRoleCaller(auth)
+      ? (vc.data as { user_id?: string }).user_id ?? null
+      : auth;
+    if (!userId) return jsonError("user_id obrigatório para chamadas internas service-role", 400, req);
 
     // Verify contact ownership before triggering RPC
     const { data: owned, error: ownerErr } = await supabase

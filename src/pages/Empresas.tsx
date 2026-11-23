@@ -15,6 +15,9 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { CompanyForm } from '@/components/forms/CompanyForm';
+import { PipelineSummaryCard } from '@/components/companies/PipelineSummaryCard';
+import { CompaniesExportButton } from '@/components/companies/CompaniesExportButton';
+import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
 import { useCompanies, type Company } from '@/hooks/useCompanies';
 import { useContacts } from '@/hooks/useContacts';
 import { useInteractions } from '@/hooks/useInteractions';
@@ -210,7 +213,7 @@ const Empresas = () => {
       <SEOHead title="Empresas" description="Gestão de empresas e organizações" />
        <Header title="Empresas" subtitle={queryError && companies.length === 0 ? 'Consulta indisponível' : totalCount ? `${filteredAndSortedCompanies.length} de ${totalCount} empresas` : `${filteredAndSortedCompanies.length} empresas`} showAddButton addButtonLabel="Nova Empresa" onAddClick={() => setIsFormOpen(true)} />
 
-      <div className="px-4 md:px-6 -mt-2 mb-3">
+      <div className="px-4 md:px-6 -mt-2 mb-3 flex items-start justify-between gap-3">
         <EmpresasSavedViews
           currentState={{ localSearch, viewMode, gridColumns, activeFilters, sortBy, sortOrder, multiSort }}
           onApply={(s) => {
@@ -223,6 +226,13 @@ const Empresas = () => {
             if (s.multiSort) setMultiSort(s.multiSort);
           }}
         />
+        <CompaniesExportButton />
+      </div>
+
+      <div className="px-4 md:px-6 mb-3">
+        <DashboardErrorBoundary sectionName="Resumo da base">
+          <PipelineSummaryCard />
+        </DashboardErrorBoundary>
       </div>
 
       {queryError && (

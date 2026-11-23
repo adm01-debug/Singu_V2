@@ -26,6 +26,7 @@ import { useNeuromarketing } from '@/hooks/useNeuromarketing';
 import { BrainSystem, PrimalStimulus } from '@/types/neuromarketing';
 import { generateScriptSections } from '@/data/neuroScriptSections';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface NeuroScriptGeneratorProps {
   contactId: string;
@@ -148,7 +149,15 @@ const NeuroScriptGenerator = ({
             </SelectContent>
           </Select>
           
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() => {
+              setExpandedSections(new Set(scriptSections.map(s => s.name)));
+              toast.success('Script regenerado com o objetivo atual');
+            }}
+          >
             <RefreshCw className="h-4 w-4" />
             Regenerar
           </Button>

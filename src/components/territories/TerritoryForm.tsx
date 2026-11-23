@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { BRAZILIAN_STATES, getRegion } from '@/lib/brazilianStates';
-import { useCreateTerritory, type Territory } from '@/hooks/useTerritories';
+import { useCreateTerritory, useUpdateTerritory, type Territory } from '@/hooks/useTerritories';
 import { X } from 'lucide-react';
 
 interface TerritoryFormProps {
@@ -18,6 +18,8 @@ interface TerritoryFormProps {
 
 export function TerritoryForm({ open, onClose, initial }: TerritoryFormProps) {
   const createTerritory = useCreateTerritory();
+  const updateTerritory = useUpdateTerritory();
+  const isEditing = !!initial?.id;
 
   const [name, setName] = useState(initial?.name ?? '');
   const [description, setDescription] = useState(initial?.description ?? '');
@@ -25,8 +27,8 @@ export function TerritoryForm({ open, onClose, initial }: TerritoryFormProps) {
   // antes o formulario lia `state`/`city` como string separada por virgula.
   const [selectedStates, setSelectedStates] = useState<string[]>(initial?.states ?? []);
   const [cities, setCities] = useState((initial?.cities ?? []).join(', '));
-  const [assignedTo, setAssignedTo] = useState('');
-  const [isActive, setIsActive] = useState(true);
+  const [assignedTo, setAssignedTo] = useState(initial?.manager_id ?? '');
+  const [isActive, setIsActive] = useState(initial?.is_active ?? true);
 
   const toggleState = (uf: string) => {
     setSelectedStates(prev =>
@@ -41,18 +43,27 @@ export function TerritoryForm({ open, onClose, initial }: TerritoryFormProps) {
   const handleSubmit = () => {
     if (!name.trim()) return;
 
-    createTerritory.mutate(
-      {
-        name: name.trim(),
-        description: description.trim() || undefined,
-        state: selectedStates.join(', '),
-        city: cities.trim() || undefined,
-        region,
-        assigned_to: assignedTo || undefined,
-      },
-      { onSuccess: onClose },
-    );
+    const payload = {
+      name: name.trim(),
+      description: description.trim() || undefined,
+      state: selectedStates.join(', '),
+      city: cities.trim() || undefined,
+      region,
+      assigned_to: assignedTo || undefined,
+    };
+
+    if (isEditing && initial?.id) {
+      updateTerritory.mutate(
+        { ...payload, id: initial.id, is_active: isActive },
+        { onSuccess: onClose },
+      );
+      return;
+    }
+
+    createTerritory.mutate(payload, { onSuccess: onClose });
   };
+
+  const isPending = createTerritory.isPending || updateTerritory.isPending;
 
   return (
     <Dialog open={open} onOpenChange={v => !v && onClose()}>
@@ -155,9 +166,9 @@ export function TerritoryForm({ open, onClose, initial }: TerritoryFormProps) {
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
           <Button
             onClick={handleSubmit}
-            disabled={!name.trim() || createTerritory.isPending}
+            disabled={!name.trim() || isPending}
           >
-            {createTerritory.isPending ? 'Salvando...' : 'Salvar'}
+            {isPending ? 'Salvando...' : 'Salvar'}
           </Button>
         </DialogFooter>
       </DialogContent>

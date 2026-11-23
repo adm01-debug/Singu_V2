@@ -227,12 +227,15 @@ Deno.serve(async (req) => {
 
     if (externalUrl && externalKey) {
       const externalDb = createClient(externalUrl, externalKey);
-      const [{ data: tData }, { data: pData }] = await Promise.all([
+      const [tRes, pRes] = await Promise.all([
         externalDb.rpc("get_territories", {}),
         externalDb.rpc("get_territory_performance", {}),
       ]);
-      territories = Array.isArray(tData) ? (tData as TerritoryRow[]) : [];
-      performance = Array.isArray(pData) ? (pData as TerritoryPerformanceRow[]) : [];
+      // F/F62: falha de RPC externa não pode virar lista vazia (mascara erro real)
+      if (tRes.error) throw tRes.error;
+      if (pRes.error) throw pRes.error;
+      territories = Array.isArray(tRes.data) ? (tRes.data as TerritoryRow[]) : [];
+      performance = Array.isArray(pRes.data) ? (pRes.data as TerritoryPerformanceRow[]) : [];
     }
 
     const { data: teamMembers } = await teamMembersPromise;

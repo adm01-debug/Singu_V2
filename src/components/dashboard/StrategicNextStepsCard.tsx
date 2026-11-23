@@ -28,6 +28,7 @@ import { updateExternalData } from '@/lib/externalData';
 import { useRegisterPassoFeedback } from '@/hooks/useProximoPassoFeedback';
 import { useRecommendationAudit } from '@/hooks/useRecommendationAudit';
 import { toast } from '@/hooks/use-toast';
+import { ToastAction } from '@/components/ui/toast';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -397,6 +398,11 @@ function ContactRecommendationSheet({ contactId, onClose }: { contactId: string 
       toast({
         title: "Follow-up gerado",
         description: "Aguardando sua revisão na fila de aprovação.",
+        action: (
+          <ToastAction altText="Ir para a fila de aprovação" asChild>
+            <Link to="/aprovacoes-follow-up">Ver fila</Link>
+          </ToastAction>
+        ),
       });
     } catch (err) {
       logger.error('Error generating follow-up:', err);

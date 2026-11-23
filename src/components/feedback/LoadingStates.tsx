@@ -298,16 +298,3 @@ export function DataLoadingState({
 
   return <>{children}</>;
 }
-
-export default {
-  Spinner,
-  DotsLoader,
-  PulseLoader,
-  CircularProgress,
-  FullPageLoader,
-  InlineLoader,
-  ShimmerBlock,
-  ButtonLoader,
-  AIProcessingLoader,
-  DataLoadingState,
-};

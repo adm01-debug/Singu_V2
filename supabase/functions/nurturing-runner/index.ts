@@ -282,7 +282,14 @@ Deno.serve(async (req) => {
     }
 
     // Flush all accumulated writes in parallel
-    const dedupedCompletedWorkflowIds = [...new Set(completedWorkflowIds)];
+    // EF-5: contar por workflow_id para incrementar exatamente N vezes (1 por conclusão)
+    const workflowCompletionCounts = completedWorkflowIds.reduce<Record<string, number>>((acc, wfId) => {
+      acc[wfId] = (acc[wfId] ?? 0) + 1;
+      return acc;
+    }, {});
+    const dedupedCompletedWorkflowIds = Object.entries(workflowCompletionCounts).flatMap(
+      ([wfId, count]) => Array.from({ length: count }, () => wfId)
+    );
     await Promise.all([
       taskRows.length > 0
         ? bestEffortWrite(supabase.from("tasks").insert(taskRows), "tasks insert error:")

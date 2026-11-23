@@ -12,6 +12,7 @@ import { AdvancedFilters, type FilterConfig, type SortOption, type SortCriteria 
 import { ContactCardWithContext } from '@/components/contact-card/ContactCardWithContext';
 import { ContactsStatsBar } from '@/components/contacts/ContactsStatsBar';
 import { BulkActionsBar } from '@/components/bulk-actions/BulkActionsBar';
+import { KeyboardListHint } from '@/components/ui/keyboard-list-hint';
 import { BulkImportDialog } from '@/components/import/BulkImportDialog';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { ContactsTableView } from '@/components/contacts/ContactsTableView';
@@ -262,6 +263,8 @@ export function ContatosContent(props: Props) {
           </>
         )}
       </PullToRefresh>
+
+      <KeyboardListHint />
 
       <BulkActionsBar
         selectedIds={Array.from(selectedIds)}

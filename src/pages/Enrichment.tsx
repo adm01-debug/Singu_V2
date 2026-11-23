@@ -9,11 +9,15 @@ import { ValidationQueueCard } from "@/components/enrichment/ValidationQueueCard
 import { BulkRevalidateCard } from "@/components/enrichment/BulkRevalidateCard";
 import { EnrichmentCoverageCard } from "@/components/enrichment/EnrichmentCoverageCard";
 import { EnrichmentExportButton } from "@/components/enrichment/EnrichmentExportButton";
-import { useEmailVerifications, usePhoneValidations } from "@/hooks/useEnrichmentSuite";
+import { useEmailVerifications, usePhoneValidations, useEmailFinderResults } from "@/hooks/useEnrichmentSuite";
+import { Badge } from "@/components/ui/badge";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export default function Enrichment() {
   const { data: emails = [] } = useEmailVerifications();
   const { data: phones = [] } = usePhoneValidations();
+  const { data: finderResults = [] } = useEmailFinderResults();
 
   const stats = useMemo(() => {
     const validEmails = emails.filter((e) => e.status === "valid").length;
@@ -70,6 +74,42 @@ export default function Enrichment() {
         <PhoneValidatorWidget />
         <PeopleIntelTimeline />
       </section>
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm flex items-center gap-2">
+            <Search className="h-4 w-4" /> Últimas buscas de email ({finderResults.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {finderResults.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4 text-center">
+              Nenhuma busca de email registrada ainda.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {finderResults.map((r) => (
+                <div key={r.id} className="flex items-center justify-between gap-2 rounded-lg border p-2 text-sm">
+                  <div className="min-w-0">
+                    <p className="font-medium text-xs truncate">{r.full_name}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">
+                      {r.best_email ?? 'sem resultado'} · {r.domain}
+                    </p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <Badge variant="outline" className="text-[10px]">
+                      {Math.round((r.best_confidence ?? 0) * 100)}%
+                    </Badge>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                      {formatDistanceToNow(new Date(r.found_at), { locale: ptBR, addSuffix: true })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
