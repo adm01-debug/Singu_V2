@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { MultiStepProgress } from '@/components/ui/multi-step-progress';
 import { Upload, FileSpreadsheet, CheckCircle2, AlertTriangle, X } from 'lucide-react';
 import { useBulkImport, type ImportEntityType } from '@/hooks/useBulkImport';
 import { cn } from '@/lib/utils';
@@ -68,6 +69,12 @@ export function BulkImportDialog({ entityType, trigger, open: openProp, onOpenCh
             Importar {label} via CSV
           </DialogTitle>
         </DialogHeader>
+
+        <MultiStepProgress
+          steps={['Arquivo', 'Mapeamento', 'Importação']}
+          currentStep={!file ? 0 : isImporting || importMutation.isSuccess ? 2 : 1}
+          className="mb-2"
+        />
 
         {!file ? (
           <div

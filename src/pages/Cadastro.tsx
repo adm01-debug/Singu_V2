@@ -5,6 +5,7 @@ import { Building2, User, Link2 } from 'lucide-react';
 import { EmpresaForm } from './cadastro/EmpresaForm';
 import { PessoaForm } from './cadastro/PessoaForm';
 import { VinculoForm } from './cadastro/VinculoForm';
+import { RelationshipList } from './cadastro/RelationshipList';
 
 export default function Cadastro() {
   const [tab, setTab] = useState<'empresa' | 'pessoa' | 'vinculo'>('empresa');
@@ -59,6 +60,16 @@ export default function Cadastro() {
             </CardHeader>
             <CardContent>
               <VinculoForm />
+            </CardContent>
+          </Card>
+
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle>Vínculos existentes</CardTitle>
+              <CardDescription>Relações criadas por você entre empresas e pessoas.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <RelationshipList />
             </CardContent>
           </Card>
         </TabsContent>

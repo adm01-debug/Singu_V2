@@ -11,6 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { OptimizedAvatar } from '@/components/ui/optimized-avatar';
 import { RelationshipScore } from '@/components/ui/relationship-score';
+import { PriorityIndicator } from '@/components/ui/priority-indicator';
 import { RelationshipStageBadge } from '@/components/ui/relationship-stage';
 import { SentimentIndicator } from '@/components/ui/sentiment-indicator';
 import { DISCBadge } from '@/components/ui/disc-badge';
@@ -214,7 +215,13 @@ function ContactCardWithContextImpl({
                       <p className="text-xs text-muted-foreground truncate mt-0.5">{subtitle}</p>
                     )}
                   </div>
-                  <RelationshipScore score={contact.relationship_score || 0} size="sm" />
+                  <div className="flex items-center gap-1.5">
+                    <PriorityIndicator
+                      relationshipScore={contact.relationship_score || 0}
+                      lastInteractionDate={lastInteraction}
+                    />
+                    <RelationshipScore score={contact.relationship_score || 0} size="sm" />
+                  </div>
                 </div>
 
                  {/* Badges row: Sentiment + DISC + VAK + Role */}

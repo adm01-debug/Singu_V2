@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQBRs } from "@/hooks/useCustomerSuccess";
+import { ScheduleQBRDialog } from "@/components/customer-success/ScheduleQBRDialog";
 import { CalendarDays, CheckCircle2, Clock, XCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -22,8 +23,9 @@ export function QBRTimeline({ accountId }: { accountId?: string }) {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <CalendarDays className="h-4 w-4" />Quarterly Business Reviews
+        <CardTitle className="flex items-center justify-between text-base">
+          <span className="flex items-center gap-2"><CalendarDays className="h-4 w-4" />Quarterly Business Reviews</span>
+          {accountId && <ScheduleQBRDialog accountId={accountId} />}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2 max-h-96 overflow-y-auto">

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DashboardErrorBoundary } from '@/components/dashboard/DashboardErrorBoundary';
  import { PersonalityExecutiveSummary } from './behavioral-tab/PersonalityExecutiveSummary';
@@ -24,8 +24,31 @@ import { BusinessContextSubTab } from './behavioral-tab/BusinessContextSubTab';
 import { BehavioralAuditSubTab } from '../crm/behavior/BehavioralAuditSubTab';
  import { PredictiveRoadmap } from '../crm/behavior/PredictiveRoadmap';
 import { BehavioralExecutiveSummary } from './behavioral-tab/BehavioralExecutiveSummary';
+import { ApproachRecommendationPanel } from '@/components/analytics/ApproachRecommendationPanel';
+import { AIMessageGenerator } from '@/components/ai/AIMessageGenerator';
+import { CognitiveBiasesPanel } from '@/components/analytics/CognitiveBiasesPanel';
+import { ClientHealthPanel } from '@/components/analytics/ClientHealthPanel';
+import { SmartTemplateSuggestions } from '@/components/triggers/SmartTemplateSuggestions';
+import { TemplatePerformanceComparison } from '@/components/triggers/TemplatePerformanceComparison';
+import { useDashboardMappedData } from '@/hooks/useDashboardMappedData';
+import { getBehavior } from '@/types/behavior';
+import type {
+  Contact as LegacyContact,
+  ContactBehavior,
+  ContactRole,
+  RelationshipStage,
+  SentimentType,
+} from '@/types';
 import { ContactFamilyInterestsCard } from './behavioral-tab/ContactFamilyInterestsCard';
 import { RapportStrategySubTab } from './behavioral-tab/RapportStrategySubTab';
+import { NeuroDominanceTab } from './behavioral-tab/NeuroDominanceTab';
+import { ConsentAuditLog } from '@/components/crm/consent/ConsentAuditLog';
+import { RelationshipReportExport } from '@/components/crm/relationship/RelationshipReportExport';
+import { ProfileBasedSuggestions } from '@/components/triggers/ProfileBasedSuggestions';
+import { CompatibilityScore } from '@/components/triggers/CompatibilityScore';
+import { TemplateHistoryByProfile } from '@/components/triggers/TemplateHistoryByProfile';
+import { useFicha360NLP } from '@/hooks/useFicha360NLP';
+import { NeuroDecisionPath, NeuroScore, NeuroAlerts, NeuroObjectionHandler, NeuroCompatibilityAnalysis, NeuroScriptGenerator, PainClaimGainBuilder } from '@/components/neuromarketing';
 const CommunicationIntelWidget = lazy(() => import('./CommunicationIntelWidget'));
 const EmotionalTrendWidget = lazy(() => import('./EmotionalTrendWidget'));
 const EmotionalTrendByContactWidget = lazy(() => import('./EmotionalTrendByContactWidget'));
@@ -41,6 +64,7 @@ import type { Contact } from '@/hooks/useContactDetail';
 
  interface Props {
    contact: Contact;
+   interactions?: Tables<'interactions'>[];
  }
  
  async function fetchWithFallback<T>(
@@ -57,8 +81,60 @@ import type { Contact } from '@/hooks/useContactDetail';
    return Array.isArray(local) ? ([] as unknown as T) : null;
  }
  
- export function ContactBehavioralTab({ contact }: Props) {
+ export function ContactBehavioralTab({ contact, interactions = [] }: Props) {
    const { user } = useAuth();
+   const { vakProfile, metaprogramProfile } = useFicha360NLP(contact.id);
+  // O painel de Abordagem IA consome o modelo de dominio legado (Contact de @/types),
+  // que difere do shape cru de `contacts`. Mapeamos apenas o que os hooks leem,
+  // sem validadores que possam lancar durante o render.
+  const panelContact = useMemo((): LegacyContact | null => {
+    if (!contact) return null;
+    const typedBehavior = getBehavior(contact.behavior) as ContactBehavior | null;
+    const lastInteraction = contact.last_interaction_at ? new Date(contact.last_interaction_at) : undefined;
+    const daysSinceContact = lastInteraction && !Number.isNaN(lastInteraction.getTime())
+      ? Math.floor((Date.now() - lastInteraction.getTime()) / 86_400_000)
+      : undefined;
+    return {
+      id: contact.id,
+      companyId: contact.company_id ?? '',
+      companyName: '',
+      firstName: contact.first_name ?? '',
+      lastName: contact.last_name ?? '',
+      role: (contact.role as ContactRole) ?? 'contact',
+      roleTitle: contact.role_title ?? '',
+      email: contact.email ?? undefined,
+      phone: contact.phone ?? undefined,
+      tags: contact.tags ?? [],
+      hobbies: contact.hobbies ?? [],
+      interests: contact.interests ?? [],
+      relationshipStage: (contact.relationship_stage as RelationshipStage) ?? 'unknown',
+      relationshipScore: contact.relationship_score ?? 0,
+      interactionCount: interactions.length,
+      lastInteraction,
+      daysSinceContact,
+      sentiment: (contact.sentiment as SentimentType) ?? 'neutral',
+      behavior: typedBehavior ?? ({ discProfile: null, discConfidence: 0 } as unknown as ContactBehavior),
+      lifeEvents: [],
+      createdAt: contact.created_at ? new Date(contact.created_at) : new Date(0),
+      updatedAt: contact.updated_at ? new Date(contact.updated_at) : new Date(0),
+    } as LegacyContact;
+  }, [contact, interactions]);
+  const panelInteractions = useMemo(
+    () => interactions.map(i => ({
+      id: i.id,
+      content: i.content ?? undefined,
+      transcription: i.transcription ?? undefined,
+      createdAt: i.created_at ?? undefined,
+    })),
+    [interactions],
+  );
+  const { mappedInteractions } = useDashboardMappedData([], [], interactions, true);
+  const neuroInteractions = useMemo(
+    () => panelInteractions
+      .filter((i): i is typeof i & { content: string } => typeof i.content === 'string' && i.content.length > 0)
+      .map(i => ({ content: i.content, transcription: i.transcription, created_at: i.createdAt })),
+    [panelInteractions],
+  );
   const behavior = contact.behavior as Record<string, unknown> | null;
 
   const { data: behavioralData } = useQuery({
@@ -119,6 +195,20 @@ import type { Contact } from '@/hooks/useContactDetail';
   const eqAnalysis = behavioralData?.eqAnalysis || null;
   const biases = behavioralData?.biases || null;
 
+  const { data: salespersonDisc } = useQuery({
+    queryKey: ['salesperson-disc', user?.id],
+    enabled: !!user,
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const { data, error } = await supabase.from('profiles').select('nlp_profile').eq('id', user!.id).maybeSingle();
+      if (error) throw error;
+      const raw = data?.nlp_profile as { discProfile?: string } | null;
+      const value = raw?.discProfile;
+      return value === 'D' || value === 'I' || value === 'S' || value === 'C' ? value : null;
+    },
+  });
+
   const discProfile = behavior?.discProfile as string | null;
   const discConfidence = (behavior?.discConfidence as number) || 0;
 
@@ -176,6 +266,12 @@ import type { Contact } from '@/hooks/useContactDetail';
            <TabsTrigger value="metaprograms" className="text-xs">Meta</TabsTrigger>
            <TabsTrigger value="reframing" className="text-xs">Sleight of Mouth</TabsTrigger>
            <TabsTrigger value="personality" className="text-xs">Big Five/MBTI</TabsTrigger>
+           <TabsTrigger value="approach" className="text-xs">Abordagem IA</TabsTrigger>
+           <TabsTrigger value="sugestoes" className="text-xs">Sugestões por Perfil</TabsTrigger>
+           <TabsTrigger value="compatibilidade" className="text-xs">Compatibilidade</TabsTrigger>
+           <TabsTrigger value="health" className="text-xs">Saúde do Cliente</TabsTrigger>
+           <TabsTrigger value="neuro" className="text-xs">Neuro</TabsTrigger>
+           <TabsTrigger value="lgpd" className="text-xs">Consentimento & Export</TabsTrigger>
          </TabsList>
          <ModuleHelp {...moduleHelpContent.disc} />
        </div>
@@ -224,8 +320,11 @@ import type { Contact } from '@/hooks/useContactDetail';
         <EqSubTab eqAnalysis={eqAnalysis} />
       </TabsContent>
 
-      <TabsContent value="biases">
+      <TabsContent value="biases" className="space-y-4">
         <BiasesSubTab biases={biases} />
+        {panelContact && (
+          <CognitiveBiasesPanel contact={panelContact} interactions={panelInteractions} />
+        )}
       </TabsContent>
 
       <TabsContent value="metaprograms">
@@ -238,6 +337,104 @@ import type { Contact } from '@/hooks/useContactDetail';
 
       <TabsContent value="reframing">
         <SleightOfMouthPanel contactId={contact.id} />
+      </TabsContent>
+
+      <TabsContent value="approach">
+        {panelContact && (
+          <div className="space-y-6">
+            <ApproachRecommendationPanel contact={panelContact} interactions={panelInteractions} />
+            <AIMessageGenerator contact={panelContact} companyName={panelContact.companyName} discProfile={discProfile} />
+            <SmartTemplateSuggestions contact={panelContact} />
+            <TemplatePerformanceComparison contact={panelContact} />
+          </div>
+        )}
+      </TabsContent>
+
+      <TabsContent value="health">
+        {panelContact && (
+          <ClientHealthPanel contact={panelContact} interactions={mappedInteractions} />
+        )}
+      </TabsContent>
+
+      <TabsContent value="neuro" className="space-y-6">
+        <NeuroDominanceTab contactId={contact.id} />
+        {panelContact && (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <NeuroScore
+                contactId={contact.id}
+                contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+                discProfile={discProfile}
+                interactions={neuroInteractions}
+              />
+              <NeuroAlerts
+                contactId={contact.id}
+                contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+                discProfile={discProfile}
+                interactions={neuroInteractions}
+              />
+            </div>
+            <NeuroDecisionPath
+              contactId={contact.id}
+              contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+              discProfile={discProfile}
+              interactions={neuroInteractions}
+            />
+            <NeuroScriptGenerator
+              contactId={contact.id}
+              contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+              discProfile={discProfile}
+              vakProfile={vakProfile?.primary ?? null}
+              interactions={neuroInteractions}
+            />
+            <PainClaimGainBuilder
+              contactId={contact.id}
+              contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <NeuroCompatibilityAnalysis
+                salespersonDISC={salespersonDisc ?? (discProfile as 'D' | 'I' | 'S' | 'C' | null) ?? 'S'}
+                contactDISC={discProfile as 'D' | 'I' | 'S' | 'C' | null}
+                contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+              />
+              <NeuroObjectionHandler
+                contactId={contact.id}
+                contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+              />
+            </div>
+          </>
+        )}
+      </TabsContent>
+
+      <TabsContent value="sugestoes">
+        {panelContact && (
+          <ProfileBasedSuggestions
+            contact={panelContact}
+            vakProfile={vakProfile ?? null}
+            metaprogramProfile={metaprogramProfile ?? null}
+          />
+        )}
+      </TabsContent>
+
+      <TabsContent value="compatibilidade">
+        {panelContact && (
+          <div className="space-y-6">
+            <CompatibilityScore
+              contact={panelContact}
+              vakProfile={vakProfile ?? null}
+              metaprogramProfile={metaprogramProfile ?? null}
+            />
+            <TemplateHistoryByProfile />
+          </div>
+        )}
+      </TabsContent>
+
+      <TabsContent value="lgpd" className="space-y-4">
+        <ConsentAuditLog contactId={contact.id} />
+        <RelationshipReportExport
+          contactId={contact.id}
+          contactName={`${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim()}
+        />
       </TabsContent>
     </Tabs>
 

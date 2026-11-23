@@ -28,6 +28,7 @@ vi.mock('@/components/contact-detail', () => ({
   ContactInteractionsTab: () => null, ContactBehavioralTab: () => null,
   ContactIntelligenceTab: () => null, ContactCommercialTab: () => null,
   ContactDataTab: () => <p>Dados preservados</p>, LifeEventsTab: () => null,
+  ContactTasksPanel: () => null,
 }));
 vi.mock('@/components/ai/AIEmailComposerTrigger', () => ({ AIEmailComposerTrigger: () => null }));
 vi.mock('@/components/enrichment/ValidateAllButton', () => ({ ValidateAllButton: () => null }));

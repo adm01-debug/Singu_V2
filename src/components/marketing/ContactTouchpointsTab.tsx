@@ -1,7 +1,11 @@
-import { useTouchpoints } from '@/hooks/useAttribution';
-import { useMQLClassifications } from '@/hooks/useMQL';
+import { useState } from 'react';
+import { useTouchpoints, useRecordTouchpoint } from '@/hooks/useAttribution';
+import { useMQLClassifications, useEvaluateMQL } from '@/hooks/useMQL';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Activity, FileText, Mail, MousePointerClick, Eye, Megaphone, Phone, Calendar, Magnet, Workflow } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -23,6 +27,11 @@ export function ContactTouchpointsTab({ contactId }: { contactId: string }) {
   const { data: touchpoints, isLoading } = useTouchpoints({ contactId });
   const { data: classifications } = useMQLClassifications();
   const mql = classifications?.find((c) => c.contact_id === contactId);
+  const evaluateMQL = useEvaluateMQL();
+  const recordTouchpoint = useRecordTouchpoint();
+  const [tpType, setTpType] = useState('page_view');
+  const [tpSource, setTpSource] = useState('');
+  const [tpCampaign, setTpCampaign] = useState('');
 
   return (
     <div className="space-y-4">
@@ -45,9 +54,29 @@ export function ContactTouchpointsTab({ contactId }: { contactId: string }) {
               {typeof mql.score_snapshot === 'number' && (
                 <Badge variant="outline">Score: {mql.score_snapshot}</Badge>
               )}
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs"
+                disabled={evaluateMQL.isPending}
+                onClick={() => evaluateMQL.mutate(contactId)}
+              >
+                Reavaliar
+              </Button>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">Contato ainda não classificado como MQL.</p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-sm text-muted-foreground">Contato ainda não classificado como MQL.</p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs"
+                disabled={evaluateMQL.isPending}
+                onClick={() => evaluateMQL.mutate(contactId)}
+              >
+                Avaliar MQL
+              </Button>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -57,6 +86,44 @@ export function ContactTouchpointsTab({ contactId }: { contactId: string }) {
           <CardTitle className="text-base">Linha do Tempo de Touchpoints</CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="flex flex-col sm:flex-row gap-2 mb-4">
+            <Select value={tpType} onValueChange={setTpType}>
+              <SelectTrigger className="w-full sm:w-[170px] h-8 text-xs"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {Object.entries(typeMeta).map(([k, v]) => (
+                  <SelectItem key={k} value={k}>{v.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              value={tpSource}
+              onChange={(e) => setTpSource(e.target.value)}
+              placeholder="Origem (ex: linkedin)"
+              className="h-8 text-xs"
+            />
+            <Input
+              value={tpCampaign}
+              onChange={(e) => setTpCampaign(e.target.value)}
+              placeholder="Campanha (opcional)"
+              className="h-8 text-xs"
+            />
+            <Button
+              size="sm"
+              className="h-8 text-xs"
+              disabled={recordTouchpoint.isPending}
+              onClick={() => recordTouchpoint.mutate(
+                {
+                  touchpoint_type: tpType,
+                  contact_id: contactId,
+                  source: tpSource || null,
+                  campaign: tpCampaign || null,
+                },
+                { onSuccess: () => { setTpSource(''); setTpCampaign(''); } },
+              )}
+            >
+              Registrar
+            </Button>
+          </div>
           {isLoading ? (
             <div className="space-y-2">
               <Skeleton className="h-12 w-full" />

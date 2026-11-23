@@ -8,6 +8,7 @@ vi.mock('@/components/notifications/UnifiedNotificationsBell', () => ({ UnifiedN
 vi.mock('@/components/notifications/SmartNotificationsBell', () => ({ SmartNotificationsBell: () => null }));
 vi.mock('@/components/ui/global-density-toggle', () => ({ GlobalDensityToggle: () => null }));
 vi.mock('@/components/ui/SystemStatusBadge', () => ({ SystemStatusBadge: () => null }));
+vi.mock('@/components/admin/SystemHealthWidget', () => ({ SystemHealthWidget: () => null }));
 
 describe('Pesquisa contextual do cabeçalho', () => {
   it('restaura o termo recebido e acompanha mudanças de contexto e limpeza', () => {

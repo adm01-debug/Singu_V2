@@ -3,7 +3,7 @@ import { usePrefetch } from "@/components/navigation/PrefetchLink";
 import {
   LayoutDashboard, Building2, Users, MessageSquare, Lightbulb, Settings,
   Zap, LogOut, CalendarDays, Bell, ChevronDown, BarChart3, Share2,
-  Workflow, MapPin, PanelLeftClose, PanelLeft, Kanban, Trophy, CheckSquare, Globe, ListFilter, BrainCircuit, LifeBuoy, BookOpen, Copy, Shield, Star, Target, Gauge, Brain, Megaphone, Activity, Sparkles, UserPlus, History, Bot, KeyRound, ShieldCheck, FileWarning,
+  Workflow, MapPin, PanelLeftClose, PanelLeft, Kanban, Trophy, CheckSquare, Globe, ListFilter, BrainCircuit, LifeBuoy, BookOpen, Copy, Shield, Star, Target, Gauge, Brain, Megaphone, Activity, Sparkles, UserPlus, History, Bot, KeyRound, ShieldCheck, FileWarning, MessageSquareCheck,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -57,6 +57,7 @@ const navSections = [
     items: [
       { title: "Mapa", url: "/mapa-empresas", icon: MapPin },
       { title: "Territórios", url: "/territorios", icon: Globe },
+      { title: "Aprovações Follow-up", url: "/aprovacoes-follow-up", icon: MessageSquareCheck },
       { title: "ABM", url: "/abm", icon: Target },
       { title: "Lead Scoring", url: "/lead-scoring", icon: Gauge },
       { title: "Enriquecimento", url: "/enrichment", icon: Sparkles },

@@ -18,10 +18,15 @@ import { useToast } from '@/hooks/use-toast';
  ] as const;
 
 import { motion, AnimatePresence } from 'framer-motion';
-import type { Contact } from '@/hooks/useContacts';
 
 interface AIMessageGeneratorProps {
-  contact: Contact;
+  contact: {
+    first_name?: string | null;
+    last_name?: string | null;
+    role_title?: string | null;
+    hobbies?: string[] | null;
+    interests?: string[] | null;
+  };
   companyName?: string;
   discProfile?: string | null;
 }

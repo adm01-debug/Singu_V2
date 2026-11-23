@@ -32,6 +32,7 @@ import {
    ContactCommercialTab,
    ContactDataTab,
    LifeEventsTab,
+   ContactTasksPanel,
  } from '@/components/contact-detail';
  import { NeuromarketingTimeline } from '@/components/crm/behavior/NeuromarketingTimeline';
 import { RelationshipTimeline } from '@/components/contact-detail/RelationshipTimeline';
@@ -40,6 +41,7 @@ import { ValidateAllButton } from '@/components/enrichment/ValidateAllButton';
 import { PeopleIntelTimeline } from '@/components/enrichment/PeopleIntelTimeline';
 import { ContactEmailThreadsSection } from '@/components/contact-detail/ContactEmailThreadsSection';
 import { BehavioralInsightsCard } from '@/components/contacts/BehavioralInsightsCard';
+import { FeatureSpotlight } from '@/components/feedback/FeatureSpotlight';
    import { SentimentTrendChart } from '@/components/contact-detail/SentimentTrendChart';
    import { NextBestAction } from '@/components/crm/NextBestAction';
    import { SocialMediaIntelligenceCard } from '@/components/contact-detail/SocialMediaIntelligenceCard';
@@ -193,15 +195,21 @@ const ContatoDetalhe = () => {
 
         {/* Meeting Mode Button */}
         <div className="flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setMeetingMode(true)}
-            className="gap-2"
+          <FeatureSpotlight
+            featureId="contact-meeting-mode"
+            title="Modo Reunião"
+            description="Gravado e transcrito aqui: o Copilot acompanha a conversa em tempo real e sugere respostas."
           >
-            <Video className="w-4 h-4" />
-            Modo Reunião
-          </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setMeetingMode(true)}
+              className="gap-2"
+            >
+              <Video className="w-4 h-4" />
+              Modo Reunião
+            </Button>
+          </FeatureSpotlight>
         </div>
 
         {/* Proactive Intelligence Panel */}
@@ -221,6 +229,7 @@ const ContatoDetalhe = () => {
             <TabsTrigger value="comportamental" className="text-xs sm:text-sm">Comportamental</TabsTrigger>
             <TabsTrigger value="inteligencia" className="text-xs sm:text-sm">Inteligência</TabsTrigger>
             <TabsTrigger value="comercial" className="text-xs sm:text-sm">Comercial</TabsTrigger>
+            <TabsTrigger value="tarefas" className="text-xs sm:text-sm">Tarefas</TabsTrigger>
             <TabsTrigger value="lux" className="text-xs sm:text-sm">Lux Intelligence</TabsTrigger>
             <TabsTrigger value="touchpoints" className="text-xs sm:text-sm">Touchpoints</TabsTrigger>
             <TabsTrigger value="life-events" className="text-xs sm:text-sm">Marcos de Vida</TabsTrigger>
@@ -296,7 +305,7 @@ const ContatoDetalhe = () => {
            <TabsContent value="comportamental" className="space-y-4">
              <DashboardErrorBoundary sectionName="Comportamental">
                <NeuromarketingTimeline contactId={contact.id} />
-               <ContactBehavioralTab contact={contact} />
+               <ContactBehavioralTab contact={contact} interactions={interactions} />
              </DashboardErrorBoundary>
            </TabsContent>
 
@@ -322,6 +331,12 @@ const ContatoDetalhe = () => {
                 <CSATPanel contactId={contact.id} />
                 <VisitCheckinPanel contactId={contact.id} entityType="contact" />
               </div>
+            </DashboardErrorBoundary>
+          </TabsContent>
+
+          <TabsContent value="tarefas">
+            <DashboardErrorBoundary sectionName="Tarefas">
+              <ContactTasksPanel contactId={contact.id} />
             </DashboardErrorBoundary>
           </TabsContent>
 

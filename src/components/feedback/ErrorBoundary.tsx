@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getErrorMessage } from '@/lib/ux-messages';
 import { logger } from '@/lib/logger';
+import { captureError } from '@/lib/errorReporting';
 
 interface Props {
   children: ReactNode;
@@ -45,6 +46,7 @@ export class ErrorBoundary extends Component<Props, State> {
       stack: error.stack,
       componentStack: errorInfo.componentStack,
     });
+    captureError(error, errorInfo.componentStack ?? undefined, { source: 'ErrorBoundary' });
   }
 
   handleRetry = () => {

@@ -10,6 +10,7 @@ import { BenchmarkConfigForm } from "@/components/revops/BenchmarkConfigForm";
 import { RevOpsAlertList } from "@/components/revops/RevOpsAlertList";
 import { RevOpsPeriodSelector, getRange, type RevOpsPeriod } from "@/components/revops/RevOpsPeriodSelector";
 import { useRevOpsKPIs, useTriggerRevOpsSnapshot } from "@/hooks/useRevOps";
+import { RevOpsSnapshotHistory } from "@/components/revops/RevOpsSnapshotHistory";
 
 export default function RevOps() {
   const [period, setPeriod] = useState<RevOpsPeriod>("30d");
@@ -51,6 +52,7 @@ export default function RevOps() {
           <TabsTrigger value="kpis">KPIs</TabsTrigger>
           <TabsTrigger value="funnel">Funil</TabsTrigger>
           <TabsTrigger value="benchmarks">Benchmarks</TabsTrigger>
+          <TabsTrigger value="snapshots">Snapshots</TabsTrigger>
         </TabsList>
 
         <TabsContent value="kpis" className="space-y-4">
@@ -71,6 +73,10 @@ export default function RevOps() {
 
         <TabsContent value="benchmarks">
           <BenchmarkConfigForm />
+        </TabsContent>
+
+        <TabsContent value="snapshots">
+          <RevOpsSnapshotHistory periodStart={range.start} periodEnd={range.end} />
         </TabsContent>
       </Tabs>
     </div>

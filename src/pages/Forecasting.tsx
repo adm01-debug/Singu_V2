@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { useForecastPeriods, useCurrentPeriod, useCreatePeriod, useForecastSummary, useForecastSnapshots, useAnalyzeForecast } from "@/hooks/useForecasting";
+import { useForecastPeriods, useCurrentPeriod, useCreatePeriod, useForecastSummary, useForecastSnapshots, useAnalyzeForecast, useClosePeriod } from "@/hooks/useForecasting";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,7 +11,7 @@ import { CategoryColumn } from "@/components/forecasting/CategoryColumn";
 import { AccuracyChart } from "@/components/forecasting/AccuracyChart";
 import { RiskDealsTable } from "@/components/forecasting/RiskDealsTable";
 import { ForecastNarrativeCard } from "@/components/forecasting/ForecastNarrativeCard";
-import { Settings, Plus, Sparkles, TrendingUp, Target, AlertTriangle, DollarSign, Loader2 } from "lucide-react";
+import { Settings, Plus, Sparkles, TrendingUp, Target, AlertTriangle, DollarSign, Loader2, Lock } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 
 export default function Forecasting() {
@@ -19,9 +19,11 @@ export default function Forecasting() {
   const { data: currentMonth } = useCurrentPeriod("month");
   const createPeriod = useCreatePeriod();
   const analyze = useAnalyzeForecast();
+  const closePeriod = useClosePeriod();
 
   const [selected, setSelected] = useState<string | undefined>(undefined);
   const periodId = selected ?? currentMonth?.id ?? periods[0]?.id;
+  const selectedPeriod = periods.find(p => p.id === periodId);
 
   const summary = useForecastSummary(periodId);
   const { data: snapshots = [] } = useForecastSnapshots(periodId);
@@ -46,6 +48,16 @@ export default function Forecasting() {
           <PeriodSelector periods={periods} value={periodId} onChange={setSelected} />
           <Button variant="outline" onClick={() => createPeriod.mutate("month")}><Plus className="h-4 w-4" />Mês</Button>
           <Button variant="outline" onClick={() => createPeriod.mutate("quarter")}><Plus className="h-4 w-4" />Trimestre</Button>
+          {selectedPeriod?.status === "open" && (
+            <Button
+              variant="outline"
+              onClick={() => closePeriod.mutate(selectedPeriod.id)}
+              disabled={closePeriod.isPending}
+            >
+              {closePeriod.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
+              Fechar período
+            </Button>
+          )}
           <Button asChild variant="outline"><Link to="/forecasting/setup"><Settings className="h-4 w-4" />Setup</Link></Button>
         </div>
       </div>

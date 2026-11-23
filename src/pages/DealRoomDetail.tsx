@@ -1,9 +1,16 @@
-import { useParams } from "react-router-dom";
-import { useDealRoom, useMilestones, useStakeholders } from "@/hooks/useDealRooms";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDealRoom, useMilestones, useStakeholders, useDeleteDealRoom } from "@/hooks/useDealRooms";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, DollarSign, Eye, Target, type LucideIcon } from "lucide-react";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Calendar, DollarSign, Eye, Target, Pencil, Trash2, type LucideIcon } from "lucide-react";
+import { DealRoomEditDialog } from "@/components/deal-rooms/DealRoomEditDialog";
 import { SmartBackButton } from "@/components/navigation/SmartBackButton";
 import { MilestoneKanban } from "@/components/deal-rooms/MilestoneKanban";
 import { StakeholderList } from "@/components/deal-rooms/StakeholderList";
@@ -18,6 +25,10 @@ export default function DealRoomDetail() {
   const { data: room, isLoading } = useDealRoom(id);
   const { data: ms = [] } = useMilestones(id);
   const { data: sh = [] } = useStakeholders(id);
+  const del = useDeleteDealRoom();
+  const navigate = useNavigate();
+  const [editOpen, setEditOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   if (isLoading) return <div className="container mx-auto p-6">Carregando...</div>;
   if (!room) return <div className="container mx-auto p-6">Deal room não encontrado.</div>;
@@ -44,8 +55,40 @@ export default function DealRoomDetail() {
             {room.target_close_date && <Badge variant="outline" className="gap-1"><Calendar className="h-3 w-3" />{new Date(room.target_close_date).toLocaleDateString("pt-BR")}</Badge>}
           </div>
         </div>
-        <ShareDialog room={room} />
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
+            <Pencil className="h-4 w-4 mr-1" />
+            Editar
+          </Button>
+          <Button variant="outline" size="sm" className="text-destructive" onClick={() => setConfirmOpen(true)}>
+            <Trash2 className="h-4 w-4 mr-1" />
+            Excluir
+          </Button>
+          <ShareDialog room={room} />
+        </div>
       </div>
+
+      <DealRoomEditDialog room={room} open={editOpen} onOpenChange={setEditOpen} />
+
+      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir Deal Room?</AlertDialogTitle>
+            <AlertDialogDescription>
+              O room "{room.title}", seus milestones, stakeholders, documentos e comentários serão removidos. Ação irreversível.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => del.mutate(room.id, { onSuccess: () => navigate("/deal-rooms") })}
+              disabled={del.isPending}
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Kpi icon={Target} label="Plano" value={`${pct}%`} sub={`${done}/${total}`} />

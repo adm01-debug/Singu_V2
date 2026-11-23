@@ -1,8 +1,10 @@
-import { Clock, AlertTriangle, Calendar, User, ChevronRight } from 'lucide-react';
+import { Clock, AlertTriangle, Calendar, User, ChevronRight, Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { usePendingFollowups } from '@/hooks/usePendingFollowups';
+import { useCompleteFollowup } from '@/hooks/useInteractionsRpc';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 
@@ -15,6 +17,7 @@ const PRIORITY_CONFIG: Record<number, { color: string; label: string }> = {
 
 export function PendingFollowupsWidget() {
   const { data: followups = [], isLoading, error } = usePendingFollowups(10);
+  const completeFollowup = useCompleteFollowup();
 
   if (isLoading) {
     return (
@@ -90,6 +93,16 @@ export function PendingFollowupsWidget() {
                         Closing Score: <span className="font-medium">{f.closing_score}%</span>
                       </div>
                     )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="mt-1 h-6 px-2 text-[10px] gap-1"
+                      disabled={completeFollowup.isPending}
+                      onClick={() => completeFollowup.mutate(f.interaction_id)}
+                    >
+                      <Check className="h-3 w-3" />
+                      Concluir follow-up
+                    </Button>
                   </div>
                 );
               })}
