@@ -34,21 +34,21 @@ Heads [108](https://github.com/adm01-debug/Singu_V2/pull/108)/[109](https://gith
 |---|---|---|---|---|
 | EF-1 | RESOLVIDO NO CÓDIGO | evolution-webhook:75–79 sem referência indefinida | Deploy/fluxo real NR; outros bugs F/F28 | Caminho de sucesso sem ReferenceError |
 | EF-2,INV/106 | RESOLVIDO NO CÓDIGO | whatsapp-import:1–4 usa helpers locais | Deploy NR | Import/boot e importação autenticada |
-| EF-3 | AINDA REPRODUZÍVEL | _shared/fetch-utils.ts existe; lux-trigger:14–22,155–170 já aplica timeout em cada tentativa; evolution-bitrix-connector mantém chamadas sem deadline | Cobrir apenas as chamadas restantes | Provedor travado termina em prazo limitado |
+| EF-3 | RESOLVIDO NO CÓDIGO | #309; evolution-bitrix-connector e demais chamadas cobertas por timeout | Deploy/fluxo real NR | Provedor travado termina em prazo limitado |
 | EF-4 | AINDA REPRODUZÍVEL | evolution-webhook:20 exige segredo; :150–155,177–183 escolhe primeiro perfil | Remover fallback cross-owner; integração AD | Instância sem dono é rejeitada, sem atribuição arbitrária |
-| EF-5 | AINDA REPRODUZÍVEL | nurturing-runner:75–78,143–145 chama RPC ausente | Antigo contador=1/duplo incremento mudou; contador continua sem contrato | Duas conclusões incrementam exatamente duas vezes |
+| EF-5 | RESOLVIDO NO CÓDIGO | #314; nurturing-runner conta conclusões por workflow corretamente | Deploy/fluxo real NR | Duas conclusões incrementam exatamente duas vezes |
 | EF-6 | AINDA REPRODUZÍVEL | validation:38–39/regen:27–28 têm RPC; DLQ:43–73/nurturing:33–38/sequence:66–90 não | Claims parcialmente resolvidos; deploy NR | Dois workers reivindicam lotes disjuntos |
-| EF-7 | AINDA REPRODUZÍVEL | send-sms-campaign:67–101,135–164; agora fetchAPI | Claim, paginação, persistência; Twilio AD | Lote grande sem duplicação/interrupção presa |
+| EF-7 | RESOLVIDO NO CÓDIGO | #310; claim atômico e paginação do sms-campaign | Deploy/fluxo real NR; Twilio AD | Lote grande sem duplicação/interrupção presa |
 | EF-8 | AINDA REPRODUZÍVEL | process-webhook-dlq:117–120 | Alvo desconhecido não pode virar sucesso | Alvo inválido falha/quarentena sem inserção |
 | EF-9 | OBSOLETO/DUPLICADO | migration 20260712221610:2–4 define contact_id como PK | Não assumir múltiplas linhas por contato; lease ainda merece teste | Unicidade e atualização concorrente preservadas |
 | EF-10 | AINDA REPRODUZÍVEL | claim_validation_batch em 20260720000002:12–35 só seleciona pending | Lease/reclaim processing | Morte do worker não bloqueia item para sempre |
-| EF-11,INV/46 | AINDA REPRODUZÍVEL | external-data:471–474 retorna jsonOk(error); :435–452 mascara batch_distinct | Seleção comum agora falha corretamente; RPC/batch ainda HTTP200 | Falha RPC não é sucesso nem lista vazia |
-| EF-12 | AINDA REPRODUZÍVEL | lead-score-cron:23; forecast-snapshot-cron:14–51 | Paginação/erros/valores inválidos; null numérico não implica NaN necessariamente | >1000 registros, erro DB e número inválido explícitos |
-| EF-13 | AINDA REPRODUZÍVEL | next-best-action:124–126/abm-whitespace-analyzer:88–91 divergem | Há guards; JSON inválido/contrato sem validação uniforme; IA AD | Ausência/malformação não gera resultado falso |
-| EF-14 | AINDA REPRODUZÍVEL | evolution-webhook:532–536 usa avatar IS NOT NULL | Alinhar intenção/filtro; integração AD | Atualizar só avatar elegível |
+| EF-11,INV/46 | RESOLVIDO NO CÓDIGO | #309; external-data propaga falha de RPC | Deploy/fluxo real NR | Falha RPC não é sucesso nem lista vazia |
+| EF-12 | RESOLVIDO NO CÓDIGO | #310; paginação do cron e NaN do forecast tratados | Deploy/fluxo real NR | >1000 registros, erro DB e número inválido explícitos |
+| EF-13 | RESOLVIDO NO CÓDIGO | #309; guardas de JSON/contrato uniformizados | Deploy/fluxo real NR; IA AD | Ausência/malformação não gera resultado falso |
+| EF-14 | RESOLVIDO NO CÓDIGO | #311; filtro avatar contacts.upsert IS NULL | Deploy/fluxo real NR | Atualizar só avatar elegível |
 | EF-15 | AINDA REPRODUZÍVEL | Helpers scoped e gates imports/CORS passaram; auto-rebatch:35,44 exige segredo de cron e JWT de usuário na mesma chamada | Unificar autenticação do cron; contratos específicos e drift remoto F/S7 | Cabeçalho único autoriza o job e mantém escopo |
-| EF-16,INV/13 | AINDA REPRODUZÍVEL | bulk-revalidate:71–76 limit(5000), :119 cappedAt só do lote | Paginar universo/avisar truncamento | Contato elegível além do teto é encontrado |
-| EF-17 | AINDA REPRODUZÍVEL | evolution-webhook:348–372 usa tarefas assíncronas não aguardadas | Persistir/aguardar trabalho crítico; integração AD | Encerrar request não perde transcrição/análise |
+| EF-16,INV/13 | RESOLVIDO NO CÓDIGO | #309; bulk-revalidate pagina o universo | Deploy/fluxo real NR | Contato elegível além do teto é encontrado |
+| EF-17 | RESOLVIDO NO CÓDIGO | #312; EdgeRuntime.waitUntil garante execução pós-response | Deploy/fluxo real NR | Encerrar request não perde transcrição/análise |
 
 ### Lacunas F: causas sistêmicas
 
@@ -75,16 +75,16 @@ Heads [108](https://github.com/adm01-debug/Singu_V2/pull/108)/[109](https://gith
 | F/F07,F/F26,F/F27,F/F28,INV/12,INV/43,INV/44,INV/45 | DECISÃO DE PRODUTO/INTEGRAÇÃO ADIADA | bitrix24-webhook:40,110–114;evolution-api:46;connector:16,134–150;evolution-webhook:20,327 | Bitrix/Evolution adiados; continuam header/schema/dono/catch; evolution-api sem papel admin | Se reativar: tenant correto e ações administrativas restritas |
 | F/F08,F/F09,F/F10,F/F30,F/F35,F/F48,F/F61,F/F66,INV/14,INV/15,INV/17,INV/51,INV/63,INV/81,INV/97,INV/105 | AINDA REPRODUZÍVEL | guards check-health:107;check-notifications:15;client-notifications:23;forecast:8;lead-score:10;revops:20;template:33;weekly:31 | Agendamento NR; email simulado/last_sent sem entrega e push anon permanecem | Execução autorizada, efeitos verdadeiros, indisponibilidade explícita |
 | F/F12,INV/21 | AINDA REPRODUZÍVEL | conversation-analyzer:41,45 | duration_seconds não existe em interactions canônicas | Interação existente não vira 404 de schema |
-| F/F15,INV/24 | AINDA REPRODUZÍVEL | crm-automation-monitor:49,63 usa bestEffortWrite, mas não há chamador conhecido para alimentar o widget | Ligar o monitor ao produtor ou remover a promessa | Gravação auxiliar sem TypeError e widget alimentado |
+| F/F15,INV/24 | RESOLVIDO NO CÓDIGO | #312; evolution-webhook aciona crm-automation-monitor via EdgeRuntime.waitUntil | Deploy/fluxo real NR | Gravação auxiliar sem TypeError e widget alimentado |
 | F/F16,F/F23,INV/25,INV/40 | AINDA REPRODUZÍVEL | cs-health-recalc:99–105;enrich-contacts:152–155 | Upsert omite campos obrigatórios; enriquecimento ainda órfão | Atualizar existente sem inserir linha incompleta |
-| F/F19,INV/32 | AINDA REPRODUZÍVEL | disc-analyzer:267,282 usa bestEffortWrite, mas evolution-webhook:419–428 chama com service-role um handler que exige JWT de usuário | Autorizar a chamada interna com escopo comprovado; IA AD | Chamada interna autorizada sem acesso cruzado |
+| F/F19,INV/32 | RESOLVIDO NO CÓDIGO | #312; disc-analyzer aceita service-role via withAuthOrServiceRole | Deploy/fluxo real NR; IA AD | Chamada interna autorizada sem acesso cruzado |
 | F/F20,INV/33 | AINDA REPRODUZÍVEL | dual-write-proxy:2,37–41 falha fechado, mas não existe consumidor de x-dual-write-secret | Ligar produtor comprovado; reparar kill-switch B/N04 | Escrita canônica espelhada no cutover autorizado |
 | F/F24,INV/41 | RESOLVIDO NO CÓDIGO | enrichlayer-linkedin:146 aguarda builder | Deploy/provedor NR | Perfil persiste ou erro explícito |
-| F/F25,INV/42 | AINDA REPRODUZÍVEL | error-budget:141;useErrorBudget.ts:58 | Sem amostra assume 100%; cadência remota NR | Falta de amostra exibida como desconhecida |
-| F/F34,INV/62 | AINDA REPRODUZÍVEL | intent-tracker:27,72,123; preflight remoto Lovable | Origem/assinatura e catch; não basta liberar Vercel para sites clientes | Cliente permitido envia; origem não autorizada não forja sinais |
-| F/F36,INV/64 | AINDA REPRODUZÍVEL | lead-score-threshold-runner:174–189 | create_task escreve alerts, não tasks | Tarefa real aparece para responsável |
-| F/F37,INV/66 | AINDA REPRODUZÍVEL | lux-trigger:151–179 | Callback sem segredo; falha upstream chama catch inválido | Falha rastreada sem processing eterno |
-| F/F40,INV/70 | AINDA REPRODUZÍVEL | mql-evaluator:60 usa contacts.lead_score | Consultar lead_scores; cron NR | Score canônico classifica contato correto |
+| F/F25,INV/42 | RESOLVIDO NO CÓDIGO | #313; error-budget trata uptimePct null como desconhecido | Deploy/fluxo real NR | Falta de amostra exibida como desconhecida |
+| F/F34,INV/62 | RESOLVIDO NO CÓDIGO | #313; intent-tracker valida origem/assinatura | Deploy/fluxo real NR | Cliente permitido envia; origem não autorizada não forja sinais |
+| F/F36,INV/64 | RESOLVIDO NO CÓDIGO | #312; lead-score-threshold-runner grava na tabela tasks | Deploy/fluxo real NR | Tarefa real aparece para responsável |
+| F/F37,INV/66 | RESOLVIDO NO CÓDIGO | #312; lux-trigger usa update direto e secreto de callback | Deploy/fluxo real NR | Falha rastreada sem processing eterno |
+| F/F40,INV/70 | RESOLVIDO NO CÓDIGO | #312; mql-evaluator consulta lead_scores | Deploy/fluxo real NR | Score canônico classifica contato correto |
 | F/F41,INV/71 | RESOLVIDO NO CÓDIGO | next-best-action:148–152 aguarda/valida persistência | IA AD; deploy NR | Falha DB não anuncia ação criada |
 | F/F42,F/F46,F/F52,F/F64,INV/72,INV/79,INV/86,INV/100 | AINDA REPRODUZÍVEL | nurturing:129–145;DLQ:43–159;sequence:244–359;validation:66–100 | Claim parcial, auth downstream, upserts, RPCs ausentes e envio falso | Concorrência/reinício/DB/provedor sem perder nem repetir |
 | F/F43,F/F55,F/F57,INV/74,INV/90,INV/92 | RESOLVIDO NO CÓDIGO | objection-handler:126,137;social-behavior:156;social-profile:169,284 | IA/Firecrawl AD; deploy NR | Writes auxiliares corretos não derrubam resultado |
@@ -94,8 +94,8 @@ Heads [108](https://github.com/adm01-debug/Singu_V2/pull/108)/[109](https://gith
 | F/F54,INV/88 | AINDA REPRODUZÍVEL | smart-notify:11,110–178; cron histórico incorreto | Catch/email fake removidos; guard/job/escalation_role continuam; entrega WhatsApp AD | Cron canônico; sem sucesso inventado; destinatário de escalonamento correto |
 | F/F58,INV/94 | AINDA REPRODUZÍVEL | suggest-next-action:195 Math.random | Necessidade preditiva continua sorteada | Inferência justificável ou exemplo rotulado |
 | F/F59,INV/95 | AINDA REPRODUZÍVEL | sync-social-interests:9,61;generate-offer:36 withAuth | Front bloqueado e downstream service-role rejeitado; IA AD | Chamada interna autenticada sem segredo exposto |
-| F/F60,INV/96 | AINDA REPRODUZÍVEL | system-health:139;StatusPage.tsx:49,57 | Fail-open corrigido; visitante não autorizado continua indisponível | Status agregado anônimo com limites |
-| F/F62,INV/98 | NÃO VERIFICADO NO RUNTIME | territory-optimization:231–235 usa RPCs externas | Ausência local não prova ausência externa; erros não devem virar vazio | RPC remota/contrato e falha explícita |
+| F/F60,INV/96 | RESOLVIDO NO CÓDIGO | #312; system-health exibe status público agregado | Deploy/fluxo real NR | Status agregado anônimo com limites |
+| F/F62,INV/98 | RESOLVIDO NO CÓDIGO | #316; territory-optimization propaga falha de RPC externa | Deploy/fluxo real NR | RPC remota/contrato e falha explícita |
 
 ### B2: riscos e plano, sem duplicar causas
 
