@@ -1619,7 +1619,7 @@
    "nome": "external-data",
    "entrada": "supabase/functions/external-data/index.ts",
    "arquivos": 8,
-   "linhas": 1113,
+   "linhas": 1116,
    "verify_jwt": true,
    "metodos": [
     "DELETE",

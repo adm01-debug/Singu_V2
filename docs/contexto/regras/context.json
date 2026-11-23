@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "76a33c0da4f5704fc75dab3d4ee7d06067ccf916",
+  "sha": "9ca4bab54ef7f49e9ed39ec8af24ff9bb694fe69",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-23 20:11 UTC",
+  "generated_at": "2026-11-23 21:51 UTC",
   "files_total": 4013,
   "code_files": 3538,
-  "code_lines": 478076
+  "code_lines": 478079
  },
  "version": "1.3.2",
- "facts_hash": "f2b610d4276a9102",
+ "facts_hash": "533d938cf4a419f9",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112274,7 +112274,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 27364,
+   "lines": 27367,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -295079,7 +295079,7 @@
   },
   "supabase/functions/external-data/audit.ts": {
    "path": "supabase/functions/external-data/audit.ts",
-   "lines": 44,
+   "lines": 47,
    "exports": [
     "type AuditOperation",
     "type AuditOutcome",
@@ -306964,10 +306964,19 @@
   }
  },
  "git": {
-  "sha": "76a33c0da4f5704fc75dab3d4ee7d06067ccf916",
+  "sha": "9ca4bab54ef7f49e9ed39ec8af24ff9bb694fe69",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "9ca4bab",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: loga falha de insert da auditoria do external-data (#321)",
+    "files": [
+     "supabase/functions/external-data/audit.ts"
+    ]
+   },
    {
     "sha": "76a33c0",
     "date": "2026-11-23",
@@ -307346,15 +307355,6 @@
     "files": [
      "docs/pendencias/_linha-de-base.md"
     ]
-   },
-   {
-    "sha": "4e69959",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(migrations): baseline idempotente (IF NOT EXISTS e guardas pg_constraint) (#287)",
-    "files": [
-     "supabase/migrations/20260110000000_baseline_tabelas_base.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -307385,6 +307385,10 @@
    [
     "supabase/functions/send-sms-campaign/index.ts",
     2
+   ],
+   [
+    "supabase/functions/external-data/audit.ts",
+    1
    ],
    [
     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_EDGE.md",
@@ -307432,10 +307436,6 @@
    ],
    [
     "src/components/admin/conexoes/ConnectionCard.tsx",
-    1
-   ],
-   [
-    "src/components/admin/conexoes/ConnectionTestHistory.tsx",
     1
    ]
   ]

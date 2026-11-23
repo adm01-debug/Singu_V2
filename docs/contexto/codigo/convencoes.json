@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix: loga falha de insert da auditoria do external-data (#321)",
    "chore(matriz): marca EF-3/5/7/11/12/13/14/16/17 e F/F15/19/25/34/36/37/40/60/62 como RC (#319)",
    "build(deps): bump the minor-and-patch group with 13 updates (#315)",
    "fix: remove exports default mortos que quebram lint com react-refresh 0.5.8 (#317)",
-   "build(deps): bump actions/dependency-review-action from 5.0.0 to 5.0.1 (#308)",
-   "chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)"
+   "build(deps): bump actions/dependency-review-action from 5.0.0 to 5.0.1 (#308)"
   ]
  },
  "pr_template": null,

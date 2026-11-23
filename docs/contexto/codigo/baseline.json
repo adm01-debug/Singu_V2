@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "76a33c0da4f5704fc75dab3d4ee7d06067ccf916",
+  "commit": "9ca4bab54ef7f49e9ed39ec8af24ff9bb694fe69",
   "branch": "main",
-  "data_commit": "2026-11-23T16:55:18-03:00",
+  "data_commit": "2026-11-23T18:50:27-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "9ca4bab",
+    "data": "2026-11-23",
+    "assunto": "fix: loga falha de insert da auditoria do external-data (#321)"
+   },
    {
     "sha": "76a33c0",
     "data": "2026-11-23",
@@ -126,11 +131,6 @@
     "sha": "d83acfb",
     "data": "2026-11-21",
     "assunto": "fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)"
-   },
-   {
-    "sha": "d4ea4a1",
-    "data": "2026-11-21",
-    "assunto": "fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)"
    }
   ],
   "arquivos_mudados_7d": 1036,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 153
+    "commits": 154
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3908,
   "arquivos_codigo": 2256,
-  "linhas_codigo": 421356,
+  "linhas_codigo": 421359,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 27364
+   "linhas": 27367
   },
   "tailwind.config.ts": {
    "arquivos": 1,
