@@ -6,7 +6,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { z } from "npm:zod@3.23.8";
-import { withAuth, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
+import { withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
