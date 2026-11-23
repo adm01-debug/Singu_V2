@@ -6,7 +6,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { z } from "npm:zod@3.23.8";
-import { withAuth, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
+import { withAuth, withAuthOrServiceRole, isServiceRoleCaller, jsonError, jsonOk, scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { fetchAI } from "../_shared/fetch-utils.ts";
 import { rateLimit } from "../_shared/rate-limit.ts";
 
@@ -16,6 +16,7 @@ const DiscAnalyzerInput = z.object({
   texts: z.array(z.string().min(1).max(5000)).min(1, 'Pelo menos 1 texto é necessário').max(50),
   contactId: z.string().uuid('contactId deve ser UUID válido'),
   interactionId: z.string().uuid().optional(),
+  userId: z.string().uuid().optional(), // F/F19: interno service-role passa userId no body
 });
 
 interface DISCScores {
@@ -128,10 +129,9 @@ Deno.serve(async (req) => {
   const limited = limiter.check(ip, req);
   if (limited) return limited;
 
-  // ── Auth guard: use JWT user_id, ignore body userId ──
-  const authResult = await withAuth(req);
+  // ── Auth guard: JWT ou service-role interno (F/F19) ──
+  const authResult = await withAuthOrServiceRole(req);
   if (authResult instanceof Response) return authResult;
-  const userId = authResult; // from JWT
 
   try {
     const { body: rawBody, error: bodyError } = await guardBody(req, 512 * 1024); // 512 KB — up to 50 text strings
@@ -142,6 +142,12 @@ Deno.serve(async (req) => {
       return jsonError(`Input inválido: ${JSON.stringify(parsed.error.flatten().fieldErrors)}`, 400, req);
     }
     const { texts, contactId, interactionId } = parsed.data;
+
+    // F/F19: service-role caller deve fornecer userId no body; JWT caller usa userId do token
+    const userId = isServiceRoleCaller(authResult)
+      ? parsed.data.userId ?? null
+      : authResult;
+    if (!userId) return jsonError("userId obrigatório para chamadas internas service-role", 400, req);
 
     const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
     if (!LOVABLE_API_KEY) {

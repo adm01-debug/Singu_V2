@@ -136,11 +136,12 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
       }), 'ingestion_log transcription_init error:');
 
       // Chama voice-to-text com gravação automática da interação
+      // EF-17: EdgeRuntime.waitUntil garante execução pós-response
       const transcriptionWork = supabase.functions.invoke('voice-to-text', {
         body: {
           whatsappMessageId: dbMessageId,
           userId,
-          autoSave: true, // Gravação pelo servidor
+          autoSave: true,
           contactId,
           companyId
         },
@@ -210,6 +211,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
 
       // Aciona análise DISC para mensagens longas (contactId existe neste bloco)
       if (messageContent.length >= 100) {
+
         const discWork = supabase.functions.invoke('disc-analyzer', {
           body: {
             texts: [messageContent],
@@ -222,6 +224,15 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
         (globalThis as any).EdgeRuntime?.waitUntil(discWork);
       }
     }
+  }
+
+  // F/F15: aciona crm-automation-monitor para alimentar widget de audit log
+  if (contactId && userId) {
+    const crmMonitorWork = supabase.functions.invoke('crm-automation-monitor', {
+      body: { contact_id: contactId, user_id: userId }
+    }).catch((err: unknown) => console.error('CRM monitor error:', err));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).EdgeRuntime?.waitUntil(crmMonitorWork);
   }
 
   return jsonResponse({
