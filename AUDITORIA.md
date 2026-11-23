@@ -132,7 +132,7 @@ Causa raiz: autorização privilegiada é decidida por conteúdo não autenticad
 
 #### A-014 · [P1] · segurança/backend — proxy externo permite mass assignment de `user_id` em updates
 
-Evidência: `supabase/functions/external-data/index.ts:464-478` recebe `updates` como objeto arbitrário e o envia integralmente ao banco externo. Para usuário comum, a cláusula `.eq('user_id', userId)` restringe qual linha começa sendo alterada, mas não remove `user_id`, `owner_id`, `role` ou outros campos sensíveis do payload; `update_with_version` repete o padrão em `:481-505`.  
+Evidência: `supabase/functions/external-data/mutations.ts:91-105` recebe `updates` como objeto arbitrário e o envia integralmente ao banco externo. Para usuário comum, a cláusula `.eq('user_id', userId)` restringe qual linha começa sendo alterada, mas não remove `user_id`, `owner_id`, `role` ou outros campos sensíveis do payload; `update_with_version` repete o padrão em `mutations.ts:93-105`.  
 Impacto: mesmo após corrigir o bypass P0, um usuário autenticado pode transferir uma linha própria para outro `user_id` ou alterar campos privilegiados existentes nas tabelas da allowlist; o conjunto exato de colunas afetadas depende do schema externo, que não pôde ser introspectado.  
 Como explorar: enviar `action=update`, o ID de uma linha própria e `updates.user_id` com outro UUID satisfaz o filtro de dono pré-update, mas grava o novo proprietário porque o payload não é saneado.  
 Causa raiz: o proxy protege o predicado de seleção, porém trata todos os campos mutáveis como equivalentes e não possui allowlist por tabela/operação.
