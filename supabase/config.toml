@@ -1,1 +1,121 @@
 project_id = "pgxfvjmuubtbowutlide"
+
+# verify_jwt e declarado por funcao aqui: esta e a fonte unica lida por
+# `supabase functions deploy` (o deploy nao passa --no-verify-jwt por flag).
+# As funcoes abaixo sao publicas por design — webhooks, crons e proxies externas que nao
+# apresentam JWT do Supabase e autenticam por conta propria (token, assinatura ou IP).
+# Evidencia medida em 2026-11-23 (run 45265513833): com apenas a anon key no header
+# `apikey` e nenhum `Authorization`, a requisicao alcanca o handler nestas funcoes;
+# nas demais o gateway responde 401 {"code":401,"message":"Missing authorization header"}.
+# A lista coincide com NO_JWT_FUNCTIONS de scripts/migration/functions/deploy-all.sh.
+
+[functions.auto-rebatch-behavioral]
+verify_jwt = false
+
+[functions.auto-regen-behavioral-profiles]
+verify_jwt = false
+
+[functions.bitrix24-webhook]
+verify_jwt = false
+
+[functions.check-health-alerts]
+verify_jwt = false
+
+[functions.check-notifications]
+verify_jwt = false
+
+[functions.client-notifications]
+verify_jwt = false
+
+[functions.cs-health-recalc]
+verify_jwt = false
+
+[functions.deal-room-buyer-view]
+verify_jwt = false
+
+[functions.dual-write-proxy]
+verify_jwt = false
+
+[functions.evolution-bitrix-connector]
+verify_jwt = false
+
+[functions.evolution-webhook]
+verify_jwt = false
+
+[functions.forecast-snapshot-cron]
+verify_jwt = false
+
+[functions.form-submit-handler]
+verify_jwt = false
+
+[functions.generate-behavioral-profile]
+verify_jwt = false
+
+[functions.get-signature]
+verify_jwt = false
+
+[functions.incoming-webhook]
+verify_jwt = false
+
+[functions.intent-pixel-snippet]
+verify_jwt = false
+
+[functions.intent-tracker]
+verify_jwt = false
+
+[functions.lead-score-cron]
+verify_jwt = false
+
+[functions.lux-webhook]
+verify_jwt = false
+
+[functions.mcp-server]
+verify_jwt = false
+
+[functions.mql-evaluator]
+verify_jwt = false
+
+[functions.nurturing-runner]
+verify_jwt = false
+
+[functions.process-behavioral-regen-queue]
+verify_jwt = false
+
+[functions.process-webhook-dlq]
+verify_jwt = false
+
+[functions.retry-behavioral-profile]
+verify_jwt = false
+
+[functions.revops-snapshot-builder]
+verify_jwt = false
+
+[functions.send-sms-campaign]
+verify_jwt = false
+
+[functions.sequence-processor]
+verify_jwt = false
+
+[functions.sequence-track]
+verify_jwt = false
+
+[functions.smart-notify]
+verify_jwt = false
+
+[functions.social-events-detector]
+verify_jwt = false
+
+[functions.submit-signature]
+verify_jwt = false
+
+[functions.sync-social-interests]
+verify_jwt = false
+
+[functions.template-success-notifications]
+verify_jwt = false
+
+[functions.validation-queue-worker]
+verify_jwt = false
+
+[functions.weekly-digest]
+verify_jwt = false
