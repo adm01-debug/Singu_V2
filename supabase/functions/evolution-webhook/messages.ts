@@ -136,7 +136,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
       }), 'ingestion_log transcription_init error:');
 
       // Chama voice-to-text com gravação automática da interação
-      supabase.functions.invoke('voice-to-text', {
+      const transcriptionWork = supabase.functions.invoke('voice-to-text', {
         body: {
           whatsappMessageId: dbMessageId,
           userId,
@@ -156,11 +156,13 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
           });
 
           // Atualiza o perfil analítico após os novos dados
-          supabase.functions.invoke('social-behavior-analyzer', {
+          await supabase.functions.invoke('social-behavior-analyzer', {
             body: { contactId, userId, companyId }
           }).catch(console.error);
         }
       }).catch(err => console.error('Transcription async error:', err));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (globalThis as any).EdgeRuntime?.waitUntil(transcriptionWork);
     }
   }
 
@@ -208,7 +210,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
 
       // Aciona análise DISC para mensagens longas (contactId existe neste bloco)
       if (messageContent.length >= 100) {
-        supabase.functions.invoke('disc-analyzer', {
+        const discWork = supabase.functions.invoke('disc-analyzer', {
           body: {
             texts: [messageContent],
             contactId,
@@ -216,6 +218,8 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
             userId,
           },
         }).catch((err: unknown) => console.error('DISC analyzer error:', err));
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (globalThis as any).EdgeRuntime?.waitUntil(discWork);
       }
     }
   }
