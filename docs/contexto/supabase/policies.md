@@ -1,5 +1,7 @@
 # Policies (RLS)
 
+> ⚠️ Seção `policies` não pôde ser atualizada nesta coleta (ver errors.md); mostrando a versão anterior.
+
 
 Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes por tabela em `tables/`.
 
