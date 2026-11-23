@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c6d9be5c08e4705c399ba7856572c7d3d398533e",
+  "sha": "6378bfb29fe31070524a225af5e50d284228e29d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-23 22:47 UTC",
-  "files_total": 4013,
+  "generated_at": "2026-11-23 22:48 UTC",
+  "files_total": 4014,
   "code_files": 3538,
   "code_lines": 478079
  },
  "version": "1.3.2",
- "facts_hash": "533d938cf4a419f9",
+ "facts_hash": "cc21237239f4230d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -190,6 +190,13 @@
     ]
    },
    {
+    "file": ".github/workflows/deploy-edge-functions.yml",
+    "name": "Deploy edge functions",
+    "triggers": [
+     "workflow_dispatch"
+    ]
+   },
+   {
     "file": ".github/workflows/docs-ci.yml",
     "name": "Documentação sem drift",
     "triggers": [
@@ -275,7 +282,45 @@
   },
   "monorepo_packages": [],
   "supabase_config": {
-   "functions_no_jwt": [],
+   "functions_no_jwt": [
+    "auto-rebatch-behavioral",
+    "auto-regen-behavioral-profiles",
+    "bitrix24-webhook",
+    "check-health-alerts",
+    "check-notifications",
+    "client-notifications",
+    "cs-health-recalc",
+    "deal-room-buyer-view",
+    "dual-write-proxy",
+    "evolution-bitrix-connector",
+    "evolution-webhook",
+    "forecast-snapshot-cron",
+    "form-submit-handler",
+    "generate-behavioral-profile",
+    "get-signature",
+    "incoming-webhook",
+    "intent-pixel-snippet",
+    "intent-tracker",
+    "lead-score-cron",
+    "lux-webhook",
+    "mcp-server",
+    "mql-evaluator",
+    "nurturing-runner",
+    "process-behavioral-regen-queue",
+    "process-webhook-dlq",
+    "retry-behavioral-profile",
+    "revops-snapshot-builder",
+    "send-sms-campaign",
+    "sequence-processor",
+    "sequence-track",
+    "smart-notify",
+    "social-events-detector",
+    "submit-signature",
+    "sync-social-interests",
+    "template-success-notifications",
+    "validation-queue-worker",
+    "weekly-digest"
+   ],
    "auth": {}
   },
   "name": "vite_react_shadcn_ts",
@@ -103667,7 +103712,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "behavioral_insight_feedback",
      "contact_analytical_profiles",
@@ -103694,7 +103739,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "behavioral_profile_regen_queue",
      "system_alerts"
@@ -103721,7 +103766,7 @@
     "methods": [
      "POST?"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "interactions"
@@ -103768,7 +103813,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "health_alert_settings",
@@ -103801,7 +103846,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contact_relatives",
      "contacts",
@@ -103851,7 +103896,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "alerts",
      "contacts",
@@ -104056,7 +104101,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "alerts",
      "cs_accounts",
@@ -104080,7 +104125,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [],
     "env": [
      "SUPABASE_SERVICE_ROLE_KEY",
@@ -104251,7 +104296,7 @@
     "methods": [
      "POST?"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [],
     "env": [
      "DUAL_WRITE_TABLES",
@@ -104513,7 +104558,7 @@
      "GET",
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "connector_log",
      "oauth_tokens"
@@ -104553,7 +104598,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "interactions",
@@ -104707,7 +104752,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "deal_forecasts",
      "forecast_periods",
@@ -104731,7 +104776,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [],
     "env": [
      "SUPABASE_SERVICE_ROLE_KEY",
@@ -104751,7 +104796,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "behavioral_insight_feedback",
      "call_logs",
@@ -104832,7 +104877,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "document_signatures",
      "document_views"
@@ -104915,7 +104960,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "incoming_webhook_dlq",
      "incoming_webhook_logs",
@@ -104963,7 +105008,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [],
     "env": [
      "SUPABASE_URL"
@@ -104984,7 +105029,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "intent_signals",
@@ -105008,7 +105053,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "interactions",
      "lead_score_recompute_queue"
@@ -105121,7 +105166,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "lux_intelligence"
@@ -105144,7 +105189,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "companies",
      "connection_configs",
@@ -105198,7 +105243,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "lead_scores",
      "mql_classifications",
@@ -105255,7 +105300,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "interactions",
@@ -105414,7 +105459,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "behavioral_profile_regen_queue"
     ],
@@ -105441,7 +105486,7 @@
      "OPTIONS",
      "POST"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "incoming_webhook_dlq",
      "incoming_webhooks"
@@ -105464,7 +105509,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "behavioral_profile_regen_queue"
     ],
@@ -105490,7 +105535,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "deal_forecasts",
@@ -105587,7 +105632,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "sms_campaign_recipients",
@@ -105640,7 +105685,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "sequence_email_reservations",
@@ -105679,7 +105724,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "sequence_events",
      "sequence_send_log"
@@ -105706,7 +105751,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contact_automation_settings",
      "contact_next_actions",
@@ -105797,7 +105842,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "notifications",
      "social_life_events",
@@ -105853,7 +105898,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "document_signatures"
     ],
@@ -105903,7 +105948,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "psychographic_audit_log",
      "social_behavior_analysis",
@@ -105964,7 +106009,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "alerts",
      "contacts",
@@ -106041,7 +106086,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "validation_queue"
     ],
@@ -106163,7 +106208,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "contacts",
      "interactions",
@@ -221743,7 +221788,45 @@
    "vincular_empresa_grupo",
    "webhook_log_message"
   ],
-  "public_functions": [],
+  "public_functions": [
+   "auto-rebatch-behavioral",
+   "auto-regen-behavioral-profiles",
+   "bitrix24-webhook",
+   "check-health-alerts",
+   "check-notifications",
+   "client-notifications",
+   "cs-health-recalc",
+   "deal-room-buyer-view",
+   "dual-write-proxy",
+   "evolution-bitrix-connector",
+   "evolution-webhook",
+   "forecast-snapshot-cron",
+   "form-submit-handler",
+   "generate-behavioral-profile",
+   "get-signature",
+   "incoming-webhook",
+   "intent-pixel-snippet",
+   "intent-tracker",
+   "lead-score-cron",
+   "lux-webhook",
+   "mcp-server",
+   "mql-evaluator",
+   "nurturing-runner",
+   "process-behavioral-regen-queue",
+   "process-webhook-dlq",
+   "retry-behavioral-profile",
+   "revops-snapshot-builder",
+   "send-sms-campaign",
+   "sequence-processor",
+   "sequence-track",
+   "smart-notify",
+   "social-events-detector",
+   "submit-signature",
+   "sync-social-interests",
+   "template-success-notifications",
+   "validation-queue-worker",
+   "weekly-digest"
+  ],
   "auth_config": {},
   "grants": [
    {
@@ -306964,10 +307047,21 @@
   }
  },
  "git": {
-  "sha": "c6d9be5c08e4705c399ba7856572c7d3d398533e",
+  "sha": "6378bfb29fe31070524a225af5e50d284228e29d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "6378bfb",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)",
+    "files": [
+     ".github/workflows/deploy-edge-functions.yml",
+     "docs/ci/README.md",
+     "supabase/config.toml"
+    ]
+   },
    {
     "sha": "c6d9be5",
     "date": "2026-11-23",
@@ -307346,21 +307440,16 @@
     "files": [
      "src/components/nlp/MetaProgramsProfiler.tsx"
     ]
-   },
-   {
-    "sha": "e453c9f",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(insights): carrega insights persistidos ao abrir a tela (#291)",
-    "files": [
-     "src/pages/Insights.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/nurturing-runner/index.ts",
     3
+   ],
+   [
+    "docs/ci/README.md",
+    2
    ],
    [
     ".github/workflows/smoke-edges-pendentes.yml",
@@ -307375,10 +307464,6 @@
     2
    ],
    [
-    "src/pages/Insights.tsx",
-    2
-   ],
-   [
     "supabase/functions/_shared/edge-types-contract_test.ts",
     2
    ],
@@ -307389,6 +307474,14 @@
    [
     "supabase/functions/send-sms-campaign/index.ts",
     2
+   ],
+   [
+    ".github/workflows/deploy-edge-functions.yml",
+    1
+   ],
+   [
+    "supabase/config.toml",
+    1
    ],
    [
     "supabase/functions/external-data/audit.ts",
@@ -307411,10 +307504,6 @@
     1
    ],
    [
-    "docs/ci/README.md",
-    1
-   ],
-   [
     "docs/lacunas/D_ui_rotas_componentes.md",
     1
    ],
@@ -307432,10 +307521,6 @@
    ],
    [
     "src/components/abm/ABMAccountEditDialog.tsx",
-    1
-   ],
-   [
-    "src/components/admin/conexoes/ConnectionCard.tsx",
     1
    ]
   ]

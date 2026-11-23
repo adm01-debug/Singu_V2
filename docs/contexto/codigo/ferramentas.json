@@ -10,7 +10,7 @@
    "JavaScript (143)",
    "JSON (22)",
    "Python (21)",
-   "YAML (19)"
+   "YAML (20)"
   ],
   "linguagem_principal": "TypeScript",
   "framework": "React",
@@ -275,6 +275,30 @@
    "actions": [
     "actions/checkout",
     "actions/dependency-review-action"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/deploy-edge-functions.yml",
+   "nome": "Deploy edge functions",
+   "gatilhos": [
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "deploy"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "supabase/setup-cli"
    ]
   },
   {
@@ -1377,7 +1401,45 @@
    "RESEND_FROM",
    "TWILIO_API_KEY"
   ],
-  "webhooks_recebidos": [],
+  "webhooks_recebidos": [
+   "auto-rebatch-behavioral",
+   "auto-regen-behavioral-profiles",
+   "bitrix24-webhook",
+   "check-health-alerts",
+   "check-notifications",
+   "client-notifications",
+   "cs-health-recalc",
+   "deal-room-buyer-view",
+   "dual-write-proxy",
+   "evolution-bitrix-connector",
+   "evolution-webhook",
+   "forecast-snapshot-cron",
+   "form-submit-handler",
+   "generate-behavioral-profile",
+   "get-signature",
+   "incoming-webhook",
+   "intent-pixel-snippet",
+   "intent-tracker",
+   "lead-score-cron",
+   "lux-webhook",
+   "mcp-server",
+   "mql-evaluator",
+   "nurturing-runner",
+   "process-behavioral-regen-queue",
+   "process-webhook-dlq",
+   "retry-behavioral-profile",
+   "revops-snapshot-builder",
+   "send-sms-campaign",
+   "sequence-processor",
+   "sequence-track",
+   "smart-notify",
+   "social-events-detector",
+   "submit-signature",
+   "sync-social-interests",
+   "template-success-notifications",
+   "validation-queue-worker",
+   "weekly-digest"
+  ],
   "realtime": [
    "cadence-updates:${user.id}",
    "contact-detail-${contactId}",

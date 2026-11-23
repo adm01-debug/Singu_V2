@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c6d9be5c08` · branch `main` · 2026-11-23 22:47 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6378bfb29f` · branch `main` · 2026-11-23 22:48 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -726,7 +726,43 @@
 
 ## Edge functions públicas (sem JWT — qualquer um chama)
 
-_nenhuma declarada em config.toml_
+- `auto-rebatch-behavioral`
+- `auto-regen-behavioral-profiles`
+- `bitrix24-webhook`
+- `check-health-alerts`
+- `check-notifications`
+- `client-notifications`
+- `cs-health-recalc`
+- `deal-room-buyer-view`
+- `dual-write-proxy`
+- `evolution-bitrix-connector`
+- `evolution-webhook`
+- `forecast-snapshot-cron`
+- `form-submit-handler`
+- `generate-behavioral-profile`
+- `get-signature`
+- `incoming-webhook`
+- `intent-pixel-snippet`
+- `intent-tracker`
+- `lead-score-cron`
+- `lux-webhook`
+- `mcp-server`
+- `mql-evaluator`
+- `nurturing-runner`
+- `process-behavioral-regen-queue`
+- `process-webhook-dlq`
+- `retry-behavioral-profile`
+- `revops-snapshot-builder`
+- `send-sms-campaign`
+- `sequence-processor`
+- `sequence-track`
+- `smart-notify`
+- `social-events-detector`
+- `submit-signature`
+- `sync-social-interests`
+- `template-success-notifications`
+- `validation-queue-worker`
+- `weekly-digest`
 
 ## Rotas protegidas no front
 

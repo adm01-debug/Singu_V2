@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `c6d9be5c08e4705c399ba7856572c7d3d398533e` (2026-11-23T19:46:25-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `6378bfb29fe31070524a225af5e50d284228e29d` (2026-11-23T19:46:29-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2093), SQL (1281), Markdown (158), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (19)
+- linguagens: TypeScript (2093), SQL (1281), Markdown (158), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3908 |
+| arquivos_total | 3909 |
 | arquivos_codigo | 2256 |
 | linhas_codigo | 421359 |
 | rotas | 116 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | migrations | 1108 |
 | cron_jobs | 44 |
 | testes | 278 |
-| workflows | 13 |
+| workflows | 14 |
 | scripts | 296 |
 | docs_md | 158 |
 
@@ -270,14 +270,14 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `ask-crm` — tabelas: user_roles; chamada por 1 arquivo(s) do front
 - `attribution-calculator` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `audit-analytics` — tabelas: audit_log; chamada por 1 arquivo(s) do front
-- `auto-rebatch-behavioral` — tabelas: behavioral_insight_feedback, contact_analytical_profiles, cron_secrets; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `auto-regen-behavioral-profiles` — tabelas: behavioral_profile_regen_queue, system_alerts; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `bitrix24-webhook` — tabelas: contacts, interactions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `auto-rebatch-behavioral` (verify_jwt=false) — tabelas: behavioral_insight_feedback, contact_analytical_profiles, cron_secrets; chamada por 0 arquivo(s) do front
+- `auto-regen-behavioral-profiles` (verify_jwt=false) — tabelas: behavioral_profile_regen_queue, system_alerts; chamada por 0 arquivo(s) do front
+- `bitrix24-webhook` (verify_jwt=false) — tabelas: contacts, interactions; chamada por 0 arquivo(s) do front
 - `bulk-revalidate` — tabelas: contacts, validation_queue; chamada por 1 arquivo(s) do front
-- `check-health-alerts` — tabelas: contacts, health_alert_settings, health_alerts, interactions; chamada por 1 arquivo(s) do front, por SQL/cron
-- `check-notifications` — tabelas: contact_relatives, contacts, insights, interactions, life_events; chamada por 0 arquivo(s) do front, por SQL/cron
+- `check-health-alerts` (verify_jwt=false) — tabelas: contacts, health_alert_settings, health_alerts, interactions; chamada por 1 arquivo(s) do front, por SQL/cron
+- `check-notifications` (verify_jwt=false) — tabelas: contact_relatives, contacts, insights, interactions, life_events; chamada por 0 arquivo(s) do front, por SQL/cron
 - `clear-must-reset-flag` — tabelas: migration_password_reset_log; chamada por 1 arquivo(s) do front
-- `client-notifications` — tabelas: alerts, contacts, interactions, life_events, purchase_history; chamada por 0 arquivo(s) do front, por SQL/cron
+- `client-notifications` (verify_jwt=false) — tabelas: alerts, contacts, interactions, life_events, purchase_history; chamada por 0 arquivo(s) do front, por SQL/cron
 - `connection-anomaly-detector` — tabelas: connection_anomalies, incoming_webhook_logs, incoming_webhooks; chamada por 1 arquivo(s) do front
 - `connection-introspect` — tabelas: connection_configs, information_schema.columns, information_schema.tables; chamada por 1 arquivo(s) do front
 - `connection-tester` — tabelas: connection_configs, connection_test_logs; chamada por 1 arquivo(s) do front
@@ -285,15 +285,15 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `conversation-coaching-digest` — tabelas: conversation_analyses; chamada por 1 arquivo(s) do front
 - `conversational-search` — tabelas: conversational_search_cache; chamada por 1 arquivo(s) do front
 - `crm-automation-monitor` — tabelas: contacts, crm_automation_logs; chamada por 0 arquivo(s) do front
-- `cs-health-recalc` — tabelas: alerts, cs_accounts, cs_health_signals; chamada por 0 arquivo(s) do front, por SQL/cron
-- `deal-room-buyer-view` — tabelas: -; chamada por 1 arquivo(s) do front
+- `cs-health-recalc` (verify_jwt=false) — tabelas: alerts, cs_accounts, cs_health_signals; chamada por 0 arquivo(s) do front, por SQL/cron
+- `deal-room-buyer-view` (verify_jwt=false) — tabelas: -; chamada por 1 arquivo(s) do front
 - `deal-room-health` — tabelas: deal_room_milestones, deal_room_stakeholders, deal_rooms; chamada por 1 arquivo(s) do front
 - `deal-room-share` — tabelas: deal_rooms; chamada por 1 arquivo(s) do front
 - `demand-forecast` — tabelas: interactions; chamada por 1 arquivo(s) do front
 - `detect-churn-risk` — tabelas: churn_risk_scores, contacts, interactions; chamada por 1 arquivo(s) do front
 - `detect-new-device` — tabelas: device_login_notifications, user_known_devices; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `disc-analyzer` — tabelas: contacts, disc_analysis_history, disc_communication_logs; chamada por 3 arquivo(s) do front
-- `dual-write-proxy` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `dual-write-proxy` (verify_jwt=false) — tabelas: -; chamada por 0 arquivo(s) do front
 - `elevenlabs-scribe-token` — tabelas: -; chamada por 1 arquivo(s) do front
 - `elevenlabs-tts` — tabelas: -; chamada por 1 arquivo(s) do front
 - `email-finder` — tabelas: email_finder_results; chamada por 1 arquivo(s) do front
@@ -304,69 +304,69 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `enrichlayer-linkedin` — tabelas: social_profiles; chamada por 1 arquivo(s) do front
 - `error-budget` — tabelas: system_alerts, system_health_snapshots; chamada por 1 arquivo(s) do front
 - `evolution-api` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `evolution-bitrix-connector` — tabelas: connector_log, oauth_tokens; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `evolution-webhook` — tabelas: contacts, interactions, whatsapp_ingestion_logs, whatsapp_instances, whatsapp_messages; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `evolution-bitrix-connector` (verify_jwt=false) — tabelas: connector_log, oauth_tokens; chamada por 0 arquivo(s) do front
+- `evolution-webhook` (verify_jwt=false) — tabelas: contacts, interactions, whatsapp_ingestion_logs, whatsapp_instances, whatsapp_messages; chamada por 0 arquivo(s) do front
 - `external-data` — tabelas: external_data_audit_log; chamada por 3 arquivo(s) do front
 - `ficha360-conversation-summary` — tabelas: ficha360_conversation_summaries; chamada por 1 arquivo(s) do front
 - `firecrawl-scrape` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `forecast-analyzer` — tabelas: deal_forecasts, forecast_quota_settings; chamada por 1 arquivo(s) do front
 - `forecast-narrative` — tabelas: deal_forecasts, forecast_periods; chamada por 1 arquivo(s) do front
-- `forecast-snapshot-cron` — tabelas: deal_forecasts, forecast_periods, forecast_snapshots; chamada por 0 arquivo(s) do front, por SQL/cron
-- `form-submit-handler` — tabelas: -; chamada por 1 arquivo(s) do front
-- `generate-behavioral-profile` — tabelas: behavioral_insight_feedback, call_logs, contacts, interactions, whatsapp_messages; chamada por 1 arquivo(s) do front
+- `forecast-snapshot-cron` (verify_jwt=false) — tabelas: deal_forecasts, forecast_periods, forecast_snapshots; chamada por 0 arquivo(s) do front, por SQL/cron
+- `form-submit-handler` (verify_jwt=false) — tabelas: -; chamada por 1 arquivo(s) do front
+- `generate-behavioral-profile` (verify_jwt=false) — tabelas: behavioral_insight_feedback, call_logs, contacts, interactions, whatsapp_messages; chamada por 1 arquivo(s) do front
 - `generate-insights` — tabelas: insights; chamada por 1 arquivo(s) do front
 - `generate-offer-suggestions` — tabelas: contact_analytical_profiles, contacts, interactions, offer_suggestions, purchase_history, social_behavior_analysis, social_insights; chamada por 1 arquivo(s) do front
-- `get-signature` — tabelas: document_signatures, document_views; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `get-signature` (verify_jwt=false) — tabelas: document_signatures, document_views; chamada por 0 arquivo(s) do front
 - `health` — tabelas: companies, profiles; chamada por 1 arquivo(s) do front
 - `health-aggregate` — tabelas: alerts, companies, connection_configs, connection_test_logs, email_logs, incoming_webhook_logs, profiles; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `incoming-webhook` — tabelas: incoming_webhook_dlq, incoming_webhook_logs, incoming_webhook_nonces, incoming_webhooks; chamada por 1 arquivo(s) do front
+- `incoming-webhook` (verify_jwt=false) — tabelas: incoming_webhook_dlq, incoming_webhook_logs, incoming_webhook_nonces, incoming_webhooks; chamada por 1 arquivo(s) do front
 - `intent-aggregator` — tabelas: intent_scores, intent_signals; chamada por 1 arquivo(s) do front
-- `intent-pixel-snippet` — tabelas: -; chamada por 1 arquivo(s) do front
-- `intent-tracker` — tabelas: contacts, intent_signals, intent_tracking_pixels; chamada por 0 arquivo(s) do front
-- `lead-score-cron` — tabelas: interactions, lead_score_recompute_queue; chamada por 0 arquivo(s) do front, por SQL/cron
+- `intent-pixel-snippet` (verify_jwt=false) — tabelas: -; chamada por 1 arquivo(s) do front
+- `intent-tracker` (verify_jwt=false) — tabelas: contacts, intent_signals, intent_tracking_pixels; chamada por 0 arquivo(s) do front
+- `lead-score-cron` (verify_jwt=false) — tabelas: interactions, lead_score_recompute_queue; chamada por 0 arquivo(s) do front, por SQL/cron
 - `lead-score-threshold-runner` — tabelas: alerts, contacts, lead_score_threshold_automations, lead_score_threshold_log, tasks; chamada por 0 arquivo(s) do front
 - `lead-scorer` — tabelas: contacts, intent_signals, interactions, lead_score_recompute_queue, lead_score_rules, lead_score_thresholds, lead_scores; chamada por 1 arquivo(s) do front
 - `lux-trigger` — tabelas: lux_intelligence, lux_webhook_config; chamada por 1 arquivo(s) do front
-- `lux-webhook` — tabelas: contacts, lux_intelligence; chamada por 0 arquivo(s) do front
-- `mcp-server` — tabelas: companies, connection_configs, contacts, deals, interactions, mcp_tool_calls; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `lux-webhook` (verify_jwt=false) — tabelas: contacts, lux_intelligence; chamada por 0 arquivo(s) do front
+- `mcp-server` (verify_jwt=false) — tabelas: companies, connection_configs, contacts, deals, interactions, mcp_tool_calls; chamada por 0 arquivo(s) do front
 - `meeting-summary` — tabelas: interactions, meeting_summaries; chamada por 1 arquivo(s) do front
-- `mql-evaluator` — tabelas: lead_scores, mql_classifications, mql_criteria; chamada por 0 arquivo(s) do front, por SQL/cron
+- `mql-evaluator` (verify_jwt=false) — tabelas: lead_scores, mql_classifications, mql_criteria; chamada por 0 arquivo(s) do front, por SQL/cron
 - `next-best-action` — tabelas: contact_analytical_profiles, contact_next_actions, contacts, interactions, neuro_behavioral_history, whatsapp_messages; chamada por 1 arquivo(s) do front
-- `nurturing-runner` — tabelas: contacts, interactions, nurturing_executions, nurturing_workflows, tasks; chamada por 1 arquivo(s) do front, por SQL/cron
+- `nurturing-runner` (verify_jwt=false) — tabelas: contacts, interactions, nurturing_executions, nurturing_workflows, tasks; chamada por 1 arquivo(s) do front, por SQL/cron
 - `objection-context-summary` — tabelas: interactions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `objection-handler` — tabelas: contact_objection_scripts, contacts, crm_objection_intelligence; chamada por 1 arquivo(s) do front
 - `phone-validator` — tabelas: phone_validations; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `playbook-generator` — tabelas: sales_playbooks; chamada por 1 arquivo(s) do front
 - `playbook-recommender` — tabelas: battle_cards, sales_playbooks; chamada por 1 arquivo(s) do front
-- `process-behavioral-regen-queue` — tabelas: behavioral_profile_regen_queue; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `process-webhook-dlq` — tabelas: incoming_webhook_dlq, incoming_webhooks; chamada por 1 arquivo(s) do front, por SQL/cron
-- `retry-behavioral-profile` — tabelas: behavioral_profile_regen_queue; chamada por 1 arquivo(s) do front
-- `revops-snapshot-builder` — tabelas: contacts, deal_forecasts, mql_classifications, revops_alerts, revops_snapshots; chamada por 1 arquivo(s) do front, por SQL/cron
+- `process-behavioral-regen-queue` (verify_jwt=false) — tabelas: behavioral_profile_regen_queue; chamada por 0 arquivo(s) do front
+- `process-webhook-dlq` (verify_jwt=false) — tabelas: incoming_webhook_dlq, incoming_webhooks; chamada por 1 arquivo(s) do front, por SQL/cron
+- `retry-behavioral-profile` (verify_jwt=false) — tabelas: behavioral_profile_regen_queue; chamada por 1 arquivo(s) do front
+- `revops-snapshot-builder` (verify_jwt=false) — tabelas: contacts, deal_forecasts, mql_classifications, revops_alerts, revops_snapshots; chamada por 1 arquivo(s) do front, por SQL/cron
 - `rfm-analyzer` — tabelas: contacts, interactions, purchase_history; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `semantic-search` — tabelas: semantic_search_cache; chamada por 1 arquivo(s) do front
 - `send-push-notification` — tabelas: push_subscriptions; chamada por 0 arquivo(s) do front
-- `send-sms-campaign` — tabelas: contacts, sms_campaign_recipients, sms_campaigns, sms_opt_outs; chamada por 1 arquivo(s) do front
+- `send-sms-campaign` (verify_jwt=false) — tabelas: contacts, sms_campaign_recipients, sms_campaigns, sms_opt_outs; chamada por 1 arquivo(s) do front
 - `send-transactional-email` — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `sequence-processor` — tabelas: contacts, sequence_email_reservations, sequence_enrollments, sequence_events, sequence_send_log, sequence_steps, sequences; chamada por 1 arquivo(s) do front, por SQL/cron
-- `sequence-track` — tabelas: sequence_events, sequence_send_log; chamada por 0 arquivo(s) do front
-- `smart-notify` — tabelas: contact_automation_settings, contact_next_actions, notification_logs, profiles; chamada por 1 arquivo(s) do front, por SQL/cron
+- `sequence-processor` (verify_jwt=false) — tabelas: contacts, sequence_email_reservations, sequence_enrollments, sequence_events, sequence_send_log, sequence_steps, sequences; chamada por 1 arquivo(s) do front, por SQL/cron
+- `sequence-track` (verify_jwt=false) — tabelas: sequence_events, sequence_send_log; chamada por 0 arquivo(s) do front
+- `smart-notify` (verify_jwt=false) — tabelas: contact_automation_settings, contact_next_actions, notification_logs, profiles; chamada por 1 arquivo(s) do front, por SQL/cron
 - `smart-reminders` — tabelas: contact_automation_settings, contact_next_actions, contacts, interactions, life_events; chamada por 1 arquivo(s) do front
 - `social-behavior-analyzer` — tabelas: contact_analytical_profiles, contacts, interactions, social_behavior_analysis, social_profiles; chamada por 0 arquivo(s) do front
-- `social-events-detector` — tabelas: notifications, social_life_events, social_profiles, social_scraping_schedule; chamada por 1 arquivo(s) do front
+- `social-events-detector` (verify_jwt=false) — tabelas: notifications, social_life_events, social_profiles, social_scraping_schedule; chamada por 1 arquivo(s) do front
 - `social-profile-scraper` — tabelas: social_life_events, social_profiles, social_scraping_schedule, suggested_rapport_intel; chamada por 2 arquivo(s) do front
-- `submit-signature` — tabelas: document_signatures; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `submit-signature` (verify_jwt=false) — tabelas: document_signatures; chamada por 0 arquivo(s) do front
 - `suggest-next-action` — tabelas: contact_predictive_roadmap, contacts, interactions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `sync-social-interests` — tabelas: psychographic_audit_log, social_behavior_analysis, social_sync_queue; chamada por 1 arquivo(s) do front
+- `sync-social-interests` (verify_jwt=false) — tabelas: psychographic_audit_log, social_behavior_analysis, social_sync_queue; chamada por 1 arquivo(s) do front
 - `system-health` — tabelas: alerts, companies, email_logs, profiles, system_health_snapshots; chamada por 2 arquivo(s) do front
-- `template-success-notifications` — tabelas: alerts, contacts, favorite_templates, profiles, push_subscriptions, trigger_usage_history; chamada por 1 arquivo(s) do front, por SQL/cron
+- `template-success-notifications` (verify_jwt=false) — tabelas: alerts, contacts, favorite_templates, profiles, push_subscriptions, trigger_usage_history; chamada por 1 arquivo(s) do front, por SQL/cron
 - `territory-optimization` — tabelas: sales_team_members; chamada por 1 arquivo(s) do front
 - `validate-access` — tabelas: access_blocked_log, access_security_settings, geo_allowed_countries, ip_whitelist; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `validation-queue-worker` — tabelas: validation_queue; chamada por 1 arquivo(s) do front, por SQL/cron
+- `validation-queue-worker` (verify_jwt=false) — tabelas: validation_queue; chamada por 1 arquivo(s) do front, por SQL/cron
 - `visual-search` — tabelas: -; chamada por 1 arquivo(s) do front
 - `voice-agent` — tabelas: -; chamada por 1 arquivo(s) do front
 - `voice-ai-health` — tabelas: -; chamada por 1 arquivo(s) do front
 - `voice-to-text` — tabelas: interactions, whatsapp_messages; chamada por 2 arquivo(s) do front
-- `weekly-digest` — tabelas: contacts, interactions, profiles, weekly_report_settings, weekly_reports; chamada por 1 arquivo(s) do front, por SQL/cron
+- `weekly-digest` (verify_jwt=false) — tabelas: contacts, interactions, profiles, weekly_report_settings, weekly_reports; chamada por 1 arquivo(s) do front, por SQL/cron
 - `whatsapp-import` — tabelas: companies, contacts, whatsapp_ingestion_logs, whatsapp_messages, whatsapp_transcriptions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `win-loss-analyzer` — tabelas: win_loss_insights, win_loss_records; chamada por 1 arquivo(s) do front
 - `win-loss-record-deal` — tabelas: win_loss_records; chamada por 1 arquivo(s) do front
@@ -420,7 +420,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Integrações externas
 - SDKs: ElevenLabs, Supabase, react-query, zod
 - hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, x.supabase.co, api.elevenlabs.io, wa.me, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.supabase.com, singu-v2.vercel.app, api.deepseek.com, api.lovable.dev, api.resend.com
-- webhooks recebidos: nenhum
+- webhooks recebidos: auto-rebatch-behavioral, auto-regen-behavioral-profiles, bitrix24-webhook, check-health-alerts, check-notifications, client-notifications, cs-health-recalc, deal-room-buyer-view, dual-write-proxy, evolution-bitrix-connector, evolution-webhook, forecast-snapshot-cron, form-submit-handler, generate-behavioral-profile, get-signature, incoming-webhook, intent-pixel-snippet, intent-tracker, lead-score-cron, lux-webhook, mcp-server, mql-evaluator, nurturing-runner, process-behavioral-regen-queue, process-webhook-dlq, retry-behavioral-profile, revops-snapshot-builder, send-sms-campaign, sequence-processor, sequence-track, smart-notify, social-events-detector, submit-signature, sync-social-interests, template-success-notifications, validation-queue-worker, weekly-digest
 - env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, DEEPSEEK_API_KEY, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, LUX_WEBHOOK_SECRET, N8N_LUX_WEBHOOK_URL, RESEND_API_KEY, RESEND_FROM, TWILIO_API_KEY
 
 ## Permissões / papéis
@@ -433,7 +433,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rotas_sem_arquivo: 0
 - componentes_ambiguos: 0
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
-- edges_orfas: 24 — ex.: attribution-calculator, auto-rebatch-behavioral, auto-regen-behavioral-profiles
+- edges_orfas: 14 — ex.: attribution-calculator, detect-new-device, email-verifier
 - edges_chamadas_sem_pasta: 0
 - tabelas_sem_rls: 131 — ex.: _stg_pac_nums, access_denied_logs, active_power_ups
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
@@ -447,8 +447,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25890 nós · 41384 arestas · 3069 comunidades · grafo do commit `c6d9be5c`
-- comunidades maiores: lucide-react (290), _shared/auth.ts (287), ref_types (273), framer-motion (268), 02_tables.sql (259), react (256), useAuth (245), ref_lib (245), ref_hooks (235), ref_components (234), 📖 Dicionário de Dados — SINGU CRM (224), react-router-dom (221)
+- 25891 nós · 41385 arestas · 3104 comunidades · grafo do commit `6378bfb2`
+- comunidades maiores: ref_hooks (454), sonner (305), _shared/auth.ts (304), ref_lib (297), framer-motion (265), react (259), 02_tables.sql (259), useAuth (247), ref_components (239), react-router-dom (237), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (215)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -474,6 +474,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `ci.yml` — CI (pull_request, push)
 - `contexto.yml` — Contexto para agentes de IA (10 min) (push, schedule, workflow_dispatch; cron 3 * * * *)
 - `dependency-review.yml` — Dependency Review (pull_request)
+- `deploy-edge-functions.yml` — Deploy edge functions (workflow_dispatch)
 - `docs-ci.yml` — Documentação sem drift (pull_request, push)
 - `estado-real.yml` — Estado real do repositório (pull_request, push, workflow_dispatch)
 - `fix-jwt-proxies-externas.yml` — Fix JWT proxies externas (workflow_dispatch)
@@ -586,6 +587,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-23 `6378bfb` ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)
 - 2026-11-23 `c6d9be5` fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)
 - 2026-11-23 `9ca4bab` fix: loga falha de insert da auditoria do external-data (#321)
 - 2026-11-23 `76a33c0` chore(matriz): marca EF-3/5/7/11/12/13/14/16/17 e F/F15/19/25/34/36/37/40/60/62 como RC (#319)
@@ -600,7 +602,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-23 `183969c` fix(edges): corrige AR EF-3/EF-11/EF-13/EF-16 (#309)
 - 2026-11-23 `8a6d5a8` fix(ef14): filtro avatar contacts.upsert IS NULL em vez de IS NOT NULL (#311)
 - 2026-11-23 `d2a5777` fix(ef7-ef12): claim atomico sms-campaign, paginacao cron e NaN forecast (#310)
-- 2026-11-22 `1f88d85` feat: integra EF win-loss-record-deal e religa digest de coaching (#306)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

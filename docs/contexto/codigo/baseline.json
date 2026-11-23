@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "c6d9be5c08e4705c399ba7856572c7d3d398533e",
+  "commit": "6378bfb29fe31070524a225af5e50d284228e29d",
   "branch": "main",
-  "data_commit": "2026-11-23T19:46:25-03:00",
+  "data_commit": "2026-11-23T19:46:29-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "6378bfb",
+    "data": "2026-11-23",
+    "assunto": "ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)"
+   },
    {
     "sha": "c6d9be5",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "d1e1811",
     "data": "2026-11-21",
     "assunto": "fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)"
-   },
-   {
-    "sha": "4bc4a7c",
-    "data": "2026-11-21",
-    "assunto": "fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)"
    }
   ],
-  "arquivos_mudados_7d": 1036,
+  "arquivos_mudados_7d": 1038,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 155
+    "commits": 156
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3908,
+  "arquivos_total": 3909,
   "arquivos_codigo": 2256,
   "linhas_codigo": 421359,
   "rotas": 116,
@@ -341,7 +341,7 @@
   "migrations": 1108,
   "cron_jobs": 44,
   "testes": 278,
-  "workflows": 13,
+  "workflows": 14,
   "scripts": 296,
   "docs_md": 158
  },
@@ -940,26 +940,16 @@
   ],
   "edges_orfas": [
    "attribution-calculator",
-   "auto-rebatch-behavioral",
-   "auto-regen-behavioral-profiles",
-   "bitrix24-webhook",
    "detect-new-device",
-   "dual-write-proxy",
    "email-verifier",
    "enrich-contacts",
    "evolution-api",
-   "evolution-bitrix-connector",
-   "evolution-webhook",
    "firecrawl-scrape",
-   "get-signature",
    "health-aggregate",
-   "mcp-server",
    "objection-context-summary",
    "phone-validator",
-   "process-behavioral-regen-queue",
    "rfm-analyzer",
    "send-transactional-email",
-   "submit-signature",
    "suggest-next-action",
    "validate-access",
    "whatsapp-import"
