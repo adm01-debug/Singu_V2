@@ -56,13 +56,14 @@ Deno.serve(async (req) => {
     }
 
     // 3 parallel queries for ALL users at once (eliminates N*3 round-trips)
+    // F/F40: usa lead_scores.total_score (canônico) em vez de contacts.lead_score (denormalizado/obsoleto)
     const [contactsResult, criteriaResult] = await Promise.all([
-      supabase.from("contacts").select("id, user_id, lead_score").in("user_id", userIds).gte("lead_score", 40).limit(50_000),
+      supabase.from("lead_scores").select("contact_id, user_id, total_score").in("user_id", userIds).gte("total_score", 40).limit(50_000),
       supabase.from("mql_criteria").select("id, user_id, conditions").in("user_id", userIds).eq("is_active", true).order("priority", { ascending: false }).limit(1000),
     ]);
 
     // Build per-user maps
-    type ContactRow = { id: string; user_id: string; lead_score: number };
+    type ContactRow = { contact_id: string; user_id: string; total_score: number };
     type CritRow = { id: string; user_id: string; conditions: unknown };
     const contactsByUser = new Map<string, ContactRow[]>();
     for (const c of (contactsResult.data ?? []) as ContactRow[]) {
@@ -79,7 +80,7 @@ Deno.serve(async (req) => {
     const allCandidateIds: string[] = [];
     for (const uid of userIds) {
       const contacts = contactsByUser.get(uid) ?? [];
-      for (const c of contacts) allCandidateIds.push(c.id);
+      for (const c of contacts) allCandidateIds.push(c.contact_id);
     }
 
     const { data: existingRows } = allCandidateIds.length > 0
@@ -98,11 +99,11 @@ Deno.serve(async (req) => {
       const minScore = (crit.conditions as { min_score?: number })?.min_score ?? 50;
       for (const c of contacts) {
         evaluated++;
-        if (alreadyClassified.has(c.id)) continue;
-        if ((c.lead_score ?? 0) >= minScore) {
+        if (alreadyClassified.has(c.contact_id)) continue;
+        if ((c.total_score ?? 0) >= minScore) {
           allNewClassifications.push({
-            user_id: uid, contact_id: c.id, criteria_id: crit.id,
-            status: "mql", score_snapshot: c.lead_score, reason: "Cron auto-evaluation",
+            user_id: uid, contact_id: c.contact_id, criteria_id: crit.id,
+            status: "mql", score_snapshot: c.total_score, reason: "Cron auto-evaluation",
           });
         }
       }

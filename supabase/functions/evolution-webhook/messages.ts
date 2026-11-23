@@ -5,14 +5,8 @@ import { readEventData, requireMessageData, requireMessageKey, messageUpdateData
 // ========================
 // MESSAGES.UPSERT - Nova mensagem recebida/enviada
 // ========================
-export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: unknown, instance: string, ownerId: string) {
-  const data = requireMessageData(payload);
-  const phoneNumber = data.key?.remoteJid?.replace('@s.whatsapp.net', '').replace('@g.us', '');
-  const isFromMe = data.key?.fromMe;
-  const senderName = data.pushName || 'Desconhecido';
-  const messageId = data.key?.id;
-
-  // Extrai o conteúdo da mensagem
+// Extrai o conteudo e o tipo da mensagem recebida (reduz complexidade cognitiva)
+function extractMessageContent(data: ReturnType<typeof requireMessageData>): { messageType: string; messageContent: string } {
   let messageContent = '';
   let messageType = 'text';
 
@@ -49,9 +43,18 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
     messageContent = data.message.pollCreationMessage.name || '[Enquete]';
   }
 
-  // Limita o conteúdo para evitar abuso (whatsapp_messages.content é TEXT)
-  messageContent = messageContent.slice(0, 100_000);
+  // Limita o conteudo para evitar abuso (whatsapp_messages.content e TEXT)
+  return { messageType, messageContent: messageContent.slice(0, 100_000) };
+}
 
+export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload: unknown, instance: string, ownerId: string) {
+  const data = requireMessageData(payload);
+  const phoneNumber = data.key?.remoteJid?.replace('@s.whatsapp.net', '').replace('@g.us', '');
+  const isFromMe = data.key?.fromMe;
+  const senderName = data.pushName || 'Desconhecido';
+  const messageId = data.key?.id;
+
+  const { messageType, messageContent } = extractMessageContent(data);
   // Ignora mensagens sem conteúdo
   if (!messageContent && messageType === 'text') {
     return jsonResponse({ status: 'ignored', reason: 'no text content' });
@@ -136,11 +139,12 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
       }), 'ingestion_log transcription_init error:');
 
       // Chama voice-to-text com gravação automática da interação
+      // EF-17: EdgeRuntime.waitUntil garante execução pós-response
       const transcriptionWork = supabase.functions.invoke('voice-to-text', {
         body: {
           whatsappMessageId: dbMessageId,
           userId,
-          autoSave: true, // Gravação pelo servidor
+          autoSave: true,
           contactId,
           companyId
         },
@@ -210,6 +214,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
 
       // Aciona análise DISC para mensagens longas (contactId existe neste bloco)
       if (messageContent.length >= 100) {
+
         const discWork = supabase.functions.invoke('disc-analyzer', {
           body: {
             texts: [messageContent],
@@ -222,6 +227,15 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
         (globalThis as any).EdgeRuntime?.waitUntil(discWork);
       }
     }
+  }
+
+  // F/F15: aciona crm-automation-monitor para alimentar widget de audit log
+  if (contactId && userId) {
+    const crmMonitorWork = supabase.functions.invoke('crm-automation-monitor', {
+      body: { contact_id: contactId, user_id: userId }
+    }).catch((err: unknown) => console.error('CRM monitor error:', err));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).EdgeRuntime?.waitUntil(crmMonitorWork);
   }
 
   return jsonResponse({

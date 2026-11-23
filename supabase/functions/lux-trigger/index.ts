@@ -1,4 +1,3 @@
-import { bestEffortWrite } from "../_shared/best-effort-write.ts";
 import { scopedCorsHeaders, guardBody } from "../_shared/auth.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "npm:zod@3.23.8";
@@ -165,6 +164,8 @@ Deno.serve(async (req) => {
           entityData,
           userId: user.id,
           callbackUrl,
+          // F/F37: segredo compartilhado para que o serviço externo autentique o callback
+          callbackSecret: Deno.env.get('LUX_WEBHOOK_SECRET') ?? '',
         }),
       },
       maxRetries,
@@ -173,10 +174,12 @@ Deno.serve(async (req) => {
 
     if (!result.ok) {
       console.error(`[lux-trigger] Webhook failed after retries: ${result.error}`);
-      await bestEffortWrite(serviceClient
+      // F/F37: status=error é transição crítica de estado — usar update direto (não bestEffortWrite)
+      const { error: updateErr } = await serviceClient
         .from('lux_intelligence')
         .update({ status: 'error', error_message: `Webhook failed: ${result.error}` })
-        .eq('id', luxRecord.id), 'lux_intelligence error update error:');
+        .eq('id', luxRecord.id);
+      if (updateErr) console.error('[lux-trigger] Failed to mark record as error:', updateErr.message);
     } else {
       console.log(`[lux-trigger] Webhook triggered successfully (status=${result.status})`);
     }
