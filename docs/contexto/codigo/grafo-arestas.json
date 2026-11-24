@@ -335,6 +335,7 @@
   ],
   "src/app/AppRoutes.tsx": [
    "src/app/lazyPages.tsx",
+   "src/components/auth/RequirePermission.tsx",
    "src/components/feedback/ErrorBoundary.tsx",
    "src/components/feedback/PageLoadingFallback.tsx",
    "src/components/skeletons/PageSkeletons.tsx",
@@ -1259,6 +1260,9 @@
    "src/components/feedback/PageLoadingFallback.tsx",
    "src/components/ui/button.tsx",
    "src/hooks/useMFAGuard.ts"
+  ],
+  "src/components/auth/RequirePermission.tsx": [
+   "src/hooks/useRBAC.tsx"
   ],
   "src/components/automation/ActionConfigForm.tsx": [
    "src/components/ui/input.tsx",
@@ -5333,6 +5337,8 @@
    "src/components/ui/sidebar.tsx",
    "src/hooks/useAuth.tsx",
    "src/hooks/useIsAdmin.ts",
+   "src/hooks/useRBAC.tsx",
+   "src/lib/routePermissions.ts",
    "src/lib/utils.ts",
    "src/pages/ConversationIntelligence.tsx"
   ],
@@ -5359,6 +5365,8 @@
   "src/components/layout/MobileSidebarDrawer.tsx": [
    "src/components/ui/avatar.tsx",
    "src/hooks/useAuth.tsx",
+   "src/hooks/useRBAC.tsx",
+   "src/lib/routePermissions.ts",
    "src/lib/utils.ts"
   ],
   "src/components/lead-routing/LeadRoutingModule.tsx": [

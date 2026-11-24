@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 278,
+ "total": 280,
  "por_tipo": {
   "contrato": 41,
   "e2e": 12,
   "pytest": 9,
-  "unit": 214
+  "unit": 216
  },
  "onde_ficam": [
   {
@@ -19,7 +19,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 99
+   "arquivos": 101
   },
   {
    "padrao": "tests/",
@@ -685,6 +685,15 @@
     "src/hooks/useDataHealthView.ts"
    ],
    "casos": 3
+  },
+  {
+   "arquivo": "src/components/auth/__tests__/RequirePermission.test.tsx",
+   "tipo": "unit",
+   "linhas": 71,
+   "testa": [
+    "src/components/auth/RequirePermission.tsx"
+   ],
+   "casos": 4
   },
   {
    "arquivo": "src/components/campaigns/__tests__/CampaignDetailDrawer.test.tsx",
@@ -1922,6 +1931,15 @@
    "casos": 5
   },
   {
+   "arquivo": "src/lib/__tests__/routePermissions.test.ts",
+   "tipo": "unit",
+   "linhas": 31,
+   "testa": [
+    "src/lib/routePermissions.ts"
+   ],
+   "casos": 6
+  },
+  {
    "arquivo": "src/lib/__tests__/rpcChurn.test.ts",
    "tipo": "unit",
    "linhas": 32,
@@ -2575,6 +2593,7 @@
   "src/components/analytics/BehaviorAlertsPanel.tsx": 1,
   "src/components/analytics/DataHealthWidget.tsx": 1,
   "src/components/auth/MFAGuard.tsx": 1,
+  "src/components/auth/RequirePermission.tsx": 1,
   "src/components/campaigns/CampaignDetailDrawer.tsx": 1,
   "src/components/carnegie/MessageReviewPanel.tsx": 1,
   "src/components/company-detail/CompanyCommercialTab.tsx": 1,
@@ -2724,6 +2743,7 @@
   "src/lib/providerGuard.ts": 2,
   "src/lib/pushNotifications.ts": 2,
   "src/lib/resilientFetch.ts": 1,
+  "src/lib/routePermissions.ts": 1,
   "src/lib/rpcChurn.ts": 1,
   "src/lib/rpcPlanDiff.ts": 1,
   "src/lib/sanitize.ts": 1,

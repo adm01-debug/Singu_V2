@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8b94ca9427` · branch `main` · 2026-11-24 16:15 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `de9c0c7abf` · branch `main` · 2026-11-24 16:38 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3224,6 +3224,10 @@ _nenhum item encontrado_
   ```
   hour: number; minute: number; bestTimeApplied: boolean
   ```
+- **canAccessRoute(url: string, hasPermission: (permission: string)** — `src/lib/routePermissions.ts`
+  ```
+  boolean,
+  ```
 - **generateMeetingInvite(ctx: MeetingInviteContext)** — `src/lib/scriptGenerator.ts`
   ```
   whatsapp: string; email: { subject: string; body: string };
@@ -4728,7 +4732,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
-## K. Testes como especificação (3242 testes em 253 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3254 testes em 255 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4868,6 +4872,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/relacoes-estendidas-gatilhos.test.ts` | 7 | relações dos gatilhos estendidos · todo conflito estendido passa a ser detectado · toda sinergia estendida passa a ser detectada · não perde nem altera nenhuma relação que já estava em uso … |
 | `src/hooks/__tests__/talk-ratio-medicao.test.ts` | 7 | analyzeTalkRatio · não devolve proporção de fala: ela exige os dois lados da conversa · separa pergunta aberta de fechada pelos padrões do módulo · conta escuta ativa e reconhecimento a partir do texto … |
 | `src/lib/errorReporting.unload.test.ts` | 7 | Envio final autenticado de erros · inicia o envio em segundo plano sem consultar a sessão nem repetir no fechamento · descarta erros anteriores ao login sem descartar os capturados após autenticar · descarta lote anônimo se o login acontece durante a consulta da sessão … |
+| `src/lib/__tests__/routePermissions.test.ts` | 7 | canAccessRoute · libera rota fora do mapa de permissoes · libera quando o usuario nao tem papel (fail-open) · libera enquanto o RBAC carrega … |
 | `src/lib/insights/__tests__/pickTopPassages.test.ts` | 7 | pickTopPassages · retorna até MAX_TOTAL_CAP itens mesmo com totalCap maior · é determinística: mesma entrada → mesma saída · aplica round-robin entre fontes (distribui antes de aprofundar) … |
 | `scripts/maintenance/tests/hooks.mjs` | 6 | hook ${name} bloqueante impede commit validado · hooks versionados rodam offline sem .env/segredo e commit inclui escopo obrigatório · hook que altera e adiciona o patch é rejeitado depois do commit isolado · hook que remove o escopo da mensagem não produz commit validado … |
 | `src/components/interactions/__tests__/InfiniteScrollSentinel.test.tsx` | 6 | InfiniteScrollSentinel · não renderiza nada quando total=0 · exibe progressbar com aria-values e contador no estado hasMore · exibe estado final sem barra quando !hasMore … |
@@ -4892,6 +4897,7 @@ _nenhum item encontrado_
 | `scripts/check-rls-profiles.test.mjs` | 5 | RLS rejeita JWT ${jwt ?  · RLS exige também os perfis declarados nos metadados · RLS não ignora perfil desconhecido no baseline · RLS permite coleta anônima quando somente esse perfil é exigido … |
 | `scripts/maintenance/tests/formatting.mjs` | 5 | scan Prettier rejeita ${name} · generated e types.ts ficam fora de candidatos e alterações laterais são rejeitadas · formatter não pode mudar permissões ou remover arquivos rastreados · ESLint não aceita diretivas inline para regras fora da allowlist … |
 | `scripts/migration/ddl/ddl.test.mjs` | 5 | 99_apply_all.sql: inclui 00–11 uma vez cada, na ordem que respeita as dependências, com \\ir; 12 fica de fora · dependências que justificam a ordem existem de fato no dump · fixture supabase-stubs.sql é idempotente · dump COMO ESTÁ: os únicos erros são os defeitos conhecidos do gerador e suas cascatas … |
+| `src/components/auth/__tests__/RequirePermission.test.tsx` | 5 | RequirePermission · libera quando o usuário não tem papel atribuído (fail-open) · libera quando o papel tem a permissão · redireciona para a home quando o papel não tem a permissão … |
 | `src/components/contact-detail/SoftDeletePanel.test.tsx` | 5 | confirmação da lixeira sem depender de realtime · fecha o diálogo e invalida somente a ficha correta após arquivamento confirmado · invalida a ficha após restauração confirmada · mantém o diálogo e não anuncia sucesso com resposta inválida: %j … |
 | `src/components/interactions/__tests__/DateRangePopover.clear.integration.test.tsx` | 5 | DateRangePopover › Limpar período (integração com URL/hook) · remove  · remove apenas  · remove apenas  … |
 | `src/components/interactions/__tests__/ViewModeChips.test.tsx` | 5 | ViewModeChips · renderiza 3 chips · chip ativo tem aria-pressed=true · click chama onChange com a key correta … |
@@ -5174,6 +5180,8 @@ _nenhum item encontrado_
 | Visível apenas para admins. Atualização propaga em ≤5 min (staleTime do hook). | `src/components/admin/MttaSlaThresholdEditor.tsx` |
 | * Limite de latência aceitável (ms) — alinhado ao alerta RpcPerfDegradation. */ | `src/components/admin/RpcPlanChurnTimelineChart.tsx` |
 | O webhook nativo não calcula HMAC SHA-256 e não deve chamar esta URL diretamente. | `src/components/admin/conexoes/WebhookSnippetsSheet.tsx` |
+| * Guard de permissão por rota, sobre a matriz `permissions` x `role_permissions`. | `src/components/auth/RequirePermission.tsx` |
+| possui a permissão pedida. | `src/components/auth/RequirePermission.tsx` |
 | que existiam apenas como dados sem tela. | `src/components/carnegie/CarnegieExtendedLibrary.tsx` |
 | Future Projection & Past Validation */} | `src/components/carnegie/IdentityLabelingPanel.tsx` |
 | que difere do shape cru de `contacts`. Mapeamos apenas o que os hooks leem, | `src/components/contact-detail/ContactBehavioralTab.tsx` |
@@ -5302,6 +5310,7 @@ _nenhum item encontrado_
 | Em prod, persistimos apenas se for aviso importante ou erro | `src/lib/logger.ts` |
 | dá InvalidStateError. Cancela e refaz com a chave atual; a permissão já concedida é mantida (sem novo prompt). | `src/lib/pushNotifications.ts` |
 | * Migra em silêncio quem já tem permissão e uma assinatura criada com outra chave VAPID. Barato: só olha a assinatura local. | `src/lib/pushNotifications.ts` |
+| * Mapa rota -> permissao da matriz RBAC (`permissions` x `role_permissions`). | `src/lib/routePermissions.ts` |
 | porque `existing` deve ser todos os presets já salvos. | `src/lib/searchPresetTransport.ts` |
 | @param length Comprimento mínimo 32 caracteres | `src/lib/secretRotation.ts` |
 | * Limite total de passagens retornadas. Sempre clampado em [1, MAX_TOTAL_CAP]. */ | `src/lib/insights/pickTopPassages.ts` |
@@ -5460,7 +5469,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| … +52 linhas — lista completa em `context.json` | |
+| … +55 linhas — lista completa em `context.json` | |

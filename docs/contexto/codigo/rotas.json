@@ -320,6 +320,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRFMSegmentConfig",
     "useRageClickDetector",
@@ -715,6 +716,7 @@
     "useProximoPassoFeedbacks",
     "usePurchasePatterns",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRFMSegmentConfig",
     "useRageClickDetector",
@@ -914,6 +916,7 @@
     "rfm_history",
     "rfm_metrics",
     "rfm_segment_config",
+    "role_permissions",
     "sales_playbooks",
     "sales_team_members",
     "score_history",
@@ -935,6 +938,7 @@
     "trigger_channel_effectiveness",
     "trigger_intensity_history",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -1030,7 +1034,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 885
+   "arquivos_puxados": 887
   },
   {
    "protegida": false,
@@ -1341,6 +1345,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -1694,6 +1699,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -1871,6 +1877,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -1886,6 +1893,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -1976,7 +1984,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -2258,6 +2266,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -2611,6 +2620,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -2788,6 +2798,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -2803,6 +2814,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -2893,7 +2905,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 788
+   "arquivos_puxados": 790
   },
   {
    "protegida": true,
@@ -3175,6 +3187,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -3528,6 +3541,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -3705,6 +3719,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -3720,6 +3735,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -3810,7 +3826,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 783
+   "arquivos_puxados": 785
   },
   {
    "protegida": true,
@@ -4273,6 +4289,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -4626,6 +4643,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -4803,6 +4821,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -4818,6 +4837,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -4908,7 +4928,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 783
+   "arquivos_puxados": 785
   },
   {
    "protegida": true,
@@ -5626,6 +5646,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -5979,6 +6000,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -6156,6 +6178,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -6171,6 +6194,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -6261,7 +6285,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 782
+   "arquivos_puxados": 784
   },
   {
    "protegida": true,
@@ -6686,6 +6710,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -7039,6 +7064,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -7216,6 +7242,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -7233,6 +7260,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -7323,7 +7351,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 782
+   "arquivos_puxados": 784
   },
   {
    "protegida": true,
@@ -7932,6 +7960,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -8286,6 +8315,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -8465,6 +8495,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -8480,6 +8511,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -8570,7 +8602,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 784
+   "arquivos_puxados": 786
   },
   {
    "protegida": true,
@@ -8618,7 +8650,8 @@
    "protegida": true,
    "wrappers": [
     "Protected",
-    "AnalyticsPageSkeleton"
+    "AnalyticsPageSkeleton",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -8895,6 +8928,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -9248,6 +9282,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -9425,6 +9460,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -9440,6 +9476,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -9530,7 +9567,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -9868,6 +9905,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -10222,6 +10260,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -10401,6 +10440,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -10416,6 +10456,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -10507,7 +10548,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 783
+   "arquivos_puxados": 785
   },
   {
    "protegida": false,
@@ -10837,6 +10878,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -11190,6 +11232,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -11367,6 +11410,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -11382,6 +11426,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -11472,7 +11517,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -11754,6 +11799,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -12107,6 +12153,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -12284,6 +12331,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -12299,6 +12347,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -12389,7 +12438,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -12733,6 +12782,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -13086,6 +13136,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -13263,6 +13314,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -13278,6 +13330,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -13368,7 +13421,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -13652,6 +13705,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -14007,6 +14061,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -14186,6 +14241,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -14201,6 +14257,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -14291,13 +14348,14 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 786
+   "arquivos_puxados": 788
   },
   {
    "protegida": true,
    "wrappers": [
     "Protected",
-    "SettingsPageSkeleton"
+    "SettingsPageSkeleton",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -14574,6 +14632,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -14927,6 +14986,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -15104,6 +15164,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -15119,6 +15180,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -15209,7 +15271,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -15492,6 +15554,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -15845,6 +15908,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -16022,6 +16086,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -16037,6 +16102,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -16127,7 +16193,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -16486,6 +16552,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportGenerator",
@@ -16934,6 +17001,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportGenerator",
@@ -17168,6 +17236,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -17191,6 +17260,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "v_contact_personality_audit",
     "v_life_events_audit",
@@ -17305,7 +17375,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 1060
+   "arquivos_puxados": 1062
   },
   {
    "protegida": true,
@@ -17615,6 +17685,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -17999,6 +18070,7 @@
     "useProximoPassoFeedbacks",
     "useProximosPassosFilters",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -18184,6 +18256,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -18200,6 +18273,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -18295,7 +18369,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 859
+   "arquivos_puxados": 861
   },
   {
    "protegida": true,
@@ -18577,6 +18651,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -18930,6 +19005,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -19107,6 +19183,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -19122,6 +19199,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -19212,7 +19290,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -19494,6 +19572,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -19847,6 +19926,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -20024,6 +20104,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -20039,6 +20120,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -20129,7 +20211,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 784
+   "arquivos_puxados": 786
   },
   {
    "protegida": true,
@@ -20886,6 +20968,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -21239,6 +21322,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -21416,6 +21500,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -21431,6 +21516,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -21521,7 +21607,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 784
+   "arquivos_puxados": 786
   },
   {
    "protegida": true,
@@ -21803,6 +21889,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -22156,6 +22243,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -22333,6 +22421,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -22348,6 +22437,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -22438,7 +22528,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": false,
@@ -22826,6 +22916,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -23179,6 +23270,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -23356,6 +23448,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -23371,6 +23464,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -23461,7 +23555,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -23747,6 +23841,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -24105,6 +24200,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -24288,6 +24384,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -24303,6 +24400,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -24394,7 +24492,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 791
+   "arquivos_puxados": 793
   },
   {
    "protegida": true,
@@ -24703,6 +24801,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -25086,6 +25185,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -25273,6 +25373,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -25288,6 +25389,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -25381,7 +25483,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 848
+   "arquivos_puxados": 850
   },
   {
    "protegida": true,
@@ -26091,6 +26193,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -26444,6 +26547,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -26621,6 +26725,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -26636,6 +26741,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -26726,7 +26832,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 782
+   "arquivos_puxados": 784
   },
   {
    "protegida": true,
@@ -27009,6 +27115,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -27362,6 +27469,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -27539,6 +27647,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -27554,6 +27663,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -27644,7 +27754,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -27926,6 +28036,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -28279,6 +28390,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -28456,6 +28568,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -28471,6 +28584,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -28561,12 +28675,13 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
    "wrappers": [
-    "Protected"
+    "Protected",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -28843,6 +28958,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -29196,6 +29312,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -29374,6 +29491,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -29389,6 +29507,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -29479,12 +29598,13 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 782
+   "arquivos_puxados": 784
   },
   {
    "protegida": true,
    "wrappers": [
-    "Protected"
+    "Protected",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -29819,6 +29939,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -30181,6 +30302,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -30364,6 +30486,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -30379,6 +30502,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -30470,7 +30594,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 786
+   "arquivos_puxados": 788
   },
   {
    "protegida": true,
@@ -30758,6 +30882,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -31120,6 +31245,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -31303,6 +31429,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -31318,6 +31445,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -31410,7 +31538,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 785
+   "arquivos_puxados": 787
   },
   {
    "protegida": true,
@@ -31693,6 +31821,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -32046,6 +32175,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -32223,6 +32353,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -32238,6 +32369,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -32328,7 +32460,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -32611,6 +32743,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -32965,6 +33098,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -33143,6 +33277,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -33158,6 +33293,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -33248,7 +33384,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 783
+   "arquivos_puxados": 785
   },
   {
    "protegida": true,
@@ -33530,6 +33666,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -33883,6 +34020,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -34060,6 +34198,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -34075,6 +34214,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -34165,7 +34305,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -34769,6 +34909,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -35122,6 +35263,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -35299,6 +35441,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -35314,6 +35457,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -35404,7 +35548,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -35639,7 +35783,8 @@
   {
    "protegida": true,
    "wrappers": [
-    "Protected"
+    "Protected",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -35916,6 +36061,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -36269,6 +36415,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -36446,6 +36593,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -36461,6 +36609,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -36551,7 +36700,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -36834,6 +36983,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -37187,6 +37337,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -37364,6 +37515,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -37379,6 +37531,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -37469,13 +37622,14 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
    "wrappers": [
     "Protected",
-    "AnalyticsPageSkeleton"
+    "AnalyticsPageSkeleton",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -37752,6 +37906,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -38105,6 +38260,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -38282,6 +38438,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -38297,6 +38454,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -38387,7 +38545,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -38670,6 +38828,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -39025,6 +39184,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -39203,6 +39363,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -39218,6 +39379,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -39309,7 +39471,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 788
+   "arquivos_puxados": 790
   },
   {
    "protegida": true,
@@ -39643,6 +39805,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -39996,6 +40159,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -40173,6 +40337,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -40188,6 +40353,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -40278,7 +40444,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -40560,6 +40726,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -40913,6 +41080,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -41090,6 +41258,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -41105,6 +41274,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -41195,7 +41365,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 783
+   "arquivos_puxados": 785
   },
   {
    "protegida": true,
@@ -41592,6 +41762,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -41945,6 +42116,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -42122,6 +42294,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -42137,6 +42310,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -42227,7 +42401,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
@@ -42509,6 +42683,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -42862,6 +43037,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -43039,6 +43215,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -43054,6 +43231,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -43144,12 +43322,13 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": true,
    "wrappers": [
-    "Protected"
+    "Protected",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -43227,7 +43406,8 @@
   {
    "protegida": true,
    "wrappers": [
-    "Protected"
+    "Protected",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -43308,7 +43488,8 @@
   {
    "protegida": true,
    "wrappers": [
-    "Protected"
+    "Protected",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -43725,6 +43906,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -44079,6 +44261,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -44257,6 +44440,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -44272,6 +44456,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -44362,7 +44547,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 786
+   "arquivos_puxados": 788
   },
   {
    "protegida": true,
@@ -44650,6 +44835,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -45012,6 +45198,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -45193,6 +45380,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -45208,6 +45396,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -45299,7 +45488,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 787
+   "arquivos_puxados": 789
   },
   {
    "protegida": false,
@@ -45570,7 +45759,8 @@
   {
    "protegida": true,
    "wrappers": [
-    "Protected"
+    "Protected",
+    "RequirePermission"
    ],
    "pai": null,
    "indice": false,
@@ -45847,6 +46037,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -46200,6 +46391,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -46377,6 +46569,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -46392,6 +46585,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -46482,7 +46676,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": false,
@@ -46909,6 +47103,7 @@
     "useQuery",
     "useQueryClient",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -47262,6 +47457,7 @@
     "useProntidaoWeightsStore",
     "usePropensityScore",
     "useQuotaStatus",
+    "useRBAC",
     "useRFMAnalysis",
     "useRageClickDetector",
     "useRapportIntel",
@@ -47439,6 +47635,7 @@
     "reframing_analysis",
     "rfm_analysis",
     "rfm_history",
+    "role_permissions",
     "sales_playbooks",
     "score_history",
     "sentiment_annotations",
@@ -47454,6 +47651,7 @@
     "territories",
     "ticket_comments",
     "trigger_usage_history",
+    "user_roles",
     "user_ui_preferences",
     "vak_analysis_history",
     "validation_queue",
@@ -47544,7 +47742,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 781
+   "arquivos_puxados": 783
   },
   {
    "protegida": false,

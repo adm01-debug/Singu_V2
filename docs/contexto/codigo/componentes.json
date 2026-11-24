@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1079,
+ "total": 1080,
  "orfaos": 21,
  "nomes_duplicados": {
   "ABM": [
@@ -491,7 +491,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 189,
+   "linhas": 190,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -2303,6 +2303,22 @@
    "dominio": "components/auth",
    "hooks_locais": [
     "useMFAGuard"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/auth/RequirePermission.tsx",
+   "exports": [
+    "RequirePermission"
+   ],
+   "export_default": "RequirePermission",
+   "linhas": 27,
+   "dominio": "components/auth",
+   "hooks_locais": [
+    "useRBAC"
    ],
    "tabelas": [],
    "edges": [],
@@ -10326,12 +10342,13 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 316,
+   "linhas": 321,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
     "useIsAdmin",
     "usePrefetch",
+    "useRBAC",
     "useSidebar"
    ],
    "tabelas": [],
@@ -10390,10 +10407,11 @@
     "MobileSidebarDrawer"
    ],
    "export_default": null,
-   "linhas": 227,
+   "linhas": 233,
    "dominio": "components/layout",
    "hooks_locais": [
-    "useAuth"
+    "useAuth",
+    "useRBAC"
    ],
    "tabelas": [],
    "edges": [],

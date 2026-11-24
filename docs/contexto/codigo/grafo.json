@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1980,
- "arestas": 8669,
+ "nos": 1982,
+ "arestas": 8675,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -245,7 +245,6 @@
   "src/domain/dealState.ts",
   "src/hooks/useBulkSelection.ts",
   "src/hooks/useFocusTrap.ts",
-  "src/hooks/useRBAC.tsx",
   "src/hooks/useSavedFilters.ts",
   "src/lib/validationSchemas.ts",
   "src/stores/useUIStore.ts",

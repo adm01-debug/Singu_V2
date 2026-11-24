@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "8b94ca9427721cf66e8fa0d09e58f3f513e1acb5",
+  "commit": "de9c0c7abf53feba2ccd12a5456f94ddc8693fcd",
   "branch": "main",
-  "data_commit": "2026-11-24T13:10:11-03:00",
+  "data_commit": "2026-11-24T13:37:16-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "de9c0c7",
+    "data": "2026-11-24",
+    "assunto": "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)"
+   },
    {
     "sha": "8b94ca9",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "1f88d85",
     "data": "2026-11-22",
     "assunto": "feat: integra EF win-loss-record-deal e religa digest de coaching (#306)"
-   },
-   {
-    "sha": "e608598",
-    "data": "2026-11-22",
-    "assunto": "chore(deps): bump minimatch 10->11 e postcss-selector-parser 6.0.10->6.1.5 via overrides (#305)"
    }
   ],
-  "arquivos_mudados_7d": 1050,
+  "arquivos_mudados_7d": 1055,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -274,6 +274,10 @@
     "mudancas": 6
    },
    {
+    "arquivo": "src/app/AppRoutes.tsx",
+    "mudancas": 6
+   },
+   {
     "arquivo": "src/pages/ContatoDetalhe.tsx",
     "mudancas": 6
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "tests/rls/functions_authenticated_allowlist.sql",
     "mudancas": 6
-   },
-   {
-    "arquivo": ".github/workflows/restore-drill.yml",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 164
+    "commits": 165
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,21 +326,21 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3911,
-  "arquivos_codigo": 2256,
-  "linhas_codigo": 421425,
+  "arquivos_total": 3915,
+  "arquivos_codigo": 2260,
+  "linhas_codigo": 421598,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 66,
   "modulos": 142,
-  "componentes": 1079,
+  "componentes": 1080,
   "hooks": 412,
   "edge_functions": 109,
   "tabelas": 542,
   "migrations": 1110,
   "cron_jobs": 44,
-  "testes": 278,
+  "testes": 280,
   "workflows": 14,
   "scripts": 296,
   "docs_md": 158
@@ -648,11 +648,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 593
+   "linhas": 594
   },
   "src/components": {
-   "arquivos": 1010,
-   "linhas": 151956
+   "arquivos": 1012,
+   "linhas": 152065
   },
   "src/config": {
    "arquivos": 1,
@@ -679,8 +679,8 @@
    "linhas": 69375
   },
   "src/lib": {
-   "arquivos": 104,
-   "linhas": 9331
+   "arquivos": 106,
+   "linhas": 9394
   },
   "src/main.tsx": {
    "arquivos": 1,

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "8b94ca9427721cf66e8fa0d09e58f3f513e1acb5",
+  "sha": "de9c0c7abf53feba2ccd12a5456f94ddc8693fcd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 16:15 UTC",
-  "files_total": 4016,
-  "code_files": 3540,
-  "code_lines": 478290
+  "generated_at": "2026-11-24 16:38 UTC",
+  "files_total": 4020,
+  "code_files": 3544,
+  "code_lines": 478463
  },
  "version": "1.3.2",
- "facts_hash": "e3487155281c3376",
+ "facts_hash": "c850eda9e9691f1a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -273,8 +273,8 @@
   "package_manager": "bun",
   "languages": {
    ".sql": 1283,
-   ".tsx": 1183,
-   ".ts": 910,
+   ".tsx": 1185,
+   ".ts": 912,
    ".mjs": 123,
    ".py": 21,
    ".js": 18,
@@ -100648,8 +100648,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -100663,7 +100665,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 106
+    "deps_count": 108
    },
    {
     "path": "",
@@ -100686,8 +100688,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -100701,7 +100705,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 113
+    "deps_count": 115
    },
    {
     "path": "",
@@ -100724,8 +100728,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -100739,7 +100745,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 104
+    "deps_count": 106
    },
    {
     "path": "",
@@ -100852,8 +100858,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -100865,7 +100873,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 100
+    "deps_count": 102
    },
    {
     "path": "",
@@ -100950,8 +100958,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -100963,7 +100973,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 103
+    "deps_count": 105
    },
    {
     "path": "",
@@ -101007,11 +101017,13 @@
      "reframing_analysis",
      "rfm_analysis",
      "rfm_history",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "stakeholder_alerts",
      "system_alerts",
      "trigger_usage_history",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101027,7 +101039,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 273
+    "deps_count": 275
    },
    {
     "path": "",
@@ -101063,8 +101075,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101076,7 +101090,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 103
+    "deps_count": 105
    },
    {
     "path": "",
@@ -101116,9 +101130,11 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101132,7 +101148,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 130
+    "deps_count": 132
    },
    {
     "path": "",
@@ -101150,8 +101166,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101163,7 +101181,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 100
+    "deps_count": 102
    },
    {
     "path": "",
@@ -101229,9 +101247,11 @@
      "insights",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101245,7 +101265,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 118
+    "deps_count": 120
    },
    {
     "path": "",
@@ -101266,8 +101286,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101279,7 +101301,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 110
+    "deps_count": 112
    },
    {
     "path": "",
@@ -101301,8 +101323,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history",
      "whatsapp_messages"
     ],
@@ -101315,7 +101339,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 113
+    "deps_count": 115
    },
    {
     "path": "",
@@ -101339,9 +101363,11 @@
      "metaprogram_analysis",
      "objection_example_feedback",
      "push_subscriptions",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history",
      "weekly_report_settings",
      "weekly_reports"
@@ -101359,7 +101385,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 157
+    "deps_count": 159
    },
    {
     "path": "",
@@ -101417,10 +101443,12 @@
      "purchase_history",
      "reframing_analysis",
      "rfm_analysis",
+     "role_permissions",
      "score_history",
      "social_consent_audit",
      "suggested_life_events",
      "system_alerts",
+     "user_roles",
      "v_life_events_audit",
      "vak_analysis_history",
      "visit_checkins",
@@ -101443,7 +101471,7 @@
      "get_score_explicability",
      "has_role"
     ],
-    "deps_count": 273
+    "deps_count": 275
    },
    {
     "path": "",
@@ -101462,9 +101490,11 @@
      "insights",
      "interactions",
      "metaprogram_analysis",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101477,7 +101507,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 176
+    "deps_count": 178
    },
    {
     "path": "",
@@ -101498,8 +101528,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101514,7 +101546,7 @@
      "has_role",
      "seed_conversation_topics"
     ],
-    "deps_count": 105
+    "deps_count": 107
    },
    {
     "path": "",
@@ -101535,8 +101567,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101551,7 +101585,7 @@
      "has_role",
      "seed_conversation_topics"
     ],
-    "deps_count": 105
+    "deps_count": 107
    },
    {
     "path": "",
@@ -101569,8 +101603,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101582,7 +101618,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 106
+    "deps_count": 108
    },
    {
     "path": "",
@@ -101719,8 +101755,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101732,7 +101770,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 101
+    "deps_count": 103
    },
    {
     "path": "",
@@ -101768,8 +101806,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101781,7 +101821,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 104
+    "deps_count": 106
    },
    {
     "path": "",
@@ -101808,9 +101848,11 @@
      "metaprogram_analysis",
      "objection_example_feedback",
      "push_subscriptions",
+     "role_permissions",
      "score_history",
      "stakeholder_alerts",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101825,7 +101867,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 208
+    "deps_count": 210
    },
    {
     "path": "",
@@ -101845,9 +101887,11 @@
      "insights",
      "interactions",
      "metaprogram_analysis",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101860,7 +101904,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 172
+    "deps_count": 174
    },
    {
     "path": "",
@@ -101881,9 +101925,11 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -101897,7 +101943,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 191
+    "deps_count": 193
    },
    {
     "path": "",
@@ -101963,9 +102009,11 @@
      "objection_example_feedback",
      "proximo_passo_feedback",
      "reframing_analysis",
+     "role_permissions",
      "score_history",
      "suggested_rapport_intel",
      "system_alerts",
+     "user_roles",
      "user_ui_preferences",
      "vak_analysis_history"
     ],
@@ -101981,7 +102029,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 210
+    "deps_count": 212
    },
    {
     "path": "",
@@ -102064,9 +102112,11 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102080,7 +102130,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 127
+    "deps_count": 129
    },
    {
     "path": "",
@@ -102098,9 +102148,11 @@
      "metaprogram_analysis",
      "objection_example_feedback",
      "profiles",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102114,7 +102166,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 167
+    "deps_count": 169
    },
    {
     "path": "",
@@ -102134,8 +102186,10 @@
      "metaprogram_analysis",
      "objection_example_feedback",
      "people_intelligence_events",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102147,7 +102201,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 175
+    "deps_count": 177
    },
    {
     "path": "",
@@ -102168,8 +102222,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102182,7 +102238,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 106
+    "deps_count": 108
    },
    {
     "path": "",
@@ -102203,8 +102259,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102217,7 +102275,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 106
+    "deps_count": 108
    },
    {
     "path": "",
@@ -102237,9 +102295,11 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "user_ui_preferences",
      "vak_analysis_history"
     ],
@@ -102254,7 +102314,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 202
+    "deps_count": 204
    },
    {
     "path": "",
@@ -102273,8 +102333,10 @@
      "knowledge_base_articles",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102286,7 +102348,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 105
+    "deps_count": 107
    },
    {
     "path": "",
@@ -102306,8 +102368,10 @@
      "landing_pages",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102319,7 +102383,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 107
+    "deps_count": 109
    },
    {
     "path": "",
@@ -102396,8 +102460,10 @@
      "health_alerts",
      "insights",
      "interactions",
+     "role_permissions",
      "smart_notifications",
-     "system_alerts"
+     "system_alerts",
+     "user_roles"
     ],
     "invokes_transitive": [
      "detect-new-device",
@@ -102409,7 +102475,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 92
+    "deps_count": 94
    },
    {
     "path": "",
@@ -102430,9 +102496,11 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102446,7 +102514,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 122
+    "deps_count": 124
    },
    {
     "path": "",
@@ -102526,8 +102594,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102539,7 +102609,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 99
+    "deps_count": 101
    },
    {
     "path": "",
@@ -102558,9 +102628,11 @@
      "metaprogram_analysis",
      "objection_example_feedback",
      "reframing_analysis",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102576,7 +102648,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 174
+    "deps_count": 176
    },
    {
     "path": "",
@@ -102590,8 +102662,10 @@
      "health_alerts",
      "insights",
      "interactions",
+     "role_permissions",
      "score_history",
-     "system_alerts"
+     "system_alerts",
+     "user_roles"
     ],
     "invokes_transitive": [
      "detect-new-device",
@@ -102601,7 +102675,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 79
+    "deps_count": 81
    },
    {
     "path": "",
@@ -102620,8 +102694,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102633,7 +102709,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 107
+    "deps_count": 109
    },
    {
     "path": "",
@@ -102653,9 +102729,11 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102669,7 +102747,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 121
+    "deps_count": 123
    },
    {
     "path": "",
@@ -102701,10 +102779,12 @@
      "metaprogram_analysis",
      "objection_example_feedback",
      "push_subscriptions",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "stakeholder_alerts",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102719,7 +102799,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 124
+    "deps_count": 126
    },
    {
     "path": "",
@@ -102754,8 +102834,10 @@
      "nurturing_executions",
      "nurturing_workflows",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102769,7 +102851,7 @@
      "enroll_contact_in_workflow",
      "has_role"
     ],
-    "deps_count": 107
+    "deps_count": 109
    },
    {
     "path": "",
@@ -102821,8 +102903,10 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -102834,7 +102918,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 108
+    "deps_count": 110
    },
    {
     "path": "",
@@ -102872,9 +102956,11 @@
      "metaprogram_analysis",
      "objection_example_feedback",
      "playbook_usage_log",
+     "role_permissions",
      "sales_playbooks",
      "score_history",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history",
      "vw_communication_dashboard",
      "win_loss_insights",
@@ -102895,7 +102981,7 @@
      "has_role",
      "seed_win_loss_defaults"
     ],
-    "deps_count": 132
+    "deps_count": 134
    },
    {
     "path": "",
@@ -103045,9 +103131,11 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -103061,7 +103149,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 112
+    "deps_count": 114
    },
    {
     "path": "",
@@ -103096,10 +103184,12 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "support_tickets",
      "system_alerts",
      "ticket_comments",
+     "user_roles",
      "vak_analysis_history",
      "vw_churn_risk_ranking"
     ],
@@ -103112,7 +103202,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 110
+    "deps_count": 112
    },
    {
     "path": "",
@@ -103243,6 +103333,7 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "sequence_enrollments",
      "sequence_events",
@@ -103250,6 +103341,7 @@
      "sequence_steps",
      "sequences",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -103262,7 +103354,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 129
+    "deps_count": 131
    },
    {
     "path": "",
@@ -103310,10 +103402,12 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "support_tickets",
      "system_alerts",
      "ticket_comments",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -103325,7 +103419,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 109
+    "deps_count": 111
    },
    {
     "path": "",
@@ -103466,6 +103560,7 @@
      "proximo_passo_feedback",
      "rfm_metrics",
      "rfm_segment_config",
+     "role_permissions",
      "sales_team_members",
      "score_history",
      "system_alerts",
@@ -103473,6 +103568,7 @@
      "trigger_bundles",
      "trigger_channel_effectiveness",
      "trigger_intensity_history",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -103484,7 +103580,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 182
+    "deps_count": 184
    },
    {
     "path": "/contatos",
@@ -103504,9 +103600,11 @@
      "interactions",
      "metaprogram_analysis",
      "objection_example_feedback",
+     "role_permissions",
      "score_history",
      "smart_notifications",
      "system_alerts",
+     "user_roles",
      "vak_analysis_history"
     ],
     "invokes_transitive": [
@@ -103520,7 +103618,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 198
+    "deps_count": 200
    },
    {
     "path": "/contatos/:id",
@@ -103600,6 +103698,7 @@
      "purchase_history",
      "reframing_analysis",
      "rfm_analysis",
+     "role_permissions",
      "score_history",
      "social_behavior_analysis",
      "social_consent_audit",
@@ -103611,6 +103710,7 @@
      "suggested_rapport_intel",
      "system_alerts",
      "trigger_usage_history",
+     "user_roles",
      "v_contact_personality_audit",
      "v_life_events_audit",
      "vak_analysis_history",
@@ -103652,7 +103752,7 @@
      "seed_conversation_topics",
      "validate_behavioral_consistency"
     ],
-    "deps_count": 426
+    "deps_count": 428
    },
    {
     "path": "/survey/:token",
@@ -106593,6 +106693,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/",
+    "component": "div",
+    "guard": "",
+    "roles": [],
+    "file": "src/components/auth/__tests__/RequirePermission.test.tsx"
+   },
+   {
     "path": "/${pick([",
     "component": "",
     "guard": "",
@@ -106836,6 +106943,13 @@
     "guard": "",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "path": "/analytics",
+    "component": "RequirePermission",
+    "guard": "",
+    "roles": [],
+    "file": "src/components/auth/__tests__/RequirePermission.test.tsx"
    },
    {
     "path": "/app",
@@ -107119,14 +107233,14 @@
    },
    {
     "path": "/intelligence/auditoria",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
     "path": "/intelligence/relacionamento/auditoria",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
@@ -107231,7 +107345,7 @@
    },
    {
     "path": "/metas",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
@@ -107308,21 +107422,21 @@
    },
    {
     "path": "/playbooks",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
     "path": "/playbooks/:id",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
     "path": "/playbooks/battle-cards/:id",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
@@ -107392,7 +107506,7 @@
    },
    {
     "path": "/sequencias",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
@@ -107595,7 +107709,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 1010,
+  "components_count": 1012,
   "hooks": [
    {
     "name": "useContacts",
@@ -111074,7 +111188,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 593,
+   "lines": 594,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -111110,8 +111224,8 @@
   },
   {
    "module": "src/components",
-   "files": 1010,
-   "lines": 151956,
+   "files": 1012,
+   "lines": 152065,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -111962,8 +112076,8 @@
   },
   {
    "module": "src/lib",
-   "files": 104,
-   "lines": 9331,
+   "files": 106,
+   "lines": 9394,
    "tables": [
     "activities",
     "crm_relationship_audit_logs",
@@ -112119,6 +112233,7 @@
     "src/lib/resilientFetch.test.ts",
     "src/lib/resilientFetch.ts",
     "src/lib/rodizioRpc.ts",
+    "src/lib/routePermissions.ts",
     "src/lib/rpcChurn.ts",
     "src/lib/rpcPlanDiff.ts",
     "src/lib/sanitize.ts",
@@ -112127,8 +112242,7 @@
     "src/lib/secretRotation.ts",
     "src/lib/sortInteractions.ts",
     "src/lib/sorting-utils.ts",
-    "src/lib/suggestPresetName.ts",
-    "src/lib/supabaseInvoke.ts"
+    "src/lib/suggestPresetName.ts"
    ]
   },
   {
@@ -128508,6 +128622,14 @@
     "text": "O webhook nativo não calcula HMAC SHA-256 e não deve chamar esta URL diretamente."
    },
    {
+    "file": "src/components/auth/RequirePermission.tsx",
+    "text": "* Guard de permissão por rota, sobre a matriz `permissions` x `role_permissions`."
+   },
+   {
+    "file": "src/components/auth/RequirePermission.tsx",
+    "text": "possui a permissão pedida."
+   },
+   {
     "file": "src/components/carnegie/CarnegieExtendedLibrary.tsx",
     "text": "que existiam apenas como dados sem tela."
    },
@@ -129018,6 +129140,10 @@
    {
     "file": "src/lib/pushNotifications.ts",
     "text": "* Migra em silêncio quem já tem permissão e uma assinatura criada com outra chave VAPID. Barato: só olha a assinatura local."
+   },
+   {
+    "file": "src/lib/routePermissions.ts",
+    "text": "* Mapa rota -> permissao da matriz RBAC (`permissions` x `role_permissions`)."
    },
    {
     "file": "src/lib/searchPresetTransport.ts",
@@ -167618,6 +167744,12 @@
     "body": "hour: number; minute: number; bestTimeApplied: boolean"
    },
    {
+    "file": "src/lib/routePermissions.ts",
+    "name": "canAccessRoute",
+    "params": "url: string, hasPermission: (permission: string",
+    "body": "boolean,"
+   },
+   {
     "file": "src/lib/scriptGenerator.ts",
     "name": "generateMeetingInvite",
     "params": "ctx: MeetingInviteContext",
@@ -174440,6 +174572,26 @@
    {
     "file": "src/components/analytics/DataHealthWidget.contract.test.tsx",
     "name": "distingue ausência de métricas de falha na consulta"
+   },
+   {
+    "file": "src/components/auth/__tests__/RequirePermission.test.tsx",
+    "name": "RequirePermission"
+   },
+   {
+    "file": "src/components/auth/__tests__/RequirePermission.test.tsx",
+    "name": "libera quando o usuário não tem papel atribuído (fail-open)"
+   },
+   {
+    "file": "src/components/auth/__tests__/RequirePermission.test.tsx",
+    "name": "libera quando o papel tem a permissão"
+   },
+   {
+    "file": "src/components/auth/__tests__/RequirePermission.test.tsx",
+    "name": "redireciona para a home quando o papel não tem a permissão"
+   },
+   {
+    "file": "src/components/auth/__tests__/RequirePermission.test.tsx",
+    "name": "não bloqueia enquanto o RBAC carrega"
    },
    {
     "file": "src/components/campaigns/__tests__/CampaignDetailDrawer.test.tsx",
@@ -181336,6 +181488,34 @@
    {
     "file": "src/lib/__tests__/providerGuard.test.ts",
     "name": "deve validar a ordem completa canônica do sistema"
+   },
+   {
+    "file": "src/lib/__tests__/routePermissions.test.ts",
+    "name": "canAccessRoute"
+   },
+   {
+    "file": "src/lib/__tests__/routePermissions.test.ts",
+    "name": "libera rota fora do mapa de permissoes"
+   },
+   {
+    "file": "src/lib/__tests__/routePermissions.test.ts",
+    "name": "libera quando o usuario nao tem papel (fail-open)"
+   },
+   {
+    "file": "src/lib/__tests__/routePermissions.test.ts",
+    "name": "libera enquanto o RBAC carrega"
+   },
+   {
+    "file": "src/lib/__tests__/routePermissions.test.ts",
+    "name": "bloqueia rota gateada sem a permissao exigida"
+   },
+   {
+    "file": "src/lib/__tests__/routePermissions.test.ts",
+    "name": "libera rota gateada com a permissao exigida"
+   },
+   {
+    "file": "src/lib/__tests__/routePermissions.test.ts",
+    "name": "todas as chaves do mapa sao rotas absolutas"
    },
    {
     "file": "src/lib/__tests__/rpcChurn.test.ts",
@@ -234052,14 +234232,14 @@
    },
    {
     "path": "/intelligence/auditoria",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
     "path": "/intelligence/relacionamento/auditoria",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
@@ -234143,7 +234323,7 @@
    },
    {
     "path": "/metas",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
@@ -234206,21 +234386,21 @@
    },
    {
     "path": "/playbooks",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
     "path": "/playbooks/:id",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
    },
    {
     "path": "/playbooks/battle-cards/:id",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
@@ -234269,7 +234449,7 @@
    },
    {
     "path": "/sequencias",
-    "component": "P",
+    "component": "RequirePermission",
     "guard": "Protected",
     "roles": [],
     "file": "src/app/AppRoutes.tsx"
@@ -245737,7 +245917,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 189,
+   "lines": 190,
    "exports": [
     "const AppRoutes"
    ],
@@ -245879,13 +246059,13 @@
     },
     {
      "path": "/intelligence/auditoria",
-     "component": "P",
+     "component": "RequirePermission",
      "guard": "Protected",
      "roles": []
     },
     {
      "path": "/intelligence/relacionamento/auditoria",
-     "component": "P",
+     "component": "RequirePermission",
      "guard": "Protected",
      "roles": []
     },
@@ -245903,7 +246083,7 @@
     },
     {
      "path": "/sequencias",
-     "component": "P",
+     "component": "RequirePermission",
      "guard": "Protected",
      "roles": []
     },
@@ -245915,7 +246095,7 @@
     },
     {
      "path": "/metas",
-     "component": "P",
+     "component": "RequirePermission",
      "guard": "Protected",
      "roles": []
     },
@@ -246065,19 +246245,19 @@
     },
     {
      "path": "/playbooks",
-     "component": "P",
+     "component": "RequirePermission",
      "guard": "Protected",
      "roles": []
     },
     {
      "path": "/playbooks/battle-cards/:id",
-     "component": "P",
+     "component": "RequirePermission",
      "guard": "Protected",
      "roles": []
     },
     {
      "path": "/playbooks/:id",
-     "component": "P",
+     "component": "RequirePermission",
      "guard": "Protected",
      "roles": []
     },
@@ -248115,6 +248295,46 @@
    ],
    "errors": [
     " className="
+   ]
+  },
+  "src/components/auth/RequirePermission.tsx": {
+   "path": "src/components/auth/RequirePermission.tsx",
+   "lines": 27,
+   "exports": [
+    "function RequirePermission"
+   ],
+   "rule_comments": [
+    "* Guard de permissão por rota, sobre a matriz `permissions` x `role_permissions`.",
+    "possui a permissão pedida."
+   ]
+  },
+  "src/components/auth/__tests__/RequirePermission.test.tsx": {
+   "path": "src/components/auth/__tests__/RequirePermission.test.tsx",
+   "lines": 71,
+   "is_test": true,
+   "routes": [
+    {
+     "path": "/",
+     "component": "div",
+     "guard": "",
+     "roles": []
+    },
+    {
+     "path": "/analytics",
+     "component": "RequirePermission",
+     "guard": "",
+     "roles": []
+    }
+   ],
+   "role_checks": [
+    "name"
+   ],
+   "tests": [
+    "RequirePermission",
+    "libera quando o usuário não tem papel atribuído (fail-open)",
+    "libera quando o papel tem a permissão",
+    "redireciona para a home quando o papel não tem a permissão",
+    "não bloqueia enquanto o RBAC carrega"
    ]
   },
   "src/components/automation/ActionConfigForm.tsx": {
@@ -256031,7 +256251,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 316,
+   "lines": 321,
    "exports": [
     "const AppSidebar"
    ],
@@ -256096,7 +256316,7 @@
   },
   "src/components/layout/MobileSidebarDrawer.tsx": {
    "path": "src/components/layout/MobileSidebarDrawer.tsx",
-   "lines": 227,
+   "lines": 233,
    "exports": [
     "function MobileSidebarDrawer"
    ],
@@ -284564,6 +284784,25 @@
     }
    ]
   },
+  "src/lib/routePermissions.ts": {
+   "path": "src/lib/routePermissions.ts",
+   "lines": 32,
+   "exports": [
+    "const ROUTE_PERMISSIONS",
+    "function canAccessRoute"
+   ],
+   "rule_comments": [
+    "* Mapa rota -> permissao da matriz RBAC (`permissions` x `role_permissions`)."
+   ],
+   "doc": "Mapa rota -> permissao da matriz RBAC (`permissions` x `role_permissions`). Fonte unica para a guarda de rota (`RequirePermission`) e para os menus: o menu nao anuncia uma pagina que o guarda vai bloquear. Rota fora do mapa e liberada.",
+   "calc_fns": [
+    {
+     "name": "canAccessRoute",
+     "params": "url: string, hasPermission: (permission: string",
+     "body": "boolean,"
+    }
+   ]
+  },
   "src/lib/rpcChurn.ts": {
    "path": "src/lib/rpcChurn.ts",
    "lines": 48,
@@ -285042,6 +285281,20 @@
     "deve detectar violação quando AuthProvider vem antes de QueryClientProvider",
     "deve ser resiliente a providers desconhecidos (ex: providers de terceiros)",
     "deve validar a ordem completa canônica do sistema"
+   ]
+  },
+  "src/lib/__tests__/routePermissions.test.ts": {
+   "path": "src/lib/__tests__/routePermissions.test.ts",
+   "lines": 31,
+   "is_test": true,
+   "tests": [
+    "canAccessRoute",
+    "libera rota fora do mapa de permissoes",
+    "libera quando o usuario nao tem papel (fail-open)",
+    "libera enquanto o RBAC carrega",
+    "bloqueia rota gateada sem a permissao exigida",
+    "libera rota gateada com a permissao exigida",
+    "todas as chaves do mapa sao rotas absolutas"
    ]
   },
   "src/lib/__tests__/rpcChurn.test.ts": {
@@ -307258,10 +307511,25 @@
   }
  },
  "git": {
-  "sha": "8b94ca9427721cf66e8fa0d09e58f3f513e1acb5",
+  "sha": "de9c0c7abf53feba2ccd12a5456f94ddc8693fcd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "de9c0c7",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/components/auth/RequirePermission.tsx",
+     "src/components/auth/__tests__/RequirePermission.test.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/components/layout/MobileSidebarDrawer.tsx",
+     "src/lib/__tests__/routePermissions.test.ts",
+     "src/lib/routePermissions.ts"
+    ]
+   },
    {
     "sha": "8b94ca9",
     "date": "2026-11-24",
@@ -307637,19 +307905,17 @@
      "supabase/migrations/20260110000001_compat_colunas_producao.sql",
      "supabase/migrations/20260110000002_baseline_compat_idempotente.sql"
     ]
-   },
-   {
-    "sha": "08dc797",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(nurturing): envia email real via send-transactional-email (#302)",
-    "files": [
-     "supabase/functions/_shared/edge-types-contract_test.ts",
-     "supabase/functions/nurturing-runner/index.ts"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "src/app/AppRoutes.tsx",
+    2
+   ],
+   [
+    "src/components/layout/AppSidebar.tsx",
+    2
+   ],
    [
     ".github/workflows/deploy-edge-functions.yml",
     2
@@ -307675,16 +307941,28 @@
     2
    ],
    [
-    "supabase/functions/_shared/edge-types-contract_test.ts",
-    2
-   ],
-   [
     "supabase/functions/evolution-webhook/messages.ts",
     2
    ],
    [
-    "supabase/functions/nurturing-runner/index.ts",
-    2
+    "src/components/auth/RequirePermission.tsx",
+    1
+   ],
+   [
+    "src/components/auth/__tests__/RequirePermission.test.tsx",
+    1
+   ],
+   [
+    "src/components/layout/MobileSidebarDrawer.tsx",
+    1
+   ],
+   [
+    "src/lib/__tests__/routePermissions.test.ts",
+    1
+   ],
+   [
+    "src/lib/routePermissions.ts",
+    1
    ],
    [
     "docs/qa/functions-authenticated-allowlist.md",
@@ -307708,26 +307986,6 @@
    ],
    [
     "docs/estado/06_INTEGRACOES.md",
-    1
-   ],
-   [
-    "supabase/functions/_shared/behavioral-generation-mock.ts",
-    1
-   ],
-   [
-    "supabase/functions/_shared/edge-test-harness.ts",
-    1
-   ],
-   [
-    "supabase/functions/_shared/fetch-utils.ts",
-    1
-   ],
-   [
-    "supabase/functions/_shared/fetch-utils_test.ts",
-    1
-   ],
-   [
-    "supabase/migrations/20261124120000_create_social_insights.sql",
     1
    ]
   ]

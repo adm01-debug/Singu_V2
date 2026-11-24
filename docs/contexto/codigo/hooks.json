@@ -8088,8 +8088,12 @@
     "useQuery"
    ],
    "canais_realtime": [],
-   "usado_por": 0,
-   "usado_por_arquivos": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/auth/RequirePermission.tsx",
+    "src/components/layout/AppSidebar.tsx",
+    "src/components/layout/MobileSidebarDrawer.tsx"
+   ],
    "coberto_por_testes": 0
   },
   {

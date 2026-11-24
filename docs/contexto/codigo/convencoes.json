@@ -6,7 +6,7 @@
    "src/pages (115)"
   ],
   "componentes": [
-   "src/components (928)",
+   "src/components (929)",
    "src/pages (142)",
    "src/app (4)"
   ],
@@ -16,13 +16,13 @@
    "src/stores (5)"
   ],
   "servicos_logica": [
-   "src/lib (74)",
+   "src/lib (75)",
    "src/data (46)",
    "src/domain (8)"
   ],
   "testes": [
    "co-localizado (*.test) (127)",
-   "co-localizado (__tests__) (99)",
+   "co-localizado (__tests__) (101)",
    "tests/ (23)"
   ],
   "edge_functions": "supabase/functions",
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1079)"
+  ".tsx (1080)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)",
    "fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)",
    "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)",
    "feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)",
-   "fix(ci): destrava o deploy de edge functions (#322)",
-   "fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)"
+   "fix(ci): destrava o deploy de edge functions (#322)"
   ]
  },
  "pr_template": null,
