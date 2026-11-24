@@ -188055,9 +188055,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=\"\""
+        ],
         "definition": null,
-        "definition_sha": "f8178679e9c13049",
+        "definition_sha": "3f8d036481bc7734",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -205268,9 +205270,11 @@
           "views": []
         },
         "comment": "[QUERY] Dados agregados para dashboard principal.",
-        "config": null,
+        "config": [
+          "search_path=\"\""
+        ],
         "definition": null,
-        "definition_sha": "25842c2f829f505f",
+        "definition_sha": "ac64442d418f8b47",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -207301,9 +207305,11 @@
           "views": []
         },
         "comment": "[QUERY] Health check do banco: retorna score de completude + estatísticas gerais.",
-        "config": null,
+        "config": [
+          "search_path=\"\""
+        ],
         "definition": null,
-        "definition_sha": "a31408822f28cc7c",
+        "definition_sha": "afc1154fef663865",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -218335,9 +218341,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=\"\""
+        ],
         "definition": null,
-        "definition_sha": "e1e0949c19ea9a2f",
+        "definition_sha": "83ac4fb43416f926",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -223196,9 +223204,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=\"\""
+        ],
         "definition": null,
-        "definition_sha": "4ef3cf60cab535fd",
+        "definition_sha": "55fe30343916744b",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -224798,9 +224808,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=\"\""
+        ],
         "definition": null,
-        "definition_sha": "a0eaeae21b1588a1",
+        "definition_sha": "f764216ca07dbf94",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -226454,9 +226466,11 @@
           "views": []
         },
         "comment": "SINGU: sync name↔nome_crm, industry↔ramo_atividade, normaliza financial_health.",
-        "config": null,
+        "config": [
+          "search_path=\"\""
+        ],
         "definition": null,
-        "definition_sha": "4674a3195d471905",
+        "definition_sha": "bd63ad75bd48b282",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -228127,9 +228141,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=\"\""
+        ],
         "definition": null,
-        "definition_sha": "5d84b2f6df5c24a7",
+        "definition_sha": "bf3349931d0e4f3e",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,

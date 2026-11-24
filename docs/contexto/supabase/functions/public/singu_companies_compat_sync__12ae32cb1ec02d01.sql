@@ -1,6 +1,7 @@
 CREATE OR REPLACE FUNCTION public.singu_companies_compat_sync()
  RETURNS trigger
  LANGUAGE plpgsql
+ SET search_path TO ''
 AS $function$
 BEGIN
   -- Garante nome_crm sempre preenchido

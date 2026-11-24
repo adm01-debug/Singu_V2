@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 13:14 UTC
+
+- **functions** alterado (8): `public.ativar_cliente(p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text)`, `public.get_dashboard_data()`, `public.get_health_check()`, `public.inativar_cliente(p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text)`, `public.registrar_compra(p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text)`, `public.sdr_qualificar_cliente(p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text)`, `public.singu_companies_compat_sync()`, `public.transferir_cliente(p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text)`
+
 ## 2026-11-24 10:13 UTC
 
 - **functions** alterado (12): `public.buyer_add_comment(_token text, _body text, _label text)`, `public.buyer_toggle_milestone(_token text, _milestone_id uuid, _done boolean, _label text)`, `public.get_buyer_document_path(_token text, _document_id uuid)`, `public.get_deal_room_by_token(_token text)`, `public.get_public_csat_survey(_token uuid)`, `public.increment_form_view(_slug text)`, `public.increment_landing_page_view(page_id uuid)`, `public.increment_magnet_view(_slug text)`, `public.record_buyer_view(_token text, _label text)`, `public.submit_public_csat_survey(_token uuid, _score integer, _feedback text)`, `public.submit_public_form(_slug text, _data jsonb, _utms jsonb, _page_url text, _user_agent text)`, `public.track_magnet_download(_slug text, _email text, _name text, _utms jsonb)`
