@@ -794,7 +794,7 @@
    "nome": "conversation-analyzer",
    "entrada": "supabase/functions/conversation-analyzer/index.ts",
    "arquivos": 1,
-   "linhas": 361,
+   "linhas": 365,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [

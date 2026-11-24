@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "16516ac61e262507ceba9faf1a2398249befd7f5",
+  "sha": "4f090e33dd84de477fc341d9473a3a11344f0b3d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 00:23 UTC",
+  "generated_at": "2026-11-24 01:51 UTC",
   "files_total": 4015,
   "code_files": 3539,
-  "code_lines": 478162
+  "code_lines": 478166
  },
  "version": "1.3.2",
- "facts_hash": "67141ddd523a12cf",
+ "facts_hash": "4b9e1b42b94dd4c8",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112337,7 +112337,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 27367,
+   "lines": 27371,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -117201,7 +117201,7 @@
     "data_interacao",
     "direction",
     "duracao_segundos",
-    "duration_seconds",
+    "duration",
     "emotion_analysis",
     "follow_up_date",
     "follow_up_required",
@@ -120905,10 +120905,6 @@
    {
     "table": "interactions",
     "column": "duracao_segundos"
-   },
-   {
-    "table": "interactions",
-    "column": "duration_seconds"
    },
    {
     "table": "interactions",
@@ -237736,11 +237732,6 @@
    },
    {
     "kind": "coluna",
-    "msg": "coluna `duration_seconds` usada no código não existe no schema de `interactions`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
     "msg": "coluna `metadata` usada no código não existe no schema de `interactions`",
     "where": []
    },
@@ -292994,7 +292985,7 @@
   },
   "supabase/functions/conversation-analyzer/index.ts": {
    "path": "supabase/functions/conversation-analyzer/index.ts",
-   "lines": 361,
+   "lines": 365,
    "tables": [
     {
      "table": "interactions",
@@ -293029,7 +293020,8 @@
     "interactions": [
      "contact_id",
      "content",
-     "duration_seconds",
+     "duracao_segundos",
+     "duration",
      "id",
      "title",
      "type",
@@ -307112,10 +307104,19 @@
   }
  },
  "git": {
-  "sha": "16516ac61e262507ceba9faf1a2398249befd7f5",
+  "sha": "4f090e33dd84de477fc341d9473a3a11344f0b3d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "4f090e3",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)",
+    "files": [
+     "supabase/functions/conversation-analyzer/index.ts"
+    ]
+   },
    {
     "sha": "16516ac",
     "date": "2026-11-23",
@@ -307496,16 +307497,6 @@
     "author": "adm01-debug",
     "subject": "fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)",
     "files": []
-   },
-   {
-    "sha": "84b1bdd",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(erp): busca visual por imagem montada no catalogo de produtos (item 31) (#294)",
-    "files": [
-     "src/components/nlp/CommunicationCoherencePanel.tsx",
-     "src/pages/ErpViewer.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -307540,6 +307531,10 @@
    [
     "supabase/functions/send-sms-campaign/index.ts",
     2
+   ],
+   [
+    "supabase/functions/conversation-analyzer/index.ts",
+    1
    ],
    [
     "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
@@ -307583,10 +307578,6 @@
    ],
    [
     "docs/lacunas/E_contratos_front_backend.md",
-    1
-   ],
-   [
-    "src/app/AppRoutes.tsx",
     1
    ]
   ]

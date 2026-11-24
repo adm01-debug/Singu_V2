@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `16516ac61e262507ceba9faf1a2398249befd7f5` (2026-11-23T21:21:10-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `4f090e33dd84de477fc341d9473a3a11344f0b3d` (2026-11-23T22:50:30-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3910 |
 | arquivos_codigo | 2256 |
-| linhas_codigo | 421359 |
+| linhas_codigo | 421363 |
 | rotas | 116 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -447,7 +447,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25893 nós · 41386 arestas · 3089 comunidades · grafo do commit `16516ac6`
+- 25893 nós · 41386 arestas · 3089 comunidades · grafo do commit `4f090e33`
 - comunidades maiores: ref_lib (306), ref_components (304), sonner (303), framer-motion (279), 02_tables.sql (259), ref_hooks (257), react (255), date-fns (252), react-router-dom (248), _shared/auth.ts (239), 📖 Dicionário de Dados — SINGU CRM (224), Tabela de evidências (213)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -587,6 +587,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-23 `4f090e3` fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)
 - 2026-11-23 `16516ac` fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)
 - 2026-11-23 `6378bfb` ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)
 - 2026-11-23 `c6d9be5` fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)
@@ -601,7 +602,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-23 `14096c0` fix(FF62): territory-optimization propaga falha de RPC externa (#316)
 - 2026-11-23 `7e545e5` fix(EF-5): nurturing-runner incrementa completed_count exatamente N vezes (#314)
 - 2026-11-23 `183969c` fix(edges): corrige AR EF-3/EF-11/EF-13/EF-16 (#309)
-- 2026-11-23 `8a6d5a8` fix(ef14): filtro avatar contacts.upsert IS NULL em vez de IS NOT NULL (#311)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

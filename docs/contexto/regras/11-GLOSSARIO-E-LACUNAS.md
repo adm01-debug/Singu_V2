@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `16516ac61e` · branch `main` · 2026-11-24 00:23 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4f090e33dd` · branch `main` · 2026-11-24 01:51 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -427,7 +427,6 @@ _nenhum item encontrado_
 | coluna | coluna `assunto` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `direction` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `duracao_segundos` usada no código não existe no schema de `interactions` |  |
-| coluna | coluna `duration_seconds` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `metadata` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `outcome` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `resumo` usada no código não existe no schema de `interactions` |  |
@@ -619,7 +618,8 @@ _nenhum item encontrado_
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/regras_negocio/generate.py` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/components/data-export/AdvancedDataExporter.tsx` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useBIAdvanced.ts` |
-| … +58 linhas — lista completa em `context.json` | | |
+| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useRealtimeNotifications.ts` |
+| … +57 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 
