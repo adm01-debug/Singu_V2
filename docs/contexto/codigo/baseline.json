@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "0d1bfce64ef21dde8841b537fb83bdbdfed194a6",
+  "commit": "bae345fa76888aadcb06ef34acdf14a5953b38ec",
   "branch": "main",
-  "data_commit": "2026-11-24T17:17:10-03:00",
+  "data_commit": "2026-11-24T17:17:41-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "bae345f",
+    "data": "2026-11-24",
+    "assunto": "fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)"
+   },
    {
     "sha": "0d1bfce",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "7e545e5",
     "data": "2026-11-23",
     "assunto": "fix(EF-5): nurturing-runner incrementa completed_count exatamente N vezes (#314)"
-   },
-   {
-    "sha": "183969c",
-    "data": "2026-11-23",
-    "assunto": "fix(edges): corrige AR EF-3/EF-11/EF-13/EF-16 (#309)"
    }
   ],
-  "arquivos_mudados_7d": 1061,
+  "arquivos_mudados_7d": 1062,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -218,11 +218,11 @@
     "mudancas": 16
    },
    {
-    "arquivo": "docs/prod-readiness.md",
-    "mudancas": 14
+    "arquivo": "docs/qa/security-definer-audit.md",
+    "mudancas": 15
    },
    {
-    "arquivo": "docs/qa/security-definer-audit.md",
+    "arquivo": "docs/prod-readiness.md",
     "mudancas": 14
    },
    {
@@ -254,6 +254,10 @@
     "mudancas": 8
    },
    {
+    "arquivo": "docs/qa/functions-authenticated-allowlist.md",
+    "mudancas": 7
+   },
+   {
     "arquivo": "src/pages/Contatos.tsx",
     "mudancas": 7
    },
@@ -262,15 +266,15 @@
     "mudancas": 7
    },
    {
+    "arquivo": "tests/rls/functions_authenticated_allowlist.sql",
+    "mudancas": 7
+   },
+   {
     "arquivo": ".github/workflows/inventario-estado-semanal.yml",
     "mudancas": 6
    },
    {
     "arquivo": "RELATORIO_CI.md",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "docs/qa/functions-authenticated-allowlist.md",
     "mudancas": 6
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": "supabase/functions/evolution-webhook/messages.ts",
     "mudancas": 6
-   },
-   {
-    "arquivo": "tests/rls/functions_authenticated_allowlist.sql",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 168
+    "commits": 169
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3918,
+  "arquivos_total": 3919,
   "arquivos_codigo": 2262,
   "linhas_codigo": 421978,
   "rotas": 116,
@@ -338,7 +338,7 @@
   "hooks": 412,
   "edge_functions": 109,
   "tabelas": 542,
-  "migrations": 1111,
+  "migrations": 1112,
   "cron_jobs": 44,
   "testes": 281,
   "workflows": 14,

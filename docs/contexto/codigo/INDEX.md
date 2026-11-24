@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `0d1bfce64ef21dde8841b537fb83bdbdfed194a6` (2026-11-24T17:17:10-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `bae345fa76888aadcb06ef34acdf14a5953b38ec` (2026-11-24T17:17:41-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2099), SQL (1284), Markdown (158), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (20)
+- linguagens: TypeScript (2099), SQL (1285), Markdown (158), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3918 |
+| arquivos_total | 3919 |
 | arquivos_codigo | 2262 |
 | linhas_codigo | 421978 |
 | rotas | 116 |
@@ -46,7 +46,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 412 |
 | edge_functions | 109 |
 | tabelas | 542 |
-| migrations | 1111 |
+| migrations | 1112 |
 | cron_jobs | 44 |
 | testes | 281 |
 | workflows | 14 |
@@ -447,7 +447,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25931 nós · 41448 arestas · 3060 comunidades · grafo do commit `0d1bfce6`
+- 25932 nós · 41448 arestas · 3061 comunidades · grafo do commit `bae345fa`
 - comunidades maiores: ref_components (343), lucide-react (337), ref_lib (310), _shared/auth.ts (297), ref_types (282), useAuth (265), framer-motion (263), 02_tables.sql (259), react-router-dom (238), react (237), ref_hooks (232), 📖 Dicionário de Dados — SINGU CRM (224)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -458,8 +458,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - package.json (22)
 - package-lock.json (17)
 - supabase/functions/external-data/index.ts (16)
+- docs/qa/security-definer-audit.md (15)
 - docs/prod-readiness.md (14)
-- docs/qa/security-definer-audit.md (14)
 - tests/rls/security_definer_hardening.sql (13)
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
@@ -467,7 +467,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - inventario/estado/edges.json (9)
 - .github/workflows/rls-exposure-guard.yml (8)
 - inventario/estado/tabelas-uso.json (8)
-- src/pages/Contatos.tsx (7)
+- docs/qa/functions-authenticated-allowlist.md (7)
 
 ## Workflows
 - `automation-local.yml` — Automação local (pull_request, push, workflow_dispatch)
@@ -587,6 +587,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-24 `bae345f` fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)
 - 2026-11-24 `0d1bfce` feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)
 - 2026-11-24 `5eedf57` docs: corrige o estado real da integracao Evolution no inventario (#334)
 - 2026-11-24 `06b1732` docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)
@@ -601,7 +602,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-23 `16516ac` fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)
 - 2026-11-23 `6378bfb` ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)
 - 2026-11-23 `c6d9be5` fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)
-- 2026-11-23 `9ca4bab` fix: loga falha de insert da auditoria do external-data (#321)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

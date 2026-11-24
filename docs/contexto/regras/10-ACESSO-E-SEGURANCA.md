@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0d1bfce64e` · branch `main` · 2026-11-24 20:18 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `bae345fa76` · branch `main` · 2026-11-24 20:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -320,7 +320,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 429 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 430 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.unit.mjs`
@@ -472,7 +472,7 @@
 - `supabase/functions/territory-optimization/index.ts`
 - `supabase/functions/validate-access/index.ts`
 - `supabase/functions/validation-queue-worker/index.ts`
-- … +279 (lista completa em `context.json`)
+- … +280 (lista completa em `context.json`)
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -884,6 +884,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC, anon, authenticated, service_role | all | `guard_contact_relation_write` |
 | revoke | PUBLIC, anon, service_role | all | `resume_sequence_email`, `merge_records_atomically`, `merge_records_atomically` |
 | revoke | PUBLIC, authenticated | all | `cron_secrets` |
+| revoke | PUBLIC, authenticated | execute | `ativar_cliente`, `inativar_cliente`, `registrar_compra`, `sdr_qualificar_cliente`, `transferir_cliente` |
 | revoke | PUBLIC, authenticated | insert, update, delete | `login_attempts` |
 | revoke | PUBLIC, authenticated, anon | execute | `public` |
 | revoke | anon | all | `_dormant`, `public`, `assert_self_user_id`, `assert_self_user_id`, `public`, `assert_self_user_id`, `assert_self_user_id`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `public`, `public`, `get_contact_sidebar_by_phone` |

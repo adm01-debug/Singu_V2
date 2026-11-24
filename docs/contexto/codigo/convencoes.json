@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)",
    "feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)",
    "docs: corrige o estado real da integracao Evolution no inventario (#334)",
    "docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)",
-   "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)",
-   "fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)"
+   "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)"
   ]
  },
  "pr_template": null,
