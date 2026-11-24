@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "1314c131bb11935d14ad7aed3a9f0d7265f127e9",
+  "commit": "2094be63bb4e9f0ad0a3f9472bc9856ff7873e21",
   "branch": "main",
-  "data_commit": "2026-11-24T06:58:27-03:00",
+  "data_commit": "2026-11-24T06:59:07-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "2094be6",
+    "data": "2026-11-24",
+    "assunto": "fix(ci): destrava o deploy de edge functions (#322)"
+   },
    {
     "sha": "1314c13",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "403fb97",
     "data": "2026-11-21",
     "assunto": "infra(db): versiona ai_recommendation_audit_logs_v2 (DDL idempotente + RLS) (#295)"
-   },
-   {
-    "sha": "5b8ee5b",
-    "data": "2026-11-21",
-    "assunto": "fix(db): baseline idempotente para stubs com defaults (42P13) (#301)"
    }
   ],
   "arquivos_mudados_7d": 1042,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 160
+    "commits": 161
    },
    {
     "autor": "devin-ai-integration[bot]",

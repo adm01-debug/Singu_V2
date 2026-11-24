@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "1314c131bb11935d14ad7aed3a9f0d7265f127e9",
+  "sha": "2094be63bb4e9f0ad0a3f9472bc9856ff7873e21",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 09:59 UTC",
+  "generated_at": "2026-11-24 10:01 UTC",
   "files_total": 4016,
   "code_files": 3540,
   "code_lines": 478247
@@ -307255,10 +307255,19 @@
   }
  },
  "git": {
-  "sha": "1314c131bb11935d14ad7aed3a9f0d7265f127e9",
+  "sha": "2094be63bb4e9f0ad0a3f9472bc9856ff7873e21",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "2094be6",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix(ci): destrava o deploy de edge functions (#322)",
+    "files": [
+     ".github/workflows/deploy-edge-functions.yml"
+    ]
+   },
    {
     "sha": "1314c13",
     "date": "2026-11-24",
@@ -307641,21 +307650,16 @@
      "supabase/functions/template-success-notifications/index.ts",
      "supabase/functions/validation-queue-worker/index.ts"
     ]
-   },
-   {
-    "sha": "4bc4a7c",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(marketing): overview com DISC/VAK, metricas reais e segmentacao (#296)",
-    "files": [
-     "src/pages/MarketingHub.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/nurturing-runner/index.ts",
     3
+   ],
+   [
+    ".github/workflows/deploy-edge-functions.yml",
+    2
    ],
    [
     "src/hooks/useAuth.tsx",
@@ -307703,10 +307707,6 @@
    ],
    [
     "tests/rls/contact_relations_owner_scope.sql",
-    1
-   ],
-   [
-    ".github/workflows/deploy-edge-functions.yml",
     1
    ],
    [

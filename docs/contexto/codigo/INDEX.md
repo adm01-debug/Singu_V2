@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `1314c131bb11935d14ad7aed3a9f0d7265f127e9` (2026-11-24T06:58:27-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `2094be63bb4e9f0ad0a3f9472bc9856ff7873e21` (2026-11-24T06:59:07-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -447,7 +447,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25901 nós · 41397 arestas · 3059 comunidades · grafo do commit `1314c131`
+- 25901 nós · 41397 arestas · 3059 comunidades · grafo do commit `2094be63`
 - comunidades maiores: react (301), ref_types (278), useAuth (272), ref_lib (263), 02_tables.sql (259), react-router-dom (248), framer-motion (247), ref_hooks (241), lucide-react (239), ref_components (234), _shared/auth.ts (229), 📖 Dicionário de Dados — SINGU CRM (224)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -587,6 +587,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-24 `2094be6` fix(ci): destrava o deploy de edge functions (#322)
 - 2026-11-24 `1314c13` fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)
 - 2026-11-23 `27c8b40` feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)
 - 2026-11-23 `4f090e3` fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)
@@ -601,7 +602,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-23 `409a5ae` chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)
 - 2026-11-23 `fa7b7fb` fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)
 - 2026-11-23 `d19dec8` fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)
-- 2026-11-23 `14096c0` fix(FF62): territory-optimization propaga falha de RPC externa (#316)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
