@@ -103,8 +103,8 @@ jobs:
           fail=0
           falhas=""
           while IFS= read -r fn; do
-            printf '-> %s ... ' "${fn}"
-            if supabase functions deploy "${fn}" --project-ref "${PROJECT_REF}" > /tmp/saida.txt 2>&1; then
+            printf -- '-> %s ... ' "${fn}"
+            if supabase functions deploy "${fn}" --project-ref "${PROJECT_REF}" --yes > /tmp/saida.txt 2>&1; then
               echo OK
               ok=$((ok + 1))
             else
@@ -123,16 +123,15 @@ jobs:
       - name: Prova pos-deploy (fim da defasagem)
         if: inputs.dry_run == false
         run: |
-          set -uo pipefail
-          resp=$(curl -sS "${SUPABASE_URL}/functions/v1/voice-ai-health" \
-            -H "apikey: ${SUPABASE_ANON_KEY}" -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
-          echo "voice-ai-health: $(printf '%s' "${resp}" | head -c 400)"
-          if printf '%s' "${resp}" | grep -q 'LOVABLE_API_KEY'; then
-            echo "::error::voice-ai-health ainda responde com o build antigo (LOVABLE_API_KEY): a defasagem nao foi encerrada."
-            exit 1
-          fi
-          printf '%s' "${resp}" | grep -q 'DEEPSEEK_API_KEY' \
-            || echo "::warning::Resposta sem DEEPSEEK_API_KEY. Confira o corpo impresso acima."
+          set -euo pipefail
+          # a funcao e protegida por JWT de usuario, entao chamar a URL nao prova o build;
+          # o corpo publicado (bundled) e a prova objetiva: o codigo atual le DEEPSEEK_API_KEY
+          curl -sS "https://api.supabase.com/v1/projects/${PROJECT_REF}/functions/voice-ai-health/body" \
+            -H "Authorization: Bearer ${SUPABASE_ACCESS_TOKEN}" -o /tmp/vah.txt
+          echo "corpo publicado: $(wc -c < /tmp/vah.txt) bytes"
+          grep -q 'DEEPSEEK_API_KEY' /tmp/vah.txt \
+            || { echo "::error::O build publicado de voice-ai-health nao contem DEEPSEEK_API_KEY: a defasagem nao foi encerrada."; exit 1; }
+          echo "Prova OK: o build publicado contem DEEPSEEK_API_KEY."
 
       - name: Conferencia do verify_jwt
         if: inputs.dry_run == false
