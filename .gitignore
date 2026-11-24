@@ -68,3 +68,6 @@ __pycache__/
 
 # Supabase CLI — artefato de versao local
 supabase/.temp/cli-latest
+
+# Arquivo local do projeto (bundles/relatorios de auditoria) - ver AGENTS.md
+/_docs/
