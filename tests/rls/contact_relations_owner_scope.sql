@@ -1,4 +1,12 @@
 BEGIN;
+-- A migration 20260925102411 liga trg_valida_dominio_signup em auth.users: sem o
+-- domínio na allowlist, o INSERT de fixture abaixo é recusado. Libera o domínio de
+-- prova apenas nesta transação (o ROLLBACK do fim desfaz).
+INSERT INTO public.config_regras_negocio (chave, valor)
+VALUES ('DOMINIOS_SIGNUP_PERMITIDOS', 'scope.example.invalid')
+ON CONFLICT (chave) DO UPDATE
+  SET valor = concat_ws(',', nullif(btrim(public.config_regras_negocio.valor), ''), 'scope.example.invalid'),
+      updated_at = now();
 DO $relations$
 DECLARE
   actor_a uuid;
