@@ -112,6 +112,7 @@ Deno.serve(async (req) => {
         remote_jid: m.remote_jid,
         message_id: m.message_id ?? null,
         from_me: m.from_me,
+        direction: m.from_me ? 'outbound' : 'inbound',
         message_type: m.message_type,
         content: m.content ?? null,
         media_url: m.media_url ?? null,
