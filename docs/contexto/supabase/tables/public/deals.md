@@ -1,6 +1,6 @@
 # public.deals
 
-> Pipeline de negócios/oportunidades de venda
+> Registro de oportunidade de venda do CRM. Cada linha representa um negócio vinculado opcionalmente a uma empresa e a um contato, com valor, etapa, probabilidade e previsão de fechamento. O status possui domínio fechado e os itens do negócio são relacionados em public.deal_items. Chaves principais: id; company_id → public.companies.id; contact_id → public.contacts.id; user_id → public.profiles.id; loss_reason_id → public.loss_reasons.id.
 
 | propriedade | valor |
 |---|---|
@@ -19,23 +19,23 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `company_id` | `uuid` | sim |  |  |  |
-| 3 | `contact_id` | `uuid` | sim |  |  |  |
-| 4 | `user_id` | `uuid` | não |  |  |  |
-| 5 | `titulo` | `text` | não |  |  |  |
-| 6 | `valor` | `numeric(15,2)` | sim | `0` |  |  |
-| 7 | `status` | `text` | sim | `'aberto'::text` |  |  |
-| 8 | `pipeline_stage` | `text` | sim | `'lead'::text` |  |  |
-| 9 | `probabilidade` | `integer` | sim | `50` |  |  |
-| 10 | `previsao_fechamento` | `date` | sim |  |  |  |
-| 11 | `motivo_perda` | `text` | sim |  |  |  |
-| 12 | `notas` | `text` | sim |  |  |  |
-| 13 | `metadata` | `jsonb` | sim | `'{}'::jsonb` |  |  |
-| 14 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 15 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 16 | `closed_at` | `timestamp with time zone` | sim |  |  |  |
-| 17 | `loss_reason_id` | `uuid` | sim |  |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador UUID interno e chave primária da oportunidade; gerado por gen_random_uuid(). |
+| 2 | `company_id` | `uuid` | sim |  |  | Empresa relacionada à oportunidade; FK para public.companies.id. Nulo quando não vinculada a empresa. |
+| 3 | `contact_id` | `uuid` | sim |  |  | Contato principal relacionado à oportunidade; FK para public.contacts.id. Nulo quando não há contato associado. |
+| 4 | `user_id` | `uuid` | não |  |  | Usuário responsável/proprietário da oportunidade; FK para public.profiles.id. |
+| 5 | `titulo` | `text` | não |  |  | Título de exibição da oportunidade; texto obrigatório. |
+| 6 | `valor` | `numeric(15,2)` | sim | `0` |  | Valor nominal estimado da oportunidade; numeric, DEFAULT 0. A moeda e a unidade (reais ou centavos) não estão definidas no schema; não converter nem agregar como moeda confirmada sem validar a origem. |
+| 7 | `status` | `text` | sim | `'aberto'::text` |  | Estado comercial da oportunidade: aberto, negociando, proposta, ganho, perdido ou arquivado. DEFAULT aberto. Usar este campo para distinguir negócios ganhos/perdidos de negócios ainda em andamento. |
+| 8 | `pipeline_stage` | `text` | sim | `'lead'::text` |  | Nome/código textual da etapa atual do pipeline; DEFAULT lead. Não há FK nem domínio fechado nesta coluna; não confundir automaticamente com public.pipeline_stages. |
+| 9 | `probabilidade` | `integer` | sim | `50` |  | Probabilidade percentual inteira de fechamento, de 0 a 100 conforme CHECK; DEFAULT 50. Representa percentual, não fração decimal. |
+| 10 | `previsao_fechamento` | `date` | sim |  |  | Data prevista para fechamento, sem horário; date. |
+| 11 | `motivo_perda` | `text` | sim |  |  | Descrição textual do motivo de perda; texto livre. Para referência normalizada, verificar loss_reason_id. |
+| 12 | `notas` | `text` | sim |  |  | Observações livres associadas à oportunidade. |
+| 13 | `metadata` | `jsonb` | sim | `'{}'::jsonb` |  | Atributos complementares da oportunidade em JSONB; DEFAULT objeto vazio. As chaves internas não são formalizadas no schema. |
+| 14 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação da oportunidade no banco; timestamptz, DEFAULT now(). |
+| 15 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). Atualização automática depende de trigger ou da aplicação. |
+| 16 | `closed_at` | `timestamp with time zone` | sim |  |  | Data e hora em que a oportunidade foi encerrada, quando disponível; não determina sozinha se foi ganha ou perdida. |
+| 17 | `loss_reason_id` | `uuid` | sim |  |  | Motivo de perda normalizado; FK para public.loss_reasons.id. Aplicável principalmente quando status = perdido. |
 
 
 ## Constraints

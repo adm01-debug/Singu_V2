@@ -1,5 +1,7 @@
 # public.sales
 
+> Registro simplificado de venda/atividade comercial legado, com nome de cliente e produto como snapshots textuais, valor e estado do ciclo comercial. Não confundir com public.deals, que é a entidade de oportunidade vinculada a company/contact. PK: id; salesperson_id → public.salespeople.id; deleted_by → auth.users.id.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -16,19 +18,19 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `client_name` | `text` | não |  |  |  |
-| 3 | `product_name` | `text` | não |  |  |  |
-| 4 | `amount` | `numeric(12,2)` | não |  |  |  |
-| 5 | `status` | `text` | não | `'pending'::text` |  |  |
-| 6 | `category` | `text` | não | `'subscription'::text` |  |  |
-| 7 | `salesperson_id` | `uuid` | sim |  |  |  |
-| 8 | `source` | `text` | sim | `'other'::text` |  |  |
-| 9 | `deleted_at` | `timestamp with time zone` | sim |  |  |  |
-| 10 | `deleted_by` | `uuid` | sim |  |  |  |
-| 11 | `delete_reason` | `text` | sim |  |  |  |
-| 12 | `created_at` | `timestamp with time zone` | não | `now()` |  |  |
-| 13 | `updated_at` | `timestamp with time zone` | não | `now()` |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador UUID da venda e chave primária; gerado por gen_random_uuid(). |
+| 2 | `client_name` | `text` | não |  |  | Nome textual do cliente armazenado no registro da venda; não é chave estrangeira nem prova de correspondência com public.clients. |
+| 3 | `product_name` | `text` | não |  |  | Nome textual do produto associado à venda; não possui FK para public.products. |
+| 4 | `amount` | `numeric(12,2)` | não |  |  | Valor numérico da venda. A moeda e a unidade (reais ou centavos) não estão declaradas no schema; validar a origem antes de somar ou converter. |
+| 5 | `status` | `text` | não | `'pending'::text` |  | Estado da oportunidade/venda: completed, pending, cancelled, negotiation, proposal, qualification, discovery ou lead. DEFAULT pending. Esses estados não equivalem necessariamente aos de public.deals.status. |
+| 6 | `category` | `text` | não | `'subscription'::text` |  | Categoria da venda: subscription, service, project ou other. DEFAULT subscription. |
+| 7 | `salesperson_id` | `uuid` | sim |  |  | Vendedor associado à venda; FK para public.salespeople.id. |
+| 8 | `source` | `text` | sim | `'other'::text` |  | Origem textual da venda; DEFAULT other. Valores além do default não estão enumerados no schema. |
+| 9 | `deleted_at` | `timestamp with time zone` | sim |  |  | Data e hora da exclusão lógica do registro; NULL indica ausência de marca temporal de exclusão. |
+| 10 | `deleted_by` | `uuid` | sim |  |  | UUID do usuário que registrou a exclusão lógica; FK para auth.users.id. |
+| 11 | `delete_reason` | `text` | sim |  |  | Motivo textual da exclusão lógica. |
+| 12 | `created_at` | `timestamp with time zone` | não | `now()` |  | Data e hora de criação do registro; timestamptz, DEFAULT now(). |
+| 13 | `updated_at` | `timestamp with time zone` | não | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). |
 
 
 ## Constraints

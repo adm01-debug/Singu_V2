@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)",
    "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)",
    "fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)",
    "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)",
-   "feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)",
-   "fix(ci): destrava o deploy de edge functions (#322)"
+   "feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)"
   ]
  },
  "pr_template": null,

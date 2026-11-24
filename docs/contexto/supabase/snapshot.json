@@ -45571,7 +45571,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador interno único da empresa; UUID gerado automaticamente por gen_random_uuid(). Chave primária referenciada por tabelas relacionadas do CRM.",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -45584,7 +45584,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Identificador numérico da empresa no Bitrix24; pode ser nulo e, quando informado, é único. Usado para integração e reconciliação com o CRM externo.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45597,7 +45597,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Indicador booleano de que a empresa exerce papel de cliente. TRUE indica cliente; FALSE indica que esse papel não está marcado. Não confundir com status comercial.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -45610,7 +45610,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indicador booleano de que a empresa exerce papel de fornecedor. TRUE indica fornecedor; FALSE indica que esse papel não está marcado.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -45623,7 +45623,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indicador booleano de que a empresa exerce papel de transportadora. TRUE indica transportadora; FALSE indica que esse papel não está marcado.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -45636,7 +45636,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Nome de exibição/identificação da empresa no CRM; campo obrigatório. Não equivale necessariamente à razão social ou ao nome fantasia.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45649,7 +45649,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Razão social legal da empresa, quando conhecida; texto opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45662,7 +45662,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Nome fantasia comercial da empresa, quando conhecido; texto opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45675,7 +45675,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "CNPJ da empresa em texto; preserva zeros à esquerda e pode conter máscara. A coluna não informa por si só se o valor está normalizado ou validado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45688,7 +45688,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Inscrição estadual informada para a empresa; texto opcional, sem regra de formato documentada no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45701,7 +45701,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Inscrição municipal informada para a empresa; texto opcional, sem regra de formato documentada no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45714,7 +45714,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Endereço do site institucional da empresa, armazenado como texto/URL; campo opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45727,7 +45727,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Ramo de atividade da empresa em texto livre; não há domínio fechado documentado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45740,7 +45740,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Nome textual de grupo econômico associado à empresa. Há também grupo_economico_id para vínculo relacional; não presumir equivalência ou sincronização entre os dois sem validar a aplicação.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45753,7 +45753,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Situação cadastral no CRM. Domínio do tipo company_status: ativo, inativo ou suspenso. DEFAULT ativo. Não representa o papel de cliente/fornecedor/transportadora.",
         "default": "'ativo'::company_status",
         "generated": null,
         "identity": null,
@@ -45766,7 +45766,7 @@
         "type": "company_status"
       },
       {
-        "comment": null,
+        "comment": "URL da imagem de logo usada como representação/avatar; comentário existente indica resolução menor. Não confundir com logo_color_url e logo_mono_url, destinados a arquivos de maior resolução.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45779,7 +45779,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Dados JSONB relacionados a merge/consolidação de registros. Estrutura interna não formalizada no schema; consultar payload antes de filtrar por chaves específicas.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45792,7 +45792,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro no banco, com fuso horário (timestamptz); DEFAULT now(). Não é necessariamente a data de criação no Bitrix24.",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -45805,7 +45805,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada no banco, com fuso horário. DEFAULT now(); a atualização automática depende de trigger ou da aplicação.",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -45818,7 +45818,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro no Bitrix24, quando disponível; timestamptz opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45831,7 +45831,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização do registro no Bitrix24, quando disponível; timestamptz opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45844,7 +45844,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": "Usuário que cadastrou a empresa no sistema",
+        "comment": "Identificador integer do usuário/colaborador que cadastrou a empresa; FK para public.users.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45857,7 +45857,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do grupo econômico associado; FK para public.grupos_economicos.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45870,7 +45870,7 @@
         "type": "uuid"
       },
       {
-        "comment": "TRUE se é matriz, FALSE se é filial",
+        "comment": "Indica se a empresa é matriz. TRUE = matriz; FALSE = filial. DEFAULT TRUE. A matriz da filial é indicada em matriz_id.",
         "default": "true",
         "generated": null,
         "identity": null,
@@ -45883,7 +45883,7 @@
         "type": "boolean"
       },
       {
-        "comment": "Se for filial, aponta para a matriz",
+        "comment": "UUID da empresa matriz à qual esta empresa filial pertence; autorrelacionamento FK para public.companies.id. Nulo quando não há matriz informada.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45896,7 +45896,7 @@
         "type": "uuid"
       },
       {
-        "comment": "Tipo na hierarquia cooperativa",
+        "comment": "Categoria da entidade na hierarquia cooperativista. Valores permitidos: CENTRAL, SINGULAR, PAC, CONFEDERACAO, ENTIDADE_SISTEMA. Nulo quando não classificada.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45909,7 +45909,7 @@
         "type": "text"
       },
       {
-        "comment": "Se for Singular ou PAC, aponta para a Central",
+        "comment": "UUID da Central relacionada na hierarquia cooperativista; autorrelacionamento FK para public.companies.id. Comentário existente especifica uso para Singular ou PAC.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45922,7 +45922,7 @@
         "type": "uuid"
       },
       {
-        "comment": "Se for PAC, aponta para a Singular",
+        "comment": "UUID da Singular relacionada na hierarquia cooperativista; autorrelacionamento FK para public.companies.id. Comentário existente especifica uso para PAC.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45935,7 +45935,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Classificação textual da saúde financeira: growing, stable, cutting ou unknown. DEFAULT unknown. Não é um valor monetário.",
         "default": "'unknown'::text",
         "generated": null,
         "identity": null,
@@ -45948,7 +45948,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Informação de quantidade/porte de colaboradores armazenada como texto. O schema não define se contém número exato ou faixa; não converter para inteiro sem validar o conteúdo.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45961,7 +45961,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Informação textual de receita anual. O schema não define moeda, escala nem se o conteúdo é valor exato ou faixa; não tratar como numeric sem validar a origem.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -45974,7 +45974,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Array PostgreSQL de textos com concorrentes associados à empresa; DEFAULT array vazio. Não há catálogo ou normalização documentados.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -45987,7 +45987,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Array PostgreSQL de textos com desafios atribuídos à empresa; DEFAULT array vazio. Não há taxonomia fechada documentada.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -46000,7 +46000,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Array PostgreSQL de rótulos textuais da empresa; DEFAULT array vazio. Diferente de tabelas relacionais de tags.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -46013,7 +46013,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de exclusão lógica da empresa; NULL normalmente indica que não há marca de exclusão registrada. Timestamptz.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46026,7 +46026,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "UUID do usuário que registrou a exclusão lógica; FK para auth.users.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46039,7 +46039,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Vetor tsvector para busca textual; campo técnico derivado/indexável, não é texto de exibição.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46052,7 +46052,7 @@
         "type": "tsvector"
       },
       {
-        "comment": null,
+        "comment": "Representação textual da base do CNPJ, usada para agrupamento/normalização; não contém regra de tamanho explicitada no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46065,7 +46065,7 @@
         "type": "character varying(8)"
       },
       {
-        "comment": "Grupos de cores da marca/logo da empresa. Ex: {verde,azul,amarelo} para Sicoob. Usado para cruzamento com cores disponíveis nos produtos.",
+        "comment": "Array do tipo cor_grupo com cores associadas à marca. Valores permitidos: branco, preto, cinza, prata, dourado, vermelho, laranja, amarelo, verde, azul, azul_marinho, roxo, rosa, marrom, bege, transparente e multicolor.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46078,7 +46078,7 @@
         "type": "cor_grupo[]"
       },
       {
-        "comment": "FK para a confederação à qual esta central/singular está filiada. Nível hierárquico: CONFEDERAÇÃO → CENTRAL → SINGULAR → PAC. Adicionado em 2026-02-19 para formalizar hierarquia cooperativista.",
+        "comment": "UUID da Confederação na hierarquia cooperativista; autorrelacionamento FK para public.companies.id. Comentário existente descreve a cadeia Confederação → Central → Singular → PAC.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46091,7 +46091,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Nicho do cliente armazenado como texto livre; não há domínio fechado definido.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46104,7 +46104,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data de fundação da empresa, sem horário; tipo date.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46117,7 +46117,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Valor numérico do capital social. Unidade monetária e moeda não estão definidas na coluna; não presumir reais ou centavos sem confirmação da origem.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46130,7 +46130,7 @@
         "type": "numeric(15,2)"
       },
       {
-        "comment": null,
+        "comment": "Código ou classificação textual da natureza jurídica; formato/catálogo não definido pela coluna.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46143,7 +46143,7 @@
         "type": "character varying(10)"
       },
       {
-        "comment": null,
+        "comment": "Descrição textual da natureza jurídica, complementar a natureza_juridica.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46156,7 +46156,7 @@
         "type": "character varying(200)"
       },
       {
-        "comment": null,
+        "comment": "Porte da empresa conforme informação atribuída à Receita Federal; texto opcional. Valores concretos não estão enumerados no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46169,7 +46169,7 @@
         "type": "character varying(30)"
       },
       {
-        "comment": null,
+        "comment": "Situação cadastral atribuída à Receita Federal; texto opcional. Não confundir com companies.status, que é a situação no CRM.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46182,7 +46182,7 @@
         "type": "character varying(20)"
       },
       {
-        "comment": null,
+        "comment": "Data associada à situação cadastral na Receita Federal; tipo date.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46195,7 +46195,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Dados adicionais da Receita Federal em JSONB; estrutura variável, sem contrato de chaves definido no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46208,7 +46208,7 @@
         "type": "jsonb"
       },
       {
-        "comment": "Número da cooperativa no portal Sicoob/Sicredi/etc (ex: 1001, 3008). Chave de cruzamento com portais oficiais.",
+        "comment": "Número de cooperativa informado por portais de sistemas cooperativistas; texto para preservar formatação/zeros. Comentário existente cita exemplos e uso em cruzamentos.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46221,7 +46221,7 @@
         "type": "character varying(10)"
       },
       {
-        "comment": null,
+        "comment": "UUID de usuário associado à empresa; não há FK declarada para esta coluna no schema consultado. Não presumir que seja equivalente a created_by_id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46234,7 +46234,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Pontuação inteira de lead, DEFAULT 0. O schema não define escala, algoritmo ou faixa permitida; interpretar como score e não como valor financeiro.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -46247,7 +46247,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização do lead_score, com fuso horário.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46260,7 +46260,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Status textual do lead, DEFAULT novo. Não há CHECK constraint com a lista de estados válidos; não presumir transições ou valores além dos dados efetivamente usados.",
         "default": "'novo'::text",
         "generated": null,
         "identity": null,
@@ -46273,7 +46273,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Setor/indústria em texto livre; distinto de ramo_atividade e sem catálogo fechado documentado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46286,7 +46286,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Observações gerais em texto livre sobre a empresa.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46299,7 +46299,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Array PostgreSQL de tags textuais; DEFAULT array vazio. Não confundir com tags_array, que é outra coluna com finalidade possivelmente distinta não detalhada pelo schema.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -46312,7 +46312,7 @@
         "type": "text[]"
       },
       {
-        "comment": "URL da logo COLORIDA em alta resolução (Cloudflare Images). Consumida pelo Gerador de Mockup (default) e exportações. Distinta de logo_url (baixa res, só avatar). fix_version: 2026-06-28 logo-hi-res",
+        "comment": "URL da logo colorida em alta resolução; comentário existente indica uso em mockups e exportações.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46325,7 +46325,7 @@
         "type": "text"
       },
       {
-        "comment": "URL da logo MONOCROMATICA / 1 cor em alta resolução (Cloudflare Images). Consumida pelo Gerador de Mockup em tecnicas mono (laser, gravacao 1 cor). fix_version: 2026-06-28 logo-hi-res",
+        "comment": "URL da logo monocromática/em uma cor em alta resolução; comentário existente indica uso em técnicas monocromáticas.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46338,7 +46338,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Rótulo textual de modalidade VAK dominante; valores possíveis e convenção de codificação não estão definidos no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46351,7 +46351,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Rótulo textual sobre direção motivacional; valores e escala não estão definidos no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46364,7 +46364,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Descrição/categoria textual de estilo de trabalho; domínio não definido no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46377,7 +46377,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Rótulo textual de quadro de referência; valores permitidos não estão definidos no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46390,7 +46390,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Rótulo textual de preferência de granularidade de informação; valores permitidos não estão definidos no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46403,7 +46403,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Rótulo textual de filtro de ação; sem domínio ou interpretação formal definidos no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46416,7 +46416,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Rótulo textual de estilo de comparação; valores permitidos não estão definidos no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46429,7 +46429,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Texto que registra a objeção mais frequente associada à empresa; não há taxonomia fechada.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46442,7 +46442,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Perfil VAK da empresa em JSONB; estrutura de chaves não especificada pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46455,7 +46455,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Perfil de metaprogramas em JSONB; estrutura e escalas não especificadas pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46468,7 +46468,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Estado emocional textual atribuído à empresa/contato comercial; catálogo não definido pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46481,7 +46481,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Confiança numérica associada à análise emocional. Faixa, unidade e interpretação não estão definidas; não assumir 0–1 ou 0–100.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46494,7 +46494,7 @@
         "type": "numeric(5,2)"
       },
       {
-        "comment": null,
+        "comment": "Texto de gatilho emocional associado à análise; sem domínio fechado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46507,7 +46507,7 @@
         "type": "text"
       },
       {
-        "comment": "Última normalização via CNPJ Já. NULL = pendente de processamento.",
+        "comment": "Data e hora da última normalização do CNPJ; comentário existente informa NULL como pendente de processamento.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46520,7 +46520,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Cores da marca em JSONB; distinta de cores_marca, que usa array tipado cor_grupo. Estrutura JSON não está formalizada no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46533,7 +46533,7 @@
         "type": "jsonb"
       },
       {
-        "comment": "Timestamp de quando a busca de redes sociais foi executada (encontrado ou não encontrado). NULL = ainda não processado.",
+        "comment": "Data e hora em que foi executada a busca de redes sociais; comentário existente informa NULL como ainda não processado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46546,7 +46546,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": "Data/hora em que os dados foram comparados e sincronizados com a planilha DADOS_COMPLETOS_PORTAL_SICOOB_2026.xlsx",
+        "comment": "Data e hora da verificação/sincronização com a planilha indicada no comentário existente.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46559,7 +46559,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Número de cooperativa singular em texto; formato e regra de preenchimento não estão definidos no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46572,7 +46572,7 @@
         "type": "character varying"
       },
       {
-        "comment": null,
+        "comment": "Contador inteiro de versão do registro, DEFAULT 0. O mecanismo de incremento não está definido pela coluna.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -46585,7 +46585,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização de nome_crm, conforme convenção da aplicação.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46598,7 +46598,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização dos dados da empresa, conforme convenção da aplicação.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46611,7 +46611,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Regime tributário informado como texto; valores possíveis não estão enumerados no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46624,7 +46624,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do endereço e chave primária; gerado por uuid_generate_v4().",
         "default": "uuid_generate_v4()",
         "generated": null,
         "identity": null,
@@ -46637,7 +46637,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Empresa proprietária do endereço; FK para public.companies.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46650,7 +46650,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Categoria textual do endereço. DEFAULT legado aparece como Comercial|Faturamento, mas a coluna não tem CHECK; não assumir se esse conteúdo é literal ou combinação de categorias.",
         "default": "'''Comercial|Faturamento''::character varying'::character varying",
         "generated": null,
         "identity": null,
@@ -46663,7 +46663,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Indica se este é o endereço principal da empresa; boolean nullable, DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -46676,7 +46676,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "CEP do endereço, armazenado como texto para preservar zeros e formatação.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46689,7 +46689,7 @@
         "type": "character varying(10)"
       },
       {
-        "comment": null,
+        "comment": "Nome textual do logradouro; o tipo do logradouro está separado em tipo_logradouro.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46702,7 +46702,7 @@
         "type": "character varying(255)"
       },
       {
-        "comment": null,
+        "comment": "Número predial ou identificador do endereço, como texto para preservar formatos não numéricos.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46715,7 +46715,7 @@
         "type": "character varying(20)"
       },
       {
-        "comment": null,
+        "comment": "Complemento do endereço em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46728,7 +46728,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Bairro do endereço em texto.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46741,7 +46741,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Nome textual da cidade; cidade_ibge é o identificador normalizado quando disponível.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46754,7 +46754,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Estado/UF em texto; o schema não impõe formato de duas letras.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46767,7 +46767,7 @@
         "type": "character varying(2)"
       },
       {
-        "comment": null,
+        "comment": "País do endereço; DEFAULT Brasil.",
         "default": "'Brasil'::character varying",
         "generated": null,
         "identity": null,
@@ -46780,7 +46780,7 @@
         "type": "character varying(50)"
       },
       {
-        "comment": "Latitude obtida via Google Places API ou geocoding",
+        "comment": "Latitude geográfica numérica; comentário existente aponta origem Google Places/geocoding. Unidade esperada: graus decimais, sem CHECK de faixa no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46793,7 +46793,7 @@
         "type": "numeric(10,8)"
       },
       {
-        "comment": "Longitude obtida via Google Places API ou geocoding",
+        "comment": "Longitude geográfica numérica; comentário existente aponta origem Google Places/geocoding. Unidade esperada: graus decimais, sem CHECK de faixa no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46806,7 +46806,7 @@
         "type": "numeric(11,8)"
       },
       {
-        "comment": null,
+        "comment": "Referência textual para localizar o endereço.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46819,7 +46819,7 @@
         "type": "character varying(255)"
       },
       {
-        "comment": null,
+        "comment": "Instruções de entrega associadas ao endereço, em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46832,7 +46832,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Horário de funcionamento associado ao endereço, em texto livre; formato não padronizado no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46845,7 +46845,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro de endereço; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -46858,7 +46858,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -46871,7 +46871,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": "URL do Google Maps para este endereço",
+        "comment": "URL do Google Maps associada ao endereço.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46884,7 +46884,7 @@
         "type": "text"
       },
       {
-        "comment": "Google Place ID para integração com Places API",
+        "comment": "Identificador de Place do Google usado na integração com Places API.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46897,7 +46897,7 @@
         "type": "text"
       },
       {
-        "comment": "Origem: legacy_flat_migration, bitrix24_api, manual, viacep",
+        "comment": "Origem do dado conforme comentário existente: legacy_flat_migration, bitrix24_api, manual ou viacep. Não há CHECK constraint.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46910,7 +46910,7 @@
         "type": "character varying(50)"
       },
       {
-        "comment": "FK para catálogo de cidades IBGE. Permite consultas geográficas por mesorregião, microrregião e coordenadas.",
+        "comment": "Código IBGE da cidade; FK para public.cidades.ibge_code. Permite relacionar com região, estado e coordenadas do catálogo.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -46923,7 +46923,7 @@
         "type": "integer"
       },
       {
-        "comment": "Tipo do logradouro padrão Correios (Rua, Avenida, Travessa, Praça, etc.). Separado do nome do logradouro.",
+        "comment": "Tipo padronizado de logradouro, como Rua, Avenida, Travessa ou Praça; separado do nome em logradouro.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47170,7 +47170,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do e-mail e chave primária; gerado por uuid_generate_v4().",
         "default": "uuid_generate_v4()",
         "generated": null,
         "identity": null,
@@ -47183,7 +47183,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Empresa proprietária do e-mail; FK para public.companies.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47196,7 +47196,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Finalidade do e-mail: corporativo, pessoal, financeiro, nfe, marketing, comercial ou compras. DEFAULT corporativo.",
         "default": "'corporativo'::email_type",
         "generated": null,
         "identity": null,
@@ -47209,7 +47209,7 @@
         "type": "email_type"
       },
       {
-        "comment": null,
+        "comment": "Endereço de e-mail da empresa; texto obrigatório.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47222,7 +47222,7 @@
         "type": "character varying(255)"
       },
       {
-        "comment": null,
+        "comment": "Versão normalizada do e-mail; algoritmo de normalização não declarado no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47235,7 +47235,7 @@
         "type": "character varying(255)"
       },
       {
-        "comment": null,
+        "comment": "Indica se este é o e-mail principal da empresa; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -47248,7 +47248,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Departamento associado ao endereço; texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47261,7 +47261,7 @@
         "type": "character varying(50)"
       },
       {
-        "comment": null,
+        "comment": "Observação livre sobre o e-mail.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47274,7 +47274,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -47287,7 +47287,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -47300,7 +47300,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Origem textual do e-mail; domínio não restringido.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47313,7 +47313,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Contexto textual de uso do e-mail; domínio não restringido.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47326,7 +47326,7 @@
         "type": "character varying(200)"
       },
       {
-        "comment": null,
+        "comment": "Score smallint de confiabilidade do e-mail; escala e interpretação não estão definidas no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47339,7 +47339,7 @@
         "type": "smallint"
       },
       {
-        "comment": null,
+        "comment": "Indica se o e-mail foi verificado; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -47352,7 +47352,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do telefone e chave primária; gerado por uuid_generate_v4().",
         "default": "uuid_generate_v4()",
         "generated": null,
         "identity": null,
@@ -47365,7 +47365,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Empresa proprietária do telefone; FK para public.companies.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47378,7 +47378,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Tipo do telefone: celular_corporativo, fixo_comercial, celular_pessoal ou invalido. DEFAULT fixo_comercial.",
         "default": "'fixo_comercial'::phone_type",
         "generated": null,
         "identity": null,
@@ -47391,7 +47391,7 @@
         "type": "phone_type"
       },
       {
-        "comment": null,
+        "comment": "Número de telefone conforme informado; texto obrigatório para preservar máscara e conteúdo original.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47404,7 +47404,7 @@
         "type": "character varying(50)"
       },
       {
-        "comment": null,
+        "comment": "Representação normalizada do número; formato/algoritmo não é validado por CHECK.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47417,7 +47417,7 @@
         "type": "character varying(20)"
       },
       {
-        "comment": null,
+        "comment": "Ramal telefônico em texto; opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47430,7 +47430,7 @@
         "type": "character varying(10)"
       },
       {
-        "comment": null,
+        "comment": "Indica se este é o telefone principal da empresa; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -47443,7 +47443,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se o número é utilizável como WhatsApp; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -47456,7 +47456,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Departamento associado ao telefone, em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47469,7 +47469,7 @@
         "type": "character varying(50)"
       },
       {
-        "comment": null,
+        "comment": "Observação livre sobre o telefone.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47482,7 +47482,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -47495,7 +47495,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -47508,7 +47508,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Número em formato internacional E.164 quando disponível; sem validação de formato no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47521,7 +47521,7 @@
         "type": "character varying(20)"
       },
       {
-        "comment": null,
+        "comment": "Origem textual do número; valores não enumerados.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47534,7 +47534,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Contexto textual de uso do telefone; valores não enumerados.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -47547,7 +47547,7 @@
         "type": "character varying(200)"
       },
       {
-        "comment": null,
+        "comment": "Score smallint de confiabilidade do telefone; escala e interpretação não estão definidas no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49679,7 +49679,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do endereço e chave primária; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -49692,7 +49692,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Contato proprietário do endereço; FK para public.contacts.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49705,7 +49705,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Tipo do endereço: residencial, profissional, cobranca ou outro. DEFAULT profissional.",
         "default": "'profissional'::text",
         "generated": null,
         "identity": null,
@@ -49718,7 +49718,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Indica se o endereço é principal para o contato; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -49731,7 +49731,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "CEP em texto; preserva zeros e pontuação.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49744,7 +49744,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Nome do logradouro em texto; tipo_logradouro guarda separadamente Rua/Avenida etc.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49757,7 +49757,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Número ou identificador predial em texto.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49770,7 +49770,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Complemento do endereço em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49783,7 +49783,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Bairro do endereço em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49796,7 +49796,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Nome textual da cidade; cidade_ibge fornece o vínculo ao catálogo IBGE quando preenchido.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49809,7 +49809,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "UF/estado em campo character; o schema não inclui CHECK de valores brasileiros.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49822,7 +49822,7 @@
         "type": "character(2)"
       },
       {
-        "comment": null,
+        "comment": "País do endereço; DEFAULT Brasil.",
         "default": "'Brasil'::text",
         "generated": null,
         "identity": null,
@@ -49835,7 +49835,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Latitude em double precision, normalmente graus decimais; faixa não validada por CHECK.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49848,7 +49848,7 @@
         "type": "double precision"
       },
       {
-        "comment": null,
+        "comment": "Longitude em double precision, normalmente graus decimais; faixa não validada por CHECK.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49861,7 +49861,7 @@
         "type": "double precision"
       },
       {
-        "comment": null,
+        "comment": "Código IBGE da cidade; FK declarada não aparece nesta tabela na inspeção, então validar constraint antes de assumir integridade referencial.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49874,7 +49874,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Tipo do logradouro, separado do nome do logradouro.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49887,7 +49887,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Ponto de referência em texto livre para localização do endereço.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49900,7 +49900,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "URL do Google Maps para este endereço, quando disponível.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49913,7 +49913,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Identificador do local no Google Places, quando disponível.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49926,7 +49926,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Origem do endereço; DEFAULT manual. Valores adicionais não são limitados por CHECK.",
         "default": "'manual'::text",
         "generated": null,
         "identity": null,
@@ -49939,7 +49939,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Fonte textual complementar do endereço; sem domínio fechado no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49952,7 +49952,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do endereço; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -49965,7 +49965,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -49978,7 +49978,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "ID integer do colaborador que criou o endereço; FK para public.users.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -49991,7 +49991,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "ID integer do colaborador que atualizou o endereço; FK para public.users.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -51473,7 +51473,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do e-mail e chave primária; gerado por uuid_generate_v4().",
         "default": "uuid_generate_v4()",
         "generated": null,
         "identity": null,
@@ -51486,7 +51486,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Contato proprietário do e-mail; FK para public.contacts.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -51499,7 +51499,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Finalidade do e-mail: corporativo, pessoal, financeiro, nfe, marketing, comercial ou compras. DEFAULT corporativo.",
         "default": "'corporativo'::email_type",
         "generated": null,
         "identity": null,
@@ -51512,7 +51512,7 @@
         "type": "email_type"
       },
       {
-        "comment": null,
+        "comment": "Endereço de e-mail armazenado conforme informado; texto obrigatório.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -51525,7 +51525,7 @@
         "type": "character varying(255)"
       },
       {
-        "comment": null,
+        "comment": "Versão normalizada do e-mail, quando calculada; não há expressão gerada ou CHECK declarando o algoritmo.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -51538,7 +51538,7 @@
         "type": "character varying(255)"
       },
       {
-        "comment": null,
+        "comment": "Indica se este é o e-mail principal do contato; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -51551,7 +51551,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se o e-mail foi verificado; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -51564,7 +51564,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -51577,7 +51577,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -51590,7 +51590,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Origem textual do e-mail; valores não enumerados no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -51603,7 +51603,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Contexto textual de uso do e-mail; valores não enumerados no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -51616,7 +51616,7 @@
         "type": "character varying(200)"
       },
       {
-        "comment": null,
+        "comment": "Score smallint de confiabilidade do e-mail; escala e interpretação não estão definidas por CHECK ou comentário. DEFAULT 0.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -52799,7 +52799,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do telefone e chave primária; gerado por uuid_generate_v4().",
         "default": "uuid_generate_v4()",
         "generated": null,
         "identity": null,
@@ -52812,7 +52812,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Contato proprietário do telefone; FK para public.contacts.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -52825,7 +52825,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Tipo do telefone: celular_corporativo, fixo_comercial, celular_pessoal ou invalido. DEFAULT fixo_comercial.",
         "default": "'fixo_comercial'::phone_type",
         "generated": null,
         "identity": null,
@@ -52838,7 +52838,7 @@
         "type": "phone_type"
       },
       {
-        "comment": null,
+        "comment": "Telefone em representação normalizada, conforme convenção da aplicação; algoritmo e formato não são validados por CHECK.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -52851,7 +52851,7 @@
         "type": "character varying(20)"
       },
       {
-        "comment": null,
+        "comment": "Indica se este é o telefone principal do contato; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -52864,7 +52864,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se o número pode ser usado como WhatsApp; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -52877,7 +52877,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se o telefone foi verificado; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -52890,7 +52890,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Observação livre sobre o telefone.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -52903,7 +52903,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -52916,7 +52916,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -52929,7 +52929,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Telefone em formato internacional E.164, quando disponível; o formato não é validado por CHECK.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -52942,7 +52942,7 @@
         "type": "character varying(20)"
       },
       {
-        "comment": null,
+        "comment": "Origem textual do número; valores não enumerados no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -52955,7 +52955,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Contexto textual de uso do telefone; valores não enumerados.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -52968,7 +52968,7 @@
         "type": "character varying(200)"
       },
       {
-        "comment": null,
+        "comment": "Score smallint de confiabilidade do telefone; escala e interpretação não estão definidas no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -52981,7 +52981,7 @@
         "type": "smallint"
       },
       {
-        "comment": null,
+        "comment": "Número de telefone conforme armazenado/informado; texto obrigatório, preserva caracteres e formatação.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54450,7 +54450,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID único do contato; PK, gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -54463,7 +54463,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Empresa associada ao contato; FK para public.companies.id. Nulo quando não há empresa vinculada.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54476,7 +54476,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Identificador integer do contato no Bitrix24; opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54489,7 +54489,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Primeiro nome do contato; texto opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54502,7 +54502,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Sobrenome do contato; texto opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54515,7 +54515,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Cargo profissional do contato em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54528,7 +54528,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Departamento do contato. Valores aceitos: Compras, Marketing, RH, Diretoria, Financeiro, Comercial e Gestão; também pode ser NULL.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54541,7 +54541,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "CPF armazenado como texto. CHECK exige exatamente 11 dígitos após remover caracteres não numéricos; pontuação pode existir no valor armazenado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54554,7 +54554,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data de nascimento sem horário; tipo date.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54567,7 +54567,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Classificação textual de sexo; valores permitidos não estão documentados no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54580,7 +54580,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Identificador integer do usuário/colaborador que atribuiu o contato; FK para public.users.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54593,7 +54593,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Origem do cadastro, enum data_source: CRM, SPA_CLIENTE, SPA_FORNECEDOR, SPA_TRANSPORTADORA, MERGED, MANUAL, LINKEDIN, LUSHA, LEADCONTACT ou WHATSAPP.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54606,7 +54606,7 @@
         "type": "data_source"
       },
       {
-        "comment": null,
+        "comment": "Atributos adicionais do contato em JSONB; sem esquema fixo de chaves.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54619,7 +54619,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro no banco; DEFAULT now(), timestamptz.",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -54632,7 +54632,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; DEFAULT now(). Atualização automática depende de trigger/aplicação.",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -54645,7 +54645,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação no Bitrix24, quando disponível.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54658,7 +54658,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Papel do contato no processo de compra: owner, manager, buyer, contact, decision_maker ou influencer.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54671,7 +54671,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Array textual de hobbies; DEFAULT vazio.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -54684,7 +54684,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Array textual de interesses; DEFAULT vazio.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -54697,7 +54697,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Informações familiares em texto livre; pode conter dados pessoais.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54710,7 +54710,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Anotações pessoais em texto livre; pode conter dados pessoais.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54723,7 +54723,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Etapa do relacionamento: unknown, prospect, qualified_lead, opportunity, negotiation, customer, loyal_customer, advocate, at_risk ou lost. DEFAULT unknown.",
         "default": "'unknown'::text",
         "generated": null,
         "identity": null,
@@ -54736,7 +54736,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Score inteiro de relacionamento de 0 a 100, conforme CHECK; DEFAULT 50.",
         "default": "50",
         "generated": null,
         "identity": null,
@@ -54749,7 +54749,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Sentimento categórico: positive, neutral ou negative. DEFAULT neutral.",
         "default": "'neutral'::text",
         "generated": null,
         "identity": null,
@@ -54762,7 +54762,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Perfil comportamental em JSONB. DEFAULT contém campos VAK/DISC e preferências; consultar o JSON efetivo para chaves e subestruturas.",
         "default": "'{\"vakProfile\": {\"scores\": {\"visual\": 0, \"digital\": 0, \"auditory\": 0, \"kinesthetic\": 0}, \"primary\": null}, \"discProfile\": null, \"supportLevel\": 5, \"decisionPower\": 5, \"influencesIds\": [], \"needsApproval\": false, \"discConfidence\": 0, \"formalityLevel\": 3, \"competitorsUsed\": [], \"influencedByIds\": [], \"decisionCriteria\": [], \"preferredChannel\": \"whatsapp\", \"currentChallenges\": [], \"temperamentProfile\": {\"primary\": null}}'::jsonb",
         "generated": null,
         "identity": null,
@@ -54775,7 +54775,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Eventos de vida em JSONB; DEFAULT array JSON vazio. Não confundir com a tabela relacional public.life_events.",
         "default": "'[]'::jsonb",
         "generated": null,
         "identity": null,
@@ -54788,7 +54788,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Array textual de tags; DEFAULT vazio.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -54801,7 +54801,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Data de aniversário sem horário; pode diferir de data_nascimento caso seja usada apenas para lembretes.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54814,7 +54814,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Notas gerais em texto livre sobre o contato.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54827,7 +54827,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "UUID do usuário proprietário/associado ao contato. NOT NULL no schema; não há FK declarada nesta coluna na inspeção.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54840,7 +54840,7 @@
         "type": "uuid"
       },
       {
-        "comment": "Nome completo gerado automaticamente (first_name + last_name)",
+        "comment": "Nome completo gerado automaticamente a partir de first_name e last_name, com espaços aparados; coluna gerada.",
         "default": "TRIM(BOTH FROM ((COALESCE(first_name, ''::text) || ' '::text) || COALESCE(last_name, ''::text)))",
         "generated": "s",
         "identity": null,
@@ -54853,7 +54853,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Indicador de duplicidade. TRUE identifica registro marcado como duplicado; FALSE não marcado. DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -54866,7 +54866,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "UUID do contato considerado registro canônico para este duplicado; FK autorreferente para public.contacts.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54879,7 +54879,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da exclusão lógica do contato; NULL indica ausência de marca temporal de exclusão.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54892,7 +54892,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "UUID do usuário que registrou a exclusão lógica; não há FK declarada na inspeção.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54905,7 +54905,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Vetor tsvector para busca textual; dado técnico derivado, não é conteúdo de exibição.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54918,7 +54918,7 @@
         "type": "tsvector"
       },
       {
-        "comment": "Nome para automações. Ex: Maria Fernanda. Auto-preenchido via full_name.",
+        "comment": "Nome recomendado para tratamento em automações; comentário existente diz que é preenchido a partir de full_name.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54931,7 +54931,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": "Apelido informal. Ex: Mafe, Zé. Preenchido manualmente pelo vendedor.",
+        "comment": "Apelido informal do contato, preenchido manualmente conforme comentário existente.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54944,7 +54944,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": "Como assina docs/emails. Ex: Maria F. Costa. Auto-preenchido.",
+        "comment": "Forma de assinatura em documentos/e-mails; comentário existente indica nome abreviado ou de assinatura.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54957,7 +54957,7 @@
         "type": "character varying(150)"
       },
       {
-        "comment": null,
+        "comment": "Título profissional do contato em texto; distinto de cargo, sem regra de sincronização definida.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54970,7 +54970,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "E-mail principal/legado do contato em texto. Para múltiplos e-mails tipados, consultar public.contact_emails.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54983,7 +54983,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Telefone principal/legado em texto. Para múltiplos telefones tipados, consultar public.contact_phones.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -54996,7 +54996,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Número ou identificador de WhatsApp em texto; normalização não especificada.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55009,7 +55009,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "URL ou identificador do perfil LinkedIn; formato não restringido pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55022,7 +55022,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "URL ou identificador do perfil Instagram; formato não restringido pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55035,7 +55035,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "URL ou identificador do perfil X/Twitter; formato não restringido pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55048,7 +55048,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "URL do avatar/foto do contato.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55061,7 +55061,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Array textual de tags; DEFAULT vazio. É distinta de tags_array e não possui catálogo definido.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -55074,7 +55074,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Array textual de interesses; distinta de interests_array, sem regra de sincronização documentada.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -55087,7 +55087,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Modalidade VAK dominante em texto; valores e convenção não especificados pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55100,7 +55100,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Direção motivacional em texto; valores permitidos não estão definidos na coluna.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55113,7 +55113,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Estilo de trabalho textual; domínio não formalizado no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55126,7 +55126,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Referencial de avaliação/comunicação textual; domínio não formalizado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55139,7 +55139,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Preferência de granularidade da informação em texto; valores não enumerados.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55152,7 +55152,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Preferência/filtro de ação em texto; valores não enumerados.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55165,7 +55165,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Estilo de comparação em texto; valores não enumerados.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55178,7 +55178,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Objeção mais frequente em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55191,7 +55191,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Perfil VAK estruturado em JSONB; esquema interno não declarado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55204,7 +55204,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Perfil de metaprogramas estruturado em JSONB; esquema interno não declarado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55217,7 +55217,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Estado emocional em texto; catálogo não declarado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55230,7 +55230,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Confiança numérica da análise emocional; escala/unidade não declarada. Não assumir intervalo 0–1 ou 0–100.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55243,7 +55243,7 @@
         "type": "numeric(5,2)"
       },
       {
-        "comment": null,
+        "comment": "Gatilho emocional associado, em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55256,7 +55256,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última interação registrada para o contato, timestamptz.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55269,7 +55269,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Padrões de objeções em JSONB; estrutura interna não formalizada.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -55282,7 +55282,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Contador inteiro de versão do registro; DEFAULT 0. Regra de incremento não declarada.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -59806,7 +59806,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do registro de cliente; PK, gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -59819,7 +59819,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Empresa que este cadastro comercial complementa; FK para public.companies.id e UNIQUE, portanto no máximo um registro customers por empresa.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59832,7 +59832,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Ramo de atividade atribuído ao cliente, em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59845,7 +59845,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Grupo/segmento interno de clientes, em texto livre; valores permitidos não documentados.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59858,7 +59858,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Tipo de cooperativa atribuído ao cliente; texto sem CHECK local. Para valores e hierarquia da empresa, comparar com companies.tipo_cooperativa.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59871,7 +59871,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Perfil de preço do cliente em texto; escala/categorias não definidas no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59884,7 +59884,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Perfil de qualidade do cliente em texto; escala/categorias não definidas.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59897,7 +59897,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Perfil de prazo do cliente em texto; escala/categorias não definidas.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59910,7 +59910,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Classificação textual do poder de compra; valores e escala não definidos.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59923,7 +59923,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Indica se o cliente foi marcado como ativado; TRUE/FALSE, DEFAULT false. Critério operacional de ativação não está descrito na coluna.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -59936,7 +59936,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se há registro de compra anterior; TRUE/FALSE, DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -59949,7 +59949,7 @@
         "type": "boolean"
       },
       {
-        "comment": "Vendedor CLOSER atual (proprietário da carteira)",
+        "comment": "ID integer do vendedor CLOSER atual e proprietário da carteira; FK para public.users.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59962,7 +59962,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Data em que o cliente entrou na carteira comercial.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59975,7 +59975,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Observações comerciais em texto livre.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -59988,7 +59988,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Resumo textual sobre o cliente; conteúdo e formato não restringidos pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60001,7 +60001,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Dados provenientes de SPA armazenados em JSONB; estrutura variável não formalizada.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60014,7 +60014,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do cadastro de cliente no banco; DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -60027,7 +60027,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; DEFAULT now(). Atualização automática depende de trigger/aplicação.",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -60040,7 +60040,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": "Data do primeiro pedido fechado",
+        "comment": "Data da primeira compra fechada; definição indicada no comentário existente.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60053,7 +60053,7 @@
         "type": "date"
       },
       {
-        "comment": "Data do último pedido fechado",
+        "comment": "Data da compra fechada mais recente; definição indicada no comentário existente.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60066,7 +60066,7 @@
         "type": "date"
       },
       {
-        "comment": "Quantidade total de pedidos",
+        "comment": "Quantidade total de pedidos, DEFAULT 0; unidade: pedidos.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -60079,7 +60079,7 @@
         "type": "integer"
       },
       {
-        "comment": "Valor total de todas as compras (LTV)",
+        "comment": "Valor agregado das compras/LTV, com CHECK para valor não negativo. Moeda e unidade não estão especificadas; não assumir BRL ou centavos sem validar a fonte.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -60092,7 +60092,7 @@
         "type": "numeric(14,2)"
       },
       {
-        "comment": "SDR responsável por prospectar este cliente (se inativo)",
+        "comment": "ID integer do SDR responsável pela prospecção do cliente, conforme comentário existente; FK para public.users.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60105,7 +60105,7 @@
         "type": "integer"
       },
       {
-        "comment": "Data que o SDR recebeu este cliente para prospecção",
+        "comment": "Data em que o SDR recebeu o cliente para prospecção.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60118,7 +60118,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Nome textual do vendedor armazenado como snapshot; vendedor_id é a chave relacional preferencial.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60131,7 +60131,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Nome textual do SDR armazenado como snapshot; sdr_id é a chave relacional preferencial.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60144,7 +60144,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data de ativação do cliente.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60157,7 +60157,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Identificação textual de quem ou qual processo ativou o cliente; formato não normalizado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60170,7 +60170,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "ID integer do primeiro ativador; a inspeção não apresentou FK para esta coluna.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60183,7 +60183,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Nome textual do primeiro ativador, armazenado como snapshot.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60196,7 +60196,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data da primeira ativação registrada.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60209,7 +60209,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Data da inativação do cliente.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60222,7 +60222,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "ID integer de quem inativou o cliente; FK não declarada na inspeção.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60235,7 +60235,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Nome textual de quem inativou o cliente, armazenado como snapshot.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60248,7 +60248,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Motivo de inativação em texto livre; valores não enumerados.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60261,7 +60261,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Ticket médio numérico, com CHECK para valor não negativo. Moeda, período de cálculo e método de agregação não estão definidos no schema.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -60274,7 +60274,7 @@
         "type": "numeric(15,2)"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da exclusão lógica do cadastro de cliente; NULL indica ausência de marca temporal de exclusão.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60963,7 +60963,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do item de oportunidade e chave primária; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -60976,7 +60976,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Oportunidade à qual pertence a linha; FK para public.deals.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -60989,7 +60989,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Produto do catálogo associado; FK para public.products.id. Pode ser nulo para item sem vínculo cadastral.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -61002,7 +61002,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Snapshot textual do nome do produto na oportunidade; pode ser nulo.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -61015,7 +61015,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Quantidade do item; integer, DEFAULT 1. Unidade de medida depende do produto.",
         "default": "1",
         "generated": null,
         "identity": null,
@@ -61028,7 +61028,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Preço unitário da linha; numeric, DEFAULT 0. Moeda não especificada no schema.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -61041,7 +61041,7 @@
         "type": "numeric"
       },
       {
-        "comment": null,
+        "comment": "Percentual de desconto aplicado à linha; numeric, DEFAULT 0. A fórmula usa o valor dividido por 100.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -61054,7 +61054,7 @@
         "type": "numeric"
       },
       {
-        "comment": null,
+        "comment": "Total calculado automaticamente: quantity × unit_price × (1 − discount_percent/100). Coluna GENERATED; não tratar como entrada independente.",
         "default": "(((quantity)::numeric * unit_price) * ((1)::numeric - (discount_percent / (100)::numeric)))",
         "generated": "s",
         "identity": null,
@@ -61067,7 +61067,7 @@
         "type": "numeric"
       },
       {
-        "comment": null,
+        "comment": "Observações textuais opcionais sobre a linha do negócio.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -61080,7 +61080,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação da linha; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -62211,7 +62211,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID interno e chave primária da oportunidade; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -62224,7 +62224,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Empresa relacionada à oportunidade; FK para public.companies.id. Nulo quando não vinculada a empresa.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -62237,7 +62237,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Contato principal relacionado à oportunidade; FK para public.contacts.id. Nulo quando não há contato associado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -62250,7 +62250,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Usuário responsável/proprietário da oportunidade; FK para public.profiles.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -62263,7 +62263,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Título de exibição da oportunidade; texto obrigatório.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -62276,7 +62276,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Valor nominal estimado da oportunidade; numeric, DEFAULT 0. A moeda e a unidade (reais ou centavos) não estão definidas no schema; não converter nem agregar como moeda confirmada sem validar a origem.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -62289,7 +62289,7 @@
         "type": "numeric(15,2)"
       },
       {
-        "comment": null,
+        "comment": "Estado comercial da oportunidade: aberto, negociando, proposta, ganho, perdido ou arquivado. DEFAULT aberto. Usar este campo para distinguir negócios ganhos/perdidos de negócios ainda em andamento.",
         "default": "'aberto'::text",
         "generated": null,
         "identity": null,
@@ -62302,7 +62302,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Nome/código textual da etapa atual do pipeline; DEFAULT lead. Não há FK nem domínio fechado nesta coluna; não confundir automaticamente com public.pipeline_stages.",
         "default": "'lead'::text",
         "generated": null,
         "identity": null,
@@ -62315,7 +62315,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Probabilidade percentual inteira de fechamento, de 0 a 100 conforme CHECK; DEFAULT 50. Representa percentual, não fração decimal.",
         "default": "50",
         "generated": null,
         "identity": null,
@@ -62328,7 +62328,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Data prevista para fechamento, sem horário; date.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -62341,7 +62341,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Descrição textual do motivo de perda; texto livre. Para referência normalizada, verificar loss_reason_id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -62354,7 +62354,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Observações livres associadas à oportunidade.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -62367,7 +62367,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Atributos complementares da oportunidade em JSONB; DEFAULT objeto vazio. As chaves internas não são formalizadas no schema.",
         "default": "'{}'::jsonb",
         "generated": null,
         "identity": null,
@@ -62380,7 +62380,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação da oportunidade no banco; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -62393,7 +62393,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now(). Atualização automática depende de trigger ou da aplicação.",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -62406,7 +62406,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora em que a oportunidade foi encerrada, quando disponível; não determina sozinha se foi ganha ou perdida.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -62419,7 +62419,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Motivo de perda normalizado; FK para public.loss_reasons.id. Aplicável principalmente quando status = perdido.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73599,7 +73599,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID da interação e chave primária; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -73612,7 +73612,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Contato participante da interação; FK para public.contacts.id; pode ser NULL.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73625,7 +73625,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Empresa relacionada à interação; FK para public.companies.id; pode ser NULL.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73638,7 +73638,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Canal da interação, armazenado como texto obrigatório. Valores permitidos não estão restringidos pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73651,7 +73651,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Direção da comunicação, armazenada como texto obrigatório. Sem valores enumerados no schema; não inferir nomes válidos apenas por convenção.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73664,7 +73664,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Estado operacional: pendente, concluido, cancelado ou agendado. DEFAULT concluido.",
         "default": "'concluido'::text",
         "generated": null,
         "identity": null,
@@ -73677,7 +73677,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Assunto/título curto da interação; opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73690,7 +73690,7 @@
         "type": "character varying(255)"
       },
       {
-        "comment": null,
+        "comment": "Resumo textual da interação; opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73703,7 +73703,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Conteúdo ou observação textual da interação; pode conter transcrição ou detalhes da comunicação.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73716,7 +73716,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da interação efetiva; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -73729,7 +73729,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora planejada para a interação; timestamptz opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73742,7 +73742,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Duração da interação em segundos; integer opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73755,7 +73755,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "ID integer do usuário/colaborador responsável; FK para public.users.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73768,7 +73768,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Metadados complementares da interação em JSONB; DEFAULT objeto vazio. Estrutura interna não é restringida.",
         "default": "'{}'::jsonb",
         "generated": null,
         "identity": null,
@@ -73781,7 +73781,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Anexos representados em JSONB; DEFAULT array JSON vazio. Não confundir com attachments, que é array de textos.",
         "default": "'[]'::jsonb",
         "generated": null,
         "identity": null,
@@ -73794,7 +73794,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Identificador externo da interação em texto; sistema de origem indicado separadamente em source_system.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73807,7 +73807,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Nome do sistema de origem da interação; texto livre, sem catálogo definido.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73820,7 +73820,7 @@
         "type": "character varying(50)"
       },
       {
-        "comment": null,
+        "comment": "Identificador integer da atividade correspondente no Bitrix24, quando disponível.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73833,7 +73833,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Rótulo de sentimento da interação; texto sem escala ou domínio fechado definido no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73846,7 +73846,7 @@
         "type": "character varying(20)"
       },
       {
-        "comment": null,
+        "comment": "Prioridade textual da interação; valores permitidos não estão enumerados no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73859,7 +73859,7 @@
         "type": "character varying(20)"
       },
       {
-        "comment": null,
+        "comment": "Indica se a interação requer follow-up; boolean nullable, DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -73872,7 +73872,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Data e hora prevista para o follow-up; timestamptz opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73885,7 +73885,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Indica se o follow-up foi concluído; boolean nullable, DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -73898,7 +73898,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro no banco; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -73911,7 +73911,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -73924,7 +73924,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "UUID do usuário que criou o registro, quando disponível; sem FK declarada no schema consultado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73937,7 +73937,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Categoria funcional da interação: whatsapp, call, email, meeting, note, social, system, commercial ou sdr_alert. Diferente de channel: este campo classifica o tipo do registro.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73950,7 +73950,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Título alternativo em texto usado por consumidores da aplicação; não há regra de equivalência com assunto definida no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73963,7 +73963,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Conteúdo alternativo em texto usado por consumidores da aplicação; não há regra de equivalência com conteudo definida no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73976,7 +73976,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "URL do áudio associado à interação, quando houver.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -73989,7 +73989,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Transcrição textual do áudio/chamada, quando disponível.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -74002,7 +74002,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Array PostgreSQL de tags textuais associadas; DEFAULT vazio.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -74015,7 +74015,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Duração adicional em segundos conforme o nome da coluna; o schema não declara unidade ou relação com duracao_segundos, portanto validar o produtor antes de combinar os campos.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -74028,7 +74028,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Array PostgreSQL de textos usados como referências de anexos; distinto de anexos JSONB.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -74041,7 +74041,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Indica quem iniciou a interação: us = usuário/equipe; them = contato/parte externa.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -74054,7 +74054,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Tempo de resposta armazenado como integer; unidade não declarada no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -74067,7 +74067,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Array textual de principais insights extraídos da interação; DEFAULT vazio.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -74080,7 +74080,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Indicador booleano alternativo de necessidade de follow-up; DEFAULT false. Não presumir equivalência com requer_followup sem validar a aplicação.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -74093,7 +74093,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Data prevista para follow-up, sem horário; tipo date.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -74106,7 +74106,7 @@
         "type": "date"
       },
       {
-        "comment": null,
+        "comment": "Resultado de análise emocional em JSONB; estrutura e escalas internas não formalizadas no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -74119,7 +74119,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "UUID do usuário associado à interação; não há FK declarada para esta coluna na inspeção. Não confundir com usuario_responsavel_id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -74132,7 +74132,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Array PostgreSQL de tags textuais; DEFAULT vazio. Coluna distinta de tags_array, sem regra de sincronização documentada.",
         "default": "'{}'::text[]",
         "generated": null,
         "identity": null,
@@ -74145,7 +74145,7 @@
         "type": "text[]"
       },
       {
-        "comment": null,
+        "comment": "Resultado textual da interação; valores possíveis e semântica de sucesso não definidos no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -77707,7 +77707,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID da origem e chave primária; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -77720,7 +77720,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Nome único de exibição da origem do lead.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -77733,7 +77733,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Descrição opcional da origem.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -77746,7 +77746,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Categoria textual da origem; domínio não definido no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -77759,7 +77759,7 @@
         "type": "character varying(50)"
       },
       {
-        "comment": null,
+        "comment": "Custo numérico atribuído a cada lead desta origem; moeda/unidade não definidas no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -77772,7 +77772,7 @@
         "type": "numeric(10,2)"
       },
       {
-        "comment": null,
+        "comment": "Indica se a origem pode ser selecionada/considerada ativa; DEFAULT true.",
         "default": "true",
         "generated": null,
         "identity": null,
@@ -77785,7 +77785,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação da origem; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -78318,7 +78318,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do motivo e chave primária; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -78331,7 +78331,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Nome único do motivo de perda.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -78344,7 +78344,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Descrição textual opcional do motivo.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -78357,7 +78357,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Categoria textual do motivo; valores não enumerados pelo schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -78370,7 +78370,7 @@
         "type": "character varying(50)"
       },
       {
-        "comment": null,
+        "comment": "Indica se o motivo está ativo para seleção; DEFAULT true.",
         "default": "true",
         "generated": null,
         "identity": null,
@@ -78383,7 +78383,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se a aplicação deve solicitar detalhes ao selecionar este motivo; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -78396,7 +78396,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do motivo; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -84129,7 +84129,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID da etapa e chave primária; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -84142,7 +84142,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Pipeline ao qual a etapa pertence; FK para public.pipelines.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84155,7 +84155,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Nome de exibição da etapa; obrigatório.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84168,7 +84168,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Descrição opcional do significado operacional da etapa.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84181,7 +84181,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Código textual de cor para interface; DEFAULT #3498db.",
         "default": "'#3498db'::character varying",
         "generated": null,
         "identity": null,
@@ -84194,7 +84194,7 @@
         "type": "character varying(7)"
       },
       {
-        "comment": null,
+        "comment": "Posição da etapa dentro do pipeline; integer obrigatório.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84207,7 +84207,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Probabilidade percentual inteira associada à etapa, de 0 a 100; DEFAULT 0.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -84220,7 +84220,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Indica se a etapa é inicial; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -84233,7 +84233,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se a etapa representa ganho; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -84246,7 +84246,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se a etapa representa perda; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -84259,7 +84259,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Limite de SLA da etapa em horas; nulo quando não configurado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84272,7 +84272,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Lista JSONB de campos exigidos para avançar/usar a etapa; DEFAULT array JSON vazio. Estrutura de elementos não validada no schema.",
         "default": "'[]'::jsonb",
         "generated": null,
         "identity": null,
@@ -84285,7 +84285,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação da etapa; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -84298,7 +84298,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -84311,7 +84311,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do pipeline e chave primária; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -84324,7 +84324,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Nome de exibição do pipeline; obrigatório.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84337,7 +84337,7 @@
         "type": "character varying(100)"
       },
       {
-        "comment": null,
+        "comment": "Descrição textual do objetivo ou escopo do pipeline.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84350,7 +84350,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Categoria textual do pipeline; DEFAULT vendas. Valores aceitos não são restringidos no schema.",
         "default": "'vendas'::character varying",
         "generated": null,
         "identity": null,
@@ -84363,7 +84363,7 @@
         "type": "character varying(50)"
       },
       {
-        "comment": null,
+        "comment": "Indica se o pipeline está ativo para uso; DEFAULT true.",
         "default": "true",
         "generated": null,
         "identity": null,
@@ -84376,7 +84376,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se o pipeline está marcado como padrão; DEFAULT false.",
         "default": "false",
         "generated": null,
         "identity": null,
@@ -84389,7 +84389,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Indica se a aplicação permite múltiplos deals no pipeline; DEFAULT true.",
         "default": "true",
         "generated": null,
         "identity": null,
@@ -84402,7 +84402,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Meta mensal monetária configurada para o pipeline; unidade/moeda não definidas no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84415,7 +84415,7 @@
         "type": "numeric(15,2)"
       },
       {
-        "comment": null,
+        "comment": "Posição de ordenação do pipeline; DEFAULT 0.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -84428,7 +84428,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "UUID do usuário que criou o pipeline; não há FK declarada na inspeção.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84441,7 +84441,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do pipeline; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -84454,7 +84454,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -84818,7 +84818,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID do produto e chave primária; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -84831,7 +84831,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Código de estoque/SKU do produto; texto opcional e único quando preenchido.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84844,7 +84844,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Nome do produto; obrigatório.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84857,7 +84857,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Descrição textual opcional do produto.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84870,7 +84870,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Categoria textual do produto; sem domínio fechado declarado.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -84883,7 +84883,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Preço unitário numérico; DEFAULT 0. Moeda não está definida no schema.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -84896,7 +84896,7 @@
         "type": "numeric(15,2)"
       },
       {
-        "comment": null,
+        "comment": "Custo unitário numérico; DEFAULT 0. Moeda não está definida no schema.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -84909,7 +84909,7 @@
         "type": "numeric(15,2)"
       },
       {
-        "comment": null,
+        "comment": "Percentual de margem gerado: ((unit_price - cost_price) / unit_price) * 100; retorna 0 quando unit_price não é positivo. Não editar como campo independente.",
         "default": "\nCASE\n    WHEN (unit_price > (0)::numeric) THEN (((unit_price - cost_price) / unit_price) * (100)::numeric)\n    ELSE (0)::numeric\nEND",
         "generated": "s",
         "identity": null,
@@ -84922,7 +84922,7 @@
         "type": "numeric(5,2)"
       },
       {
-        "comment": null,
+        "comment": "Quantidade atual em estoque, em unidades do produto; DEFAULT 0.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -84935,7 +84935,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Limite mínimo de estoque configurado, em unidades do produto; DEFAULT 0.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -84948,7 +84948,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Indica se o produto está ativo para uso comercial; DEFAULT true.",
         "default": "true",
         "generated": null,
         "identity": null,
@@ -84961,7 +84961,7 @@
         "type": "boolean"
       },
       {
-        "comment": null,
+        "comment": "Atributos complementares do produto em JSONB; DEFAULT objeto vazio, sem chaves padronizadas no schema.",
         "default": "'{}'::jsonb",
         "generated": null,
         "identity": null,
@@ -84974,7 +84974,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do produto; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -84987,7 +84987,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -85338,7 +85338,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID interno e chave primária da proposta; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -85351,7 +85351,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Empresa destinatária da proposta; FK para public.companies.id; pode ser NULL.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85364,7 +85364,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Contato destinatário da proposta; FK para public.contacts.id; pode ser NULL.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85377,7 +85377,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Oportunidade associada à proposta; FK para public.deals.id; pode ser NULL.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85390,7 +85390,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Usuário responsável pela proposta; FK para public.profiles.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85403,7 +85403,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Número ou identificador textual da proposta; opcional, sem padrão de numeração definido no schema.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85416,7 +85416,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Título da proposta comercial; texto obrigatório.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85429,7 +85429,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Descrição textual do escopo ou conteúdo da proposta; opcional.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85442,7 +85442,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Valor bruto total da proposta antes do desconto; numeric, DEFAULT 0. A moeda/unidade monetária não está definida no schema.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -85455,7 +85455,7 @@
         "type": "numeric(15,2)"
       },
       {
-        "comment": null,
+        "comment": "Percentual de desconto quando discount_type = percentage; numeric, DEFAULT 0. O schema não impõe faixa percentual.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -85468,7 +85468,7 @@
         "type": "numeric(5,2)"
       },
       {
-        "comment": null,
+        "comment": "Valor final da proposta após desconto; numeric, DEFAULT 0. Não é coluna gerada: a aplicação deve manter o cálculo consistente com valor_total e desconto.",
         "default": "0",
         "generated": null,
         "identity": null,
@@ -85481,7 +85481,7 @@
         "type": "numeric(15,2)"
       },
       {
-        "comment": null,
+        "comment": "Estado da proposta: rascunho, enviada, visualizada, aceita, rejeitada ou expirada. DEFAULT rascunho.",
         "default": "'rascunho'::text",
         "generated": null,
         "identity": null,
@@ -85494,7 +85494,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Prazo de validade informado em dias; integer, DEFAULT 30.",
         "default": "30",
         "generated": null,
         "identity": null,
@@ -85507,7 +85507,7 @@
         "type": "integer"
       },
       {
-        "comment": null,
+        "comment": "Data e hora em que a proposta foi enviada; timestamptz.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85520,7 +85520,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora em que foi registrada uma resposta à proposta; timestamptz.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85533,7 +85533,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Motivo textual da rejeição, quando aplicável.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85546,7 +85546,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Texto dos termos e condições comerciais associados à proposta.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -85559,7 +85559,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Itens da proposta armazenados em JSONB; DEFAULT array JSON vazio. Estrutura dos objetos não está definida por constraint.",
         "default": "'[]'::jsonb",
         "generated": null,
         "identity": null,
@@ -85572,7 +85572,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Dados complementares da proposta em JSONB; DEFAULT objeto vazio. Chaves variáveis, sem contrato declarado no schema.",
         "default": "'{}'::jsonb",
         "generated": null,
         "identity": null,
@@ -85585,7 +85585,7 @@
         "type": "jsonb"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação da proposta no banco; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -85598,7 +85598,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -85611,7 +85611,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Interpretação do desconto: percentage = desconto percentual; fixed = desconto de valor fixo. DEFAULT percentage.",
         "default": "'percentage'::text",
         "generated": null,
         "identity": null,
@@ -89953,7 +89953,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Identificador UUID da venda e chave primária; gerado por gen_random_uuid().",
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -89966,7 +89966,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Nome textual do cliente armazenado no registro da venda; não é chave estrangeira nem prova de correspondência com public.clients.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -89979,7 +89979,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Nome textual do produto associado à venda; não possui FK para public.products.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -89992,7 +89992,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Valor numérico da venda. A moeda e a unidade (reais ou centavos) não estão declaradas no schema; validar a origem antes de somar ou converter.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -90005,7 +90005,7 @@
         "type": "numeric(12,2)"
       },
       {
-        "comment": null,
+        "comment": "Estado da oportunidade/venda: completed, pending, cancelled, negotiation, proposal, qualification, discovery ou lead. DEFAULT pending. Esses estados não equivalem necessariamente aos de public.deals.status.",
         "default": "'pending'::text",
         "generated": null,
         "identity": null,
@@ -90018,7 +90018,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Categoria da venda: subscription, service, project ou other. DEFAULT subscription.",
         "default": "'subscription'::text",
         "generated": null,
         "identity": null,
@@ -90031,7 +90031,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Vendedor associado à venda; FK para public.salespeople.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -90044,7 +90044,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Origem textual da venda; DEFAULT other. Valores além do default não estão enumerados no schema.",
         "default": "'other'::text",
         "generated": null,
         "identity": null,
@@ -90057,7 +90057,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da exclusão lógica do registro; NULL indica ausência de marca temporal de exclusão.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -90070,7 +90070,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "UUID do usuário que registrou a exclusão lógica; FK para auth.users.id.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -90083,7 +90083,7 @@
         "type": "uuid"
       },
       {
-        "comment": null,
+        "comment": "Motivo textual da exclusão lógica.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -90096,7 +90096,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Data e hora de criação do registro; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -90109,7 +90109,7 @@
         "type": "timestamp with time zone"
       },
       {
-        "comment": null,
+        "comment": "Data e hora da última atualização registrada; timestamptz, DEFAULT now().",
         "default": "now()",
         "generated": null,
         "identity": null,
@@ -301676,7 +301676,7 @@
         "partition_bound": null,
         "partition_key": null,
         "replica_identity": "default",
-        "rls_enabled": false,
+        "rls_enabled": true,
         "rls_forced": false,
         "schema": "_dormant"
       },
@@ -305491,7 +305491,7 @@
         "schema": "public"
       },
       {
-        "comment": "Cadastro de empresas (clientes, fornecedores, transportadoras)",
+        "comment": "Cadastro mestre de organizações do CRM. Uma linha representa uma empresa, que pode atuar como cliente, fornecedor e/ou transportadora conforme os indicadores de papel. Centraliza identificação cadastral, vínculo com Bitrix24, hierarquia empresarial/cooperativista, dados de contato e atributos de qualificação comercial. PK: id. Relacionamentos confirmados: company_addresses.company_id, company_phones.company_id, company_emails.company_id, contacts.company_id, customers.company_id, suppliers.company_id, carriers.company_id e diversas tabelas operacionais apontam para companies.id. Valores monetários e métricas textuais devem ser interpretados conforme a unidade de origem; não inferir moeda ou escala quando não explicitadas.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -305506,7 +305506,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Endereços associados a empresas do CRM. Cada registro pertence a uma empresa e pode incluir tipo, endereço postal, coordenadas geográficas e referências de geocodificação. company_id referencia public.companies.id; cidade_ibge referencia public.cidades.ibge_code. A coluna tipo tem um DEFAULT legado cujo conteúdo é ambíguo; não interpretá-lo como lista oficial de categorias sem validar os dados.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -305551,7 +305551,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Endereços de e-mail associados a empresas, com finalidade, sinalização de principal/verificado e metadados de origem/contexto. Cada registro referencia public.companies.id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -305566,7 +305566,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Telefones de empresas com tipo, número normalizado, ramal, departamento e indicadores de principal/WhatsApp. Cada registro referencia public.companies.id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -305791,7 +305791,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Endereços de pessoas/contatos. Cada registro pertence a public.contacts e possui categoria residencial, profissional, cobrança ou outro. Guarda dados postais e coordenadas opcionais. PK: id; contact_id → public.contacts.id; created_by e updated_by → public.users.id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -305926,7 +305926,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Endereços de e-mail associados a contatos, permitindo múltiplos e-mails tipados e sinalização de principal/verificado. Cada registro referencia public.contacts.id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -306046,7 +306046,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Telefones associados a contatos, com tipo, normalização, sinalizadores de principal/WhatsApp/verificação e metadados de origem. Cada registro referencia public.contacts.id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -306211,7 +306211,7 @@
         "schema": "public"
       },
       {
-        "comment": "Contatos vinculados a empresas",
+        "comment": "Cadastro de pessoas/contatos comerciais vinculados opcionalmente a uma empresa. Reúne identificação, canais de contato, papéis de compra, atributos comportamentais e dados derivados. PK: id. company_id referencia public.companies.id; duplicate_of referencia public.contacts.id; assigned_by_id referencia public.users.id. Preferir as tabelas contact_emails, contact_phones e contact_social_media para múltiplos canais quando apropriado; não assumir que os campos legados equivalem a essas tabelas.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -306646,7 +306646,7 @@
         "schema": "public"
       },
       {
-        "comment": "Dados comerciais de clientes (carteira, vendedor, histórico)",
+        "comment": "Extensão comercial de public.companies para empresas qualificadas como clientes. Armazena carteira, responsável comercial, ativação, histórico agregado de compras e métricas de valor. company_id é UNIQUE e referencia public.companies.id; id é a PK. O soft delete é representado por deleted_at.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -306721,7 +306721,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Linhas de produto/serviço associadas a uma oportunidade de public.deals. Registra quantidade, preço, desconto e total calculado. deal_id referencia public.deals.id; product_id referencia public.products.id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -306841,7 +306841,7 @@
         "schema": "public"
       },
       {
-        "comment": "Pipeline de negócios/oportunidades de venda",
+        "comment": "Registro de oportunidade de venda do CRM. Cada linha representa um negócio vinculado opcionalmente a uma empresa e a um contato, com valor, etapa, probabilidade e previsão de fechamento. O status possui domínio fechado e os itens do negócio são relacionados em public.deal_items. Chaves principais: id; company_id → public.companies.id; contact_id → public.contacts.id; user_id → public.profiles.id; loss_reason_id → public.loss_reasons.id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -307801,7 +307801,7 @@
         "schema": "public"
       },
       {
-        "comment": "Histórico de interações com contatos/empresas",
+        "comment": "Histórico de interações comerciais e de relacionamento com contatos e/ou empresas. Registra canal, direção, estado, conteúdo, agendamento, responsável e metadados. Uma interação pode referenciar contato, empresa e usuário responsável; as tabelas de análise podem referenciar interactions.id. PK: id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -308071,7 +308071,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Catálogo de origens de leads utilizado por entidades comerciais que guardam source_id. Mantém nome, categoria, descrição, custo por lead e estado ativo. PK: id; nome é UNIQUE.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -308131,7 +308131,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Catálogo de motivos de perda de oportunidades. Usado por public.deals.loss_reason_id; nome é UNIQUE. Pode indicar se o usuário deve fornecer detalhes adicionais.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -308611,7 +308611,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Etapas pertencentes a um pipeline comercial. Registra nome, ordem, probabilidade, estados de início/ganho/perda e SLA. pipeline_id referencia public.pipelines.id; outras entidades de negócio podem referenciar a etapa conforme suas FKs.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -308626,7 +308626,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Configuração de pipelines comerciais. Cada registro define um fluxo de trabalho de vendas, suas opções de múltiplas oportunidades, meta mensal e ordenação. PK: id. As etapas são relacionadas por public.pipeline_stages.pipeline_id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -308686,7 +308686,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Catálogo de produtos/serviços comercializados. Contém SKU, preço, custo, estoque e metadados. PK: id; SKU é opcional e UNIQUE. Relaciona-se a itens de oportunidade por public.deal_items.product_id e a novidades por public.product_novelties.product_id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -308716,7 +308716,7 @@
         "schema": "public"
       },
       {
-        "comment": "Propostas comerciais/orçamentos",
+        "comment": "Propostas comerciais/orçamentos vinculados opcionalmente a empresa, contato e oportunidade. Mantém totais, desconto, estado do ciclo de envio/resposta, validade e itens em JSONB. PK: id. Relacionamentos: company_id → public.companies.id; contact_id → public.contacts.id; deal_id → public.deals.id; user_id → public.profiles.id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -309106,7 +309106,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Registro simplificado de venda/atividade comercial legado, com nome de cliente e produto como snapshots textuais, valor e estado do ciclo comercial. Não confundir com public.deals, que é a entidade de oportunidade vinculada a company/contact. PK: id; salesperson_id → public.salespeople.id; deleted_by → auth.users.id.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",

@@ -1,6 +1,6 @@
 # public.proposals
 
-> Propostas comerciais/orçamentos
+> Propostas comerciais/orçamentos vinculados opcionalmente a empresa, contato e oportunidade. Mantém totais, desconto, estado do ciclo de envio/resposta, validade e itens em JSONB. PK: id. Relacionamentos: company_id → public.companies.id; contact_id → public.contacts.id; deal_id → public.deals.id; user_id → public.profiles.id.
 
 | propriedade | valor |
 |---|---|
@@ -19,28 +19,28 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `company_id` | `uuid` | sim |  |  |  |
-| 3 | `contact_id` | `uuid` | sim |  |  |  |
-| 4 | `deal_id` | `uuid` | sim |  |  |  |
-| 5 | `user_id` | `uuid` | não |  |  |  |
-| 6 | `numero` | `text` | sim |  |  |  |
-| 7 | `titulo` | `text` | não |  |  |  |
-| 8 | `descricao` | `text` | sim |  |  |  |
-| 9 | `valor_total` | `numeric(15,2)` | sim | `0` |  |  |
-| 10 | `desconto_percentual` | `numeric(5,2)` | sim | `0` |  |  |
-| 11 | `valor_final` | `numeric(15,2)` | sim | `0` |  |  |
-| 12 | `status` | `text` | sim | `'rascunho'::text` |  |  |
-| 13 | `validade_dias` | `integer` | sim | `30` |  |  |
-| 14 | `data_envio` | `timestamp with time zone` | sim |  |  |  |
-| 15 | `data_resposta` | `timestamp with time zone` | sim |  |  |  |
-| 16 | `motivo_rejeicao` | `text` | sim |  |  |  |
-| 17 | `termos_condicoes` | `text` | sim |  |  |  |
-| 18 | `itens` | `jsonb` | sim | `'[]'::jsonb` |  |  |
-| 19 | `metadata` | `jsonb` | sim | `'{}'::jsonb` |  |  |
-| 20 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 21 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 22 | `discount_type` | `text` | sim | `'percentage'::text` |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador UUID interno e chave primária da proposta; gerado por gen_random_uuid(). |
+| 2 | `company_id` | `uuid` | sim |  |  | Empresa destinatária da proposta; FK para public.companies.id; pode ser NULL. |
+| 3 | `contact_id` | `uuid` | sim |  |  | Contato destinatário da proposta; FK para public.contacts.id; pode ser NULL. |
+| 4 | `deal_id` | `uuid` | sim |  |  | Oportunidade associada à proposta; FK para public.deals.id; pode ser NULL. |
+| 5 | `user_id` | `uuid` | não |  |  | Usuário responsável pela proposta; FK para public.profiles.id. |
+| 6 | `numero` | `text` | sim |  |  | Número ou identificador textual da proposta; opcional, sem padrão de numeração definido no schema. |
+| 7 | `titulo` | `text` | não |  |  | Título da proposta comercial; texto obrigatório. |
+| 8 | `descricao` | `text` | sim |  |  | Descrição textual do escopo ou conteúdo da proposta; opcional. |
+| 9 | `valor_total` | `numeric(15,2)` | sim | `0` |  | Valor bruto total da proposta antes do desconto; numeric, DEFAULT 0. A moeda/unidade monetária não está definida no schema. |
+| 10 | `desconto_percentual` | `numeric(5,2)` | sim | `0` |  | Percentual de desconto quando discount_type = percentage; numeric, DEFAULT 0. O schema não impõe faixa percentual. |
+| 11 | `valor_final` | `numeric(15,2)` | sim | `0` |  | Valor final da proposta após desconto; numeric, DEFAULT 0. Não é coluna gerada: a aplicação deve manter o cálculo consistente com valor_total e desconto. |
+| 12 | `status` | `text` | sim | `'rascunho'::text` |  | Estado da proposta: rascunho, enviada, visualizada, aceita, rejeitada ou expirada. DEFAULT rascunho. |
+| 13 | `validade_dias` | `integer` | sim | `30` |  | Prazo de validade informado em dias; integer, DEFAULT 30. |
+| 14 | `data_envio` | `timestamp with time zone` | sim |  |  | Data e hora em que a proposta foi enviada; timestamptz. |
+| 15 | `data_resposta` | `timestamp with time zone` | sim |  |  | Data e hora em que foi registrada uma resposta à proposta; timestamptz. |
+| 16 | `motivo_rejeicao` | `text` | sim |  |  | Motivo textual da rejeição, quando aplicável. |
+| 17 | `termos_condicoes` | `text` | sim |  |  | Texto dos termos e condições comerciais associados à proposta. |
+| 18 | `itens` | `jsonb` | sim | `'[]'::jsonb` |  | Itens da proposta armazenados em JSONB; DEFAULT array JSON vazio. Estrutura dos objetos não está definida por constraint. |
+| 19 | `metadata` | `jsonb` | sim | `'{}'::jsonb` |  | Dados complementares da proposta em JSONB; DEFAULT objeto vazio. Chaves variáveis, sem contrato declarado no schema. |
+| 20 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação da proposta no banco; timestamptz, DEFAULT now(). |
+| 21 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). |
+| 22 | `discount_type` | `text` | sim | `'percentage'::text` |  | Interpretação do desconto: percentage = desconto percentual; fixed = desconto de valor fixo. DEFAULT percentage. |
 
 
 ## Constraints

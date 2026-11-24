@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "de9c0c7abf53feba2ccd12a5456f94ddc8693fcd",
+  "sha": "06b1732387b4c46546dcf725ace49be324351c33",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 16:38 UTC",
+  "generated_at": "2026-11-24 17:12 UTC",
   "files_total": 4020,
   "code_files": 3544,
   "code_lines": 478463
@@ -307511,10 +307511,20 @@
   }
  },
  "git": {
-  "sha": "de9c0c7abf53feba2ccd12a5456f94ddc8693fcd",
+  "sha": "06b1732387b4c46546dcf725ace49be324351c33",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "06b1732",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)",
+    "files": [
+     ".gitignore",
+     "AGENTS.md"
+    ]
+   },
    {
     "sha": "de9c0c7",
     "date": "2026-11-24",
@@ -307895,16 +307905,6 @@
     "files": [
      "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
     ]
-   },
-   {
-    "sha": "5b8ee5b",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(db): baseline idempotente para stubs com defaults (42P13) (#301)",
-    "files": [
-     "supabase/migrations/20260110000001_compat_colunas_producao.sql",
-     "supabase/migrations/20260110000002_baseline_compat_idempotente.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -307945,6 +307945,14 @@
     2
    ],
    [
+    ".gitignore",
+    1
+   ],
+   [
+    "AGENTS.md",
+    1
+   ],
+   [
     "src/components/auth/RequirePermission.tsx",
     1
    ],
@@ -307978,14 +307986,6 @@
    ],
    [
     "tests/rls/security_definer_hardening.sql",
-    1
-   ],
-   [
-    "docs/estado/02_INTELIGENCIA_IA.md",
-    1
-   ],
-   [
-    "docs/estado/06_INTEGRACOES.md",
     1
    ]
   ]

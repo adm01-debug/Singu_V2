@@ -1,5 +1,7 @@
 # public.lead_sources
 
+> Catálogo de origens de leads utilizado por entidades comerciais que guardam source_id. Mantém nome, categoria, descrição, custo por lead e estado ativo. PK: id; nome é UNIQUE.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -17,13 +19,13 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `nome` | `character varying(100)` | não |  |  |  |
-| 3 | `descricao` | `text` | sim |  |  |  |
-| 4 | `categoria` | `character varying(50)` | sim |  |  |  |
-| 5 | `custo_por_lead` | `numeric(10,2)` | sim |  |  |  |
-| 6 | `is_active` | `boolean` | sim | `true` |  |  |
-| 7 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador UUID da origem e chave primária; gerado por gen_random_uuid(). |
+| 2 | `nome` | `character varying(100)` | não |  |  | Nome único de exibição da origem do lead. |
+| 3 | `descricao` | `text` | sim |  |  | Descrição opcional da origem. |
+| 4 | `categoria` | `character varying(50)` | sim |  |  | Categoria textual da origem; domínio não definido no schema. |
+| 5 | `custo_por_lead` | `numeric(10,2)` | sim |  |  | Custo numérico atribuído a cada lead desta origem; moeda/unidade não definidas no schema. |
+| 6 | `is_active` | `boolean` | sim | `true` |  | Indica se a origem pode ser selecionada/considerada ativa; DEFAULT true. |
+| 7 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação da origem; timestamptz, DEFAULT now(). |
 
 
 ## Constraints

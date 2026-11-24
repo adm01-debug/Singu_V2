@@ -1,5 +1,7 @@
 # public.contact_phones
 
+> Telefones associados a contatos, com tipo, normalização, sinalizadores de principal/WhatsApp/verificação e metadados de origem. Cada registro referencia public.contacts.id.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -17,21 +19,21 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  |  |
-| 2 | `contact_id` | `uuid` | não |  |  |  |
-| 3 | `phone_type` | `phone_type` | sim | `'fixo_comercial'::phone_type` |  |  |
-| 5 | `numero_normalizado` | `character varying(20)` | não |  |  |  |
-| 6 | `is_primary` | `boolean` | sim | `false` |  |  |
-| 7 | `is_whatsapp` | `boolean` | sim | `false` |  |  |
-| 8 | `is_verified` | `boolean` | sim | `false` |  |  |
-| 9 | `observacao` | `character varying(100)` | sim |  |  |  |
-| 10 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 11 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 12 | `numero_e164` | `character varying(20)` | sim |  |  |  |
-| 13 | `fonte` | `character varying(100)` | sim |  |  |  |
-| 14 | `contexto` | `character varying(200)` | sim |  |  |  |
-| 15 | `confiabilidade` | `smallint` | sim |  |  |  |
-| 16 | `numero` | `character varying(50)` | não |  |  |  |
+| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  | Identificador UUID do telefone e chave primária; gerado por uuid_generate_v4(). |
+| 2 | `contact_id` | `uuid` | não |  |  | Contato proprietário do telefone; FK para public.contacts.id. |
+| 3 | `phone_type` | `phone_type` | sim | `'fixo_comercial'::phone_type` |  | Tipo do telefone: celular_corporativo, fixo_comercial, celular_pessoal ou invalido. DEFAULT fixo_comercial. |
+| 5 | `numero_normalizado` | `character varying(20)` | não |  |  | Telefone em representação normalizada, conforme convenção da aplicação; algoritmo e formato não são validados por CHECK. |
+| 6 | `is_primary` | `boolean` | sim | `false` |  | Indica se este é o telefone principal do contato; DEFAULT false. |
+| 7 | `is_whatsapp` | `boolean` | sim | `false` |  | Indica se o número pode ser usado como WhatsApp; DEFAULT false. |
+| 8 | `is_verified` | `boolean` | sim | `false` |  | Indica se o telefone foi verificado; DEFAULT false. |
+| 9 | `observacao` | `character varying(100)` | sim |  |  | Observação livre sobre o telefone. |
+| 10 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação do registro; timestamptz, DEFAULT now(). |
+| 11 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). |
+| 12 | `numero_e164` | `character varying(20)` | sim |  |  | Telefone em formato internacional E.164, quando disponível; o formato não é validado por CHECK. |
+| 13 | `fonte` | `character varying(100)` | sim |  |  | Origem textual do número; valores não enumerados no schema. |
+| 14 | `contexto` | `character varying(200)` | sim |  |  | Contexto textual de uso do telefone; valores não enumerados. |
+| 15 | `confiabilidade` | `smallint` | sim |  |  | Score smallint de confiabilidade do telefone; escala e interpretação não estão definidas no schema. |
+| 16 | `numero` | `character varying(50)` | não |  |  | Número de telefone conforme armazenado/informado; texto obrigatório, preserva caracteres e formatação. |
 
 
 ## Constraints

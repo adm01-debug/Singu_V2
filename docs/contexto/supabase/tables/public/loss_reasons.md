@@ -1,5 +1,7 @@
 # public.loss_reasons
 
+> Catálogo de motivos de perda de oportunidades. Usado por public.deals.loss_reason_id; nome é UNIQUE. Pode indicar se o usuário deve fornecer detalhes adicionais.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -17,13 +19,13 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `nome` | `character varying(100)` | não |  |  |  |
-| 3 | `descricao` | `text` | sim |  |  |  |
-| 4 | `categoria` | `character varying(50)` | sim |  |  |  |
-| 5 | `is_active` | `boolean` | sim | `true` |  |  |
-| 6 | `requer_detalhes` | `boolean` | sim | `false` |  |  |
-| 7 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador UUID do motivo e chave primária; gerado por gen_random_uuid(). |
+| 2 | `nome` | `character varying(100)` | não |  |  | Nome único do motivo de perda. |
+| 3 | `descricao` | `text` | sim |  |  | Descrição textual opcional do motivo. |
+| 4 | `categoria` | `character varying(50)` | sim |  |  | Categoria textual do motivo; valores não enumerados pelo schema. |
+| 5 | `is_active` | `boolean` | sim | `true` |  | Indica se o motivo está ativo para seleção; DEFAULT true. |
+| 6 | `requer_detalhes` | `boolean` | sim | `false` |  | Indica se a aplicação deve solicitar detalhes ao selecionar este motivo; DEFAULT false. |
+| 7 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação do motivo; timestamptz, DEFAULT now(). |
 
 
 ## Constraints

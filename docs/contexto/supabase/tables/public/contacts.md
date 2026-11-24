@@ -1,6 +1,6 @@
 # public.contacts
 
-> Contatos vinculados a empresas
+> Cadastro de pessoas/contatos comerciais vinculados opcionalmente a uma empresa. Reúne identificação, canais de contato, papéis de compra, atributos comportamentais e dados derivados. PK: id. company_id referencia public.companies.id; duplicate_of referencia public.contacts.id; assigned_by_id referencia public.users.id. Preferir as tabelas contact_emails, contact_phones e contact_social_media para múltiplos canais quando apropriado; não assumir que os campos legados equivalem a essas tabelas.
 
 | propriedade | valor |
 |---|---|
@@ -19,71 +19,71 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `company_id` | `uuid` | sim |  |  |  |
-| 3 | `bitrix_contact_id` | `integer` | sim |  |  |  |
-| 4 | `first_name` | `text` | sim |  |  |  |
-| 5 | `last_name` | `text` | sim |  |  |  |
-| 11 | `cargo` | `text` | sim |  |  |  |
-| 12 | `departamento` | `text` | sim |  |  |  |
-| 13 | `cpf` | `text` | sim |  |  |  |
-| 14 | `data_nascimento` | `date` | sim |  |  |  |
-| 15 | `sexo` | `text` | sim |  |  |  |
-| 18 | `assigned_by_id` | `integer` | sim |  |  |  |
-| 19 | `source` | `data_source` | sim |  |  |  |
-| 20 | `extra_data` | `jsonb` | sim |  |  |  |
-| 21 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 22 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 23 | `bitrix_created_at` | `timestamp with time zone` | sim |  |  |  |
-| 24 | `role` | `text` | sim |  |  |  |
-| 25 | `hobbies` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 26 | `interests_array` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 27 | `family_info` | `text` | sim |  |  |  |
-| 28 | `personal_notes` | `text` | sim |  |  |  |
-| 29 | `relationship_stage` | `text` | sim | `'unknown'::text` |  |  |
-| 30 | `relationship_score` | `integer` | sim | `50` |  |  |
-| 31 | `sentiment` | `text` | sim | `'neutral'::text` |  |  |
-| 32 | `behavior` | `jsonb` | sim | `'{"vakProfile": {"scores": {"visual": 0, "digital": 0, "auditory": 0, "kinesthetic": 0}, "primary": null}, "discProfile": null, "supportLevel": 5, "decisionPower": 5, "influencesIds": [], "needsApproval": false, "discConfidence": 0, "formalityLevel": 3, "competitorsUsed": [], "influencedByIds": [], "decisionCriteria": [], "preferredChannel": "whatsapp", "currentChallenges": [], "temperamentProfile": {"primary": null}}'::jsonb` |  |  |
-| 33 | `life_events` | `jsonb` | sim | `'[]'::jsonb` |  |  |
-| 34 | `tags_array` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 35 | `birthday` | `date` | sim |  |  |  |
-| 36 | `notes` | `text` | sim |  |  |  |
-| 37 | `user_id` | `uuid` | não |  |  |  |
-| 38 | `full_name` | `text` | sim | `TRIM(BOTH FROM ((COALESCE(first_name, ''::text) \|\| ' '::text) \|\| COALESCE(last_name, ''::text)))` | s | Nome completo gerado automaticamente (first_name + last_name) |
-| 39 | `is_duplicate` | `boolean` | sim | `false` |  |  |
-| 40 | `duplicate_of` | `uuid` | sim |  |  |  |
-| 42 | `deleted_at` | `timestamp with time zone` | sim |  |  |  |
-| 43 | `deleted_by` | `uuid` | sim |  |  |  |
-| 44 | `search_vector` | `tsvector` | sim |  |  |  |
-| 45 | `nome_tratamento` | `character varying(100)` | sim |  |  | Nome para automações. Ex: Maria Fernanda. Auto-preenchido via full_name. |
-| 46 | `apelido` | `character varying(100)` | sim |  |  | Apelido informal. Ex: Mafe, Zé. Preenchido manualmente pelo vendedor. |
-| 47 | `assinatura_contato` | `character varying(150)` | sim |  |  | Como assina docs/emails. Ex: Maria F. Costa. Auto-preenchido. |
-| 48 | `role_title` | `text` | sim |  |  |  |
-| 49 | `email` | `text` | sim |  |  |  |
-| 50 | `phone` | `text` | sim |  |  |  |
-| 51 | `whatsapp` | `text` | sim |  |  |  |
-| 52 | `linkedin` | `text` | sim |  |  |  |
-| 53 | `instagram` | `text` | sim |  |  |  |
-| 54 | `twitter` | `text` | sim |  |  |  |
-| 55 | `avatar_url` | `text` | sim |  |  |  |
-| 56 | `tags` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 57 | `interests` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 58 | `vak_dominant` | `text` | sim |  |  |  |
-| 59 | `motivation_direction` | `text` | sim |  |  |  |
-| 60 | `working_style` | `text` | sim |  |  |  |
-| 61 | `reference_frame` | `text` | sim |  |  |  |
-| 62 | `chunk_size` | `text` | sim |  |  |  |
-| 63 | `action_filter` | `text` | sim |  |  |  |
-| 64 | `comparison_style` | `text` | sim |  |  |  |
-| 65 | `most_frequent_objection` | `text` | sim |  |  |  |
-| 66 | `vak_profile` | `jsonb` | sim |  |  |  |
-| 67 | `metaprogram_profile` | `jsonb` | sim |  |  |  |
-| 68 | `emotional_state` | `text` | sim |  |  |  |
-| 69 | `emotional_confidence` | `numeric(5,2)` | sim |  |  |  |
-| 70 | `emotional_trigger` | `text` | sim |  |  |  |
-| 71 | `last_interaction_at` | `timestamp with time zone` | sim |  |  |  |
-| 72 | `objection_patterns` | `jsonb` | sim |  |  |  |
-| 73 | `version` | `integer` | não | `0` |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador UUID único do contato; PK, gerado por gen_random_uuid(). |
+| 2 | `company_id` | `uuid` | sim |  |  | Empresa associada ao contato; FK para public.companies.id. Nulo quando não há empresa vinculada. |
+| 3 | `bitrix_contact_id` | `integer` | sim |  |  | Identificador integer do contato no Bitrix24; opcional. |
+| 4 | `first_name` | `text` | sim |  |  | Primeiro nome do contato; texto opcional. |
+| 5 | `last_name` | `text` | sim |  |  | Sobrenome do contato; texto opcional. |
+| 11 | `cargo` | `text` | sim |  |  | Cargo profissional do contato em texto livre. |
+| 12 | `departamento` | `text` | sim |  |  | Departamento do contato. Valores aceitos: Compras, Marketing, RH, Diretoria, Financeiro, Comercial e Gestão; também pode ser NULL. |
+| 13 | `cpf` | `text` | sim |  |  | CPF armazenado como texto. CHECK exige exatamente 11 dígitos após remover caracteres não numéricos; pontuação pode existir no valor armazenado. |
+| 14 | `data_nascimento` | `date` | sim |  |  | Data de nascimento sem horário; tipo date. |
+| 15 | `sexo` | `text` | sim |  |  | Classificação textual de sexo; valores permitidos não estão documentados no schema. |
+| 18 | `assigned_by_id` | `integer` | sim |  |  | Identificador integer do usuário/colaborador que atribuiu o contato; FK para public.users.id. |
+| 19 | `source` | `data_source` | sim |  |  | Origem do cadastro, enum data_source: CRM, SPA_CLIENTE, SPA_FORNECEDOR, SPA_TRANSPORTADORA, MERGED, MANUAL, LINKEDIN, LUSHA, LEADCONTACT ou WHATSAPP. |
+| 20 | `extra_data` | `jsonb` | sim |  |  | Atributos adicionais do contato em JSONB; sem esquema fixo de chaves. |
+| 21 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação do registro no banco; DEFAULT now(), timestamptz. |
+| 22 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; DEFAULT now(). Atualização automática depende de trigger/aplicação. |
+| 23 | `bitrix_created_at` | `timestamp with time zone` | sim |  |  | Data e hora de criação no Bitrix24, quando disponível. |
+| 24 | `role` | `text` | sim |  |  | Papel do contato no processo de compra: owner, manager, buyer, contact, decision_maker ou influencer. |
+| 25 | `hobbies` | `text[]` | sim | `'{}'::text[]` |  | Array textual de hobbies; DEFAULT vazio. |
+| 26 | `interests_array` | `text[]` | sim | `'{}'::text[]` |  | Array textual de interesses; DEFAULT vazio. |
+| 27 | `family_info` | `text` | sim |  |  | Informações familiares em texto livre; pode conter dados pessoais. |
+| 28 | `personal_notes` | `text` | sim |  |  | Anotações pessoais em texto livre; pode conter dados pessoais. |
+| 29 | `relationship_stage` | `text` | sim | `'unknown'::text` |  | Etapa do relacionamento: unknown, prospect, qualified_lead, opportunity, negotiation, customer, loyal_customer, advocate, at_risk ou lost. DEFAULT unknown. |
+| 30 | `relationship_score` | `integer` | sim | `50` |  | Score inteiro de relacionamento de 0 a 100, conforme CHECK; DEFAULT 50. |
+| 31 | `sentiment` | `text` | sim | `'neutral'::text` |  | Sentimento categórico: positive, neutral ou negative. DEFAULT neutral. |
+| 32 | `behavior` | `jsonb` | sim | `'{"vakProfile": {"scores": {"visual": 0, "digital": 0, "auditory": 0, "kinesthetic": 0}, "primary": null}, "discProfile": null, "supportLevel": 5, "decisionPower": 5, "influencesIds": [], "needsApproval": false, "discConfidence": 0, "formalityLevel": 3, "competitorsUsed": [], "influencedByIds": [], "decisionCriteria": [], "preferredChannel": "whatsapp", "currentChallenges": [], "temperamentProfile": {"primary": null}}'::jsonb` |  | Perfil comportamental em JSONB. DEFAULT contém campos VAK/DISC e preferências; consultar o JSON efetivo para chaves e subestruturas. |
+| 33 | `life_events` | `jsonb` | sim | `'[]'::jsonb` |  | Eventos de vida em JSONB; DEFAULT array JSON vazio. Não confundir com a tabela relacional public.life_events. |
+| 34 | `tags_array` | `text[]` | sim | `'{}'::text[]` |  | Array textual de tags; DEFAULT vazio. |
+| 35 | `birthday` | `date` | sim |  |  | Data de aniversário sem horário; pode diferir de data_nascimento caso seja usada apenas para lembretes. |
+| 36 | `notes` | `text` | sim |  |  | Notas gerais em texto livre sobre o contato. |
+| 37 | `user_id` | `uuid` | não |  |  | UUID do usuário proprietário/associado ao contato. NOT NULL no schema; não há FK declarada nesta coluna na inspeção. |
+| 38 | `full_name` | `text` | sim | `TRIM(BOTH FROM ((COALESCE(first_name, ''::text) \|\| ' '::text) \|\| COALESCE(last_name, ''::text)))` | s | Nome completo gerado automaticamente a partir de first_name e last_name, com espaços aparados; coluna gerada. |
+| 39 | `is_duplicate` | `boolean` | sim | `false` |  | Indicador de duplicidade. TRUE identifica registro marcado como duplicado; FALSE não marcado. DEFAULT false. |
+| 40 | `duplicate_of` | `uuid` | sim |  |  | UUID do contato considerado registro canônico para este duplicado; FK autorreferente para public.contacts.id. |
+| 42 | `deleted_at` | `timestamp with time zone` | sim |  |  | Data e hora da exclusão lógica do contato; NULL indica ausência de marca temporal de exclusão. |
+| 43 | `deleted_by` | `uuid` | sim |  |  | UUID do usuário que registrou a exclusão lógica; não há FK declarada na inspeção. |
+| 44 | `search_vector` | `tsvector` | sim |  |  | Vetor tsvector para busca textual; dado técnico derivado, não é conteúdo de exibição. |
+| 45 | `nome_tratamento` | `character varying(100)` | sim |  |  | Nome recomendado para tratamento em automações; comentário existente diz que é preenchido a partir de full_name. |
+| 46 | `apelido` | `character varying(100)` | sim |  |  | Apelido informal do contato, preenchido manualmente conforme comentário existente. |
+| 47 | `assinatura_contato` | `character varying(150)` | sim |  |  | Forma de assinatura em documentos/e-mails; comentário existente indica nome abreviado ou de assinatura. |
+| 48 | `role_title` | `text` | sim |  |  | Título profissional do contato em texto; distinto de cargo, sem regra de sincronização definida. |
+| 49 | `email` | `text` | sim |  |  | E-mail principal/legado do contato em texto. Para múltiplos e-mails tipados, consultar public.contact_emails. |
+| 50 | `phone` | `text` | sim |  |  | Telefone principal/legado em texto. Para múltiplos telefones tipados, consultar public.contact_phones. |
+| 51 | `whatsapp` | `text` | sim |  |  | Número ou identificador de WhatsApp em texto; normalização não especificada. |
+| 52 | `linkedin` | `text` | sim |  |  | URL ou identificador do perfil LinkedIn; formato não restringido pelo schema. |
+| 53 | `instagram` | `text` | sim |  |  | URL ou identificador do perfil Instagram; formato não restringido pelo schema. |
+| 54 | `twitter` | `text` | sim |  |  | URL ou identificador do perfil X/Twitter; formato não restringido pelo schema. |
+| 55 | `avatar_url` | `text` | sim |  |  | URL do avatar/foto do contato. |
+| 56 | `tags` | `text[]` | sim | `'{}'::text[]` |  | Array textual de tags; DEFAULT vazio. É distinta de tags_array e não possui catálogo definido. |
+| 57 | `interests` | `text[]` | sim | `'{}'::text[]` |  | Array textual de interesses; distinta de interests_array, sem regra de sincronização documentada. |
+| 58 | `vak_dominant` | `text` | sim |  |  | Modalidade VAK dominante em texto; valores e convenção não especificados pelo schema. |
+| 59 | `motivation_direction` | `text` | sim |  |  | Direção motivacional em texto; valores permitidos não estão definidos na coluna. |
+| 60 | `working_style` | `text` | sim |  |  | Estilo de trabalho textual; domínio não formalizado no schema. |
+| 61 | `reference_frame` | `text` | sim |  |  | Referencial de avaliação/comunicação textual; domínio não formalizado. |
+| 62 | `chunk_size` | `text` | sim |  |  | Preferência de granularidade da informação em texto; valores não enumerados. |
+| 63 | `action_filter` | `text` | sim |  |  | Preferência/filtro de ação em texto; valores não enumerados. |
+| 64 | `comparison_style` | `text` | sim |  |  | Estilo de comparação em texto; valores não enumerados. |
+| 65 | `most_frequent_objection` | `text` | sim |  |  | Objeção mais frequente em texto livre. |
+| 66 | `vak_profile` | `jsonb` | sim |  |  | Perfil VAK estruturado em JSONB; esquema interno não declarado. |
+| 67 | `metaprogram_profile` | `jsonb` | sim |  |  | Perfil de metaprogramas estruturado em JSONB; esquema interno não declarado. |
+| 68 | `emotional_state` | `text` | sim |  |  | Estado emocional em texto; catálogo não declarado. |
+| 69 | `emotional_confidence` | `numeric(5,2)` | sim |  |  | Confiança numérica da análise emocional; escala/unidade não declarada. Não assumir intervalo 0–1 ou 0–100. |
+| 70 | `emotional_trigger` | `text` | sim |  |  | Gatilho emocional associado, em texto livre. |
+| 71 | `last_interaction_at` | `timestamp with time zone` | sim |  |  | Data e hora da última interação registrada para o contato, timestamptz. |
+| 72 | `objection_patterns` | `jsonb` | sim |  |  | Padrões de objeções em JSONB; estrutura interna não formalizada. |
+| 73 | `version` | `integer` | não | `0` |  | Contador inteiro de versão do registro; DEFAULT 0. Regra de incremento não declarada. |
 
 
 ## Constraints

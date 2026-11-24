@@ -1,5 +1,7 @@
 # public.company_emails
 
+> Endereços de e-mail associados a empresas, com finalidade, sinalização de principal/verificado e metadados de origem/contexto. Cada registro referencia public.companies.id.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -17,20 +19,20 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  |  |
-| 2 | `company_id` | `uuid` | não |  |  |  |
-| 3 | `email_type` | `email_type` | sim | `'corporativo'::email_type` |  |  |
-| 4 | `email` | `character varying(255)` | não |  |  |  |
-| 5 | `email_normalizado` | `character varying(255)` | sim |  |  |  |
-| 6 | `is_primary` | `boolean` | sim | `false` |  |  |
-| 7 | `departamento` | `character varying(50)` | sim |  |  |  |
-| 8 | `observacao` | `character varying(100)` | sim |  |  |  |
-| 9 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 10 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 11 | `fonte` | `character varying(100)` | sim |  |  |  |
-| 12 | `contexto` | `character varying(200)` | sim |  |  |  |
-| 13 | `confiabilidade` | `smallint` | sim |  |  |  |
-| 14 | `is_verified` | `boolean` | sim | `false` |  |  |
+| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  | Identificador UUID do e-mail e chave primária; gerado por uuid_generate_v4(). |
+| 2 | `company_id` | `uuid` | não |  |  | Empresa proprietária do e-mail; FK para public.companies.id. |
+| 3 | `email_type` | `email_type` | sim | `'corporativo'::email_type` |  | Finalidade do e-mail: corporativo, pessoal, financeiro, nfe, marketing, comercial ou compras. DEFAULT corporativo. |
+| 4 | `email` | `character varying(255)` | não |  |  | Endereço de e-mail da empresa; texto obrigatório. |
+| 5 | `email_normalizado` | `character varying(255)` | sim |  |  | Versão normalizada do e-mail; algoritmo de normalização não declarado no schema. |
+| 6 | `is_primary` | `boolean` | sim | `false` |  | Indica se este é o e-mail principal da empresa; DEFAULT false. |
+| 7 | `departamento` | `character varying(50)` | sim |  |  | Departamento associado ao endereço; texto livre. |
+| 8 | `observacao` | `character varying(100)` | sim |  |  | Observação livre sobre o e-mail. |
+| 9 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação do registro; timestamptz, DEFAULT now(). |
+| 10 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). |
+| 11 | `fonte` | `character varying(100)` | sim |  |  | Origem textual do e-mail; domínio não restringido. |
+| 12 | `contexto` | `character varying(200)` | sim |  |  | Contexto textual de uso do e-mail; domínio não restringido. |
+| 13 | `confiabilidade` | `smallint` | sim |  |  | Score smallint de confiabilidade do e-mail; escala e interpretação não estão definidas no schema. |
+| 14 | `is_verified` | `boolean` | sim | `false` |  | Indica se o e-mail foi verificado; DEFAULT false. |
 
 
 ## Constraints

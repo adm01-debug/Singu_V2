@@ -1,6 +1,6 @@
 # public.companies
 
-> Cadastro de empresas (clientes, fornecedores, transportadoras)
+> Cadastro mestre de organizações do CRM. Uma linha representa uma empresa, que pode atuar como cliente, fornecedor e/ou transportadora conforme os indicadores de papel. Centraliza identificação cadastral, vínculo com Bitrix24, hierarquia empresarial/cooperativista, dados de contato e atributos de qualificação comercial. PK: id. Relacionamentos confirmados: company_addresses.company_id, company_phones.company_id, company_emails.company_id, contacts.company_id, customers.company_id, suppliers.company_id, carriers.company_id e diversas tabelas operacionais apontam para companies.id. Valores monetários e métricas textuais devem ser interpretados conforme a unidade de origem; não inferir moeda ou escala quando não explicitadas.
 
 | propriedade | valor |
 |---|---|
@@ -19,87 +19,87 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `bitrix_company_id` | `integer` | sim |  |  |  |
-| 6 | `is_customer` | `boolean` | sim | `false` |  |  |
-| 7 | `is_supplier` | `boolean` | sim | `false` |  |  |
-| 8 | `is_carrier` | `boolean` | sim | `false` |  |  |
-| 9 | `nome_crm` | `text` | não |  |  |  |
-| 10 | `razao_social` | `text` | sim |  |  |  |
-| 11 | `nome_fantasia` | `text` | sim |  |  |  |
-| 12 | `cnpj` | `text` | sim |  |  |  |
-| 13 | `inscricao_estadual` | `text` | sim |  |  |  |
-| 14 | `inscricao_municipal` | `text` | sim |  |  |  |
-| 18 | `website` | `text` | sim |  |  |  |
-| 31 | `ramo_atividade` | `text` | sim |  |  |  |
-| 32 | `grupo_economico` | `text` | sim |  |  |  |
-| 34 | `status` | `company_status` | sim | `'ativo'::company_status` |  |  |
-| 36 | `logo_url` | `text` | sim |  |  |  |
-| 37 | `merge_notes` | `jsonb` | sim |  |  |  |
-| 38 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 39 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 40 | `bitrix_created_at` | `timestamp with time zone` | sim |  |  |  |
-| 41 | `bitrix_updated_at` | `timestamp with time zone` | sim |  |  |  |
-| 42 | `created_by_id` | `integer` | sim |  |  | Usuário que cadastrou a empresa no sistema |
-| 43 | `grupo_economico_id` | `uuid` | sim |  |  |  |
-| 44 | `is_matriz` | `boolean` | sim | `true` |  | TRUE se é matriz, FALSE se é filial |
-| 45 | `matriz_id` | `uuid` | sim |  |  | Se for filial, aponta para a matriz |
-| 46 | `tipo_cooperativa` | `text` | sim |  |  | Tipo na hierarquia cooperativa |
-| 47 | `central_id` | `uuid` | sim |  |  | Se for Singular ou PAC, aponta para a Central |
-| 48 | `singular_id` | `uuid` | sim |  |  | Se for PAC, aponta para a Singular |
-| 51 | `financial_health` | `text` | sim | `'unknown'::text` |  |  |
-| 52 | `employee_count` | `text` | sim |  |  |  |
-| 53 | `annual_revenue` | `text` | sim |  |  |  |
-| 54 | `competitors` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 55 | `challenges` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 56 | `tags_array` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 61 | `deleted_at` | `timestamp with time zone` | sim |  |  |  |
-| 62 | `deleted_by` | `uuid` | sim |  |  |  |
-| 63 | `search_vector` | `tsvector` | sim |  |  |  |
-| 64 | `cnpj_base` | `character varying(8)` | sim |  |  |  |
-| 65 | `cores_marca` | `cor_grupo[]` | sim |  |  | Grupos de cores da marca/logo da empresa. Ex: {verde,azul,amarelo} para Sicoob. Usado para cruzamento com cores disponíveis nos produtos. |
-| 66 | `confederacao_id` | `uuid` | sim |  |  | FK para a confederação à qual esta central/singular está filiada. Nível hierárquico: CONFEDERAÇÃO → CENTRAL → SINGULAR → PAC. Adicionado em 2026-02-19 para formalizar hierarquia cooperativista. |
-| 67 | `nicho_cliente` | `text` | sim |  |  |  |
-| 68 | `data_fundacao` | `date` | sim |  |  |  |
-| 69 | `capital_social` | `numeric(15,2)` | sim |  |  |  |
-| 70 | `natureza_juridica` | `character varying(10)` | sim |  |  |  |
-| 71 | `natureza_juridica_desc` | `character varying(200)` | sim |  |  |  |
-| 72 | `porte_rf` | `character varying(30)` | sim |  |  |  |
-| 73 | `situacao_rf` | `character varying(20)` | sim |  |  |  |
-| 74 | `situacao_rf_data` | `date` | sim |  |  |  |
-| 75 | `extra_data_rf` | `jsonb` | sim |  |  |  |
-| 78 | `numero_cooperativa` | `character varying(10)` | sim |  |  | Número da cooperativa no portal Sicoob/Sicredi/etc (ex: 1001, 3008). Chave de cruzamento com portais oficiais. |
-| 79 | `user_id` | `uuid` | sim |  |  |  |
-| 80 | `lead_score` | `integer` | sim | `0` |  |  |
-| 81 | `lead_score_updated_at` | `timestamp with time zone` | sim |  |  |  |
-| 82 | `lead_status` | `text` | sim | `'novo'::text` |  |  |
-| 84 | `industry` | `text` | sim |  |  |  |
-| 90 | `notes` | `text` | sim |  |  |  |
-| 91 | `tags` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 100 | `logo_color_url` | `text` | sim |  |  | URL da logo COLORIDA em alta resolução (Cloudflare Images). Consumida pelo Gerador de Mockup (default) e exportações. Distinta de logo_url (baixa res, só avatar). fix_version: 2026-06-28 logo-hi-res |
-| 101 | `logo_mono_url` | `text` | sim |  |  | URL da logo MONOCROMATICA / 1 cor em alta resolução (Cloudflare Images). Consumida pelo Gerador de Mockup em tecnicas mono (laser, gravacao 1 cor). fix_version: 2026-06-28 logo-hi-res |
-| 102 | `vak_dominant` | `text` | sim |  |  |  |
-| 103 | `motivation_direction` | `text` | sim |  |  |  |
-| 104 | `working_style` | `text` | sim |  |  |  |
-| 105 | `reference_frame` | `text` | sim |  |  |  |
-| 106 | `chunk_size` | `text` | sim |  |  |  |
-| 107 | `action_filter` | `text` | sim |  |  |  |
-| 108 | `comparison_style` | `text` | sim |  |  |  |
-| 109 | `most_frequent_objection` | `text` | sim |  |  |  |
-| 110 | `vak_profile` | `jsonb` | sim |  |  |  |
-| 111 | `metaprogram_profile` | `jsonb` | sim |  |  |  |
-| 112 | `emotional_state` | `text` | sim |  |  |  |
-| 113 | `emotional_confidence` | `numeric(5,2)` | sim |  |  |  |
-| 114 | `emotional_trigger` | `text` | sim |  |  |  |
-| 115 | `cnpj_normalizado_em` | `timestamp with time zone` | sim |  |  | Última normalização via CNPJ Já. NULL = pendente de processamento. |
-| 116 | `brand_colors` | `jsonb` | sim |  |  |  |
-| 117 | `social_media_searched_at` | `timestamp with time zone` | sim |  |  | Timestamp de quando a busca de redes sociais foi executada (encontrado ou não encontrado). NULL = ainda não processado. |
-| 118 | `verificado_em` | `timestamp with time zone` | sim |  |  | Data/hora em que os dados foram comparados e sincronizados com a planilha DADOS_COMPLETOS_PORTAL_SICOOB_2026.xlsx |
-| 119 | `numero_cooperativa_singular` | `character varying` | sim |  |  |  |
-| 120 | `version` | `integer` | não | `0` |  |  |
-| 121 | `nome_crm_atualizado_em` | `timestamp with time zone` | sim |  |  |  |
-| 122 | `empresa_atualizada_em` | `timestamp with time zone` | sim |  |  |  |
-| 123 | `regime_tributario` | `text` | sim |  |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador interno único da empresa; UUID gerado automaticamente por gen_random_uuid(). Chave primária referenciada por tabelas relacionadas do CRM. |
+| 2 | `bitrix_company_id` | `integer` | sim |  |  | Identificador numérico da empresa no Bitrix24; pode ser nulo e, quando informado, é único. Usado para integração e reconciliação com o CRM externo. |
+| 6 | `is_customer` | `boolean` | sim | `false` |  | Indicador booleano de que a empresa exerce papel de cliente. TRUE indica cliente; FALSE indica que esse papel não está marcado. Não confundir com status comercial. |
+| 7 | `is_supplier` | `boolean` | sim | `false` |  | Indicador booleano de que a empresa exerce papel de fornecedor. TRUE indica fornecedor; FALSE indica que esse papel não está marcado. |
+| 8 | `is_carrier` | `boolean` | sim | `false` |  | Indicador booleano de que a empresa exerce papel de transportadora. TRUE indica transportadora; FALSE indica que esse papel não está marcado. |
+| 9 | `nome_crm` | `text` | não |  |  | Nome de exibição/identificação da empresa no CRM; campo obrigatório. Não equivale necessariamente à razão social ou ao nome fantasia. |
+| 10 | `razao_social` | `text` | sim |  |  | Razão social legal da empresa, quando conhecida; texto opcional. |
+| 11 | `nome_fantasia` | `text` | sim |  |  | Nome fantasia comercial da empresa, quando conhecido; texto opcional. |
+| 12 | `cnpj` | `text` | sim |  |  | CNPJ da empresa em texto; preserva zeros à esquerda e pode conter máscara. A coluna não informa por si só se o valor está normalizado ou validado. |
+| 13 | `inscricao_estadual` | `text` | sim |  |  | Inscrição estadual informada para a empresa; texto opcional, sem regra de formato documentada no schema. |
+| 14 | `inscricao_municipal` | `text` | sim |  |  | Inscrição municipal informada para a empresa; texto opcional, sem regra de formato documentada no schema. |
+| 18 | `website` | `text` | sim |  |  | Endereço do site institucional da empresa, armazenado como texto/URL; campo opcional. |
+| 31 | `ramo_atividade` | `text` | sim |  |  | Ramo de atividade da empresa em texto livre; não há domínio fechado documentado. |
+| 32 | `grupo_economico` | `text` | sim |  |  | Nome textual de grupo econômico associado à empresa. Há também grupo_economico_id para vínculo relacional; não presumir equivalência ou sincronização entre os dois sem validar a aplicação. |
+| 34 | `status` | `company_status` | sim | `'ativo'::company_status` |  | Situação cadastral no CRM. Domínio do tipo company_status: ativo, inativo ou suspenso. DEFAULT ativo. Não representa o papel de cliente/fornecedor/transportadora. |
+| 36 | `logo_url` | `text` | sim |  |  | URL da imagem de logo usada como representação/avatar; comentário existente indica resolução menor. Não confundir com logo_color_url e logo_mono_url, destinados a arquivos de maior resolução. |
+| 37 | `merge_notes` | `jsonb` | sim |  |  | Dados JSONB relacionados a merge/consolidação de registros. Estrutura interna não formalizada no schema; consultar payload antes de filtrar por chaves específicas. |
+| 38 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação do registro no banco, com fuso horário (timestamptz); DEFAULT now(). Não é necessariamente a data de criação no Bitrix24. |
+| 39 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada no banco, com fuso horário. DEFAULT now(); a atualização automática depende de trigger ou da aplicação. |
+| 40 | `bitrix_created_at` | `timestamp with time zone` | sim |  |  | Data e hora de criação do registro no Bitrix24, quando disponível; timestamptz opcional. |
+| 41 | `bitrix_updated_at` | `timestamp with time zone` | sim |  |  | Data e hora da última atualização do registro no Bitrix24, quando disponível; timestamptz opcional. |
+| 42 | `created_by_id` | `integer` | sim |  |  | Identificador integer do usuário/colaborador que cadastrou a empresa; FK para public.users.id. |
+| 43 | `grupo_economico_id` | `uuid` | sim |  |  | Identificador UUID do grupo econômico associado; FK para public.grupos_economicos.id. |
+| 44 | `is_matriz` | `boolean` | sim | `true` |  | Indica se a empresa é matriz. TRUE = matriz; FALSE = filial. DEFAULT TRUE. A matriz da filial é indicada em matriz_id. |
+| 45 | `matriz_id` | `uuid` | sim |  |  | UUID da empresa matriz à qual esta empresa filial pertence; autorrelacionamento FK para public.companies.id. Nulo quando não há matriz informada. |
+| 46 | `tipo_cooperativa` | `text` | sim |  |  | Categoria da entidade na hierarquia cooperativista. Valores permitidos: CENTRAL, SINGULAR, PAC, CONFEDERACAO, ENTIDADE_SISTEMA. Nulo quando não classificada. |
+| 47 | `central_id` | `uuid` | sim |  |  | UUID da Central relacionada na hierarquia cooperativista; autorrelacionamento FK para public.companies.id. Comentário existente especifica uso para Singular ou PAC. |
+| 48 | `singular_id` | `uuid` | sim |  |  | UUID da Singular relacionada na hierarquia cooperativista; autorrelacionamento FK para public.companies.id. Comentário existente especifica uso para PAC. |
+| 51 | `financial_health` | `text` | sim | `'unknown'::text` |  | Classificação textual da saúde financeira: growing, stable, cutting ou unknown. DEFAULT unknown. Não é um valor monetário. |
+| 52 | `employee_count` | `text` | sim |  |  | Informação de quantidade/porte de colaboradores armazenada como texto. O schema não define se contém número exato ou faixa; não converter para inteiro sem validar o conteúdo. |
+| 53 | `annual_revenue` | `text` | sim |  |  | Informação textual de receita anual. O schema não define moeda, escala nem se o conteúdo é valor exato ou faixa; não tratar como numeric sem validar a origem. |
+| 54 | `competitors` | `text[]` | sim | `'{}'::text[]` |  | Array PostgreSQL de textos com concorrentes associados à empresa; DEFAULT array vazio. Não há catálogo ou normalização documentados. |
+| 55 | `challenges` | `text[]` | sim | `'{}'::text[]` |  | Array PostgreSQL de textos com desafios atribuídos à empresa; DEFAULT array vazio. Não há taxonomia fechada documentada. |
+| 56 | `tags_array` | `text[]` | sim | `'{}'::text[]` |  | Array PostgreSQL de rótulos textuais da empresa; DEFAULT array vazio. Diferente de tabelas relacionais de tags. |
+| 61 | `deleted_at` | `timestamp with time zone` | sim |  |  | Data e hora de exclusão lógica da empresa; NULL normalmente indica que não há marca de exclusão registrada. Timestamptz. |
+| 62 | `deleted_by` | `uuid` | sim |  |  | UUID do usuário que registrou a exclusão lógica; FK para auth.users.id. |
+| 63 | `search_vector` | `tsvector` | sim |  |  | Vetor tsvector para busca textual; campo técnico derivado/indexável, não é texto de exibição. |
+| 64 | `cnpj_base` | `character varying(8)` | sim |  |  | Representação textual da base do CNPJ, usada para agrupamento/normalização; não contém regra de tamanho explicitada no schema. |
+| 65 | `cores_marca` | `cor_grupo[]` | sim |  |  | Array do tipo cor_grupo com cores associadas à marca. Valores permitidos: branco, preto, cinza, prata, dourado, vermelho, laranja, amarelo, verde, azul, azul_marinho, roxo, rosa, marrom, bege, transparente e multicolor. |
+| 66 | `confederacao_id` | `uuid` | sim |  |  | UUID da Confederação na hierarquia cooperativista; autorrelacionamento FK para public.companies.id. Comentário existente descreve a cadeia Confederação → Central → Singular → PAC. |
+| 67 | `nicho_cliente` | `text` | sim |  |  | Nicho do cliente armazenado como texto livre; não há domínio fechado definido. |
+| 68 | `data_fundacao` | `date` | sim |  |  | Data de fundação da empresa, sem horário; tipo date. |
+| 69 | `capital_social` | `numeric(15,2)` | sim |  |  | Valor numérico do capital social. Unidade monetária e moeda não estão definidas na coluna; não presumir reais ou centavos sem confirmação da origem. |
+| 70 | `natureza_juridica` | `character varying(10)` | sim |  |  | Código ou classificação textual da natureza jurídica; formato/catálogo não definido pela coluna. |
+| 71 | `natureza_juridica_desc` | `character varying(200)` | sim |  |  | Descrição textual da natureza jurídica, complementar a natureza_juridica. |
+| 72 | `porte_rf` | `character varying(30)` | sim |  |  | Porte da empresa conforme informação atribuída à Receita Federal; texto opcional. Valores concretos não estão enumerados no schema. |
+| 73 | `situacao_rf` | `character varying(20)` | sim |  |  | Situação cadastral atribuída à Receita Federal; texto opcional. Não confundir com companies.status, que é a situação no CRM. |
+| 74 | `situacao_rf_data` | `date` | sim |  |  | Data associada à situação cadastral na Receita Federal; tipo date. |
+| 75 | `extra_data_rf` | `jsonb` | sim |  |  | Dados adicionais da Receita Federal em JSONB; estrutura variável, sem contrato de chaves definido no schema. |
+| 78 | `numero_cooperativa` | `character varying(10)` | sim |  |  | Número de cooperativa informado por portais de sistemas cooperativistas; texto para preservar formatação/zeros. Comentário existente cita exemplos e uso em cruzamentos. |
+| 79 | `user_id` | `uuid` | sim |  |  | UUID de usuário associado à empresa; não há FK declarada para esta coluna no schema consultado. Não presumir que seja equivalente a created_by_id. |
+| 80 | `lead_score` | `integer` | sim | `0` |  | Pontuação inteira de lead, DEFAULT 0. O schema não define escala, algoritmo ou faixa permitida; interpretar como score e não como valor financeiro. |
+| 81 | `lead_score_updated_at` | `timestamp with time zone` | sim |  |  | Data e hora da última atualização do lead_score, com fuso horário. |
+| 82 | `lead_status` | `text` | sim | `'novo'::text` |  | Status textual do lead, DEFAULT novo. Não há CHECK constraint com a lista de estados válidos; não presumir transições ou valores além dos dados efetivamente usados. |
+| 84 | `industry` | `text` | sim |  |  | Setor/indústria em texto livre; distinto de ramo_atividade e sem catálogo fechado documentado. |
+| 90 | `notes` | `text` | sim |  |  | Observações gerais em texto livre sobre a empresa. |
+| 91 | `tags` | `text[]` | sim | `'{}'::text[]` |  | Array PostgreSQL de tags textuais; DEFAULT array vazio. Não confundir com tags_array, que é outra coluna com finalidade possivelmente distinta não detalhada pelo schema. |
+| 100 | `logo_color_url` | `text` | sim |  |  | URL da logo colorida em alta resolução; comentário existente indica uso em mockups e exportações. |
+| 101 | `logo_mono_url` | `text` | sim |  |  | URL da logo monocromática/em uma cor em alta resolução; comentário existente indica uso em técnicas monocromáticas. |
+| 102 | `vak_dominant` | `text` | sim |  |  | Rótulo textual de modalidade VAK dominante; valores possíveis e convenção de codificação não estão definidos no schema. |
+| 103 | `motivation_direction` | `text` | sim |  |  | Rótulo textual sobre direção motivacional; valores e escala não estão definidos no schema. |
+| 104 | `working_style` | `text` | sim |  |  | Descrição/categoria textual de estilo de trabalho; domínio não definido no schema. |
+| 105 | `reference_frame` | `text` | sim |  |  | Rótulo textual de quadro de referência; valores permitidos não estão definidos no schema. |
+| 106 | `chunk_size` | `text` | sim |  |  | Rótulo textual de preferência de granularidade de informação; valores permitidos não estão definidos no schema. |
+| 107 | `action_filter` | `text` | sim |  |  | Rótulo textual de filtro de ação; sem domínio ou interpretação formal definidos no schema. |
+| 108 | `comparison_style` | `text` | sim |  |  | Rótulo textual de estilo de comparação; valores permitidos não estão definidos no schema. |
+| 109 | `most_frequent_objection` | `text` | sim |  |  | Texto que registra a objeção mais frequente associada à empresa; não há taxonomia fechada. |
+| 110 | `vak_profile` | `jsonb` | sim |  |  | Perfil VAK da empresa em JSONB; estrutura de chaves não especificada pelo schema. |
+| 111 | `metaprogram_profile` | `jsonb` | sim |  |  | Perfil de metaprogramas em JSONB; estrutura e escalas não especificadas pelo schema. |
+| 112 | `emotional_state` | `text` | sim |  |  | Estado emocional textual atribuído à empresa/contato comercial; catálogo não definido pelo schema. |
+| 113 | `emotional_confidence` | `numeric(5,2)` | sim |  |  | Confiança numérica associada à análise emocional. Faixa, unidade e interpretação não estão definidas; não assumir 0–1 ou 0–100. |
+| 114 | `emotional_trigger` | `text` | sim |  |  | Texto de gatilho emocional associado à análise; sem domínio fechado. |
+| 115 | `cnpj_normalizado_em` | `timestamp with time zone` | sim |  |  | Data e hora da última normalização do CNPJ; comentário existente informa NULL como pendente de processamento. |
+| 116 | `brand_colors` | `jsonb` | sim |  |  | Cores da marca em JSONB; distinta de cores_marca, que usa array tipado cor_grupo. Estrutura JSON não está formalizada no schema. |
+| 117 | `social_media_searched_at` | `timestamp with time zone` | sim |  |  | Data e hora em que foi executada a busca de redes sociais; comentário existente informa NULL como ainda não processado. |
+| 118 | `verificado_em` | `timestamp with time zone` | sim |  |  | Data e hora da verificação/sincronização com a planilha indicada no comentário existente. |
+| 119 | `numero_cooperativa_singular` | `character varying` | sim |  |  | Número de cooperativa singular em texto; formato e regra de preenchimento não estão definidos no schema. |
+| 120 | `version` | `integer` | não | `0` |  | Contador inteiro de versão do registro, DEFAULT 0. O mecanismo de incremento não está definido pela coluna. |
+| 121 | `nome_crm_atualizado_em` | `timestamp with time zone` | sim |  |  | Data e hora da última atualização de nome_crm, conforme convenção da aplicação. |
+| 122 | `empresa_atualizada_em` | `timestamp with time zone` | sim |  |  | Data e hora da última atualização dos dados da empresa, conforme convenção da aplicação. |
+| 123 | `regime_tributario` | `text` | sim |  |  | Regime tributário informado como texto; valores possíveis não estão enumerados no schema. |
 
 
 ## Constraints

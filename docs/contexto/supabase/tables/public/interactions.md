@@ -1,6 +1,6 @@
 # public.interactions
 
-> Histórico de interações com contatos/empresas
+> Histórico de interações comerciais e de relacionamento com contatos e/ou empresas. Registra canal, direção, estado, conteúdo, agendamento, responsável e metadados. Uma interação pode referenciar contato, empresa e usuário responsável; as tabelas de análise podem referenciar interactions.id. PK: id.
 
 | propriedade | valor |
 |---|---|
@@ -19,49 +19,49 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `contact_id` | `uuid` | sim |  |  |  |
-| 3 | `company_id` | `uuid` | sim |  |  |  |
-| 4 | `channel` | `text` | não |  |  |  |
-| 5 | `direction` | `text` | não |  |  |  |
-| 6 | `status` | `text` | sim | `'concluido'::text` |  |  |
-| 7 | `assunto` | `character varying(255)` | sim |  |  |  |
-| 8 | `resumo` | `text` | sim |  |  |  |
-| 9 | `conteudo` | `text` | sim |  |  |  |
-| 10 | `data_interacao` | `timestamp with time zone` | não | `now()` |  |  |
-| 11 | `data_agendada` | `timestamp with time zone` | sim |  |  |  |
-| 12 | `duracao_segundos` | `integer` | sim |  |  |  |
-| 13 | `usuario_responsavel_id` | `integer` | sim |  |  |  |
-| 14 | `metadata` | `jsonb` | sim | `'{}'::jsonb` |  |  |
-| 15 | `anexos` | `jsonb` | sim | `'[]'::jsonb` |  |  |
-| 16 | `external_id` | `character varying(100)` | sim |  |  |  |
-| 17 | `source_system` | `character varying(50)` | sim |  |  |  |
-| 18 | `bitrix_activity_id` | `integer` | sim |  |  |  |
-| 19 | `sentiment` | `character varying(20)` | sim |  |  |  |
-| 20 | `prioridade` | `character varying(20)` | sim |  |  |  |
-| 21 | `requer_followup` | `boolean` | sim | `false` |  |  |
-| 22 | `data_followup` | `timestamp with time zone` | sim |  |  |  |
-| 23 | `followup_concluido` | `boolean` | sim | `false` |  |  |
-| 24 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 25 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 26 | `created_by` | `uuid` | sim |  |  |  |
-| 27 | `type` | `text` | sim |  |  |  |
-| 28 | `title` | `text` | sim |  |  |  |
-| 29 | `content` | `text` | sim |  |  |  |
-| 30 | `audio_url` | `text` | sim |  |  |  |
-| 31 | `transcription` | `text` | sim |  |  |  |
-| 32 | `tags_array` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 33 | `duration` | `integer` | sim |  |  |  |
-| 34 | `attachments` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 35 | `initiated_by` | `text` | sim |  |  |  |
-| 36 | `response_time` | `integer` | sim |  |  |  |
-| 37 | `key_insights` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 38 | `follow_up_required` | `boolean` | não | `false` |  |  |
-| 39 | `follow_up_date` | `date` | sim |  |  |  |
-| 40 | `emotion_analysis` | `jsonb` | sim |  |  |  |
-| 41 | `user_id` | `uuid` | sim |  |  |  |
-| 42 | `tags` | `text[]` | sim | `'{}'::text[]` |  |  |
-| 43 | `outcome` | `text` | sim |  |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador UUID da interação e chave primária; gerado por gen_random_uuid(). |
+| 2 | `contact_id` | `uuid` | sim |  |  | Contato participante da interação; FK para public.contacts.id; pode ser NULL. |
+| 3 | `company_id` | `uuid` | sim |  |  | Empresa relacionada à interação; FK para public.companies.id; pode ser NULL. |
+| 4 | `channel` | `text` | não |  |  | Canal da interação, armazenado como texto obrigatório. Valores permitidos não estão restringidos pelo schema. |
+| 5 | `direction` | `text` | não |  |  | Direção da comunicação, armazenada como texto obrigatório. Sem valores enumerados no schema; não inferir nomes válidos apenas por convenção. |
+| 6 | `status` | `text` | sim | `'concluido'::text` |  | Estado operacional: pendente, concluido, cancelado ou agendado. DEFAULT concluido. |
+| 7 | `assunto` | `character varying(255)` | sim |  |  | Assunto/título curto da interação; opcional. |
+| 8 | `resumo` | `text` | sim |  |  | Resumo textual da interação; opcional. |
+| 9 | `conteudo` | `text` | sim |  |  | Conteúdo ou observação textual da interação; pode conter transcrição ou detalhes da comunicação. |
+| 10 | `data_interacao` | `timestamp with time zone` | não | `now()` |  | Data e hora da interação efetiva; timestamptz, DEFAULT now(). |
+| 11 | `data_agendada` | `timestamp with time zone` | sim |  |  | Data e hora planejada para a interação; timestamptz opcional. |
+| 12 | `duracao_segundos` | `integer` | sim |  |  | Duração da interação em segundos; integer opcional. |
+| 13 | `usuario_responsavel_id` | `integer` | sim |  |  | ID integer do usuário/colaborador responsável; FK para public.users.id. |
+| 14 | `metadata` | `jsonb` | sim | `'{}'::jsonb` |  | Metadados complementares da interação em JSONB; DEFAULT objeto vazio. Estrutura interna não é restringida. |
+| 15 | `anexos` | `jsonb` | sim | `'[]'::jsonb` |  | Anexos representados em JSONB; DEFAULT array JSON vazio. Não confundir com attachments, que é array de textos. |
+| 16 | `external_id` | `character varying(100)` | sim |  |  | Identificador externo da interação em texto; sistema de origem indicado separadamente em source_system. |
+| 17 | `source_system` | `character varying(50)` | sim |  |  | Nome do sistema de origem da interação; texto livre, sem catálogo definido. |
+| 18 | `bitrix_activity_id` | `integer` | sim |  |  | Identificador integer da atividade correspondente no Bitrix24, quando disponível. |
+| 19 | `sentiment` | `character varying(20)` | sim |  |  | Rótulo de sentimento da interação; texto sem escala ou domínio fechado definido no schema. |
+| 20 | `prioridade` | `character varying(20)` | sim |  |  | Prioridade textual da interação; valores permitidos não estão enumerados no schema. |
+| 21 | `requer_followup` | `boolean` | sim | `false` |  | Indica se a interação requer follow-up; boolean nullable, DEFAULT false. |
+| 22 | `data_followup` | `timestamp with time zone` | sim |  |  | Data e hora prevista para o follow-up; timestamptz opcional. |
+| 23 | `followup_concluido` | `boolean` | sim | `false` |  | Indica se o follow-up foi concluído; boolean nullable, DEFAULT false. |
+| 24 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação do registro no banco; timestamptz, DEFAULT now(). |
+| 25 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). |
+| 26 | `created_by` | `uuid` | sim |  |  | UUID do usuário que criou o registro, quando disponível; sem FK declarada no schema consultado. |
+| 27 | `type` | `text` | sim |  |  | Categoria funcional da interação: whatsapp, call, email, meeting, note, social, system, commercial ou sdr_alert. Diferente de channel: este campo classifica o tipo do registro. |
+| 28 | `title` | `text` | sim |  |  | Título alternativo em texto usado por consumidores da aplicação; não há regra de equivalência com assunto definida no schema. |
+| 29 | `content` | `text` | sim |  |  | Conteúdo alternativo em texto usado por consumidores da aplicação; não há regra de equivalência com conteudo definida no schema. |
+| 30 | `audio_url` | `text` | sim |  |  | URL do áudio associado à interação, quando houver. |
+| 31 | `transcription` | `text` | sim |  |  | Transcrição textual do áudio/chamada, quando disponível. |
+| 32 | `tags_array` | `text[]` | sim | `'{}'::text[]` |  | Array PostgreSQL de tags textuais associadas; DEFAULT vazio. |
+| 33 | `duration` | `integer` | sim |  |  | Duração adicional em segundos conforme o nome da coluna; o schema não declara unidade ou relação com duracao_segundos, portanto validar o produtor antes de combinar os campos. |
+| 34 | `attachments` | `text[]` | sim | `'{}'::text[]` |  | Array PostgreSQL de textos usados como referências de anexos; distinto de anexos JSONB. |
+| 35 | `initiated_by` | `text` | sim |  |  | Indica quem iniciou a interação: us = usuário/equipe; them = contato/parte externa. |
+| 36 | `response_time` | `integer` | sim |  |  | Tempo de resposta armazenado como integer; unidade não declarada no schema. |
+| 37 | `key_insights` | `text[]` | sim | `'{}'::text[]` |  | Array textual de principais insights extraídos da interação; DEFAULT vazio. |
+| 38 | `follow_up_required` | `boolean` | não | `false` |  | Indicador booleano alternativo de necessidade de follow-up; DEFAULT false. Não presumir equivalência com requer_followup sem validar a aplicação. |
+| 39 | `follow_up_date` | `date` | sim |  |  | Data prevista para follow-up, sem horário; tipo date. |
+| 40 | `emotion_analysis` | `jsonb` | sim |  |  | Resultado de análise emocional em JSONB; estrutura e escalas internas não formalizadas no schema. |
+| 41 | `user_id` | `uuid` | sim |  |  | UUID do usuário associado à interação; não há FK declarada para esta coluna na inspeção. Não confundir com usuario_responsavel_id. |
+| 42 | `tags` | `text[]` | sim | `'{}'::text[]` |  | Array PostgreSQL de tags textuais; DEFAULT vazio. Coluna distinta de tags_array, sem regra de sincronização documentada. |
+| 43 | `outcome` | `text` | sim |  |  | Resultado textual da interação; valores possíveis e semântica de sucesso não definidos no schema. |
 
 
 ## Constraints

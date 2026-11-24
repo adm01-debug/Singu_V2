@@ -1,5 +1,7 @@
 # public.pipeline_stages
 
+> Etapas pertencentes a um pipeline comercial. Registra nome, ordem, probabilidade, estados de início/ganho/perda e SLA. pipeline_id referencia public.pipelines.id; outras entidades de negócio podem referenciar a etapa conforme suas FKs.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -17,20 +19,20 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `pipeline_id` | `uuid` | não |  |  |  |
-| 3 | `nome` | `character varying(100)` | não |  |  |  |
-| 4 | `descricao` | `text` | sim |  |  |  |
-| 5 | `cor` | `character varying(7)` | sim | `'#3498db'::character varying` |  |  |
-| 6 | `ordem` | `integer` | não |  |  |  |
-| 7 | `probabilidade` | `integer` | sim | `0` |  |  |
-| 8 | `is_initial` | `boolean` | sim | `false` |  |  |
-| 9 | `is_won` | `boolean` | sim | `false` |  |  |
-| 10 | `is_lost` | `boolean` | sim | `false` |  |  |
-| 11 | `sla_horas` | `integer` | sim |  |  |  |
-| 12 | `campos_obrigatorios` | `jsonb` | sim | `'[]'::jsonb` |  |  |
-| 13 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 14 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador UUID da etapa e chave primária; gerado por gen_random_uuid(). |
+| 2 | `pipeline_id` | `uuid` | não |  |  | Pipeline ao qual a etapa pertence; FK para public.pipelines.id. |
+| 3 | `nome` | `character varying(100)` | não |  |  | Nome de exibição da etapa; obrigatório. |
+| 4 | `descricao` | `text` | sim |  |  | Descrição opcional do significado operacional da etapa. |
+| 5 | `cor` | `character varying(7)` | sim | `'#3498db'::character varying` |  | Código textual de cor para interface; DEFAULT #3498db. |
+| 6 | `ordem` | `integer` | não |  |  | Posição da etapa dentro do pipeline; integer obrigatório. |
+| 7 | `probabilidade` | `integer` | sim | `0` |  | Probabilidade percentual inteira associada à etapa, de 0 a 100; DEFAULT 0. |
+| 8 | `is_initial` | `boolean` | sim | `false` |  | Indica se a etapa é inicial; DEFAULT false. |
+| 9 | `is_won` | `boolean` | sim | `false` |  | Indica se a etapa representa ganho; DEFAULT false. |
+| 10 | `is_lost` | `boolean` | sim | `false` |  | Indica se a etapa representa perda; DEFAULT false. |
+| 11 | `sla_horas` | `integer` | sim |  |  | Limite de SLA da etapa em horas; nulo quando não configurado. |
+| 12 | `campos_obrigatorios` | `jsonb` | sim | `'[]'::jsonb` |  | Lista JSONB de campos exigidos para avançar/usar a etapa; DEFAULT array JSON vazio. Estrutura de elementos não validada no schema. |
+| 13 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação da etapa; timestamptz, DEFAULT now(). |
+| 14 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). |
 
 
 ## Constraints

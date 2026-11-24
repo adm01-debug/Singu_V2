@@ -35,7 +35,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.collectible_badges](tables/dormant/collectible_badges.md) | table | sim | 1 | 10 | não |  |
 | [_dormant.communication_cadence](tables/dormant/communication_cadence.md) | table | sim | 1 | 18 | não | SINGU: Gestão de cadência de comunicação por contato |
 | [_dormant.communication_preferences](tables/dormant/communication_preferences.md) | table | sim | 1 | 28 | não | SINGU: Preferências de comunicação por contato |
-| [_dormant.company_tags](tables/dormant/company_tags.md) | table | não | 0 | 3 | não |  |
+| [_dormant.company_tags](tables/dormant/company_tags.md) | table | sim | 0 | 3 | não |  |
 | [_dormant.compatibility_alerts](tables/dormant/compatibility_alerts.md) | table | sim | 4 | 11 | não |  |
 | [_dormant.compatibility_settings](tables/dormant/compatibility_settings.md) | table | sim | 4 | 8 | não |  |
 | [_dormant.competitive_chat_messages](tables/dormant/competitive_chat_messages.md) | table | não | 0 | 5 | não |  |
@@ -290,12 +290,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.commission_rules](tables/public/commission_rules.md) | table | sim | 1 | 10 | não |  |
 | [public.commissions](tables/public/commissions.md) | table | sim | 4 | 11 | não |  |
 | [public.communication_preferences](tables/public/communication_preferences.md) | table | sim | 8 | 13 | não | SINGU: Dados analíticos de comunicação com taxas de resposta por canal. |
-| [public.companies](tables/public/companies.md) | table | sim | 9 | 81 | sim | Cadastro de empresas (clientes, fornecedores, transportadoras) |
-| [public.company_addresses](tables/public/company_addresses.md) | table | sim | 6 | 24 | não |  |
+| [public.companies](tables/public/companies.md) | table | sim | 9 | 81 | sim | Cadastro mestre de organizações do CRM. Uma linha representa uma empresa, que pode atuar como cliente, fornecedor e/ou transportadora conforme os indicadores de papel. Centraliza identificação cadastral, vínculo com Bitrix24, hierarquia empresarial/cooperativista, dados de contato e atributos de qualificação comercial. PK: id. Relacionamentos confirmados: company_addresses.company_id, company_phones.company_id, company_emails.company_id, contacts.company_id, customers.company_id, suppliers.company_id, carriers.company_id e diversas tabelas operacionais apontam para companies.id. Valores monetários e métricas textuais devem ser interpretados conforme a unidade de origem; não inferir moeda ou escala quando não explicitadas. |
+| [public.company_addresses](tables/public/company_addresses.md) | table | sim | 6 | 24 | não | Endereços associados a empresas do CRM. Cada registro pertence a uma empresa e pode incluir tipo, endereço postal, coordenadas geográficas e referências de geocodificação. company_id referencia public.companies.id; cidade_ibge referencia public.cidades.ibge_code. A coluna tipo tem um DEFAULT legado cujo conteúdo é ambíguo; não interpretá-lo como lista oficial de categorias sem validar os dados. |
 | [public.company_cadences](tables/public/company_cadences.md) | table | sim | 4 | 11 | não |  |
 | [public.company_cnaes](tables/public/company_cnaes.md) | table | sim | 1 | 7 | não | Vínculo empresa ↔ CNAEs. Cada empresa tem 1 principal (is_principal=true) e N secundários. |
-| [public.company_emails](tables/public/company_emails.md) | table | sim | 6 | 14 | não |  |
-| [public.company_phones](tables/public/company_phones.md) | table | sim | 6 | 16 | não |  |
+| [public.company_emails](tables/public/company_emails.md) | table | sim | 6 | 14 | não | Endereços de e-mail associados a empresas, com finalidade, sinalização de principal/verificado e metadados de origem/contexto. Cada registro referencia public.companies.id. |
+| [public.company_phones](tables/public/company_phones.md) | table | sim | 6 | 16 | não | Telefones de empresas com tipo, número normalizado, ramal, departamento e indicadores de principal/WhatsApp. Cada registro referencia public.companies.id. |
 | [public.company_rfm_scores](tables/public/company_rfm_scores.md) | table | sim | 4 | 18 | não | SINGU: Scores RFM agregados por empresa |
 | [public.company_social_media](tables/public/company_social_media.md) | table | sim | 1 | 16 | não |  |
 | [public.company_stakeholder_map](tables/public/company_stakeholder_map.md) | table | sim | 4 | 16 | não | SINGU: Mapa de stakeholders por empresa (poder/interesse) |
@@ -310,7 +310,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.connection_quotas](tables/public/connection_quotas.md) | table | sim | 2 | 9 | não |  |
 | [public.connection_test_logs](tables/public/connection_test_logs.md) | table | sim | 2 | 8 | não |  |
 | [public.connector_log](tables/public/connector_log.md) | table | sim | 1 | 13 | não | Log de integrações WhatsApp/Bitrix (auditoria) |
-| [public.contact_addresses](tables/public/contact_addresses.md) | table | sim | 1 | 25 | não |  |
+| [public.contact_addresses](tables/public/contact_addresses.md) | table | sim | 1 | 25 | não | Endereços de pessoas/contatos. Cada registro pertence a public.contacts e possui categoria residencial, profissional, cobrança ou outro. Guarda dados postais e coordenadas opcionais. PK: id; contact_id → public.contacts.id; created_by e updated_by → public.users.id. |
 | [public.contact_analytical_profile_versions](tables/public/contact_analytical_profile_versions.md) | table | sim | 2 | 16 | não |  |
 | [public.contact_analytical_profiles](tables/public/contact_analytical_profiles.md) | table | sim | 2 | 13 | não |  |
 | [public.contact_automation_settings](tables/public/contact_automation_settings.md) | table | sim | 1 | 11 | não |  |
@@ -319,7 +319,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_cadence](tables/public/contact_cadence.md) | table | sim | 8 | 11 | não | SINGU: Cadência ideal de contato por lead/cliente. Auto-remind e next_contact_due. |
 | [public.contact_cadence_audit](tables/public/contact_cadence_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.contact_decision_making](tables/public/contact_decision_making.md) | table | sim | 4 | 9 | não |  |
-| [public.contact_emails](tables/public/contact_emails.md) | table | sim | 5 | 12 | não |  |
+| [public.contact_emails](tables/public/contact_emails.md) | table | sim | 5 | 12 | não | Endereços de e-mail associados a contatos, permitindo múltiplos e-mails tipados e sinalização de principal/verificado. Cada registro referencia public.contacts.id. |
 | [public.contact_family_history](tables/public/contact_family_history.md) | table | sim | 2 | 5 | não |  |
 | [public.contact_influence](tables/public/contact_influence.md) | table | sim | 4 | 8 | não |  |
 | [public.contact_metaprograms](tables/public/contact_metaprograms.md) | table | sim | 4 | 15 | não |  |
@@ -327,7 +327,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_notes](tables/public/contact_notes.md) | table | sim | 4 | 9 | não | ZAPP WEB: Notas rápidas de contato. Criadas pelo painel Contact 360° durante atendimento. FK contacts(id). |
 | [public.contact_objection_scripts](tables/public/contact_objection_scripts.md) | table | sim | 2 | 9 | não |  |
 | [public.contact_personality](tables/public/contact_personality.md) | table | sim | 3 | 21 | não |  |
-| [public.contact_phones](tables/public/contact_phones.md) | table | sim | 6 | 15 | não |  |
+| [public.contact_phones](tables/public/contact_phones.md) | table | sim | 6 | 15 | não | Telefones associados a contatos, com tipo, normalização, sinalizadores de principal/WhatsApp/verificação e metadados de origem. Cada registro referencia public.contacts.id. |
 | [public.contact_predictive_roadmap](tables/public/contact_predictive_roadmap.md) | table | sim | 5 | 10 | não |  |
 | [public.contact_preferences](tables/public/contact_preferences.md) | table | sim | 8 | 13 | não | SINGU: Preferências pessoais de comunicação (canal, horários, restrições). |
 | [public.contact_preferences_audit](tables/public/contact_preferences_audit.md) | table | sim | 1 | 9 | não |  |
@@ -338,7 +338,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_social_media](tables/public/contact_social_media.md) | table | sim | 1 | 17 | não |  |
 | [public.contact_time_analysis](tables/public/contact_time_analysis.md) | table | sim | 8 | 9 | não | SINGU: Heatmap de melhores horários/dias para contatar cada lead. Grid 7x24. |
 | [public.contact_time_analysis_audit](tables/public/contact_time_analysis_audit.md) | table | sim | 1 | 9 | não |  |
-| [public.contacts](tables/public/contacts.md) | table | sim | 10 | 65 | sim | Contatos vinculados a empresas |
+| [public.contacts](tables/public/contacts.md) | table | sim | 10 | 65 | sim | Cadastro de pessoas/contatos comerciais vinculados opcionalmente a uma empresa. Reúne identificação, canais de contato, papéis de compra, atributos comportamentais e dados derivados. PK: id. company_id referencia public.companies.id; duplicate_of referencia public.contacts.id; assigned_by_id referencia public.users.id. Preferir as tabelas contact_emails, contact_phones e contact_social_media para múltiplos canais quando apropriado; não assumir que os campos legados equivalem a essas tabelas. |
 | [public.conversation_analyses](tables/public/conversation_analyses.md) | table | sim | 4 | 23 | não |  |
 | [public.conversation_topics_catalog](tables/public/conversation_topics_catalog.md) | table | sim | 4 | 10 | não |  |
 | [public.conversational_search_cache](tables/public/conversational_search_cache.md) | table | sim | 4 | 8 | não |  |
@@ -367,12 +367,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.customer_rotation_state](tables/public/customer_rotation_state.md) | table | sim | 4 | 15 | não |  |
 | [public.customer_sdr_history](tables/public/customer_sdr_history.md) | table | sim | 5 | 21 | não | Histórico de prospecção SDR ↔ Cliente |
 | [public.customer_surveys](tables/public/customer_surveys.md) | table | sim | 1 | 13 | não |  |
-| [public.customers](tables/public/customers.md) | table | sim | 4 | 37 | não | Dados comerciais de clientes (carteira, vendedor, histórico) |
+| [public.customers](tables/public/customers.md) | table | sim | 4 | 37 | não | Extensão comercial de public.companies para empresas qualificadas como clientes. Armazena carteira, responsável comercial, ativação, histórico agregado de compras e métricas de valor. company_id é UNIQUE e referencia public.companies.id; id é a PK. O soft delete é representado por deleted_at. |
 | [public.daily_challenges](tables/public/daily_challenges.md) | table | sim | 1 | 10 | não |  |
 | [public.data_quality_audits](tables/public/data_quality_audits.md) | table | sim | 2 | 15 | não | Registro permanente de auditorias de qualidade de dados por sistema cooperativo |
 | [public.deal_competitors](tables/public/deal_competitors.md) | table | sim | 1 | 6 | não |  |
 | [public.deal_forecasts](tables/public/deal_forecasts.md) | table | sim | 4 | 21 | não |  |
-| [public.deal_items](tables/public/deal_items.md) | table | sim | 1 | 10 | não |  |
+| [public.deal_items](tables/public/deal_items.md) | table | sim | 1 | 10 | não | Linhas de produto/serviço associadas a uma oportunidade de public.deals. Registra quantidade, preço, desconto e total calculado. deal_id referencia public.deals.id; product_id referencia public.products.id. |
 | [public.deal_room_activities](tables/public/deal_room_activities.md) | table | sim | 1 | 8 | não |  |
 | [public.deal_room_comments](tables/public/deal_room_comments.md) | table | sim | 1 | 7 | não |  |
 | [public.deal_room_documents](tables/public/deal_room_documents.md) | table | sim | 1 | 11 | não |  |
@@ -380,7 +380,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.deal_room_stakeholders](tables/public/deal_room_stakeholders.md) | table | sim | 1 | 13 | não |  |
 | [public.deal_rooms](tables/public/deal_rooms.md) | table | sim | 1 | 19 | não |  |
 | [public.deal_velocity_analysis](tables/public/deal_velocity_analysis.md) | table | sim | 2 | 15 | não | Análise de velocidade de fechamento de deals |
-| [public.deals](tables/public/deals.md) | table | sim | 8 | 17 | não | Pipeline de negócios/oportunidades de venda |
+| [public.deals](tables/public/deals.md) | table | sim | 8 | 17 | não | Registro de oportunidade de venda do CRM. Cada linha representa um negócio vinculado opcionalmente a uma empresa e a um contato, com valor, etapa, probabilidade e previsão de fechamento. O status possui domínio fechado e os itens do negócio são relacionados em public.deal_items. Chaves principais: id; company_id → public.companies.id; contact_id → public.contacts.id; user_id → public.profiles.id; loss_reason_id → public.loss_reasons.id. |
 | [public.decision_criteria](tables/public/decision_criteria.md) | table | sim | 8 | 10 | não | SINGU: Critérios que o contato usa para decidir compras (preço, qualidade, confiança). |
 | [public.device_login_notifications](tables/public/device_login_notifications.md) | table | sim | 5 | 14 | não | SINGU: Notificações enviadas em eventos de login anômalos. Trackeia resposta do usuário (trusted/reported_fraud). |
 | [public.disc_analysis_history](tables/public/disc_analysis_history.md) | table | sim | 8 | 23 | não | SINGU: Histórico de análises DISC por contato. Cada registro = 1 análise (manual ou IA). FK contacts(id). |
@@ -444,7 +444,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.intent_tracking_pixels](tables/public/intent_tracking_pixels.md) | table | sim | 4 | 10 | não |  |
 | [public.interaction_summaries](tables/public/interaction_summaries.md) | table | sim | 2 | 11 | não |  |
 | [public.interaction_templates](tables/public/interaction_templates.md) | table | sim | 4 | 14 | não |  |
-| [public.interactions](tables/public/interactions.md) | table | sim | 10 | 43 | sim | Histórico de interações com contatos/empresas |
+| [public.interactions](tables/public/interactions.md) | table | sim | 10 | 43 | sim | Histórico de interações comerciais e de relacionamento com contatos e/ou empresas. Registra canal, direção, estado, conteúdo, agendamento, responsável e metadados. Uma interação pode referenciar contato, empresa e usuário responsável; as tabelas de análise podem referenciar interactions.id. PK: id. |
 | [public.interactions_audit](tables/public/interactions_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.ip_whitelist](tables/public/ip_whitelist.md) | table | sim | 5 | 12 | não | SINGU: IPs/CIDRs permitidos por usuário. Usado se access_security_settings.ip_whitelist_enabled=true. |
 | [public.knowledge_base_articles](tables/public/knowledge_base_articles.md) | table | sim | 5 | 20 | não | SINGU: Artigos da base de conhecimento público/interno. search_vector para busca full-text. Workflow draft→published→archived. |
@@ -462,11 +462,11 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.lead_score_threshold_log](tables/public/lead_score_threshold_log.md) | table | sim | 2 | 11 | não |  |
 | [public.lead_score_thresholds](tables/public/lead_score_thresholds.md) | table | sim | 4 | 6 | não |  |
 | [public.lead_scores](tables/public/lead_scores.md) | table | sim | 8 | 23 | não | SINGU: Score atual de lead por contato. 4 dimensões ponderadas (Engagement 30%, Fit 20%, Intent 25%, Relationship 25%). Grade automática. 1 registro por contato. Série temporal em lead_score_history. |
-| [public.lead_sources](tables/public/lead_sources.md) | table | sim | 2 | 7 | não |  |
+| [public.lead_sources](tables/public/lead_sources.md) | table | sim | 2 | 7 | não | Catálogo de origens de leads utilizado por entidades comerciais que guardam source_id. Mantém nome, categoria, descrição, custo por lead e estado ativo. PK: id; nome é UNIQUE. |
 | [public.life_events](tables/public/life_events.md) | table | sim | 8 | 13 | não | SINGU: Eventos importantes (aniversários, promoções) para oportunidades de rapport. |
 | [public.life_events_history](tables/public/life_events_history.md) | table | sim | 1 | 12 | não |  |
 | [public.login_attempts](tables/public/login_attempts.md) | table | sim | 4 | 15 | não | SINGU: Log de TODAS as tentativas de login (success=true/false) para detecção de brute force via query nos últimos N minutos. |
-| [public.loss_reasons](tables/public/loss_reasons.md) | table | sim | 2 | 7 | não |  |
+| [public.loss_reasons](tables/public/loss_reasons.md) | table | sim | 2 | 7 | não | Catálogo de motivos de perda de oportunidades. Usado por public.deals.loss_reason_id; nome é UNIQUE. Pode indicar se o usuário deve fornecer detalhes adicionais. |
 | [public.lux_intelligence](tables/public/lux_intelligence.md) | table | sim | 8 | 21 | não | Inteligência Lux (análise comportamental) |
 | [public.lux_webhook_config](tables/public/lux_webhook_config.md) | table | sim | 8 | 36 | não | SINGU: Configurações de webhooks do módulo Lux Intelligence. Cada linha = 1 endpoint n8n/externo para enriquecimento profundo (redes sociais, CNPJ, LinkedIn). Inclui auth, retry exponencial, rate limiting e estatísticas. Admin UI: /admin/lux-config. |
 | [public.marketing_campaign_stats](tables/public/marketing_campaign_stats.md) | table | sim | 3 | 13 | não |  |
@@ -498,14 +498,14 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.permissions](tables/public/permissions.md) | table | sim | 4 | 7 | não |  |
 | [public.phone_validations](tables/public/phone_validations.md) | table | sim | 4 | 17 | não |  |
 | [public.pipeline_stage_transitions](tables/public/pipeline_stage_transitions.md) | table | sim | 2 | 6 | não |  |
-| [public.pipeline_stages](tables/public/pipeline_stages.md) | table | sim | 2 | 14 | não |  |
-| [public.pipelines](tables/public/pipelines.md) | table | sim | 2 | 12 | não |  |
+| [public.pipeline_stages](tables/public/pipeline_stages.md) | table | sim | 2 | 14 | não | Etapas pertencentes a um pipeline comercial. Registra nome, ordem, probabilidade, estados de início/ganho/perda e SLA. pipeline_id referencia public.pipelines.id; outras entidades de negócio podem referenciar a etapa conforme suas FKs. |
+| [public.pipelines](tables/public/pipelines.md) | table | sim | 2 | 12 | não | Configuração de pipelines comerciais. Cada registro define um fluxo de trabalho de vendas, suas opções de múltiplas oportunidades, meta mensal e ordenação. PK: id. As etapas são relacionadas por public.pipeline_stages.pipeline_id. |
 | [public.playbook_usage_log](tables/public/playbook_usage_log.md) | table | sim | 2 | 9 | não |  |
 | [public.portfolio_settings](tables/public/portfolio_settings.md) | table | sim | 2 | 5 | não |  |
 | [public.product_novelties](tables/public/product_novelties.md) | table | sim | 2 | 13 | não | Ciclo de vida do selo NOVO. Pipeline popula via fn_populate_novelties_from_supplier. Trigger sincroniza products.is_new automaticamente. |
-| [public.products](tables/public/products.md) | table | sim | 1 | 14 | não |  |
+| [public.products](tables/public/products.md) | table | sim | 1 | 14 | não | Catálogo de produtos/serviços comercializados. Contém SKU, preço, custo, estoque e metadados. PK: id; SKU é opcional e UNIQUE. Relaciona-se a itens de oportunidade por public.deal_items.product_id e a novidades por public.product_novelties.product_id. |
 | [public.profiles](tables/public/profiles.md) | table | sim | 7 | 26 | não | SINGU: Perfis de usuários do sistema, vinculados ao Supabase Auth |
-| [public.proposals](tables/public/proposals.md) | table | sim | 4 | 22 | não | Propostas comerciais/orçamentos |
+| [public.proposals](tables/public/proposals.md) | table | sim | 4 | 22 | não | Propostas comerciais/orçamentos vinculados opcionalmente a empresa, contato e oportunidade. Mantém totais, desconto, estado do ciclo de envio/resposta, validade e itens em JSONB. PK: id. Relacionamentos: company_id → public.companies.id; contact_id → public.contacts.id; deal_id → public.deals.id; user_id → public.profiles.id. |
 | [public.proximo_passo_feedback](tables/public/proximo_passo_feedback.md) | table | sim | 3 | 9 | não |  |
 | [public.psychographic_audit_log](tables/public/psychographic_audit_log.md) | table | sim | 1 | 8 | não |  |
 | [public.purchase_history](tables/public/purchase_history.md) | table | sim | 8 | 17 | não |  |
@@ -531,7 +531,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.role_permissions](tables/public/role_permissions.md) | table | sim | 4 | 4 | não |  |
 | [public.rpc_perf_samples](tables/public/rpc_perf_samples.md) | table | sim | 1 | 4 | não |  |
 | [public.rpc_plan_snapshots](tables/public/rpc_plan_snapshots.md) | table | sim | 2 | 9 | não |  |
-| [public.sales](tables/public/sales.md) | table | sim | 2 | 13 | não |  |
+| [public.sales](tables/public/sales.md) | table | sim | 2 | 13 | não | Registro simplificado de venda/atividade comercial legado, com nome de cliente e produto como snapshots textuais, valor e estado do ciclo comercial. Não confundir com public.deals, que é a entidade de oportunidade vinculada a company/contact. PK: id; salesperson_id → public.salespeople.id; deleted_by → auth.users.id. |
 | [public.sales_activities](tables/public/sales_activities.md) | table | sim | 2 | 12 | não |  |
 | [public.sales_cadences](tables/public/sales_cadences.md) | table | sim | 1 | 9 | não |  |
 | [public.sales_forecasts](tables/public/sales_forecasts.md) | table | sim | 1 | 10 | não |  |

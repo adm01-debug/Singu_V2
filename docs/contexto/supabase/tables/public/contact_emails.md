@@ -1,5 +1,7 @@
 # public.contact_emails
 
+> Endereços de e-mail associados a contatos, permitindo múltiplos e-mails tipados e sinalização de principal/verificado. Cada registro referencia public.contacts.id.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -17,18 +19,18 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  |  |
-| 2 | `contact_id` | `uuid` | não |  |  |  |
-| 3 | `email_type` | `email_type` | sim | `'corporativo'::email_type` |  |  |
-| 4 | `email` | `character varying(255)` | não |  |  |  |
-| 5 | `email_normalizado` | `character varying(255)` | sim |  |  |  |
-| 6 | `is_primary` | `boolean` | sim | `false` |  |  |
-| 7 | `is_verified` | `boolean` | sim | `false` |  |  |
-| 8 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 9 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 10 | `fonte` | `character varying(100)` | sim |  |  |  |
-| 11 | `contexto` | `character varying(200)` | sim |  |  |  |
-| 12 | `confiabilidade` | `smallint` | sim | `0` |  |  |
+| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  | Identificador UUID do e-mail e chave primária; gerado por uuid_generate_v4(). |
+| 2 | `contact_id` | `uuid` | não |  |  | Contato proprietário do e-mail; FK para public.contacts.id. |
+| 3 | `email_type` | `email_type` | sim | `'corporativo'::email_type` |  | Finalidade do e-mail: corporativo, pessoal, financeiro, nfe, marketing, comercial ou compras. DEFAULT corporativo. |
+| 4 | `email` | `character varying(255)` | não |  |  | Endereço de e-mail armazenado conforme informado; texto obrigatório. |
+| 5 | `email_normalizado` | `character varying(255)` | sim |  |  | Versão normalizada do e-mail, quando calculada; não há expressão gerada ou CHECK declarando o algoritmo. |
+| 6 | `is_primary` | `boolean` | sim | `false` |  | Indica se este é o e-mail principal do contato; DEFAULT false. |
+| 7 | `is_verified` | `boolean` | sim | `false` |  | Indica se o e-mail foi verificado; DEFAULT false. |
+| 8 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação do registro; timestamptz, DEFAULT now(). |
+| 9 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). |
+| 10 | `fonte` | `character varying(100)` | sim |  |  | Origem textual do e-mail; valores não enumerados no schema. |
+| 11 | `contexto` | `character varying(200)` | sim |  |  | Contexto textual de uso do e-mail; valores não enumerados no schema. |
+| 12 | `confiabilidade` | `smallint` | sim | `0` |  | Score smallint de confiabilidade do e-mail; escala e interpretação não estão definidas por CHECK ou comentário. DEFAULT 0. |
 
 
 ## Constraints

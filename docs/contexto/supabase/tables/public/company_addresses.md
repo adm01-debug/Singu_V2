@@ -1,5 +1,7 @@
 # public.company_addresses
 
+> Endereços associados a empresas do CRM. Cada registro pertence a uma empresa e pode incluir tipo, endereço postal, coordenadas geográficas e referências de geocodificação. company_id referencia public.companies.id; cidade_ibge referencia public.cidades.ibge_code. A coluna tipo tem um DEFAULT legado cujo conteúdo é ambíguo; não interpretá-lo como lista oficial de categorias sem validar os dados.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -17,30 +19,30 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  |  |
-| 2 | `company_id` | `uuid` | não |  |  |  |
-| 3 | `tipo` | `text` | sim | `'''Comercial\|Faturamento''::character varying'::character varying` |  |  |
-| 4 | `is_primary` | `boolean` | sim | `false` |  |  |
-| 5 | `cep` | `character varying(10)` | sim |  |  |  |
-| 6 | `logradouro` | `character varying(255)` | sim |  |  |  |
-| 7 | `numero` | `character varying(20)` | sim |  |  |  |
-| 8 | `complemento` | `text` | sim |  |  |  |
-| 9 | `bairro` | `text` | sim |  |  |  |
-| 10 | `cidade` | `text` | sim |  |  |  |
-| 11 | `estado` | `character varying(2)` | sim |  |  |  |
-| 12 | `pais` | `character varying(50)` | sim | `'Brasil'::character varying` |  |  |
-| 13 | `latitude` | `numeric(10,8)` | sim |  |  | Latitude obtida via Google Places API ou geocoding |
-| 14 | `longitude` | `numeric(11,8)` | sim |  |  | Longitude obtida via Google Places API ou geocoding |
-| 15 | `ponto_referencia` | `character varying(255)` | sim |  |  |  |
-| 16 | `instrucoes_entrega` | `text` | sim |  |  |  |
-| 17 | `horario_funcionamento` | `text` | sim |  |  |  |
-| 18 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 19 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 20 | `google_maps_url` | `text` | sim |  |  | URL do Google Maps para este endereço |
-| 21 | `google_place_id` | `text` | sim |  |  | Google Place ID para integração com Places API |
-| 22 | `origem` | `character varying(50)` | sim |  |  | Origem: legacy_flat_migration, bitrix24_api, manual, viacep |
-| 23 | `cidade_ibge` | `integer` | sim |  |  | FK para catálogo de cidades IBGE. Permite consultas geográficas por mesorregião, microrregião e coordenadas. |
-| 24 | `tipo_logradouro` | `character varying(50)` | sim |  |  | Tipo do logradouro padrão Correios (Rua, Avenida, Travessa, Praça, etc.). Separado do nome do logradouro. |
+| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  | Identificador UUID do endereço e chave primária; gerado por uuid_generate_v4(). |
+| 2 | `company_id` | `uuid` | não |  |  | Empresa proprietária do endereço; FK para public.companies.id. |
+| 3 | `tipo` | `text` | sim | `'''Comercial\|Faturamento''::character varying'::character varying` |  | Categoria textual do endereço. DEFAULT legado aparece como Comercial\|Faturamento, mas a coluna não tem CHECK; não assumir se esse conteúdo é literal ou combinação de categorias. |
+| 4 | `is_primary` | `boolean` | sim | `false` |  | Indica se este é o endereço principal da empresa; boolean nullable, DEFAULT false. |
+| 5 | `cep` | `character varying(10)` | sim |  |  | CEP do endereço, armazenado como texto para preservar zeros e formatação. |
+| 6 | `logradouro` | `character varying(255)` | sim |  |  | Nome textual do logradouro; o tipo do logradouro está separado em tipo_logradouro. |
+| 7 | `numero` | `character varying(20)` | sim |  |  | Número predial ou identificador do endereço, como texto para preservar formatos não numéricos. |
+| 8 | `complemento` | `text` | sim |  |  | Complemento do endereço em texto livre. |
+| 9 | `bairro` | `text` | sim |  |  | Bairro do endereço em texto. |
+| 10 | `cidade` | `text` | sim |  |  | Nome textual da cidade; cidade_ibge é o identificador normalizado quando disponível. |
+| 11 | `estado` | `character varying(2)` | sim |  |  | Estado/UF em texto; o schema não impõe formato de duas letras. |
+| 12 | `pais` | `character varying(50)` | sim | `'Brasil'::character varying` |  | País do endereço; DEFAULT Brasil. |
+| 13 | `latitude` | `numeric(10,8)` | sim |  |  | Latitude geográfica numérica; comentário existente aponta origem Google Places/geocoding. Unidade esperada: graus decimais, sem CHECK de faixa no schema. |
+| 14 | `longitude` | `numeric(11,8)` | sim |  |  | Longitude geográfica numérica; comentário existente aponta origem Google Places/geocoding. Unidade esperada: graus decimais, sem CHECK de faixa no schema. |
+| 15 | `ponto_referencia` | `character varying(255)` | sim |  |  | Referência textual para localizar o endereço. |
+| 16 | `instrucoes_entrega` | `text` | sim |  |  | Instruções de entrega associadas ao endereço, em texto livre. |
+| 17 | `horario_funcionamento` | `text` | sim |  |  | Horário de funcionamento associado ao endereço, em texto livre; formato não padronizado no schema. |
+| 18 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação do registro de endereço; timestamptz, DEFAULT now(). |
+| 19 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). |
+| 20 | `google_maps_url` | `text` | sim |  |  | URL do Google Maps associada ao endereço. |
+| 21 | `google_place_id` | `text` | sim |  |  | Identificador de Place do Google usado na integração com Places API. |
+| 22 | `origem` | `character varying(50)` | sim |  |  | Origem do dado conforme comentário existente: legacy_flat_migration, bitrix24_api, manual ou viacep. Não há CHECK constraint. |
+| 23 | `cidade_ibge` | `integer` | sim |  |  | Código IBGE da cidade; FK para public.cidades.ibge_code. Permite relacionar com região, estado e coordenadas do catálogo. |
+| 24 | `tipo_logradouro` | `character varying(50)` | sim |  |  | Tipo padronizado de logradouro, como Rua, Avenida, Travessa ou Praça; separado do nome em logradouro. |
 
 
 ## Constraints

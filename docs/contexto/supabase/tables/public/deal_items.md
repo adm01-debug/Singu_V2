@@ -1,5 +1,7 @@
 # public.deal_items
 
+> Linhas de produto/serviço associadas a uma oportunidade de public.deals. Registra quantidade, preço, desconto e total calculado. deal_id referencia public.deals.id; product_id referencia public.products.id.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -16,16 +18,16 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
-| 2 | `deal_id` | `uuid` | sim |  |  |  |
-| 3 | `product_id` | `uuid` | sim |  |  |  |
-| 4 | `product_name` | `text` | sim |  |  |  |
-| 5 | `quantity` | `integer` | sim | `1` |  |  |
-| 6 | `unit_price` | `numeric` | sim | `0` |  |  |
-| 7 | `discount_percent` | `numeric` | sim | `0` |  |  |
-| 8 | `total_price` | `numeric` | sim | `(((quantity)::numeric * unit_price) * ((1)::numeric - (discount_percent / (100)::numeric)))` | s |  |
-| 9 | `notes` | `text` | sim |  |  |  |
-| 10 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  | Identificador UUID do item de oportunidade e chave primária; gerado por gen_random_uuid(). |
+| 2 | `deal_id` | `uuid` | sim |  |  | Oportunidade à qual pertence a linha; FK para public.deals.id. |
+| 3 | `product_id` | `uuid` | sim |  |  | Produto do catálogo associado; FK para public.products.id. Pode ser nulo para item sem vínculo cadastral. |
+| 4 | `product_name` | `text` | sim |  |  | Snapshot textual do nome do produto na oportunidade; pode ser nulo. |
+| 5 | `quantity` | `integer` | sim | `1` |  | Quantidade do item; integer, DEFAULT 1. Unidade de medida depende do produto. |
+| 6 | `unit_price` | `numeric` | sim | `0` |  | Preço unitário da linha; numeric, DEFAULT 0. Moeda não especificada no schema. |
+| 7 | `discount_percent` | `numeric` | sim | `0` |  | Percentual de desconto aplicado à linha; numeric, DEFAULT 0. A fórmula usa o valor dividido por 100. |
+| 8 | `total_price` | `numeric` | sim | `(((quantity)::numeric * unit_price) * ((1)::numeric - (discount_percent / (100)::numeric)))` | s | Total calculado automaticamente: quantity × unit_price × (1 − discount_percent/100). Coluna GENERATED; não tratar como entrada independente. |
+| 9 | `notes` | `text` | sim |  |  | Observações textuais opcionais sobre a linha do negócio. |
+| 10 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação da linha; timestamptz, DEFAULT now(). |
 
 
 ## Constraints

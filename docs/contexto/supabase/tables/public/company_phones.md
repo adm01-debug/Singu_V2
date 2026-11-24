@@ -1,5 +1,7 @@
 # public.company_phones
 
+> Telefones de empresas com tipo, número normalizado, ramal, departamento e indicadores de principal/WhatsApp. Cada registro referencia public.companies.id.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
@@ -17,22 +19,22 @@
 
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
-| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  |  |
-| 2 | `company_id` | `uuid` | não |  |  |  |
-| 3 | `phone_type` | `phone_type` | sim | `'fixo_comercial'::phone_type` |  |  |
-| 4 | `numero` | `character varying(50)` | não |  |  |  |
-| 5 | `numero_normalizado` | `character varying(20)` | não |  |  |  |
-| 6 | `ramal` | `character varying(10)` | sim |  |  |  |
-| 7 | `is_primary` | `boolean` | sim | `false` |  |  |
-| 8 | `is_whatsapp` | `boolean` | sim | `false` |  |  |
-| 9 | `departamento` | `character varying(50)` | sim |  |  |  |
-| 10 | `observacao` | `character varying(100)` | sim |  |  |  |
-| 11 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 12 | `updated_at` | `timestamp with time zone` | sim | `now()` |  |  |
-| 13 | `numero_e164` | `character varying(20)` | sim |  |  |  |
-| 14 | `fonte` | `character varying(100)` | sim |  |  |  |
-| 15 | `contexto` | `character varying(200)` | sim |  |  |  |
-| 16 | `confiabilidade` | `smallint` | sim |  |  |  |
+| 1 | `id` | `uuid` | não | `uuid_generate_v4()` |  | Identificador UUID do telefone e chave primária; gerado por uuid_generate_v4(). |
+| 2 | `company_id` | `uuid` | não |  |  | Empresa proprietária do telefone; FK para public.companies.id. |
+| 3 | `phone_type` | `phone_type` | sim | `'fixo_comercial'::phone_type` |  | Tipo do telefone: celular_corporativo, fixo_comercial, celular_pessoal ou invalido. DEFAULT fixo_comercial. |
+| 4 | `numero` | `character varying(50)` | não |  |  | Número de telefone conforme informado; texto obrigatório para preservar máscara e conteúdo original. |
+| 5 | `numero_normalizado` | `character varying(20)` | não |  |  | Representação normalizada do número; formato/algoritmo não é validado por CHECK. |
+| 6 | `ramal` | `character varying(10)` | sim |  |  | Ramal telefônico em texto; opcional. |
+| 7 | `is_primary` | `boolean` | sim | `false` |  | Indica se este é o telefone principal da empresa; DEFAULT false. |
+| 8 | `is_whatsapp` | `boolean` | sim | `false` |  | Indica se o número é utilizável como WhatsApp; DEFAULT false. |
+| 9 | `departamento` | `character varying(50)` | sim |  |  | Departamento associado ao telefone, em texto livre. |
+| 10 | `observacao` | `character varying(100)` | sim |  |  | Observação livre sobre o telefone. |
+| 11 | `created_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora de criação do registro; timestamptz, DEFAULT now(). |
+| 12 | `updated_at` | `timestamp with time zone` | sim | `now()` |  | Data e hora da última atualização registrada; timestamptz, DEFAULT now(). |
+| 13 | `numero_e164` | `character varying(20)` | sim |  |  | Número em formato internacional E.164 quando disponível; sem validação de formato no schema. |
+| 14 | `fonte` | `character varying(100)` | sim |  |  | Origem textual do número; valores não enumerados. |
+| 15 | `contexto` | `character varying(200)` | sim |  |  | Contexto textual de uso do telefone; valores não enumerados. |
+| 16 | `confiabilidade` | `smallint` | sim |  |  | Score smallint de confiabilidade do telefone; escala e interpretação não estão definidas no schema. |
 
 
 ## Constraints
