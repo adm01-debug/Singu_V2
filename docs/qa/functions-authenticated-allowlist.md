@@ -91,15 +91,18 @@ Callable sem sessão via token/slug; RLS por token dentro da função.
 | `seed_forecast_period(uuid, text)` | Onboarding |
 | `seed_lead_score_defaults(uuid)` | Onboarding |
 
-### 🔒 Stubs legados de ciclo de vida do cliente (authenticated) — 5
+### 🔒 Stubs legados de ciclo de vida do cliente — `authenticated` revogado em 2026-11-24
 
-Existem no banco desde a compat de janeiro (`20260110000001_compat_colunas_producao.sql`) e tiveram
-`EXECUTE` revogado de `anon` em `20261121154000_revoke_anon_exec_stubs_crm.sql`. `authenticated`
-segue autorizado porque o fluxo legado de ERP/CRM as invoca; **nenhuma** tela deste frontend as chama.
+Existem no banco desde a compat de janeiro (`20260110000001_compat_colunas_producao.sql`). Tiveram
+`EXECUTE` revogado de `anon` em `20261121154000_revoke_anon_exec_stubs_crm.sql` e de `authenticated`
+em `20261124143000_revoke_authenticated_exec_stubs_crm.sql`: são `SECURITY DEFINER` sem checagem de
+papel no corpo, então qualquer usuário logado ativava cliente, registrava compra, qualificava SDR
+e transferia carteira direto pela API REST. **Nenhuma** tela, edge function ou tipo gerado do frontend
+as invoca; só `service_role` (e o dono) mantêm `EXECUTE`.
 
 | Função | Consumo |
 |---|---|
-| `ativar_cliente(uuid, integer, text)` | Fluxo legado ERP/CRM |
+| `ativar_cliente(uuid, integer, text)` | Fluxo legado ERP/CRM; também é chamada pelo trigger `trg_customer_purchases_after_insert`, que roda como `postgres`/`service_role` |
 | `inativar_cliente(uuid, text, integer, text)` | Fluxo legado ERP/CRM |
 | `registrar_compra(uuid, numeric, text, text)` | Fluxo legado ERP/CRM |
 | `sdr_qualificar_cliente(uuid, integer, integer, text, text)` | Fluxo legado ERP/CRM |
