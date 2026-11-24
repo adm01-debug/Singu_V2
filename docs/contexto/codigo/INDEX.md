@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `2094be63bb4e9f0ad0a3f9472bc9856ff7873e21` (2026-11-24T06:59:07-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `9f4e1ac6bda01e938e2383a16b9bc3fe0a2a44ee` (2026-11-24T10:19:21-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3911 |
 | arquivos_codigo | 2256 |
-| linhas_codigo | 421390 |
+| linhas_codigo | 421425 |
 | rotas | 116 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -419,12 +419,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 
 ## Integrações externas
 - SDKs: ElevenLabs, Supabase, react-query, zod
-- hosts mais citados: ai.gateway.lovable.dev, canonical.supabase.co, example.test, x.supabase.co, api.elevenlabs.io, wa.me, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.supabase.com, singu-v2.vercel.app, api.deepseek.com, api.lovable.dev, api.resend.com
+- hosts mais citados: ai.gateway.lovable.dev, api.elevenlabs.io, canonical.supabase.co, example.test, x.supabase.co, wa.me, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.lovable.dev, api.supabase.com, singu-v2.vercel.app, api.resend.com, avatar.invalid
 - webhooks recebidos: auto-rebatch-behavioral, auto-regen-behavioral-profiles, bitrix24-webhook, check-health-alerts, check-notifications, client-notifications, cs-health-recalc, deal-room-buyer-view, dual-write-proxy, evolution-bitrix-connector, evolution-webhook, forecast-snapshot-cron, form-submit-handler, generate-behavioral-profile, get-signature, incoming-webhook, intent-pixel-snippet, intent-tracker, lead-score-cron, lux-webhook, mcp-server, mql-evaluator, nurturing-runner, process-behavioral-regen-queue, process-webhook-dlq, retry-behavioral-profile, revops-snapshot-builder, send-sms-campaign, sequence-processor, sequence-track, smart-notify, social-events-detector, submit-signature, sync-social-interests, template-success-notifications, validation-queue-worker, weekly-digest
 - env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, DEEPSEEK_API_KEY, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, LUX_WEBHOOK_SECRET, N8N_LUX_WEBHOOK_URL, RESEND_API_KEY, RESEND_FROM, TWILIO_API_KEY
 
 ## Permissões / papéis
-- papéis no código: user (38), system (32), status (30), alert (28), group (20), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), tab (1), tablist (1)
+- papéis no código: user (39), system (32), status (30), alert (28), group (20), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), link (1), list (1), main (1), menu (1), presentation (1), progressbar (1), tab (1), tablist (1)
 - enums de papel: salesperson_role: sdr|closer|hybrid; app_role: admin|manager|salesperson|moderator|user|moderator|user|moderator|user; entity_relationship_role: buyer|manager|owner|decision_maker|influencer|user|sponsor|partner|supplier|subsidiary|parent|employee_of|other
 - guards: src/app/lazyPages.tsx, src/components/auth/MFAGuard.tsx, src/hooks/useAuth.tsx · rotas protegidas: 104 · públicas: /*, /auth, /design-system, /dr/:token, /f/:slug, /lm/:slug, /lp/:slug, /reset-password, /signature/:token, /sso/callback, /status, /survey/:token
 - feature flags: nenhuma
@@ -447,8 +447,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25901 nós · 41397 arestas · 3059 comunidades · grafo do commit `2094be63`
-- comunidades maiores: react (301), ref_types (278), useAuth (272), ref_lib (263), 02_tables.sql (259), react-router-dom (248), framer-motion (247), ref_hooks (241), lucide-react (239), ref_components (234), _shared/auth.ts (229), 📖 Dicionário de Dados — SINGU CRM (224)
+- 25902 nós · 41401 arestas · 3043 comunidades · grafo do commit `9f4e1ac6`
+- comunidades maiores: ref_hooks (446), sonner (301), ref_lib (300), ref_integrations (270), framer-motion (263), _shared/auth.ts (261), 02_tables.sql (259), react-router-dom (258), ref_components (243), react (242), date-fns (234), 📖 Dicionário de Dados — SINGU CRM (224)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -587,6 +587,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-24 `9f4e1ac` feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)
 - 2026-11-24 `2094be6` fix(ci): destrava o deploy de edge functions (#322)
 - 2026-11-24 `1314c13` fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)
 - 2026-11-23 `27c8b40` feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)
@@ -601,7 +602,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-23 `b177218` build(deps): bump actions/dependency-review-action from 5.0.0 to 5.0.1 (#308)
 - 2026-11-23 `409a5ae` chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)
 - 2026-11-23 `fa7b7fb` fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)
-- 2026-11-23 `d19dec8` fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

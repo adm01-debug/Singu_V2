@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2094be63bb` · branch `main` · 2026-11-24 10:01 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9f4e1ac6bd` · branch `main` · 2026-11-24 13:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1422,7 +1422,6 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `delay_tactic` | escreve | `src/hooks/useAdvancedTriggers.ts` |
 | `type` | `deleted` | escreve | `src/hooks/useInteractions.ts` |
 | `type` | `direct_judgment` | escreve | `src/types/carnegie-extended.ts` |
-| `type` | `disabled` | escreve | `supabase/functions/_shared/fetch-utils.ts` |
 | `type` | `disc` | escreve | `src/components/nlp/CommunicationCoherencePanel.tsx`<br>`src/components/nlp/NLPRealtimeCoach.tsx` |
 | `type` | `divider` | compara, escreve | `src/components/email-builder/EmailBuilder.tsx`<br>`src/components/email-builder/types.ts`<br>`src/lib/emailBuilderRenderer.ts`<br>`src/pages/PublicLandingPage.tsx` |
 | `type` | `ebook` | escreve | `src/hooks/useLeadMagnets.ts`<br>`src/pages/MarketingHub.tsx` |
@@ -1625,7 +1624,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `closed_lost` | compara | `supabase/functions/abm-account-scorer/index.ts` |
 | `status` | `closed_won` | compara | `supabase/functions/abm-account-scorer/index.ts` |
-| … +180 linhas — lista completa em `context.json` | | | |
+| `status` | `completed` | compara, escreve | `src/components/company-detail/CompanyCommercialTab.tsx`<br>`src/components/contact-detail/ContactTasksPanel.tsx`<br>`src/components/contact-detail/commercial-tab/TasksCard.tsx`<br>`src/components/gamification/UserGoalsWidget.tsx`<br>`src/components/lux/LuxHistoryTimeline.tsx`<br>… +10 |
+| … +179 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -5334,6 +5334,7 @@ _nenhum item encontrado_
 | * fetch() with a hard deadline via AbortSignal.timeout(). | `supabase/functions/_shared/fetch-utils.ts` |
 | @param timeoutMs Deadline in milliseconds (default: API_TIMEOUT_MS = 30 s) | `supabase/functions/_shared/fetch-utils.ts` |
 | * Convenience wrapper for AI gateway / LLM inference calls (45 s deadline). | `supabase/functions/_shared/fetch-utils.ts` |
+| sem isso a negativa de permissão viraria `catch` e o corpo seguiria com o modelo antigo. */ | `supabase/functions/_shared/fetch-utils.ts` |
 | telemetry must never break the caller | `supabase/functions/_shared/fetch-utils.ts` |
 | * Convenience wrapper for external scraping API calls (90 s deadline). */ | `supabase/functions/_shared/fetch-utils.ts` |
 | * Convenience wrapper for third-party REST API calls (30 s deadline). */ | `supabase/functions/_shared/fetch-utils.ts` |
@@ -5462,5 +5463,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_full_intelligence_stream LIMIT 20) fs), | `supabase/migrations/20260409224718_zapp_history_209_master_dashboard_v10.sql` |
-| … +51 linhas — lista completa em `context.json` | |
+| … +52 linhas — lista completa em `context.json` | |

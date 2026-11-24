@@ -943,7 +943,6 @@
    "BITRIX_WEBHOOK_URL",
    "CRON_SECRET",
    "DEEPSEEK_API_KEY",
-   "DEEPSEEK_MODEL",
    "DUAL_WRITE_TABLES",
    "ELEVENLABS_API_KEY",
    "ENRICHLAYER_API_KEY",
@@ -1064,7 +1063,11 @@
   "hosts_externos": [
    {
     "host": "ai.gateway.lovable.dev",
-    "arquivos": 35
+    "arquivos": 36
+   },
+   {
+    "host": "api.elevenlabs.io",
+    "arquivos": 6
    },
    {
     "host": "canonical.supabase.co",
@@ -1077,10 +1080,6 @@
    {
     "host": "x.supabase.co",
     "arquivos": 6
-   },
-   {
-    "host": "api.elevenlabs.io",
-    "arquivos": 5
    },
    {
     "host": "wa.me",
@@ -1103,20 +1102,16 @@
     "arquivos": 3
    },
    {
+    "host": "api.lovable.dev",
+    "arquivos": 3
+   },
+   {
     "host": "api.supabase.com",
     "arquivos": 3
    },
    {
     "host": "singu-v2.vercel.app",
     "arquivos": 3
-   },
-   {
-    "host": "api.deepseek.com",
-    "arquivos": 2
-   },
-   {
-    "host": "api.lovable.dev",
-    "arquivos": 2
    },
    {
     "host": "api.resend.com",
@@ -1155,6 +1150,10 @@
     "arquivos": 2
    },
    {
+    "host": "openrouter.ai",
+    "arquivos": 2
+   },
+   {
     "host": "provider.example.test",
     "arquivos": 2
    },
@@ -1172,6 +1171,10 @@
    },
    {
     "host": "api.bitrix24.com",
+    "arquivos": 1
+   },
+   {
+    "host": "api.deepseek.com",
     "arquivos": 1
    },
    {
@@ -1452,7 +1455,7 @@
   "papeis_no_codigo": [
    {
     "papel": "user",
-    "ocorrencias": 38
+    "ocorrencias": 39
    },
    {
     "papel": "system",

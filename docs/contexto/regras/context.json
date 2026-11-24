@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "2094be63bb4e9f0ad0a3f9472bc9856ff7873e21",
+  "sha": "9f4e1ac6bda01e938e2383a16b9bc3fe0a2a44ee",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 10:01 UTC",
+  "generated_at": "2026-11-24 13:20 UTC",
   "files_total": 4016,
   "code_files": 3540,
-  "code_lines": 478247
+  "code_lines": 478282
  },
  "version": "1.3.2",
- "facts_hash": "1d22bc40fba93598",
+ "facts_hash": "f5e8577698055b88",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112492,7 +112492,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 27371,
+   "lines": 27406,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -118706,9 +118706,6 @@
     "supabase/functions/voice-ai-health/index.ts",
     "supabase/functions/voice-to-text/index.ts",
     "supabase/functions/win-loss-analyzer/index.ts"
-   ],
-   "DEEPSEEK_MODEL": [
-    "supabase/functions/_shared/fetch-utils.ts"
    ],
    "DEPLOY_TIMEOUT_TEMPO_REAL": [
     "scripts/check-deploy-timeout.test.mjs"
@@ -129149,6 +129146,10 @@
    {
     "file": "supabase/functions/_shared/fetch-utils.ts",
     "text": "* Convenience wrapper for AI gateway / LLM inference calls (45 s deadline)."
+   },
+   {
+    "file": "supabase/functions/_shared/fetch-utils.ts",
+    "text": "sem isso a negativa de permissão viraria `catch` e o corpo seguiria com o modelo antigo. */"
    },
    {
     "file": "supabase/functions/_shared/fetch-utils.ts",
@@ -161742,14 +161743,14 @@
    },
    {
     "file": "supabase/functions/_shared/fetch-utils.ts",
-    "field": "type",
-    "value": "disabled",
+    "field": "status",
+    "value": "success",
     "kind": "escreve"
    },
    {
-    "file": "supabase/functions/_shared/fetch-utils.ts",
-    "field": "status",
-    "value": "success",
+    "file": "supabase/functions/_shared/fetch-utils_test.ts",
+    "field": "role",
+    "value": "user",
     "kind": "escreve"
    },
    {
@@ -213478,9 +213479,6 @@
      "skepticism": [
       "escreve:src/types/triggers-advanced.ts"
      ],
-     "disabled": [
-      "escreve:supabase/functions/_shared/fetch-utils.ts"
-     ],
      "AAAA": [
       "compara:supabase/functions/_shared/safe-http_test.ts"
      ],
@@ -214485,6 +214483,7 @@
       "compara:src/pages/Assistente.tsx",
       "escreve:src/hooks/useAiAssistant.ts",
       "escreve:src/hooks/useAskCrm.ts",
+      "escreve:supabase/functions/_shared/fetch-utils_test.ts",
       "escreve:supabase/functions/abm-whitespace-analyzer/index.ts",
       "escreve:supabase/functions/ai-assistant/index.ts",
       "escreve:supabase/functions/ai-email-refine/index.ts",
@@ -290846,7 +290845,7 @@
   },
   "supabase/functions/_shared/fetch-utils.ts": {
    "path": "supabase/functions/_shared/fetch-utils.ts",
-   "lines": 204,
+   "lines": 214,
    "exports": [
     "const AI_TIMEOUT_MS",
     "const SCRAPE_TIMEOUT_MS",
@@ -290854,12 +290853,13 @@
     "const HEALTH_TIMEOUT_MS",
     "function fetchWithTimeout",
     "function fetchAI",
-    "const DEEPSEEK_CHAT_URL",
+    "const OPENROUTER_CHAT_URL",
+    "function envValue",
+    "function routeToOpenRouter",
     "function fetchScrape",
     "function fetchAPI"
    ],
    "env": [
-    "DEEPSEEK_MODEL",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -290883,11 +290883,6 @@
    ],
    "status_values": [
     {
-     "field": "type",
-     "value": "disabled",
-     "kind": "escreve"
-    },
-    {
      "field": "status",
      "value": "success",
      "kind": "escreve"
@@ -290899,6 +290894,7 @@
     "* fetch() with a hard deadline via AbortSignal.timeout().",
     "@param timeoutMs Deadline in milliseconds (default: API_TIMEOUT_MS = 30 s)",
     "* Convenience wrapper for AI gateway / LLM inference calls (45 s deadline).",
+    "sem isso a negativa de permissão viraria `catch` e o corpo seguiria com o modelo antigo. */",
     "telemetry must never break the caller",
     "* Convenience wrapper for external scraping API calls (90 s deadline). */",
     "* Convenience wrapper for third-party REST API calls (30 s deadline). */"
@@ -290908,7 +290904,14 @@
   },
   "supabase/functions/_shared/fetch-utils_test.ts": {
    "path": "supabase/functions/_shared/fetch-utils_test.ts",
-   "lines": 36,
+   "lines": 61,
+   "status_values": [
+    {
+     "field": "role",
+     "value": "user",
+     "kind": "escreve"
+    }
+   ],
    "doc": "Edge-case tests for fetchWithTimeout — ensures deadlines abort the request. Uses a local Deno.serve that intentionally stalls. Run with: deno test --allow-net supabase/functions/_shared/fetch-utils_test.ts"
   },
   "supabase/functions/_shared/lead-score-contract.ts": {
@@ -307255,10 +307258,22 @@
   }
  },
  "git": {
-  "sha": "2094be63bb4e9f0ad0a3f9472bc9856ff7873e21",
+  "sha": "9f4e1ac6bda01e938e2383a16b9bc3fe0a2a44ee",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "9f4e1ac",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)",
+    "files": [
+     "supabase/functions/_shared/behavioral-generation-mock.ts",
+     "supabase/functions/_shared/edge-test-harness.ts",
+     "supabase/functions/_shared/fetch-utils.ts",
+     "supabase/functions/_shared/fetch-utils_test.ts"
+    ]
+   },
    {
     "sha": "2094be6",
     "date": "2026-11-24",
@@ -307631,32 +307646,9 @@
     "files": [
      "supabase/functions/send-transactional-email/index.ts"
     ]
-   },
-   {
-    "sha": "d1e1811",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)",
-    "files": [
-     "supabase/functions/_shared/auth.ts",
-     "supabase/functions/check-health-alerts/index.ts",
-     "supabase/functions/nurturing-runner/index.ts",
-     "supabase/functions/process-webhook-dlq/index.ts",
-     "supabase/functions/revops-snapshot-builder/index.ts",
-     "supabase/functions/send-sms-campaign/index.ts",
-     "supabase/functions/smart-notify/index.ts",
-     "supabase/functions/social-events-detector/index.ts",
-     "supabase/functions/sync-social-interests/index.ts",
-     "supabase/functions/template-success-notifications/index.ts",
-     "supabase/functions/validation-queue-worker/index.ts"
-    ]
    }
   ],
   "hot_files": [
-   [
-    "supabase/functions/nurturing-runner/index.ts",
-    3
-   ],
    [
     ".github/workflows/deploy-edge-functions.yml",
     2
@@ -307690,8 +307682,24 @@
     2
    ],
    [
-    "supabase/functions/send-sms-campaign/index.ts",
+    "supabase/functions/nurturing-runner/index.ts",
     2
+   ],
+   [
+    "supabase/functions/_shared/behavioral-generation-mock.ts",
+    1
+   ],
+   [
+    "supabase/functions/_shared/edge-test-harness.ts",
+    1
+   ],
+   [
+    "supabase/functions/_shared/fetch-utils.ts",
+    1
+   ],
+   [
+    "supabase/functions/_shared/fetch-utils_test.ts",
+    1
    ],
    [
     "supabase/migrations/20261124120000_create_social_insights.sql",
@@ -307719,18 +307727,6 @@
    ],
    [
     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_EDGE.md",
-    1
-   ],
-   [
-    "src/components/feedback/LoadingStates.tsx",
-    1
-   ],
-   [
-    "src/components/micro-interactions/StatusIndicators.tsx",
-    1
-   ],
-   [
-    ".github/workflows/dependency-review.yml",
     1
    ]
   ]
