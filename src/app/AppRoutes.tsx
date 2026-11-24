@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
  import { RequireAuth } from '@/hooks/useAuth';
 import { ErrorBoundary } from '@/components/feedback/ErrorBoundary';
+import { RequirePermission } from '@/components/auth/RequirePermission';
 import { PageLoadingFallback } from '@/components/feedback/PageLoadingFallback';
 import { useWebVitals } from '@/hooks/useWebVitals';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
@@ -88,23 +89,23 @@ export const AppRoutes = () => {
       <Route path="/inbox" element={<Protected><P.Inbox /></Protected>} />
       <Route path="/pipeline" element={<Protected><P.PipelinePage /></Protected>} />
       <Route path="/insights" element={<Protected fallback={<InsightsPageSkeleton />}><P.Insights /></Protected>} />
-      <Route path="/nlp-analytics" element={<Protected fallback={<AnalyticsPageSkeleton />}><P.NLPAnalytics /></Protected>} />
-      <Route path="/analytics" element={<Protected fallback={<AnalyticsPageSkeleton />}><P.Analytics /></Protected>} />
-      <Route path="/configuracoes" element={<Protected fallback={<SettingsPageSkeleton />}><P.Configuracoes /></Protected>} />
+      <Route path="/nlp-analytics" element={<Protected fallback={<AnalyticsPageSkeleton />}><RequirePermission permission="view_analytics"><P.NLPAnalytics /></RequirePermission></Protected>} />
+      <Route path="/analytics" element={<Protected fallback={<AnalyticsPageSkeleton />}><RequirePermission permission="view_analytics"><P.Analytics /></RequirePermission></Protected>} />
+      <Route path="/configuracoes" element={<Protected fallback={<SettingsPageSkeleton />}><RequirePermission permission="view_settings"><P.Configuracoes /></RequirePermission></Protected>} />
       <Route path="/calendario" element={<Protected fallback={<CalendarPageSkeleton />}><P.Calendario /></Protected>} />
       <Route path="/notificacoes" element={<Protected><P.Notificacoes /></Protected>} />
       <Route path="/notificacoes/configuracoes" element={<Protected><P.NotificacoesConfig /></Protected>} />
       <Route path="/network" element={<Protected fallback={<NetworkPageSkeleton />}><P.Network /></Protected>} />
       <Route path="/intelligence" element={<Protected><P.Intelligence /></Protected>} />
-      <Route path="/intelligence/auditoria" element={<Protected><P.RecommendationAudit /></Protected>} />
-      <Route path="/intelligence/relacionamento/auditoria" element={<Protected><P.CRMRelationshipAudit /></Protected>} />
+      <Route path="/intelligence/auditoria" element={<Protected><RequirePermission permission="view_audit"><P.RecommendationAudit /></RequirePermission></Protected>} />
+      <Route path="/intelligence/relacionamento/auditoria" element={<Protected><RequirePermission permission="view_audit"><P.CRMRelationshipAudit /></RequirePermission></Protected>} />
       <Route path="/relatorio/:id" element={<Protected><P.RelatorioContato /></Protected>} />
 
       {/* Protected — automação/marketing */}
       <Route path="/automacoes" element={<Protected><P.Automacoes /></Protected>} />
-      <Route path="/sequencias" element={<Protected><P.Sequencias /></Protected>} />
+      <Route path="/sequencias" element={<Protected><RequirePermission permission="view_cadences"><P.Sequencias /></RequirePermission></Protected>} />
       <Route path="/mapa-empresas" element={<Protected><P.MapaEmpresas /></Protected>} />
-      <Route path="/metas" element={<Protected><P.Metas /></Protected>} />
+      <Route path="/metas" element={<Protected><RequirePermission permission="view_goals"><P.Metas /></RequirePermission></Protected>} />
       <Route path="/performance" element={<Protected><P.Performance /></Protected>} />
       <Route path="/territorios" element={<Protected><P.Territorios /></Protected>} />
       <Route path="/aprovacoes-follow-up" element={<Protected><P.AprovacoesFollowUp /></Protected>} />
@@ -129,9 +130,9 @@ export const AppRoutes = () => {
       <Route path="/customer-success/account/:id" element={<Protected><P.CustomerSuccessAccountPage /></Protected>} />
       <Route path="/deal-rooms" element={<Protected><P.DealRoomsPage /></Protected>} />
       <Route path="/deal-rooms/:id" element={<Protected><P.DealRoomDetailPage /></Protected>} />
-      <Route path="/playbooks" element={<Protected><P.PlaybooksPage /></Protected>} />
-      <Route path="/playbooks/battle-cards/:id" element={<Protected><P.BattleCardDetailPage /></Protected>} />
-      <Route path="/playbooks/:id" element={<Protected><P.PlaybookDetailPage /></Protected>} />
+      <Route path="/playbooks" element={<Protected><RequirePermission permission="view_playbooks"><P.PlaybooksPage /></RequirePermission></Protected>} />
+      <Route path="/playbooks/battle-cards/:id" element={<Protected><RequirePermission permission="view_playbooks"><P.BattleCardDetailPage /></RequirePermission></Protected>} />
+      <Route path="/playbooks/:id" element={<Protected><RequirePermission permission="view_playbooks"><P.PlaybookDetailPage /></RequirePermission></Protected>} />
       <Route path="/rodizio" element={<Admin><P.Rodizio /></Admin>} />
       <Route path="/tarefas" element={<Protected><P.Tarefas /></Protected>} />
       <Route path="/bi" element={<Protected><P.BIAvancado /></Protected>} />
