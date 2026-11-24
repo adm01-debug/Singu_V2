@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "docs: corrige o estado real da integracao Evolution no inventario (#334)",
    "docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)",
    "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)",
    "fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)",
-   "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)",
-   "feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)"
+   "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)"
   ]
  },
  "pr_template": null,

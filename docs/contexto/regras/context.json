@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "06b1732387b4c46546dcf725ace49be324351c33",
+  "sha": "5eedf571c5a84d5165f532e9f1438a84b654af8e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 17:12 UTC",
+  "generated_at": "2026-11-24 18:15 UTC",
   "files_total": 4020,
   "code_files": 3544,
   "code_lines": 478463
@@ -307511,10 +307511,19 @@
   }
  },
  "git": {
-  "sha": "06b1732387b4c46546dcf725ace49be324351c33",
+  "sha": "5eedf571c5a84d5165f532e9f1438a84b654af8e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "5eedf57",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "docs: corrige o estado real da integracao Evolution no inventario (#334)",
+    "files": [
+     "docs/estado/06_INTEGRACOES.md"
+    ]
+   },
    {
     "sha": "06b1732",
     "date": "2026-11-24",
@@ -307896,18 +307905,13 @@
     "files": [
      "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
     ]
-   },
-   {
-    "sha": "403fb97",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "infra(db): versiona ai_recommendation_audit_logs_v2 (DDL idempotente + RLS) (#295)",
-    "files": [
-     "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "docs/estado/06_INTEGRACOES.md",
+    2
+   ],
    [
     "src/app/AppRoutes.tsx",
     2
@@ -307982,10 +307986,6 @@
    ],
    [
     "tests/rls/functions_authenticated_allowlist.sql",
-    1
-   ],
-   [
-    "tests/rls/security_definer_hardening.sql",
     1
    ]
   ]
