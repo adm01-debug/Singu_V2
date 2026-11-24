@@ -36,10 +36,9 @@ function extractMessageContent(data: ReturnType<typeof requireMessageData>): { m
     messageType = 'contact';
     messageContent = `[Contato: ${data.message.contactMessage.displayName || ''}]`;
   } else if (data.message?.reactionMessage) {
-    messageType = 'reaction';
+    // reacao/enquete seguem como 'text': o message_type_check nao aceita 'reaction' nem 'poll'
     messageContent = data.message.reactionMessage.text || '';
   } else if (data.message?.pollCreationMessage) {
-    messageType = 'poll';
     messageContent = data.message.pollCreationMessage.name || '[Enquete]';
   }
 
@@ -65,7 +64,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
   if (data.status === 'DELIVERY_ACK') status = 'delivered';
   else if (data.status === 'READ') status = 'read';
   else if (data.status === 'PLAYED') status = 'played';
-  else if (data.status === 'ERROR') status = 'error';
+  else if (data.status === 'ERROR') status = 'failed';
   else if (data.status === 'PENDING') status = 'pending';
   // SERVER_ACK mantém o valor inicial 'sent'
 
@@ -82,6 +81,7 @@ export async function handleMessageUpsert(supabase: SupabaseAdminClient, payload
       remote_jid: requireMessageKey(data).remoteJid,
       message_id: messageId,
       from_me: isFromMe,
+      direction: isFromMe ? 'outbound' : 'inbound',
       message_type: messageType,
       content: messageContent,
       status,
