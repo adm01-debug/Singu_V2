@@ -8,7 +8,10 @@ DECLARE
   v_queue public.behavioral_profile_regen_queue;
 BEGIN
   IF current_user <> 'service_role' OR p_actor_id IS NULL
-    OR NOT COALESCE(public.has_role(p_actor_id, 'admin'), false) THEN
+    OR NOT EXISTS (
+      SELECT 1 FROM public.user_roles AS ur
+      WHERE ur.user_id = p_actor_id AND ur.role = 'admin'::public.app_role
+    ) THEN
     RAISE EXCEPTION 'Reanálise exclusiva de administrador autenticado' USING ERRCODE = '42501';
   END IF;
 

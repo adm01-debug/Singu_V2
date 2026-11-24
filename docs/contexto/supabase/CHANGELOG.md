@@ -2,6 +2,14 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 00:29 UTC
+
+- **functions** alterado (10): `public.auto_atualizar_nomes_contato()`, `public.auto_preencher_nomes_contato()`, `public.claim_behavioral_profile_retry(p_contact_id uuid, p_actor_id uuid)`, `public.handle_new_user()`, `public.has_role(_user_id uuid, _role app_role)`, `public.search_companies(search_term text, max_results integer)`, `public.search_contacts(search_term text, max_results integer)`, `public.to_title_case_pt(s text)`, `public.update_company_search_vector()`, `public.update_contact_search_vector()`
+- **migrations** adicionado (2): `20261120153000_fix_handle_new_user_trigger_email`, `20261123200000_fix_claim_behavioral_profile_retry_admin_check`
+- **policies (RLS)** adicionado (8): `public.company_cnaes.company_cnaes_owner_or_admin_mfa_all`, `public.company_territories.company_territories_owner_or_admin_mfa_select`, `public.competitive_losses.competitive_losses_owner_or_admin_mfa_select`, `public.customer_health_scores.customer_health_scores_owner_or_admin_mfa_select`, `public.customer_surveys.customer_surveys_owner_or_admin_mfa_select`, `public.deal_items.deal_items_owner_or_admin_mfa_select`, `public.nps_surveys.nps_surveys_owner_or_admin_mfa_all`, `public.sales_opportunities.sales_opportunities_owner_or_admin_mfa_select`
+- **policies (RLS)** removido (8): `public.company_cnaes.company_cnaes_all`, `public.company_territories.Authenticated read`, `public.competitive_losses.Authenticated read`, `public.customer_health_scores.Authenticated read`, `public.customer_surveys.Authenticated read`, `public.deal_items.Authenticated read`, `public.nps_surveys.nps_surveys_all`, `public.sales_opportunities.Authenticated read`
+- **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_27`
+
 ## 2026-11-23 23:13 UTC
 
 - **functions** alterado (2): `public.has_role(_user_id uuid, _role app_role)`, `public.track_magnet_download(_slug text, _email text, _name text, _utms jsonb)`

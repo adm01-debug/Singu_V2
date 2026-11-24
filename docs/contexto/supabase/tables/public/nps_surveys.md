@@ -53,15 +53,15 @@
 
 ## Policies (RLS)
 
-### `nps_surveys_all`
+### `nps_surveys_owner_or_admin_mfa_all`
 
 | campo | valor |
 |---|---|
 | comando | ALL |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
-| WITH CHECK | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| USING | `((((company_id IS NOT NULL) OR (contact_id IS NOT NULL) OR (created_by = ( SELECT auth.uid() AS uid))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1    FROM companies c   WHERE ((c.id = nps_surveys.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid)))))) AND ((contact_id IS NULL) OR (EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = nps_surveys.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
+| WITH CHECK | `((((company_id IS NOT NULL) OR (contact_id IS NOT NULL) OR (created_by = ( SELECT auth.uid() AS uid))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1    FROM companies c   WHERE ((c.id = nps_surveys.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid)))))) AND ((contact_id IS NULL) OR (EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = nps_surveys.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 
 
 ## Triggers

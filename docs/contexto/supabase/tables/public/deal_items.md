@@ -48,14 +48,14 @@
 
 ## Policies (RLS)
 
-### `Authenticated read`
+### `deal_items_owner_or_admin_mfa_select`
 
 | campo | valor |
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| USING | `((EXISTS ( SELECT 1    FROM deals d   WHERE ((d.id = deal_items.deal_id) AND (d.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 | WITH CHECK |  |
 
 

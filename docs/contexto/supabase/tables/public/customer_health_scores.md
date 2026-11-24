@@ -51,14 +51,14 @@
 
 ## Policies (RLS)
 
-### `Authenticated read`
+### `customer_health_scores_owner_or_admin_mfa_select`
 
 | campo | valor |
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| USING | `((EXISTS ( SELECT 1    FROM companies c   WHERE ((c.id = customer_health_scores.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 | WITH CHECK |  |
 
 

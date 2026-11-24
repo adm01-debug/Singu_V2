@@ -59,14 +59,14 @@
 
 ## Policies (RLS)
 
-### `Authenticated read`
+### `sales_opportunities_owner_or_admin_mfa_select`
 
 | campo | valor |
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| USING | `(((company_id IS NOT NULL) AND (EXISTS ( SELECT 1    FROM companies c   WHERE ((c.id = sales_opportunities.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid)))))) OR ((company_id IS NULL) AND ((identified_by = ( SELECT auth.uid() AS uid)) OR (assigned_to = ( SELECT auth.uid() AS uid)))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 | WITH CHECK |  |
 
 

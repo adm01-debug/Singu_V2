@@ -2,9 +2,7 @@
   "api": {
     "enabled": false
   },
-  "carried": [
-    "constraints"
-  ],
+  "carried": [],
   "db": {
     "columns": [
       {
@@ -188378,9 +188376,11 @@
           "views": []
         },
         "comment": "[TRIGGER][NOME] Recalcula nomes derivados quando full_name muda. BEFORE UPDATE.",
-        "config": null,
+        "config": [
+          "search_path=public, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "79db461c8a6174e7",
+        "definition_sha": "9d2a28d479bd4681",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -188484,9 +188484,11 @@
           "views": []
         },
         "comment": "[TRIGGER][NOME] Auto-preenche first_name, last_name, nome_tratamento, assinatura a partir de full_name. BEFORE INSERT.",
-        "config": null,
+        "config": [
+          "search_path=public, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "7d9c0504f52bee93",
+        "definition_sha": "c3663a1493d797d4",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -191023,7 +191025,7 @@
           "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "902720f01fd91282",
+        "definition_sha": "3374469901d0d2c9",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -217561,10 +217563,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "f7448811c489a0ed",
+        "definition_sha": "d1ee5e20e5f293ef",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -217835,10 +217837,9 @@
               "hits": 2
             }
           ],
-          "code_total_files": 84,
+          "code_total_files": 85,
           "cron": [],
           "db": [
-            "public.claim_behavioral_profile_retry",
             "public.cleanup_behavioral_regen_queue",
             "public.decrypt_connection_config",
             "public.encrypt_connection_config",
@@ -224739,14 +224740,16 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=public, extensions, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "4c8fa765b9a4ece1",
+        "definition_sha": "4620a9c3489917f3",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
         "kind": "function",
-        "language": "plpgsql",
+        "language": "sql",
         "leakproof": false,
         "name": "search_companies",
         "owner": "postgres",
@@ -224754,7 +224757,7 @@
         "schema": "public",
         "security_definer": false,
         "strict": false,
-        "volatility": "volatile"
+        "volatility": "stable"
       },
       {
         "args": "p_query text, p_uf text, p_cidade text, p_status text, p_vendedor_id integer, p_limit integer",
@@ -224922,14 +224925,16 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=public, extensions, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "c2c5872ab3c8a22a",
+        "definition_sha": "f6463e4315404011",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
         "kind": "function",
-        "language": "plpgsql",
+        "language": "sql",
         "leakproof": false,
         "name": "search_contacts",
         "owner": "postgres",
@@ -224937,7 +224942,7 @@
         "schema": "public",
         "security_definer": false,
         "strict": false,
-        "volatility": "volatile"
+        "volatility": "stable"
       },
       {
         "args": "p_search text, p_vendedor text, p_ramo text, p_rfm_segment text, p_estado text, p_cliente_ativado boolean, p_ja_comprou boolean, p_sort_by text, p_page integer, p_page_size integer",
@@ -227609,9 +227614,11 @@
           "views": []
         },
         "comment": null,
-        "config": null,
+        "config": [
+          "search_path=pg_catalog"
+        ],
         "definition": null,
-        "definition_sha": "849cb22058977237",
+        "definition_sha": "0076475812ef100b",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -229124,9 +229131,11 @@
           "views": []
         },
         "comment": "[TRIGGER][SEARCH] Atualiza search_vector de companies para full-text search. BEFORE INSERT/UPDATE.",
-        "config": null,
+        "config": [
+          "search_path=public, extensions, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "2ef0e22aeed7837a",
+        "definition_sha": "f48a5fab0d4bd0ca",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -229264,9 +229273,11 @@
           "views": []
         },
         "comment": "[TRIGGER][SEARCH] Atualiza search_vector de contacts para full-text search. BEFORE INSERT/UPDATE.",
-        "config": null,
+        "config": [
+          "search_path=public, extensions, pg_temp"
+        ],
         "definition": null,
-        "definition_sha": "104fa74b76dff8d9",
+        "definition_sha": "0550fc32a733d701",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -280189,6 +280200,16 @@
         "statements": 1,
         "statements_sha": "caed1eecc62e598f",
         "version": "20261118183212"
+      },
+      {
+        "name": "fix_handle_new_user_trigger_email",
+        "statements": null,
+        "version": "20261120153000"
+      },
+      {
+        "name": "fix_claim_behavioral_profile_retry_admin_check",
+        "statements": null,
+        "version": "20261123200000"
       }
     ],
     "policies": [
@@ -285092,15 +285113,15 @@
       },
       {
         "cmd": "ALL",
-        "name": "company_cnaes_all",
+        "name": "company_cnaes_owner_or_admin_mfa_all",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "company_cnaes",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = company_cnaes.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = company_cnaes.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "DELETE",
@@ -285356,14 +285377,14 @@
       },
       {
         "cmd": "SELECT",
-        "name": "Authenticated read",
+        "name": "company_territories_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "company_territories",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = company_territories.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -285560,14 +285581,14 @@
       },
       {
         "cmd": "SELECT",
-        "name": "Authenticated read",
+        "name": "competitive_losses_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "competitive_losses",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "((((company_id IS NOT NULL) OR (reported_by = ( SELECT auth.uid() AS uid))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = competitive_losses.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -287792,14 +287813,14 @@
       },
       {
         "cmd": "SELECT",
-        "name": "Authenticated read",
+        "name": "customer_health_scores_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "customer_health_scores",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = customer_health_scores.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -287984,14 +288005,14 @@
       },
       {
         "cmd": "SELECT",
-        "name": "Authenticated read",
+        "name": "customer_surveys_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "customer_surveys",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "((((company_id IS NOT NULL) OR (contact_id IS NOT NULL)) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = customer_surveys.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid)))))) AND ((contact_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = customer_surveys.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -288140,14 +288161,14 @@
       },
       {
         "cmd": "SELECT",
-        "name": "Authenticated read",
+        "name": "deal_items_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "deal_items",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "((EXISTS ( SELECT 1\n   FROM deals d\n  WHERE ((d.id = deal_items.deal_id) AND (d.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -293413,15 +293434,15 @@
       },
       {
         "cmd": "ALL",
-        "name": "nps_surveys_all",
+        "name": "nps_surveys_owner_or_admin_mfa_all",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "nps_surveys",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
-        "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+        "using": "((((company_id IS NOT NULL) OR (contact_id IS NOT NULL) OR (created_by = ( SELECT auth.uid() AS uid))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = nps_surveys.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid)))))) AND ((contact_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = nps_surveys.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": "((((company_id IS NOT NULL) OR (contact_id IS NOT NULL) OR (created_by = ( SELECT auth.uid() AS uid))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = nps_surveys.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid)))))) AND ((contact_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = nps_surveys.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
         "cmd": "DELETE",
@@ -295466,14 +295487,14 @@
       },
       {
         "cmd": "SELECT",
-        "name": "Authenticated read",
+        "name": "sales_opportunities_owner_or_admin_mfa_select",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "sales_opportunities",
-        "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "using": "(((company_id IS NOT NULL) AND (EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = sales_opportunities.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid)))))) OR ((company_id IS NULL) AND ((identified_by = ( SELECT auth.uid() AS uid)) OR (assigned_to = ( SELECT auth.uid() AS uid)))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": null
       },
       {
@@ -300261,6 +300282,11 @@
           "publication": "supabase_realtime_messages_publication",
           "schema": "realtime",
           "table": "messages_2026_11_26"
+        },
+        {
+          "publication": "supabase_realtime_messages_publication",
+          "schema": "realtime",
+          "table": "messages_2026_11_27"
         }
       ]
     },
@@ -319955,15 +319981,6 @@
     ],
     "webhooks": []
   },
-  "errors": [
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "constraints"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "db_stats"
-    }
-  ],
+  "errors": [],
   "format_version": 2
 }
