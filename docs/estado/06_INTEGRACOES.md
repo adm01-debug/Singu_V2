@@ -8,6 +8,14 @@
 
 Data da varredura: 2026-08-16 · Commit auditado: working tree em `/home/user/singu-v2`
 
+> **Atualização 2026-11-24 (posterior a esta varredura).** O provedor de LLM deixou de ser o gateway
+> do Lovable e passou a ser o **OpenRouter**: `fetchAI()` encaminha as chamadas feitas ao endereço antigo
+> para `https://openrouter.ai/api/v1/chat/completions` (`supabase/functions/_shared/fetch-utils.ts:102`)
+> e fixa o modelo em `OPENROUTER_MODEL`, padrão `google/gemini-2.5-flash` (`:118`). O nome do secret
+> continua legado — `DEEPSEEK_API_KEY` nas 34 EFs que chamam LLM e `LOVABLE_API_KEY` em `send-sms-campaign` —
+> mas **nenhum dos dois existia no projeto** `pgxfvjmuubtbowutlide` em 2026-11-24. As tabelas abaixo
+> descrevem a varredura de 2026-08-16 (mudança na PR #327).
+
 ---
 
 ## Resumo
@@ -40,8 +48,8 @@ Números de apoio (contados, não estimados):
 
 | # | Integração | Classificação | Direção | Implementada em | Secret (nome) | Gatilho | Persistência | Falha tratada? | Evidência / o que falta |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | **Lovable AI Gateway** (LLM — Gemini/GPT) | ✅ | saída | 33 EFs via `fetchAI` — `supabase/functions/_shared/fetch-utils.ts:42` | `LOVABLE_API_KEY` | UI (`supabase.functions.invoke`) + cron | Tabela por domínio (ex.: `conversation_analyses`, `win_loss_insights`) + telemetria em `ai_gateway_metrics` (`_shared/fetch-utils.ts:137`) | **Parcial** — timeout 45s (`fetch-utils.ts:15,51`), telemetria de erro/timeout/429 (`fetch-utils.ts:68-90`). **Sem retry, sem DLQ, sem circuit breaker.** | Ex.: `ask-crm/index.ts:76`, `generate-insights/index.ts:96`, `conversation-analyzer/index.ts:86`. Uso real: `NAO_VERIFICADO` |
-| 2 | **Lovable AI — host divergente** `api.lovable.dev` | 🟨 | saída | `supabase/functions/meeting-summary/index.ts:128` | `LOVABLE_API_KEY` | UI — `src/hooks/useMeetingSummary.ts:51` | `meeting_summaries` (via EF) | Trata 429 (`meeting-summary/index.ts:142`) | **1 de 35 EFs aponta para host diferente** dos outros 33 (`ai.gateway.lovable.dev`). Nenhum outro arquivo usa esse host. Divergência não documentada — provável endpoint errado |
+| 1 | **OpenRouter** (LLM — Gemini e outros modelos) | ✅ | saída | 34 EFs via `fetchAI` → `supabase/functions/_shared/fetch-utils.ts:42`, com o destino definido pelo roteador `routeToOpenRouter` (`:118`) | `DEEPSEEK_API_KEY` (34 EFs) e `LOVABLE_API_KEY` (24 EFs; só `send-sms-campaign` usa apenas ele) — **nomes legados, ambos ausentes no projeto em 2026-11-24** | UI (`supabase.functions.invoke`) + cron | Tabela por domínio (ex.: `conversation_analyses`, `win_loss_insights`) + telemetria em `ai_gateway_metrics` (`_shared/fetch-utils.ts:169`) | **Parcial** — timeout 45s (`fetch-utils.ts:15,52`), telemetria de erro/timeout/429 (`fetch-utils.ts:69-91`). **Sem retry, sem DLQ, sem circuit breaker.** | Ex.: `ask-crm/index.ts:76`, `generate-insights/index.ts:96`, `conversation-analyzer/index.ts:86`. Uso real: `NAO_VERIFICADO` |
+| 2 | **Host divergente do provedor de IA** `api.lovable.dev` | ✅ | saída | `supabase/functions/meeting-summary/index.ts:128` | `LOVABLE_API_KEY` | UI → `src/hooks/useMeetingSummary.ts:51` | `meeting_summaries` (via EF) | Trata 429 (`meeting-summary/index.ts:142`) | **Neutralizado em 2026-11-24:** `routeToOpenRouter` (`_shared/fetch-utils.ts:118`) reescreve `ai.gateway.lovable.dev` e `api.lovable.dev` para o mesmo destino, então a divergência deixou de produzir erro |
 | 3 | **ElevenLabs Scribe (STT)** | ✅ | saída | `supabase/functions/elevenlabs-scribe-token/index.ts:30` | `ELEVENLABS_API_KEY` (`:24`) | UI — `src/hooks/useVoiceAgent.ts:121` | Nenhuma (token efêmero devolvido ao browser) | Erro → 500 genérico (`:40,47`); rate limit 5/min (`:10`); **sem retry** | Probe em `voice-ai-health/index.ts:22` e `system-health/index.ts:103`. Uso real: `NAO_VERIFICADO` |
 | 4 | **ElevenLabs TTS** | ✅ | saída | `supabase/functions/elevenlabs-tts/index.ts:47` | `ELEVENLABS_API_KEY` (`:30`) | UI — `src/components/admin/VoiceAITestPanel.tsx:111` | Nenhuma (áudio devolvido ao caller) | Erro → 500 (`:74,87`); rate limit 10/min (`:13`); **sem retry** | Probe em `voice-ai-health/index.ts:55`. Uso real: `NAO_VERIFICADO` |
 | 5 | **Evolution API (WhatsApp) — API genérica** | ⬛ | saída | `supabase/functions/evolution-api/index.ts:53-54,384` — 404 linhas, 44 ações em allowlist (`:24-34`) | `EVOLUTION_API_URL`, `EVOLUTION_API_KEY` | **NENHUM** — zero chamadores em `src/`, `tests/`, `e2e/`, `scripts/`, migrations | Nenhuma (`grep '\.from('` na função: 0 ocorrências) | Erro → 500 genérico (`:400`); timeout 30s via `fetchAPI` | Busca por `evolution-api`, `evolutionApi`, `evolution_api` em `src/` retorna **0 hits**. Só aparece em documentação (`docs/EDGE_FUNCTIONS_API.md:324`, `docs/RUNBOOK.md:198`). Código completo sem caminho de execução no repo |
@@ -111,7 +119,7 @@ Backend (Edge Functions):
 | `SUPABASE_SERVICE_ROLE_KEY` | 88 ocorrências | ❌ Não (injetada pela plataforma) |
 | `SUPABASE_ANON_KEY` | 29 ocorrências | ❌ Não (injetada pela plataforma) |
 | `SUPABASE_DB_URL` | `email-pipeline-health` | ❌ Não |
-| `LOVABLE_API_KEY` | **35 EFs** (`ask-crm`, `ai-assistant`, `generate-insights`, `conversation-analyzer`, `send-sms-campaign`, `meeting-summary`, … ) | ❌ **Não** |
+| `DEEPSEEK_API_KEY` / `LOVABLE_API_KEY` | **34 EFs** leem `DEEPSEEK_API_KEY` (todas as de LLM: `ask-crm`, `ai-assistant`, `generate-insights`, `conversation-analyzer`, `meeting-summary`, ...) e **24** leem `LOVABLE_API_KEY` (`send-sms-campaign` só ele) | ❌ **Nenhum dos dois existe no projeto** (Management API, 2026-11-24) |
 | `ELEVENLABS_API_KEY` | `elevenlabs-tts`, `elevenlabs-scribe-token`, `voice-ai-health`, `health-aggregate`, `system-health` | ❌ **Não** |
 | `EVOLUTION_API_URL` | `evolution-api`, `smart-notify`, `health-aggregate`, `system-health` | ❌ **Não** |
 | `EVOLUTION_API_KEY` | `evolution-api`, `smart-notify`, `health-aggregate`, `system-health` | ❌ **Não** |
@@ -182,7 +190,7 @@ Três lugares fingem enviar e-mail:
 | Circuit breaker | **Nenhum** — `grep -rn "circuitBreaker\|CircuitBreaker" supabase/functions/` → 0 hits, apesar de `docs/adr/003-circuit-breaker-pattern.md` existir |
 | Timeout | ✅ Universal via `_shared/fetch-utils.ts:15-18,30-36` |
 
-Ou seja: uma indisponibilidade de 30s no Lovable AI Gateway, ElevenLabs, Firecrawl, EnrichLayer, Twilio ou Evolution API **perde a operação em definitivo**, sem reprocessamento. O único amortecedor é o timeout, que apenas evita travar o isolate.
+Ou seja: uma indisponibilidade de 30s no OpenRouter (antes o gateway do Lovable), ElevenLabs, Firecrawl, EnrichLayer, Twilio ou Evolution API **perde a operação em definitivo**, sem reprocessamento. O único amortecedor é o timeout, que apenas evita travar o isolate.
 
 ### A-8 · 🟡 MÉDIO — Web Push implementado sem VAPID nem criptografia
 `supabase/functions/send-push-notification/index.ts:42-50` declara `Content-Encoding: aes128gcm` e envia o corpo **em JSON claro, sem cifrar e sem header `Authorization: vapid t=..., k=...`**. Nenhum arquivo do repo lê `VAPID_PRIVATE_KEY`. A chave pública está hard-coded em `src/lib/pushNotifications.ts:6`. Serviços de push (FCM, Mozilla autopush) rejeitam requisições nesse formato — a integração está sintaticamente presente e funcionalmente inerte.
@@ -194,7 +202,7 @@ Ou seja: uma indisponibilidade de 30s no Lovable AI Gateway, ElevenLabs, Firecra
 Ver inventário acima. 22 variáveis exigidas em runtime, 0 declaradas. Onboarding e disaster recovery dependem de conhecimento tácito.
 
 ### A-11 · 🔵 BAIXO — Host divergente no gateway de IA
-`meeting-summary/index.ts:128` usa `api.lovable.dev` enquanto as outras 33 EFs usam `ai.gateway.lovable.dev`. Se o host correto for o segundo, essa função retorna erro em 100% das chamadas — e o usuário vê a mensagem genérica de `:142`.
+`meeting-summary/index.ts:128` usa `api.lovable.dev` enquanto as outras 33 EFs usam `ai.gateway.lovable.dev`. Se o host correto for o segundo, essa função retorna erro em 100% das chamadas — e o usuário vê a mensagem genérica de `:142`. **Atualização 2026-11-24:** `routeToOpenRouter` (`_shared/fetch-utils.ts:118`) unifica os dois hosts no OpenRouter, então nenhuma variante erra por host.
 
 ### A-12 · 🔵 BAIXO — Terceiros no frontend fora de qualquer inventário
 `ipapi.co` (`src/hooks/useIPValidation.ts:16`), `nominatim.openstreetmap.org` (`src/pages/mapa/geocoding.ts:8`) e `cdnjs.cloudflare.com` (`src/pages/MapaEmpresas.tsx:29-31`) recebem tráfego direto do browser do usuário. Nenhum aparece em `HANDOFF.md`, `ARCHITECTURE.md` ou `docs/RUNBOOK.md`. Implicação de LGPD: o IP do usuário vai para `ipapi.co` sem menção em política de privacidade encontrável no repo.
