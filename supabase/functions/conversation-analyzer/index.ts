@@ -38,11 +38,15 @@ Deno.serve(async (req) => {
 
   const { data: interaction, error: intErr } = await supabase
     .from("interactions")
-    .select("id, user_id, contact_id, content, type, duration_seconds, title")
+    .select("id, user_id, contact_id, content, type, duracao_segundos, duration, title")
     .eq("id", interactionId)
     .eq("user_id", userId)
     .maybeSingle();
-  if (intErr || !interaction) return jsonError("Interaction not found", 404, req);
+  if (intErr) {
+    console.error("Falha ao consultar interação:", intErr.message);
+    return jsonError("Falha ao consultar interação", 500, req);
+  }
+  if (!interaction) return jsonError("Interaction not found", 404, req);
   if (!interaction.content || interaction.content.length < 80) {
     return jsonError("Conteúdo insuficiente para análise (mínimo 80 caracteres)", 400, req);
   }
@@ -257,7 +261,7 @@ ${interaction.content.slice(0, 12000)}`;
       user_id: userId,
       interaction_id: interactionId,
       contact_id: interaction.contact_id,
-      duration_seconds: interaction.duration_seconds ?? null,
+      duration_seconds: interaction.duracao_segundos ?? interaction.duration ?? null,
       talk_ratio_rep: analysis.talk_ratio_rep,
       talk_ratio_customer: analysis.talk_ratio_customer,
       longest_monologue_seconds: analysis.longest_monologue_seconds ?? null,
