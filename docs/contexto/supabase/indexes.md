@@ -1452,7 +1452,6 @@ Uso e tamanho em `stats.md`.
 | public.system_alerts | idx_system_alerts_unack | btree | created_at | não | sim | `(acknowledged_at IS NULL)` |
 | public.system_alerts | system_alerts_pkey | btree | id | sim | sim |  |
 | public.system_config | system_config_pkey | btree | key | sim | sim |  |
-| public.system_health_snapshots | idx_health_snapshots_timestamp_desc | btree | timestamp | não | sim |  |
 | public.system_health_snapshots | idx_system_health_snapshots_timestamp | btree | timestamp | não | sim |  |
 | public.system_health_snapshots | system_health_snapshots_pkey | btree | id | sim | sim |  |
 | public.tags | tags_nome_key | btree | nome | sim | sim |  |

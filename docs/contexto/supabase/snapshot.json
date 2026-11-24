@@ -269361,20 +269361,6 @@
         "columns": [
           "timestamp"
         ],
-        "definition": "CREATE INDEX idx_health_snapshots_timestamp_desc ON public.system_health_snapshots USING btree (\"timestamp\" DESC)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_health_snapshots_timestamp_desc",
-        "predicate": null,
-        "schema": "public",
-        "table": "system_health_snapshots"
-      },
-      {
-        "columns": [
-          "timestamp"
-        ],
         "definition": "CREATE INDEX idx_system_health_snapshots_timestamp ON public.system_health_snapshots USING btree (\"timestamp\" DESC)",
         "is_primary": false,
         "is_unique": false,

@@ -36,7 +36,6 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| idx_health_snapshots_timestamp_desc | btree | timestamp | não | sim |  | `CREATE INDEX idx_health_snapshots_timestamp_desc ON public.system_health_snapshots USING btree ("timestamp" DESC)` |
 | idx_system_health_snapshots_timestamp | btree | timestamp | não | sim |  | `CREATE INDEX idx_system_health_snapshots_timestamp ON public.system_health_snapshots USING btree ("timestamp" DESC)` |
 | system_health_snapshots_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX system_health_snapshots_pkey ON public.system_health_snapshots USING btree (id)` |
 

@@ -25,7 +25,7 @@ Gerado automaticamente a cada 10 min pelo workflow `contexto` (job `banco`). **N
 | functions | 1468 |
 | triggers | 499 |
 | policies (RLS) | 1666 |
-| índices | 1688 |
+| índices | 1687 |
 | tipos/enums | 37 |
 | extensões | 12 |
 | cron jobs | 40 |
