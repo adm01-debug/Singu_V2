@@ -2,7 +2,25 @@
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 111 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-18)
+## Baseline atual — 116 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-24)
+
+Total verificado no gate de 2026-11-24: **116 DEFINERs**. O delta de +5 sobre a rodada de 2026-11-18
+são os stubs legados de ciclo de vida do cliente, todos `SECURITY DEFINER` com `search_path` travado e
+`EXECUTE` **revogado de `anon`** (migration `20261121154000_revoke_anon_exec_stubs_crm.sql`) e mantido
+para `authenticated` porque o fluxo legado de ERP/CRM ainda os chama:
+
+| Função | Situação |
+|---|---|
+| `ativar_cliente(uuid, integer, text)` | `anon` revogado; `authenticated` com EXECUTE |
+| `inativar_cliente(uuid, text, integer, text)` | `anon` revogado; `authenticated` com EXECUTE |
+| `registrar_compra(uuid, numeric, text, text)` | `anon` revogado; `authenticated` com EXECUTE |
+| `sdr_qualificar_cliente(uuid, integer, integer, text, text)` | `anon` revogado; `authenticated` com EXECUTE |
+| `transferir_cliente(uuid, integer, text, integer, text)` | `anon` revogado; `authenticated` com EXECUTE |
+
+Pendência de hardening (decisão de negócio, não de CI): revogar `authenticated` nessas cinco também,
+como já foi feito em `anon` — depende de confirmar que nenhum consumidor externo (ERP/automação) as invoca.
+
+## Baseline anterior (24/11) — 111 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-18)
 
 Total verificado no gate de 2026-11-18: **111 DEFINERs**. A diferença para a baseline anterior é
 `guard_contact_relation_write()`, da migration `20261027220000_serialize_contact_relation_writes.sql`.
