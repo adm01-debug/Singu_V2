@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 15:14 UTC
+
+- **functions** alterado (9): `public.ativar_cliente(p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text)`, `public.get_dashboard_data()`, `public.get_health_check()`, `public.has_role(_user_id uuid, _role app_role)`, `public.inativar_cliente(p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text)`, `public.registrar_compra(p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text)`, `public.sdr_qualificar_cliente(p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text)`, `public.transferir_cliente(p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text)`, `public.trg_after_purchase()`
+
 ## 2026-11-24 14:14 UTC
 
 - **roles** alterado (1): `authenticator`

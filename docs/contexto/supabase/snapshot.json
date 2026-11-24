@@ -188059,7 +188059,7 @@
           "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "3f8d036481bc7734",
+        "definition_sha": "f2e61014ceac31f2",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -188070,7 +188070,7 @@
         "owner": "postgres",
         "returns": "jsonb",
         "schema": "public",
-        "security_definer": false,
+        "security_definer": true,
         "strict": false,
         "volatility": "volatile"
       },
@@ -205274,7 +205274,7 @@
           "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "ac64442d418f8b47",
+        "definition_sha": "3cfebc28d8c5e9d0",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -205287,7 +205287,7 @@
         "schema": "public",
         "security_definer": false,
         "strict": false,
-        "volatility": "volatile"
+        "volatility": "stable"
       },
       {
         "args": "p_user_id uuid",
@@ -207309,12 +207309,12 @@
           "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "afc1154fef663865",
+        "definition_sha": "ce39758b1b284672",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
-        "language": "plpgsql",
+        "language": "sql",
         "leakproof": false,
         "name": "get_health_check",
         "owner": "postgres",
@@ -218057,6 +218057,7 @@
           "code_total_files": 85,
           "cron": [],
           "db": [
+            "public.ativar_cliente",
             "public.cleanup_behavioral_regen_queue",
             "public.decrypt_connection_config",
             "public.encrypt_connection_config",
@@ -218068,9 +218069,13 @@
             "public.get_slow_rpc_trend",
             "public.get_top_slow_rpcs",
             "public.guard_contact_relation_write",
+            "public.inativar_cliente",
             "public.move_deal",
             "public.publish_mtta_sla_breach_alert",
+            "public.registrar_compra",
+            "public.sdr_qualificar_cliente",
             "public.simulate_behavioral_regen_alert",
+            "public.transferir_cliente",
             "public.update_deal_amount"
           ],
           "triggers": [],
@@ -218345,7 +218350,7 @@
           "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "83ac4fb43416f926",
+        "definition_sha": "ffacbb4d1686912d",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -218356,7 +218361,7 @@
         "owner": "postgres",
         "returns": "jsonb",
         "schema": "public",
-        "security_definer": false,
+        "security_definer": true,
         "strict": false,
         "volatility": "volatile"
       },
@@ -223208,7 +223213,7 @@
           "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "55fe30343916744b",
+        "definition_sha": "20c041db4611c52f",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -223219,7 +223224,7 @@
         "owner": "postgres",
         "returns": "jsonb",
         "schema": "public",
-        "security_definer": false,
+        "security_definer": true,
         "strict": false,
         "volatility": "volatile"
       },
@@ -224812,7 +224817,7 @@
           "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "f764216ca07dbf94",
+        "definition_sha": "492f76acb0084347",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -224823,7 +224828,7 @@
         "owner": "postgres",
         "returns": "jsonb",
         "schema": "public",
-        "security_definer": false,
+        "security_definer": true,
         "strict": false,
         "volatility": "volatile"
       },
@@ -228145,7 +228150,7 @@
           "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "bf3349931d0e4f3e",
+        "definition_sha": "fa9e49de29f646f2",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -228156,7 +228161,7 @@
         "owner": "postgres",
         "returns": "jsonb",
         "schema": "public",
-        "security_definer": false,
+        "security_definer": true,
         "strict": false,
         "volatility": "volatile"
       },
@@ -228212,7 +228217,7 @@
           "search_path=public, pg_catalog"
         ],
         "definition": null,
-        "definition_sha": "96c88aea1910523e",
+        "definition_sha": "4c51abd6b9d3913e",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
