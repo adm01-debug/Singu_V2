@@ -189,7 +189,7 @@ Nenhuma das quatro está em `types.ts` (que tem apenas o placeholder). Se a fun�
 | `revalidate-stale-emails` | `0 4 * * *` | `INSERT INTO validation_queue` ← `email_verifications` | ✅ ambas as tabelas existem | `20260417120721_823eaa43-…sql:24` |
 | `revalidate-stale-phones` | `30 4 * * *` | `INSERT INTO validation_queue` ← `phone_validations` | ✅ | `20260417120721_823eaa43-…sql:41` |
 | `check-contact-health-daily` | `0 0 * * *` | `public.check_contact_health_alerts()` | ✅ `20260509172946_b942797e-…sql:118` | `20260509173046_0804c068-…sql:7` |
-| `smart-notify-automation` | `0 */4 * * *` | `net.http_post` → `/functions/v1/smart-notify` | ✅ `supabase/functions/smart-notify/` | `20260512105729_9e0ffd45-…sql:6` |
+| ~~`smart-notify-automation`~~ **não agendado** | — | `cron.job` (40 jobs, nenhum de notify — 2026-11-24) | ✅ `supabase/functions/smart-notify/` | `20260512105729_9e0ffd45-…sql:6` nunca aplicada |
 | `cleanup-simulated-alerts-weekly` | `0 3 * * 0` | `public.cleanup_simulated_alerts()` | ✅ `20260713124628_449b2996-…sql:2` | `20260713124628_449b2996-…sql:28` |
 | `mtta-sla-breach-auto-ack-hourly` | `7 * * * *` | `public.auto_ack_stale_mtta_sla_breaches()` | ✅ `20260715184735_158ce47d-…sql:2` | `20260715184735_158ce47d-…sql:31` |
 | `mtta-auto-ack-heartbeat-watchdog` | `*/30 * * * *` | `public.check_mtta_auto_ack_heartbeat()` | ✅ `20260717142132_7f20a3a3-…sql:4` | `20260717142132_7f20a3a3-…sql:69` |

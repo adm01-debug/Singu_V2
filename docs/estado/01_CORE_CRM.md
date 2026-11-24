@@ -169,7 +169,7 @@ Os quatro toggles de `/configuracoes` → aba Notificações **não têm camada 
 
 ### 7. Quatro edge functions sem nenhum caminho de execução
 
-`enrich-contacts`, `check-notifications` e `client-notifications` não têm um único chamador no repositório (verificado em `src/`, `supabase/functions/`, migrations, `config.toml` e `.github/`). Os 15 `cron.schedule` existentes agendam apenas: `validation-queue-drain`, `revalidate-stale-emails`, `revalidate-stale-phones`, `check-contact-health-daily`, `smart-notify-automation`, `ai-gateway-alerts-eval`, `apply-data-retention-daily`, `capture-degraded-rpc-plans` e outros — nenhum deles. Referências a `client-notifications` existem apenas em **comentários** de `supabase/migrations/20260720000024_cron_notification_indexes.sql:1-26`, que criam índices para uma rotina que não é agendada em lugar nenhum do repositório.
+`enrich-contacts`, `check-notifications` e `client-notifications` não têm um único chamador no repositório (verificado em `src/`, `supabase/functions/`, migrations, `config.toml` e `.github/`). Os 15 `cron.schedule` existentes agendam apenas: `validation-queue-drain`, `revalidate-stale-emails`, `revalidate-stale-phones`, `check-contact-health-daily`, `ai-gateway-alerts-eval`, `apply-data-retention-daily`, `capture-degraded-rpc-plans` e outros — nenhum deles. Referências a `client-notifications` existem apenas em **comentários** de `supabase/migrations/20260720000024_cron_notification_indexes.sql:1-26`, que criam índices para uma rotina que não é agendada em lugar nenhum do repositório.
 
 ### 8. Auditoria de leitura grava uma linha em `activities` a cada consulta
 
