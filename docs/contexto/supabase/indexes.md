@@ -1383,6 +1383,11 @@ Uso e tamanho em `stats.md`.
 | public.social_behavior_analysis | social_behavior_analysis_pkey | btree | id | sim | sim |  |
 | public.social_consent_audit | idx_consent_audit_contact | btree | contact_id | não | sim |  |
 | public.social_consent_audit | social_consent_audit_pkey | btree | id | sim | sim |  |
+| public.social_insights | social_insights_contact_id_idx | btree | contact_id | não | sim |  |
+| public.social_insights | social_insights_contact_id_platform_idx | btree | contact_id, platform | não | sim |  |
+| public.social_insights | social_insights_created_at_idx | btree | created_at | não | sim |  |
+| public.social_insights | social_insights_pkey | btree | id | sim | sim |  |
+| public.social_insights | social_insights_user_id_idx | btree | user_id | não | sim |  |
 | public.social_life_events | idx_social_life_events_contact | btree | contact_id | não | sim |  |
 | public.social_life_events | idx_social_life_events_date | btree | event_date | não | sim |  |
 | public.social_life_events | idx_social_life_events_type | btree | event_type | não | sim |  |

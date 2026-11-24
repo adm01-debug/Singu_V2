@@ -737,3 +737,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261120153000 | [fix_handle_new_user_trigger_email](migrations/20261120153000_fix_handle_new_user_trigger_email.sql) | 0 |
 | 20261121154000 | [revoke_anon_exec_stubs_crm](migrations/20261121154000_revoke_anon_exec_stubs_crm.sql) | 0 |
 | 20261123200000 | [fix_claim_behavioral_profile_retry_admin_check](migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql) | 0 |
+| 20261124120000 | [](migrations/20261124120000.sql) | 0 |

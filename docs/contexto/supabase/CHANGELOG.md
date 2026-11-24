@@ -2,6 +2,18 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 03:16 UTC
+
+- **colunas** adicionado (12): `public.social_insights.contact_id`, `public.social_insights.content`, `public.social_insights.created_at`, `public.social_insights.id`, `public.social_insights.indicator_score`, `public.social_insights.insight_type`, `public.social_insights.metadata`, `public.social_insights.platform`, `public.social_insights.sentiment`, `public.social_insights.source_url`, `public.social_insights.updated_at`, `public.social_insights.user_id`
+- **constraints** adicionado (3): `public.social_insights.social_insights_contact_id_fkey`, `public.social_insights.social_insights_pkey`, `public.social_insights.social_insights_user_id_fkey`
+- **cron jobs** alterado (5): `1:zapp-generate-daily-summaries`, `2:zapp-process-pending-media`, `3:zapp-embed-pending-messages`, `4:zapp-curate-training-dataset`, `5:zapp-cleanup-expired-media`
+- **grants** adicionado (2): `public.social_insights:authenticated`, `public.social_insights:service_role`
+- **indexes** adicionado (5): `public.social_insights_contact_id_idx`, `public.social_insights_contact_id_platform_idx`, `public.social_insights_created_at_idx`, `public.social_insights_pkey`, `public.social_insights_user_id_idx`
+- **lints** adicionado (4): `policy_auth_fn_not_wrapped:public.social_insights.social_insights_delete_own`, `policy_auth_fn_not_wrapped:public.social_insights.social_insights_insert_own`, `policy_auth_fn_not_wrapped:public.social_insights.social_insights_select_own`, `policy_auth_fn_not_wrapped:public.social_insights.social_insights_update_own`
+- **migrations** adicionado (1): `20261124120000_`
+- **policies (RLS)** adicionado (4): `public.social_insights.social_insights_delete_own`, `public.social_insights.social_insights_insert_own`, `public.social_insights.social_insights_select_own`, `public.social_insights.social_insights_update_own`
+- **tabelas** adicionado (1): `public.social_insights`
+
 ## 2026-11-24 01:14 UTC
 
 - **functions** alterado (7): `public.ativar_cliente(p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text)`, `public.inativar_cliente(p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text)`, `public.registrar_compra(p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text)`, `public.sdr_qualificar_cliente(p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text)`, `public.search_companies(search_term text, max_results integer)`, `public.search_contacts(search_term text, max_results integer)`, `public.transferir_cliente(p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text)`

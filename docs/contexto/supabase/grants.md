@@ -1366,6 +1366,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.social_behavior_analysis | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.social_consent_audit | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.social_consent_audit | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.social_insights | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.social_insights | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.social_life_events | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.social_life_events | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.social_profiles | authenticated | DELETE, INSERT, SELECT, UPDATE |

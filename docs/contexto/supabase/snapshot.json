@@ -97541,6 +97541,162 @@
         "nullable": false,
         "position": 1,
         "schema": "public",
+        "table": "social_insights",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "contact_id",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "user_id",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "platform",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "insight_type",
+        "nullable": true,
+        "position": 5,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "''::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "content",
+        "nullable": false,
+        "position": 6,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "source_url",
+        "nullable": true,
+        "position": 7,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "metadata",
+        "nullable": true,
+        "position": 8,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "jsonb"
+      },
+      {
+        "comment": null,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "indicator_score",
+        "nullable": false,
+        "position": 9,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "numeric"
+      },
+      {
+        "comment": null,
+        "default": "'neutral'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "sentiment",
+        "nullable": false,
+        "position": 10,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_at",
+        "nullable": false,
+        "position": 11,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 12,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
         "table": "social_life_events",
         "type": "uuid"
       },
@@ -180494,6 +180650,61 @@
         ],
         "deferrable": false,
         "definition": "FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE",
+        "name": "social_insights_contact_id_fkey",
+        "on_delete": "CASCADE",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "public",
+        "ref_table": "contacts",
+        "schema": "public",
+        "table": "social_insights",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id)",
+        "name": "social_insights_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "social_insights",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "user_id"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE",
+        "name": "social_insights_user_id_fkey",
+        "on_delete": "CASCADE",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "auth",
+        "ref_table": "users",
+        "schema": "public",
+        "table": "social_insights",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "contact_id"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE",
         "name": "social_life_events_contact_id_fkey",
         "on_delete": "CASCADE",
         "on_update": "NO ACTION",
@@ -185416,7 +185627,7 @@
       "installed": true,
       "jobs": [
         {
-          "active": true,
+          "active": false,
           "command": "SELECT zapp_history.invoke_edge_function('generate-daily-summary', jsonb_build_object('date', (CURRENT_DATE - INTERVAL '1 day')::date::text));",
           "database": "postgres",
           "jobid": 1,
@@ -185425,7 +185636,7 @@
           "username": "postgres"
         },
         {
-          "active": true,
+          "active": false,
           "command": "SELECT zapp_history.invoke_edge_function('process-pending-media');",
           "database": "postgres",
           "jobid": 2,
@@ -185434,7 +185645,7 @@
           "username": "postgres"
         },
         {
-          "active": true,
+          "active": false,
           "command": "SELECT zapp_history.invoke_edge_function('embed-message');",
           "database": "postgres",
           "jobid": 3,
@@ -185443,7 +185654,7 @@
           "username": "postgres"
         },
         {
-          "active": true,
+          "active": false,
           "command": "SELECT zapp_history.invoke_edge_function('curate-training-dataset');",
           "database": "postgres",
           "jobid": 4,
@@ -185452,7 +185663,7 @@
           "username": "postgres"
         },
         {
-          "active": true,
+          "active": false,
           "command": "UPDATE zapp_history.message_media SET download_status = 'expired' WHERE download_status = 'failed' AND download_attempts >= 5 AND created_at < NOW() - INTERVAL '7 days';",
           "database": "postgres",
           "jobid": 5,
@@ -245278,6 +245489,18 @@
           "grantee": "authenticated",
           "privileges": "DELETE, INSERT, SELECT, UPDATE",
           "schema": "public",
+          "table": "social_insights"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "social_insights"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "schema": "public",
           "table": "social_life_events"
         },
         {
@@ -268136,6 +268359,77 @@
         "columns": [
           "contact_id"
         ],
+        "definition": "CREATE INDEX social_insights_contact_id_idx ON public.social_insights USING btree (contact_id)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "social_insights_contact_id_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "social_insights"
+      },
+      {
+        "columns": [
+          "contact_id",
+          "platform"
+        ],
+        "definition": "CREATE INDEX social_insights_contact_id_platform_idx ON public.social_insights USING btree (contact_id, platform)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "social_insights_contact_id_platform_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "social_insights"
+      },
+      {
+        "columns": [
+          "created_at"
+        ],
+        "definition": "CREATE INDEX social_insights_created_at_idx ON public.social_insights USING btree (created_at DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "social_insights_created_at_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "social_insights"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "definition": "CREATE UNIQUE INDEX social_insights_pkey ON public.social_insights USING btree (id)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "social_insights_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "social_insights"
+      },
+      {
+        "columns": [
+          "user_id"
+        ],
+        "definition": "CREATE INDEX social_insights_user_id_idx ON public.social_insights USING btree (user_id)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "social_insights_user_id_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "social_insights"
+      },
+      {
+        "columns": [
+          "contact_id"
+        ],
         "definition": "CREATE INDEX idx_social_life_events_contact ON public.social_life_events USING btree (contact_id)",
         "is_primary": false,
         "is_unique": false,
@@ -275394,6 +275688,30 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.social_insights.social_insights_delete_own",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.social_insights.social_insights_insert_own",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.social_insights.social_insights_select_own",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.social_insights.social_insights_update_own",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.social_life_events.Users can delete their own social life events",
         "severity": "BAIXA"
       },
@@ -280215,6 +280533,11 @@
         "name": "fix_claim_behavioral_profile_retry_admin_check",
         "statements": null,
         "version": "20261123200000"
+      },
+      {
+        "name": null,
+        "statements": null,
+        "version": "20261124120000"
       }
     ],
     "policies": [
@@ -297065,6 +297388,54 @@
       },
       {
         "cmd": "DELETE",
+        "name": "social_insights_delete_own",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "public"
+        ],
+        "schema": "public",
+        "table": "social_insights",
+        "using": "(auth.uid() = user_id)",
+        "with_check": null
+      },
+      {
+        "cmd": "INSERT",
+        "name": "social_insights_insert_own",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "public"
+        ],
+        "schema": "public",
+        "table": "social_insights",
+        "using": null,
+        "with_check": "(auth.uid() = user_id)"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "social_insights_select_own",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "public"
+        ],
+        "schema": "public",
+        "table": "social_insights",
+        "using": "(auth.uid() = user_id)",
+        "with_check": null
+      },
+      {
+        "cmd": "UPDATE",
+        "name": "social_insights_update_own",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "public"
+        ],
+        "schema": "public",
+        "table": "social_insights",
+        "using": "(auth.uid() = user_id)",
+        "with_check": "(auth.uid() = user_id)"
+      },
+      {
+        "cmd": "DELETE",
         "name": "Users can delete their own social life events",
         "permissive": "PERMISSIVE",
         "roles": [
@@ -309334,6 +309705,21 @@
         "is_partition": false,
         "kind": "table",
         "name": "social_consent_audit",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
+        "comment": null,
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "social_insights",
         "owner": "postgres",
         "parent": null,
         "partition_bound": null,

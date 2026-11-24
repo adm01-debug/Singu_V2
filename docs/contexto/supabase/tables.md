@@ -573,6 +573,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.sms_templates](tables/public/sms_templates.md) | table | sim | 5 | 12 | não | SINGU: Templates reutilizáveis de SMS com placeholders de variáveis. |
 | [public.social_behavior_analysis](tables/public/social_behavior_analysis.md) | table | sim | 8 | 21 | não |  |
 | [public.social_consent_audit](tables/public/social_consent_audit.md) | table | sim | 2 | 9 | não |  |
+| [public.social_insights](tables/public/social_insights.md) | table | sim | 4 | 12 | não |  |
 | [public.social_life_events](tables/public/social_life_events.md) | table | sim | 8 | 15 | não |  |
 | [public.social_profiles](tables/public/social_profiles.md) | table | sim | 8 | 24 | não |  |
 | [public.social_scraping_schedule](tables/public/social_scraping_schedule.md) | table | sim | 8 | 14 | não |  |

@@ -261,6 +261,7 @@
 | public.sms_opt_outs | sms_opt_outs_contact_id_fkey | contact_id | SET NULL |
 | public.social_behavior_analysis | social_behavior_analysis_contact_id_fkey | contact_id | CASCADE |
 | public.social_consent_audit | social_consent_audit_contact_id_fkey | contact_id | CASCADE |
+| public.social_insights | social_insights_contact_id_fkey | contact_id | CASCADE |
 | public.social_life_events | social_life_events_contact_id_fkey | contact_id | CASCADE |
 | public.social_profiles | social_profiles_contact_id_fkey | contact_id | CASCADE |
 | public.social_scraping_schedule | social_scraping_schedule_contact_id_fkey | contact_id | CASCADE |

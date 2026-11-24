@@ -4,11 +4,11 @@ Horários em UTC. Execuções recentes em `cron-runs.md`.
 
 | id | nome | schedule | ativo | database | usuário | comando |
 |---|---|---|---|---|---|---|
-| 1 | zapp-generate-daily-summaries | `0 2 * * *` | sim | postgres | postgres | `SELECT zapp_history.invoke_edge_function('generate-daily-summary', jsonb_build_object('date', (CURRENT_DATE - INTERVAL '1 day')::date::text));` |
-| 2 | zapp-process-pending-media | `*/15 * * * *` | sim | postgres | postgres | `SELECT zapp_history.invoke_edge_function('process-pending-media');` |
-| 3 | zapp-embed-pending-messages | `*/30 * * * *` | sim | postgres | postgres | `SELECT zapp_history.invoke_edge_function('embed-message');` |
-| 4 | zapp-curate-training-dataset | `0 4 * * 0` | sim | postgres | postgres | `SELECT zapp_history.invoke_edge_function('curate-training-dataset');` |
-| 5 | zapp-cleanup-expired-media | `0 5 * * *` | sim | postgres | postgres | `UPDATE zapp_history.message_media SET download_status = 'expired' WHERE download_status = 'failed' AND download_attempts >= 5 AND created_at < NOW() - INTERVAL '7 days';` |
+| 1 | zapp-generate-daily-summaries | `0 2 * * *` | não | postgres | postgres | `SELECT zapp_history.invoke_edge_function('generate-daily-summary', jsonb_build_object('date', (CURRENT_DATE - INTERVAL '1 day')::date::text));` |
+| 2 | zapp-process-pending-media | `*/15 * * * *` | não | postgres | postgres | `SELECT zapp_history.invoke_edge_function('process-pending-media');` |
+| 3 | zapp-embed-pending-messages | `*/30 * * * *` | não | postgres | postgres | `SELECT zapp_history.invoke_edge_function('embed-message');` |
+| 4 | zapp-curate-training-dataset | `0 4 * * 0` | não | postgres | postgres | `SELECT zapp_history.invoke_edge_function('curate-training-dataset');` |
+| 5 | zapp-cleanup-expired-media | `0 5 * * *` | não | postgres | postgres | `UPDATE zapp_history.message_media SET download_status = 'expired' WHERE download_status = 'failed' AND download_attempts >= 5 AND created_at < NOW() - INTERVAL '7 days';` |
 | 6 | zapp-sync-pending-summaries | `30 * * * *` | sim | postgres | postgres | `SELECT zapp_history.sync_summary_to_interaction(id) FROM zapp_history.conversation_daily_summaries WHERE synced_to_interactions = FALSE AND created_at > NOW() - INTERVAL '7 days' LIMIT 100;` |
 | 7 | zapp-refresh-contact-stats | `0 3 * * *` | sim | postgres | postgres | `SELECT zapp_history.refresh_contact_stats();` |
 | 9 | zapp-reconcile-nlp | `* * * * *` | sim | postgres | postgres | ` SELECT zapp_history.reconcile_nlp_responses() ` |

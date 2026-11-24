@@ -641,6 +641,8 @@
 | public.social_behavior_analysis | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.social_consent_audit | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.social_consent_audit | user_id | auth.users | id | NO ACTION | NO ACTION |
+| public.social_insights | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.social_insights | user_id | auth.users | id | CASCADE | NO ACTION |
 | public.social_life_events | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.social_profiles | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.social_scraping_schedule | contact_id | public.contacts | id | CASCADE | NO ACTION |

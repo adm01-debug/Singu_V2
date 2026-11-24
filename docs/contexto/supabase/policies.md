@@ -1408,6 +1408,10 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.social_behavior_analysis | social_behavior_analysis_update | UPDATE | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
 | public.social_consent_audit | Users can insert consent logs | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.social_consent_audit | Users can view their own consent logs | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.social_insights | social_insights_delete_own | DELETE | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.social_insights | social_insights_insert_own | INSERT | PERMISSIVE | public |  | `(auth.uid() = user_id)` |
+| public.social_insights | social_insights_select_own | SELECT | PERMISSIVE | public | `(auth.uid() = user_id)` |  |
+| public.social_insights | social_insights_update_own | UPDATE | PERMISSIVE | public | `(auth.uid() = user_id)` | `(auth.uid() = user_id)` |
 | public.social_life_events | Users can delete their own social life events | DELETE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.social_life_events | Users can insert their own social life events | INSERT | PERMISSIVE | authenticated |  | `(auth.uid() = user_id)` |
 | public.social_life_events | Users can update their own social life events | UPDATE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
