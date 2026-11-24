@@ -3,6 +3,13 @@
 > **Auditoria por medição direta do código.** Cada linha abaixo cita `arquivo:linha` que foi
 > efetivamente aberto e lido nesta sessão. Documentação existente (README, HANDOFF, docs/RUNBOOK,
 > `.lovable/`) foi tratada como **hipótese**, nunca como prova.
+
+> **Atualização 2026-11-24.** O provedor de LLM mudou: o gateway do Lovable foi substituído pelo
+> **OpenRouter** (`https://openrouter.ai/api/v1/chat/completions`, `_shared/fetch-utils.ts:102`), com o
+> modelo fixado em `OPENROUTER_MODEL` (padrão `google/gemini-2.5-flash`). O roteamento é central em
+> `fetchAI()`/`routeToOpenRouter` (`_shared/fetch-utils.ts:118`) e os nomes dos secrets permaneceram
+> legados (`DEEPSEEK_API_KEY`, `LOVABLE_API_KEY`), ambos **ausentes no projeto em 2026-11-24**. Os números
+> e citações abaixo são da auditoria original (PR #327 fez a troca).
 >
 > **Limites desta auditoria (invioláveis):**
 > - **Runtime = `NAO_VERIFICADO`.** Não houve acesso ao banco. Nenhuma afirmação sobre volume de
@@ -37,12 +44,14 @@ Recorte só das **40 Edge Functions do escopo** (inventário na seção própria
 | 🟦 SUGERIDO_OU_INICIADO | **3 de 40** |
 | ⬛ MORTO_OU_ABANDONADO | **4 de 40** |
 
-**Leitura executiva.** O núcleo de IA do SINGU é real e homogêneo: 100% das chamadas de LLM saem
-pelo **Lovable AI Gateway** (`https://ai.gateway.lovable.dev/v1/chat/completions`) com o secret
-`LOVABLE_API_KEY`, e 28 de 29 funções que chamam LLM passam pelo wrapper `fetchAI()`
-(`supabase/functions/_shared/fetch-utils.ts:42`), que instrumenta telemetria em
-`ai_gateway_metrics`. Voz usa **ElevenLabs** (`ELEVENLABS_API_KEY`) para STT-realtime e TTS, e o
-Gateway (Gemini) para NLU e transcrição assíncrona. Os problemas concentram-se em três bolsões:
+**Leitura executiva.** O núcleo de IA do SINGU é real e homogêneo: 100% das chamadas de LLM passam
+pelo mesmo roteador, `fetchAI()` (`supabase/functions/_shared/fetch-utils.ts:42`), e 28 de 29 funções
+que chamam LLM usam esse wrapper. Desde 2026-11-24 o destino é o **OpenRouter**
+(`https://openrouter.ai/api/v1/chat/completions`, `_shared/fetch-utils.ts:102`), com o modelo fixado em
+`OPENROUTER_MODEL` (padrão `google/gemini-2.5-flash`); antes era o gateway do Lovable, que não existe
+fora do Lovable Cloud. A telemetria segue em `ai_gateway_metrics` (`:169`). Voz usa **ElevenLabs**
+(`ELEVENLABS_API_KEY`) para STT-realtime e TTS, e o LLM para NLU e transcrição assíncrona. Os problemas
+concentram-se em três bolsões:
 (1) **dado fictício em telas comportamentais/PNL** — `Math.random()`, hash do `contact.id` e scores
 literais servidos como métrica; (2) **quatro Edge Functions sem qualquer chamador** (fila
 comportamental automática e digest de coaching); (3) **quebras de fio** — o painel `/insights` gera
@@ -114,8 +123,8 @@ IA e variável lida via `Deno.env.get`.
 | 53 | Win/Loss Analyzer | ✅ IMPLEMENTADO_TOTAL | `src/hooks/useWinLoss.ts:417` | `win-loss-analyzer` | `win_loss_records`, `win_loss_insights` — `supabase/migrations/20260416235533_dfd48be7-...sql` | Lovable AI Gateway · `LOVABLE_API_KEY` | Fio completo com persistência de insights agregados. |
 | 54 | Forecast — análise e narrativa | ✅ IMPLEMENTADO_TOTAL | `src/hooks/useForecasting.ts:177` e `:230` | `forecast-analyzer`, `forecast-narrative` | `deal_forecasts`, `forecast_quota_settings`, `forecast_periods` — `supabase/migrations/20260417001337_e3b9438d-...sql` | Lovable AI Gateway · `LOVABLE_API_KEY` (ambas) | Dois fios completos; ambas leem e/ou escrevem `deal_forecasts`. |
 | 55 | Demand Forecast | 🟨 IMPLEMENTADO_PARCIAL | `src/hooks/useBIAdvanced.ts:18` | `demand-forecast` | **Nenhuma** — só lê `interactions` (`demand-forecast/index.ts:30-36`) | Lovable AI Gateway · `LOVABLE_API_KEY` (linha 53, `google/gemini-3-flash-preview` com tool-call estruturado, linhas 74-105) | A previsão é bem construída (tool schema com `forecast`, `insights`, `seasonality_detected`, `growth_rate_percent`) mas **o resultado só é retornado** (`return jsonOk({ historical, ...forecastData })`, linha 122) — nenhuma tabela recebe a previsão, então não há série histórica nem comparação previsto-vs-realizado. Além disso a "demanda" é proxy por contagem de `interactions`, não por deals/receita. |
-| 56 | Telemetria de chamadas ao AI Gateway | ✅ IMPLEMENTADO_TOTAL | `src/components/admin/AiGatewayHealthCard.tsx` | todas via `fetchAI` | `ai_gateway_metrics` (particionada — `supabase/migrations/20260723154109_ad0a12c4-...sql:128-138`) | n/a (instrumentação) | `supabase/functions/_shared/fetch-utils.ts:42-90` registra `function_name`, `model`, `status` (`rate_limited`/`success`/`error`), latência e tokens extraídos de `usage` (linhas 61-62). Crons de manutenção existem: `ai-gateway-alerts-eval` (`20260723152932_...sql:93`), `auto_resolve_ai_gateway_alerts` (`20260723153336_...sql:178`), `ai-gateway-metrics-ensure-partition` e `-drop-old` (`20260723154109_...sql:128,134`). |
-| 57 | Módulo duplicado `aiGatewayLogger.ts` | ⬛ MORTO_OU_ABANDONADO | n/a | n/a | `ai_gateway_metrics` | n/a | `supabase/functions/_shared/aiGatewayLogger.ts:20` exporta `logAiGatewayCall`. **Nenhum `index.ts` de Edge Function o importa** — grep por `aiGatewayLogger`/`logAiGatewayCall` fora do próprio arquivo retorna só `fetch-utils.ts:70,84,132` (que tem sua **própria** cópia interna, `logAiGatewayCallSafe`) e uma menção em texto na UI (`AiGatewayHealthCard.tsx:102`). Módulo morto duplicando lógica viva. |
+| 56 | Telemetria de chamadas ao AI Gateway | ✅ IMPLEMENTADO_TOTAL | `src/components/admin/AiGatewayHealthCard.tsx` | todas via `fetchAI` | `ai_gateway_metrics` (particionada — `supabase/migrations/20260723154109_ad0a12c4-...sql:128-138`) | n/a (instrumentação) | `supabase/functions/_shared/fetch-utils.ts:42-94` registra `function_name`, `model`, `status` (`rate_limited`/`success`/`error`), latência e tokens extraídos de `usage` (linhas 61-63). Crons de manutenção existem: `ai-gateway-alerts-eval` (`20260723152932_...sql:93`), `auto_resolve_ai_gateway_alerts` (`20260723153336_...sql:178`), `ai-gateway-metrics-ensure-partition` e `-drop-old` (`20260723154109_...sql:128,134`). |
+| 57 | Módulo duplicado `aiGatewayLogger.ts` | ⬛ MORTO_OU_ABANDONADO | n/a | n/a | `ai_gateway_metrics` | n/a | `supabase/functions/_shared/aiGatewayLogger.ts:20` exporta `logAiGatewayCall`. **Nenhum `index.ts` de Edge Function o importa** — grep por `aiGatewayLogger`/`logAiGatewayCall` fora do próprio arquivo retorna só `fetch-utils.ts:71,85,169` (que tem sua **própria** cópia interna, `logAiGatewayCallSafe`) e uma menção em texto na UI (`AiGatewayHealthCard.tsx:102`). Módulo morto duplicando lógica viva. |
 | 58 | Componente `AIMessageGenerator` | ⬛ MORTO_OU_ABANDONADO | `src/components/ai/AIMessageGenerator.tsx` | — | — | — | **Zero referências fora do próprio arquivo** (contagem de imports/JSX em `src/`: 0). Contraste: `AIEmailComposerTrigger` tem 4 referências e `EmailThreadSummaryCard` tem 2. |
 | 59 | `src/domain/` — regras de negócio puras | 🟦 SUGERIDO_OU_INICIADO (para o escopo de IA) | n/a | n/a | n/a | n/a | Os 8 arquivos (`leadScoring.ts`, `closingScore.ts`, `churnRisk.ts`, `forecastSimulation.ts`, `dealState.ts`, `nextStepLogic.ts`, `demoEntities.ts`, `validationSchemas.ts`) são lógica determinística de CRM. **Nenhum deles participa do fio de IA/DISC/voz auditado aqui** — nenhuma Edge Function de IA os importa (são módulos de front). Classificação restrita a este escopo; a avaliação plena pertence à auditoria de pipeline/vendas. |
 | 60 | `/nlp-analytics` como painel de decisão | 🟦 SUGERIDO_OU_INICIADO | `src/pages/NLPAnalytics.tsx` (431 linhas, 20 componentes montados nas linhas 8-28) | — | Parcial | n/a | Dos 20 componentes montados, **apenas 5 leem o banco** (`NLPConversionMetrics`, `NLPEvolutionTimeline`, `NLPInsightsDashboard`, `SleightOfMouthPanel`, `NLPRealtimeCoach` — verificado por grep de `supabase` em cada arquivo de `src/components/nlp/`); os outros 15 são conteúdo estático/ferramentas locais sem persistência. A página *parece* um painel analítico mas é majoritariamente material de treinamento — e dois de seus cards exibem números inventados (linhas 27 e 28 desta tabela). |
@@ -224,7 +233,7 @@ Storage).
 | `auto-rebatch-behavioral` | 166 | Grep idem → **zero resultados**. Lê `cron_secrets` (intenção de cron), mas nenhum job criado. |
 | `process-behavioral-regen-queue` | 112 | Sem chamador de UI (correto — é cron), mas **o job nunca é criado por migration**; só monitorado por `get_behavioral_regen_cron_health()` (`20260713104851_...sql:29`) e `check_behavioral_regen_cron_staleness()` (`20260713105030_...sql:20`). Ironia: existe monitoramento de "staleness" com alerta em `system_alerts` para um job que o repositório nunca agenda. |
 | **Componentes órfãos** | — | `src/components/search/VisualSearchButton.tsx` (0 imports fora do próprio arquivo) e `src/components/ai/AIMessageGenerator.tsx` (0 referências). |
-| **Módulo órfão** | — | `supabase/functions/_shared/aiGatewayLogger.ts` — 0 importadores; duplica `logAiGatewayCallSafe` de `fetch-utils.ts:132`, que é o realmente usado. |
+| **Módulo órfão** | — | `supabase/functions/_shared/aiGatewayLogger.ts` — 0 importadores; duplica `logAiGatewayCallSafe` de `fetch-utils.ts:169`, que é o realmente usado. |
 
 ### D. Provedores de IA e secrets — mapa consolidado
 
@@ -232,7 +241,7 @@ Verificado por `grep -oP "Deno\.env\.get\(['\"]\K[A-Z_0-9]+"` em cada `index.ts`
 
 | Provider | Endpoint | Secret | Funções do escopo |
 |---|---|---|---|
-| **Lovable AI Gateway** | `https://ai.gateway.lovable.dev/v1/chat/completions` (33 ocorrências no diretório `supabase/functions/`) | `LOVABLE_API_KEY` | 29 funções: `ai-assistant`, `ai-email-refine`, `ai-suggest-mapping`, `ai-writing-assistant`, `ask-crm`, `conversation-analyzer`, `conversation-coaching-digest`, `conversational-search`, `disc-analyzer`, `generate-behavioral-profile`, `generate-insights`, `next-best-action`, `suggest-next-action`, `objection-handler`, `objection-context-summary`, `meeting-summary`, `email-thread-summary`, `semantic-search`, `visual-search`, `social-behavior-analyzer`, `voice-agent`, `voice-ai-health`, `voice-to-text`, `playbook-generator`, `win-loss-analyzer`, `demand-forecast`, `forecast-analyzer`, `forecast-narrative` |
+| **OpenRouter** (desde 2026-11-24; antes o gateway do Lovable) | `https://openrouter.ai/api/v1/chat/completions`, reescrito por `routeToOpenRouter` (`_shared/fetch-utils.ts:118`); o endereço antigo (`ai.gateway.lovable.dev`) continua no código como gatilho do rewrite | `DEEPSEEK_API_KEY` (34 EFs) e `LOVABLE_API_KEY` (24 EFs) — nomes legados, ausentes no projeto em 2026-11-24 | 29 funções: `ai-assistant`, `ai-email-refine`, `ai-suggest-mapping`, `ai-writing-assistant`, `ask-crm`, `conversation-analyzer`, `conversation-coaching-digest`, `conversational-search`, `disc-analyzer`, `generate-behavioral-profile`, `generate-insights`, `next-best-action`, `suggest-next-action`, `objection-handler`, `objection-context-summary`, `meeting-summary`, `email-thread-summary`, `semantic-search`, `visual-search`, `social-behavior-analyzer`, `voice-agent`, `voice-ai-health`, `voice-to-text`, `playbook-generator`, `win-loss-analyzer`, `demand-forecast`, `forecast-analyzer`, `forecast-narrative` |
 | **ElevenLabs** | `https://api.elevenlabs.io` (6 ocorrências) | `ELEVENLABS_API_KEY` | `elevenlabs-scribe-token` (`index.ts:24,30`), `elevenlabs-tts` (`:30,47`, `eleven_multilingual_v2` linha 56), `voice-ai-health` (`:16,47`) |
 | **Firecrawl** | — | `FIRECRAWL_API_KEY` | `social-events-detector` (único no escopo) |
 | **Sem LLM** (determinístico) | — | só `SUPABASE_*` | `rfm-analyzer`, `generate-offer-suggestions`, `sync-social-interests`, `playbook-recommender`, `mcp-server`, `retry-behavioral-profile`, `process-behavioral-regen-queue`, `auto-regen-behavioral-profiles`, `auto-rebatch-behavioral` |
@@ -256,7 +265,7 @@ Configuração efetiva no projeto Supabase = `NAO_VERIFICADO`.
 ### E. Boas práticas observadas (contraponto)
 
 - **Telemetria universal:** 28 das 29 funções que chamam LLM passam por `fetchAI()`
-  (`_shared/fetch-utils.ts:42`), que extrai `usage.prompt_tokens`/`completion_tokens` (linhas 61-62)
+  (`_shared/fetch-utils.ts:42`), que extrai `usage.prompt_tokens`/`completion_tokens` (linhas 61-63)
   e grava em `ai_gateway_metrics` com particionamento e retenção automatizados
   (`20260723154109_ad0a12c4-...sql:128,134`). A única exceção é `elevenlabs-tts` — coerente, pois
   não é o Gateway.
