@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(whatsapp): grava direction no webhook e alinha status/tipo ao check do banco (#335)",
    "fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)",
    "feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)",
    "docs: corrige o estado real da integracao Evolution no inventario (#334)",
-   "docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)",
-   "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)"
+   "docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)"
   ]
  },
  "pr_template": null,

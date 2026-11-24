@@ -3910,7 +3910,7 @@
    "nome": "whatsapp-import",
    "entrada": "supabase/functions/whatsapp-import/index.ts",
    "arquivos": 1,
-   "linhas": 189,
+   "linhas": 190,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS",

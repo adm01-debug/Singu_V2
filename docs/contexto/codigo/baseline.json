@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "bae345fa76888aadcb06ef34acdf14a5953b38ec",
+  "commit": "1104bf2eefbc4b8a1d81036a3d8422ceb0d2badd",
   "branch": "main",
-  "data_commit": "2026-11-24T17:17:41-03:00",
+  "data_commit": "2026-11-24T17:49:39-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "1104bf2",
+    "data": "2026-11-24",
+    "assunto": "fix(whatsapp): grava direction no webhook e alinha status/tipo ao check do banco (#335)"
+   },
    {
     "sha": "bae345f",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "14096c0",
     "data": "2026-11-23",
     "assunto": "fix(FF62): territory-optimization propaga falha de RPC externa (#316)"
-   },
-   {
-    "sha": "7e545e5",
-    "data": "2026-11-23",
-    "assunto": "fix(EF-5): nurturing-runner incrementa completed_count exatamente N vezes (#314)"
    }
   ],
-  "arquivos_mudados_7d": 1062,
+  "arquivos_mudados_7d": 1064,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -160,6 +160,10 @@
     "mudancas": 16
    },
    {
+    "pasta": "supabase/functions/evolution-webhook",
+    "mudancas": 16
+   },
+   {
     "pasta": "CHANGELOG.md",
     "mudancas": 15
    },
@@ -169,10 +173,6 @@
    },
    {
     "pasta": "src/hooks/__tests__",
-    "mudancas": 15
-   },
-   {
-    "pasta": "supabase/functions/evolution-webhook",
     "mudancas": 15
    },
    {
@@ -262,6 +262,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "supabase/functions/evolution-webhook/messages.ts",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/tests/get_contact_sidebar_by_phone.sql",
     "mudancas": 7
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "supabase/functions/evolution-bitrix-connector/index.ts",
     "mudancas": 6
-   },
-   {
-    "arquivo": "supabase/functions/evolution-webhook/messages.ts",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 169
+    "commits": 170
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3919,
   "arquivos_codigo": 2262,
-  "linhas_codigo": 421978,
+  "linhas_codigo": 421979,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -708,7 +708,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 27406
+   "linhas": 27407
   },
   "tailwind.config.ts": {
    "arquivos": 1,

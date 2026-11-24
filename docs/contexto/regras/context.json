@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "bae345fa76888aadcb06ef34acdf14a5953b38ec",
+  "sha": "1104bf2eefbc4b8a1d81036a3d8422ceb0d2badd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 20:20 UTC",
+  "generated_at": "2026-11-24 20:50 UTC",
   "files_total": 4024,
   "code_files": 3548,
-  "code_lines": 478865
+  "code_lines": 478866
  },
  "version": "1.3.2",
- "facts_hash": "e8730bf3d27c6556",
+ "facts_hash": "20bb8a7fe70dff88",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112658,7 +112658,7 @@
   {
    "module": "supabase/functions",
    "files": 175,
-   "lines": 27406,
+   "lines": 27407,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -301745,7 +301745,7 @@
   },
   "supabase/functions/whatsapp-import/index.ts": {
    "path": "supabase/functions/whatsapp-import/index.ts",
-   "lines": 189,
+   "lines": 190,
    "tables": [
     {
      "table": "contacts",
@@ -307871,10 +307871,22 @@
   }
  },
  "git": {
-  "sha": "bae345fa76888aadcb06ef34acdf14a5953b38ec",
+  "sha": "1104bf2eefbc4b8a1d81036a3d8422ceb0d2badd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "1104bf2",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix(whatsapp): grava direction no webhook e alinha status/tipo ao check do banco (#335)",
+    "files": [
+     "docs/estado/01_CORE_CRM.md",
+     "docs/estado/06_INTEGRACOES.md",
+     "supabase/functions/evolution-webhook/messages.ts",
+     "supabase/functions/whatsapp-import/index.ts"
+    ]
+   },
    {
     "sha": "bae345f",
     "date": "2026-11-24",
@@ -308264,19 +308276,17 @@
      "src/pages/ConversationIntelligence.tsx",
      "supabase/functions/win-loss-record-deal/index.ts"
     ]
-   },
-   {
-    "sha": "e608598",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "chore(deps): bump minimatch 10->11 e postcss-selector-parser 6.0.10->6.1.5 via overrides (#305)",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "docs/estado/06_INTEGRACOES.md",
+    3
+   ],
+   [
+    "supabase/functions/evolution-webhook/messages.ts",
+    3
+   ],
    [
     "docs/qa/functions-authenticated-allowlist.md",
     2
@@ -308295,10 +308305,6 @@
    ],
    [
     "docs/lacunas/D_ui_rotas_componentes.md",
-    2
-   ],
-   [
-    "docs/estado/06_INTEGRACOES.md",
     2
    ],
    [
@@ -308326,16 +308332,12 @@
     2
    ],
    [
-    "package-lock.json",
-    2
+    "docs/estado/01_CORE_CRM.md",
+    1
    ],
    [
-    "package.json",
-    2
-   ],
-   [
-    "supabase/functions/evolution-webhook/messages.ts",
-    2
+    "supabase/functions/whatsapp-import/index.ts",
+    1
    ],
    [
     "supabase/migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql",
