@@ -224817,7 +224817,7 @@
           "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "492f76acb0084347",
+        "definition_sha": "390f526520252326",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,

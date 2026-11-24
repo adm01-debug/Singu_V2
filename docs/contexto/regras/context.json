@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "68e6140a4a69dfe32ba4cee0e8b43345cf2d3fff",
+  "sha": "8b94ca9427721cf66e8fa0d09e58f3f513e1acb5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 14:13 UTC",
+  "generated_at": "2026-11-24 16:15 UTC",
   "files_total": 4016,
   "code_files": 3540,
-  "code_lines": 478282
+  "code_lines": 478290
  },
  "version": "1.3.2",
- "facts_hash": "f5e8577698055b88",
+ "facts_hash": "e3487155281c3376",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112879,7 +112879,7 @@
   {
    "module": "tests",
    "files": 71,
-   "lines": 6457,
+   "lines": 6465,
    "tables": [],
    "exports": [
     "ask-crm.js: options, function",
@@ -306965,7 +306965,7 @@
   },
   "tests/rls/functions_authenticated_allowlist.sql": {
    "path": "tests/rls/functions_authenticated_allowlist.sql",
-   "lines": 104,
+   "lines": 112,
    "is_test": true
   },
   "tests/rls/functions_least_privilege.sql": {
@@ -307258,10 +307258,22 @@
   }
  },
  "git": {
-  "sha": "68e6140a4a69dfe32ba4cee0e8b43345cf2d3fff",
+  "sha": "8b94ca9427721cf66e8fa0d09e58f3f513e1acb5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "8b94ca9",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)",
+    "files": [
+     "docs/qa/functions-authenticated-allowlist.md",
+     "docs/qa/security-definer-audit.md",
+     "tests/rls/functions_authenticated_allowlist.sql",
+     "tests/rls/security_definer_hardening.sql"
+    ]
+   },
    {
     "sha": "68e6140",
     "date": "2026-11-24",
@@ -307635,18 +307647,6 @@
      "supabase/functions/_shared/edge-types-contract_test.ts",
      "supabase/functions/nurturing-runner/index.ts"
     ]
-   },
-   {
-    "sha": "8677d68",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat: inscrição de contato em workflow de nurturing pela UI (#300)",
-    "files": [
-     "src/components/enroll/EnrollContactDialog.contract.test.tsx",
-     "src/components/enroll/EnrollContactDialog.tsx",
-     "src/hooks/useNurturingExecutions.ts",
-     "src/pages/Nurturing.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -307687,6 +307687,22 @@
     2
    ],
    [
+    "docs/qa/functions-authenticated-allowlist.md",
+    1
+   ],
+   [
+    "docs/qa/security-definer-audit.md",
+    1
+   ],
+   [
+    "tests/rls/functions_authenticated_allowlist.sql",
+    1
+   ],
+   [
+    "tests/rls/security_definer_hardening.sql",
+    1
+   ],
+   [
     "docs/estado/02_INTELIGENCIA_IA.md",
     1
    ],
@@ -307712,22 +307728,6 @@
    ],
    [
     "supabase/migrations/20261124120000_create_social_insights.sql",
-    1
-   ],
-   [
-    "supabase/functions/conversation-analyzer/index.ts",
-    1
-   ],
-   [
-    "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
-    1
-   ],
-   [
-    "tests/rls/contact_relations_owner_scope.sql",
-    1
-   ],
-   [
-    "supabase/config.toml",
     1
    ]
   ]

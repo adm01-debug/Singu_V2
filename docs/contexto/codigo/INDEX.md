@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `68e6140a4a69dfe32ba4cee0e8b43345cf2d3fff` (2026-11-24T10:48:41-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `8b94ca9427721cf66e8fa0d09e58f3f513e1acb5` (2026-11-24T13:10:11-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -447,8 +447,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25902 nós · 41407 arestas · 3042 comunidades · grafo do commit `68e6140a`
-- comunidades maiores: ref_hooks (446), sonner (301), ref_lib (300), ref_integrations (270), _shared/auth.ts (265), framer-motion (263), 02_tables.sql (259), react-router-dom (258), ref_components (243), react (242), date-fns (234), 📖 Dicionário de Dados — SINGU CRM (224)
+- 25904 nós · 41409 arestas · 3107 comunidades · grafo do commit `8b94ca94`
+- comunidades maiores: @tanstack/react-query (565), ref_hooks (462), _shared/auth.ts (296), framer-motion (265), 02_tables.sql (259), react (258), ref_components (256), ref_lib (253), ref_types (245), date-fns (239), sonner (234), 📖 Dicionário de Dados — SINGU CRM (224)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -459,8 +459,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - package-lock.json (17)
 - supabase/functions/external-data/index.ts (16)
 - docs/prod-readiness.md (14)
-- docs/qa/security-definer-audit.md (13)
-- tests/rls/security_definer_hardening.sql (12)
+- docs/qa/security-definer-audit.md (14)
+- tests/rls/security_definer_hardening.sql (13)
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
 - inventario/estado/banco.json (9)
@@ -587,6 +587,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-24 `8b94ca9` fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)
 - 2026-11-24 `68e6140` docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)
 - 2026-11-24 `9f4e1ac` feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)
 - 2026-11-24 `2094be6` fix(ci): destrava o deploy de edge functions (#322)
@@ -601,7 +602,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-23 `36d59c2` build(deps): bump the minor-and-patch group with 13 updates (#315)
 - 2026-11-23 `0958775` fix: remove exports default mortos que quebram lint com react-refresh 0.5.8 (#317)
 - 2026-11-23 `b177218` build(deps): bump actions/dependency-review-action from 5.0.0 to 5.0.1 (#308)
-- 2026-11-23 `409a5ae` chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
