@@ -91,6 +91,20 @@ Callable sem sessão via token/slug; RLS por token dentro da função.
 | `seed_forecast_period(uuid, text)` | Onboarding |
 | `seed_lead_score_defaults(uuid)` | Onboarding |
 
+### 🔒 Stubs legados de ciclo de vida do cliente (authenticated) — 5
+
+Existem no banco desde a compat de janeiro (`20260110000001_compat_colunas_producao.sql`) e tiveram
+`EXECUTE` revogado de `anon` em `20261121154000_revoke_anon_exec_stubs_crm.sql`. `authenticated`
+segue autorizado porque o fluxo legado de ERP/CRM as invoca; **nenhuma** tela deste frontend as chama.
+
+| Função | Consumo |
+|---|---|
+| `ativar_cliente(uuid, integer, text)` | Fluxo legado ERP/CRM |
+| `inativar_cliente(uuid, text, integer, text)` | Fluxo legado ERP/CRM |
+| `registrar_compra(uuid, numeric, text, text)` | Fluxo legado ERP/CRM |
+| `sdr_qualificar_cliente(uuid, integer, integer, text, text)` | Fluxo legado ERP/CRM |
+| `transferir_cliente(uuid, integer, text, integer, text)` | Fluxo legado ERP/CRM |
+
 ## Governança
 
 1. Nova função em `public.*` **não** recebe `EXECUTE` a `authenticated` por padrão.
