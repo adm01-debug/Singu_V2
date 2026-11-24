@@ -189192,10 +189192,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "abf59fdac4326e42",
+        "definition_sha": "dfabac4b1e4cddc1",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -189231,10 +189231,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "730c023d515e5d47",
+        "definition_sha": "b13ce480aafe39fc",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -201301,10 +201301,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "3eea1ffc91ecde03",
+        "definition_sha": "9d574469334ffe69",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -205641,10 +205641,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "4498b71a1bbbf11e",
+        "definition_sha": "7eecc87ee0af7ba1",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -211233,10 +211233,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "7a260f34e13122b0",
+        "definition_sha": "8d94d5e5d7bc496c",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -218418,10 +218418,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "1da24dfb4fb99dee",
+        "definition_sha": "790762e6bdb387f3",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -218457,10 +218457,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "467faf3fcaf63cdf",
+        "definition_sha": "62e4fd92add45e59",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -218496,10 +218496,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "048a49877ae37ed9",
+        "definition_sha": "70da8f956734e4d0",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -222614,10 +222614,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "252897c9eb56c5f5",
+        "definition_sha": "86887016eff9b2e8",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -227141,10 +227141,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "ca58546f66d808db",
+        "definition_sha": "ae91220985313f48",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -227180,10 +227180,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "b3817c775793067a",
+        "definition_sha": "a384a8bd6e03684e",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -228068,10 +228068,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public, pg_temp"
+          "search_path=\"\""
         ],
         "definition": null,
-        "definition_sha": "1efbad69ab1ffb88",
+        "definition_sha": "ae25ea20a3d2814d",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,

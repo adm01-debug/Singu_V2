@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 10:13 UTC
+
+- **functions** alterado (12): `public.buyer_add_comment(_token text, _body text, _label text)`, `public.buyer_toggle_milestone(_token text, _milestone_id uuid, _done boolean, _label text)`, `public.get_buyer_document_path(_token text, _document_id uuid)`, `public.get_deal_room_by_token(_token text)`, `public.get_public_csat_survey(_token uuid)`, `public.increment_form_view(_slug text)`, `public.increment_landing_page_view(page_id uuid)`, `public.increment_magnet_view(_slug text)`, `public.record_buyer_view(_token text, _label text)`, `public.submit_public_csat_survey(_token uuid, _score integer, _feedback text)`, `public.submit_public_form(_slug text, _data jsonb, _utms jsonb, _page_url text, _user_agent text)`, `public.track_magnet_download(_slug text, _email text, _name text, _utms jsonb)`
+
 ## 2026-11-24 03:16 UTC
 
 - **colunas** adicionado (12): `public.social_insights.contact_id`, `public.social_insights.content`, `public.social_insights.created_at`, `public.social_insights.id`, `public.social_insights.indicator_score`, `public.social_insights.insight_type`, `public.social_insights.metadata`, `public.social_insights.platform`, `public.social_insights.sentiment`, `public.social_insights.source_url`, `public.social_insights.updated_at`, `public.social_insights.user_id`

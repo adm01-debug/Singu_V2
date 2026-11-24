@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.record_buyer_view(_token text, _label text DEF
  RETURNS boolean
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO ''
 AS $function$
 DECLARE
   _room public.deal_rooms;

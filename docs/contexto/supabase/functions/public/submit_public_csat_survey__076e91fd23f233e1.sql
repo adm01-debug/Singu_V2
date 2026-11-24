@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.submit_public_csat_survey(_token uuid, _score 
  RETURNS boolean
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO ''
 AS $function$
 DECLARE
   _id uuid;

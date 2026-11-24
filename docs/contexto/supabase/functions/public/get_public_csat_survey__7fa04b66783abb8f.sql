@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_public_csat_survey(_token uuid)
  RETURNS jsonb
  LANGUAGE plpgsql
  STABLE SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO ''
 AS $function$
 DECLARE
   _result jsonb;

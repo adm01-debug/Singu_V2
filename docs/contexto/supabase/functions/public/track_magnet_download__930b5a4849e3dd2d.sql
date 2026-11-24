@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.track_magnet_download(_slug text, _email text,
  RETURNS jsonb
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO ''
 AS $function$
 DECLARE
   _magnet public.lead_magnets;

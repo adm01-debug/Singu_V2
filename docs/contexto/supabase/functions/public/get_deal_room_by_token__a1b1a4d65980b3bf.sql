@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_deal_room_by_token(_token text)
  RETURNS jsonb
  LANGUAGE plpgsql
  STABLE SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO ''
 AS $function$
 DECLARE
   _room public.deal_rooms;

@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.submit_public_form(_slug text, _data jsonb, _u
  RETURNS jsonb
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO ''
 AS $function$
 DECLARE
   _form public.forms;

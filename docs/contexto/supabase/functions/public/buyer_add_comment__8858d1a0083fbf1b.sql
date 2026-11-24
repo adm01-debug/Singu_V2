@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.buyer_add_comment(_token text, _body text, _la
  RETURNS uuid
  LANGUAGE plpgsql
  SECURITY DEFINER
- SET search_path TO 'public', 'pg_temp'
+ SET search_path TO ''
 AS $function$
 DECLARE
   _room public.deal_rooms;
