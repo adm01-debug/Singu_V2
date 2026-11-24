@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "27c8b408c641b544f10bc155a48645076a9dd756",
+  "sha": "1314c131bb11935d14ad7aed3a9f0d7265f127e9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 01:59 UTC",
-  "files_total": 4015,
-  "code_files": 3539,
-  "code_lines": 478193
+  "generated_at": "2026-11-24 09:59 UTC",
+  "files_total": 4016,
+  "code_files": 3540,
+  "code_lines": 478247
  },
  "version": "1.3.2",
- "facts_hash": "9d5b67fc58f3b1f4",
+ "facts_hash": "1d22bc40fba93598",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,7 +272,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1282,
+   ".sql": 1283,
    ".tsx": 1183,
    ".ts": 910,
    ".mjs": 123,
@@ -45808,67 +45808,88 @@
       "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
      },
      {
       "name": "contact_id",
       "type": "uuid NOT NULL REFERENCES public.contacts(id) ON DELETE CASCADE",
       "fk": "contacts.id ON DELETE CASCADE",
       "generated": "",
-      "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
      },
      {
       "name": "user_id",
       "type": "uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE",
       "fk": "users.id ON DELETE CASCADE",
       "generated": "",
-      "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
      },
      {
       "name": "platform",
       "type": "text NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
-     },
-     {
-      "name": "content",
-      "type": "text NOT NULL DEFAULT ''",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
      },
      {
       "name": "insight_type",
       "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+     },
+     {
+      "name": "content",
+      "type": "text NOT NULL DEFAULT ''",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+     },
+     {
+      "name": "source_url",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
      },
      {
       "name": "metadata",
       "type": "jsonb",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+     },
+     {
+      "name": "indicator_score",
+      "type": "numeric NOT NULL DEFAULT 0",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+     },
+     {
+      "name": "sentiment",
+      "type": "text NOT NULL DEFAULT 'neutral'",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
      },
      {
       "name": "created_at",
       "type": "timestamptz NOT NULL DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
      },
      {
       "name": "updated_at",
       "type": "timestamptz NOT NULL DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
+      "src": "supabase/migrations/20261124120000_create_social_insights.sql"
      }
     ],
     "constraints": [],
-    "src": "supabase/migrations/20260720000023_create_phantom_tables.sql",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql",
     "comment": "",
     "origin": "migration"
    },
@@ -57652,46 +57673,6 @@
     "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
    },
    {
-    "name": "social_insights_select_own",
-    "table": "social_insights",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.uid() = user_id",
-    "check": "",
-    "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
-   },
-   {
-    "name": "social_insights_insert_own",
-    "table": "social_insights",
-    "cmd": "INSERT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "",
-    "check": "auth.uid() = user_id",
-    "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
-   },
-   {
-    "name": "social_insights_update_own",
-    "table": "social_insights",
-    "cmd": "UPDATE",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.uid() = user_id",
-    "check": "auth.uid() = user_id",
-    "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
-   },
-   {
-    "name": "social_insights_delete_own",
-    "table": "social_insights",
-    "cmd": "DELETE",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.uid() = user_id",
-    "check": "",
-    "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
-   },
-   {
     "name": "owners read entity_relationships",
     "table": "entity_relationships",
     "cmd": "SELECT",
@@ -60290,6 +60271,46 @@
     "using": "auth.uid() = user_id",
     "check": "auth.uid() = user_id",
     "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
+   },
+   {
+    "name": "social_insights_select_own",
+    "table": "social_insights",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "social_insights_insert_own",
+    "table": "social_insights",
+    "cmd": "INSERT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "",
+    "check": "auth.uid() = user_id",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "social_insights_update_own",
+    "table": "social_insights",
+    "cmd": "UPDATE",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "auth.uid() = user_id",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "social_insights_delete_own",
+    "table": "social_insights",
+    "cmd": "DELETE",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
    }
   ],
   "triggers": [
@@ -85738,6 +85759,38 @@
     "unique": false,
     "where": "WHERE outcome IN ('denied','error')",
     "src": "supabase/migrations/20261119000000_external_data_audit_log.sql"
+   },
+   {
+    "name": "social_insights_contact_id_idx",
+    "table": "social_insights",
+    "columns": "contact_id",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "social_insights_user_id_idx",
+    "table": "social_insights",
+    "columns": "user_id",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "social_insights_contact_id_platform_idx",
+    "table": "social_insights",
+    "columns": "contact_id, platform",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "social_insights_created_at_idx",
+    "table": "social_insights",
+    "columns": "created_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
    }
   ],
   "cron_jobs": [
@@ -87480,7 +87533,8 @@
    "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
    "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql",
    "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql",
-   "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
+   "supabase/migrations/20261124120000_create_social_insights.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -112716,8 +112770,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1109,
-   "lines": 104146,
+   "files": 1110,
+   "lines": 104200,
    "tables": [
     "users"
    ],
@@ -121389,18 +121443,6 @@
    {
     "table": "sms_campaign_recipients",
     "column": "replied_at"
-   },
-   {
-    "table": "social_insights",
-    "column": "indicator_score"
-   },
-   {
-    "table": "social_insights",
-    "column": "sentiment"
-   },
-   {
-    "table": "social_insights",
-    "column": "source_url"
    },
    {
     "table": "support_tickets",
@@ -151559,6 +151601,16 @@
     "table": "social_insights",
     "column": "content",
     "rule": "default ''"
+   },
+   {
+    "table": "social_insights",
+    "column": "indicator_score",
+    "rule": "default 0"
+   },
+   {
+    "table": "social_insights",
+    "column": "sentiment",
+    "rule": "default 'neutral'"
    },
    {
     "table": "social_insights",
@@ -194253,46 +194305,6 @@
     "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
    },
    {
-    "name": "social_insights_select_own",
-    "table": "social_insights",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.uid() = user_id",
-    "check": "",
-    "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
-   },
-   {
-    "name": "social_insights_insert_own",
-    "table": "social_insights",
-    "cmd": "INSERT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "",
-    "check": "auth.uid() = user_id",
-    "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
-   },
-   {
-    "name": "social_insights_update_own",
-    "table": "social_insights",
-    "cmd": "UPDATE",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.uid() = user_id",
-    "check": "auth.uid() = user_id",
-    "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
-   },
-   {
-    "name": "social_insights_delete_own",
-    "table": "social_insights",
-    "cmd": "DELETE",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.uid() = user_id",
-    "check": "",
-    "src": "supabase/migrations/20260720000023_create_phantom_tables.sql"
-   },
-   {
     "name": "owners read entity_relationships",
     "table": "entity_relationships",
     "cmd": "SELECT",
@@ -196891,6 +196903,46 @@
     "using": "auth.uid() = user_id",
     "check": "auth.uid() = user_id",
     "src": "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql"
+   },
+   {
+    "name": "social_insights_select_own",
+    "table": "social_insights",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "social_insights_insert_own",
+    "table": "social_insights",
+    "cmd": "INSERT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "",
+    "check": "auth.uid() = user_id",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "social_insights_update_own",
+    "table": "social_insights",
+    "cmd": "UPDATE",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "auth.uid() = user_id",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "social_insights_delete_own",
+    "table": "social_insights",
+    "cmd": "DELETE",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() = user_id",
+    "check": "",
+    "src": "supabase/migrations/20261124120000_create_social_insights.sql"
    }
   ],
   "db_triggers": [
@@ -238311,21 +238363,6 @@
    {
     "kind": "coluna",
     "msg": "coluna `replied_at` usada no código não existe no schema de `sms_campaign_recipients`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `indicator_score` usada no código não existe no schema de `social_insights`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `sentiment` usada no código não existe no schema de `social_insights`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `source_url` usada no código não existe no schema de `social_insights`",
     "where": []
    },
    {
@@ -306541,6 +306578,10 @@
    ],
    "uses_service_role": true
   },
+  "supabase/migrations/20261124120000_create_social_insights.sql": {
+   "path": "supabase/migrations/20261124120000_create_social_insights.sql",
+   "lines": 54
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -307214,10 +307255,19 @@
   }
  },
  "git": {
-  "sha": "27c8b408c641b544f10bc155a48645076a9dd756",
+  "sha": "1314c131bb11935d14ad7aed3a9f0d7265f127e9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "1314c13",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)",
+    "files": [
+     "supabase/migrations/20261124120000_create_social_insights.sql"
+    ]
+   },
    {
     "sha": "27c8b40",
     "date": "2026-11-23",
@@ -307600,15 +307650,6 @@
     "files": [
      "src/pages/MarketingHub.tsx"
     ]
-   },
-   {
-    "sha": "d83acfb",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(security): evolution-api exige role admin antes de expor acoes destrutivas do whatsapp (#297)",
-    "files": [
-     "supabase/functions/evolution-api/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -307649,6 +307690,10 @@
     2
    ],
    [
+    "supabase/migrations/20261124120000_create_social_insights.sql",
+    1
+   ],
+   [
     "supabase/functions/conversation-analyzer/index.ts",
     1
    ],
@@ -307686,10 +307731,6 @@
    ],
    [
     ".github/workflows/dependency-review.yml",
-    1
-   ],
-   [
-    "docs/lacunas/D_ui_rotas_componentes.md",
     1
    ]
   ]

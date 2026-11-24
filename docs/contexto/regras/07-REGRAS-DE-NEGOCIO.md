@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `27c8b408c6` · branch `main` · 2026-11-24 01:59 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1314c131bb` · branch `main` · 2026-11-24 09:59 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -617,7 +617,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `communication_preferences` | `preferred_channel` | default 'whatsapp' |
 | `communication_preferences` | `preferred_days` | default '{}' |
 | `communication_preferences` | `contact_frequency` | default 'weekly' |
-| … +4181 linhas — lista completa em `context.json` | | |
+| … +4183 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 

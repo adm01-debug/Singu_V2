@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1109,
+ "migrations": 1110,
  "seeds": [],
  "avisos": [
   "211 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -62805,6 +62805,13 @@
      "default": "gen_random_uuid()",
      "ref": null
     },
+    "indicator_score": {
+     "tipo": "numeric",
+     "nn": true,
+     "pk": false,
+     "default": "0",
+     "ref": null
+    },
     "insight_type": {
      "tipo": "text",
      "nn": false,
@@ -62822,6 +62829,20 @@
     "platform": {
      "tipo": "text",
      "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "sentiment": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'neutral'",
+     "ref": null
+    },
+    "source_url": {
+     "tipo": "text",
+     "nn": false,
      "pk": false,
      "default": null,
      "ref": null
@@ -62877,6 +62898,11 @@
     {
      "nome": "social_insights_contact_id_platform_idx",
      "colunas": "contact_id, platform",
+     "unico": false
+    },
+    {
+     "nome": "social_insights_created_at_idx",
+     "colunas": "created_at DESC",
      "unico": false
     },
     {

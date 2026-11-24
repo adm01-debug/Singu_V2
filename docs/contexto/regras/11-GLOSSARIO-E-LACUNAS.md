@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `27c8b408c6` · branch `main` · 2026-11-24 01:59 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1314c131bb` · branch `main` · 2026-11-24 09:59 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -522,9 +522,6 @@ _nenhum item encontrado_
 | coluna | coluna `cost_cents` usada no código não existe no schema de `sms_campaign_recipients` |  |
 | coluna | coluna `error_message` usada no código não existe no schema de `sms_campaign_recipients` |  |
 | coluna | coluna `replied_at` usada no código não existe no schema de `sms_campaign_recipients` |  |
-| coluna | coluna `indicator_score` usada no código não existe no schema de `social_insights` |  |
-| coluna | coluna `sentiment` usada no código não existe no schema de `social_insights` |  |
-| coluna | coluna `source_url` usada no código não existe no schema de `social_insights` |  |
 | coluna | coluna `sla_deadline` usada no código não existe no schema de `support_tickets` |  |
 | coluna | coluna `manager_id` usada no código não existe no schema de `sales_team_members` |  |
 | coluna | coluna `name` usada no código não existe no schema de `sales_team_members` |  |
@@ -619,7 +616,10 @@ _nenhum item encontrado_
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/components/data-export/AdvancedDataExporter.tsx` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useBIAdvanced.ts` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useRealtimeNotifications.ts` |
-| … +57 linhas — lista completa em `context.json` | | |
+| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/bulk-revalidate/index.ts` |
+| dinâmico | 4 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/dual-write-proxy/index.ts` |
+| dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/external-data/database.ts` |
+| … +54 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

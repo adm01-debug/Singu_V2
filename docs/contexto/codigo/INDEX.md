@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `27c8b408c641b544f10bc155a48645076a9dd756` (2026-11-23T22:57:14-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `1314c131bb11935d14ad7aed3a9f0d7265f127e9` (2026-11-24T06:58:27-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2093), SQL (1282), Markdown (158), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (20)
+- linguagens: TypeScript (2093), SQL (1283), Markdown (158), Shell (147), JavaScript (143), JSON (22), Python (21), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3910 |
+| arquivos_total | 3911 |
 | arquivos_codigo | 2256 |
 | linhas_codigo | 421390 |
 | rotas | 116 |
@@ -46,7 +46,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 412 |
 | edge_functions | 109 |
 | tabelas | 542 |
-| migrations | 1109 |
+| migrations | 1110 |
 | cron_jobs | 44 |
 | testes | 278 |
 | workflows | 14 |
@@ -447,8 +447,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25893 nós · 41386 arestas · 3089 comunidades · grafo do commit `27c8b408`
-- comunidades maiores: ref_lib (306), ref_components (304), sonner (303), framer-motion (279), 02_tables.sql (259), ref_hooks (257), react (255), date-fns (252), react-router-dom (248), _shared/auth.ts (239), 📖 Dicionário de Dados — SINGU CRM (224), Tabela de evidências (213)
+- 25901 nós · 41397 arestas · 3059 comunidades · grafo do commit `1314c131`
+- comunidades maiores: react (301), ref_types (278), useAuth (272), ref_lib (263), 02_tables.sql (259), react-router-dom (248), framer-motion (247), ref_hooks (241), lucide-react (239), ref_components (234), _shared/auth.ts (229), 📖 Dicionário de Dados — SINGU CRM (224)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -587,6 +587,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-24 `1314c13` fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)
 - 2026-11-23 `27c8b40` feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)
 - 2026-11-23 `4f090e3` fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)
 - 2026-11-23 `16516ac` fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)
@@ -601,7 +602,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-23 `fa7b7fb` fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)
 - 2026-11-23 `d19dec8` fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)
 - 2026-11-23 `14096c0` fix(FF62): territory-optimization propaga falha de RPC externa (#316)
-- 2026-11-23 `7e545e5` fix(EF-5): nurturing-runner incrementa completed_count exatamente N vezes (#314)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

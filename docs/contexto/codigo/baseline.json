@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "27c8b408c641b544f10bc155a48645076a9dd756",
+  "commit": "1314c131bb11935d14ad7aed3a9f0d7265f127e9",
   "branch": "main",
-  "data_commit": "2026-11-23T22:57:14-03:00",
+  "data_commit": "2026-11-24T06:58:27-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "1314c13",
+    "data": "2026-11-24",
+    "assunto": "fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)"
+   },
    {
     "sha": "27c8b40",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "5b8ee5b",
     "data": "2026-11-21",
     "assunto": "fix(db): baseline idempotente para stubs com defaults (42P13) (#301)"
-   },
-   {
-    "sha": "08dc797",
-    "data": "2026-11-21",
-    "assunto": "feat(nurturing): envia email real via send-transactional-email (#302)"
    }
   ],
-  "arquivos_mudados_7d": 1041,
+  "arquivos_mudados_7d": 1042,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 159
+    "commits": 160
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3910,
+  "arquivos_total": 3911,
   "arquivos_codigo": 2256,
   "linhas_codigo": 421390,
   "rotas": 116,
@@ -338,7 +338,7 @@
   "hooks": 412,
   "edge_functions": 109,
   "tabelas": 542,
-  "migrations": 1109,
+  "migrations": 1110,
   "cron_jobs": 44,
   "testes": 278,
   "workflows": 14,
