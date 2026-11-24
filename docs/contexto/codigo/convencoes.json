@@ -16,13 +16,13 @@
    "src/stores (5)"
   ],
   "servicos_logica": [
-   "src/lib (75)",
+   "src/lib (76)",
    "src/data (46)",
    "src/domain (8)"
   ],
   "testes": [
    "co-localizado (*.test) (127)",
-   "co-localizado (__tests__) (101)",
+   "co-localizado (__tests__) (102)",
    "tests/ (23)"
   ],
   "edge_functions": "supabase/functions",
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)",
    "docs: corrige o estado real da integracao Evolution no inventario (#334)",
    "docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)",
    "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)",
-   "fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)",
-   "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)"
+   "fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)"
   ]
  },
  "pr_template": null,

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5eedf571c5` · branch `main` · 2026-11-24 18:15 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0d1bfce64e` · branch `main` · 2026-11-24 20:18 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -311,7 +311,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `company_social_media` | company_social_media_update | UPDATE | public | permissive | `true` |  |
 | `company_social_media` | company_social_media_delete | DELETE | public | permissive | `true` |  |
 | `contact_phones` | contact_phones_select | SELECT | public | permissive | `true` |  |
-| … +953 linhas — lista completa em `context.json` | | | | | | |
+| … +954 linhas — lista completa em `context.json` | | | | | | |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -1803,6 +1803,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | WeightsHealth | zero \| low \| ok | `src/lib/prontidaoWeightsHealth.ts` |
 | RodizioTable | vw_rodizio_carga_closers \| vw_rodizio_carga_sdrs \| vw_rodizio_execucoes \| vw_rodizio_bloqueios \| vw_rodizio_kpis \| rodizio_distribuicao_staging | `src/lib/rodizioRpc.ts` |
 | RodizioRpc | rodizio_sugerir_distribuicao \| rodizio_aplicar_onda \| rodizio_bloquear_cliente \| rodizio_aprovar_bloqueio \| rodizio_reverter_execucao \| rodizio_closer_executar \| rodizio_sdr_executar | `src/lib/rodizioRpc.ts` |
+| APP_ROLES | 'admin', 'manager', 'salesperson', 'moderator', 'user' | `src/lib/roleAssignment.ts` |
 | CHURN_WINDOW_VALUES | '6', '24', '168' | `src/lib/rpcChurn.ts` |
 | PlanNodeStatus | unchanged \| changed \| added \| removed | `src/lib/rpcPlanDiff.ts` |
 | ScriptChannel | whatsapp \| email \| call | `src/lib/scriptGenerator.ts` |
@@ -3224,6 +3225,10 @@ _nenhum item encontrado_
   ```
   hour: number; minute: number; bestTimeApplied: boolean
   ```
+- **canRemoveRole(actingUserId: string | undefined, targetUserId: string, role: AppRole,)** — `src/lib/roleAssignment.ts`
+  ```
+  return !(actingUserId === targetUserId && role === 'admin');
+  ```
 - **canAccessRoute(url: string, hasPermission: (permission: string)** — `src/lib/routePermissions.ts`
   ```
   boolean,
@@ -3291,6 +3296,10 @@ _nenhum item encontrado_
 - **formatCurrency(value: number)** — `src/pages/Pipeline.tsx`
   ```
   
+  ```
+- **invalidarPapeis()** — `src/pages/RolesPage.tsx`
+  ```
+  void queryClient.invalidateQueries({ queryKey: ['all-user-roles'] }); void queryClient.invalidateQueries({ queryKey: ['user-roles'] }); void queryClient.invalidateQueries({ queryKey: ['user-permissions'] });
   ```
 - **RankingTable({ items, sort }: { items: LabelAgg[]; sort: 'down' | 'up' })** — `src/pages/admin/InsightFeedbackAnalytics.tsx`
   ```
@@ -4720,8 +4729,10 @@ _nenhum item encontrado_
 | `decision_maker` | `src/hooks/useYourDay.ts` |
 | `owner` | `src/hooks/useYourDay.ts` |
 | `granted` | `src/lib/pushNotifications.ts` |
+| `admin` | `src/lib/roleAssignment.ts` |
 | `user` | `src/pages/Assistente.tsx` |
 | `denied` | `src/pages/Notificacoes.tsx` |
+| `papel` | `src/pages/RolesPage.tsx` |
 | `champion` | `supabase/functions/abm-account-scorer/index.ts` |
 | `decision_maker` | `supabase/functions/abm-account-scorer/index.ts` |
 | `decision_maker` | `supabase/functions/generate-offer-suggestions/index.ts` |
@@ -4732,7 +4743,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
-## K. Testes como especificação (3254 testes em 255 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3273 testes em 256 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4776,6 +4787,7 @@ _nenhum item encontrado_
 | `src/data/__tests__/carnegieExtended.test.ts` | 20 | Carnegie Yes-Ladder Templates · has at least 3 templates · all templates have unique IDs · all templates have at least 2 steps … |
 | `scripts/hardening/hardening.test.mjs` | 19 | hardening: checks de catálogo · banco limpo: todos passam, com cabeçalho e linha final padronizados · objetos legítimos que a versão antiga acusava não geram achado · somente leitura: todos rodam com default_transaction_read_only=on … |
 | `scripts/inventario/gerar-banco.test.mjs` | 19 | extrairInventario: aceita psql, objeto, linhas da API, resposta e envelope do MCP · extrairInventario: entradas degeneradas dão erro claro (nunca TypeError) · contarUsoNoCodigo: conta src e edges, ignora testes, storage.from e rpc; nomes hostis não poluem · versoesDoRepo, edgesNoRepo e edgesExternasCatalogadas leem só o que vale … |
+| `src/lib/__tests__/roleAssignment.test.ts` | 19 | isAppRole · aceita os cinco papeis do enum app_role · rejeita papel fora do enum · hasPermissionsMapped … |
 | `scripts/inventario/mudou-conteudo.test.mjs` | 18 | PADRAO cobre os cinco arquivos do inventário · carimbos de data e telemetria rolante não contam como mudança · texto dos alertas: porcentagem e horas rolam sem contar; entrar/sair da lista conta · mudança de verdade conta … |
 | `src/components/interactions/__tests__/SortChips.test.tsx` | 18 | SortChips · renderiza os 4 chips · chip ativo recebe aria-pressed=true · click em chip inativo chama onChange … |
 | `src/hooks/__tests__/canonical-communication-contracts.test.tsx` | 18 | Contratos canônicos da comunicação WhatsApp · consulta mensagens e transcrições reais e normaliza os aliases virtuais · rejeita metadados de duração incompatíveis · não converte erro da consulta de transcrições em lista vazia … |
@@ -5310,6 +5322,9 @@ _nenhum item encontrado_
 | Em prod, persistimos apenas se for aviso importante ou erro | `src/lib/logger.ts` |
 | dá InvalidStateError. Cancela e refaz com a chave atual; a permissão já concedida é mantida (sem novo prompt). | `src/lib/pushNotifications.ts` |
 | * Migra em silêncio quem já tem permissão e uma assinatura criada com outra chave VAPID. Barato: só olha a assinatura local. | `src/lib/pushNotifications.ts` |
+| * Papéis sem nenhuma linha em `role_permissions`: não concedem nenhuma permissão. */ | `src/lib/roleAssignment.ts` |
+| * `admin`, `manager` e `salesperson` têm permissão mapeada; `moderator` e `user` não. */ | `src/lib/roleAssignment.ts` |
+| * Um admin não pode remover o próprio `admin`: sem ele a tela de papéis fica | `src/lib/roleAssignment.ts` |
 | * Mapa rota -> permissao da matriz RBAC (`permissions` x `role_permissions`). | `src/lib/routePermissions.ts` |
 | porque `existing` deve ser todos os presets já salvos. | `src/lib/searchPresetTransport.ts` |
 | @param length Comprimento mínimo 32 caracteres | `src/lib/secretRotation.ts` |
@@ -5466,7 +5481,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
 | FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_produtos_demanda LIMIT 5) tp), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_objecoes_recorrentes LIMIT 5) o), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_top_contatos_potencial LIMIT 5) tc), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| … +55 linhas — lista completa em `context.json` | |
+| … +58 linhas — lista completa em `context.json` | |

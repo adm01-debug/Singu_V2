@@ -1092,6 +1092,7 @@
    ],
    "flags": [],
    "papeis": [
+    "admin",
     "alert",
     "assistant",
     "banner",
@@ -12248,9 +12249,9 @@
   },
   {
    "modulo": "lib",
-   "arquivos": 71,
+   "arquivos": 72,
    "testes": 18,
-   "linhas": 6880,
+   "linhas": 6950,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -12311,6 +12312,7 @@
    ],
    "flags": [],
    "papeis": [
+    "admin",
     "presentation",
     "status"
    ],
@@ -12452,7 +12454,7 @@
   {
    "modulo": "lib/__tests__",
    "arquivos": 0,
-   "testes": 11,
+   "testes": 12,
    "linhas": 0,
    "itens_menu": [],
    "telas": [],
@@ -12551,7 +12553,7 @@
    "modulo": "pages",
    "arquivos": 106,
    "testes": 6,
-   "linhas": 21588,
+   "linhas": 21808,
    "itens_menu": [
     "ABM",
     "Análise PNL",
@@ -13727,6 +13729,7 @@
    ],
    "flags": [],
    "papeis": [
+    "admin",
     "alert",
     "assistant",
     "banner",

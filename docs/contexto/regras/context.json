@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "5eedf571c5a84d5165f532e9f1438a84b654af8e",
+  "sha": "0d1bfce64ef21dde8841b537fb83bdbdfed194a6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 18:15 UTC",
-  "files_total": 4020,
-  "code_files": 3544,
-  "code_lines": 478463
+  "generated_at": "2026-11-24 20:18 UTC",
+  "files_total": 4023,
+  "code_files": 3547,
+  "code_lines": 478852
  },
  "version": "1.3.2",
- "facts_hash": "c850eda9e9691f1a",
+ "facts_hash": "1fd1169f43434bf9",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,9 +272,9 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1283,
+   ".sql": 1284,
    ".tsx": 1185,
-   ".ts": 912,
+   ".ts": 914,
    ".mjs": 123,
    ".py": 21,
    ".js": 18,
@@ -60311,6 +60311,16 @@
     "using": "auth.uid() = user_id",
     "check": "",
     "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "Admins can view all profiles",
+    "table": "profiles",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql"
    }
   ],
   "triggers": [
@@ -87534,7 +87544,8 @@
    "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql",
    "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql",
    "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
-   "supabase/migrations/20261124120000_create_social_insights.sql"
+   "supabase/migrations/20261124120000_create_social_insights.sql",
+   "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -103286,7 +103297,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 12
+    "deps_count": 15
    },
    {
     "path": "",
@@ -112076,8 +112087,8 @@
   },
   {
    "module": "src/lib",
-   "files": 106,
-   "lines": 9394,
+   "files": 108,
+   "lines": 9554,
    "tables": [
     "activities",
     "crm_relationship_audit_logs",
@@ -112233,6 +112244,7 @@
     "src/lib/resilientFetch.test.ts",
     "src/lib/resilientFetch.ts",
     "src/lib/rodizioRpc.ts",
+    "src/lib/roleAssignment.ts",
     "src/lib/routePermissions.ts",
     "src/lib/rpcChurn.ts",
     "src/lib/rpcPlanDiff.ts",
@@ -112241,14 +112253,13 @@
     "src/lib/searchPresetTransport.ts",
     "src/lib/secretRotation.ts",
     "src/lib/sortInteractions.ts",
-    "src/lib/sorting-utils.ts",
-    "src/lib/suggestPresetName.ts"
+    "src/lib/sorting-utils.ts"
    ]
   },
   {
    "module": "src/pages",
    "files": 156,
-   "lines": 29476,
+   "lines": 29696,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -112884,8 +112895,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1110,
-   "lines": 104200,
+   "files": 1111,
+   "lines": 104209,
    "tables": [
     "users"
    ],
@@ -115253,6 +115264,7 @@
      "src/hooks/useTemplateNotifications.ts",
      "src/pages/Configuracoes.tsx",
      "src/pages/Notificacoes.tsx",
+     "src/pages/RolesPage.tsx",
      "supabase/functions/health-aggregate/index.ts",
      "supabase/functions/health/index.ts",
      "supabase/functions/smart-notify/index.ts",
@@ -115392,7 +115404,8 @@
    "role_permissions": {
     "select": [
      "src/hooks/useRBAC.tsx",
-     "src/pages/RolePermissionsPage.tsx"
+     "src/pages/RolePermissionsPage.tsx",
+     "src/pages/RolesPage.tsx"
     ]
    },
    "runtime_table": {
@@ -115884,6 +115897,12 @@
      "src/hooks/useRBAC.tsx",
      "src/pages/RolesPage.tsx",
      "supabase/functions/ask-crm/index.ts"
+    ],
+    "insert": [
+     "src/pages/RolesPage.tsx"
+    ],
+    "delete": [
+     "src/pages/RolesPage.tsx"
     ]
    },
    "user_ui_preferences": {
@@ -117923,7 +117942,9 @@
     "avatar_url",
     "email",
     "first_name",
+    "full_name",
     "id",
+    "is_active",
     "last_name",
     "nlp_profile",
     "phone",
@@ -121012,6 +121033,10 @@
   ],
   "columns_unknown": [
    {
+    "table": "profiles",
+    "column": "is_active"
+   },
+   {
     "table": "companies",
     "column": "deleted_at"
    },
@@ -123596,6 +123621,11 @@
     "file": "src/lib/rodizioRpc.ts",
     "name": "RodizioRpc",
     "values": "rodizio_sugerir_distribuicao | rodizio_aplicar_onda | rodizio_bloquear_cliente | rodizio_aprovar_bloqueio | rodizio_reverter_execucao | rodizio_closer_executar | rodizio_sdr_executar"
+   },
+   {
+    "file": "src/lib/roleAssignment.ts",
+    "name": "APP_ROLES",
+    "values": "'admin', 'manager', 'salesperson', 'moderator', 'user'"
    },
    {
     "file": "src/lib/rpcChurn.ts",
@@ -128532,12 +128562,20 @@
     "value": "granted"
    },
    {
+    "file": "src/lib/roleAssignment.ts",
+    "value": "admin"
+   },
+   {
     "file": "src/pages/Assistente.tsx",
     "value": "user"
    },
    {
     "file": "src/pages/Notificacoes.tsx",
     "value": "denied"
+   },
+   {
+    "file": "src/pages/RolesPage.tsx",
+    "value": "papel"
    },
    {
     "file": "supabase/functions/abm-account-scorer/index.ts",
@@ -129140,6 +129178,18 @@
    {
     "file": "src/lib/pushNotifications.ts",
     "text": "* Migra em silêncio quem já tem permissão e uma assinatura criada com outra chave VAPID. Barato: só olha a assinatura local."
+   },
+   {
+    "file": "src/lib/roleAssignment.ts",
+    "text": "* Papéis sem nenhuma linha em `role_permissions`: não concedem nenhuma permissão. */"
+   },
+   {
+    "file": "src/lib/roleAssignment.ts",
+    "text": "* `admin`, `manager` e `salesperson` têm permissão mapeada; `moderator` e `user` não. */"
+   },
+   {
+    "file": "src/lib/roleAssignment.ts",
+    "text": "* Um admin não pode remover o próprio `admin`: sem ele a tela de papéis fica"
    },
    {
     "file": "src/lib/routePermissions.ts",
@@ -160338,6 +160388,12 @@
     "kind": "compara"
    },
    {
+    "file": "src/lib/roleAssignment.ts",
+    "field": "role",
+    "value": "admin",
+    "kind": "compara"
+   },
+   {
     "file": "src/lib/rpcPlanDiff.ts",
     "field": "status",
     "value": "removed",
@@ -167744,6 +167800,12 @@
     "body": "hour: number; minute: number; bestTimeApplied: boolean"
    },
    {
+    "file": "src/lib/roleAssignment.ts",
+    "name": "canRemoveRole",
+    "params": "actingUserId: string | undefined, targetUserId: string, role: AppRole,",
+    "body": "return !(actingUserId === targetUserId && role === 'admin');"
+   },
+   {
     "file": "src/lib/routePermissions.ts",
     "name": "canAccessRoute",
     "params": "url: string, hasPermission: (permission: string",
@@ -167844,6 +167906,12 @@
     "name": "formatCurrency",
     "params": "value: number",
     "body": ""
+   },
+   {
+    "file": "src/pages/RolesPage.tsx",
+    "name": "invalidarPapeis",
+    "params": "",
+    "body": "void queryClient.invalidateQueries({ queryKey: ['all-user-roles'] }); void queryClient.invalidateQueries({ queryKey: ['user-roles'] }); void queryClient.invalidateQueries({ queryKey: ['user-permissions'] });"
    },
    {
     "file": "src/pages/admin/InsightFeedbackAnalytics.tsx",
@@ -181488,6 +181556,82 @@
    {
     "file": "src/lib/__tests__/providerGuard.test.ts",
     "name": "deve validar a ordem completa canônica do sistema"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "isAppRole"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "aceita os cinco papeis do enum app_role"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "rejeita papel fora do enum"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "hasPermissionsMapped"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "moderator e user nao tem permissao mapeada"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "admin, manager e salesperson tem permissao mapeada"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "rolesOfUser"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "devolve so os papeis do usuario, na ordem do enum"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "ignora papel fora do enum"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "devolve lista vazia para usuario sem papel"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "usersWithoutRole"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "lista apenas perfis sem nenhuma atribuicao"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "canRemoveRole"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "bloqueia o admin de remover o proprio admin"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "libera remover outro papel de si mesmo"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "libera remover admin de outro usuario"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "describeRoleError"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "traduz duplicidade, perfil sem conta e falta de permissao"
+   },
+   {
+    "file": "src/lib/__tests__/roleAssignment.test.ts",
+    "name": "usa a mensagem do erro quando o codigo e desconhecido"
    },
    {
     "file": "src/lib/__tests__/routePermissions.test.ts",
@@ -197124,6 +197268,16 @@
     "using": "auth.uid() = user_id",
     "check": "",
     "src": "supabase/migrations/20261124120000_create_social_insights.sql"
+   },
+   {
+    "name": "Admins can view all profiles",
+    "table": "profiles",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql"
    }
   ],
   "db_triggers": [
@@ -214716,6 +214870,10 @@
       "compara:src/hooks/useYourDay.ts",
       "compara:supabase/functions/generate-offer-suggestions/index.ts"
      ],
+     "admin": [
+      "compara:src/lib/roleAssignment.ts",
+      "filtra:supabase/functions/ask-crm/index.ts"
+     ],
      "service_role": [
       "escreve:supabase/functions/_shared/auth_test.ts"
      ],
@@ -214752,9 +214910,6 @@
       "escreve:supabase/functions/voice-ai-health/index.ts",
       "escreve:supabase/functions/voice-to-text/index.ts",
       "escreve:supabase/functions/win-loss-analyzer/index.ts"
-     ],
-     "admin": [
-      "filtra:supabase/functions/ask-crm/index.ts"
      ],
      "authenticated": [
       "escreve:supabase/functions/connection-tester/index_test.ts"
@@ -214924,6 +215079,7 @@
    "moderator",
    "other",
    "owner",
+   "papel",
    "parent",
    "partner",
    "role",
@@ -219181,7 +219337,8 @@
    "profiles": {
     "rls": "enabled",
     "SELECT": [
-     "public: ((select auth.uid()) = id)"
+     "public: ((select auth.uid()) = id)",
+     "authenticated: public.has_role(auth.uid(), 'admin'::app_role)"
     ],
     "INSERT": [
      "public: ((select auth.uid()) = id)"
@@ -237863,6 +238020,11 @@
     "where": [
      "escreve:src/components/conversation-intel/KeyMomentsTimeline.tsx"
     ]
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `is_active` usada no código não existe no schema de `profiles`",
+    "where": []
    },
    {
     "kind": "coluna",
@@ -284784,6 +284946,52 @@
     }
    ]
   },
+  "src/lib/roleAssignment.ts": {
+   "path": "src/lib/roleAssignment.ts",
+   "lines": 70,
+   "exports": [
+    "const APP_ROLES",
+    "type AppRole",
+    "const ROLE_LABELS",
+    "const ROLES_WITHOUT_PERMISSIONS",
+    "interface RoleAssignment",
+    "function isAppRole",
+    "function hasPermissionsMapped",
+    "function rolesOfUser",
+    "function usersWithoutRole",
+    "function canRemoveRole",
+    "function describeRoleError"
+   ],
+   "enums": [
+    {
+     "name": "APP_ROLES",
+     "values": "'admin', 'manager', 'salesperson', 'moderator', 'user'"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "role",
+     "value": "admin",
+     "kind": "compara"
+    }
+   ],
+   "role_checks": [
+    "admin"
+   ],
+   "rule_comments": [
+    "* Papéis sem nenhuma linha em `role_permissions`: não concedem nenhuma permissão. */",
+    "* `admin`, `manager` e `salesperson` têm permissão mapeada; `moderator` e `user` não. */",
+    "* Um admin não pode remover o próprio `admin`: sem ele a tela de papéis fica"
+   ],
+   "doc": "Regras da atribuição de papéis em /admin/roles. Fonte da verdade: enum `app_role` e as tabelas `user_roles`, `role_permissions` e `permissions` do Supabase. A escrita em `user_roles` só é liberada por RLS para quem tem o papel `admin`.",
+   "calc_fns": [
+    {
+     "name": "canRemoveRole",
+     "params": "actingUserId: string | undefined, targetUserId: string, role: AppRole,",
+     "body": "return !(actingUserId === targetUserId && role === 'admin');"
+    }
+   ]
+  },
   "src/lib/routePermissions.ts": {
    "path": "src/lib/routePermissions.ts",
    "lines": 32,
@@ -285281,6 +285489,32 @@
     "deve detectar violação quando AuthProvider vem antes de QueryClientProvider",
     "deve ser resiliente a providers desconhecidos (ex: providers de terceiros)",
     "deve validar a ordem completa canônica do sistema"
+   ]
+  },
+  "src/lib/__tests__/roleAssignment.test.ts": {
+   "path": "src/lib/__tests__/roleAssignment.test.ts",
+   "lines": 90,
+   "is_test": true,
+   "tests": [
+    "isAppRole",
+    "aceita os cinco papeis do enum app_role",
+    "rejeita papel fora do enum",
+    "hasPermissionsMapped",
+    "moderator e user nao tem permissao mapeada",
+    "admin, manager e salesperson tem permissao mapeada",
+    "rolesOfUser",
+    "devolve so os papeis do usuario, na ordem do enum",
+    "ignora papel fora do enum",
+    "devolve lista vazia para usuario sem papel",
+    "usersWithoutRole",
+    "lista apenas perfis sem nenhuma atribuicao",
+    "canRemoveRole",
+    "bloqueia o admin de remover o proprio admin",
+    "libera remover outro papel de si mesmo",
+    "libera remover admin de outro usuario",
+    "describeRoleError",
+    "traduz duplicidade, perfil sem conta e falta de permissao",
+    "usa a mensagem do erro quando o codigo e desconhecido"
    ]
   },
   "src/lib/__tests__/routePermissions.test.ts": {
@@ -288050,23 +288284,58 @@
   },
   "src/pages/RolesPage.tsx": {
    "path": "src/pages/RolesPage.tsx",
-   "lines": 68,
+   "lines": 288,
    "exports": [
     "function RolesPage"
    ],
    "tables": [
     {
+     "table": "profiles",
+     "op": "select"
+    },
+    {
      "table": "user_roles",
      "op": "select"
+    },
+    {
+     "table": "role_permissions",
+     "op": "select"
+    },
+    {
+     "table": "user_roles",
+     "op": "insert"
+    },
+    {
+     "table": "user_roles",
+     "op": "delete"
     }
    ],
    "table_cols": {
+    "profiles": [
+     "email",
+     "full_name",
+     "id",
+     "is_active"
+    ],
     "user_roles": [
      "id",
      "role",
      "user_id"
+    ],
+    "role_permissions": [
+     "role"
     ]
    },
+   "role_checks": [
+    "papel"
+   ],
+   "calc_fns": [
+    {
+     "name": "invalidarPapeis",
+     "params": "",
+     "body": "void queryClient.invalidateQueries({ queryKey: ['all-user-roles'] }); void queryClient.invalidateQueries({ queryKey: ['user-roles'] }); void queryClient.invalidateQueries({ queryKey: ['user-permissions'] });"
+    }
+   ],
    "pagination": [
     "500"
    ]
@@ -306838,6 +307107,10 @@
    "path": "supabase/migrations/20261124120000_create_social_insights.sql",
    "lines": 54
   },
+  "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql": {
+   "path": "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql",
+   "lines": 9
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -307511,10 +307784,26 @@
   }
  },
  "git": {
-  "sha": "5eedf571c5a84d5165f532e9f1438a84b654af8e",
+  "sha": "0d1bfce64ef21dde8841b537fb83bdbdfed194a6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "0d1bfce",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)",
+    "files": [
+     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
+     "docs/lacunas/B2_reverificacao_estado_05_10.md",
+     "docs/lacunas/D_ui_rotas_componentes.md",
+     "scripts/docs/citacoes-baseline.json",
+     "src/lib/__tests__/roleAssignment.test.ts",
+     "src/lib/roleAssignment.ts",
+     "src/pages/RolesPage.tsx",
+     "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql"
+    ]
+   },
    {
     "sha": "5eedf57",
     "date": "2026-11-24",
@@ -307896,18 +308185,17 @@
      "docs/estado/13_AUDITORIA_EDGES_ORFAS_POS_300.md",
      "inventario/estado/edges.json"
     ]
-   },
-   {
-    "sha": "d57e85c",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix(rls): revoga EXECUTE anon das 7 stubs CRM/search recriadas pelas baselines (destrava gate allowlist) (#303)",
-    "files": [
-     "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "docs/lacunas/B2_reverificacao_estado_05_10.md",
+    2
+   ],
+   [
+    "docs/lacunas/D_ui_rotas_componentes.md",
+    2
+   ],
    [
     "docs/estado/06_INTEGRACOES.md",
     2
@@ -307949,43 +308237,35 @@
     2
    ],
    [
+    "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
+    1
+   ],
+   [
+    "scripts/docs/citacoes-baseline.json",
+    1
+   ],
+   [
+    "src/lib/__tests__/roleAssignment.test.ts",
+    1
+   ],
+   [
+    "src/lib/roleAssignment.ts",
+    1
+   ],
+   [
+    "src/pages/RolesPage.tsx",
+    1
+   ],
+   [
+    "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql",
+    1
+   ],
+   [
     ".gitignore",
     1
    ],
    [
     "AGENTS.md",
-    1
-   ],
-   [
-    "src/components/auth/RequirePermission.tsx",
-    1
-   ],
-   [
-    "src/components/auth/__tests__/RequirePermission.test.tsx",
-    1
-   ],
-   [
-    "src/components/layout/MobileSidebarDrawer.tsx",
-    1
-   ],
-   [
-    "src/lib/__tests__/routePermissions.test.ts",
-    1
-   ],
-   [
-    "src/lib/routePermissions.ts",
-    1
-   ],
-   [
-    "docs/qa/functions-authenticated-allowlist.md",
-    1
-   ],
-   [
-    "docs/qa/security-definer-audit.md",
-    1
-   ],
-   [
-    "tests/rls/functions_authenticated_allowlist.sql",
     1
    ]
   ]

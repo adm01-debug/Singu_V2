@@ -7483,6 +7483,7 @@
     "useIsAdmin",
     "useLocation",
     "useMemo",
+    "useMutation",
     "useNavigate",
     "useQuery",
     "useQueryClient",
@@ -7497,6 +7498,8 @@
    ],
    "tabelas": [
     "error_logs",
+    "profiles",
+    "role_permissions",
     "user_roles"
    ],
    "rpcs": [
@@ -7508,9 +7511,10 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [
+    "admin",
     "status"
    ],
-   "arquivos_puxados": 13
+   "arquivos_puxados": 16
   },
   {
    "protegida": true,

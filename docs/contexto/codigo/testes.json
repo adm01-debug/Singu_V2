@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 280,
+ "total": 281,
  "por_tipo": {
   "contrato": 41,
   "e2e": 12,
   "pytest": 9,
-  "unit": 216
+  "unit": 217
  },
  "onde_ficam": [
   {
@@ -19,7 +19,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 101
+   "arquivos": 102
   },
   {
    "padrao": "tests/",
@@ -1931,6 +1931,15 @@
    "casos": 5
   },
   {
+   "arquivo": "src/lib/__tests__/roleAssignment.test.ts",
+   "tipo": "unit",
+   "linhas": 90,
+   "testa": [
+    "src/lib/roleAssignment.ts"
+   ],
+   "casos": 13
+  },
+  {
    "arquivo": "src/lib/__tests__/routePermissions.test.ts",
    "tipo": "unit",
    "linhas": 31,
@@ -2743,6 +2752,7 @@
   "src/lib/providerGuard.ts": 2,
   "src/lib/pushNotifications.ts": 2,
   "src/lib/resilientFetch.ts": 1,
+  "src/lib/roleAssignment.ts": 1,
   "src/lib/routePermissions.ts": 1,
   "src/lib/rpcChurn.ts": 1,
   "src/lib/rpcPlanDiff.ts": 1,

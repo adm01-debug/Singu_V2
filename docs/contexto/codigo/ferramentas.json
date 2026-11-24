@@ -3,8 +3,8 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2097)",
-   "SQL (1283)",
+   "TypeScript (2099)",
+   "SQL (1284)",
    "Markdown (158)",
    "Shell (147)",
    "JavaScript (143)",
@@ -1514,6 +1514,10 @@
     "ocorrencias": 3
    },
    {
+    "papel": "admin",
+    "ocorrencias": 2
+   },
+   {
     "papel": "authenticated",
     "ocorrencias": 2
    },
@@ -1566,6 +1570,10 @@
     "ocorrencias": 1
    },
    {
+    "papel": "legado",
+    "ocorrencias": 1
+   },
+   {
     "papel": "link",
     "ocorrencias": 1
    },
@@ -1578,6 +1586,10 @@
     "ocorrencias": 1
    },
    {
+    "papel": "manager",
+    "ocorrencias": 1
+   },
+   {
     "papel": "menu",
     "ocorrencias": 1
    },
@@ -1587,6 +1599,10 @@
    },
    {
     "papel": "progressbar",
+    "ocorrencias": 1
+   },
+   {
+    "papel": "salesperson",
     "ocorrencias": 1
    },
    {

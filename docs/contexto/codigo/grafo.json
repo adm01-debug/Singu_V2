@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1982,
- "arestas": 8675,
+ "nos": 1983,
+ "arestas": 8678,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -14,7 +14,7 @@
   },
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 532
+   "importado_por": 533
   },
   {
    "arquivo": "src/lib/utils.ts",
@@ -50,7 +50,7 @@
   },
   {
    "arquivo": "src/components/ui/select.tsx",
-   "importado_por": 127
+   "importado_por": 128
   },
   {
    "arquivo": "src/lib/errorMessages.ts",

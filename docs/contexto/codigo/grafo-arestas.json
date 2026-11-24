@@ -10952,11 +10952,14 @@
   ],
   "src/pages/RolesPage.tsx": [
    "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/select.tsx",
    "src/components/ui/skeleton.tsx",
    "src/hooks/useAuth.tsx",
    "src/hooks/useIsAdmin.ts",
-   "src/integrations/supabase/client.ts"
+   "src/integrations/supabase/client.ts",
+   "src/lib/roleAssignment.ts"
   ],
   "src/pages/SSOCallbackPage.tsx": [
    "src/components/feedback/PageLoadingFallback.tsx",

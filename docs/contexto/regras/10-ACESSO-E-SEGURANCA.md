@@ -1,11 +1,11 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5eedf571c5` · branch `main` · 2026-11-24 18:15 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0d1bfce64e` · branch `main` · 2026-11-24 20:18 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
 
-`admin`, `assistant`, `buyer`, `champion`, `closer`, `comprador`, `contact`, `decision_maker`, `default`, `denied`, `dono`, `employee_of`, `granted`, `hybrid`, `influencer`, `manager`, `moderator`, `other`, `owner`, `parent`, `partner`, `role`, `salesperson`, `sdr`, `sponsor`, `subsidiary`, `supplier`, `user`
+`admin`, `assistant`, `buyer`, `champion`, `closer`, `comprador`, `contact`, `decision_maker`, `default`, `denied`, `dono`, `employee_of`, `granted`, `hybrid`, `influencer`, `manager`, `moderator`, `other`, `owner`, `papel`, `parent`, `partner`, `role`, `salesperson`, `sdr`, `sponsor`, `subsidiary`, `supplier`, `user`
 
 - Tabelas de perfil/permissão: `sales_team_members`, `campaign_members`, `economic_group_members`, `user_roles`, `permissions`, `role_permissions`
 - Colunas de perfil: `ai_chat_messages.role` (text NOT NULL CHECK (role IN ('user','assistant','system','function','tool'))), `contacts.role` (TEXT CHECK (role IN ('owner', 'manager', 'buyer', 'contact', 'decision_maker', 'influencer')) DEFAULT 'contact'), `entity_relationships.role` (public.entity_relationship_role NOT NULL), `sales_team_members.role` (text NOT NULL CHECK (role IN ('sdr','closer','manager','admin'))), `workspace_accounts.is_admin` (bool NOT NULL DEFAULT false), `economic_group_members.role` (text DEFAULT 'member'::text), `salespeople.role` (public.salesperson_role NOT NULL DEFAULT 'hybrid'), `user_roles.role` (app_role NOT NULL), `role_permissions.role` (app_role NOT NULL), `chat_messages.role` (TEXT NOT NULL CHECK (role IN ('user','assistant')))

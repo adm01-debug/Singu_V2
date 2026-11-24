@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1110,
+ "migrations": 1111,
  "seeds": [],
  "avisos": [
   "211 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -50702,6 +50702,12 @@
    "rls": true,
    "policies": [
     {
+     "nome": "Admins can view all profiles",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
      "nome": "Users can delete their own profile",
      "comando": "delete",
      "para": "authenticated",
@@ -50770,7 +50776,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 13,
+   "usada_no_front": 14,
    "usada_em_edges": [
     "health",
     "health-aggregate",
@@ -55372,7 +55378,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 2,
+   "usada_no_front": 3,
    "usada_em_edges": [],
    "triggers": [],
    "sem_rls": false,
