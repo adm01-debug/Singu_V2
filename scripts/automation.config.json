@@ -3147,8 +3147,23 @@
       "manual": ["python3","scripts/supabase_snapshot/test_snapshot_seguranca.py"],
       "triggers": ["manual"],
       "reason": "Su?te adicionada pelo kit de migra??o; sem chamador literal no invent?rio. Execu??o manual controlada ap?s revisar par?metros e ambiente. O dispatcher n?o executa esta opera??o."
-    }
-  ],
+    },
+    {
+      "id": "legacy-e3cf67e26c047511",
+      "kind": "legacy",
+      "files": ["scripts/diag-extdata.sh"],
+      "manual": ["sh", "scripts/diag-extdata.sh"],
+      "triggers": ["manual"],
+      "reason": "Sonda manual read-only da edge external-data e do external_data_audit_log; recuperada de branch órfã, sem chamador no CI. O dispatcher não executa esta operação."
+    },
+    {
+      "id": "legacy-f14fa5cc8d143ed2",
+      "kind": "legacy",
+      "files": ["scripts/diag-sb-inventory.py"],
+      "manual": ["python3", "scripts/diag-sb-inventory.py"],
+      "triggers": ["manual"],
+      "reason": "Inventário manual read-only via Management API (nomes de secrets e versões de edge functions deployadas); recuperado de branch órfã. O dispatcher não executa esta operação."
+    }  ],
   "ci": [
     {
       "file": ".github/workflows/automation-local.yml",
