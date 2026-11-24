@@ -14,9 +14,9 @@
 
 | Classificação | Qtde | % |
 |---|---|---|
-| ✅ IMPLEMENTADO_TOTAL | 29 / 68 | 42,6% |
+| ✅ IMPLEMENTADO_TOTAL | 30 / 68 | 44,1% |
 | 🟨 IMPLEMENTADO_PARCIAL | 27 / 68 | 39,7% |
-| 🟦 SUGERIDO_OU_INICIADO | 6 / 68 | 8,8% |
+| 🟦 SUGERIDO_OU_INICIADO | 5 / 68 | 7,4% |
 | ⬛ MORTO_OU_ABANDONADO | 6 / 68 | 8,8% |
 | **Total avaliado** | **68 funcionalidades** | **100%** |
 
@@ -63,8 +63,8 @@
 | EF `validate-access` (enforcement de IP + geo) | 🟦 SUGERIDO_OU_INICIADO | — | EF completa, com Zod e log de bloqueio | `access_security_settings`, `ip_whitelist`, `geo_allowed_countries`, `access_blocked_log` | `withAuth` + rate limit | `supabase/functions/validate-access/index.ts:40-88`. **Zero chamadores**: `grep -rn "invoke.*validate-access" src/` → nenhum resultado. A função existe e é boa, mas nunca é executada |
 | Detecção de novos dispositivos | 🟦 SUGERIDO_OU_INICIADO | Switch em `SecuritySettings` | EF `detect-new-device` completa | `user_known_devices`, `device_login_notifications` | `withAuth` + rate limit | `supabase/functions/detect-new-device/index.ts:45-84`. **Zero chamadores** no `src/`. `src/hooks/useDeviceDetection.ts:49` também é órfão (nenhum consumidor). O badge "Detecção de dispositivos" em `src/components/security/SecurityDashboard.tsx:55` reflete apenas um booleano de configuração |
 | SSO — callback `/sso/callback` | 🟦 SUGERIDO_OU_INICIADO | Loading + redirect | Apenas `getSession()` | — | rota pública | `src/pages/SSOCallbackPage.tsx:10-17` (20 linhas totais). **Falta tudo**: não há `signInWithSSO`, `signInWithOAuth`, SAML ou OIDC em nenhum lugar do `src/` — o callback nunca é atingido porque nada inicia SSO. Esqueleto puro |
-| RBAC por permissão (`useRBAC`) | 🟦 SUGERIDO_OU_INICIADO | — | `hasPermission`/`hasRole`/`hasModuleAccess` | `permissions`, `role_permissions` | RLS | `src/hooks/useRBAC.tsx:13-70`. **Zero consumidores**: `grep -rn "useRBAC\|hasPermission\|canAccessModule" src/` fora do próprio arquivo → nenhum resultado. Nenhuma tela é protegida por permissão granular; a única autorização real é `has_role('admin')` |
-| `/admin/roles` — gerenciar roles | 🟨 IMPLEMENTADO_PARCIAL | Lista + contagem | leitura direta | `user_roles` | `RequireAdmin` + `useIsAdmin` interno | `src/pages/RolesPage.tsx:17-19`. Título diz "Gerenciar Roles" (`:38`) mas **não há mutation**: não é possível atribuir nem revogar role pela UI |
+| RBAC por permissão (`useRBAC`) | 🟨 IMPLEMENTADO_PARCIAL | Menu e rotas gateados por permissão; ações não | `hasPermission`/`hasRole`/`hasModuleAccess` | `permissions`, `role_permissions` | RLS | `src/hooks/useRBAC.tsx:13-70`; consumidores `src/components/auth/RequirePermission.tsx:19`, `src/components/layout/AppSidebar.tsx:119`, `src/lib/routePermissions.ts:8`. **Falta**: botões/ações não checam permissão e os papéis sem permissão mapeada (`moderator`, `user`) ficam sem rota |
+| `/admin/roles` — gerenciar papéis | ✅ IMPLEMENTADO_TOTAL | Lista de perfis + atribuir + revogar | `user_roles` insert/delete | `profiles`, `user_roles`, `role_permissions` | `RequireAdmin` + `useIsAdmin`; escrita em `user_roles` só para `admin` ("Admins can insert/delete roles"); leitura de todos os perfis pela policy nova | `src/pages/RolesPage.tsx:51` (perfis), `:67` (papéis), `:104` (insert), `:116` (delete), `:245-280` (controles); guarda contra auto-bloqueio `src/lib/roleAssignment.ts:55-59`; policy `supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql` |
 | `/admin/permissions` | 🟨 IMPLEMENTADO_PARCIAL | Lista agrupada por módulo | leitura direta | `permissions` | `RequireAdmin` + `useIsAdmin` | `src/pages/PermissionsPage.tsx:17`. Somente leitura; sem CRUD |
 | `/admin/role-permissions` | 🟨 IMPLEMENTADO_PARCIAL | Matriz role × permissão | leitura com join | `role_permissions` → `permissions` | `RequireAdmin` + `useIsAdmin` | `src/pages/RolePermissionsPage.tsx:16-19`. Somente leitura; sem editor de matriz |
 | Feature flags — tabela + painel CRUD | 🟨 IMPLEMENTADO_PARCIAL | Criar/ligar/desligar | `useFeatureFlags` | `public.feature_flags` | RLS: leitura autenticada, escrita admin | Tabela `supabase/migrations/20260420163323_5af39c4d-bd55-4bd4-963f-2b48aadf5e64.sql:30-37`; policies `:41-59`. UI `src/pages/admin/FeatureFlagsPage.tsx:23-56`. **Falta**: nenhum seed de flags nas migrations (`grep "INSERT INTO public.feature_flags"` → vazio) e a coluna `roles` (`:34`) nunca é lida por ninguém |
