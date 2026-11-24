@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "chore(scripts): recupera scripts de diagnostico de branch orfa e registra como legacy manual (#340)",
    "fix(docs): mecanismo real da falha do smart-notify (502, nao skip silencioso) (#338)",
    "fix(docs): smart-notify sem cron agendado e guard aceita JWT (#337)",
    "fix(whatsapp): grava direction no webhook e alinha status/tipo ao check do banco (#335)",
-   "fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)",
-   "feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)"
+   "fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)"
   ]
  },
  "pr_template": null,

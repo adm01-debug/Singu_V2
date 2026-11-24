@@ -1,14 +1,14 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 152,
+ "total": 153,
  "por_camada": {
   "config": 1,
   "data": 46,
   "domain": 8,
   "integrations": 3,
   "lib": 76,
-  "python": 12,
+  "python": 13,
   "store": 1,
   "stores": 5
  },
@@ -152,6 +152,32 @@
     "__future__",
     "dataclasses",
     "re"
+   ],
+   "rotas_http": 0,
+   "usado_por": 0,
+   "usado_por_modulos": [],
+   "coberto_por_testes": 0,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/diag-sb-inventory.py",
+   "camada": "python",
+   "exports": [
+    "get"
+   ],
+   "linhas": 47,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [
+    "SB_PAT",
+    "SB_REF"
+   ],
+   "externos": [
+    "json",
+    "os",
+    "sys",
+    "urllib"
    ],
    "rotas_http": 0,
    "usado_por": 0,

@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 296,
+ "total": 298,
  "scripts": [
   {
    "arquivo": "scripts/_pgdocs.py",
@@ -468,6 +468,24 @@
    "arquivo": "scripts/ci/workflow-test-support.mjs",
    "descricao": "Leitores restritos ao formato em blocos dos workflows deste repositorio. Nao sao um parser YAML geral: formatos nao reconhecidos falham nos contratos.",
    "linhas": 134,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/diag-extdata.sh",
+   "descricao": null,
+   "linhas": 19,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/diag-sb-inventory.py",
+   "descricao": "Inventario read-only do projeto Supabase (nomes de secrets + funcoes deployadas).\"\"\"",
+   "linhas": 47,
    "env": [],
    "npm_scripts": [],
    "workflows": [],

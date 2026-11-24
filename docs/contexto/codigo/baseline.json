@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "662919439a0a004a5a8ac47cda7222da5de00745",
+  "commit": "2c7686a68a3911515400862d21ad832ca603e624",
   "branch": "main",
-  "data_commit": "2026-11-24T17:59:47-03:00",
+  "data_commit": "2026-11-24T19:25:54-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "2c7686a",
+    "data": "2026-11-24",
+    "assunto": "chore(scripts): recupera scripts de diagnostico de branch orfa e registra como legacy manual (#340)"
+   },
    {
     "sha": "6629194",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "409a5ae",
     "data": "2026-11-23",
     "assunto": "chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)"
-   },
-   {
-    "sha": "fa7b7fb",
-    "data": "2026-11-23",
-    "assunto": "fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)"
    }
   ],
-  "arquivos_mudados_7d": 1065,
+  "arquivos_mudados_7d": 1068,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 172
+    "commits": 173
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3919,
-  "arquivos_codigo": 2262,
-  "linhas_codigo": 421979,
+  "arquivos_total": 3921,
+  "arquivos_codigo": 2263,
+  "linhas_codigo": 422026,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -342,7 +342,7 @@
   "cron_jobs": 44,
   "testes": 281,
   "workflows": 14,
-  "scripts": 296,
+  "scripts": 298,
   "docs_md": 158
  },
  "por_pasta": {
@@ -525,6 +525,10 @@
   "scripts/ci": {
    "arquivos": 16,
    "linhas": 2782
+  },
+  "scripts/diag-sb-inventory.py": {
+   "arquivos": 1,
+   "linhas": 47
   },
   "scripts/diff-tables.mjs": {
    "arquivos": 1,
