@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "4f090e33dd84de477fc341d9473a3a11344f0b3d",
+  "commit": "27c8b408c641b544f10bc155a48645076a9dd756",
   "branch": "main",
-  "data_commit": "2026-11-23T22:50:30-03:00",
+  "data_commit": "2026-11-23T22:57:14-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "27c8b40",
+    "data": "2026-11-23",
+    "assunto": "feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)"
+   },
    {
     "sha": "4f090e3",
     "data": "2026-11-23",
@@ -126,11 +131,6 @@
     "sha": "08dc797",
     "data": "2026-11-21",
     "assunto": "feat(nurturing): envia email real via send-transactional-email (#302)"
-   },
-   {
-    "sha": "8677d68",
-    "data": "2026-11-21",
-    "assunto": "feat: inscrição de contato em workflow de nurturing pela UI (#300)"
    }
   ],
   "arquivos_mudados_7d": 1041,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 158
+    "commits": 159
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3910,
   "arquivos_codigo": 2256,
-  "linhas_codigo": 421363,
+  "linhas_codigo": 421390,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -672,7 +672,7 @@
   },
   "src/hooks": {
    "arquivos": 444,
-   "linhas": 58704
+   "linhas": 58731
   },
   "src/integrations": {
    "arquivos": 3,
@@ -951,7 +951,6 @@
    "rfm-analyzer",
    "send-transactional-email",
    "suggest-next-action",
-   "validate-access",
    "whatsapp-import"
   ],
   "edges_chamadas_sem_pasta": [],

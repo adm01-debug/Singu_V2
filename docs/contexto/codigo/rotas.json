@@ -986,6 +986,7 @@
     "smart-reminders",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -1934,6 +1935,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -2850,6 +2852,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -3766,6 +3769,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -3858,7 +3862,8 @@
     "has_role"
    ],
    "edges": [
-    "health"
+    "health",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -3913,7 +3918,8 @@
     "has_role"
    ],
    "edges": [
-    "audit-analytics"
+    "audit-analytics",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -3976,7 +3982,8 @@
     "publish_mtta_sla_breach_alert"
    ],
    "edges": [
-    "retry-behavioral-profile"
+    "retry-behavioral-profile",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -4860,6 +4867,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -4974,7 +4982,8 @@
     "connection-introspect",
     "connection-tester",
     "incoming-webhook",
-    "process-webhook-dlq"
+    "process-webhook-dlq",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -5036,7 +5045,8 @@
    "rpcs": [],
    "edges": [
     "connection-anomaly-detector",
-    "process-webhook-dlq"
+    "process-webhook-dlq",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -5094,7 +5104,8 @@
     "has_role"
    ],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -5221,7 +5232,8 @@
     "has_role"
    ],
    "edges": [
-    "error-budget"
+    "error-budget",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -5277,7 +5289,9 @@
    "rpcs": [
     "has_role"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -6206,6 +6220,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -6324,7 +6339,9 @@
    "rpcs": [
     "has_role"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -6379,7 +6396,9 @@
    "rpcs": [
     "has_role"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -7263,6 +7282,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -7348,7 +7368,9 @@
    "rpcs": [
     "has_role"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -7399,7 +7421,9 @@
    "rpcs": [
     "has_role"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -7450,7 +7474,9 @@
    "rpcs": [
     "has_role"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -7508,7 +7534,9 @@
    "rpcs": [
     "has_role"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -7562,7 +7590,9 @@
    "rpcs": [
     "has_role"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -7612,7 +7642,9 @@
     "password_reset_requests"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -8497,6 +8529,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -9456,6 +9489,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -9543,7 +9577,9 @@
     "follow_up_approvals_v2"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -10430,6 +10466,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -10509,7 +10546,9 @@
     "error_logs"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -11392,6 +11431,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -12308,6 +12348,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -12400,7 +12441,8 @@
    ],
    "rpcs": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -13285,6 +13327,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -14207,6 +14250,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -15124,6 +15168,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -16041,6 +16086,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -17217,6 +17263,7 @@
     "sync-social-interests",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -18205,6 +18252,7 @@
     "social-profile-scraper",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -19123,6 +19171,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -20039,6 +20088,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -20179,7 +20229,9 @@
     "compute_account_health",
     "cs_renewal_pipeline"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -20262,7 +20314,9 @@
     "compute_account_health",
     "cs_renewal_pipeline"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -20364,7 +20418,8 @@
    "edges": [
     "deal-room-buyer-view",
     "deal-room-health",
-    "deal-room-share"
+    "deal-room-share",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -20471,7 +20526,8 @@
    "edges": [
     "deal-room-buyer-view",
     "deal-room-health",
-    "deal-room-share"
+    "deal-room-share",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -20539,7 +20595,8 @@
    ],
    "rpcs": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -21423,6 +21480,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -22339,6 +22397,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -22476,7 +22535,8 @@
    "edges": [
     "deal-room-buyer-view",
     "deal-room-health",
-    "deal-room-share"
+    "deal-room-share",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -23360,6 +23420,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -24292,6 +24353,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -25277,6 +25339,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -25411,6 +25474,7 @@
     "bulk-revalidate",
     "email-finder",
     "external-data",
+    "validate-access",
     "validation-queue-worker"
    ],
    "canais_realtime": [],
@@ -25510,7 +25574,8 @@
     "increment_form_view"
    ],
    "edges": [
-    "form-submit-handler"
+    "form-submit-handler",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -25590,7 +25655,8 @@
    ],
    "edges": [
     "forecast-analyzer",
-    "forecast-narrative"
+    "forecast-narrative",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -25670,7 +25736,8 @@
    ],
    "edges": [
     "forecast-analyzer",
-    "forecast-narrative"
+    "forecast-narrative",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -25733,7 +25800,8 @@
    ],
    "rpcs": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -26617,6 +26685,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -27534,6 +27603,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -28450,6 +28520,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -29367,6 +29438,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -29450,7 +29522,9 @@
    "rpcs": [
     "check_relationship_consistency"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -30355,6 +30429,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -31294,6 +31369,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -32211,6 +32287,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -33130,6 +33207,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -34046,6 +34124,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -34154,7 +34233,8 @@
     "persist_lead_score_results"
    ],
    "edges": [
-    "lead-scorer"
+    "lead-scorer",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -34217,7 +34297,9 @@
     "lead_score_threshold_log"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -34301,7 +34383,8 @@
     "persist_lead_score_results"
    ],
    "edges": [
-    "lead-scorer"
+    "lead-scorer",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -34358,7 +34441,9 @@
     "increment_magnet_view",
     "track_magnet_download"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -35278,6 +35363,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -35417,7 +35503,8 @@
     "get_marketing_funnel_stats"
    ],
    "edges": [
-    "nurturing-runner"
+    "nurturing-runner",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -35483,7 +35570,9 @@
     "forms"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -35537,7 +35626,9 @@
     "lead_magnets"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -36419,6 +36510,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -37336,6 +37428,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -38253,6 +38346,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -39174,6 +39268,7 @@
     "smart-reminders",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -39258,7 +39353,9 @@
     "notification_preferences"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -40140,6 +40237,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -41056,6 +41154,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -41141,7 +41240,9 @@
     "profiles"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -41201,7 +41302,8 @@
    ],
    "rpcs": [],
    "edges": [
-    "generate-behavioral-profile"
+    "generate-behavioral-profile",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -42084,6 +42186,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -43000,6 +43103,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -43110,7 +43214,8 @@
    "rpcs": [],
    "edges": [
     "playbook-generator",
-    "playbook-recommender"
+    "playbook-recommender",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -43190,7 +43295,8 @@
    "rpcs": [],
    "edges": [
     "playbook-generator",
-    "playbook-recommender"
+    "playbook-recommender",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -43270,7 +43376,8 @@
    "rpcs": [],
    "edges": [
     "playbook-generator",
-    "playbook-recommender"
+    "playbook-recommender",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -43328,7 +43435,8 @@
    ],
    "rpcs": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -44213,6 +44321,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -45149,6 +45258,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -45293,7 +45403,8 @@
     "dismiss_revops_alert"
    ],
    "edges": [
-    "revops-snapshot-builder"
+    "revops-snapshot-builder",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -45380,7 +45491,9 @@
     "vw_rodizio_kpis"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -45443,7 +45556,9 @@
     "webauthn_credentials"
    ],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [
@@ -46326,6 +46441,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -46444,7 +46560,8 @@
    ],
    "rpcs": [],
    "edges": [
-    "send-sms-campaign"
+    "send-sms-campaign",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -47386,6 +47503,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -47532,7 +47650,8 @@
    ],
    "rpcs": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -47600,7 +47719,8 @@
     "has_role"
    ],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -47724,7 +47844,8 @@
    ],
    "rpcs": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -47810,6 +47931,7 @@
     "seed_win_loss_defaults"
    ],
    "edges": [
+    "validate-access",
     "win-loss-analyzer",
     "win-loss-record-deal"
    ],
@@ -47896,6 +48018,7 @@
     "seed_win_loss_defaults"
    ],
    "edges": [
+    "validate-access",
     "win-loss-analyzer",
     "win-loss-record-deal"
    ],

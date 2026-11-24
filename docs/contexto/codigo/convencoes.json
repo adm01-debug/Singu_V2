@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)",
    "fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)",
    "fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)",
    "ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)",
-   "fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)",
-   "fix: loga falha de insert da auditoria do external-data (#321)"
+   "fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)"
   ]
  },
  "pr_template": null,

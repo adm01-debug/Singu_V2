@@ -778,6 +778,7 @@
     "system-health",
     "template-success-notifications",
     "territory-optimization",
+    "validate-access",
     "validation-queue-worker",
     "visual-search",
     "voice-agent",
@@ -1221,7 +1222,8 @@
    "hooks_definidos": [],
    "edges": [
     "abm-account-scorer",
-    "abm-whitespace-analyzer"
+    "abm-whitespace-analyzer",
+    "validate-access"
    ],
    "tabelas": [
     "abm_account_plans",
@@ -1324,6 +1326,7 @@
     "incoming-webhook",
     "process-webhook-dlq",
     "system-health",
+    "validate-access",
     "voice-agent",
     "voice-to-text"
    ],
@@ -1449,7 +1452,8 @@
     "ai-email-refine",
     "ai-writing-assistant",
     "email-thread-summary",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -1589,7 +1593,8 @@
    "hooks_definidos": [],
    "edges": [
     "disc-analyzer",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -1737,7 +1742,9 @@
     "useMFAGuard"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -1794,7 +1801,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "automation_logs",
     "automation_rules",
@@ -1865,7 +1874,8 @@
    "hooks_definidos": [],
    "edges": [
     "demand-forecast",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -1923,7 +1933,9 @@
     "usePreContactBriefing"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "client_values",
     "companies",
@@ -1982,7 +1994,9 @@
     "useIsAdmin"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -2039,7 +2053,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "campaign_recipients",
     "contacts",
@@ -2188,7 +2204,8 @@
    "hooks_definidos": [],
    "edges": [
     "detect-churn-risk",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -2240,7 +2257,9 @@
     "useGlobalDensity"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -2309,7 +2328,8 @@
     "useGroupExpansion"
    ],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -2371,7 +2391,9 @@
     "useSubmitInsightFeedback"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "behavioral_insight_feedback",
     "call_logs",
@@ -2442,7 +2464,8 @@
    "hooks_definidos": [],
    "edges": [
     "disc-analyzer",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -2585,7 +2608,8 @@
    "edges": [
     "ai-writing-assistant",
     "disc-analyzer",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -2668,7 +2692,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -2887,6 +2912,7 @@
     "social-events-detector",
     "social-profile-scraper",
     "sync-social-interests",
+    "validate-access",
     "voice-to-text"
    ],
    "tabelas": [
@@ -3093,7 +3119,8 @@
    "hooks_definidos": [],
    "edges": [
     "external-data",
-    "generate-behavioral-profile"
+    "generate-behavioral-profile",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -3216,7 +3243,8 @@
    "hooks_definidos": [],
    "edges": [
     "conversation-analyzer",
-    "conversation-coaching-digest"
+    "conversation-coaching-digest",
+    "validate-access"
    ],
    "tabelas": [
     "coaching_scorecards",
@@ -3292,7 +3320,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "sync-social-interests"
+    "sync-social-interests",
+    "validate-access"
    ],
    "tabelas": [
     "client_values",
@@ -3419,7 +3448,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "csat_surveys",
     "error_logs"
@@ -3471,7 +3502,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "custom_field_values",
     "custom_fields",
@@ -3533,7 +3566,9 @@
     "useUpsertQBR"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "cs_accounts",
     "cs_health_signals",
@@ -3705,6 +3740,7 @@
     "external-data",
     "smart-notify",
     "smart-reminders",
+    "validate-access",
     "weekly-digest"
    ],
    "tabelas": [
@@ -3835,7 +3871,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -3912,7 +3950,8 @@
    "edges": [
     "deal-room-buyer-view",
     "deal-room-health",
-    "deal-room-share"
+    "deal-room-share",
+    "validate-access"
    ],
    "tabelas": [
     "deal_room_activities",
@@ -3981,7 +4020,9 @@
     "useToast"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "contacts",
     "disc_analysis_history",
@@ -4083,7 +4124,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "documents",
     "error_logs"
@@ -4200,6 +4243,7 @@
     "bulk-revalidate",
     "email-finder",
     "external-data",
+    "validate-access",
     "validation-queue-worker"
    ],
    "tabelas": [
@@ -4270,7 +4314,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -4377,7 +4422,9 @@
    "hooks_definidos": [
     "useWhatsNew"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -4439,7 +4486,9 @@
     "useToast",
     "useToast"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -4557,7 +4606,8 @@
     "external-data",
     "ficha360-conversation-summary",
     "next-best-action",
-    "social-profile-scraper"
+    "social-profile-scraper",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -4697,7 +4747,8 @@
    "hooks_definidos": [],
    "edges": [
     "forecast-analyzer",
-    "forecast-narrative"
+    "forecast-narrative",
+    "validate-access"
    ],
    "tabelas": [
     "deal_forecasts",
@@ -4778,6 +4829,7 @@
    "edges": [
     "disc-analyzer",
     "external-data",
+    "validate-access",
     "voice-to-text"
    ],
    "tabelas": [
@@ -4857,7 +4909,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -4984,7 +5037,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "companies",
     "contacts",
@@ -5086,7 +5141,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -5166,7 +5222,8 @@
    "hooks_definidos": [],
    "edges": [
     "ask-crm",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -5252,7 +5309,8 @@
    "hooks_definidos": [],
    "edges": [
     "intent-aggregator",
-    "intent-pixel-snippet"
+    "intent-pixel-snippet",
+    "validate-access"
    ],
    "tabelas": [
     "error_logs",
@@ -5357,7 +5415,8 @@
     "conversation-analyzer",
     "conversation-coaching-digest",
     "disc-analyzer",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -5860,6 +5919,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -6086,7 +6146,9 @@
     "useUpdateRodizioMembro"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "config_regras_negocio",
     "error_logs",
@@ -6155,7 +6217,9 @@
     "useWhyScoreDrawerPreference"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "contact_cadence",
     "contacts",
@@ -6248,7 +6312,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "lead-scorer"
+    "lead-scorer",
+    "validate-access"
    ],
    "tabelas": [
     "error_logs",
@@ -6311,7 +6376,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "lux-trigger"
+    "lux-trigger",
+    "validate-access"
    ],
    "tabelas": [
     "contacts",
@@ -6376,7 +6442,9 @@
     "useTouchpoints"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "attribution_touchpoints",
     "error_logs",
@@ -6889,6 +6957,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -7092,7 +7161,9 @@
     "useNetworkGraph"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "companies",
     "contacts",
@@ -7205,7 +7276,8 @@
    "hooks_definidos": [],
    "edges": [
     "ai-writing-assistant",
-    "objection-handler"
+    "objection-handler",
+    "validate-access"
    ],
    "tabelas": [
     "ai_tone_preferences",
@@ -7292,7 +7364,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "smart-notify"
+    "smart-notify",
+    "validate-access"
    ],
    "tabelas": [
     "alerts",
@@ -7361,7 +7434,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -7420,7 +7494,9 @@
    "hooks_definidos": [
     "useOnboardingTour"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "contacts",
     "error_logs",
@@ -7524,6 +7600,7 @@
     "external-data",
     "playbook-generator",
     "playbook-recommender",
+    "validate-access",
     "win-loss-analyzer",
     "win-loss-record-deal"
    ],
@@ -7621,7 +7698,8 @@
    "hooks_definidos": [],
    "edges": [
     "playbook-generator",
-    "playbook-recommender"
+    "playbook-recommender",
+    "validate-access"
    ],
    "tabelas": [
     "battle_cards",
@@ -7824,6 +7902,7 @@
    "edges": [
     "disc-analyzer",
     "external-data",
+    "validate-access",
     "voice-to-text"
    ],
    "tabelas": [
@@ -7890,7 +7969,9 @@
     "useRecentlyViewed"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -7957,7 +8038,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -8028,7 +8110,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "revops-snapshot-builder"
+    "revops-snapshot-builder",
+    "validate-access"
    ],
    "tabelas": [
     "error_logs",
@@ -8104,6 +8187,7 @@
     "elevenlabs-scribe-token",
     "external-data",
     "semantic-search",
+    "validate-access",
     "visual-search"
    ],
    "tabelas": [
@@ -8190,7 +8274,9 @@
     "useWebAuthn"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "access_security_settings",
     "error_logs",
@@ -8250,7 +8336,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "contact_behavior",
     "contacts",
@@ -8339,7 +8427,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -8400,7 +8489,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -8553,7 +8644,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "smart-reminders"
+    "smart-reminders",
+    "validate-access"
    ],
    "tabelas": [
     "error_logs"
@@ -8611,7 +8703,9 @@
     "useStakeholderSimulator"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs",
     "push_subscriptions",
@@ -8672,7 +8766,9 @@
     "useTicketComments"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "canned_responses",
     "error_logs",
@@ -8727,7 +8823,9 @@
     "useTeamDashboard"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "contacts",
     "deals",
@@ -8787,7 +8885,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -8937,7 +9036,8 @@
     "useTriggerAnalyticsData"
    ],
    "edges": [
-    "template-success-notifications"
+    "template-success-notifications",
+    "validate-access"
    ],
    "tabelas": [
     "companies",
@@ -9031,7 +9131,9 @@
     "useSidebar",
     "useSidebar"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "audit_log",
     "error_logs"
@@ -9234,7 +9336,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -9285,7 +9389,9 @@
     "useVisitCheckins"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs",
     "visit_checkins"
@@ -9337,6 +9443,7 @@
    ],
    "hooks_definidos": [],
    "edges": [
+    "validate-access",
     "voice-to-text"
    ],
    "tabelas": [
@@ -9392,7 +9499,9 @@
     "useWhatsAppData"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs",
     "whatsapp_instances",
@@ -9466,6 +9575,7 @@
    ],
    "hooks_definidos": [],
    "edges": [
+    "validate-access",
     "win-loss-analyzer",
     "win-loss-record-deal"
    ],
@@ -9561,7 +9671,9 @@
     "useListDensity",
     "useNavigationStack"
    ],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "error_logs"
    ],
@@ -9614,7 +9726,9 @@
     "useTopRelationships"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "client_values",
     "contacts",
@@ -9750,7 +9864,7 @@
    "modulo": "hooks",
    "arquivos": 379,
    "testes": 23,
-   "linhas": 51280,
+   "linhas": 51307,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -11115,6 +11229,7 @@
     "social-profile-scraper",
     "template-success-notifications",
     "territory-optimization",
+    "validate-access",
     "validation-queue-worker",
     "voice-ai-health",
     "weekly-digest",
@@ -11444,6 +11559,7 @@
      "social-profile-scraper",
      "template-success-notifications",
      "territory-optimization",
+     "validate-access",
      "validation-queue-worker",
      "voice-ai-health",
      "weekly-digest",
@@ -11911,7 +12027,8 @@
     "useSocialSync"
    ],
    "edges": [
-    "sync-social-interests"
+    "sync-social-interests",
+    "validate-access"
    ],
    "tabelas": [
     "error_logs",
@@ -12152,7 +12269,8 @@
    ],
    "edges": [
     "disc-analyzer",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -13300,6 +13418,7 @@
     "system-health",
     "template-success-notifications",
     "territory-optimization",
+    "validate-access",
     "validation-queue-worker",
     "visual-search",
     "voice-agent",
@@ -14214,6 +14333,7 @@
     "smart-notify",
     "system-health",
     "template-success-notifications",
+    "validate-access",
     "validation-queue-worker",
     "voice-to-text",
     "weekly-digest",
@@ -14449,7 +14569,9 @@
     "useTopRelationships"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "contacts",
     "error_logs"
@@ -14537,7 +14659,9 @@
     "useErrorReporter"
    ],
    "hooks_definidos": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "tabelas": [
     "automation_logs",
     "automation_rules",
@@ -14594,7 +14718,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -14690,7 +14815,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "template-success-notifications"
+    "template-success-notifications",
+    "validate-access"
    ],
    "tabelas": [
     "compatibility_settings",
@@ -14766,7 +14892,8 @@
    "edges": [
     "external-data",
     "smart-notify",
-    "system-health"
+    "system-health",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -14952,7 +15079,8 @@
    "hooks_definidos": [],
    "edges": [
     "disc-analyzer",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -15088,7 +15216,8 @@
    "hooks_definidos": [],
    "edges": [
     "disc-analyzer",
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -15167,7 +15296,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",
@@ -15308,7 +15438,8 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "external-data"
+    "external-data",
+    "validate-access"
    ],
    "tabelas": [
     "activities",

@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `4f090e33dd84de477fc341d9473a3a11344f0b3d` (2026-11-23T22:50:30-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `27c8b408c641b544f10bc155a48645076a9dd756` (2026-11-23T22:57:14-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3910 |
 | arquivos_codigo | 2256 |
-| linhas_codigo | 421363 |
+| linhas_codigo | 421390 |
 | rotas | 116 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -69,63 +69,63 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 670 | 72 | 234 |
-| components/abm | 0 | 0 | 9 | 20 | 2 | 6 |
-| components/admin | 0 | 0 | 46 | 37 | 13 | 19 |
-| components/analytics | 0 | 0 | 43 | 82 | 2 | 26 |
-| components/bi | 0 | 0 | 5 | 21 | 2 | 6 |
+| app | 0 | 0 | 6 | 670 | 73 | 234 |
+| components/abm | 0 | 0 | 9 | 20 | 3 | 6 |
+| components/admin | 0 | 0 | 46 | 37 | 14 | 19 |
+| components/analytics | 0 | 0 | 43 | 82 | 3 | 26 |
+| components/bi | 0 | 0 | 5 | 21 | 3 | 6 |
 | components/carnegie | 0 | 0 | 14 | 1 | 0 | 0 |
-| components/companies | 0 | 0 | 7 | 18 | 1 | 2 |
-| components/company-detail | 0 | 0 | 29 | 77 | 3 | 11 |
-| components/contact-detail | 0 | 0 | 112 | 142 | 16 | 78 |
-| components/contacts | 0 | 0 | 10 | 16 | 2 | 10 |
-| components/conversation-intel | 0 | 0 | 11 | 14 | 2 | 5 |
-| components/crm | 0 | 0 | 34 | 18 | 1 | 37 |
-| components/customer-success | 0 | 0 | 11 | 15 | 0 | 6 |
-| components/dashboard | 0 | 0 | 46 | 110 | 6 | 38 |
-| components/deal-rooms | 0 | 0 | 9 | 23 | 3 | 8 |
-| components/disc | 0 | 0 | 9 | 6 | 0 | 5 |
-| components/enrichment | 0 | 0 | 11 | 26 | 4 | 15 |
-| components/feedback | 0 | 0 | 16 | 10 | 0 | 1 |
-| components/ficha-360 | 0 | 0 | 36 | 51 | 4 | 14 |
-| components/forecasting | 0 | 0 | 9 | 15 | 2 | 5 |
-| components/forms | 0 | 0 | 17 | 24 | 3 | 11 |
-| components/gamification | 0 | 0 | 5 | 9 | 1 | 2 |
-| components/intel | 0 | 0 | 34 | 14 | 1 | 4 |
-| components/intelligence | 0 | 0 | 5 | 16 | 2 | 7 |
-| components/intent | 0 | 0 | 5 | 12 | 2 | 4 |
-| components/interactions | 0 | 0 | 42 | 46 | 4 | 17 |
-| components/layout | 0 | 0 | 6 | 344 | 30 | 98 |
-| components/lead-routing | 0 | 0 | 6 | 17 | 0 | 10 |
-| components/lead-scoring | 0 | 0 | 13 | 18 | 1 | 7 |
-| components/lux | 0 | 0 | 6 | 4 | 1 | 3 |
+| components/companies | 0 | 0 | 7 | 18 | 2 | 2 |
+| components/company-detail | 0 | 0 | 29 | 77 | 4 | 11 |
+| components/contact-detail | 0 | 0 | 112 | 142 | 17 | 78 |
+| components/contacts | 0 | 0 | 10 | 16 | 3 | 10 |
+| components/conversation-intel | 0 | 0 | 11 | 14 | 3 | 5 |
+| components/crm | 0 | 0 | 34 | 18 | 2 | 37 |
+| components/customer-success | 0 | 0 | 11 | 15 | 1 | 6 |
+| components/dashboard | 0 | 0 | 46 | 110 | 7 | 38 |
+| components/deal-rooms | 0 | 0 | 9 | 23 | 4 | 8 |
+| components/disc | 0 | 0 | 9 | 6 | 1 | 5 |
+| components/enrichment | 0 | 0 | 11 | 26 | 5 | 15 |
+| components/feedback | 0 | 0 | 16 | 10 | 1 | 1 |
+| components/ficha-360 | 0 | 0 | 36 | 51 | 5 | 14 |
+| components/forecasting | 0 | 0 | 9 | 15 | 3 | 5 |
+| components/forms | 0 | 0 | 17 | 24 | 4 | 11 |
+| components/gamification | 0 | 0 | 5 | 9 | 2 | 2 |
+| components/intel | 0 | 0 | 34 | 14 | 2 | 4 |
+| components/intelligence | 0 | 0 | 5 | 16 | 3 | 7 |
+| components/intent | 0 | 0 | 5 | 12 | 3 | 4 |
+| components/interactions | 0 | 0 | 42 | 46 | 5 | 17 |
+| components/layout | 0 | 0 | 6 | 344 | 31 | 98 |
+| components/lead-routing | 0 | 0 | 6 | 17 | 1 | 10 |
+| components/lead-scoring | 0 | 0 | 13 | 18 | 2 | 7 |
+| components/lux | 0 | 0 | 6 | 4 | 2 | 3 |
 | components/micro-interactions | 0 | 0 | 6 | 0 | 0 | 0 |
-| components/navigation | 0 | 0 | 12 | 344 | 30 | 98 |
+| components/navigation | 0 | 0 | 12 | 344 | 31 | 98 |
 | components/neuromarketing | 0 | 0 | 17 | 1 | 0 | 0 |
-| components/nlp | 0 | 0 | 33 | 11 | 2 | 9 |
-| components/onboarding | 0 | 0 | 8 | 6 | 0 | 3 |
-| components/pipeline | 0 | 0 | 10 | 42 | 5 | 14 |
-| components/playbooks | 0 | 0 | 6 | 15 | 2 | 4 |
-| components/reports | 0 | 0 | 5 | 17 | 1 | 9 |
-| components/revops | 0 | 0 | 6 | 10 | 1 | 4 |
-| components/search | 0 | 0 | 12 | 14 | 5 | 7 |
-| components/security | 0 | 0 | 9 | 9 | 0 | 5 |
-| components/sequences | 0 | 0 | 7 | 9 | 1 | 8 |
+| components/nlp | 0 | 0 | 33 | 11 | 3 | 9 |
+| components/onboarding | 0 | 0 | 8 | 6 | 1 | 3 |
+| components/pipeline | 0 | 0 | 10 | 42 | 6 | 14 |
+| components/playbooks | 0 | 0 | 6 | 15 | 3 | 4 |
+| components/reports | 0 | 0 | 5 | 17 | 2 | 9 |
+| components/revops | 0 | 0 | 6 | 10 | 2 | 4 |
+| components/search | 0 | 0 | 12 | 14 | 6 | 7 |
+| components/security | 0 | 0 | 9 | 9 | 1 | 5 |
+| components/sequences | 0 | 0 | 7 | 9 | 2 | 8 |
 | components/skeletons | 0 | 0 | 5 | 0 | 0 | 0 |
-| components/stakeholders | 0 | 0 | 10 | 7 | 0 | 3 |
-| components/triggers | 0 | 0 | 34 | 13 | 1 | 10 |
-| components/ui | 0 | 0 | 72 | 11 | 0 | 2 |
-| components/win-loss | 0 | 0 | 8 | 18 | 2 | 5 |
-| data | 0 | 0 | 46 | 6 | 0 | 6 |
+| components/stakeholders | 0 | 0 | 10 | 7 | 1 | 3 |
+| components/triggers | 0 | 0 | 34 | 13 | 2 | 10 |
+| components/ui | 0 | 0 | 72 | 11 | 1 | 2 |
+| components/win-loss | 0 | 0 | 8 | 18 | 3 | 5 |
+| data | 0 | 0 | 46 | 6 | 1 | 6 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
-| hooks | 0 | 0 | 379 | 645 | 56 | 210 |
+| hooks | 0 | 0 | 379 | 645 | 57 | 210 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
-| lib | 0 | 0 | 70 | 17 | 2 | 13 |
-| pages | 52 | 106 | 106 | 647 | 70 | 228 |
-| pages/admin | 7 | 8 | 9 | 360 | 32 | 105 |
-| pages/cadastro | 0 | 0 | 5 | 6 | 1 | 3 |
+| lib | 0 | 0 | 70 | 17 | 3 | 13 |
+| pages | 52 | 106 | 106 | 647 | 71 | 228 |
+| pages/admin | 7 | 8 | 9 | 360 | 33 | 105 |
+| pages/cadastro | 0 | 0 | 5 | 6 | 2 | 3 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
-| pages/mapa | 0 | 0 | 5 | 6 | 1 | 4 |
+| pages/mapa | 0 | 0 | 5 | 6 | 2 | 4 |
 | stores | 0 | 0 | 5 | 1 | 0 | 0 |
 | types | 0 | 0 | 20 | 0 | 0 | 0 |
 
@@ -360,7 +360,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `system-health` — tabelas: alerts, companies, email_logs, profiles, system_health_snapshots; chamada por 2 arquivo(s) do front
 - `template-success-notifications` (verify_jwt=false) — tabelas: alerts, contacts, favorite_templates, profiles, push_subscriptions, trigger_usage_history; chamada por 1 arquivo(s) do front, por SQL/cron
 - `territory-optimization` — tabelas: sales_team_members; chamada por 1 arquivo(s) do front
-- `validate-access` — tabelas: access_blocked_log, access_security_settings, geo_allowed_countries, ip_whitelist; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `validate-access` — tabelas: access_blocked_log, access_security_settings, geo_allowed_countries, ip_whitelist; chamada por 1 arquivo(s) do front
 - `validation-queue-worker` (verify_jwt=false) — tabelas: validation_queue; chamada por 1 arquivo(s) do front, por SQL/cron
 - `visual-search` — tabelas: -; chamada por 1 arquivo(s) do front
 - `voice-agent` — tabelas: -; chamada por 1 arquivo(s) do front
@@ -433,7 +433,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rotas_sem_arquivo: 0
 - componentes_ambiguos: 0
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
-- edges_orfas: 14 — ex.: attribution-calculator, detect-new-device, email-verifier
+- edges_orfas: 13 — ex.: attribution-calculator, detect-new-device, email-verifier
 - edges_chamadas_sem_pasta: 0
 - tabelas_sem_rls: 131 — ex.: _stg_pac_nums, access_denied_logs, active_power_ups
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
@@ -447,7 +447,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25893 nós · 41386 arestas · 3089 comunidades · grafo do commit `4f090e33`
+- 25893 nós · 41386 arestas · 3089 comunidades · grafo do commit `27c8b408`
 - comunidades maiores: ref_lib (306), ref_components (304), sonner (303), framer-motion (279), 02_tables.sql (259), ref_hooks (257), react (255), date-fns (252), react-router-dom (248), _shared/auth.ts (239), 📖 Dicionário de Dados — SINGU CRM (224), Tabela de evidências (213)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -587,6 +587,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-23 `27c8b40` feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)
 - 2026-11-23 `4f090e3` fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)
 - 2026-11-23 `16516ac` fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)
 - 2026-11-23 `6378bfb` ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)
@@ -601,7 +602,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-23 `d19dec8` fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)
 - 2026-11-23 `14096c0` fix(FF62): territory-optimization propaga falha de RPC externa (#316)
 - 2026-11-23 `7e545e5` fix(EF-5): nurturing-runner incrementa completed_count exatamente N vezes (#314)
-- 2026-11-23 `183969c` fix(edges): corrige AR EF-3/EF-11/EF-13/EF-16 (#309)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

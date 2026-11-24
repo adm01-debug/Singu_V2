@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "4f090e33dd84de477fc341d9473a3a11344f0b3d",
+  "sha": "27c8b408c641b544f10bc155a48645076a9dd756",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 01:51 UTC",
+  "generated_at": "2026-11-24 01:59 UTC",
   "files_total": 4015,
   "code_files": 3539,
-  "code_lines": 478166
+  "code_lines": 478193
  },
  "version": "1.3.2",
- "facts_hash": "4b9e1b42b94dd4c8",
+ "facts_hash": "9d5b67fc58f3b1f4",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -100567,7 +100567,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 15
@@ -100602,6 +100603,7 @@
      "abm-whitespace-analyzer",
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -100639,6 +100641,7 @@
      "abm-whitespace-analyzer",
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -100676,6 +100679,7 @@
      "abm-whitespace-analyzer",
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -100692,7 +100696,8 @@
     ],
     "invokes_transitive": [
      "audit-analytics",
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -100719,7 +100724,8 @@
      "connection-introspect",
      "connection-tester",
      "detect-new-device",
-     "process-webhook-dlq"
+     "process-webhook-dlq",
+     "validate-access"
     ],
     "rpc_transitive": [
      "get_connection_metrics"
@@ -100738,7 +100744,8 @@
     "invokes_transitive": [
      "connection-anomaly-detector",
      "detect-new-device",
-     "process-webhook-dlq"
+     "process-webhook-dlq",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 25
@@ -100754,7 +100761,8 @@
      "secret_rotation_log"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -100797,6 +100805,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -100812,7 +100821,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -100828,7 +100838,8 @@
      "lux_webhook_config"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -100844,7 +100855,8 @@
      "schema_drift_alerts"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -100860,7 +100872,8 @@
      "secret_rotation_log"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -100890,6 +100903,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -100953,6 +100967,7 @@
      "objection-handler",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -100970,7 +100985,8 @@
      "follow_up_approvals_v2"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 13
@@ -101000,6 +101016,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101015,7 +101032,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 19
@@ -101054,6 +101072,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101084,6 +101103,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101104,7 +101124,8 @@
     "invokes_transitive": [
      "detect-new-device",
      "playbook-generator",
-     "playbook-recommender"
+     "playbook-recommender",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 19
@@ -101117,7 +101138,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 11
@@ -101132,7 +101154,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 31
@@ -101162,6 +101185,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101195,6 +101219,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101230,6 +101255,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101272,6 +101298,7 @@
      "smart-notify",
      "system-health",
      "template-success-notifications",
+     "validate-access",
      "voice-to-text",
      "weekly-digest"
     ],
@@ -101353,7 +101380,8 @@
      "email-finder",
      "email-thread-summary",
      "generate-behavioral-profile",
-     "lux-trigger"
+     "lux-trigger",
+     "validate-access"
     ],
     "rpc_transitive": [
      "compute_attribution",
@@ -101389,7 +101417,8 @@
      "detect-new-device",
      "disc-analyzer",
      "smart-notify",
-     "system-health"
+     "system-health",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -101424,6 +101453,7 @@
      "conversation-coaching-digest",
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101460,6 +101490,7 @@
      "conversation-coaching-digest",
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101491,6 +101522,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101511,7 +101543,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "compute_account_health",
@@ -101532,7 +101565,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "compute_account_health",
@@ -101557,7 +101591,8 @@
      "deal-room-buyer-view",
      "deal-room-health",
      "deal-room-share",
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "buyer_add_comment",
@@ -101584,7 +101619,8 @@
      "deal-room-buyer-view",
      "deal-room-health",
      "deal-room-share",
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "buyer_add_comment",
@@ -101607,7 +101643,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 38
@@ -101635,6 +101672,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101650,7 +101688,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -101682,6 +101721,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101725,6 +101765,7 @@
      "disc-analyzer",
      "intent-aggregator",
      "lux-trigger",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101759,7 +101800,8 @@
      "detect-new-device",
      "disc-analyzer",
      "smart-notify",
-     "system-health"
+     "system-health",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -101795,6 +101837,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101822,6 +101865,7 @@
      "bulk-revalidate",
      "detect-new-device",
      "email-finder",
+     "validate-access",
      "validation-queue-worker"
     ],
     "rpc_transitive": [
@@ -101877,6 +101921,7 @@
      "ficha360-conversation-summary",
      "next-best-action",
      "social-profile-scraper",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -101898,7 +101943,8 @@
     "invokes_transitive": [
      "detect-new-device",
      "forecast-analyzer",
-     "forecast-narrative"
+     "forecast-narrative",
+     "validate-access"
     ],
     "rpc_transitive": [
      "seed_forecast_period"
@@ -101919,7 +101965,8 @@
     "invokes_transitive": [
      "detect-new-device",
      "forecast-analyzer",
-     "forecast-narrative"
+     "forecast-narrative",
+     "validate-access"
     ],
     "rpc_transitive": [
      "seed_forecast_period"
@@ -101939,7 +101986,8 @@
      "whatsapp_messages"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 26
@@ -101972,6 +102020,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102005,6 +102054,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102037,6 +102087,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102071,6 +102122,7 @@
      "detect-new-device",
      "disc-analyzer",
      "intent-aggregator",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102105,6 +102157,7 @@
      "detect-new-device",
      "disc-analyzer",
      "intent-aggregator",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102141,6 +102194,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102172,6 +102226,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102204,6 +102259,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102224,7 +102280,8 @@
     ],
     "invokes_transitive": [
      "detect-new-device",
-     "lead-scorer"
+     "lead-scorer",
+     "validate-access"
     ],
     "rpc_transitive": [
      "persist_lead_score_results"
@@ -102241,7 +102298,8 @@
      "lead_score_threshold_log"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 31
@@ -102260,7 +102318,8 @@
     ],
     "invokes_transitive": [
      "detect-new-device",
-     "lead-scorer"
+     "lead-scorer",
+     "validate-access"
     ],
     "rpc_transitive": [
      "persist_lead_score_results"
@@ -102290,7 +102349,8 @@
      "detect-new-device",
      "disc-analyzer",
      "smart-notify",
-     "system-health"
+     "system-health",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -102326,6 +102386,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102342,7 +102403,8 @@
      "form_submissions"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 38
@@ -102368,7 +102430,8 @@
     ],
     "invokes_transitive": [
      "detect-new-device",
-     "nurturing-runner"
+     "nurturing-runner",
+     "validate-access"
     ],
     "rpc_transitive": [
      "compute_attribution",
@@ -102387,7 +102450,8 @@
      "lead_magnet_downloads"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 17
@@ -102415,6 +102479,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102451,6 +102516,7 @@
      "objection-handler",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102475,7 +102541,8 @@
     ],
     "invokes_transitive": [
      "detect-new-device",
-     "disc-analyzer"
+     "disc-analyzer",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -102506,6 +102573,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102541,6 +102609,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102590,6 +102659,7 @@
      "smart-notify",
      "smart-reminders",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102606,7 +102676,8 @@
      "notification_preferences"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 16
@@ -102637,6 +102708,7 @@
      "detect-new-device",
      "disc-analyzer",
      "nurturing-runner",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102655,7 +102727,8 @@
      "profiles"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 22
@@ -102672,7 +102745,8 @@
     ],
     "invokes_transitive": [
      "detect-new-device",
-     "generate-behavioral-profile"
+     "generate-behavioral-profile",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 19
@@ -102700,6 +102774,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102715,7 +102790,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -102756,6 +102832,7 @@
      "disc-analyzer",
      "playbook-generator",
      "playbook-recommender",
+     "validate-access",
      "voice-to-text",
      "win-loss-analyzer",
      "win-loss-record-deal"
@@ -102779,7 +102856,8 @@
     "invokes_transitive": [
      "detect-new-device",
      "playbook-generator",
-     "playbook-recommender"
+     "playbook-recommender",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 20
@@ -102797,7 +102875,8 @@
     "invokes_transitive": [
      "detect-new-device",
      "playbook-generator",
-     "playbook-recommender"
+     "playbook-recommender",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 25
@@ -102819,7 +102898,8 @@
      "deal-room-buyer-view",
      "deal-room-health",
      "deal-room-share",
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "buyer_add_comment",
@@ -102838,7 +102918,8 @@
      "form_submissions"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 19
@@ -102863,7 +102944,8 @@
      "lead_magnet_downloads"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 17
@@ -102919,6 +103001,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102936,7 +103019,8 @@
      "neuro_behavioral_history"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 22
@@ -102968,6 +103052,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -102998,7 +103083,8 @@
     ],
     "invokes_transitive": [
      "detect-new-device",
-     "revops-snapshot-builder"
+     "revops-snapshot-builder",
+     "validate-access"
     ],
     "rpc_transitive": [
      "compute_revops_kpis",
@@ -103020,7 +103106,8 @@
      "vw_rodizio_carga_sdrs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 20
@@ -103033,7 +103120,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -103048,7 +103136,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -103078,7 +103167,8 @@
      "webauthn_credentials"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 33
@@ -103112,6 +103202,7 @@
      "detect-new-device",
      "disc-analyzer",
      "sequence-processor",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -103131,7 +103222,8 @@
     ],
     "invokes_transitive": [
      "detect-new-device",
-     "send-sms-campaign"
+     "send-sms-campaign",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 20
@@ -103173,6 +103265,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -103192,7 +103285,8 @@
      "error_logs"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 32
@@ -103207,7 +103301,8 @@
      "territories"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [
      "has_role"
@@ -103239,7 +103334,8 @@
      "whatsapp_transcriptions"
     ],
     "invokes_transitive": [
-     "detect-new-device"
+     "detect-new-device",
+     "validate-access"
     ],
     "rpc_transitive": [],
     "deps_count": 26
@@ -103257,6 +103353,7 @@
     ],
     "invokes_transitive": [
      "detect-new-device",
+     "validate-access",
      "win-loss-analyzer",
      "win-loss-record-deal"
     ],
@@ -103278,6 +103375,7 @@
     ],
     "invokes_transitive": [
      "detect-new-device",
+     "validate-access",
      "win-loss-analyzer",
      "win-loss-record-deal"
     ],
@@ -103326,6 +103424,7 @@
     "invokes_transitive": [
      "detect-new-device",
      "disc-analyzer",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -103361,6 +103460,7 @@
      "disc-analyzer",
      "smart-notify",
      "system-health",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -103484,6 +103584,7 @@
      "social-events-detector",
      "social-profile-scraper",
      "sync-social-interests",
+     "validate-access",
      "voice-to-text"
     ],
     "rpc_transitive": [
@@ -111404,7 +111505,7 @@
   {
    "module": "src/hooks",
    "files": 444,
-   "lines": 58704,
+   "lines": 58731,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -119768,6 +119869,9 @@
    "tools-edge": [
     "scripts/ai-context/gerar.unit.mjs"
    ],
+   "validate-access": [
+    "src/hooks/useAuth.tsx"
+   ],
    "validation-queue-worker": [
     "src/hooks/useValidationQueue.ts"
    ],
@@ -125547,6 +125651,10 @@
    {
     "file": "src/hooks/useAttribution.ts",
     "msg": "Não autenticado"
+   },
+   {
+    "file": "src/hooks/useAuth.tsx",
+    "msg": "Acesso bloqueado pela política de segurança desta conta."
    },
    {
     "file": "src/hooks/useAuth.tsx",
@@ -265364,14 +265472,15 @@
   },
   "src/hooks/useAuth.tsx": {
    "path": "src/hooks/useAuth.tsx",
-   "lines": 372,
+   "lines": 399,
    "exports": [
     "function AuthProvider",
     "function useAuth",
     "const RequireAuth"
    ],
    "invokes": [
-    "detect-new-device"
+    "detect-new-device",
+    "validate-access"
    ],
    "env": [
     "DEV"
@@ -265380,6 +265489,7 @@
     "/auth"
    ],
    "errors": [
+    "Acesso bloqueado pela política de segurança desta conta.",
     "Erro ao atualizar sessão.",
     "Sua sessão expirou. Por favor, faça login novamente.",
     "useAuth must be used within an AuthProvider"
@@ -307104,10 +307214,19 @@
   }
  },
  "git": {
-  "sha": "4f090e33dd84de477fc341d9473a3a11344f0b3d",
+  "sha": "27c8b408c641b544f10bc155a48645076a9dd756",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "27c8b40",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)",
+    "files": [
+     "src/hooks/useAuth.tsx"
+    ]
+   },
    {
     "sha": "4f090e3",
     "date": "2026-11-23",
@@ -307490,19 +307609,16 @@
     "files": [
      "supabase/functions/evolution-api/index.ts"
     ]
-   },
-   {
-    "sha": "d4ea4a1",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(nlp): substituicoes do painel de coerencia usam vocabulario real (removido Math.random) (#293)",
-    "files": []
    }
   ],
   "hot_files": [
    [
     "supabase/functions/nurturing-runner/index.ts",
     3
+   ],
+   [
+    "src/hooks/useAuth.tsx",
+    2
    ],
    [
     "docs/ci/README.md",
@@ -307574,10 +307690,6 @@
    ],
    [
     "docs/lacunas/D_ui_rotas_componentes.md",
-    1
-   ],
-   [
-    "docs/lacunas/E_contratos_front_backend.md",
     1
    ]
   ]

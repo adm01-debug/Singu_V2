@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4f090e33dd` · branch `main` · 2026-11-24 01:51 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `27c8b408c6` · branch `main` · 2026-11-24 01:59 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4694,7 +4694,7 @@ _nenhum item encontrado_
 | Falha ao copiar link. | `src/components/intel/RecentSnapshotsPanel.tsx` |
 | Comando desconhecido: ${cmd} | `src/components/intelligence/AskTab.tsx` |
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
-| … +808 linhas — lista completa em `context.json` | |
+| … +809 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

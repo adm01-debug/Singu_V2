@@ -1249,11 +1249,13 @@
    "hooks_exportados": [
     "useAuth"
    ],
-   "linhas": 372,
+   "linhas": 399,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "hooks_internos": [
     "useCallback",
     "useContext",

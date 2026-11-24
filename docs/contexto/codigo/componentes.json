@@ -15545,14 +15545,16 @@
     "RequireAuth"
    ],
    "export_default": null,
-   "linhas": 372,
+   "linhas": 399,
    "dominio": "hooks",
    "hooks_locais": [
     "useAuth",
     "useDeviceDetection"
    ],
    "tabelas": [],
-   "edges": [],
+   "edges": [
+    "validate-access"
+   ],
    "usado_por": 339,
    "orfao": false
   },
