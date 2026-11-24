@@ -3,8 +3,8 @@
  * Uses a local Deno.serve that intentionally stalls.
  * Run with: deno test --allow-net supabase/functions/_shared/fetch-utils_test.ts
  */
-import { assert, assertRejects } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { fetchWithTimeout } from "./fetch-utils.ts";
+import { assert, assertEquals, assertRejects } from "https://deno.land/std@0.224.0/assert/mod.ts";
+import { fetchWithTimeout, OPENROUTER_CHAT_URL, routeToOpenRouter } from "./fetch-utils.ts";
 
 Deno.test("fetchWithTimeout: aborts with TimeoutError when deadline elapses", async () => {
   const ac = new AbortController();
@@ -33,4 +33,28 @@ Deno.test("fetchWithTimeout: succeeds when server responds under deadline", asyn
   assert(body === "ok");
   ac.abort();
   await server.finished.catch(() => {});
+});
+
+Deno.test("roteamento de IA: o endereco antigo do gateway vai para o OpenRouter", () => {
+  const body = JSON.stringify({ model: "google/gemini-3-flash-preview", messages: [] });
+  const [url, init] = routeToOpenRouter("https://ai.gateway.lovable.dev/v1/chat/completions", { body });
+  assertEquals(url, OPENROUTER_CHAT_URL);
+  assertEquals(JSON.parse(init.body as string).model, "google/gemini-2.5-flash");
+});
+
+Deno.test("roteamento de IA: host divergente e demais campos do corpo sao preservados", () => {
+  const body = JSON.stringify({ model: "x", messages: [{ role: "user", content: "oi" }], tool_choice: "auto" });
+  const [url, init] = routeToOpenRouter("https://api.lovable.dev/v1/chat/completions", { body, method: "POST" });
+  assertEquals(url, OPENROUTER_CHAT_URL);
+  assertEquals(init.method, "POST");
+  const parsed = JSON.parse(init.body as string);
+  assertEquals(parsed.messages.length, 1);
+  assertEquals(parsed.tool_choice, "auto");
+});
+
+Deno.test("roteamento de IA: URL que nao e do gateway passa intacta", () => {
+  const opts = { method: "POST", body: "{}" };
+  const [url, init] = routeToOpenRouter("https://api.elevenlabs.io/v1/text-to-speech/x", opts);
+  assertEquals(url, "https://api.elevenlabs.io/v1/text-to-speech/x");
+  assertEquals(init, opts);
 });

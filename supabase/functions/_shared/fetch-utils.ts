@@ -44,7 +44,7 @@ export async function fetchAI(
   opts: RequestInit = {},
   meta: { functionName?: string } = {},
 ): Promise<Response> {
-  [url, opts] = routeToDeepSeek(url, opts);
+  [url, opts] = routeToOpenRouter(url, opts);
   const started = performance.now();
   const functionName = meta.functionName ?? detectFunctionName();
   const model = extractModelFromInit(opts);
@@ -95,30 +95,40 @@ export async function fetchAI(
 
 // ---------- internal helpers ----------
 
-/** Provedor de IA: o gateway do Lovable (só existe no Lovable Cloud) foi trocado pelo DeepSeek.
- *  Chamadas ao endereço antigo seguem para a API do DeepSeek (compatível com OpenAI) com o modelo
- *  DEEPSEEK_MODEL (padrão deepseek-flash) e o modo "thinking" desligado — com ele ligado o DeepSeek
- *  recusa `tool_choice` forçando uma função, que várias funções usam. */
-export const DEEPSEEK_CHAT_URL = 'https://api.deepseek.com/chat/completions';
+/** Provedor de IA: o gateway do Lovable (só existe no Lovable Cloud) foi trocado pelo OpenRouter.
+ *  Chamadas ao endereço antigo seguem para o OpenRouter (compatível com OpenAI) com o modelo
+ *  OPENROUTER_MODEL (padrão google/gemini-2.5-flash); a chave segue em DEEPSEEK_API_KEY
+ *  (nome legado, lido por cada função antes de chamar fetchAI). */
+export const OPENROUTER_CHAT_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const LOVABLE_AI_URLS = new Set([
   'https://ai.gateway.lovable.dev/v1/chat/completions',
   'https://api.lovable.dev/v1/chat/completions',
 ]);
 
-function routeToDeepSeek(url: FetchTarget, opts: RequestInit): [FetchTarget, RequestInit] {
+/** Lê env sem depender de `--allow-env` (no runtime das Edge Functions a leitura é liberada);
+ *  sem isso a negativa de permissão viraria `catch` e o corpo seguiria com o modelo antigo. */
+export function envValue(name: string): string | undefined {
+  try {
+    return Deno.env.get(name) ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+export function routeToOpenRouter(url: FetchTarget, opts: RequestInit): [FetchTarget, RequestInit] {
   if (typeof url !== 'string' || !LOVABLE_AI_URLS.has(url)) return [url, opts];
+  const model = envValue('OPENROUTER_MODEL') ?? 'google/gemini-2.5-flash';
   let body = opts.body;
   if (typeof body === 'string') {
     try {
       const parsed = JSON.parse(body);
-      parsed.model = Deno.env.get('DEEPSEEK_MODEL') || 'deepseek-flash';
-      parsed.thinking ??= { type: 'disabled' };
+      parsed.model = model;
       body = JSON.stringify(parsed);
     } catch {
       // corpo não-JSON: envia como veio
     }
   }
-  return [DEEPSEEK_CHAT_URL, { ...opts, body }];
+  return [OPENROUTER_CHAT_URL, { ...opts, body }];
 }
 
 function detectFunctionName(): string {

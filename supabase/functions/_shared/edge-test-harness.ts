@@ -26,7 +26,7 @@ export async function withHandler(
     globalThis.fetch = (input, init) => {
       const url = new URL(input instanceof Request ? input.url : String(input));
       if (url.origin === ${JSON.stringify(base)}) return originalFetch(input, init);
-      if (${mockAI} && url.href === "https://api.deepseek.com/chat/completions") {
+      if (${mockAI} && (url.href === "https://api.deepseek.com/chat/completions" || url.href === "https://openrouter.ai/api/v1/chat/completions")) {
         return Promise.resolve(Response.json({ choices: [{ message: { content: "{inválido}" } }] }));
       }
       return Promise.reject(new Error("Acesso externo proibido no teste: " + url.origin));
