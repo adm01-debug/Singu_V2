@@ -6,19 +6,23 @@
 
 Total verificado no gate de 2026-11-24: **116 DEFINERs**. O delta de +5 sobre a rodada de 2026-11-18
 são os stubs legados de ciclo de vida do cliente, todos `SECURITY DEFINER` com `search_path` travado e
-`EXECUTE` **revogado de `anon`** (migration `20261121154000_revoke_anon_exec_stubs_crm.sql`) e mantido
-para `authenticated` porque o fluxo legado de ERP/CRM ainda os chama:
+`EXECUTE` **revogado de `anon`** (migration `20261121154000_revoke_anon_exec_stubs_crm.sql`) e também
+**revogado de `authenticated`** em 2026-11-24 (migration `20261124143000_revoke_authenticated_exec_stubs_crm.sql`):
 
 | Função | Situação |
 |---|---|
-| `ativar_cliente(uuid, integer, text)` | `anon` revogado; `authenticated` com EXECUTE |
-| `inativar_cliente(uuid, text, integer, text)` | `anon` revogado; `authenticated` com EXECUTE |
-| `registrar_compra(uuid, numeric, text, text)` | `anon` revogado; `authenticated` com EXECUTE |
-| `sdr_qualificar_cliente(uuid, integer, integer, text, text)` | `anon` revogado; `authenticated` com EXECUTE |
-| `transferir_cliente(uuid, integer, text, integer, text)` | `anon` revogado; `authenticated` com EXECUTE |
+| `ativar_cliente(uuid, integer, text)` | `anon` e `authenticated` revogados; só `service_role` |
+| `inativar_cliente(uuid, text, integer, text)` | `anon` e `authenticated` revogados; só `service_role` |
+| `registrar_compra(uuid, numeric, text, text)` | `anon` e `authenticated` revogados; só `service_role` |
+| `sdr_qualificar_cliente(uuid, integer, integer, text, text)` | `anon` e `authenticated` revogados; só `service_role` |
+| `transferir_cliente(uuid, integer, text, integer, text)` | `anon` e `authenticated` revogados; só `service_role` |
 
-Pendência de hardening (decisão de negócio, não de CI): revogar `authenticated` nessas cinco também,
-como já foi feito em `anon` — depende de confirmar que nenhum consumidor externo (ERP/automação) as invoca.
+Hardening concluído em 2026-11-24: nenhuma tela, edge function ou tipo gerado do frontend invoca as cinco,
+e o `EXECUTE` de `authenticated` só existia por herança da compat de janeiro. Continuam contando na
+baseline DEFINER (116) porque seguem `SECURITY DEFINER`. O trigger `trg_customer_purchases_after_insert`
+(`public.trg_after_purchase`, SECURITY INVOKER) chama `ativar_cliente`, mas roda como `postgres`/`service_role`
+— `customer_purchases` não tem policy de INSERT para `authenticated`. Um consumidor externo de ERP/CRM,
+se existir, passa a precisar de chave `service_role`.
 
 ## Baseline anterior (24/11) — 111 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-18)
 
