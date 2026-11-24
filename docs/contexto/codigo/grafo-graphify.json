@@ -4,11 +4,11 @@
  "presente": true,
  "como_gerar": "uvx --from \"graphifyy[sql]\" graphify update .  (ou: bun run graph:update); saída em graphify-out/ — graph.json e graph.html NÃO são versionados (dezenas de MB); use `graphify query/path/explain` localmente",
  "relatorio": null,
- "commit_do_grafo": "9f4e1ac6bda01e938e2383a16b9bc3fe0a2a44ee",
+ "commit_do_grafo": "68e6140a4a69dfe32ba4cee0e8b43345cf2d3fff",
  "grafo_atual": true,
  "nos": 25902,
- "arestas": 41401,
- "comunidades_total": 3043,
+ "arestas": 41407,
+ "comunidades_total": 3042,
  "relacoes": {
   "calls": 3277,
   "cites": 11,
@@ -24,12 +24,12 @@
   "rationale_for": 85,
   "re_exports": 317,
   "reads_from": 1587,
-  "references": 2561,
+  "references": 2567,
   "triggers": 586
  },
  "origem": {
   "EXTRACTED": 39754,
-  "INFERRED": 1647
+  "INFERRED": 1653
  },
  "comunidades": [
   {
@@ -101,6 +101,23 @@
    ]
   },
   {
+   "id": 10,
+   "nome": "_shared/auth.ts",
+   "nos": 265,
+   "callables": 84,
+   "arquivos": 80,
+   "exemplos_arquivos": [
+    "CHANGELOG.md",
+    "docs/adr/007-scoped-cors.md",
+    "supabase/functions/_shared/auth.ts",
+    "supabase/functions/_shared/auth_test.ts",
+    "supabase/functions/_shared/rate-limit.ts",
+    "supabase/functions/_shared/tenant-guard.ts",
+    "supabase/functions/_shared/tracing.ts",
+    "supabase/functions/_shared/validate.ts"
+   ]
+  },
+  {
    "id": 21,
    "nome": "framer-motion",
    "nos": 263,
@@ -115,23 +132,6 @@
     "src/components/company-detail/CompanyDataTab.tsx",
     "src/components/company-detail/CompanyProfileCard.tsx",
     "src/components/company-detail/profile/BusinessInfoCard.tsx"
-   ]
-  },
-  {
-   "id": 10,
-   "nome": "_shared/auth.ts",
-   "nos": 261,
-   "callables": 84,
-   "arquivos": 79,
-   "exemplos_arquivos": [
-    "CHANGELOG.md",
-    "docs/adr/007-scoped-cors.md",
-    "supabase/functions/_shared/auth.ts",
-    "supabase/functions/_shared/auth_test.ts",
-    "supabase/functions/_shared/rate-limit.ts",
-    "supabase/functions/_shared/tenant-guard.ts",
-    "supabase/functions/_shared/tracing.ts",
-    "supabase/functions/_shared/validate.ts"
    ]
   },
   {
@@ -293,9 +293,9 @@
   {
    "id": 30,
    "nome": "withAuth",
-   "nos": 166,
-   "callables": 31,
-   "arquivos": 48,
+   "nos": 164,
+   "callables": 30,
+   "arquivos": 47,
    "exemplos_arquivos": [
     ".lovable/memory/features/win-loss-intelligence.md",
     "AGENTS.md",
@@ -519,20 +519,20 @@
    ]
   },
   {
-   "id": 44,
-   "nome": "bestEffortWrite",
+   "id": 29,
+   "nome": "fetch-utils.ts",
    "nos": 80,
-   "callables": 41,
-   "arquivos": 14,
+   "callables": 36,
+   "arquivos": 15,
    "exemplos_arquivos": [
-    "supabase/functions/_shared/best-effort-write.ts",
-    "supabase/functions/_shared/best-effort-write_test.ts",
-    "supabase/functions/_shared/safe-http.ts",
-    "supabase/functions/_shared/safe-http_test.ts",
-    "supabase/functions/connection-introspect/index.ts",
-    "supabase/functions/connection-tester/index.ts",
-    "supabase/functions/conversational-search/index.ts",
-    "supabase/functions/disc-analyzer/index.ts"
+    "docs/estado/02_INTELIGENCIA_IA.md",
+    "docs/estado/06_INTEGRACOES.md",
+    "supabase/functions/_shared/behavioral-generation-mock.ts",
+    "supabase/functions/_shared/fetch-utils.ts",
+    "supabase/functions/_shared/fetch-utils_test.ts",
+    "supabase/functions/abm-whitespace-analyzer/index.ts",
+    "supabase/functions/ai-email-refine/index.ts",
+    "supabase/functions/ai-writing-assistant/index.ts"
    ]
   },
   {
@@ -543,6 +543,23 @@
    "arquivos": 1,
    "exemplos_arquivos": [
     "scripts/ai-context/gerar.mjs"
+   ]
+  },
+  {
+   "id": 84,
+   "nome": "bestEffortWrite",
+   "nos": 80,
+   "callables": 41,
+   "arquivos": 16,
+   "exemplos_arquivos": [
+    "docs/estado/06_INTEGRACOES.md",
+    "docs/lacunas/B2_reverificacao_estado_05_10.md",
+    "supabase/functions/_shared/best-effort-write.ts",
+    "supabase/functions/_shared/best-effort-write_test.ts",
+    "supabase/functions/_shared/fetch-utils.ts",
+    "supabase/functions/_shared/safe-http.ts",
+    "supabase/functions/_shared/safe-http_test.ts",
+    "supabase/functions/connection-introspect/index.ts"
    ]
   },
   {
@@ -570,23 +587,6 @@
    "arquivos": 1,
    "exemplos_arquivos": [
     "supabase/migrations/20260110000002_baseline_compat_idempotente.sql"
-   ]
-  },
-  {
-   "id": 29,
-   "nome": "fetch-utils.ts",
-   "nos": 78,
-   "callables": 33,
-   "arquivos": 14,
-   "exemplos_arquivos": [
-    "docs/estado/02_INTELIGENCIA_IA.md",
-    "supabase/functions/_shared/behavioral-generation-mock.ts",
-    "supabase/functions/_shared/fetch-utils.ts",
-    "supabase/functions/_shared/fetch-utils_test.ts",
-    "supabase/functions/abm-whitespace-analyzer/index.ts",
-    "supabase/functions/ai-email-refine/index.ts",
-    "supabase/functions/ai-writing-assistant/index.ts",
-    "supabase/functions/auto-regen-behavioral-profiles/index.ts"
    ]
   },
   {
@@ -634,7 +634,7 @@
    ]
   },
   {
-   "id": 84,
+   "id": 85,
    "nome": "ref_https",
    "nos": 75,
    "callables": 33,
@@ -678,6 +678,22 @@
    ]
   },
   {
+   "id": 82,
+   "nome": "3. Riscos estruturais, por gravidade",
+   "nos": 72,
+   "callables": 0,
+   "arquivos": 7,
+   "exemplos_arquivos": [
+    "ESTADO_ATUAL.md",
+    "docs/estado/02_INTELIGENCIA_IA.md",
+    "docs/estado/04_REVOPS_VENDAS.md",
+    "docs/estado/06_INTEGRACOES.md",
+    "docs/estado/07_DADOS_BACKEND.md",
+    "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md",
+    "docs/estado/12_VALIDACAO_DA_AUDITORIA.md"
+   ]
+  },
+  {
    "id": 1344,
    "nome": "_pgdocs.py",
    "nos": 71,
@@ -694,7 +710,24 @@
    ]
   },
   {
-   "id": 85,
+   "id": 19,
+   "nome": "weekly-digest/index.ts",
+   "nos": 70,
+   "callables": 48,
+   "arquivos": 16,
+   "exemplos_arquivos": [
+    "supabase/functions/_shared/auth.ts",
+    "supabase/functions/_shared/fetch-utils.ts",
+    "supabase/functions/_shared/pagination.ts",
+    "supabase/functions/_shared/pagination_test.ts",
+    "supabase/functions/_shared/resend.ts",
+    "supabase/functions/auto-rebatch-behavioral/index.ts",
+    "supabase/functions/check-health-alerts/index.ts",
+    "supabase/functions/email-pipeline-health/index.ts"
+   ]
+  },
+  {
+   "id": 138,
    "nome": "branch-podaveis.test.mjs",
    "nos": 70,
    "callables": 55,
@@ -778,23 +811,6 @@
    ]
   },
   {
-   "id": 19,
-   "nome": "weekly-digest/index.ts",
-   "nos": 65,
-   "callables": 44,
-   "arquivos": 15,
-   "exemplos_arquivos": [
-    "supabase/functions/_shared/auth.ts",
-    "supabase/functions/_shared/fetch-utils.ts",
-    "supabase/functions/_shared/pagination.ts",
-    "supabase/functions/_shared/pagination_test.ts",
-    "supabase/functions/_shared/resend.ts",
-    "supabase/functions/auto-rebatch-behavioral/index.ts",
-    "supabase/functions/check-health-alerts/index.ts",
-    "supabase/functions/email-pipeline-health/index.ts"
-   ]
-  },
-  {
    "id": 46,
    "nome": "useCompanies.ts",
    "nos": 64,
@@ -854,7 +870,7 @@
    ]
   },
   {
-   "id": 138,
+   "id": 144,
    "nome": "20260110000000_baseline_tabelas_base.sql",
    "nos": 61,
    "callables": 0,
@@ -906,23 +922,6 @@
    "exemplos_arquivos": [
     "docs/COMPLETE_SYSTEM_ANALYSIS.md",
     "scripts/migration/cdc/replay_test.ts"
-   ]
-  },
-  {
-   "id": 82,
-   "nome": "Achados",
-   "nos": 55,
-   "callables": 6,
-   "arquivos": 9,
-   "exemplos_arquivos": [
-    "ESTADO_ATUAL.md",
-    "docs/estado/04_REVOPS_VENDAS.md",
-    "docs/estado/06_INTEGRACOES.md",
-    "docs/estado/07_DADOS_BACKEND.md",
-    "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md",
-    "docs/estado/12_VALIDACAO_DA_AUDITORIA.md",
-    "supabase/functions/_shared/fetch-utils.ts",
-    "supabase/functions/connection-tester/index.ts"
    ]
   },
   {
@@ -1002,7 +1001,7 @@
    ]
   },
   {
-   "id": 144,
+   "id": 153,
    "nome": ".metadata",
    "nos": 52,
    "callables": 35,
@@ -1014,7 +1013,7 @@
    ]
   },
   {
-   "id": 153,
+   "id": 155,
    "nome": "supplier_scores",
    "nos": 52,
    "callables": 0,
@@ -1109,7 +1108,7 @@
    ]
   },
   {
-   "id": 155,
+   "id": 156,
    "nome": "snapshot.py",
    "nos": 50,
    "callables": 35,
@@ -1119,7 +1118,7 @@
    ]
   },
   {
-   "id": 156,
+   "id": 185,
    "nome": "mgmt-mock.test.mjs",
    "nos": 49,
    "callables": 31,
@@ -1152,7 +1151,7 @@
    ]
   },
   {
-   "id": 185,
+   "id": 189,
    "nome": "automation.mjs",
    "nos": 48,
    "callables": 35,
@@ -1169,7 +1168,7 @@
    ]
   },
   {
-   "id": 189,
+   "id": 192,
    "nome": "supplier_homologations",
    "nos": 48,
    "callables": 0,
@@ -1203,7 +1202,7 @@
    ]
   },
   {
-   "id": 192,
+   "id": 203,
    "nome": "20260721223121_wave173_idx_and_final_isnull_fix.sql",
    "nos": 47,
    "callables": 0,
@@ -1213,7 +1212,7 @@
    ]
   },
   {
-   "id": 203,
+   "id": 204,
    "nome": "gerar-banco.mjs",
    "nos": 47,
    "callables": 24,
@@ -1638,6 +1637,13 @@
    "comunidade": "ref_hooks"
   },
   {
+   "id": "supabase_functions_shared_fetch_utils_fetchai",
+   "rotulo": "fetchAI()",
+   "arquivo": "supabase/functions/_shared/fetch-utils.ts",
+   "grau": 53,
+   "comunidade": "fetch-utils.ts"
+  },
+  {
    "id": "supabase_migrations_20260721221440_idx_user_id_rls_tables",
    "rotulo": "20260721221440_idx_user_id_rls_tables.sql",
    "arquivo": "supabase/migrations/20260721221440_idx_user_id_rls_tables.sql",
@@ -1664,13 +1670,6 @@
    "arquivo": "src/components/dashboard/tabs/OverviewTab.tsx",
    "grau": 52,
    "comunidade": "ref_components"
-  },
-  {
-   "id": "supabase_functions_shared_fetch_utils_fetchai",
-   "rotulo": "fetchAI()",
-   "arquivo": "supabase/functions/_shared/fetch-utils.ts",
-   "grau": 51,
-   "comunidade": "fetch-utils.ts"
   }
  ],
  "mais_chamados": [
@@ -2497,7 +2496,7 @@
   "docs/estado/03_MARKETING_AUTOMACAO.md": "withAuth",
   "docs/estado/04_REVOPS_VENDAS.md": "Componentes e features órfãs",
   "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md": "withAuth",
-  "docs/estado/06_INTEGRACOES.md": "Achados",
+  "docs/estado/06_INTEGRACOES.md": "fetch-utils.ts",
   "docs/estado/07_DADOS_BACKEND.md": "Estado — Camada de Dados e Backend",
   "docs/estado/08_INFRA_CI_TESTES_DOCS.md": "Lacunas: o que NÃO verifiquei e por quê",
   "docs/estado/09_VERIFICACAO_ADVERSARIAL_ORFAOS.md": "withAuth",
@@ -4966,7 +4965,7 @@
   "supabase/functions/demand-forecast/index.ts": "_shared/auth.ts",
   "supabase/functions/detect-churn-risk/index.ts": "_shared/auth.ts",
   "supabase/functions/detect-new-device/index.ts": "_shared/auth.ts",
-  "supabase/functions/disc-analyzer/index.ts": "bestEffortWrite",
+  "supabase/functions/disc-analyzer/index.ts": "fetch-utils.ts",
   "supabase/functions/dual-write-proxy/index.ts": "_shared/auth.ts",
   "supabase/functions/elevenlabs-scribe-token/index.ts": "_shared/auth.ts",
   "supabase/functions/elevenlabs-tts/index.ts": "_shared/auth.ts",
@@ -5024,7 +5023,7 @@
   "supabase/functions/objection-context-summary/index.ts": "_shared/auth.ts",
   "supabase/functions/objection-handler/index.ts": "_shared/auth.ts",
   "supabase/functions/phone-validator/index.ts": "phone-validator/index.ts",
-  "supabase/functions/playbook-generator/index.ts": "fetch-utils.ts",
+  "supabase/functions/playbook-generator/index.ts": "_shared/auth.ts",
   "supabase/functions/playbook-recommender/index.ts": "_shared/auth.ts",
   "supabase/functions/process-behavioral-regen-queue/index.ts": "fetch-utils.ts",
   "supabase/functions/process-webhook-dlq/index.ts": "weekly-digest/index.ts",
@@ -5042,7 +5041,7 @@
   "supabase/functions/smart-notify/provider_config_test.ts": "ref_https",
   "supabase/functions/smart-reminders/index.ts": "_shared/auth.ts",
   "supabase/functions/social-behavior-analyzer/index.ts": "_shared/auth.ts",
-  "supabase/functions/social-events-detector/index.ts": "Achados",
+  "supabase/functions/social-events-detector/index.ts": "weekly-digest/index.ts",
   "supabase/functions/social-profile-scraper/index.ts": "bestEffortWrite",
   "supabase/functions/submit-signature/index.ts": "_shared/auth.ts",
   "supabase/functions/suggest-next-action/index.ts": "_shared/auth.ts",

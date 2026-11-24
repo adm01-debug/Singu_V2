@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "9f4e1ac6bda01e938e2383a16b9bc3fe0a2a44ee",
+  "sha": "68e6140a4a69dfe32ba4cee0e8b43345cf2d3fff",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 13:20 UTC",
+  "generated_at": "2026-11-24 14:13 UTC",
   "files_total": 4016,
   "code_files": 3540,
   "code_lines": 478282
@@ -307258,10 +307258,20 @@
   }
  },
  "git": {
-  "sha": "9f4e1ac6bda01e938e2383a16b9bc3fe0a2a44ee",
+  "sha": "68e6140a4a69dfe32ba4cee0e8b43345cf2d3fff",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "68e6140",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)",
+    "files": [
+     "docs/estado/02_INTELIGENCIA_IA.md",
+     "docs/estado/06_INTEGRACOES.md"
+    ]
+   },
    {
     "sha": "9f4e1ac",
     "date": "2026-11-24",
@@ -307637,15 +307647,6 @@
      "src/hooks/useNurturingExecutions.ts",
      "src/pages/Nurturing.tsx"
     ]
-   },
-   {
-    "sha": "6b9a9e4",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(sequencias): tracking de abertura e clique no email transacional (#299)",
-    "files": [
-     "supabase/functions/send-transactional-email/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -307686,6 +307687,14 @@
     2
    ],
    [
+    "docs/estado/02_INTELIGENCIA_IA.md",
+    1
+   ],
+   [
+    "docs/estado/06_INTEGRACOES.md",
+    1
+   ],
+   [
     "supabase/functions/_shared/behavioral-generation-mock.ts",
     1
    ],
@@ -307719,14 +307728,6 @@
    ],
    [
     "supabase/config.toml",
-    1
-   ],
-   [
-    "supabase/functions/external-data/audit.ts",
-    1
-   ],
-   [
-    "docs/lacunas/MATRIZ_RECONCILIADA_20261012_EDGE.md",
     1
    ]
   ]

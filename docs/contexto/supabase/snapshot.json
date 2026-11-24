@@ -300711,7 +300711,7 @@
       {
         "bypass_rls": false,
         "config": [
-          "session_preload_libraries=safeupdate",
+          "session_preload_libraries=supautils, safeupdate",
           "statement_timeout=8s",
           "lock_timeout=8s",
           "search_path=public, _dormant, extensions"

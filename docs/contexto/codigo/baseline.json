@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "9f4e1ac6bda01e938e2383a16b9bc3fe0a2a44ee",
+  "commit": "68e6140a4a69dfe32ba4cee0e8b43345cf2d3fff",
   "branch": "main",
-  "data_commit": "2026-11-24T10:19:21-03:00",
+  "data_commit": "2026-11-24T10:48:41-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "68e6140",
+    "data": "2026-11-24",
+    "assunto": "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)"
+   },
    {
     "sha": "9f4e1ac",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "86259d6",
     "data": "2026-11-22",
     "assunto": "chore(inventario): regenera edges.json pós-#300 e consolida auditoria de edges órfãs (doc 13) (#304)"
-   },
-   {
-    "sha": "d57e85c",
-    "data": "2026-11-22",
-    "assunto": "fix(rls): revoga EXECUTE anon das 7 stubs CRM/search recriadas pelas baselines (destrava gate allowlist) (#303)"
    }
   ],
-  "arquivos_mudados_7d": 1046,
+  "arquivos_mudados_7d": 1048,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 162
+    "commits": 163
    },
    {
     "autor": "devin-ai-integration[bot]",

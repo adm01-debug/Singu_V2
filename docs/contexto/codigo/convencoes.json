@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)",
    "feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)",
    "fix(ci): destrava o deploy de edge functions (#322)",
    "fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)",
-   "feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)",
-   "fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)"
+   "feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)"
   ]
  },
  "pr_template": null,
