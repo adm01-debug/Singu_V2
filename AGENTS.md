@@ -12,6 +12,7 @@ Sistema ~80% pronto, em manutenção: bugs, hardening (RLS, CI, segredos), infra
 - Supabase canônico: `pgxfvjmuubtbowutlide`. `supabase/config.toml` e `supabase/.temp/linked-project.json` apontam para ele; `scripts/check-supabase-project-ref.test.mjs` (CI) impede a divergência.
 - Stack: Vite 6 + React 18 + TypeScript 5 + Tailwind 3 + shadcn/ui; TanStack Query 5; Zod 4; Supabase (Postgres, Auth, Storage, Edge Functions/Deno).
 - Onde: `src/` (pages, components, hooks, domain, integrations) · `supabase/functions/` (`_shared/` = auth com CORS, rate-limit, safe-http) · `supabase/migrations/` · `tests/rls/` · `e2e/` · `scripts/` · `docs/`.
+- Pasta canônica do projeto: `~/projetos/Singu_V2` — repo e `_docs/` (bundles de auditoria, relatórios, material importado) na **mesma** pasta. `_docs/` não vai para o git (`.gitignore`). Não crie cópia do projeto nem `_docs` fora dele: trabalho que nasce fora da pasta canônica se perde.
 
 ## Comandos
 
