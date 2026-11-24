@@ -35,6 +35,8 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { useRBAC } from '@/hooks/useRBAC';
+import { canAccessRoute } from '@/lib/routePermissions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface MobileSidebarDrawerProps {
@@ -80,6 +82,7 @@ export function MobileSidebarDrawer({ open, onClose, onSearchClick }: MobileSide
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { hasPermission, userRoles, isLoading: rbacLoading } = useRBAC();
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
@@ -102,7 +105,10 @@ export function MobileSidebarDrawer({ open, onClose, onSearchClick }: MobileSide
   };
 
   // Group items by section
-  const sections = navItems.reduce((acc, item) => {
+  const visibleNavItems = navItems.filter((item) =>
+    canAccessRoute(item.path, hasPermission, userRoles, rbacLoading),
+  );
+  const sections = visibleNavItems.reduce((acc, item) => {
     if (!acc[item.section]) acc[item.section] = [];
     acc[item.section].push(item);
     return acc;

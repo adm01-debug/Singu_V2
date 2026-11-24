@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { useRBAC } from "@/hooks/useRBAC";
+import { canAccessRoute } from "@/lib/routePermissions";
 import { useEffect, useState, useCallback, useMemo, memo } from "react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -114,6 +116,7 @@ function AppSidebarInner() {
   const { prefetch } = usePrefetch();
   const { user, signOut } = useAuth();
   const { isAdmin } = useIsAdmin();
+  const { hasPermission, userRoles, isLoading: rbacLoading } = useRBAC();
   const visibleSections = useMemo(() => (isAdmin ? [...navSections, adminSection] : navSections), [isAdmin]);
   const collapsedKey = `${COLLAPSED_KEY_PREFIX}-${user?.id ?? 'anon'}`;
   const [sectionCollapsed, setSectionCollapsed] = useState<Record<string, boolean>>(() => getInitialCollapsed(user?.id));
@@ -223,7 +226,9 @@ function AppSidebarInner() {
                 )}
               >
                 <SidebarMenu>
-                  {section.items.map((item) => {
+                  {section.items
+                    .filter((item) => canAccessRoute(item.url, hasPermission, userRoles, rbacLoading))
+                    .map((item) => {
                     const isActive = item.url === "/"
                       ? location.pathname === "/"
                       : location.pathname.startsWith(item.url);
