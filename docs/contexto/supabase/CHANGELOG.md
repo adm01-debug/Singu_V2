@@ -2,6 +2,12 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 01:14 UTC
+
+- **functions** alterado (7): `public.ativar_cliente(p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text)`, `public.inativar_cliente(p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text)`, `public.registrar_compra(p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text)`, `public.sdr_qualificar_cliente(p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text)`, `public.search_companies(search_term text, max_results integer)`, `public.search_contacts(search_term text, max_results integer)`, `public.transferir_cliente(p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text)`
+- **migrations** adicionado (1): `20261121154000_revoke_anon_exec_stubs_crm`
+- **realtime** removido (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_20`
+
 ## 2026-11-24 00:29 UTC
 
 - **functions** alterado (10): `public.auto_atualizar_nomes_contato()`, `public.auto_preencher_nomes_contato()`, `public.claim_behavioral_profile_retry(p_contact_id uuid, p_actor_id uuid)`, `public.handle_new_user()`, `public.has_role(_user_id uuid, _role app_role)`, `public.search_companies(search_term text, max_results integer)`, `public.search_contacts(search_term text, max_results integer)`, `public.to_title_case_pt(s text)`, `public.update_company_search_vector()`, `public.update_contact_search_vector()`
