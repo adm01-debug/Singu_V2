@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)",
    "ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)",
    "fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)",
    "fix: loga falha de insert da auditoria do external-data (#321)",
-   "chore(matriz): marca EF-3/5/7/11/12/13/14/16/17 e F/F15/19/25/34/36/37/40/60/62 como RC (#319)",
-   "build(deps): bump the minor-and-patch group with 13 updates (#315)"
+   "chore(matriz): marca EF-3/5/7/11/12/13/14/16/17 e F/F15/19/25/34/36/37/40/60/62 como RC (#319)"
   ]
  },
  "pr_template": null,

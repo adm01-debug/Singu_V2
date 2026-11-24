@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "6378bfb29fe31070524a225af5e50d284228e29d",
+  "sha": "16516ac61e262507ceba9faf1a2398249befd7f5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-23 22:48 UTC",
-  "files_total": 4014,
-  "code_files": 3538,
-  "code_lines": 478079
+  "generated_at": "2026-11-24 00:23 UTC",
+  "files_total": 4015,
+  "code_files": 3539,
+  "code_lines": 478162
  },
  "version": "1.3.2",
- "facts_hash": "cc21237239f4230d",
+ "facts_hash": "67141ddd523a12cf",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,7 +272,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1281,
+   ".sql": 1282,
    ".tsx": 1183,
    ".ts": 910,
    ".mjs": 123,
@@ -70370,10 +70370,10 @@
     "args": "p_contact_id uuid, p_actor_id uuid",
     "returns": "public.behavioral_profile_regen_queue",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
     "security_definer": false,
     "search_path": true,
-    "body": "DECLARE v_owner uuid; v_queue public.behavioral_profile_regen_queue; BEGIN IF current_user <> 'service_role' OR p_actor_id IS NULL OR NOT COALESCE(public.has_role(p_actor_id, 'admin'), false) THEN RAISE EXCEPTION 'Reanálise exclusiva de administrador autenticado' USING ERRCODE = '42501'; END IF; SELECT c.user_id INTO v_owner FROM public.contacts AS c WHERE c.id = p_contact_id; IF v_owner IS NULL THEN RAISE EXCEPTION 'Contato não encontrado' USING ERRCODE = '22023'; END IF; INSERT INTO public.behavioral_profile_regen_queue ( contact_id, user_id, enqueued_at, next_run_at, trigger_source ) VALUES (p_contact_id, v_owner, clock_timestamp(), clock_timestamp(), 'manual_retry') ON CONFLICT (contact_ …",
+    "body": "DECLARE v_owner uuid; v_queue public.behavioral_profile_regen_queue; BEGIN IF current_user <> 'service_role' OR p_actor_id IS NULL OR NOT EXISTS ( SELECT 1 FROM public.user_roles AS ur WHERE ur.user_id = p_actor_id AND ur.role = 'admin'::public.app_role ) THEN RAISE EXCEPTION 'Reanálise exclusiva de administrador autenticado' USING ERRCODE = '42501'; END IF; SELECT c.user_id INTO v_owner FROM public.contacts AS c WHERE c.id = p_contact_id; IF v_owner IS NULL THEN RAISE EXCEPTION 'Contato não encontrado' USING ERRCODE = '22023'; END IF; INSERT INTO public.behavioral_profile_regen_queue ( contact_id, user_id, enqueued_at, next_run_at, trigger_source ) VALUES (p_contact_id, v_owner, clock_times …",
     "raises": [
      "Reanálise exclusiva de administrador autenticado",
      "Contato não encontrado",
@@ -70385,6 +70385,7 @@
      "behavioral_profile_regen_queue",
      "contact_analytical_profile_versions",
      "contacts",
+     "user_roles",
      "v_owner",
      "v_queue"
     ]
@@ -87478,7 +87479,8 @@
    "supabase/migrations/20261119000000_external_data_audit_log.sql",
    "supabase/migrations/20261120153000_fix_handle_new_user_trigger_email.sql",
    "supabase/migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql",
-   "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql",
+   "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -99282,6 +99284,22 @@
     "objkind": "function",
     "roles": "authenticated",
     "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "claim_behavioral_profile_retry",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "claim_behavioral_profile_retry",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
    }
   ],
   "raises": [
@@ -99956,31 +99974,6 @@
     "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
    },
    {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Reanálise exclusiva de administrador autenticado",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Contato não encontrado",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Proprietário da reserva divergente",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Reanálise recente; aguarde cinco minutos",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Contato reservado ou em pausa temporária; aguarde para tentar novamente",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
     "function": "claim_behavioral_profile_sla",
     "msg": "Reserva exclusiva do serviço",
     "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
@@ -100324,6 +100317,31 @@
     "function": "guard_contact_relation_write",
     "msg": "Contact relation write forbidden",
     "src": "supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Reanálise exclusiva de administrador autenticado",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Contato não encontrado",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Proprietário da reserva divergente",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Reanálise recente; aguarde cinco minutos",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Contato reservado ou em pausa temporária; aguarde para tentar novamente",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
    }
   ],
   "seed": [],
@@ -112597,8 +112615,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1108,
-   "lines": 104071,
+   "files": 1109,
+   "lines": 104146,
    "tables": [
     "users"
    ],
@@ -112706,7 +112724,7 @@
   {
    "module": "tests",
    "files": 71,
-   "lines": 6449,
+   "lines": 6457,
    "tables": [],
    "exports": [
     "ask-crm.js: options, function",
@@ -128294,6 +128312,10 @@
    },
    {
     "file": "supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql",
+    "value": "admin"
+   },
+   {
+    "file": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
     "value": "admin"
    }
   ],
@@ -169813,6 +169835,18 @@
    {
     "file": "supabase/migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql",
     "line": "AND timestamp > now() - interval '24 hours';"
+   },
+   {
+    "file": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
+    "line": "AND v_queue.last_processed_at > clock_timestamp() - interval '5 minutes') THEN"
+   },
+   {
+    "file": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
+    "line": "AND version.generated_at > clock_timestamp() - interval '5 minutes'"
+   },
+   {
+    "file": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
+    "line": "next_run_at = clock_timestamp() + interval '20 minutes',"
    }
   ],
   "percents": [
@@ -206833,10 +206867,10 @@
     "args": "p_contact_id uuid, p_actor_id uuid",
     "returns": "public.behavioral_profile_regen_queue",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
     "security_definer": false,
     "search_path": true,
-    "body": "DECLARE v_owner uuid; v_queue public.behavioral_profile_regen_queue; BEGIN IF current_user <> 'service_role' OR p_actor_id IS NULL OR NOT COALESCE(public.has_role(p_actor_id, 'admin'), false) THEN RAISE EXCEPTION 'Reanálise exclusiva de administrador autenticado' USING ERRCODE = '42501'; END IF; SELECT c.user_id INTO v_owner FROM public.contacts AS c WHERE c.id = p_contact_id; IF v_owner IS NULL THEN RAISE EXCEPTION 'Contato não encontrado' USING ERRCODE = '22023'; END IF; INSERT INTO public.behavioral_profile_regen_queue ( contact_id, user_id, enqueued_at, next_run_at, trigger_source ) VALUES (p_contact_id, v_owner, clock_timestamp(), clock_timestamp(), 'manual_retry') ON CONFLICT (contact_ …",
+    "body": "DECLARE v_owner uuid; v_queue public.behavioral_profile_regen_queue; BEGIN IF current_user <> 'service_role' OR p_actor_id IS NULL OR NOT EXISTS ( SELECT 1 FROM public.user_roles AS ur WHERE ur.user_id = p_actor_id AND ur.role = 'admin'::public.app_role ) THEN RAISE EXCEPTION 'Reanálise exclusiva de administrador autenticado' USING ERRCODE = '42501'; END IF; SELECT c.user_id INTO v_owner FROM public.contacts AS c WHERE c.id = p_contact_id; IF v_owner IS NULL THEN RAISE EXCEPTION 'Contato não encontrado' USING ERRCODE = '22023'; END IF; INSERT INTO public.behavioral_profile_regen_queue ( contact_id, user_id, enqueued_at, next_run_at, trigger_source ) VALUES (p_contact_id, v_owner, clock_times …",
     "raises": [
      "Reanálise exclusiva de administrador autenticado",
      "Contato não encontrado",
@@ -206848,6 +206882,7 @@
      "behavioral_profile_regen_queue",
      "contact_analytical_profile_versions",
      "contacts",
+     "user_roles",
      "v_owner",
      "v_queue"
     ]
@@ -208088,31 +208123,6 @@
     "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
    },
    {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Reanálise exclusiva de administrador autenticado",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Contato não encontrado",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Proprietário da reserva divergente",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Reanálise recente; aguarde cinco minutos",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
-    "function": "claim_behavioral_profile_retry",
-    "msg": "Contato reservado ou em pausa temporária; aguarde para tentar novamente",
-    "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
-   },
-   {
     "function": "claim_behavioral_profile_sla",
     "msg": "Reserva exclusiva do serviço",
     "src": "supabase/migrations/20261012194307_recover_atomic_queue_claims.sql"
@@ -208456,6 +208466,31 @@
     "function": "guard_contact_relation_write",
     "msg": "Contact relation write forbidden",
     "src": "supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Reanálise exclusiva de administrador autenticado",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Contato não encontrado",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Proprietário da reserva divergente",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Reanálise recente; aguarde cinco minutos",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "claim_behavioral_profile_retry",
+    "msg": "Contato reservado ou em pausa temporária; aguarde para tentar novamente",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
    }
   ],
   "db_generated": [
@@ -221521,6 +221556,7 @@
    "supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql",
    "supabase/migrations/20261118183212_incoming_webhook_nonces_policy.sql",
    "supabase/migrations/20261119000000_external_data_audit_log.sql",
+   "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -233260,6 +233296,22 @@
     "objkind": "function",
     "roles": "authenticated",
     "src": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "claim_behavioral_profile_retry",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "claim_behavioral_profile_retry",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
    }
   ],
   "guards": [
@@ -306374,6 +306426,19 @@
    "path": "supabase/migrations/20261121154000_revoke_anon_exec_stubs_crm.sql",
    "lines": 26
   },
+  "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql": {
+   "path": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
+   "lines": 75,
+   "role_checks": [
+    "admin"
+   ],
+   "temporal": [
+    "AND v_queue.last_processed_at > clock_timestamp() - interval '5 minutes') THEN",
+    "AND version.generated_at > clock_timestamp() - interval '5 minutes'",
+    "next_run_at = clock_timestamp() + interval '20 minutes',"
+   ],
+   "uses_service_role": true
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -306723,7 +306788,7 @@
   },
   "tests/rls/contact_relations_owner_scope.sql": {
    "path": "tests/rls/contact_relations_owner_scope.sql",
-   "lines": 169,
+   "lines": 177,
    "is_test": true,
    "role_checks": [
     "admin"
@@ -307047,10 +307112,20 @@
   }
  },
  "git": {
-  "sha": "6378bfb29fe31070524a225af5e50d284228e29d",
+  "sha": "16516ac61e262507ceba9faf1a2398249befd7f5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "16516ac",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)",
+    "files": [
+     "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
+     "tests/rls/contact_relations_owner_scope.sql"
+    ]
+   },
    {
     "sha": "6378bfb",
     "date": "2026-11-23",
@@ -307431,15 +307506,6 @@
      "src/components/nlp/CommunicationCoherencePanel.tsx",
      "src/pages/ErpViewer.tsx"
     ]
-   },
-   {
-    "sha": "fe5d8c1",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(nlp): metaprogramas derivados de dados reais do contato (remove hash ficticio) (#292)",
-    "files": [
-     "src/components/nlp/MetaProgramsProfiler.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -307474,6 +307540,14 @@
    [
     "supabase/functions/send-sms-campaign/index.ts",
     2
+   ],
+   [
+    "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
+    1
+   ],
+   [
+    "tests/rls/contact_relations_owner_scope.sql",
+    1
    ],
    [
     ".github/workflows/deploy-edge-functions.yml",
@@ -307513,14 +307587,6 @@
    ],
    [
     "src/app/AppRoutes.tsx",
-    1
-   ],
-   [
-    "src/app/lazyPages.tsx",
-    1
-   ],
-   [
-    "src/components/abm/ABMAccountEditDialog.tsx",
     1
    ]
   ]

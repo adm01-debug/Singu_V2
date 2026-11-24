@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "6378bfb29fe31070524a225af5e50d284228e29d",
+  "commit": "16516ac61e262507ceba9faf1a2398249befd7f5",
   "branch": "main",
-  "data_commit": "2026-11-23T19:46:29-03:00",
+  "data_commit": "2026-11-23T21:21:10-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "16516ac",
+    "data": "2026-11-23",
+    "assunto": "fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)"
+   },
    {
     "sha": "6378bfb",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "6b9a9e4",
     "data": "2026-11-21",
     "assunto": "feat(sequencias): tracking de abertura e clique no email transacional (#299)"
-   },
-   {
-    "sha": "d1e1811",
-    "data": "2026-11-21",
-    "assunto": "fix(edges): guarda cron-ou-usuario-autenticado em 9 edges (#298)"
    }
   ],
-  "arquivos_mudados_7d": 1038,
+  "arquivos_mudados_7d": 1040,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 156
+    "commits": 157
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3909,
+  "arquivos_total": 3910,
   "arquivos_codigo": 2256,
   "linhas_codigo": 421359,
   "rotas": 116,
@@ -338,7 +338,7 @@
   "hooks": 412,
   "edge_functions": 109,
   "tabelas": 542,
-  "migrations": 1108,
+  "migrations": 1109,
   "cron_jobs": 44,
   "testes": 278,
   "workflows": 14,

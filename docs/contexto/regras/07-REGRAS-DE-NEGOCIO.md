@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6378bfb29f` · branch `main` · 2026-11-23 22:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `16516ac61e` · branch `main` · 2026-11-24 00:23 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1063,11 +1063,6 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `save_behavioral_profile_if_fresh` | Proprietário do perfil divergente | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `save_behavioral_profile_if_fresh` | Reserva exclusiva do serviço | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `save_behavioral_profile_if_fresh` | Proprietário da reserva divergente | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
-| `claim_behavioral_profile_retry` | Reanálise exclusiva de administrador autenticado | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
-| `claim_behavioral_profile_retry` | Contato não encontrado | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
-| `claim_behavioral_profile_retry` | Proprietário da reserva divergente | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
-| `claim_behavioral_profile_retry` | Reanálise recente; aguarde cinco minutos | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
-| `claim_behavioral_profile_retry` | Contato reservado ou em pausa temporária; aguarde para tentar novamente | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `claim_behavioral_profile_sla` | Reserva exclusiva do serviço | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `claim_behavioral_profile_sla` | Proprietário do contato divergente | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `claim_behavioral_profile_sla` | Proprietário da reserva divergente | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
@@ -1137,6 +1132,11 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `merge_records_atomically` | Relação pertence a outro usuário | `supabase/migrations/20261109120000_fix_merge_nome_crm_override.sql` |
 | `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `guard_contact_relation_write` | Contact relation write forbidden | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
+| `claim_behavioral_profile_retry` | Reanálise exclusiva de administrador autenticado | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
+| `claim_behavioral_profile_retry` | Contato não encontrado | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
+| `claim_behavioral_profile_retry` | Proprietário da reserva divergente | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
+| `claim_behavioral_profile_retry` | Reanálise recente; aguarde cinco minutos | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
+| `claim_behavioral_profile_retry` | Contato reservado ou em pausa temporária; aguarde para tentar novamente | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
 ## E. Estados, máquinas de estado e transições
 
@@ -4082,7 +4082,7 @@ _nenhum item encontrado_
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/usePendingNotifications.ts` |
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +232 linhas — lista completa em `context.json` | |
+| … +235 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -4726,6 +4726,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261012194307_recover_atomic_queue_claims.sql` |
 | `admin` | `supabase/migrations/20261027220000_serialize_contact_relation_writes.sql` |
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
+| `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
 ## K. Testes como especificação (3242 testes em 253 arquivos — nomes completos em `context.json`)
 
