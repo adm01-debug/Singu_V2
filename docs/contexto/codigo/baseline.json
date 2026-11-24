@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "1104bf2eefbc4b8a1d81036a3d8422ceb0d2badd",
+  "commit": "662919439a0a004a5a8ac47cda7222da5de00745",
   "branch": "main",
-  "data_commit": "2026-11-24T17:49:39-03:00",
+  "data_commit": "2026-11-24T17:59:47-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "6629194",
+    "data": "2026-11-24",
+    "assunto": "fix(docs): mecanismo real da falha do smart-notify (502, nao skip silencioso) (#338)"
+   },
+   {
+    "sha": "a737bf1",
+    "data": "2026-11-24",
+    "assunto": "fix(docs): smart-notify sem cron agendado e guard aceita JWT (#337)"
+   },
    {
     "sha": "1104bf2",
     "data": "2026-11-24",
@@ -121,19 +131,9 @@
     "sha": "fa7b7fb",
     "data": "2026-11-23",
     "assunto": "fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)"
-   },
-   {
-    "sha": "d19dec8",
-    "data": "2026-11-23",
-    "assunto": "fix: corrige error-budget sem amostras e valida origem do intent-tracker (#313)"
-   },
-   {
-    "sha": "14096c0",
-    "data": "2026-11-23",
-    "assunto": "fix(FF62): territory-optimization propaga falha de RPC externa (#316)"
    }
   ],
-  "arquivos_mudados_7d": 1064,
+  "arquivos_mudados_7d": 1065,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 170
+    "commits": 172
    },
    {
     "autor": "devin-ai-integration[bot]",

@@ -504,7 +504,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.portfolio_settings](tables/public/portfolio_settings.md) | table | sim | 2 | 5 | não |  |
 | [public.product_novelties](tables/public/product_novelties.md) | table | sim | 2 | 13 | não | Ciclo de vida do selo NOVO. Pipeline popula via fn_populate_novelties_from_supplier. Trigger sincroniza products.is_new automaticamente. |
 | [public.products](tables/public/products.md) | table | sim | 1 | 14 | não | Catálogo de produtos/serviços comercializados. Contém SKU, preço, custo, estoque e metadados. PK: id; SKU é opcional e UNIQUE. Relaciona-se a itens de oportunidade por public.deal_items.product_id e a novidades por public.product_novelties.product_id. |
-| [public.profiles](tables/public/profiles.md) | table | sim | 7 | 26 | não | SINGU: Perfis de usuários do sistema, vinculados ao Supabase Auth |
+| [public.profiles](tables/public/profiles.md) | table | sim | 8 | 26 | não | SINGU: Perfis de usuários do sistema, vinculados ao Supabase Auth |
 | [public.proposals](tables/public/proposals.md) | table | sim | 4 | 22 | não | Propostas comerciais/orçamentos vinculados opcionalmente a empresa, contato e oportunidade. Mantém totais, desconto, estado do ciclo de envio/resposta, validade e itens em JSONB. PK: id. Relacionamentos: company_id → public.companies.id; contact_id → public.contacts.id; deal_id → public.deals.id; user_id → public.profiles.id. |
 | [public.proximo_passo_feedback](tables/public/proximo_passo_feedback.md) | table | sim | 3 | 9 | não |  |
 | [public.psychographic_audit_log](tables/public/psychographic_audit_log.md) | table | sim | 1 | 8 | não |  |

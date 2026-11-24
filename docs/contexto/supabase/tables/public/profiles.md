@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 7 |
+| policies | 8 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -179,6 +179,16 @@
 
 
 ## Policies (RLS)
+
+### `Admins can view all profiles`
+
+| campo | valor |
+|---|---|
+| comando | SELECT |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| WITH CHECK |  |
 
 ### `Users can insert their own profile`
 

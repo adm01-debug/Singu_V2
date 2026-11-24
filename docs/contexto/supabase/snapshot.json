@@ -188060,7 +188060,7 @@
         ],
         "definition": null,
         "definition_sha": "f2e61014ceac31f2",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -218054,7 +218054,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 85,
+          "code_total_files": 86,
           "cron": [],
           "db": [
             "public.ativar_cliente",
@@ -218351,7 +218351,7 @@
         ],
         "definition": null,
         "definition_sha": "ffacbb4d1686912d",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -223214,7 +223214,7 @@
         ],
         "definition": null,
         "definition_sha": "20c041db4611c52f",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -224818,7 +224818,7 @@
         ],
         "definition": null,
         "definition_sha": "390f526520252326",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -228151,7 +228151,7 @@
         ],
         "definition": null,
         "definition_sha": "fa9e49de29f646f2",
-        "execute_api_roles": "authenticated, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -275553,6 +275553,12 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.profiles.Admins can view all profiles",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.profiles.Users can insert their own profile",
         "severity": "BAIXA"
       },
@@ -280559,6 +280565,16 @@
         "name": null,
         "statements": null,
         "version": "20261124120000"
+      },
+      {
+        "name": "rbac_admin_le_perfis_para_atribuir_papel",
+        "statements": null,
+        "version": "20261124141500"
+      },
+      {
+        "name": "revoke_authenticated_exec_stubs_crm",
+        "statements": null,
+        "version": "20261124143000"
       }
     ],
     "policies": [
@@ -294405,6 +294421,18 @@
         "table": "products",
         "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
         "with_check": "(( SELECT auth.uid() AS uid) IS NOT NULL)"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "Admins can view all profiles",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "profiles",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "with_check": null
       },
       {
         "cmd": "INSERT",

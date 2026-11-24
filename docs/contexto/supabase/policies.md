@@ -1158,6 +1158,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.product_novelties | authenticated_read_novelties | SELECT | PERMISSIVE | authenticated | `true` |  |
 | public.product_novelties | service_all_novelties | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.products | products_all | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| public.profiles | Admins can view all profiles | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.profiles | Users can insert their own profile | INSERT | PERMISSIVE | authenticated |  | `(auth.uid() = id)` |
 | public.profiles | Users can update their own profile | UPDATE | PERMISSIVE | authenticated | `(auth.uid() = id)` |  |
 | public.profiles | Users can view their own profile | SELECT | PERMISSIVE | authenticated | `(auth.uid() = id)` |  |

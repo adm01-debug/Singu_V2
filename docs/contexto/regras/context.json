@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "1104bf2eefbc4b8a1d81036a3d8422ceb0d2badd",
+  "sha": "662919439a0a004a5a8ac47cda7222da5de00745",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-24 20:50 UTC",
+  "generated_at": "2026-11-24 21:11 UTC",
   "files_total": 4024,
   "code_files": 3548,
   "code_lines": 478866
@@ -307871,10 +307871,33 @@
   }
  },
  "git": {
-  "sha": "1104bf2eefbc4b8a1d81036a3d8422ceb0d2badd",
+  "sha": "662919439a0a004a5a8ac47cda7222da5de00745",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "6629194",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix(docs): mecanismo real da falha do smart-notify (502, nao skip silencioso) (#338)",
+    "files": [
+     "docs/estado/03_MARKETING_AUTOMACAO.md",
+     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md"
+    ]
+   },
+   {
+    "sha": "a737bf1",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix(docs): smart-notify sem cron agendado e guard aceita JWT (#337)",
+    "files": [
+     "docs/estado/01_CORE_CRM.md",
+     "docs/estado/03_MARKETING_AUTOMACAO.md",
+     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
+     "docs/estado/06_INTEGRACOES.md",
+     "docs/estado/07_DADOS_BACKEND.md"
+    ]
+   },
    {
     "sha": "1104bf2",
     "date": "2026-11-24",
@@ -308253,39 +308276,28 @@
      "supabase/functions/evolution-webhook/events.ts",
      "supabase/functions/evolution-webhook/messages.ts"
     ]
-   },
-   {
-    "sha": "d2a5777",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix(ef7-ef12): claim atomico sms-campaign, paginacao cron e NaN forecast (#310)",
-    "files": [
-     "supabase/functions/forecast-snapshot-cron/index.ts",
-     "supabase/functions/lead-score-cron/index.ts",
-     "supabase/functions/send-sms-campaign/index.ts"
-    ]
-   },
-   {
-    "sha": "1f88d85",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: integra EF win-loss-record-deal e religa digest de coaching (#306)",
-    "files": [
-     "src/hooks/useConversationIntel.ts",
-     "src/hooks/useWinLoss.ts",
-     "src/pages/ConversationIntelligence.tsx",
-     "supabase/functions/win-loss-record-deal/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/estado/06_INTEGRACOES.md",
+    4
+   ],
+   [
+    "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
     3
    ],
    [
     "supabase/functions/evolution-webhook/messages.ts",
     3
+   ],
+   [
+    "docs/estado/03_MARKETING_AUTOMACAO.md",
+    2
+   ],
+   [
+    "docs/estado/01_CORE_CRM.md",
+    2
    ],
    [
     "docs/qa/functions-authenticated-allowlist.md",
@@ -308332,7 +308344,7 @@
     2
    ],
    [
-    "docs/estado/01_CORE_CRM.md",
+    "docs/estado/07_DADOS_BACKEND.md",
     1
    ],
    [
@@ -308344,19 +308356,7 @@
     1
    ],
    [
-    "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
-    1
-   ],
-   [
     "scripts/docs/citacoes-baseline.json",
-    1
-   ],
-   [
-    "src/lib/__tests__/roleAssignment.test.ts",
-    1
-   ],
-   [
-    "src/lib/roleAssignment.ts",
     1
    ]
   ]

@@ -2,6 +2,13 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 21:13 UTC
+
+- **functions** alterado (6): `public.ativar_cliente(p_customer_id uuid, p_executado_por_id integer, p_executado_por_nome text)`, `public.has_role(_user_id uuid, _role app_role)`, `public.inativar_cliente(p_customer_id uuid, p_motivo text, p_executado_por_id integer, p_executado_por_nome text)`, `public.registrar_compra(p_customer_id uuid, p_valor numeric, p_numero_pedido text, p_observacoes text)`, `public.sdr_qualificar_cliente(p_customer_id uuid, p_sdr_id integer, p_closer_id integer, p_closer_nome text, p_observacoes text)`, `public.transferir_cliente(p_customer_id uuid, p_novo_vendedor_id integer, p_novo_vendedor_nome text, p_executado_por_id integer, p_executado_por_nome text)`
+- **lints** adicionado (1): `policy_auth_fn_not_wrapped:public.profiles.Admins can view all profiles`
+- **migrations** adicionado (2): `20261124141500_rbac_admin_le_perfis_para_atribuir_papel`, `20261124143000_revoke_authenticated_exec_stubs_crm`
+- **policies (RLS)** adicionado (1): `public.profiles.Admins can view all profiles`
+
 ## 2026-11-24 17:13 UTC
 
 - **colunas** alterado (448): `public.companies.action_filter`, `public.companies.annual_revenue`, `public.companies.bitrix_company_id`, `public.companies.bitrix_created_at`, `public.companies.bitrix_updated_at`, `public.companies.brand_colors`, `public.companies.capital_social`, `public.companies.central_id`, `public.companies.challenges`, `public.companies.chunk_size`, `public.companies.cnpj`, `public.companies.cnpj_base`, `public.companies.cnpj_normalizado_em`, `public.companies.comparison_style`, `public.companies.competitors`, `public.companies.confederacao_id`, `public.companies.cores_marca`, `public.companies.created_at`, `public.companies.created_by_id`, `public.companies.data_fundacao`, `public.companies.deleted_at`, `public.companies.deleted_by`, `public.companies.emotional_confidence`, `public.companies.emotional_state`, `public.companies.emotional_trigger`, `public.companies.employee_count`, `public.companies.empresa_atualizada_em`, `public.companies.extra_data_rf`, `public.companies.financial_health`, `public.companies.grupo_economico`, `public.companies.grupo_economico_id`, `public.companies.id`, `public.companies.industry`, `public.companies.inscricao_estadual`, `public.companies.inscricao_municipal`, `public.companies.is_carrier`, `public.companies.is_customer`, `public.companies.is_matriz`, `public.companies.is_supplier`, `public.companies.lead_score` … (+408)
