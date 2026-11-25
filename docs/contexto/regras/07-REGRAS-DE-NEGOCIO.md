@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `675d6fd65c` · branch `main` · 2026-11-25 18:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c61914112e` · branch `main` · 2026-11-25 18:06 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3401,6 +3401,10 @@ _nenhum item encontrado_
   ```
   const offers: Record<string, object[]> = { champions: [ { offerType: 'Acesso VIP', description: 'Acesso antecipado a novos produtos', validDays: 30, reason: 'Recompensar lealdade' } ], at_risk: [ { offerType: 'Win-Back', description: 'Desconto agressivo + brinde', discountPercent: 30, validDays: 3, reason: 'Recuperar cliente' } ], cant_lose: [ { offerType: 'VIP Especial', description: 'Condições exclusivas personalizadas', discountPercent: 35, validDays: 7, reason: 'Salvar relacionamento' } ] }; …
   ```
+- **rankTokens(texts: readonly string[])** — `supabase/functions/sync-social-interests/analysis.ts`
+  ```
+  token: string; hits: number
+  ```
 - **generateAiRecommendations(payload: { territories: TerritoryRow[]; performance: TerritoryPerformanceRow[]; underserved: TerritoryRow[]; overserved:)** — `supabase/functions/territory-optimization/index.ts`
   ```
   const apiKey = Deno.env.get("DEEPSEEK_API_KEY"); if (!apiKey) { console.warn("[territory-optimization] DEEPSEEK_API_KEY missing — heuristic only"); return []; } const summary = { total_territories: payload.territories.length, coverage_pct: Math.round(payload.coverage * 100), gini: Number(payload.giniIndex.toFixed(2)), territories: payload.territories.slice(0, 25).map((t) => ({ id: t.id, name: t.name, state: t.state, assigned_to_name: t.assigned_to_name, companies: t.company_count ?? 0, contacts: …
@@ -3805,6 +3809,12 @@ _nenhum item encontrado_
 | `ERP_PAGE_SIZE` | `500` | `supabase/functions/sync-product-catalog/index.ts` |
 | `UPSERT_CHUNK_SIZE` | `200` | `supabase/functions/sync-product-catalog/index.ts` |
 | `ERP_MAX_PRODUCTS` | `20` | `supabase/functions/sync-product-catalog/index.ts` |
+| `MAX_INTERESTS` | `10` | `supabase/functions/sync-social-interests/analysis.ts` |
+| `MIN_INTEREST_HITS` | `2` | `supabase/functions/sync-social-interests/analysis.ts` |
+| `MAX_ARRAY_LENGTH` | `30` | `supabase/functions/sync-social-interests/analysis.ts` |
+| `MAX_INTERACTIONS` | `200` | `supabase/functions/sync-social-interests/index.ts` |
+| `MAX_ERROR_LENGTH` | `500` | `supabase/functions/sync-social-interests/index.ts` |
+| `CLIENT_ERROR` | `'Falha ao sincronizar interesses'` | `supabase/functions/sync-social-interests/index.ts` |
 | `BATCH_SIZE` | `10` | `supabase/functions/validation-queue-worker/index.ts` |
 | `MAX_ATTEMPTS` | `3` | `supabase/functions/validation-queue-worker/index.ts` |
 
@@ -4418,7 +4428,7 @@ _nenhum item encontrado_
 | 1 | `supabase/functions/health-aggregate/index.ts` |
 | 5000 | `supabase/functions/intent-aggregator/index.ts` |
 | 1000 | `supabase/functions/mql-evaluator/index.ts` |
-| … +21 linhas — lista completa em `context.json` | |
+| … +22 linhas — lista completa em `context.json` | |
 
 ## I. Regras implícitas em mensagens de erro/validação
 
@@ -4760,7 +4770,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
-## K. Testes como especificação (3295 testes em 259 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3309 testes em 260 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4830,6 +4840,7 @@ _nenhum item encontrado_
 | `src/data/__tests__/discAdvancedData.test.ts` | 14 | DISC Advanced Data Integrity · has exactly 4 DISC profiles · includes D, I, S, C · Profile %s … |
 | `src/hooks/__tests__/company-contracts.test.ts` | 14 | contrato canônico de empresas · produz aliases reais exclusivamente de colunas e relações canônicas · escolhe relação primária deterministicamente sem depender da ordem do payload · usa nome fantasia/razão social e mantém fallback de localização do nome … |
 | `tests/integration/offer-catalog.test.ts` | 14 | normalizeText e keywordsFrom · remove acento e caixa para o casamento entre nome de produto e conversa · descarta palavras curtas que nao discriminam produto · buildCatalog … |
+| `tests/integration/social-interests.test.ts` | 14 | tokenize · tira acento e caixa para a mesma palavra nao virar duas evidencias · descarta palavra curta, numero solto e ruido de conversa · rankTokens … |
 | `tests/rls/prepare-sql.node-test.mjs` | 14 | preserva BEGIN/COMMIT em funções e comentários, removendo só o wrapper externo · preserva blocos DO, dollar tags Unicode e transações dentro de strings · preserva comentários aninhados e aspas duplicadas/escapadas · remove wrapper BEGIN/ROLLBACK da fixture mesmo na mesma linha … |
 | `scripts/lib/seguranca-processo.test.mjs` | 13 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/rls-matrix/check-rls-baseline.test.mjs` | 13 | aprova quando o que cada perfil enxerga bate com o baseline · reprova: ${nome} · exposição menor: aprova, avisa e --update fixa o novo patamar · --update com piora grava, mas deixa a regressão aceita escrita no stderr … |
@@ -5425,6 +5436,7 @@ _nenhum item encontrado_
 | 🔒 Cron secret validation | `supabase/functions/social-events-detector/index.ts` |
 | O roadmap e validado a parte, com safeParse: um marco malformado nao pode | `supabase/functions/suggest-next-action/index.ts` |
 | Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os | `supabase/functions/suggest-next-action/index.ts` |
+| Erro de escrita nao pode passar em branco: a fila vira 'failed' com o motivo | `supabase/functions/sync-social-interests/index.ts` |
 | F/F60: página de status pública — rate limit por IP, sem exigência de autenticação | `supabase/functions/system-health/index.ts` |
 | 🔒 Cron secret validation | `supabase/functions/template-success-notifications/index.ts` |
 | F/F62: falha de RPC externa não pode virar lista vazia (mascara erro real) | `supabase/functions/territory-optimization/index.ts` |
@@ -5500,5 +5512,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
 | FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_churn_alerts LIMIT 10) c), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| … +58 linhas — lista completa em `context.json` | |
+| … +59 linhas — lista completa em `context.json` | |

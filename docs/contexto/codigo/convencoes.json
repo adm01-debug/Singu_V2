@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (*.test) (127)",
    "co-localizado (__tests__) (104)",
-   "tests/ (24)"
+   "tests/ (25)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix: interesses sociais derivados das interacoes reais (#353)",
    "fix: oferta deixa de falhar quando a coluna metadata nao existe (#352)",
    "fix(sync): payload do catalogo respeita a coluna margin_pct gerada pelo banco (#351)",
    "fix(deploy): sync-product-catalog nasce sem verify_jwt verificavel e o cron nao a alcanca (#350)",
-   "feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)",
-   "fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)"
+   "feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)"
   ]
  },
  "pr_template": null,

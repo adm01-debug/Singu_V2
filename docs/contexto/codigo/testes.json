@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 284,
+ "total": 285,
  "por_tipo": {
   "contrato": 41,
   "e2e": 12,
   "pytest": 9,
-  "unit": 220
+  "unit": 221
  },
  "onde_ficam": [
   {
@@ -23,7 +23,7 @@
   },
   {
    "padrao": "tests/",
-   "arquivos": 24
+   "arquivos": 25
   },
   {
    "padrao": "outro",
@@ -2502,6 +2502,15 @@
    "casos": 2
   },
   {
+   "arquivo": "tests/integration/social-interests.test.ts",
+   "tipo": "unit",
+   "linhas": 73,
+   "testa": [
+    "supabase/functions/sync-social-interests/analysis.ts"
+   ],
+   "casos": 9
+  },
+  {
    "arquivo": "tests/integration/web-push-sender.test.ts",
    "tipo": "unit",
    "linhas": 63,
@@ -2810,7 +2819,8 @@
   "supabase/functions/_shared/rate-limit.ts": 2,
   "supabase/functions/_shared/search-filter.ts": 2,
   "supabase/functions/_shared/tenant-guard.ts": 1,
-  "supabase/functions/generate-offer-suggestions/catalog.ts": 1
+  "supabase/functions/generate-offer-suggestions/catalog.ts": 1,
+  "supabase/functions/sync-social-interests/analysis.ts": 1
  },
  "sem_teste": {
   "telas": [

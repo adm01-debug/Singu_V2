@@ -12112,7 +12112,8 @@
   ],
   "supabase/functions/sync-social-interests/index.ts": [
    "supabase/functions/_shared/auth.ts",
-   "supabase/functions/_shared/validate.ts"
+   "supabase/functions/_shared/validate.ts",
+   "supabase/functions/sync-social-interests/analysis.ts"
   ],
   "supabase/functions/system-health/index.ts": [
    "supabase/functions/_shared/auth.ts",

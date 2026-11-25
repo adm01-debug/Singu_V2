@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `675d6fd65c` · branch `main` · 2026-11-25 18:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c61914112e` · branch `main` · 2026-11-25 18:06 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -426,6 +426,7 @@ _nenhum item encontrado_
 | coluna | coluna `total_purchases` usada no código não existe no schema de `rfm_analysis` |  |
 | coluna | coluna `total_score` usada no código não existe no schema de `rfm_analysis` |  |
 | coluna | coluna `assunto` usada no código não existe no schema de `interactions` |  |
+| coluna | coluna `conteudo` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `direction` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `duracao_segundos` usada no código não existe no schema de `interactions` |  |
 | coluna | coluna `metadata` usada no código não existe no schema de `interactions` |  |
@@ -618,8 +619,7 @@ _nenhum item encontrado_
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/compliance/lgpd-snapshot.ts` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/verify/dual-write-diverge.ts` |
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/regras_negocio/generate.py` |
-| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/components/data-export/AdvancedDataExporter.tsx` |
-| … +59 linhas — lista completa em `context.json` | | |
+| … +60 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "675d6fd65c25f47bf1b54f957b0cfefaf9f36c2d",
+  "sha": "c61914112e50943821bd05eda0a54aca24fb74a4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 18:03 UTC",
-  "files_total": 4040,
-  "code_files": 3562,
-  "code_lines": 480281
+  "generated_at": "2026-11-25 18:06 UTC",
+  "files_total": 4042,
+  "code_files": 3564,
+  "code_lines": 480490
  },
  "version": "1.3.2",
- "facts_hash": "1785f93f79c32e6b",
+ "facts_hash": "ed347ff33398e400",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -274,7 +274,7 @@
   "languages": {
    ".sql": 1293,
    ".tsx": 1187,
-   ".ts": 917,
+   ".ts": 919,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -106317,6 +106317,8 @@
     ],
     "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
+     "contacts",
+     "interactions",
      "psychographic_audit_log",
      "social_behavior_analysis",
      "social_sync_queue"
@@ -112699,8 +112701,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 177,
-   "lines": 27911,
+   "files": 178,
+   "lines": 28047,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -112870,7 +112872,8 @@
     "mutations.ts: handleMutation",
     "tables.ts: ALLOWED_RPCS, AllowedRpc, isAllowedRpc, ALLOWED_TABLES, AllowedTable, USER_RLS_READ_ONLY_TABLES",
     "catalog.ts: CatalogItem, ProductRow, MAX_CANDIDATES_PER_CONTACT, MIN_CANDIDATES_PER_CONTACT, normalizeText, keywordsFrom",
-    "index.ts: buildHtmlBody"
+    "index.ts: buildHtmlBody",
+    "analysis.ts: tokenize, rankTokens, deriveKeywords, deriveInterests, mergeUnique"
    ],
    "docs": [
     "aiGatewayLogger.ts: Shared helper for edge functions to record Lovable AI Gateway calls into public.ai_gateway_metrics. Best-effort — never throws.",
@@ -113088,8 +113091,8 @@
   },
   {
    "module": "tests",
-   "files": 72,
-   "lines": 6589,
+   "files": 73,
+   "lines": 6662,
    "tables": [],
    "exports": [
     "ask-crm.js: options, function",
@@ -113135,6 +113138,7 @@
     "tests/integration/auth-external-data.test.ts",
     "tests/integration/offer-catalog.test.ts",
     "tests/integration/rate-limit.test.ts",
+    "tests/integration/social-interests.test.ts",
     "tests/integration/web-push-sender.test.ts",
     "tests/load/ask-crm.js",
     "tests/load/external-data.js",
@@ -114009,6 +114013,7 @@
      "supabase/functions/smart-reminders/index.ts",
      "supabase/functions/social-behavior-analyzer/index.ts",
      "supabase/functions/suggest-next-action/index.ts",
+     "supabase/functions/sync-social-interests/index.ts",
      "supabase/functions/template-success-notifications/index.ts",
      "supabase/functions/weekly-digest/index.ts",
      "supabase/functions/whatsapp-import/index.ts"
@@ -114864,6 +114869,7 @@
      "supabase/functions/smart-reminders/index.ts",
      "supabase/functions/social-behavior-analyzer/index.ts",
      "supabase/functions/suggest-next-action/index.ts",
+     "supabase/functions/sync-social-interests/index.ts",
      "supabase/functions/voice-to-text/index.ts",
      "supabase/functions/weekly-digest/index.ts"
     ],
@@ -115706,9 +115712,10 @@
      "supabase/functions/sync-social-interests/index.ts"
     ],
     "insert": [
-     "supabase/functions/social-behavior-analyzer/index.ts"
+     "supabase/functions/social-behavior-analyzer/index.ts",
+     "supabase/functions/sync-social-interests/index.ts"
     ],
-    "upsert": [
+    "update": [
      "supabase/functions/sync-social-interests/index.ts"
     ]
    },
@@ -117579,6 +117586,7 @@
     "company_id",
     "contact_id",
     "content",
+    "conteudo",
     "created_at",
     "data_interacao",
     "direction",
@@ -118429,6 +118437,9 @@
    ],
    "social_behavior_analysis": [
     "contact_id",
+    "id",
+    "interests",
+    "keywords",
     "user_id"
    ],
    "social_consent_audit": [
@@ -121306,6 +121317,10 @@
    {
     "table": "interactions",
     "column": "assunto"
+   },
+   {
+    "table": "interactions",
+    "column": "conteudo"
    },
    {
     "table": "interactions",
@@ -129649,6 +129664,10 @@
    {
     "file": "supabase/functions/suggest-next-action/index.ts",
     "text": "Roadmap: grava apenas o que o modelo devolveu. Antes desta mudanca, os"
+   },
+   {
+    "file": "supabase/functions/sync-social-interests/index.ts",
+    "text": "Erro de escrita nao pode passar em branco: a fila vira 'failed' com o motivo"
    },
    {
     "file": "supabase/functions/system-health/index.ts",
@@ -153556,6 +153575,36 @@
     "value": "20"
    },
    {
+    "file": "supabase/functions/sync-social-interests/analysis.ts",
+    "name": "MAX_INTERESTS",
+    "value": "10"
+   },
+   {
+    "file": "supabase/functions/sync-social-interests/analysis.ts",
+    "name": "MIN_INTEREST_HITS",
+    "value": "2"
+   },
+   {
+    "file": "supabase/functions/sync-social-interests/analysis.ts",
+    "name": "MAX_ARRAY_LENGTH",
+    "value": "30"
+   },
+   {
+    "file": "supabase/functions/sync-social-interests/index.ts",
+    "name": "MAX_INTERACTIONS",
+    "value": "200"
+   },
+   {
+    "file": "supabase/functions/sync-social-interests/index.ts",
+    "name": "MAX_ERROR_LENGTH",
+    "value": "500"
+   },
+   {
+    "file": "supabase/functions/sync-social-interests/index.ts",
+    "name": "CLIENT_ERROR",
+    "value": "'Falha ao sincronizar interesses'"
+   },
+   {
     "file": "supabase/functions/validation-queue-worker/index.ts",
     "name": "BATCH_SIZE",
     "value": "10"
@@ -166333,6 +166382,12 @@
    {
     "file": "supabase/functions/sync-social-interests/index.ts",
     "field": "status",
+    "value": "failed",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/sync-social-interests/index.ts",
+    "field": "status",
     "value": "processing",
     "kind": "escreve"
    },
@@ -168263,6 +168318,12 @@
     "name": "generateOffers",
     "params": "segment: string",
     "body": "const offers: Record<string, object[]> = { champions: [ { offerType: 'Acesso VIP', description: 'Acesso antecipado a novos produtos', validDays: 30, reason: 'Recompensar lealdade' } ], at_risk: [ { offerType: 'Win-Back', description: 'Desconto agressivo + brinde', discountPercent: 30, validDays: 3, reason: 'Recuperar cliente' } ], cant_lose: [ { offerType: 'VIP Especial', description: 'Condições exclusivas personalizadas', discountPercent: 35, validDays: 7, reason: 'Salvar relacionamento' } ] }; …"
+   },
+   {
+    "file": "supabase/functions/sync-social-interests/analysis.ts",
+    "name": "rankTokens",
+    "params": "texts: readonly string[]",
+    "body": "token: string; hits: number"
    },
    {
     "file": "supabase/functions/territory-optimization/index.ts",
@@ -184249,6 +184310,62 @@
    {
     "file": "tests/integration/rate-limit.test.ts",
     "name": "should reset after the window expires"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "tokenize"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "tira acento e caixa para a mesma palavra nao virar duas evidencias"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "descarta palavra curta, numero solto e ruido de conversa"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "rankTokens"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "conta em quantas interacoes o token aparece, nao quantas vezes repete"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "deriveInterests"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "so promove a interesse o que voltou em mais de uma conversa"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "nao inventa interesse quando o contato nao tem conversa"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "deriveKeywords"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "ordena por frequencia e respeita o limite"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "mergeUnique"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "nao repete o que ja existia, em qualquer caixa"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "corta pelo mais recente quando passa do limite"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "sobrevive a analise anterior nula"
    },
    {
     "file": "tests/integration/web-push-sender.test.ts",
@@ -211032,6 +211149,10 @@
     "limit": "10"
    },
    {
+    "file": "supabase/functions/sync-social-interests/index.ts",
+    "limit": "1"
+   },
+   {
     "file": "supabase/functions/system-health/index.ts",
     "limit": "1"
    },
@@ -214439,7 +214560,8 @@
       "escreve:supabase/functions/crm-automation-monitor/index.ts",
       "escreve:supabase/functions/process-webhook-dlq/index.ts",
       "escreve:supabase/functions/send-sms-campaign/index.ts",
-      "escreve:supabase/functions/sequence-processor/index.ts"
+      "escreve:supabase/functions/sequence-processor/index.ts",
+      "escreve:supabase/functions/sync-social-interests/index.ts"
      ],
      "sent": [
       "compara:src/components/campaigns/CampaignDetailDrawer.tsx",
@@ -238576,6 +238698,11 @@
    {
     "kind": "coluna",
     "msg": "coluna `assunto` usada no código não existe no schema de `interactions`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `conteudo` usada no código não existe no schema de `interactions`",
     "where": []
    },
    {
@@ -301161,13 +301288,58 @@
    "doc": "Espelha o catalogo de produtos do ERP Promo Gifts (doufsxqlfjyuvxuezpln) em public.products do Singu, que e a fonte usada pelo motor de ofertas (generate-offer-suggestions). O ERP e a fonte da verdade dos produtos; o Singu so replica. O upsert usa sku como chave natural (products_sku_key UNIQUE), en …",
    "uses_service_role": true
   },
+  "supabase/functions/sync-social-interests/analysis.ts": {
+   "path": "supabase/functions/sync-social-interests/analysis.ts",
+   "lines": 82,
+   "exports": [
+    "function tokenize",
+    "function rankTokens",
+    "function deriveKeywords",
+    "function deriveInterests",
+    "function mergeUnique"
+   ],
+   "params": [
+    {
+     "name": "MAX_INTERESTS",
+     "value": "10"
+    },
+    {
+     "name": "MIN_INTEREST_HITS",
+     "value": "2"
+    },
+    {
+     "name": "MAX_ARRAY_LENGTH",
+     "value": "30"
+    }
+   ],
+   "doc": "Derivacao de interesse social a partir do texto real das interacoes do contato. A versao anterior gravava rotulos fixos ('AI', 'Productivity', 'automation', 'efficiency') em toda sincronizacao: interesses que nao vieram de dado nenhum do cliente e que ainda cresciam a cada clique. Agora o que se gra …",
+   "calc_fns": [
+    {
+     "name": "rankTokens",
+     "params": "texts: readonly string[]",
+     "body": "token: string; hits: number"
+    }
+   ]
+  },
   "supabase/functions/sync-social-interests/index.ts": {
    "path": "supabase/functions/sync-social-interests/index.ts",
-   "lines": 73,
+   "lines": 127,
    "tables": [
     {
      "table": "social_sync_queue",
      "op": "update"
+    },
+    {
+     "table": "social_sync_queue",
+     "op": "update"
+    },
+    {
+     "table": "contacts",
+     "op": "select"
+    },
+    {
+     "table": "interactions",
+     "op": "select"
     },
     {
      "table": "social_behavior_analysis",
@@ -301175,7 +301347,11 @@
     },
     {
      "table": "social_behavior_analysis",
-     "op": "upsert"
+     "op": "update"
+    },
+    {
+     "table": "social_behavior_analysis",
+     "op": "insert"
     },
     {
      "table": "psychographic_audit_log",
@@ -301190,8 +301366,22 @@
     "social_sync_queue": [
      "id"
     ],
+    "contacts": [
+     "id",
+     "user_id"
+    ],
+    "interactions": [
+     "assunto",
+     "contact_id",
+     "content",
+     "conteudo",
+     "resumo"
+    ],
     "social_behavior_analysis": [
-     "contact_id"
+     "contact_id",
+     "id",
+     "interests",
+     "keywords"
     ]
    },
    "invokes": [
@@ -301200,6 +301390,20 @@
    "env": [
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
+   ],
+   "params": [
+    {
+     "name": "MAX_INTERACTIONS",
+     "value": "200"
+    },
+    {
+     "name": "MAX_ERROR_LENGTH",
+     "value": "500"
+    },
+    {
+     "name": "CLIENT_ERROR",
+     "value": "'Falha ao sincronizar interesses'"
+    }
    ],
    "status_values": [
     {
@@ -301214,6 +301418,11 @@
     },
     {
      "field": "status",
+     "value": "failed",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
      "value": "processing",
      "kind": "escreve"
     },
@@ -301223,8 +301432,14 @@
      "kind": "escreve"
     }
    ],
+   "rule_comments": [
+    "Erro de escrita nao pode passar em branco: a fila vira 'failed' com o motivo"
+   ],
    "side_effects": [
     "invoke("
+   ],
+   "pagination": [
+    "1"
    ],
    "uses_service_role": true
   },
@@ -307876,6 +308091,27 @@
     "should reset after the window expires"
    ]
   },
+  "tests/integration/social-interests.test.ts": {
+   "path": "tests/integration/social-interests.test.ts",
+   "lines": 73,
+   "is_test": true,
+   "tests": [
+    "tokenize",
+    "tira acento e caixa para a mesma palavra nao virar duas evidencias",
+    "descarta palavra curta, numero solto e ruido de conversa",
+    "rankTokens",
+    "conta em quantas interacoes o token aparece, nao quantas vezes repete",
+    "deriveInterests",
+    "so promove a interesse o que voltou em mais de uma conversa",
+    "nao inventa interesse quando o contato nao tem conversa",
+    "deriveKeywords",
+    "ordena por frequencia e respeita o limite",
+    "mergeUnique",
+    "nao repete o que ja existia, em qualquer caixa",
+    "corta pelo mais recente quando passa do limite",
+    "sobrevive a analise anterior nula"
+   ]
+  },
   "tests/integration/web-push-sender.test.ts": {
    "path": "tests/integration/web-push-sender.test.ts",
    "lines": 63,
@@ -308382,10 +308618,21 @@
   }
  },
  "git": {
-  "sha": "675d6fd65c25f47bf1b54f957b0cfefaf9f36c2d",
+  "sha": "c61914112e50943821bd05eda0a54aca24fb74a4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "c619141",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: interesses sociais derivados das interacoes reais (#353)",
+    "files": [
+     "supabase/functions/sync-social-interests/analysis.ts",
+     "supabase/functions/sync-social-interests/index.ts",
+     "tests/integration/social-interests.test.ts"
+    ]
+   },
    {
     "sha": "675d6fd",
     "date": "2026-11-25",
@@ -308695,16 +308942,6 @@
     "files": [
      "supabase/functions/conversation-analyzer/index.ts"
     ]
-   },
-   {
-    "sha": "16516ac",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)",
-    "files": [
-     "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
-     "tests/rls/contact_relations_owner_scope.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -308722,10 +308959,6 @@
    ],
    [
     "supabase/functions/sync-product-catalog/index.ts",
-    2
-   ],
-   [
-    "tests/rls/contact_relations_owner_scope.sql",
     2
    ],
    [
@@ -308765,6 +308998,18 @@
     2
    ],
    [
+    "supabase/functions/sync-social-interests/analysis.ts",
+    1
+   ],
+   [
+    "supabase/functions/sync-social-interests/index.ts",
+    1
+   ],
+   [
+    "tests/integration/social-interests.test.ts",
+    1
+   ],
+   [
     "scripts/migration/functions/deploy-all.sh",
     1
    ],
@@ -308778,14 +309023,6 @@
    ],
    [
     "supabase/functions/generate-offer-suggestions/catalog.ts",
-    1
-   ],
-   [
-    "tests/integration/offer-catalog.test.ts",
-    1
-   ],
-   [
-    "src/components/command/GlobalCommandBar.tsx",
     1
    ]
   ]

@@ -3534,13 +3534,15 @@
   {
    "nome": "sync-social-interests",
    "entrada": "supabase/functions/sync-social-interests/index.ts",
-   "arquivos": 1,
-   "linhas": 73,
+   "arquivos": 2,
+   "linhas": 209,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS"
    ],
    "tabelas": [
+    "contacts",
+    "interactions",
     "psychographic_audit_log",
     "social_behavior_analysis",
     "social_sync_queue"
