@@ -29,16 +29,22 @@ BEGIN
       VALUES (actor_admin, actor_admin::text || '@scope.example.invalid', '{"first_name":"Prova","last_name":"Admin"}');
     INSERT INTO public.user_roles(user_id,role) VALUES (actor_admin,'admin');
   END IF;
-  SELECT id INTO actor_a FROM auth.users
-    WHERE NOT public.has_role(id, 'admin'::public.app_role) ORDER BY created_at LIMIT 1;
+  -- has_role depende de auth.uid(), que ainda e nulo aqui, e devolve false para
+  -- todos: filtrar por ela escolheria o usuario mais antigo mesmo sendo admin.
+  SELECT id INTO actor_a FROM auth.users u
+    WHERE NOT EXISTS (SELECT 1 FROM public.user_roles ur
+      WHERE ur.user_id = u.id AND ur.role = 'admin'::public.app_role)
+    ORDER BY u.created_at LIMIT 1;
   IF actor_a IS NULL THEN
     actor_a := gen_random_uuid();
     INSERT INTO auth.users(id,email,raw_user_meta_data)
       VALUES (actor_a, actor_a::text || '@scope.example.invalid', '{"first_name":"Prova","last_name":"A"}');
   END IF;
-  SELECT id INTO actor_b FROM auth.users
-    WHERE id <> actor_a AND NOT public.has_role(id, 'admin'::public.app_role)
-    ORDER BY created_at LIMIT 1;
+  SELECT id INTO actor_b FROM auth.users u
+    WHERE u.id <> actor_a
+      AND NOT EXISTS (SELECT 1 FROM public.user_roles ur
+        WHERE ur.user_id = u.id AND ur.role = 'admin'::public.app_role)
+    ORDER BY u.created_at LIMIT 1;
   IF actor_b IS NULL THEN
     actor_b := gen_random_uuid();
     INSERT INTO auth.users(id,email,raw_user_meta_data)
