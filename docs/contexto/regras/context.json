@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c61914112e50943821bd05eda0a54aca24fb74a4",
+  "sha": "e0b7b01d123302e2628d7204d20564c92789824c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 18:06 UTC",
+  "generated_at": "2026-11-25 18:44 UTC",
   "files_total": 4042,
   "code_files": 3564,
-  "code_lines": 480490
+  "code_lines": 480511
  },
  "version": "1.3.2",
- "facts_hash": "ed347ff33398e400",
+ "facts_hash": "47c638687082f5b0",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112702,7 +112702,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28047,
+   "lines": 28056,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113092,7 +113092,7 @@
   {
    "module": "tests",
    "files": 73,
-   "lines": 6662,
+   "lines": 6674,
    "tables": [],
    "exports": [
     "ask-crm.js: options, function",
@@ -153586,6 +153586,11 @@
    },
    {
     "file": "supabase/functions/sync-social-interests/analysis.ts",
+    "name": "MIN_INTEREST_MENTIONS",
+    "value": "3"
+   },
+   {
+    "file": "supabase/functions/sync-social-interests/analysis.ts",
     "name": "MAX_ARRAY_LENGTH",
     "value": "30"
    },
@@ -168323,7 +168328,7 @@
     "file": "supabase/functions/sync-social-interests/analysis.ts",
     "name": "rankTokens",
     "params": "texts: readonly string[]",
-    "body": "token: string; hits: number"
+    "body": "token: string; hits: number; mentions: number"
    },
    {
     "file": "supabase/functions/territory-optimization/index.ts",
@@ -184338,6 +184343,14 @@
    {
     "file": "tests/integration/social-interests.test.ts",
     "name": "so promove a interesse o que voltou em mais de uma conversa"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "promove a interesse o que o contato repetiu no mesmo historico"
+   },
+   {
+    "file": "tests/integration/social-interests.test.ts",
+    "name": "nao promove termo que apareceu uma unica vez"
    },
    {
     "file": "tests/integration/social-interests.test.ts",
@@ -301290,7 +301303,7 @@
   },
   "supabase/functions/sync-social-interests/analysis.ts": {
    "path": "supabase/functions/sync-social-interests/analysis.ts",
-   "lines": 82,
+   "lines": 91,
    "exports": [
     "function tokenize",
     "function rankTokens",
@@ -301308,6 +301321,10 @@
      "value": "2"
     },
     {
+     "name": "MIN_INTEREST_MENTIONS",
+     "value": "3"
+    },
+    {
      "name": "MAX_ARRAY_LENGTH",
      "value": "30"
     }
@@ -301317,7 +301334,7 @@
     {
      "name": "rankTokens",
      "params": "texts: readonly string[]",
-     "body": "token: string; hits: number"
+     "body": "token: string; hits: number; mentions: number"
     }
    ]
   },
@@ -308093,7 +308110,7 @@
   },
   "tests/integration/social-interests.test.ts": {
    "path": "tests/integration/social-interests.test.ts",
-   "lines": 73,
+   "lines": 85,
    "is_test": true,
    "tests": [
     "tokenize",
@@ -308103,6 +308120,8 @@
     "conta em quantas interacoes o token aparece, nao quantas vezes repete",
     "deriveInterests",
     "so promove a interesse o que voltou em mais de uma conversa",
+    "promove a interesse o que o contato repetiu no mesmo historico",
+    "nao promove termo que apareceu uma unica vez",
     "nao inventa interesse quando o contato nao tem conversa",
     "deriveKeywords",
     "ordena por frequencia e respeita o limite",
@@ -308618,10 +308637,20 @@
   }
  },
  "git": {
-  "sha": "c61914112e50943821bd05eda0a54aca24fb74a4",
+  "sha": "e0b7b01d123302e2628d7204d20564c92789824c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "e0b7b01",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: interesse social tambem conta repeticao no mesmo historico (#354)",
+    "files": [
+     "supabase/functions/sync-social-interests/analysis.ts",
+     "tests/integration/social-interests.test.ts"
+    ]
+   },
    {
     "sha": "c619141",
     "date": "2026-11-25",
@@ -308933,15 +308962,6 @@
     "files": [
      "src/hooks/useAuth.tsx"
     ]
-   },
-   {
-    "sha": "4f090e3",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)",
-    "files": [
-     "supabase/functions/conversation-analyzer/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -308952,6 +308972,14 @@
    [
     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
     3
+   ],
+   [
+    "supabase/functions/sync-social-interests/analysis.ts",
+    2
+   ],
+   [
+    "tests/integration/social-interests.test.ts",
+    2
    ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
@@ -308998,15 +309026,7 @@
     2
    ],
    [
-    "supabase/functions/sync-social-interests/analysis.ts",
-    1
-   ],
-   [
     "supabase/functions/sync-social-interests/index.ts",
-    1
-   ],
-   [
-    "tests/integration/social-interests.test.ts",
     1
    ],
    [

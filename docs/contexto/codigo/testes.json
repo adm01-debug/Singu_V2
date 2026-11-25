@@ -2504,11 +2504,11 @@
   {
    "arquivo": "tests/integration/social-interests.test.ts",
    "tipo": "unit",
-   "linhas": 73,
+   "linhas": 85,
    "testa": [
     "supabase/functions/sync-social-interests/analysis.ts"
    ],
-   "casos": 9
+   "casos": 11
   },
   {
    "arquivo": "tests/integration/web-push-sender.test.ts",

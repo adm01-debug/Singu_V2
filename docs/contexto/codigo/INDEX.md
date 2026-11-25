@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `c61914112e50943821bd05eda0a54aca24fb74a4` (2026-11-25T15:06:00-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e0b7b01d123302e2628d7204d20564c92789824c` (2026-11-25T15:43:42-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3937 |
 | arquivos_codigo | 2270 |
-| linhas_codigo | 423028 |
+| linhas_codigo | 423049 |
 | rotas | 116 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -448,7 +448,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26016 nós · 41586 arestas · 3148 comunidades · grafo do commit `c6191411`
+- 26016 nós · 41586 arestas · 3148 comunidades · grafo do commit `e0b7b01d`
 - comunidades maiores: @tanstack/react-query (519), react (510), ref_lib (326), _shared/auth.ts (320), lucide-react (317), framer-motion (284), ref_components (272), 02_tables.sql (259), ref_types (251), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (218), withAuth (153)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -588,6 +588,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-25 `e0b7b01` fix: interesse social tambem conta repeticao no mesmo historico (#354)
 - 2026-11-25 `c619141` fix: interesses sociais derivados das interacoes reais (#353)
 - 2026-11-25 `675d6fd` fix: oferta deixa de falhar quando a coluna metadata nao existe (#352)
 - 2026-11-25 `882db32` fix(sync): payload do catalogo respeita a coluna margin_pct gerada pelo banco (#351)
@@ -602,7 +603,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-25 `970f220` chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)
 - 2026-11-25 `f14b8be` fix: fecha os 9 drops de indice duplicado que ficaram pendentes da Wave 119 (#341)
 - 2026-11-25 `81fe6e1` fix(whatsapp): alinha check de status e colunas do import em whatsapp_messages (#336)
-- 2026-11-24 `2c7686a` chore(scripts): recupera scripts de diagnostico de branch orfa e registra como legacy manual (#340)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

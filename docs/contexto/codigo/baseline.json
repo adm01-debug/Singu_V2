@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "c61914112e50943821bd05eda0a54aca24fb74a4",
+  "commit": "e0b7b01d123302e2628d7204d20564c92789824c",
   "branch": "main",
-  "data_commit": "2026-11-25T15:06:00-03:00",
+  "data_commit": "2026-11-25T15:43:42-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "e0b7b01",
+    "data": "2026-11-25",
+    "assunto": "fix: interesse social tambem conta repeticao no mesmo historico (#354)"
+   },
    {
     "sha": "c619141",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "8b94ca9",
     "data": "2026-11-24",
     "assunto": "fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)"
-   },
-   {
-    "sha": "68e6140",
-    "data": "2026-11-24",
-    "assunto": "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)"
    }
   ],
-  "arquivos_mudados_7d": 1067,
+  "arquivos_mudados_7d": 1060,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 187
+    "commits": 188
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3937,
   "arquivos_codigo": 2270,
-  "linhas_codigo": 423028,
+  "linhas_codigo": 423049,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28047
+   "linhas": 28056
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -740,7 +740,7 @@
   },
   "tests/integration": {
    "arquivos": 5,
-   "linhas": 349
+   "linhas": 361
   },
   "tests/load": {
    "arquivos": 4,

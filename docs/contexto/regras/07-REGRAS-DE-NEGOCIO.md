@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c61914112e` · branch `main` · 2026-11-25 18:06 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e0b7b01d12` · branch `main` · 2026-11-25 18:44 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3403,7 +3403,7 @@ _nenhum item encontrado_
   ```
 - **rankTokens(texts: readonly string[])** — `supabase/functions/sync-social-interests/analysis.ts`
   ```
-  token: string; hits: number
+  token: string; hits: number; mentions: number
   ```
 - **generateAiRecommendations(payload: { territories: TerritoryRow[]; performance: TerritoryPerformanceRow[]; underserved: TerritoryRow[]; overserved:)** — `supabase/functions/territory-optimization/index.ts`
   ```
@@ -3811,6 +3811,7 @@ _nenhum item encontrado_
 | `ERP_MAX_PRODUCTS` | `20` | `supabase/functions/sync-product-catalog/index.ts` |
 | `MAX_INTERESTS` | `10` | `supabase/functions/sync-social-interests/analysis.ts` |
 | `MIN_INTEREST_HITS` | `2` | `supabase/functions/sync-social-interests/analysis.ts` |
+| `MIN_INTEREST_MENTIONS` | `3` | `supabase/functions/sync-social-interests/analysis.ts` |
 | `MAX_ARRAY_LENGTH` | `30` | `supabase/functions/sync-social-interests/analysis.ts` |
 | `MAX_INTERACTIONS` | `200` | `supabase/functions/sync-social-interests/index.ts` |
 | `MAX_ERROR_LENGTH` | `500` | `supabase/functions/sync-social-interests/index.ts` |
@@ -4770,7 +4771,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
-## K. Testes como especificação (3309 testes em 260 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3311 testes em 260 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4826,6 +4827,7 @@ _nenhum item encontrado_
 | `src/__tests__/integration/auth-flow.test.ts` | 16 | should handle parallel refresh session requests (race condition simulation) · Auth Flow Integration · Session Management · should retrieve existing session on init … |
 | `src/hooks/__tests__/canonical-conversation-contracts.test.tsx` | 16 | Análises de conversa usam JSON validado, sem cast de compatibilidade · normaliza os campos JSON e preserva nulabilidade e sugestões reais · preserva a ausência legítima de análise · propaga JSON incompatível: %j … |
 | `src/hooks/__tests__/canonical-side-effect-contracts.test.tsx` | 16 | Operações secundárias não geram sucesso quando falham · a leitura de destinatários existentes não é tratada como lista vazia · expõe erro da consulta de campanhas · a inscrição não anuncia sucesso se a contagem falhar … |
+| `tests/integration/social-interests.test.ts` | 16 | tokenize · tira acento e caixa para a mesma palavra nao virar duas evidencias · descarta palavra curta, numero solto e ruido de conversa · rankTokens … |
 | `scripts/gen-supabase-types.test.mjs` | 15 | jsonSchemaToTs: mapeia os tipos do PostgREST para TypeScript válido · chaveTs: identificador fica cru, o resto vai entre aspas · gerarTypes: tabelas x views, nulabilidade, ordem estável e sem carimbo de data · gerarTypes: OpenAPI vazio ou torto é recusado (não grava types vazio) … |
 | `scripts/ci/branch-podaveis.test.mjs` | 15 | branch patch-equivalente, antiga e sem PR é elegível e vira comando · branch com PR aberta fica fora do comando · branch recente (7 dias ou menos) fica fora; o corte é estritamente maior que 7 dias · epoch ausente, zero ou inválido não prova idade: fica fora … |
 | `src/__tests__/integration/resilience-patterns.test.ts` | 15 | Circuit Breaker Pattern · should open after threshold failures · Rate Limiter Pattern · should allow requests within limit … |
@@ -4840,7 +4842,6 @@ _nenhum item encontrado_
 | `src/data/__tests__/discAdvancedData.test.ts` | 14 | DISC Advanced Data Integrity · has exactly 4 DISC profiles · includes D, I, S, C · Profile %s … |
 | `src/hooks/__tests__/company-contracts.test.ts` | 14 | contrato canônico de empresas · produz aliases reais exclusivamente de colunas e relações canônicas · escolhe relação primária deterministicamente sem depender da ordem do payload · usa nome fantasia/razão social e mantém fallback de localização do nome … |
 | `tests/integration/offer-catalog.test.ts` | 14 | normalizeText e keywordsFrom · remove acento e caixa para o casamento entre nome de produto e conversa · descarta palavras curtas que nao discriminam produto · buildCatalog … |
-| `tests/integration/social-interests.test.ts` | 14 | tokenize · tira acento e caixa para a mesma palavra nao virar duas evidencias · descarta palavra curta, numero solto e ruido de conversa · rankTokens … |
 | `tests/rls/prepare-sql.node-test.mjs` | 14 | preserva BEGIN/COMMIT em funções e comentários, removendo só o wrapper externo · preserva blocos DO, dollar tags Unicode e transações dentro de strings · preserva comentários aninhados e aspas duplicadas/escapadas · remove wrapper BEGIN/ROLLBACK da fixture mesmo na mesma linha … |
 | `scripts/lib/seguranca-processo.test.mjs` | 13 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/rls-matrix/check-rls-baseline.test.mjs` | 13 | aprova quando o que cada perfil enxerga bate com o baseline · reprova: ${nome} · exposição menor: aprova, avisa e --update fixa o novo patamar · --update com piora grava, mas deixa a regressão aceita escrita no stderr … |
