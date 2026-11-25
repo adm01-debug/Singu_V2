@@ -45,6 +45,18 @@ describe('deriveInterests', () => {
     expect(interests).toContain('garrafa');
   });
 
+  it('promove a interesse o que o contato repetiu no mesmo historico', () => {
+    const interests = deriveInterests([
+      'sobre a caneca: preciso da caneca em 300 unidades, a caneca com logo',
+    ]);
+    expect(interests).toContain('caneca');
+  });
+
+  it('nao promove termo que apareceu uma unica vez', () => {
+    const interests = deriveInterests(['preciso de garrafa e mais nada']);
+    expect(interests).not.toContain('garrafa');
+  });
+
   it('nao inventa interesse quando o contato nao tem conversa', () => {
     expect(deriveInterests([])).toEqual([]);
   });

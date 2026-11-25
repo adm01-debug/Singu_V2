@@ -9,6 +9,10 @@ const MIN_TOKEN_LENGTH = 4;
 const MAX_KEYWORDS = 15;
 const MAX_INTERESTS = 10;
 const MIN_INTEREST_HITS = 2;
+// Base real do CRM: 4.729 contatos, 2.318 com interacao, mas so 2 com mais de uma.
+// Exigir recorrencia entre conversas deixaria `interests` vazio para quase toda a
+// carteira, entao tres mencoes no mesmo historico tambem contam como evidencia.
+const MIN_INTEREST_MENTIONS = 3;
 const MAX_ARRAY_LENGTH = 30;
 
 // Ruido de conversa de CRM: palavras longas o bastante para passar no filtro de
@@ -42,27 +46,32 @@ export function tokenize(text: string): string[] {
       && !/^\d+$/.test(token));
 }
 
-/** Conta em quantas interacoes distintas cada token aparece (nao quantas vezes repete). */
-export function rankTokens(texts: readonly string[]): Array<{ token: string; hits: number }> {
+/** Conta em quantas interacoes distintas cada token aparece e quantas mencoes somou. */
+export function rankTokens(texts: readonly string[]): Array<{ token: string; hits: number; mentions: number }> {
   const hits = new Map<string, number>();
+  const mentions = new Map<string, number>();
   for (const text of texts) {
-    for (const token of new Set(tokenize(text))) {
+    const tokens = tokenize(text);
+    for (const token of new Set(tokens)) {
       hits.set(token, (hits.get(token) ?? 0) + 1);
+    }
+    for (const token of tokens) {
+      mentions.set(token, (mentions.get(token) ?? 0) + 1);
     }
   }
   return [...hits.entries()]
-    .map(([token, count]) => ({ token, hits: count }))
-    .sort((a, b) => b.hits - a.hits || a.token.localeCompare(b.token));
+    .map(([token, count]) => ({ token, hits: count, mentions: mentions.get(token) ?? 0 }))
+    .sort((a, b) => b.hits - a.hits || b.mentions - a.mentions || a.token.localeCompare(b.token));
 }
 
 export function deriveKeywords(texts: readonly string[], limit: number = MAX_KEYWORDS): string[] {
   return rankTokens(texts).slice(0, limit).map((entry) => entry.token);
 }
 
-/** Interesse e o que voltou em mais de uma conversa; aparencia unica e so palavra solta. */
+/** Interesse e o que voltou em mais de uma conversa ou o que o contato repetiu no historico. */
 export function deriveInterests(texts: readonly string[], limit: number = MAX_INTERESTS): string[] {
   return rankTokens(texts)
-    .filter((entry) => entry.hits >= MIN_INTEREST_HITS)
+    .filter((entry) => entry.hits >= MIN_INTEREST_HITS || entry.mentions >= MIN_INTEREST_MENTIONS)
     .slice(0, limit)
     .map((entry) => entry.token);
 }
