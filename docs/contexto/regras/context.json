@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "84d23576edf63766f3afc46f0514cfb4f1e7dee1",
+  "sha": "7912bb2d3cdcdfd02214b72b0a27cdf4e174db48",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 22:35 UTC",
+  "generated_at": "2026-11-25 23:20 UTC",
   "files_total": 4042,
   "code_files": 3564,
   "code_lines": 480521
@@ -308634,10 +308634,21 @@
   }
  },
  "git": {
-  "sha": "84d23576edf63766f3afc46f0514cfb4f1e7dee1",
+  "sha": "7912bb2d3cdcdfd02214b72b0a27cdf4e174db48",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "7912bb2",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "chore(ci): desbloquear gate RLS — baseline DEFINER 119 e contadores de produção (#358)",
+    "files": [
+     "docs/qa/security-definer-audit.md",
+     "scripts/rls-matrix/rls-baseline.json",
+     "tests/rls/security_definer_hardening.sql"
+    ]
+   },
    {
     "sha": "84d2357",
     "date": "2026-11-25",
@@ -308950,15 +308961,6 @@
     "files": [
      ".github/workflows/deploy-edge-functions.yml"
     ]
-   },
-   {
-    "sha": "1314c13",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)",
-    "files": [
-     "supabase/migrations/20261124120000_create_social_insights.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -308967,12 +308969,20 @@
     5
    ],
    [
+    "docs/qa/security-definer-audit.md",
+    3
+   ],
+   [
     "supabase/functions/generate-offer-suggestions/index.ts",
     3
    ],
    [
     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
     3
+   ],
+   [
+    "tests/rls/security_definer_hardening.sql",
+    2
    ],
    [
     "supabase/functions/sync-social-interests/analysis.ts",
@@ -309015,12 +309025,12 @@
     2
    ],
    [
-    "docs/qa/security-definer-audit.md",
+    "tests/rls/functions_authenticated_allowlist.sql",
     2
    ],
    [
-    "tests/rls/functions_authenticated_allowlist.sql",
-    2
+    "scripts/rls-matrix/rls-baseline.json",
+    1
    ],
    [
     "supabase/functions/sync-social-interests/index.ts",
@@ -309032,14 +309042,6 @@
    ],
    [
     "supabase/config.toml",
-    1
-   ],
-   [
-    "docs/EDGE_FUNCTIONS_API.md",
-    1
-   ],
-   [
-    "supabase/functions/generate-offer-suggestions/catalog.ts",
     1
    ]
   ]

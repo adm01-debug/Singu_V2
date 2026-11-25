@@ -1,7 +1,7 @@
 # Graph Report - Singu_V2  (2026-11-25)
 
 ## Corpus Check
-- 3994 files · ~2,682,486 words
+- 3994 files · ~2,682,527 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 18 file(s) not represented in the graph (top: (none) 8, .example 3, .lock 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `84d23576`
+- Built from commit: `7912bb2d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -4808,7 +4808,7 @@ Nodes (6): 🔴 Críticos, 🟡 Funcionais / técnicos (planejados para próxima
 
 ### Community 579 - "Auditoria SECURITY DEFINER — Rodada 01/11"
 Cohesion: 0.17
-Nodes (11): Auditoria SECURITY DEFINER — Rodada 01/11, Baseline anterior (06/11) — 110 DEFINERs, Baseline anterior — 104 DEFINERs, Baseline anterior (10/11) — 109 DEFINERs, Baseline anterior (11/11) — 110 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-11), Baseline anterior (24/11) — 111 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-18), Baseline atual — 116 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-24), Cenários de gap prevenidos (+3 more)
+Nodes (11): Auditoria SECURITY DEFINER — Rodada 01/11, Baseline anterior (06/11) — 110 DEFINERs, Baseline anterior — 104 DEFINERs, Baseline anterior (10/11) — 109 DEFINERs, Baseline anterior (11/11) — 110 DEFINERs (banco canônico `pgxfvjmuubtbowutlide` com migrations pendentes, 2026-11-11), Baseline anterior (24/11) — 111 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-18), Baseline atual — 119 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-25), Cenários de gap prevenidos (+3 more)
 
 ### Community 580 - "Testes E2E (Playwright)"
 Cohesion: 0.29

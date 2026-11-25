@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `84d23576edf63766f3afc46f0514cfb4f1e7dee1` (2026-11-25T19:33:13-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `7912bb2d3cdcdfd02214b72b0a27cdf4e174db48` (2026-11-25T19:36:52-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -448,7 +448,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26016 nós · 41587 arestas · 3148 comunidades · grafo do commit `84d23576`
+- 26016 nós · 41587 arestas · 3148 comunidades · grafo do commit `7912bb2d`
 - comunidades maiores: @tanstack/react-query (519), react (510), ref_lib (326), _shared/auth.ts (320), lucide-react (317), framer-motion (284), ref_components (272), 02_tables.sql (259), ref_types (251), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (218), withAuth (153)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -458,10 +458,10 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - .github/workflows/ci.yml (23)
 - package.json (22)
 - package-lock.json (17)
+- docs/qa/security-definer-audit.md (16)
 - supabase/functions/external-data/index.ts (16)
-- docs/qa/security-definer-audit.md (15)
 - docs/prod-readiness.md (14)
-- tests/rls/security_definer_hardening.sql (13)
+- tests/rls/security_definer_hardening.sql (14)
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
 - inventario/estado/banco.json (9)
@@ -588,6 +588,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-25 `7912bb2` chore(ci): desbloquear gate RLS — baseline DEFINER 119 e contadores de produção (#358)
 - 2026-11-25 `84d2357` fix(ofertas): aceitar chamada service_role e gerar ofertas para toda a base (#356)
 - 2026-11-25 `e0b7b01` fix: interesse social tambem conta repeticao no mesmo historico (#354)
 - 2026-11-25 `c619141` fix: interesses sociais derivados das interacoes reais (#353)
@@ -602,7 +603,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-25 `e380fe1` docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)
 - 2026-11-25 `082f91a` chore(ia): usa OPENROUTER_API_KEY como fonte da chave e trava o contrato (#343)
 - 2026-11-25 `970f220` chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)
-- 2026-11-25 `f14b8be` fix: fecha os 9 drops de indice duplicado que ficaram pendentes da Wave 119 (#341)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

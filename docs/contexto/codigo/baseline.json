@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "84d23576edf63766f3afc46f0514cfb4f1e7dee1",
+  "commit": "7912bb2d3cdcdfd02214b72b0a27cdf4e174db48",
   "branch": "main",
-  "data_commit": "2026-11-25T19:33:13-03:00",
+  "data_commit": "2026-11-25T19:36:52-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "7912bb2",
+    "data": "2026-11-25",
+    "assunto": "chore(ci): desbloquear gate RLS — baseline DEFINER 119 e contadores de produção (#358)"
+   },
    {
     "sha": "84d2357",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "06b1732",
     "data": "2026-11-24",
     "assunto": "docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)"
-   },
-   {
-    "sha": "de9c0c7",
-    "data": "2026-11-24",
-    "assunto": "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)"
    }
   ],
-  "arquivos_mudados_7d": 1029,
+  "arquivos_mudados_7d": 1020,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -214,12 +214,12 @@
     "mudancas": 17
    },
    {
-    "arquivo": "supabase/functions/external-data/index.ts",
+    "arquivo": "docs/qa/security-definer-audit.md",
     "mudancas": 16
    },
    {
-    "arquivo": "docs/qa/security-definer-audit.md",
-    "mudancas": 15
+    "arquivo": "supabase/functions/external-data/index.ts",
+    "mudancas": 16
    },
    {
     "arquivo": "docs/prod-readiness.md",
@@ -227,7 +227,7 @@
    },
    {
     "arquivo": "tests/rls/security_definer_hardening.sql",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -286,22 +286,22 @@
     "mudancas": 6
    },
    {
+    "arquivo": "scripts/rls-matrix/rls-baseline.json",
+    "mudancas": 6
+   },
+   {
     "arquivo": "src/app/AppRoutes.tsx",
     "mudancas": 6
    },
    {
     "arquivo": "src/pages/ContatoDetalhe.tsx",
     "mudancas": 6
-   },
-   {
-    "arquivo": "src/pages/Empresas.tsx",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 189
+    "commits": 190
    },
    {
     "autor": "devin-ai-integration[bot]",
