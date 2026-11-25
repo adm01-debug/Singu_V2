@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e347c016b39f14b6209d09cd30452d86582a9563` (2026-11-25T11:15:25-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `2c502bd125e75604a2d9b3e0e66faa6a482d253c` (2026-11-25T13:28:04-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2101), SQL (1293), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
+- linguagens: TypeScript (2104), SQL (1293), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3932 |
-| arquivos_codigo | 2265 |
-| linhas_codigo | 422241 |
+| arquivos_total | 3935 |
+| arquivos_codigo | 2268 |
+| linhas_codigo | 422824 |
 | rotas | 116 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -44,11 +44,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | modulos | 142 |
 | componentes | 1080 |
 | hooks | 412 |
-| edge_functions | 109 |
+| edge_functions | 110 |
 | tabelas | 542 |
 | migrations | 1116 |
 | cron_jobs | 44 |
-| testes | 283 |
+| testes | 284 |
 | workflows | 14 |
 | scripts | 302 |
 | docs_md | 159 |
@@ -58,7 +58,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - componentes: src/components (929), src/pages (142), src/app (4)
 - hooks: src/hooks (381), src/components (20), src/stores (5)
 - servicos_logica: src/lib (76), src/data (46), src/domain (8)
-- testes: co-localizado (*.test) (127), co-localizado (__tests__) (104), tests/ (23)
+- testes: co-localizado (*.test) (127), co-localizado (__tests__) (104), tests/ (24)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/migration (177), scripts/maintenance (15), scripts/hardening (10)
@@ -315,7 +315,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `form-submit-handler` (verify_jwt=false) — tabelas: -; chamada por 1 arquivo(s) do front
 - `generate-behavioral-profile` (verify_jwt=false) — tabelas: behavioral_insight_feedback, call_logs, contacts, interactions, whatsapp_messages; chamada por 1 arquivo(s) do front
 - `generate-insights` — tabelas: insights; chamada por 1 arquivo(s) do front
-- `generate-offer-suggestions` — tabelas: contact_analytical_profiles, contacts, interactions, offer_suggestions, purchase_history, social_behavior_analysis, social_insights; chamada por 1 arquivo(s) do front
+- `generate-offer-suggestions` — tabelas: contact_analytical_profiles, contacts, interactions, offer_suggestions, products, purchase_history, social_behavior_analysis, social_insights; chamada por 1 arquivo(s) do front
 - `get-signature` (verify_jwt=false) — tabelas: document_signatures, document_views; chamada por 0 arquivo(s) do front
 - `health` — tabelas: companies, profiles; chamada por 1 arquivo(s) do front
 - `health-aggregate` — tabelas: alerts, companies, connection_configs, connection_test_logs, email_logs, incoming_webhook_logs, profiles; chamada por 0 arquivo(s) do front — **ÓRFÃ**
@@ -356,6 +356,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `social-profile-scraper` — tabelas: social_life_events, social_profiles, social_scraping_schedule, suggested_rapport_intel; chamada por 2 arquivo(s) do front
 - `submit-signature` (verify_jwt=false) — tabelas: document_signatures; chamada por 0 arquivo(s) do front
 - `suggest-next-action` — tabelas: contact_predictive_roadmap, contacts, interactions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `sync-product-catalog` — tabelas: products; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `sync-social-interests` (verify_jwt=false) — tabelas: psychographic_audit_log, social_behavior_analysis, social_sync_queue; chamada por 1 arquivo(s) do front
 - `system-health` — tabelas: alerts, companies, email_logs, profiles, system_health_snapshots; chamada por 2 arquivo(s) do front
 - `template-success-notifications` (verify_jwt=false) — tabelas: alerts, contacts, favorite_templates, profiles, push_subscriptions, trigger_usage_history; chamada por 1 arquivo(s) do front, por SQL/cron
@@ -433,7 +434,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rotas_sem_arquivo: 0
 - componentes_ambiguos: 0
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
-- edges_orfas: 13 — ex.: attribution-calculator, detect-new-device, email-verifier
+- edges_orfas: 14 — ex.: attribution-calculator, detect-new-device, email-verifier
 - edges_chamadas_sem_pasta: 0
 - tabelas_sem_rls: 131 — ex.: _stg_pac_nums, access_denied_logs, active_power_ups
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
@@ -447,8 +448,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25979 nós · 41501 arestas · 3140 comunidades · grafo do commit `e347c016`
-- comunidades maiores: ref_hooks (312), framer-motion (283), ref_lib (276), _shared/auth.ts (263), sonner (261), 02_tables.sql (259), useAuth (225), 📖 Dicionário de Dados — SINGU CRM (224), react-router-dom (224), react (222), date-fns (211), lucide-react (210)
+- 26006 nós · 41563 arestas · 3108 comunidades · grafo do commit `2c502bd1`
+- comunidades maiores: lucide-react (282), ref_components (280), ref_lib (274), sonner (272), _shared/auth.ts (272), framer-motion (267), 02_tables.sql (259), useAuth (244), react-router-dom (243), date-fns (234), react (227), 📖 Dicionário de Dados — SINGU CRM (224)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -551,7 +552,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `docs/DATABASE_ANALYSIS.md` — 📊 Análise Exaustiva do Banco de Dados - RelateIQ (1291 linhas)
 - `docs/DATA_DICTIONARY.md` — SINGU CRM — Dicionário de Dados (112 linhas)
 - `docs/DISASTER_RECOVERY.md` — SINGU CRM — Disaster Recovery Plan (114 linhas)
-- `docs/EDGE_FUNCTIONS_API.md` — SINGU CRM — Edge Functions API Reference (383 linhas)
+- `docs/EDGE_FUNCTIONS_API.md` — SINGU CRM — Edge Functions API Reference (389 linhas)
 - `docs/GET_CONTACT_SIDEBAR_BY_PHONE.md` — RPC `get_contact_sidebar_by_phone(p_phone text)` (94 linhas)
 - `docs/GRAPHIFY.md` — Graphify (37 linhas)
 - `docs/HARDENING_FINAL_10_10.md` — 🏆 SINGU SECURITY HARDENING - SCORE 10/10 (112 linhas)
@@ -587,6 +588,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-25 `2c502bd` feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)
 - 2026-11-25 `e347c01` fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)
 - 2026-11-25 `a16128a` feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)
 - 2026-11-25 `472ff96` feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)
@@ -601,7 +603,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-24 `a737bf1` fix(docs): smart-notify sem cron agendado e guard aceita JWT (#337)
 - 2026-11-24 `1104bf2` fix(whatsapp): grava direction no webhook e alinha status/tipo ao check do banco (#335)
 - 2026-11-24 `bae345f` fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)
-- 2026-11-24 `0d1bfce` feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

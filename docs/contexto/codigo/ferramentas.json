@@ -3,7 +3,7 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2101)",
+   "TypeScript (2104)",
    "SQL (1293)",
    "Markdown (159)",
    "Shell (148)",
@@ -707,7 +707,7 @@
   {
    "arquivo": "docs/EDGE_FUNCTIONS_API.md",
    "titulo": "SINGU CRM — Edge Functions API Reference",
-   "linhas": 383
+   "linhas": 389
   },
   {
    "arquivo": "docs/GET_CONTACT_SIDEBAR_BY_PHONE.md",
@@ -946,6 +946,8 @@
    "DUAL_WRITE_TABLES",
    "ELEVENLABS_API_KEY",
    "ENRICHLAYER_API_KEY",
+   "ERP_SUPABASE_SERVICE_ROLE_KEY",
+   "ERP_SUPABASE_URL",
    "EVOLUTION_API_KEY",
    "EVOLUTION_API_URL",
    "EVOLUTION_BITRIX_CONNECTOR_URL",

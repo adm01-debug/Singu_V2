@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (*.test) (127)",
    "co-localizado (__tests__) (104)",
-   "tests/ (23)"
+   "tests/ (24)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)",
    "fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)",
    "feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)",
    "feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)",
-   "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)",
-   "docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)"
+   "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)"
   ]
  },
  "pr_template": null,

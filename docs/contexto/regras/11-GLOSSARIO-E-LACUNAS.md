@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e347c016b3` · branch `main` · 2026-11-25 14:16 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2c502bd125` · branch `main` · 2026-11-25 16:28 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -536,6 +536,10 @@ _nenhum item encontrado_
 | coluna | coluna `metadata` usada no código não existe no schema de `competitors` |  |
 | coluna | coluna `claim_expires_at` usada no código não existe no schema de `notification_logs` |  |
 | coluna | coluna `claim_token` usada no código não existe no schema de `notification_logs` |  |
+| coluna | coluna `is_active` usada no código não existe no schema de `products` |  |
+| coluna | coluna `metadata` usada no código não existe no schema de `products` |  |
+| coluna | coluna `stock_qty` usada no código não existe no schema de `products` |  |
+| coluna | coluna `unit_price` usada no código não existe no schema de `products` |  |
 | tabela | tabela `__proto__` usada no código não existe nas migrations/types do repo | `scripts/inventario/gerar-banco.test.mjs` |
 | tabela | tabela `a` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
 | tabela | tabela `alfa` usada no código não existe nas migrations/types do repo | `scripts/audit-ausentes.test.mjs` |
@@ -615,11 +619,7 @@ _nenhum item encontrado_
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/verify/dual-write-diverge.ts` |
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/regras_negocio/generate.py` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/components/data-export/AdvancedDataExporter.tsx` |
-| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useBIAdvanced.ts` |
-| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `src/hooks/useRealtimeNotifications.ts` |
-| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/bulk-revalidate/index.ts` |
-| dinâmico | 4 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/dual-write-proxy/index.ts` |
-| … +55 linhas — lista completa em `context.json` | | |
+| … +59 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

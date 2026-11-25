@@ -5,12 +5,12 @@
   "vitest",
   "playwright"
  ],
- "total": 283,
+ "total": 284,
  "por_tipo": {
   "contrato": 41,
   "e2e": 12,
   "pytest": 9,
-  "unit": 219
+  "unit": 220
  },
  "onde_ficam": [
   {
@@ -23,7 +23,7 @@
   },
   {
    "padrao": "tests/",
-   "arquivos": 23
+   "arquivos": 24
   },
   {
    "padrao": "outro",
@@ -2484,6 +2484,15 @@
    "casos": 2
   },
   {
+   "arquivo": "tests/integration/offer-catalog.test.ts",
+   "tipo": "unit",
+   "linhas": 122,
+   "testa": [
+    "supabase/functions/generate-offer-suggestions/catalog.ts"
+   ],
+   "casos": 10
+  },
+  {
    "arquivo": "tests/integration/rate-limit.test.ts",
    "tipo": "unit",
    "linhas": 27,
@@ -2800,7 +2809,8 @@
   "supabase/functions/_shared/push.ts": 1,
   "supabase/functions/_shared/rate-limit.ts": 2,
   "supabase/functions/_shared/search-filter.ts": 2,
-  "supabase/functions/_shared/tenant-guard.ts": 1
+  "supabase/functions/_shared/tenant-guard.ts": 1,
+  "supabase/functions/generate-offer-suggestions/catalog.ts": 1
  },
  "sem_teste": {
   "telas": [
@@ -3369,6 +3379,7 @@
    "social-profile-scraper",
    "submit-signature",
    "suggest-next-action",
+   "sync-product-catalog",
    "sync-social-interests",
    "system-health",
    "template-success-notifications",

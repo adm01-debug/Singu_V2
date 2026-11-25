@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e347c016b39f14b6209d09cd30452d86582a9563",
+  "sha": "2c502bd125e75604a2d9b3e0e66faa6a482d253c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 14:16 UTC",
-  "files_total": 4037,
-  "code_files": 3559,
-  "code_lines": 479703
+  "generated_at": "2026-11-25 16:28 UTC",
+  "files_total": 4040,
+  "code_files": 3562,
+  "code_lines": 480286
  },
  "version": "1.3.2",
- "facts_hash": "04a02d0485fb54c6",
+ "facts_hash": "3cc12834df44a51d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -274,7 +274,7 @@
   "languages": {
    ".sql": 1293,
    ".tsx": 1187,
-   ".ts": 914,
+   ".ts": 917,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -105193,6 +105193,7 @@
      "contacts",
      "interactions",
      "offer_suggestions",
+     "products",
      "purchase_history",
      "social_behavior_analysis",
      "social_insights"
@@ -106275,6 +106276,33 @@
     "errors": [
      "DEEPSEEK_API_KEY is not configured",
      "O gateway não retornou uma sugestão válida"
+    ],
+    "side_effects": [],
+    "webhook_events": [],
+    "idempotency": false
+   },
+   {
+    "name": "sync-product-catalog",
+    "file": "supabase/functions/sync-product-catalog/index.ts",
+    "methods": [
+     "OPTIONS"
+    ],
+    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "tables": [
+     "products"
+    ],
+    "env": [
+     "ERP_SUPABASE_SERVICE_ROLE_KEY",
+     "ERP_SUPABASE_URL",
+     "SUPABASE_SERVICE_ROLE_KEY",
+     "SUPABASE_URL"
+    ],
+    "external": [],
+    "invokes": [],
+    "doc": "Espelha o catalogo de produtos do ERP Promo Gifts (doufsxqlfjyuvxuezpln) em public.products do Singu, que e a fonte usada pelo motor de ofertas (generate-offer-suggestions). O ERP e a fonte da verdade dos produtos; o Singu so replica. O upsert usa sku como chave natural (products_sku_key UNIQUE), en …",
+    "errors": [
+     "ERP respondeu ${response.status}: ${detail.slice(0, 300)}",
+     "Upsert falhou: ${error.message}"
     ],
     "side_effects": [],
     "webhook_events": [],
@@ -112670,8 +112698,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 175,
-   "lines": 27455,
+   "files": 177,
+   "lines": 27916,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -112764,6 +112792,7 @@
     "oauth_tokens",
     "offer_suggestions",
     "phone_validations",
+    "products",
     "profiles",
     "psychographic_audit_log",
     "purchase_history",
@@ -112839,6 +112868,7 @@
     "database.ts: getExternalClient, UserScopedUnavailableReason, userScopedUnavailableReason, getUserScopedClient, hasRelationAccess, getRelationIdForRecord",
     "mutations.ts: handleMutation",
     "tables.ts: ALLOWED_RPCS, AllowedRpc, isAllowedRpc, ALLOWED_TABLES, AllowedTable, USER_RLS_READ_ONLY_TABLES",
+    "catalog.ts: CatalogItem, ProductRow, MAX_CANDIDATES_PER_CONTACT, MIN_CANDIDATES_PER_CONTACT, normalizeText, keywordsFrom",
     "index.ts: buildHtmlBody"
    ],
    "docs": [
@@ -113057,8 +113087,8 @@
   },
   {
    "module": "tests",
-   "files": 71,
-   "lines": 6467,
+   "files": 72,
+   "lines": 6589,
    "tables": [],
    "exports": [
     "ask-crm.js: options, function",
@@ -113102,6 +113132,7 @@
     "tests/e2e/hubs-smoke.spec.ts",
     "tests/e2e/navigation.spec.ts",
     "tests/integration/auth-external-data.test.ts",
+    "tests/integration/offer-catalog.test.ts",
     "tests/integration/rate-limit.test.ts",
     "tests/integration/web-push-sender.test.ts",
     "tests/load/ask-crm.js",
@@ -115301,6 +115332,14 @@
     ],
     "select": [
      "src/hooks/usePlaybooks.ts"
+    ]
+   },
+   "products": {
+    "select": [
+     "supabase/functions/generate-offer-suggestions/index.ts"
+    ],
+    "upsert": [
+     "supabase/functions/sync-product-catalog/index.ts"
     ]
    },
    "profiles": {
@@ -117992,6 +118031,14 @@
     "playbook_id",
     "user_id"
    ],
+   "products": [
+    "category",
+    "is_active",
+    "metadata",
+    "name",
+    "stock_qty",
+    "unit_price"
+   ],
    "profiles": [
     "avatar_url",
     "email",
@@ -118975,6 +119022,12 @@
    "ENRICHLAYER_API_KEY": [
     "supabase/functions/enrichlayer-linkedin/index.ts"
    ],
+   "ERP_SUPABASE_SERVICE_ROLE_KEY": [
+    "supabase/functions/sync-product-catalog/index.ts"
+   ],
+   "ERP_SUPABASE_URL": [
+    "supabase/functions/sync-product-catalog/index.ts"
+   ],
    "EVOLUTION_API_KEY": [
     "supabase/functions/evolution-api/index.ts",
     "supabase/functions/evolution-bitrix-connector/index.ts",
@@ -119413,6 +119466,7 @@
     "supabase/functions/social-events-detector/index.ts",
     "supabase/functions/submit-signature/index.ts",
     "supabase/functions/suggest-next-action/index.ts",
+    "supabase/functions/sync-product-catalog/index.ts",
     "supabase/functions/sync-social-interests/index.ts",
     "supabase/functions/system-health/index.ts",
     "supabase/functions/template-success-notifications/index.ts",
@@ -119523,6 +119577,7 @@
     "supabase/functions/social-profile-scraper/index.ts",
     "supabase/functions/submit-signature/index.ts",
     "supabase/functions/suggest-next-action/index.ts",
+    "supabase/functions/sync-product-catalog/index.ts",
     "supabase/functions/sync-social-interests/index.ts",
     "supabase/functions/system-health/index.ts",
     "supabase/functions/template-success-notifications/index.ts",
@@ -121004,7 +121059,6 @@
    "prize_wheel_spins",
    "product_dictionary",
    "product_novelties",
-   "products",
    "progressive_goals",
    "proposals",
    "prospect_cadences",
@@ -121691,6 +121745,22 @@
    {
     "table": "notification_logs",
     "column": "claim_token"
+   },
+   {
+    "table": "products",
+    "column": "is_active"
+   },
+   {
+    "table": "products",
+    "column": "metadata"
+   },
+   {
+    "table": "products",
+    "column": "stock_qty"
+   },
+   {
+    "table": "products",
+    "column": "unit_price"
    }
   ]
  },
@@ -128454,6 +128524,14 @@
    {
     "file": "supabase/functions/suggest-next-action/index.ts",
     "msg": "O gateway não retornou uma sugestão válida"
+   },
+   {
+    "file": "supabase/functions/sync-product-catalog/index.ts",
+    "msg": "ERP respondeu ${response.status}: ${detail.slice(0, 300)}"
+   },
+   {
+    "file": "supabase/functions/sync-product-catalog/index.ts",
+    "msg": "Upsert falhou: ${error.message}"
    },
    {
     "file": "supabase/functions/validation-queue-worker/index.ts",
@@ -153407,6 +153485,36 @@
     "value": "50"
    },
    {
+    "file": "supabase/functions/generate-offer-suggestions/catalog.ts",
+    "name": "MAX_CANDIDATES_PER_CONTACT",
+    "value": "12"
+   },
+   {
+    "file": "supabase/functions/generate-offer-suggestions/catalog.ts",
+    "name": "MIN_CANDIDATES_PER_CONTACT",
+    "value": "6"
+   },
+   {
+    "file": "supabase/functions/generate-offer-suggestions/catalog.ts",
+    "name": "FALLBACK_CATEGORY",
+    "value": "'Outros'"
+   },
+   {
+    "file": "supabase/functions/generate-offer-suggestions/index.ts",
+    "name": "CATALOG_TTL_MS",
+    "value": "5"
+   },
+   {
+    "file": "supabase/functions/generate-offer-suggestions/index.ts",
+    "name": "CATALOG_PAGE_SIZE",
+    "value": "1000"
+   },
+   {
+    "file": "supabase/functions/generate-offer-suggestions/index.ts",
+    "name": "CATALOG_MAX_ROWS",
+    "value": "12"
+   },
+   {
     "file": "supabase/functions/lead-scorer/index.ts",
     "name": "DAY_MS",
     "value": "86"
@@ -153430,6 +153538,21 @@
     "file": "supabase/functions/send-sms-campaign/index.ts",
     "name": "TWILIO_GATEWAY",
     "value": "\"https://connector-gateway.lovable.dev/twilio\""
+   },
+   {
+    "file": "supabase/functions/sync-product-catalog/index.ts",
+    "name": "ERP_PAGE_SIZE",
+    "value": "500"
+   },
+   {
+    "file": "supabase/functions/sync-product-catalog/index.ts",
+    "name": "UPSERT_CHUNK_SIZE",
+    "value": "200"
+   },
+   {
+    "file": "supabase/functions/sync-product-catalog/index.ts",
+    "name": "ERP_MAX_PRODUCTS",
+    "value": "20"
    },
    {
     "file": "supabase/functions/validation-queue-worker/index.ts",
@@ -166183,6 +166306,18 @@
     "kind": "escreve"
    },
    {
+    "file": "supabase/functions/sync-product-catalog/index.ts",
+    "field": "type",
+    "value": "boolean",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/sync-product-catalog/index.ts",
+    "field": "type",
+    "value": "number",
+    "kind": "escreve"
+   },
+   {
     "file": "supabase/functions/sync-social-interests/index.ts",
     "field": "type",
     "value": "string",
@@ -168081,6 +168216,12 @@
     "body": "score: number; risks: string[]"
    },
    {
+    "file": "supabase/functions/generate-offer-suggestions/catalog.ts",
+    "name": "targetScoreForPrice",
+    "params": "price: number | null",
+    "body": "if (price === null) return 55; if (price <= 50) return 45; if (price <= 150) return 55; if (price <= 400) return 65; return 75;"
+   },
+   {
     "file": "supabase/functions/intent-aggregator/index.ts",
     "name": "compute",
     "params": "scope: \"contact\" | \"account\", id: string, items: SignalRow[]",
@@ -169811,6 +169952,10 @@
    {
     "file": "supabase/functions/generate-insights/index.ts",
     "line": "expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),"
+   },
+   {
+    "file": "supabase/functions/generate-offer-suggestions/index.ts",
+    "line": "const CATALOG_TTL_MS = 5 * 60 * 1000;"
    },
    {
     "file": "supabase/functions/generate-offer-suggestions/index.ts",
@@ -184035,6 +184180,62 @@
    {
     "file": "tests/integration/auth-external-data.test.ts",
     "name": "should handle concurrent edit errors (409) correctly"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "normalizeText e keywordsFrom"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "remove acento e caixa para o casamento entre nome de produto e conversa"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "descarta palavras curtas que nao discriminam produto"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "buildCatalog"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "mapeia produto real e ignora linha sem nome"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "usa categoria neutra quando o ERP nao informa categoria"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "aproveita target_audience/use_cases do ERP como palavra-chave"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "escala a exigencia de relacionamento com o preco do produto"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "candidatesFor"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "prioriza o produto que casa com o contexto do contato"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "completa com os produtos de maior giro quando o contexto nao casa nada"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "nunca devolve mais que o teto de candidatos por contato"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "buildFallbackOrder"
+   },
+   {
+    "file": "tests/integration/offer-catalog.test.ts",
+    "name": "ordena por giro e ignora produto sem preco valido"
    },
    {
     "file": "tests/integration/rate-limit.test.ts",
@@ -213040,7 +213241,8 @@
       "escreve:supabase/functions/lead-score-threshold-runner/index.ts",
       "escreve:supabase/functions/mcp-server/index.ts",
       "escreve:supabase/functions/objection-handler/index.ts",
-      "escreve:supabase/functions/suggest-next-action/index.ts"
+      "escreve:supabase/functions/suggest-next-action/index.ts",
+      "escreve:supabase/functions/sync-product-catalog/index.ts"
      ],
      "hobby": [
       "compara:src/components/contact-detail/behavioral-tab/RapportCard.tsx",
@@ -213783,6 +213985,7 @@
       "escreve:supabase/functions/demand-forecast/index.ts",
       "escreve:supabase/functions/generate-behavioral-profile/index.ts",
       "escreve:supabase/functions/lead-scorer/index.ts",
+      "escreve:supabase/functions/sync-product-catalog/index.ts",
       "escreve:supabase/functions/template-success-notifications/index.ts",
       "escreve:supabase/functions/weekly-digest/index.ts"
      ],
@@ -221891,6 +222094,7 @@
    "supabase/functions/social-events-detector/index.ts",
    "supabase/functions/submit-signature/index.ts",
    "supabase/functions/suggest-next-action/index.ts",
+   "supabase/functions/sync-product-catalog/index.ts",
    "supabase/functions/sync-social-interests/index.ts",
    "supabase/functions/system-health/index.ts",
    "supabase/functions/template-success-notifications/index.ts",
@@ -238920,6 +239124,26 @@
    {
     "kind": "coluna",
     "msg": "coluna `claim_token` usada no código não existe no schema de `notification_logs`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `is_active` usada no código não existe no schema de `products`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `metadata` usada no código não existe no schema de `products`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `stock_qty` usada no código não existe no schema de `products`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `unit_price` usada no código não existe no schema de `products`",
     "where": []
    },
    {
@@ -296928,10 +297152,53 @@
    ],
    "uses_service_role": true
   },
+  "supabase/functions/generate-offer-suggestions/catalog.ts": {
+   "path": "supabase/functions/generate-offer-suggestions/catalog.ts",
+   "lines": 170,
+   "exports": [
+    "interface CatalogItem",
+    "interface ProductRow",
+    "const MAX_CANDIDATES_PER_CONTACT",
+    "const MIN_CANDIDATES_PER_CONTACT",
+    "function normalizeText",
+    "function keywordsFrom",
+    "function targetScoreForPrice",
+    "function buildCatalog",
+    "function buildKeywordIndex",
+    "function buildFallbackOrder",
+    "function candidatesFor"
+   ],
+   "params": [
+    {
+     "name": "MAX_CANDIDATES_PER_CONTACT",
+     "value": "12"
+    },
+    {
+     "name": "MIN_CANDIDATES_PER_CONTACT",
+     "value": "6"
+    },
+    {
+     "name": "FALLBACK_CATEGORY",
+     "value": "'Outros'"
+    }
+   ],
+   "doc": "Catalogo de ofertas do motor de recomendacao. Antes desta mudanca o motor comparava o contato com 8 ofertas SaaS escritas no proprio codigo (\"Upgrade para Plano Premium\", \"Licencas Adicionais\"...), que a empresa nao vende. Agora o catalogo vem de public.products, o espelho do catalogo real do ERP Pr …",
+   "calc_fns": [
+    {
+     "name": "targetScoreForPrice",
+     "params": "price: number | null",
+     "body": "if (price === null) return 55; if (price <= 50) return 45; if (price <= 150) return 55; if (price <= 400) return 65; return 75;"
+    }
+   ]
+  },
   "supabase/functions/generate-offer-suggestions/index.ts": {
    "path": "supabase/functions/generate-offer-suggestions/index.ts",
-   "lines": 265,
+   "lines": 336,
    "tables": [
+    {
+     "table": "products",
+     "op": "select"
+    },
     {
      "table": "contacts",
      "op": "select"
@@ -296966,6 +297233,14 @@
     }
    ],
    "table_cols": {
+    "products": [
+     "category",
+     "is_active",
+     "metadata",
+     "name",
+     "stock_qty",
+     "unit_price"
+    ],
     "contacts": [
      "user_id"
     ],
@@ -296996,6 +297271,20 @@
    "env": [
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
+   ],
+   "params": [
+    {
+     "name": "CATALOG_TTL_MS",
+     "value": "5"
+    },
+    {
+     "name": "CATALOG_PAGE_SIZE",
+     "value": "1000"
+    },
+    {
+     "name": "CATALOG_MAX_ROWS",
+     "value": "12"
+    }
    ],
    "status_values": [
     {
@@ -297032,6 +297321,7 @@
     "').in('contact_id', contactIds).order('created_at', { ascending: false }).limit(100),"
    ],
    "temporal": [
+    "const CATALOG_TTL_MS = 5 * 60 * 1000;",
     "const daysUntil = Math.ceil((renewalDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));",
     "expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),"
    ],
@@ -300819,6 +301109,54 @@
    "pagination": [
     "10"
    ],
+   "uses_service_role": true
+  },
+  "supabase/functions/sync-product-catalog/index.ts": {
+   "path": "supabase/functions/sync-product-catalog/index.ts",
+   "lines": 220,
+   "tables": [
+    {
+     "table": "products",
+     "op": "upsert"
+    }
+   ],
+   "env": [
+    "ERP_SUPABASE_SERVICE_ROLE_KEY",
+    "ERP_SUPABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "errors": [
+    "ERP respondeu ${response.status}: ${detail.slice(0, 300)}",
+    "Upsert falhou: ${error.message}"
+   ],
+   "params": [
+    {
+     "name": "ERP_PAGE_SIZE",
+     "value": "500"
+    },
+    {
+     "name": "UPSERT_CHUNK_SIZE",
+     "value": "200"
+    },
+    {
+     "name": "ERP_MAX_PRODUCTS",
+     "value": "20"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "boolean",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "number",
+     "kind": "escreve"
+    }
+   ],
+   "doc": "Espelha o catalogo de produtos do ERP Promo Gifts (doufsxqlfjyuvxuezpln) em public.products do Singu, que e a fonte usada pelo motor de ofertas (generate-offer-suggestions). O ERP e a fonte da verdade dos produtos; o Singu so replica. O upsert usa sku como chave natural (products_sku_key UNIQUE), en …",
    "uses_service_role": true
   },
   "supabase/functions/sync-social-interests/index.ts": {
@@ -307505,6 +307843,27 @@
     "should handle concurrent edit errors (409) correctly"
    ]
   },
+  "tests/integration/offer-catalog.test.ts": {
+   "path": "tests/integration/offer-catalog.test.ts",
+   "lines": 122,
+   "is_test": true,
+   "tests": [
+    "normalizeText e keywordsFrom",
+    "remove acento e caixa para o casamento entre nome de produto e conversa",
+    "descarta palavras curtas que nao discriminam produto",
+    "buildCatalog",
+    "mapeia produto real e ignora linha sem nome",
+    "usa categoria neutra quando o ERP nao informa categoria",
+    "aproveita target_audience/use_cases do ERP como palavra-chave",
+    "escala a exigencia de relacionamento com o preco do produto",
+    "candidatesFor",
+    "prioriza o produto que casa com o contexto do contato",
+    "completa com os produtos de maior giro quando o contexto nao casa nada",
+    "nunca devolve mais que o teto de candidatos por contato",
+    "buildFallbackOrder",
+    "ordena por giro e ignora produto sem preco valido"
+   ]
+  },
   "tests/integration/rate-limit.test.ts": {
    "path": "tests/integration/rate-limit.test.ts",
    "lines": 27,
@@ -308021,10 +308380,23 @@
   }
  },
  "git": {
-  "sha": "e347c016b39f14b6209d09cd30452d86582a9563",
+  "sha": "2c502bd125e75604a2d9b3e0e66faa6a482d253c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "2c502bd",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)",
+    "files": [
+     "docs/EDGE_FUNCTIONS_API.md",
+     "supabase/functions/generate-offer-suggestions/catalog.ts",
+     "supabase/functions/generate-offer-suggestions/index.ts",
+     "supabase/functions/sync-product-catalog/index.ts",
+     "tests/integration/offer-catalog.test.ts"
+    ]
+   },
    {
     "sha": "e347c01",
     "date": "2026-11-25",
@@ -308332,15 +308704,6 @@
     "files": [
      "supabase/functions/external-data/audit.ts"
     ]
-   },
-   {
-    "sha": "76a33c0",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "chore(matriz): marca EF-3/5/7/11/12/13/14/16/17 e F/F15/19/25/34/36/37/40/60/62 como RC (#319)",
-    "files": [
-     "docs/lacunas/MATRIZ_RECONCILIADA_20261012_EDGE.md"
-    ]
    }
   ],
   "hot_files": [
@@ -308397,31 +308760,31 @@
     2
    ],
    [
+    "docs/EDGE_FUNCTIONS_API.md",
+    1
+   ],
+   [
+    "supabase/functions/generate-offer-suggestions/catalog.ts",
+    1
+   ],
+   [
+    "supabase/functions/generate-offer-suggestions/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/sync-product-catalog/index.ts",
+    1
+   ],
+   [
+    "tests/integration/offer-catalog.test.ts",
+    1
+   ],
+   [
     "src/components/command/GlobalCommandBar.tsx",
     1
    ],
    [
     "src/components/command/__tests__/GlobalCommandBar.rbac.test.tsx",
-    1
-   ],
-   [
-    "src/components/layout/MobileBottomNav.tsx",
-    1
-   ],
-   [
-    "src/components/layout/__tests__/MobileBottomNav.test.tsx",
-    1
-   ],
-   [
-    "supabase/migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql",
-    1
-   ],
-   [
-    "scripts/diag/README.md",
     1
    ]
   ]

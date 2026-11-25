@@ -50507,12 +50507,15 @@
     ]
    },
    "usada_no_front": 0,
-   "usada_em_edges": [],
+   "usada_em_edges": [
+    "generate-offer-suggestions",
+    "sync-product-catalog"
+   ],
    "triggers": [
     "trg_products_updated_at"
    ],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "profiles": {
    "colunas": {

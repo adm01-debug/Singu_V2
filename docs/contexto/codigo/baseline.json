@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "e347c016b39f14b6209d09cd30452d86582a9563",
+  "commit": "2c502bd125e75604a2d9b3e0e66faa6a482d253c",
   "branch": "main",
-  "data_commit": "2026-11-25T11:15:25-03:00",
+  "data_commit": "2026-11-25T13:28:04-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "2c502bd",
+    "data": "2026-11-25",
+    "assunto": "feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)"
+   },
    {
     "sha": "e347c01",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "27c8b40",
     "data": "2026-11-23",
     "assunto": "feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)"
-   },
-   {
-    "sha": "4f090e3",
-    "data": "2026-11-23",
-    "assunto": "fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)"
    }
   ],
-  "arquivos_mudados_7d": 1069,
+  "arquivos_mudados_7d": 1071,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 182
+    "commits": 183
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3932,
-  "arquivos_codigo": 2265,
-  "linhas_codigo": 422241,
+  "arquivos_total": 3935,
+  "arquivos_codigo": 2268,
+  "linhas_codigo": 422824,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -336,11 +336,11 @@
   "modulos": 142,
   "componentes": 1080,
   "hooks": 412,
-  "edge_functions": 109,
+  "edge_functions": 110,
   "tabelas": 542,
   "migrations": 1116,
   "cron_jobs": 44,
-  "testes": 283,
+  "testes": 284,
   "workflows": 14,
   "scripts": 302,
   "docs_md": 159
@@ -711,8 +711,8 @@
    "linhas": 5974
   },
   "supabase/functions": {
-   "arquivos": 175,
-   "linhas": 27455
+   "arquivos": 177,
+   "linhas": 27916
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -739,8 +739,8 @@
    "linhas": 297
   },
   "tests/integration": {
-   "arquivos": 3,
-   "linhas": 154
+   "arquivos": 4,
+   "linhas": 276
   },
   "tests/load": {
    "arquivos": 4,
@@ -955,6 +955,7 @@
    "rfm-analyzer",
    "send-transactional-email",
    "suggest-next-action",
+   "sync-product-catalog",
    "whatsapp-import"
   ],
   "edges_chamadas_sem_pasta": [],

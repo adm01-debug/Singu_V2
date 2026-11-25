@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "pasta": "supabase/functions",
- "total": 109,
+ "total": 110,
  "verify_jwt_false": [
   "auto-rebatch-behavioral",
   "auto-regen-behavioral-profiles",
@@ -1998,8 +1998,8 @@
   {
    "nome": "generate-offer-suggestions",
    "entrada": "supabase/functions/generate-offer-suggestions/index.ts",
-   "arquivos": 1,
-   "linhas": 265,
+   "arquivos": 2,
+   "linhas": 506,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [
@@ -2007,6 +2007,7 @@
     "contacts",
     "interactions",
     "offer_suggestions",
+    "products",
     "purchase_history",
     "social_behavior_analysis",
     "social_insights"
@@ -3490,6 +3491,38 @@
     "auth.ts",
     "fetch-utils.ts",
     "rate-limit.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
+   "testes": 0
+  },
+  {
+   "nome": "sync-product-catalog",
+   "entrada": "supabase/functions/sync-product-catalog/index.ts",
+   "arquivos": 1,
+   "linhas": 220,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "tabelas": [
+    "products"
+   ],
+   "rpcs": [],
+   "env": [
+    "ERP_SUPABASE_SERVICE_ROLE_KEY",
+    "ERP_SUPABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [
+    "auth.ts",
+    "validate.ts"
    ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],

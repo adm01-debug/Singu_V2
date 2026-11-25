@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e347c016b3` · branch `main` · 2026-11-25 14:16 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2c502bd125` · branch `main` · 2026-11-25 16:28 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1377,7 +1377,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `birthday` | compara, escreve | `public/sw-push.js`<br>`src/components/contact-detail/life-events/LifeEventsGapChecklist.tsx`<br>`src/components/contact-detail/life-events/LifeEventsTimeline.tsx`<br>`src/components/dashboard/important-dates/EventCard.tsx`<br>`src/hooks/useImportantDates.ts`<br>… +5 |
 | `type` | `birthday-wished` | escreve | `src/components/smart-reminders/SmartRemindersPanel.tsx` |
 | `type` | `blocker` | compara | `src/components/analytics/churn/ChurnHelpers.tsx` |
-| `type` | `boolean` | compara, escreve | `src/lib/reports/reportEngine.ts`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/conversation-analyzer/index.ts`<br>`supabase/functions/conversational-search/index.ts`<br>… +6 |
+| `type` | `boolean` | compara, escreve | `src/lib/reports/reportEngine.ts`<br>`supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/conversation-analyzer/index.ts`<br>`supabase/functions/conversational-search/index.ts`<br>… +7 |
 | `type` | `brain` | compara, escreve | `src/components/neuromarketing/NeuroABTracker.tsx`<br>`src/components/neuromarketing/NeuroTooltipSystem.tsx` |
 | `type` | `brain_shift` | escreve | `src/components/neuromarketing/NeuroAlerts.tsx` |
 | `type` | `breakthrough` | escreve | `src/data/carnegieProgressCelebration.ts` |
@@ -1504,7 +1504,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `normalization` | escreve | `src/data/carnegieEmpathyTemplates.ts` |
 | `type` | `notFound` | compara | `src/components/feedback/ErrorState.tsx` |
 | `type` | `note` | escreve | `src/components/dashboard/StrategicNextStepsCard.tsx`<br>`src/components/interactions/insights/SuggestedResponseModal.tsx`<br>`supabase/functions/_shared/validation-contract_test.ts` |
-| `type` | `number` | compara, escreve | `src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx`<br>`src/components/crm/marketing/components/BehavioralSegmentation.tsx`<br>`src/hooks/useContactSegmentation.ts`<br>`src/lib/reports/reportEngine.ts`<br>`supabase/functions/_shared/validate.ts`<br>… +12 |
+| `type` | `number` | compara, escreve | `src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx`<br>`src/components/crm/marketing/components/BehavioralSegmentation.tsx`<br>`src/hooks/useContactSegmentation.ts`<br>`src/lib/reports/reportEngine.ts`<br>`supabase/functions/_shared/validate.ts`<br>… +13 |
 | `type` | `number_list` | escreve | `src/data/copywritingData.ts` |
 | `type` | `object` | compara, escreve | `supabase/functions/_shared/validate.ts`<br>`supabase/functions/_shared/validate_test.ts`<br>`supabase/functions/abm-whitespace-analyzer/index.ts`<br>`supabase/functions/ai-writing-assistant/index.ts`<br>`supabase/functions/connection-tester/index.ts`<br>… +19 |
 | `type` | `objection` | escreve | `src/components/crm/RelationshipKPIsDashboard.tsx`<br>`src/components/triggers/ProfileBasedSuggestions.tsx` |
@@ -3369,6 +3369,10 @@ _nenhum item encontrado_
   ```
   score: number; risks: string[]
   ```
+- **targetScoreForPrice(price: number | null)** — `supabase/functions/generate-offer-suggestions/catalog.ts`
+  ```
+  if (price === null) return 55; if (price <= 50) return 45; if (price <= 150) return 55; if (price <= 400) return 65; return 75;
+  ```
 - **compute(scope: "contact" | "account", id: string, items: SignalRow[])** — `supabase/functions/intent-aggregator/index.ts`
   ```
   const totalWeight = items.reduce((s, r) => s + r.weight, 0); const score = Math.min(100, Math.round((totalWeight / 80) * 100)); const recent = items.filter((r) => new Date(r.occurred_at).getTime() >= midpoint); const older = items.filter((r) => new Date(r.occurred_at).getTime() < midpoint); const recentW = recent.reduce((s, r) => s + r.weight, 0); const olderW = older.reduce((s, r) => s + r.weight, 0); const trend: "rising" | "stable" | "falling" = recentW > olderW * 1.2 ? "rising" : recentW < o …
@@ -3787,11 +3791,20 @@ _nenhum item encontrado_
 | `SERVICE_ROLE_SENTINEL` | `"__SERVICE_ROLE__"` | `supabase/functions/external-data/audit.ts` |
 | `MAX_PAGE_SIZE` | `500` | `supabase/functions/external-data/index.ts` |
 | `DEFAULT_PAGE_SIZE` | `50` | `supabase/functions/external-data/index.ts` |
+| `MAX_CANDIDATES_PER_CONTACT` | `12` | `supabase/functions/generate-offer-suggestions/catalog.ts` |
+| `MIN_CANDIDATES_PER_CONTACT` | `6` | `supabase/functions/generate-offer-suggestions/catalog.ts` |
+| `FALLBACK_CATEGORY` | `'Outros'` | `supabase/functions/generate-offer-suggestions/catalog.ts` |
+| `CATALOG_TTL_MS` | `5` | `supabase/functions/generate-offer-suggestions/index.ts` |
+| `CATALOG_PAGE_SIZE` | `1000` | `supabase/functions/generate-offer-suggestions/index.ts` |
+| `CATALOG_MAX_ROWS` | `12` | `supabase/functions/generate-offer-suggestions/index.ts` |
 | `DAY_MS` | `86` | `supabase/functions/lead-scorer/index.ts` |
 | `MAX_CONTENT_PER_INTERACTION` | `1200` | `supabase/functions/objection-context-summary/index.ts` |
 | `MAX_TOTAL_CONTEXT` | `6000` | `supabase/functions/objection-context-summary/index.ts` |
 | `CACHE_TTL_MINUTES` | `10` | `supabase/functions/semantic-search/index.ts` |
 | `TWILIO_GATEWAY` | `"https://connector-gateway.lovable.dev/twilio"` | `supabase/functions/send-sms-campaign/index.ts` |
+| `ERP_PAGE_SIZE` | `500` | `supabase/functions/sync-product-catalog/index.ts` |
+| `UPSERT_CHUNK_SIZE` | `200` | `supabase/functions/sync-product-catalog/index.ts` |
+| `ERP_MAX_PRODUCTS` | `20` | `supabase/functions/sync-product-catalog/index.ts` |
 | `BATCH_SIZE` | `10` | `supabase/functions/validation-queue-worker/index.ts` |
 | `MAX_ATTEMPTS` | `3` | `supabase/functions/validation-queue-worker/index.ts` |
 
@@ -4099,7 +4112,7 @@ _nenhum item encontrado_
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/usePendingNotifications.ts` |
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +235 linhas — lista completa em `context.json` | |
+| … +236 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 
@@ -4711,7 +4724,7 @@ _nenhum item encontrado_
 | Falha ao copiar link. | `src/components/intel/RecentSnapshotsPanel.tsx` |
 | Comando desconhecido: ${cmd} | `src/components/intelligence/AskTab.tsx` |
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
-| … +809 linhas — lista completa em `context.json` | |
+| … +811 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -4747,7 +4760,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
-## K. Testes como especificação (3281 testes em 258 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3295 testes em 259 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4816,6 +4829,7 @@ _nenhum item encontrado_
 | `src/contexts/NavigationStackContext.test.tsx` | 14 | Histórico e retorno de navegação · percorre os índices reais do navegador sem apagar o avançar · usa uma visita anterior filtrada da seção, mesmo após visitar outra rota · prioriza o retorno contextual quando a seção é apenas um fallback … |
 | `src/data/__tests__/discAdvancedData.test.ts` | 14 | DISC Advanced Data Integrity · has exactly 4 DISC profiles · includes D, I, S, C · Profile %s … |
 | `src/hooks/__tests__/company-contracts.test.ts` | 14 | contrato canônico de empresas · produz aliases reais exclusivamente de colunas e relações canônicas · escolhe relação primária deterministicamente sem depender da ordem do payload · usa nome fantasia/razão social e mantém fallback de localização do nome … |
+| `tests/integration/offer-catalog.test.ts` | 14 | normalizeText e keywordsFrom · remove acento e caixa para o casamento entre nome de produto e conversa · descarta palavras curtas que nao discriminam produto · buildCatalog … |
 | `tests/rls/prepare-sql.node-test.mjs` | 14 | preserva BEGIN/COMMIT em funções e comentários, removendo só o wrapper externo · preserva blocos DO, dollar tags Unicode e transações dentro de strings · preserva comentários aninhados e aspas duplicadas/escapadas · remove wrapper BEGIN/ROLLBACK da fixture mesmo na mesma linha … |
 | `scripts/lib/seguranca-processo.test.mjs` | 13 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/rls-matrix/check-rls-baseline.test.mjs` | 13 | aprova quando o que cada perfil enxerga bate com o baseline · reprova: ${nome} · exposição menor: aprova, avisa e --update fixa o novo patamar · --update com piora grava, mas deixa a regressão aceita escrita no stderr … |
