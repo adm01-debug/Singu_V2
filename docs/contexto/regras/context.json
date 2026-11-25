@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "f14b8be423127716d3d174073d8d4ed3c7ca446f",
+  "sha": "970f220d1d3b6c57ccd5d9f022d340be88ac811e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 10:02 UTC",
-  "files_total": 4028,
-  "code_files": 3551,
-  "code_lines": 479046
+  "generated_at": "2026-11-25 11:12 UTC",
+  "files_total": 4033,
+  "code_files": 3555,
+  "code_lines": 479421
  },
  "version": "1.3.2",
- "facts_hash": "203df2fd4860e7bf",
+ "facts_hash": "17a06ba429ca52a0",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,7 +272,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1287,
+   ".sql": 1291,
    ".tsx": 1185,
    ".ts": 914,
    ".mjs": 123,
@@ -110976,8 +110976,8 @@
   },
   {
    "module": "scripts",
-   "files": 310,
-   "lines": 51582,
+   "files": 314,
+   "lines": 51957,
    "tables": [
     "__proto__",
     "a",
@@ -242417,6 +242417,22 @@
    ],
    "doc": "Leitores restritos ao formato em blocos dos workflows deste repositorio. Nao sao um parser YAML geral: formatos nao reconhecidos falham nos contratos. Isolar job/step evita que comentarios e passos vizinhos satisfaçam garantias."
   },
+  "scripts/diag/anon_crm_probe.sql": {
+   "path": "scripts/diag/anon_crm_probe.sql",
+   "lines": 37
+  },
+  "scripts/diag/fix_triggers.sql": {
+   "path": "scripts/diag/fix_triggers.sql",
+   "lines": 250
+  },
+  "scripts/diag/scan_triggers.sql": {
+   "path": "scripts/diag/scan_triggers.sql",
+   "lines": 50
+  },
+  "scripts/diag/verify_triggers.sql": {
+   "path": "scripts/diag/verify_triggers.sql",
+   "lines": 38
+  },
   "scripts/docs/verificar-citacoes.mjs": {
    "path": "scripts/docs/verificar-citacoes.mjs",
    "lines": 187,
@@ -307920,10 +307936,23 @@
   }
  },
  "git": {
-  "sha": "f14b8be423127716d3d174073d8d4ed3c7ca446f",
+  "sha": "970f220d1d3b6c57ccd5d9f022d340be88ac811e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "970f220",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)",
+    "files": [
+     "scripts/diag/README.md",
+     "scripts/diag/anon_crm_probe.sql",
+     "scripts/diag/fix_triggers.sql",
+     "scripts/diag/scan_triggers.sql",
+     "scripts/diag/verify_triggers.sql"
+    ]
+   },
    {
     "sha": "f14b8be",
     "date": "2026-11-25",
@@ -308309,15 +308338,6 @@
      "supabase/functions/error-budget/index.ts",
      "supabase/functions/intent-tracker/index.ts"
     ]
-   },
-   {
-    "sha": "14096c0",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix(FF62): territory-optimization propaga falha de RPC externa (#316)",
-    "files": [
-     "supabase/functions/territory-optimization/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -308386,19 +308406,19 @@
     2
    ],
    [
-    "supabase/migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql",
+    "scripts/diag/README.md",
     1
    ],
    [
-    "supabase/migrations/20261124211500_whatsapp_messages_status_played_e_colunas_import.sql",
+    "scripts/diag/anon_crm_probe.sql",
     1
    ],
    [
-    "scripts/automation.config.json",
+    "scripts/diag/fix_triggers.sql",
     1
    ],
    [
-    "scripts/diag-extdata.sh",
+    "scripts/diag/scan_triggers.sql",
     1
    ]
   ]

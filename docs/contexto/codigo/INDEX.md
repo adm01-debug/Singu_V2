@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `f14b8be423127716d3d174073d8d4ed3c7ca446f` (2026-11-25T06:59:56-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `970f220d1d3b6c57ccd5d9f022d340be88ac811e` (2026-11-25T07:40:14-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2099), SQL (1287), Markdown (158), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
+- linguagens: TypeScript (2099), SQL (1291), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3923 |
+| arquivos_total | 3928 |
 | arquivos_codigo | 2263 |
 | linhas_codigo | 422026 |
 | rotas | 116 |
@@ -50,8 +50,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | cron_jobs | 44 |
 | testes | 281 |
 | workflows | 14 |
-| scripts | 298 |
-| docs_md | 158 |
+| scripts | 302 |
+| docs_md | 159 |
 
 ## Onde ficam as coisas
 - telas: src/pages (115)
@@ -447,8 +447,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 25941 nós · 41463 arestas · 3115 comunidades · grafo do commit `f14b8be4`
-- comunidades maiores: @tanstack/react-query (451), ref_hooks (426), react (340), _shared/auth.ts (307), useAuth (305), ref_lib (280), framer-motion (280), ref_components (276), 02_tables.sql (259), ref_types (255), date-fns (235), 📖 Dicionário de Dados — SINGU CRM (224)
+- 25966 nós · 41480 arestas · 3077 comunidades · grafo do commit `970f220d`
+- comunidades maiores: ref_hooks (425), ref_components (298), ref_integrations (290), _shared/auth.ts (288), ref_types (280), ref_lib (278), framer-motion (264), react (259), 02_tables.sql (259), useAuth (256), react-router-dom (225), 📖 Dicionário de Dados — SINGU CRM (224)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -587,6 +587,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-25 `970f220` chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)
 - 2026-11-25 `f14b8be` fix: fecha os 9 drops de indice duplicado que ficaram pendentes da Wave 119 (#341)
 - 2026-11-25 `81fe6e1` fix(whatsapp): alinha check de status e colunas do import em whatsapp_messages (#336)
 - 2026-11-24 `2c7686a` chore(scripts): recupera scripts de diagnostico de branch orfa e registra como legacy manual (#340)
@@ -601,7 +602,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-24 `8b94ca9` fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)
 - 2026-11-24 `68e6140` docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)
 - 2026-11-24 `9f4e1ac` feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)
-- 2026-11-24 `2094be6` fix(ci): destrava o deploy de edge functions (#322)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

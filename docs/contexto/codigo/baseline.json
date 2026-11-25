@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "f14b8be423127716d3d174073d8d4ed3c7ca446f",
+  "commit": "970f220d1d3b6c57ccd5d9f022d340be88ac811e",
   "branch": "main",
-  "data_commit": "2026-11-25T06:59:56-03:00",
+  "data_commit": "2026-11-25T07:40:14-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "970f220",
+    "data": "2026-11-25",
+    "assunto": "chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)"
+   },
    {
     "sha": "f14b8be",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "36d59c2",
     "data": "2026-11-23",
     "assunto": "build(deps): bump the minor-and-patch group with 13 updates (#315)"
-   },
-   {
-    "sha": "0958775",
-    "data": "2026-11-23",
-    "assunto": "fix: remove exports default mortos que quebram lint com react-refresh 0.5.8 (#317)"
    }
   ],
-  "arquivos_mudados_7d": 1070,
+  "arquivos_mudados_7d": 1075,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 175
+    "commits": 176
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3923,
+  "arquivos_total": 3928,
   "arquivos_codigo": 2263,
   "linhas_codigo": 422026,
   "rotas": 116,
@@ -342,8 +342,8 @@
   "cron_jobs": 44,
   "testes": 281,
   "workflows": 14,
-  "scripts": 298,
-  "docs_md": 158
+  "scripts": 302,
+  "docs_md": 159
  },
  "por_pasta": {
   "commitlint.config.cjs": {

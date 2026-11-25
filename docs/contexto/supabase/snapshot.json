@@ -190469,6 +190469,10 @@
         "callers": {
           "code": [
             {
+              "file": "scripts/diag/verify_triggers.sql",
+              "hits": 1
+            },
+            {
               "file": "scripts/migration/ddl/08_functions.sql",
               "hits": 3
             },
@@ -190477,7 +190481,7 @@
               "hits": 3
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.calculate_relationship_metrics",
@@ -202222,8 +202226,13 @@
       {
         "args": "p_phones text[]",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "scripts/diag/anon_crm_probe.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -203424,8 +203433,13 @@
       {
         "args": "p_phone text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "scripts/diag/anon_crm_probe.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -203674,8 +203688,13 @@
       {
         "args": "p_phone text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "scripts/diag/anon_crm_probe.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -219229,11 +219248,15 @@
         "callers": {
           "code": [
             {
+              "file": "scripts/diag/fix_triggers.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261005230000_fix_contacts_companies_write_triggers.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "public.trigger_log_deal_activity",
@@ -219267,11 +219290,15 @@
         "callers": {
           "code": [
             {
+              "file": "scripts/diag/fix_triggers.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261005230000_fix_contacts_companies_write_triggers.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "public.trigger_log_deal_activity",
@@ -219305,11 +219332,15 @@
         "callers": {
           "code": [
             {
+              "file": "scripts/diag/fix_triggers.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261005230000_fix_contacts_companies_write_triggers.sql",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "public.trigger_log_deal_activity",
@@ -225201,8 +225232,13 @@
       {
         "args": "p_search text, p_vendedor text, p_ramo text, p_rfm_segment text, p_estado text, p_cliente_ativado boolean, p_ja_comprou boolean, p_sort_by text, p_page integer, p_page_size integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "scripts/diag/anon_crm_probe.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],

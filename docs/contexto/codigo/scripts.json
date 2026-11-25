@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 298,
+ "total": 302,
  "scripts": [
   {
    "arquivo": "scripts/_pgdocs.py",
@@ -486,6 +486,42 @@
    "arquivo": "scripts/diag-sb-inventory.py",
    "descricao": "Inventario read-only do projeto Supabase (nomes de secrets + funcoes deployadas).\"\"\"",
    "linhas": 47,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/diag/anon_crm_probe.sql",
+   "descricao": null,
+   "linhas": 37,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/diag/fix_triggers.sql",
+   "descricao": null,
+   "linhas": 250,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/diag/scan_triggers.sql",
+   "descricao": null,
+   "linhas": 50,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/diag/verify_triggers.sql",
+   "descricao": null,
+   "linhas": 38,
    "env": [],
    "npm_scripts": [],
    "workflows": [],
