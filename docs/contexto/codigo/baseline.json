@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "e0b7b01d123302e2628d7204d20564c92789824c",
+  "commit": "84d23576edf63766f3afc46f0514cfb4f1e7dee1",
   "branch": "main",
-  "data_commit": "2026-11-25T15:43:42-03:00",
+  "data_commit": "2026-11-25T19:33:13-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "84d2357",
+    "data": "2026-11-25",
+    "assunto": "fix(ofertas): aceitar chamada service_role e gerar ofertas para toda a base (#356)"
+   },
    {
     "sha": "e0b7b01",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "de9c0c7",
     "data": "2026-11-24",
     "assunto": "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)"
-   },
-   {
-    "sha": "8b94ca9",
-    "data": "2026-11-24",
-    "assunto": "fix(rls): alinha allowlist e baseline DEFINER ao banco real (116) (#330)"
    }
   ],
-  "arquivos_mudados_7d": 1060,
+  "arquivos_mudados_7d": 1029,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 188
+    "commits": 189
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3937,
   "arquivos_codigo": 2270,
-  "linhas_codigo": 423049,
+  "linhas_codigo": 423059,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28056
+   "linhas": 28066
   },
   "tailwind.config.ts": {
    "arquivos": 1,

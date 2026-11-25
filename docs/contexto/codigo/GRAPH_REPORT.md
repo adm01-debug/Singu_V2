@@ -1,17 +1,17 @@
 # Graph Report - Singu_V2  (2026-11-25)
 
 ## Corpus Check
-- 3994 files · ~2,682,434 words
+- 3994 files · ~2,682,486 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 18 file(s) not represented in the graph (top: (none) 8, .example 3, .lock 1)
 
 ## Summary
-- 26016 nodes · 41586 edges · 3148 communities (1426 shown, 1722 thin omitted)
+- 26016 nodes · 41587 edges · 3148 communities (1426 shown, 1722 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 1662 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e0b7b01d`
+- Built from commit: `84d23576`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

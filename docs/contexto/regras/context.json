@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e0b7b01d123302e2628d7204d20564c92789824c",
+  "sha": "84d23576edf63766f3afc46f0514cfb4f1e7dee1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 18:44 UTC",
+  "generated_at": "2026-11-25 22:35 UTC",
   "files_total": 4042,
   "code_files": 3564,
-  "code_lines": 480511
+  "code_lines": 480521
  },
  "version": "1.3.2",
- "facts_hash": "47c638687082f5b0",
+ "facts_hash": "d42eadc18ad9dd7e",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112702,7 +112702,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28056,
+   "lines": 28066,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -297335,7 +297335,7 @@
   },
   "supabase/functions/generate-offer-suggestions/index.ts": {
    "path": "supabase/functions/generate-offer-suggestions/index.ts",
-   "lines": 337,
+   "lines": 347,
    "tables": [
     {
      "table": "products",
@@ -297382,9 +297382,6 @@
      "name",
      "stock_qty",
      "unit_price"
-    ],
-    "contacts": [
-     "user_id"
     ],
     "purchase_history": [
      "contact_id"
@@ -308637,10 +308634,19 @@
   }
  },
  "git": {
-  "sha": "e0b7b01d123302e2628d7204d20564c92789824c",
+  "sha": "84d23576edf63766f3afc46f0514cfb4f1e7dee1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "84d2357",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix(ofertas): aceitar chamada service_role e gerar ofertas para toda a base (#356)",
+    "files": [
+     "supabase/functions/generate-offer-suggestions/index.ts"
+    ]
+   },
    {
     "sha": "e0b7b01",
     "date": "2026-11-25",
@@ -308953,21 +308959,16 @@
     "files": [
      "supabase/migrations/20261124120000_create_social_insights.sql"
     ]
-   },
-   {
-    "sha": "27c8b40",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)",
-    "files": [
-     "src/hooks/useAuth.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/estado/06_INTEGRACOES.md",
     5
+   ],
+   [
+    "supabase/functions/generate-offer-suggestions/index.ts",
+    3
    ],
    [
     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
@@ -308979,10 +308980,6 @@
    ],
    [
     "tests/integration/social-interests.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/generate-offer-suggestions/index.ts",
     2
    ],
    [

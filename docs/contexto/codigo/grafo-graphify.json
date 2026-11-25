@@ -4,10 +4,10 @@
  "presente": true,
  "como_gerar": "uvx --from \"graphifyy[sql]\" graphify update .  (ou: bun run graph:update); saída em graphify-out/ — graph.json e graph.html NÃO são versionados (dezenas de MB); use `graphify query/path/explain` localmente",
  "relatorio": null,
- "commit_do_grafo": "e0b7b01d123302e2628d7204d20564c92789824c",
+ "commit_do_grafo": "84d23576edf63766f3afc46f0514cfb4f1e7dee1",
  "grafo_atual": true,
  "nos": 26016,
- "arestas": 41586,
+ "arestas": 41587,
  "comunidades_total": 3148,
  "relacoes": {
   "calls": 3295,
@@ -15,7 +15,7 @@
   "contains": 17628,
   "defines": 474,
   "dynamic_import": 295,
-  "imports": 2774,
+  "imports": 2775,
   "imports_from": 9568,
   "indexes": 1864,
   "indirect_call": 240,
@@ -28,7 +28,7 @@
   "triggers": 586
  },
  "origem": {
-  "EXTRACTED": 39924,
+  "EXTRACTED": 39925,
   "INFERRED": 1662
  },
  "comunidades": [
@@ -1482,7 +1482,7 @@
    "id": "supabase_functions_shared_auth_withauth",
    "rotulo": "withAuth()",
    "arquivo": "supabase/functions/_shared/auth.ts",
-   "grau": 93,
+   "grau": 92,
    "comunidade": "withAuth"
   },
   {
