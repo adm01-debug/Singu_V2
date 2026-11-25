@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)",
+   "docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)",
    "chore(ia): usa OPENROUTER_API_KEY como fonte da chave e trava o contrato (#343)",
    "chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)",
-   "fix: fecha os 9 drops de indice duplicado que ficaram pendentes da Wave 119 (#341)",
-   "fix(whatsapp): alinha check de status e colunas do import em whatsapp_messages (#336)",
-   "chore(scripts): recupera scripts de diagnostico de branch orfa e registra como legacy manual (#340)"
+   "fix: fecha os 9 drops de indice duplicado que ficaram pendentes da Wave 119 (#341)"
   ]
  },
  "pr_template": null,

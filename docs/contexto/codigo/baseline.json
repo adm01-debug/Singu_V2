@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "082f91a7d7ce49ff8f54d6a36ae6ab844cfa150f",
+  "commit": "603c40489b22c8baf2bd2f44f0391be10b069bd1",
   "branch": "main",
-  "data_commit": "2026-11-25T08:12:22-03:00",
+  "data_commit": "2026-11-25T09:43:52-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "603c404",
+    "data": "2026-11-25",
+    "assunto": "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)"
+   },
+   {
+    "sha": "e380fe1",
+    "data": "2026-11-25",
+    "assunto": "docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)"
+   },
    {
     "sha": "082f91a",
     "data": "2026-11-25",
@@ -121,19 +131,9 @@
     "sha": "c6d9be5",
     "data": "2026-11-23",
     "assunto": "fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)"
-   },
-   {
-    "sha": "9ca4bab",
-    "data": "2026-11-23",
-    "assunto": "fix: loga falha de insert da auditoria do external-data (#321)"
-   },
-   {
-    "sha": "76a33c0",
-    "data": "2026-11-23",
-    "assunto": "chore(matriz): marca EF-3/5/7/11/12/13/14/16/17 e F/F15/19/25/34/36/37/40/60/62 como RC (#319)"
    }
   ],
-  "arquivos_mudados_7d": 1075,
+  "arquivos_mudados_7d": 1064,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -282,6 +282,10 @@
     "mudancas": 6
    },
    {
+    "arquivo": "scripts/docs/citacoes-baseline.json",
+    "mudancas": 6
+   },
+   {
     "arquivo": "src/app/AppRoutes.tsx",
     "mudancas": 6
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "src/pages/Empresas.tsx",
     "mudancas": 6
-   },
-   {
-    "arquivo": "supabase/functions/evolution-bitrix-connector/index.ts",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 177
+    "commits": 179
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3928,
+  "arquivos_total": 3929,
   "arquivos_codigo": 2263,
   "linhas_codigo": 422074,
   "rotas": 116,
@@ -338,7 +338,7 @@
   "hooks": 412,
   "edge_functions": 109,
   "tabelas": 542,
-  "migrations": 1114,
+  "migrations": 1115,
   "cron_jobs": 44,
   "testes": 281,
   "workflows": 14,

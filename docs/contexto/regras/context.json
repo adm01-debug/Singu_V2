@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "082f91a7d7ce49ff8f54d6a36ae6ab844cfa150f",
+  "sha": "603c40489b22c8baf2bd2f44f0391be10b069bd1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 11:16 UTC",
-  "files_total": 4033,
-  "code_files": 3555,
-  "code_lines": 479469
+  "generated_at": "2026-11-25 12:45 UTC",
+  "files_total": 4034,
+  "code_files": 3556,
+  "code_lines": 479490
  },
  "version": "1.3.2",
- "facts_hash": "01befd1f1debf272",
+ "facts_hash": "e82f5709be8acb9c",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,7 +272,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1291,
+   ".sql": 1292,
    ".tsx": 1185,
    ".ts": 914,
    ".mjs": 123,
@@ -87557,7 +87557,8 @@
    "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql",
    "supabase/migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql",
    "supabase/migrations/20261124211500_whatsapp_messages_status_played_e_colunas_import.sql",
-   "supabase/migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql"
+   "supabase/migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql",
+   "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -112947,8 +112948,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1114,
-   "lines": 104359,
+   "files": 1115,
+   "lines": 104380,
    "tables": [
     "users"
    ],
@@ -307278,6 +307279,10 @@
    "path": "supabase/migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql",
    "lines": 96
   },
+  "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql": {
+   "path": "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql",
+   "lines": 21
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -307951,10 +307956,29 @@
   }
  },
  "git": {
-  "sha": "082f91a7d7ce49ff8f54d6a36ae6ab844cfa150f",
+  "sha": "603c40489b22c8baf2bd2f44f0391be10b069bd1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "603c404",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)",
+    "files": [
+     "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql"
+    ]
+   },
+   {
+    "sha": "e380fe1",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)",
+    "files": [
+     "docs/estado/06_INTEGRACOES.md",
+     "scripts/docs/citacoes-baseline.json"
+    ]
+   },
    {
     "sha": "082f91a",
     "date": "2026-11-25",
@@ -308251,116 +308275,20 @@
     "files": [
      ".github/workflows/dependency-review.yml"
     ]
-   },
-   {
-    "sha": "409a5ae",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)",
-    "files": [
-     ".github/workflows/smoke-edges-pendentes.yml",
-     "docs/ci/README.md",
-     "docs/lacunas/D_ui_rotas_componentes.md",
-     "docs/lacunas/E_contratos_front_backend.md",
-     "src/app/AppRoutes.tsx",
-     "src/app/lazyPages.tsx",
-     "src/components/abm/ABMAccountEditDialog.tsx",
-     "src/components/admin/conexoes/ConnectionCard.tsx",
-     "src/components/admin/conexoes/ConnectionTestHistory.tsx",
-     "src/components/ai/AIMessageGenerator.tsx",
-     "src/components/carnegie/CarnegieExtendedLibrary.tsx",
-     "src/components/carnegie/index.ts",
-     "src/components/companies/CompaniesExportButton.tsx",
-     "src/components/companies/PipelineSummaryCard.tsx",
-     "src/components/contact-card/ContactCardWithContext.tsx",
-     "src/components/contact-detail/ContactBehavioralTab.tsx",
-     "src/components/contact-detail/ContactTasksPanel.tsx",
-     "src/components/contact-detail/behavioral-tab/NeuroDominanceTab.tsx",
-     "src/components/contact-detail/behavioral-tab/PersonalityFrameworkInsights.tsx",
-     "src/components/contact-detail/behavioral-tab/PersonalitySubTab.tsx",
-     "src/components/contact-detail/data-tab/CadencePreferencesCard.tsx",
-     "src/components/contact-detail/index.ts",
-     "src/components/customer-success/HealthSignalTimeline.tsx",
-     "src/components/customer-success/QBRTimeline.tsx",
-     "src/components/customer-success/RecordSignalDialog.tsx",
-     "src/components/customer-success/RenewalEditDialog.tsx",
-     "src/components/customer-success/RenewalPipelineList.tsx",
-     "src/components/customer-success/ScheduleQBRDialog.tsx",
-     "src/components/dashboard/StrategicNextStepsCard.tsx",
-     "src/components/dashboard/tabs/OverviewTab.tsx",
-     "src/components/dashboard/widgets/PendingFollowupsWidget.contract.test.tsx",
-     "src/components/dashboard/widgets/PendingFollowupsWidget.tsx",
-     "src/components/deal-rooms/DealRoomEditDialog.tsx",
-     "src/components/feedback/ErrorBoundary.tsx",
-     "src/components/import/BulkImportDialog.tsx",
-     "src/components/layout/AppSidebar.tsx",
-     "src/components/layout/Header.search.test.tsx",
-     "src/components/layout/Header.tsx",
-     "src/components/lead-score/LeadScoreWeightsEditor.tsx",
-     "src/components/lead-scoring/AutomationWizard.tsx",
-     "src/components/marketing/ContactTouchpointsTab.tsx",
-     "src/components/neuromarketing/NeuroScriptGenerator.tsx",
-     "src/components/revops/RevOpsSnapshotHistory.tsx",
-     "src/components/territories/TerritoryForm.tsx",
-     "src/components/win-loss/WinLossRecordsTable.tsx",
-     "src/hooks/useAuth.tsx",
-     "src/hooks/useCommunicationPreferences.ts",
-     "src/hooks/useCompanyActions.ts",
-     "src/hooks/useFollowUpApprovals.ts",
-     "src/hooks/useTasks.ts",
-     "src/hooks/useTerritories.ts",
-     "src/pages/ABMAccountDetail.tsx",
-     "src/pages/AdminConexoes.tsx",
-     "src/pages/AprovacoesFollowUp.tsx",
-     "src/pages/Cadastro.tsx",
-     "src/pages/Configuracoes.tsx",
-     "src/pages/ContatoDetalhe.errors.test.tsx",
-     "src/pages/ContatoDetalhe.tsx",
-     "src/pages/Contatos.search.test.tsx",
-     "src/pages/DealRoomDetail.tsx",
-     "src/pages/EmpresaDetalhe.tsx",
-     "src/pages/Empresas.errors.test.tsx",
-     "src/pages/Empresas.tsx",
-     "src/pages/Enrichment.tsx",
-     "src/pages/Forecasting.tsx",
-     "src/pages/Insights.tsx",
-     "src/pages/Intent.tsx",
-     "src/pages/LeadScoringConfig.tsx",
-     "src/pages/ResetPassword.tsx",
-     "src/pages/RevOps.tsx",
-     "src/pages/Territorios.tsx",
-     "src/pages/cadastro/RelationshipList.tsx",
-     "src/pages/configuracoes/ConfigSecurityTab.tsx",
-     "src/pages/contatos/ContatosContent.tsx",
-     "src/pages/empresas/EmpresasContent.tsx",
-     "supabase/functions/generate-insights/index.ts"
-    ]
-   },
-   {
-    "sha": "fa7b7fb",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix: corrige 7 bugs AR (F/F36 F/F19 F/F15 F/F37 F/F40 F/F60 EF-17) (#312)",
-    "files": [
-     "supabase/functions/_shared/edge-types-contract_test.ts",
-     "supabase/functions/crm-automation-monitor/index.ts",
-     "supabase/functions/disc-analyzer/index.ts",
-     "supabase/functions/evolution-webhook/messages.ts",
-     "supabase/functions/lead-score-threshold-runner/index.ts",
-     "supabase/functions/lux-trigger/index.ts",
-     "supabase/functions/mql-evaluator/index.ts",
-     "supabase/functions/system-health/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/estado/06_INTEGRACOES.md",
-    4
+    5
    ],
    [
     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
     3
+   ],
+   [
+    "scripts/docs/citacoes-baseline.json",
+    2
    ],
    [
     "docs/estado/02_INTELIGENCIA_IA.md",
@@ -308383,10 +308311,6 @@
     2
    ],
    [
-    "supabase/functions/evolution-webhook/messages.ts",
-    2
-   ],
-   [
     "docs/qa/functions-authenticated-allowlist.md",
     2
    ],
@@ -308399,32 +308323,12 @@
     2
    ],
    [
-    "docs/lacunas/D_ui_rotas_componentes.md",
-    2
-   ],
-   [
-    "src/app/AppRoutes.tsx",
-    2
-   ],
-   [
-    "src/components/layout/AppSidebar.tsx",
-    2
-   ],
-   [
     ".github/workflows/deploy-edge-functions.yml",
     2
    ],
    [
-    "src/hooks/useAuth.tsx",
-    2
-   ],
-   [
-    "docs/ci/README.md",
-    2
-   ],
-   [
-    ".github/workflows/smoke-edges-pendentes.yml",
-    2
+    "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql",
+    1
    ],
    [
     "scripts/diag/README.md",
@@ -308432,6 +308336,26 @@
    ],
    [
     "scripts/diag/anon_crm_probe.sql",
+    1
+   ],
+   [
+    "scripts/diag/fix_triggers.sql",
+    1
+   ],
+   [
+    "scripts/diag/scan_triggers.sql",
+    1
+   ],
+   [
+    "scripts/diag/verify_triggers.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20261124211500_whatsapp_messages_status_played_e_colunas_import.sql",
     1
    ]
   ]
