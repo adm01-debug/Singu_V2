@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { useRBAC } from '@/hooks/useRBAC';
+import { canAccessRoute } from '@/lib/routePermissions';
 
 const mainNavItems = [
   { icon: Home, label: 'Início', path: '/' },
@@ -43,6 +45,12 @@ function MobileBottomNavInner() {
   const navigate = useNavigate();
   const [showMore, setShowMore] = useState(false);
   const haptic = useHapticFeedback();
+  const { hasPermission, userRoles, isLoading: rbacLoading } = useRBAC();
+
+  // Mesmo filtro do AppSidebar: o menu nao anuncia pagina que o guarda bloqueia.
+  const visibleMoreItems = moreNavItems.filter((item) =>
+    canAccessRoute(item.path, hasPermission, userRoles, rbacLoading),
+  );
 
   // Auto-close "More" overlay on route change (e.g. swipe-back gesture)
   useEffect(() => {
@@ -60,7 +68,7 @@ function MobileBottomNavInner() {
   };
 
   // Check if active route is in "more" section for indicator
-  const activeInMore = moreNavItems.some(item => isActive(item.path));
+  const activeInMore = visibleMoreItems.some(item => isActive(item.path));
 
   const handleNavigate = (path: string) => {
     haptic.selection();
@@ -114,7 +122,7 @@ function MobileBottomNavInner() {
                 </button>
               </div>
               <div className="grid grid-cols-3 gap-3">
-                {moreNavItems.map((item) => {
+                {visibleMoreItems.map((item) => {
                   const Icon = item.icon;
                   const active = isActive(item.path);
                   return (
