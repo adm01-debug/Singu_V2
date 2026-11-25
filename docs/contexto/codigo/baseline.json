@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "8b65e231179a1736da2a23d1b38af7cfdff4ef51",
+  "commit": "774d2f2decb03bea1bc916af9bfa8e75de1273f7",
   "branch": "main",
-  "data_commit": "2026-11-25T20:11:36-03:00",
+  "data_commit": "2026-11-25T20:31:21-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "774d2f2",
+    "data": "2026-11-25",
+    "assunto": "fix(social): para de gravar nome, email e telefone como interesse do cliente (#359)"
+   },
    {
     "sha": "8b65e23",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "0d1bfce",
     "data": "2026-11-24",
     "assunto": "feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)"
-   },
-   {
-    "sha": "5eedf57",
-    "data": "2026-11-24",
-    "assunto": "docs: corrige o estado real da integracao Evolution no inventario (#334)"
    }
   ],
-  "arquivos_mudados_7d": 1021,
+  "arquivos_mudados_7d": 1017,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 191
+    "commits": 192
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3938,
   "arquivos_codigo": 2270,
-  "linhas_codigo": 423059,
+  "linhas_codigo": 423081,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28066
+   "linhas": 28088
   },
   "tailwind.config.ts": {
    "arquivos": 1,

@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(social): para de gravar nome, email e telefone como interesse do cliente (#359)",
    "feat(social): sincronizacao automatica com enqueue e dispatch (#355)",
    "chore(ci): desbloquear gate RLS — baseline DEFINER 119 e contadores de produção (#358)",
    "fix(ofertas): aceitar chamada service_role e gerar ofertas para toda a base (#356)",
-   "fix: interesse social tambem conta repeticao no mesmo historico (#354)",
-   "fix: interesses sociais derivados das interacoes reais (#353)"
+   "fix: interesse social tambem conta repeticao no mesmo historico (#354)"
   ]
  },
  "pr_template": null,

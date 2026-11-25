@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `8b65e231179a1736da2a23d1b38af7cfdff4ef51` (2026-11-25T20:11:36-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `774d2f2decb03bea1bc916af9bfa8e75de1273f7` (2026-11-25T20:31:21-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -36,7 +36,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 |---|---|
 | arquivos_total | 3938 |
 | arquivos_codigo | 2270 |
-| linhas_codigo | 423059 |
+| linhas_codigo | 423081 |
 | rotas | 116 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -451,8 +451,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26020 nós · 41590 arestas · 3095 comunidades · grafo do commit `8b65e231`
-- comunidades maiores: _shared/auth.ts (328), ref_components (306), sonner (302), ref_lib (289), react (284), framer-motion (275), 02_tables.sql (259), lucide-react (251), ref_hooks (240), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (223), react-router-dom (222)
+- 26022 nós · 41594 arestas · 3093 comunidades · grafo do commit `774d2f2d`
+- comunidades maiores: ref_lib (282), ref_types (276), lucide-react (267), react (265), 02_tables.sql (259), framer-motion (258), react-router-dom (251), useAuth (240), ref_hooks (232), 📖 Dicionário de Dados — SINGU CRM (224), ref_components (217), date-fns (208)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -591,6 +591,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-25 `774d2f2` fix(social): para de gravar nome, email e telefone como interesse do cliente (#359)
 - 2026-11-25 `8b65e23` feat(social): sincronizacao automatica com enqueue e dispatch (#355)
 - 2026-11-25 `7912bb2` chore(ci): desbloquear gate RLS — baseline DEFINER 119 e contadores de produção (#358)
 - 2026-11-25 `84d2357` fix(ofertas): aceitar chamada service_role e gerar ofertas para toda a base (#356)
@@ -605,7 +606,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-25 `472ff96` feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)
 - 2026-11-25 `603c404` chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)
 - 2026-11-25 `e380fe1` docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)
-- 2026-11-25 `082f91a` chore(ia): usa OPENROUTER_API_KEY como fonte da chave e trava o contrato (#343)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -3535,7 +3535,7 @@
    "nome": "sync-social-interests",
    "entrada": "supabase/functions/sync-social-interests/index.ts",
    "arquivos": 2,
-   "linhas": 218,
+   "linhas": 240,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS"
