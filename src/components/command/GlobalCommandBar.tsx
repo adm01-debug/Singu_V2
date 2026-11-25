@@ -13,6 +13,8 @@ import { cn } from '@/lib/utils';
 import { COMMAND_ROUTES, pushRecent, readRecent, type CommandAction, type CommandRoute } from './commandRegistry';
 import { useGlobalDensity } from '@/hooks/useGlobalDensity';
 import { useAuth } from '@/hooks/useAuth';
+import { useRBAC } from '@/hooks/useRBAC';
+import { canAccessRoute } from '@/lib/routePermissions';
 
 type Mode = 'navigate' | 'actions' | 'search' | 'ask';
 
@@ -38,6 +40,7 @@ export function GlobalCommandBar({ open, onOpenChange, onOpenLegacySearch, onOpe
   const [query, setQuery] = useState('');
   const { toggle: toggleDensity, isCompact } = useGlobalDensity();
   const { user } = useAuth();
+  const { hasPermission, userRoles, isLoading: rbacLoading } = useRBAC();
 
   const recentIds = useMemo(() => (open ? readRecent(user?.id) : []), [open, user?.id]);
 
@@ -151,19 +154,24 @@ export function GlobalCommandBar({ open, onOpenChange, onOpenLegacySearch, onOpe
     [navigate, close, toggleDensity, isCompact, onOpenLegacySearch, onOpenAsk],
   );
 
+  const visibleRoutes = useMemo(
+    () => COMMAND_ROUTES.filter((r) => canAccessRoute(r.url, hasPermission, userRoles, rbacLoading)),
+    [hasPermission, userRoles, rbacLoading],
+  );
+
   const groupedRoutes = useMemo(() => {
     const groups = new Map<CommandRoute['section'], CommandRoute[]>();
-    for (const r of COMMAND_ROUTES) {
+    for (const r of visibleRoutes) {
       const list = groups.get(r.section) ?? [];
       list.push(r);
       groups.set(r.section, list);
     }
     return Array.from(groups.entries());
-  }, []);
+  }, [visibleRoutes]);
 
   const recentRoutes = useMemo(
-    () => recentIds.map((id) => COMMAND_ROUTES.find((r) => r.id === id)).filter((x): x is CommandRoute => !!x),
-    [recentIds],
+    () => recentIds.map((id) => visibleRoutes.find((r) => r.id === id)).filter((x): x is CommandRoute => !!x),
+    [recentIds, visibleRoutes],
   );
 
   return (
