@@ -1,4 +1,4 @@
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import {
   handleCorsAndMethod,
@@ -8,6 +8,16 @@ import {
   guardBody,
 } from "../_shared/auth.ts";
 import { validate } from "../_shared/validate.ts";
+import {
+  buildCatalog,
+  buildFallbackOrder,
+  buildKeywordIndex,
+  candidatesFor,
+  keywordsFrom,
+  normalizeText,
+  type CatalogItem,
+  type ProductRow,
+} from "./catalog.ts";
 
 interface OfferSuggestion {
   contactId: string;
@@ -23,6 +33,54 @@ interface OfferSuggestion {
 }
 
 const limiter = rateLimit({ windowMs: 60_000, max: 10 });
+
+const LEGACY_OFFER_CATALOG: CatalogItem[] = [
+  { name: 'Upgrade para Plano Premium', category: 'Upgrade', targetScore: 70, keywords: ['crescimento', 'expansão', 'mais recursos'] },
+  { name: 'Treinamento Avançado', category: 'Serviço', targetScore: 60, keywords: ['dificuldade', 'aprender', 'capacitar'] },
+  { name: 'Consultoria Personalizada', category: 'Consultoria', targetScore: 80, keywords: ['estratégia', 'otimização', 'resultados'] },
+  { name: 'Plano Anual com Desconto', category: 'Renovação', targetScore: 50, keywords: ['custo', 'economia', 'orçamento'] },
+  { name: 'Módulo de Integração', category: 'Addon', targetScore: 65, keywords: ['integrar', 'automatizar', 'conectar'] },
+  { name: 'Suporte Premium 24/7', category: 'Suporte', targetScore: 55, keywords: ['urgência', 'problema', 'ajuda'] },
+  { name: 'Licenças Adicionais', category: 'Expansão', targetScore: 60, keywords: ['equipe', 'colaboradores', 'usuários'] },
+  { name: 'Migração de Dados', category: 'Serviço', targetScore: 45, keywords: ['migrar', 'transferir', 'importar'] },
+];
+
+// O catalogo real tem milhares de produtos: reler tudo a cada clique em
+// "sugestoes de oferta" inviabiliza a geracao. O isolate do Deno sobrevive
+// entre invocacoes, entao o catalogo fica em cache curto.
+const CATALOG_TTL_MS = 5 * 60 * 1000;
+const CATALOG_PAGE_SIZE = 1000;
+const CATALOG_MAX_ROWS = 12_000;
+let catalogCache: { loadedAt: number; rows: ProductRow[] } | null = null;
+
+async function loadCatalogRows(supabase: SupabaseClient): Promise<ProductRow[]> {
+  if (catalogCache && Date.now() - catalogCache.loadedAt < CATALOG_TTL_MS) {
+    return catalogCache.rows;
+  }
+
+  const rows: ProductRow[] = [];
+  try {
+    for (let offset = 0; offset < CATALOG_MAX_ROWS; offset += CATALOG_PAGE_SIZE) {
+      const { data, error } = await supabase
+        .from('products')
+        .select('name, category, unit_price, stock_qty, metadata')
+        .eq('is_active', true)
+        .gt('unit_price', 0)
+        .order('sku', { ascending: true })
+        .range(offset, offset + CATALOG_PAGE_SIZE - 1);
+      if (error) throw error;
+      const page = (data ?? []) as ProductRow[];
+      rows.push(...page);
+      if (page.length < CATALOG_PAGE_SIZE) break;
+    }
+  } catch (error) {
+    console.error('Falha ao carregar o catalogo de produtos:', error);
+    return catalogCache?.rows ?? [];
+  }
+
+  catalogCache = { loadedAt: Date.now(), rows };
+  return rows;
+}
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 Deno.serve(async (req) => {
@@ -73,6 +131,7 @@ Deno.serve(async (req) => {
       { data: socialAnalysis },
       { data: existingOffers },
       { data: allSocialInsights },
+      catalogProducts,
     ] = await Promise.all([
       supabase.from('purchase_history').select('*').in('contact_id', contactIds).order('purchase_date', { ascending: false }),
       supabase.from('interactions').select('*').in('contact_id', contactIds).order('created_at', { ascending: false }).limit(100),
@@ -80,6 +139,7 @@ Deno.serve(async (req) => {
       supabase.from('social_behavior_analysis').select('*').in('contact_id', contactIds),
       supabase.from('offer_suggestions').select('contact_id, offer_name').in('contact_id', contactIds).eq('status', 'pending'),
       supabase.from('social_insights').select('id, contact_id, platform, content').in('contact_id', contactIds),
+      loadCatalogRows(supabase),
     ]);
 
     const socialInsightsByContact = new Map<string, Array<{ id: string; platform: string; content: string }>>();
@@ -93,16 +153,18 @@ Deno.serve(async (req) => {
       (existingOffers || []).map(o => `${o.contact_id}-${o.offer_name}`)
     );
 
-    const offerCatalog = [
-      { name: 'Upgrade para Plano Premium', category: 'Upgrade', targetScore: 70, keywords: ['crescimento', 'expansão', 'mais recursos'] },
-      { name: 'Treinamento Avançado', category: 'Serviço', targetScore: 60, keywords: ['dificuldade', 'aprender', 'capacitar'] },
-      { name: 'Consultoria Personalizada', category: 'Consultoria', targetScore: 80, keywords: ['estratégia', 'otimização', 'resultados'] },
-      { name: 'Plano Anual com Desconto', category: 'Renovação', targetScore: 50, keywords: ['custo', 'economia', 'orçamento'] },
-      { name: 'Módulo de Integração', category: 'Addon', targetScore: 65, keywords: ['integrar', 'automatizar', 'conectar'] },
-      { name: 'Suporte Premium 24/7', category: 'Suporte', targetScore: 55, keywords: ['urgência', 'problema', 'ajuda'] },
-      { name: 'Licenças Adicionais', category: 'Expansão', targetScore: 60, keywords: ['equipe', 'colaboradores', 'usuários'] },
-      { name: 'Migração de Dados', category: 'Serviço', targetScore: 45, keywords: ['migrar', 'transferir', 'importar'] },
-    ];
+    // Catalogo real de ofertas: produtos que a empresa vende (espelho do ERP).
+    // Sem produto cadastrado o motor cai no catalogo legado para nao ficar mudo.
+    const catalogRows = (catalogProducts ?? []) as ProductRow[];
+    const realCatalog = buildCatalog(catalogRows);
+    const useRealCatalog = realCatalog.length > 0;
+    const keywordIndex = useRealCatalog ? buildKeywordIndex(realCatalog) : new Map<string, number[]>();
+    const fallbackOrder = useRealCatalog ? buildFallbackOrder(catalogRows) : [];
+    const catalogForContext = (context: string): CatalogItem[] =>
+      useRealCatalog
+        ? candidatesFor(context, realCatalog, keywordIndex, fallbackOrder)
+        : LEGACY_OFFER_CATALOG;
+
 
     const suggestions: OfferSuggestion[] = [];
 
@@ -130,6 +192,15 @@ Deno.serve(async (req) => {
         const daysUntil = Math.ceil((renewalDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         return daysUntil > 0 && daysUntil <= 60;
       });
+
+      // Renovacao real vinda de purchase_history entra como oferta antes do catalogo.
+      const renewalOffers: CatalogItem[] = upcomingRenewals.slice(0, 1).map((renewal) => ({
+        name: `Renovação: ${renewal.product_name || 'Produto'}`,
+        category: 'Renovação',
+        targetScore: 50,
+        keywords: keywordsFrom(renewal.product_name),
+      }));
+      const offerCatalog = [...renewalOffers, ...catalogForContext(normalizeText(combinedContext))];
 
       for (const offer of offerCatalog) {
         const key = `${contact.id}-${offer.name}`;

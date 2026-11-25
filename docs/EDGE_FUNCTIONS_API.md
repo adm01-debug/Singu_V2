@@ -231,14 +231,19 @@ Sugere próxima ação para um contato.
 ---
 
 ### `generate-offer-suggestions`
-Gera sugestões de ofertas personalizadas.
+Gera sugestões de ofertas cruzando o contexto do contato (interações, perfil
+analítico, comportamento social) com o catálogo real de produtos em
+`public.products`. Sem produto cadastrado, cai no catálogo legado de ofertas de
+serviço (comportamento anterior).
 
 ```json
 // Request:
-{ "contactId": "uuid", "context": "renovação de contrato" }
+{ "contactId": "uuid" }   // opcional: sem contactId processa todos os contatos do usuário
 
 // Response:
-{ "offers": [{ "title": "...", "description": "...", "confidence": 0.85 }] }
+{ "success": true, "suggestionsGenerated": 12,
+  "suggestions": [{ "contactId": "uuid", "offerName": "Caneca plástica PP 400ml",
+                    "offerCategory": "Bebidas", "reason": "...", "confidenceScore": 70 }] }
 ```
 
 ---
@@ -346,6 +351,7 @@ Todas exigem header `x-cron-secret`:
 | `smart-reminders` | Gera lembretes inteligentes baseados em cadência |
 | `template-success-notifications` | Notifica sucesso de templates |
 | `weekly-digest` | Gera e envia resumo semanal |
+| `sync-product-catalog` | Espelha o catálogo de produtos do ERP (`ERP_SUPABASE_URL`) em `public.products`; aceita `{ "dryRun": true }`. Alimenta o `generate-offer-suggestions` |
 
 ---
 
