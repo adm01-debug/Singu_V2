@@ -307,7 +307,8 @@ Deno.serve(async (req) => {
         reason: s.reason,
         confidence_score: s.confidenceScore,
         status: 'pending',
-        metadata: s.metadata,
+        // Coluna opcional: se o banco nao a tiver, enviar a chave (mesmo vazia) faz o PostgREST recusar o insert inteiro.
+        ...(s.metadata ? { metadata: s.metadata } : {}),
         expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       }));
 
