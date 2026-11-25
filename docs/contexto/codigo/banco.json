@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1116,
+ "migrations": 1117,
  "seeds": [],
  "avisos": [
   "212 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -339,6 +339,7 @@
   "definir_hierarquia_cooperativa",
   "detect_contact_intel_changes",
   "dismiss_revops_alert",
+  "dispatch_social_sync",
   "drop_old_ai_gateway_metrics_partitions",
   "encerrar_vinculo_sdr_closer",
   "encrypt_connection_config",
@@ -346,6 +347,7 @@
   "enqueue_contact_validation",
   "enqueue_crm_reprocess",
   "enqueue_smart_notification",
+  "enqueue_social_sync",
   "enroll_contact_in_workflow",
   "enroll_lead_score_contact",
   "enroll_sequence_contact",
@@ -525,6 +527,7 @@
   "remove_company_tag",
   "remove_tag",
   "reopen_task",
+  "requeue_social_sync_stuck",
   "reserve_sequence_email_send",
   "reset_daily_lead_counts",
   "resolve_alerts_batch",
@@ -2945,6 +2948,21 @@
    "nome": "singu-rodizio-segmentar",
    "agenda": "0 1 * * *",
    "migration": "20260924213115_t213_rodizio_pg_cron_jobs.sql"
+  },
+  {
+   "nome": "singu-social-dispatch",
+   "agenda": "*/5 * * * *",
+   "migration": "20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+  },
+  {
+   "nome": "singu-social-enqueue-daily",
+   "agenda": "0 5 * * *",
+   "migration": "20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+  },
+  {
+   "nome": "singu-social-requeue-stuck",
+   "agenda": "25 * * * *",
+   "migration": "20261125190000_social_sync_automatico_enqueue_dispatch.sql"
   },
   {
    "nome": "smart-notify-automation",

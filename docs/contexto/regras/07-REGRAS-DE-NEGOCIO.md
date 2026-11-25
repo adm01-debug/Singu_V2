@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7912bb2d3c` · branch `main` · 2026-11-25 23:20 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8b65e23117` · branch `main` · 2026-11-25 23:24 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1137,6 +1137,11 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `claim_behavioral_profile_retry` | Proprietário da reserva divergente | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 | `claim_behavioral_profile_retry` | Reanálise recente; aguarde cinco minutos | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 | `claim_behavioral_profile_retry` | Contato reservado ou em pausa temporária; aguarde para tentar novamente | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
+| `enqueue_social_sync` | enqueue_social_sync: p_limit precisa ser >= 1 (recebido %) | `supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql` |
+| `enqueue_social_sync` | enqueue_social_sync: p_stale_days precisa ser >= 1 (recebido %) | `supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql` |
+| `dispatch_social_sync` | dispatch_social_sync: p_limit precisa ser >= 1 (recebido %) | `supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql` |
+| `dispatch_social_sync` | dispatch_social_sync: singu_cron_secret ausente no Vault; a edge function responderia 401 e a fila nao drenaria | `supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql` |
+| `requeue_social_sync_stuck` | requeue_social_sync_stuck: p_stuck_minutes precisa ser >= 1 (recebido %) | `supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql` |
 
 ## E. Estados, máquinas de estado e transições
 
@@ -4123,7 +4128,7 @@ _nenhum item encontrado_
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/usePendingNotifications.ts` |
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +236 linhas — lista completa em `context.json` | |
+| … +237 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 

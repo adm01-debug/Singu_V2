@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "7912bb2d3cdcdfd02214b72b0a27cdf4e174db48",
+  "sha": "8b65e231179a1736da2a23d1b38af7cfdff4ef51",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 23:20 UTC",
-  "files_total": 4042,
-  "code_files": 3564,
-  "code_lines": 480521
+  "generated_at": "2026-11-25 23:24 UTC",
+  "files_total": 4043,
+  "code_files": 3565,
+  "code_lines": 480740
  },
  "version": "1.3.2",
- "facts_hash": "d42eadc18ad9dd7e",
+ "facts_hash": "94d853fcf976d57a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,7 +272,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1293,
+   ".sql": 1294,
    ".tsx": 1187,
    ".ts": 919,
    ".mjs": 123,
@@ -70824,6 +70824,63 @@
      "sent",
      "serie"
     ]
+   },
+   "enqueue_social_sync": {
+    "args": "p_limit integer DEFAULT 500, p_stale_days integer DEFAULT 30",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_inserted integer; BEGIN IF p_limit IS NULL OR p_limit < 1 THEN RAISE EXCEPTION 'enqueue_social_sync: p_limit precisa ser >= 1 (recebido %)', p_limit; END IF; IF p_stale_days IS NULL OR p_stale_days < 1 THEN RAISE EXCEPTION 'enqueue_social_sync: p_stale_days precisa ser >= 1 (recebido %)', p_stale_days; END IF; WITH candidato AS ( SELECT c.id AS contact_id, max(i.created_at) AS ultima_interacao FROM public.contacts c JOIN public.interactions i ON i.contact_id = c.id WHERE ( nullif(btrim(coalesce(i.conteudo, '')), '') IS NOT NULL OR nullif(btrim(coalesce(i.content, '')), '') IS NOT NULL OR nullif(btrim(coalesce(i.assunto, '')), '') IS NOT NULL OR nullif(btrim(coalesce(i.resumo, '')), …",
+    "raises": [
+     "enqueue_social_sync: p_limit precisa ser >= 1 (recebido %)",
+     "enqueue_social_sync: p_stale_days precisa ser >= 1 (recebido %)"
+    ],
+    "tables": [
+     "candidato",
+     "contacts",
+     "inserido",
+     "interactions",
+     "social_behavior_analysis",
+     "social_sync_queue",
+     "v_inserted"
+    ]
+   },
+   "dispatch_social_sync": {
+    "args": "p_limit integer DEFAULT 25",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE r record; v_secret text; v_url text := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/sync-social-interests'; v_count integer := 0; BEGIN IF p_limit IS NULL OR p_limit < 1 THEN RAISE EXCEPTION 'dispatch_social_sync: p_limit precisa ser >= 1 (recebido %)', p_limit; END IF; SELECT decrypted_secret INTO v_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'; IF v_secret IS NULL OR btrim(v_secret) = '' THEN RAISE EXCEPTION 'dispatch_social_sync: singu_cron_secret ausente no Vault; a edge function responderia 401 e a fila nao drenaria'; END IF; FOR r IN SELECT id, contact_id FROM public.social_sync_queue WHERE status = 'pending' AND (last_attempt IS NULL OR last_at …",
+    "raises": [
+     "dispatch_social_sync: p_limit precisa ser >= 1 (recebido %)",
+     "dispatch_social_sync: singu_cron_secret ausente no Vault; a edge function responderia 401 e a fila nao drenaria"
+    ],
+    "tables": [
+     "social_sync_queue",
+     "v_secret",
+     "vault"
+    ]
+   },
+   "requeue_social_sync_stuck": {
+    "args": "p_stuck_minutes integer DEFAULT 30",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_count integer; BEGIN IF p_stuck_minutes IS NULL OR p_stuck_minutes < 1 THEN RAISE EXCEPTION 'requeue_social_sync_stuck: p_stuck_minutes precisa ser >= 1 (recebido %)', p_stuck_minutes; END IF; WITH reciclado AS ( UPDATE public.social_sync_queue q SET status = 'pending', retry_count = q.retry_count + 1, error_log = 'reagendado apos ficar preso em processing/failed', updated_at = now() WHERE q.retry_count < coalesce(q.max_retries, 3) AND ( (q.status = 'processing' AND q.last_attempt < now() - make_interval(mins => p_stuck_minutes)) OR (q.status = 'failed' AND coalesce(q.last_attempt, q.created_at) < now() - make_interval(mins => p_stuck_minutes * 4)) ) RETURNING 1 ) SELECT count(*) I …",
+    "raises": [
+     "requeue_social_sync_stuck: p_stuck_minutes precisa ser >= 1 (recebido %)"
+    ],
+    "tables": [
+     "reciclado",
+     "social_sync_queue",
+     "v_count"
+    ]
    }
   },
   "enums": {
@@ -87560,7 +87617,8 @@
    "supabase/migrations/20261124211500_whatsapp_messages_status_played_e_colunas_import.sql",
    "supabase/migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql",
    "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql",
-   "supabase/migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql"
+   "supabase/migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql",
+   "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -99420,6 +99478,54 @@
     "objkind": "function",
     "roles": "PUBLIC, authenticated",
     "src": "supabase/migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "enqueue_social_sync",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "dispatch_social_sync",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "requeue_social_sync_stuck",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "enqueue_social_sync",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "dispatch_social_sync",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "requeue_social_sync_stuck",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
    }
   ],
   "raises": [
@@ -100462,6 +100568,31 @@
     "function": "claim_behavioral_profile_retry",
     "msg": "Contato reservado ou em pausa temporária; aguarde para tentar novamente",
     "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "enqueue_social_sync",
+    "msg": "enqueue_social_sync: p_limit precisa ser >= 1 (recebido %)",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "function": "enqueue_social_sync",
+    "msg": "enqueue_social_sync: p_stale_days precisa ser >= 1 (recebido %)",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "function": "dispatch_social_sync",
+    "msg": "dispatch_social_sync: p_limit precisa ser >= 1 (recebido %)",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "function": "dispatch_social_sync",
+    "msg": "dispatch_social_sync: singu_cron_secret ausente no Vault; a edge function responderia 401 e a fila nao drenaria",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "function": "requeue_social_sync_stuck",
+    "msg": "requeue_social_sync_stuck: p_stuck_minutes precisa ser >= 1 (recebido %)",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
    }
   ],
   "seed": [],
@@ -112983,8 +113114,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1116,
-   "lines": 104420,
+   "files": 1117,
+   "lines": 104639,
    "tables": [
     "users"
    ],
@@ -170487,6 +170618,10 @@
    {
     "file": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
     "line": "next_run_at = clock_timestamp() + interval '20 minutes',"
+   },
+   {
+    "file": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+    "line": "AND (last_attempt IS NULL OR last_attempt < now() - interval '3 minutes')"
    }
   ],
   "percents": [
@@ -208206,6 +208341,63 @@
      "sent",
      "serie"
     ]
+   },
+   "enqueue_social_sync": {
+    "args": "p_limit integer DEFAULT 500, p_stale_days integer DEFAULT 30",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_inserted integer; BEGIN IF p_limit IS NULL OR p_limit < 1 THEN RAISE EXCEPTION 'enqueue_social_sync: p_limit precisa ser >= 1 (recebido %)', p_limit; END IF; IF p_stale_days IS NULL OR p_stale_days < 1 THEN RAISE EXCEPTION 'enqueue_social_sync: p_stale_days precisa ser >= 1 (recebido %)', p_stale_days; END IF; WITH candidato AS ( SELECT c.id AS contact_id, max(i.created_at) AS ultima_interacao FROM public.contacts c JOIN public.interactions i ON i.contact_id = c.id WHERE ( nullif(btrim(coalesce(i.conteudo, '')), '') IS NOT NULL OR nullif(btrim(coalesce(i.content, '')), '') IS NOT NULL OR nullif(btrim(coalesce(i.assunto, '')), '') IS NOT NULL OR nullif(btrim(coalesce(i.resumo, '')), …",
+    "raises": [
+     "enqueue_social_sync: p_limit precisa ser >= 1 (recebido %)",
+     "enqueue_social_sync: p_stale_days precisa ser >= 1 (recebido %)"
+    ],
+    "tables": [
+     "candidato",
+     "contacts",
+     "inserido",
+     "interactions",
+     "social_behavior_analysis",
+     "social_sync_queue",
+     "v_inserted"
+    ]
+   },
+   "dispatch_social_sync": {
+    "args": "p_limit integer DEFAULT 25",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE r record; v_secret text; v_url text := 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/sync-social-interests'; v_count integer := 0; BEGIN IF p_limit IS NULL OR p_limit < 1 THEN RAISE EXCEPTION 'dispatch_social_sync: p_limit precisa ser >= 1 (recebido %)', p_limit; END IF; SELECT decrypted_secret INTO v_secret FROM vault.decrypted_secrets WHERE name = 'singu_cron_secret'; IF v_secret IS NULL OR btrim(v_secret) = '' THEN RAISE EXCEPTION 'dispatch_social_sync: singu_cron_secret ausente no Vault; a edge function responderia 401 e a fila nao drenaria'; END IF; FOR r IN SELECT id, contact_id FROM public.social_sync_queue WHERE status = 'pending' AND (last_attempt IS NULL OR last_at …",
+    "raises": [
+     "dispatch_social_sync: p_limit precisa ser >= 1 (recebido %)",
+     "dispatch_social_sync: singu_cron_secret ausente no Vault; a edge function responderia 401 e a fila nao drenaria"
+    ],
+    "tables": [
+     "social_sync_queue",
+     "v_secret",
+     "vault"
+    ]
+   },
+   "requeue_social_sync_stuck": {
+    "args": "p_stuck_minutes integer DEFAULT 30",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_count integer; BEGIN IF p_stuck_minutes IS NULL OR p_stuck_minutes < 1 THEN RAISE EXCEPTION 'requeue_social_sync_stuck: p_stuck_minutes precisa ser >= 1 (recebido %)', p_stuck_minutes; END IF; WITH reciclado AS ( UPDATE public.social_sync_queue q SET status = 'pending', retry_count = q.retry_count + 1, error_log = 'reagendado apos ficar preso em processing/failed', updated_at = now() WHERE q.retry_count < coalesce(q.max_retries, 3) AND ( (q.status = 'processing' AND q.last_attempt < now() - make_interval(mins => p_stuck_minutes)) OR (q.status = 'failed' AND coalesce(q.last_attempt, q.created_at) < now() - make_interval(mins => p_stuck_minutes * 4)) ) RETURNING 1 ) SELECT count(*) I …",
+    "raises": [
+     "requeue_social_sync_stuck: p_stuck_minutes precisa ser >= 1 (recebido %)"
+    ],
+    "tables": [
+     "reciclado",
+     "social_sync_queue",
+     "v_count"
+    ]
    }
   },
   "db_enums": {
@@ -209417,6 +209609,31 @@
     "function": "claim_behavioral_profile_retry",
     "msg": "Contato reservado ou em pausa temporária; aguarde para tentar novamente",
     "src": "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql"
+   },
+   {
+    "function": "enqueue_social_sync",
+    "msg": "enqueue_social_sync: p_limit precisa ser >= 1 (recebido %)",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "function": "enqueue_social_sync",
+    "msg": "enqueue_social_sync: p_stale_days precisa ser >= 1 (recebido %)",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "function": "dispatch_social_sync",
+    "msg": "dispatch_social_sync: p_limit precisa ser >= 1 (recebido %)",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "function": "dispatch_social_sync",
+    "msg": "dispatch_social_sync: singu_cron_secret ausente no Vault; a edge function responderia 401 e a fila nao drenaria",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "function": "requeue_social_sync_stuck",
+    "msg": "requeue_social_sync_stuck: p_stuck_minutes precisa ser >= 1 (recebido %)",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
    }
   ],
   "db_generated": [
@@ -222500,6 +222717,7 @@
    "supabase/migrations/20261119000000_external_data_audit_log.sql",
    "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
    "supabase/migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql",
+   "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -222590,11 +222808,13 @@
    "detect_contact_intel_changes",
    "detect_relationship_status",
    "dismiss_revops_alert",
+   "dispatch_social_sync",
    "drop_old_ai_gateway_metrics_partitions",
    "encrypt_connection_config",
    "enqueue_behavioral_profile_regen",
    "enqueue_contact_validation",
    "enqueue_smart_notification",
+   "enqueue_social_sync",
    "enroll_contact_in_workflow",
    "ensure_ai_gateway_metrics_partition",
    "ensure_audit_log_partition",
@@ -222700,6 +222920,7 @@
    "request_embedding",
    "request_nlp",
    "request_transcription",
+   "requeue_social_sync_stuck",
    "reset_daily_lead_counts",
    "resolve_alerts_batch",
    "resolve_company_from_cnpj",
@@ -234296,6 +234517,54 @@
     "objkind": "function",
     "roles": "PUBLIC, authenticated",
     "src": "supabase/migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "enqueue_social_sync",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "dispatch_social_sync",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "requeue_social_sync_stuck",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "enqueue_social_sync",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "dispatch_social_sync",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "requeue_social_sync_stuck",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
    }
   ],
   "guards": [
@@ -307917,6 +308186,14 @@
    "path": "supabase/migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql",
    "lines": 40
   },
+  "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql": {
+   "path": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+   "lines": 219,
+   "temporal": [
+    "AND (last_attempt IS NULL OR last_attempt < now() - interval '3 minutes')"
+   ],
+   "uses_service_role": true
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -308634,10 +308911,19 @@
   }
  },
  "git": {
-  "sha": "7912bb2d3cdcdfd02214b72b0a27cdf4e174db48",
+  "sha": "8b65e231179a1736da2a23d1b38af7cfdff4ef51",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "8b65e23",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "feat(social): sincronizacao automatica com enqueue e dispatch (#355)",
+    "files": [
+     "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+    ]
+   },
    {
     "sha": "7912bb2",
     "date": "2026-11-25",
@@ -308952,15 +309238,6 @@
      "supabase/functions/_shared/fetch-utils.ts",
      "supabase/functions/_shared/fetch-utils_test.ts"
     ]
-   },
-   {
-    "sha": "2094be6",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix(ci): destrava o deploy de edge functions (#322)",
-    "files": [
-     ".github/workflows/deploy-edge-functions.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -309029,6 +309306,10 @@
     2
    ],
    [
+    "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+    1
+   ],
+   [
     "scripts/rls-matrix/rls-baseline.json",
     1
    ],
@@ -309038,10 +309319,6 @@
    ],
    [
     "scripts/migration/functions/deploy-all.sh",
-    1
-   ],
-   [
-    "supabase/config.toml",
     1
    ]
   ]

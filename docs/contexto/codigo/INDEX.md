@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `7912bb2d3cdcdfd02214b72b0a27cdf4e174db48` (2026-11-25T19:36:52-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `8b65e231179a1736da2a23d1b38af7cfdff4ef51` (2026-11-25T20:11:36-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2106), SQL (1293), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
+- linguagens: TypeScript (2106), SQL (1294), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,7 +34,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3937 |
+| arquivos_total | 3938 |
 | arquivos_codigo | 2270 |
 | linhas_codigo | 423059 |
 | rotas | 116 |
@@ -46,8 +46,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 412 |
 | edge_functions | 110 |
 | tabelas | 542 |
-| migrations | 1116 |
-| cron_jobs | 44 |
+| migrations | 1117 |
+| cron_jobs | 47 |
 | testes | 285 |
 | workflows | 14 |
 | scripts | 302 |
@@ -357,7 +357,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `submit-signature` (verify_jwt=false) — tabelas: document_signatures; chamada por 0 arquivo(s) do front
 - `suggest-next-action` — tabelas: contact_predictive_roadmap, contacts, interactions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `sync-product-catalog` (verify_jwt=false) — tabelas: products; chamada por 0 arquivo(s) do front
-- `sync-social-interests` (verify_jwt=false) — tabelas: contacts, interactions, psychographic_audit_log, social_behavior_analysis, social_sync_queue; chamada por 1 arquivo(s) do front
+- `sync-social-interests` (verify_jwt=false) — tabelas: contacts, interactions, psychographic_audit_log, social_behavior_analysis, social_sync_queue; chamada por 1 arquivo(s) do front, por SQL/cron
 - `system-health` — tabelas: alerts, companies, email_logs, profiles, system_health_snapshots; chamada por 2 arquivo(s) do front
 - `template-success-notifications` (verify_jwt=false) — tabelas: alerts, contacts, favorite_templates, profiles, push_subscriptions, trigger_usage_history; chamada por 1 arquivo(s) do front, por SQL/cron
 - `territory-optimization` — tabelas: sales_team_members; chamada por 1 arquivo(s) do front
@@ -405,6 +405,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `singu-rodizio-closer` 0 6 * * 1 (20260924213115_t213_rodizio_pg_cron_jobs.sql)
 - `singu-rodizio-sdr` 10 6 * * 1 (20260924213115_t213_rodizio_pg_cron_jobs.sql)
 - `singu-rodizio-segmentar` 0 1 * * * (20260924213115_t213_rodizio_pg_cron_jobs.sql)
+- `singu-social-dispatch` */5 * * * * (20261125190000_social_sync_automatico_enqueue_dispatch.sql)
+- `singu-social-enqueue-daily` 0 5 * * * (20261125190000_social_sync_automatico_enqueue_dispatch.sql)
+- `singu-social-requeue-stuck` 25 * * * * (20261125190000_social_sync_automatico_enqueue_dispatch.sql)
 - `smart-notify-automation` 0 */4 * * * → edge smart-notify (20260512105729_9e0ffd45-400f-45c7-b371-7437029a5de3.sql)
 - `validation-queue-drain` */5 * * * * → edge validation-queue-worker (20260417120721_823eaa43-3b8a-4ea7-a046-ad763d7c5f03.sql)
 - `zapp-cleanup-expired-media` 0 5 * * * (20260408200316_zapp_history_10_pg_cron_jobs.sql)
@@ -448,8 +451,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26016 nós · 41587 arestas · 3148 comunidades · grafo do commit `7912bb2d`
-- comunidades maiores: @tanstack/react-query (519), react (510), ref_lib (326), _shared/auth.ts (320), lucide-react (317), framer-motion (284), ref_components (272), 02_tables.sql (259), ref_types (251), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (218), withAuth (153)
+- 26020 nós · 41590 arestas · 3095 comunidades · grafo do commit `8b65e231`
+- comunidades maiores: _shared/auth.ts (328), ref_components (306), sonner (302), ref_lib (289), react (284), framer-motion (275), 02_tables.sql (259), lucide-react (251), ref_hooks (240), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (223), react-router-dom (222)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -588,6 +591,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-25 `8b65e23` feat(social): sincronizacao automatica com enqueue e dispatch (#355)
 - 2026-11-25 `7912bb2` chore(ci): desbloquear gate RLS — baseline DEFINER 119 e contadores de produção (#358)
 - 2026-11-25 `84d2357` fix(ofertas): aceitar chamada service_role e gerar ofertas para toda a base (#356)
 - 2026-11-25 `e0b7b01` fix: interesse social tambem conta repeticao no mesmo historico (#354)
@@ -602,7 +606,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-25 `603c404` chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)
 - 2026-11-25 `e380fe1` docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)
 - 2026-11-25 `082f91a` chore(ia): usa OPENROUTER_API_KEY como fonte da chave e trava o contrato (#343)
-- 2026-11-25 `970f220` chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
