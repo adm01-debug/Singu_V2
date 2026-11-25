@@ -2,7 +2,7 @@
 --   1) search_path travado em TODO DEFINER
 --   2) DEFINER exposto a `anon` NUNCA pode usar auth.uid() (padrão inseguro:
 --      anon sem JWT resulta em auth.uid() = NULL e escreve linhas órfãs)
---   3) Baseline: 116 DEFINERs (ajuste consciente aqui + docs/qa/security-definer-audit.md)
+--   3) Baseline: 119 DEFINERs (ajuste consciente aqui + docs/qa/security-definer-audit.md)
 
 BEGIN;
 
@@ -48,11 +48,11 @@ BEGIN
     RAISE EXCEPTION 'DEFINER exposto a anon usando auth.uid() (padrão inseguro): %', uses_authuid;
   END IF;
 
-  IF total <> 116 THEN
-      RAISE EXCEPTION 'baseline DEFINER esperado = 116; atual = %. Atualize docs/qa/security-definer-audit.md se intencional.', total;
+  IF total <> 119 THEN
+      RAISE EXCEPTION 'baseline DEFINER esperado = 119; atual = %. Atualize docs/qa/security-definer-audit.md se intencional.', total;
   END IF;
 
-  RAISE NOTICE 'OK — 116/116 DEFINERs conformes (search_path pinned; nenhum exposto a anon usa auth.uid()).';
+  RAISE NOTICE 'OK — 119/119 DEFINERs conformes (search_path pinned; nenhum exposto a anon usa auth.uid()).';
 END $$;
 
 ROLLBACK;
