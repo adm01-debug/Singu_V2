@@ -18,7 +18,7 @@ const MAX_ARRAY_LENGTH = 30;
 // Ruido de conversa de CRM: palavras longas o bastante para passar no filtro de
 // tamanho, mas que nao dizem nada sobre o que o cliente quer comprar.
 const STOPWORDS = new Set([
-  'aqui', 'ainda', 'algum', 'alguma', 'apenas', 'antes', 'ate', 'atencao', 'bom', 'boa',
+  'aqui', 'ainda', 'algum', 'alguma', 'apenas', 'antes', 'ate', 'atencao', 'ativo', 'bom', 'boa',
   'caso', 'certamente', 'cliente', 'clientes', 'coisa', 'comercial', 'como', 'confirmar',
   'confirmado', 'conforme', 'conosco', 'contato', 'depois', 'desde', 'durante', 'email',
   'empresa', 'enviado', 'enviar', 'entao', 'entre', 'essa', 'esse', 'esta', 'estao',
@@ -26,10 +26,32 @@ const STOPWORDS = new Set([
   'hoje', 'isso', 'ligacao', 'mandar', 'mais', 'mesmo', 'mensagem', 'muito', 'nada',
   'nosso', 'nossa', 'obrigado', 'obrigada', 'orcamento', 'outro', 'outra', 'para',
   'parte', 'pedido', 'pediu', 'pelo', 'pela', 'podem', 'pode', 'preciso', 'precisamos',
-  'proposta', 'quando', 'queria', 'reuniao', 'segue', 'seguir', 'semana', 'seria',
+  'proposta', 'quando', 'queria', 'registrado', 'reuniao', 'segue', 'seguir', 'semana', 'seria',
   'sobre', 'tambem', 'tarde', 'temos', 'tenho', 'tipo', 'todos', 'todas', 'tudo',
   'vamos', 'verificar', 'whatsapp',
+  // Rotulos de cadastro e provedores que o tokenizador transformava em "interesse".
+  'facebook', 'gmail', 'hotmail', 'instagram', 'linkedin', 'outlook', 'quero', 'rede',
+  'telefone', 'yahoo',
 ]);
+
+// O texto real das interacoes do CRM e majoritariamente cadastro, nao conversa:
+// "Email registrado: lucianapassos@sicoobcredindaia.com.br", "Rede: linkedin |
+// @trapani-industria-de-maquinas", "WhatsApp ativo: 16991565481". Sem remover esses
+// trechos antes de tokenizar, nome de pessoa, dominio e telefone viram palavra-chave
+// e o motor de ofertas passa a sugerir produto a partir do nome do contato.
+const PHONE_WORD = /^\+?\d[\d().-]{7,}$/;
+
+function isContactNoise(word: string): boolean {
+  if (word.includes('@')) return true;
+  const lower = word.toLowerCase();
+  if (lower.startsWith('http://') || lower.startsWith('https://') || lower.startsWith('www.')) return true;
+  return PHONE_WORD.test(word);
+}
+
+/** Tira email, URL, @handle e telefone do texto antes de separar palavras. */
+function stripContactNoise(text: string): string {
+  return text.split(/\s+/).filter((word) => !isContactNoise(word)).join(' ');
+}
 
 /** Sem acento e sem caixa, para "Café" e "cafe" contarem como a mesma evidencia. */
 function normalize(value: string): string {
@@ -38,7 +60,7 @@ function normalize(value: string): string {
 
 /** Tokens com significado do texto: descarta palavra curta, ruido de conversa e numero solto. */
 export function tokenize(text: string): string[] {
-  return normalize(text)
+  return normalize(stripContactNoise(text))
     .split(/[^a-z0-9]+/)
     .filter((token) =>
       token.length >= MIN_TOKEN_LENGTH
