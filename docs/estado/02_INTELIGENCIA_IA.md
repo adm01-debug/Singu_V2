@@ -7,14 +7,32 @@
 > **Atualização 2026-11-24.** O provedor de LLM mudou: o gateway do Lovable foi substituído pelo
 > **OpenRouter** (`https://openrouter.ai/api/v1/chat/completions`, `_shared/fetch-utils.ts:102`), com o
 > modelo fixado em `OPENROUTER_MODEL` (padrão `google/gemini-2.5-flash`). O roteamento é central em
-> `fetchAI()`/`routeToOpenRouter` (`_shared/fetch-utils.ts:118`) e os nomes dos secrets permaneceram
-> legados (`DEEPSEEK_API_KEY`, `LOVABLE_API_KEY`), ambos **ausentes no projeto em 2026-11-24**. Os números
-> e citações abaixo são da auditoria original (PR #327 fez a troca).
+> `fetchAI()`/`routeToOpenRouter` (`_shared/fetch-utils.ts:118`) e o nome do secret permaneceu legado
+> (`DEEPSEEK_API_KEY`). Os números e citações abaixo são da auditoria original (PR #327 fez a troca).
+>
+> **CORREÇÃO — 2026-11-25 (medição em produção, não em código).** A frase anterior deste bloco dizia que
+> `DEEPSEEK_API_KEY` e `LOVABLE_API_KEY` estavam **"ausentes no projeto"**. Isso é **falso** e induziu a
+> sessão de 2026-11-25 a diagnosticar uma quebra de 401 que não existia. O que foi medido:
+>
+> - `DEEPSEEK_API_KEY` **existe** e contém uma chave **OpenRouter**, não uma chave DeepSeek. Prova: a
+>   Management API devolve o SHA-256 de cada secret e `DEEPSEEK_API_KEY` e `OPENROUTER_API_KEY` têm hash
+>   **idêntico** (`c0d2c9c8ac3fe75d67415d454a0747c1c4ba4c90d0abbcedcb996696ddb5f3c4`).
+> - `POST /functions/v1/generate-insights` com JWT de usuário real → **HTTP 200** com insights de LLM
+>   (`traceId` `fedac9a4-…`), e `public.ai_gateway_metrics` recebeu linha `status = 'success'`.
+> - Portanto **não havia 401**: o `Authorization: Bearer <DEEPSEEK_API_KEY>` montado pelas edges era uma
+>   chave OpenRouter válida chegando no OpenRouter. A inteligência do produto funcionava.
+> - O risco real é de nomenclatura, não de fio: um secret chamado `DEEPSEEK_API_KEY` segurando chave
+>   OpenRouter quebra silenciosamente se a chave for rotacionada no lugar errado. Por isso o código passou
+>   a preferir `OPENROUTER_API_KEY` com **fallback** no nome legado.
+> - `LOVABLE_API_KEY` continua ausente e **é irrelevante**: nenhuma leitura de env chega a usá-lo — as
+>   edges declaram `const LOVABLE_API_KEY = Deno.env.get("DEEPSEEK_API_KEY")`.
 >
 > **Limites desta auditoria (invioláveis):**
 > - **Runtime = `NAO_VERIFICADO`.** Não houve acesso ao banco. Nenhuma afirmação sobre volume de
 >   linhas, existência real de objetos no servidor, secrets efetivamente configurados no projeto
->   Supabase (`hjhthvzwtvwgdrochcam`, `supabase/config.toml:1`) ou jobs `pg_cron` realmente ativos.
+>   Supabase (`pgxfvjmuubtbowutlide`, `supabase/config.toml:1`) ou jobs `pg_cron` realmente ativos.
+>   *Nota 2026-11-25: este bloco citava `hjhthvzwtvwgdrochcam`; esse ref **não** é o do
+>   `supabase/config.toml` atual, que aponta para `pgxfvjmuubtbowutlide`.*
 >   Quando digo "tabela existe", significa **"existe migration no repositório que a cria"**.
 > - **`node_modules` vazio.** Não foi executado build, lint, typecheck ou teste. **Nada aqui afirma
 >   que o projeto compila ou que testes passam.**

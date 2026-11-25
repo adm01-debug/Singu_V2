@@ -115,6 +115,25 @@ export function envValue(name: string): string | undefined {
   }
 }
 
+/** Chave usada nas chamadas ao OpenRouter. As funções legadas montam
+ *  `Authorization: Bearer <DEEPSEEK_API_KEY>` antes de chamar `fetchAI`; ao reescrever a URL é
+ *  preciso trocar a chave junto, senão o OpenRouter responde 401. O fallback mantém o
+ *  comportamento anterior enquanto `OPENROUTER_API_KEY` não estiver configurada. */
+export function openRouterKey(): string | undefined {
+  return envValue('OPENROUTER_API_KEY') ?? envValue('DEEPSEEK_API_KEY');
+}
+
+/** Reescreve o `Authorization` das chamadas de IA para a chave do OpenRouter.
+ *  Sem header `Authorization` o init segue intacto — quem não autentica não ganha chave.
+ *  A chave entra por parâmetro para o contrato ficar testável sem `--allow-env`. */
+export function applyOpenRouterAuth(opts: RequestInit, key: string | undefined): RequestInit {
+  if (!key) return opts;
+  const headers = new Headers(opts.headers as HeadersInit | undefined);
+  if (!headers.has('authorization')) return opts;
+  headers.set('Authorization', `Bearer ${key}`);
+  return { ...opts, headers };
+}
+
 export function routeToOpenRouter(url: FetchTarget, opts: RequestInit): [FetchTarget, RequestInit] {
   if (typeof url !== 'string' || !LOVABLE_AI_URLS.has(url)) return [url, opts];
   const model = envValue('OPENROUTER_MODEL') ?? 'google/gemini-2.5-flash';
@@ -128,7 +147,8 @@ export function routeToOpenRouter(url: FetchTarget, opts: RequestInit): [FetchTa
       // corpo não-JSON: envia como veio
     }
   }
-  return [OPENROUTER_CHAT_URL, { ...opts, body }];
+  const routed = applyOpenRouterAuth(opts, openRouterKey());
+  return [OPENROUTER_CHAT_URL, { ...routed, body }];
 }
 
 function detectFunctionName(): string {

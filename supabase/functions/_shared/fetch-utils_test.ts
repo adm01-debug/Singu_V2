@@ -4,7 +4,7 @@
  * Run with: deno test --allow-net supabase/functions/_shared/fetch-utils_test.ts
  */
 import { assert, assertEquals, assertRejects } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { fetchWithTimeout, OPENROUTER_CHAT_URL, routeToOpenRouter } from "./fetch-utils.ts";
+import { fetchWithTimeout, OPENROUTER_CHAT_URL, applyOpenRouterAuth, routeToOpenRouter } from "./fetch-utils.ts";
 
 Deno.test("fetchWithTimeout: aborts with TimeoutError when deadline elapses", async () => {
   const ac = new AbortController();
@@ -57,4 +57,32 @@ Deno.test("roteamento de IA: URL que nao e do gateway passa intacta", () => {
   const [url, init] = routeToOpenRouter("https://api.elevenlabs.io/v1/text-to-speech/x", opts);
   assertEquals(url, "https://api.elevenlabs.io/v1/text-to-speech/x");
   assertEquals(init, opts);
+});
+
+Deno.test("chave de IA: o Bearer legado e trocado pela chave do OpenRouter", () => {
+  const opts = {
+    method: "POST",
+    headers: { Authorization: "Bearer chave-legada", "Content-Type": "application/json" },
+    body: "{}",
+  };
+  const out = applyOpenRouterAuth(opts, "sk-or-nova");
+  const headers = new Headers(out.headers as HeadersInit);
+  assertEquals(headers.get("authorization"), "Bearer sk-or-nova");
+  assertEquals(headers.get("content-type"), "application/json");
+});
+
+Deno.test("chave de IA: Headers instanciado tambem e reescrito", () => {
+  const headers = new Headers([["authorization", "Bearer legado"]]);
+  const out = applyOpenRouterAuth({ headers }, "sk-or-nova");
+  assertEquals(new Headers(out.headers as HeadersInit).get("authorization"), "Bearer sk-or-nova");
+});
+
+Deno.test("chave de IA: sem chave configurada nada e alterado", () => {
+  const opts = { headers: { Authorization: "Bearer legado" } };
+  assertEquals(applyOpenRouterAuth(opts, undefined), opts);
+});
+
+Deno.test("chave de IA: chamada sem Authorization nao ganha chave", () => {
+  const opts = { headers: { "Content-Type": "application/json" } };
+  assertEquals(applyOpenRouterAuth(opts, "sk-or-nova"), opts);
 });
