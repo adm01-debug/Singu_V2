@@ -740,3 +740,5 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261124120000 | [](migrations/20261124120000.sql) | 0 |
 | 20261124141500 | [rbac_admin_le_perfis_para_atribuir_papel](migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql) | 0 |
 | 20261124143000 | [revoke_authenticated_exec_stubs_crm](migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql) | 0 |
+| 20261124211500 | [whatsapp_messages_status_played_e_colunas_import](migrations/20261124211500_whatsapp_messages_status_played_e_colunas_import.sql) | 0 |
+| 20261124231412 | [remove_duplicate_indexes_wave119_restante](migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql) | 0 |

@@ -41,6 +41,8 @@
 | 23 | `timestamp` | `timestamp with time zone` | não | `now()` |  |  |
 | 24 | `played_at` | `timestamp with time zone` | sim |  |  |  |
 | 25 | `updated_at` | `timestamp with time zone` | não | `now()` |  |  |
+| 26 | `duration_seconds` | `integer` | sim |  |  |  |
+| 27 | `transcription_status` | `text` | sim |  |  |  |
 
 
 ## Constraints
@@ -52,7 +54,7 @@
 | whatsapp_messages_direction_check | CHECK | `CHECK (direction = ANY (ARRAY['inbound'::text, 'outbound'::text]))` |  |  | sim |
 | whatsapp_messages_message_type_check | CHECK | `CHECK (message_type = ANY (ARRAY['text'::text, 'image'::text, 'audio'::text, 'video'::text, 'document'::text, 'location'::text, 'contact'::text, 'sticker'::text]))` |  |  | sim |
 | whatsapp_messages_pkey | PRIMARY KEY | `PRIMARY KEY (id)` |  |  | sim |
-| whatsapp_messages_status_check | CHECK | `CHECK (status = ANY (ARRAY['pending'::text, 'sent'::text, 'delivered'::text, 'read'::text, 'failed'::text]))` |  |  | sim |
+| whatsapp_messages_status_check | CHECK | `CHECK (status = ANY (ARRAY['pending'::text, 'sent'::text, 'delivered'::text, 'read'::text, 'played'::text, 'failed'::text]))` |  |  | sim |
 
 
 ## Índices

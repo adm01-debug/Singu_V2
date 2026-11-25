@@ -50,7 +50,6 @@
 |---|---|---|---|---|---|---|
 | idx_insights_active | btree | contact_id, user_id | não | sim | `(dismissed = false)` | `CREATE INDEX idx_insights_active ON public.insights USING btree (contact_id, user_id) WHERE (dismissed = false)` |
 | idx_insights_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_insights_contact ON public.insights USING btree (contact_id)` |
-| idx_insights_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_insights_contact_id ON public.insights USING btree (contact_id)` |
 | idx_insights_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_insights_user_id ON public.insights USING btree (user_id)` |
 | insights_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX insights_pkey ON public.insights USING btree (id)` |
 

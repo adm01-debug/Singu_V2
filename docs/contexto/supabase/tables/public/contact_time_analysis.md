@@ -46,7 +46,6 @@
 |---|---|---|---|---|---|---|
 | contact_time_analysis_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX contact_time_analysis_pkey ON public.contact_time_analysis USING btree (id)` |
 | contact_time_analysis_user_id_contact_id_day_of_week_hour_o_key | btree | user_id, contact_id, day_of_week, hour_of_day | sim | sim |  | `CREATE UNIQUE INDEX contact_time_analysis_user_id_contact_id_day_of_week_hour_o_key ON public.contact_time_analysis USING btree (user_id, contact_id, day_of_week, hour_of_day)` |
-| idx_contact_time_analysis_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_contact_time_analysis_contact ON public.contact_time_analysis USING btree (contact_id)` |
 | idx_time_analysis_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_time_analysis_contact ON public.contact_time_analysis USING btree (contact_id)` |
 
 

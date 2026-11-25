@@ -2,6 +2,13 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-25 10:14 UTC
+
+- **colunas** adicionado (2): `public.whatsapp_messages.duration_seconds`, `public.whatsapp_messages.transcription_status`
+- **constraints** alterado (1): `public.whatsapp_messages.whatsapp_messages_status_check`
+- **indexes** removido (9): `public.idx_cognitive_bias_history_contact_id`, `public.idx_communication_preferences_contact`, `public.idx_contact_relatives_contact_id`, `public.idx_contact_time_analysis_contact`, `public.idx_eq_analysis_history_contact_id`, `public.idx_insights_contact_id`, `public.idx_interactions_contact_id`, `public.idx_metaprogram_analysis_contact`, `public.idx_metaprogram_analysis_user`
+- **migrations** adicionado (2): `20261124211500_whatsapp_messages_status_played_e_colunas_import`, `20261124231412_remove_duplicate_indexes_wave119_restante`
+
 ## 2026-11-25 01:17 UTC
 
 - **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_28`

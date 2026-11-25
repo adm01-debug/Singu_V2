@@ -49,7 +49,6 @@
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
 | contact_relatives_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX contact_relatives_pkey ON public.contact_relatives USING btree (id)` |
-| idx_contact_relatives_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_contact_relatives_contact_id ON public.contact_relatives USING btree (contact_id)` |
 | idx_contact_relatives_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_contact_relatives_user_id ON public.contact_relatives USING btree (user_id)` |
 | idx_relatives_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_relatives_contact ON public.contact_relatives USING btree (contact_id)` |
 

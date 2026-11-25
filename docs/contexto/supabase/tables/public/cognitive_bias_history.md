@@ -50,7 +50,6 @@
 | cognitive_bias_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX cognitive_bias_history_pkey ON public.cognitive_bias_history USING btree (id)` |
 | idx_cog_bias_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_cog_bias_contact ON public.cognitive_bias_history USING btree (contact_id)` |
 | idx_cognitive_bias_history_analyzed_at | btree | analyzed_at | não | sim |  | `CREATE INDEX idx_cognitive_bias_history_analyzed_at ON public.cognitive_bias_history USING btree (analyzed_at DESC)` |
-| idx_cognitive_bias_history_contact_id | btree | contact_id | não | sim |  | `CREATE INDEX idx_cognitive_bias_history_contact_id ON public.cognitive_bias_history USING btree (contact_id)` |
 | idx_cognitive_bias_history_interaction_id | btree | interaction_id | não | sim |  | `CREATE INDEX idx_cognitive_bias_history_interaction_id ON public.cognitive_bias_history USING btree (interaction_id)` |
 | idx_cognitive_bias_history_user_id | btree | user_id | não | sim |  | `CREATE INDEX idx_cognitive_bias_history_user_id ON public.cognitive_bias_history USING btree (user_id)` |
 

@@ -131528,6 +131528,32 @@
       },
       {
         "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "duration_seconds",
+        "nullable": true,
+        "position": 26,
+        "schema": "public",
+        "table": "whatsapp_messages",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "transcription_status",
+        "nullable": true,
+        "position": 27,
+        "schema": "public",
+        "table": "whatsapp_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -183634,7 +183660,7 @@
           "status"
         ],
         "deferrable": false,
-        "definition": "CHECK (status = ANY (ARRAY['pending'::text, 'sent'::text, 'delivered'::text, 'read'::text, 'failed'::text]))",
+        "definition": "CHECK (status = ANY (ARRAY['pending'::text, 'sent'::text, 'delivered'::text, 'read'::text, 'played'::text, 'failed'::text]))",
         "name": "whatsapp_messages_status_check",
         "on_delete": null,
         "on_update": null,
@@ -255807,20 +255833,6 @@
       },
       {
         "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_cognitive_bias_history_contact_id ON public.cognitive_bias_history USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_cognitive_bias_history_contact_id",
-        "predicate": null,
-        "schema": "public",
-        "table": "cognitive_bias_history"
-      },
-      {
-        "columns": [
           "interaction_id"
         ],
         "definition": "CREATE INDEX idx_cognitive_bias_history_interaction_id ON public.cognitive_bias_history USING btree (interaction_id)",
@@ -255956,20 +255968,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "idx_comm_pref_contact",
-        "predicate": null,
-        "schema": "public",
-        "table": "communication_preferences"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_communication_preferences_contact ON public.communication_preferences USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_communication_preferences_contact",
         "predicate": null,
         "schema": "public",
         "table": "communication_preferences"
@@ -258252,20 +258250,6 @@
       },
       {
         "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_contact_relatives_contact_id ON public.contact_relatives USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_contact_relatives_contact_id",
-        "predicate": null,
-        "schema": "public",
-        "table": "contact_relatives"
-      },
-      {
-        "columns": [
           "user_id"
         ],
         "definition": "CREATE INDEX idx_contact_relatives_user_id ON public.contact_relatives USING btree (user_id)",
@@ -258404,20 +258388,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "contact_time_analysis_user_id_contact_id_day_of_week_hour_o_key",
-        "predicate": null,
-        "schema": "public",
-        "table": "contact_time_analysis"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_contact_time_analysis_contact ON public.contact_time_analysis USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_contact_time_analysis_contact",
         "predicate": null,
         "schema": "public",
         "table": "contact_time_analysis"
@@ -261724,20 +261694,6 @@
       },
       {
         "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_eq_analysis_history_contact_id ON public.eq_analysis_history USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_eq_analysis_history_contact_id",
-        "predicate": null,
-        "schema": "public",
-        "table": "eq_analysis_history"
-      },
-      {
-        "columns": [
           "interaction_id"
         ],
         "definition": "CREATE INDEX idx_eq_analysis_history_interaction_id ON public.eq_analysis_history USING btree (interaction_id)",
@@ -262818,20 +262774,6 @@
       },
       {
         "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_insights_contact_id ON public.insights USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_insights_contact_id",
-        "predicate": null,
-        "schema": "public",
-        "table": "insights"
-      },
-      {
-        "columns": [
           "user_id"
         ],
         "definition": "CREATE INDEX idx_insights_user_id ON public.insights USING btree (user_id)",
@@ -263096,20 +263038,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "idx_interactions_contact_created",
-        "predicate": null,
-        "schema": "public",
-        "table": "interactions"
-      },
-      {
-        "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_interactions_contact_id ON public.interactions USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_interactions_contact_id",
         "predicate": null,
         "schema": "public",
         "table": "interactions"
@@ -264406,20 +264334,6 @@
       },
       {
         "columns": [
-          "contact_id"
-        ],
-        "definition": "CREATE INDEX idx_metaprogram_analysis_contact ON public.metaprogram_analysis USING btree (contact_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_metaprogram_analysis_contact",
-        "predicate": null,
-        "schema": "public",
-        "table": "metaprogram_analysis"
-      },
-      {
-        "columns": [
           "interaction_id"
         ],
         "definition": "CREATE INDEX idx_metaprogram_analysis_interaction_id ON public.metaprogram_analysis USING btree (interaction_id)",
@@ -264428,20 +264342,6 @@
         "is_valid": true,
         "method": "btree",
         "name": "idx_metaprogram_analysis_interaction_id",
-        "predicate": null,
-        "schema": "public",
-        "table": "metaprogram_analysis"
-      },
-      {
-        "columns": [
-          "user_id"
-        ],
-        "definition": "CREATE INDEX idx_metaprogram_analysis_user ON public.metaprogram_analysis USING btree (user_id)",
-        "is_primary": false,
-        "is_unique": false,
-        "is_valid": true,
-        "method": "btree",
-        "name": "idx_metaprogram_analysis_user",
         "predicate": null,
         "schema": "public",
         "table": "metaprogram_analysis"
@@ -280561,6 +280461,16 @@
         "name": "revoke_authenticated_exec_stubs_crm",
         "statements": null,
         "version": "20261124143000"
+      },
+      {
+        "name": "whatsapp_messages_status_played_e_colunas_import",
+        "statements": null,
+        "version": "20261124211500"
+      },
+      {
+        "name": "remove_duplicate_indexes_wave119_restante",
+        "statements": null,
+        "version": "20261124231412"
       }
     ],
     "policies": [

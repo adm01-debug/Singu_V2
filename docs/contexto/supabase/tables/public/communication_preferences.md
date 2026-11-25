@@ -49,7 +49,6 @@
 | communication_preferences_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX communication_preferences_pkey ON public.communication_preferences USING btree (id)` |
 | communication_preferences_user_id_contact_id_key | btree | user_id, contact_id | sim | sim |  | `CREATE UNIQUE INDEX communication_preferences_user_id_contact_id_key ON public.communication_preferences USING btree (user_id, contact_id)` |
 | idx_comm_pref_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_comm_pref_contact ON public.communication_preferences USING btree (contact_id)` |
-| idx_communication_preferences_contact | btree | contact_id | não | sim |  | `CREATE INDEX idx_communication_preferences_contact ON public.communication_preferences USING btree (contact_id)` |
 
 
 ## Policies (RLS)

@@ -499,7 +499,6 @@ Uso e tamanho em `stats.md`.
 | public.cognitive_bias_history | cognitive_bias_history_pkey | btree | id | sim | sim |  |
 | public.cognitive_bias_history | idx_cog_bias_contact | btree | contact_id | não | sim |  |
 | public.cognitive_bias_history | idx_cognitive_bias_history_analyzed_at | btree | analyzed_at | não | sim |  |
-| public.cognitive_bias_history | idx_cognitive_bias_history_contact_id | btree | contact_id | não | sim |  |
 | public.cognitive_bias_history | idx_cognitive_bias_history_interaction_id | btree | interaction_id | não | sim |  |
 | public.cognitive_bias_history | idx_cognitive_bias_history_user_id | btree | user_id | não | sim |  |
 | public.commission_rules | commission_rules_pkey | btree | id | sim | sim |  |
@@ -510,7 +509,6 @@ Uso e tamanho em `stats.md`.
 | public.communication_preferences | communication_preferences_pkey | btree | id | sim | sim |  |
 | public.communication_preferences | communication_preferences_user_id_contact_id_key | btree | user_id, contact_id | sim | sim |  |
 | public.communication_preferences | idx_comm_pref_contact | btree | contact_id | não | sim |  |
-| public.communication_preferences | idx_communication_preferences_contact | btree | contact_id | não | sim |  |
 | public.companies | companies_bitrix_company_id_key | btree | bitrix_company_id | sim | sim |  |
 | public.companies | companies_pkey | btree | id | sim | sim |  |
 | public.companies | idx_companies_active | btree | id | não | sim | `(deleted_at IS NULL)` |
@@ -672,7 +670,6 @@ Uso e tamanho em `stats.md`.
 | public.contact_rapport_strategy | contact_rapport_strategy_contact_id_key | btree | contact_id | sim | sim |  |
 | public.contact_rapport_strategy | contact_rapport_strategy_pkey | btree | id | sim | sim |  |
 | public.contact_relatives | contact_relatives_pkey | btree | id | sim | sim |  |
-| public.contact_relatives | idx_contact_relatives_contact_id | btree | contact_id | não | sim |  |
 | public.contact_relatives | idx_contact_relatives_user_id | btree | user_id | não | sim |  |
 | public.contact_relatives | idx_relatives_contact | btree | contact_id | não | sim |  |
 | public.contact_relatives_audit | contact_relatives_audit_pkey | btree | id | sim | sim |  |
@@ -683,7 +680,6 @@ Uso e tamanho em `stats.md`.
 | public.contact_social_media | uq_contact_social_media | btree | contact_id, plataforma | sim | sim |  |
 | public.contact_time_analysis | contact_time_analysis_pkey | btree | id | sim | sim |  |
 | public.contact_time_analysis | contact_time_analysis_user_id_contact_id_day_of_week_hour_o_key | btree | user_id, contact_id, day_of_week, hour_of_day | sim | sim |  |
-| public.contact_time_analysis | idx_contact_time_analysis_contact | btree | contact_id | não | sim |  |
 | public.contact_time_analysis | idx_time_analysis_contact | btree | contact_id | não | sim |  |
 | public.contact_time_analysis_audit | contact_time_analysis_audit_pkey | btree | id | sim | sim |  |
 | public.contacts | contacts_pkey | btree | id | sim | sim |  |
@@ -916,7 +912,6 @@ Uso e tamanho em `stats.md`.
 | public.eq_analysis_history | eq_analysis_history_pkey | btree | id | sim | sim |  |
 | public.eq_analysis_history | idx_eq_analysis_contact | btree | contact_id | não | sim |  |
 | public.eq_analysis_history | idx_eq_analysis_history_analyzed_at | btree | analyzed_at | não | sim |  |
-| public.eq_analysis_history | idx_eq_analysis_history_contact_id | btree | contact_id | não | sim |  |
 | public.eq_analysis_history | idx_eq_analysis_history_interaction_id | btree | interaction_id | não | sim |  |
 | public.eq_analysis_history | idx_eq_analysis_history_user_id | btree | user_id | não | sim |  |
 | public.eq_assessment_questions | eq_assessment_questions_pkey | btree | id | sim | sim |  |
@@ -993,7 +988,6 @@ Uso e tamanho em `stats.md`.
 | public.incoming_webhooks | incoming_webhooks_token_key | btree | token | sim | sim |  |
 | public.insights | idx_insights_active | btree | contact_id, user_id | não | sim | `(dismissed = false)` |
 | public.insights | idx_insights_contact | btree | contact_id | não | sim |  |
-| public.insights | idx_insights_contact_id | btree | contact_id | não | sim |  |
 | public.insights | idx_insights_user_id | btree | user_id | não | sim |  |
 | public.insights | insights_pkey | btree | id | sim | sim |  |
 | public.integration_logs | idx_integration_logs_integration_id | btree | integration_id | não | sim |  |
@@ -1013,7 +1007,6 @@ Uso e tamanho em `stats.md`.
 | public.interactions | idx_interactions_company_created | btree | company_id, created_at | não | sim |  |
 | public.interactions | idx_interactions_contact | btree | contact_id | não | sim |  |
 | public.interactions | idx_interactions_contact_created | btree | contact_id, created_at | não | sim |  |
-| public.interactions | idx_interactions_contact_id | btree | contact_id | não | sim |  |
 | public.interactions | idx_interactions_created_at | btree | created_at | não | sim |  |
 | public.interactions | idx_interactions_data | btree | data_interacao | não | sim |  |
 | public.interactions | idx_interactions_followup_pending | btree | follow_up_date | não | sim | `((follow_up_date IS NOT NULL) AND (COALESCE(followup_concluido, false) = false))` |
@@ -1105,9 +1098,7 @@ Uso e tamanho em `stats.md`.
 | public.meetings | meetings_pkey | btree | id | sim | sim |  |
 | public.message_templates | message_templates_pkey | btree | id | sim | sim |  |
 | public.metaprogram_analysis | idx_meta_contact | btree | contact_id | não | sim |  |
-| public.metaprogram_analysis | idx_metaprogram_analysis_contact | btree | contact_id | não | sim |  |
 | public.metaprogram_analysis | idx_metaprogram_analysis_interaction_id | btree | interaction_id | não | sim |  |
-| public.metaprogram_analysis | idx_metaprogram_analysis_user | btree | user_id | não | sim |  |
 | public.metaprogram_analysis | idx_metaprogram_analysis_user_id | btree | user_id | não | sim |  |
 | public.metaprogram_analysis | metaprogram_analysis_pkey | btree | id | sim | sim |  |
 | public.model_pricing_v2 | model_pricing_v2_model_provider_key | btree | model, provider | sim | sim |  |

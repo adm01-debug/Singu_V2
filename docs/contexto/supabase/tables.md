@@ -624,7 +624,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.whatsapp_ingestion_logs](tables/public/whatsapp_ingestion_logs.md) | table | sim | 2 | 8 | não |  |
 | [public.whatsapp_instances](tables/public/whatsapp_instances.md) | table | sim | 5 | 15 | não |  |
 | [public.whatsapp_kpis](tables/public/whatsapp_kpis.md) | table | sim | 5 | 14 | não |  |
-| [public.whatsapp_messages](tables/public/whatsapp_messages.md) | table | sim | 6 | 25 | sim |  |
+| [public.whatsapp_messages](tables/public/whatsapp_messages.md) | table | sim | 6 | 27 | sim |  |
 | [public.whatsapp_messages_index](tables/public/whatsapp_messages_index.md) | table | sim | 2 | 11 | não |  |
 | [public.whatsapp_transcriptions](tables/public/whatsapp_transcriptions.md) | table | sim | 1 | 7 | não |  |
 | [public.win_loss_insights](tables/public/win_loss_insights.md) | table | sim | 3 | 11 | não |  |
