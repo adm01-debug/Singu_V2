@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "882db3289b2c5d2494520ce4cc1197761b24710a",
+  "commit": "675d6fd65c25f47bf1b54f957b0cfefaf9f36c2d",
   "branch": "main",
-  "data_commit": "2026-11-25T14:15:38-03:00",
+  "data_commit": "2026-11-25T15:02:39-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "675d6fd",
+    "data": "2026-11-25",
+    "assunto": "fix: oferta deixa de falhar quando a coluna metadata nao existe (#352)"
+   },
    {
     "sha": "882db32",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "9f4e1ac",
     "data": "2026-11-24",
     "assunto": "feat(ia): troca o gateway do Lovable pelo OpenRouter (#327)"
-   },
-   {
-    "sha": "2094be6",
-    "data": "2026-11-24",
-    "assunto": "fix(ci): destrava o deploy de edge functions (#322)"
    }
   ],
-  "arquivos_mudados_7d": 1072,
+  "arquivos_mudados_7d": 1065,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 185
+    "commits": 186
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3935,
   "arquivos_codigo": 2268,
-  "linhas_codigo": 422818,
+  "linhas_codigo": 422819,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 177,
-   "linhas": 27910
+   "linhas": 27911
   },
   "tailwind.config.ts": {
    "arquivos": 1,

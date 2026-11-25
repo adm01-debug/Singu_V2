@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "882db3289b2c5d2494520ce4cc1197761b24710a",
+  "sha": "675d6fd65c25f47bf1b54f957b0cfefaf9f36c2d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 17:16 UTC",
+  "generated_at": "2026-11-25 18:03 UTC",
   "files_total": 4040,
   "code_files": 3562,
-  "code_lines": 480280
+  "code_lines": 480281
  },
  "version": "1.3.2",
- "facts_hash": "415e47d6e0370745",
+ "facts_hash": "1785f93f79c32e6b",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112700,7 +112700,7 @@
   {
    "module": "supabase/functions",
    "files": 177,
-   "lines": 27910,
+   "lines": 27911,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -297195,7 +297195,7 @@
   },
   "supabase/functions/generate-offer-suggestions/index.ts": {
    "path": "supabase/functions/generate-offer-suggestions/index.ts",
-   "lines": 336,
+   "lines": 337,
    "tables": [
     {
      "table": "products",
@@ -308382,10 +308382,19 @@
   }
  },
  "git": {
-  "sha": "882db3289b2c5d2494520ce4cc1197761b24710a",
+  "sha": "675d6fd65c25f47bf1b54f957b0cfefaf9f36c2d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "675d6fd",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix: oferta deixa de falhar quando a coluna metadata nao existe (#352)",
+    "files": [
+     "supabase/functions/generate-offer-suggestions/index.ts"
+    ]
+   },
    {
     "sha": "882db32",
     "date": "2026-11-25",
@@ -308696,17 +308705,6 @@
      "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
      "tests/rls/contact_relations_owner_scope.sql"
     ]
-   },
-   {
-    "sha": "6378bfb",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)",
-    "files": [
-     ".github/workflows/deploy-edge-functions.yml",
-     "docs/ci/README.md",
-     "supabase/config.toml"
-    ]
    }
   ],
   "hot_files": [
@@ -308719,11 +308717,11 @@
     3
    ],
    [
-    "supabase/functions/sync-product-catalog/index.ts",
+    "supabase/functions/generate-offer-suggestions/index.ts",
     2
    ],
    [
-    "supabase/config.toml",
+    "supabase/functions/sync-product-catalog/index.ts",
     2
    ],
    [
@@ -308767,11 +308765,11 @@
     2
    ],
    [
-    ".github/workflows/deploy-edge-functions.yml",
-    2
+    "scripts/migration/functions/deploy-all.sh",
+    1
    ],
    [
-    "scripts/migration/functions/deploy-all.sh",
+    "supabase/config.toml",
     1
    ],
    [
@@ -308783,11 +308781,11 @@
     1
    ],
    [
-    "supabase/functions/generate-offer-suggestions/index.ts",
+    "tests/integration/offer-catalog.test.ts",
     1
    ],
    [
-    "tests/integration/offer-catalog.test.ts",
+    "src/components/command/GlobalCommandBar.tsx",
     1
    ]
   ]
