@@ -185966,6 +185966,33 @@
           "jobname": "revalidate-stale-emails",
           "schedule": "0 4 * * *",
           "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "SELECT public.enqueue_social_sync(500, 30);",
+          "database": "postgres",
+          "jobid": 2463,
+          "jobname": "singu-social-enqueue-daily",
+          "schedule": "0 5 * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "SELECT public.dispatch_social_sync(25);",
+          "database": "postgres",
+          "jobid": 2464,
+          "jobname": "singu-social-dispatch",
+          "schedule": "*/5 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "SELECT public.requeue_social_sync_stuck(30);",
+          "database": "postgres",
+          "jobid": 2465,
+          "jobname": "singu-social-requeue-stuck",
+          "schedule": "25 * * * *",
+          "username": "postgres"
         }
       ]
     },
@@ -194793,6 +194820,38 @@
         "volatility": "volatile"
       },
       {
+        "args": "p_limit integer",
+        "callers": {
+          "code": [],
+          "code_total_files": 0,
+          "cron": [
+            "2464:singu-social-dispatch"
+          ],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "73599c7b966496da",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "dispatch_social_sync",
+        "owner": "postgres",
+        "returns": "integer",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
         "args": "retention_days integer",
         "callers": {
           "code": [
@@ -195085,6 +195144,38 @@
         "name": "enqueue_smart_notification",
         "owner": "postgres",
         "returns": "uuid",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "p_limit integer, p_stale_days integer",
+        "callers": {
+          "code": [],
+          "code_total_files": 0,
+          "cron": [
+            "2463:singu-social-enqueue-daily"
+          ],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "958c9d1432de581f",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "enqueue_social_sync",
+        "owner": "postgres",
+        "returns": "integer",
         "schema": "public",
         "security_definer": true,
         "strict": false,
@@ -223545,6 +223636,38 @@
         "returns": "boolean",
         "schema": "public",
         "security_definer": false,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "p_stuck_minutes integer",
+        "callers": {
+          "code": [],
+          "code_total_files": 0,
+          "cron": [
+            "2465:singu-social-requeue-stuck"
+          ],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "b75933f2a75fcfce",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "requeue_social_sync_stuck",
+        "owner": "postgres",
+        "returns": "integer",
+        "schema": "public",
+        "security_definer": true,
         "strict": false,
         "volatility": "volatile"
       },

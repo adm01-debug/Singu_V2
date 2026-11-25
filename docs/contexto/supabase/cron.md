@@ -39,3 +39,6 @@ Horários em UTC. Execuções recentes em `cron-runs.md`.
 | 2460 | mtta-auto-ack-heartbeat-watchdog | `*/30 * * * *` | sim | postgres | postgres | ` SELECT public.check_mtta_auto_ack_heartbeat(); ` |
 | 2461 | cleanup-simulated-alerts-weekly | `0 3 * * 0` | sim | postgres | postgres | ` SELECT public.cleanup_simulated_alerts(); ` |
 | 2462 | revalidate-stale-emails | `0 4 * * *` | sim | postgres | postgres | `   INSERT INTO public.validation_queue (user_id, contact_id, kind, value)   SELECT DISTINCT ev.user_id, ev.contact_id, 'email'::public.validation_kind, ev.email   FROM public.email_verifications ev   WHERE ev.verified_at < now() - INTERVAL '30 days'     AND NOT EXISTS (       SELECT 1 FROM public.validation_queue vq       WHERE vq.user_id = ev.user_id AND vq.value = ev.email AND vq.kind = 'email'         AND vq.status IN ('pending','processing')     )   LIMIT 500 ` |
+| 2463 | singu-social-enqueue-daily | `0 5 * * *` | sim | postgres | postgres | `SELECT public.enqueue_social_sync(500, 30);` |
+| 2464 | singu-social-dispatch | `*/5 * * * *` | sim | postgres | postgres | `SELECT public.dispatch_social_sync(25);` |
+| 2465 | singu-social-requeue-stuck | `25 * * * *` | sim | postgres | postgres | `SELECT public.requeue_social_sync_stuck(30);` |

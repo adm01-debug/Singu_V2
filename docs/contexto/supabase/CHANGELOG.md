@@ -2,6 +2,11 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-25 22:16 UTC
+
+- **cron jobs** adicionado (3): `2463:singu-social-enqueue-daily`, `2464:singu-social-dispatch`, `2465:singu-social-requeue-stuck`
+- **functions** adicionado (3): `public.dispatch_social_sync(p_limit integer)`, `public.enqueue_social_sync(p_limit integer, p_stale_days integer)`, `public.requeue_social_sync_stuck(p_stuck_minutes integer)`
+
 ## 2026-11-25 13:14 UTC
 
 - **cron jobs** removido (5): `10:zapp-reconcile-nlp-30s`, `11:zapp-gc-zombie-messages`, `6:zapp-sync-pending-summaries`, `7:zapp-refresh-contact-stats`, `9:zapp-reconcile-nlp`
