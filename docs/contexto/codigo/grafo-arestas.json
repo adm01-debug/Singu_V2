@@ -5355,6 +5355,8 @@
   ],
   "src/components/layout/MobileBottomNav.tsx": [
    "src/hooks/useHapticFeedback.ts",
+   "src/hooks/useRBAC.tsx",
+   "src/lib/routePermissions.ts",
    "src/lib/utils.ts"
   ],
   "src/components/layout/MobileHeader.tsx": [

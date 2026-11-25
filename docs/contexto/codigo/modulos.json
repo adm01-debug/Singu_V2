@@ -5546,8 +5546,8 @@
   {
    "modulo": "components/layout",
    "arquivos": 6,
-   "testes": 1,
-   "linhas": 1417,
+   "testes": 2,
+   "linhas": 1425,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],

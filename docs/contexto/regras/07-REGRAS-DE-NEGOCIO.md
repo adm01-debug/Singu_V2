@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `472ff967e6` · branch `main` · 2026-11-25 12:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a16128a3a0` · branch `main` · 2026-11-25 13:18 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4747,7 +4747,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
-## K. Testes como especificação (3273 testes em 256 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3277 testes em 257 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4938,6 +4938,7 @@ _nenhum item encontrado_
 | `src/components/carnegie/__tests__/MessageReviewPanel.test.tsx` | 4 | MessageReviewPanel · começa vazio, com o botão desabilitado · mensagem sem problema não mostra ponto de atenção nem nota inventada · aponta os problemas e aplica a versão sugerida ao rascunho |
 | `src/components/contact-detail/__tests__/LifeEventsTab.test.tsx` | 4 | LifeEventsTab · renders correctly and shows the title · displays the gap checklist tab · displays the audit trail tab |
 | `src/components/crm/NextBestAction.contract.test.tsx` | 4 | Contrato canônico de conclusão de próxima ação · preserva o tipo permitido %s e informa canal e direção · registra %s como nota sem violar a constraint de tipo · não anuncia conclusão quando a gravação da interação falha |
+| `src/components/layout/__tests__/MobileBottomNav.test.tsx` | 4 | MobileBottomNav · anuncia rota gateada quando o usuario nao tem papel (fail-open) · esconde a rota gateada quando o papel nao tem a permissao · mantem visiveis as rotas fora do mapa de permissoes |
 | `src/components/sequences/SequenceEnrollDialog.contract.test.tsx` | 4 | Inscrição com busca e cache da carteira · impede fechar pelo X ou Escape durante uma inscrição pendente · repete o mesmo termo depois de falha transitória e oferece o contato recuperado · não inscreve um contato selecionado que desapareceu do cache após arquivamento |
 | `src/hooks/useContactDetail.presence.test.tsx` | 4 | presença confirmada na recarga da ficha · retira a ficha anterior do cache quando ambas as fontes confirmam ausência · preserva a ficha se a consulta %s falhar e recupera no retry · mantém o contato da lixeira da fonte %s disponível para restauração |
 | `src/hooks/useDailySummary.contract.test.tsx` | 4 | Contrato do dia e fuso do resumo diário · usa o dia brasileiro no instante %s · preserva a data selecionada ao consultar um dia anterior · expõe a falha da RPC sem apresentar dados de sucesso |

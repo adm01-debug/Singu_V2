@@ -10377,10 +10377,11 @@
     "MobileBottomNav"
    ],
    "export_default": null,
-   "linhas": 231,
+   "linhas": 239,
    "dominio": "components/layout",
    "hooks_locais": [
-    "useHapticFeedback"
+    "useHapticFeedback",
+    "useRBAC"
    ],
    "tabelas": [],
    "edges": [],

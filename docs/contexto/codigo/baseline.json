@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "472ff967e69d923a24cd2d05f184b3908f8c7c01",
+  "commit": "a16128a3a0156d5dba15563174b2507dae6a240c",
   "branch": "main",
-  "data_commit": "2026-11-25T09:44:23-03:00",
+  "data_commit": "2026-11-25T10:18:13-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "a16128a",
+    "data": "2026-11-25",
+    "assunto": "feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)"
+   },
    {
     "sha": "472ff96",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "16516ac",
     "data": "2026-11-23",
     "assunto": "fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)"
-   },
-   {
-    "sha": "6378bfb",
-    "data": "2026-11-23",
-    "assunto": "ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)"
    }
   ],
-  "arquivos_mudados_7d": 1065,
+  "arquivos_mudados_7d": 1067,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 180
+    "commits": 181
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3930,
-  "arquivos_codigo": 2263,
-  "linhas_codigo": 422074,
+  "arquivos_total": 3931,
+  "arquivos_codigo": 2264,
+  "linhas_codigo": 422155,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -340,7 +340,7 @@
   "tabelas": 542,
   "migrations": 1116,
   "cron_jobs": 44,
-  "testes": 281,
+  "testes": 282,
   "workflows": 14,
   "scripts": 302,
   "docs_md": 159
@@ -655,8 +655,8 @@
    "linhas": 594
   },
   "src/components": {
-   "arquivos": 1012,
-   "linhas": 152065
+   "arquivos": 1013,
+   "linhas": 152146
   },
   "src/config": {
    "arquivos": 1,
