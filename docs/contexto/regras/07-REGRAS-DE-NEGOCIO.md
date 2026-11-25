@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `970f220d1d` · branch `main` · 2026-11-25 11:12 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `082f91a7d7` · branch `main` · 2026-11-25 11:16 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3312,6 +3312,10 @@ _nenhum item encontrado_
 - **calculateRFMScore(value: number, percentiles: number[], isRecency: boolean = false)** — `src/types/rfm.ts`
   ```
   // For recency, lower is better (more recent) if (isRecency) { if (value <= percentiles[0]) return 5; if (value <= percentiles[1]) return 4; if (value <= percentiles[2]) return 3; if (value <= percentiles[3]) return 2; return 1; } // For frequency and monetary, higher is better if (value >= percentiles[3]) return 5; if (value >= percentiles[2]) return 4; if (value >= percentiles[1]) return 3; if (value >= percentiles[0]) return 2; return 1;
+  ```
+- **applyOpenRouterAuth(opts: RequestInit, key: string | undefined)** — `supabase/functions/_shared/fetch-utils.ts`
+  ```
+  if (!key) return opts; const headers = new Headers(opts.headers as HeadersInit | undefined); if (!headers.has('authorization')) return opts; headers.set('Authorization', `Bearer ${key}`); return { ...opts, headers };
   ```
 - **scorePayloads(input: { userId: string; contactId: string; dimensions: Record<string, number>; total: number; grade: string; previousSc)** — `supabase/functions/_shared/lead-score-contract.ts`
   ```

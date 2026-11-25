@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "970f220d1d3b6c57ccd5d9f022d340be88ac811e",
+  "commit": "082f91a7d7ce49ff8f54d6a36ae6ab844cfa150f",
   "branch": "main",
-  "data_commit": "2026-11-25T07:40:14-03:00",
+  "data_commit": "2026-11-25T08:12:22-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "082f91a",
+    "data": "2026-11-25",
+    "assunto": "chore(ia): usa OPENROUTER_API_KEY como fonte da chave e trava o contrato (#343)"
+   },
    {
     "sha": "970f220",
     "data": "2026-11-25",
@@ -126,11 +131,6 @@
     "sha": "76a33c0",
     "data": "2026-11-23",
     "assunto": "chore(matriz): marca EF-3/5/7/11/12/13/14/16/17 e F/F15/19/25/34/36/37/40/60/62 como RC (#319)"
-   },
-   {
-    "sha": "36d59c2",
-    "data": "2026-11-23",
-    "assunto": "build(deps): bump the minor-and-patch group with 13 updates (#315)"
    }
   ],
   "arquivos_mudados_7d": 1075,
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 27
+    "mudancas": 29
    },
    {
     "pasta": "src/components/triggers",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 176
+    "commits": 177
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3928,
   "arquivos_codigo": 2263,
-  "linhas_codigo": 422026,
+  "linhas_codigo": 422074,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 175,
-   "linhas": 27407
+   "linhas": 27455
   },
   "tailwind.config.ts": {
    "arquivos": 1,
