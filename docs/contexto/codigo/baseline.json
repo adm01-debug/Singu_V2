@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "81fe6e11101448a0a8863f2fae7c38926d0b715e",
+  "commit": "f14b8be423127716d3d174073d8d4ed3c7ca446f",
   "branch": "main",
-  "data_commit": "2026-11-25T06:59:49-03:00",
+  "data_commit": "2026-11-25T06:59:56-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "f14b8be",
+    "data": "2026-11-25",
+    "assunto": "fix: fecha os 9 drops de indice duplicado que ficaram pendentes da Wave 119 (#341)"
+   },
    {
     "sha": "81fe6e1",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "0958775",
     "data": "2026-11-23",
     "assunto": "fix: remove exports default mortos que quebram lint com react-refresh 0.5.8 (#317)"
-   },
-   {
-    "sha": "b177218",
-    "data": "2026-11-23",
-    "assunto": "build(deps): bump actions/dependency-review-action from 5.0.0 to 5.0.1 (#308)"
    }
   ],
-  "arquivos_mudados_7d": 1069,
+  "arquivos_mudados_7d": 1070,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 174
+    "commits": 175
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3922,
+  "arquivos_total": 3923,
   "arquivos_codigo": 2263,
   "linhas_codigo": 422026,
   "rotas": 116,
@@ -338,7 +338,7 @@
   "hooks": 412,
   "edge_functions": 109,
   "tabelas": 542,
-  "migrations": 1113,
+  "migrations": 1114,
   "cron_jobs": 44,
   "testes": 281,
   "workflows": 14,
