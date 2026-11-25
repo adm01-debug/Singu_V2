@@ -76,11 +76,6 @@ function toNumber(value: NumericValue): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function marginPct(price: number | null, cost: number | null): number | null {
-  if (price === null || cost === null || price <= 0) return null;
-  return Number((((price - cost) / price) * 100).toFixed(2));
-}
-
 function toSinguRow(product: ErpProduct) {
   const price = toNumber(product.sale_price);
   const cost = toNumber(product.cost_price);
@@ -91,7 +86,6 @@ function toSinguRow(product: ErpProduct) {
     category: product.category_name ?? null,
     unit_price: price,
     cost_price: cost,
-    margin_pct: marginPct(price, cost),
     stock_qty: product.stock_quantity ?? 0,
     is_active: product.is_deleted !== true,
     metadata: {
