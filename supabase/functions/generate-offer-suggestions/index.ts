@@ -2,7 +2,8 @@ import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 import { rateLimit } from "../_shared/rate-limit.ts";
 import {
   handleCorsAndMethod,
-  withAuth,
+  withAuthOrServiceRole,
+  isServiceRoleCaller,
   jsonError,
   jsonOk,
   guardBody,
@@ -91,9 +92,9 @@ Deno.serve(async (req) => {
   if (limited) return limited;
 
 
-  const authResult = await withAuth(req);
+  const authResult = await withAuthOrServiceRole(req);
   if (authResult instanceof Response) return authResult;
-  const userId = authResult;
+  const systemCaller = isServiceRoleCaller(authResult);
 
   const { body: rawBody, error: bodyError } = await guardBody(req, 256 * 1024);
   if (bodyError) return bodyError;
@@ -109,10 +110,12 @@ Deno.serve(async (req) => {
     if (!vgo.ok) return jsonError(vgo.error, 400, req);
     const { contactId } = vgo.data as { contactId?: string };
 
-    // Generating offer suggestions — scoped to authenticated user
+    // Generating offer suggestions — user callers scoped to their own contacts
 
-    // Build query for contacts — always scoped to authenticated user
-    let contactsQuery = supabase.from('contacts').select('*').eq('user_id', userId);
+    // User callers stay scoped to their own contacts; service-role callers
+    // (cron / internal fan-out from sync-social-interests) run system-wide.
+    let contactsQuery = supabase.from('contacts').select('*');
+    if (!systemCaller) contactsQuery = contactsQuery.eq('user_id', authResult);
     if (contactId) contactsQuery = contactsQuery.eq('id', contactId);
     
     const { data: contacts, error: contactsError } = await contactsQuery;
@@ -124,6 +127,9 @@ Deno.serve(async (req) => {
 
     // Fetch all dependent data in parallel — all 6 queries depend only on contactIds
     const contactIds = contacts.map(c => c.id);
+    const ownerByContact = new Map<string, string>(
+      contacts.map((c: { id: string; user_id: string }) => [c.id, c.user_id]),
+    );
     const [
       { data: purchases },
       { data: interactions },
@@ -299,18 +305,22 @@ Deno.serve(async (req) => {
     const topSuggestions = suggestions.slice(0, 50);
 
     if (topSuggestions.length > 0) {
-      const insertData = topSuggestions.map(s => ({
-        user_id: userId,
-        contact_id: s.contactId,
-        offer_name: s.offerName,
-        offer_category: s.offerCategory,
-        reason: s.reason,
-        confidence_score: s.confidenceScore,
-        status: 'pending',
-        // Coluna opcional: se o banco nao a tiver, enviar a chave (mesmo vazia) faz o PostgREST recusar o insert inteiro.
-        ...(s.metadata ? { metadata: s.metadata } : {}),
-        expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-      }));
+      const insertData = topSuggestions.flatMap((s) => {
+        const owner = systemCaller ? (ownerByContact.get(s.contactId) ?? null) : authResult;
+        if (!owner) return [];
+        return [{
+          user_id: owner,
+          contact_id: s.contactId,
+          offer_name: s.offerName,
+          offer_category: s.offerCategory,
+          reason: s.reason,
+          confidence_score: s.confidenceScore,
+          status: 'pending',
+          // Coluna opcional: se o banco nao a tiver, enviar a chave (mesmo vazia) faz o PostgREST recusar o insert inteiro.
+          ...(s.metadata ? { metadata: s.metadata } : {}),
+          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        }];
+      });
 
       const { error: insertError } = await supabase
         .from('offer_suggestions')
