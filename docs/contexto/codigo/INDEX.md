@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `2c502bd125e75604a2d9b3e0e66faa6a482d253c` (2026-11-25T13:28:04-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `bc7a0ba5fb75111a9e1a21f3b49bf77d430d36ce` (2026-11-25T13:52:32-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -356,7 +356,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `social-profile-scraper` — tabelas: social_life_events, social_profiles, social_scraping_schedule, suggested_rapport_intel; chamada por 2 arquivo(s) do front
 - `submit-signature` (verify_jwt=false) — tabelas: document_signatures; chamada por 0 arquivo(s) do front
 - `suggest-next-action` — tabelas: contact_predictive_roadmap, contacts, interactions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `sync-product-catalog` — tabelas: products; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `sync-product-catalog` (verify_jwt=false) — tabelas: products; chamada por 0 arquivo(s) do front
 - `sync-social-interests` (verify_jwt=false) — tabelas: psychographic_audit_log, social_behavior_analysis, social_sync_queue; chamada por 1 arquivo(s) do front
 - `system-health` — tabelas: alerts, companies, email_logs, profiles, system_health_snapshots; chamada por 2 arquivo(s) do front
 - `template-success-notifications` (verify_jwt=false) — tabelas: alerts, contacts, favorite_templates, profiles, push_subscriptions, trigger_usage_history; chamada por 1 arquivo(s) do front, por SQL/cron
@@ -421,7 +421,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Integrações externas
 - SDKs: ElevenLabs, Supabase, react-query, zod
 - hosts mais citados: ai.gateway.lovable.dev, api.elevenlabs.io, canonical.supabase.co, example.test, x.supabase.co, wa.me, example.invalid, test.supabase.co, api.exemplo.com, api.firecrawl.dev, api.lovable.dev, api.supabase.com, singu-v2.vercel.app, api.resend.com, avatar.invalid
-- webhooks recebidos: auto-rebatch-behavioral, auto-regen-behavioral-profiles, bitrix24-webhook, check-health-alerts, check-notifications, client-notifications, cs-health-recalc, deal-room-buyer-view, dual-write-proxy, evolution-bitrix-connector, evolution-webhook, forecast-snapshot-cron, form-submit-handler, generate-behavioral-profile, get-signature, incoming-webhook, intent-pixel-snippet, intent-tracker, lead-score-cron, lux-webhook, mcp-server, mql-evaluator, nurturing-runner, process-behavioral-regen-queue, process-webhook-dlq, retry-behavioral-profile, revops-snapshot-builder, send-sms-campaign, sequence-processor, sequence-track, smart-notify, social-events-detector, submit-signature, sync-social-interests, template-success-notifications, validation-queue-worker, weekly-digest
+- webhooks recebidos: auto-rebatch-behavioral, auto-regen-behavioral-profiles, bitrix24-webhook, check-health-alerts, check-notifications, client-notifications, cs-health-recalc, deal-room-buyer-view, dual-write-proxy, evolution-bitrix-connector, evolution-webhook, forecast-snapshot-cron, form-submit-handler, generate-behavioral-profile, get-signature, incoming-webhook, intent-pixel-snippet, intent-tracker, lead-score-cron, lux-webhook, mcp-server, mql-evaluator, nurturing-runner, process-behavioral-regen-queue, process-webhook-dlq, retry-behavioral-profile, revops-snapshot-builder, send-sms-campaign, sequence-processor, sequence-track, smart-notify, social-events-detector, submit-signature, sync-product-catalog, sync-social-interests, template-success-notifications, validation-queue-worker, weekly-digest
 - env de integração (só nomes): BITRIX_APPLICATION_TOKEN, BITRIX_CLIENT_ID, BITRIX_CLIENT_SECRET, BITRIX_WEBHOOK_URL, CRON_SECRET, DEEPSEEK_API_KEY, ELEVENLABS_API_KEY, ENRICHLAYER_API_KEY, EVOLUTION_API_KEY, EVOLUTION_API_URL, EVOLUTION_BITRIX_CONNECTOR_URL, EVOLUTION_INSTANCE_NAME, EVOLUTION_WEBHOOK_SECRET, FIRECRAWL_API_KEY, LOVABLE_API_KEY, LUX_WEBHOOK_SECRET, N8N_LUX_WEBHOOK_URL, RESEND_API_KEY, RESEND_FROM, TWILIO_API_KEY
 
 ## Permissões / papéis
@@ -434,7 +434,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - rotas_sem_arquivo: 0
 - componentes_ambiguos: 0
 - menu_sem_destino: 6 — ex.: 1º Contato -> primeiro_contato, Fechamento -> fechamento, Negociação -> negociacao
-- edges_orfas: 14 — ex.: attribution-calculator, detect-new-device, email-verifier
+- edges_orfas: 13 — ex.: attribution-calculator, detect-new-device, email-verifier
 - edges_chamadas_sem_pasta: 0
 - tabelas_sem_rls: 131 — ex.: _stg_pac_nums, access_denied_logs, active_power_ups
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
@@ -448,7 +448,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26006 nós · 41563 arestas · 3108 comunidades · grafo do commit `2c502bd1`
+- 26006 nós · 41563 arestas · 3108 comunidades · grafo do commit `bc7a0ba5`
 - comunidades maiores: lucide-react (282), ref_components (280), ref_lib (274), sonner (272), _shared/auth.ts (272), framer-motion (267), 02_tables.sql (259), useAuth (244), react-router-dom (243), date-fns (234), react (227), 📖 Dicionário de Dados — SINGU CRM (224)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -588,6 +588,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-25 `bc7a0ba` fix(deploy): sync-product-catalog nasce sem verify_jwt verificavel e o cron nao a alcanca (#350)
 - 2026-11-25 `2c502bd` feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)
 - 2026-11-25 `e347c01` fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)
 - 2026-11-25 `a16128a` feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)
@@ -602,7 +603,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-24 `6629194` fix(docs): mecanismo real da falha do smart-notify (502, nao skip silencioso) (#338)
 - 2026-11-24 `a737bf1` fix(docs): smart-notify sem cron agendado e guard aceita JWT (#337)
 - 2026-11-24 `1104bf2` fix(whatsapp): grava direction no webhook e alinha status/tipo ao check do banco (#335)
-- 2026-11-24 `bae345f` fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

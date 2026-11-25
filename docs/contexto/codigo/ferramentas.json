@@ -1442,6 +1442,7 @@
    "smart-notify",
    "social-events-detector",
    "submit-signature",
+   "sync-product-catalog",
    "sync-social-interests",
    "template-success-notifications",
    "validation-queue-worker",

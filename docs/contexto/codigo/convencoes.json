@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(deploy): sync-product-catalog nasce sem verify_jwt verificavel e o cron nao a alcanca (#350)",
    "feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)",
    "fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)",
    "feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)",
-   "feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)",
-   "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)"
+   "feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)"
   ]
  },
  "pr_template": null,

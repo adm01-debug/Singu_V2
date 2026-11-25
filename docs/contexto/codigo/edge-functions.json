@@ -37,6 +37,7 @@
   "smart-notify",
   "social-events-detector",
   "submit-signature",
+  "sync-product-catalog",
   "sync-social-interests",
   "template-success-notifications",
   "validation-queue-worker",
@@ -3503,7 +3504,7 @@
    "entrada": "supabase/functions/sync-product-catalog/index.ts",
    "arquivos": 1,
    "linhas": 220,
-   "verify_jwt": true,
+   "verify_jwt": false,
    "metodos": [
     "OPTIONS"
    ],
@@ -3527,7 +3528,7 @@
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
-   "orfa": true,
+   "orfa": false,
    "testes": 0
   },
   {

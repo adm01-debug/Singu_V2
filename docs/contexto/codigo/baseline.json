@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "2c502bd125e75604a2d9b3e0e66faa6a482d253c",
+  "commit": "bc7a0ba5fb75111a9e1a21f3b49bf77d430d36ce",
   "branch": "main",
-  "data_commit": "2026-11-25T13:28:04-03:00",
+  "data_commit": "2026-11-25T13:52:32-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "bc7a0ba",
+    "data": "2026-11-25",
+    "assunto": "fix(deploy): sync-product-catalog nasce sem verify_jwt verificavel e o cron nao a alcanca (#350)"
+   },
    {
     "sha": "2c502bd",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "1314c13",
     "data": "2026-11-24",
     "assunto": "fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)"
-   },
-   {
-    "sha": "27c8b40",
-    "data": "2026-11-23",
-    "assunto": "feat(auth): aplica a política de acesso por conta no login (fail-open) (#323)"
    }
   ],
-  "arquivos_mudados_7d": 1071,
+  "arquivos_mudados_7d": 1072,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -156,6 +156,10 @@
     "mudancas": 20
    },
    {
+    "pasta": "scripts/migration/functions",
+    "mudancas": 16
+   },
+   {
     "pasta": "src/components/admin",
     "mudancas": 16
    },
@@ -165,10 +169,6 @@
    },
    {
     "pasta": "CHANGELOG.md",
-    "mudancas": 15
-   },
-   {
-    "pasta": "scripts/migration/functions",
     "mudancas": 15
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 183
+    "commits": 184
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -955,7 +955,6 @@
    "rfm-analyzer",
    "send-transactional-email",
    "suggest-next-action",
-   "sync-product-catalog",
    "whatsapp-import"
   ],
   "edges_chamadas_sem_pasta": [],
