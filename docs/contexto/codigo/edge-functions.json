@@ -3503,7 +3503,7 @@
    "nome": "sync-product-catalog",
    "entrada": "supabase/functions/sync-product-catalog/index.ts",
    "arquivos": 1,
-   "linhas": 220,
+   "linhas": 214,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS"

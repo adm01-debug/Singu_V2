@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "bc7a0ba5fb75111a9e1a21f3b49bf77d430d36ce",
+  "commit": "882db3289b2c5d2494520ce4cc1197761b24710a",
   "branch": "main",
-  "data_commit": "2026-11-25T13:52:32-03:00",
+  "data_commit": "2026-11-25T14:15:38-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "882db32",
+    "data": "2026-11-25",
+    "assunto": "fix(sync): payload do catalogo respeita a coluna margin_pct gerada pelo banco (#351)"
+   },
    {
     "sha": "bc7a0ba",
     "data": "2026-11-25",
@@ -126,11 +131,6 @@
     "sha": "2094be6",
     "data": "2026-11-24",
     "assunto": "fix(ci): destrava o deploy de edge functions (#322)"
-   },
-   {
-    "sha": "1314c13",
-    "data": "2026-11-24",
-    "assunto": "fix(db): cria social_insights no formato usado pelos paineis de inteligencia social (#326)"
    }
   ],
   "arquivos_mudados_7d": 1072,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 184
+    "commits": 185
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -328,7 +328,7 @@
  "contagens": {
   "arquivos_total": 3935,
   "arquivos_codigo": 2268,
-  "linhas_codigo": 422824,
+  "linhas_codigo": 422818,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 177,
-   "linhas": 27916
+   "linhas": 27910
   },
   "tailwind.config.ts": {
    "arquivos": 1,

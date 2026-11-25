@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "bc7a0ba5fb75111a9e1a21f3b49bf77d430d36ce",
+  "sha": "882db3289b2c5d2494520ce4cc1197761b24710a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 16:54 UTC",
+  "generated_at": "2026-11-25 17:16 UTC",
   "files_total": 4040,
   "code_files": 3562,
-  "code_lines": 480286
+  "code_lines": 480280
  },
  "version": "1.3.2",
- "facts_hash": "469971dd76b60aec",
+ "facts_hash": "415e47d6e0370745",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -112700,7 +112700,7 @@
   {
    "module": "supabase/functions",
    "files": 177,
-   "lines": 27916,
+   "lines": 27910,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -301115,7 +301115,7 @@
   },
   "supabase/functions/sync-product-catalog/index.ts": {
    "path": "supabase/functions/sync-product-catalog/index.ts",
-   "lines": 220,
+   "lines": 214,
    "tables": [
     {
      "table": "products",
@@ -308382,10 +308382,19 @@
   }
  },
  "git": {
-  "sha": "bc7a0ba5fb75111a9e1a21f3b49bf77d430d36ce",
+  "sha": "882db3289b2c5d2494520ce4cc1197761b24710a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "882db32",
+    "date": "2026-11-25",
+    "author": "adm01-debug",
+    "subject": "fix(sync): payload do catalogo respeita a coluna margin_pct gerada pelo banco (#351)",
+    "files": [
+     "supabase/functions/sync-product-catalog/index.ts"
+    ]
+   },
    {
     "sha": "bc7a0ba",
     "date": "2026-11-25",
@@ -308698,15 +308707,6 @@
      "docs/ci/README.md",
      "supabase/config.toml"
     ]
-   },
-   {
-    "sha": "c6d9be5",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)",
-    "files": [
-     ".github/workflows/smoke-edges-pendentes.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -308717,6 +308717,10 @@
    [
     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
     3
+   ],
+   [
+    "supabase/functions/sync-product-catalog/index.ts",
+    2
    ],
    [
     "supabase/config.toml",
@@ -308780,10 +308784,6 @@
    ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/sync-product-catalog/index.ts",
     1
    ],
    [
