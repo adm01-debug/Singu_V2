@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "603c40489b22c8baf2bd2f44f0391be10b069bd1",
+  "commit": "472ff967e69d923a24cd2d05f184b3908f8c7c01",
   "branch": "main",
-  "data_commit": "2026-11-25T09:43:52-03:00",
+  "data_commit": "2026-11-25T09:44:23-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "472ff96",
+    "data": "2026-11-25",
+    "assunto": "feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)"
+   },
    {
     "sha": "603c404",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "6378bfb",
     "data": "2026-11-23",
     "assunto": "ci: versiona verify_jwt por funcao e cria o deploy de edge functions que faltava (#320)"
-   },
-   {
-    "sha": "c6d9be5",
-    "data": "2026-11-23",
-    "assunto": "fix(ci): usa SB_UID no smoke, UID e readonly no bash (#318)"
    }
   ],
-  "arquivos_mudados_7d": 1064,
+  "arquivos_mudados_7d": 1065,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 179
+    "commits": 180
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3929,
+  "arquivos_total": 3930,
   "arquivos_codigo": 2263,
   "linhas_codigo": 422074,
   "rotas": 116,
@@ -338,7 +338,7 @@
   "hooks": 412,
   "edge_functions": 109,
   "tabelas": 542,
-  "migrations": 1115,
+  "migrations": 1116,
   "cron_jobs": 44,
   "testes": 281,
   "workflows": 14,
