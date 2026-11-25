@@ -39,11 +39,18 @@ const STOPWORDS = new Set([
 // @trapani-industria-de-maquinas", "WhatsApp ativo: 16991565481". Sem remover esses
 // trechos antes de tokenizar, nome de pessoa, dominio e telefone viram palavra-chave
 // e o motor de ofertas passa a sugerir produto a partir do nome do contato.
-const CONTACT_NOISE = /https?:\/\/\S+|www\.\S+|\S+@\S+\.\S+|@[\w.%-]+|\+?\d[\d\s().-]{7,}/gi;
+const PHONE_WORD = /^\+?\d[\d().-]{7,}$/;
+
+function isContactNoise(word: string): boolean {
+  if (word.includes('@')) return true;
+  const lower = word.toLowerCase();
+  if (lower.startsWith('http://') || lower.startsWith('https://') || lower.startsWith('www.')) return true;
+  return PHONE_WORD.test(word);
+}
 
 /** Tira email, URL, @handle e telefone do texto antes de separar palavras. */
 function stripContactNoise(text: string): string {
-  return text.replace(CONTACT_NOISE, ' ');
+  return text.split(/\s+/).filter((word) => !isContactNoise(word)).join(' ');
 }
 
 /** Sem acento e sem caixa, para "Café" e "cafe" contarem como a mesma evidencia. */
