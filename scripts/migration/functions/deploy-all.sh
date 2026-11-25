@@ -76,7 +76,7 @@ NO_JWT_FUNCTIONS=(
   mql-evaluator nurturing-runner
   process-behavioral-regen-queue process-webhook-dlq retry-behavioral-profile
   revops-snapshot-builder send-sms-campaign sequence-processor sequence-track
-  smart-notify social-events-detector submit-signature sync-social-interests
+  smart-notify social-events-detector submit-signature sync-product-catalog sync-social-interests
   template-success-notifications validation-queue-worker weekly-digest
 )
 
