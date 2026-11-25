@@ -1,7 +1,7 @@
 {
   "_meta": {
     "descricao": "Baseline de exposicao RLS do Singu (pgxfvjmuubtbowutlide). Linhas visiveis por perfil, medidas via PostgREST. Contador satura em 1001.",
-    "gerado_em": "2026-10-22",
+    "gerado_em": "2026-11-25",
     "etapa_plano": "84",
     "regra": "O teste FALHA se qualquer tabela expuser MAIS linhas que o baseline para um perfil. Reduzir exposicao (Fase 3) exige atualizar o baseline no mesmo PR que reduz.",
     "perfis": {
@@ -25,15 +25,15 @@
     },
     "suppliers": {
       "anon": -1,
-      "authenticated_sem_role": 754
+      "authenticated_sem_role": 0
     },
     "carriers": {
       "anon": -1,
-      "authenticated_sem_role": 114
+      "authenticated_sem_role": 0
     },
     "role_permissions": {
       "anon": -1,
-      "authenticated_sem_role": 63
+      "authenticated_sem_role": 66
     },
     "permissions": {
       "anon": -1,
@@ -49,7 +49,7 @@
     },
     "customer_ownership_history": {
       "anon": -1,
-      "authenticated_sem_role": 12
+      "authenticated_sem_role": 0
     },
     "disc_profile_config": {
       "anon": -1,
