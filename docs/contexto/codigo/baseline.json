@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "a16128a3a0156d5dba15563174b2507dae6a240c",
+  "commit": "e347c016b39f14b6209d09cd30452d86582a9563",
   "branch": "main",
-  "data_commit": "2026-11-25T10:18:13-03:00",
+  "data_commit": "2026-11-25T11:15:25-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "e347c01",
+    "data": "2026-11-25",
+    "assunto": "fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)"
+   },
    {
     "sha": "a16128a",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "4f090e3",
     "data": "2026-11-23",
     "assunto": "fix: conversation-analyzer consultava coluna inexistente e nunca analisava (#325)"
-   },
-   {
-    "sha": "16516ac",
-    "data": "2026-11-23",
-    "assunto": "fix: reanalise manual por admin e fixture de dominio no teste RLS (#324)"
    }
   ],
-  "arquivos_mudados_7d": 1067,
+  "arquivos_mudados_7d": 1069,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 181
+    "commits": 182
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3931,
-  "arquivos_codigo": 2264,
-  "linhas_codigo": 422155,
+  "arquivos_total": 3932,
+  "arquivos_codigo": 2265,
+  "linhas_codigo": 422241,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -340,7 +340,7 @@
   "tabelas": 542,
   "migrations": 1116,
   "cron_jobs": 44,
-  "testes": 282,
+  "testes": 283,
   "workflows": 14,
   "scripts": 302,
   "docs_md": 159
@@ -655,8 +655,8 @@
    "linhas": 594
   },
   "src/components": {
-   "arquivos": 1013,
-   "linhas": 152146
+   "arquivos": 1014,
+   "linhas": 152232
   },
   "src/config": {
    "arquivos": 1,

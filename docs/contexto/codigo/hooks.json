@@ -8088,9 +8088,10 @@
     "useQuery"
    ],
    "canais_realtime": [],
-   "usado_por": 4,
+   "usado_por": 5,
    "usado_por_arquivos": [
     "src/components/auth/RequirePermission.tsx",
+    "src/components/command/GlobalCommandBar.tsx",
     "src/components/layout/AppSidebar.tsx",
     "src/components/layout/MobileBottomNav.tsx",
     "src/components/layout/MobileSidebarDrawer.tsx"

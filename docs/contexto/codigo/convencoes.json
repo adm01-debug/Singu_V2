@@ -22,7 +22,7 @@
   ],
   "testes": [
    "co-localizado (*.test) (127)",
-   "co-localizado (__tests__) (103)",
+   "co-localizado (__tests__) (104)",
    "tests/ (23)"
   ],
   "edge_functions": "supabase/functions",
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)",
    "feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)",
    "feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)",
    "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)",
-   "docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)",
-   "chore(ia): usa OPENROUTER_API_KEY como fonte da chave e trava o contrato (#343)"
+   "docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)"
   ]
  },
  "pr_template": null,

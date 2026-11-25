@@ -2774,11 +2774,12 @@
     "GlobalCommandBar"
    ],
    "export_default": null,
-   "linhas": 288,
+   "linhas": 296,
    "dominio": "components/command",
    "hooks_locais": [
     "useAuth",
-    "useGlobalDensity"
+    "useGlobalDensity",
+    "useRBAC"
    ],
    "tabelas": [],
    "edges": [],

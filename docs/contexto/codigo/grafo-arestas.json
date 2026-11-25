@@ -1533,6 +1533,8 @@
    "src/components/ui/command.tsx",
    "src/hooks/useAuth.tsx",
    "src/hooks/useGlobalDensity.ts",
+   "src/hooks/useRBAC.tsx",
+   "src/lib/routePermissions.ts",
    "src/lib/utils.ts"
   ],
   "src/components/companies/CompaniesExportButton.tsx": [
