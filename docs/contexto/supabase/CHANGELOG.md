@@ -2,6 +2,12 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-25 13:14 UTC
+
+- **cron jobs** removido (5): `10:zapp-reconcile-nlp-30s`, `11:zapp-gc-zombie-messages`, `6:zapp-sync-pending-summaries`, `7:zapp-refresh-contact-stats`, `9:zapp-reconcile-nlp`
+- **functions** alterado (5): `zapp_history.gc_zombie_messages()`, `zapp_history.invoke_edge_function(p_function_name text, p_body jsonb)`, `zapp_history.reconcile_nlp_responses()`, `zapp_history.refresh_contact_stats()`, `zapp_history.sync_summary_to_interaction(p_summary_id uuid)`
+- **migrations** adicionado (2): `20261125090000_desativa_crons_modulo_zapp_history_morto`, `20261125091000_rbac_popula_papeis_e_completa_matriz_rotas`
+
 ## 2026-11-25 11:13 UTC
 
 - **functions** alterado (8): `public.calculate_relationship_metrics_internal(v_contact_id uuid)`, `public.get_companies_by_phones_batch(p_phones text[])`, `public.get_contact_360_by_phone(p_phone text)`, `public.get_contact_intelligence_by_phone(p_phone text)`, `public.log_activity(p_type text, p_description text, p_contact_id uuid, p_company_id uuid, p_interaction_id uuid, p_data jsonb, p_user_id uuid)`, `public.log_activity(p_user_id uuid, p_activity_type text, p_entity_type text, p_entity_id uuid, p_entity_name text, p_description text, p_metadata jsonb)`, `public.log_activity(p_user_id uuid, p_type text, p_title text, p_description text, p_entity_type text, p_entity_id uuid, p_metadata jsonb)`, `public.search_contacts_advanced(p_search text, p_vendedor text, p_ramo text, p_rfm_segment text, p_estado text, p_cliente_ativado boolean, p_ja_comprou boolean, p_sort_by text, p_page integer, p_page_size integer)`

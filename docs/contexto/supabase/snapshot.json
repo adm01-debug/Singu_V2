@@ -185699,51 +185699,6 @@
         },
         {
           "active": true,
-          "command": "SELECT zapp_history.sync_summary_to_interaction(id) FROM zapp_history.conversation_daily_summaries WHERE synced_to_interactions = FALSE AND created_at > NOW() - INTERVAL '7 days' LIMIT 100;",
-          "database": "postgres",
-          "jobid": 6,
-          "jobname": "zapp-sync-pending-summaries",
-          "schedule": "30 * * * *",
-          "username": "postgres"
-        },
-        {
-          "active": true,
-          "command": "SELECT zapp_history.refresh_contact_stats();",
-          "database": "postgres",
-          "jobid": 7,
-          "jobname": "zapp-refresh-contact-stats",
-          "schedule": "0 3 * * *",
-          "username": "postgres"
-        },
-        {
-          "active": true,
-          "command": " SELECT zapp_history.reconcile_nlp_responses() ",
-          "database": "postgres",
-          "jobid": 9,
-          "jobname": "zapp-reconcile-nlp",
-          "schedule": "* * * * *",
-          "username": "postgres"
-        },
-        {
-          "active": true,
-          "command": " SELECT pg_sleep(30); SELECT zapp_history.reconcile_nlp_responses(); ",
-          "database": "postgres",
-          "jobid": 10,
-          "jobname": "zapp-reconcile-nlp-30s",
-          "schedule": "* * * * *",
-          "username": "postgres"
-        },
-        {
-          "active": true,
-          "command": "SELECT zapp_history.gc_zombie_messages();",
-          "database": "postgres",
-          "jobid": 11,
-          "jobname": "zapp-gc-zombie-messages",
-          "schedule": "*/15 * * * *",
-          "username": "postgres"
-        },
-        {
-          "active": true,
           "command": "SELECT public.rodizio_segmentar_carteira()",
           "database": "postgres",
           "jobid": 12,
@@ -234565,9 +234520,7 @@
             }
           ],
           "code_total_files": 2,
-          "cron": [
-            "11:zapp-gc-zombie-messages"
-          ],
+          "cron": [],
           "db": [],
           "triggers": [],
           "views": []
@@ -235134,9 +235087,13 @@
             {
               "file": "supabase/migrations/20260408201117_zapp_history_18_backfill_summaries_rpc.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [
             "1:zapp-generate-daily-summaries",
             "2:zapp-process-pending-media",
@@ -235310,10 +235267,7 @@
             }
           ],
           "code_total_files": 5,
-          "cron": [
-            "9:zapp-reconcile-nlp",
-            "10:zapp-reconcile-nlp-30s"
-          ],
+          "cron": [],
           "db": [
             "zapp_history.trg_periodic_reconcile"
           ],
@@ -235350,9 +235304,7 @@
             }
           ],
           "code_total_files": 1,
-          "cron": [
-            "7:zapp-refresh-contact-stats"
-          ],
+          "cron": [],
           "db": [],
           "triggers": [],
           "views": []
@@ -235833,9 +235785,7 @@
             }
           ],
           "code_total_files": 2,
-          "cron": [
-            "6:zapp-sync-pending-summaries"
-          ],
+          "cron": [],
           "db": [
             "zapp_history.trg_sync_summary_to_interaction"
           ],
@@ -280507,6 +280457,16 @@
         "name": "remove_duplicate_indexes_wave119_restante",
         "statements": null,
         "version": "20261124231412"
+      },
+      {
+        "name": "desativa_crons_modulo_zapp_history_morto",
+        "statements": null,
+        "version": "20261125090000"
+      },
+      {
+        "name": "rbac_popula_papeis_e_completa_matriz_rotas",
+        "statements": null,
+        "version": "20261125091000"
       }
     ],
     "policies": [

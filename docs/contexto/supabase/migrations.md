@@ -742,3 +742,5 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261124143000 | [revoke_authenticated_exec_stubs_crm](migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql) | 0 |
 | 20261124211500 | [whatsapp_messages_status_played_e_colunas_import](migrations/20261124211500_whatsapp_messages_status_played_e_colunas_import.sql) | 0 |
 | 20261124231412 | [remove_duplicate_indexes_wave119_restante](migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql) | 0 |
+| 20261125090000 | [desativa_crons_modulo_zapp_history_morto](migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql) | 0 |
+| 20261125091000 | [rbac_popula_papeis_e_completa_matriz_rotas](migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql) | 0 |

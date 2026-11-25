@@ -9,11 +9,6 @@ Horários em UTC. Execuções recentes em `cron-runs.md`.
 | 3 | zapp-embed-pending-messages | `*/30 * * * *` | não | postgres | postgres | `SELECT zapp_history.invoke_edge_function('embed-message');` |
 | 4 | zapp-curate-training-dataset | `0 4 * * 0` | não | postgres | postgres | `SELECT zapp_history.invoke_edge_function('curate-training-dataset');` |
 | 5 | zapp-cleanup-expired-media | `0 5 * * *` | não | postgres | postgres | `UPDATE zapp_history.message_media SET download_status = 'expired' WHERE download_status = 'failed' AND download_attempts >= 5 AND created_at < NOW() - INTERVAL '7 days';` |
-| 6 | zapp-sync-pending-summaries | `30 * * * *` | sim | postgres | postgres | `SELECT zapp_history.sync_summary_to_interaction(id) FROM zapp_history.conversation_daily_summaries WHERE synced_to_interactions = FALSE AND created_at > NOW() - INTERVAL '7 days' LIMIT 100;` |
-| 7 | zapp-refresh-contact-stats | `0 3 * * *` | sim | postgres | postgres | `SELECT zapp_history.refresh_contact_stats();` |
-| 9 | zapp-reconcile-nlp | `* * * * *` | sim | postgres | postgres | ` SELECT zapp_history.reconcile_nlp_responses() ` |
-| 10 | zapp-reconcile-nlp-30s | `* * * * *` | sim | postgres | postgres | ` SELECT pg_sleep(30); SELECT zapp_history.reconcile_nlp_responses(); ` |
-| 11 | zapp-gc-zombie-messages | `*/15 * * * *` | sim | postgres | postgres | `SELECT zapp_history.gc_zombie_messages();` |
 | 12 | singu-rodizio-segmentar | `0 1 * * *` | sim | postgres | postgres | `SELECT public.rodizio_segmentar_carteira()` |
 | 13 | singu-rodizio-closer | `0 6 * * 1` | sim | postgres | postgres | `SELECT public.cron_rodizio_closer_tick()` |
 | 14 | singu-rodizio-sdr | `10 6 * * 1` | sim | postgres | postgres | `SELECT public.cron_rodizio_sdr_tick()` |
