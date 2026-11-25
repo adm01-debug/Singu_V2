@@ -108,6 +108,9 @@ verify_jwt = false
 [functions.submit-signature]
 verify_jwt = false
 
+[functions.sync-product-catalog]
+verify_jwt = false
+
 [functions.sync-social-interests]
 verify_jwt = false
 
