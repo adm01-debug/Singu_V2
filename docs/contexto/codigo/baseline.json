@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "2c7686a68a3911515400862d21ad832ca603e624",
+  "commit": "81fe6e11101448a0a8863f2fae7c38926d0b715e",
   "branch": "main",
-  "data_commit": "2026-11-24T19:25:54-03:00",
+  "data_commit": "2026-11-25T06:59:49-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "81fe6e1",
+    "data": "2026-11-25",
+    "assunto": "fix(whatsapp): alinha check de status e colunas do import em whatsapp_messages (#336)"
+   },
    {
     "sha": "2c7686a",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "b177218",
     "data": "2026-11-23",
     "assunto": "build(deps): bump actions/dependency-review-action from 5.0.0 to 5.0.1 (#308)"
-   },
-   {
-    "sha": "409a5ae",
-    "data": "2026-11-23",
-    "assunto": "chore(ci): smoke manual que fecha as 3 validacoes de edge pendentes (#307)"
    }
   ],
-  "arquivos_mudados_7d": 1068,
+  "arquivos_mudados_7d": 1069,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 173
+    "commits": 174
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,7 +326,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3921,
+  "arquivos_total": 3922,
   "arquivos_codigo": 2263,
   "linhas_codigo": 422026,
   "rotas": 116,
@@ -338,7 +338,7 @@
   "hooks": 412,
   "edge_functions": 109,
   "tabelas": 542,
-  "migrations": 1112,
+  "migrations": 1113,
   "cron_jobs": 44,
   "testes": 281,
   "workflows": 14,

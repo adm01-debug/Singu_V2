@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2c7686a68a` · branch `main` · 2026-11-24 23:10 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `81fe6e1110` · branch `main` · 2026-11-25 10:00 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -617,7 +617,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `communication_preferences` | `preferred_channel` | default 'whatsapp' |
 | `communication_preferences` | `preferred_days` | default '{}' |
 | `communication_preferences` | `contact_frequency` | default 'weekly' |
-| … +4183 linhas — lista completa em `context.json` | | |
+| … +4184 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -1223,7 +1223,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `validation_queue` | `status` | `pending`, `processing`, `done`, `error` | `pending` |
 | `whatsapp_ingestion_logs` | `status` | **livre (sem enum/CHECK)** |  |
 | `whatsapp_instances` | `status` | `connected`, `connecting`, `disconnected`, `error`, `qr_code` | `disconnected` |
-| `whatsapp_messages` | `status` | **livre (sem enum/CHECK)** | `pending` |
+| `whatsapp_messages` | `status` | `delivered`, `failed`, `pending`, `played`, `read`, `sent` | `pending` |
 | `migration_password_reset_log` | `status` | `failed`, `pending`, `sent`, `skipped` |  |
 | `calendar_events` | `status` | `cancelled`, `completed`, `confirmed`, `scheduled`, `tentative` | `scheduled` |
 | `campaigns` | `status` | `active`, `archived`, `cancelled`, `completed`, `draft`, `paused` | `draft` |

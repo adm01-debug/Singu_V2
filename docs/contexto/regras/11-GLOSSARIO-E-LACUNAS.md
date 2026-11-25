@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2c7686a68a` · branch `main` · 2026-11-24 23:10 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `81fe6e1110` · branch `main` · 2026-11-25 10:00 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -703,7 +703,7 @@ _nenhum item encontrado_
 - `validation_queue.status` tem valores ['pending', 'processing', 'done', 'error'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `whatsapp_ingestion_logs.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `whatsapp_instances.status` tem valores ['connected', 'connecting', 'disconnected', 'error', 'qr_code'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- `whatsapp_messages.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `whatsapp_messages.status` tem valores ['delivered', 'failed', 'pending', 'played', 'read', 'sent'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `migration_password_reset_log.status` tem valores ['failed', 'pending', 'sent', 'skipped'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `calendar_events.status` tem valores ['cancelled', 'completed', 'confirmed', 'scheduled', 'tentative'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `campaigns.status` tem valores ['active', 'archived', 'cancelled', 'completed', 'draft', 'paused'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
