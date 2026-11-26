@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TelemetriaGateway } from '@/components/governanca-ia/TelemetriaGateway';
 import { useCatalogoModelos, useReframes, useScriptsRecomendados } from '@/hooks/useGovernancaIA';
 
 const formatNumber = (value: number) => value.toLocaleString('pt-BR');
@@ -135,6 +136,7 @@ export default function GovernancaIA() {
             <TabsTrigger value="modelos">Catálogo de modelos</TabsTrigger>
             <TabsTrigger value="reframes">Reframes</TabsTrigger>
             <TabsTrigger value="scripts">Scripts recomendados</TabsTrigger>
+            <TabsTrigger value="telemetria">Telemetria</TabsTrigger>
           </TabsList>
 
           <TabsContent value="modelos" className="mt-4">
@@ -319,6 +321,10 @@ export default function GovernancaIA() {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          <TabsContent value="telemetria" className="mt-4">
+            <TelemetriaGateway />
           </TabsContent>
         </Tabs>
       </div>

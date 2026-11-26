@@ -81,6 +81,8 @@ export const ALLOWED_RPCS = [
     'get_ai_recommendation_logs', 'approve_follow_up', 'reject_follow_up',
     // ── Agregacao por periodo (analytics, dashboard) ──
     'get_activity_overview',
+    // ── Telemetria do gateway de IA (admin) ──
+    'get_ai_gateway_health', 'get_ai_gateway_partition_stats',
   ] as const;
 
 export type AllowedRpc = typeof ALLOWED_RPCS[number];
