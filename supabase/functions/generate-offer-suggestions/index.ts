@@ -190,6 +190,12 @@ Deno.serve(async (req) => {
      const analyticalTopics = (contactAnalytical?.recurrent_topics || []).join(' ').toLowerCase();
      
      const combinedContext = `${interactionText} ${socialInterests} ${socialKeywords} ${analyticalTopics}`;
+     // O indice de produtos e construido com keywords normalizadas (normalizeText
+     // remove acento). Medir o match sobre o texto cru fazia `matchedKeywords`
+     // ficar sempre vazio: o candidato era escolhido pelo texto normalizado e a
+     // evidencia conferida no original, entao "Interesse detectado" e o
+     // metadata nunca apareciam. Mesma base dos dois lados.
+     const normalizedContext = normalizeText(combinedContext);
 
       const now = new Date();
       const upcomingRenewals = contactPurchases.filter(p => {
@@ -206,7 +212,7 @@ Deno.serve(async (req) => {
         targetScore: 50,
         keywords: keywordsFrom(renewal.product_name),
       }));
-      const offerCatalog = [...renewalOffers, ...catalogForContext(normalizeText(combinedContext))];
+      const offerCatalog = [...renewalOffers, ...catalogForContext(normalizedContext)];
 
       for (const offer of offerCatalog) {
         const key = `${contact.id}-${offer.name}`;
@@ -224,7 +230,7 @@ Deno.serve(async (req) => {
           reasons.push(`Bom score de relacionamento (${score})`);
         }
 
-        const matchedKeywords = offer.keywords.filter(kw => combinedContext.includes(kw.toLowerCase()));
+        const matchedKeywords = offer.keywords.filter(kw => normalizedContext.includes(normalizeText(kw)));
         if (matchedKeywords.length > 0) {
           confidence += matchedKeywords.length * 10;
           

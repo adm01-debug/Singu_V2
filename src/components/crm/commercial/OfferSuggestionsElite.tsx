@@ -42,6 +42,17 @@ interface Props {
   contactId: string;
 }
 
+/**
+ * A evidencia vem do proprio registro da oferta. Antes o badge dependia da
+ * palavra "social" dentro de `reason`, entao uma oferta com keyword real mas
+ * sem social_insight nunca mostrava a evidencia que o backend gravou.
+ */
+function hasSocialEvidence(metadata: unknown): boolean {
+  const m = metadata as SocialMatchEvidence | null;
+  if (!m) return false;
+  return (m.sources?.length ?? 0) > 0 || (m.keywords?.length ?? 0) > 0;
+}
+
 export function OfferSuggestionsElite({ contactId }: Props) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -202,7 +213,7 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                             {offer.offer_category}
                           </Badge>
                         )}
-                        {offer.reason?.toLowerCase().includes('social') && (
+                        {hasSocialEvidence(offer.metadata) && (
                           <Badge variant="secondary" className="text-[9px] h-4 bg-indigo-50 text-indigo-600 border-indigo-100 gap-1 px-1.5">
                             <Globe className="h-2.5 w-2.5" />
                             Social Match
@@ -212,7 +223,7 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                       <p className="text-xs text-muted-foreground leading-relaxed italic">
                         "{offer.reason}"
                       </p>
-                      {offer.reason?.toLowerCase().includes('social') && (
+                      {hasSocialEvidence(offer.metadata) && (
                         <SocialMatchPanel
                           contactId={contactId}
                           offerName={offer.offer_name}
