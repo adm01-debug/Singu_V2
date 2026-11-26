@@ -3,7 +3,7 @@ import { usePrefetch } from "@/components/navigation/PrefetchLink";
 import {
   LayoutDashboard, Building2, Users, MessageSquare, Lightbulb, Settings,
   Zap, LogOut, CalendarDays, Bell, ChevronDown, BarChart3, Share2,
-  Workflow, MapPin, PanelLeftClose, PanelLeft, Kanban, Trophy, CheckSquare, Globe, ListFilter, BrainCircuit, LifeBuoy, BookOpen, Copy, Shield, Star, Target, Gauge, Brain, Megaphone, Activity, Sparkles, UserPlus, History, Bot, KeyRound, ShieldCheck, FileWarning, MessageSquareCheck, Layers, Database, Truck, CalendarClock,
+  Workflow, MapPin, PanelLeftClose, PanelLeft, Kanban, Trophy, CheckSquare, Globe, ListFilter, BrainCircuit, LifeBuoy, BookOpen, Copy, Shield, Star, Target, Gauge, Brain, Megaphone, Activity, Sparkles, UserPlus, History, Bot, KeyRound, ShieldCheck, FileWarning, MessageSquareCheck, Layers, Database, Truck, CalendarClock, Building,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -103,6 +103,7 @@ const adminSection = {
     { title: "Carteira e ativação", url: "/carteira", icon: Users },
     { title: "Saúde das automações", url: "/admin/automacoes", icon: Bot },
     { title: "Governança de IA", url: "/admin/ia", icon: Brain },
+    { title: "Contas do Workspace", url: "/admin/workspaces", icon: Building },
   ],
 };
 

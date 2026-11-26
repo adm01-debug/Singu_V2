@@ -160,10 +160,12 @@ export const ALLOWED_TABLES = [
   // ── Clientes 360 ──
   'vw_cliente_completo', 'vw_status_clientes', 'vw_empresas_hierarquia',
   'vw_cooperativas_estrutura', 'vw_empresa_historico_completo',
-  // ââ GovernanÃ§a de IA ââ
+  // ── Governança de IA ──
   'v_model_catalog', 'vw_reframe_suggestions', 'vw_recommended_scripts',
-  // ââ Eventos de cliente ââ
+  // ── Eventos de cliente ──
   'vw_timeline_cliente',
+  // Contas do Google Workspace
+  'vw_workspace_overview',
 ] as const;
 
 export type AllowedTable = typeof ALLOWED_TABLES[number];
@@ -230,6 +232,8 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_reframe_suggestions',
   'vw_recommended_scripts',
   'vw_timeline_cliente',
+  'workspace_accounts',
+  'vw_workspace_overview',
 ]);
 
 export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
