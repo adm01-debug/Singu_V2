@@ -76,6 +76,7 @@ export const AppRoutes = () => {
       {/* Protected — core */}
       <Route path="/" element={<Protected><Index /></Protected>} />
       <Route path="/empresas" element={<Protected fallback={<CompaniesPageSkeleton />}><P.Empresas /></Protected>} />
+      <Route path="/grupos-economicos" element={<Protected><P.GruposEconomicos /></Protected>} />
       <Route path="/cadastro" element={<Protected><P.Cadastro /></Protected>} />
       <Route path="/whatsapp/importar" element={<Protected><P.WhatsAppImport /></Protected>} />
       <Route path="/historico" element={<Protected><P.Historico /></Protected>} />
