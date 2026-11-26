@@ -366,6 +366,7 @@
    "src/pages/AdminFieldMapping.tsx",
    "src/pages/AdminKnowledgeExport.tsx",
    "src/pages/AdminLuxConfig.tsx",
+   "src/pages/AdminReadiness.tsx",
    "src/pages/AdminSchemaDrift.tsx",
    "src/pages/AdminSecretsManagement.tsx",
    "src/pages/AdminTelemetria.tsx",
@@ -9273,6 +9274,10 @@
    "src/lib/errorMessages.ts",
    "src/lib/externalData.ts"
   ],
+  "src/hooks/useSinguReadiness.ts": [
+   "src/integrations/supabase/types.ts",
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useSlowRpcTrend.ts": [
    "src/integrations/supabase/client.ts"
   ],
@@ -9790,6 +9795,18 @@
    "src/hooks/useIsAdmin.ts",
    "src/hooks/useLuxWebhookConfig.ts",
    "src/integrations/supabase/client.ts"
+  ],
+  "src/pages/AdminReadiness.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/progress.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useSinguReadiness.ts"
   ],
   "src/pages/AdminSchemaDrift.tsx": [
    "src/components/ui/badge.tsx",

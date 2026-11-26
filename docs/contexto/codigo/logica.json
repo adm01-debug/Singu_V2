@@ -2267,7 +2267,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 111,
+   "usado_por": 112,
    "usado_por_modulos": [
     "components/company-detail",
     "components/contact-detail",
@@ -2926,7 +2926,7 @@
    "zod_schemas": 1,
    "flags": [],
    "papeis": [],
-   "usado_por": 108,
+   "usado_por": 109,
    "usado_por_modulos": [
     "components/contact-detail",
     "components/contacts",

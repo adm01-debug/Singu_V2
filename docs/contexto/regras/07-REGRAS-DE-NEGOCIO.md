@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `42882061f6` · branch `main` · 2026-11-26 14:33 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6409ca43b6` · branch `main` · 2026-11-26 14:57 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3734,6 +3734,7 @@ _nenhum item encontrado_
 | `CINCO_MIN` | `5` | `src/hooks/useReportWidgets.ts` |
 | `MAX` | `20` | `src/hooks/useSavedAskViews.ts` |
 | `STALE` | `60` | `src/hooks/useScoreAutomations.ts` |
+| `STATUS_COM_DADOS` | `'OK'` | `src/hooks/useSinguReadiness.ts` |
 | `SLOW_THRESHOLD_MS` | `3000` | `src/hooks/useSlowQueryDetector.ts` |
 | `CRITICAL_THRESHOLD_MS` | `8000` | `src/hooks/useSlowQueryDetector.ts` |
 | `CLEAR_DELAY_MS` | `5000` | `src/hooks/useSlowQueryDetector.ts` |
@@ -4133,7 +4134,7 @@ _nenhum item encontrado_
 | `staleTime: 30 * 60 * 1000, // 30 min — resumo estável dentro do período` | `src/hooks/useObjectionContextSummary.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/useOrphanContacts.ts` |
 | `gcTime: 10 * 60 * 1000,` | `src/hooks/usePendingFollowups.ts` |
-| … +241 linhas — lista completa em `context.json` | |
+| … +242 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 

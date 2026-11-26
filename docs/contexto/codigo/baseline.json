@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "42882061f6091214bb019bf39ecff28cdedd00fd",
+  "commit": "6409ca43b6582bb7be5a953d0b79e2d71c22c1d6",
   "branch": "main",
-  "data_commit": "2026-11-26T11:31:18-03:00",
+  "data_commit": "2026-11-26T11:57:01-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "6409ca4",
+    "data": "2026-11-26",
+    "assunto": "feat(admin): tela de readiness dos dados por tabela (#365)"
+   },
    {
     "sha": "4288206",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "81fe6e1",
     "data": "2026-11-25",
     "assunto": "fix(whatsapp): alinha check de status e colunas do import em whatsapp_messages (#336)"
-   },
-   {
-    "sha": "2c7686a",
-    "data": "2026-11-24",
-    "assunto": "chore(scripts): recupera scripts de diagnostico de branch orfa e registra como legacy manual (#340)"
    }
   ],
-  "arquivos_mudados_7d": 1023,
+  "arquivos_mudados_7d": 1025,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -192,8 +192,8 @@
     "mudancas": 14
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 13
+    "pasta": "supabase/functions/external-data",
+    "mudancas": 14
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -254,11 +254,11 @@
     "mudancas": 8
    },
    {
-    "arquivo": "docs/qa/functions-authenticated-allowlist.md",
-    "mudancas": 7
+    "arquivo": "src/app/AppRoutes.tsx",
+    "mudancas": 8
    },
    {
-    "arquivo": "src/app/AppRoutes.tsx",
+    "arquivo": "docs/qa/functions-authenticated-allowlist.md",
     "mudancas": 7
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 197
+    "commits": 198
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,16 +326,16 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3946,
-  "arquivos_codigo": 2275,
-  "linhas_codigo": 423696,
-  "rotas": 117,
+  "arquivos_total": 3948,
+  "arquivos_codigo": 2277,
+  "linhas_codigo": 423935,
+  "rotas": 118,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 67,
+  "itens_menu": 68,
   "modulos": 142,
-  "componentes": 1081,
-  "hooks": 413,
+  "componentes": 1082,
+  "hooks": 414,
   "edge_functions": 110,
   "tabelas": 542,
   "migrations": 1120,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 596
+   "linhas": 598
   },
   "src/components": {
    "arquivos": 1017,
-   "linhas": 152378
+   "linhas": 152379
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 445,
-   "linhas": 58838
+   "arquivos": 446,
+   "linhas": 58891
   },
   "src/integrations": {
    "arquivos": 3,
@@ -691,8 +691,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 157,
-   "linhas": 30021
+   "arquivos": 158,
+   "linhas": 30202
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28120
+   "linhas": 28122
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1179,6 +1179,7 @@
    "AdminEmailDiagnostics",
    "AdminKnowledgeExport",
    "AdminLuxConfig",
+   "AdminReadiness",
    "AdminSchemaDrift",
    "AdminSecretsManagement",
    "AdminSegurancaPage",

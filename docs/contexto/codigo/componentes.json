@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1081,
+ "total": 1082,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -43,6 +43,10 @@
   "AdminLuxConfig": [
    "src/app/lazyPages.tsx",
    "src/pages/AdminLuxConfig.tsx"
+  ],
+  "AdminReadiness": [
+   "src/app/lazyPages.tsx",
+   "src/pages/AdminReadiness.tsx"
   ],
   "AdminSchemaDrift": [
    "src/app/lazyPages.tsx",
@@ -495,7 +499,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 191,
+   "linhas": 192,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -529,6 +533,7 @@
     "AdminKnowledgeExport",
     "AdminLuxConfig",
     "AdminObservability",
+    "AdminReadiness",
     "AdminSchemaDrift",
     "AdminSecretsManagement",
     "AdminSegurancaPage",
@@ -636,7 +641,7 @@
     "WinLossSetupPage"
    ],
    "export_default": null,
-   "linhas": 175,
+   "linhas": 176,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10340,7 +10345,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 48,
+   "usado_por": 49,
    "orfao": false
   },
   {
@@ -10349,7 +10354,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 322,
+   "linhas": 323,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14235,7 +14240,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 553,
+   "usado_por": 554,
    "orfao": false
   },
   {
@@ -14250,7 +14255,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 533,
+   "usado_por": 534,
    "orfao": false
   },
   {
@@ -14285,7 +14290,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 591,
+   "usado_por": 592,
    "orfao": false
   },
   {
@@ -14564,7 +14569,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 208,
+   "usado_por": 209,
    "orfao": false
   },
   {
@@ -14740,7 +14745,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 107,
+   "usado_por": 108,
    "orfao": false
   },
   {
@@ -14910,7 +14915,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 129,
+   "usado_por": 130,
    "orfao": false
   },
   {
@@ -15070,7 +15075,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 206,
+   "usado_por": 207,
    "orfao": false
   },
   {
@@ -15194,7 +15199,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 19,
+   "usado_por": 20,
    "orfao": false
   },
   {
@@ -15927,6 +15932,22 @@
    "tabelas": [
     "lux_intelligence"
    ],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/AdminReadiness.tsx",
+   "exports": [
+    "AdminReadiness"
+   ],
+   "export_default": "AdminReadiness",
+   "linhas": 181,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useSinguReadiness"
+   ],
+   "tabelas": [],
    "edges": [],
    "usado_por": 1,
    "orfao": false

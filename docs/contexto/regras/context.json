@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "42882061f6091214bb019bf39ecff28cdedd00fd",
+  "sha": "6409ca43b6582bb7be5a953d0b79e2d71c22c1d6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 14:33 UTC",
-  "files_total": 4051,
-  "code_files": 3573,
-  "code_lines": 481546
+  "generated_at": "2026-11-26 14:57 UTC",
+  "files_total": 4053,
+  "code_files": 3575,
+  "code_lines": 481785
  },
  "version": "1.3.2",
- "facts_hash": "28ed171a69010136",
+ "facts_hash": "c4310a49741a0e29",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -273,8 +273,8 @@
   "package_manager": "bun",
   "languages": {
    ".sql": 1297,
-   ".tsx": 1191,
-   ".ts": 920,
+   ".tsx": 1192,
+   ".ts": 921,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -101157,6 +101157,39 @@
    },
    {
     "path": "",
+    "file": "src/pages/AdminReadiness.tsx",
+    "component": "AdminReadiness",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 106
+   },
+   {
+    "path": "",
     "file": "src/pages/AdminSchemaDrift.tsx",
     "component": "AdminSchemaDrift",
     "tables_transitive": [
@@ -107215,6 +107248,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/admin/readiness",
+    "component": "Admin",
+    "guard": "",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/admin/role-permissions",
     "component": "Admin",
     "guard": "",
@@ -110402,6 +110442,10 @@
     "file": "src/hooks/useSequences.ts"
    },
    {
+    "name": "useSinguReadiness",
+    "file": "src/hooks/useSinguReadiness.ts"
+   },
+   {
     "name": "useSlowQueryDetector",
     "file": "src/hooks/useSlowQueryDetector.ts"
    },
@@ -111526,7 +111570,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 596,
+   "lines": 598,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -111563,7 +111607,7 @@
   {
    "module": "src/components",
    "files": 1017,
-   "lines": 152378,
+   "lines": 152379,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112010,8 +112054,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 445,
-   "lines": 58838,
+   "files": 446,
+   "lines": 58891,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -112585,8 +112629,8 @@
   },
   {
    "module": "src/pages",
-   "files": 157,
-   "lines": 30021,
+   "files": 158,
+   "lines": 30202,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -112632,6 +112676,7 @@
     "AdminFieldMapping.tsx: FieldMappingDocs",
     "AdminKnowledgeExport.tsx: AdminKnowledgeExport",
     "AdminLuxConfig.tsx: AdminLuxConfig",
+    "AdminReadiness.tsx: AdminReadiness",
     "AdminSchemaDrift.tsx: AdminSchemaDrift",
     "AdminSecretsManagement.tsx: AdminSecretsManagement",
     "AdminTelemetria.tsx: AdminTelemetriaPage",
@@ -112659,8 +112704,7 @@
     "DealRoomDetail.tsx: DealRoomDetail",
     "DealRooms.tsx: DealRooms",
     "Deduplicacao.tsx: Deduplicacao",
-    "DesignSystem.tsx: DesignSystem",
-    "DocsPage.tsx: DocsPage"
+    "DesignSystem.tsx: DesignSystem"
    ],
    "docs": [],
    "deps": [
@@ -112705,6 +112749,7 @@
     "src/pages/AdminFieldMapping.tsx",
     "src/pages/AdminKnowledgeExport.tsx",
     "src/pages/AdminLuxConfig.tsx",
+    "src/pages/AdminReadiness.tsx",
     "src/pages/AdminSchemaDrift.tsx",
     "src/pages/AdminSecretsManagement.tsx",
     "src/pages/AdminTelemetria.tsx",
@@ -112772,8 +112817,7 @@
     "src/pages/NotFound.tsx",
     "src/pages/Notificacoes.tsx",
     "src/pages/NotificacoesConfig.tsx",
-    "src/pages/Nurturing.tsx",
-    "src/pages/Onboarding.tsx"
+    "src/pages/Nurturing.tsx"
    ]
   },
   {
@@ -112944,7 +112988,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28120,
+   "lines": 28122,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -153418,6 +153462,11 @@
     "value": "60"
    },
    {
+    "file": "src/hooks/useSinguReadiness.ts",
+    "name": "STATUS_COM_DADOS",
+    "value": "'OK'"
+   },
+   {
     "file": "src/hooks/useSlowQueryDetector.ts",
     "name": "SLOW_THRESHOLD_MS",
     "value": "3000"
@@ -169998,6 +170047,10 @@
    },
    {
     "file": "src/hooks/useSecretRotation.ts",
+    "line": "staleTime: 5 * 60 * 1000,"
+   },
+   {
+    "file": "src/hooks/useSinguReadiness.ts",
     "line": "staleTime: 5 * 60 * 1000,"
    },
    {
@@ -247166,7 +247219,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 191,
+   "lines": 192,
    "exports": [
     "const AppRoutes"
    ],
@@ -247691,6 +247744,12 @@
      "roles": []
     },
     {
+     "path": "/admin/readiness",
+     "component": "Admin",
+     "guard": "",
+     "roles": []
+    },
+    {
      "path": "/admin/field-mapping",
      "component": "Admin",
      "guard": "",
@@ -247897,7 +247956,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 175,
+   "lines": 176,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -257551,7 +257610,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 322,
+   "lines": 323,
    "exports": [
     "const AppSidebar"
    ],
@@ -280963,6 +281022,28 @@
     "50"
    ]
   },
+  "src/hooks/useSinguReadiness.ts": {
+   "path": "src/hooks/useSinguReadiness.ts",
+   "lines": 53,
+   "exports": [
+    "type ReadinessRow",
+    "interface ReadinessResumo",
+    "function resumirReadiness",
+    "function useSinguReadiness"
+   ],
+   "params": [
+    {
+     "name": "STATUS_COM_DADOS",
+     "value": "'OK'"
+    }
+   ],
+   "hooks": [
+    "useSinguReadiness"
+   ],
+   "temporal": [
+    "staleTime: 5 * 60 * 1000,"
+   ]
+  },
   "src/hooks/useSlowQueryDetector.ts": {
    "path": "src/hooks/useSlowQueryDetector.ts",
    "lines": 99,
@@ -287594,6 +287675,13 @@
    ],
    "pagination": [
     "100"
+   ]
+  },
+  "src/pages/AdminReadiness.tsx": {
+   "path": "src/pages/AdminReadiness.tsx",
+   "lines": 181,
+   "exports": [
+    "function AdminReadiness"
    ]
   },
   "src/pages/AdminSchemaDrift.tsx": {
@@ -297274,7 +297362,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 179,
+   "lines": 181,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -309313,10 +309401,24 @@
   }
  },
  "git": {
-  "sha": "42882061f6091214bb019bf39ecff28cdedd00fd",
+  "sha": "6409ca43b6582bb7be5a953d0b79e2d71c22c1d6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "6409ca4",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(admin): tela de readiness dos dados por tabela (#365)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/hooks/useSinguReadiness.ts",
+     "src/pages/AdminReadiness.tsx",
+     "supabase/functions/external-data/tables.ts"
+    ]
+   },
    {
     "sha": "4288206",
     "date": "2026-11-26",
@@ -309631,28 +309733,16 @@
      "supabase/migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql",
      "tests/rls/functions_authenticated_allowlist.sql"
     ]
-   },
-   {
-    "sha": "0d1bfce",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)",
-    "files": [
-     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
-     "docs/lacunas/B2_reverificacao_estado_05_10.md",
-     "docs/lacunas/D_ui_rotas_componentes.md",
-     "scripts/docs/citacoes-baseline.json",
-     "src/lib/__tests__/roleAssignment.test.ts",
-     "src/lib/roleAssignment.ts",
-     "src/pages/RolesPage.tsx",
-     "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
     4
+   ],
+   [
+    "supabase/functions/external-data/tables.ts",
+    3
    ],
    [
     "docs/qa/security-definer-audit.md",
@@ -309667,11 +309757,15 @@
     3
    ],
    [
-    "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
-    3
+    "src/app/AppRoutes.tsx",
+    2
    ],
    [
-    "supabase/functions/external-data/tables.ts",
+    "src/app/lazyPages.tsx",
+    2
+   ],
+   [
+    "src/components/layout/AppSidebar.tsx",
     2
    ],
    [
@@ -309687,11 +309781,11 @@
     2
    ],
    [
-    "scripts/docs/citacoes-baseline.json",
+    "docs/estado/03_MARKETING_AUTOMACAO.md",
     2
    ],
    [
-    "docs/estado/03_MARKETING_AUTOMACAO.md",
+    "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
     2
    ],
    [
@@ -309699,19 +309793,15 @@
     2
    ],
    [
+    "src/hooks/useSinguReadiness.ts",
+    1
+   ],
+   [
+    "src/pages/AdminReadiness.tsx",
+    1
+   ],
+   [
     "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql",
-    1
-   ],
-   [
-    "src/app/AppRoutes.tsx",
-    1
-   ],
-   [
-    "src/app/lazyPages.tsx",
-    1
-   ],
-   [
-    "src/components/layout/AppSidebar.tsx",
     1
    ],
    [
@@ -309724,10 +309814,6 @@
    ],
    [
     "src/pages/GruposEconomicos.tsx",
-    1
-   ],
-   [
-    "src/components/contact-detail/SocialIntelligencePanel.tsx",
     1
    ]
   ]
