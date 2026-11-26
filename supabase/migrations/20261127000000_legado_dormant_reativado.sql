@@ -67,7 +67,9 @@ declare
   ];
 begin
   foreach t in array tabelas loop
-    execute format('drop policy if exists %I on public.%I', 'dormant_deny_all_' || t, t);
+    if to_regclass('public.' || quote_ident(t)) is not null then
+      execute format('drop policy if exists %I on public.%I', 'dormant_deny_all_' || t, t);
+    end if;
   end loop;
 end $$;
 
@@ -95,6 +97,9 @@ declare
   expr text;
 begin
   foreach t in array (por_contato || por_usuario || outras) loop
+    if to_regclass('public.' || quote_ident(t)) is null then
+      continue;
+    end if;
     execute format('alter table public.%I enable row level security', t);
     execute format('revoke all on public.%I from anon', t);
     execute format('revoke all on public.%I from authenticated', t);
@@ -107,28 +112,41 @@ begin
 
   foreach t in array por_contato loop
     expr := 'contact_id in (select c.id from public.contacts c where c.user_id = (select auth.uid()))';
-    execute format('create policy %I on public.%I for all to authenticated using (%s) with check (%s)', t || '_owner_access', t, expr, expr);
+    if to_regclass('public.' || quote_ident(t)) is not null then
+      execute format('create policy %I on public.%I for all to authenticated using (%s) with check (%s)', t || '_owner_access', t, expr, expr);
+    end if;
   end loop;
 
   foreach t in array por_usuario loop
     expr := 'user_id = (select auth.uid())';
-    execute format('create policy %I on public.%I for all to authenticated using (%s) with check (%s)', t || '_owner_access', t, expr, expr);
+    if to_regclass('public.' || quote_ident(t)) is not null then
+      execute format('create policy %I on public.%I for all to authenticated using (%s) with check (%s)', t || '_owner_access', t, expr, expr);
+    end if;
   end loop;
 
   -- leads: dono da carteira ou quem criou
-  execute 'create policy leads_owner_access on public.leads for all to authenticated '
-       || 'using (owner_id = (select auth.uid()) or created_by_id = (select auth.uid())) '
-       || 'with check (owner_id = (select auth.uid()) or created_by_id = (select auth.uid()))';
+  if to_regclass('public.leads') is not null then
+    execute 'drop policy if exists leads_owner_access on public.leads';
+    execute 'create policy leads_owner_access on public.leads for all to authenticated '
+         || 'using (owner_id = (select auth.uid()) or created_by_id = (select auth.uid())) '
+         || 'with check (owner_id = (select auth.uid()) or created_by_id = (select auth.uid()))';
+  end if;
 
   -- pix_accounts: pertence à empresa do usuário
-  execute 'create policy pix_accounts_owner_access on public.pix_accounts for all to authenticated '
-       || 'using (company_id in (select c.id from public.companies c where c.user_id = (select auth.uid()))) '
-       || 'with check (company_id in (select c.id from public.companies c where c.user_id = (select auth.uid())))';
+  if to_regclass('public.pix_accounts') is not null then
+    execute 'drop policy if exists pix_accounts_owner_access on public.pix_accounts';
+    execute 'create policy pix_accounts_owner_access on public.pix_accounts for all to authenticated '
+         || 'using (company_id in (select c.id from public.companies c where c.user_id = (select auth.uid()))) '
+         || 'with check (company_id in (select c.id from public.companies c where c.user_id = (select auth.uid())))';
+  end if;
 
   -- trigger_templates: catálogo compartilhado, sem dado pessoal; leitura e
   -- manutenção liberadas para quem está autenticado
-  execute 'create policy trigger_templates_owner_access on public.trigger_templates for all to authenticated '
-       || 'using (true) with check (true)';
+  if to_regclass('public.trigger_templates') is not null then
+    execute 'drop policy if exists trigger_templates_owner_access on public.trigger_templates';
+    execute 'create policy trigger_templates_owner_access on public.trigger_templates for all to authenticated '
+         || 'using (true) with check (true)';
+  end if;
 end $$;
 
 -- As funções geradoras gravam sem informar `user_id`; preenchemos o dono a
@@ -158,8 +176,10 @@ declare
   ];
 begin
   foreach t in array tabelas loop
-    execute format('drop trigger if exists set_owner_from_contact on public.%I', t);
-    execute format('create trigger set_owner_from_contact before insert or update on public.%I for each row execute function public.set_owner_from_contact()', t);
+    if to_regclass('public.' || quote_ident(t)) is not null then
+      execute format('drop trigger if exists set_owner_from_contact on public.%I', t);
+      execute format('create trigger set_owner_from_contact before insert or update on public.%I for each row execute function public.set_owner_from_contact()', t);
+    end if;
   end loop;
 end $$;
 
