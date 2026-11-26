@@ -18,7 +18,7 @@ BEGIN
   PERFORM public.assert_self_user_id(p_user_id);
 
   SELECT COALESCE(c.full_name, c.first_name || ' ' || c.last_name),
-         COALESCE(co.title, co.razao_social)
+         COALESCE(co.nome_fantasia, co.razao_social, co.nome_crm)
   INTO v_name, v_company
   FROM contacts c
   LEFT JOIN companies co ON c.company_id = co.id
@@ -59,7 +59,7 @@ BEGIN
 
   SELECT array_agg(DISTINCT o.objection_text) INTO v_objections
   FROM objections o
-  WHERE o.contact_id = p_contact_id AND o.status != 'resolved' LIMIT 3;
+  WHERE o.contact_id = p_contact_id AND o.is_resolved IS NOT TRUE LIMIT 3;
 
   IF v_objections IS NULL THEN v_objections := ARRAY['Preço', 'Prazo', 'Aprovação']; END IF;
 

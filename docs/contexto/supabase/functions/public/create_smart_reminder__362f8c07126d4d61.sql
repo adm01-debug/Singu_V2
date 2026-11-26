@@ -13,7 +13,7 @@ BEGIN
   IF p_contact_id IS NOT NULL THEN
       SELECT jsonb_build_object(
           'contact_name',       COALESCE(c.full_name, c.first_name || ' ' || c.last_name),
-          'company',            COALESCE(co.title, co.razao_social),
+          'company',            COALESCE(co.nome_fantasia, co.razao_social, co.nome_crm),
           'disc_type',          da.primary_profile,
           'last_interaction',   (SELECT MAX(data_interacao) FROM interactions WHERE contact_id = c.id),
           'relationship_score', c.relationship_score

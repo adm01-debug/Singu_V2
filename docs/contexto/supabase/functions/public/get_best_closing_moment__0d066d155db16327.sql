@@ -36,7 +36,7 @@ BEGIN
     
     -- 4. Objeções não resolvidas
     SELECT COUNT(*) INTO v_objections_count
-    FROM objections o WHERE o.contact_id = p_contact_id AND o.status != 'resolved';
+    FROM objections o WHERE o.contact_id = p_contact_id AND o.is_resolved IS NOT TRUE;
     
     -- 5. Prontidão emocional
     v_emotional_readiness := CASE 
@@ -48,8 +48,8 @@ BEGIN
     
     -- Ajustar com tendência
     SELECT trend_direction INTO v_interaction_trend
-    FROM emotional_trend_snapshots
-    WHERE contact_id = p_contact_id ORDER BY period_end DESC LIMIT 1;
+    FROM emotional_trend_snapshots ets
+    WHERE ets.contact_id = p_contact_id ORDER BY ets.period_end DESC LIMIT 1;
     
     IF v_interaction_trend = 'improving' THEN
         v_emotional_readiness := LEAST(v_emotional_readiness + 15, 100);

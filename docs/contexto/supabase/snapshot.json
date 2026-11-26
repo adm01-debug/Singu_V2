@@ -2,7 +2,11 @@
   "api": {
     "enabled": false
   },
-  "carried": [],
+  "carried": [
+    "columns",
+    "constraints",
+    "indexes"
+  ],
   "db": {
     "columns": [
       {
@@ -193938,7 +193942,7 @@
           "search_path=public, pg_catalog"
         ],
         "definition": null,
-        "definition_sha": "169ca13f770095bf",
+        "definition_sha": "3bdb6a4e646d8e35",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -199203,7 +199207,7 @@
           "search_path=public, pg_catalog"
         ],
         "definition": null,
-        "definition_sha": "537d6369f483f474",
+        "definition_sha": "1c4d5e7ee9950e20",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -201055,7 +201059,7 @@
           "search_path=public, pg_catalog"
         ],
         "definition": null,
-        "definition_sha": "63e90866e0a8c3a4",
+        "definition_sha": "5bd9e40d018d1f6b",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -226242,8 +226246,8 @@
         ],
         "definition": null,
         "definition_sha": "15d10ec92ab81997",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "authenticated, service_role",
+        "execute_public": false,
         "is_trigger_fn": true,
         "kind": "function",
         "language": "plpgsql",
@@ -321346,6 +321350,27 @@
     ],
     "webhooks": []
   },
-  "errors": [],
+  "errors": [
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "columns"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "constraints"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "indexes"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "table_stats"
+    },
+    {
+      "error": "canceling statement due to lock timeout",
+      "section": "db_stats"
+    }
+  ],
   "format_version": 2
 }
