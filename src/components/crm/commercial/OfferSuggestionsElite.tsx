@@ -35,6 +35,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { useSocialSync } from '@/hooks/commercial/useSocialSync';
 import { AuditLogDrawer } from './components/AuditLogDrawer';
+import { SocialMatchPanel, type SocialMatchEvidence } from './components/SocialMatchPanel';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -52,7 +53,7 @@ export function OfferSuggestionsElite({ contactId }: Props) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('offer_suggestions')
-        .select('id, confidence_score, contact_id, created_at, expires_at, offer_category, offer_name, presented_at, reason, result, status, user_id')
+        .select('id, confidence_score, contact_id, created_at, expires_at, offer_category, offer_name, presented_at, reason, result, status, user_id, metadata')
         .eq('contact_id', contactId)
         .eq('user_id', user!.id)
         .order('confidence_score', { ascending: false })
@@ -212,7 +213,11 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                         "{offer.reason}"
                       </p>
                       {offer.reason?.toLowerCase().includes('social') && (
-                        <p className="text-xs text-muted-foreground">Evidências do match social indisponíveis: esta oferta não registra fontes ou palavras-chave.</p>
+                        <SocialMatchPanel
+                          contactId={contactId}
+                          offerName={offer.offer_name}
+                          metadata={(offer.metadata as SocialMatchEvidence | null) ?? {}}
+                        />
                       )}
                     </div>
                     <div className="text-right shrink-0">

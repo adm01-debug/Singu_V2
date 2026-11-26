@@ -291,9 +291,11 @@ Deno.serve(async (req) => {
             offerCategory: offer.category,
             reason: reasons.slice(0, 3).join('. ') + '.',
             confidenceScore: Math.min(100, confidence),
-            metadata: matchedInsightIds.length > 0 ? {
+            // Evidencia do match: sem isso a UI nao consegue mostrar de onde veio a
+            // oferta e cai no aviso "evidencias indisponiveis".
+            metadata: matchedKeywords.length > 0 ? {
               sources: matchedSources,
-              keywords: matchedKeywordsList,
+              keywords: matchedKeywordsList.length > 0 ? matchedKeywordsList : matchedKeywords,
               social_insight_ids: matchedInsightIds
             } : undefined
           });
@@ -303,6 +305,7 @@ Deno.serve(async (req) => {
 
     suggestions.sort((a, b) => b.confidenceScore - a.confidenceScore);
     const topSuggestions = suggestions.slice(0, 50);
+    let inserted = 0;
 
     if (topSuggestions.length > 0) {
       const insertData = topSuggestions.flatMap((s) => {
@@ -316,7 +319,11 @@ Deno.serve(async (req) => {
           reason: s.reason,
           confidence_score: s.confidenceScore,
           status: 'pending',
-          // Coluna opcional: se o banco nao a tiver, enviar a chave (mesmo vazia) faz o PostgREST recusar o insert inteiro.
+          // `offer_suggestions.metadata` (migration 20261126090000) guarda a
+          // evidencia que sustentou a oferta: fontes sociais, keywords e ids de
+          // social_insights. Antes desta coluna existir o PostgREST recusava o
+          // insert inteiro quando havia match social, e a resposta ainda dizia
+          // "suggestionsGenerated: N" — perda silenciosa de sugestoes.
           ...(s.metadata ? { metadata: s.metadata } : {}),
           expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         }];
@@ -327,8 +334,10 @@ Deno.serve(async (req) => {
         .insert(insertData);
 
       if (insertError) {
-        console.error('Error inserting suggestions:', insertError);
+        console.error("Error inserting suggestions:", insertError.message);
+        return jsonError(`Falha ao gravar sugestoes: ${insertError.message}`, 500, req);
       }
+      inserted = insertData.length;
     }
 
     // Offer suggestions generated
@@ -336,6 +345,7 @@ Deno.serve(async (req) => {
     return jsonOk({ 
       success: true, 
       suggestionsGenerated: topSuggestions.length,
+      suggestionsInserted: inserted,
       suggestions: topSuggestions 
     }, req);
 

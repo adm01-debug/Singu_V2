@@ -3,14 +3,16 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { SocialMatchDetails } from './SocialMatchDetails';
 
+export interface SocialMatchEvidence {
+  sources?: string[];
+  keywords?: string[];
+  social_insight_ids?: string[];
+}
+
 interface Props {
   contactId: string;
   offerName: string;
-  metadata: {
-    sources?: string[];
-    keywords?: string[];
-    social_insight_ids?: string[];
-  };
+  metadata: SocialMatchEvidence;
 }
 
 export function SocialMatchPanel({ contactId, offerName, metadata }: Props) {

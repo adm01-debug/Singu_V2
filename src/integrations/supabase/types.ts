@@ -33769,6 +33769,7 @@ export type Database = {
           created_at: string
           expires_at: string | null
           id: string
+          metadata: Json | null
           offer_category: string | null
           offer_name: string
           presented_at: string | null
@@ -33784,6 +33785,7 @@ export type Database = {
           created_at?: string
           expires_at?: string | null
           id?: string
+          metadata?: Json | null
           offer_category?: string | null
           offer_name: string
           presented_at?: string | null
@@ -33799,6 +33801,7 @@ export type Database = {
           created_at?: string
           expires_at?: string | null
           id?: string
+          metadata?: Json | null
           offer_category?: string | null
           offer_name?: string
           presented_at?: string | null
