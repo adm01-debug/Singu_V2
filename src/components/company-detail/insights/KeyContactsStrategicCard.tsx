@@ -3,9 +3,9 @@ import { Badge } from '@/components/ui/badge';
 import { Users } from 'lucide-react';
 
 interface KeyContact {
-  id: string;
+  contact_id: string;
   name: string;
-  role?: string;
+  cargo?: string | null;
   importance_score: number;
 }
 
@@ -24,10 +24,10 @@ export function KeyContactsStrategicCard({ keyContacts }: { keyContacts: KeyCont
       <CardContent>
         <div className="space-y-2">
           {keyContacts.slice(0, 5).map((kc) => (
-            <div key={kc.id} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
+            <div key={kc.contact_id} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
               <div>
                 <p className="text-sm font-medium">{kc.name}</p>
-                {kc.role && <p className="text-[10px] text-muted-foreground">{kc.role}</p>}
+                            {kc.cargo && <p className="text-[10px] text-muted-foreground">{kc.cargo}</p>}
               </div>
               <Badge variant={kc.importance_score >= 70 ? 'default' : 'secondary'} className="text-[10px]">
                 {kc.importance_score}%

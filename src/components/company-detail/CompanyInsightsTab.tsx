@@ -9,9 +9,11 @@ import { ExternalDataCard } from '@/components/ui/external-data-card';
 import { AccountChurnPredictionPanel } from '@/components/analytics/AccountChurnPredictionPanel';
 import { useCompanyTimeline, useCompany360, useNextBestAction, useTouchpointSummary, useKeyContacts, useChurnRisk } from '@/hooks/useCompanyIntelligence';
 import { motion } from 'framer-motion';
-import { Users, TrendingUp, BarChart3, Clock, Brain, AlertTriangle, Lightbulb, Phone } from 'lucide-react';
+import { Users, TrendingUp, BarChart3, Clock, Brain, AlertTriangle, Lightbulb } from 'lucide-react';
 import { Company360Card } from './insights/Company360Card';
 import { CompanyTimelineCard } from './insights/CompanyTimelineCard';
+import { TouchpointSummaryCard } from './insights/TouchpointSummaryCard';
+import { KeyContactsStrategicCard } from './insights/KeyContactsStrategicCard';
 import type { Tables } from '@/integrations/supabase/types';
 import type { DISCProfile } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -213,70 +215,11 @@ export function CompanyInsightsTab({
         </Card>
       </div>
 
-      {/* Touchpoint Summary */}
-      {touchpoints && (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <Phone className="w-4 h-4 text-primary" />
-              Resumo de Touchpoints
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-3 mb-3">
-              <div className="text-center p-2 rounded-lg bg-muted/50">
-                <div className="text-lg font-bold">{touchpoints.total_touchpoints}</div>
-                <div className="text-[10px] text-muted-foreground">Total</div>
-              </div>
-              <div className="text-center p-2 rounded-lg bg-muted/50">
-                <div className="text-lg font-bold">{touchpoints.avg_gap_days?.toFixed(0) || 0}d</div>
-                <div className="text-[10px] text-muted-foreground">Gap Médio</div>
-              </div>
-              <div className="text-center p-2 rounded-lg bg-muted/50">
-                <div className="text-sm font-medium">{touchpoints.last_touchpoint ? new Date(touchpoints.last_touchpoint).toLocaleDateString('pt-BR') : '—'}</div>
-                <div className="text-[10px] text-muted-foreground">Último</div>
-              </div>
-            </div>
-            {touchpoints.by_channel && (
-              <div className="flex flex-wrap gap-1.5">
-                {Object.entries(touchpoints.by_channel).map(([channel, count]) => (
-                  <Badge key={channel} variant="outline" className="text-[10px]">
-                    {channel}: {count as number}
-                  </Badge>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
+{/* Touchpoint Summary */}
+      {touchpoints && <TouchpointSummaryCard touchpoints={touchpoints} />}
 
       {/* Key Contacts from RPC */}
-      {keyContacts.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <Users className="w-4 h-4 text-primary" />
-              Contatos Estratégicos
-              <Badge variant="outline" className="text-[10px] ml-auto">{keyContacts.length}</Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {keyContacts.slice(0, 5).map((kc) => (
-                <div key={kc.contact_id} className="flex items-center justify-between py-1.5 border-b border-border/50 last:border-0">
-                  <div>
-                    <p className="text-sm font-medium">{kc.name}</p>
-                    {kc.cargo && <p className="text-[10px] text-muted-foreground">{kc.cargo}</p>}
-                  </div>
-                  <Badge variant={kc.importance_score >= 70 ? 'default' : 'secondary'} className="text-[10px]">
-                    {kc.importance_score}%
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <KeyContactsStrategicCard keyContacts={keyContacts} />
 
       {/* Company Timeline */}
       <ExternalDataCard 
