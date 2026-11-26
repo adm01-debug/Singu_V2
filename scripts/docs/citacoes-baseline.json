@@ -1,7 +1,7 @@
 {
   "fonte": "scripts/docs/verificar-citacoes.mjs --baseline",
   "o_que_e": "citacoes arquivo:linha que já estavam quebradas quando a catraca foi criada. A lista só pode encolher: quebra nova reprova. Corrigiu uma? rode --baseline e commite.",
-  "total": 183,
+  "total": 182,
   "quebras": [
     "AGENTS.md -> docs/contexto/00-INDEX.md (arquivo nao existe)",
     "AUDITORIA.md -> src/main.tsx:103-123 (arquivo tem 97 linhas)",
@@ -133,7 +133,6 @@
     "docs/estado/04_REVOPS_VENDAS.md -> src/hooks/useLeadRoutingServer.ts:34 (arquivo nao existe)",
     "docs/estado/04_REVOPS_VENDAS.md -> src/hooks/useLeadRoutingServer.ts:96 (arquivo nao existe)",
     "docs/estado/04_REVOPS_VENDAS.md -> src/hooks/usePerformanceMetrics.ts:49-176 (arquivo tem 168 linhas)",
-    "docs/estado/04_REVOPS_VENDAS.md -> src/pages/Performance.tsx:1-293 (arquivo tem 243 linhas)",
     "docs/estado/04_REVOPS_VENDAS.md -> supabase/functions/lead-routing/index.ts:237-240 (arquivo nao existe)",
     "docs/estado/04_REVOPS_VENDAS.md -> supabase/functions/lead-routing/index.ts:243 (arquivo nao existe)",
     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md -> supabase/functions/connection-tester/index.ts:295 (arquivo tem 216 linhas)",
