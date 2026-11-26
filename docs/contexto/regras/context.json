@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d49a430d7ae1dd6f027908f729608355d4212a73",
+  "sha": "5755b2169cb6907d0f615b06b4891593bda74255",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 21:35 UTC",
-  "files_total": 4085,
-  "code_files": 3607,
-  "code_lines": 488015
+  "generated_at": "2026-11-26 21:42 UTC",
+  "files_total": 4087,
+  "code_files": 3609,
+  "code_lines": 488215
  },
  "version": "1.3.2",
- "facts_hash": "7b7f9ce921f72c5d",
+ "facts_hash": "7b000e4e1ca3bd65",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -273,8 +273,8 @@
   "package_manager": "bun",
   "languages": {
    ".sql": 1306,
-   ".tsx": 1204,
-   ".ts": 932,
+   ".tsx": 1205,
+   ".ts": 933,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -103637,7 +103637,7 @@
     "rpc_transitive": [
      "has_role"
     ],
-    "deps_count": 110
+    "deps_count": 112
    },
    {
     "path": "",
@@ -108594,7 +108594,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 1018,
+  "components_count": 1019,
   "hooks": [
    {
     "name": "useContacts",
@@ -111017,6 +111017,14 @@
     "file": "src/hooks/useSecretRotation.ts"
    },
    {
+    "name": "useCoachingSuggestions",
+    "file": "src/hooks/useSellerCoaching.ts"
+   },
+   {
+    "name": "usePerformanceBenchmark",
+    "file": "src/hooks/useSellerCoaching.ts"
+   },
+   {
     "name": "useSemanticSearch",
     "file": "src/hooks/useSemanticSearch.ts"
    },
@@ -112241,8 +112249,8 @@
   },
   {
    "module": "src/components",
-   "files": 1018,
-   "lines": 152751,
+   "files": 1019,
+   "lines": 152894,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112689,8 +112697,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 458,
-   "lines": 60402,
+   "files": 459,
+   "lines": 60456,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -113265,7 +113273,7 @@
   {
    "module": "src/pages",
    "files": 168,
-   "lines": 34112,
+   "lines": 34115,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -261089,6 +261097,13 @@
     "transition={{ delay: 0.5 + index * 0.1 }}"
    ]
   },
+  "src/components/performance/SellerCoachingPanel.tsx": {
+   "path": "src/components/performance/SellerCoachingPanel.tsx",
+   "lines": 143,
+   "exports": [
+    "function SellerCoachingPanel"
+   ]
+  },
   "src/components/pipeline/CreateDealWidget.contract.test.tsx": {
    "path": "src/components/pipeline/CreateDealWidget.contract.test.tsx",
    "lines": 107,
@@ -282182,6 +282197,21 @@
     "200"
    ]
   },
+  "src/hooks/useSellerCoaching.ts": {
+   "path": "src/hooks/useSellerCoaching.ts",
+   "lines": 54,
+   "exports": [
+    "interface CoachingSuggestion",
+    "interface BenchmarkSide",
+    "interface PerformanceBenchmark",
+    "function useCoachingSuggestions",
+    "function usePerformanceBenchmark"
+   ],
+   "hooks": [
+    "useCoachingSuggestions",
+    "usePerformanceBenchmark"
+   ]
+  },
   "src/hooks/useSemanticSearch.ts": {
    "path": "src/hooks/useSemanticSearch.ts",
    "lines": 135,
@@ -290778,7 +290808,7 @@
   },
   "src/pages/Performance.tsx": {
    "path": "src/pages/Performance.tsx",
-   "lines": 243,
+   "lines": 246,
    "exports": [
     "function Performance"
    ]
@@ -311159,10 +311189,23 @@
   }
  },
  "git": {
-  "sha": "d49a430d7ae1dd6f027908f729608355d4212a73",
+  "sha": "5755b2169cb6907d0f615b06b4891593bda74255",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "5755b21",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(performance): coaching do vendedor e comparativo com o time (#380)",
+    "files": [
+     "docs/estado/04_REVOPS_VENDAS.md",
+     "scripts/docs/citacoes-baseline.json",
+     "src/components/performance/SellerCoachingPanel.tsx",
+     "src/hooks/useSellerCoaching.ts",
+     "src/pages/Performance.tsx"
+    ]
+   },
    {
     "sha": "d49a430",
     "date": "2026-11-26",
@@ -311532,16 +311575,6 @@
      "supabase/functions/sync-product-catalog/index.ts",
      "tests/integration/offer-catalog.test.ts"
     ]
-   },
-   {
-    "sha": "e347c01",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)",
-    "files": [
-     "src/components/command/GlobalCommandBar.tsx",
-     "src/components/command/__tests__/GlobalCommandBar.rbac.test.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -311606,23 +311639,23 @@
     2
    ],
    [
-    "src/hooks/useFunilVendas.ts",
+    "docs/estado/04_REVOPS_VENDAS.md",
     1
    ],
    [
-    "src/lib/routePermissions.ts",
+    "scripts/docs/citacoes-baseline.json",
     1
    ],
    [
-    "src/pages/FunilVendas.tsx",
+    "src/components/performance/SellerCoachingPanel.tsx",
     1
    ],
    [
-    "src/hooks/useInteligenciaRamos.ts",
+    "src/hooks/useSellerCoaching.ts",
     1
    ],
    [
-    "src/pages/InteligenciaRamos.tsx",
+    "src/pages/Performance.tsx",
     1
    ]
   ]

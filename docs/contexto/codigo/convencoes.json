@@ -6,12 +6,12 @@
    "src/pages (127)"
   ],
   "componentes": [
-   "src/components (930)",
+   "src/components (931)",
    "src/pages (154)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (394)",
+   "src/hooks (395)",
    "src/components (20)",
    "src/stores (5)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1093)"
+  ".tsx (1094)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(performance): coaching do vendedor e comparativo com o time (#380)",
    "feat(funil): tela de funil e ciclo de vendas em /funil-vendas (#378)",
    "feat(ramos): tela de inteligencia por ramo em /inteligencia-ramos (#376)",
    "fix(analytics): corrige contrato dos widgets de tendencia e comparativo anual (#377)",
-   "feat(qualidade): tela de qualidade cadastral em /admin/qualidade-cadastral (#375)",
-   "feat(ia): aba de telemetria do gateway de IA em Governanca de IA (#374)"
+   "feat(qualidade): tela de qualidade cadastral em /admin/qualidade-cadastral (#375)"
   ]
  },
  "pr_template": null,

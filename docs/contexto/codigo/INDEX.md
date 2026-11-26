@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `d49a430d7ae1dd6f027908f729608355d4212a73` (2026-11-26T18:33:09-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `5755b2169cb6907d0f615b06b4891593bda74255` (2026-11-26T18:33:13-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2136), SQL (1306), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
+- linguagens: TypeScript (2138), SQL (1306), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,16 +34,16 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3980 |
-| arquivos_codigo | 2300 |
-| linhas_codigo | 429834 |
+| arquivos_total | 3982 |
+| arquivos_codigo | 2302 |
+| linhas_codigo | 430034 |
 | rotas | 128 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
 | itens_menu | 78 |
-| modulos | 143 |
-| componentes | 1093 |
-| hooks | 425 |
+| modulos | 144 |
+| componentes | 1094 |
+| hooks | 426 |
 | edge_functions | 110 |
 | tabelas | 542 |
 | migrations | 1129 |
@@ -55,8 +55,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 
 ## Onde ficam as coisas
 - telas: src/pages (127)
-- componentes: src/components (930), src/pages (154), src/app (4)
-- hooks: src/hooks (394), src/components (20), src/stores (5)
+- componentes: src/components (931), src/pages (154), src/app (4)
+- hooks: src/hooks (395), src/components (20), src/stores (5)
 - servicos_logica: src/lib (76), src/data (46), src/domain (8)
 - testes: co-localizado (*.test) (131), co-localizado (__tests__) (104), tests/ (25)
 - edge_functions: supabase/functions
@@ -69,7 +69,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 700 | 73 | 234 |
+| app | 0 | 0 | 6 | 702 | 73 | 234 |
 | components/abm | 0 | 0 | 9 | 20 | 3 | 6 |
 | components/admin | 0 | 0 | 46 | 37 | 14 | 19 |
 | components/analytics | 0 | 0 | 43 | 82 | 3 | 26 |
@@ -95,12 +95,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/intelligence | 0 | 0 | 5 | 16 | 3 | 7 |
 | components/intent | 0 | 0 | 5 | 12 | 3 | 4 |
 | components/interactions | 0 | 0 | 42 | 46 | 5 | 17 |
-| components/layout | 0 | 0 | 6 | 345 | 31 | 100 |
+| components/layout | 0 | 0 | 6 | 347 | 31 | 100 |
 | components/lead-routing | 0 | 0 | 6 | 17 | 1 | 10 |
 | components/lead-scoring | 0 | 0 | 13 | 18 | 2 | 7 |
 | components/lux | 0 | 0 | 6 | 4 | 2 | 3 |
 | components/micro-interactions | 0 | 0 | 6 | 0 | 0 | 0 |
-| components/navigation | 0 | 0 | 12 | 345 | 31 | 100 |
+| components/navigation | 0 | 0 | 12 | 347 | 31 | 100 |
 | components/neuromarketing | 0 | 0 | 17 | 1 | 0 | 0 |
 | components/nlp | 0 | 0 | 33 | 11 | 3 | 9 |
 | components/onboarding | 0 | 0 | 8 | 6 | 1 | 3 |
@@ -118,11 +118,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/win-loss | 0 | 0 | 8 | 18 | 3 | 5 |
 | data | 0 | 0 | 46 | 6 | 1 | 6 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
-| hooks | 0 | 0 | 392 | 674 | 57 | 210 |
+| hooks | 0 | 0 | 393 | 676 | 57 | 210 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 72 | 17 | 3 | 13 |
-| pages | 64 | 118 | 118 | 677 | 71 | 228 |
-| pages/admin | 7 | 8 | 9 | 361 | 33 | 107 |
+| pages | 64 | 118 | 118 | 679 | 71 | 228 |
+| pages/admin | 7 | 8 | 9 | 363 | 33 | 107 |
 | pages/cadastro | 0 | 0 | 5 | 6 | 2 | 3 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
 | pages/mapa | 0 | 0 | 5 | 6 | 2 | 4 |
@@ -463,8 +463,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26325 nós · 42070 arestas · 3118 comunidades · grafo do commit `d49a430d`
-- comunidades maiores: sonner (394), ref_components (320), ref_lib (290), framer-motion (285), _shared/auth.ts (276), 02_tables.sql (259), react (252), useAuth (244), react-router-dom (235), ref_hooks (229), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (221)
+- 26337 nós · 42087 arestas · 3130 comunidades · grafo do commit `5755b216`
+- comunidades maiores: react (393), ref_components (321), _shared/auth.ts (311), ref_types (283), ref_lib (278), framer-motion (268), 02_tables.sql (259), ref_hooks (247), react-router-dom (244), useAuth (236), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (218)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -603,6 +603,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-26 `5755b21` feat(performance): coaching do vendedor e comparativo com o time (#380)
 - 2026-11-26 `d49a430` feat(funil): tela de funil e ciclo de vendas em /funil-vendas (#378)
 - 2026-11-26 `18a7e15` feat(ramos): tela de inteligencia por ramo em /inteligencia-ramos (#376)
 - 2026-11-26 `cf58aa2` fix(analytics): corrige contrato dos widgets de tendencia e comparativo anual (#377)
@@ -617,7 +618,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-26 `c849597` feat(carteira): tela de carteira e ativacao com quem ativou e risco de inativacao (#367)
 - 2026-11-26 `9ca772e` feat(parceiros): tela de fornecedores e transportadoras com ranking, qualidade e homologacao (#366)
 - 2026-11-26 `6409ca4` feat(admin): tela de readiness dos dados por tabela (#365)
-- 2026-11-26 `4288206` fix(empresas): da ao admin a base inteira e remove filtro user_id das views sem essa coluna (#364)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

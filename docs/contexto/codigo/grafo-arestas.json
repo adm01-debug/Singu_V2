@@ -6347,6 +6347,12 @@
   "src/components/onboarding/steps/WelcomeStep.tsx": [
    "src/components/ui/button.tsx"
   ],
+  "src/components/performance/SellerCoachingPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useSellerCoaching.ts"
+  ],
   "src/components/pipeline/CreateDealWidget.tsx": [
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
@@ -9298,6 +9304,10 @@
    "src/lib/errorMessages.ts",
    "src/lib/secretRotation.ts"
   ],
+  "src/hooks/useSellerCoaching.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useSemanticSearch.ts": [
    "src/integrations/supabase/client.ts",
    "src/lib/logger.ts"
@@ -10958,6 +10968,7 @@
   ],
   "src/pages/Performance.tsx": [
    "src/components/layout/AppLayout.tsx",
+   "src/components/performance/SellerCoachingPanel.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/progress.tsx",

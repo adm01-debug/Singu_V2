@@ -141,6 +141,7 @@
     "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
+    "useCoachingSuggestions",
     "useCoalitionDetection",
     "useCognitiveBiasPersistence",
     "useCognitiveBiases",
@@ -499,6 +500,7 @@
     "usePendingNotifications",
     "usePendingTasks",
     "usePeopleIntelligenceEvents",
+    "usePerformanceBenchmark",
     "usePerformanceMetrics",
     "usePersistentBoolean",
     "usePhaseColors",
@@ -5680,6 +5682,7 @@
     "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
+    "useCoachingSuggestions",
     "useCohortAnalysis",
     "useCommunicationIntel",
     "useCommunicationIntelList",
@@ -5859,6 +5862,7 @@
     "usePendingFollowups",
     "usePendingTasks",
     "usePeopleIntelligenceEvents",
+    "usePerformanceBenchmark",
     "usePerformanceMetrics",
     "usePersistentBoolean",
     "usePhaseColors",
@@ -6718,6 +6722,7 @@
     "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
+    "useCoachingSuggestions",
     "useCohortAnalysis",
     "useCommunicationIntel",
     "useCommunicationIntelList",
@@ -6897,6 +6902,7 @@
     "usePendingFollowups",
     "usePendingTasks",
     "usePeopleIntelligenceEvents",
+    "usePerformanceBenchmark",
     "usePerformanceMetrics",
     "usePersistentBoolean",
     "usePhaseColors",
@@ -7631,6 +7637,60 @@
     "framer-motion",
     "lucide-react",
     "sonner"
+   ]
+  },
+  {
+   "modulo": "components/performance",
+   "arquivos": 1,
+   "testes": 0,
+   "linhas": 143,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [
+    "useAuth",
+    "useCoachingSuggestions",
+    "useDeviceDetection",
+    "useErrorReporter",
+    "usePerformanceBenchmark"
+   ],
+   "hooks_definidos": [],
+   "edges": [
+    "external-data",
+    "validate-access"
+   ],
+   "tabelas": [
+    "activities",
+    "error_logs"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "VITE_APP_VERSION",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [
+    "status"
+   ],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks"
+   ],
+   "pacotes_externos": [
+    "lucide-react"
    ]
   },
   {
@@ -9326,6 +9386,7 @@
     "components/notifications",
     "components/nps",
     "components/onboarding",
+    "components/performance",
     "components/pipeline",
     "components/playbooks",
     "components/proactive-intelligence",
@@ -9954,9 +10015,9 @@
   },
   {
    "modulo": "hooks",
-   "arquivos": 392,
+   "arquivos": 393,
    "testes": 24,
-   "linhas": 52916,
+   "linhas": 52970,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -10061,6 +10122,7 @@
     "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
+    "useCoachingSuggestions",
     "useCoalitionDetection",
     "useCognitiveBiasPersistence",
     "useCognitiveBiases",
@@ -10404,6 +10466,7 @@
     "usePendingNotifications",
     "usePendingTasks",
     "usePeopleIntelligenceEvents",
+    "usePerformanceBenchmark",
     "usePerformanceMetrics",
     "usePersistentBoolean",
     "usePhoneValidations",
@@ -11227,6 +11290,8 @@
     "useSearchContactsView",
     "useSearchPresets",
     "useSecretRotation",
+    "useCoachingSuggestions",
+    "usePerformanceBenchmark",
     "useSemanticSearch",
     "useSentimentAnnotations",
     "useSequenceEvents",
@@ -12023,6 +12088,7 @@
     "components/notifications",
     "components/nps",
     "components/onboarding",
+    "components/performance",
     "components/pipeline",
     "components/playbooks",
     "components/proactive-intelligence",
@@ -12692,7 +12758,7 @@
    "modulo": "pages",
    "arquivos": 118,
    "testes": 6,
-   "linhas": 26224,
+   "linhas": 26227,
    "itens_menu": [
     "ABM",
     "Análise PNL",
@@ -12979,6 +13045,7 @@
     "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
+    "useCoachingSuggestions",
     "useCoalitionDetection",
     "useCognitiveBiasPersistence",
     "useCognitiveBiases",
@@ -13327,6 +13394,7 @@
     "usePendingNotifications",
     "usePendingTasks",
     "usePeopleIntelligenceEvents",
+    "usePerformanceBenchmark",
     "usePerformanceMetrics",
     "usePersistentBoolean",
     "usePhaseColors",
@@ -14059,6 +14127,7 @@
     "components/nlp",
     "components/nps",
     "components/onboarding",
+    "components/performance",
     "components/pipeline",
     "components/playbooks",
     "components/proactive-intelligence",
@@ -14201,6 +14270,7 @@
     "useCoachingDigest",
     "useCoachingMetrics",
     "useCoachingScorecards",
+    "useCoachingSuggestions",
     "useCohortAnalysis",
     "useCommunicationIntel",
     "useCommunicationIntelList",
@@ -14387,6 +14457,7 @@
     "usePendingFollowups",
     "usePendingTasks",
     "usePeopleIntelligenceEvents",
+    "usePerformanceBenchmark",
     "usePerformanceMetrics",
     "usePersistentBoolean",
     "usePhaseColors",

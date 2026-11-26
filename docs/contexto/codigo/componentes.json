@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1093,
+ "total": 1094,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -12293,6 +12293,23 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/performance/SellerCoachingPanel.tsx",
+   "exports": [
+    "SellerCoachingPanel"
+   ],
+   "export_default": null,
+   "linhas": 143,
+   "dominio": "components/performance",
+   "hooks_locais": [
+    "useCoachingSuggestions",
+    "usePerformanceBenchmark"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/pipeline/CreateDealWidget.tsx",
    "exports": [
     "CreateDealWidget"
@@ -14307,7 +14324,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 565,
+   "usado_por": 566,
    "orfao": false
   },
   {
@@ -14357,7 +14374,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 603,
+   "usado_por": 604,
    "orfao": false
   },
   {
@@ -15142,7 +15159,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 218,
+   "usado_por": 219,
    "orfao": false
   },
   {
@@ -15653,7 +15670,7 @@
    "edges": [
     "validate-access"
    ],
-   "usado_por": 339,
+   "usado_por": 340,
    "orfao": false
   },
   {
@@ -17707,7 +17724,7 @@
     "Performance"
    ],
    "export_default": "Performance",
-   "linhas": 243,
+   "linhas": 246,
    "dominio": "pages",
    "hooks_locais": [
     "usePerformanceMetrics"

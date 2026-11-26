@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "d49a430d7ae1dd6f027908f729608355d4212a73",
+  "commit": "5755b2169cb6907d0f615b06b4891593bda74255",
   "branch": "main",
-  "data_commit": "2026-11-26T18:33:09-03:00",
+  "data_commit": "2026-11-26T18:33:13-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "5755b21",
+    "data": "2026-11-26",
+    "assunto": "feat(performance): coaching do vendedor e comparativo com o time (#380)"
+   },
    {
     "sha": "d49a430",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "e0b7b01",
     "data": "2026-11-25",
     "assunto": "fix: interesse social tambem conta repeticao no mesmo historico (#354)"
-   },
-   {
-    "sha": "c619141",
-    "data": "2026-11-25",
-    "assunto": "fix: interesses sociais derivados das interacoes reais (#353)"
    }
   ],
-  "arquivos_mudados_7d": 1051,
+  "arquivos_mudados_7d": 1055,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -274,6 +274,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "scripts/docs/citacoes-baseline.json",
+    "mudancas": 7
+   },
+   {
     "arquivo": "src/pages/ContatoDetalhe.tsx",
     "mudancas": 7
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "tests/rls/functions_authenticated_allowlist.sql",
     "mudancas": 7
-   },
-   {
-    "arquivo": ".github/workflows/inventario-estado-semanal.yml",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 211
+    "commits": 212
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,16 +326,16 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3980,
-  "arquivos_codigo": 2300,
-  "linhas_codigo": 429834,
+  "arquivos_total": 3982,
+  "arquivos_codigo": 2302,
+  "linhas_codigo": 430034,
   "rotas": 128,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
   "itens_menu": 78,
-  "modulos": 143,
-  "componentes": 1093,
-  "hooks": 425,
+  "modulos": 144,
+  "componentes": 1094,
+  "hooks": 426,
   "edge_functions": 110,
   "tabelas": 542,
   "migrations": 1129,
@@ -655,8 +655,8 @@
    "linhas": 618
   },
   "src/components": {
-   "arquivos": 1018,
-   "linhas": 152751
+   "arquivos": 1019,
+   "linhas": 152894
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 458,
-   "linhas": 60402
+   "arquivos": 459,
+   "linhas": 60456
   },
   "src/integrations": {
    "arquivos": 3,
@@ -692,7 +692,7 @@
   },
   "src/pages": {
    "arquivos": 168,
-   "linhas": 34112
+   "linhas": 34115
   },
   "src/store": {
    "arquivos": 1,

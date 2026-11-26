@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 425,
+ "total": 426,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -1268,7 +1268,7 @@
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 339,
+   "usado_por": 340,
    "usado_por_arquivos": [
     "src/app/AppChrome.tsx",
     "src/app/AppProviders.tsx",
@@ -9149,6 +9149,28 @@
    "usado_por_arquivos": [
     "src/pages/AdminDashboard.tsx",
     "src/pages/AdminSecretsManagement.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSellerCoaching.ts",
+   "hooks_exportados": [
+    "useCoachingSuggestions",
+    "usePerformanceBenchmark"
+   ],
+   "linhas": 54,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/performance/SellerCoachingPanel.tsx"
    ],
    "coberto_por_testes": 0
   },
