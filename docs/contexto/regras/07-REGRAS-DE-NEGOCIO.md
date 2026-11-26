@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c040dd38dd` · branch `main` · 2026-11-26 18:58 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e4a9d179a1` · branch `main` · 2026-11-26 19:24 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1782,6 +1782,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | NotifUrgency | critical \| high \| normal \| low | `src/hooks/useSmartNotifications.ts` |
 | NotifStatus | pending \| delivered \| dismissed \| clicked \| suppressed \| snoozed | `src/hooks/useSmartNotifications.ts` |
 | TableDensity | comfortable \| compact | `src/hooks/useTableDensity.ts` |
+| JANELAS_TELEMETRIA | { valor: '1', label: 'Última hora', horas: 1 }, { valor: '24', label: 'Últimas 24 h', horas: 24 }, { valor: '168', label: 'Últimos 7 dias', horas: 168 }, { valor: '720', label: 'Últimos 30 dias', horas: 720 }, | `src/hooks/useTelemetriaIA.ts` |
 | GroupBy | company \| contact | `src/hooks/useTimelineByEntity.ts` |
 | ToneType | friendly \| formal \| casual | `src/hooks/useTonePersistence.ts` |
 | SeqChannel | whatsapp \| email \| call \| meeting | `src/hooks/useTouchpointSequences.ts` |
@@ -3653,6 +3654,8 @@ _nenhum item encontrado_
 | `NAO_RESPONDEU_COOLDOWN_HOURS` | `24` | `src/components/ficha-360/PassoFeedbackMenu.tsx` |
 | `MAX_VISIBLE` | `4` | `src/components/ficha-360/RelatoriosFixosBar.tsx` |
 | `MAX_DESC` | `200` | `src/components/ficha-360/SalvarRelatorioDialog.tsx` |
+| `LIMITE_ERRO_PCT` | `5` | `src/components/governanca-ia/TelemetriaGateway.tsx` |
+| `LIMITE_P95_MS` | `8000` | `src/components/governanca-ia/TelemetriaGateway.tsx` |
 | `STALE_MS` | `60` | `src/components/intel/IntelDataSourceBadge.tsx` |
 | `SCHEMA_VERSION` | `'intel-hub-v5'` | `src/components/intel/IntelHealthPanel.tsx` |
 | `LIMIT` | `20` | `src/components/intel/IntelLatencyBadge.tsx` |
@@ -4765,7 +4768,7 @@ _nenhum item encontrado_
 | Falha ao copiar link. | `src/components/intel/RecentSnapshotsPanel.tsx` |
 | Comando desconhecido: ${cmd} | `src/components/intelligence/AskTab.tsx` |
 | Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
-| … +811 linhas — lista completa em `context.json` | |
+| … +812 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

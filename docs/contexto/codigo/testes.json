@@ -3300,6 +3300,7 @@
    "src/hooks/useSupportTickets.ts",
    "src/hooks/useTableDensity.ts",
    "src/hooks/useTeamDashboard.ts",
+   "src/hooks/useTelemetriaIA.ts",
    "src/hooks/useTelemetryExport.ts",
    "src/hooks/useTemplateNotifications.ts",
    "src/hooks/useTemplatePerformanceData.ts",

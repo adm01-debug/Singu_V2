@@ -7469,6 +7469,7 @@
     "useOverdueTasks",
     "usePageTitle",
     "useParetoCustomers",
+    "useParticoesGatewayIA",
     "usePendingFollowups",
     "usePendingTasks",
     "usePeopleIntelligenceEvents",
@@ -7511,6 +7512,7 @@
     "useRestoreEntity",
     "useRfmDashboard",
     "useRunNurturing",
+    "useSaudeGatewayIA",
     "useSavedAskViews",
     "useScopedShortcut",
     "useScoreRules",
@@ -7829,6 +7831,7 @@
     "useOverdueTasks",
     "usePageTitle",
     "useParetoCustomers",
+    "useParticoesGatewayIA",
     "usePendingFollowups",
     "usePendingTasks",
     "usePeopleIntelligenceEvents",
@@ -7867,6 +7870,7 @@
     "useRestoreEntity",
     "useRfmDashboard",
     "useRunNurturing",
+    "useSaudeGatewayIA",
     "useSavedAskViews",
     "useScopedShortcut",
     "useScoreRules",
@@ -8135,7 +8139,7 @@
     "tablist",
     "user"
    ],
-   "arquivos_puxados": 785
+   "arquivos_puxados": 787
   },
   {
    "protegida": true,

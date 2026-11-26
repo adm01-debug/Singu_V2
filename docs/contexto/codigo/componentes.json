@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1089,
+ "total": 1090,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -8977,6 +8977,23 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/governanca-ia/TelemetriaGateway.tsx",
+   "exports": [
+    "TelemetriaGateway"
+   ],
+   "export_default": null,
+   "linhas": 359,
+   "dominio": "components/governanca-ia",
+   "hooks_locais": [
+    "useParticoesGatewayIA",
+    "useSaudeGatewayIA"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/help/ContextualHelpTooltip.tsx",
    "exports": [
     "ContextualHelpTooltip"
@@ -14275,7 +14292,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 561,
+   "usado_por": 562,
    "orfao": false
   },
   {
@@ -14290,7 +14307,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 541,
+   "usado_por": 542,
    "orfao": false
   },
   {
@@ -14325,7 +14342,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 599,
+   "usado_por": 600,
    "orfao": false
   },
   {
@@ -14950,7 +14967,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 134,
+   "usado_por": 135,
    "orfao": false
   },
   {
@@ -15110,7 +15127,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 214,
+   "usado_por": 215,
    "orfao": false
   },
   {
@@ -15234,7 +15251,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 27,
+   "usado_por": 28,
    "orfao": false
   },
   {
@@ -17013,7 +17030,7 @@
     "GovernancaIA"
    ],
    "export_default": "GovernancaIA",
-   "linhas": 327,
+   "linhas": 333,
    "dominio": "pages",
    "hooks_locais": [
     "useCatalogoModelos",

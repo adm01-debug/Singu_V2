@@ -486,6 +486,7 @@
     "useParceiroRanking",
     "useParceiroResumo",
     "useParetoCustomers",
+    "useParticoesGatewayIA",
     "usePasswordBreachCheck",
     "usePasswordResetRequests",
     "usePendingFollowups",
@@ -578,6 +579,7 @@
     "useRpcPlanSnapshots",
     "useRunNurturing",
     "useSatisfactionTrend",
+    "useSaudeGatewayIA",
     "useSavedAskViews",
     "useSavedReports",
     "useSchemaDriftAlerts",
@@ -4977,6 +4979,53 @@
    ]
   },
   {
+   "modulo": "components/governanca-ia",
+   "arquivos": 1,
+   "testes": 0,
+   "linhas": 359,
+   "itens_menu": [],
+   "telas": [],
+   "rotas_http": [],
+   "componentes": 1,
+   "hooks_locais": [
+    "useParticoesGatewayIA",
+    "useSaudeGatewayIA"
+   ],
+   "hooks_definidos": [],
+   "edges": [
+    "external-data"
+   ],
+   "tabelas": [
+    "activities",
+    "error_logs"
+   ],
+   "rpcs": [],
+   "buckets": [],
+   "canais_realtime": [],
+   "env": [
+    "DEV",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "flags": [],
+   "papeis": [],
+   "diretos": {
+    "edges": [],
+    "tabelas": [],
+    "rpcs": []
+   },
+   "importado_por_outros_modulos": [
+    "pages"
+   ],
+   "depende_de_modulos": [
+    "components/ui",
+    "hooks"
+   ],
+   "pacotes_externos": [
+    "lucide-react"
+   ]
+  },
+  {
    "modulo": "components/help",
    "arquivos": 1,
    "testes": 0,
@@ -9247,6 +9296,7 @@
     "components/forecasting",
     "components/forms",
     "components/gamification",
+    "components/governanca-ia",
     "components/help",
     "components/import",
     "components/inline-edit",
@@ -9897,9 +9947,9 @@
   },
   {
    "modulo": "hooks",
-   "arquivos": 388,
+   "arquivos": 389,
    "testes": 23,
-   "linhas": 52535,
+   "linhas": 52635,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -10334,6 +10384,7 @@
     "useParceiroRanking",
     "useParceiroResumo",
     "useParetoCustomers",
+    "useParticoesGatewayIA",
     "usePasswordBreachCheck",
     "usePasswordResetRequests",
     "usePendingFollowups",
@@ -10423,6 +10474,7 @@
     "useRpcPlanSnapshots",
     "useRunNurturing",
     "useSatisfactionTrend",
+    "useSaudeGatewayIA",
     "useSavedAskViews",
     "useSavedFilters",
     "useSavedReports",
@@ -11193,6 +11245,8 @@
     "useSnoozeReminder",
     "useUpdateTask",
     "useTeamDashboard",
+    "useParticoesGatewayIA",
+    "useSaudeGatewayIA",
     "useTelemetryExport",
     "useTemplateNotifications",
     "useTemplatePerformanceData",
@@ -11926,6 +11980,7 @@
     "components/forecasting",
     "components/forms",
     "components/gamification",
+    "components/governanca-ia",
     "components/help",
     "components/import",
     "components/intel",
@@ -12616,7 +12671,7 @@
    "modulo": "pages",
    "arquivos": 115,
    "testes": 6,
-   "linhas": 25035,
+   "linhas": 25041,
    "itens_menu": [
     "ABM",
     "Análise PNL",
@@ -13233,6 +13288,7 @@
     "useParceiroRanking",
     "useParceiroResumo",
     "useParetoCustomers",
+    "useParticoesGatewayIA",
     "usePasswordBreachCheck",
     "usePendingFollowups",
     "usePendingNotifications",
@@ -13319,6 +13375,7 @@
     "useRoutingMetrics",
     "useRunNurturing",
     "useSatisfactionTrend",
+    "useSaudeGatewayIA",
     "useSavedAskViews",
     "useSavedReports",
     "useSchemaDriftAlerts",
@@ -13949,6 +14006,7 @@
     "components/forecasting",
     "components/forms",
     "components/gamification",
+    "components/governanca-ia",
     "components/intel",
     "components/intelligence",
     "components/intent",
