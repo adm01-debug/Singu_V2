@@ -227822,8 +227822,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -227837,8 +227842,8 @@
         ],
         "definition": null,
         "definition_sha": "0bef7571cfa10f04",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "service_role",
+        "execute_public": false,
         "is_trigger_fn": true,
         "kind": "function",
         "language": "plpgsql",
