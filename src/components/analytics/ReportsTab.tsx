@@ -149,7 +149,7 @@ function TrendChart() {
             <XAxis dataKey="period" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
             <YAxis tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
             <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8 }} />
-            <Area type="monotone" dataKey="value" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.1)" strokeWidth={2} />
+            <Area type="monotone" dataKey="value" name="Novas empresas" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.1)" strokeWidth={2} />
           </AreaChart>
         </ResponsiveContainer>
       </CardContent>
