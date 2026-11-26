@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "8a792164cbd90dca8687033ef980e33a0d386a2f",
+  "sha": "0dd35e16e9e9073218fce6e8792f4627bc2d23eb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 11:40 UTC",
-  "files_total": 4046,
-  "code_files": 3568,
-  "code_lines": 480896
+  "generated_at": "2026-11-26 13:13 UTC",
+  "files_total": 4048,
+  "code_files": 3570,
+  "code_lines": 481076
  },
  "version": "1.3.2",
- "facts_hash": "0f62de97274ab2d8",
+ "facts_hash": "e7a7f96641a0f070",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,8 +272,8 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1295,
-   ".tsx": 1189,
+   ".sql": 1296,
+   ".tsx": 1190,
    ".ts": 919,
    ".mjs": 123,
    ".py": 22,
@@ -70881,6 +70881,19 @@
      "social_sync_queue",
      "v_count"
     ]
+   },
+   "sync_social_insight_from_analysis": {
+    "args": "",
+    "returns": "trigger",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "declare v_content text; v_sentiment text; v_score numeric; begin v_content := nullif(btrim(concat_ws( ' ', nullif(array_to_string(coalesce(new.keywords, '{}'::text[]), ' '), ''), nullif(array_to_string(coalesce(new.topics, '{}'::text[]), ' '), ''), nullif(array_to_string(coalesce(new.interests, '{}'::text[]), ' '), ''), nullif(new.executive_summary, '') )), ''); if v_content is null then return new; end if; v_sentiment := case lower(coalesce(new.overall_sentiment, '')) when 'positive' then 'positive' when 'positivo' then 'positive' when 'negative' then 'negative' when 'negativo' then 'negative' else 'neutral' end; v_score := greatest(0, least(100, coalesce(new.influence_score, new.confidence …",
+    "raises": [],
+    "tables": [
+     "social_insights"
+    ]
    }
   },
   "enums": {
@@ -87619,7 +87632,8 @@
    "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql",
    "supabase/migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql",
    "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
-   "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql"
+   "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql",
+   "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -99527,6 +99541,30 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "sync_social_insight_from_analysis",
+    "objkind": "function",
+    "roles": "public",
+    "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "sync_social_insight_from_analysis",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "sync_social_insight_from_analysis",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
    }
   ],
   "raises": [
@@ -101638,13 +101676,20 @@
      "phone_validations",
      "profiles",
      "proximo_passo_feedback",
+     "psychographic_audit_log",
      "purchase_history",
      "reframing_analysis",
      "rfm_analysis",
      "role_permissions",
      "score_history",
+     "social_behavior_analysis",
      "social_consent_audit",
+     "social_insights",
+     "social_life_events",
+     "social_profiles",
+     "social_sync_queue",
      "suggested_life_events",
+     "suggested_rapport_intel",
      "system_alerts",
      "user_roles",
      "v_life_events_audit",
@@ -101660,7 +101705,9 @@
      "email-finder",
      "email-thread-summary",
      "generate-behavioral-profile",
+     "generate-offer-suggestions",
      "lux-trigger",
+     "sync-social-interests",
      "validate-access"
     ],
     "rpc_transitive": [
@@ -101669,7 +101716,7 @@
      "get_score_explicability",
      "has_role"
     ],
-    "deps_count": 275
+    "deps_count": 282
    },
    {
     "path": "",
@@ -103950,7 +103997,7 @@
      "seed_conversation_topics",
      "validate_behavioral_consistency"
     ],
-    "deps_count": 429
+    "deps_count": 430
    },
    {
     "path": "/survey/:token",
@@ -107937,7 +107984,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 1016,
+  "components_count": 1017,
   "hooks": [
    {
     "name": "useContacts",
@@ -111452,8 +111499,8 @@
   },
   {
    "module": "src/components",
-   "files": 1016,
-   "lines": 152323,
+   "files": 1017,
+   "lines": 152375,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112476,7 +112523,7 @@
   {
    "module": "src/pages",
    "files": 156,
-   "lines": 29696,
+   "lines": 29701,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -113115,8 +113162,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1118,
-   "lines": 104666,
+   "files": 1119,
+   "lines": 104789,
    "tables": [
     "users"
    ],
@@ -175238,6 +175285,14 @@
     "name": "não anuncia evidência quando a oferta não registra nenhuma"
    },
    {
+    "file": "src/components/crm/commercial/components/SocialMatchDetails.test.tsx",
+    "name": "SocialMatchDetails"
+   },
+   {
+    "file": "src/components/crm/commercial/components/SocialMatchDetails.test.tsx",
+    "name": "mostra o insight vindo de social_behavior_analysis com rotulo legivel"
+   },
+   {
     "file": "src/components/csat/CSATPanel.contract.test.tsx",
     "name": "Registro manual de satisfação"
    },
@@ -208420,6 +208475,19 @@
      "social_sync_queue",
      "v_count"
     ]
+   },
+   "sync_social_insight_from_analysis": {
+    "args": "",
+    "returns": "trigger",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "declare v_content text; v_sentiment text; v_score numeric; begin v_content := nullif(btrim(concat_ws( ' ', nullif(array_to_string(coalesce(new.keywords, '{}'::text[]), ' '), ''), nullif(array_to_string(coalesce(new.topics, '{}'::text[]), ' '), ''), nullif(array_to_string(coalesce(new.interests, '{}'::text[]), ' '), ''), nullif(new.executive_summary, '') )), ''); if v_content is null then return new; end if; v_sentiment := case lower(coalesce(new.overall_sentiment, '')) when 'positive' then 'positive' when 'positivo' then 'positive' when 'negative' then 'negative' when 'negativo' then 'negative' else 'neutral' end; v_score := greatest(0, least(100, coalesce(new.influence_score, new.confidence …",
+    "raises": [],
+    "tables": [
+     "social_insights"
+    ]
    }
   },
   "db_enums": {
@@ -222978,6 +223046,7 @@
    "sync_interaction_from_zapp",
    "sync_message_nlp_to_interaction",
    "sync_nlp_to_contact",
+   "sync_social_insight_from_analysis",
    "sync_summary_to_interaction",
    "tg_mprl_touch_updated_at",
    "track_magnet_download",
@@ -234587,6 +234656,30 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "sync_social_insight_from_analysis",
+    "objkind": "function",
+    "roles": "public",
+    "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "sync_social_insight_from_analysis",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "sync_social_insight_from_analysis",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
    }
   ],
   "guards": [
@@ -252786,9 +252879,18 @@
     "function AuditLogDrawer"
    ]
   },
+  "src/components/crm/commercial/components/SocialMatchDetails.test.tsx": {
+   "path": "src/components/crm/commercial/components/SocialMatchDetails.test.tsx",
+   "lines": 50,
+   "is_test": true,
+   "tests": [
+    "SocialMatchDetails",
+    "mostra o insight vindo de social_behavior_analysis com rotulo legivel"
+   ]
+  },
   "src/components/crm/commercial/components/SocialMatchDetails.tsx": {
    "path": "src/components/crm/commercial/components/SocialMatchDetails.tsx",
-   "lines": 207,
+   "lines": 209,
    "exports": [
     "function SocialMatchDetails"
    ]
@@ -287681,7 +287783,7 @@
   },
   "src/pages/ContatoDetalhe.tsx": {
    "path": "src/pages/ContatoDetalhe.tsx",
-   "lines": 390,
+   "lines": 395,
    "exports": [
     "default ContatoDetalhe"
    ],
@@ -308241,6 +308343,10 @@
    "path": "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql",
    "lines": 27
   },
+  "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql": {
+   "path": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
+   "lines": 123
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -308958,10 +309064,26 @@
   }
  },
  "git": {
-  "sha": "8a792164cbd90dca8687033ef980e33a0d386a2f",
+  "sha": "0dd35e16e9e9073218fce6e8792f4627bc2d23eb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "0dd35e1",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(social,ofertas): liga social_insights e monta as duas UIs que nenhuma rota exibia (#362)",
+    "files": [
+     "docs/qa/security-definer-audit.md",
+     "src/components/contact-detail/SocialIntelligencePanel.tsx",
+     "src/components/crm/commercial/components/SocialMatchDetails.test.tsx",
+     "src/components/crm/commercial/components/SocialMatchDetails.tsx",
+     "src/hooks/useSocialInsights.ts",
+     "src/pages/ContatoDetalhe.tsx",
+     "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
+     "tests/rls/security_definer_hardening.sql"
+    ]
+   },
    {
     "sha": "8a79216",
     "date": "2026-11-26",
@@ -309270,21 +309392,6 @@
      ".gitignore",
      "AGENTS.md"
     ]
-   },
-   {
-    "sha": "de9c0c7",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "feat(rbac): liga o RBAC — guarda de rota e menu por permissão (#329)",
-    "files": [
-     "src/app/AppRoutes.tsx",
-     "src/components/auth/RequirePermission.tsx",
-     "src/components/auth/__tests__/RequirePermission.test.tsx",
-     "src/components/layout/AppSidebar.tsx",
-     "src/components/layout/MobileSidebarDrawer.tsx",
-     "src/lib/__tests__/routePermissions.test.ts",
-     "src/lib/routePermissions.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -309297,6 +309404,10 @@
     4
    ],
    [
+    "docs/qa/security-definer-audit.md",
+    3
+   ],
+   [
     "supabase/functions/sync-social-interests/analysis.ts",
     3
    ],
@@ -309305,7 +309416,7 @@
     3
    ],
    [
-    "docs/qa/security-definer-audit.md",
+    "tests/rls/security_definer_hardening.sql",
     2
    ],
    [
@@ -309329,6 +309440,30 @@
     2
    ],
    [
+    "src/components/contact-detail/SocialIntelligencePanel.tsx",
+    1
+   ],
+   [
+    "src/components/crm/commercial/components/SocialMatchDetails.test.tsx",
+    1
+   ],
+   [
+    "src/components/crm/commercial/components/SocialMatchDetails.tsx",
+    1
+   ],
+   [
+    "src/hooks/useSocialInsights.ts",
+    1
+   ],
+   [
+    "src/pages/ContatoDetalhe.tsx",
+    1
+   ],
+   [
+    "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
+    1
+   ],
+   [
     "src/components/company-detail/CompanyInsightsTab.test.tsx",
     1
    ],
@@ -309338,34 +309473,6 @@
    ],
    [
     "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
-    1
-   ],
-   [
-    "src/components/crm/commercial/OfferSuggestionsElite.test.tsx",
-    1
-   ],
-   [
-    "src/components/crm/commercial/OfferSuggestionsElite.tsx",
-    1
-   ],
-   [
-    "src/components/crm/commercial/components/SocialMatchPanel.tsx",
-    1
-   ],
-   [
-    "src/integrations/supabase/types.ts",
-    1
-   ],
-   [
-    "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
-    1
-   ],
-   [
-    "scripts/rls-matrix/rls-baseline.json",
     1
    ]
   ]

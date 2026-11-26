@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `8a792164cbd90dca8687033ef980e33a0d386a2f` (2026-11-26T08:40:14-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `0dd35e16e9e9073218fce6e8792f4627bc2d23eb` (2026-11-26T10:11:03-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2108), SQL (1295), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
+- linguagens: TypeScript (2109), SQL (1296), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3941 |
-| arquivos_codigo | 2272 |
-| linhas_codigo | 423191 |
+| arquivos_total | 3943 |
+| arquivos_codigo | 2273 |
+| linhas_codigo | 423248 |
 | rotas | 116 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -46,9 +46,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 412 |
 | edge_functions | 110 |
 | tabelas | 542 |
-| migrations | 1118 |
+| migrations | 1119 |
 | cron_jobs | 47 |
-| testes | 287 |
+| testes | 288 |
 | workflows | 14 |
 | scripts | 302 |
 | docs_md | 159 |
@@ -58,7 +58,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - componentes: src/components (929), src/pages (142), src/app (4)
 - hooks: src/hooks (381), src/components (20), src/stores (5)
 - servicos_logica: src/lib (76), src/data (46), src/domain (8)
-- testes: co-localizado (*.test) (129), co-localizado (__tests__) (104), tests/ (25)
+- testes: co-localizado (*.test) (130), co-localizado (__tests__) (104), tests/ (25)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/migration (177), scripts/maintenance (15), scripts/hardening (10)
@@ -451,8 +451,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26033 nós · 41621 arestas · 3130 comunidades · grafo do commit `8a792164`
-- comunidades maiores: @tanstack/react-query (462), ref_hooks (407), ref_types (361), ref_lib (318), _shared/auth.ts (275), react (270), date-fns (262), 02_tables.sql (259), framer-motion (241), react-router-dom (233), 📖 Dicionário de Dados — SINGU CRM (224), ref_components (214)
+- 26040 nós · 41631 arestas · 3133 comunidades · grafo do commit `0dd35e16`
+- comunidades maiores: _shared/auth.ts (320), ref_lib (319), 02_tables.sql (259), react (236), framer-motion (234), react-router-dom (228), 📖 Dicionário de Dados — SINGU CRM (224), ref_hooks (217), ref_components (216), date-fns (201), sonner (195), lucide-react (194)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -460,11 +460,11 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG.md (48)
 - .github/workflows/ci.yml (23)
 - package.json (22)
+- docs/qa/security-definer-audit.md (17)
 - package-lock.json (17)
-- docs/qa/security-definer-audit.md (16)
 - supabase/functions/external-data/index.ts (16)
+- tests/rls/security_definer_hardening.sql (15)
 - docs/prod-readiness.md (14)
-- tests/rls/security_definer_hardening.sql (14)
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
 - inventario/estado/banco.json (9)
@@ -591,6 +591,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-26 `0dd35e1` feat(social,ofertas): liga social_insights e monta as duas UIs que nenhuma rota exibia (#362)
 - 2026-11-26 `8a79216` refactor: monta os cards de touchpoint e contatos estrategicos que ficaram orfaos (#361)
 - 2026-11-26 `7d2a052` fix: evidencia do match social nas ofertas (coluna inexistente causava perda silenciosa) (#360)
 - 2026-11-25 `774d2f2` fix(social): para de gravar nome, email e telefone como interesse do cliente (#359)
@@ -605,7 +606,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-25 `2c502bd` feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)
 - 2026-11-25 `e347c01` fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)
 - 2026-11-25 `a16128a` feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)
-- 2026-11-25 `472ff96` feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

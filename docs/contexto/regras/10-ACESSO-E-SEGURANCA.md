@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8a792164cb` · branch `main` · 2026-11-26 11:40 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0dd35e16e9` · branch `main` · 2026-11-26 13:13 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -695,6 +695,7 @@
 - `sync_interaction_from_zapp`
 - `sync_message_nlp_to_interaction`
 - `sync_nlp_to_contact`
+- `sync_social_insight_from_analysis`
 - `sync_summary_to_interaction`
 - `tg_mprl_touch_updated_at`
 - `track_magnet_download`
@@ -891,7 +892,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC, authenticated | execute | `ativar_cliente`, `inativar_cliente`, `registrar_compra`, `sdr_qualificar_cliente`, `transferir_cliente` |
 | revoke | PUBLIC, authenticated | insert, update, delete | `login_attempts` |
 | revoke | PUBLIC, authenticated, anon | execute | `public` |
-| revoke | anon | all | `_dormant`, `public`, `assert_self_user_id`, `assert_self_user_id`, `public`, `assert_self_user_id`, `assert_self_user_id`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `public`, `public`, `get_contact_sidebar_by_phone` |
+| revoke | anon | all | `_dormant`, `public`, `assert_self_user_id`, `assert_self_user_id`, `public`, `assert_self_user_id`, `assert_self_user_id`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `public`, `public`, `get_contact_sidebar_by_phone`, `sync_social_insight_from_analysis` |
 | revoke | anon | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `net`, `create_deal`, `fn_cf_collect_sm_legacy_dispatch`, `fn_cf_collect_sm_legacy_harvest`, `fn_ingest_asia_hg_batch`, `fn_set_novelty_updated_at`, `fn_sm_promote_images_to_gold`, `fn_sync_novelty_to_product`, `net`, `check_behavioral_regen_cron_staleness`, `cleanup_behavioral_regen_queue` … +6 |
 | revoke | anon | insert, update, delete | `deal_rooms`, `deal_room_milestones`, `deal_room_stakeholders`, `deal_room_documents`, `deal_room_comments`, `forms`, `lead_magnets`, `landing_pages` |
 | revoke | anon | select | `document_signatures_public`, `csat_surveys_public` |
@@ -901,11 +902,12 @@ Middleware matcher (Next.js): nenhum
 | revoke | anon, authenticated | all | `incoming_webhook_nonces`, `incoming_webhook_nonces` |
 | revoke | anon, authenticated, PUBLIC | execute | `tg_set_updated_at`, `touch_system_config`, `update_bpr_queue_updated_at`, `validate_entity_relationship`, `cleanup_behavioral_regen_queue`, `execute_readonly_query`, `increment_webhook_quota`, `publish_mtta_sla_breach_alert`, `reset_daily_lead_counts`, `compute_attribution` |
 | revoke | anon, authenticated, public | all | `zapp_history`, `zapp_history`, `zapp_history` |
-| revoke | authenticated | all | `_dormant`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone` |
+| revoke | authenticated | all | `_dormant`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `sync_social_insight_from_analysis` |
 | revoke | authenticated | execute | `execute_readonly_query`, `handle_new_user`, `redistribute_admin_portfolio`, `execute_readonly_query`, `net`, `fn_cf_collect_sm_legacy_dispatch`, `fn_cf_collect_sm_legacy_harvest`, `fn_ingest_asia_hg_batch`, `fn_set_novelty_updated_at`, `fn_sm_promote_images_to_gold`, `fn_sync_novelty_to_product`, `fn_promote_kit_components_batch`, `fn_apply_auto_tag_rules`, `redistribute_admin_portfolio`, `validate_data_batch` … +14 |
 | revoke | authenticated | update | `public`, `public` |
 | revoke | authenticated, PUBLIC | execute | `enqueue_behavioral_profile_regen`, `notify_admins_on_critical_behavioral_alert`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `get_behavioral_regen_cron_health`, `simulate_behavioral_regen_alert` |
 | revoke | authenticated, anon, PUBLIC | execute | `audit_life_events`, `audit_trigger_fn`, `audit_connection_changes`, `calculate_interaction_response_time`, `calculate_next_contact_due`, `connection_configs_encrypt_trigger`, `detect_contact_intel_changes`, `enqueue_contact_validation`, `handle_new_user`, `increment_playbook_usage`, `increment_version_column`, `log_behavioral_change`, `log_contact_tag_changes`, `log_deal_forecast_category_change`, `notify_connection_failures` … +42 |
+| revoke | public | all | `sync_social_insight_from_analysis` |
 | revoke | service_role | execute | `confirm_sequence_manual_step` |
 
 ## Riscos de acesso detectados

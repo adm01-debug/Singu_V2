@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "8a792164cbd90dca8687033ef980e33a0d386a2f",
+  "commit": "0dd35e16e9e9073218fce6e8792f4627bc2d23eb",
   "branch": "main",
-  "data_commit": "2026-11-26T08:40:14-03:00",
+  "data_commit": "2026-11-26T10:11:03-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "0dd35e1",
+    "data": "2026-11-26",
+    "assunto": "feat(social,ofertas): liga social_insights e monta as duas UIs que nenhuma rota exibia (#362)"
+   },
    {
     "sha": "8a79216",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "a737bf1",
     "data": "2026-11-24",
     "assunto": "fix(docs): smart-notify sem cron agendado e guard aceita JWT (#337)"
-   },
-   {
-    "sha": "1104bf2",
-    "data": "2026-11-24",
-    "assunto": "fix(whatsapp): grava direction no webhook e alinha status/tipo ao check do banco (#335)"
    }
   ],
-  "arquivos_mudados_7d": 1014,
+  "arquivos_mudados_7d": 1019,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "src/components/contact-detail",
-    "mudancas": 29
+    "mudancas": 30
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -172,6 +172,10 @@
     "mudancas": 15
    },
    {
+    "pasta": "src/components/crm",
+    "mudancas": 15
+   },
+   {
     "pasta": "src/hooks/__tests__",
     "mudancas": 15
    },
@@ -190,10 +194,6 @@
    {
     "pasta": ".github/workflows/ci.yml",
     "mudancas": 13
-   },
-   {
-    "pasta": "src/components/crm",
-    "mudancas": 13
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -210,23 +210,23 @@
     "mudancas": 22
    },
    {
-    "arquivo": "package-lock.json",
+    "arquivo": "docs/qa/security-definer-audit.md",
     "mudancas": 17
    },
    {
-    "arquivo": "docs/qa/security-definer-audit.md",
-    "mudancas": 16
+    "arquivo": "package-lock.json",
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
     "mudancas": 16
    },
    {
-    "arquivo": "docs/prod-readiness.md",
-    "mudancas": 14
+    "arquivo": "tests/rls/security_definer_hardening.sql",
+    "mudancas": 15
    },
    {
-    "arquivo": "tests/rls/security_definer_hardening.sql",
+    "arquivo": "docs/prod-readiness.md",
     "mudancas": 14
    },
    {
@@ -255,6 +255,10 @@
    },
    {
     "arquivo": "docs/qa/functions-authenticated-allowlist.md",
+    "mudancas": 7
+   },
+   {
+    "arquivo": "src/pages/ContatoDetalhe.tsx",
     "mudancas": 7
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": "src/app/AppRoutes.tsx",
     "mudancas": 6
-   },
-   {
-    "arquivo": "src/pages/ContatoDetalhe.tsx",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 194
+    "commits": 195
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3941,
-  "arquivos_codigo": 2272,
-  "linhas_codigo": 423191,
+  "arquivos_total": 3943,
+  "arquivos_codigo": 2273,
+  "linhas_codigo": 423248,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -338,9 +338,9 @@
   "hooks": 412,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1118,
+  "migrations": 1119,
   "cron_jobs": 47,
-  "testes": 287,
+  "testes": 288,
   "workflows": 14,
   "scripts": 302,
   "docs_md": 159
@@ -655,8 +655,8 @@
    "linhas": 594
   },
   "src/components": {
-   "arquivos": 1016,
-   "linhas": 152323
+   "arquivos": 1017,
+   "linhas": 152375
   },
   "src/config": {
    "arquivos": 1,
@@ -692,7 +692,7 @@
   },
   "src/pages": {
    "arquivos": 156,
-   "linhas": 29696
+   "linhas": 29701
   },
   "src/store": {
    "arquivos": 1,

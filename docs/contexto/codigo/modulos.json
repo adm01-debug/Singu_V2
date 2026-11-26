@@ -3301,8 +3301,8 @@
   {
    "modulo": "components/crm",
    "arquivos": 34,
-   "testes": 2,
-   "linhas": 5935,
+   "testes": 3,
+   "linhas": 5937,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -12556,7 +12556,7 @@
    "modulo": "pages",
    "arquivos": 106,
    "testes": 6,
-   "linhas": 21808,
+   "linhas": 21813,
    "itens_menu": [
     "ABM",
     "Análise PNL",

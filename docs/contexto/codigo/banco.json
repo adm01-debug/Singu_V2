@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1118,
+ "migrations": 1119,
  "seeds": [],
  "avisos": [
   "212 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -594,6 +594,7 @@
   "sync_contact_last_interaction",
   "sync_interaction_from_zapp",
   "sync_nlp_to_contact",
+  "sync_social_insight_from_analysis",
   "tg_set_updated_at",
   "touch_system_config",
   "track_magnet_download",

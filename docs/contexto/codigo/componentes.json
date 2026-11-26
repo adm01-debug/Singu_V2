@@ -5168,7 +5168,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -5803,7 +5803,7 @@
     "SocialMatchDetails"
    ],
    "export_default": null,
-   "linhas": 207,
+   "linhas": 209,
    "dominio": "components/crm",
    "hooks_locais": [
     "useSocialInsights"
@@ -5860,7 +5860,7 @@
     "offer_suggestions"
    ],
    "edges": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -16412,7 +16412,7 @@
     "ContatoDetalhe"
    ],
    "export_default": "ContatoDetalhe",
-   "linhas": 390,
+   "linhas": 395,
    "dominio": "pages",
    "hooks_locais": [
     "useContactDetail",
