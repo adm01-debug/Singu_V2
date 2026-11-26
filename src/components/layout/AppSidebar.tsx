@@ -101,6 +101,7 @@ const adminSection = {
     { title: "Fornecedores e transportadoras", url: "/parceiros", icon: Truck },
     { title: "Carteira e ativação", url: "/carteira", icon: Users },
     { title: "Saúde das automações", url: "/admin/automacoes", icon: Bot },
+    { title: "Governança de IA", url: "/admin/ia", icon: Brain },
   ],
 };
 
