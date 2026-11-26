@@ -1,4 +1,4 @@
-# _dormant.contact_trigger_preferences
+# public.contact_trigger_preferences
 
 > SINGU: Preferências de gatilhos mentais aprendidas por contato
 
@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 1 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -50,32 +50,43 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| contact_trigger_preferences_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX contact_trigger_preferences_pkey ON _dormant.contact_trigger_preferences USING btree (id)` |
-| idx_trigger_prefs_unique | btree | contact_id | sim | sim |  | `CREATE UNIQUE INDEX idx_trigger_prefs_unique ON _dormant.contact_trigger_preferences USING btree (contact_id)` |
+| contact_trigger_preferences_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX contact_trigger_preferences_pkey ON public.contact_trigger_preferences USING btree (id)` |
+| idx_trigger_prefs_unique | btree | contact_id | sim | sim |  | `CREATE UNIQUE INDEX idx_trigger_prefs_unique ON public.contact_trigger_preferences USING btree (contact_id)` |
 
 
 ## Policies (RLS)
 
-### `dormant_deny_all_contact_trigger_preferences`
+### `contact_trigger_preferences_owner_access`
 
 | campo | valor |
 |---|---|
 | comando | ALL |
-| tipo | RESTRICTIVE |
-| roles | public |
-| USING | `false` |
-| WITH CHECK |  |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| WITH CHECK | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+
+### `service_role_full_contact_trigger_preferences`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
 
 
 ## Triggers
 
-_nenhum_
+| nome | timing | eventos | nível | status | função |
+|---|---|---|---|---|---|
+| set_owner_from_contact | BEFORE | INSERT OR UPDATE | ROW | enabled | public.set_owner_from_contact |
 
 
 ## Grants
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

@@ -52,7 +52,7 @@
 
 | tabela | constraint | colunas | on delete |
 |---|---|---|---|
-| _dormant.trigger_templates | trigger_templates_trigger_type_id_fkey | trigger_type_id | NO ACTION |
+| public.trigger_templates | trigger_templates_trigger_type_id_fkey | trigger_type_id | NO ACTION |
 
 
 ## Índices

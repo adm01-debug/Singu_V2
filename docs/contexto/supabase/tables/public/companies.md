@@ -128,12 +128,8 @@
 | _dormant.health_alerts | health_alerts_company_id_fkey | company_id | CASCADE |
 | _dormant.inactivity_alerts | inactivity_alerts_company_id_fkey | company_id | CASCADE |
 | _dormant.insights | insights_company_id_fkey | company_id | CASCADE |
-| _dormant.leads | leads_company_id_fkey | company_id | NO ACTION |
 | _dormant.notifications | notifications_company_id_fkey | company_id | SET NULL |
-| _dormant.pix_accounts | pix_accounts_company_id_fkey | company_id | CASCADE |
 | _dormant.purchase_history | purchase_history_company_id_fkey | company_id | CASCADE |
-| _dormant.satisfaction_scores | satisfaction_scores_company_id_fkey | company_id | SET NULL |
-| _dormant.smart_reminders | smart_reminders_company_id_fkey | company_id | SET NULL |
 | _dormant.stakeholder_alerts | stakeholder_alerts_company_id_fkey | company_id | CASCADE |
 | _dormant.tasks | tasks_company_id_fkey | company_id | SET NULL |
 | _dormant.user_companies_link | user_companies_link_company_id_fkey | company_id | CASCADE |
@@ -176,14 +172,18 @@
 | public.inactivity_alerts | inactivity_alerts_company_id_fkey | company_id | NO ACTION |
 | public.interactions | interactions_company_id_fkey | company_id | SET NULL |
 | public.lead_score_history | lead_score_history_company_id_fkey | company_id | CASCADE |
+| public.leads | leads_company_id_fkey | company_id | NO ACTION |
 | public.meetings | meetings_company_id_fkey | company_id | CASCADE |
 | public.neuro_pnl_sessions | neuro_pnl_sessions_company_id_fkey | company_id | CASCADE |
 | public.nps_surveys | nps_surveys_company_id_fkey | company_id | CASCADE |
+| public.pix_accounts | pix_accounts_company_id_fkey | company_id | CASCADE |
 | public.proposals | proposals_company_id_fkey | company_id | CASCADE |
 | public.quick_notes | quick_notes_company_id_fkey | company_id | NO ACTION |
 | public.reminders | reminders_company_id_fkey | company_id | NO ACTION |
 | public.sales_opportunities | sales_opportunities_company_id_fkey | company_id | CASCADE |
+| public.satisfaction_scores | satisfaction_scores_company_id_fkey | company_id | SET NULL |
 | public.scheduled_visits | scheduled_visits_company_id_fkey | company_id | NO ACTION |
+| public.smart_reminders | smart_reminders_company_id_fkey | company_id | SET NULL |
 | public.stakeholder_alerts | stakeholder_alerts_company_id_fkey | company_id | CASCADE |
 | public.suppliers | suppliers_company_id_fkey | company_id | RESTRICT |
 | public.support_tickets | support_tickets_company_id_fkey | company_id | SET NULL |

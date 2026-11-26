@@ -1,12 +1,12 @@
-# _dormant.pix_accounts
+# public.pix_accounts
 
 | propriedade | valor |
 |---|---|
 | tipo | table |
 | owner | postgres |
-| RLS habilitado | não |
+| RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 0 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -44,15 +44,32 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| idx_pix_company | btree | company_id | não | sim |  | `CREATE INDEX idx_pix_company ON _dormant.pix_accounts USING btree (company_id)` |
-| pix_accounts_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX pix_accounts_pkey ON _dormant.pix_accounts USING btree (id)` |
-| uq_pix_chave_ativa | btree | company_id, pix_chave | sim | sim | `(is_active = true)` | `CREATE UNIQUE INDEX uq_pix_chave_ativa ON _dormant.pix_accounts USING btree (company_id, pix_chave) WHERE (is_active = true)` |
+| idx_pix_company | btree | company_id | não | sim |  | `CREATE INDEX idx_pix_company ON public.pix_accounts USING btree (company_id)` |
+| pix_accounts_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX pix_accounts_pkey ON public.pix_accounts USING btree (id)` |
+| uq_pix_chave_ativa | btree | company_id, pix_chave | sim | sim | `(is_active = true)` | `CREATE UNIQUE INDEX uq_pix_chave_ativa ON public.pix_accounts USING btree (company_id, pix_chave) WHERE (is_active = true)` |
 
 
 ## Policies (RLS)
 
-> ⚠️ RLS **desabilitado** nesta tabela.
+### `pix_accounts_owner_access`
 
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(company_id IN ( SELECT c.id    FROM companies c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| WITH CHECK | `(company_id IN ( SELECT c.id    FROM companies c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+
+### `service_role_full_pix_accounts`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
 
 
 ## Triggers
@@ -66,6 +83,5 @@
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

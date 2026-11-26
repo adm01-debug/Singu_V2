@@ -1,4 +1,4 @@
-# _dormant.user_disc_profile
+# public.user_disc_profile
 
 > SINGU: Perfil DISC do próprio usuário/vendedor
 
@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 1 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -53,21 +53,31 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| idx_user_disc_current | btree | user_id | sim | sim | `(is_current = true)` | `CREATE UNIQUE INDEX idx_user_disc_current ON _dormant.user_disc_profile USING btree (user_id) WHERE (is_current = true)` |
-| user_disc_profile_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX user_disc_profile_pkey ON _dormant.user_disc_profile USING btree (id)` |
+| idx_user_disc_current | btree | user_id | sim | sim | `(is_current = true)` | `CREATE UNIQUE INDEX idx_user_disc_current ON public.user_disc_profile USING btree (user_id) WHERE (is_current = true)` |
+| user_disc_profile_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX user_disc_profile_pkey ON public.user_disc_profile USING btree (id)` |
 
 
 ## Policies (RLS)
 
-### `dormant_deny_all_user_disc_profile`
+### `service_role_full_user_disc_profile`
 
 | campo | valor |
 |---|---|
 | comando | ALL |
-| tipo | RESTRICTIVE |
-| roles | public |
-| USING | `false` |
-| WITH CHECK |  |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
+
+### `user_disc_profile_owner_access`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(user_id = ( SELECT auth.uid() AS uid))` |
+| WITH CHECK | `(user_id = ( SELECT auth.uid() AS uid))` |
 
 
 ## Triggers
@@ -79,6 +89,5 @@ _nenhum_
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

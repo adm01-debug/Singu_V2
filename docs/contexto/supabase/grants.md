@@ -82,9 +82,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.client_values | anon | SELECT |
 | _dormant.client_values | authenticated | SELECT |
 | _dormant.client_values | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.closing_moment_analysis | anon | SELECT |
-| _dormant.closing_moment_analysis | authenticated | SELECT |
-| _dormant.closing_moment_analysis | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.cognitive_bias_history | anon | SELECT |
 | _dormant.cognitive_bias_history | authenticated | SELECT |
 | _dormant.cognitive_bias_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -121,15 +118,9 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.contact_cadence | anon | SELECT |
 | _dormant.contact_cadence | authenticated | SELECT |
 | _dormant.contact_cadence | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.contact_communication_style | anon | SELECT |
-| _dormant.contact_communication_style | authenticated | SELECT |
-| _dormant.contact_communication_style | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.contact_compatibility | anon | SELECT |
 | _dormant.contact_compatibility | authenticated | SELECT |
 | _dormant.contact_compatibility | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.contact_eq_scores | anon | SELECT |
-| _dormant.contact_eq_scores | authenticated | SELECT |
-| _dormant.contact_eq_scores | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.contact_metaprograms | anon | SELECT |
 | _dormant.contact_metaprograms | authenticated | SELECT |
 | _dormant.contact_metaprograms | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -151,12 +142,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.contact_time_analysis | anon | SELECT |
 | _dormant.contact_time_analysis | authenticated | SELECT |
 | _dormant.contact_time_analysis | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.contact_trigger_preferences | anon | SELECT |
-| _dormant.contact_trigger_preferences | authenticated | SELECT |
-| _dormant.contact_trigger_preferences | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.contact_values | anon | SELECT |
-| _dormant.contact_values | authenticated | SELECT |
-| _dormant.contact_values | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.custom_field_values | anon | SELECT |
 | _dormant.custom_field_values | authenticated | SELECT |
 | _dormant.custom_field_values | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -208,18 +193,12 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.demand_forecasts | anon | SELECT |
 | _dormant.demand_forecasts | authenticated | SELECT |
 | _dormant.demand_forecasts | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.digest_history | anon | SELECT |
-| _dormant.digest_history | authenticated | SELECT |
-| _dormant.digest_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.digital_signatures | anon | SELECT |
 | _dormant.digital_signatures | authenticated | SELECT |
 | _dormant.digital_signatures | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.disc_analysis_history | anon | SELECT |
 | _dormant.disc_analysis_history | authenticated | SELECT |
 | _dormant.disc_analysis_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.disc_assessments | anon | SELECT |
-| _dormant.disc_assessments | authenticated | SELECT |
-| _dormant.disc_assessments | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.disc_communication_logs | anon | SELECT |
 | _dormant.disc_communication_logs | authenticated | SELECT |
 | _dormant.disc_communication_logs | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -250,9 +229,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.emotional_states_history | anon | SELECT |
 | _dormant.emotional_states_history | authenticated | SELECT |
 | _dormant.emotional_states_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.emotional_trend_snapshots | anon | SELECT |
-| _dormant.emotional_trend_snapshots | authenticated | SELECT |
-| _dormant.emotional_trend_snapshots | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.entity_versions | anon | SELECT |
 | _dormant.entity_versions | authenticated | SELECT |
 | _dormant.entity_versions | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -316,9 +292,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.lead_scores | anon | SELECT |
 | _dormant.lead_scores | authenticated | SELECT |
 | _dormant.lead_scores | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.leads | anon | SELECT |
-| _dormant.leads | authenticated | SELECT |
-| _dormant.leads | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.life_events | anon | SELECT |
 | _dormant.life_events | authenticated | SELECT |
 | _dormant.life_events | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -346,18 +319,12 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.notification_preferences | anon | SELECT |
 | _dormant.notification_preferences | authenticated | SELECT |
 | _dormant.notification_preferences | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.notification_settings | anon | SELECT |
-| _dormant.notification_settings | authenticated | SELECT |
-| _dormant.notification_settings | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.notifications | anon | SELECT |
 | _dormant.notifications | authenticated | SELECT |
 | _dormant.notifications | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.objection_templates | anon | SELECT |
 | _dormant.objection_templates | authenticated | SELECT |
 | _dormant.objection_templates | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.objections | anon | SELECT |
-| _dormant.objections | authenticated | SELECT |
-| _dormant.objections | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.objections_library | anon | SELECT |
 | _dormant.objections_library | authenticated | SELECT |
 | _dormant.objections_library | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -373,9 +340,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.personalized_message_templates | anon | SELECT |
 | _dormant.personalized_message_templates | authenticated | SELECT |
 | _dormant.personalized_message_templates | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.pix_accounts | anon | SELECT |
-| _dormant.pix_accounts | authenticated | SELECT |
-| _dormant.pix_accounts | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.playbook_items | anon | SELECT |
 | _dormant.playbook_items | authenticated | SELECT |
 | _dormant.playbook_items | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -385,9 +349,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.playbooks | anon | SELECT |
 | _dormant.playbooks | authenticated | SELECT |
 | _dormant.playbooks | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.pre_contact_briefings | anon | SELECT |
-| _dormant.pre_contact_briefings | authenticated | SELECT |
-| _dormant.pre_contact_briefings | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.price_alerts | anon | SELECT |
 | _dormant.price_alerts | authenticated | SELECT |
 | _dormant.price_alerts | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -421,9 +382,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.rank_change_notifications | anon | SELECT |
 | _dormant.rank_change_notifications | authenticated | SELECT |
 | _dormant.rank_change_notifications | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.rapport_score_history | anon | SELECT |
-| _dormant.rapport_score_history | authenticated | SELECT |
-| _dormant.rapport_score_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.rate_limit_logs | anon | SELECT |
 | _dormant.rate_limit_logs | authenticated | SELECT |
 | _dormant.rate_limit_logs | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -469,9 +427,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.salesperson_xp | anon | SELECT |
 | _dormant.salesperson_xp | authenticated | SELECT |
 | _dormant.salesperson_xp | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.satisfaction_scores | anon | SELECT |
-| _dormant.satisfaction_scores | authenticated | SELECT |
-| _dormant.satisfaction_scores | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.saved_filters | anon | SELECT |
 | _dormant.saved_filters | authenticated | SELECT |
 | _dormant.saved_filters | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -487,15 +442,9 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.security_alert_settings | anon | SELECT |
 | _dormant.security_alert_settings | authenticated | SELECT |
 | _dormant.security_alert_settings | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.shared_interests | anon | SELECT |
-| _dormant.shared_interests | authenticated | SELECT |
-| _dormant.shared_interests | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.sla_configs | anon | SELECT |
 | _dormant.sla_configs | authenticated | SELECT |
 | _dormant.sla_configs | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.smart_reminders | anon | SELECT |
-| _dormant.smart_reminders | authenticated | SELECT |
-| _dormant.smart_reminders | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.sms_verification_codes | anon | SELECT |
 | _dormant.sms_verification_codes | authenticated | SELECT |
 | _dormant.sms_verification_codes | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -574,24 +523,12 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.trigger_suggestions | anon | SELECT |
 | _dormant.trigger_suggestions | authenticated | SELECT |
 | _dormant.trigger_suggestions | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.trigger_templates | anon | SELECT |
-| _dormant.trigger_templates | authenticated | SELECT |
-| _dormant.trigger_templates | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.trigger_usage_history | anon | SELECT |
 | _dormant.trigger_usage_history | authenticated | SELECT |
 | _dormant.trigger_usage_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.trigger_usage_log | anon | SELECT |
-| _dormant.trigger_usage_log | authenticated | SELECT |
-| _dormant.trigger_usage_log | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.user_companies_link | anon | SELECT |
 | _dormant.user_companies_link | authenticated | SELECT |
 | _dormant.user_companies_link | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.user_contacts_link | anon | SELECT |
-| _dormant.user_contacts_link | authenticated | SELECT |
-| _dormant.user_contacts_link | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.user_disc_profile | anon | SELECT |
-| _dormant.user_disc_profile | authenticated | SELECT |
-| _dormant.user_disc_profile | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.user_favorite_templates | anon | SELECT |
 | _dormant.user_favorite_templates | authenticated | SELECT |
 | _dormant.user_favorite_templates | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -604,9 +541,6 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | _dormant.vak_analysis_history | anon | SELECT |
 | _dormant.vak_analysis_history | authenticated | SELECT |
 | _dormant.vak_analysis_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| _dormant.vak_profiles | anon | SELECT |
-| _dormant.vak_profiles | authenticated | SELECT |
-| _dormant.vak_profiles | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | _dormant.vak_templates | anon | SELECT |
 | _dormant.vak_templates | authenticated | SELECT |
 | _dormant.vak_templates | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -771,6 +705,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.client_values | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.clients | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.clients | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.closing_moment_analysis | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.closing_moment_analysis | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.closing_score_config | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.closing_score_config | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.cnaes | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -843,10 +779,14 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.contact_cadence | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.contact_cadence_audit | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.contact_cadence_audit | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.contact_communication_style | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.contact_communication_style | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.contact_decision_making | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.contact_decision_making | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.contact_emails | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.contact_emails | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.contact_eq_scores | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.contact_eq_scores | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.contact_family_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.contact_family_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.contact_influence | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -883,6 +823,10 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.contact_time_analysis | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.contact_time_analysis_audit | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.contact_time_analysis_audit | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.contact_trigger_preferences | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.contact_trigger_preferences | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.contact_values | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.contact_values | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.contacts | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.contacts | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.conversation_analyses | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -972,12 +916,16 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.decision_criteria | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.device_login_notifications | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.device_login_notifications | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.digest_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.digest_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.disc_analysis_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.disc_analysis_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.disc_analysis_history_audit | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.disc_analysis_history_audit | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.disc_approach_recommendations | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.disc_approach_recommendations | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.disc_assessments | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.disc_assessments | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.disc_communication_logs | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.disc_communication_logs | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.disc_conversion_metrics | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1018,6 +966,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.emotional_anchors | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.emotional_states_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.emotional_states_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.emotional_trend_snapshots | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.emotional_trend_snapshots | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.entity_relationships | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.entity_relationships | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.eq_analysis_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1139,6 +1089,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.lead_scores | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.lead_sources | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.lead_sources | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.leads | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.leads | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.life_events | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.life_events | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.life_events_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1186,6 +1138,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.notification_logs | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.notification_preferences | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.notification_preferences | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.notification_settings | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.notification_settings | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.notifications | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.notifications | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.nps_surveys | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1200,6 +1154,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.oauth_tokens | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.objection_example_feedback | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.objection_example_feedback | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.objections | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.objections | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.offer_suggestions | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.offer_suggestions | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.password_reset_requests | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1216,10 +1172,14 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.pipeline_stages | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.pipelines | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.pipelines | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.pix_accounts | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.pix_accounts | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.playbook_usage_log | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.playbook_usage_log | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.portfolio_settings | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.portfolio_settings | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.pre_contact_briefings | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.pre_contact_briefings | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.product_novelties | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.product_novelties | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.products | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1244,6 +1204,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.quick_notes | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.ragas_scores | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.ragas_scores | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.rapport_score_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.rapport_score_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.redistribution_log | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.redistribution_log | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.reframing_analysis | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1302,6 +1264,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.sales_team_members | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.salespeople | authenticated | SELECT |
 | public.salespeople | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.satisfaction_scores | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.satisfaction_scores | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.scheduled_reports | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.scheduled_reports | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.scheduled_visits | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1338,6 +1302,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.sequence_steps | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.sequences | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.sequences | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.shared_interests | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.shared_interests | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.sla_rules | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.sla_rules | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.sla_violations | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1352,6 +1318,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.sm_upload_mapping | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.smart_notifications | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.smart_notifications | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.smart_reminders | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.smart_reminders | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.smart_segments | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.smart_segments | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.sms_campaign_recipients | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1424,14 +1392,22 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.trigger_channel_effectiveness | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.trigger_intensity_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.trigger_intensity_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.trigger_templates | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.trigger_templates | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.trigger_types | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.trigger_types | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.trigger_usage_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.trigger_usage_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.trigger_usage_log | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.trigger_usage_log | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.uapi_sessions | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.uapi_sessions | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.user_badges | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.user_badges | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.user_contacts_link | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.user_contacts_link | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.user_disc_profile | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.user_disc_profile | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.user_goals | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.user_goals | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.user_known_devices | authenticated | DELETE, INSERT, SELECT, UPDATE |
@@ -1482,6 +1458,8 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vak_analysis_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vak_keywords | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vak_keywords | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| public.vak_profiles | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vak_profiles | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.validation_queue | authenticated | DELETE, INSERT, SELECT |
 | public.validation_queue | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.visit_checkins | authenticated | DELETE, INSERT, SELECT, UPDATE |

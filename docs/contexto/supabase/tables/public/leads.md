@@ -1,12 +1,12 @@
-# _dormant.leads
+# public.leads
 
 | propriedade | valor |
 |---|---|
 | tipo | table |
 | owner | postgres |
-| RLS habilitado | não |
+| RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 0 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -86,14 +86,31 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| leads_codigo_key | btree | codigo | sim | sim |  | `CREATE UNIQUE INDEX leads_codigo_key ON _dormant.leads USING btree (codigo)` |
-| leads_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX leads_pkey ON _dormant.leads USING btree (id)` |
+| leads_codigo_key | btree | codigo | sim | sim |  | `CREATE UNIQUE INDEX leads_codigo_key ON public.leads USING btree (codigo)` |
+| leads_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX leads_pkey ON public.leads USING btree (id)` |
 
 
 ## Policies (RLS)
 
-> ⚠️ RLS **desabilitado** nesta tabela.
+### `leads_owner_access`
 
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `((owner_id = ( SELECT auth.uid() AS uid)) OR (created_by_id = ( SELECT auth.uid() AS uid)))` |
+| WITH CHECK | `((owner_id = ( SELECT auth.uid() AS uid)) OR (created_by_id = ( SELECT auth.uid() AS uid)))` |
+
+### `service_role_full_leads`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
 
 
 ## Triggers
@@ -108,6 +125,5 @@
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

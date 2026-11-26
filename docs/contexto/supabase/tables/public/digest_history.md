@@ -1,4 +1,4 @@
-# _dormant.digest_history
+# public.digest_history
 
 > Histórico de digests enviados
 
@@ -6,9 +6,9 @@
 |---|---|
 | tipo | table |
 | owner | postgres |
-| RLS habilitado | não |
+| RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 0 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -54,13 +54,30 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| digest_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX digest_history_pkey ON _dormant.digest_history USING btree (id)` |
+| digest_history_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX digest_history_pkey ON public.digest_history USING btree (id)` |
 
 
 ## Policies (RLS)
 
-> ⚠️ RLS **desabilitado** nesta tabela.
+### `digest_history_owner_access`
 
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(user_id = ( SELECT auth.uid() AS uid))` |
+| WITH CHECK | `(user_id = ( SELECT auth.uid() AS uid))` |
+
+### `service_role_full_digest_history`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
 
 
 ## Triggers
@@ -72,6 +89,5 @@ _nenhum_
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

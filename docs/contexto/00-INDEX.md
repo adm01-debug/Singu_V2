@@ -1,6 +1,6 @@
 # CONTEXTO PARA AGENTES DE IA — ÍNDICE ÚNICO
 
-> Gerado automaticamente por indice.py · 2026-11-26 21:44 UTC · HEAD `5755b2169c` · Não edite à mão.
+> Gerado automaticamente por indice.py · 2026-11-26 22:18 UTC · HEAD `5755b2169c` · Não edite à mão.
 
 Um sistema, três fontes de verdade, três produtores independentes. **Leia este arquivo e vá direto à fonte certa.** Cada fato tem um dono: se duas fontes discordarem, vale o dono.
 
@@ -8,9 +8,9 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 
 | Preciso de… | Fonte (dona do fato) | Onde ler | Estado |
 |---|---|---|---|
-| Regras que não podem ser quebradas: RLS por operação, estados e transições, validações, fórmulas, prazos, erros de negócio, testes como especificação, inconsistências código×schema (NÃO VERIFICADO) e regras humanas (`manual/`) | **regras de negócio** | `docs/contexto/regras/07-REGRAS-DE-NEGOCIO.md` | ok · 2 min atrás |
-| Tabelas, colunas, RLS/políticas, funções, triggers, cron, storage, lints — **como está em produção agora** | **banco real** | `docs/contexto/supabase/README.md` | ok · 29 min atrás |
-| Rotas, telas, módulos, hooks, edge functions, grafo de dependências, testes, scripts, convenções | **código** | `docs/contexto/codigo/INDEX.md` | ok · 2 min atrás |
+| Regras que não podem ser quebradas: RLS por operação, estados e transições, validações, fórmulas, prazos, erros de negócio, testes como especificação, inconsistências código×schema (NÃO VERIFICADO) e regras humanas (`manual/`) | **regras de negócio** | `docs/contexto/regras/07-REGRAS-DE-NEGOCIO.md` | ok · 36 min atrás |
+| Tabelas, colunas, RLS/políticas, funções, triggers, cron, storage, lints — **como está em produção agora** | **banco real** | `docs/contexto/supabase/README.md` | ok · 0 min atrás |
+| Rotas, telas, módulos, hooks, edge functions, grafo de dependências, testes, scripts, convenções | **código** | `docs/contexto/codigo/INDEX.md` | ok · 36 min atrás |
 
 ## Ordem de leitura antes de qualquer tarefa ou planejamento
 
@@ -82,7 +82,6 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 - `docs/contexto/supabase/tables/dormant/circuit_breaker_events.md`
 - `docs/contexto/supabase/tables/dormant/client_portfolio.md`
 - `docs/contexto/supabase/tables/dormant/client_values.md`
-- `docs/contexto/supabase/tables/dormant/closing_moment_analysis.md`
 - `docs/contexto/supabase/tables/dormant/cognitive_bias_history.md`
 - `docs/contexto/supabase/tables/dormant/cognitive_biases.md`
 - `docs/contexto/supabase/tables/dormant/collectible_badges.md`
@@ -95,9 +94,7 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 - `docs/contexto/supabase/tables/dormant/competitive_seasons.md`
 - `docs/contexto/supabase/tables/dormant/contact_availability.md`
 - `docs/contexto/supabase/tables/dormant/contact_cadence.md`
-- `docs/contexto/supabase/tables/dormant/contact_communication_style.md`
 - `docs/contexto/supabase/tables/dormant/contact_compatibility.md`
-- `docs/contexto/supabase/tables/dormant/contact_eq_scores.md`
 - `docs/contexto/supabase/tables/dormant/contact_metaprograms.md`
 - `docs/contexto/supabase/tables/dormant/contact_preferences.md`
 - `docs/contexto/supabase/tables/dormant/contact_relationships.md`
@@ -105,9 +102,12 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 - `docs/contexto/supabase/tables/dormant/contact_rfm_scores.md`
 - `docs/contexto/supabase/tables/dormant/contact_tags.md`
 - `docs/contexto/supabase/tables/dormant/contact_time_analysis.md`
-- `docs/contexto/supabase/tables/dormant/contact_trigger_preferences.md`
-- `docs/contexto/supabase/tables/dormant/contact_values.md`
 - `docs/contexto/supabase/tables/dormant/custom_field_values.md`
+- `docs/contexto/supabase/tables/dormant/custom_fields.md`
+- `docs/contexto/supabase/tables/dormant/customer_contacts.md`
+- `docs/contexto/supabase/tables/dormant/daily_challenge_progress.md`
+- `docs/contexto/supabase/tables/dormant/daily_metrics.md`
+- `docs/contexto/supabase/tables/dormant/daily_streak_achievements.md`
 - … +603
 
 </details>

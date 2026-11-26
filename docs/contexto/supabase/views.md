@@ -910,7 +910,7 @@ SELECT COALESCE(cu.vendedor_nome, 'Sem vendedor'::text) AS vendedor,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.closing_moment_analysis, public.companies, public.contact_emails, public.contacts |
+| depende de | public.closing_moment_analysis, public.companies, public.contact_emails, public.contacts |
 | populada | n/a |
 | comentário |  |
 
@@ -1617,7 +1617,7 @@ SELECT cu.vendedor_id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.interaction_participants, _dormant.user_contacts_link, public.churn_predictions, public.companies, public.contact_emails, public.contacts, public.interactions, public.profiles |
+| depende de | _dormant.interaction_participants, public.churn_predictions, public.companies, public.contact_emails, public.contacts, public.interactions, public.profiles, public.user_contacts_link |
 | populada | n/a |
 | comentário |  |
 
@@ -1885,7 +1885,7 @@ SELECT c.id AS contact_id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.disc_assessments, _dormant.user_contacts_link, _dormant.vak_profiles, public.companies, public.contact_emails, public.contacts, public.interactions, public.profiles, public.relationship_score_history |
+| depende de | public.companies, public.contact_emails, public.contacts, public.disc_assessments, public.interactions, public.profiles, public.relationship_score_history, public.user_contacts_link, public.vak_profiles |
 | populada | n/a |
 | comentário |  |
 
@@ -1937,7 +1937,7 @@ SELECT c.id AS contact_id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.contact_communication_style, _dormant.contact_eq_scores, _dormant.disc_assessments, _dormant.rapport_score_history, _dormant.shared_interests, _dormant.vak_profiles, public.companies, public.contacts |
+| depende de | public.companies, public.contact_communication_style, public.contact_eq_scores, public.contacts, public.disc_assessments, public.rapport_score_history, public.shared_interests, public.vak_profiles |
 | populada | n/a |
 | comentário |  |
 
@@ -3022,7 +3022,7 @@ WITH metricas_base AS (
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.user_contacts_link, public.companies, public.contact_emails, public.contacts, public.deal_velocity_analysis, public.profiles |
+| depende de | public.companies, public.contact_emails, public.contacts, public.deal_velocity_analysis, public.profiles, public.user_contacts_link |
 | populada | n/a |
 | comentário |  |
 
@@ -3142,7 +3142,7 @@ SELECT d.id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.activity_log, _dormant.disc_assessments, _dormant.user_contacts_link, _dormant.user_disc_profile, public.contact_emails, public.contacts, public.profiles |
+| depende de | _dormant.activity_log, public.contact_emails, public.contacts, public.disc_assessments, public.profiles, public.user_contacts_link, public.user_disc_profile |
 | populada | n/a |
 | comentário |  |
 
@@ -3221,7 +3221,7 @@ SELECT c.id AS contact_id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.emotional_trend_snapshots, public.companies, public.contact_emails, public.contacts |
+| depende de | public.companies, public.contact_emails, public.contacts, public.emotional_trend_snapshots |
 | populada | n/a |
 | comentário |  |
 
@@ -3425,7 +3425,7 @@ SELECT co.id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.closing_moment_analysis, _dormant.contact_eq_scores, _dormant.disc_assessments, _dormant.emotional_trend_snapshots, public.companies, public.contacts |
+| depende de | public.closing_moment_analysis, public.companies, public.contact_eq_scores, public.contacts, public.disc_assessments, public.emotional_trend_snapshots |
 | populada | n/a |
 | comentário | Dashboard consolidado de inteligência emocional |
 
@@ -3490,7 +3490,7 @@ SELECT c.id AS contact_id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.contact_eq_scores, public.companies, public.contact_emails, public.contacts |
+| depende de | public.companies, public.contact_emails, public.contact_eq_scores, public.contacts |
 | populada | n/a |
 | comentário |  |
 
@@ -3899,7 +3899,7 @@ SELECT i.id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.leads, public.companies, public.contacts, public.lead_sources, public.pipeline_stages, public.pipelines |
+| depende de | public.companies, public.contacts, public.lead_sources, public.leads, public.pipeline_stages, public.pipelines |
 | populada | n/a |
 | comentário |  |
 
@@ -3994,7 +3994,7 @@ SELECT matriz.id AS matriz_id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.digest_history, _dormant.inactivity_alerts, _dormant.notification_settings, _dormant.notifications, _dormant.smart_reminders, public.contacts, public.profiles |
+| depende de | _dormant.inactivity_alerts, _dormant.notifications, public.contacts, public.digest_history, public.notification_settings, public.profiles, public.smart_reminders |
 | populada | n/a |
 | comentário |  |
 
@@ -4154,7 +4154,7 @@ SELECT n.id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.deals, _dormant.leads, public.pipeline_stages, public.pipelines |
+| depende de | _dormant.deals, public.leads, public.pipeline_stages, public.pipelines |
 | populada | n/a |
 | comentário |  |
 
@@ -4187,7 +4187,7 @@ SELECT p.id AS pipeline_id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.pix_accounts, public.companies |
+| depende de | public.companies, public.pix_accounts |
 | populada | n/a |
 | comentário |  |
 
@@ -4296,7 +4296,7 @@ SELECT ce.customer_id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.contact_communication_style, _dormant.rapport_score_history, _dormant.shared_interests, public.companies, public.contacts |
+| depende de | public.companies, public.contact_communication_style, public.contacts, public.rapport_score_history, public.shared_interests |
 | populada | n/a |
 | comentário |  |
 
@@ -4708,7 +4708,7 @@ SELECT u.id AS closer_id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.satisfaction_scores, public.companies, public.contact_emails, public.contacts |
+| depende de | public.companies, public.contact_emails, public.contacts, public.satisfaction_scores |
 | populada | n/a |
 | comentário |  |
 
@@ -6069,7 +6069,7 @@ SELECT ce.id,
 | owner | postgres |
 | security_invoker | sim |
 | opções | security_invoker=true |
-| depende de | _dormant.smart_reminders, public.companies, public.contacts |
+| depende de | public.companies, public.contacts, public.smart_reminders |
 | populada | n/a |
 | comentário |  |
 

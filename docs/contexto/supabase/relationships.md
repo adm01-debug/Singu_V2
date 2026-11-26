@@ -30,8 +30,6 @@
 | _dormant.client_portfolio | client_id | public.clients | id | CASCADE | NO ACTION |
 | _dormant.client_portfolio | salesperson_id | public.salespeople | id | CASCADE | NO ACTION |
 | _dormant.client_values | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.closing_moment_analysis | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.closing_moment_analysis | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.cognitive_bias_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.cognitive_bias_history | interaction_id | public.interactions | id | SET NULL | NO ACTION |
 | _dormant.cognitive_biases | contact_id | public.contacts | id | CASCADE | NO ACTION |
@@ -47,12 +45,8 @@
 | _dormant.contact_availability | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.contact_availability | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.contact_cadence | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.contact_communication_style | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.contact_communication_style | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.contact_compatibility | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.contact_compatibility | user_id | public.profiles | id | CASCADE | NO ACTION |
-| _dormant.contact_eq_scores | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.contact_eq_scores | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.contact_metaprograms | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.contact_metaprograms | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.contact_preferences | contact_id | public.contacts | id | CASCADE | NO ACTION |
@@ -64,11 +58,6 @@
 | _dormant.contact_rfm_scores | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.contact_tags | tag_id | public.tags | id | CASCADE | NO ACTION |
 | _dormant.contact_time_analysis | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.contact_trigger_preferences | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.contact_trigger_preferences | user_id | public.profiles | id | CASCADE | NO ACTION |
-| _dormant.contact_values | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.contact_values | discovered_in_interaction_id | public.interactions | id | NO ACTION | NO ACTION |
-| _dormant.contact_values | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.custom_field_values | custom_field_id | _dormant.custom_fields | id | CASCADE | NO ACTION |
 | _dormant.customer_contacts | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.daily_challenge_progress | challenge_id | public.daily_challenges | id | CASCADE | NO ACTION |
@@ -88,7 +77,7 @@
 | _dormant.deal_stage_history | sale_id | public.sales | id | CASCADE | NO ACTION |
 | _dormant.deals | company_id | public.companies | id | NO ACTION | NO ACTION |
 | _dormant.deals | contact_id | public.contacts | id | NO ACTION | NO ACTION |
-| _dormant.deals | lead_id | _dormant.leads | id | NO ACTION | NO ACTION |
+| _dormant.deals | lead_id | public.leads | id | NO ACTION | NO ACTION |
 | _dormant.deals | loss_reason_id | public.loss_reasons | id | NO ACTION | NO ACTION |
 | _dormant.deals | pipeline_id | public.pipelines | id | NO ACTION | NO ACTION |
 | _dormant.deals | source_id | public.lead_sources | id | NO ACTION | NO ACTION |
@@ -97,13 +86,9 @@
 | _dormant.decision_criteria | discovered_in_interaction_id | public.interactions | id | NO ACTION | NO ACTION |
 | _dormant.decision_criteria | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.demand_forecasts | product_id | _dormant.products | id | CASCADE | NO ACTION |
-| _dormant.digest_history | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.digital_signatures | created_by | public.salespeople | id | NO ACTION | NO ACTION |
 | _dormant.disc_analysis_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.disc_analysis_history | interaction_id | public.interactions | id | SET NULL | NO ACTION |
-| _dormant.disc_assessments | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.disc_assessments | user_id | public.profiles | id | CASCADE | NO ACTION |
-| _dormant.disc_assessments | validated_by | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.disc_communication_logs | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.disc_communication_logs | interaction_id | public.interactions | id | SET NULL | NO ACTION |
 | _dormant.disc_interaction_signals | contact_id | public.contacts | id | CASCADE | NO ACTION |
@@ -119,12 +104,10 @@
 | _dormant.emotional_states | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.emotional_states_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.emotional_states_history | interaction_id | public.interactions | id | SET NULL | NO ACTION |
-| _dormant.emotional_trend_snapshots | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.emotional_trend_snapshots | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.entity_versions | changed_by | auth.users | id | NO ACTION | NO ACTION |
 | _dormant.eq_analysis_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.eq_analysis_history | interaction_id | public.interactions | id | SET NULL | NO ACTION |
-| _dormant.eq_pillar_details | eq_score_id | _dormant.contact_eq_scores | id | CASCADE | NO ACTION |
+| _dormant.eq_pillar_details | eq_score_id | public.contact_eq_scores | id | CASCADE | NO ACTION |
 | _dormant.feed_comments | feed_item_id | _dormant.victory_feed | id | CASCADE | NO ACTION |
 | _dormant.feed_comments | salesperson_id | public.salespeople | id | CASCADE | NO ACTION |
 | _dormant.feed_reactions | feed_item_id | _dormant.victory_feed | id | CASCADE | NO ACTION |
@@ -150,45 +133,33 @@
 | _dormant.known_devices | user_id | auth.users | id | CASCADE | NO ACTION |
 | _dormant.kudos | from_salesperson_id | public.salespeople | id | CASCADE | NO ACTION |
 | _dormant.kudos | to_salesperson_id | public.salespeople | id | CASCADE | NO ACTION |
-| _dormant.lead_history | lead_id | _dormant.leads | id | CASCADE | NO ACTION |
+| _dormant.lead_history | lead_id | public.leads | id | CASCADE | NO ACTION |
 | _dormant.lead_history | stage_anterior_id | public.pipeline_stages | id | NO ACTION | NO ACTION |
 | _dormant.lead_history | stage_novo_id | public.pipeline_stages | id | NO ACTION | NO ACTION |
 | _dormant.lead_routing_log | client_id | public.clients | id | SET NULL | NO ACTION |
 | _dormant.lead_routing_log | from_salesperson_id | public.salespeople | id | NO ACTION | NO ACTION |
 | _dormant.lead_routing_log | to_salesperson_id | public.salespeople | id | NO ACTION | NO ACTION |
 | _dormant.lead_scores | sale_id | public.sales | id | CASCADE | NO ACTION |
-| _dormant.leads | company_id | public.companies | id | NO ACTION | NO ACTION |
-| _dormant.leads | contact_id | public.contacts | id | NO ACTION | NO ACTION |
-| _dormant.leads | pipeline_id | public.pipelines | id | NO ACTION | NO ACTION |
-| _dormant.leads | source_id | public.lead_sources | id | NO ACTION | NO ACTION |
-| _dormant.leads | stage_id | public.pipeline_stages | id | NO ACTION | NO ACTION |
 | _dormant.life_events | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.life_events | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.login_alerts | user_id | auth.users | id | CASCADE | NO ACTION |
 | _dormant.metaprogram_templates | created_by | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.mfa_verification_attempts | user_id | auth.users | id | CASCADE | NO ACTION |
-| _dormant.notification_settings | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.notifications | company_id | public.companies | id | SET NULL | NO ACTION |
 | _dormant.notifications | contact_id | public.contacts | id | SET NULL | NO ACTION |
 | _dormant.notifications | interaction_id | public.interactions | id | SET NULL | NO ACTION |
 | _dormant.notifications | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.objection_templates | user_id | public.profiles | id | CASCADE | NO ACTION |
-| _dormant.objections | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.objections | interaction_id | public.interactions | id | SET NULL | NO ACTION |
-| _dormant.objections | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.objections_library | created_by | public.salespeople | id | NO ACTION | NO ACTION |
 | _dormant.offer_suggestions | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.offer_suggestions | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.password_reset_requests | user_id | auth.users | id | CASCADE | NO ACTION |
 | _dormant.performance_bets | bettor_id | public.salespeople | id | CASCADE | NO ACTION |
 | _dormant.performance_bets | target_id | public.salespeople | id | CASCADE | NO ACTION |
-| _dormant.pix_accounts | company_id | public.companies | id | CASCADE | NO ACTION |
 | _dormant.playbook_items | playbook_id | _dormant.playbooks | id | CASCADE | NO ACTION |
 | _dormant.playbook_progress | completed_by | public.salespeople | id | NO ACTION | NO ACTION |
 | _dormant.playbook_progress | playbook_item_id | _dormant.playbook_items | id | CASCADE | NO ACTION |
 | _dormant.playbook_progress | sale_id | public.sales | id | CASCADE | NO ACTION |
-| _dormant.pre_contact_briefings | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.pre_contact_briefings | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.price_alerts | product_id | _dormant.products | id | CASCADE | NO ACTION |
 | _dormant.price_alerts | supplier_id | public.suppliers | id | CASCADE | NO ACTION |
 | _dormant.price_history | product_id | _dormant.products | id | CASCADE | NO ACTION |
@@ -207,8 +178,6 @@
 | _dormant.quotes | client_id | public.clients | id | SET NULL | NO ACTION |
 | _dormant.quotes | salesperson_id | public.salespeople | id | SET NULL | NO ACTION |
 | _dormant.rank_change_notifications | salesperson_id | public.salespeople | id | CASCADE | NO ACTION |
-| _dormant.rapport_score_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.rapport_score_history | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.reauthentication_requests | user_id | auth.users | id | CASCADE | NO ACTION |
 | _dormant.rfm_analysis | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.rfm_calculations | user_id | public.profiles | id | CASCADE | NO ACTION |
@@ -223,9 +192,6 @@
 | _dormant.salesperson_leagues | season_id | _dormant.competitive_seasons | id | NO ACTION | NO ACTION |
 | _dormant.salesperson_preferences | salesperson_id | public.salespeople | id | CASCADE | NO ACTION |
 | _dormant.salesperson_xp | salesperson_id | public.salespeople | id | CASCADE | NO ACTION |
-| _dormant.satisfaction_scores | company_id | public.companies | id | SET NULL | NO ACTION |
-| _dormant.satisfaction_scores | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.satisfaction_scores | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.saved_filters | user_id | auth.users | id | CASCADE | NO ACTION |
 | _dormant.score_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.script_usage_log | contact_id | public.contacts | id | NO ACTION | NO ACTION |
@@ -233,13 +199,7 @@
 | _dormant.script_usage_log | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.security_alert_history | user_id | auth.users | id | CASCADE | NO ACTION |
 | _dormant.security_alert_settings | user_id | auth.users | id | CASCADE | NO ACTION |
-| _dormant.shared_interests | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.shared_interests | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.sla_configs | pipeline_stage_id | public.pipeline_stages | id | CASCADE | NO ACTION |
-| _dormant.smart_reminders | company_id | public.companies | id | SET NULL | NO ACTION |
-| _dormant.smart_reminders | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.smart_reminders | interaction_id | public.interactions | id | SET NULL | NO ACTION |
-| _dormant.smart_reminders | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.sms_verification_codes | user_id | auth.users | id | CASCADE | NO ACTION |
 | _dormant.social_behavior_analysis | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.social_life_events | contact_id | public.contacts | id | CASCADE | NO ACTION |
@@ -262,7 +222,7 @@
 | _dormant.tasks | company_id | public.companies | id | SET NULL | NO ACTION |
 | _dormant.tasks | contact_id | public.contacts | id | SET NULL | NO ACTION |
 | _dormant.tasks | deal_id | _dormant.deals | id | CASCADE | NO ACTION |
-| _dormant.tasks | lead_id | _dormant.leads | id | CASCADE | NO ACTION |
+| _dormant.tasks | lead_id | public.leads | id | CASCADE | NO ACTION |
 | _dormant.team_closers | closer_id | public.salespeople | id | CASCADE | NO ACTION |
 | _dormant.team_closers | team_id | _dormant.teams | id | CASCADE | NO ACTION |
 | _dormant.teams | sdr_id | public.salespeople | id | SET NULL | NO ACTION |
@@ -286,25 +246,14 @@
 | _dormant.trigger_suggestions | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.trigger_suggestions | used_in_interaction_id | public.interactions | id | NO ACTION | NO ACTION |
 | _dormant.trigger_suggestions | user_id | public.profiles | id | CASCADE | NO ACTION |
-| _dormant.trigger_templates | created_by | public.profiles | id | NO ACTION | NO ACTION |
-| _dormant.trigger_templates | trigger_type_id | public.trigger_types | id | NO ACTION | NO ACTION |
-| _dormant.trigger_usage_log | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.trigger_usage_log | interaction_id | public.interactions | id | SET NULL | NO ACTION |
-| _dormant.trigger_usage_log | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.user_companies_link | company_id | public.companies | id | CASCADE | NO ACTION |
 | _dormant.user_companies_link | shared_by | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.user_companies_link | user_id | public.profiles | id | CASCADE | NO ACTION |
-| _dormant.user_contacts_link | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.user_contacts_link | shared_by | public.profiles | id | NO ACTION | NO ACTION |
-| _dormant.user_contacts_link | user_id | public.profiles | id | CASCADE | NO ACTION |
-| _dormant.user_disc_profile | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.user_favorite_templates | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.user_mfa_settings | user_id | auth.users | id | CASCADE | NO ACTION |
 | _dormant.user_roles | user_id | auth.users | id | CASCADE | NO ACTION |
 | _dormant.vak_analysis_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | _dormant.vak_analysis_history | interaction_id | public.interactions | id | SET NULL | NO ACTION |
-| _dormant.vak_profiles | contact_id | public.contacts | id | CASCADE | NO ACTION |
-| _dormant.vak_profiles | user_id | public.profiles | id | CASCADE | NO ACTION |
 | _dormant.vak_templates | created_by | public.profiles | id | NO ACTION | NO ACTION |
 | _dormant.victory_feed | salesperson_id | public.salespeople | id | CASCADE | NO ACTION |
 | _dormant.webauthn_challenges | user_id | auth.users | id | CASCADE | NO ACTION |
@@ -318,7 +267,7 @@
 | _dormant.workflow_action_logs | execution_id | _dormant.workflow_executions | id | CASCADE | NO ACTION |
 | _dormant.workflow_actions | workflow_id | _dormant.workflows | id | CASCADE | NO ACTION |
 | _dormant.workflow_executions | deal_id | _dormant.deals | id | SET NULL | NO ACTION |
-| _dormant.workflow_executions | lead_id | _dormant.leads | id | SET NULL | NO ACTION |
+| _dormant.workflow_executions | lead_id | public.leads | id | SET NULL | NO ACTION |
 | _dormant.workflow_executions | trigger_id | _dormant.workflow_triggers | id | NO ACTION | NO ACTION |
 | _dormant.workflow_executions | workflow_id | _dormant.workflows | id | NO ACTION | NO ACTION |
 | _dormant.workflow_triggers | stage_from_id | public.pipeline_stages | id | NO ACTION | NO ACTION |
@@ -375,6 +324,8 @@
 | public.cidades | estado_ibge | public.estados | ibge_code | NO ACTION | NO ACTION |
 | public.client_values | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.clients | deleted_by | auth.users | id | NO ACTION | NO ACTION |
+| public.closing_moment_analysis | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.closing_moment_analysis | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.cognitive_bias_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.cognitive_bias_history | interaction_id | public.interactions | id | NO ACTION | NO ACTION |
 | public.commissions | deal_id | public.deals | id | SET NULL | NO ACTION |
@@ -415,8 +366,12 @@
 | public.contact_addresses | created_by | public.users | id | NO ACTION | NO ACTION |
 | public.contact_addresses | updated_by | public.users | id | NO ACTION | NO ACTION |
 | public.contact_cadence | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.contact_communication_style | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.contact_communication_style | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.contact_decision_making | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.contact_emails | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.contact_eq_scores | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.contact_eq_scores | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.contact_family_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.contact_influence | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.contact_metaprograms | contact_id | public.contacts | id | CASCADE | NO ACTION |
@@ -430,6 +385,11 @@
 | public.contact_relatives | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.contact_social_media | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.contact_time_analysis | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.contact_trigger_preferences | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.contact_trigger_preferences | user_id | public.profiles | id | CASCADE | NO ACTION |
+| public.contact_values | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.contact_values | discovered_in_interaction_id | public.interactions | id | NO ACTION | NO ACTION |
+| public.contact_values | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.contacts | assigned_by_id | public.users | id | NO ACTION | NO ACTION |
 | public.contacts | company_id | public.companies | id | SET NULL | NO ACTION |
 | public.contacts | duplicate_of | public.contacts | id | NO ACTION | NO ACTION |
@@ -500,8 +460,12 @@
 | public.deals | loss_reason_id | public.loss_reasons | id | NO ACTION | NO ACTION |
 | public.deals | user_id | public.profiles | id | SET NULL | NO ACTION |
 | public.decision_criteria | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.digest_history | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.disc_analysis_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.disc_analysis_history | interaction_id | public.interactions | id | NO ACTION | NO ACTION |
+| public.disc_assessments | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.disc_assessments | user_id | public.profiles | id | CASCADE | NO ACTION |
+| public.disc_assessments | validated_by | public.profiles | id | NO ACTION | NO ACTION |
 | public.disc_communication_logs | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.disc_communication_logs | interaction_id | public.interactions | id | NO ACTION | NO ACTION |
 | public.disc_templates | created_by | public.profiles | id | NO ACTION | NO ACTION |
@@ -515,6 +479,8 @@
 | public.emotional_anchors | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.emotional_states_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.emotional_states_history | interaction_id | public.interactions | id | NO ACTION | NO ACTION |
+| public.emotional_trend_snapshots | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.emotional_trend_snapshots | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.eq_analysis_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.eq_analysis_history | interaction_id | public.interactions | id | NO ACTION | NO ACTION |
 | public.external_data_audit_log | user_id | auth.users | id | SET NULL | NO ACTION |
@@ -543,6 +509,11 @@
 | public.lead_score_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.lead_score_threshold_log | automation_id | public.lead_score_threshold_automations | id | CASCADE | NO ACTION |
 | public.lead_scores | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.leads | company_id | public.companies | id | NO ACTION | NO ACTION |
+| public.leads | contact_id | public.contacts | id | NO ACTION | NO ACTION |
+| public.leads | pipeline_id | public.pipelines | id | NO ACTION | NO ACTION |
+| public.leads | source_id | public.lead_sources | id | NO ACTION | NO ACTION |
+| public.leads | stage_id | public.pipeline_stages | id | NO ACTION | NO ACTION |
 | public.life_events | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.meetings | company_id | public.companies | id | CASCADE | NO ACTION |
 | public.meetings | contact_id | public.contacts | id | SET NULL | NO ACTION |
@@ -558,12 +529,19 @@
 | public.nlp_feedback | user_id | auth.users | id | NO ACTION | NO ACTION |
 | public.notification_logs | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.notification_logs | user_id | auth.users | id | CASCADE | NO ACTION |
+| public.notification_settings | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.notifications | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.nps_surveys | company_id | public.companies | id | CASCADE | NO ACTION |
 | public.nps_surveys | contact_id | public.contacts | id | SET NULL | NO ACTION |
 | public.nps_surveys | created_by | public.profiles | id | NO ACTION | NO ACTION |
+| public.objections | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.objections | interaction_id | public.interactions | id | SET NULL | NO ACTION |
+| public.objections | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.offer_suggestions | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.pipeline_stages | pipeline_id | public.pipelines | id | CASCADE | NO ACTION |
+| public.pix_accounts | company_id | public.companies | id | CASCADE | NO ACTION |
+| public.pre_contact_briefings | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.pre_contact_briefings | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.product_novelties | product_id | public.products | id | CASCADE | NO ACTION |
 | public.product_novelties | supplier_id | public.suppliers | id | SET NULL | NO ACTION |
 | public.profiles | bitrix_user_id | public.users | id | NO ACTION | NO ACTION |
@@ -577,6 +555,8 @@
 | public.purchase_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.quick_notes | company_id | public.companies | id | NO ACTION | NO ACTION |
 | public.quick_notes | user_id | public.profiles | id | NO ACTION | NO ACTION |
+| public.rapport_score_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.rapport_score_history | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.redistribution_log | from_member_id | public.sales_team_members | id | SET NULL | NO ACTION |
 | public.redistribution_log | to_member_id | public.sales_team_members | id | SET NULL | NO ACTION |
 | public.relationship_score_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
@@ -610,6 +590,9 @@
 | public.sales_tasks | deleted_by | auth.users | id | NO ACTION | NO ACTION |
 | public.sales_tasks | sale_id | public.sales | id | CASCADE | NO ACTION |
 | public.sales_tasks | salesperson_id | public.salespeople | id | SET NULL | NO ACTION |
+| public.satisfaction_scores | company_id | public.companies | id | SET NULL | NO ACTION |
+| public.satisfaction_scores | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.satisfaction_scores | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.scheduled_reports | created_by | public.profiles | id | NO ACTION | NO ACTION |
 | public.scheduled_visits | company_id | public.companies | id | NO ACTION | NO ACTION |
 | public.scheduled_visits | user_id | public.profiles | id | NO ACTION | NO ACTION |
@@ -630,10 +613,16 @@
 | public.sequence_send_log | step_id | public.sequence_steps | id | CASCADE | NO ACTION |
 | public.sequence_steps | sequence_id | public.sequences | id | CASCADE | NO ACTION |
 | public.sequences | user_id | auth.users | id | CASCADE | NO ACTION |
+| public.shared_interests | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.shared_interests | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.sla_violations | sla_rule_id | public.sla_rules | id | NO ACTION | NO ACTION |
 | public.sla_violations | user_id | public.profiles | id | NO ACTION | NO ACTION |
 | public.sleight_of_mouth_examples | pattern_id | public.sleight_of_mouth_patterns | id | CASCADE | NO ACTION |
 | public.smart_notifications | user_id | auth.users | id | CASCADE | NO ACTION |
+| public.smart_reminders | company_id | public.companies | id | SET NULL | NO ACTION |
+| public.smart_reminders | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.smart_reminders | interaction_id | public.interactions | id | SET NULL | NO ACTION |
+| public.smart_reminders | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.smart_segments | created_by | public.profiles | id | NO ACTION | NO ACTION |
 | public.sms_campaign_recipients | campaign_id | public.sms_campaigns | id | CASCADE | NO ACTION |
 | public.sms_campaign_recipients | contact_id | public.contacts | id | CASCADE | NO ACTION |
@@ -679,14 +668,25 @@
 | public.trigger_channel_effectiveness | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.trigger_intensity_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.trigger_intensity_history | interaction_id | public.interactions | id | SET NULL | NO ACTION |
+| public.trigger_templates | created_by | public.profiles | id | NO ACTION | NO ACTION |
+| public.trigger_templates | trigger_type_id | public.trigger_types | id | NO ACTION | NO ACTION |
+| public.trigger_usage_log | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.trigger_usage_log | interaction_id | public.interactions | id | SET NULL | NO ACTION |
+| public.trigger_usage_log | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.user_badges | badge_id | public.badges | id | CASCADE | NO ACTION |
 | public.user_badges | user_id | public.profiles | id | CASCADE | NO ACTION |
+| public.user_contacts_link | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.user_contacts_link | shared_by | public.profiles | id | NO ACTION | NO ACTION |
+| public.user_contacts_link | user_id | public.profiles | id | CASCADE | NO ACTION |
+| public.user_disc_profile | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.user_goals | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.user_known_devices | user_id | auth.users | id | CASCADE | NO ACTION |
 | public.user_roles | user_id | auth.users | id | CASCADE | NO ACTION |
 | public.user_ui_preferences | user_id | auth.users | id | CASCADE | NO ACTION |
 | public.vak_analysis_history | contact_id | public.contacts | id | CASCADE | NO ACTION |
 | public.vak_analysis_history | interaction_id | public.interactions | id | SET NULL | NO ACTION |
+| public.vak_profiles | contact_id | public.contacts | id | CASCADE | NO ACTION |
+| public.vak_profiles | user_id | public.profiles | id | CASCADE | NO ACTION |
 | public.visit_checkins | company_id | public.companies | id | SET NULL | NO ACTION |
 | public.webhook_logs | webhook_id | public.webhooks | id | CASCADE | NO ACTION |
 | public.webhooks | created_by | public.profiles | id | NO ACTION | NO ACTION |

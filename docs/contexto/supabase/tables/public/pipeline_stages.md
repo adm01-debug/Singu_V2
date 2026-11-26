@@ -54,10 +54,10 @@
 | _dormant.deals | deals_stage_id_fkey | stage_id | NO ACTION |
 | _dormant.lead_history | lead_history_stage_anterior_id_fkey | stage_anterior_id | NO ACTION |
 | _dormant.lead_history | lead_history_stage_novo_id_fkey | stage_novo_id | NO ACTION |
-| _dormant.leads | leads_stage_id_fkey | stage_id | NO ACTION |
 | _dormant.sla_configs | sla_configs_pipeline_stage_id_fkey | pipeline_stage_id | CASCADE |
 | _dormant.workflow_triggers | workflow_triggers_stage_from_id_fkey | stage_from_id | NO ACTION |
 | _dormant.workflow_triggers | workflow_triggers_stage_to_id_fkey | stage_to_id | NO ACTION |
+| public.leads | leads_stage_id_fkey | stage_id | NO ACTION |
 
 
 ## Índices

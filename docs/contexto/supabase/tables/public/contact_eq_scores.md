@@ -1,4 +1,4 @@
-# _dormant.contact_eq_scores
+# public.contact_eq_scores
 
 > Scores de Inteligência Emocional (EQ) dos contatos - 4 pilares de Goleman
 
@@ -6,9 +6,9 @@
 |---|---|
 | tipo | table |
 | owner | postgres |
-| RLS habilitado | não |
+| RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 0 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -71,24 +71,42 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| contact_eq_scores_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX contact_eq_scores_pkey ON _dormant.contact_eq_scores USING btree (id)` |
+| contact_eq_scores_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX contact_eq_scores_pkey ON public.contact_eq_scores USING btree (id)` |
 
 
 ## Policies (RLS)
 
-> ⚠️ RLS **desabilitado** nesta tabela.
+### `contact_eq_scores_owner_access`
 
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| WITH CHECK | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+
+### `service_role_full_contact_eq_scores`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
 
 
 ## Triggers
 
-_nenhum_
+| nome | timing | eventos | nível | status | função |
+|---|---|---|---|---|---|
+| set_owner_from_contact | BEFORE | INSERT OR UPDATE | ROW | enabled | public.set_owner_from_contact |
 
 
 ## Grants
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

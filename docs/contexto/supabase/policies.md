@@ -58,8 +58,6 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | _dormant.contact_time_analysis | Users can insert their own contact time analysis | INSERT | PERMISSIVE | public |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | _dormant.contact_time_analysis | Users can update their own contact time analysis | UPDATE | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | _dormant.contact_time_analysis | Users can view their own contact time analysis | SELECT | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| _dormant.contact_trigger_preferences | dormant_deny_all_contact_trigger_preferences | ALL | RESTRICTIVE | public | `false` |  |
-| _dormant.contact_values | dormant_deny_all_contact_values | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.daily_metrics | dormant_deny_all_daily_metrics | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.dashboard_widgets | dormant_deny_all_dashboard_widgets | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.deal_chat_history | dormant_deny_all_deal_chat_history | ALL | RESTRICTIVE | public | `false` |  |
@@ -70,7 +68,6 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | _dormant.disc_analysis_history | Users can delete their own DISC analysis | DELETE | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | _dormant.disc_analysis_history | Users can update their own disc_analysis_history | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | _dormant.disc_analysis_history | Users can view their own DISC analysis history | SELECT | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| _dormant.disc_assessments | dormant_deny_all_disc_assessments | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.disc_communication_logs | Users can create their own DISC communication logs | INSERT | PERMISSIVE | public |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | _dormant.disc_communication_logs | Users can delete their own disc_communication_logs | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | _dormant.disc_communication_logs | Users can update their own DISC communication logs | UPDATE | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
@@ -116,7 +113,6 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | _dormant.metaprogram_analysis | Users can view their own metaprogram analysis | SELECT | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | _dormant.notes | dormant_deny_all_notes | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.objection_templates | dormant_deny_all_objection_templates | ALL | RESTRICTIVE | public | `false` |  |
-| _dormant.objections | dormant_deny_all_objections | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.offer_suggestions | dormant_deny_all_offer_suggestions | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.playbooks | dormant_deny_all_playbooks | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.products | dormant_deny_all_products | ALL | RESTRICTIVE | public | `false` |  |
@@ -176,15 +172,11 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | _dormant.trigger_usage_history | Users can insert their own trigger usage history | INSERT | PERMISSIVE | public |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | _dormant.trigger_usage_history | Users can update their own trigger usage history | UPDATE | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | _dormant.trigger_usage_history | Users can view their own trigger usage history | SELECT | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| _dormant.trigger_usage_log | dormant_deny_all_trigger_usage_log | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.user_companies_link | dormant_deny_all_user_companies_link | ALL | RESTRICTIVE | public | `false` |  |
-| _dormant.user_contacts_link | dormant_deny_all_user_contacts_link | ALL | RESTRICTIVE | public | `false` |  |
-| _dormant.user_disc_profile | dormant_deny_all_user_disc_profile | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.vak_analysis_history | Users can delete their own VAK analysis | DELETE | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | _dormant.vak_analysis_history | Users can insert their own VAK analysis | INSERT | PERMISSIVE | public |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | _dormant.vak_analysis_history | Users can update their own vak_analysis_history | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | _dormant.vak_analysis_history | Users can view their own VAK analysis | SELECT | PERMISSIVE | public | `(( SELECT auth.uid() AS uid) = user_id)` |  |
-| _dormant.vak_profiles | dormant_deny_all_vak_profiles | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.victory_feed | dormant_deny_all_victory_feed | ALL | RESTRICTIVE | public | `false` |  |
 | _dormant.weekly_report_settings | Users can create their own report settings | INSERT | PERMISSIVE | public |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | _dormant.weekly_report_settings | Users can delete their own weekly_report_settings | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
@@ -370,6 +362,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.client_values | Users can view own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.client_values | Users can view their own client values | SELECT | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.clients | clients_all | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| public.closing_moment_analysis | closing_moment_analysis_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.closing_moment_analysis | service_role_full_closing_moment_analysis | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.closing_score_config | read_only_auth | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.closing_score_config | service_full | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.cnaes | read_only_auth | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
@@ -499,6 +493,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.contact_cadence | Users can view own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.contact_cadence | Users can view their own contact cadence | SELECT | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.contact_cadence_audit | Users can view their own cadence audit | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.contact_communication_style | contact_communication_style_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.contact_communication_style | service_role_full_contact_communication_style | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.contact_decision_making | Owner or admin can delete contact_decision_making | DELETE | PERMISSIVE | authenticated | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |  |
 | public.contact_decision_making | Owner or admin can insert contact_decision_making | INSERT | PERMISSIVE | authenticated |  | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |
 | public.contact_decision_making | Owner or admin can select contact_decision_making | SELECT | PERMISSIVE | authenticated | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_decision_making.contact_id) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |  |
@@ -509,6 +505,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.contact_emails | contact_emails_select_admin | SELECT | PERMISSIVE | authenticated | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |  |
 | public.contact_emails | contact_emails_update | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.contact_emails | contact_relation_active_owner_or_admin | ALL | RESTRICTIVE | authenticated | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_emails.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(auth.uid(), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_emails.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(auth.uid(), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
+| public.contact_eq_scores | contact_eq_scores_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.contact_eq_scores | service_role_full_contact_eq_scores | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.contact_family_history | contact_family_history_owner_or_admin_mfa_insert | INSERT | PERMISSIVE | authenticated |  | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_family_history.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 | public.contact_family_history | contact_family_history_owner_or_admin_mfa_select | SELECT | PERMISSIVE | authenticated | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_family_history.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |  |
 | public.contact_influence | Owner or admin can delete contact_influence | DELETE | PERMISSIVE | authenticated | `((EXISTS ( SELECT 1    FROM contacts c   WHERE ((c.id = contact_influence.contact_id) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |  |
@@ -579,6 +577,10 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.contact_time_analysis | Users can view own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.contact_time_analysis | Users can view their own contact time analysis | SELECT | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.contact_time_analysis_audit | Users can view their own analysis audit | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.contact_trigger_preferences | contact_trigger_preferences_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.contact_trigger_preferences | service_role_full_contact_trigger_preferences | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.contact_values | contact_values_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.contact_values | service_role_full_contact_values | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.contacts | Users can access their own contacts | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.contacts | Users can delete their own contacts | DELETE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.contacts | Users can insert their own contacts | INSERT | PERMISSIVE | authenticated |  | `(auth.uid() = user_id)` |
@@ -712,6 +714,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.device_login_notifications | Users can update own | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.device_login_notifications | Users can view own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.device_login_notifications | Users read own device notifications | ALL | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
+| public.digest_history | digest_history_owner_access | ALL | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
+| public.digest_history | service_role_full_digest_history | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.disc_analysis_history | Users can create their own DISC analysis | INSERT | PERMISSIVE | authenticated |  | `(auth.uid() = user_id)` |
 | public.disc_analysis_history | Users can delete own | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.disc_analysis_history | Users can delete their own DISC analysis | DELETE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
@@ -723,6 +727,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.disc_analysis_history_audit | Users can view their own DISC audit | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.disc_approach_recommendations | read_only_auth | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.disc_approach_recommendations | service_full | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.disc_assessments | disc_assessments_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.disc_assessments | service_role_full_disc_assessments | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.disc_communication_logs | Users can create their own DISC communication logs | INSERT | PERMISSIVE | authenticated |  | `(auth.uid() = user_id)` |
 | public.disc_communication_logs | Users can delete own | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.disc_communication_logs | Users can delete their own disc_communication_logs | DELETE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
@@ -813,6 +819,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.emotional_states_history | Users can update their own emotional_states_history | UPDATE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.emotional_states_history | Users can view own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.emotional_states_history | Users can view their own emotional states history | SELECT | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
+| public.emotional_trend_snapshots | emotional_trend_snapshots_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.emotional_trend_snapshots | service_role_full_emotional_trend_snapshots | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.entity_relationships | auth users insert entity_relationships | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
 | public.entity_relationships | auth users read entity_relationships | SELECT | PERMISSIVE | authenticated | `true` |  |
 | public.entity_relationships | creator or admin deletes entity_relationships | DELETE | PERMISSIVE | authenticated | `((created_by = ( SELECT auth.uid() AS uid)) OR has_role(( SELECT auth.uid() AS uid), 'admin'::app_role))` |  |
@@ -1042,6 +1050,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.lead_scores | Users can view their own lead scores | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.lead_sources | read_only_auth | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.lead_sources | service_full | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.leads | leads_owner_access | ALL | PERMISSIVE | authenticated | `((owner_id = ( SELECT auth.uid() AS uid)) OR (created_by_id = ( SELECT auth.uid() AS uid)))` | `((owner_id = ( SELECT auth.uid() AS uid)) OR (created_by_id = ( SELECT auth.uid() AS uid)))` |
+| public.leads | service_role_full_leads | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.life_events | Users can delete own | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.life_events | Users can delete their own life events | DELETE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.life_events | Users can insert own | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
@@ -1117,6 +1127,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.notification_preferences | self read prefs | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.notification_preferences | self update prefs | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.notification_preferences | self upsert prefs | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
+| public.notification_settings | notification_settings_owner_access | ALL | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
+| public.notification_settings | service_role_full_notification_settings | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.notifications | notifications_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.notifications | notifications_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.notifications | notifications_select | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
@@ -1139,6 +1151,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.objection_example_feedback | Users insert own objection feedback | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.objection_example_feedback | Users update own objection feedback | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.objection_example_feedback | Users view own objection feedback | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.objections | objections_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.objections | service_role_full_objections | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.offer_suggestions | Users can delete own | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.offer_suggestions | Users can delete their own offer suggestions | DELETE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.offer_suggestions | Users can insert own | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
@@ -1167,10 +1181,14 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.pipeline_stages | service_full | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.pipelines | read_only_auth | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.pipelines | service_full | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.pix_accounts | pix_accounts_owner_access | ALL | PERMISSIVE | authenticated | `(company_id IN ( SELECT c.id    FROM companies c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(company_id IN ( SELECT c.id    FROM companies c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.pix_accounts | service_role_full_pix_accounts | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.playbook_usage_log | playbook_usage_insert_own | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.playbook_usage_log | playbook_usage_select_own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.portfolio_settings | read_only_auth | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.portfolio_settings | service_full | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.pre_contact_briefings | pre_contact_briefings_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.pre_contact_briefings | service_role_full_pre_contact_briefings | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.product_novelties | authenticated_read_novelties | SELECT | PERMISSIVE | authenticated | `true` |  |
 | public.product_novelties | service_all_novelties | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.products | products_all | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
@@ -1221,6 +1239,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.quick_notes | quick_notes_update | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.ragas_scores | ragas_scores_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
 | public.ragas_scores | ragas_scores_select | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
+| public.rapport_score_history | rapport_score_history_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.rapport_score_history | service_role_full_rapport_score_history | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.redistribution_log | Admins can view all redistribution logs | SELECT | PERMISSIVE | authenticated | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |  |
 | public.redistribution_log | Users can insert own | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.redistribution_log | Users can insert their own redistribution logs | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
@@ -1314,6 +1334,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.sales_team_members | Users can view their own team members | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.salespeople | legacy_sales_service | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.salespeople | legacy_salespeople_owner | SELECT | PERMISSIVE | authenticated | `(auth_user_id = ( SELECT auth.uid() AS uid))` |  |
+| public.satisfaction_scores | satisfaction_scores_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| public.satisfaction_scores | service_role_full_satisfaction_scores | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.scheduled_reports | scheduled_reports_owner_or_admin_mfa | ALL | PERMISSIVE | authenticated | `((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` | `((created_by = ( SELECT auth.uid() AS uid)) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))` |
 | public.scheduled_visits | scheduled_visits_delete | DELETE | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` |  |
 | public.scheduled_visits | scheduled_visits_insert | INSERT | PERMISSIVE | authenticated |  | `(user_id = ( SELECT auth.uid() AS uid))` |
@@ -1378,6 +1400,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.sequences | Users can update own | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.sequences | Users can view own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.sequences | Users manage own sequences | ALL | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
+| public.shared_interests | service_role_full_shared_interests | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.shared_interests | shared_interests_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
 | public.sla_rules | sla_rules_all | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
 | public.sla_violations | sla_violations_delete | DELETE | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` |  |
 | public.sla_violations | sla_violations_insert | INSERT | PERMISSIVE | authenticated |  | `(user_id = ( SELECT auth.uid() AS uid))` |
@@ -1392,6 +1416,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.smart_notifications | self insert notif | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.smart_notifications | self read notif | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.smart_notifications | self update notif | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
+| public.smart_reminders | service_role_full_smart_reminders | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.smart_reminders | smart_reminders_owner_access | ALL | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
 | public.smart_segments | smart_segments_all | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
 | public.sms_campaign_recipients | Delete recipients of own SMS campaigns | DELETE | PERMISSIVE | authenticated | `(EXISTS ( SELECT 1    FROM sms_campaigns c   WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = ( SELECT auth.uid() AS uid)))))` |  |
 | public.sms_campaign_recipients | Insert recipients of own SMS campaigns | INSERT | PERMISSIVE | authenticated |  | `(EXISTS ( SELECT 1    FROM sms_campaigns c   WHERE ((c.id = sms_campaign_recipients.campaign_id) AND (c.user_id = ( SELECT auth.uid() AS uid)))))` |
@@ -1545,6 +1571,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.trigger_intensity_history | Users can update their own intensity history | UPDATE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.trigger_intensity_history | Users can view own | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.trigger_intensity_history | Users can view their own intensity history | SELECT | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
+| public.trigger_templates | service_role_full_trigger_templates | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.trigger_templates | trigger_templates_owner_access | ALL | PERMISSIVE | authenticated | `true` | `true` |
 | public.trigger_types | trigger_types_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.trigger_types | trigger_types_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
 | public.trigger_types | trigger_types_select | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
@@ -1557,11 +1585,17 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.trigger_usage_history | trigger_usage_history_insert | INSERT | PERMISSIVE | authenticated |  | `(user_id = ( SELECT auth.uid() AS uid))` |
 | public.trigger_usage_history | trigger_usage_history_select | SELECT | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` |  |
 | public.trigger_usage_history | trigger_usage_history_update | UPDATE | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
+| public.trigger_usage_log | service_role_full_trigger_usage_log | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.trigger_usage_log | trigger_usage_log_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
 | public.uapi_sessions | uapi_sessions_service_only | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.user_badges | user_badges_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.user_badges | user_badges_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.user_badges | user_badges_select | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.user_badges | user_badges_update | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` | `(( SELECT auth.uid() AS uid) = user_id)` |
+| public.user_contacts_link | service_role_full_user_contacts_link | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.user_contacts_link | user_contacts_link_owner_access | ALL | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
+| public.user_disc_profile | service_role_full_user_disc_profile | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.user_disc_profile | user_disc_profile_owner_access | ALL | PERMISSIVE | authenticated | `(user_id = ( SELECT auth.uid() AS uid))` | `(user_id = ( SELECT auth.uid() AS uid))` |
 | public.user_goals | user_goals_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.user_goals | user_goals_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.user_goals | user_goals_select | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
@@ -1597,6 +1631,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.vak_analysis_history | Users can view their own VAK analysis | SELECT | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.vak_keywords | read_only_auth | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |  |
 | public.vak_keywords | service_full | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.vak_profiles | service_role_full_vak_profiles | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.vak_profiles | vak_profiles_owner_access | ALL | PERMISSIVE | authenticated | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
 | public.validation_queue | users insert own validation queue | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.validation_queue | users update own validation queue | UPDATE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.validation_queue | users view own validation queue | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |

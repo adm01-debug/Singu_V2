@@ -29,7 +29,6 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.circuit_breaker_events](tables/dormant/circuit_breaker_events.md) | table | não | 0 | 6 | não |  |
 | [_dormant.client_portfolio](tables/dormant/client_portfolio.md) | table | não | 0 | 10 | não |  |
 | [_dormant.client_values](tables/dormant/client_values.md) | table | sim | 4 | 11 | não |  |
-| [_dormant.closing_moment_analysis](tables/dormant/closing_moment_analysis.md) | table | não | 0 | 26 | não | Análise do melhor momento para fechamento |
 | [_dormant.cognitive_bias_history](tables/dormant/cognitive_bias_history.md) | table | sim | 4 | 13 | não |  |
 | [_dormant.cognitive_biases](tables/dormant/cognitive_biases.md) | table | sim | 1 | 12 | não | SINGU: Vieses cognitivos detectados por contato |
 | [_dormant.collectible_badges](tables/dormant/collectible_badges.md) | table | sim | 1 | 10 | não |  |
@@ -42,9 +41,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.competitive_seasons](tables/dormant/competitive_seasons.md) | table | não | 0 | 7 | não |  |
 | [_dormant.contact_availability](tables/dormant/contact_availability.md) | table | sim | 1 | 12 | não | SINGU: Mapa de disponibilidade semanal do contato |
 | [_dormant.contact_cadence](tables/dormant/contact_cadence.md) | table | sim | 4 | 11 | não |  |
-| [_dormant.contact_communication_style](tables/dormant/contact_communication_style.md) | table | não | 0 | 20 | não |  |
 | [_dormant.contact_compatibility](tables/dormant/contact_compatibility.md) | table | sim | 1 | 15 | não | SINGU: Análise de compatibilidade DISC entre usuário e contato |
-| [_dormant.contact_eq_scores](tables/dormant/contact_eq_scores.md) | table | não | 0 | 25 | não | Scores de Inteligência Emocional (EQ) dos contatos - 4 pilares de Goleman |
 | [_dormant.contact_metaprograms](tables/dormant/contact_metaprograms.md) | table | sim | 1 | 22 | não | SINGU: Metaprogramas de PNL identificados por contato |
 | [_dormant.contact_preferences](tables/dormant/contact_preferences.md) | table | sim | 4 | 13 | não |  |
 | [_dormant.contact_relationships](tables/dormant/contact_relationships.md) | table | sim | 1 | 17 | não | SINGU: Mapeamento de relacionamentos entre contatos |
@@ -52,8 +49,6 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.contact_rfm_scores](tables/dormant/contact_rfm_scores.md) | table | sim | 1 | 21 | não | SINGU: Scores RFM calculados para cada contato |
 | [_dormant.contact_tags](tables/dormant/contact_tags.md) | table | não | 0 | 3 | não |  |
 | [_dormant.contact_time_analysis](tables/dormant/contact_time_analysis.md) | table | sim | 4 | 9 | não |  |
-| [_dormant.contact_trigger_preferences](tables/dormant/contact_trigger_preferences.md) | table | sim | 1 | 16 | não | SINGU: Preferências de gatilhos mentais aprendidas por contato |
-| [_dormant.contact_values](tables/dormant/contact_values.md) | table | sim | 1 | 11 | não | SINGU: Valores pessoais e profissionais identificados |
 | [_dormant.custom_field_values](tables/dormant/custom_field_values.md) | table | não | 0 | 11 | não |  |
 | [_dormant.custom_fields](tables/dormant/custom_fields.md) | table | não | 0 | 10 | não |  |
 | [_dormant.customer_contacts](tables/dormant/customer_contacts.md) | table | não | 0 | 10 | não |  |
@@ -71,10 +66,8 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.deals](tables/dormant/deals.md) | table | não | 0 | 37 | não |  |
 | [_dormant.decision_criteria](tables/dormant/decision_criteria.md) | table | sim | 1 | 13 | não | SINGU: Critérios de decisão de compra por contato |
 | [_dormant.demand_forecasts](tables/dormant/demand_forecasts.md) | table | não | 0 | 10 | não |  |
-| [_dormant.digest_history](tables/dormant/digest_history.md) | table | não | 0 | 21 | não | Histórico de digests enviados |
 | [_dormant.digital_signatures](tables/dormant/digital_signatures.md) | table | não | 0 | 10 | não |  |
 | [_dormant.disc_analysis_history](tables/dormant/disc_analysis_history.md) | table | sim | 4 | 23 | não |  |
-| [_dormant.disc_assessments](tables/dormant/disc_assessments.md) | table | sim | 1 | 20 | não | SINGU: Avaliações DISC realizadas para contatos |
 | [_dormant.disc_communication_logs](tables/dormant/disc_communication_logs.md) | table | sim | 4 | 12 | não |  |
 | [_dormant.disc_compatibility](tables/dormant/disc_compatibility.md) | table | sim | 1 | 13 | não | SINGU: Matriz de compatibilidade entre perfis DISC |
 | [_dormant.disc_conversion_metrics](tables/dormant/disc_conversion_metrics.md) | table | sim | 1 | 17 | não |  |
@@ -85,7 +78,6 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.emotional_anchors](tables/dormant/emotional_anchors.md) | table | sim | 1 | 15 | não | SINGU: Âncoras emocionais identificadas por contato |
 | [_dormant.emotional_states](tables/dormant/emotional_states.md) | table | sim | 1 | 16 | não | SINGU: Estados emocionais detectados em interações |
 | [_dormant.emotional_states_history](tables/dormant/emotional_states_history.md) | table | sim | 4 | 9 | não |  |
-| [_dormant.emotional_trend_snapshots](tables/dormant/emotional_trend_snapshots.md) | table | não | 0 | 21 | não | Snapshots periódicos de tendência emocional |
 | [_dormant.entity_versions](tables/dormant/entity_versions.md) | table | sim | 1 | 8 | não |  |
 | [_dormant.eq_analysis_history](tables/dormant/eq_analysis_history.md) | table | sim | 4 | 16 | não |  |
 | [_dormant.eq_pillar_details](tables/dormant/eq_pillar_details.md) | table | não | 0 | 10 | não | Detalhamento dos 4 pilares do EQ |
@@ -107,7 +99,6 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.lead_history](tables/dormant/lead_history.md) | table | não | 0 | 10 | não |  |
 | [_dormant.lead_routing_log](tables/dormant/lead_routing_log.md) | table | não | 0 | 7 | não |  |
 | [_dormant.lead_scores](tables/dormant/lead_scores.md) | table | não | 0 | 7 | não |  |
-| [_dormant.leads](tables/dormant/leads.md) | table | não | 0 | 39 | não |  |
 | [_dormant.life_events](tables/dormant/life_events.md) | table | sim | 1 | 19 | não | SINGU: Eventos de vida importantes dos contatos |
 | [_dormant.login_alerts](tables/dormant/login_alerts.md) | table | não | 0 | 7 | não |  |
 | [_dormant.login_attempts](tables/dormant/login_attempts.md) | table | não | 0 | 7 | não |  |
@@ -117,20 +108,16 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.mfa_verification_attempts](tables/dormant/mfa_verification_attempts.md) | table | não | 0 | 6 | não |  |
 | [_dormant.notes](tables/dormant/notes.md) | table | sim | 1 | 11 | não | Notas e observações livres |
 | [_dormant.notification_preferences](tables/dormant/notification_preferences.md) | table | não | 0 | 12 | não |  |
-| [_dormant.notification_settings](tables/dormant/notification_settings.md) | table | não | 0 | 29 | não | Configurações de notificação por usuário |
 | [_dormant.notifications](tables/dormant/notifications.md) | table | não | 0 | 30 | não | Notificações e alertas do sistema |
 | [_dormant.objection_templates](tables/dormant/objection_templates.md) | table | sim | 1 | 16 | não | SINGU: Templates de resposta para objeções comuns |
-| [_dormant.objections](tables/dormant/objections.md) | table | sim | 1 | 17 | não | SINGU: Registro de objeções levantadas por contatos |
 | [_dormant.objections_library](tables/dormant/objections_library.md) | table | não | 0 | 9 | não |  |
 | [_dormant.offer_suggestions](tables/dormant/offer_suggestions.md) | table | sim | 1 | 22 | não | SINGU: Sugestões de ofertas personalizadas |
 | [_dormant.password_reset_requests](tables/dormant/password_reset_requests.md) | table | não | 0 | 9 | não |  |
 | [_dormant.performance_bets](tables/dormant/performance_bets.md) | table | não | 0 | 9 | não |  |
 | [_dormant.personalized_message_templates](tables/dormant/personalized_message_templates.md) | table | não | 0 | 18 | não |  |
-| [_dormant.pix_accounts](tables/dormant/pix_accounts.md) | table | não | 0 | 10 | não |  |
 | [_dormant.playbook_items](tables/dormant/playbook_items.md) | table | não | 0 | 7 | não |  |
 | [_dormant.playbook_progress](tables/dormant/playbook_progress.md) | table | não | 0 | 5 | não |  |
 | [_dormant.playbooks](tables/dormant/playbooks.md) | table | sim | 1 | 6 | não |  |
-| [_dormant.pre_contact_briefings](tables/dormant/pre_contact_briefings.md) | table | não | 0 | 30 | não |  |
 | [_dormant.price_alerts](tables/dormant/price_alerts.md) | table | não | 0 | 9 | não |  |
 | [_dormant.price_history](tables/dormant/price_history.md) | table | não | 0 | 8 | não |  |
 | [_dormant.prize_wheel_spins](tables/dormant/prize_wheel_spins.md) | table | não | 0 | 6 | não |  |
@@ -142,7 +129,6 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.quote_sync_logs](tables/dormant/quote_sync_logs.md) | table | não | 0 | 8 | não |  |
 | [_dormant.quotes](tables/dormant/quotes.md) | table | não | 0 | 16 | não |  |
 | [_dormant.rank_change_notifications](tables/dormant/rank_change_notifications.md) | table | não | 0 | 7 | não |  |
-| [_dormant.rapport_score_history](tables/dormant/rapport_score_history.md) | table | não | 0 | 15 | não |  |
 | [_dormant.rate_limit_logs](tables/dormant/rate_limit_logs.md) | table | não | 0 | 9 | não |  |
 | [_dormant.rate_limit_settings](tables/dormant/rate_limit_settings.md) | table | não | 0 | 8 | não |  |
 | [_dormant.reauthentication_requests](tables/dormant/reauthentication_requests.md) | table | não | 0 | 8 | não |  |
@@ -158,15 +144,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.salesperson_leagues](tables/dormant/salesperson_leagues.md) | table | não | 0 | 7 | não |  |
 | [_dormant.salesperson_preferences](tables/dormant/salesperson_preferences.md) | table | não | 0 | 8 | não |  |
 | [_dormant.salesperson_xp](tables/dormant/salesperson_xp.md) | table | sim | 1 | 7 | não |  |
-| [_dormant.satisfaction_scores](tables/dormant/satisfaction_scores.md) | table | não | 0 | 16 | não | Scores de satisfação e NPS dos clientes |
 | [_dormant.saved_filters](tables/dormant/saved_filters.md) | table | sim | 4 | 8 | não |  |
 | [_dormant.score_history](tables/dormant/score_history.md) | table | sim | 4 | 10 | não |  |
 | [_dormant.script_usage_log](tables/dormant/script_usage_log.md) | table | não | 0 | 16 | não |  |
 | [_dormant.security_alert_history](tables/dormant/security_alert_history.md) | table | não | 0 | 8 | não |  |
 | [_dormant.security_alert_settings](tables/dormant/security_alert_settings.md) | table | não | 0 | 10 | não |  |
-| [_dormant.shared_interests](tables/dormant/shared_interests.md) | table | não | 0 | 14 | não |  |
 | [_dormant.sla_configs](tables/dormant/sla_configs.md) | table | não | 0 | 9 | não |  |
-| [_dormant.smart_reminders](tables/dormant/smart_reminders.md) | table | não | 0 | 25 | não | Lembretes inteligentes com contexto |
 | [_dormant.sms_verification_codes](tables/dormant/sms_verification_codes.md) | table | não | 0 | 8 | não |  |
 | [_dormant.social_behavior_analysis](tables/dormant/social_behavior_analysis.md) | table | sim | 4 | 21 | não |  |
 | [_dormant.social_life_events](tables/dormant/social_life_events.md) | table | sim | 4 | 15 | não |  |
@@ -193,17 +176,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [_dormant.trigger_channel_effectiveness](tables/dormant/trigger_channel_effectiveness.md) | table | sim | 4 | 11 | não |  |
 | [_dormant.trigger_intensity_history](tables/dormant/trigger_intensity_history.md) | table | sim | 4 | 9 | não |  |
 | [_dormant.trigger_suggestions](tables/dormant/trigger_suggestions.md) | table | sim | 1 | 18 | não | SINGU: Sugestões de gatilhos mentais geradas por IA |
-| [_dormant.trigger_templates](tables/dormant/trigger_templates.md) | table | não | 0 | 14 | não | Templates prontos utilizando gatilhos mentais de Cialdini |
 | [_dormant.trigger_usage_history](tables/dormant/trigger_usage_history.md) | table | sim | 4 | 14 | não |  |
-| [_dormant.trigger_usage_log](tables/dormant/trigger_usage_log.md) | table | sim | 1 | 15 | não | SINGU: Log de uso de gatilhos mentais e seus resultados |
 | [_dormant.user_companies_link](tables/dormant/user_companies_link.md) | table | sim | 1 | 6 | não | SINGU: Vínculo de permissão entre usuários e empresas compartilhadas |
-| [_dormant.user_contacts_link](tables/dormant/user_contacts_link.md) | table | sim | 1 | 6 | não | SINGU: Vínculo de permissão entre usuários e contatos compartilhados |
-| [_dormant.user_disc_profile](tables/dormant/user_disc_profile.md) | table | sim | 1 | 13 | não | SINGU: Perfil DISC do próprio usuário/vendedor |
 | [_dormant.user_favorite_templates](tables/dormant/user_favorite_templates.md) | table | não | 0 | 8 | não | Templates favoritos salvos por cada usuário |
 | [_dormant.user_mfa_settings](tables/dormant/user_mfa_settings.md) | table | não | 0 | 13 | não |  |
 | [_dormant.user_roles](tables/dormant/user_roles.md) | table | não | 0 | 5 | não |  |
 | [_dormant.vak_analysis_history](tables/dormant/vak_analysis_history.md) | table | sim | 4 | 14 | não |  |
-| [_dormant.vak_profiles](tables/dormant/vak_profiles.md) | table | sim | 1 | 16 | não | SINGU: Perfis VAK (Visual, Auditivo, Cinestésico) dos contatos |
 | [_dormant.vak_templates](tables/dormant/vak_templates.md) | table | não | 0 | 14 | não | Templates adaptados por modalidade sensorial VAK |
 | [_dormant.victory_feed](tables/dormant/victory_feed.md) | table | sim | 1 | 8 | não |  |
 | [_dormant.webauthn_challenges](tables/dormant/webauthn_challenges.md) | table | não | 0 | 5 | não |  |
@@ -282,6 +260,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.city_whitelist](tables/public/city_whitelist.md) | table | sim | 5 | 9 | não | SINGU: Cidades permitidas (mais granular que country). Para ambientes corporativos restritos. |
 | [public.client_values](tables/public/client_values.md) | table | sim | 8 | 11 | não | SINGU: Valores pessoais/profissionais do contato para personalizar abordagem comercial. |
 | [public.clients](tables/public/clients.md) | table | sim | 1 | 11 | não |  |
+| [public.closing_moment_analysis](tables/public/closing_moment_analysis.md) | table | sim | 2 | 26 | não | Análise do melhor momento para fechamento |
 | [public.closing_score_config](tables/public/closing_score_config.md) | table | sim | 2 | 10 | não | Configuração dos fatores que compõem o score de fechamento |
 | [public.cnaes](tables/public/cnaes.md) | table | sim | 2 | 8 | não | Catálogo oficial de CNAEs da Receita Federal. Fonte de verdade para códigos e descrições. |
 | [public.cnpj_cache](tables/public/cnpj_cache.md) | table | sim | 1 | 22 | não |  |
@@ -318,8 +297,10 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_business_context](tables/public/contact_business_context.md) | table | sim | 4 | 9 | não |  |
 | [public.contact_cadence](tables/public/contact_cadence.md) | table | sim | 8 | 11 | não | SINGU: Cadência ideal de contato por lead/cliente. Auto-remind e next_contact_due. |
 | [public.contact_cadence_audit](tables/public/contact_cadence_audit.md) | table | sim | 1 | 9 | não |  |
+| [public.contact_communication_style](tables/public/contact_communication_style.md) | table | sim | 2 | 20 | não |  |
 | [public.contact_decision_making](tables/public/contact_decision_making.md) | table | sim | 4 | 9 | não |  |
 | [public.contact_emails](tables/public/contact_emails.md) | table | sim | 6 | 12 | não | Endereços de e-mail associados a contatos, permitindo múltiplos e-mails tipados e sinalização de principal/verificado. Cada registro referencia public.contacts.id. |
+| [public.contact_eq_scores](tables/public/contact_eq_scores.md) | table | sim | 2 | 25 | não | Scores de Inteligência Emocional (EQ) dos contatos - 4 pilares de Goleman |
 | [public.contact_family_history](tables/public/contact_family_history.md) | table | sim | 2 | 5 | não |  |
 | [public.contact_influence](tables/public/contact_influence.md) | table | sim | 4 | 8 | não |  |
 | [public.contact_metaprograms](tables/public/contact_metaprograms.md) | table | sim | 4 | 15 | não |  |
@@ -338,6 +319,8 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_social_media](tables/public/contact_social_media.md) | table | sim | 2 | 17 | não |  |
 | [public.contact_time_analysis](tables/public/contact_time_analysis.md) | table | sim | 8 | 9 | não | SINGU: Heatmap de melhores horários/dias para contatar cada lead. Grid 7x24. |
 | [public.contact_time_analysis_audit](tables/public/contact_time_analysis_audit.md) | table | sim | 1 | 9 | não |  |
+| [public.contact_trigger_preferences](tables/public/contact_trigger_preferences.md) | table | sim | 2 | 16 | não | SINGU: Preferências de gatilhos mentais aprendidas por contato |
+| [public.contact_values](tables/public/contact_values.md) | table | sim | 2 | 11 | não | SINGU: Valores pessoais e profissionais identificados |
 | [public.contacts](tables/public/contacts.md) | table | sim | 10 | 65 | sim | Cadastro de pessoas/contatos comerciais vinculados opcionalmente a uma empresa. Reúne identificação, canais de contato, papéis de compra, atributos comportamentais e dados derivados. PK: id. company_id referencia public.companies.id; duplicate_of referencia public.contacts.id; assigned_by_id referencia public.users.id. Preferir as tabelas contact_emails, contact_phones e contact_social_media para múltiplos canais quando apropriado; não assumir que os campos legados equivalem a essas tabelas. |
 | [public.conversation_analyses](tables/public/conversation_analyses.md) | table | sim | 4 | 23 | não |  |
 | [public.conversation_topics_catalog](tables/public/conversation_topics_catalog.md) | table | sim | 4 | 10 | não |  |
@@ -383,9 +366,11 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.deals](tables/public/deals.md) | table | sim | 8 | 17 | não | Registro de oportunidade de venda do CRM. Cada linha representa um negócio vinculado opcionalmente a uma empresa e a um contato, com valor, etapa, probabilidade e previsão de fechamento. O status possui domínio fechado e os itens do negócio são relacionados em public.deal_items. Chaves principais: id; company_id → public.companies.id; contact_id → public.contacts.id; user_id → public.profiles.id; loss_reason_id → public.loss_reasons.id. |
 | [public.decision_criteria](tables/public/decision_criteria.md) | table | sim | 8 | 10 | não | SINGU: Critérios que o contato usa para decidir compras (preço, qualidade, confiança). |
 | [public.device_login_notifications](tables/public/device_login_notifications.md) | table | sim | 5 | 14 | não | SINGU: Notificações enviadas em eventos de login anômalos. Trackeia resposta do usuário (trusted/reported_fraud). |
+| [public.digest_history](tables/public/digest_history.md) | table | sim | 2 | 21 | não | Histórico de digests enviados |
 | [public.disc_analysis_history](tables/public/disc_analysis_history.md) | table | sim | 8 | 23 | não | SINGU: Histórico de análises DISC por contato. Cada registro = 1 análise (manual ou IA). FK contacts(id). |
 | [public.disc_analysis_history_audit](tables/public/disc_analysis_history_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.disc_approach_recommendations](tables/public/disc_approach_recommendations.md) | table | sim | 2 | 13 | não | Recomendações estratégicas de abordagem por perfil DISC |
+| [public.disc_assessments](tables/public/disc_assessments.md) | table | sim | 2 | 20 | não | SINGU: Avaliações DISC realizadas para contatos |
 | [public.disc_communication_logs](tables/public/disc_communication_logs.md) | table | sim | 8 | 12 | não | SINGU: Logs de comunicação adaptada ao perfil DISC. Registra se vendedor seguiu as dicas. |
 | [public.disc_conversion_metrics](tables/public/disc_conversion_metrics.md) | table | sim | 9 | 17 | não | SINGU: Métricas agregadas de conversão por perfil DISC. Dados periódicos. |
 | [public.disc_profile_config](tables/public/disc_profile_config.md) | table | sim | 2 | 51 | não | SINGU: Configuração e características de cada perfil DISC |
@@ -405,6 +390,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.embedding_configs](tables/public/embedding_configs.md) | table | sim | 4 | 11 | não |  |
 | [public.emotional_anchors](tables/public/emotional_anchors.md) | table | sim | 8 | 10 | não | SINGU: Palavras/temas gatilho que desencadeiam reações emocionais específicas. |
 | [public.emotional_states_history](tables/public/emotional_states_history.md) | table | sim | 8 | 9 | não | SINGU: Evolução emocional do contato ao longo das interações. |
+| [public.emotional_trend_snapshots](tables/public/emotional_trend_snapshots.md) | table | sim | 2 | 21 | não | Snapshots periódicos de tendência emocional |
 | [public.entity_relationships](tables/public/entity_relationships.md) | table | sim | 4 | 14 | não |  |
 | [public.eq_analysis_history](tables/public/eq_analysis_history.md) | table | sim | 8 | 16 | não | SINGU: Histórico de análises de Inteligência Emocional (EQ). 5 pilares: self_awareness, self_regulation, motivation, empathy, social_skills. |
 | [public.eq_assessment_questions](tables/public/eq_assessment_questions.md) | table | sim | 2 | 12 | não | Perguntas para avaliação de EQ |
@@ -463,6 +449,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.lead_score_thresholds](tables/public/lead_score_thresholds.md) | table | sim | 4 | 6 | não |  |
 | [public.lead_scores](tables/public/lead_scores.md) | table | sim | 8 | 23 | não | SINGU: Score atual de lead por contato. 4 dimensões ponderadas (Engagement 30%, Fit 20%, Intent 25%, Relationship 25%). Grade automática. 1 registro por contato. Série temporal em lead_score_history. |
 | [public.lead_sources](tables/public/lead_sources.md) | table | sim | 2 | 7 | não | Catálogo de origens de leads utilizado por entidades comerciais que guardam source_id. Mantém nome, categoria, descrição, custo por lead e estado ativo. PK: id; nome é UNIQUE. |
+| [public.leads](tables/public/leads.md) | table | sim | 2 | 39 | não |  |
 | [public.life_events](tables/public/life_events.md) | table | sim | 8 | 13 | não | SINGU: Eventos importantes (aniversários, promoções) para oportunidades de rapport. |
 | [public.life_events_history](tables/public/life_events_history.md) | table | sim | 1 | 12 | não |  |
 | [public.login_attempts](tables/public/login_attempts.md) | table | sim | 4 | 15 | não | SINGU: Log de TODAS as tentativas de login (success=true/false) para detecção de brute force via query nos últimos N minutos. |
@@ -485,6 +472,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.nlp_feedback](tables/public/nlp_feedback.md) | table | sim | 2 | 10 | não |  |
 | [public.notification_logs](tables/public/notification_logs.md) | table | sim | 1 | 9 | não |  |
 | [public.notification_preferences](tables/public/notification_preferences.md) | table | sim | 3 | 10 | não |  |
+| [public.notification_settings](tables/public/notification_settings.md) | table | sim | 2 | 29 | não | Configurações de notificação por usuário |
 | [public.notifications](tables/public/notifications.md) | table | sim | 5 | 11 | não |  |
 | [public.nps_surveys](tables/public/nps_surveys.md) | table | sim | 1 | 12 | não |  |
 | [public.nurturing_enrollments](tables/public/nurturing_enrollments.md) | table | sim | 5 | 13 | não | SINGU: Contatos em workflows de nurturing. Context carrega estado entre steps. |
@@ -492,6 +480,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.nurturing_workflows](tables/public/nurturing_workflows.md) | table | sim | 5 | 17 | não | SINGU: Fluxos de nutrição long-term (mais complexos que sequences). Trigger-based (score/segment/inactivity/event). |
 | [public.oauth_tokens](tables/public/oauth_tokens.md) | table | sim | 1 | 5 | não | Tokens OAuth para integrações externas |
 | [public.objection_example_feedback](tables/public/objection_example_feedback.md) | table | sim | 4 | 8 | não |  |
+| [public.objections](tables/public/objections.md) | table | sim | 2 | 17 | não | SINGU: Registro de objeções levantadas por contatos |
 | [public.offer_suggestions](tables/public/offer_suggestions.md) | table | sim | 8 | 14 | não | SINGU: Ofertas personalizadas sugeridas pela IA com base no perfil comportamental. |
 | [public.password_reset_requests](tables/public/password_reset_requests.md) | table | sim | 3 | 18 | não | SINGU: Tokens de reset de senha (armazenados como hash). Single-use com expiração. |
 | [public.people_intelligence_events](tables/public/people_intelligence_events.md) | table | sim | 3 | 12 | não |  |
@@ -500,8 +489,10 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.pipeline_stage_transitions](tables/public/pipeline_stage_transitions.md) | table | sim | 2 | 6 | não |  |
 | [public.pipeline_stages](tables/public/pipeline_stages.md) | table | sim | 2 | 14 | não | Etapas pertencentes a um pipeline comercial. Registra nome, ordem, probabilidade, estados de início/ganho/perda e SLA. pipeline_id referencia public.pipelines.id; outras entidades de negócio podem referenciar a etapa conforme suas FKs. |
 | [public.pipelines](tables/public/pipelines.md) | table | sim | 2 | 12 | não | Configuração de pipelines comerciais. Cada registro define um fluxo de trabalho de vendas, suas opções de múltiplas oportunidades, meta mensal e ordenação. PK: id. As etapas são relacionadas por public.pipeline_stages.pipeline_id. |
+| [public.pix_accounts](tables/public/pix_accounts.md) | table | sim | 2 | 10 | não |  |
 | [public.playbook_usage_log](tables/public/playbook_usage_log.md) | table | sim | 2 | 9 | não |  |
 | [public.portfolio_settings](tables/public/portfolio_settings.md) | table | sim | 2 | 5 | não |  |
+| [public.pre_contact_briefings](tables/public/pre_contact_briefings.md) | table | sim | 2 | 30 | não |  |
 | [public.product_novelties](tables/public/product_novelties.md) | table | sim | 2 | 13 | não | Ciclo de vida do selo NOVO. Pipeline popula via fn_populate_novelties_from_supplier. Trigger sincroniza products.is_new automaticamente. |
 | [public.products](tables/public/products.md) | table | sim | 1 | 14 | não | Catálogo de produtos/serviços comercializados. Contém SKU, preço, custo, estoque e metadados. PK: id; SKU é opcional e UNIQUE. Relaciona-se a itens de oportunidade por public.deal_items.product_id e a novidades por public.product_novelties.product_id. |
 | [public.profiles](tables/public/profiles.md) | table | sim | 8 | 26 | não | SINGU: Perfis de usuários do sistema, vinculados ao Supabase Auth |
@@ -513,6 +504,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.query_telemetry](tables/public/query_telemetry.md) | table | sim | 7 | 13 | não |  |
 | [public.quick_notes](tables/public/quick_notes.md) | table | sim | 4 | 9 | não |  |
 | [public.ragas_scores](tables/public/ragas_scores.md) | table | sim | 2 | 15 | não |  |
+| [public.rapport_score_history](tables/public/rapport_score_history.md) | table | sim | 2 | 15 | não |  |
 | [public.redistribution_log](tables/public/redistribution_log.md) | table | sim | 5 | 19 | não | SINGU: Log append-only de redistribuições de carteira. Cada linha = 1 transferência de lead de um vendedor para outro, com motivo (inatividade, férias, cap excedido, manual, etc). Base para auditoria e analytics de rotação. |
 | [public.reframing_analysis](tables/public/reframing_analysis.md) | table | sim | 3 | 13 | não |  |
 | [public.reframing_analysis_audit](tables/public/reframing_analysis_audit.md) | table | sim | 1 | 9 | não |  |
@@ -542,6 +534,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.sales_tasks](tables/public/sales_tasks.md) | table | sim | 1 | 16 | não |  |
 | [public.sales_team_members](tables/public/sales_team_members.md) | table | sim | 9 | 28 | não | SINGU: Membros do time de vendas com role (sdr/closer/manager), peso para round-robin ponderado (1-10), caps diário/total e controle de férias. Usado pelo módulo Lead Routing & Portfolio Rotation. |
 | [public.salespeople](tables/public/salespeople.md) | table | sim | 2 | 10 | não | Cadastro de vendedores |
+| [public.satisfaction_scores](tables/public/satisfaction_scores.md) | table | sim | 2 | 16 | não | Scores de satisfação e NPS dos clientes |
 | [public.scheduled_reports](tables/public/scheduled_reports.md) | table | sim | 1 | 12 | não |  |
 | [public.scheduled_visits](tables/public/scheduled_visits.md) | table | sim | 4 | 12 | não |  |
 | [public.schema_drift_alerts](tables/public/schema_drift_alerts.md) | table | sim | 7 | 11 | não |  |
@@ -560,12 +553,14 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.sequence_send_log](tables/public/sequence_send_log.md) | table | sim | 2 | 16 | não |  |
 | [public.sequence_steps](tables/public/sequence_steps.md) | table | sim | 5 | 22 | não | SINGU: Passos individuais de uma sequência. Ordem via step_number. Delay em dias+horas. Canal: email/whatsapp/sms/call/linkedin/task/wait. |
 | [public.sequences](tables/public/sequences.md) | table | sim | 5 | 20 | não | SINGU: Sequências (cadências) multi-canal de contato. Mãe dos steps individuais em sequence_steps. |
+| [public.shared_interests](tables/public/shared_interests.md) | table | sim | 2 | 14 | não |  |
 | [public.sla_rules](tables/public/sla_rules.md) | table | sim | 1 | 9 | não |  |
 | [public.sla_violations](tables/public/sla_violations.md) | table | sim | 4 | 10 | não |  |
 | [public.sleight_of_mouth_examples](tables/public/sleight_of_mouth_examples.md) | table | sim | 2 | 11 | não |  |
 | [public.sleight_of_mouth_patterns](tables/public/sleight_of_mouth_patterns.md) | table | sim | 2 | 16 | não |  |
 | [public.sm_upload_mapping](tables/public/sm_upload_mapping.md) | table | sim | 1 | 7 | não |  |
 | [public.smart_notifications](tables/public/smart_notifications.md) | table | sim | 4 | 21 | sim |  |
+| [public.smart_reminders](tables/public/smart_reminders.md) | table | sim | 2 | 25 | não | Lembretes inteligentes com contexto |
 | [public.smart_segments](tables/public/smart_segments.md) | table | sim | 1 | 11 | não |  |
 | [public.sms_campaign_recipients](tables/public/sms_campaign_recipients.md) | table | sim | 8 | 18 | não | SINGU: Destinatários individuais de sms_campaigns. |
 | [public.sms_campaigns](tables/public/sms_campaigns.md) | table | sim | 5 | 21 | não | SINGU: Campanhas de SMS com provider configurável, segmentação e tracking de custo. |
@@ -602,10 +597,14 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.trigger_bundles](tables/public/trigger_bundles.md) | table | sim | 8 | 28 | não | SINGU: Combinações pré-configuradas de gatilhos mentais |
 | [public.trigger_channel_effectiveness](tables/public/trigger_channel_effectiveness.md) | table | sim | 8 | 23 | não |  |
 | [public.trigger_intensity_history](tables/public/trigger_intensity_history.md) | table | sim | 6 | 22 | não | SINGU: Histórico temporal de intensidade dos gatilhos mentais aplicados por contato. Trackeia escalação progressiva (1-5) para analytics de quais níveis converteram. Append-only. is_escalation e reached_max_intensity são computed. |
+| [public.trigger_templates](tables/public/trigger_templates.md) | table | sim | 2 | 14 | não | Templates prontos utilizando gatilhos mentais de Cialdini |
 | [public.trigger_types](tables/public/trigger_types.md) | table | sim | 4 | 18 | não | SINGU: Catálogo de tipos de gatilhos mentais |
 | [public.trigger_usage_history](tables/public/trigger_usage_history.md) | table | sim | 8 | 24 | não |  |
+| [public.trigger_usage_log](tables/public/trigger_usage_log.md) | table | sim | 2 | 15 | não | SINGU: Log de uso de gatilhos mentais e seus resultados |
 | [public.uapi_sessions](tables/public/uapi_sessions.md) | table | sim | 1 | 28 | não | Sessões UAPI Lalamove - tokens e credenciais para integração com br-uapi.lalamove.com |
 | [public.user_badges](tables/public/user_badges.md) | table | sim | 4 | 4 | não |  |
+| [public.user_contacts_link](tables/public/user_contacts_link.md) | table | sim | 2 | 6 | não | SINGU: Vínculo de permissão entre usuários e contatos compartilhados |
+| [public.user_disc_profile](tables/public/user_disc_profile.md) | table | sim | 2 | 13 | não | SINGU: Perfil DISC do próprio usuário/vendedor |
 | [public.user_goals](tables/public/user_goals.md) | table | sim | 4 | 12 | não |  |
 | [public.user_known_devices](tables/public/user_known_devices.md) | table | sim | 5 | 18 | não | SINGU: Dispositivos conhecidos por usuário. Trust flag permite bypass de verificações extras. Revoke imediato em caso de comprometimento. |
 | [public.user_roles](tables/public/user_roles.md) | table | sim | 9 | 4 | não |  |
@@ -613,6 +612,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.users](tables/public/users.md) | table | sim | 3 | 16 | não | Usuários/colaboradores sincronizados do Bitrix24 |
 | [public.vak_analysis_history](tables/public/vak_analysis_history.md) | table | sim | 8 | 28 | não | SINGU: Histórico de análises VAK (Visual/Auditivo/Cinestésico/Digital) por contato. Cada registro = 1 análise (manual, AI automática via keyword_match em vak_keywords, ou voice_analysis). Espelha o padrão de disc_analysis_history e eq_analysis_history. |
 | [public.vak_keywords](tables/public/vak_keywords.md) | table | sim | 2 | 8 | não | Dicionário de palavras-chave por modalidade VAK para detecção automática |
+| [public.vak_profiles](tables/public/vak_profiles.md) | table | sim | 2 | 16 | não | SINGU: Perfis VAK (Visual, Auditivo, Cinestésico) dos contatos |
 | [public.validation_queue](tables/public/validation_queue.md) | table | sim | 3 | 12 | não |  |
 | [public.visit_checkins](tables/public/visit_checkins.md) | table | sim | 5 | 22 | não | SINGU: Check-ins de visitas presenciais com GPS (lat/long/accuracy), duração computada, fotos e outcome. duration_minutes é computed. |
 | [public.webauthn_credentials](tables/public/webauthn_credentials.md) | table | sim | 5 | 17 | não | SINGU: Credenciais WebAuthn/Passkeys (FIDO2). counter protege contra replay. public_key em bytea. |

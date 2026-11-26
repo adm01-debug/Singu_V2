@@ -22,11 +22,11 @@
 | public.gender | enum | masculino, feminino, outro, nao_informado |  |
 | public.interaction_direction | enum | inbound, outbound |  |
 | public.interaction_status | enum | pendente, em_andamento, concluido, cancelado, sem_resposta, agendado |  |
-| public.lead_status | enum | novo, contatado, qualificando, qualificado, desqualificado, convertido | _dormant.leads.status, public.vw_leads_full.status |
+| public.lead_status | enum | novo, contatado, qualificando, qualificado, desqualificado, convertido | public.leads.status, public.vw_leads_full.status |
 | public.motivo_carteira | enum | NOVO_CLIENTE, RODIZIO_ANUAL, TRANSFERENCIA, REATIVACAO, IMPORTACAO_INICIAL |  |
 | public.passo_outcome | enum | respondeu_positivo, respondeu_neutro, nao_respondeu, nao_atendeu, pulou | public.proximo_passo_feedback.outcome |
 | public.phone_type | enum | celular_corporativo, fixo_comercial, celular_pessoal, invalido | public.company_phones.phone_type, public.contact_phones.phone_type |
-| public.priority_level | enum | baixa, media, alta, urgente | _dormant.deals.prioridade, _dormant.leads.prioridade, _dormant.tasks.prioridade, public.vw_deals_full.prioridade, public.vw_leads_full.prioridade |
+| public.priority_level | enum | baixa, media, alta, urgente | _dormant.deals.prioridade, _dormant.tasks.prioridade, public.leads.prioridade, public.vw_deals_full.prioridade, public.vw_leads_full.prioridade |
 | public.salesperson_role | enum | sdr, closer, hybrid | public.salespeople.role |
 | public.social_media_platform | enum | linkedin, instagram, facebook, x, youtube, tiktok, whatsapp, google_business, website | public.company_social_media.plataforma, public.contact_social_media.plataforma |
 | public.supplier_alert_severity | enum | info, atencao, critico |  |

@@ -40,7 +40,6 @@ Uso e tamanho em `stats.md`.
 | _dormant.client_values | client_values_pkey | btree | id | sim | sim |  |
 | _dormant.client_values | client_values_user_id_contact_id_category_value_name_key | btree | user_id, contact_id, category, value_name | sim | sim |  |
 | _dormant.client_values | idx_client_values_contact | btree | contact_id | não | sim |  |
-| _dormant.closing_moment_analysis | closing_moment_analysis_pkey | btree | id | sim | sim |  |
 | _dormant.cognitive_bias_history | cognitive_bias_history_pkey | btree | id | sim | sim |  |
 | _dormant.cognitive_bias_history | idx_cognitive_bias_history_contact_id | btree | contact_id | não | sim |  |
 | _dormant.cognitive_biases | cognitive_biases_pkey | btree | id | sim | sim |  |
@@ -59,10 +58,8 @@ Uso e tamanho em `stats.md`.
 | _dormant.contact_availability | contact_availability_pkey | btree | id | sim | sim |  |
 | _dormant.contact_cadence | contact_cadence_pkey | btree | id | sim | sim |  |
 | _dormant.contact_cadence | contact_cadence_user_id_contact_id_key | btree | user_id, contact_id | sim | sim |  |
-| _dormant.contact_communication_style | contact_communication_style_pkey | btree | id | sim | sim |  |
 | _dormant.contact_compatibility | contact_compatibility_pkey | btree | id | sim | sim |  |
 | _dormant.contact_compatibility | idx_compatibility_unique | btree | user_id, contact_id | sim | sim |  |
-| _dormant.contact_eq_scores | contact_eq_scores_pkey | btree | id | sim | sim |  |
 | _dormant.contact_metaprograms | contact_metaprograms_pkey | btree | id | sim | sim |  |
 | _dormant.contact_metaprograms | idx_metaprograms_unique | btree | contact_id | sim | sim |  |
 | _dormant.contact_preferences | contact_preferences_pkey | btree | id | sim | sim |  |
@@ -76,9 +73,6 @@ Uso e tamanho em `stats.md`.
 | _dormant.contact_time_analysis | contact_time_analysis_pkey | btree | id | sim | sim |  |
 | _dormant.contact_time_analysis | contact_time_analysis_user_id_contact_id_day_of_week_hour_o_key | btree | user_id, contact_id, day_of_week, hour_of_day | sim | sim |  |
 | _dormant.contact_time_analysis | idx_contact_time_analysis_contact | btree | contact_id | não | sim |  |
-| _dormant.contact_trigger_preferences | contact_trigger_preferences_pkey | btree | id | sim | sim |  |
-| _dormant.contact_trigger_preferences | idx_trigger_prefs_unique | btree | contact_id | sim | sim |  |
-| _dormant.contact_values | contact_values_pkey | btree | id | sim | sim |  |
 | _dormant.custom_field_values | custom_field_values_custom_field_id_entity_id_key | btree | custom_field_id, entity_id | sim | sim |  |
 | _dormant.custom_field_values | custom_field_values_pkey | btree | id | sim | sim |  |
 | _dormant.custom_fields | custom_fields_entity_type_field_name_key | btree | entity_type, field_name | sim | sim |  |
@@ -105,11 +99,9 @@ Uso e tamanho em `stats.md`.
 | _dormant.deals | deals_pkey | btree | id | sim | sim |  |
 | _dormant.decision_criteria | decision_criteria_pkey | btree | id | sim | sim |  |
 | _dormant.demand_forecasts | demand_forecasts_pkey | btree | id | sim | sim |  |
-| _dormant.digest_history | digest_history_pkey | btree | id | sim | sim |  |
 | _dormant.digital_signatures | digital_signatures_pkey | btree | id | sim | sim |  |
 | _dormant.disc_analysis_history | disc_analysis_history_pkey | btree | id | sim | sim |  |
 | _dormant.disc_analysis_history | idx_disc_analysis_history_contact | btree | contact_id | não | sim |  |
-| _dormant.disc_assessments | disc_assessments_pkey | btree | id | sim | sim |  |
 | _dormant.disc_communication_logs | disc_communication_logs_pkey | btree | id | sim | sim |  |
 | _dormant.disc_communication_logs | idx_disc_communication_logs_contact | btree | contact_id | não | sim |  |
 | _dormant.disc_compatibility | disc_compatibility_pkey | btree | id | sim | sim |  |
@@ -124,7 +116,6 @@ Uso e tamanho em `stats.md`.
 | _dormant.emotional_states | emotional_states_pkey | btree | id | sim | sim |  |
 | _dormant.emotional_states_history | emotional_states_history_pkey | btree | id | sim | sim |  |
 | _dormant.emotional_states_history | idx_emotional_states_contact | btree | contact_id | não | sim |  |
-| _dormant.emotional_trend_snapshots | emotional_trend_snapshots_pkey | btree | id | sim | sim |  |
 | _dormant.entity_versions | entity_versions_pkey | btree | id | sim | sim |  |
 | _dormant.entity_versions | unique_entity_version | btree | entity_type, entity_id, version_number | sim | sim |  |
 | _dormant.eq_analysis_history | eq_analysis_history_pkey | btree | id | sim | sim |  |
@@ -157,8 +148,6 @@ Uso e tamanho em `stats.md`.
 | _dormant.lead_routing_log | lead_routing_log_pkey | btree | id | sim | sim |  |
 | _dormant.lead_scores | lead_scores_pkey | btree | id | sim | sim |  |
 | _dormant.lead_scores | lead_scores_sale_id_key | btree | sale_id | sim | sim |  |
-| _dormant.leads | leads_codigo_key | btree | codigo | sim | sim |  |
-| _dormant.leads | leads_pkey | btree | id | sim | sim |  |
 | _dormant.life_events | life_events_pkey | btree | id | sim | sim |  |
 | _dormant.login_alerts | login_alerts_pkey | btree | id | sim | sim |  |
 | _dormant.login_attempts | login_attempts_pkey | btree | id | sim | sim |  |
@@ -168,11 +157,8 @@ Uso e tamanho em `stats.md`.
 | _dormant.mfa_verification_attempts | mfa_verification_attempts_pkey | btree | id | sim | sim |  |
 | _dormant.notes | notes_pkey | btree | id | sim | sim |  |
 | _dormant.notification_preferences | notification_preferences_pkey | btree | id | sim | sim |  |
-| _dormant.notification_settings | idx_notif_settings_user | btree | user_id | sim | sim |  |
-| _dormant.notification_settings | notification_settings_pkey | btree | id | sim | sim |  |
 | _dormant.notifications | notifications_pkey | btree | id | sim | sim |  |
 | _dormant.objection_templates | objection_templates_pkey | btree | id | sim | sim |  |
-| _dormant.objections | objections_pkey | btree | id | sim | sim |  |
 | _dormant.objections_library | objections_library_pkey | btree | id | sim | sim |  |
 | _dormant.offer_suggestions | offer_suggestions_pkey | btree | id | sim | sim |  |
 | _dormant.password_reset_requests | password_reset_requests_pkey | btree | id | sim | sim |  |
@@ -180,14 +166,10 @@ Uso e tamanho em `stats.md`.
 | _dormant.performance_bets | performance_bets_pkey | btree | id | sim | sim |  |
 | _dormant.personalized_message_templates | personalized_message_templates_pkey | btree | id | sim | sim |  |
 | _dormant.personalized_message_templates | personalized_message_templates_template_code_key | btree | template_code | sim | sim |  |
-| _dormant.pix_accounts | idx_pix_company | btree | company_id | não | sim |  |
-| _dormant.pix_accounts | pix_accounts_pkey | btree | id | sim | sim |  |
-| _dormant.pix_accounts | uq_pix_chave_ativa | btree | company_id, pix_chave | sim | sim | `(is_active = true)` |
 | _dormant.playbook_items | playbook_items_pkey | btree | id | sim | sim |  |
 | _dormant.playbook_progress | playbook_progress_pkey | btree | id | sim | sim |  |
 | _dormant.playbook_progress | playbook_progress_playbook_item_id_sale_id_key | btree | playbook_item_id, sale_id | sim | sim |  |
 | _dormant.playbooks | playbooks_pkey | btree | id | sim | sim |  |
-| _dormant.pre_contact_briefings | pre_contact_briefings_pkey | btree | id | sim | sim |  |
 | _dormant.price_alerts | price_alerts_pkey | btree | id | sim | sim |  |
 | _dormant.price_history | price_history_pkey | btree | id | sim | sim |  |
 | _dormant.prize_wheel_spins | prize_wheel_spins_pkey | btree | id | sim | sim |  |
@@ -203,7 +185,6 @@ Uso e tamanho em `stats.md`.
 | _dormant.quotes | quotes_pkey | btree | id | sim | sim |  |
 | _dormant.quotes | quotes_quote_number_key | btree | quote_number | sim | sim |  |
 | _dormant.rank_change_notifications | rank_change_notifications_pkey | btree | id | sim | sim |  |
-| _dormant.rapport_score_history | rapport_score_history_pkey | btree | id | sim | sim |  |
 | _dormant.rate_limit_logs | rate_limit_logs_pkey | btree | id | sim | sim |  |
 | _dormant.rate_limit_settings | rate_limit_settings_action_key | btree | action | sim | sim |  |
 | _dormant.rate_limit_settings | rate_limit_settings_pkey | btree | id | sim | sim |  |
@@ -228,7 +209,6 @@ Uso e tamanho em `stats.md`.
 | _dormant.salesperson_preferences | salesperson_preferences_salesperson_id_key | btree | salesperson_id | sim | sim |  |
 | _dormant.salesperson_xp | salesperson_xp_pkey | btree | id | sim | sim |  |
 | _dormant.salesperson_xp | salesperson_xp_salesperson_id_key | btree | salesperson_id | sim | sim |  |
-| _dormant.satisfaction_scores | satisfaction_scores_pkey | btree | id | sim | sim |  |
 | _dormant.saved_filters | saved_filters_pkey | btree | id | sim | sim |  |
 | _dormant.saved_filters | unique_filter_name_per_user_entity | btree | user_id, entity_type, name | sim | sim |  |
 | _dormant.score_history | idx_score_history_composite | btree | contact_id, score_type, calculated_at | não | sim |  |
@@ -237,9 +217,7 @@ Uso e tamanho em `stats.md`.
 | _dormant.security_alert_history | security_alert_history_pkey | btree | id | sim | sim |  |
 | _dormant.security_alert_settings | security_alert_settings_pkey | btree | id | sim | sim |  |
 | _dormant.security_alert_settings | security_alert_settings_user_id_key | btree | user_id | sim | sim |  |
-| _dormant.shared_interests | shared_interests_pkey | btree | id | sim | sim |  |
 | _dormant.sla_configs | sla_configs_pkey | btree | id | sim | sim |  |
-| _dormant.smart_reminders | smart_reminders_pkey | btree | id | sim | sim |  |
 | _dormant.sms_verification_codes | sms_verification_codes_pkey | btree | id | sim | sim |  |
 | _dormant.social_behavior_analysis | idx_social_behavior_analysis_contact | btree | contact_id | não | sim |  |
 | _dormant.social_behavior_analysis | social_behavior_analysis_pkey | btree | id | sim | sim |  |
@@ -280,15 +258,9 @@ Uso e tamanho em `stats.md`.
 | _dormant.trigger_intensity_history | idx_trigger_intensity_history_user_contact | btree | user_id, contact_id | não | sim |  |
 | _dormant.trigger_intensity_history | trigger_intensity_history_pkey | btree | id | sim | sim |  |
 | _dormant.trigger_suggestions | trigger_suggestions_pkey | btree | id | sim | sim |  |
-| _dormant.trigger_templates | trigger_templates_pkey | btree | id | sim | sim |  |
 | _dormant.trigger_usage_history | trigger_usage_history_pkey | btree | id | sim | sim |  |
-| _dormant.trigger_usage_log | trigger_usage_log_pkey | btree | id | sim | sim |  |
 | _dormant.user_companies_link | user_companies_link_pkey | btree | id | sim | sim |  |
 | _dormant.user_companies_link | user_companies_link_user_id_company_id_key | btree | user_id, company_id | sim | sim |  |
-| _dormant.user_contacts_link | user_contacts_link_pkey | btree | id | sim | sim |  |
-| _dormant.user_contacts_link | user_contacts_link_user_id_contact_id_key | btree | user_id, contact_id | sim | sim |  |
-| _dormant.user_disc_profile | idx_user_disc_current | btree | user_id | sim | sim | `(is_current = true)` |
-| _dormant.user_disc_profile | user_disc_profile_pkey | btree | id | sim | sim |  |
 | _dormant.user_favorite_templates | user_favorite_templates_pkey | btree | id | sim | sim |  |
 | _dormant.user_favorite_templates | user_favorite_templates_user_id_template_type_template_id_key | btree | user_id, template_type, template_id | sim | sim |  |
 | _dormant.user_mfa_settings | user_mfa_settings_pkey | btree | id | sim | sim |  |
@@ -297,8 +269,6 @@ Uso e tamanho em `stats.md`.
 | _dormant.user_roles | user_roles_user_id_role_key | btree | user_id, role | sim | sim |  |
 | _dormant.vak_analysis_history | idx_vak_analysis_contact | btree | contact_id | não | sim |  |
 | _dormant.vak_analysis_history | vak_analysis_history_pkey | btree | id | sim | sim |  |
-| _dormant.vak_profiles | idx_vak_unique | btree | contact_id | sim | sim |  |
-| _dormant.vak_profiles | vak_profiles_pkey | btree | id | sim | sim |  |
 | _dormant.vak_templates | vak_templates_pkey | btree | id | sim | sim |  |
 | _dormant.victory_feed | victory_feed_pkey | btree | id | sim | sim |  |
 | _dormant.webauthn_challenges | webauthn_challenges_pkey | btree | id | sim | sim |  |
@@ -490,6 +460,7 @@ Uso e tamanho em `stats.md`.
 | public.client_values | idx_client_values_contact | btree | contact_id | não | sim |  |
 | public.clients | clients_pkey | btree | id | sim | sim |  |
 | public.clients | idx_clients_deleted_by | btree | deleted_by | não | sim |  |
+| public.closing_moment_analysis | closing_moment_analysis_pkey | btree | id | sim | sim |  |
 | public.closing_score_config | closing_score_config_factor_name_key | btree | factor_name | sim | sim |  |
 | public.closing_score_config | closing_score_config_pkey | btree | id | sim | sim |  |
 | public.cnaes | cnaes_pkey | btree | codigo | sim | sim |  |
@@ -633,12 +604,14 @@ Uso e tamanho em `stats.md`.
 | public.contact_cadence | contact_cadence_user_id_contact_id_key | btree | user_id, contact_id | sim | sim |  |
 | public.contact_cadence | idx_cadence_contact | btree | contact_id | não | sim |  |
 | public.contact_cadence_audit | contact_cadence_audit_pkey | btree | id | sim | sim |  |
+| public.contact_communication_style | contact_communication_style_pkey | btree | id | sim | sim |  |
 | public.contact_decision_making | contact_decision_making_contact_id_key | btree | contact_id | sim | sim |  |
 | public.contact_decision_making | contact_decision_making_pkey | btree | id | sim | sim |  |
 | public.contact_emails | contact_emails_contact_id_email_ci_unique | btree | contact_id | sim | sim |  |
 | public.contact_emails | contact_emails_pkey | btree | id | sim | sim |  |
 | public.contact_emails | idx_contact_emails_contact_id | btree | contact_id | não | sim |  |
 | public.contact_emails | idx_contact_emails_primary | btree | contact_id | não | sim | `(is_primary = true)` |
+| public.contact_eq_scores | contact_eq_scores_pkey | btree | id | sim | sim |  |
 | public.contact_family_history | contact_family_history_pkey | btree | id | sim | sim |  |
 | public.contact_family_history | idx_contact_family_history_contact | btree | contact_id, changed_at | não | sim |  |
 | public.contact_influence | contact_influence_contact_id_key | btree | contact_id | sim | sim |  |
@@ -682,6 +655,9 @@ Uso e tamanho em `stats.md`.
 | public.contact_time_analysis | contact_time_analysis_user_id_contact_id_day_of_week_hour_o_key | btree | user_id, contact_id, day_of_week, hour_of_day | sim | sim |  |
 | public.contact_time_analysis | idx_time_analysis_contact | btree | contact_id | não | sim |  |
 | public.contact_time_analysis_audit | contact_time_analysis_audit_pkey | btree | id | sim | sim |  |
+| public.contact_trigger_preferences | contact_trigger_preferences_pkey | btree | id | sim | sim |  |
+| public.contact_trigger_preferences | idx_trigger_prefs_unique | btree | contact_id | sim | sim |  |
+| public.contact_values | contact_values_pkey | btree | id | sim | sim |  |
 | public.contacts | contacts_pkey | btree | id | sim | sim |  |
 | public.contacts | idx_contacts_active | btree | id | não | sim | `(deleted_at IS NULL)` |
 | public.contacts | idx_contacts_assigned_by_id | btree | assigned_by_id | não | sim |  |
@@ -835,6 +811,7 @@ Uso e tamanho em `stats.md`.
 | public.decision_criteria | idx_decision_criteria_user_id | btree | user_id | não | sim |  |
 | public.device_login_notifications | device_login_notifications_pkey | btree | id | sim | sim |  |
 | public.device_login_notifications | idx_device_login_notifications_user_id | btree | user_id | não | sim |  |
+| public.digest_history | digest_history_pkey | btree | id | sim | sim |  |
 | public.disc_analysis_history | disc_analysis_history_pkey | btree | id | sim | sim |  |
 | public.disc_analysis_history | idx_disc_analysis_history_analyzed_at | btree | analyzed_at | não | sim |  |
 | public.disc_analysis_history | idx_disc_analysis_history_contact | btree | contact_id | não | sim |  |
@@ -842,6 +819,7 @@ Uso e tamanho em `stats.md`.
 | public.disc_analysis_history | idx_disc_analysis_history_user | btree | user_id | não | sim |  |
 | public.disc_analysis_history_audit | disc_analysis_history_audit_pkey | btree | id | sim | sim |  |
 | public.disc_approach_recommendations | disc_approach_recommendations_pkey | btree | id | sim | sim |  |
+| public.disc_assessments | disc_assessments_pkey | btree | id | sim | sim |  |
 | public.disc_communication_logs | disc_communication_logs_pkey | btree | id | sim | sim |  |
 | public.disc_communication_logs | idx_disc_communication_logs_contact | btree | contact_id | não | sim |  |
 | public.disc_communication_logs | idx_disc_communication_logs_interaction_id | btree | interaction_id | não | sim |  |
@@ -903,6 +881,7 @@ Uso e tamanho em `stats.md`.
 | public.emotional_states_history | idx_emotional_states_created | btree | created_at | não | sim |  |
 | public.emotional_states_history | idx_emotional_states_history_interaction_id | btree | interaction_id | não | sim |  |
 | public.emotional_states_history | idx_emotional_states_history_user_id | btree | user_id | não | sim |  |
+| public.emotional_trend_snapshots | emotional_trend_snapshots_pkey | btree | id | sim | sim |  |
 | public.entity_relationships | entity_relationships_pkey | btree | id | sim | sim |  |
 | public.entity_relationships | entity_relationships_unique | btree | from_type, from_id, to_type, to_id, role | sim | sim |  |
 | public.entity_relationships | idx_entity_rel_from | btree | from_type, from_id | não | sim |  |
@@ -1071,6 +1050,8 @@ Uso e tamanho em `stats.md`.
 | public.lead_scores | unique_lead_score_contact | btree | user_id, contact_id | sim | sim |  |
 | public.lead_sources | lead_sources_nome_key | btree | nome | sim | sim |  |
 | public.lead_sources | lead_sources_pkey | btree | id | sim | sim |  |
+| public.leads | leads_codigo_key | btree | codigo | sim | sim |  |
+| public.leads | leads_pkey | btree | id | sim | sim |  |
 | public.life_events | idx_life_events_contact | btree | contact_id | não | sim |  |
 | public.life_events | idx_life_events_date | btree | event_date | não | sim |  |
 | public.life_events | idx_life_events_user_id | btree | user_id | não | sim |  |
@@ -1119,6 +1100,8 @@ Uso e tamanho em `stats.md`.
 | public.notification_logs | notification_logs_pkey | btree | id | sim | sim |  |
 | public.notification_logs | notification_logs_reminder_id_channel_key | btree | reminder_id, channel | sim | sim |  |
 | public.notification_preferences | notification_preferences_pkey | btree | user_id | sim | sim |  |
+| public.notification_settings | idx_notif_settings_user | btree | user_id | sim | sim |  |
+| public.notification_settings | notification_settings_pkey | btree | id | sim | sim |  |
 | public.notifications | idx_notifications_user_id | btree | user_id | não | sim |  |
 | public.notifications | idx_notifications_user_unread | btree | user_id, is_read | não | sim | `(is_read = false)` |
 | public.notifications | notifications_pkey | btree | id | sim | sim |  |
@@ -1140,6 +1123,7 @@ Uso e tamanho em `stats.md`.
 | public.objection_example_feedback | idx_objection_example_feedback_user_objection | btree | user_id, objection | não | sim |  |
 | public.objection_example_feedback | objection_example_feedback_pkey | btree | id | sim | sim |  |
 | public.objection_example_feedback | objection_example_feedback_unique | btree | user_id, objection, interaction_id | sim | sim |  |
+| public.objections | objections_pkey | btree | id | sim | sim |  |
 | public.offer_suggestions | idx_offer_suggestions_contact | btree | contact_id | não | sim |  |
 | public.offer_suggestions | idx_offer_suggestions_status | btree | status | não | sim |  |
 | public.offer_suggestions | idx_offer_suggestions_user_id | btree | user_id | não | sim |  |
@@ -1163,12 +1147,16 @@ Uso e tamanho em `stats.md`.
 | public.pipeline_stages | pipeline_stages_pipeline_id_ordem_key | btree | pipeline_id, ordem | sim | sim |  |
 | public.pipeline_stages | pipeline_stages_pkey | btree | id | sim | sim |  |
 | public.pipelines | pipelines_pkey | btree | id | sim | sim |  |
+| public.pix_accounts | idx_pix_company | btree | company_id | não | sim |  |
+| public.pix_accounts | pix_accounts_pkey | btree | id | sim | sim |  |
+| public.pix_accounts | uq_pix_chave_ativa | btree | company_id, pix_chave | sim | sim | `(is_active = true)` |
 | public.playbook_usage_log | idx_playbook_usage_battle_card | btree | battle_card_id, opened_at | não | sim |  |
 | public.playbook_usage_log | idx_playbook_usage_playbook | btree | playbook_id, opened_at | não | sim |  |
 | public.playbook_usage_log | idx_playbook_usage_user | btree | user_id, opened_at | não | sim |  |
 | public.playbook_usage_log | playbook_usage_log_pkey | btree | id | sim | sim |  |
 | public.portfolio_settings | portfolio_settings_pkey | btree | id | sim | sim |  |
 | public.portfolio_settings | portfolio_settings_setting_key_key | btree | setting_key | sim | sim |  |
+| public.pre_contact_briefings | pre_contact_briefings_pkey | btree | id | sim | sim |  |
 | public.product_novelties | idx_product_novelties_supplier_id | btree | supplier_id | não | sim |  |
 | public.product_novelties | product_novelties_pkey | btree | id | sim | sim |  |
 | public.product_novelties | product_novelties_product_id_unique | btree | product_id | sim | sim |  |
@@ -1198,6 +1186,7 @@ Uso e tamanho em `stats.md`.
 | public.quick_notes | idx_quick_notes_user_id | btree | user_id | não | sim |  |
 | public.quick_notes | quick_notes_pkey | btree | id | sim | sim |  |
 | public.ragas_scores | ragas_scores_pkey | btree | id | sim | sim |  |
+| public.rapport_score_history | rapport_score_history_pkey | btree | id | sim | sim |  |
 | public.redistribution_log | idx_redistribution_log_user_id | btree | user_id | não | sim |  |
 | public.redistribution_log | redistribution_log_pkey | btree | id | sim | sim |  |
 | public.reframing_analysis | reframing_analysis_pkey | btree | id | sim | sim |  |
@@ -1281,6 +1270,7 @@ Uso e tamanho em `stats.md`.
 | public.salespeople | salespeople_auth_user_id_key | btree | auth_user_id | sim | sim |  |
 | public.salespeople | salespeople_email_key | btree | email | sim | sim |  |
 | public.salespeople | salespeople_pkey | btree | id | sim | sim |  |
+| public.satisfaction_scores | satisfaction_scores_pkey | btree | id | sim | sim |  |
 | public.scheduled_reports | idx_scheduled_reports_created_by | btree | created_by | não | sim |  |
 | public.scheduled_reports | scheduled_reports_pkey | btree | id | sim | sim |  |
 | public.scheduled_visits | idx_scheduled_visits_company_id | btree | company_id | não | sim |  |
@@ -1340,6 +1330,7 @@ Uso e tamanho em `stats.md`.
 | public.sequence_steps | unique_step_per_sequence | btree | sequence_id, step_number | sim | sim |  |
 | public.sequences | idx_sequences_user_id | btree | user_id | não | sim |  |
 | public.sequences | sequences_pkey | btree | id | sim | sim |  |
+| public.shared_interests | shared_interests_pkey | btree | id | sim | sim |  |
 | public.sla_rules | sla_rules_pkey | btree | id | sim | sim |  |
 | public.sla_violations | idx_sla_violations_sla_rule_id | btree | sla_rule_id | não | sim |  |
 | public.sla_violations | idx_sla_violations_user_id | btree | user_id | não | sim |  |
@@ -1353,6 +1344,7 @@ Uso e tamanho em `stats.md`.
 | public.smart_notifications | idx_smart_notif_urgency | btree | user_id, urgency, status | não | sim |  |
 | public.smart_notifications | idx_smart_notif_user_status | btree | user_id, status, scheduled_for | não | sim |  |
 | public.smart_notifications | smart_notifications_pkey | btree | id | sim | sim |  |
+| public.smart_reminders | smart_reminders_pkey | btree | id | sim | sim |  |
 | public.smart_segments | idx_smart_segments_created_by | btree | created_by | não | sim |  |
 | public.smart_segments | smart_segments_pkey | btree | id | sim | sim |  |
 | public.sms_campaign_recipients | idx_sms_campaign_recipients_user_id | btree | user_id | não | sim |  |
@@ -1482,18 +1474,24 @@ Uso e tamanho em `stats.md`.
 | public.trigger_intensity_history | idx_trigger_intensity_history_user_contact | btree | user_id, contact_id | não | sim |  |
 | public.trigger_intensity_history | idx_trigger_intensity_history_user_id | btree | user_id | não | sim |  |
 | public.trigger_intensity_history | trigger_intensity_history_pkey | btree | id | sim | sim |  |
+| public.trigger_templates | trigger_templates_pkey | btree | id | sim | sim |  |
 | public.trigger_types | trigger_types_code_key | btree | code | sim | sim |  |
 | public.trigger_types | trigger_types_pkey | btree | id | sim | sim |  |
 | public.trigger_usage_history | idx_trigger_usage_history_contact_id | btree | contact_id | não | sim |  |
 | public.trigger_usage_history | idx_trigger_usage_history_used_at | btree | used_at | não | sim |  |
 | public.trigger_usage_history | idx_trigger_usage_history_user_id | btree | user_id | não | sim |  |
 | public.trigger_usage_history | trigger_usage_history_pkey | btree | id | sim | sim |  |
+| public.trigger_usage_log | trigger_usage_log_pkey | btree | id | sim | sim |  |
 | public.uapi_sessions | idx_uapi_sessions_active | btree | provider, label | sim | sim | `(is_active = true)` |
 | public.uapi_sessions | uapi_sessions_pkey | btree | id | sim | sim |  |
 | public.user_badges | idx_user_badges_badge_id | btree | badge_id | não | sim |  |
 | public.user_badges | idx_user_badges_user | btree | user_id | não | sim |  |
 | public.user_badges | user_badges_pkey | btree | id | sim | sim |  |
 | public.user_badges | user_badges_user_id_badge_id_key | btree | user_id, badge_id | sim | sim |  |
+| public.user_contacts_link | user_contacts_link_pkey | btree | id | sim | sim |  |
+| public.user_contacts_link | user_contacts_link_user_id_contact_id_key | btree | user_id, contact_id | sim | sim |  |
+| public.user_disc_profile | idx_user_disc_current | btree | user_id | sim | sim | `(is_current = true)` |
+| public.user_disc_profile | user_disc_profile_pkey | btree | id | sim | sim |  |
 | public.user_goals | idx_user_goals_period | btree | period_start, period_end | não | sim |  |
 | public.user_goals | idx_user_goals_user_id | btree | user_id | não | sim |  |
 | public.user_goals | user_goals_pkey | btree | id | sim | sim |  |
@@ -1511,6 +1509,8 @@ Uso e tamanho em `stats.md`.
 | public.vak_analysis_history | idx_vak_visual_score | btree | visual_score | não | sim |  |
 | public.vak_analysis_history | vak_analysis_history_pkey | btree | id | sim | sim |  |
 | public.vak_keywords | vak_keywords_pkey | btree | id | sim | sim |  |
+| public.vak_profiles | idx_vak_unique | btree | contact_id | sim | sim |  |
+| public.vak_profiles | vak_profiles_pkey | btree | id | sim | sim |  |
 | public.validation_queue | idx_validation_queue_contact | btree | contact_id | não | sim |  |
 | public.validation_queue | idx_validation_queue_status_created | btree | status, created_at | não | sim |  |
 | public.validation_queue | idx_validation_queue_user | btree | user_id | não | sim |  |

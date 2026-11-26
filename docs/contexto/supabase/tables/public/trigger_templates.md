@@ -1,4 +1,4 @@
-# _dormant.trigger_templates
+# public.trigger_templates
 
 > Templates prontos utilizando gatilhos mentais de Cialdini
 
@@ -6,9 +6,9 @@
 |---|---|
 | tipo | table |
 | owner | postgres |
-| RLS habilitado | não |
+| RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 0 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -47,13 +47,30 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| trigger_templates_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX trigger_templates_pkey ON _dormant.trigger_templates USING btree (id)` |
+| trigger_templates_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX trigger_templates_pkey ON public.trigger_templates USING btree (id)` |
 
 
 ## Policies (RLS)
 
-> ⚠️ RLS **desabilitado** nesta tabela.
+### `service_role_full_trigger_templates`
 
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
+
+### `trigger_templates_owner_access`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `true` |
+| WITH CHECK | `true` |
 
 
 ## Triggers
@@ -67,6 +84,5 @@
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

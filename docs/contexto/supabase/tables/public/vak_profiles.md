@@ -1,4 +1,4 @@
-# _dormant.vak_profiles
+# public.vak_profiles
 
 > SINGU: Perfis VAK (Visual, Auditivo, Cinestésico) dos contatos
 
@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 1 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -57,32 +57,43 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| idx_vak_unique | btree | contact_id | sim | sim |  | `CREATE UNIQUE INDEX idx_vak_unique ON _dormant.vak_profiles USING btree (contact_id)` |
-| vak_profiles_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX vak_profiles_pkey ON _dormant.vak_profiles USING btree (id)` |
+| idx_vak_unique | btree | contact_id | sim | sim |  | `CREATE UNIQUE INDEX idx_vak_unique ON public.vak_profiles USING btree (contact_id)` |
+| vak_profiles_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX vak_profiles_pkey ON public.vak_profiles USING btree (id)` |
 
 
 ## Policies (RLS)
 
-### `dormant_deny_all_vak_profiles`
+### `service_role_full_vak_profiles`
 
 | campo | valor |
 |---|---|
 | comando | ALL |
-| tipo | RESTRICTIVE |
-| roles | public |
-| USING | `false` |
-| WITH CHECK |  |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
+
+### `vak_profiles_owner_access`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
+| WITH CHECK | `(contact_id IN ( SELECT c.id    FROM contacts c   WHERE (c.user_id = ( SELECT auth.uid() AS uid))))` |
 
 
 ## Triggers
 
-_nenhum_
+| nome | timing | eventos | nível | status | função |
+|---|---|---|---|---|---|
+| set_owner_from_contact | BEFORE | INSERT OR UPDATE | ROW | enabled | public.set_owner_from_contact |
 
 
 ## Grants
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

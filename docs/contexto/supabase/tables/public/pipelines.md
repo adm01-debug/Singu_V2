@@ -45,8 +45,8 @@
 | tabela | constraint | colunas | on delete |
 |---|---|---|---|
 | _dormant.deals | deals_pipeline_id_fkey | pipeline_id | NO ACTION |
-| _dormant.leads | leads_pipeline_id_fkey | pipeline_id | NO ACTION |
 | _dormant.workflows | workflows_pipeline_id_fkey | pipeline_id | NO ACTION |
+| public.leads | leads_pipeline_id_fkey | pipeline_id | NO ACTION |
 | public.pipeline_stages | pipeline_stages_pipeline_id_fkey | pipeline_id | CASCADE |
 
 

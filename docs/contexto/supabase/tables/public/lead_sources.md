@@ -41,7 +41,7 @@
 | tabela | constraint | colunas | on delete |
 |---|---|---|---|
 | _dormant.deals | deals_source_id_fkey | source_id | NO ACTION |
-| _dormant.leads | leads_source_id_fkey | source_id | NO ACTION |
+| public.leads | leads_source_id_fkey | source_id | NO ACTION |
 
 
 ## Índices

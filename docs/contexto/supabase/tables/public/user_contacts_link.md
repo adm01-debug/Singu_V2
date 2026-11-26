@@ -1,4 +1,4 @@
-# _dormant.user_contacts_link
+# public.user_contacts_link
 
 > SINGU: Vínculo de permissão entre usuários e contatos compartilhados
 
@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 1 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -43,21 +43,31 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| user_contacts_link_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX user_contacts_link_pkey ON _dormant.user_contacts_link USING btree (id)` |
-| user_contacts_link_user_id_contact_id_key | btree | user_id, contact_id | sim | sim |  | `CREATE UNIQUE INDEX user_contacts_link_user_id_contact_id_key ON _dormant.user_contacts_link USING btree (user_id, contact_id)` |
+| user_contacts_link_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX user_contacts_link_pkey ON public.user_contacts_link USING btree (id)` |
+| user_contacts_link_user_id_contact_id_key | btree | user_id, contact_id | sim | sim |  | `CREATE UNIQUE INDEX user_contacts_link_user_id_contact_id_key ON public.user_contacts_link USING btree (user_id, contact_id)` |
 
 
 ## Policies (RLS)
 
-### `dormant_deny_all_user_contacts_link`
+### `service_role_full_user_contacts_link`
 
 | campo | valor |
 |---|---|
 | comando | ALL |
-| tipo | RESTRICTIVE |
-| roles | public |
-| USING | `false` |
-| WITH CHECK |  |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
+
+### `user_contacts_link_owner_access`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(user_id = ( SELECT auth.uid() AS uid))` |
+| WITH CHECK | `(user_id = ( SELECT auth.uid() AS uid))` |
 
 
 ## Triggers
@@ -69,6 +79,5 @@ _nenhum_
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

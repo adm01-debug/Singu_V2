@@ -1,4 +1,4 @@
-# _dormant.notification_settings
+# public.notification_settings
 
 > Configurações de notificação por usuário
 
@@ -6,9 +6,9 @@
 |---|---|
 | tipo | table |
 | owner | postgres |
-| RLS habilitado | não |
+| RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 0 |
+| policies | 2 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -62,14 +62,31 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
-| idx_notif_settings_user | btree | user_id | sim | sim |  | `CREATE UNIQUE INDEX idx_notif_settings_user ON _dormant.notification_settings USING btree (user_id)` |
-| notification_settings_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX notification_settings_pkey ON _dormant.notification_settings USING btree (id)` |
+| idx_notif_settings_user | btree | user_id | sim | sim |  | `CREATE UNIQUE INDEX idx_notif_settings_user ON public.notification_settings USING btree (user_id)` |
+| notification_settings_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX notification_settings_pkey ON public.notification_settings USING btree (id)` |
 
 
 ## Policies (RLS)
 
-> ⚠️ RLS **desabilitado** nesta tabela.
+### `notification_settings_owner_access`
 
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(user_id = ( SELECT auth.uid() AS uid))` |
+| WITH CHECK | `(user_id = ( SELECT auth.uid() AS uid))` |
+
+### `service_role_full_notification_settings`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | service_role |
+| USING | `true` |
+| WITH CHECK | `true` |
 
 
 ## Triggers
@@ -81,6 +98,5 @@ _nenhum_
 
 | role | privilégios |
 |---|---|
-| anon | SELECT |
-| authenticated | SELECT |
+| authenticated | DELETE, INSERT, SELECT, UPDATE |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

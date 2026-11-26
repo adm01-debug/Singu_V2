@@ -84,7 +84,6 @@
 |---|---|---|---|
 | _dormant.cognitive_bias_history | cognitive_bias_history_interaction_id_fkey | interaction_id | SET NULL |
 | _dormant.cognitive_biases | cognitive_biases_detected_in_interaction_id_fkey | detected_in_interaction_id | NO ACTION |
-| _dormant.contact_values | contact_values_discovered_in_interaction_id_fkey | discovered_in_interaction_id | NO ACTION |
 | _dormant.decision_criteria | decision_criteria_discovered_in_interaction_id_fkey | discovered_in_interaction_id | NO ACTION |
 | _dormant.disc_analysis_history | disc_analysis_history_interaction_id_fkey | interaction_id | SET NULL |
 | _dormant.disc_communication_logs | disc_communication_logs_interaction_id_fkey | interaction_id | SET NULL |
@@ -96,16 +95,14 @@
 | _dormant.hidden_objections | hidden_objections_interaction_id_fkey | interaction_id | SET NULL |
 | _dormant.insights | insights_interaction_id_fkey | interaction_id | CASCADE |
 | _dormant.notifications | notifications_interaction_id_fkey | interaction_id | SET NULL |
-| _dormant.objections | objections_interaction_id_fkey | interaction_id | SET NULL |
-| _dormant.smart_reminders | smart_reminders_interaction_id_fkey | interaction_id | SET NULL |
 | _dormant.social_mentions | social_mentions_interaction_id_fkey | interaction_id | SET NULL |
 | _dormant.trigger_intensity_history | trigger_intensity_history_interaction_id_fkey | interaction_id | SET NULL |
 | _dormant.trigger_suggestions | trigger_suggestions_used_in_interaction_id_fkey | used_in_interaction_id | NO ACTION |
-| _dormant.trigger_usage_log | trigger_usage_log_interaction_id_fkey | interaction_id | SET NULL |
 | _dormant.vak_analysis_history | vak_analysis_history_interaction_id_fkey | interaction_id | SET NULL |
 | public.activities | activities_interaction_id_fkey | interaction_id | SET NULL |
 | public.alerts | alerts_interaction_id_fkey | interaction_id | CASCADE |
 | public.cognitive_bias_history | cognitive_bias_history_interaction_id_fkey | interaction_id | NO ACTION |
+| public.contact_values | contact_values_discovered_in_interaction_id_fkey | discovered_in_interaction_id | NO ACTION |
 | public.csat_surveys | csat_surveys_interaction_id_fkey | interaction_id | SET NULL |
 | public.disc_analysis_history | disc_analysis_history_interaction_id_fkey | interaction_id | NO ACTION |
 | public.disc_communication_logs | disc_communication_logs_interaction_id_fkey | interaction_id | NO ACTION |
@@ -114,7 +111,10 @@
 | public.hidden_objections | hidden_objections_interaction_id_fkey | interaction_id | NO ACTION |
 | public.metaprogram_analysis | metaprogram_analysis_interaction_id_fkey | interaction_id | NO ACTION |
 | public.nlp_feedback | nlp_feedback_interaction_id_fkey | interaction_id | NO ACTION |
+| public.objections | objections_interaction_id_fkey | interaction_id | SET NULL |
+| public.smart_reminders | smart_reminders_interaction_id_fkey | interaction_id | SET NULL |
 | public.trigger_intensity_history | trigger_intensity_history_interaction_id_fkey | interaction_id | SET NULL |
+| public.trigger_usage_log | trigger_usage_log_interaction_id_fkey | interaction_id | SET NULL |
 | public.vak_analysis_history | vak_analysis_history_interaction_id_fkey | interaction_id | SET NULL |
 | zapp_history.conversation_daily_summaries | conversation_daily_summaries_interaction_id_fkey | interaction_id | SET NULL |
 

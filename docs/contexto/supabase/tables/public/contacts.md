@@ -109,7 +109,6 @@
 |---|---|---|---|
 | _dormant.carrier_contacts | carrier_contacts_contact_id_fkey | contact_id | CASCADE |
 | _dormant.client_values | client_values_contact_id_fkey | contact_id | CASCADE |
-| _dormant.closing_moment_analysis | closing_moment_analysis_contact_id_fkey | contact_id | CASCADE |
 | _dormant.cognitive_bias_history | cognitive_bias_history_contact_id_fkey | contact_id | CASCADE |
 | _dormant.cognitive_biases | cognitive_biases_contact_id_fkey | contact_id | CASCADE |
 | _dormant.communication_cadence | communication_cadence_contact_id_fkey | contact_id | CASCADE |
@@ -117,49 +116,36 @@
 | _dormant.compatibility_alerts | compatibility_alerts_contact_id_fkey | contact_id | CASCADE |
 | _dormant.contact_availability | contact_availability_contact_id_fkey | contact_id | CASCADE |
 | _dormant.contact_cadence | contact_cadence_contact_id_fkey | contact_id | CASCADE |
-| _dormant.contact_communication_style | contact_communication_style_contact_id_fkey | contact_id | CASCADE |
 | _dormant.contact_compatibility | contact_compatibility_contact_id_fkey | contact_id | CASCADE |
-| _dormant.contact_eq_scores | contact_eq_scores_contact_id_fkey | contact_id | CASCADE |
 | _dormant.contact_metaprograms | contact_metaprograms_contact_id_fkey | contact_id | CASCADE |
 | _dormant.contact_preferences | contact_preferences_contact_id_fkey | contact_id | CASCADE |
 | _dormant.contact_relationships | contact_relationships_contact_a_id_fkey | contact_a_id | CASCADE |
 | _dormant.contact_relationships | contact_relationships_contact_b_id_fkey | contact_b_id | CASCADE |
 | _dormant.contact_rfm_scores | contact_rfm_scores_contact_id_fkey | contact_id | CASCADE |
 | _dormant.contact_time_analysis | contact_time_analysis_contact_id_fkey | contact_id | CASCADE |
-| _dormant.contact_trigger_preferences | contact_trigger_preferences_contact_id_fkey | contact_id | CASCADE |
-| _dormant.contact_values | contact_values_contact_id_fkey | contact_id | CASCADE |
 | _dormant.customer_contacts | customer_contacts_contact_id_fkey | contact_id | CASCADE |
 | _dormant.deals | deals_contact_id_fkey | contact_id | NO ACTION |
 | _dormant.decision_criteria | decision_criteria_contact_id_fkey | contact_id | CASCADE |
 | _dormant.disc_analysis_history | disc_analysis_history_contact_id_fkey | contact_id | CASCADE |
-| _dormant.disc_assessments | disc_assessments_contact_id_fkey | contact_id | CASCADE |
 | _dormant.disc_communication_logs | disc_communication_logs_contact_id_fkey | contact_id | CASCADE |
 | _dormant.disc_interaction_signals | disc_interaction_signals_contact_id_fkey | contact_id | CASCADE |
 | _dormant.emotional_anchors | emotional_anchors_contact_id_fkey | contact_id | CASCADE |
 | _dormant.emotional_states | emotional_states_contact_id_fkey | contact_id | CASCADE |
 | _dormant.emotional_states_history | emotional_states_history_contact_id_fkey | contact_id | CASCADE |
-| _dormant.emotional_trend_snapshots | emotional_trend_snapshots_contact_id_fkey | contact_id | CASCADE |
 | _dormant.eq_analysis_history | eq_analysis_history_contact_id_fkey | contact_id | CASCADE |
 | _dormant.health_alerts | health_alerts_contact_id_fkey | contact_id | CASCADE |
 | _dormant.hidden_objections | hidden_objections_contact_id_fkey | contact_id | CASCADE |
 | _dormant.inactivity_alerts | inactivity_alerts_contact_id_fkey | contact_id | CASCADE |
 | _dormant.influence_network | influence_network_contact_id_fkey | contact_id | CASCADE |
 | _dormant.insights | insights_contact_id_fkey | contact_id | CASCADE |
-| _dormant.leads | leads_contact_id_fkey | contact_id | NO ACTION |
 | _dormant.life_events | life_events_contact_id_fkey | contact_id | CASCADE |
 | _dormant.notifications | notifications_contact_id_fkey | contact_id | SET NULL |
-| _dormant.objections | objections_contact_id_fkey | contact_id | CASCADE |
 | _dormant.offer_suggestions | offer_suggestions_contact_id_fkey | contact_id | CASCADE |
-| _dormant.pre_contact_briefings | pre_contact_briefings_contact_id_fkey | contact_id | CASCADE |
 | _dormant.purchase_history | purchase_history_contact_id_fkey | contact_id | CASCADE |
-| _dormant.rapport_score_history | rapport_score_history_contact_id_fkey | contact_id | CASCADE |
 | _dormant.rfm_analysis | rfm_analysis_contact_id_fkey | contact_id | CASCADE |
 | _dormant.rfm_history | rfm_history_contact_id_fkey | contact_id | CASCADE |
-| _dormant.satisfaction_scores | satisfaction_scores_contact_id_fkey | contact_id | CASCADE |
 | _dormant.score_history | score_history_contact_id_fkey | contact_id | CASCADE |
 | _dormant.script_usage_log | script_usage_log_contact_id_fkey | contact_id | NO ACTION |
-| _dormant.shared_interests | shared_interests_contact_id_fkey | contact_id | CASCADE |
-| _dormant.smart_reminders | smart_reminders_contact_id_fkey | contact_id | CASCADE |
 | _dormant.social_behavior_analysis | social_behavior_analysis_contact_id_fkey | contact_id | CASCADE |
 | _dormant.social_life_events | social_life_events_contact_id_fkey | contact_id | CASCADE |
 | _dormant.social_mentions | social_mentions_mentioned_contact_id_fkey | mentioned_contact_id | SET NULL |
@@ -175,10 +161,7 @@
 | _dormant.trigger_channel_effectiveness | trigger_channel_effectiveness_contact_id_fkey | contact_id | CASCADE |
 | _dormant.trigger_intensity_history | trigger_intensity_history_contact_id_fkey | contact_id | CASCADE |
 | _dormant.trigger_suggestions | trigger_suggestions_contact_id_fkey | contact_id | CASCADE |
-| _dormant.trigger_usage_log | trigger_usage_log_contact_id_fkey | contact_id | CASCADE |
-| _dormant.user_contacts_link | user_contacts_link_contact_id_fkey | contact_id | CASCADE |
 | _dormant.vak_analysis_history | vak_analysis_history_contact_id_fkey | contact_id | CASCADE |
-| _dormant.vak_profiles | vak_profiles_contact_id_fkey | contact_id | CASCADE |
 | _dormant.whatsapp_messages | whatsapp_messages_contact_id_fkey | contact_id | SET NULL |
 | public.activities | activities_contact_id_fkey | contact_id | SET NULL |
 | public.ai_recommendation_audit_logs_v2 | ai_recommendation_audit_logs_v2_contact_id_fkey | contact_id | SET NULL |
@@ -192,6 +175,7 @@
 | public.campaign_recipients | campaign_recipients_contact_id_fkey | contact_id | CASCADE |
 | public.churn_predictions | churn_predictions_contact_id_fkey | contact_id | CASCADE |
 | public.client_values | client_values_contact_id_fkey | contact_id | CASCADE |
+| public.closing_moment_analysis | closing_moment_analysis_contact_id_fkey | contact_id | CASCADE |
 | public.cognitive_bias_history | cognitive_bias_history_contact_id_fkey | contact_id | CASCADE |
 | public.communication_preferences | communication_preferences_contact_id_fkey | contact_id | CASCADE |
 | public.company_stakeholder_map | company_stakeholder_map_access_via_contact_id_fkey | access_via_contact_id | NO ACTION |
@@ -199,8 +183,10 @@
 | public.compatibility_alerts | compatibility_alerts_contact_id_fkey | contact_id | CASCADE |
 | public.contact_addresses | contact_addresses_contact_id_fkey | contact_id | CASCADE |
 | public.contact_cadence | contact_cadence_contact_id_fkey | contact_id | CASCADE |
+| public.contact_communication_style | contact_communication_style_contact_id_fkey | contact_id | CASCADE |
 | public.contact_decision_making | contact_decision_making_contact_id_fkey | contact_id | CASCADE |
 | public.contact_emails | contact_emails_contact_id_fkey | contact_id | CASCADE |
+| public.contact_eq_scores | contact_eq_scores_contact_id_fkey | contact_id | CASCADE |
 | public.contact_family_history | contact_family_history_contact_id_fkey | contact_id | CASCADE |
 | public.contact_influence | contact_influence_contact_id_fkey | contact_id | CASCADE |
 | public.contact_metaprograms | contact_metaprograms_contact_id_fkey | contact_id | CASCADE |
@@ -214,6 +200,8 @@
 | public.contact_relatives | contact_relatives_contact_id_fkey | contact_id | CASCADE |
 | public.contact_social_media | contact_social_media_contact_id_fkey | contact_id | CASCADE |
 | public.contact_time_analysis | contact_time_analysis_contact_id_fkey | contact_id | CASCADE |
+| public.contact_trigger_preferences | contact_trigger_preferences_contact_id_fkey | contact_id | CASCADE |
+| public.contact_values | contact_values_contact_id_fkey | contact_id | CASCADE |
 | public.contacts | contacts_duplicate_of_fkey | duplicate_of | NO ACTION |
 | public.crm_alerts | crm_alerts_contact_id_fkey | contact_id | CASCADE |
 | public.crm_automation_logs | crm_automation_logs_contact_id_fkey | contact_id | CASCADE |
@@ -229,10 +217,12 @@
 | public.deals | deals_contact_id_fkey | contact_id | SET NULL |
 | public.decision_criteria | decision_criteria_contact_id_fkey | contact_id | CASCADE |
 | public.disc_analysis_history | disc_analysis_history_contact_id_fkey | contact_id | CASCADE |
+| public.disc_assessments | disc_assessments_contact_id_fkey | contact_id | CASCADE |
 | public.disc_communication_logs | disc_communication_logs_contact_id_fkey | contact_id | CASCADE |
 | public.email_logs | email_logs_contact_id_fkey | contact_id | NO ACTION |
 | public.emotional_anchors | emotional_anchors_contact_id_fkey | contact_id | CASCADE |
 | public.emotional_states_history | emotional_states_history_contact_id_fkey | contact_id | CASCADE |
+| public.emotional_trend_snapshots | emotional_trend_snapshots_contact_id_fkey | contact_id | CASCADE |
 | public.eq_analysis_history | eq_analysis_history_contact_id_fkey | contact_id | CASCADE |
 | public.health_alerts | health_alerts_contact_id_fkey | contact_id | CASCADE |
 | public.hidden_objections | hidden_objections_contact_id_fkey | contact_id | CASCADE |
@@ -241,6 +231,7 @@
 | public.interactions | interactions_contact_id_fkey | contact_id | SET NULL |
 | public.lead_score_history | lead_score_history_contact_id_fkey | contact_id | CASCADE |
 | public.lead_scores | lead_scores_contact_id_fkey | contact_id | CASCADE |
+| public.leads | leads_contact_id_fkey | contact_id | NO ACTION |
 | public.life_events | life_events_contact_id_fkey | contact_id | CASCADE |
 | public.meetings | meetings_contact_id_fkey | contact_id | SET NULL |
 | public.metaprogram_analysis | metaprogram_analysis_contact_id_fkey | contact_id | CASCADE |
@@ -249,14 +240,20 @@
 | public.nlp_feedback | nlp_feedback_contact_id_fkey | contact_id | NO ACTION |
 | public.notification_logs | notification_logs_contact_id_fkey | contact_id | CASCADE |
 | public.nps_surveys | nps_surveys_contact_id_fkey | contact_id | SET NULL |
+| public.objections | objections_contact_id_fkey | contact_id | CASCADE |
 | public.offer_suggestions | offer_suggestions_contact_id_fkey | contact_id | CASCADE |
+| public.pre_contact_briefings | pre_contact_briefings_contact_id_fkey | contact_id | CASCADE |
 | public.proposals | proposals_contact_id_fkey | contact_id | SET NULL |
 | public.psychographic_audit_log | psychographic_audit_log_contact_id_fkey | contact_id | CASCADE |
 | public.purchase_history | purchase_history_contact_id_fkey | contact_id | CASCADE |
+| public.rapport_score_history | rapport_score_history_contact_id_fkey | contact_id | CASCADE |
 | public.relationship_score_history | relationship_score_history_contact_id_fkey | contact_id | CASCADE |
 | public.rfm_analysis | rfm_analysis_contact_id_fkey | contact_id | CASCADE |
 | public.rfm_history | rfm_history_contact_id_fkey | contact_id | CASCADE |
+| public.satisfaction_scores | satisfaction_scores_contact_id_fkey | contact_id | CASCADE |
 | public.sequence_email_reservations | sequence_email_reservations_contact_id_fkey | contact_id | RESTRICT |
+| public.shared_interests | shared_interests_contact_id_fkey | contact_id | CASCADE |
+| public.smart_reminders | smart_reminders_contact_id_fkey | contact_id | CASCADE |
 | public.sms_campaign_recipients | sms_campaign_recipients_contact_id_fkey | contact_id | CASCADE |
 | public.sms_opt_outs | sms_opt_outs_contact_id_fkey | contact_id | SET NULL |
 | public.social_behavior_analysis | social_behavior_analysis_contact_id_fkey | contact_id | CASCADE |
@@ -274,7 +271,10 @@
 | public.trigger_ab_tests | trigger_ab_tests_contact_id_fkey | contact_id | CASCADE |
 | public.trigger_channel_effectiveness | trigger_channel_effectiveness_contact_id_fkey | contact_id | CASCADE |
 | public.trigger_intensity_history | trigger_intensity_history_contact_id_fkey | contact_id | CASCADE |
+| public.trigger_usage_log | trigger_usage_log_contact_id_fkey | contact_id | CASCADE |
+| public.user_contacts_link | user_contacts_link_contact_id_fkey | contact_id | CASCADE |
 | public.vak_analysis_history | vak_analysis_history_contact_id_fkey | contact_id | CASCADE |
+| public.vak_profiles | vak_profiles_contact_id_fkey | contact_id | CASCADE |
 | public.whatsapp_messages | whatsapp_messages_contact_id_fkey | contact_id | SET NULL |
 | zapp_history.ai_cost_log | ai_cost_log_contact_id_fkey | contact_id | SET NULL |
 | zapp_history.ai_training_dataset | ai_training_dataset_contact_id_fkey | contact_id | SET NULL |
