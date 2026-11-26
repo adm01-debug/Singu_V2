@@ -83,6 +83,8 @@ export const ALLOWED_RPCS = [
     'get_activity_overview',
     // ── Qualidade cadastral ──
     'detect_cnpj_duplicates',
+    // ── Inteligência por ramo ──
+    'get_best_industries', 'get_industry_roi',
     // ── Telemetria do gateway de IA (admin) ──
     'get_ai_gateway_health', 'get_ai_gateway_partition_stats',
   ] as const;
