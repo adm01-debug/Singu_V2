@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3a745b60a2` · branch `main` · 2026-11-26 18:09 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2e20fce68d` · branch `main` · 2026-11-26 18:33 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -320,7 +320,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 433 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 434 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.unit.mjs`
@@ -472,7 +472,7 @@
 - `supabase/functions/template-success-notifications/index.ts`
 - `supabase/functions/territory-optimization/index.ts`
 - `supabase/functions/validate-access/index.ts`
-- … +283 (lista completa em `context.json`)
+- … +284 (lista completa em `context.json`)
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -867,7 +867,7 @@ Middleware matcher (Next.js): nenhum
 | grant | anon, authenticated | select | `csat_surveys_public`, `forms_public`, `landing_pages_public`, `document_signatures_public`, `product_novelties` |
 | grant | anon, authenticated, service_role | execute | `get_public_csat_survey`, `submit_public_csat_survey`, `increment_landing_page_view`, `get_public_csat_survey`, `submit_public_csat_survey` |
 | grant | authenticated | execute | `get_contact_360_by_phone`, `search_contacts_advanced`, `get_companies_by_phones_batch`, `sync_interaction_from_zapp`, `get_contact_intelligence_by_phone`, `recalculate_rfm_for_company`, `zapp_history.get_contact_intelligence_v2`, `zapp_history.trigger_backfill_summaries`, `zapp_history.user_can_access_contact`, `zapp_history.get_contact_messages_for_summary`, `zapp_history.get_contact_intelligence_v2`, `zapp_history.trigger_backfill_summaries`, `zapp_history.get_embedding_config`, `zapp_history.detect_pii`, `zapp_history.connector_log_search` … +59 |
-| grant | authenticated | select | `_dormant`, `zapp_history`, `connector_log`, `zapp_history.v_runtime_config_safe`, `zapp_history.v_pedidos_detectados`, `zapp_history.v_dashboard_atendimento`, `zapp_history.v_pedidos_detectados`, `zapp_history.v_dashboard_atendimento`, `zapp_history.v_funil_origem`, `zapp_history.v_top_produtos_demanda`, `zapp_history.v_top_produtos_demanda`, `zapp_history.v_funil_vendas`, `zapp_history.v_objecoes_recorrentes`, `zapp_history.v_sla_atendimento`, `zapp_history.v_conversas_aguardando` … +69 |
+| grant | authenticated | select | `_dormant`, `zapp_history`, `connector_log`, `zapp_history.v_runtime_config_safe`, `zapp_history.v_pedidos_detectados`, `zapp_history.v_dashboard_atendimento`, `zapp_history.v_pedidos_detectados`, `zapp_history.v_dashboard_atendimento`, `zapp_history.v_funil_origem`, `zapp_history.v_top_produtos_demanda`, `zapp_history.v_top_produtos_demanda`, `zapp_history.v_funil_vendas`, `zapp_history.v_objecoes_recorrentes`, `zapp_history.v_sla_atendimento`, `zapp_history.v_conversas_aguardando` … +70 |
 | grant | authenticated | select, insert | `audit_log`, `rfm_history` |
 | grant | authenticated | select, insert, update | `migration_password_reset_log` |
 | grant | authenticated | select, insert, update, delete | `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences`, `alerts` … +246 |
@@ -876,6 +876,7 @@ Middleware matcher (Next.js): nenhum
 | grant | service_role | all | `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences` … +267 |
 | grant | service_role | execute | `zapp_history`, `zapp_history.request_embedding`, `zapp_history.request_transcription`, `zapp_history.request_classify`, `zapp_history.get_runtime_secret`, `increment_webhook_quota`, `execute_readonly_query`, `redistribute_admin_portfolio`, `fn_cf_collect_sm_legacy`, `fn_cf_collect_sm_legacy_dispatch`, `fn_cf_collect_sm_legacy_harvest`, `fn_get_product_ai_context`, `fn_promote_kit_components_batch`, `cleanup_behavioral_regen_queue`, `check_behavioral_regen_cron_staleness` … +100 |
 | grant | service_role | insert | `connector_log` |
+| grant | service_role | select | `vw_timeline_cliente` |
 | grant | service_role | select, insert, delete | `incoming_webhook_nonces`, `incoming_webhook_nonces` |
 | grant | service_role, authenticated | execute | `fn_apply_auto_tag_rules`, `ensure_audit_log_partition`, `ensure_audit_log_partition` |
 | grant | service_role, authenticated | select | `zapp_history.v_audit_intelligence` |
@@ -894,7 +895,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC, authenticated | execute | `ativar_cliente`, `inativar_cliente`, `registrar_compra`, `sdr_qualificar_cliente`, `transferir_cliente` |
 | revoke | PUBLIC, authenticated | insert, update, delete | `login_attempts` |
 | revoke | PUBLIC, authenticated, anon | execute | `public` |
-| revoke | anon | all | `_dormant`, `public`, `assert_self_user_id`, `assert_self_user_id`, `public`, `assert_self_user_id`, `assert_self_user_id`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `public`, `public`, `get_contact_sidebar_by_phone`, `sync_social_insight_from_analysis` |
+| revoke | anon | all | `_dormant`, `public`, `assert_self_user_id`, `assert_self_user_id`, `public`, `assert_self_user_id`, `assert_self_user_id`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `public`, `public`, `get_contact_sidebar_by_phone`, `sync_social_insight_from_analysis`, `vw_timeline_cliente` |
 | revoke | anon | execute | `execute_readonly_query`, `handle_new_user`, `publish_mtta_sla_breach_alert`, `execute_readonly_query`, `net`, `create_deal`, `fn_cf_collect_sm_legacy_dispatch`, `fn_cf_collect_sm_legacy_harvest`, `fn_ingest_asia_hg_batch`, `fn_set_novelty_updated_at`, `fn_sm_promote_images_to_gold`, `fn_sync_novelty_to_product`, `net`, `check_behavioral_regen_cron_staleness`, `cleanup_behavioral_regen_queue` … +6 |
 | revoke | anon | insert, update, delete | `deal_rooms`, `deal_room_milestones`, `deal_room_stakeholders`, `deal_room_documents`, `deal_room_comments`, `forms`, `lead_magnets`, `landing_pages` |
 | revoke | anon | select | `document_signatures_public`, `csat_surveys_public` |
@@ -906,6 +907,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | anon, authenticated, public | all | `zapp_history`, `zapp_history`, `zapp_history` |
 | revoke | authenticated | all | `_dormant`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `get_contact_sidebar_by_phone`, `sync_social_insight_from_analysis` |
 | revoke | authenticated | execute | `execute_readonly_query`, `handle_new_user`, `redistribute_admin_portfolio`, `execute_readonly_query`, `net`, `fn_cf_collect_sm_legacy_dispatch`, `fn_cf_collect_sm_legacy_harvest`, `fn_ingest_asia_hg_batch`, `fn_set_novelty_updated_at`, `fn_sm_promote_images_to_gold`, `fn_sync_novelty_to_product`, `fn_promote_kit_components_batch`, `fn_apply_auto_tag_rules`, `redistribute_admin_portfolio`, `validate_data_batch` … +14 |
+| revoke | authenticated | insert, update, delete, truncate, references, trigger | `vw_timeline_cliente` |
 | revoke | authenticated | update | `public`, `public` |
 | revoke | authenticated, PUBLIC | execute | `enqueue_behavioral_profile_regen`, `notify_admins_on_critical_behavioral_alert`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `get_behavioral_regen_cron_health`, `simulate_behavioral_regen_alert` |
 | revoke | authenticated, anon, PUBLIC | execute | `audit_life_events`, `audit_trigger_fn`, `audit_connection_changes`, `calculate_interaction_response_time`, `calculate_next_contact_due`, `connection_configs_encrypt_trigger`, `detect_contact_intel_changes`, `enqueue_contact_validation`, `handle_new_user`, `increment_playbook_usage`, `increment_version_column`, `log_behavioral_change`, `log_contact_tag_changes`, `log_deal_forecast_category_change`, `notify_connection_failures` … +42 |

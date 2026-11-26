@@ -3,15 +3,15 @@
  "format_version": 2,
  "onde_ficam": {
   "telas": [
-   "src/pages (122)"
+   "src/pages (123)"
   ],
   "componentes": [
    "src/components (929)",
-   "src/pages (149)",
+   "src/pages (150)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (388)",
+   "src/hooks (389)",
    "src/components (20)",
    "src/stores (5)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1087)"
+  ".tsx (1088)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(eventos): linha do tempo de eventos de cliente em /eventos (#372)",
    "feat(admin): tela de Governança de IA com catálogo de modelos, reframes e scripts (#371)",
    "feat(parceiros): controle de homologação com validade, prazo e motivo (#370)",
    "feat(clientes): tela Clientes 360 com carteira, hierarquia, cooperativas e histórico (#369)",
-   "feat(automacoes): painel de saúde das automações e notificações (#368)",
-   "feat(carteira): tela de carteira e ativacao com quem ativou e risco de inativacao (#367)"
+   "feat(automacoes): painel de saúde das automações e notificações (#368)"
   ]
  },
  "pr_template": null,

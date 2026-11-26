@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 419,
+ "total": 420,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -5016,6 +5016,27 @@
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/pages/admin/ErrorLogs.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useEventosCliente.ts",
+   "hooks_exportados": [
+    "useEventosCliente",
+    "useResumoEventos"
+   ],
+   "linhas": 99,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/EventosCliente.tsx"
    ],
    "coberto_por_testes": 0
   },

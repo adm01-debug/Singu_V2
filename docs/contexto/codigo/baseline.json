@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "3a745b60a24457c7206282055afe63a6f63e3509",
+  "commit": "2e20fce68d30d5e8f992b0ed88f3ac0acadefb9c",
   "branch": "main",
-  "data_commit": "2026-11-26T15:08:51-03:00",
+  "data_commit": "2026-11-26T15:33:02-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "2e20fce",
+    "data": "2026-11-26",
+    "assunto": "feat(eventos): linha do tempo de eventos de cliente em /eventos (#372)"
+   },
    {
     "sha": "3a745b6",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "a16128a",
     "data": "2026-11-25",
     "assunto": "feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)"
-   },
-   {
-    "sha": "472ff96",
-    "data": "2026-11-25",
-    "assunto": "feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)"
    }
   ],
-  "arquivos_mudados_7d": 1032,
+  "arquivos_mudados_7d": 1035,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -148,11 +148,11 @@
     "mudancas": 29
    },
    {
-    "pasta": "src/components/triggers",
-    "mudancas": 21
+    "pasta": "supabase/functions/external-data",
+    "mudancas": 22
    },
    {
-    "pasta": "supabase/functions/external-data",
+    "pasta": "src/components/triggers",
     "mudancas": 21
    },
    {
@@ -161,7 +161,7 @@
    },
    {
     "pasta": "src/components/layout",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "pasta": "scripts/migration/functions",
@@ -231,19 +231,19 @@
    },
    {
     "arquivo": "src/app/AppRoutes.tsx",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "arquivo": "src/components/layout/AppSidebar.tsx",
-    "mudancas": 11
+    "mudancas": 12
    },
    {
     "arquivo": "supabase/functions/external-data/tables.ts",
-    "mudancas": 11
+    "mudancas": 12
    },
    {
     "arquivo": "src/app/lazyPages.tsx",
-    "mudancas": 10
+    "mudancas": 11
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 204
+    "commits": 205
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,19 +326,19 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3965,
-  "arquivos_codigo": 2287,
-  "linhas_codigo": 427068,
-  "rotas": 123,
+  "arquivos_total": 3968,
+  "arquivos_codigo": 2289,
+  "linhas_codigo": 427451,
+  "rotas": 124,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 73,
+  "itens_menu": 74,
   "modulos": 142,
-  "componentes": 1087,
-  "hooks": 419,
+  "componentes": 1088,
+  "hooks": 420,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1127,
+  "migrations": 1128,
   "cron_jobs": 47,
   "testes": 288,
   "workflows": 14,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 608
+   "linhas": 610
   },
   "src/components": {
    "arquivos": 1017,
-   "linhas": 152384
+   "linhas": 152385
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 451,
-   "linhas": 59782
+   "arquivos": 452,
+   "linhas": 59881
   },
   "src/integrations": {
    "arquivos": 3,
@@ -691,8 +691,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 163,
-   "linhas": 32364
+   "arquivos": 164,
+   "linhas": 32642
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28187
+   "linhas": 28190
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1216,6 +1216,7 @@
    "EmpresaDetalhe",
    "Empresas",
    "ErpViewer",
+   "EventosCliente",
    "Ficha360",
    "GovernancaIA",
    "GruposEconomicos",

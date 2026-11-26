@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1087,
+ "total": 1088,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -191,6 +191,10 @@
   "ErpViewer": [
    "src/app/lazyPages.tsx",
    "src/pages/ErpViewer.tsx"
+  ],
+  "EventosCliente": [
+   "src/app/lazyPages.tsx",
+   "src/pages/EventosCliente.tsx"
   ],
   "Ficha360": [
    "src/app/lazyPages.tsx",
@@ -519,7 +523,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 197,
+   "linhas": 198,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -594,6 +598,7 @@
     "Empresas",
     "EnrichmentPage",
     "ErpViewer",
+    "EventosCliente",
     "Ficha360",
     "ForecastingPage",
     "ForecastingSetupPage",
@@ -666,7 +671,7 @@
     "WinLossSetupPage"
    ],
    "export_default": null,
-   "linhas": 181,
+   "linhas": 182,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10370,7 +10375,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 54,
+   "usado_por": 55,
    "orfao": false
   },
   {
@@ -10379,7 +10384,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 328,
+   "linhas": 329,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14265,7 +14270,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 559,
+   "usado_por": 560,
    "orfao": false
   },
   {
@@ -14280,7 +14285,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 539,
+   "usado_por": 540,
    "orfao": false
   },
   {
@@ -14315,7 +14320,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 597,
+   "usado_por": 598,
    "orfao": false
   },
   {
@@ -14594,7 +14599,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 213,
+   "usado_por": 214,
    "orfao": false
   },
   {
@@ -14940,7 +14945,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 132,
+   "usado_por": 133,
    "orfao": false
   },
   {
@@ -15100,7 +15105,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 212,
+   "usado_por": 213,
    "orfao": false
   },
   {
@@ -15224,7 +15229,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 25,
+   "usado_por": 26,
    "orfao": false
   },
   {
@@ -16905,6 +16910,23 @@
     "useErpProducts",
     "useErpProposals",
     "useErpStats"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/EventosCliente.tsx",
+   "exports": [
+    "EventosCliente"
+   ],
+   "export_default": "EventosCliente",
+   "linhas": 278,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useEventosCliente",
+    "useResumoEventos"
    ],
    "tabelas": [],
    "edges": [],

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "3a745b60a24457c7206282055afe63a6f63e3509",
+  "sha": "2e20fce68d30d5e8f992b0ed88f3ac0acadefb9c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 18:09 UTC",
-  "files_total": 4070,
-  "code_files": 3592,
-  "code_lines": 485199
+  "generated_at": "2026-11-26 18:33 UTC",
+  "files_total": 4073,
+  "code_files": 3595,
+  "code_lines": 485592
  },
  "version": "1.3.2",
- "facts_hash": "acf08807dae11ea1",
+ "facts_hash": "f558796145e078b7",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,9 +272,9 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1304,
-   ".tsx": 1197,
-   ".ts": 926,
+   ".sql": 1305,
+   ".tsx": 1198,
+   ".ts": 927,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -87751,7 +87751,8 @@
    "supabase/migrations/20261126170000_admin_read_automation_notifications.sql",
    "supabase/migrations/20261126180000_clientes_views_read_only.sql",
    "supabase/migrations/20261126190000_parceiros_controle_read_only.sql",
-   "supabase/migrations/20261126200000_governanca_ia_read_only.sql"
+   "supabase/migrations/20261126200000_governanca_ia_read_only.sql",
+   "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -99683,6 +99684,38 @@
     "objkind": "function",
     "roles": "authenticated",
     "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "vw_timeline_cliente",
+    "objkind": "table",
+    "roles": "anon",
+    "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "insert, update, delete, truncate, references, trigger",
+    "object": "vw_timeline_cliente",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "vw_timeline_cliente",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "vw_timeline_cliente",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
    }
   ],
   "raises": [
@@ -102481,6 +102514,39 @@
     ],
     "rpc_transitive": [],
     "deps_count": 18
+   },
+   {
+    "path": "",
+    "file": "src/pages/EventosCliente.tsx",
+    "component": "EventosCliente",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 105
    },
    {
     "path": "",
@@ -107835,6 +107901,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/eventos",
+    "component": "P.EventosCliente",
+    "guard": "",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/f/:slug",
     "component": "LazyPage",
     "guard": "",
@@ -109643,6 +109716,14 @@
    {
     "name": "useErrorLogs",
     "file": "src/hooks/useErrorLogs.ts"
+   },
+   {
+    "name": "useEventosCliente",
+    "file": "src/hooks/useEventosCliente.ts"
+   },
+   {
+    "name": "useResumoEventos",
+    "file": "src/hooks/useEventosCliente.ts"
    },
    {
     "name": "useEvidenceForLabel",
@@ -111937,7 +112018,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 608,
+   "lines": 610,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -111974,7 +112055,7 @@
   {
    "module": "src/components",
    "files": 1017,
-   "lines": 152384,
+   "lines": 152385,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112421,8 +112502,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 451,
-   "lines": 59782,
+   "files": 452,
+   "lines": 59881,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -112996,8 +113077,8 @@
   },
   {
    "module": "src/pages",
-   "files": 163,
-   "lines": 32364,
+   "files": 164,
+   "lines": 32642,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -113157,6 +113238,7 @@
     "src/pages/Empresas.tsx",
     "src/pages/Enrichment.tsx",
     "src/pages/ErpViewer.tsx",
+    "src/pages/EventosCliente.tsx",
     "src/pages/Ficha360.tsx",
     "src/pages/Forecasting.tsx",
     "src/pages/ForecastingSetup.tsx",
@@ -113183,8 +113265,7 @@
     "src/pages/Metas.tsx",
     "src/pages/NLPAnalytics.tsx",
     "src/pages/NPS.contract.test.tsx",
-    "src/pages/NPS.tsx",
-    "src/pages/Network.tsx"
+    "src/pages/NPS.tsx"
    ]
   },
   {
@@ -113355,7 +113436,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28187,
+   "lines": 28190,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113636,8 +113717,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1127,
-   "lines": 105092,
+   "files": 1128,
+   "lines": 105102,
    "tables": [
     "users"
    ],
@@ -124071,6 +124152,11 @@
     "file": "src/hooks/useEntityRelationships.ts",
     "name": "EntityRelationshipRole",
     "values": "buyer | manager | owner | decision_maker | influencer | user | sponsor | partner | supplier | subsidiary | parent | employee_of | other"
+   },
+   {
+    "file": "src/hooks/useEventosCliente.ts",
+    "name": "TIPOS_EVENTO",
+    "values": "{ valor: 'TRANSFERENCIA', label: 'Transferência de carteira' }, { valor: 'COMPRA', label: 'Compra' }, { valor: 'PRIMEIRA_COMPRA', label: 'Primeira compra' }, { valor: 'ATIVACAO', label: 'Ativação' }, { valor: 'REATIVACAO', label: 'Reativação' }, { valor: 'INATIVACAO', label: 'Inativação' }, { valor: …"
    },
    {
     "file": "src/hooks/useEvidenceForLabel.ts",
@@ -153662,6 +153748,11 @@
     "value": "500"
    },
    {
+    "file": "src/hooks/useEventosCliente.ts",
+    "name": "TAMANHO_PAGINA",
+    "value": "25"
+   },
+   {
     "file": "src/hooks/useFicha360FilterFavorites.ts",
     "name": "MAX_FAVORITES",
     "value": "10"
@@ -160127,6 +160218,42 @@
     "field": "type",
     "value": "eq",
     "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useEventosCliente.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useEventosCliente.ts",
+    "field": "type",
+    "value": "in",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useEventosCliente.ts",
+    "field": "type",
+    "value": "in",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useEventosCliente.ts",
+    "field": "type",
+    "value": "in",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useEventosCliente.ts",
+    "field": "type",
+    "value": "in",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useEventosCliente.ts",
+    "field": "tipo",
+    "value": "todos",
+    "kind": "compara"
    },
    {
     "file": "src/hooks/useExternalInteractions.ts",
@@ -168955,6 +169082,12 @@
     "name": "validateForm",
     "params": "",
     "body": "const newErrors: Record<string, string> = {}; try { emailSchema.parse(email); } catch (e) { if (e instanceof z.ZodError) newErrors.email = e.issues[0].message; } try { passwordSchema.parse(password); } catch (e) { if (e instanceof z.ZodError) newErrors.password = e.issues[0].message; } if (mode === 'signup') { try { nameSchema.parse(firstName); } catch (e) { if (e instanceof z.ZodError) newErrors.firstName = e.issues[0].message; } try { nameSchema.parse(lastName); } catch (e) { if (e instanceof …"
+   },
+   {
+    "file": "src/pages/EventosCliente.tsx",
+    "name": "formatValor",
+    "params": "chave: string, valor: unknown",
+    "body": "if (valor === null || valor === undefined || valor === '') return null; if (chave === 'valor' || chave === 'valor_total') { const numero = Number(valor); if (Number.isFinite(numero)) { return `${chave === 'valor_total' ? 'Total ' : ''}R$ ${numero.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`; } } if (typeof valor === 'object') return null; return `${ROTULO_EXTRA[chave] ?? chave}: ${String(valor)}`;"
    },
    {
     "file": "src/pages/Ficha360.tsx",
@@ -214378,6 +214511,7 @@
       "escreve:src/hooks/useEntity360.ts",
       "escreve:src/hooks/useEqEvolution.ts",
       "escreve:src/hooks/useErpData.ts",
+      "escreve:src/hooks/useEventosCliente.ts",
       "escreve:src/hooks/useExternalInteractions.ts",
       "escreve:src/hooks/useGruposEconomicos.ts",
       "escreve:src/hooks/useInactivityAlerts.ts",
@@ -214625,6 +214759,7 @@
       "compara:supabase/functions/external-data/index.ts",
       "escreve:src/components/intelligence/CrossRefTab.tsx",
       "escreve:src/hooks/useCrossReference.ts",
+      "escreve:src/hooks/useEventosCliente.ts",
       "escreve:src/hooks/useExternalInteractions.ts",
       "escreve:src/pages/cadastro/RelationshipList.tsx",
       "escreve:supabase/functions/_shared/tenant-guard_test.ts"
@@ -216483,6 +216618,9 @@
      ],
      "suporte": [
       "compara:src/hooks/useCompanies.ts"
+     ],
+     "todos": [
+      "compara:src/hooks/useEventosCliente.ts"
      ],
      "positivo": [
       "escreve:src/hooks/useFicha360ConversationSummary.ts"
@@ -223610,6 +223748,7 @@
    "supabase/migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql",
    "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
    "supabase/migrations/20261126200000_governanca_ia_read_only.sql",
+   "supabase/migrations/20261126203000_eventos_cliente_read_only.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -235482,6 +235621,38 @@
     "objkind": "function",
     "roles": "authenticated",
     "src": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "vw_timeline_cliente",
+    "objkind": "table",
+    "roles": "anon",
+    "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "insert, update, delete, truncate, references, trigger",
+    "object": "vw_timeline_cliente",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "vw_timeline_cliente",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "vw_timeline_cliente",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
    }
   ],
   "guards": [
@@ -247846,7 +248017,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 197,
+   "lines": 198,
    "exports": [
     "const AppRoutes"
    ],
@@ -248401,6 +248572,12 @@
      "roles": []
     },
     {
+     "path": "/eventos",
+     "component": "P.EventosCliente",
+     "guard": "",
+     "roles": []
+    },
+    {
      "path": "/clientes",
      "component": "P",
      "guard": "Protected",
@@ -248614,7 +248791,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 181,
+   "lines": 182,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -258268,7 +258445,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 328,
+   "lines": 329,
    "exports": [
     "const AppSidebar"
    ],
@@ -274832,6 +275009,66 @@
     "200"
    ]
   },
+  "src/hooks/useEventosCliente.ts": {
+   "path": "src/hooks/useEventosCliente.ts",
+   "lines": 99,
+   "exports": [
+    "const TAMANHO_PAGINA",
+    "const TIPOS_EVENTO",
+    "interface EventoClienteRow",
+    "function rotuloTipoEvento",
+    "function useEventosCliente",
+    "function useResumoEventos"
+   ],
+   "enums": [
+    {
+     "name": "TIPOS_EVENTO",
+     "values": "{ valor: 'TRANSFERENCIA', label: 'Transferência de carteira' }, { valor: 'COMPRA', label: 'Compra' }, { valor: 'PRIMEIRA_COMPRA', label: 'Primeira compra' }, { valor: 'ATIVACAO', label: 'Ativação' }, { valor: 'REATIVACAO', label: 'Reativação' }, { valor: 'INATIVACAO', label: 'Inativação' }, { valor: …"
+    }
+   ],
+   "params": [
+    {
+     "name": "TAMANHO_PAGINA",
+     "value": "25"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "in",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "in",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "in",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "in",
+     "kind": "escreve"
+    },
+    {
+     "field": "tipo",
+     "value": "todos",
+     "kind": "compara"
+    }
+   ],
+   "hooks": [
+    "useEventosCliente",
+    "useResumoEventos"
+   ]
+  },
   "src/hooks/useEvidenceForLabel.ts": {
    "path": "src/hooks/useEvidenceForLabel.ts",
    "lines": 111,
@@ -289291,6 +289528,20 @@
     "function ErpViewer"
    ]
   },
+  "src/pages/EventosCliente.tsx": {
+   "path": "src/pages/EventosCliente.tsx",
+   "lines": 278,
+   "exports": [
+    "function EventosCliente"
+   ],
+   "calc_fns": [
+    {
+     "name": "formatValor",
+     "params": "chave: string, valor: unknown",
+     "body": "if (valor === null || valor === undefined || valor === '') return null; if (chave === 'valor' || chave === 'valor_total') { const numero = Number(valor); if (Number.isFinite(numero)) { return `${chave === 'valor_total' ? 'Total ' : ''}R$ ${numero.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`; } } if (typeof valor === 'object') return null; return `${ROTULO_EXTRA[chave] ?? chave}: ${String(valor)}`;"
+    }
+   ]
+  },
   "src/pages/Ficha360.tsx": {
    "path": "src/pages/Ficha360.tsx",
    "lines": 670,
@@ -298271,7 +298522,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 240,
+   "lines": 243,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -309625,6 +309876,11 @@
    "lines": 17,
    "uses_service_role": true
   },
+  "supabase/migrations/20261126203000_eventos_cliente_read_only.sql": {
+   "path": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql",
+   "lines": 10,
+   "uses_service_role": true
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -310342,10 +310598,25 @@
   }
  },
  "git": {
-  "sha": "3a745b60a24457c7206282055afe63a6f63e3509",
+  "sha": "2e20fce68d30d5e8f992b0ed88f3ac0acadefb9c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "2e20fce",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(eventos): linha do tempo de eventos de cliente em /eventos (#372)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/hooks/useEventosCliente.ts",
+     "src/pages/EventosCliente.tsx",
+     "supabase/functions/external-data/tables.ts",
+     "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+    ]
+   },
    {
     "sha": "3a745b6",
     "date": "2026-11-26",
@@ -310687,33 +310958,24 @@
      "scripts/diag/scan_triggers.sql",
      "scripts/diag/verify_triggers.sql"
     ]
-   },
-   {
-    "sha": "f14b8be",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "fix: fecha os 9 drops de indice duplicado que ficaram pendentes da Wave 119 (#341)",
-    "files": [
-     "supabase/migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/external-data/tables.ts",
-    9
+    10
    ],
    [
     "src/app/AppRoutes.tsx",
-    7
+    8
    ],
    [
     "src/app/lazyPages.tsx",
-    7
+    8
    ],
    [
     "src/components/layout/AppSidebar.tsx",
-    7
+    8
    ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
@@ -310748,6 +311010,18 @@
     2
    ],
    [
+    "src/hooks/useEventosCliente.ts",
+    1
+   ],
+   [
+    "src/pages/EventosCliente.tsx",
+    1
+   ],
+   [
+    "supabase/migrations/20261126203000_eventos_cliente_read_only.sql",
+    1
+   ],
+   [
     "src/hooks/useGovernancaIA.ts",
     1
    ],
@@ -310765,18 +311039,6 @@
    ],
    [
     "src/hooks/useClientes.ts",
-    1
-   ],
-   [
-    "src/pages/Clientes.tsx",
-    1
-   ],
-   [
-    "supabase/functions/external-data/index.ts",
-    1
-   ],
-   [
-    "supabase/migrations/20261126180000_clientes_views_read_only.sql",
     1
    ]
   ]

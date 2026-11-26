@@ -3,8 +3,8 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2123)",
-   "SQL (1304)",
+   "TypeScript (2125)",
+   "SQL (1305)",
    "Markdown (159)",
    "Shell (148)",
    "JavaScript (143)",
@@ -1675,6 +1675,7 @@
    "/auth",
    "/design-system",
    "/dr/:token",
+   "/eventos",
    "/f/:slug",
    "/lm/:slug",
    "/lp/:slug",

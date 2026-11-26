@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3a745b60a2` · branch `main` · 2026-11-26 18:09 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2e20fce68d` · branch `main` · 2026-11-26 18:33 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1435,7 +1435,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `empathy` | compara | `src/hooks/useCarnegieAnalysis.ts` |
 | `type` | `enroll_in_sequence` | escreve | `src/components/automation/AutomationTemplates.tsx` |
 | `type` | `enum` | escreve | `src/lib/reports/reportEngine.ts` |
-| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +67 |
+| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +68 |
 | `type` | `error` | compara | `src/lib/queryErrorReporter.ts` |
 | `type` | `error_budget_100` | escreve | `supabase/functions/error-budget/index.ts` |
 | `type` | `error_budget_50` | escreve | `supabase/functions/error-budget/index.ts` |
@@ -1472,7 +1472,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `image_url` | escreve | `supabase/functions/visual-search/index.ts` |
 | `type` | `impersonal` | escreve | `src/data/carnegieWarmth.ts` |
 | `type` | `improvement_noted` | escreve | `src/data/carnegieProgressCelebration.ts` |
-| `type` | `in` | compara, escreve | `src/components/intelligence/CrossRefTab.tsx`<br>`src/hooks/useCrossReference.ts`<br>`src/hooks/useExternalInteractions.ts`<br>`src/pages/cadastro/RelationshipList.tsx`<br>`supabase/functions/_shared/tenant-guard_test.ts`<br>… +1 |
+| `type` | `in` | compara, escreve | `src/components/intelligence/CrossRefTab.tsx`<br>`src/hooks/useCrossReference.ts`<br>`src/hooks/useEventosCliente.ts`<br>`src/hooks/useExternalInteractions.ts`<br>`src/pages/cadastro/RelationshipList.tsx`<br>… +2 |
 | `type` | `influence` | compara, escreve | `src/components/stakeholders/CoalitionDetectionPanel.tsx`<br>`src/components/stakeholders/StakeholderInfluenceNetwork.tsx`<br>`src/components/stakeholders/stakeholder-network/NetworkHelpers.ts`<br>`src/hooks/useCoalitionDetection.ts` |
 | `type` | `input_file` | escreve | `supabase/functions/voice-to-text/index.ts` |
 | `type` | `insight` | compara, escreve | `public/sw-push.js`<br>`src/hooks/useRealtimeNotifications.ts`<br>`supabase/functions/check-notifications/index.ts` |
@@ -1630,7 +1630,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `closed_lost` | compara | `supabase/functions/abm-account-scorer/index.ts` |
 | `status` | `closed_won` | compara | `supabase/functions/abm-account-scorer/index.ts` |
-| … +182 linhas — lista completa em `context.json` | | | |
+| … +183 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -1738,6 +1738,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | BookmarkType | contact \| company \| deal | `src/hooks/useEntityBookmarks.ts` |
 | EntityType | company \| contact | `src/hooks/useEntityRelationships.ts` |
 | EntityRelationshipRole | buyer \| manager \| owner \| decision_maker \| influencer \| user \| sponsor \| partner \| supplier \| subsidiary \| parent \| employee_of \| other | `src/hooks/useEntityRelationships.ts` |
+| TIPOS_EVENTO | { valor: 'TRANSFERENCIA', label: 'Transferência de carteira' }, { valor: 'COMPRA', label: 'Compra' }, { valor: 'PRIMEIRA_COMPRA', label: 'Primeira compra' }, { valor: 'ATIVACAO', label: 'Ativação' }, { valor: 'REATIVACAO', label: 'Reativação' }, { valor: 'INATIVACAO', label: 'Inativação' }, { valor: … | `src/hooks/useEventosCliente.ts` |
 | EvidenceSource | whatsapp \| call \| interaction | `src/hooks/useEvidenceForLabel.ts` |
 | Ficha360Sort | recente \| relevante | `src/hooks/useFicha360Sort.ts` |
 | FollowUpDecision | approved \| rejected | `src/hooks/useFollowUpApprovals.ts` |
@@ -3289,6 +3290,10 @@ _nenhum item encontrado_
   ```
   const newErrors: Record<string, string> = {}; try { emailSchema.parse(email); } catch (e) { if (e instanceof z.ZodError) newErrors.email = e.issues[0].message; } try { passwordSchema.parse(password); } catch (e) { if (e instanceof z.ZodError) newErrors.password = e.issues[0].message; } if (mode === 'signup') { try { nameSchema.parse(firstName); } catch (e) { if (e instanceof z.ZodError) newErrors.firstName = e.issues[0].message; } try { nameSchema.parse(lastName); } catch (e) { if (e instanceof …
   ```
+- **formatValor(chave: string, valor: unknown)** — `src/pages/EventosCliente.tsx`
+  ```
+  if (valor === null || valor === undefined || valor === '') return null; if (chave === 'valor' || chave === 'valor_total') { const numero = Number(valor); if (Number.isFinite(numero)) { return `${chave === 'valor_total' ? 'Total ' : ''}R$ ${numero.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`; } } if (typeof valor === 'object') return null; return `${ROTULO_EXTRA[chave] ?? chave}: ${String(valor)}`;
+  ```
 - **applyDraftFilters()** — `src/pages/Ficha360.tsx`
   ```
   setDays(draftDays); setChannels(draftChannels);
@@ -3703,6 +3708,7 @@ _nenhum item encontrado_
 | `FORCA_TETO_NEGATIVA` | `7` | `src/hooks/useEmotionalIntelligence.ts` |
 | `MAX` | `10` | `src/hooks/useEntityBookmarks.ts` |
 | `DEBOUNCE_MS` | `500` | `src/hooks/useEntityNotes.ts` |
+| `TAMANHO_PAGINA` | `25` | `src/hooks/useEventosCliente.ts` |
 | `MAX_FAVORITES` | `10` | `src/hooks/useFicha360FilterFavorites.ts` |
 | `MAX_DESCRIPTION` | `200` | `src/hooks/useFicha360FilterFavorites.ts` |
 | `SCOPE` | `'ficha360:presets'` | `src/hooks/useFicha360FilterPresets.ts` |

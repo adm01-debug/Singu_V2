@@ -404,6 +404,7 @@
    "src/pages/Empresas.tsx",
    "src/pages/Enrichment.tsx",
    "src/pages/ErpViewer.tsx",
+   "src/pages/EventosCliente.tsx",
    "src/pages/Ficha360.tsx",
    "src/pages/Forecasting.tsx",
    "src/pages/ForecastingSetup.tsx",
@@ -8631,6 +8632,9 @@
    "src/integrations/supabase/types.ts",
    "src/lib/logger.ts"
   ],
+  "src/hooks/useEventosCliente.ts": [
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useEvidenceForLabel.ts": [
    "src/integrations/supabase/client.ts"
   ],
@@ -10403,6 +10407,17 @@
    "src/components/ui/table.tsx",
    "src/components/ui/tabs.tsx",
    "src/hooks/useErpData.ts"
+  ],
+  "src/pages/EventosCliente.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useEventosCliente.ts"
   ],
   "src/pages/Ficha360.tsx": [
    "src/components/ficha-360/AplicarFavoritoCompartilhadoDialog.tsx",
