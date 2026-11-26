@@ -28,6 +28,7 @@ const navSections = [
       { title: "Marketing & Campanhas", url: "/marketing", icon: Megaphone },
       { title: "Dashboard", url: "/", icon: LayoutDashboard },
       { title: "Empresas", url: "/empresas", icon: Building2 },
+      { title: "Clientes 360", url: "/clientes", icon: Users },
       { title: "Contatos", url: "/contatos", icon: Users },
       { title: "Pipeline", url: "/pipeline", icon: Kanban },
       { title: "Conversas", url: "/interacoes", icon: MessageSquare },

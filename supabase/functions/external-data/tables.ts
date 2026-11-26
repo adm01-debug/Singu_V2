@@ -157,6 +157,9 @@ export const ALLOWED_TABLES = [
   // ── Automações & notificações ──
   'vw_singu_automation_dashboard', 'vw_notification_dashboard',
   'vw_apelidos_progresso', 'v_channel_stats',
+  // ── Clientes 360 ──
+  'vw_cliente_completo', 'vw_status_clientes', 'vw_empresas_hierarquia',
+  'vw_cooperativas_estrutura', 'vw_empresa_historico_completo',
 ] as const;
 
 export type AllowedTable = typeof ALLOWED_TABLES[number];
@@ -212,6 +215,11 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_notification_dashboard',
   'vw_apelidos_progresso',
   'v_channel_stats',
+  'vw_cliente_completo',
+  'vw_status_clientes',
+  'vw_empresas_hierarquia',
+  'vw_cooperativas_estrutura',
+  'vw_empresa_historico_completo',
 ]);
 
 export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
