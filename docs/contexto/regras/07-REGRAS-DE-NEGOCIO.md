@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8f49ae8ae7` · branch `main` · 2026-11-26 16:58 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1c327708f5` · branch `main` · 2026-11-26 17:36 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1630,7 +1630,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `closed_lost` | compara | `supabase/functions/abm-account-scorer/index.ts` |
 | `status` | `closed_won` | compara | `supabase/functions/abm-account-scorer/index.ts` |
-| … +181 linhas — lista completa em `context.json` | | | |
+| … +182 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -1765,6 +1765,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | DigestMode | immediate \| hourly \| daily | `src/hooks/useNotificationPreferences.ts` |
 | Channel | in_app \| email \| push \| whatsapp | `src/hooks/useNotificationPreferences.ts` |
 | TipoParceiro | fornecedor \| transportadora | `src/hooks/useParceiros.ts` |
+| SITUACOES_HOMOLOGACAO | { valor: 'NUNCA_SOLICITADA', label: 'Nunca solicitada' }, { valor: 'pendente', label: 'Pendente' }, { valor: 'em_analise', label: 'Em análise' }, { valor: 'VENCIDA', label: 'Vencida' }, { valor: 'VENCENDO_EM_BREVE', label: 'Vencendo em 30 dias' }, { valor: 'VIGENTE', label: 'Vigente' }, { valor: 'ho … | `src/hooks/useParceiros.ts` |
 | PlaybookScenario | discovery \| demo \| negotiation \| objection \| closing \| winback \| onboarding \| custom | `src/hooks/usePlaybooks.ts` |
 | PlaybookSectionType | talktrack \| questions \| objections \| next_steps \| resources | `src/hooks/usePlaybooks.ts` |
 | HealthStatus | healthy \| warning \| critical | `src/hooks/usePortfolioHealth.ts` |
@@ -5337,6 +5338,7 @@ _nenhum item encontrado_
 | * Trabalho 100% client-side: não há fetch envolvido — apenas evitamos pagar | `src/hooks/useNextPagePrefetch.ts` |
 | Request notification permission and subscribe | `src/hooks/useNotifications.ts` |
 | Não tenta novamente em 402 (créditos) ou 429 (rate limit) | `src/hooks/useObjectionContextSummary.ts` |
+| * Situações calculadas pela própria view, na ordem em que o negócio as acompanha. */ | `src/hooks/useParceiros.ts` |
 | * - SSR-safe: lê do storage apenas após o mount (evita mismatch de hidratação). | `src/hooks/usePersistentBoolean.ts` |
 | - SECURITY: callers that store user-specific state MUST include the user ID in `key` | `src/hooks/usePersistentBoolean.ts` |
 | ').in('id', companyIds).limit(200) | `src/hooks/usePreContactBriefing.ts` |
@@ -5534,5 +5536,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_demanda_por_cidade LIMIT 10) c), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| … +60 linhas — lista completa em `context.json` | |
+| … +61 linhas — lista completa em `context.json` | |

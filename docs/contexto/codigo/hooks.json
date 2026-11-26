@@ -7619,11 +7619,12 @@
   {
    "arquivo": "src/hooks/useParceiros.ts",
    "hooks_exportados": [
+    "useParceiroControleHomologacao",
     "useParceiroFilaHomologacao",
     "useParceiroRanking",
     "useParceiroResumo"
    ],
-   "linhas": 235,
+   "linhas": 303,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8f49ae8ae7` · branch `main` · 2026-11-26 16:58 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1c327708f5` · branch `main` · 2026-11-26 17:36 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -307,7 +307,7 @@
 | `nurturing_executions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
 | `nurturing_workflows` | SINGU: Fluxos de nutrição long-term (mais complexos que sequences). Trigger-based (score/segment/inactivity/event). | 14 colunas | migration |
 | `oauth_tokens` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | migration |
-| … +463 linhas — lista completa em `context.json` | | | |
+| … +464 linhas — lista completa em `context.json` | | | |
 
 ## Dados de referência (seed — planos, categorias, perfis fixos)
 
@@ -387,6 +387,7 @@ _nenhum item encontrado_
 | status | valor `fechado` para `relationship_stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/nlp/NLPConversionMetrics.tsx` |
 | status | valor `cliente` para `relationship_stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/nlp/NLPConversionMetrics.tsx` |
 | status | valor `text-primary` para `next_step` usado no código não existe em nenhum enum do banco/TS | `escreve:src/components/conversation-intel/KeyMomentsTimeline.tsx` |
+| status | valor `todas` para `situacao` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useParceiros.ts` |
 | coluna | coluna `is_active` usada no código não existe no schema de `profiles` |  |
 | coluna | coluna `deleted_at` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `extra_data_rf` usada no código não existe no schema de `companies` |  |
@@ -618,8 +619,7 @@ _nenhum item encontrado_
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/reset-passwords.ts` |
 | dinâmico | 5 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/cdc/replay.ts` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/compliance/lgpd-snapshot.ts` |
-| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/verify/dual-write-diverge.ts` |
-| … +61 linhas — lista completa em `context.json` | | |
+| … +62 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

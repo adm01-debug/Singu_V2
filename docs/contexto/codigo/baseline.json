@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "8f49ae8ae730f189ab76d25b873d4561b4f8c882",
+  "commit": "1c327708f56bb159934e0d1c28e478d9bf85941c",
   "branch": "main",
-  "data_commit": "2026-11-26T13:56:44-03:00",
+  "data_commit": "2026-11-26T14:32:15-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "1c32770",
+    "data": "2026-11-26",
+    "assunto": "feat(parceiros): controle de homologação com validade, prazo e motivo (#370)"
+   },
    {
     "sha": "8f49ae8",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "603c404",
     "data": "2026-11-25",
     "assunto": "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)"
-   },
-   {
-    "sha": "e380fe1",
-    "data": "2026-11-25",
-    "assunto": "docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)"
    }
   ],
-  "arquivos_mudados_7d": 1038,
+  "arquivos_mudados_7d": 1039,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -157,7 +157,7 @@
    },
    {
     "pasta": "supabase/functions/external-data",
-    "mudancas": 19
+    "mudancas": 20
    },
    {
     "pasta": "scripts/migration/functions",
@@ -246,6 +246,10 @@
     "mudancas": 10
    },
    {
+    "arquivo": "supabase/functions/external-data/tables.ts",
+    "mudancas": 10
+   },
+   {
     "arquivo": "inventario/estado/banco.json",
     "mudancas": 9
    },
@@ -255,10 +259,6 @@
    },
    {
     "arquivo": "src/app/lazyPages.tsx",
-    "mudancas": 9
-   },
-   {
-    "arquivo": "supabase/functions/external-data/tables.ts",
     "mudancas": 9
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 202
+    "commits": 203
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3961,
+  "arquivos_total": 3962,
   "arquivos_codigo": 2285,
-  "linhas_codigo": 426390,
+  "linhas_codigo": 426635,
   "rotas": 122,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -338,7 +338,7 @@
   "hooks": 418,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1125,
+  "migrations": 1126,
   "cron_jobs": 47,
   "testes": 288,
   "workflows": 14,
@@ -676,7 +676,7 @@
   },
   "src/hooks": {
    "arquivos": 450,
-   "linhas": 59616
+   "linhas": 59684
   },
   "src/integrations": {
    "arquivos": 3,
@@ -692,7 +692,7 @@
   },
   "src/pages": {
    "arquivos": 162,
-   "linhas": 31862
+   "linhas": 32037
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28180
+   "linhas": 28182
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -879,7 +879,7 @@
   "ts_ignore": 2,
   "eslint_disable": 1,
   "todos": 8,
-  "arquivos_acima_500_linhas": 46
+  "arquivos_acima_500_linhas": 47
  },
  "todos": [
   {

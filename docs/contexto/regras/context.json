@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "8f49ae8ae730f189ab76d25b873d4561b4f8c882",
+  "sha": "1c327708f56bb159934e0d1c28e478d9bf85941c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 16:58 UTC",
-  "files_total": 4066,
-  "code_files": 3588,
-  "code_lines": 484487
+  "generated_at": "2026-11-26 17:36 UTC",
+  "files_total": 4067,
+  "code_files": 3589,
+  "code_lines": 484749
  },
  "version": "1.3.2",
- "facts_hash": "050066ad56c576e4",
+ "facts_hash": "cf34439a8ceb1f51",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,7 +272,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1302,
+   ".sql": 1303,
    ".tsx": 1196,
    ".ts": 925,
    ".mjs": 123,
@@ -87749,7 +87749,8 @@
    "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql",
    "supabase/migrations/20261126160000_admin_read_mfa_locked_tables.sql",
    "supabase/migrations/20261126170000_admin_read_automation_notifications.sql",
-   "supabase/migrations/20261126180000_clientes_views_read_only.sql"
+   "supabase/migrations/20261126180000_clientes_views_read_only.sql",
+   "supabase/migrations/20261126190000_parceiros_controle_read_only.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -110259,6 +110260,10 @@
     "file": "src/hooks/useParceiros.ts"
    },
    {
+    "name": "useParceiroControleHomologacao",
+    "file": "src/hooks/useParceiros.ts"
+   },
+   {
     "name": "usePasswordBreachCheck",
     "file": "src/hooks/usePasswordBreachCheck.tsx"
    },
@@ -112364,7 +112369,7 @@
   {
    "module": "src/hooks",
    "files": 450,
-   "lines": 59616,
+   "lines": 59684,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -112939,7 +112944,7 @@
   {
    "module": "src/pages",
    "files": 162,
-   "lines": 31862,
+   "lines": 32037,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -113297,7 +113302,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28180,
+   "lines": 28182,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113578,8 +113583,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1125,
-   "lines": 105058,
+   "files": 1126,
+   "lines": 105075,
    "tables": [
     "users"
    ],
@@ -124150,6 +124155,11 @@
     "values": "fornecedor | transportadora"
    },
    {
+    "file": "src/hooks/useParceiros.ts",
+    "name": "SITUACOES_HOMOLOGACAO",
+    "values": "{ valor: 'NUNCA_SOLICITADA', label: 'Nunca solicitada' }, { valor: 'pendente', label: 'Pendente' }, { valor: 'em_analise', label: 'Em análise' }, { valor: 'VENCIDA', label: 'Vencida' }, { valor: 'VENCENDO_EM_BREVE', label: 'Vencendo em 30 dias' }, { valor: 'VIGENTE', label: 'Vigente' }, { valor: 'ho …"
+   },
+   {
     "file": "src/hooks/usePlaybooks.ts",
     "name": "PlaybookScenario",
     "values": "discovery | demo | negotiation | objection | closing | winback | onboarding | custom"
@@ -129782,6 +129792,10 @@
    {
     "file": "src/hooks/useObjectionContextSummary.ts",
     "text": "Não tenta novamente em 402 (créditos) ou 429 (rate limit)"
+   },
+   {
+    "file": "src/hooks/useParceiros.ts",
+    "text": "* Situações calculadas pela própria view, na ordem em que o negócio as acompanha. */"
    },
    {
     "file": "src/hooks/usePersistentBoolean.ts",
@@ -160481,6 +160495,18 @@
     "field": "type",
     "value": "eq",
     "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useParceiros.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useParceiros.ts",
+    "field": "situacao",
+    "value": "todas",
+    "kind": "compara"
    },
    {
     "file": "src/hooks/usePasswordResetRequests.ts",
@@ -216450,6 +216476,11 @@
       "escreve:src/components/pipeline/DealDetailDrawer.tsx"
      ]
     },
+    "situacao": {
+     "todas": [
+      "compara:src/hooks/useParceiros.ts"
+     ]
+    },
     "last_test_status": {
      "success": [
       "compara:src/pages/AdminLuxConfig.tsx"
@@ -239636,6 +239667,13 @@
     "msg": "valor `text-primary` para `next_step` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "escreve:src/components/conversation-intel/KeyMomentsTimeline.tsx"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `todas` para `situacao` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:src/hooks/useParceiros.ts"
     ]
    },
    {
@@ -278998,7 +279036,7 @@
   },
   "src/hooks/useParceiros.ts": {
    "path": "src/hooks/useParceiros.ts",
-   "lines": 235,
+   "lines": 303,
    "exports": [
     "type TipoParceiro",
     "type Percentual",
@@ -279014,12 +279052,19 @@
     "interface ParceiroResumo",
     "function useParceiroResumo",
     "function useParceiroRanking",
-    "function useParceiroFilaHomologacao"
+    "function useParceiroFilaHomologacao",
+    "interface ParceiroControleRow",
+    "const SITUACOES_HOMOLOGACAO",
+    "function useParceiroControleHomologacao"
    ],
    "enums": [
     {
      "name": "TipoParceiro",
      "values": "fornecedor | transportadora"
+    },
+    {
+     "name": "SITUACOES_HOMOLOGACAO",
+     "values": "{ valor: 'NUNCA_SOLICITADA', label: 'Nunca solicitada' }, { valor: 'pendente', label: 'Pendente' }, { valor: 'em_analise', label: 'Em análise' }, { valor: 'VENCIDA', label: 'Vencida' }, { valor: 'VENCENDO_EM_BREVE', label: 'Vencendo em 30 dias' }, { valor: 'VIGENTE', label: 'Vigente' }, { valor: 'ho …"
     }
    ],
    "params": [
@@ -279033,12 +279078,26 @@
      "field": "type",
      "value": "eq",
      "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "situacao",
+     "value": "todas",
+     "kind": "compara"
     }
+   ],
+   "rule_comments": [
+    "* Situações calculadas pela própria view, na ordem em que o negócio as acompanha. */"
    ],
    "hooks": [
     "useParceiroResumo",
     "useParceiroRanking",
-    "useParceiroFilaHomologacao"
+    "useParceiroFilaHomologacao",
+    "useParceiroControleHomologacao"
    ],
    "calc_fns": [
     {
@@ -289823,7 +289882,7 @@
   },
   "src/pages/Parceiros.tsx": {
    "path": "src/pages/Parceiros.tsx",
-   "lines": 386,
+   "lines": 561,
    "exports": [
     "function Parceiros"
    ],
@@ -298117,7 +298176,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 233,
+   "lines": 235,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -309462,6 +309521,10 @@
    "path": "supabase/migrations/20261126180000_clientes_views_read_only.sql",
    "lines": 24
   },
+  "supabase/migrations/20261126190000_parceiros_controle_read_only.sql": {
+   "path": "supabase/migrations/20261126190000_parceiros_controle_read_only.sql",
+   "lines": 17
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -310179,10 +310242,22 @@
   }
  },
  "git": {
-  "sha": "8f49ae8ae730f189ab76d25b873d4561b4f8c882",
+  "sha": "1c327708f56bb159934e0d1c28e478d9bf85941c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "1c32770",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(parceiros): controle de homologação com validade, prazo e motivo (#370)",
+    "files": [
+     "src/hooks/useParceiros.ts",
+     "src/pages/Parceiros.tsx",
+     "supabase/functions/external-data/tables.ts",
+     "supabase/migrations/20261126190000_parceiros_controle_read_only.sql"
+    ]
+   },
    {
     "sha": "8f49ae8",
     "date": "2026-11-26",
@@ -310515,23 +310590,12 @@
     "files": [
      "supabase/migrations/20261124211500_whatsapp_messages_status_played_e_colunas_import.sql"
     ]
-   },
-   {
-    "sha": "2c7686a",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "chore(scripts): recupera scripts de diagnostico de branch orfa e registra como legacy manual (#340)",
-    "files": [
-     "scripts/automation.config.json",
-     "scripts/diag-extdata.sh",
-     "scripts/diag-sb-inventory.py"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/external-data/tables.ts",
-    7
+    8
    ],
    [
     "src/app/AppRoutes.tsx",
@@ -310554,6 +310618,14 @@
     3
    ],
    [
+    "src/hooks/useParceiros.ts",
+    2
+   ],
+   [
+    "src/pages/Parceiros.tsx",
+    2
+   ],
+   [
     "docs/qa/security-definer-audit.md",
     2
    ],
@@ -310568,6 +310640,10 @@
    [
     "supabase/functions/sync-product-catalog/index.ts",
     2
+   ],
+   [
+    "supabase/migrations/20261126190000_parceiros_controle_read_only.sql",
+    1
    ],
    [
     "src/hooks/useClientes.ts",
@@ -310595,18 +310671,6 @@
    ],
    [
     "supabase/migrations/20261126170000_admin_read_automation_notifications.sql",
-    1
-   ],
-   [
-    "src/hooks/useCarteira.ts",
-    1
-   ],
-   [
-    "src/pages/Carteira.tsx",
-    1
-   ],
-   [
-    "supabase/migrations/20261126160000_admin_read_mfa_locked_tables.sql",
     1
    ]
   ]

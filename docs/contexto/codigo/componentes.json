@@ -17556,9 +17556,10 @@
     "Parceiros"
    ],
    "export_default": "Parceiros",
-   "linhas": 386,
+   "linhas": 561,
    "dominio": "pages",
    "hooks_locais": [
+    "useParceiroControleHomologacao",
     "useParceiroFilaHomologacao",
     "useParceiroRanking",
     "useParceiroResumo"
