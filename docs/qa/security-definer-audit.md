@@ -2,7 +2,13 @@
 
 > Objetivo: confirmar que **toda** função `SECURITY DEFINER` em `public.*` (a) trava `search_path`; e que nenhum DEFINER **exposto a `anon`** lê `auth.uid()` — combinação perigosa: `anon` sem JWT resulta em `auth.uid() = NULL` e o DEFINER escreve linhas órfãs ou cross-tenant.
 
-## Baseline atual — 119 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-25)
+## Baseline atual — 120 DEFINERs (banco canônico `pgxfvjmuubtbowutlide`, 2026-11-26)
+
+O delta de +1 sobre a rodada de 2026-11-25 é `sync_social_insight_from_analysis()`
+(migration `20261126114500_social_insights_from_behavior_analysis.sql`), função de trigger
+`AFTER INSERT OR UPDATE` em `social_behavior_analysis` que projeta a análise em `social_insights`.
+`SECURITY DEFINER` com `search_path = public` e `EXECUTE` revogado de `PUBLIC`/`anon`/`authenticated`:
+só o trigger e `service_role` executam.
 
 O delta de +3 sobre a rodada de 2026-11-24 são as funções do motor social automático
 (migration `20261125190000_social_sync_automatico_enqueue_dispatch.sql`), todas `SECURITY DEFINER`
@@ -25,7 +31,7 @@ são os stubs legados de ciclo de vida do cliente, todos `SECURITY DEFINER` com 
 
 Hardening concluído em 2026-11-24: nenhuma tela, edge function ou tipo gerado do frontend invoca as cinco,
 e o `EXECUTE` de `authenticated` só existia por herança da compat de janeiro. Continuam contando na
-baseline DEFINER (119) porque seguem `SECURITY DEFINER`. O trigger `trg_customer_purchases_after_insert`
+baseline DEFINER (120) porque seguem `SECURITY DEFINER`. O trigger `trg_customer_purchases_after_insert`
 (`public.trg_after_purchase`, SECURITY INVOKER) chama `ativar_cliente`, mas roda como `postgres`/`service_role`
 — `customer_purchases` não tem policy de INSERT para `authenticated`. Um consumidor externo de ERP/CRM,
 se existir, passa a precisar de chave `service_role`.

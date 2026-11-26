@@ -115,3 +115,9 @@ where btrim(concat_ws(
      where si.contact_id = a.contact_id
        and si.insight_type = 'behavior_summary'
   );
+
+-- Funcao de trigger: ninguem precisa executar direto. Sem este revoke o grant
+-- herdado de PUBLIC deixa `anon`/`authenticated` fora da allowlist publica.
+revoke all on function public.sync_social_insight_from_analysis() from public;
+revoke all on function public.sync_social_insight_from_analysis() from anon;
+revoke all on function public.sync_social_insight_from_analysis() from authenticated;
