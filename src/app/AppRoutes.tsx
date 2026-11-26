@@ -168,6 +168,7 @@ export const AppRoutes = () => {
       <Route path="/admin/readiness" element={<Admin><P.AdminReadiness /></Admin>} />
       <Route path="/parceiros" element={<Admin><P.Parceiros /></Admin>} />
       <Route path="/carteira" element={<Admin><P.Carteira /></Admin>} />
+      <Route path="/admin/automacoes" element={<Admin><P.AdminAutomacoes /></Admin>} />
       <Route path="/admin/field-mapping" element={<Admin><P.AdminFieldMapping /></Admin>} />
       <Route path="/admin/email-diagnostics" element={<Admin><P.AdminEmailDiagnostics /></Admin>} />
       <Route path="/admin/voice-diagnostics" element={<Admin><P.AdminVoiceDiagnostics /></Admin>} />

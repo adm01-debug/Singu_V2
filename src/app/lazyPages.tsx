@@ -72,6 +72,7 @@ export const AdminSchemaDrift = lazy(() => import("@/pages/AdminSchemaDrift"));
 export const AdminReadiness = lazy(() => import("@/pages/AdminReadiness"));
 export const Parceiros = lazy(() => import("@/pages/Parceiros"));
 export const Carteira = lazy(() => import("@/pages/Carteira"));
+export const AdminAutomacoes = lazy(() => import("@/pages/AdminAutomacoes"));
 export const AdminFieldMapping = lazy(() => import("@/pages/AdminFieldMapping"));
 export const AdminEmailDiagnostics = lazy(() => import("@/pages/AdminEmailDiagnostics"));
 export const AdminVoiceDiagnostics = lazy(() => import("@/pages/AdminVoiceDiagnostics"));
