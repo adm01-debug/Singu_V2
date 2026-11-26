@@ -10,6 +10,7 @@ import {
   Building2, CheckCircle2, AlertCircle, Smile, Meh, Frown, Zap, Calendar,
 } from 'lucide-react';
 import { usePerformanceMetrics } from '@/hooks/usePerformanceMetrics';
+import { SellerCoachingPanel } from '@/components/performance/SellerCoachingPanel';
 import {
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid,
   PieChart, Pie, Cell,
@@ -189,6 +190,8 @@ export default function Performance() {
             </CardContent>
           </Card>
         </div>
+
+        <SellerCoachingPanel />
       </div>
     </AppLayout>
   );
