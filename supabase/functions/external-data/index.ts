@@ -370,8 +370,14 @@ Deno.serve(async (req) => {
         const clamped = clampRange(rangeConfig);
         query = query.range(clamped.from, clamped.to);
 
-        const { data, error, count } = await query as unknown as { data: unknown[]; error: { message: string } | null; count: number };
-        if (error) throw new Error(`Select failed: ${error.message}`);
+        const { data, error, count } = await query as unknown as { data: unknown[]; error: { message: string } | null; count: number | null };
+        if (error) {
+          // PostgREST responde 416 quando o offset passa do total (paginação além da última página).
+          if (/range not satisfiable/i.test(error.message)) {
+            return { data: [], count: count ?? 0 };
+          }
+          throw new Error(`Select failed: ${error.message}`);
+        }
         return { data: data || [], count };
       });
 
