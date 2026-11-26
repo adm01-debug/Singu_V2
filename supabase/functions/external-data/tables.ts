@@ -154,6 +154,9 @@ export const ALLOWED_TABLES = [
   'vw_primeiro_ativador', 'vw_ultimo_inativador', 'vw_top_clientes_vendedor',
   'vw_risco_inativacao', 'vw_clientes_prioridade', 'vw_matriz_filiais',
   'vw_historico_carteira', 'vw_historico_carteira_empresa',
+  // ── Automações & notificações ──
+  'vw_singu_automation_dashboard', 'vw_notification_dashboard',
+  'vw_apelidos_progresso', 'v_channel_stats',
 ] as const;
 
 export type AllowedTable = typeof ALLOWED_TABLES[number];
@@ -205,6 +208,10 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_matriz_filiais',
   'vw_historico_carteira',
   'vw_historico_carteira_empresa',
+  'vw_singu_automation_dashboard',
+  'vw_notification_dashboard',
+  'vw_apelidos_progresso',
+  'v_channel_stats',
 ]);
 
 export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
