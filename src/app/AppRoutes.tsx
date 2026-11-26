@@ -171,6 +171,7 @@ export const AppRoutes = () => {
       <Route path="/admin/automacoes" element={<Admin><P.AdminAutomacoes /></Admin>} />
       <Route path="/admin/ia" element={<Admin><P.GovernancaIA /></Admin>} />
       <Route path="/admin/workspaces" element={<Admin><P.Workspaces /></Admin>} />
+      <Route path="/admin/qualidade-cadastral" element={<Admin><P.QualidadeCadastral /></Admin>} />
       <Route path="/eventos" element={<P.EventosCliente />} />
       <Route path="/clientes" element={<Protected><P.Clientes /></Protected>} />
       <Route path="/admin/field-mapping" element={<Admin><P.AdminFieldMapping /></Admin>} />

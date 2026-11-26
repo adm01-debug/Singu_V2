@@ -104,6 +104,7 @@ const adminSection = {
     { title: "Saúde das automações", url: "/admin/automacoes", icon: Bot },
     { title: "Governança de IA", url: "/admin/ia", icon: Brain },
     { title: "Contas do Workspace", url: "/admin/workspaces", icon: Building },
+    { title: "Qualidade cadastral", url: "/admin/qualidade-cadastral", icon: FileWarning },
   ],
 };
 
