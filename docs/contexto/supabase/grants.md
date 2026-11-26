@@ -1468,7 +1468,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.v_guardrail_dashboard | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.v_life_events_audit | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.v_life_events_audit | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.v_model_catalog | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.v_model_catalog | authenticated | SELECT |
 | public.v_model_catalog | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.v_nlp_analytics | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.v_nlp_analytics | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -1630,9 +1630,9 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_quem_inativou | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_rapport_points | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_rapport_points | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_recommended_scripts | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_recommended_scripts | authenticated | SELECT |
 | public.vw_recommended_scripts | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_reframe_suggestions | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_reframe_suggestions | authenticated | SELECT |
 | public.vw_reframe_suggestions | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_resumo_alertas_vendedor | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_resumo_alertas_vendedor | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -1698,7 +1698,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_supplier_qualification_dashboard | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_supplier_ranking | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_supplier_ranking | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_timeline_cliente | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_timeline_cliente | authenticated | SELECT |
 | public.vw_timeline_cliente | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_timeline_empresa | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_timeline_empresa | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

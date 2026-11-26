@@ -246320,7 +246320,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "v_model_catalog"
         },
@@ -247292,7 +247292,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_recommended_scripts"
         },
@@ -247304,7 +247304,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_reframe_suggestions"
         },
@@ -247700,7 +247700,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_timeline_cliente"
         },
@@ -280746,6 +280746,16 @@
         "name": "parceiros_controle_read_only",
         "statements": null,
         "version": "20261126190000"
+      },
+      {
+        "name": "governanca_ia_read_only",
+        "statements": null,
+        "version": "20261126200000"
+      },
+      {
+        "name": "eventos_cliente_read_only",
+        "statements": null,
+        "version": "20261126203000"
       }
     ],
     "policies": [

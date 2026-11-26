@@ -2,6 +2,11 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 18:16 UTC
+
+- **grants** alterado (4): `public.v_model_catalog:authenticated`, `public.vw_recommended_scripts:authenticated`, `public.vw_reframe_suggestions:authenticated`, `public.vw_timeline_cliente:authenticated`
+- **migrations** adicionado (2): `20261126200000_governanca_ia_read_only`, `20261126203000_eventos_cliente_read_only`
+
 ## 2026-11-26 17:12 UTC
 
 - **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`
