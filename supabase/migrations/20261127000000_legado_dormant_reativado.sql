@@ -163,5 +163,10 @@ begin
   end loop;
 end $$;
 
+-- CREATE FUNCTION concede EXECUTE a PUBLIC por padrao, o que deixa anon executar a
+-- funcao de trigger (o teste functions_authenticated_allowlist.sql reprova nisso).
+revoke all on function public.set_owner_from_contact() from public;
+grant execute on function public.set_owner_from_contact() to authenticated, service_role;
+
 comment on function public.set_owner_from_contact() is
   'Preenche user_id a partir do dono do contato nas tabelas reativadas de _dormant.';
