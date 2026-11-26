@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1092,
+ "total": 1093,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -199,6 +199,10 @@
   "Ficha360": [
    "src/app/lazyPages.tsx",
    "src/pages/Ficha360.tsx"
+  ],
+  "FunilVendas": [
+   "src/app/lazyPages.tsx",
+   "src/pages/FunilVendas.tsx"
   ],
   "GovernancaIA": [
    "src/app/lazyPages.tsx",
@@ -535,7 +539,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 201,
+   "linhas": 202,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -614,6 +618,7 @@
     "Ficha360",
     "ForecastingPage",
     "ForecastingSetupPage",
+    "FunilVendas",
     "GovernancaIA",
     "GruposEconomicos",
     "Historico",
@@ -686,7 +691,7 @@
     "Workspaces"
    ],
    "export_default": null,
-   "linhas": 185,
+   "linhas": 186,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10407,7 +10412,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 58,
+   "usado_por": 59,
    "orfao": false
   },
   {
@@ -10416,7 +10421,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 332,
+   "linhas": 333,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -10482,7 +10487,7 @@
     "MobileSidebarDrawer"
    ],
    "export_default": null,
-   "linhas": 237,
+   "linhas": 238,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14302,7 +14307,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 564,
+   "usado_por": 565,
    "orfao": false
   },
   {
@@ -14317,7 +14322,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 544,
+   "usado_por": 545,
    "orfao": false
   },
   {
@@ -14352,7 +14357,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 602,
+   "usado_por": 603,
    "orfao": false
   },
   {
@@ -15137,7 +15142,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 217,
+   "usado_por": 218,
    "orfao": false
   },
   {
@@ -15261,7 +15266,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 30,
+   "usado_por": 31,
    "orfao": false
   },
   {
@@ -17028,6 +17033,22 @@
    "hooks_locais": [
     "useQuotaSettings",
     "useUpsertQuotaSettings"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/FunilVendas.tsx",
+   "exports": [
+    "FunilVendas"
+   ],
+   "export_default": "FunilVendas",
+   "linhas": 437,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useFunilVendas"
    ],
    "tabelas": [],
    "edges": [],

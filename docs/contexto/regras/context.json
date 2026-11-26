@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "18a7e15ff35a925f3fb9d10df60c7cfac763774c",
+  "sha": "d49a430d7ae1dd6f027908f729608355d4212a73",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 20:42 UTC",
-  "files_total": 4083,
-  "code_files": 3605,
-  "code_lines": 487492
+  "generated_at": "2026-11-26 21:35 UTC",
+  "files_total": 4085,
+  "code_files": 3607,
+  "code_lines": 488015
  },
  "version": "1.3.2",
- "facts_hash": "08aa259998941744",
+ "facts_hash": "7b7f9ce921f72c5d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -273,8 +273,8 @@
   "package_manager": "bun",
   "languages": {
    ".sql": 1306,
-   ".tsx": 1203,
-   ".ts": 931,
+   ".tsx": 1204,
+   ".ts": 932,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -102631,6 +102631,39 @@
    },
    {
     "path": "",
+    "file": "src/pages/FunilVendas.tsx",
+    "component": "FunilVendas",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 105
+   },
+   {
+    "path": "",
     "file": "src/pages/GovernancaIA.tsx",
     "component": "GovernancaIA",
     "tables_transitive": [
@@ -110000,6 +110033,10 @@
     "file": "src/hooks/useForms.ts"
    },
    {
+    "name": "useFunilVendas",
+    "file": "src/hooks/useFunilVendas.ts"
+   },
+   {
     "name": "useFuzzySearch",
     "file": "src/hooks/useFuzzySearch.ts"
    },
@@ -111787,6 +111824,10 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "guard": "Protected",
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "guard": "RequireAuth",
     "file": "src/app/AppRoutes.tsx"
    },
@@ -112164,7 +112205,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 616,
+   "lines": 618,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -112201,7 +112242,7 @@
   {
    "module": "src/components",
    "files": 1018,
-   "lines": 152749,
+   "lines": 152751,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112648,8 +112689,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 457,
-   "lines": 60326,
+   "files": 458,
+   "lines": 60402,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -113053,7 +113094,7 @@
   {
    "module": "src/lib",
    "files": 108,
-   "lines": 9556,
+   "lines": 9558,
    "tables": [
     "activities",
     "crm_relationship_audit_logs",
@@ -113223,8 +113264,8 @@
   },
   {
    "module": "src/pages",
-   "files": 167,
-   "lines": 33675,
+   "files": 168,
+   "lines": 34112,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -113388,6 +113429,7 @@
     "src/pages/Ficha360.tsx",
     "src/pages/Forecasting.tsx",
     "src/pages/ForecastingSetup.tsx",
+    "src/pages/FunilVendas.tsx",
     "src/pages/GovernancaIA.tsx",
     "src/pages/GruposEconomicos.tsx",
     "src/pages/Historico.tsx",
@@ -113410,8 +113452,7 @@
     "src/pages/MarketingHub.tsx",
     "src/pages/MarketingMagnetDetail.tsx",
     "src/pages/Metas.tsx",
-    "src/pages/NLPAnalytics.tsx",
-    "src/pages/NPS.contract.test.tsx"
+    "src/pages/NLPAnalytics.tsx"
    ]
   },
   {
@@ -113582,7 +113623,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28200,
+   "lines": 28204,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -162440,6 +162481,18 @@
     "file": "src/pages/Forecasting.tsx",
     "field": "status",
     "value": "open",
+    "kind": "compara"
+   },
+   {
+    "file": "src/pages/FunilVendas.tsx",
+    "field": "stage",
+    "value": "cliente",
+    "kind": "compara"
+   },
+   {
+    "file": "src/pages/FunilVendas.tsx",
+    "field": "stage",
+    "value": "perdido",
     "kind": "compara"
    },
    {
@@ -216660,7 +216713,8 @@
       "compara:src/hooks/useDISCConversionData.ts"
      ],
      "cliente": [
-      "compara:src/hooks/useDISCConversionData.ts"
+      "compara:src/hooks/useDISCConversionData.ts",
+      "compara:src/pages/FunilVendas.tsx"
      ],
      "unknown": [
       "compara:src/hooks/useDealVelocity.ts"
@@ -216679,6 +216733,9 @@
      ],
      "company": [
       "escreve:src/pages/EmpresaDetalhe.tsx"
+     ],
+     "perdido": [
+      "compara:src/pages/FunilVendas.tsx"
      ],
      "upsert": [
       "escreve:supabase/functions/revops-snapshot-builder/index.ts"
@@ -236260,6 +236317,10 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "guard": "Protected",
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "guard": "RequireAuth",
     "file": "src/app/AppRoutes.tsx"
    },
@@ -240079,7 +240140,8 @@
     "kind": "status",
     "msg": "valor `cliente` para `stage` usado no código não existe em nenhum enum do banco/TS",
     "where": [
-     "compara:src/hooks/useDISCConversionData.ts"
+     "compara:src/hooks/useDISCConversionData.ts",
+     "compara:src/pages/FunilVendas.tsx"
     ]
    },
    {
@@ -240101,6 +240163,13 @@
     "msg": "valor `new` para `stage` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:src/hooks/useProactiveIntelligence.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `perdido` para `stage` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:src/pages/FunilVendas.tsx"
     ]
    },
    {
@@ -248263,7 +248332,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 201,
+   "lines": 202,
    "exports": [
     "const AppRoutes"
    ],
@@ -249035,6 +249104,7 @@
     "Protected",
     "Protected",
     "Protected",
+    "Protected",
     "RequireAuth",
     "Protected",
     "Protected"
@@ -249050,7 +249120,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 185,
+   "lines": 186,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -258721,7 +258791,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 332,
+   "lines": 333,
    "exports": [
     "const AppSidebar"
    ],
@@ -258786,7 +258856,7 @@
   },
   "src/components/layout/MobileSidebarDrawer.tsx": {
    "path": "src/components/layout/MobileSidebarDrawer.tsx",
-   "lines": 237,
+   "lines": 238,
    "exports": [
     "function MobileSidebarDrawer"
    ],
@@ -276231,6 +276301,22 @@
     "200"
    ]
   },
+  "src/hooks/useFunilVendas.ts": {
+   "path": "src/hooks/useFunilVendas.ts",
+   "lines": 76,
+   "exports": [
+    "interface EstagioFunil",
+    "interface CanalConversao",
+    "interface MetricaCiclo",
+    "interface CoorteRetencao",
+    "interface SegmentoLtv",
+    "interface FunilVendas",
+    "function useFunilVendas"
+   ],
+   "hooks": [
+    "useFunilVendas"
+   ]
+  },
   "src/hooks/useFuzzySearch.ts": {
    "path": "src/hooks/useFuzzySearch.ts",
    "lines": 193,
@@ -287403,7 +287489,7 @@
   },
   "src/lib/navigationLabels.ts": {
    "path": "src/lib/navigationLabels.ts",
-   "lines": 42,
+   "lines": 43,
    "exports": [
     "function getReadableLabel",
     "function getSectionFallback",
@@ -287797,7 +287883,7 @@
   },
   "src/lib/routePermissions.ts": {
    "path": "src/lib/routePermissions.ts",
-   "lines": 32,
+   "lines": 33,
    "exports": [
     "const ROUTE_PERMISSIONS",
     "function canAccessRoute"
@@ -289997,6 +290083,25 @@
    "lines": 81,
    "exports": [
     "function ForecastingSetup"
+   ]
+  },
+  "src/pages/FunilVendas.tsx": {
+   "path": "src/pages/FunilVendas.tsx",
+   "lines": 437,
+   "exports": [
+    "function FunilVendas"
+   ],
+   "status_values": [
+    {
+     "field": "stage",
+     "value": "cliente",
+     "kind": "compara"
+    },
+    {
+     "field": "stage",
+     "value": "perdido",
+     "kind": "compara"
+    }
    ]
   },
   "src/pages/GovernancaIA.tsx": {
@@ -298973,7 +299078,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 253,
+   "lines": 257,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -311054,10 +311159,27 @@
   }
  },
  "git": {
-  "sha": "18a7e15ff35a925f3fb9d10df60c7cfac763774c",
+  "sha": "d49a430d7ae1dd6f027908f729608355d4212a73",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "d49a430",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(funil): tela de funil e ciclo de vendas em /funil-vendas (#378)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/components/layout/MobileSidebarDrawer.tsx",
+     "src/hooks/useFunilVendas.ts",
+     "src/lib/navigationLabels.ts",
+     "src/lib/routePermissions.ts",
+     "src/pages/FunilVendas.tsx",
+     "supabase/functions/external-data/tables.ts"
+    ]
+   },
    {
     "sha": "18a7e15",
     "date": "2026-11-26",
@@ -311420,45 +311542,39 @@
      "src/components/command/GlobalCommandBar.tsx",
      "src/components/command/__tests__/GlobalCommandBar.rbac.test.tsx"
     ]
-   },
-   {
-    "sha": "a16128a",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)",
-    "files": [
-     "src/components/layout/MobileBottomNav.tsx",
-     "src/components/layout/__tests__/MobileBottomNav.test.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/external-data/tables.ts",
-    14
+    15
    ],
    [
     "src/app/AppRoutes.tsx",
-    11
+    12
    ],
    [
     "src/app/lazyPages.tsx",
-    11
+    12
    ],
    [
     "src/components/layout/AppSidebar.tsx",
-    11
+    12
    ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
     4
    ],
    [
+    "src/components/layout/MobileSidebarDrawer.tsx",
+    3
+   ],
+   [
     "supabase/functions/sync-social-interests/analysis.ts",
     3
    ],
    [
-    "src/components/layout/MobileSidebarDrawer.tsx",
+    "src/lib/navigationLabels.ts",
     2
    ],
    [
@@ -311490,27 +311606,23 @@
     2
    ],
    [
+    "src/hooks/useFunilVendas.ts",
+    1
+   ],
+   [
+    "src/lib/routePermissions.ts",
+    1
+   ],
+   [
+    "src/pages/FunilVendas.tsx",
+    1
+   ],
+   [
     "src/hooks/useInteligenciaRamos.ts",
     1
    ],
    [
-    "src/lib/navigationLabels.ts",
-    1
-   ],
-   [
     "src/pages/InteligenciaRamos.tsx",
-    1
-   ],
-   [
-    "src/components/analytics/ReportsTab.tsx",
-    1
-   ],
-   [
-    "src/components/analytics/YoyComparisonWidget.tsx",
-    1
-   ],
-   [
-    "src/hooks/useReportsAnalytics.ts",
     1
    ]
   ]

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18a7e15ff3` · branch `main` · 2026-11-26 20:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d49a430d7a` · branch `main` · 2026-11-26 21:35 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1630,7 +1630,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `closed_lost` | compara | `supabase/functions/abm-account-scorer/index.ts` |
 | `status` | `closed_won` | compara | `supabase/functions/abm-account-scorer/index.ts` |
-| … +184 linhas — lista completa em `context.json` | | | |
+| … +185 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 

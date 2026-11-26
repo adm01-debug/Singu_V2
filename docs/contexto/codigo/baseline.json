@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "18a7e15ff35a925f3fb9d10df60c7cfac763774c",
+  "commit": "d49a430d7ae1dd6f027908f729608355d4212a73",
   "branch": "main",
-  "data_commit": "2026-11-26T17:37:43-03:00",
+  "data_commit": "2026-11-26T18:33:09-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "d49a430",
+    "data": "2026-11-26",
+    "assunto": "feat(funil): tela de funil e ciclo de vendas em /funil-vendas (#378)"
+   },
    {
     "sha": "18a7e15",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "c619141",
     "data": "2026-11-25",
     "assunto": "fix: interesses sociais derivados das interacoes reais (#353)"
-   },
-   {
-    "sha": "675d6fd",
-    "data": "2026-11-25",
-    "assunto": "fix: oferta deixa de falhar quando a coluna metadata nao existe (#352)"
    }
   ],
-  "arquivos_mudados_7d": 1049,
+  "arquivos_mudados_7d": 1051,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -144,16 +144,16 @@
     "mudancas": 30
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 29
-   },
-   {
     "pasta": "supabase/functions/external-data",
-    "mudancas": 26
+    "mudancas": 27
    },
    {
     "pasta": "src/components/layout",
-    "mudancas": 22
+    "mudancas": 24
+   },
+   {
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 24
    },
    {
     "pasta": "src/components/triggers",
@@ -172,8 +172,8 @@
     "mudancas": 16
    },
    {
-    "pasta": "supabase/functions/evolution-webhook",
-    "mudancas": 16
+    "pasta": "src/app/AppRoutes.tsx",
+    "mudancas": 15
    },
    {
     "pasta": "src/components/crm",
@@ -184,15 +184,15 @@
     "mudancas": 15
    },
    {
-    "pasta": "CHANGELOG.md",
-    "mudancas": 14
-   },
-   {
     "pasta": "docs/prod-readiness.md",
     "mudancas": 14
    },
    {
     "pasta": "scripts/migration/cdc",
+    "mudancas": 14
+   },
+   {
+    "pasta": "scripts/migration/tests",
     "mudancas": 14
    }
   ],
@@ -210,6 +210,10 @@
     "mudancas": 22
    },
    {
+    "arquivo": "src/app/AppRoutes.tsx",
+    "mudancas": 18
+   },
+   {
     "arquivo": "docs/qa/security-definer-audit.md",
     "mudancas": 17
    },
@@ -218,19 +222,19 @@
     "mudancas": 17
    },
    {
-    "arquivo": "src/app/AppRoutes.tsx",
-    "mudancas": 17
-   },
-   {
     "arquivo": "supabase/functions/external-data/index.ts",
     "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/external-data/tables.ts",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "src/components/layout/AppSidebar.tsx",
+    "mudancas": 16
+   },
+   {
+    "arquivo": "src/app/lazyPages.tsx",
     "mudancas": 15
    },
    {
@@ -239,10 +243,6 @@
    },
    {
     "arquivo": "docs/prod-readiness.md",
-    "mudancas": 14
-   },
-   {
-    "arquivo": "src/app/lazyPages.tsx",
     "mudancas": 14
    },
    {
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 210
+    "commits": 211
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 16
+    "commits": 15
    },
    {
     "autor": "dependabot[bot]",
@@ -326,16 +326,16 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3978,
-  "arquivos_codigo": 2298,
-  "linhas_codigo": 429311,
-  "rotas": 127,
+  "arquivos_total": 3980,
+  "arquivos_codigo": 2300,
+  "linhas_codigo": 429834,
+  "rotas": 128,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 77,
+  "itens_menu": 78,
   "modulos": 143,
-  "componentes": 1092,
-  "hooks": 424,
+  "componentes": 1093,
+  "hooks": 425,
   "edge_functions": 110,
   "tabelas": 542,
   "migrations": 1129,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 616
+   "linhas": 618
   },
   "src/components": {
    "arquivos": 1018,
-   "linhas": 152749
+   "linhas": 152751
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 457,
-   "linhas": 60326
+   "arquivos": 458,
+   "linhas": 60402
   },
   "src/integrations": {
    "arquivos": 3,
@@ -684,15 +684,15 @@
   },
   "src/lib": {
    "arquivos": 108,
-   "linhas": 9556
+   "linhas": 9558
   },
   "src/main.tsx": {
    "arquivos": 1,
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 167,
-   "linhas": 33675
+   "arquivos": 168,
+   "linhas": 34112
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28200
+   "linhas": 28204
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1218,6 +1218,7 @@
    "ErpViewer",
    "EventosCliente",
    "Ficha360",
+   "FunilVendas",
    "GovernancaIA",
    "GruposEconomicos",
    "Historico",

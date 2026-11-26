@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18a7e15ff3` · branch `main` · 2026-11-26 20:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d49a430d7a` · branch `main` · 2026-11-26 21:35 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -378,10 +378,11 @@ _nenhum item encontrado_
 | status | valor `proof` para `stage` usado no código não existe em nenhum enum do banco/TS | `escreve:src/data/copywritingAdvancedData.ts` |
 | status | valor `negociando` para `stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDISCConversionData.ts` |
 | status | valor `fechado` para `stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDISCConversionData.ts` |
-| status | valor `cliente` para `stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDISCConversionData.ts` |
+| status | valor `cliente` para `stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDISCConversionData.ts`<br>`compara:src/pages/FunilVendas.tsx` |
 | status | valor `converted` para `stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useProactiveIntelligence.ts` |
 | status | valor `engaged` para `stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useProactiveIntelligence.ts` |
 | status | valor `new` para `stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useProactiveIntelligence.ts` |
+| status | valor `perdido` para `stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/FunilVendas.tsx` |
 | status | valor `upsert` para `stage` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/revops-snapshot-builder/index.ts` |
 | status | valor `alerts` para `stage` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/revops-snapshot-builder/index.ts` |
 | status | valor `fechado` para `relationship_stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/nlp/NLPConversionMetrics.tsx` |
@@ -618,8 +619,7 @@ _nenhum item encontrado_
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/inventario/gerar-banco.mjs` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/inventario/gerar-rotas.test.mjs` |
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/reset-passwords.ts` |
-| dinâmico | 5 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/cdc/replay.ts` |
-| … +63 linhas — lista completa em `context.json` | | |
+| … +64 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

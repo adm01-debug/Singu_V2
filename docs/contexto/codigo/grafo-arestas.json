@@ -408,6 +408,7 @@
    "src/pages/Ficha360.tsx",
    "src/pages/Forecasting.tsx",
    "src/pages/ForecastingSetup.tsx",
+   "src/pages/FunilVendas.tsx",
    "src/pages/GovernancaIA.tsx",
    "src/pages/GruposEconomicos.tsx",
    "src/pages/Historico.tsx",
@@ -8754,6 +8755,9 @@
    "src/integrations/supabase/types.ts",
    "src/lib/errorMessages.ts"
   ],
+  "src/hooks/useFunilVendas.ts": [
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useGamification.ts": [
    "src/hooks/useAuth.tsx",
    "src/lib/externalData.ts",
@@ -10514,6 +10518,15 @@
    "src/components/ui/label.tsx",
    "src/components/ui/slider.tsx",
    "src/hooks/useForecasting.ts"
+  ],
+  "src/pages/FunilVendas.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useFunilVendas.ts"
   ],
   "src/pages/GovernancaIA.tsx": [
    "src/components/governanca-ia/TelemetriaGateway.tsx",
