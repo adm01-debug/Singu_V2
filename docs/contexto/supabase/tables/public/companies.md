@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 9 |
+| policies | 10 |
 | realtime (publication) | sim |
 | replica identity | default |
 | vem de extensão | não |
@@ -268,6 +268,16 @@
 | roles | authenticated |
 | USING | `(auth.uid() = user_id)` |
 | WITH CHECK |  |
+
+### `companies_owner_or_admin`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `((( SELECT auth.uid() AS uid) = user_id) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))` |
+| WITH CHECK | `((( SELECT auth.uid() AS uid) = user_id) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))` |
 
 ### `service_role_full_companies`
 

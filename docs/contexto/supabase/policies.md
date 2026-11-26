@@ -398,6 +398,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.companies | Users can insert their own companies | INSERT | PERMISSIVE | authenticated |  | `(auth.uid() = user_id)` |
 | public.companies | Users can update their own companies | UPDATE | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
 | public.companies | Users can view their own companies | SELECT | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
+| public.companies | companies_owner_or_admin | ALL | PERMISSIVE | authenticated | `((( SELECT auth.uid() AS uid) = user_id) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))` | `((( SELECT auth.uid() AS uid) = user_id) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))` |
 | public.companies | service_role_full_companies | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.companies | singu_companies_delete | DELETE | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.companies | singu_companies_insert | INSERT | PERMISSIVE | authenticated |  | `(( SELECT auth.uid() AS uid) = user_id)` |

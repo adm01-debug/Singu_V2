@@ -24,13 +24,13 @@ Gerado automaticamente a cada 10 min pelo workflow `contexto` (job `banco`). **N
 | views | 193 |
 | functions | 1472 |
 | triggers | 500 |
-| policies (RLS) | 1666 |
+| policies (RLS) | 1667 |
 | índices | 1678 |
 | tipos/enums | 37 |
 | extensões | 12 |
 | cron jobs | 38 |
 | filas pgmq | 0 |
-| migrations | 751 |
+| migrations | 752 |
 | buckets | 5 |
 | edge functions | n/d |
 | webhooks | 0 |

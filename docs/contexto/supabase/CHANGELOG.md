@@ -2,6 +2,11 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 14:15 UTC
+
+- **migrations** adicionado (1): `20261126120000_companies_owner_or_admin_policy`
+- **policies (RLS)** adicionado (1): `public.companies.companies_owner_or_admin`
+
 ## 2026-11-26 13:19 UTC
 
 - **functions** alterado (1): `public.sync_social_insight_from_analysis()`

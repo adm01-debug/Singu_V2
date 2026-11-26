@@ -280711,6 +280711,11 @@
         "name": "social_insights_from_behavior_analysis",
         "statements": null,
         "version": "20261126114500"
+      },
+      {
+        "name": "companies_owner_or_admin_policy",
+        "statements": null,
+        "version": "20261126120000"
       }
     ],
     "policies": [
@@ -285431,6 +285436,18 @@
         "table": "companies",
         "using": "(auth.uid() = user_id)",
         "with_check": null
+      },
+      {
+        "cmd": "ALL",
+        "name": "companies_owner_or_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "companies",
+        "using": "((( SELECT auth.uid() AS uid) = user_id) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))",
+        "with_check": "((( SELECT auth.uid() AS uid) = user_id) OR ( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role))"
       },
       {
         "cmd": "ALL",

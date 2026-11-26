@@ -755,3 +755,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261125190000 | [social_sync_automatico_enqueue_dispatch](migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql) | 0 |
 | 20261126090000 | [offer_suggestions_metadata_social_match](migrations/20261126090000_offer_suggestions_metadata_social_match.sql) | 1 |
 | 20261126114500 | [social_insights_from_behavior_analysis](migrations/20261126114500_social_insights_from_behavior_analysis.sql) | 0 |
+| 20261126120000 | [companies_owner_or_admin_policy](migrations/20261126120000_companies_owner_or_admin_policy.sql) | 0 |
