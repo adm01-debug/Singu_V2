@@ -162,6 +162,8 @@ export const ALLOWED_TABLES = [
   'vw_cooperativas_estrutura', 'vw_empresa_historico_completo',
   // ââ GovernanÃ§a de IA ââ
   'v_model_catalog', 'vw_reframe_suggestions', 'vw_recommended_scripts',
+  // ââ Eventos de cliente ââ
+  'vw_timeline_cliente',
 ] as const;
 
 export type AllowedTable = typeof ALLOWED_TABLES[number];
@@ -227,6 +229,7 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'v_model_catalog',
   'vw_reframe_suggestions',
   'vw_recommended_scripts',
+  'vw_timeline_cliente',
 ]);
 
 export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
