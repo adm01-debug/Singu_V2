@@ -148,6 +148,12 @@ export const ALLOWED_TABLES = [
   'vw_carrier_homologation_queue',
   // ── Company cadences ──
   'company_cadences',
+  // ── Carteira & ativação ──
+  'vw_carteira_vendedores', 'vw_dashboard_vendedor', 'vw_dashboard_vendedor_v2',
+  'vw_resumo_diario_vendedor', 'vw_quem_ativou', 'vw_quem_inativou',
+  'vw_primeiro_ativador', 'vw_ultimo_inativador', 'vw_top_clientes_vendedor',
+  'vw_risco_inativacao', 'vw_clientes_prioridade', 'vw_matriz_filiais',
+  'vw_historico_carteira', 'vw_historico_carteira_empresa',
 ] as const;
 
 export type AllowedTable = typeof ALLOWED_TABLES[number];
@@ -185,6 +191,20 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_carrier_by_state',
   'vw_carrier_data_quality',
   'vw_carrier_homologation_queue',
+  'vw_carteira_vendedores',
+  'vw_dashboard_vendedor',
+  'vw_dashboard_vendedor_v2',
+  'vw_resumo_diario_vendedor',
+  'vw_quem_ativou',
+  'vw_quem_inativou',
+  'vw_primeiro_ativador',
+  'vw_ultimo_inativador',
+  'vw_top_clientes_vendedor',
+  'vw_risco_inativacao',
+  'vw_clientes_prioridade',
+  'vw_matriz_filiais',
+  'vw_historico_carteira',
+  'vw_historico_carteira_empresa',
 ]);
 
 export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([

@@ -98,6 +98,7 @@ const adminSection = {
     { title: "Observabilidade", url: "/admin/observabilidade", icon: Gauge },
     { title: "Readiness dos dados", url: "/admin/readiness", icon: Database },
     { title: "Fornecedores e transportadoras", url: "/parceiros", icon: Truck },
+    { title: "Carteira e ativação", url: "/carteira", icon: Users },
   ],
 };
 
