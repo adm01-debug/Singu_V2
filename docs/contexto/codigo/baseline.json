@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "e4a9d179a19d9343297b3cff4e7e3bfb454a07a0",
+  "commit": "3cf27ae23e49fc5de491c98773c9c0b91499ba2e",
   "branch": "main",
-  "data_commit": "2026-11-26T16:22:25-03:00",
+  "data_commit": "2026-11-26T16:56:36-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "3cf27ae",
+    "data": "2026-11-26",
+    "assunto": "feat(qualidade): tela de qualidade cadastral em /admin/qualidade-cadastral (#375)"
+   },
    {
     "sha": "e4a9d17",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "bc7a0ba",
     "data": "2026-11-25",
     "assunto": "fix(deploy): sync-product-catalog nasce sem verify_jwt verificavel e o cron nao a alcanca (#350)"
-   },
-   {
-    "sha": "2c502bd",
-    "data": "2026-11-25",
-    "assunto": "feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)"
    }
   ],
-  "arquivos_mudados_7d": 1040,
+  "arquivos_mudados_7d": 1042,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -149,7 +149,7 @@
    },
    {
     "pasta": "supabase/functions/external-data",
-    "mudancas": 24
+    "mudancas": 25
    },
    {
     "pasta": "src/components/triggers",
@@ -161,7 +161,7 @@
    },
    {
     "pasta": "src/components/layout",
-    "mudancas": 19
+    "mudancas": 20
    },
    {
     "pasta": "scripts/migration/functions",
@@ -223,6 +223,10 @@
    },
    {
     "arquivo": "src/app/AppRoutes.tsx",
+    "mudancas": 16
+   },
+   {
+    "arquivo": "supabase/functions/external-data/tables.ts",
     "mudancas": 15
    },
    {
@@ -234,16 +238,12 @@
     "mudancas": 14
    },
    {
-    "arquivo": "supabase/functions/external-data/tables.ts",
+    "arquivo": "src/components/layout/AppSidebar.tsx",
     "mudancas": 14
    },
    {
-    "arquivo": "src/components/layout/AppSidebar.tsx",
-    "mudancas": 13
-   },
-   {
     "arquivo": "src/app/lazyPages.tsx",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 207
+    "commits": 208
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,16 +326,16 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3973,
-  "arquivos_codigo": 2293,
-  "linhas_codigo": 428284,
-  "rotas": 125,
+  "arquivos_total": 3975,
+  "arquivos_codigo": 2295,
+  "linhas_codigo": 428845,
+  "rotas": 126,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 75,
+  "itens_menu": 76,
   "modulos": 143,
-  "componentes": 1090,
-  "hooks": 422,
+  "componentes": 1091,
+  "hooks": 423,
   "edge_functions": 110,
   "tabelas": 542,
   "migrations": 1129,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 612
+   "linhas": 614
   },
   "src/components": {
    "arquivos": 1018,
-   "linhas": 152745
+   "linhas": 152746
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 454,
-   "linhas": 60059
+   "arquivos": 455,
+   "linhas": 60153
   },
   "src/integrations": {
    "arquivos": 3,
@@ -691,8 +691,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 165,
-   "linhas": 32929
+   "arquivos": 166,
+   "linhas": 33391
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28196
+   "linhas": 28198
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1257,6 +1257,7 @@
    "PublicLeadMagnet",
    "PublicSignaturePage",
    "PublicSurvey",
+   "QualidadeCadastral",
    "React",
    "RecommendationAudit",
    "RelationshipScoreChart",

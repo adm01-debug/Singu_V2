@@ -1,20 +1,20 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 2007,
- "arestas": 8805,
+ "nos": 2009,
+ "arestas": 8816,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
-   "importado_por": 600
+   "importado_por": 601
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 563
+   "importado_por": 564
   },
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 543
+   "importado_por": 544
   },
   {
    "arquivo": "src/lib/utils.ts",
@@ -30,11 +30,11 @@
   },
   {
    "arquivo": "src/components/ui/input.tsx",
-   "importado_por": 215
+   "importado_por": 216
   },
   {
    "arquivo": "src/components/ui/skeleton.tsx",
-   "importado_por": 215
+   "importado_por": 216
   },
   {
    "arquivo": "src/lib/logger.ts",
@@ -46,7 +46,7 @@
   },
   {
    "arquivo": "src/lib/externalData.ts",
-   "importado_por": 141
+   "importado_por": 142
   },
   {
    "arquivo": "src/components/ui/select.tsx",
@@ -78,7 +78,7 @@
   },
   {
    "arquivo": "src/components/ui/tabs.tsx",
-   "importado_por": 96
+   "importado_por": 97
   },
   {
    "arquivo": "src/components/ui/scroll-area.tsx",
@@ -98,7 +98,7 @@
   },
   {
    "arquivo": "src/components/layout/AppLayout.tsx",
-   "importado_por": 56
+   "importado_por": 57
   },
   {
    "arquivo": "supabase/functions/_shared/fetch-utils.ts",
@@ -134,7 +134,7 @@
   },
   {
    "arquivo": "src/components/ui/table.tsx",
-   "importado_por": 28
+   "importado_por": 29
   },
   {
    "arquivo": "src/components/dashboard/DashboardErrorBoundary.tsx",

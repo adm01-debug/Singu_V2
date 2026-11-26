@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1090,
+ "total": 1091,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -356,6 +356,10 @@
    "src/app/lazyPages.tsx",
    "src/pages/PublicSurvey.tsx"
   ],
+  "QualidadeCadastral": [
+   "src/app/lazyPages.tsx",
+   "src/pages/QualidadeCadastral.tsx"
+  ],
   "React": [
    "src/components/gamification/BadgesWidget.tsx",
    "src/components/gamification/GoalsDashboardWidget.tsx",
@@ -527,7 +531,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 199,
+   "linhas": 200,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -649,6 +653,7 @@
     "PublicLeadMagnet",
     "PublicSignaturePage",
     "PublicSurvey",
+    "QualidadeCadastral",
     "RecommendationAudit",
     "RelatorioContato",
     "ReportBuilder",
@@ -676,7 +681,7 @@
     "Workspaces"
    ],
    "export_default": null,
-   "linhas": 183,
+   "linhas": 184,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10397,7 +10402,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 56,
+   "usado_por": 57,
    "orfao": false
   },
   {
@@ -10406,7 +10411,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 330,
+   "linhas": 331,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14292,7 +14297,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 562,
+   "usado_por": 563,
    "orfao": false
   },
   {
@@ -14307,7 +14312,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 542,
+   "usado_por": 543,
    "orfao": false
   },
   {
@@ -14342,7 +14347,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 600,
+   "usado_por": 601,
    "orfao": false
   },
   {
@@ -14621,7 +14626,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 215,
+   "usado_por": 216,
    "orfao": false
   },
   {
@@ -15127,7 +15132,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 215,
+   "usado_por": 216,
    "orfao": false
   },
   {
@@ -15251,7 +15256,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 28,
+   "usado_por": 29,
    "orfao": false
   },
   {
@@ -15268,7 +15273,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 96,
+   "usado_por": 97,
    "orfao": false
   },
   {
@@ -17837,6 +17842,25 @@
    "linhas": 201,
    "dominio": "pages",
    "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/QualidadeCadastral.tsx",
+   "exports": [
+    "QualidadeCadastral"
+   ],
+   "export_default": "QualidadeCadastral",
+   "linhas": 462,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useCnpjsDuplicados",
+    "useCnpjsInvalidos",
+    "useEmpresasIncompletas",
+    "usePendenciasQualidade"
+   ],
    "tabelas": [],
    "edges": [],
    "usado_por": 1,

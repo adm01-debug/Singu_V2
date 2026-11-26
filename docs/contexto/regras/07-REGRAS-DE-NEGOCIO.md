@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e4a9d179a1` · branch `main` · 2026-11-26 19:24 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3cf27ae23e` · branch `main` · 2026-11-26 20:00 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1630,7 +1630,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `closed_lost` | compara | `supabase/functions/abm-account-scorer/index.ts` |
 | `status` | `closed_won` | compara | `supabase/functions/abm-account-scorer/index.ts` |
-| … +183 linhas — lista completa em `context.json` | | | |
+| … +184 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -3793,6 +3793,7 @@ _nenhum item encontrado_
 | `SEARCH_DEBOUNCE_MS` | `400` | `src/pages/GruposEconomicos.tsx` |
 | `GEOCODING_BATCH_SIZE` | `50` | `src/pages/MapaEmpresas.tsx` |
 | `SEARCH_DEBOUNCE_MS` | `400` | `src/pages/Parceiros.tsx` |
+| `POR_PAGINA` | `25` | `src/pages/QualidadeCadastral.tsx` |
 | `SMS_LIMIT` | `160` | `src/pages/SmsMarketing.tsx` |
 | `TAMANHO_PAGINA` | `25` | `src/pages/Workspaces.tsx` |
 | `PAGE_SIZE` | `50` | `src/pages/admin/BehavioralRegenAudit.tsx` |

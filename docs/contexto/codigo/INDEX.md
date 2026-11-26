@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e4a9d179a19d9343297b3cff4e7e3bfb454a07a0` (2026-11-26T16:22:25-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `3cf27ae23e49fc5de491c98773c9c0b91499ba2e` (2026-11-26T16:56:36-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2129), SQL (1306), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
+- linguagens: TypeScript (2131), SQL (1306), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,16 +34,16 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3973 |
-| arquivos_codigo | 2293 |
-| linhas_codigo | 428284 |
-| rotas | 125 |
+| arquivos_total | 3975 |
+| arquivos_codigo | 2295 |
+| linhas_codigo | 428845 |
+| rotas | 126 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
-| itens_menu | 75 |
+| itens_menu | 76 |
 | modulos | 143 |
-| componentes | 1090 |
-| hooks | 422 |
+| componentes | 1091 |
+| hooks | 423 |
 | edge_functions | 110 |
 | tabelas | 542 |
 | migrations | 1129 |
@@ -54,9 +54,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | docs_md | 159 |
 
 ## Onde ficam as coisas
-- telas: src/pages (124)
-- componentes: src/components (930), src/pages (151), src/app (4)
-- hooks: src/hooks (391), src/components (20), src/stores (5)
+- telas: src/pages (125)
+- componentes: src/components (930), src/pages (152), src/app (4)
+- hooks: src/hooks (392), src/components (20), src/stores (5)
 - servicos_logica: src/lib (76), src/data (46), src/domain (8)
 - testes: co-localizado (*.test) (130), co-localizado (__tests__) (104), tests/ (25)
 - edge_functions: supabase/functions
@@ -69,7 +69,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Módulos (menu → domínio)
 | módulo | itens de menu | telas/rotas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
-| app | 0 | 0 | 6 | 693 | 73 | 234 |
+| app | 0 | 0 | 6 | 697 | 73 | 234 |
 | components/abm | 0 | 0 | 9 | 20 | 3 | 6 |
 | components/admin | 0 | 0 | 46 | 37 | 14 | 19 |
 | components/analytics | 0 | 0 | 43 | 82 | 3 | 26 |
@@ -118,10 +118,10 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | components/win-loss | 0 | 0 | 8 | 18 | 3 | 5 |
 | data | 0 | 0 | 46 | 6 | 1 | 6 |
 | domain | 0 | 0 | 8 | 1 | 1 | 2 |
-| hooks | 0 | 0 | 389 | 667 | 57 | 210 |
+| hooks | 0 | 0 | 390 | 671 | 57 | 210 |
 | hooks/voice | 0 | 0 | 9 | 2 | 0 | 1 |
 | lib | 0 | 0 | 72 | 17 | 3 | 13 |
-| pages | 61 | 115 | 115 | 670 | 71 | 228 |
+| pages | 62 | 116 | 116 | 674 | 71 | 228 |
 | pages/admin | 7 | 8 | 9 | 361 | 33 | 107 |
 | pages/cadastro | 0 | 0 | 5 | 6 | 2 | 3 |
 | pages/crm | 1 | 1 | 1 | 0 | 0 | 0 |
@@ -154,6 +154,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - `/admin/lux-config` [tela] → src/pages/AdminLuxConfig.tsx (protegida)
 - `/admin/observabilidade` [tela] → src/pages/admin/Observability.tsx (protegida)
 - `/admin/permissions` [tela] → src/pages/PermissionsPage.tsx (protegida)
+- `/admin/qualidade-cadastral` [tela] → src/pages/QualidadeCadastral.tsx (protegida)
 - `/admin/readiness` [tela] → src/pages/AdminReadiness.tsx (protegida)
 - `/admin/role-permissions` [tela] → src/pages/RolePermissionsPage.tsx (protegida)
 - `/admin/roles` [tela] → src/pages/RolesPage.tsx (protegida)
@@ -439,7 +440,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Permissões / papéis
 - papéis no código: user (39), system (32), status (30), alert (28), group (20), button (10), img (7), contact (5), region (5), dialog (4), assistant (3), decision_maker (3), meter (3), radio (3), radiogroup (3), admin (2), authenticated (2), combobox (2), menuitem (2), menuitemcheckbox (2), navigation (2), note (2), owner (2), service_role (2), a (1), anon (1), b (1), banner (1), figure (1), legado (1), link (1), list (1), main (1), manager (1), menu (1), presentation (1), progressbar (1), salesperson (1), tab (1), tablist (1)
 - enums de papel: salesperson_role: sdr|closer|hybrid; app_role: admin|manager|salesperson|moderator|user|moderator|user|moderator|user; entity_relationship_role: buyer|manager|owner|decision_maker|influencer|user|sponsor|partner|supplier|subsidiary|parent|employee_of|other
-- guards: src/app/lazyPages.tsx, src/components/auth/MFAGuard.tsx, src/hooks/useAuth.tsx · rotas protegidas: 112 · públicas: /*, /auth, /design-system, /dr/:token, /eventos, /f/:slug, /lm/:slug, /lp/:slug, /reset-password, /signature/:token, /sso/callback, /status, /survey/:token
+- guards: src/app/lazyPages.tsx, src/components/auth/MFAGuard.tsx, src/hooks/useAuth.tsx · rotas protegidas: 113 · públicas: /*, /auth, /design-system, /dr/:token, /eventos, /f/:slug, /lm/:slug, /lp/:slug, /reset-password, /signature/:token, /sso/callback, /status, /survey/:token
 - feature flags: nenhuma
 
 ## Alertas (baseline.json → alertas)
@@ -453,15 +454,15 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - tabelas_com_drift_migration_vs_types: 43 — ex.: audit_log, automation_logs, behavioral_profile_regen_queue
 - rpcs_sem_definicao: 2 — ex.: get_territories, get_territory_performance
 - componentes_orfaos: 18 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/conversation-intel/TopicsChart.tsx
-- componentes_com_nome_duplicado: 117 — ex.: ABM, ABMAccountDetail, ABMCampaigns
+- componentes_com_nome_duplicado: 118 — ex.: ABM, ABMAccountDetail, ABMCampaigns
 - scripts_orfaos: 8 — ex.: scripts/hardening/check-client-tls.sql, scripts/hardening/check-extensions-hardening.sql, scripts/hardening/check-indexes-duplicated.sql
 - env_usadas_nao_declaradas: 4 — ex.: DEV, PROD, VITE_APP_VERSION
 - ciclos_de_import: 5
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26263 nós · 41963 arestas · 3164 comunidades · grafo do commit `e4a9d179`
-- comunidades maiores: @tanstack/react-query (505), lucide-react (333), ref_components (319), ref_lib (306), react (277), framer-motion (264), 02_tables.sql (259), _shared/auth.ts (258), ref_hooks (255), ref_types (237), date-fns (226), 📖 Dicionário de Dados — SINGU CRM (224)
+- 26284 nós · 41998 arestas · 3139 comunidades · grafo do commit `3cf27ae2`
+- comunidades maiores: ref_hooks (401), ref_lib (378), _shared/auth.ts (327), useAuth (267), react (262), 02_tables.sql (259), framer-motion (250), react-helmet-async (235), react-router-dom (233), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (213), ref_components (206)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -472,12 +473,12 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - docs/qa/security-definer-audit.md (17)
 - package-lock.json (17)
 - supabase/functions/external-data/index.ts (17)
-- src/app/AppRoutes.tsx (15)
+- src/app/AppRoutes.tsx (16)
+- supabase/functions/external-data/tables.ts (15)
 - tests/rls/security_definer_hardening.sql (15)
 - docs/prod-readiness.md (14)
-- supabase/functions/external-data/tables.ts (14)
-- src/components/layout/AppSidebar.tsx (13)
-- src/app/lazyPages.tsx (12)
+- src/components/layout/AppSidebar.tsx (14)
+- src/app/lazyPages.tsx (13)
 - src/hooks/useContacts.ts (10)
 - src/lib/externalData.ts (10)
 - inventario/estado/banco.json (9)
@@ -600,6 +601,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-26 `3cf27ae` feat(qualidade): tela de qualidade cadastral em /admin/qualidade-cadastral (#375)
 - 2026-11-26 `e4a9d17` feat(ia): aba de telemetria do gateway de IA em Governanca de IA (#374)
 - 2026-11-26 `c040dd3` feat(workspace): tela de contas do Google Workspace e correção da RLS que a zerava (#373)
 - 2026-11-26 `2e20fce` feat(eventos): linha do tempo de eventos de cliente em /eventos (#372)
@@ -614,7 +616,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-26 `e6a9b2a` feat(grupos): tela de grupos economicos com penetracao e prospects (#363)
 - 2026-11-26 `0dd35e1` feat(social,ofertas): liga social_insights e monta as duas UIs que nenhuma rota exibia (#362)
 - 2026-11-26 `8a79216` refactor: monta os cards de touchpoint e contatos estrategicos que ficaram orfaos (#361)
-- 2026-11-26 `7d2a052` fix: evidencia do match social nas ofertas (coluna inexistente causava perda silenciosa) (#360)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

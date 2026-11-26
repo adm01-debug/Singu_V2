@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e4a9d179a1` · branch `main` · 2026-11-26 19:24 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3cf27ae23e` · branch `main` · 2026-11-26 20:00 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -388,6 +388,7 @@ _nenhum item encontrado_
 | status | valor `cliente` para `relationship_stage` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/nlp/NLPConversionMetrics.tsx` |
 | status | valor `text-primary` para `next_step` usado no código não existe em nenhum enum do banco/TS | `escreve:src/components/conversation-intel/KeyMomentsTimeline.tsx` |
 | status | valor `todas` para `situacao` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useParceiros.ts` |
+| status | valor `Estado` para `estado` usado no código não existe em nenhum enum do banco/TS | `escreve:src/hooks/useQualidadeCadastral.ts` |
 | coluna | coluna `is_active` usada no código não existe no schema de `profiles` |  |
 | coluna | coluna `deleted_at` usada no código não existe no schema de `companies` |  |
 | coluna | coluna `extra_data_rf` usada no código não existe no schema de `companies` |  |
@@ -618,8 +619,7 @@ _nenhum item encontrado_
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/inventario/gerar-rotas.test.mjs` |
 | dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/reset-passwords.ts` |
 | dinâmico | 5 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/cdc/replay.ts` |
-| dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/compliance/lgpd-snapshot.ts` |
-| … +62 linhas — lista completa em `context.json` | | |
+| … +63 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

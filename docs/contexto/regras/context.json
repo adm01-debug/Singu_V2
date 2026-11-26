@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e4a9d179a19d9343297b3cff4e7e3bfb454a07a0",
+  "sha": "3cf27ae23e49fc5de491c98773c9c0b91499ba2e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 19:24 UTC",
-  "files_total": 4078,
-  "code_files": 3600,
-  "code_lines": 486465
+  "generated_at": "2026-11-26 20:00 UTC",
+  "files_total": 4080,
+  "code_files": 3602,
+  "code_lines": 487026
  },
  "version": "1.3.2",
- "facts_hash": "6dafb547a2369b94",
+ "facts_hash": "7bc90a93ea3b3c08",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -273,8 +273,8 @@
   "package_manager": "bun",
   "languages": {
    ".sql": 1306,
-   ".tsx": 1200,
-   ".ts": 929,
+   ".tsx": 1201,
+   ".ts": 930,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -103768,6 +103768,39 @@
    },
    {
     "path": "",
+    "file": "src/pages/QualidadeCadastral.tsx",
+    "component": "QualidadeCadastral",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 105
+   },
+   {
+    "path": "",
     "file": "src/pages/RecommendationAudit.tsx",
     "component": "RecommendationAudit",
     "tables_transitive": [
@@ -107626,6 +107659,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/admin/qualidade-cadastral",
+    "component": "Admin",
+    "guard": "",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/admin/readiness",
     "component": "Admin",
     "guard": "",
@@ -110559,6 +110599,22 @@
     "file": "src/hooks/usePurchasePatterns.ts"
    },
    {
+    "name": "usePendenciasQualidade",
+    "file": "src/hooks/useQualidadeCadastral.ts"
+   },
+   {
+    "name": "useCnpjsInvalidos",
+    "file": "src/hooks/useQualidadeCadastral.ts"
+   },
+   {
+    "name": "useCnpjsDuplicados",
+    "file": "src/hooks/useQualidadeCadastral.ts"
+   },
+   {
+    "name": "useEmpresasIncompletas",
+    "file": "src/hooks/useQualidadeCadastral.ts"
+   },
+   {
     "name": "useRBAC",
     "file": "src/hooks/useRBAC.tsx"
    },
@@ -112063,7 +112119,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 612,
+   "lines": 614,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -112100,7 +112156,7 @@
   {
    "module": "src/components",
    "files": 1018,
-   "lines": 152745,
+   "lines": 152746,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112547,8 +112603,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 454,
-   "lines": 60059,
+   "files": 455,
+   "lines": 60153,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -113122,8 +113178,8 @@
   },
   {
    "module": "src/pages",
-   "files": 165,
-   "lines": 32929,
+   "files": 166,
+   "lines": 33391,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -113481,7 +113537,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28196,
+   "lines": 28198,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -154222,6 +154278,11 @@
     "value": "400"
    },
    {
+    "file": "src/pages/QualidadeCadastral.tsx",
+    "name": "POR_PAGINA",
+    "value": "25"
+   },
+   {
     "file": "src/pages/SmsMarketing.tsx",
     "name": "SMS_LIMIT",
     "value": "160"
@@ -160879,6 +160940,12 @@
     "field": "stage",
     "value": "new",
     "kind": "compara"
+   },
+   {
+    "file": "src/hooks/useQualidadeCadastral.ts",
+    "field": "estado",
+    "value": "Estado",
+    "kind": "escreve"
    },
    {
     "file": "src/hooks/useRapportIntelView.ts",
@@ -216730,6 +216797,11 @@
       "compara:src/hooks/useParceiros.ts"
      ]
     },
+    "estado": {
+     "Estado": [
+      "escreve:src/hooks/useQualidadeCadastral.ts"
+     ]
+    },
     "last_test_status": {
      "success": [
       "compara:src/pages/AdminLuxConfig.tsx"
@@ -239985,6 +240057,13 @@
     ]
    },
    {
+    "kind": "status",
+    "msg": "valor `Estado` para `estado` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "escreve:src/hooks/useQualidadeCadastral.ts"
+    ]
+   },
+   {
     "kind": "coluna",
     "msg": "coluna `is_active` usada no código não existe no schema de `profiles`",
     "where": []
@@ -248095,7 +248174,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 199,
+   "lines": 200,
    "exports": [
     "const AppRoutes"
    ],
@@ -248656,6 +248735,12 @@
      "roles": []
     },
     {
+     "path": "/admin/qualidade-cadastral",
+     "component": "Admin",
+     "guard": "",
+     "roles": []
+    },
+    {
      "path": "/eventos",
      "component": "P.EventosCliente",
      "guard": "",
@@ -248875,7 +248960,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 183,
+   "lines": 184,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -258546,7 +258631,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 330,
+   "lines": 331,
    "exports": [
     "const AppSidebar"
    ],
@@ -280364,6 +280449,34 @@
     "const diffDays = Math.floor((current.getTime() - next.getTime()) / (1000 * 60 * 60 * 24));"
    ]
   },
+  "src/hooks/useQualidadeCadastral.ts": {
+   "path": "src/hooks/useQualidadeCadastral.ts",
+   "lines": 94,
+   "exports": [
+    "interface PendenciasQualidade",
+    "interface CnpjInvalido",
+    "interface CnpjDuplicado",
+    "interface EmpresaIncompleta",
+    "const ROTULO_CAMPO",
+    "function usePendenciasQualidade",
+    "function useCnpjsInvalidos",
+    "function useCnpjsDuplicados",
+    "function useEmpresasIncompletas"
+   ],
+   "status_values": [
+    {
+     "field": "estado",
+     "value": "Estado",
+     "kind": "escreve"
+    }
+   ],
+   "hooks": [
+    "usePendenciasQualidade",
+    "useCnpjsInvalidos",
+    "useCnpjsDuplicados",
+    "useEmpresasIncompletas"
+   ]
+  },
   "src/hooks/useRBAC.tsx": {
    "path": "src/hooks/useRBAC.tsx",
    "lines": 73,
@@ -290731,6 +290844,19 @@
     }
    ]
   },
+  "src/pages/QualidadeCadastral.tsx": {
+   "path": "src/pages/QualidadeCadastral.tsx",
+   "lines": 462,
+   "exports": [
+    "function QualidadeCadastral"
+   ],
+   "params": [
+    {
+     "name": "POR_PAGINA",
+     "value": "25"
+    }
+   ]
+  },
   "src/pages/RecommendationAudit.tsx": {
    "path": "src/pages/RecommendationAudit.tsx",
    "lines": 151,
@@ -298701,7 +298827,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 249,
+   "lines": 251,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -310782,10 +310908,24 @@
   }
  },
  "git": {
-  "sha": "e4a9d179a19d9343297b3cff4e7e3bfb454a07a0",
+  "sha": "3cf27ae23e49fc5de491c98773c9c0b91499ba2e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "3cf27ae",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(qualidade): tela de qualidade cadastral em /admin/qualidade-cadastral (#375)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/hooks/useQualidadeCadastral.ts",
+     "src/pages/QualidadeCadastral.tsx",
+     "supabase/functions/external-data/tables.ts"
+    ]
+   },
    {
     "sha": "e4a9d17",
     "date": "2026-11-26",
@@ -311135,34 +311275,24 @@
     "files": [
      "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql"
     ]
-   },
-   {
-    "sha": "e380fe1",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)",
-    "files": [
-     "docs/estado/06_INTEGRACOES.md",
-     "scripts/docs/citacoes-baseline.json"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/external-data/tables.ts",
-    12
+    13
    ],
    [
     "src/app/AppRoutes.tsx",
-    9
+    10
    ],
    [
     "src/app/lazyPages.tsx",
-    9
+    10
    ],
    [
     "src/components/layout/AppSidebar.tsx",
-    9
+    10
    ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
@@ -311201,6 +311331,14 @@
     2
    ],
    [
+    "src/hooks/useQualidadeCadastral.ts",
+    1
+   ],
+   [
+    "src/pages/QualidadeCadastral.tsx",
+    1
+   ],
+   [
     "src/components/governanca-ia/TelemetriaGateway.tsx",
     1
    ],
@@ -311218,14 +311356,6 @@
    ],
    [
     "supabase/migrations/20261126210000_workspaces_rls_read_only.sql",
-    1
-   ],
-   [
-    "src/hooks/useEventosCliente.ts",
-    1
-   ],
-   [
-    "src/pages/EventosCliente.tsx",
     1
    ]
   ]

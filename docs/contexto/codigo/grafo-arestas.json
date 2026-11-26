@@ -448,6 +448,7 @@
    "src/pages/PublicLeadMagnet.tsx",
    "src/pages/PublicSignaturePage.tsx",
    "src/pages/PublicSurvey.tsx",
+   "src/pages/QualidadeCadastral.tsx",
    "src/pages/RecommendationAudit.tsx",
    "src/pages/RelatorioContato.tsx",
    "src/pages/ReportBuilder.tsx",
@@ -9116,6 +9117,9 @@
    "src/integrations/supabase/client.ts",
    "src/lib/logger.ts"
   ],
+  "src/hooks/useQualidadeCadastral.ts": [
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useRBAC.tsx": [
    "src/hooks/useAuth.tsx",
    "src/integrations/supabase/client.ts"
@@ -11035,6 +11039,17 @@
    "src/components/ui/card.tsx",
    "src/components/ui/textarea.tsx",
    "src/integrations/supabase/client.ts"
+  ],
+  "src/pages/QualidadeCadastral.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useQualidadeCadastral.ts"
   ],
   "src/pages/RecommendationAudit.tsx": [
    "src/components/layout/AppLayout.tsx",

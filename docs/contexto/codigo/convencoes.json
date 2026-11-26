@@ -3,15 +3,15 @@
  "format_version": 2,
  "onde_ficam": {
   "telas": [
-   "src/pages (124)"
+   "src/pages (125)"
   ],
   "componentes": [
    "src/components (930)",
-   "src/pages (151)",
+   "src/pages (152)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (391)",
+   "src/hooks (392)",
    "src/components (20)",
    "src/stores (5)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1090)"
+  ".tsx (1091)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(qualidade): tela de qualidade cadastral em /admin/qualidade-cadastral (#375)",
    "feat(ia): aba de telemetria do gateway de IA em Governanca de IA (#374)",
    "feat(workspace): tela de contas do Google Workspace e correção da RLS que a zerava (#373)",
    "feat(eventos): linha do tempo de eventos de cliente em /eventos (#372)",
-   "feat(admin): tela de Governança de IA com catálogo de modelos, reframes e scripts (#371)",
-   "feat(parceiros): controle de homologação com validade, prazo e motivo (#370)"
+   "feat(admin): tela de Governança de IA com catálogo de modelos, reframes e scripts (#371)"
   ]
  },
  "pr_template": null,
