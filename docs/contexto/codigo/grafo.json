@@ -1,20 +1,20 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1993,
- "arestas": 8731,
+ "nos": 1995,
+ "arestas": 8741,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
-   "importado_por": 593
+   "importado_por": 594
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 556
+   "importado_por": 557
   },
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 536
+   "importado_por": 537
   },
   {
    "arquivo": "src/lib/utils.ts",
@@ -30,11 +30,11 @@
   },
   {
    "arquivo": "src/components/ui/input.tsx",
-   "importado_por": 210
+   "importado_por": 211
   },
   {
    "arquivo": "src/components/ui/skeleton.tsx",
-   "importado_por": 208
+   "importado_por": 209
   },
   {
    "arquivo": "src/lib/logger.ts",
@@ -46,7 +46,7 @@
   },
   {
    "arquivo": "src/lib/externalData.ts",
-   "importado_por": 134
+   "importado_por": 135
   },
   {
    "arquivo": "src/components/ui/select.tsx",
@@ -102,7 +102,7 @@
   },
   {
    "arquivo": "src/components/layout/AppLayout.tsx",
-   "importado_por": 50
+   "importado_por": 51
   },
   {
    "arquivo": "src/components/ui/switch.tsx",

@@ -382,6 +382,7 @@
    "src/pages/Cadastro.tsx",
    "src/pages/Calendario.tsx",
    "src/pages/Campanhas.tsx",
+   "src/pages/Carteira.tsx",
    "src/pages/CompanyProfileAnalytics.tsx",
    "src/pages/Configuracoes.tsx",
    "src/pages/ContatoDetalhe.tsx",
@@ -8071,6 +8072,9 @@
    "src/types/carnegie.ts",
    "src/types/index.ts"
   ],
+  "src/hooks/useCarteira.ts": [
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useChannelHistory.ts": [
    "src/hooks/useAuth.tsx"
   ],
@@ -10013,6 +10017,16 @@
    "src/components/ui/textarea.tsx",
    "src/hooks/useEmailCampaigns.ts",
    "src/lib/emailBuilderRenderer.ts"
+  ],
+  "src/pages/Carteira.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useCarteira.ts"
   ],
   "src/pages/CompanyProfileAnalytics.tsx": [
    "src/components/company-analytics/ActivityTimeline.tsx",

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "9ca772e61021b442642b5ae7493f91b6d64c973d",
+  "commit": "c84959720d6957fd08c8a9be5af41b79b4f95a93",
   "branch": "main",
-  "data_commit": "2026-11-26T12:19:14-03:00",
+  "data_commit": "2026-11-26T13:00:59-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "c849597",
+    "data": "2026-11-26",
+    "assunto": "feat(carteira): tela de carteira e ativacao com quem ativou e risco de inativacao (#367)"
+   },
    {
     "sha": "9ca772e",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "970f220",
     "data": "2026-11-25",
     "assunto": "chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)"
-   },
-   {
-    "sha": "f14b8be",
-    "data": "2026-11-25",
-    "assunto": "fix: fecha os 9 drops de indice duplicado que ficaram pendentes da Wave 119 (#341)"
    }
   ],
-  "arquivos_mudados_7d": 1029,
+  "arquivos_mudados_7d": 1032,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -168,15 +168,15 @@
     "mudancas": 16
    },
    {
+    "pasta": "supabase/functions/external-data",
+    "mudancas": 16
+   },
+   {
     "pasta": "src/components/crm",
     "mudancas": 15
    },
    {
     "pasta": "src/hooks/__tests__",
-    "mudancas": 15
-   },
-   {
-    "pasta": "supabase/functions/external-data",
     "mudancas": 15
    },
    {
@@ -230,6 +230,10 @@
     "mudancas": 14
    },
    {
+    "arquivo": "src/app/AppRoutes.tsx",
+    "mudancas": 10
+   },
+   {
     "arquivo": "src/hooks/useContacts.ts",
     "mudancas": 10
    },
@@ -246,10 +250,6 @@
     "mudancas": 9
    },
    {
-    "arquivo": "src/app/AppRoutes.tsx",
-    "mudancas": 9
-   },
-   {
     "arquivo": ".github/workflows/rls-exposure-guard.yml",
     "mudancas": 8
    },
@@ -258,11 +258,15 @@
     "mudancas": 8
    },
    {
+    "arquivo": "src/components/layout/AppSidebar.tsx",
+    "mudancas": 8
+   },
+   {
     "arquivo": "docs/qa/functions-authenticated-allowlist.md",
     "mudancas": 7
    },
    {
-    "arquivo": "src/components/layout/AppSidebar.tsx",
+    "arquivo": "src/app/lazyPages.tsx",
     "mudancas": 7
    },
    {
@@ -278,6 +282,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "supabase/functions/external-data/tables.ts",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/tests/get_contact_sidebar_by_phone.sql",
     "mudancas": 7
    },
@@ -288,20 +296,12 @@
    {
     "arquivo": ".github/workflows/inventario-estado-semanal.yml",
     "mudancas": 6
-   },
-   {
-    "arquivo": "RELATORIO_CI.md",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "scripts/docs/citacoes-baseline.json",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 199
+    "commits": 200
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,19 +326,19 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3952,
-  "arquivos_codigo": 2279,
-  "linhas_codigo": 424576,
-  "rotas": 119,
+  "arquivos_total": 3955,
+  "arquivos_codigo": 2281,
+  "linhas_codigo": 425244,
+  "rotas": 120,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 69,
+  "itens_menu": 70,
   "modulos": 142,
-  "componentes": 1083,
-  "hooks": 415,
+  "componentes": 1084,
+  "hooks": 416,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1122,
+  "migrations": 1123,
   "cron_jobs": 47,
   "testes": 288,
   "workflows": 14,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 600
+   "linhas": 602
   },
   "src/components": {
    "arquivos": 1017,
-   "linhas": 152380
+   "linhas": 152381
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 447,
-   "linhas": 59126
+   "arquivos": 448,
+   "linhas": 59287
   },
   "src/integrations": {
    "arquivos": 3,
@@ -691,8 +691,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 159,
-   "linhas": 30588
+   "arquivos": 160,
+   "linhas": 31072
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28139
+   "linhas": 28159
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1194,6 +1194,7 @@
    "Cadastro",
    "Calendario",
    "Campanhas",
+   "Carteira",
    "ChurnRiskWidget",
    "CollapsibleSection",
    "CompanyProfileAnalytics",

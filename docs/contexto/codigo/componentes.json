@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1083,
+ "total": 1084,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -103,6 +103,10 @@
   "Campanhas": [
    "src/app/lazyPages.tsx",
    "src/pages/Campanhas.tsx"
+  ],
+  "Carteira": [
+   "src/app/lazyPages.tsx",
+   "src/pages/Carteira.tsx"
   ],
   "ChurnRiskWidget": [
    "src/components/contact-detail/ChurnRiskWidget.tsx",
@@ -503,7 +507,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 193,
+   "linhas": 194,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -554,6 +558,7 @@
     "Cadastro",
     "Calendario",
     "Campanhas",
+    "Carteira",
     "CompanyProfileAnalytics",
     "Configuracoes",
     "ContatoDetalhe",
@@ -646,7 +651,7 @@
     "WinLossSetupPage"
    ],
    "export_default": null,
-   "linhas": 177,
+   "linhas": 178,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10350,7 +10355,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 50,
+   "usado_por": 51,
    "orfao": false
   },
   {
@@ -10359,7 +10364,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 324,
+   "linhas": 325,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14245,7 +14250,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 555,
+   "usado_por": 556,
    "orfao": false
   },
   {
@@ -14260,7 +14265,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 535,
+   "usado_por": 536,
    "orfao": false
   },
   {
@@ -14295,7 +14300,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 593,
+   "usado_por": 594,
    "orfao": false
   },
   {
@@ -14574,7 +14579,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 210,
+   "usado_por": 211,
    "orfao": false
   },
   {
@@ -15080,7 +15085,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 208,
+   "usado_por": 209,
    "orfao": false
   },
   {
@@ -15204,7 +15209,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 21,
+   "usado_por": 22,
    "orfao": false
   },
   {
@@ -16365,6 +16370,22 @@
    "dominio": "pages",
    "hooks_locais": [
     "useEmailCampaigns"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/Carteira.tsx",
+   "exports": [
+    "Carteira"
+   ],
+   "export_default": "Carteira",
+   "linhas": 484,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useCarteiraPainel"
    ],
    "tabelas": [],
    "edges": [],
