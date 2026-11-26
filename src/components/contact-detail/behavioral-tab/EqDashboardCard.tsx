@@ -1,23 +1,26 @@
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, RefreshCw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { InlineEmptyState } from '@/components/ui/empty-state';
-import { useQuery } from '@tanstack/react-query';
-import { queryExternalData } from '@/lib/externalData';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { callExternalRpc, queryExternalData } from '@/lib/externalData';
 
 interface EqDashboardRow {
-  contact_id: string;
-  contact_name?: string;
-  latest_score?: number;
-  latest_level?: string;
-  analysis_count?: number;
-  avg_score?: number;
-  max_score?: number;
-  min_score?: number;
-  score_trend?: string;
-  top_strengths?: string[];
-  top_growth_areas?: string[];
-  last_analyzed_at?: string;
+  contact_id: string | null;
+  contact_name: string | null;
+  company_name: string | null;
+  eq_score: number | null;
+  eq_level: string | null;
+  communication_style: string | null;
+  emotional_trend: string | null;
+  avg_sentiment_score: number | null;
+  closing_timing: string | null;
+  closing_readiness: number | null;
+  disc_type: string | null;
+  relationship_score: number | null;
+  action_summary: string | null;
 }
 
 interface Props {
@@ -25,6 +28,8 @@ interface Props {
 }
 
 export function EqDashboardCard({ contactId }: Props) {
+  const queryClient = useQueryClient();
+
   const { data, isLoading } = useQuery({
     queryKey: ['vw-eq-dashboard', contactId],
     queryFn: async () => {
@@ -41,6 +46,41 @@ export function EqDashboardCard({ contactId }: Props) {
     gcTime: 20 * 60 * 1000,
   });
 
+  const recalculate = useMutation({
+    mutationFn: async () => {
+      const score = await callExternalRpc('calculate_eq_score', { p_contact_id: contactId });
+      if (score.error) throw score.error;
+      const trend = await callExternalRpc('calculate_emotional_trend', {
+        p_contact_id: contactId,
+        p_period_days: 30,
+      });
+      if (trend.error) throw trend.error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vw-eq-dashboard', contactId] });
+      queryClient.invalidateQueries({ queryKey: ['eq-evolution', contactId] });
+      toast.success('Análise de EQ atualizada');
+    },
+    onError: (error) => {
+      toast.error('Não foi possível atualizar a análise', {
+        description: error instanceof Error ? error.message : undefined,
+      });
+    },
+  });
+
+  const recalculateButton = (
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      onClick={() => recalculate.mutate()}
+      disabled={recalculate.isPending}
+    >
+      <RefreshCw className={recalculate.isPending ? 'h-3.5 w-3.5 animate-spin' : 'h-3.5 w-3.5'} />
+      {recalculate.isPending ? 'Analisando…' : 'Recalcular análise'}
+    </Button>
+  );
+
   if (isLoading) return null;
 
   if (!data) {
@@ -52,12 +92,13 @@ export function EqDashboardCard({ contactId }: Props) {
             Dashboard EQ
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
           <InlineEmptyState
             icon={BarChart3}
             title="Sem dados de EQ"
-            description="Dados serão exibidos após análises de inteligência emocional"
+            description="Gere a análise de inteligência emocional deste contato"
           />
+          <div className="flex justify-center">{recalculateButton}</div>
         </CardContent>
       </Card>
     );
@@ -68,6 +109,13 @@ export function EqDashboardCard({ contactId }: Props) {
     declining: '📉 Declinando',
     stable: '➡️ Estável',
   };
+
+  const metric = (value: number | null, label: string) => (
+    <div className="rounded-lg bg-muted/50 p-2 text-center">
+      <p className="text-lg font-semibold text-foreground">{value ?? '—'}</p>
+      <p className="text-[10px] text-muted-foreground">{label}</p>
+    </div>
+  );
 
   return (
     <Card>
@@ -80,63 +128,45 @@ export function EqDashboardCard({ contactId }: Props) {
       <CardContent className="space-y-3">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-primary/20">
-            <span className="text-xl font-bold text-primary">{data.latest_score ?? '—'}</span>
+            <span className="text-xl font-bold text-primary">{data.eq_score ?? '—'}</span>
           </div>
           <div className="flex-1 space-y-1">
-            {data.latest_level && (
-              <Badge variant="secondary" className="text-xs capitalize">{data.latest_level}</Badge>
+            {data.eq_level && (
+              <Badge variant="secondary" className="text-xs capitalize">{data.eq_level}</Badge>
             )}
-            {data.score_trend && (
-              <p className="text-xs text-muted-foreground">{trendLabel[data.score_trend] || data.score_trend}</p>
+            {data.emotional_trend && (
+              <p className="text-xs text-muted-foreground">
+                {trendLabel[data.emotional_trend] || data.emotional_trend}
+              </p>
             )}
-            <p className="text-xs text-muted-foreground">{data.analysis_count ?? 0} análises realizadas</p>
+            {data.communication_style && (
+              <p className="text-xs text-muted-foreground capitalize">{data.communication_style}</p>
+            )}
           </div>
         </div>
 
-        {(data.avg_score || data.min_score || data.max_score) && (
-          <div className="grid grid-cols-3 gap-2 text-center">
-            <div className="rounded-lg bg-muted/50 p-2">
-              <p className="text-lg font-semibold text-foreground">{data.min_score ?? '—'}</p>
-              <p className="text-[10px] text-muted-foreground">Mínimo</p>
-            </div>
-            <div className="rounded-lg bg-muted/50 p-2">
-              <p className="text-lg font-semibold text-foreground">{data.avg_score ?? '—'}</p>
-              <p className="text-[10px] text-muted-foreground">Média</p>
-            </div>
-            <div className="rounded-lg bg-muted/50 p-2">
-              <p className="text-lg font-semibold text-foreground">{data.max_score ?? '—'}</p>
-              <p className="text-[10px] text-muted-foreground">Máximo</p>
-            </div>
+        <div className="grid grid-cols-3 gap-2">
+          {metric(data.relationship_score, 'Relacionamento')}
+          {metric(data.closing_readiness, 'Prontidão')}
+          {metric(data.avg_sentiment_score, 'Sentimento')}
+        </div>
+
+        {(data.disc_type || data.closing_timing) && (
+          <div className="flex flex-wrap gap-1">
+            {data.disc_type && (
+              <Badge variant="outline" className="text-xs">DISC: {data.disc_type}</Badge>
+            )}
+            {data.closing_timing && (
+              <Badge variant="outline" className="text-xs capitalize">{data.closing_timing}</Badge>
+            )}
           </div>
         )}
 
-        {data.top_strengths && data.top_strengths.length > 0 && (
-          <div>
-            <p className="text-xs font-medium text-muted-foreground mb-1">Forças Principais</p>
-            <div className="flex flex-wrap gap-1">
-              {data.top_strengths.slice(0, 5).map((s) => (
-                <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>
-              ))}
-            </div>
-          </div>
+        {data.action_summary && (
+          <p className="rounded-lg bg-muted/50 p-2 text-xs text-foreground">{data.action_summary}</p>
         )}
 
-        {data.top_growth_areas && data.top_growth_areas.length > 0 && (
-          <div>
-            <p className="text-xs font-medium text-muted-foreground mb-1">Áreas de Crescimento</p>
-            <div className="flex flex-wrap gap-1">
-              {data.top_growth_areas.slice(0, 5).map((a) => (
-                <Badge key={a} variant="outline" className="text-xs">{a}</Badge>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {data.last_analyzed_at && (
-          <p className="text-[10px] text-muted-foreground/70 text-right">
-            Última análise: {new Date(data.last_analyzed_at).toLocaleDateString('pt-BR')}
-          </p>
-        )}
+        <div className="flex justify-end">{recalculateButton}</div>
       </CardContent>
     </Card>
   );
