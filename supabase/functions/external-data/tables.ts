@@ -151,6 +151,7 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_pending_followups',
   'vw_interacoes_sem_apelido',
   'vw_singu_data_health',
+  'vw_grupos_economicos_resumo',
 ]);
 
 export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
