@@ -46,6 +46,7 @@ import { FeatureSpotlight } from '@/components/feedback/FeatureSpotlight';
    import { NextBestAction } from '@/components/crm/NextBestAction';
    import { SocialMediaIntelligenceCard } from '@/components/contact-detail/SocialMediaIntelligenceCard';
    import { SocialIntelligencePanel } from '@/components/contact-detail/SocialIntelligencePanel';
+   import { OfferSuggestionsElite } from '@/components/crm/commercial/OfferSuggestionsElite';
    import { EscalationAutomation } from '@/components/crm/EscalationAutomation';
 
 const ContactTimelineWidget = lazy(() => import('@/components/contact-detail/ContactTimelineWidget'));
@@ -331,6 +332,7 @@ const ContatoDetalhe = () => {
             <DashboardErrorBoundary sectionName="Comercial">
               <div className="space-y-4">
                 <ContactCommercialTab contactId={contact.id} />
+                <OfferSuggestionsElite contactId={contact.id} />
                 <CSATPanel contactId={contact.id} />
                 <VisitCheckinPanel contactId={contact.id} entityType="contact" />
               </div>
