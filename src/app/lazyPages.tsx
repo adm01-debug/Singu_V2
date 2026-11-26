@@ -70,6 +70,7 @@ export const PublicLeadMagnet = lazy(() => import("@/pages/PublicLeadMagnet"));
 export const AdminTelemetria = lazy(() => import("@/pages/AdminTelemetria"));
 export const AdminSchemaDrift = lazy(() => import("@/pages/AdminSchemaDrift"));
 export const AdminReadiness = lazy(() => import("@/pages/AdminReadiness"));
+export const Parceiros = lazy(() => import("@/pages/Parceiros"));
 export const AdminFieldMapping = lazy(() => import("@/pages/AdminFieldMapping"));
 export const AdminEmailDiagnostics = lazy(() => import("@/pages/AdminEmailDiagnostics"));
 export const AdminVoiceDiagnostics = lazy(() => import("@/pages/AdminVoiceDiagnostics"));
