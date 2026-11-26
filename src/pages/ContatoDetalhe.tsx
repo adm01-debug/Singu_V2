@@ -45,6 +45,7 @@ import { FeatureSpotlight } from '@/components/feedback/FeatureSpotlight';
    import { SentimentTrendChart } from '@/components/contact-detail/SentimentTrendChart';
    import { NextBestAction } from '@/components/crm/NextBestAction';
    import { SocialMediaIntelligenceCard } from '@/components/contact-detail/SocialMediaIntelligenceCard';
+   import { SocialIntelligencePanel } from '@/components/contact-detail/SocialIntelligencePanel';
    import { EscalationAutomation } from '@/components/crm/EscalationAutomation';
 
 const ContactTimelineWidget = lazy(() => import('@/components/contact-detail/ContactTimelineWidget'));
@@ -320,6 +321,8 @@ const ContatoDetalhe = () => {
                  currentSentiment={contact.sentiment || 'neutral'}
                  interactions={interactions}
                />
+
+                                <SocialIntelligencePanel contactId={contact.id} />
 
             </DashboardErrorBoundary>
           </TabsContent>
