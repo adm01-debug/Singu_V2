@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c84959720d6957fd08c8a9be5af41b79b4f95a93",
+  "sha": "6205952814c91fef1b732883f92d2c46f02b9624",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 16:02 UTC",
-  "files_total": 4060,
-  "code_files": 3582,
-  "code_lines": 483292
+  "generated_at": "2026-11-26 16:30 UTC",
+  "files_total": 4063,
+  "code_files": 3585,
+  "code_lines": 483750
  },
  "version": "1.3.2",
- "facts_hash": "9ba53780c26e67f5",
+ "facts_hash": "405879968f248c0d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,9 +272,9 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1300,
-   ".tsx": 1194,
-   ".ts": 923,
+   ".sql": 1301,
+   ".tsx": 1195,
+   ".ts": 924,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -87747,7 +87747,8 @@
    "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql",
    "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql",
    "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql",
-   "supabase/migrations/20261126160000_admin_read_mfa_locked_tables.sql"
+   "supabase/migrations/20261126160000_admin_read_mfa_locked_tables.sql",
+   "supabase/migrations/20261126170000_admin_read_automation_notifications.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -101116,6 +101117,39 @@
    },
    {
     "path": "",
+    "file": "src/pages/AdminAutomacoes.tsx",
+    "component": "AdminAutomacoes",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 106
+   },
+   {
+    "path": "",
     "file": "src/pages/AdminConexoes.tsx",
     "component": "AdminConexoes",
     "tables_transitive": [
@@ -107305,6 +107339,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/admin/automacoes",
+    "component": "Admin",
+    "guard": "",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/admin/behavioral-regen-audit",
     "component": "Admin",
     "guard": "",
@@ -108519,6 +108560,10 @@
    {
     "name": "useAuth",
     "file": "src/hooks/useAuth.tsx"
+   },
+   {
+    "name": "useAutomacoesPainel",
+    "file": "src/hooks/useAutomacoes.ts"
    },
    {
     "name": "useAutomationRules",
@@ -111769,7 +111814,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 602,
+   "lines": 604,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -111806,7 +111851,7 @@
   {
    "module": "src/components",
    "files": 1017,
-   "lines": 152381,
+   "lines": 152382,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112253,8 +112298,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 448,
-   "lines": 59287,
+   "files": 449,
+   "lines": 59372,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -112495,6 +112540,7 @@
     "useAttribution.ts: AttributionModel, Touchpoint, Allocation, useTouchpoints, useAttribution, useRecordTouchpoint",
     "useAuditAnalytics.ts: ResumoAuditoria, useAuditAnalytics",
     "useAuth.tsx: AuthProvider, useAuth, RequireAuth",
+    "useAutomacoes.ts: Percentual, RegraAutomacaoRow, NotificacaoUsuarioRow, ApelidoProgressoRow, CanalStatsRow, useAutomacoesPainel",
     "useAutomationRules.ts: TriggerType, ActionType, AutomationCondition, AutomationAction, AutomationRule, AutomationLog",
     "useBIAdvanced.ts: DemandForecast, useDemandForecast, ProfitabilityItem, useProfitabilityByContact, GeoSalesPoint, useGeoSalesData",
     "useBattleCards.ts: BattleCardItem, ProofPoint, BattleCard, useBattleCards, useBattleCard, useUpsertBattleCard",
@@ -112506,8 +112552,7 @@
     "useBestContactTime.ts: useBestContactTime",
     "useBestTimeHeatmap.ts: HeatmapCell, TopSlot, BestTimeHeatmapResult, useBestTimeHeatmap, HEATMAP_CONSTANTS",
     "useBestTimeToContact.ts: TimeSlot, ContactTimeAnalysis, useBestTimeToContact",
-    "useBirthdayContacts.ts: useBirthdayContacts",
-    "useBulkImport.ts: ImportEntityType, mapImportBatch, useBulkImport"
+    "useBirthdayContacts.ts: useBirthdayContacts"
    ],
    "docs": [
     "useAdvancedTriggers.ts: ============================================== ADVANCED TRIGGERS HOOK - Enterprise Mental Trigger Analysis Provides trigger chains, saturation detection, timing, and A/B testing ==============================================",
@@ -112576,6 +112621,7 @@
     "src/hooks/useAttribution.ts",
     "src/hooks/useAuditAnalytics.ts",
     "src/hooks/useAuth.tsx",
+    "src/hooks/useAutomacoes.ts",
     "src/hooks/useAutomationRules.ts",
     "src/hooks/useBIAdvanced.ts",
     "src/hooks/useBattleCards.ts",
@@ -112626,8 +112672,7 @@
     "src/hooks/useCompanyActions.ts",
     "src/hooks/useCompanyCommercial.ts",
     "src/hooks/useCompanyFilterOptions.ts",
-    "src/hooks/useCompanyIntelligence.ts",
-    "src/hooks/useCompanyProfileAnalytics.ts"
+    "src/hooks/useCompanyIntelligence.ts"
    ]
   },
   {
@@ -112828,8 +112873,8 @@
   },
   {
    "module": "src/pages",
-   "files": 160,
-   "lines": 31072,
+   "files": 161,
+   "lines": 31410,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -112868,6 +112913,7 @@
     "ABMAccountDetail.tsx: ABMAccountDetail",
     "ABMCampaigns.tsx: ABMCampaigns",
     "AdminAuditTrail.tsx: AdminAuditTrail",
+    "AdminAutomacoes.tsx: AdminAutomacoes",
     "AdminConexoes.tsx: AdminConexoes",
     "AdminConexoesLogs.tsx: AdminConexoesLogs",
     "AdminDashboard.tsx: AdminDashboard",
@@ -112902,8 +112948,7 @@
     "CustomerSuccess.tsx: CustomerSuccess",
     "CustomerSuccessAccount.tsx: CustomerSuccessAccount",
     "DealRoomDetail.tsx: DealRoomDetail",
-    "DealRooms.tsx: DealRooms",
-    "Deduplicacao.tsx: Deduplicacao"
+    "DealRooms.tsx: DealRooms"
    ],
    "docs": [],
    "deps": [
@@ -112941,6 +112986,7 @@
     "src/pages/ABMAccountDetail.tsx",
     "src/pages/ABMCampaigns.tsx",
     "src/pages/AdminAuditTrail.tsx",
+    "src/pages/AdminAutomacoes.tsx",
     "src/pages/AdminConexoes.tsx",
     "src/pages/AdminConexoesLogs.tsx",
     "src/pages/AdminDashboard.tsx",
@@ -113015,8 +113061,7 @@
     "src/pages/NPS.tsx",
     "src/pages/Network.tsx",
     "src/pages/NotFound.tsx",
-    "src/pages/Notificacoes.tsx",
-    "src/pages/NotificacoesConfig.tsx"
+    "src/pages/Notificacoes.tsx"
    ]
   },
   {
@@ -113187,7 +113232,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28159,
+   "lines": 28166,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113468,8 +113513,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1123,
-   "lines": 105009,
+   "files": 1124,
+   "lines": 105034,
    "tables": [
     "users"
    ],
@@ -247560,7 +247605,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 194,
+   "lines": 195,
    "exports": [
     "const AppRoutes"
    ],
@@ -248103,6 +248148,12 @@
      "roles": []
     },
     {
+     "path": "/admin/automacoes",
+     "component": "Admin",
+     "guard": "",
+     "roles": []
+    },
+    {
      "path": "/admin/field-mapping",
      "component": "Admin",
      "guard": "",
@@ -248309,7 +248360,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 178,
+   "lines": 179,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -257963,7 +258014,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 325,
+   "lines": 326,
    "exports": [
     "const AppSidebar"
    ],
@@ -267493,6 +267544,21 @@
    ],
    "side_effects": [
     "invoke("
+   ]
+  },
+  "src/hooks/useAutomacoes.ts": {
+   "path": "src/hooks/useAutomacoes.ts",
+   "lines": 85,
+   "exports": [
+    "type Percentual",
+    "interface RegraAutomacaoRow",
+    "interface NotificacaoUsuarioRow",
+    "interface ApelidoProgressoRow",
+    "interface CanalStatsRow",
+    "function useAutomacoesPainel"
+   ],
+   "hooks": [
+    "useAutomacoesPainel"
    ]
   },
   "src/hooks/useAutomationRules.ts": {
@@ -287736,6 +287802,13 @@
     "400"
    ]
   },
+  "src/pages/AdminAutomacoes.tsx": {
+   "path": "src/pages/AdminAutomacoes.tsx",
+   "lines": 338,
+   "exports": [
+    "function AdminAutomacoes"
+   ]
+  },
   "src/pages/AdminConexoes.tsx": {
    "path": "src/pages/AdminConexoes.tsx",
    "lines": 173,
@@ -297806,7 +297879,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 218,
+   "lines": 225,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -309143,6 +309216,10 @@
    "path": "supabase/migrations/20261126160000_admin_read_mfa_locked_tables.sql",
    "lines": 38
   },
+  "supabase/migrations/20261126170000_admin_read_automation_notifications.sql": {
+   "path": "supabase/migrations/20261126170000_admin_read_automation_notifications.sql",
+   "lines": 25
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -309860,10 +309937,25 @@
   }
  },
  "git": {
-  "sha": "c84959720d6957fd08c8a9be5af41b79b4f95a93",
+  "sha": "6205952814c91fef1b732883f92d2c46f02b9624",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "6205952",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(automacoes): painel de saúde das automações e notificações (#368)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/hooks/useAutomacoes.ts",
+     "src/pages/AdminAutomacoes.tsx",
+     "supabase/functions/external-data/tables.ts",
+     "supabase/migrations/20261126170000_admin_read_automation_notifications.sql"
+    ]
+   },
    {
     "sha": "c849597",
     "date": "2026-11-26",
@@ -310186,37 +310278,24 @@
      "docs/estado/03_MARKETING_AUTOMACAO.md",
      "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md"
     ]
-   },
-   {
-    "sha": "a737bf1",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix(docs): smart-notify sem cron agendado e guard aceita JWT (#337)",
-    "files": [
-     "docs/estado/01_CORE_CRM.md",
-     "docs/estado/03_MARKETING_AUTOMACAO.md",
-     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
-     "docs/estado/06_INTEGRACOES.md",
-     "docs/estado/07_DADOS_BACKEND.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/external-data/tables.ts",
-    5
+    6
    ],
    [
     "src/app/AppRoutes.tsx",
-    4
+    5
    ],
    [
     "src/app/lazyPages.tsx",
-    4
+    5
    ],
    [
     "src/components/layout/AppSidebar.tsx",
-    4
+    5
    ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
@@ -310243,16 +310322,16 @@
     2
    ],
    [
-    "docs/estado/06_INTEGRACOES.md",
-    2
+    "src/hooks/useAutomacoes.ts",
+    1
    ],
    [
-    "docs/estado/03_MARKETING_AUTOMACAO.md",
-    2
+    "src/pages/AdminAutomacoes.tsx",
+    1
    ],
    [
-    "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
-    2
+    "supabase/migrations/20261126170000_admin_read_automation_notifications.sql",
+    1
    ],
    [
     "src/hooks/useCarteira.ts",

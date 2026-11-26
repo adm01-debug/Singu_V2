@@ -359,6 +359,7 @@
    "src/pages/ABMAccountDetail.tsx",
    "src/pages/ABMCampaigns.tsx",
    "src/pages/AdminAuditTrail.tsx",
+   "src/pages/AdminAutomacoes.tsx",
    "src/pages/AdminConexoes.tsx",
    "src/pages/AdminConexoesLogs.tsx",
    "src/pages/AdminDashboard.tsx",
@@ -7966,6 +7967,9 @@
    "src/lib/errorReporting.ts",
    "src/lib/logger.ts"
   ],
+  "src/hooks/useAutomacoes.ts": [
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useAutomationRules.ts": [
    "src/hooks/useAuth.tsx",
    "src/integrations/supabase/client.ts",
@@ -9724,6 +9728,17 @@
    "src/components/ui/separator.tsx",
    "src/hooks/useIsAdmin.ts",
    "src/integrations/supabase/client.ts"
+  ],
+  "src/pages/AdminAutomacoes.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/progress.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useAutomacoes.ts"
   ],
   "src/pages/AdminConexoes.tsx": [
    "src/components/admin/AdminLayout.tsx",

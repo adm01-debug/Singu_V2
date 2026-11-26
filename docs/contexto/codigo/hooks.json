@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 416,
+ "total": 417,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -1302,6 +1302,26 @@
     "src/components/crm/consent/ConsentAuditLog.tsx"
    ],
    "coberto_por_testes": 3
+  },
+  {
+   "arquivo": "src/hooks/useAutomacoes.ts",
+   "hooks_exportados": [
+    "useAutomacoesPainel"
+   ],
+   "linhas": 85,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AdminAutomacoes.tsx"
+   ],
+   "coberto_por_testes": 0
   },
   {
    "arquivo": "src/hooks/useAutomationRules.ts",

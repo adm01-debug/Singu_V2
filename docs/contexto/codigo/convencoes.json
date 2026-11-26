@@ -3,15 +3,15 @@
  "format_version": 2,
  "onde_ficam": {
   "telas": [
-   "src/pages (119)"
+   "src/pages (120)"
   ],
   "componentes": [
    "src/components (929)",
-   "src/pages (146)",
+   "src/pages (147)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (385)",
+   "src/hooks (386)",
    "src/components (20)",
    "src/stores (5)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1084)"
+  ".tsx (1085)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(automacoes): painel de saúde das automações e notificações (#368)",
    "feat(carteira): tela de carteira e ativacao com quem ativou e risco de inativacao (#367)",
    "feat(parceiros): tela de fornecedores e transportadoras com ranking, qualidade e homologacao (#366)",
    "feat(admin): tela de readiness dos dados por tabela (#365)",
-   "fix(empresas): da ao admin a base inteira e remove filtro user_id das views sem essa coluna (#364)",
-   "feat(grupos): tela de grupos economicos com penetracao e prospects (#363)"
+   "fix(empresas): da ao admin a base inteira e remove filtro user_id das views sem essa coluna (#364)"
   ]
  },
  "pr_template": null,

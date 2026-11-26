@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "c84959720d6957fd08c8a9be5af41b79b4f95a93",
+  "commit": "6205952814c91fef1b732883f92d2c46f02b9624",
   "branch": "main",
-  "data_commit": "2026-11-26T13:00:59-03:00",
+  "data_commit": "2026-11-26T13:27:18-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "6205952",
+    "data": "2026-11-26",
+    "assunto": "feat(automacoes): painel de saúde das automações e notificações (#368)"
+   },
    {
     "sha": "c849597",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "082f91a",
     "data": "2026-11-25",
     "assunto": "chore(ia): usa OPENROUTER_API_KEY como fonte da chave e trava o contrato (#343)"
-   },
-   {
-    "sha": "970f220",
-    "data": "2026-11-25",
-    "assunto": "chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)"
    }
   ],
-  "arquivos_mudados_7d": 1032,
+  "arquivos_mudados_7d": 1035,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -156,6 +156,10 @@
     "mudancas": 20
    },
    {
+    "pasta": "supabase/functions/external-data",
+    "mudancas": 17
+   },
+   {
     "pasta": "scripts/migration/functions",
     "mudancas": 16
    },
@@ -168,11 +172,11 @@
     "mudancas": 16
    },
    {
-    "pasta": "supabase/functions/external-data",
-    "mudancas": 16
+    "pasta": "src/components/crm",
+    "mudancas": 15
    },
    {
-    "pasta": "src/components/crm",
+    "pasta": "src/components/layout",
     "mudancas": 15
    },
    {
@@ -189,10 +193,6 @@
    },
    {
     "pasta": "scripts/migration/cdc",
-    "mudancas": 14
-   },
-   {
-    "pasta": "scripts/migration/tests",
     "mudancas": 14
    }
   ],
@@ -231,7 +231,7 @@
    },
    {
     "arquivo": "src/app/AppRoutes.tsx",
-    "mudancas": 10
+    "mudancas": 11
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -250,6 +250,10 @@
     "mudancas": 9
    },
    {
+    "arquivo": "src/components/layout/AppSidebar.tsx",
+    "mudancas": 9
+   },
+   {
     "arquivo": ".github/workflows/rls-exposure-guard.yml",
     "mudancas": 8
    },
@@ -258,15 +262,15 @@
     "mudancas": 8
    },
    {
-    "arquivo": "src/components/layout/AppSidebar.tsx",
+    "arquivo": "src/app/lazyPages.tsx",
+    "mudancas": 8
+   },
+   {
+    "arquivo": "supabase/functions/external-data/tables.ts",
     "mudancas": 8
    },
    {
     "arquivo": "docs/qa/functions-authenticated-allowlist.md",
-    "mudancas": 7
-   },
-   {
-    "arquivo": "src/app/lazyPages.tsx",
     "mudancas": 7
    },
    {
@@ -279,10 +283,6 @@
    },
    {
     "arquivo": "supabase/functions/evolution-webhook/messages.ts",
-    "mudancas": 7
-   },
-   {
-    "arquivo": "supabase/functions/external-data/tables.ts",
     "mudancas": 7
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 200
+    "commits": 201
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,19 +326,19 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3955,
-  "arquivos_codigo": 2281,
-  "linhas_codigo": 425244,
-  "rotas": 120,
+  "arquivos_total": 3958,
+  "arquivos_codigo": 2283,
+  "linhas_codigo": 425677,
+  "rotas": 121,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 70,
+  "itens_menu": 71,
   "modulos": 142,
-  "componentes": 1084,
-  "hooks": 416,
+  "componentes": 1085,
+  "hooks": 417,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1123,
+  "migrations": 1124,
   "cron_jobs": 47,
   "testes": 288,
   "workflows": 14,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 602
+   "linhas": 604
   },
   "src/components": {
    "arquivos": 1017,
-   "linhas": 152381
+   "linhas": 152382
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 448,
-   "linhas": 59287
+   "arquivos": 449,
+   "linhas": 59372
   },
   "src/integrations": {
    "arquivos": 3,
@@ -691,8 +691,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 160,
-   "linhas": 31072
+   "arquivos": 161,
+   "linhas": 31410
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28159
+   "linhas": 28166
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1173,6 +1173,7 @@
    "ABMAccountDetail",
    "ABMCampaigns",
    "AdminAuditTrail",
+   "AdminAutomacoes",
    "AdminConexoes",
    "AdminConexoesLogs",
    "AdminDashboard",

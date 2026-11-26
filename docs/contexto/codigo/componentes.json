@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1084,
+ "total": 1085,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -19,6 +19,10 @@
   "AdminAuditTrail": [
    "src/app/lazyPages.tsx",
    "src/pages/AdminAuditTrail.tsx"
+  ],
+  "AdminAutomacoes": [
+   "src/app/lazyPages.tsx",
+   "src/pages/AdminAutomacoes.tsx"
   ],
   "AdminConexoes": [
    "src/app/lazyPages.tsx",
@@ -507,7 +511,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 194,
+   "linhas": 195,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -527,6 +531,7 @@
     "ABMAccountDetail",
     "ABMCampaigns",
     "AdminAuditTrail",
+    "AdminAutomacoes",
     "AdminBehavioralRegenAudit",
     "AdminComponentGallery",
     "AdminConexoes",
@@ -651,7 +656,7 @@
     "WinLossSetupPage"
    ],
    "export_default": null,
-   "linhas": 178,
+   "linhas": 179,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10355,7 +10360,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 51,
+   "usado_por": 52,
    "orfao": false
   },
   {
@@ -10364,7 +10369,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 325,
+   "linhas": 326,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14250,7 +14255,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 556,
+   "usado_por": 557,
    "orfao": false
   },
   {
@@ -14265,7 +14270,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 536,
+   "usado_por": 537,
    "orfao": false
   },
   {
@@ -14300,7 +14305,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 594,
+   "usado_por": 595,
    "orfao": false
   },
   {
@@ -14579,7 +14584,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 211,
+   "usado_por": 212,
    "orfao": false
   },
   {
@@ -14755,7 +14760,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 109,
+   "usado_por": 110,
    "orfao": false
   },
   {
@@ -15085,7 +15090,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 209,
+   "usado_por": 210,
    "orfao": false
   },
   {
@@ -15209,7 +15214,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 22,
+   "usado_por": 23,
    "orfao": false
   },
   {
@@ -15817,6 +15822,22 @@
    "tabelas": [
     "audit_log"
    ],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/AdminAutomacoes.tsx",
+   "exports": [
+    "AdminAutomacoes"
+   ],
+   "export_default": "AdminAutomacoes",
+   "linhas": 338,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useAutomacoesPainel"
+   ],
+   "tabelas": [],
    "edges": [],
    "usado_por": 1,
    "orfao": false
