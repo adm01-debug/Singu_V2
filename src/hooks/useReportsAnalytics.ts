@@ -65,6 +65,13 @@ export interface TrendData {
   trend: 'up' | 'down' | 'stable';
 }
 
+/** `get_trend_analysis(p_months)` devolve um jsonb com a serie mensal, nao uma lista de linhas. */
+interface TrendAnalysisPayload {
+  periodo_meses?: number | null;
+  tendencia_empresas?: Array<{ mes: string | null; novas_empresas: number | null }> | null;
+  tendencia_interacoes?: unknown;
+}
+
 export interface LossReasonData {
   reason: string;
   count: number;
@@ -229,12 +236,26 @@ export function useTrendAnalysis(months = 6) {
   return useQuery({
     queryKey: ['trend-analysis', months, user?.id],
     enabled: !!user,
-    queryFn: async () => {
-      const { data, error } = await callExternalRpc<TrendData[]>(
+    queryFn: async (): Promise<TrendData[]> => {
+      const { data, error } = await callExternalRpc<TrendAnalysisPayload>(
         'get_trend_analysis', { p_months: months }
       );
       if (error) throw error;
-      return data || [];
+      const pontos = data?.tendencia_empresas ?? [];
+      let anterior: number | null = null;
+      return pontos.map((ponto) => {
+        const value = Number(ponto.novas_empresas ?? 0);
+        const trend: TrendData['trend'] = anterior === null || value === anterior
+          ? 'stable'
+          : value > anterior ? 'up' : 'down';
+        anterior = value;
+        const mes = ponto.mes ?? '';
+        return {
+          period: mes.length >= 7 ? `${mes.slice(5, 7)}/${mes.slice(2, 4)}` : '—',
+          value,
+          trend,
+        };
+      });
     },
     staleTime: 30 * 60 * 1000,
   });

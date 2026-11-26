@@ -38,7 +38,7 @@ export const YoyComparisonWidget = React.memo(function YoyComparisonWidget() {
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={yoyData}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis dataKey="month" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} />
+            <XAxis dataKey="month_num" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} />
             <YAxis tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
             <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8 }} />
             <Legend />
