@@ -144,7 +144,14 @@ export const ALLOWED_TABLES = [
 
 export type AllowedTable = typeof ALLOWED_TABLES[number];
 
+/**
+ * Sem filtro `.eq('user_id')` do servidor: a RLS decide (a tabela/view tem policy própria,
+ * ou é uma view security_invoker que herda a RLS da tabela de origem).
+ * `companies` está aqui porque a policy `companies_owner_or_admin` dá ao admin a base inteira;
+ * as views abaixo não têm coluna `user_id`, então filtrar por ela devolvia 500.
+ */
 export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
+  'companies',
   'sales_activities',
   'vw_active_alerts',
   'vw_contacts_sem_apelido',
@@ -152,6 +159,13 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_interacoes_sem_apelido',
   'vw_singu_data_health',
   'vw_grupos_economicos_resumo',
+  'vw_companies_completo',
+  'vw_companies_contato',
+  'vw_companies_cores',
+  'vw_companies_duplicatas',
+  'vw_companies_stats',
+  'vw_company_addresses',
+  'vw_company_social_media',
 ]);
 
 export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
