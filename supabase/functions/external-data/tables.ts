@@ -139,6 +139,13 @@ export const ALLOWED_TABLES = [
   'v_company_summary', 'vw_company_addresses', 'vw_company_social_media',
   'vw_singu_data_health', 'vw_singu_disc_dashboard', 'vw_singu_usage_kpis',
   'vw_singu_readiness',
+  // ── Suppliers & carriers ──
+  'vw_supplier_ranking', 'vw_supplier_qualification_dashboard',
+  'vw_supplier_by_state', 'vw_supplier_data_quality',
+  'vw_supplier_homologation_queue',
+  'vw_carrier_ranking', 'vw_carrier_qualification_dashboard',
+  'vw_carrier_by_state', 'vw_carrier_data_quality',
+  'vw_carrier_homologation_queue',
   // ── Company cadences ──
   'company_cadences',
 ] as const;
@@ -168,6 +175,16 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_companies_stats',
   'vw_company_addresses',
   'vw_company_social_media',
+  'vw_supplier_ranking',
+  'vw_supplier_qualification_dashboard',
+  'vw_supplier_by_state',
+  'vw_supplier_data_quality',
+  'vw_supplier_homologation_queue',
+  'vw_carrier_ranking',
+  'vw_carrier_qualification_dashboard',
+  'vw_carrier_by_state',
+  'vw_carrier_data_quality',
+  'vw_carrier_homologation_queue',
 ]);
 
 export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([

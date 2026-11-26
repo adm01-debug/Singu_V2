@@ -3,7 +3,7 @@ import { usePrefetch } from "@/components/navigation/PrefetchLink";
 import {
   LayoutDashboard, Building2, Users, MessageSquare, Lightbulb, Settings,
   Zap, LogOut, CalendarDays, Bell, ChevronDown, BarChart3, Share2,
-  Workflow, MapPin, PanelLeftClose, PanelLeft, Kanban, Trophy, CheckSquare, Globe, ListFilter, BrainCircuit, LifeBuoy, BookOpen, Copy, Shield, Star, Target, Gauge, Brain, Megaphone, Activity, Sparkles, UserPlus, History, Bot, KeyRound, ShieldCheck, FileWarning, MessageSquareCheck, Layers, Database,
+  Workflow, MapPin, PanelLeftClose, PanelLeft, Kanban, Trophy, CheckSquare, Globe, ListFilter, BrainCircuit, LifeBuoy, BookOpen, Copy, Shield, Star, Target, Gauge, Brain, Megaphone, Activity, Sparkles, UserPlus, History, Bot, KeyRound, ShieldCheck, FileWarning, MessageSquareCheck, Layers, Database, Truck,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -97,6 +97,7 @@ const adminSection = {
     { title: "Logs de erro", url: "/admin/error-logs", icon: FileWarning },
     { title: "Observabilidade", url: "/admin/observabilidade", icon: Gauge },
     { title: "Readiness dos dados", url: "/admin/readiness", icon: Database },
+    { title: "Fornecedores e transportadoras", url: "/parceiros", icon: Truck },
   ],
 };
 
