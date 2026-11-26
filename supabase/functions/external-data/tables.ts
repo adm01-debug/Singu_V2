@@ -85,6 +85,9 @@ export const ALLOWED_RPCS = [
     'detect_cnpj_duplicates',
     // ── Inteligência por ramo ──
     'get_best_industries', 'get_industry_roi',
+    // ── Funil e ciclo de vendas ──
+    'get_sales_funnel', 'get_channel_conversion', 'get_sales_cycle_analysis',
+    'get_retention_by_cohort', 'get_ltv_segments',
     // ── Telemetria do gateway de IA (admin) ──
     'get_ai_gateway_health', 'get_ai_gateway_partition_stats',
   ] as const;
@@ -250,3 +253,4 @@ export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([
 export function isAllowedTable(table: string): table is AllowedTable {
   return ALLOWED_TABLES.includes(table as AllowedTable);
 }
+

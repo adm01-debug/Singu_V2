@@ -48,6 +48,7 @@ const navSections = [
       { title: "Insights", url: "/insights", icon: Lightbulb },
       { title: "Análise PNL", url: "/nlp-analytics", icon: Brain },
       { title: "Analytics", url: "/analytics", icon: BarChart3 },
+      { title: "Funil de vendas", url: "/funil-vendas", icon: ListFilter },
       { title: "Performance", url: "/performance", icon: Zap },
       { title: "BI Avançado", url: "/bi", icon: BrainCircuit },
       { title: "Suporte", url: "/suporte", icon: LifeBuoy },

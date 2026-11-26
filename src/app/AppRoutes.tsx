@@ -93,6 +93,7 @@ export const AppRoutes = () => {
       <Route path="/nlp-analytics" element={<Protected fallback={<AnalyticsPageSkeleton />}><RequirePermission permission="view_analytics"><P.NLPAnalytics /></RequirePermission></Protected>} />
       <Route path="/analytics" element={<Protected fallback={<AnalyticsPageSkeleton />}><RequirePermission permission="view_analytics"><P.Analytics /></RequirePermission></Protected>} />
       <Route path="/inteligencia-ramos" element={<Protected fallback={<AnalyticsPageSkeleton />}><P.InteligenciaRamos /></Protected>} />
+      <Route path="/funil-vendas" element={<Protected fallback={<AnalyticsPageSkeleton />}><P.FunilVendas /></Protected>} />
       <Route path="/configuracoes" element={<Protected fallback={<SettingsPageSkeleton />}><RequirePermission permission="view_settings"><P.Configuracoes /></RequirePermission></Protected>} />
       <Route path="/calendario" element={<Protected fallback={<CalendarPageSkeleton />}><P.Calendario /></Protected>} />
       <Route path="/notificacoes" element={<Protected><P.Notificacoes /></Protected>} />
