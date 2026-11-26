@@ -2494,6 +2494,7 @@
   ],
   "src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx": [
    "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/empty-state.tsx",
    "src/lib/externalData.ts"

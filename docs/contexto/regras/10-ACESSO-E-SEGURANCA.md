@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5755b2169c` · branch `main` · 2026-11-26 21:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e77396eacf` · branch `main` · 2026-11-26 23:32 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -320,7 +320,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 435 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 436 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.unit.mjs`
@@ -472,7 +472,7 @@
 - `supabase/functions/template-success-notifications/index.ts`
 - `supabase/functions/territory-optimization/index.ts`
 - `supabase/functions/validate-access/index.ts`
-- … +285 (lista completa em `context.json`)
+- … +286 (lista completa em `context.json`)
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -537,7 +537,6 @@
 - `connector_log_search`
 - `create_economic_group`
 - `create_notification`
-- `create_smart_reminder`
 - `create_template`
 - `create_webhook`
 - `dashboard_summary`
@@ -573,7 +572,6 @@
 - `fn_valida_dominio_signup`
 - `gc_zombie_messages`
 - `generate_daily_digest`
-- `generate_pre_contact_briefing`
 - `generate_rapport_suggestions`
 - `get_ai_gateway_health`
 - `get_ai_gateway_partition_stats`
@@ -871,7 +869,7 @@ Middleware matcher (Next.js): nenhum
 | grant | authenticated | select, insert | `audit_log`, `rfm_history` |
 | grant | authenticated | select, insert, update | `migration_password_reset_log` |
 | grant | authenticated | select, insert, update, delete | `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences`, `alerts` … +246 |
-| grant | authenticated, service_role | execute | `zapp_history.webhook_log_message`, `zapp_history.health_check`, `zapp_history.get_config`, `zapp_history.ingest_evolution_event`, `zapp_history.request_nlp`, `zapp_history.reconcile_nlp_responses`, `zapp_history.dashboard_summary`, `zapp_history.extract_quantity_from_text`, `zapp_history.extract_deadline_from_text`, `zapp_history.dashboard_summary`, `zapp_history.extract_budget_from_text`, `zapp_history.extract_discovery_channel`, `zapp_history.normalize_product_name`, `zapp_history.extract_objections`, `zapp_history.detect_funnel_stage` … +97 |
+| grant | authenticated, service_role | execute | `zapp_history.webhook_log_message`, `zapp_history.health_check`, `zapp_history.get_config`, `zapp_history.ingest_evolution_event`, `zapp_history.request_nlp`, `zapp_history.reconcile_nlp_responses`, `zapp_history.dashboard_summary`, `zapp_history.extract_quantity_from_text`, `zapp_history.extract_deadline_from_text`, `zapp_history.dashboard_summary`, `zapp_history.extract_budget_from_text`, `zapp_history.extract_discovery_channel`, `zapp_history.normalize_product_name`, `zapp_history.extract_objections`, `zapp_history.detect_funnel_stage` … +98 |
 | grant | authenticated, service_role | select | `vw_rodizio_carga_closers`, `vw_rodizio_carga_sdrs`, `vw_rodizio_execucoes`, `vw_rodizio_bloqueios`, `vw_rodizio_kpis`, `vw_rodizio_execucoes`, `vw_singu_data_health`, `_dormant.inactivity_alerts` |
 | grant | service_role | all | `_migration_cdc_checkpoint`, `abm_account_plans`, `abm_accounts`, `abm_buying_committee`, `abm_campaigns`, `abm_whitespace_opportunities`, `access_blocked_log`, `access_security_settings`, `activities`, `ai_chat_messages`, `ai_chat_threads`, `ai_recommendation_audit_logs`, `ai_recommendation_audit_logs_v2`, `ai_recommendation_logs`, `ai_tone_preferences` … +267 |
 | grant | service_role | execute | `zapp_history`, `zapp_history.request_embedding`, `zapp_history.request_transcription`, `zapp_history.request_classify`, `zapp_history.get_runtime_secret`, `increment_webhook_quota`, `execute_readonly_query`, `redistribute_admin_portfolio`, `fn_cf_collect_sm_legacy`, `fn_cf_collect_sm_legacy_dispatch`, `fn_cf_collect_sm_legacy_harvest`, `fn_get_product_ai_context`, `fn_promote_kit_components_batch`, `cleanup_behavioral_regen_queue`, `check_behavioral_regen_cron_staleness` … +100 |
@@ -912,7 +910,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | authenticated, PUBLIC | execute | `enqueue_behavioral_profile_regen`, `notify_admins_on_critical_behavioral_alert`, `check_behavioral_regen_cron_staleness`, `cleanup_simulated_alerts`, `get_behavioral_regen_cron_health`, `simulate_behavioral_regen_alert` |
 | revoke | authenticated, anon | insert, update, delete | `workspace_accounts`, `vw_workspace_overview` |
 | revoke | authenticated, anon, PUBLIC | execute | `audit_life_events`, `audit_trigger_fn`, `audit_connection_changes`, `calculate_interaction_response_time`, `calculate_next_contact_due`, `connection_configs_encrypt_trigger`, `detect_contact_intel_changes`, `enqueue_contact_validation`, `handle_new_user`, `increment_playbook_usage`, `increment_version_column`, `log_behavioral_change`, `log_contact_tag_changes`, `log_deal_forecast_category_change`, `notify_connection_failures` … +42 |
-| revoke | public | all | `sync_social_insight_from_analysis` |
+| revoke | public | all | `sync_social_insight_from_analysis`, `set_owner_from_contact` |
 | revoke | service_role | execute | `confirm_sequence_manual_step` |
 
 ## Riscos de acesso detectados

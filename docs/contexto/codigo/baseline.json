@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "5755b2169cb6907d0f615b06b4891593bda74255",
+  "commit": "e77396eacf24b447b915cd8ac697790bad3698c5",
   "branch": "main",
-  "data_commit": "2026-11-26T18:33:13-03:00",
+  "data_commit": "2026-11-26T20:21:38-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "e77396e",
+    "data": "2026-11-26",
+    "assunto": "fix(legado): reativa tabelas _dormant e corrige as funcoes do modulo EQ (#382)"
+   },
    {
     "sha": "5755b21",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "84d2357",
     "data": "2026-11-25",
     "assunto": "fix(ofertas): aceitar chamada service_role e gerar ofertas para toda a base (#356)"
-   },
-   {
-    "sha": "e0b7b01",
-    "data": "2026-11-25",
-    "assunto": "fix: interesse social tambem conta repeticao no mesmo historico (#354)"
    }
   ],
-  "arquivos_mudados_7d": 1055,
+  "arquivos_mudados_7d": 1058,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -141,11 +141,11 @@
    },
    {
     "pasta": "src/components/contact-detail",
-    "mudancas": 30
+    "mudancas": 31
    },
    {
     "pasta": "supabase/functions/external-data",
-    "mudancas": 27
+    "mudancas": 28
    },
    {
     "pasta": "src/components/layout",
@@ -214,6 +214,10 @@
     "mudancas": 18
    },
    {
+    "arquivo": "supabase/functions/external-data/tables.ts",
+    "mudancas": 18
+   },
+   {
     "arquivo": "docs/qa/security-definer-audit.md",
     "mudancas": 17
    },
@@ -223,10 +227,6 @@
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
-    "mudancas": 17
-   },
-   {
-    "arquivo": "supabase/functions/external-data/tables.ts",
     "mudancas": 17
    },
    {
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 212
+    "commits": 213
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 15
+    "commits": 14
    },
    {
     "autor": "dependabot[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3982,
+  "arquivos_total": 3984,
   "arquivos_codigo": 2302,
-  "linhas_codigo": 430034,
+  "linhas_codigo": 430065,
   "rotas": 128,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -337,8 +337,8 @@
   "componentes": 1094,
   "hooks": 426,
   "edge_functions": 110,
-  "tabelas": 542,
-  "migrations": 1129,
+  "tabelas": 544,
+  "migrations": 1131,
   "cron_jobs": 47,
   "testes": 289,
   "workflows": 14,
@@ -656,7 +656,7 @@
   },
   "src/components": {
    "arquivos": 1019,
-   "linhas": 152894
+   "linhas": 152923
   },
   "src/config": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28204
+   "linhas": 28206
   },
   "tailwind.config.ts": {
    "arquivos": 1,

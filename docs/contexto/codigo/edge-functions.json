@@ -1658,7 +1658,7 @@
    "nome": "external-data",
    "entrada": "supabase/functions/external-data/index.ts",
    "arquivos": 8,
-   "linhas": 1216,
+   "linhas": 1218,
    "verify_jwt": true,
    "metodos": [
     "DELETE",

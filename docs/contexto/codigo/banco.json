@@ -8,10 +8,10 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1129,
+ "migrations": 1131,
  "seeds": [],
  "avisos": [
-  "219 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
+  "223 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
  ],
  "extensoes": [
   "http",
@@ -412,6 +412,7 @@
   "get_ai_recommendation_logs",
   "get_all_tasks",
   "get_behavioral_regen_cron_health",
+  "get_best_closing_moment",
   "get_best_contact_times",
   "get_buyer_document_path",
   "get_channel_analysis",
@@ -569,6 +570,7 @@
   "seed_win_loss_defaults",
   "sequence_event_to_intent_signal",
   "sequence_pause_on_interaction_reply",
+  "set_owner_from_contact",
   "set_rpc_plan_changed",
   "set_updated_at",
   "set_user_ui_preferences_updated_at",
@@ -2101,6 +2103,13 @@
    "evento": "insert or update or delete",
    "tabela": "public",
    "funcao": "guard_contact_relation_write"
+  },
+  {
+   "nome": "set_owner_from_contact",
+   "quando": "before",
+   "evento": "insert or update",
+   "tabela": "public",
+   "funcao": "set_owner_from_contact"
   },
   {
    "nome": "set_updated_at_purchase_history",
@@ -43648,6 +43657,19 @@
    "sem_rls": true,
    "nao_usada": true
   },
+  "leads": {
+   "colunas": {},
+   "rls": false,
+   "policies": [],
+   "indices": [],
+   "fks": [],
+   "criada_em": null,
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
+  },
   "life_events": {
    "colunas": {
     "contact_id": {
@@ -51503,7 +51525,8 @@
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [
-    "serialize_contact_relation_write"
+    "serialize_contact_relation_write",
+    "set_owner_from_contact"
    ],
    "sem_rls": false,
    "nao_usada": true
@@ -69945,6 +69968,19 @@
    "triggers": [],
    "sem_rls": false,
    "nao_usada": false
+  },
+  "trigger_templates": {
+   "colunas": {},
+   "rls": false,
+   "policies": [],
+   "indices": [],
+   "fks": [],
+   "criada_em": null,
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
   },
   "trigger_types": {
    "colunas": {},

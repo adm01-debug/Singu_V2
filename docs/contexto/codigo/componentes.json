@@ -3691,7 +3691,7 @@
     "EqDashboardCard"
    ],
    "export_default": null,
-   "linhas": 144,
+   "linhas": 173,
    "dominio": "components/contact-detail",
    "hooks_locais": [],
    "tabelas": [],
@@ -14339,7 +14339,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 545,
+   "usado_por": 546,
    "orfao": false
   },
   {

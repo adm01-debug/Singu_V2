@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(legado): reativa tabelas _dormant e corrige as funcoes do modulo EQ (#382)",
    "feat(performance): coaching do vendedor e comparativo com o time (#380)",
    "feat(funil): tela de funil e ciclo de vendas em /funil-vendas (#378)",
    "feat(ramos): tela de inteligencia por ramo em /inteligencia-ramos (#376)",
-   "fix(analytics): corrige contrato dos widgets de tendencia e comparativo anual (#377)",
-   "feat(qualidade): tela de qualidade cadastral em /admin/qualidade-cadastral (#375)"
+   "fix(analytics): corrige contrato dos widgets de tendencia e comparativo anual (#377)"
   ]
  },
  "pr_template": null,

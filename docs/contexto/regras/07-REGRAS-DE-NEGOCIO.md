@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5755b2169c` · branch `main` · 2026-11-26 21:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e77396eacf` · branch `main` · 2026-11-26 23:32 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2649,6 +2649,10 @@ _nenhum item encontrado_
   ```
   const { history, loading } = useScoreHistory(contactId); if (!loading && history.length === 0) return null; return ( <Card> <CardHeader className="pb-3"> <CardTitle className="flex items-center gap-2 text-sm"> <History className="h-4 w-4 text-primary" /> Histórico de Scores ({history.length}) </CardTitle> </CardHeader> <CardContent> <div className="space-y-1.5 max-h-64 overflow-y-auto"> {history.map(entry => { const diff = entry.previous_value != null ? Number(entry.score_value) - Number(entry.p …
   ```
+- **recalculateButton(<Button type="button" variant="outline" size="sm" onClick={()** — `src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`
+  ```
+  recalculate.mutate()}
+  ```
 - **formatCurrency(val: number | null)** — `src/components/contact-detail/commercial-tab/DealsLeadsPipelineCard.tsx`
   ```
   if (val == null) return '—'; return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(val);
@@ -4688,6 +4692,7 @@ _nenhum item encontrado_
 | Erro ao mover para lixeira | `src/components/contact-detail/SoftDeletePanel.tsx` |
 | Erro ao restaurar contato | `src/components/contact-detail/SoftDeletePanel.tsx` |
 | Restauração não confirmada | `src/components/contact-detail/SoftDeletePanel.tsx` |
+| Não foi possível atualizar a análise | `src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx` |
 | Por favor, insira um e-mail válido | `src/components/contact-detail/data-tab/RelativeDialog.tsx` |
 | ;  interface LifeEventsGapChecklistProps {   lifeEvents: Tables< | `src/components/contact-detail/life-events/LifeEventsGapChecklist.tsx` |
 | Erro ao importar contato | `src/components/contacts/ExternalContactLookupDialog.tsx` |
@@ -4770,8 +4775,7 @@ _nenhum item encontrado_
 |        className= | `src/components/intel/IntelErrorState.tsx` |
 | Falha ao copiar link. | `src/components/intel/RecentSnapshotsPanel.tsx` |
 | Comando desconhecido: ${cmd} | `src/components/intelligence/AskTab.tsx` |
-| Nenhuma tabela disponível para exportar. | `src/components/intelligence/AskTab.tsx` |
-| … +812 linhas — lista completa em `context.json` | |
+| … +813 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
