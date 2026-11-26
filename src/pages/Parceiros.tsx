@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AlertTriangle, BadgeCheck, ChevronLeft, ChevronRight, RefreshCw, Search, Truck } from 'lucide-react';
+import { AlertTriangle, BadgeCheck, CalendarClock, ChevronLeft, ChevronRight, RefreshCw, Search, Truck } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -14,8 +14,10 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   PARCEIROS_PAGE_SIZE,
   PARCEIRO_CONFIG,
+  SITUACOES_HOMOLOGACAO,
   nomeDoParceiro,
   totalDoParceiro,
+  useParceiroControleHomologacao,
   useParceiroFilaHomologacao,
   useParceiroRanking,
   useParceiroResumo,
@@ -34,6 +36,40 @@ const formatPct = (value: string | number | null | undefined) => {
 
 const formatScore = (value: number | null | undefined) =>
   typeof value === 'number' ? value.toFixed(1) : '—';
+
+const formatData = (value: string | null | undefined) => {
+  if (!value) return '—';
+  const data = new Date(value);
+  return Number.isNaN(data.getTime()) ? '—' : data.toLocaleDateString('pt-BR');
+};
+
+const formatDias = (dias: number | null | undefined) => {
+  if (dias === null || dias === undefined) return '—';
+  if (dias === 0) return 'vence hoje';
+  if (dias < 0) return `vencida há ${formatNumber(Math.abs(dias))} dia${Math.abs(dias) === 1 ? '' : 's'}`;
+  return `${formatNumber(dias)} dia${dias === 1 ? '' : 's'}`;
+};
+
+const SITUACAO_BADGE: Record<string, { label: string; classe?: string; variant?: 'default' | 'secondary' | 'outline' | 'destructive' }> = {
+  VIGENTE: { label: 'Vigente' },
+  VENCENDO_EM_BREVE: { label: 'Vencendo em 30 dias', classe: 'border-amber-500/60 text-amber-600 dark:text-amber-400', variant: 'outline' },
+  VENCIDA: { label: 'Vencida', variant: 'destructive' },
+  NUNCA_SOLICITADA: { label: 'Nunca solicitada', variant: 'outline' },
+  pendente: { label: 'Pendente', variant: 'secondary' },
+  em_analise: { label: 'Em análise', variant: 'secondary' },
+  homologado: { label: 'Homologado' },
+  reprovado: { label: 'Reprovado', variant: 'destructive' },
+};
+
+function SituacaoBadge({ situacao }: { situacao: string | null }) {
+  if (!situacao) return <span className="text-muted-foreground">—</span>;
+  const config = SITUACAO_BADGE[situacao] ?? { label: situacao, variant: 'outline' as const };
+  return (
+    <Badge variant={config.variant ?? 'default'} className={config.classe}>
+      {config.label}
+    </Badge>
+  );
+}
 
 function QualidadeBarra({ label, pct, total, comCampo }: { label: string; pct: string | number | null; total: number; comCampo: number | null }) {
   const numero = pct === null || pct === undefined ? 0 : Number(pct);
@@ -57,6 +93,10 @@ export default function Parceiros() {
   const [search, setSearch] = useState('');
   const [somenteHomologados, setSomenteHomologados] = useState(false);
   const [page, setPage] = useState(0);
+  const [controleBuscaInput, setControleBuscaInput] = useState('');
+  const [controleBusca, setControleBusca] = useState('');
+  const [controleSituacao, setControleSituacao] = useState('todas');
+  const [controlePage, setControlePage] = useState(0);
 
   const config = PARCEIRO_CONFIG[tipo];
 
@@ -69,14 +109,31 @@ export default function Parceiros() {
   }, [searchInput]);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setControleBusca(controleBuscaInput);
+      setControlePage(0);
+    }, SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [controleBuscaInput]);
+
+  useEffect(() => {
     setPage(0);
     setSearchInput('');
     setSearch('');
+    setControleBuscaInput('');
+    setControleBusca('');
+    setControleSituacao('todas');
+    setControlePage(0);
   }, [tipo]);
 
   const resumo = useParceiroResumo(tipo);
   const ranking = useParceiroRanking(tipo, { page, search, somenteHomologados });
   const fila = useParceiroFilaHomologacao(tipo);
+  const controle = useParceiroControleHomologacao(tipo, {
+    page: controlePage,
+    search: controleBusca,
+    situacao: controleSituacao,
+  });
 
   const dashboard = resumo.data?.dashboard ?? null;
   const qualidade = resumo.data?.qualidade ?? null;
@@ -101,15 +158,19 @@ export default function Parceiros() {
   const totalRows = ranking.data?.total ?? 0;
   const totalPaginas = Math.max(1, Math.ceil(totalRows / PARCEIROS_PAGE_SIZE));
   const filaRows = fila.data ?? [];
-  const atualizando = resumo.isFetching || ranking.isFetching || fila.isFetching;
+  const controleRows = controle.data?.rows ?? [];
+  const controleTotal = controle.data?.total ?? 0;
+  const controlePaginas = Math.max(1, Math.ceil(controleTotal / PARCEIROS_PAGE_SIZE));
+  const atualizando = resumo.isFetching || ranking.isFetching || fila.isFetching || controle.isFetching;
 
   const recarregar = () => {
     void resumo.refetch();
     void ranking.refetch();
     void fila.refetch();
+    void controle.refetch();
   };
 
-  const erro = resumo.error ?? ranking.error ?? fila.error;
+  const erro = resumo.error ?? ranking.error ?? fila.error ?? controle.error;
 
   return (
     <AppLayout>
@@ -378,6 +439,120 @@ export default function Parceiros() {
                 </Table>
               </div>
             )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="gap-4">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <CalendarClock className="h-4 w-4 text-muted-foreground" />
+                  Controle de homologação ({formatNumber(controleTotal)})
+                </CardTitle>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Última homologação de cada {config.singular}: validade, prazo de vencimento, avaliador e motivo de reprovação.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <div className="relative">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    value={controleBuscaInput}
+                    onChange={(evento) => setControleBuscaInput(evento.target.value)}
+                    placeholder={`Buscar ${config.singular} ou CNPJ…`}
+                    className="w-full pl-8 sm:w-64"
+                  />
+                </div>
+                <Select
+                  value={controleSituacao}
+                  onValueChange={(valor) => {
+                    setControleSituacao(valor);
+                    setControlePage(0);
+                  }}
+                >
+                  <SelectTrigger className="w-full sm:w-52">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todas">Todas as situações</SelectItem>
+                    {SITUACOES_HOMOLOGACAO.map((situacao) => (
+                      <SelectItem key={situacao.valor} value={situacao.valor}>{situacao.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {controle.isLoading ? (
+              <div className="space-y-2">
+                {Array.from({ length: 8 }).map((_, indice) => <Skeleton key={indice} className="h-10 w-full" />)}
+              </div>
+            ) : controleRows.length === 0 ? (
+              <p className="py-8 text-center text-sm text-muted-foreground">
+                Nenhum {config.singular} nesta situação.
+              </p>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{config.singular === 'fornecedor' ? 'Fornecedor' : 'Transportadora'}</TableHead>
+                      <TableHead>CNPJ</TableHead>
+                      <TableHead>Situação</TableHead>
+                      <TableHead>Validade</TableHead>
+                      <TableHead className="text-right">Prazo</TableHead>
+                      <TableHead>Decisão</TableHead>
+                      <TableHead>Avaliador</TableHead>
+                      <TableHead>Motivo da reprovação</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {controleRows.map((linha, indice) => (
+                      <TableRow key={`controle-${String(linha.homologation_id ?? indice)}`}>
+                        <TableCell className="font-medium">{nomeDoParceiro(tipo, linha)}</TableCell>
+                        <TableCell className="font-mono text-xs">{linha.cnpj ?? '—'}</TableCell>
+                        <TableCell><SituacaoBadge situacao={linha.situacao} /></TableCell>
+                        <TableCell className="whitespace-nowrap tabular-nums">{formatData(linha.validade)}</TableCell>
+                        <TableCell className="whitespace-nowrap text-right tabular-nums">
+                          {formatDias(linha.dias_para_vencer)}
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap tabular-nums">{formatData(linha.data_decisao)}</TableCell>
+                        <TableCell>{linha.avaliador ?? '—'}</TableCell>
+                        <TableCell className="text-muted-foreground">{linha.motivo_reprovacao ?? '—'}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+
+            <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+              <p className="text-xs text-muted-foreground">
+                Página {Math.min(controlePage + 1, controlePaginas)} de {controlePaginas}
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={controlePage === 0}
+                  onClick={() => setControlePage((atual) => Math.max(atual - 1, 0))}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Anterior
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={controlePage + 1 >= controlePaginas}
+                  onClick={() => setControlePage((atual) => atual + 1)}
+                >
+                  Próxima
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
