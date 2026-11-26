@@ -753,3 +753,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261125090000 | [desativa_crons_modulo_zapp_history_morto](migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql) | 0 |
 | 20261125091000 | [rbac_popula_papeis_e_completa_matriz_rotas](migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql) | 0 |
 | 20261125190000 | [social_sync_automatico_enqueue_dispatch](migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql) | 0 |
+| 20261126090000 | [offer_suggestions_metadata_social_match](migrations/20261126090000_offer_suggestions_metadata_social_match.sql) | 1 |

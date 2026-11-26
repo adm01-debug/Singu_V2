@@ -492,7 +492,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.nurturing_workflows](tables/public/nurturing_workflows.md) | table | sim | 5 | 17 | não | SINGU: Fluxos de nutrição long-term (mais complexos que sequences). Trigger-based (score/segment/inactivity/event). |
 | [public.oauth_tokens](tables/public/oauth_tokens.md) | table | sim | 1 | 5 | não | Tokens OAuth para integrações externas |
 | [public.objection_example_feedback](tables/public/objection_example_feedback.md) | table | sim | 4 | 8 | não |  |
-| [public.offer_suggestions](tables/public/offer_suggestions.md) | table | sim | 8 | 13 | não | SINGU: Ofertas personalizadas sugeridas pela IA com base no perfil comportamental. |
+| [public.offer_suggestions](tables/public/offer_suggestions.md) | table | sim | 8 | 14 | não | SINGU: Ofertas personalizadas sugeridas pela IA com base no perfil comportamental. |
 | [public.password_reset_requests](tables/public/password_reset_requests.md) | table | sim | 3 | 18 | não | SINGU: Tokens de reset de senha (armazenados como hash). Single-use com expiração. |
 | [public.people_intelligence_events](tables/public/people_intelligence_events.md) | table | sim | 3 | 12 | não |  |
 | [public.permissions](tables/public/permissions.md) | table | sim | 4 | 7 | não |  |

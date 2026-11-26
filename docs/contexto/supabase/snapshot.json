@@ -83349,6 +83349,19 @@
         "type": "timestamp with time zone"
       },
       {
+        "comment": "Evidencia do match que sustentou a oferta: {sources: string[], keywords: string[], social_insight_ids: uuid[]}. Preenchida por generate-offer-suggestions.",
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "metadata",
+        "nullable": true,
+        "position": 14,
+        "schema": "public",
+        "table": "offer_suggestions",
+        "type": "jsonb"
+      },
+      {
         "comment": null,
         "default": "gen_random_uuid()",
         "generated": null,
@@ -280650,6 +280663,12 @@
         "name": "social_sync_automatico_enqueue_dispatch",
         "statements": [],
         "version": "20261125190000"
+      },
+      {
+        "name": "offer_suggestions_metadata_social_match",
+        "statements": 1,
+        "statements_sha": "b0adfc44780c21a6",
+        "version": "20261126090000"
       }
     ],
     "policies": [

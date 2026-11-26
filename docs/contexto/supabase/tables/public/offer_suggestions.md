@@ -32,6 +32,7 @@
 | 11 | `presented_at` | `timestamp with time zone` | sim |  |  |  |
 | 12 | `result` | `text` | sim |  |  |  |
 | 13 | `expires_at` | `timestamp with time zone` | sim |  |  |  |
+| 14 | `metadata` | `jsonb` | sim |  |  | Evidencia do match que sustentou a oferta: {sources: string[], keywords: string[], social_insight_ids: uuid[]}. Preenchida por generate-offer-suggestions. |
 
 
 ## Constraints
