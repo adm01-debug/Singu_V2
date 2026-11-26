@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "7d2a052f4ffb712c0f35a5abde90f999c4e510b1",
+  "commit": "8a792164cbd90dca8687033ef980e33a0d386a2f",
   "branch": "main",
-  "data_commit": "2026-11-26T08:24:37-03:00",
+  "data_commit": "2026-11-26T08:40:14-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "8a79216",
+    "data": "2026-11-26",
+    "assunto": "refactor: monta os cards de touchpoint e contatos estrategicos que ficaram orfaos (#361)"
+   },
    {
     "sha": "7d2a052",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "1104bf2",
     "data": "2026-11-24",
     "assunto": "fix(whatsapp): grava direction no webhook e alinha status/tipo ao check do banco (#335)"
-   },
-   {
-    "sha": "bae345f",
-    "data": "2026-11-24",
-    "assunto": "fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)"
    }
   ],
-  "arquivos_mudados_7d": 1011,
+  "arquivos_mudados_7d": 1014,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 193
+    "commits": 194
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3940,
-  "arquivos_codigo": 2271,
-  "linhas_codigo": 423182,
+  "arquivos_total": 3941,
+  "arquivos_codigo": 2272,
+  "linhas_codigo": 423191,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -340,7 +340,7 @@
   "tabelas": 542,
   "migrations": 1118,
   "cron_jobs": 47,
-  "testes": 286,
+  "testes": 287,
   "workflows": 14,
   "scripts": 302,
   "docs_md": 159
@@ -655,8 +655,8 @@
    "linhas": 594
   },
   "src/components": {
-   "arquivos": 1015,
-   "linhas": 152314
+   "arquivos": 1016,
+   "linhas": 152323
   },
   "src/config": {
    "arquivos": 1,
@@ -1151,8 +1151,6 @@
   "componentes_orfaos": [
    "src/components/admin/AccessSecurityManager.tsx",
    "src/components/admin/EmailPipelineStatus.tsx",
-   "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
-   "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
    "src/components/conversation-intel/TopicsChart.tsx",
    "src/components/crm/ContactBehaviorExtended.tsx",
    "src/components/crm/copywriting/PerformanceHistory.tsx",

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7d2a052f4f` · branch `main` · 2026-11-26 11:25 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8a792164cb` · branch `main` · 2026-11-26 11:40 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4776,7 +4776,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
-## K. Testes como especificação (3314 testes em 261 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3316 testes em 262 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -5018,6 +5018,7 @@ _nenhum item encontrado_
 | `src/components/admin/conexoes/webhookSnippetBuilders.test.ts` | 2 | buildPythonWebhookSnippet · carrega booleanos e nulos como JSON antes de serializar |
 | `src/components/analytics/BehaviorAlertsPanel.contract.test.tsx` | 2 | recuperação da detecção de alertas · informa a falha, libera o botão e permite repetir a consulta |
 | `src/components/company-detail/CompanyCommercialTab.test.tsx` | 2 | Contrato comercial de empresa · sinaliza o vínculo ausente sem consultar atividades por coluna inexistente |
+| `src/components/company-detail/CompanyInsightsTab.test.tsx` | 2 | CompanyInsightsTab · mostra o resumo de touchpoints e os contatos estrategicos vindos do RPC |
 | `src/components/csat/CSATPanel.contract.test.tsx` | 2 | Registro manual de satisfação · oferece criar uma pesquisa e mantém a nota selecionada até confirmar a gravação |
 | `src/components/layout/Header.search.test.tsx` | 2 | Pesquisa contextual do cabeçalho · restaura o termo recebido e acompanha mudanças de contexto e limpeza |
 | `src/hooks/useBulkImport.test.ts` | 2 | mapImportBatch · preserva o número original das linhas válidas após descartar uma linha inválida |

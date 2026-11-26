@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "total": 1080,
- "orfaos": 20,
+ "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
    "src/app/lazyPages.tsx",
@@ -3148,7 +3148,7 @@
     "CompanyInsightsTab"
    ],
    "export_default": null,
-   "linhas": 357,
+   "linhas": 300,
    "dominio": "components/company-detail",
    "hooks_locais": [
     "useChurnRisk",
@@ -3279,8 +3279,8 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
@@ -3293,8 +3293,8 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/company-detail/InteracoesPessoaCargoBar.tsx",

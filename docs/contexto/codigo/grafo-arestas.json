@@ -1700,6 +1700,8 @@
    "src/components/company-detail/QuickActionsWidget.tsx",
    "src/components/company-detail/insights/Company360Card.tsx",
    "src/components/company-detail/insights/CompanyTimelineCard.tsx",
+   "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
+   "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
    "src/components/dashboard/DashboardErrorBoundary.tsx",
    "src/components/pipeline/CreateDealWidget.tsx",
    "src/components/ui/badge.tsx",

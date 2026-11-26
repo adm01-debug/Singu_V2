@@ -2528,8 +2528,8 @@
   {
    "modulo": "components/company-detail",
    "arquivos": 29,
-   "testes": 1,
-   "linhas": 3460,
+   "testes": 2,
+   "linhas": 3403,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],

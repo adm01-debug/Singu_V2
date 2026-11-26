@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "nos": 1987,
- "arestas": 8687,
+ "arestas": 8689,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -222,8 +222,6 @@
   "src/components/admin/AccessSecurityManager.tsx",
   "src/components/admin/EmailPipelineStatus.tsx",
   "src/components/celebrations/index.ts",
-  "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
-  "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
   "src/components/conversation-intel/TopicsChart.tsx",
   "src/components/crm/ContactBehaviorExtended.tsx",
   "src/components/crm/copywriting/PerformanceHistory.tsx",
