@@ -138,6 +138,7 @@ export const ALLOWED_TABLES = [
   'vw_companies_stats', 'vw_companies_contato', 'vw_companies_cores',
   'v_company_summary', 'vw_company_addresses', 'vw_company_social_media',
   'vw_singu_data_health', 'vw_singu_disc_dashboard', 'vw_singu_usage_kpis',
+  'vw_singu_readiness',
   // ── Company cadences ──
   'company_cadences',
 ] as const;
@@ -158,6 +159,7 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_pending_followups',
   'vw_interacoes_sem_apelido',
   'vw_singu_data_health',
+  'vw_singu_readiness',
   'vw_grupos_economicos_resumo',
   'vw_companies_completo',
   'vw_companies_contato',
