@@ -35,10 +35,22 @@ import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { useSocialSync } from '@/hooks/commercial/useSocialSync';
 import { AuditLogDrawer } from './components/AuditLogDrawer';
+import { SocialMatchPanel, type SocialMatchEvidence } from './components/SocialMatchPanel';
 import { cn } from '@/lib/utils';
 
 interface Props {
   contactId: string;
+}
+
+/**
+ * A evidencia vem do proprio registro da oferta. Antes o badge dependia da
+ * palavra "social" dentro de `reason`, entao uma oferta com keyword real mas
+ * sem social_insight nunca mostrava a evidencia que o backend gravou.
+ */
+function hasSocialEvidence(metadata: unknown): boolean {
+  const m = metadata as SocialMatchEvidence | null;
+  if (!m) return false;
+  return (m.sources?.length ?? 0) > 0 || (m.keywords?.length ?? 0) > 0;
 }
 
 export function OfferSuggestionsElite({ contactId }: Props) {
@@ -52,7 +64,7 @@ export function OfferSuggestionsElite({ contactId }: Props) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('offer_suggestions')
-        .select('id, confidence_score, contact_id, created_at, expires_at, offer_category, offer_name, presented_at, reason, result, status, user_id')
+        .select('id, confidence_score, contact_id, created_at, expires_at, offer_category, offer_name, presented_at, reason, result, status, user_id, metadata')
         .eq('contact_id', contactId)
         .eq('user_id', user!.id)
         .order('confidence_score', { ascending: false })
@@ -201,7 +213,7 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                             {offer.offer_category}
                           </Badge>
                         )}
-                        {offer.reason?.toLowerCase().includes('social') && (
+                        {hasSocialEvidence(offer.metadata) && (
                           <Badge variant="secondary" className="text-[9px] h-4 bg-indigo-50 text-indigo-600 border-indigo-100 gap-1 px-1.5">
                             <Globe className="h-2.5 w-2.5" />
                             Social Match
@@ -211,8 +223,12 @@ export function OfferSuggestionsElite({ contactId }: Props) {
                       <p className="text-xs text-muted-foreground leading-relaxed italic">
                         "{offer.reason}"
                       </p>
-                      {offer.reason?.toLowerCase().includes('social') && (
-                        <p className="text-xs text-muted-foreground">Evidências do match social indisponíveis: esta oferta não registra fontes ou palavras-chave.</p>
+                      {hasSocialEvidence(offer.metadata) && (
+                        <SocialMatchPanel
+                          contactId={contactId}
+                          offerName={offer.offer_name}
+                          metadata={(offer.metadata as SocialMatchEvidence | null) ?? {}}
+                        />
                       )}
                     </div>
                     <div className="text-right shrink-0">
