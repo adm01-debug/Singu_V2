@@ -2926,7 +2926,7 @@
    "zod_schemas": 1,
    "flags": [],
    "papeis": [],
-   "usado_por": 118,
+   "usado_por": 119,
    "usado_por_modulos": [
     "components/contact-detail",
     "components/contacts",
@@ -3553,7 +3553,7 @@
     "getSectionFallback"
    ],
    "export_default": null,
-   "linhas": 40,
+   "linhas": 42,
    "tabelas": [],
    "rpcs": [],
    "edges": [],

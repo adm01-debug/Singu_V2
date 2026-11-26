@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "cf58aa24ef0f2b483a5508bd56eaf1e62fa39ac5",
+  "commit": "18a7e15ff35a925f3fb9d10df60c7cfac763774c",
   "branch": "main",
-  "data_commit": "2026-11-26T17:37:37-03:00",
+  "data_commit": "2026-11-26T17:37:43-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "18a7e15",
+    "data": "2026-11-26",
+    "assunto": "feat(ramos): tela de inteligencia por ramo em /inteligencia-ramos (#376)"
+   },
    {
     "sha": "cf58aa2",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "675d6fd",
     "data": "2026-11-25",
     "assunto": "fix: oferta deixa de falhar quando a coluna metadata nao existe (#352)"
-   },
-   {
-    "sha": "882db32",
-    "data": "2026-11-25",
-    "assunto": "fix(sync): payload do catalogo respeita a coluna margin_pct gerada pelo banco (#351)"
    }
   ],
-  "arquivos_mudados_7d": 1046,
+  "arquivos_mudados_7d": 1049,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -149,7 +149,11 @@
    },
    {
     "pasta": "supabase/functions/external-data",
-    "mudancas": 25
+    "mudancas": 26
+   },
+   {
+    "pasta": "src/components/layout",
+    "mudancas": 22
    },
    {
     "pasta": "src/components/triggers",
@@ -157,10 +161,6 @@
    },
    {
     "pasta": "scripts/migration/storage",
-    "mudancas": 20
-   },
-   {
-    "pasta": "src/components/layout",
     "mudancas": 20
    },
    {
@@ -218,15 +218,19 @@
     "mudancas": 17
    },
    {
+    "arquivo": "src/app/AppRoutes.tsx",
+    "mudancas": 17
+   },
+   {
     "arquivo": "supabase/functions/external-data/index.ts",
     "mudancas": 17
    },
    {
-    "arquivo": "src/app/AppRoutes.tsx",
+    "arquivo": "supabase/functions/external-data/tables.ts",
     "mudancas": 16
    },
    {
-    "arquivo": "supabase/functions/external-data/tables.ts",
+    "arquivo": "src/components/layout/AppSidebar.tsx",
     "mudancas": 15
    },
    {
@@ -238,12 +242,8 @@
     "mudancas": 14
    },
    {
-    "arquivo": "src/components/layout/AppSidebar.tsx",
-    "mudancas": 14
-   },
-   {
     "arquivo": "src/app/lazyPages.tsx",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 209
+    "commits": 210
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,16 +326,16 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3976,
-  "arquivos_codigo": 2296,
-  "linhas_codigo": 428928,
-  "rotas": 126,
+  "arquivos_total": 3978,
+  "arquivos_codigo": 2298,
+  "linhas_codigo": 429311,
+  "rotas": 127,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 76,
+  "itens_menu": 77,
   "modulos": 143,
-  "componentes": 1091,
-  "hooks": 423,
+  "componentes": 1092,
+  "hooks": 424,
   "edge_functions": 110,
   "tabelas": 542,
   "migrations": 1129,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 614
+   "linhas": 616
   },
   "src/components": {
    "arquivos": 1018,
-   "linhas": 152746
+   "linhas": 152749
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 456,
-   "linhas": 60236
+   "arquivos": 457,
+   "linhas": 60326
   },
   "src/integrations": {
    "arquivos": 3,
@@ -684,15 +684,15 @@
   },
   "src/lib": {
    "arquivos": 108,
-   "linhas": 9554
+   "linhas": 9556
   },
   "src/main.tsx": {
    "arquivos": 1,
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 166,
-   "linhas": 33391
+   "arquivos": 167,
+   "linhas": 33675
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28198
+   "linhas": 28200
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1223,6 +1223,7 @@
    "Historico",
    "Inbox",
    "Insights",
+   "InteligenciaRamos",
    "Intelligence",
    "IntentPage",
    "IntentSetupPage",

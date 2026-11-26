@@ -3,15 +3,15 @@
  "format_version": 2,
  "onde_ficam": {
   "telas": [
-   "src/pages (125)"
+   "src/pages (126)"
   ],
   "componentes": [
    "src/components (930)",
-   "src/pages (152)",
+   "src/pages (153)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (392)",
+   "src/hooks (393)",
    "src/components (20)",
    "src/stores (5)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1091)"
+  ".tsx (1092)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(ramos): tela de inteligencia por ramo em /inteligencia-ramos (#376)",
    "fix(analytics): corrige contrato dos widgets de tendencia e comparativo anual (#377)",
    "feat(qualidade): tela de qualidade cadastral em /admin/qualidade-cadastral (#375)",
    "feat(ia): aba de telemetria do gateway de IA em Governanca de IA (#374)",
-   "feat(workspace): tela de contas do Google Workspace e correção da RLS que a zerava (#373)",
-   "feat(eventos): linha do tempo de eventos de cliente em /eventos (#372)"
+   "feat(workspace): tela de contas do Google Workspace e correção da RLS que a zerava (#373)"
   ]
  },
  "pr_template": null,

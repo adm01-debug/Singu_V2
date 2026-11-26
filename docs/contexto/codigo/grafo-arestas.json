@@ -413,6 +413,7 @@
    "src/pages/Historico.tsx",
    "src/pages/Inbox.tsx",
    "src/pages/Insights.tsx",
+   "src/pages/InteligenciaRamos.tsx",
    "src/pages/Intelligence.tsx",
    "src/pages/Intent.tsx",
    "src/pages/IntentSetup.tsx",
@@ -8835,6 +8836,9 @@
   "src/hooks/useIntelTour.ts": [
    "src/hooks/useAuth.tsx"
   ],
+  "src/hooks/useInteligenciaRamos.ts": [
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useIntent.ts": [
    "src/hooks/useAuth.tsx",
    "src/integrations/supabase/client.ts",
@@ -10611,6 +10615,17 @@
    "src/lib/logger.ts",
    "src/lib/utils.ts",
    "src/pages/insights/InsightsContent.tsx"
+  ],
+  "src/pages/InteligenciaRamos.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useInteligenciaRamos.ts"
   ],
   "src/pages/Intelligence.tsx": [
    "src/components/dashboard/DashboardErrorBoundary.tsx",

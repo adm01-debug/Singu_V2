@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 423,
+ "total": 424,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -6177,6 +6177,27 @@
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/pages/Intelligence.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useInteligenciaRamos.ts",
+   "hooks_exportados": [
+    "useEmpresasDoRamo",
+    "useRankingRamos"
+   ],
+   "linhas": 90,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/InteligenciaRamos.tsx"
    ],
    "coberto_por_testes": 0
   },

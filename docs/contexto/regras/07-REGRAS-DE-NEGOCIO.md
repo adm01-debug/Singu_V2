@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `cf58aa24ef` · branch `main` · 2026-11-26 20:39 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18a7e15ff3` · branch `main` · 2026-11-26 20:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1435,7 +1435,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `empathy` | compara | `src/hooks/useCarnegieAnalysis.ts` |
 | `type` | `enroll_in_sequence` | escreve | `src/components/automation/AutomationTemplates.tsx` |
 | `type` | `enum` | escreve | `src/lib/reports/reportEngine.ts` |
-| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +69 |
+| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +70 |
 | `type` | `error` | compara | `src/lib/queryErrorReporter.ts` |
 | `type` | `error_budget_100` | escreve | `supabase/functions/error-budget/index.ts` |
 | `type` | `error_budget_50` | escreve | `supabase/functions/error-budget/index.ts` |
@@ -1481,7 +1481,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `interaction` | compara, escreve | `src/components/contact-detail/RelationshipTimeline.tsx`<br>`src/components/crm/RelationshipKPIsDashboard.tsx`<br>`src/components/quick-add/QuickAddButton.tsx`<br>`src/components/search/GlobalSearch.tsx`<br>`src/components/search/global-search/SearchLocalGroups.tsx` |
 | `type` | `interest` | escreve | `src/components/ficha-360/TagsInteresseCard.tsx`<br>`src/hooks/useSocialIntelligence.ts`<br>`supabase/functions/social-profile-scraper/index.ts` |
 | `type` | `invalido` | compara | `src/components/contact-detail/data-tab/PhonesCard.tsx` |
-| `type` | `is` | escreve | `src/components/enroll/EnrollContactDialog.tsx`<br>`src/components/sequences/SequenceEnrollDialog.tsx`<br>`src/hooks/useCompanies.ts`<br>`src/hooks/useContacts.ts` |
+| `type` | `is` | escreve | `src/components/enroll/EnrollContactDialog.tsx`<br>`src/components/sequences/SequenceEnrollDialog.tsx`<br>`src/hooks/useCompanies.ts`<br>`src/hooks/useContacts.ts`<br>`src/hooks/useInteligenciaRamos.ts` |
 | `type` | `json_object` | escreve | `supabase/functions/ai-email-refine/index.ts`<br>`supabase/functions/email-thread-summary/index.ts` |
 | `type` | `latency_degradation` | escreve | `supabase/functions/connection-anomaly-detector/index.ts` |
 | `type` | `lead_score_threshold` | escreve | `supabase/functions/lead-score-threshold-runner/index.ts` |
@@ -3732,6 +3732,7 @@ _nenhum item encontrado_
 | `MIN_TOTAL` | `10` | `src/hooks/useInboundActivityHeatmap.ts` |
 | `MAX_EVENTS` | `100` | `src/hooks/useIntelTelemetry.ts` |
 | `VERSION` | `1` | `src/hooks/useIntelTour.ts` |
+| `RAMO_NAO_INFORMADO` | `'Não informado'` | `src/hooks/useInteligenciaRamos.ts` |
 | `STALE` | `5` | `src/hooks/useIntent.ts` |
 | `PAGE_SIZE` | `50` | `src/hooks/useInteractions.ts` |
 | `DEFAULT_PER_PAGE` | `25` | `src/hooks/useInteractionsAdvancedFilter.ts` |
@@ -3791,6 +3792,7 @@ _nenhum item encontrado_
 | `CONCURRENCY` | `5` | `src/pages/CRMRelationshipAuditPage.tsx` |
 | `PAGE_SIZE` | `25` | `src/pages/GruposEconomicos.tsx` |
 | `SEARCH_DEBOUNCE_MS` | `400` | `src/pages/GruposEconomicos.tsx` |
+| `POR_PAGINA` | `25` | `src/pages/InteligenciaRamos.tsx` |
 | `GEOCODING_BATCH_SIZE` | `50` | `src/pages/MapaEmpresas.tsx` |
 | `SEARCH_DEBOUNCE_MS` | `400` | `src/pages/Parceiros.tsx` |
 | `POR_PAGINA` | `25` | `src/pages/QualidadeCadastral.tsx` |
