@@ -62,6 +62,7 @@ const navItems = [
   { icon: Shield, label: 'Auditoria IA', path: '/intelligence/auditoria', section: 'Análise' },
   { icon: Lightbulb, label: 'Insights', path: '/insights', section: 'Análise' },
   { icon: BarChart3, label: 'Analytics', path: '/analytics', section: 'Análise' },
+  { icon: Target, label: 'Funil de vendas', path: '/funil-vendas', section: 'Análise' },
   { icon: Zap, label: 'Performance', path: '/performance', section: 'Análise' },
   { icon: BrainCircuit, label: 'BI Avançado', path: '/bi', section: 'Análise' },
   { icon: LifeBuoy, label: 'Suporte', path: '/suporte', section: 'Análise' },

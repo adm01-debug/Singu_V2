@@ -4,6 +4,7 @@ const ROUTE_LABELS: Record<string, string> = {
   empresas: 'Empresas',
   interacoes: 'Interações',
   analytics: 'Analytics',
+  'funil-vendas': 'Funil de vendas',
   insights: 'Insights',
   calendario: 'Calendário',
   notificacoes: 'Notificações',

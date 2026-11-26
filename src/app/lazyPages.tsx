@@ -76,6 +76,7 @@ export const AdminAutomacoes = lazy(() => import("@/pages/AdminAutomacoes"));
 export const GovernancaIA = lazy(() => import("@/pages/GovernancaIA"));
 export const QualidadeCadastral = lazy(() => import("@/pages/QualidadeCadastral"));
 export const InteligenciaRamos = lazy(() => import("@/pages/InteligenciaRamos"));
+export const FunilVendas = lazy(() => import("@/pages/FunilVendas"));
 export const EventosCliente = lazy(() => import("@/pages/EventosCliente"));
 export const Workspaces = lazy(() => import("@/pages/Workspaces"));
 export const Clientes = lazy(() => import("@/pages/Clientes"));

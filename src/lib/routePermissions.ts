@@ -6,6 +6,7 @@
  */
 export const ROUTE_PERMISSIONS: Record<string, string> = {
   '/analytics': 'view_analytics',
+  '/funil-vendas': 'view_analytics',
   '/nlp-analytics': 'view_analytics',
   '/configuracoes': 'view_settings',
   '/intelligence/auditoria': 'view_audit',
