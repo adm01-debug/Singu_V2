@@ -133,6 +133,7 @@ export const ALLOWED_TABLES = [
   'vw_singu_contact_360', 'vw_singu_emotional_trend',
   'vw_singu_rapport_intel', 'vw_todays_reminders',
   // ── Extended views ──
+  'vw_grupos_economicos_resumo',
   'vw_companies_completo', 'vw_companies_duplicatas',
   'vw_companies_stats', 'vw_companies_contato', 'vw_companies_cores',
   'v_company_summary', 'vw_company_addresses', 'vw_company_social_media',
@@ -150,6 +151,7 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_pending_followups',
   'vw_interacoes_sem_apelido',
   'vw_singu_data_health',
+  'vw_grupos_economicos_resumo',
 ]);
 
 export const GLOBAL_READ_ONLY_TABLES = new Set<AllowedTable>([

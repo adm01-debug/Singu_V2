@@ -31,7 +31,8 @@ import {
   Sparkles,
   Brain,
   BookOpen,
-  Kanban
+  Kanban,
+  Layers
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
@@ -54,6 +55,7 @@ const navItems = [
   { icon: Calendar, label: 'Calendário', path: '/calendario', section: 'Principal' },
 
   { icon: Network, label: 'Network', path: '/network', section: 'Análise' },
+  { icon: Layers, label: 'Grupos Econômicos', path: '/grupos-economicos', section: 'Análise' },
   { icon: Activity, label: 'Intelligence', path: '/intelligence', section: 'Análise' },
   { icon: Shield, label: 'Auditoria IA', path: '/intelligence/auditoria', section: 'Análise' },
   { icon: Lightbulb, label: 'Insights', path: '/insights', section: 'Análise' },
