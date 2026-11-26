@@ -3179,6 +3179,7 @@
   ],
   "src/components/crm/commercial/OfferSuggestionsElite.tsx": [
    "src/components/crm/commercial/components/AuditLogDrawer.tsx",
+   "src/components/crm/commercial/components/SocialMatchPanel.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",

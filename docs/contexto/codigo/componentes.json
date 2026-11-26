@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "total": 1080,
- "orfaos": 21,
+ "orfaos": 20,
  "nomes_duplicados": {
   "ABM": [
    "src/app/lazyPages.tsx",
@@ -5816,16 +5816,17 @@
   {
    "arquivo": "src/components/crm/commercial/components/SocialMatchPanel.tsx",
    "exports": [
+    "SocialMatchEvidence",
     "SocialMatchPanel"
    ],
    "export_default": null,
-   "linhas": 66,
+   "linhas": 68,
    "dominio": "components/crm",
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 0,
-   "orfao": true
+   "usado_por": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/components/crm/commercial/DecisionCriteriaElite.tsx",
@@ -5849,7 +5850,7 @@
     "OfferSuggestionsElite"
    ],
    "export_default": null,
-   "linhas": 275,
+   "linhas": 291,
    "dominio": "components/crm",
    "hooks_locais": [
     "useAuth",

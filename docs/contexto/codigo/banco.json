@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1117,
+ "migrations": 1118,
  "seeds": [],
  "avisos": [
   "212 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -48313,7 +48313,7 @@
      "tipo": "jsonb",
      "nn": false,
      "pk": false,
-     "default": "'{}'::jsonb",
+     "default": null,
      "ref": null
     },
     "offer_category": {
@@ -48415,6 +48415,7 @@
     "created_at": "string",
     "expires_at": "string | null",
     "id": "string",
+    "metadata": "Json | null",
     "offer_category": "string | null",
     "offer_name": "string",
     "presented_at": "string | null",
@@ -48425,9 +48426,7 @@
     "user_id": "string"
    },
    "drift": {
-    "so_na_migration": [
-     "metadata"
-    ],
+    "so_na_migration": [],
     "so_no_types": [
      "updated_at"
     ]

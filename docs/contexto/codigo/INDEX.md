@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `774d2f2decb03bea1bc916af9bfa8e75de1273f7` (2026-11-25T20:31:21-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `7d2a052f4ffb712c0f35a5abde90f999c4e510b1` (2026-11-26T08:24:37-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2106), SQL (1294), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
+- linguagens: TypeScript (2107), SQL (1295), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3938 |
-| arquivos_codigo | 2270 |
-| linhas_codigo | 423081 |
+| arquivos_total | 3940 |
+| arquivos_codigo | 2271 |
+| linhas_codigo | 423182 |
 | rotas | 116 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -46,9 +46,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 412 |
 | edge_functions | 110 |
 | tabelas | 542 |
-| migrations | 1117 |
+| migrations | 1118 |
 | cron_jobs | 47 |
-| testes | 285 |
+| testes | 286 |
 | workflows | 14 |
 | scripts | 302 |
 | docs_md | 159 |
@@ -58,7 +58,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - componentes: src/components (929), src/pages (142), src/app (4)
 - hooks: src/hooks (381), src/components (20), src/stores (5)
 - servicos_logica: src/lib (76), src/data (46), src/domain (8)
-- testes: co-localizado (*.test) (127), co-localizado (__tests__) (104), tests/ (25)
+- testes: co-localizado (*.test) (128), co-localizado (__tests__) (104), tests/ (25)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/migration (177), scripts/maintenance (15), scripts/hardening (10)
@@ -443,7 +443,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - tabelas_usadas_sem_definicao: 6 — ex.: information_schema.columns, information_schema.tables, logs
 - tabelas_com_drift_migration_vs_types: 43 — ex.: audit_log, automation_logs, behavioral_profile_regen_queue
 - rpcs_sem_definicao: 2 — ex.: get_territories, get_territory_performance
-- componentes_orfaos: 21 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/company-detail/insights/KeyContactsStrategicCard.tsx
+- componentes_orfaos: 20 — ex.: src/components/admin/AccessSecurityManager.tsx, src/components/admin/EmailPipelineStatus.tsx, src/components/company-detail/insights/KeyContactsStrategicCard.tsx
 - componentes_com_nome_duplicado: 108 — ex.: ABM, ABMAccountDetail, ABMCampaigns
 - scripts_orfaos: 8 — ex.: scripts/hardening/check-client-tls.sql, scripts/hardening/check-extensions-hardening.sql, scripts/hardening/check-indexes-duplicated.sql
 - env_usadas_nao_declaradas: 4 — ex.: DEV, PROD, VITE_APP_VERSION
@@ -451,8 +451,8 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26022 nós · 41594 arestas · 3093 comunidades · grafo do commit `774d2f2d`
-- comunidades maiores: ref_lib (282), ref_types (276), lucide-react (267), react (265), 02_tables.sql (259), framer-motion (258), react-router-dom (251), useAuth (240), ref_hooks (232), 📖 Dicionário de Dados — SINGU CRM (224), ref_components (217), date-fns (208)
+- 26030 nós · 41609 arestas · 3093 comunidades · grafo do commit `7d2a052f`
+- comunidades maiores: _shared/auth.ts (316), sonner (304), lucide-react (289), framer-motion (288), ref_lib (283), 02_tables.sql (259), react (246), ref_hooks (243), useAuth (236), date-fns (230), react-router-dom (227), 📖 Dicionário de Dados — SINGU CRM (224)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
 
@@ -591,6 +591,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-26 `7d2a052` fix: evidencia do match social nas ofertas (coluna inexistente causava perda silenciosa) (#360)
 - 2026-11-25 `774d2f2` fix(social): para de gravar nome, email e telefone como interesse do cliente (#359)
 - 2026-11-25 `8b65e23` feat(social): sincronizacao automatica com enqueue e dispatch (#355)
 - 2026-11-25 `7912bb2` chore(ci): desbloquear gate RLS — baseline DEFINER 119 e contadores de produção (#358)
@@ -605,7 +606,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-25 `a16128a` feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)
 - 2026-11-25 `472ff96` feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)
 - 2026-11-25 `603c404` chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)
-- 2026-11-25 `e380fe1` docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

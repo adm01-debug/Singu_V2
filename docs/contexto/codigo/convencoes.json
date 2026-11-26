@@ -21,7 +21,7 @@
    "src/domain (8)"
   ],
   "testes": [
-   "co-localizado (*.test) (127)",
+   "co-localizado (*.test) (128)",
    "co-localizado (__tests__) (104)",
    "tests/ (25)"
   ],
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix: evidencia do match social nas ofertas (coluna inexistente causava perda silenciosa) (#360)",
    "fix(social): para de gravar nome, email e telefone como interesse do cliente (#359)",
    "feat(social): sincronizacao automatica com enqueue e dispatch (#355)",
    "chore(ci): desbloquear gate RLS — baseline DEFINER 119 e contadores de produção (#358)",
-   "fix(ofertas): aceitar chamada service_role e gerar ofertas para toda a base (#356)",
-   "fix: interesse social tambem conta repeticao no mesmo historico (#354)"
+   "fix(ofertas): aceitar chamada service_role e gerar ofertas para toda a base (#356)"
   ]
  },
  "pr_template": null,

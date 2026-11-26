@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "774d2f2decb03bea1bc916af9bfa8e75de1273f7",
+  "sha": "7d2a052f4ffb712c0f35a5abde90f999c4e510b1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-25 23:35 UTC",
-  "files_total": 4043,
-  "code_files": 3565,
-  "code_lines": 480762
+  "generated_at": "2026-11-26 11:25 UTC",
+  "files_total": 4045,
+  "code_files": 3567,
+  "code_lines": 480887
  },
  "version": "1.3.2",
- "facts_hash": "9127e92c98d17bbd",
+ "facts_hash": "21ea19a5002b06cb",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,8 +272,8 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1294,
-   ".tsx": 1187,
+   ".sql": 1295,
+   ".tsx": 1188,
    ".ts": 919,
    ".mjs": 123,
    ".py": 22,
@@ -87618,7 +87618,8 @@
    "supabase/migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql",
    "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql",
    "supabase/migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql",
-   "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql"
+   "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+   "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -100598,7 +100599,7 @@
   "seed": [],
   "comments": {
    "table:entity_relationships": "Relacionamentos polimórficos entre Empresa/Pessoa com papel (comprador, gerente, proprietário, ...).",
-   "column:offer_suggestions.metadata": "Armazena detalhes do match social, incluindo sources, keywords e social_insight_ids vinculados.",
+   "column:offer_suggestions.metadata": "Evidencia do match que sustentou a oferta: {sources: string[], keywords: string[], social_insight_ids: uuid[]}. Preenchida por generate-offer-suggestions.",
    "column:profiles.nlp_profile": "Stores the salesperson NLP profile including VAK, DISC and Metaprograms for compatibility scoring",
    "table:score_history": "Historical record of all calculated scores for contacts",
    "table:lalamove_drivers": "LALAMOVE PLUS: Histórico de motoristas com service_times e avg_rating",
@@ -103949,7 +103950,7 @@
      "seed_conversation_topics",
      "validate_behavioral_consistency"
     ],
-    "deps_count": 428
+    "deps_count": 429
    },
    {
     "path": "/survey/:token",
@@ -107936,7 +107937,7 @@
     "file": ".github/workflows/rls-exposure-guard.yml"
    }
   ],
-  "components_count": 1014,
+  "components_count": 1015,
   "hooks": [
    {
     "name": "useContacts",
@@ -111451,8 +111452,8 @@
   },
   {
    "module": "src/components",
-   "files": 1014,
-   "lines": 152232,
+   "files": 1015,
+   "lines": 152314,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112833,7 +112834,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28088,
+   "lines": 28104,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113114,8 +113115,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1117,
-   "lines": 104639,
+   "files": 1118,
+   "lines": 104666,
    "tables": [
     "users"
    ],
@@ -118115,6 +118116,7 @@
     "created_at",
     "expires_at",
     "id",
+    "metadata",
     "offer_category",
     "offer_name",
     "presented_at",
@@ -175214,6 +175216,18 @@
    {
     "file": "src/components/crm/NextBestAction.contract.test.tsx",
     "name": "não anuncia conclusão quando a gravação da interação falha"
+   },
+   {
+    "file": "src/components/crm/commercial/OfferSuggestionsElite.test.tsx",
+    "name": "Evidence do match gravada na oferta"
+   },
+   {
+    "file": "src/components/crm/commercial/OfferSuggestionsElite.test.tsx",
+    "name": "mostra fontes e palavras-chave quando a oferta traz metadata"
+   },
+   {
+    "file": "src/components/crm/commercial/OfferSuggestionsElite.test.tsx",
+    "name": "não anuncia evidência quando a oferta não registra nenhuma"
    },
    {
     "file": "src/components/csat/CSATPanel.contract.test.tsx",
@@ -252582,9 +252596,19 @@
     "50"
    ]
   },
+  "src/components/crm/commercial/OfferSuggestionsElite.test.tsx": {
+   "path": "src/components/crm/commercial/OfferSuggestionsElite.test.tsx",
+   "lines": 64,
+   "is_test": true,
+   "tests": [
+    "Evidence do match gravada na oferta",
+    "mostra fontes e palavras-chave quando a oferta traz metadata",
+    "não anuncia evidência quando a oferta não registra nenhuma"
+   ]
+  },
   "src/components/crm/commercial/OfferSuggestionsElite.tsx": {
    "path": "src/components/crm/commercial/OfferSuggestionsElite.tsx",
-   "lines": 275,
+   "lines": 291,
    "exports": [
     "function OfferSuggestionsElite"
    ],
@@ -252605,6 +252629,7 @@
      "created_at",
      "expires_at",
      "id",
+     "metadata",
      "offer_category",
      "offer_name",
      "presented_at",
@@ -252753,8 +252778,9 @@
   },
   "src/components/crm/commercial/components/SocialMatchPanel.tsx": {
    "path": "src/components/crm/commercial/components/SocialMatchPanel.tsx",
-   "lines": 66,
+   "lines": 68,
    "exports": [
+    "interface SocialMatchEvidence",
     "function SocialMatchPanel"
    ]
   },
@@ -297604,7 +297630,7 @@
   },
   "supabase/functions/generate-offer-suggestions/index.ts": {
    "path": "supabase/functions/generate-offer-suggestions/index.ts",
-   "lines": 347,
+   "lines": 363,
    "tables": [
     {
      "table": "products",
@@ -308194,6 +308220,10 @@
    ],
    "uses_service_role": true
   },
+  "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql": {
+   "path": "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql",
+   "lines": 27
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -308911,10 +308941,24 @@
   }
  },
  "git": {
-  "sha": "774d2f2decb03bea1bc916af9bfa8e75de1273f7",
+  "sha": "7d2a052f4ffb712c0f35a5abde90f999c4e510b1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "7d2a052",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "fix: evidencia do match social nas ofertas (coluna inexistente causava perda silenciosa) (#360)",
+    "files": [
+     "src/components/crm/commercial/OfferSuggestionsElite.test.tsx",
+     "src/components/crm/commercial/OfferSuggestionsElite.tsx",
+     "src/components/crm/commercial/components/SocialMatchPanel.tsx",
+     "src/integrations/supabase/types.ts",
+     "supabase/functions/generate-offer-suggestions/index.ts",
+     "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql"
+    ]
+   },
    {
     "sha": "774d2f2",
     "date": "2026-11-25",
@@ -309225,22 +309269,16 @@
      "tests/rls/functions_authenticated_allowlist.sql",
      "tests/rls/security_definer_hardening.sql"
     ]
-   },
-   {
-    "sha": "68e6140",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "docs: atualiza inventário de estado da IA para o provedor OpenRouter (#328)",
-    "files": [
-     "docs/estado/02_INTELIGENCIA_IA.md",
-     "docs/estado/06_INTEGRACOES.md"
-    ]
    }
   ],
   "hot_files": [
    [
+    "supabase/functions/generate-offer-suggestions/index.ts",
+    4
+   ],
+   [
     "docs/estado/06_INTEGRACOES.md",
-    5
+    4
    ],
    [
     "supabase/functions/sync-social-interests/analysis.ts",
@@ -309248,10 +309286,6 @@
    ],
    [
     "docs/qa/security-definer-audit.md",
-    3
-   ],
-   [
-    "supabase/functions/generate-offer-suggestions/index.ts",
     3
    ],
    [
@@ -309275,10 +309309,6 @@
     2
    ],
    [
-    "docs/estado/02_INTELIGENCIA_IA.md",
-    2
-   ],
-   [
     "docs/estado/03_MARKETING_AUTOMACAO.md",
     2
    ],
@@ -309295,27 +309325,31 @@
     2
    ],
    [
+    "src/components/crm/commercial/OfferSuggestionsElite.test.tsx",
+    1
+   ],
+   [
+    "src/components/crm/commercial/OfferSuggestionsElite.tsx",
+    1
+   ],
+   [
+    "src/components/crm/commercial/components/SocialMatchPanel.tsx",
+    1
+   ],
+   [
+    "src/integrations/supabase/types.ts",
+    1
+   ],
+   [
+    "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql",
+    1
+   ],
+   [
     "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
     1
    ],
    [
     "scripts/rls-matrix/rls-baseline.json",
-    1
-   ],
-   [
-    "supabase/functions/sync-social-interests/index.ts",
-    1
-   ],
-   [
-    "scripts/migration/functions/deploy-all.sh",
-    1
-   ],
-   [
-    "supabase/config.toml",
-    1
-   ],
-   [
-    "docs/EDGE_FUNCTIONS_API.md",
     1
    ]
   ]

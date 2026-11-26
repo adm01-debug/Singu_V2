@@ -5,17 +5,17 @@
   "vitest",
   "playwright"
  ],
- "total": 285,
+ "total": 286,
  "por_tipo": {
   "contrato": 41,
   "e2e": 12,
   "pytest": 9,
-  "unit": 221
+  "unit": 222
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 127
+   "arquivos": 128
   },
   {
    "padrao": "co-localizado (__tests__)",
@@ -775,6 +775,15 @@
     "src/lib/externalData.ts"
    ],
    "casos": 4
+  },
+  {
+   "arquivo": "src/components/crm/commercial/OfferSuggestionsElite.test.tsx",
+   "tipo": "unit",
+   "linhas": 64,
+   "testa": [
+    "src/components/crm/commercial/OfferSuggestionsElite.tsx"
+   ],
+   "casos": 2
   },
   {
    "arquivo": "src/components/crm/NextBestAction.contract.test.tsx",
@@ -2649,6 +2658,7 @@
   "src/components/contact-detail/SocialIntelligencePanel.tsx": 1,
   "src/components/contact-detail/SoftDeletePanel.tsx": 1,
   "src/components/crm/NextBestAction.tsx": 1,
+  "src/components/crm/commercial/OfferSuggestionsElite.tsx": 1,
   "src/components/crm/commercial/components/SocialMatchDetails.tsx": 1,
   "src/components/csat/CSATPanel.tsx": 1,
   "src/components/dashboard/YourDaySection.tsx": 1,

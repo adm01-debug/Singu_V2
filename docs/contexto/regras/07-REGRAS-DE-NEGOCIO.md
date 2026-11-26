@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `774d2f2dec` · branch `main` · 2026-11-25 23:35 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7d2a052f4f` · branch `main` · 2026-11-26 11:25 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4776,7 +4776,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
-## K. Testes como especificação (3311 testes em 260 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3314 testes em 261 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -4986,6 +4986,7 @@ _nenhum item encontrado_
 | `e2e/interacoes-prefs-back-button.spec.ts` | 3 | /interacoes — preferências sobrevivem ao botão Voltar · aplicar prefs → ir pro dashboard → voltar → prefs restauradas · reload da rota com prefs na URL ainda restaura o estado |
 | `src/components/admin/RequireAdmin.test.tsx` | 3 | Banner MFA administrativo · não anuncia ausência de MFA quando a consulta dos fatores está indisponível · mostra o aviso quando a ausência de fatores verificados foi confirmada |
 | `src/components/contact-detail/ContactDetailHeader.test.tsx` | 3 | confirmação de estágio na ficha · não anuncia sucesso após uma atualização rejeitada e permite nova tentativa · libera o controle e mostra erro se a atualização lançar uma exceção |
+| `src/components/crm/commercial/OfferSuggestionsElite.test.tsx` | 3 | Evidence do match gravada na oferta · mostra fontes e palavras-chave quando a oferta traz metadata · não anuncia evidência quando a oferta não registra nenhuma |
 | `src/components/dashboard/widgets/PendingFollowupsWidget.contract.test.tsx` | 3 | Prioridade canônica das pendências · distingue as quatro prioridades numéricas sem rebaixar as críticas · não apresenta falha de consulta como ausência de pendências |
 | `src/components/enroll/EnrollContactDialog.contract.test.tsx` | 3 | Inscrição com busca e cache da carteira (dialógo genérico) · impede fechar pelo X ou Escape durante uma inscrição pendente · não inscreve um contato selecionado que desapareceu do cache após arquivamento |
 | `src/components/erp/CompanyErpProposalsWidget.test.tsx` | 3 | Propostas ERP da empresa · propaga a falha de todas as origens e recupera os dados ao repetir · confirma ausência somente após uma consulta bem-sucedida, inclusive no fallback |

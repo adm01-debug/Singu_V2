@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "774d2f2decb03bea1bc916af9bfa8e75de1273f7",
+  "commit": "7d2a052f4ffb712c0f35a5abde90f999c4e510b1",
   "branch": "main",
-  "data_commit": "2026-11-25T20:31:21-03:00",
+  "data_commit": "2026-11-26T08:24:37-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "7d2a052",
+    "data": "2026-11-26",
+    "assunto": "fix: evidencia do match social nas ofertas (coluna inexistente causava perda silenciosa) (#360)"
+   },
    {
     "sha": "774d2f2",
     "data": "2026-11-25",
@@ -126,14 +131,9 @@
     "sha": "bae345f",
     "data": "2026-11-24",
     "assunto": "fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)"
-   },
-   {
-    "sha": "0d1bfce",
-    "data": "2026-11-24",
-    "assunto": "feat(rbac): permite atribuir e revogar papéis em /admin/roles (#332)"
    }
   ],
-  "arquivos_mudados_7d": 1017,
+  "arquivos_mudados_7d": 1011,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -192,8 +192,8 @@
     "mudancas": 13
    },
    {
-    "pasta": "package.json",
-    "mudancas": 12
+    "pasta": "src/components/crm",
+    "mudancas": 13
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -301,11 +301,11 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 192
+    "commits": 193
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 18
+    "commits": 17
    },
    {
     "autor": "dependabot[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3938,
-  "arquivos_codigo": 2270,
-  "linhas_codigo": 423081,
+  "arquivos_total": 3940,
+  "arquivos_codigo": 2271,
+  "linhas_codigo": 423182,
   "rotas": 116,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -338,9 +338,9 @@
   "hooks": 412,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1117,
+  "migrations": 1118,
   "cron_jobs": 47,
-  "testes": 285,
+  "testes": 286,
   "workflows": 14,
   "scripts": 302,
   "docs_md": 159
@@ -655,8 +655,8 @@
    "linhas": 594
   },
   "src/components": {
-   "arquivos": 1014,
-   "linhas": 152232
+   "arquivos": 1015,
+   "linhas": 152314
   },
   "src/config": {
    "arquivos": 1,
@@ -680,7 +680,7 @@
   },
   "src/integrations": {
    "arquivos": 3,
-   "linhas": 69375
+   "linhas": 69378
   },
   "src/lib": {
    "arquivos": 108,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28088
+   "linhas": 28104
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -774,7 +774,7 @@
  "maiores_arquivos": [
   {
    "arquivo": "src/integrations/supabase/types.ts",
-   "linhas": 69313
+   "linhas": 69316
   },
   {
    "arquivo": "scripts/regras_negocio/generate.py",
@@ -1154,7 +1154,6 @@
    "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
    "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
    "src/components/conversation-intel/TopicsChart.tsx",
-   "src/components/crm/commercial/components/SocialMatchPanel.tsx",
    "src/components/crm/ContactBehaviorExtended.tsx",
    "src/components/crm/copywriting/PerformanceHistory.tsx",
    "src/components/dashboard/SmartNotificationsCard.tsx",

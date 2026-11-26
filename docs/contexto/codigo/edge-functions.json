@@ -2000,7 +2000,7 @@
    "nome": "generate-offer-suggestions",
    "entrada": "supabase/functions/generate-offer-suggestions/index.ts",
    "arquivos": 2,
-   "linhas": 517,
+   "linhas": 533,
    "verify_jwt": true,
    "metodos": [],
    "tabelas": [

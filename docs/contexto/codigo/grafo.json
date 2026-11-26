@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "nos": 1987,
- "arestas": 8686,
+ "arestas": 8687,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -226,7 +226,6 @@
   "src/components/company-detail/insights/TouchpointSummaryCard.tsx",
   "src/components/conversation-intel/TopicsChart.tsx",
   "src/components/crm/ContactBehaviorExtended.tsx",
-  "src/components/crm/commercial/components/SocialMatchPanel.tsx",
   "src/components/crm/copywriting/PerformanceHistory.tsx",
   "src/components/dashboard/SmartNotificationsCard.tsx",
   "src/components/dashboard/your-day/FollowUpItem.tsx",
