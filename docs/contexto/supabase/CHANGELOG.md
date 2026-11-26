@@ -2,6 +2,12 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 12:18 UTC
+
+- **functions** adicionado (1): `public.sync_social_insight_from_analysis()`
+- **migrations** adicionado (1): `20261126114500_social_insights_from_behavior_analysis`
+- **triggers** adicionado (1): `public.social_behavior_analysis.trg_sync_social_insight`
+
 ## 2026-11-26 11:13 UTC
 
 - **colunas** adicionado (1): `public.offer_suggestions.metadata`

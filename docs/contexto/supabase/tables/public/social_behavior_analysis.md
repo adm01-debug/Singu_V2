@@ -141,7 +141,9 @@
 
 ## Triggers
 
-_nenhum_
+| nome | timing | eventos | nível | status | função |
+|---|---|---|---|---|---|
+| trg_sync_social_insight | AFTER | INSERT OR UPDATE | ROW | enabled | public.sync_social_insight_from_analysis |
 
 
 ## Grants

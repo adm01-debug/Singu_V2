@@ -227820,6 +227820,38 @@
         "volatility": "volatile"
       },
       {
+        "args": "",
+        "callers": {
+          "code": [],
+          "code_total_files": 0,
+          "cron": [],
+          "db": [],
+          "triggers": [
+            "public.social_behavior_analysis.trg_sync_social_insight"
+          ],
+          "views": []
+        },
+        "comment": "Converte social_behavior_analysis em social_insights (uma linha behavior_summary por contato), que e a forma que o motor de ofertas e o painel social consomem.",
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "0bef7571cfa10f04",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": true,
+        "is_trigger_fn": true,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "sync_social_insight_from_analysis",
+        "owner": "postgres",
+        "returns": "trigger",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
         "args": "p_phone text, p_name text, p_company_id uuid",
         "callers": {
           "code": [],
@@ -280669,6 +280701,11 @@
         "statements": 1,
         "statements_sha": "b0adfc44780c21a6",
         "version": "20261126090000"
+      },
+      {
+        "name": "social_insights_from_behavior_analysis",
+        "statements": null,
+        "version": "20261126114500"
       }
     ],
     "policies": [
@@ -315480,6 +315517,17 @@
         "status": "enabled",
         "table": "sms_templates",
         "timing": "BEFORE"
+      },
+      {
+        "definition": "CREATE TRIGGER trg_sync_social_insight AFTER INSERT OR UPDATE OF keywords, topics, interests, executive_summary, influence_score, overall_sentiment ON social_behavior_analysis FOR EACH ROW EXECUTE FUNCTION sync_social_insight_from_analysis()",
+        "events": "INSERT OR UPDATE",
+        "function": "public.sync_social_insight_from_analysis",
+        "level": "ROW",
+        "name": "trg_sync_social_insight",
+        "schema": "public",
+        "status": "enabled",
+        "table": "social_behavior_analysis",
+        "timing": "AFTER"
       },
       {
         "definition": "CREATE TRIGGER set_updated_at_social_profiles BEFORE UPDATE ON social_profiles FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()",
