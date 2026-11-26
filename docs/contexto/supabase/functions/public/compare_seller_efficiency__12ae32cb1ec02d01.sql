@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.compare_seller_efficiency()
  RETURNS TABLE(user_name text, interactions_per_deal numeric, conversion_rate numeric, avg_cycle_days numeric, efficiency_rank integer)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   WITH stats AS (
     SELECT p.id, COALESCE(p.full_name, p.email) as name,

@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_seasonality_analysis(p_months integer DEFA
  RETURNS jsonb
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   WITH months AS (
     SELECT generate_series(

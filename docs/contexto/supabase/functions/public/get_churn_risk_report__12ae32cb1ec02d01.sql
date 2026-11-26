@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_churn_risk_report()
  RETURNS TABLE(risk_level text, customer_count bigint, total_revenue numeric, pct_total numeric)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   WITH data AS (
     SELECT c.id, calculate_churn_risk(c.id) as risk, (SELECT COALESCE(SUM(d.valor), 0) FROM deals d WHERE d.company_id = c.id AND d.status = 'ganho') as revenue

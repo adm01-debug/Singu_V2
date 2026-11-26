@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.compare_periods(p_metric text, p_days integer 
  RETURNS jsonb
  LANGUAGE plpgsql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 DECLARE v_current numeric; v_previous numeric; v_change numeric;
 BEGIN

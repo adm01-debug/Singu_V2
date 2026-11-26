@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_seasonality_analysis()
  RETURNS TABLE(month_num integer, month_name text, avg_revenue numeric, deal_count bigint)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   SELECT 
     EXTRACT(MONTH FROM closed_at)::int,

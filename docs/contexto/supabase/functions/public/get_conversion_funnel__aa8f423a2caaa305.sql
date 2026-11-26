@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_conversion_funnel(p_days integer DEFAULT 3
  RETURNS jsonb
  LANGUAGE plpgsql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 DECLARE
   v_result jsonb;

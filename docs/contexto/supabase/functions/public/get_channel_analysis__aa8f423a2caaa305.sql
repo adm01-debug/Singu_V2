@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_channel_analysis(p_days integer DEFAULT 30
  RETURNS jsonb
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   WITH recent AS (
     SELECT * FROM interactions WHERE created_at >= now() - make_interval(days => greatest(1, least(coalesce(p_days, 30), 3650)))

@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_sales_cycle_analysis()
  RETURNS TABLE(metric text, value numeric)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   SELECT 'avg_cycle_days'::text, ROUND(AVG(EXTRACT(EPOCH FROM (closed_at - created_at))/86400), 1)
   FROM deals WHERE status = 'ganho' AND closed_at IS NOT NULL

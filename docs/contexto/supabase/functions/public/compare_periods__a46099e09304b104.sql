@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.compare_periods(p_period1_start date, p_period
  RETURNS jsonb
  LANGUAGE plpgsql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 DECLARE
   result jsonb;

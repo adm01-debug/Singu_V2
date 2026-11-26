@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_industry_analysis()
  RETURNS TABLE(ramo text, leads_count bigint, customers bigint, conversion_rate numeric, revenue numeric)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   SELECT COALESCE(c.ramo_atividade, 'Não informado'), COUNT(DISTINCT c.id),
     COUNT(DISTINCT c.id) FILTER (WHERE c.is_customer = true),

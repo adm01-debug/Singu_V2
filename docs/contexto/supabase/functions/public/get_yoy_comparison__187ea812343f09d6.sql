@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_yoy_comparison(p_year integer DEFAULT (EXT
  RETURNS TABLE(month_num integer, current_year numeric, previous_year numeric, change_pct numeric)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   SELECT m.month,
     (SELECT COALESCE(SUM(valor), 0) FROM deals WHERE status = 'ganho' AND EXTRACT(YEAR FROM closed_at) = p_year AND EXTRACT(MONTH FROM closed_at) = m.month),

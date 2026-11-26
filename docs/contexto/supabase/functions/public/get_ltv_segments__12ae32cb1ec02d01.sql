@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_ltv_segments()
  RETURNS TABLE(segment text, company_count bigint, avg_ltv numeric, total_ltv numeric)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   WITH ltv AS (
     SELECT c.id, COALESCE(SUM(d.valor), 0) as lifetime_value

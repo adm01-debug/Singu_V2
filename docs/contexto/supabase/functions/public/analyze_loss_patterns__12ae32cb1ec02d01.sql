@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.analyze_loss_patterns()
  RETURNS TABLE(pattern text, occurrences bigint, total_lost_value numeric, recommendation text)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   SELECT 
     CASE 

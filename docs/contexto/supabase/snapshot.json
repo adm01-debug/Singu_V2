@@ -186536,10 +186536,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "ac082178f1e9d45c",
+        "definition_sha": "e263e49996799db1",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -191935,10 +191935,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "e41590302e59ad3b",
+        "definition_sha": "9de7e48929637ad2",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -191965,10 +191965,10 @@
         },
         "comment": "Compara métricas entre dois períodos",
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "4cb3d736ff5b3b2d",
+        "definition_sha": "92c25ae6f7d5e36c",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -192145,10 +192145,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "5886b0ecfd3adabf",
+        "definition_sha": "d3d164d065144f14",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -201172,10 +201172,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "a21f3adf4f340d85",
+        "definition_sha": "0af34055d37dcfdc",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -201552,10 +201552,10 @@
         },
         "comment": "Análise de efetividade por canal e tipo de interação",
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "d9d8b78038f57a43",
+        "definition_sha": "288200a1622ecfa5",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -201582,10 +201582,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "2d62a3c161524193",
+        "definition_sha": "d394cfb0549ea258",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -201852,10 +201852,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "a035713432dc3e17",
+        "definition_sha": "ad210e4abe8fc4d4",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -201942,10 +201942,10 @@
         },
         "comment": "Análise de cohort de empresas",
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "b76438b3ffbb403b",
+        "definition_sha": "b8fc0cce85fb4abd",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -201972,10 +201972,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "2501eee23c939659",
+        "definition_sha": "c5b8b864f4b74f12",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -204196,10 +204196,10 @@
         },
         "comment": "Funil de conversão: empresa → contato → cliente → venda",
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "4f62c15ea1275d66",
+        "definition_sha": "b854d51980869006",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -205510,10 +205510,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "6b796fd5c8ca3619",
+        "definition_sha": "45e07754959d85c3",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -206520,10 +206520,10 @@
         },
         "comment": "Dashboard executivo - CORRIGIDO v2 (follow_up_date)",
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "e8dcd8a24bb17cd5",
+        "definition_sha": "1580caf8ce5679bf",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -207817,10 +207817,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "bfa1485ad65f3b0c",
+        "definition_sha": "534a24bfee6af181",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -207847,10 +207847,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "bc58392dc107bc54",
+        "definition_sha": "d8ccb484b40d8f50",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -208400,10 +208400,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "5d4826151493af03",
+        "definition_sha": "295b1168f47c6b8b",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -208550,10 +208550,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "0a971d7472495af7",
+        "definition_sha": "ced7a8c0b0fbe298",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -208850,10 +208850,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "e537c13b2e2bfed8",
+        "definition_sha": "6e27df62119265a3",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -209991,10 +209991,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "74e786f55769e751",
+        "definition_sha": "8e3ff5156b1824df",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -212255,10 +212255,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "00fd210b476c5d56",
+        "definition_sha": "45fe722dde49ce1f",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -212555,10 +212555,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "ff2b4fbe6522d75a",
+        "definition_sha": "84af0c0183352075",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -212615,10 +212615,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "1840b0654c03ce3b",
+        "definition_sha": "c3c0693b9ff7a18d",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -212908,10 +212908,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "bee4637c530ad28a",
+        "definition_sha": "7b5476375bad9b72",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -213058,10 +213058,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "c204c057e9e03750",
+        "definition_sha": "9eedbdc9b54b9ff6",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -213795,10 +213795,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "4b80795486242fa8",
+        "definition_sha": "333a5c64300d7b4e",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -213825,10 +213825,10 @@
         },
         "comment": "Análise de sazonalidade",
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "8d8cdda133718af8",
+        "definition_sha": "9f92ca6532aca457",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -215862,10 +215862,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "eded4404f46b7133",
+        "definition_sha": "c6611953bee6616e",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -215892,10 +215892,10 @@
         },
         "comment": "Análise de tendência",
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "f31ba603f3790693",
+        "definition_sha": "43d396a658dd6127",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -217177,10 +217177,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "0235f539a2041566",
+        "definition_sha": "29f6920c6907567a",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -217539,10 +217539,10 @@
         },
         "comment": "Comparação Year over Year",
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "23f12aef970580ce",
+        "definition_sha": "1a01989fa6372703",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -217569,10 +217569,10 @@
         },
         "comment": null,
         "config": [
-          "search_path=public"
+          "search_path=public, pg_temp"
         ],
         "definition": null,
-        "definition_sha": "a1f2bee840fdfebb",
+        "definition_sha": "0296d932ebdfb67c",
         "execute_api_roles": "authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,

@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_leaderboard(p_period text DEFAULT 'month':
  RETURNS TABLE(rank integer, user_id uuid, user_name text, revenue numeric, deals_won bigint, interactions bigint, points integer)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   WITH period_filter AS (
     SELECT CASE 

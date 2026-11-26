@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_trend_analysis(p_months integer DEFAULT 6)
  RETURNS jsonb
  LANGUAGE plpgsql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 DECLARE
   result jsonb;

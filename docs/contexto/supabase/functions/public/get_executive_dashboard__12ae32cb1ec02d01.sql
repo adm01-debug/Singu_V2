@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_executive_dashboard()
  RETURNS jsonb
  LANGUAGE plpgsql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 BEGIN
   RETURN jsonb_build_object(

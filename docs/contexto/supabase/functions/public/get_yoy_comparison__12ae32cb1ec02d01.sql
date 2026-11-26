@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_yoy_comparison()
  RETURNS jsonb
  LANGUAGE plpgsql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 DECLARE
   result jsonb;

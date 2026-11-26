@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_cohort_analysis(p_period text DEFAULT 'mon
  RETURNS TABLE(cohort text, total_companies bigint, still_active bigint, retention_rate numeric)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   WITH cohorts AS (
     SELECT DATE_TRUNC(p_period, c.created_at)::date as cohort_date, c.id

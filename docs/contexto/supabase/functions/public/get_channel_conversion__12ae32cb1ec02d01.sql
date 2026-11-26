@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_channel_conversion()
  RETURNS TABLE(channel text, first_contact_count bigint, converted_count bigint, conversion_rate numeric)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   WITH first_contact AS (
     SELECT company_id, channel, ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY data_interacao) as rn

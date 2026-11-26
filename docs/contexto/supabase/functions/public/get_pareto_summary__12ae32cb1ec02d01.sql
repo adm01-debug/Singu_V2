@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_pareto_summary()
  RETURNS jsonb
  LANGUAGE plpgsql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 DECLARE v_top_count int; v_top_revenue numeric; v_total_count int; v_total_revenue numeric;
 BEGIN

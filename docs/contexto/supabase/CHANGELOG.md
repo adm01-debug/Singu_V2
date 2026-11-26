@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 21:15 UTC
+
+- **functions** alterado (31): `public.analyze_loss_patterns()`, `public.compare_periods(p_metric text, p_days integer)`, `public.compare_periods(p_period1_start date, p_period1_end date, p_period2_start date, p_period2_end date)`, `public.compare_seller_efficiency()`, `public.get_best_industries()`, `public.get_channel_analysis(p_days integer)`, `public.get_channel_conversion()`, `public.get_churn_risk_report()`, `public.get_cohort_analysis(p_months integer)`, `public.get_cohort_analysis(p_period text)`, `public.get_conversion_funnel(p_days integer)`, `public.get_data_quality_report()`, `public.get_executive_dashboard()`, `public.get_industry_analysis()`, `public.get_industry_roi()`, `public.get_leaderboard(p_period text)`, `public.get_loss_reason_analysis(p_days integer)`, `public.get_ltv_segments()`, `public.get_pareto_summary()`, `public.get_retention_by_cohort()`, `public.get_rfm_dashboard()`, `public.get_rfm_segments()`, `public.get_sales_cycle_analysis()`, `public.get_sales_funnel()`, `public.get_seasonality_analysis()`, `public.get_seasonality_analysis(p_months integer)`, `public.get_trend_analysis()`, `public.get_trend_analysis(p_months integer)`, `public.get_weekly_summary()`, `public.get_yoy_comparison()`, `public.get_yoy_comparison(p_year integer)`
+
 ## 2026-11-26 19:12 UTC
 
 - **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`

@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_rfm_segments()
  RETURNS TABLE(segment text, description text, company_count bigint, avg_value numeric)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   SELECT 
     CASE 

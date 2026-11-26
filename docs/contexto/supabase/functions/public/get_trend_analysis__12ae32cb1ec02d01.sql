@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_trend_analysis()
  RETURNS TABLE(metric text, current_week numeric, previous_week numeric, change_pct numeric, trend text)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   SELECT 'Revenue'::text, 
     (SELECT COALESCE(SUM(valor), 0) FROM deals WHERE status = 'ganho' AND closed_at >= DATE_TRUNC('week', NOW())),

@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_retention_by_cohort()
  RETURNS TABLE(cohort_month text, m0 bigint, m1 bigint, m2 bigint, m3 bigint)
  LANGUAGE sql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
   WITH cohorts AS (
     SELECT DATE_TRUNC('month', c.created_at)::date as cohort, c.id FROM companies c WHERE c.deleted_at IS NULL AND c.created_at >= NOW() - interval '6 months'

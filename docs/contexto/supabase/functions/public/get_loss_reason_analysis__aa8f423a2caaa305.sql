@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_loss_reason_analysis(p_days integer DEFAUL
  RETURNS TABLE(reason_id uuid, reason_name text, category text, count bigint, total_value numeric, pct_of_total numeric)
  LANGUAGE plpgsql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 DECLARE
   v_total_lost bigint;

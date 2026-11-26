@@ -2,7 +2,7 @@ CREATE OR REPLACE FUNCTION public.get_sales_funnel()
  RETURNS TABLE(stage text, stage_order integer, count bigint, value numeric)
  LANGUAGE plpgsql
  STABLE
- SET search_path TO 'public'
+ SET search_path TO 'public', 'pg_temp'
 AS $function$
 BEGIN
   RETURN QUERY
