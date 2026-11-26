@@ -719,13 +719,19 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261019144500 | [fix_sidebar_rpc_empresa_influencers](migrations/20261019144500_fix_sidebar_rpc_empresa_influencers.sql) | 5 |
 | 20261022195616 | [fix_update_company_fields_security_definer_search_path](migrations/20261022195616_fix_update_company_fields_security_definer_search_path.sql) | 1 |
 | 20261022203935 | [update_company_fields_security_fix](migrations/20261022203935_update_company_fields_security_fix.sql) | 1 |
+| 20261108190000 | [cron_job_run_details_retention](migrations/20261108190000_cron_job_run_details_retention.sql) | 0 |
+| 20261108200000 | [fix_contact_phones_trigger_primary_indexes](migrations/20261108200000_fix_contact_phones_trigger_primary_indexes.sql) | 0 |
 | 20261108203932 | [fix_contact_phones_trigger_primary_indexes](migrations/20261108203932_fix_contact_phones_trigger_primary_indexes.sql) | 1 |
 | 20261109010329 | [fix_merge_nome_crm_override](migrations/20261109010329_fix_merge_nome_crm_override.sql) | 1 |
+| 20261109120000 | [fix_merge_nome_crm_override](migrations/20261109120000_fix_merge_nome_crm_override.sql) | 0 |
 | 20261111210500 | [agenda_edge_functions_cron](migrations/20261111210500_agenda_edge_functions_cron.sql) | 0 |
 | 20261111233000 | [reagenda_rotinas_sql_e_rpc_nurturing](migrations/20261111233000_reagenda_rotinas_sql_e_rpc_nurturing.sql) | 0 |
 | 20261112001000 | [weekly_digest_cron_horario](migrations/20261112001000_weekly_digest_cron_horario.sql) | 0 |
+| 20261113154000 | [fix_mtta_heartbeat_alert_null_threshold](migrations/20261113154000_fix_mtta_heartbeat_alert_null_threshold.sql) | 0 |
+| 20261114124000 | [remove_duplicate_indexes](migrations/20261114124000_remove_duplicate_indexes.sql) | 0 |
 | 20261118121105 | [remove_duplicate_indexes](migrations/20261118121105_remove_duplicate_indexes.sql) | 1 |
 | 20261118122016 | [multiplix_list_ufs_cast_text](migrations/20261118122016_multiplix_list_ufs_cast_text.sql) | 1 |
+| 20261118123000 | [multiplix_list_ufs_cast_text](migrations/20261118123000_multiplix_list_ufs_cast_text.sql) | 0 |
 | 20261118150043 | [views_security_invoker_16](migrations/20261118150043_views_security_invoker_16.sql) | 1 |
 | 20261118181543 | [incoming_webhook_nonces](migrations/20261118181543_incoming_webhook_nonces.sql) | 1 |
 | 20261118181554 | [harden_incoming_webhooks_signature](migrations/20261118181554_harden_incoming_webhooks_signature.sql) | 1 |
@@ -734,7 +740,9 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261118182619 | [get_activity_overview](migrations/20261118182619_get_activity_overview.sql) | 1 |
 | 20261118182753 | [get_activity_overview_direcao](migrations/20261118182753_get_activity_overview_direcao.sql) | 1 |
 | 20261118183212 | [incoming_webhook_nonces_policy](migrations/20261118183212_incoming_webhook_nonces_policy.sql) | 1 |
+| 20261119000000 | [external_data_audit_log](migrations/20261119000000_external_data_audit_log.sql) | 0 |
 | 20261120153000 | [fix_handle_new_user_trigger_email](migrations/20261120153000_fix_handle_new_user_trigger_email.sql) | 0 |
+| 20261121120000 | [create_ai_recommendation_audit_logs_v2](migrations/20261121120000_create_ai_recommendation_audit_logs_v2.sql) | 0 |
 | 20261121154000 | [revoke_anon_exec_stubs_crm](migrations/20261121154000_revoke_anon_exec_stubs_crm.sql) | 0 |
 | 20261123200000 | [fix_claim_behavioral_profile_retry_admin_check](migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql) | 0 |
 | 20261124120000 | [](migrations/20261124120000.sql) | 0 |
@@ -744,3 +752,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261124231412 | [remove_duplicate_indexes_wave119_restante](migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql) | 0 |
 | 20261125090000 | [desativa_crons_modulo_zapp_history_morto](migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql) | 0 |
 | 20261125091000 | [rbac_popula_papeis_e_completa_matriz_rotas](migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql) | 0 |
+| 20261125190000 | [social_sync_automatico_enqueue_dispatch](migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql) | 0 |

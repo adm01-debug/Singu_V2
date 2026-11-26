@@ -194822,8 +194822,13 @@
       {
         "args": "p_limit integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 1,
           "cron": [
             "2464:singu-social-dispatch"
           ],
@@ -195152,8 +195157,13 @@
       {
         "args": "p_limit integer, p_stale_days integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 1,
           "cron": [
             "2463:singu-social-enqueue-daily"
           ],
@@ -223642,8 +223652,13 @@
       {
         "args": "p_stuck_minutes integer",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 1,
           "cron": [
             "2465:singu-social-requeue-stuck"
           ],
@@ -280455,6 +280470,16 @@
         "version": "20261022203935"
       },
       {
+        "name": "cron_job_run_details_retention",
+        "statements": [],
+        "version": "20261108190000"
+      },
+      {
+        "name": "fix_contact_phones_trigger_primary_indexes",
+        "statements": [],
+        "version": "20261108200000"
+      },
+      {
         "name": "fix_contact_phones_trigger_primary_indexes",
         "statements": 1,
         "statements_sha": "248510aec34355d6",
@@ -280465,6 +280490,11 @@
         "statements": 1,
         "statements_sha": "a413394a9121e7c0",
         "version": "20261109010329"
+      },
+      {
+        "name": "fix_merge_nome_crm_override",
+        "statements": [],
+        "version": "20261109120000"
       },
       {
         "name": "agenda_edge_functions_cron",
@@ -280482,6 +280512,16 @@
         "version": "20261112001000"
       },
       {
+        "name": "fix_mtta_heartbeat_alert_null_threshold",
+        "statements": [],
+        "version": "20261113154000"
+      },
+      {
+        "name": "remove_duplicate_indexes",
+        "statements": [],
+        "version": "20261114124000"
+      },
+      {
         "name": "remove_duplicate_indexes",
         "statements": 1,
         "statements_sha": "c573160ba1780538",
@@ -280492,6 +280532,11 @@
         "statements": 1,
         "statements_sha": "e1d9ba7d303441dc",
         "version": "20261118122016"
+      },
+      {
+        "name": "multiplix_list_ufs_cast_text",
+        "statements": [],
+        "version": "20261118123000"
       },
       {
         "name": "views_security_invoker_16",
@@ -280542,9 +280587,19 @@
         "version": "20261118183212"
       },
       {
+        "name": "external_data_audit_log",
+        "statements": [],
+        "version": "20261119000000"
+      },
+      {
         "name": "fix_handle_new_user_trigger_email",
         "statements": null,
         "version": "20261120153000"
+      },
+      {
+        "name": "create_ai_recommendation_audit_logs_v2",
+        "statements": [],
+        "version": "20261121120000"
       },
       {
         "name": "revoke_anon_exec_stubs_crm",
@@ -280590,6 +280645,11 @@
         "name": "rbac_popula_papeis_e_completa_matriz_rotas",
         "statements": null,
         "version": "20261125091000"
+      },
+      {
+        "name": "social_sync_automatico_enqueue_dispatch",
+        "statements": [],
+        "version": "20261125190000"
       }
     ],
     "policies": [

@@ -2,6 +2,11 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 00:33 UTC
+
+- **functions** alterado (3): `public.dispatch_social_sync(p_limit integer)`, `public.enqueue_social_sync(p_limit integer, p_stale_days integer)`, `public.requeue_social_sync_stuck(p_stuck_minutes integer)`
+- **migrations** adicionado (9): `20261108190000_cron_job_run_details_retention`, `20261108200000_fix_contact_phones_trigger_primary_indexes`, `20261109120000_fix_merge_nome_crm_override`, `20261113154000_fix_mtta_heartbeat_alert_null_threshold`, `20261114124000_remove_duplicate_indexes`, `20261118123000_multiplix_list_ufs_cast_text`, `20261119000000_external_data_audit_log`, `20261121120000_create_ai_recommendation_audit_logs_v2`, `20261125190000_social_sync_automatico_enqueue_dispatch`
+
 ## 2026-11-25 22:16 UTC
 
 - **cron jobs** adicionado (3): `2463:singu-social-enqueue-daily`, `2464:singu-social-dispatch`, `2465:singu-social-requeue-stuck`
