@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "fix(empresas): da ao admin a base inteira e remove filtro user_id das views sem essa coluna (#364)",
    "feat(grupos): tela de grupos economicos com penetracao e prospects (#363)",
    "feat(social,ofertas): liga social_insights e monta as duas UIs que nenhuma rota exibia (#362)",
    "refactor: monta os cards de touchpoint e contatos estrategicos que ficaram orfaos (#361)",
-   "fix: evidencia do match social nas ofertas (coluna inexistente causava perda silenciosa) (#360)",
-   "fix(social): para de gravar nome, email e telefone como interesse do cliente (#359)"
+   "fix: evidencia do match social nas ofertas (coluna inexistente causava perda silenciosa) (#360)"
   ]
  },
  "pr_template": null,

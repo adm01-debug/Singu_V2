@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e6a9b2af9c` · branch `main` · 2026-11-26 13:39 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `42882061f6` · branch `main` · 2026-11-26 14:33 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -311,7 +311,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `company_social_media` | company_social_media_update | UPDATE | public | permissive | `true` |  |
 | `company_social_media` | company_social_media_delete | DELETE | public | permissive | `true` |  |
 | `contact_phones` | contact_phones_select | SELECT | public | permissive | `true` |  |
-| … +954 linhas — lista completa em `context.json` | | | | | | |
+| … +955 linhas — lista completa em `context.json` | | | | | | |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 

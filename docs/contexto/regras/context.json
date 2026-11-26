@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e6a9b2af9cff8da8932195a261e4c32724b5c3fd",
+  "sha": "42882061f6091214bb019bf39ecff28cdedd00fd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 13:39 UTC",
-  "files_total": 4050,
-  "code_files": 3572,
-  "code_lines": 481510
+  "generated_at": "2026-11-26 14:33 UTC",
+  "files_total": 4051,
+  "code_files": 3573,
+  "code_lines": 481546
  },
  "version": "1.3.2",
- "facts_hash": "08b0b4b93bae2d63",
+ "facts_hash": "28ed171a69010136",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,7 +272,7 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1296,
+   ".sql": 1297,
    ".tsx": 1191,
    ".ts": 920,
    ".mjs": 123,
@@ -60331,6 +60331,16 @@
     "using": "public.has_role(auth.uid(), 'admin'::app_role)",
     "check": "",
     "src": "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql"
+   },
+   {
+    "name": "companies_owner_or_admin",
+    "table": "companies",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))",
+    "check": "(select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))",
+    "src": "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql"
    }
   ],
   "triggers": [
@@ -87633,7 +87643,8 @@
    "supabase/migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql",
    "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
    "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql",
-   "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql"
+   "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
+   "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -112933,7 +112944,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28106,
+   "lines": 28120,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113214,8 +113225,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1119,
-   "lines": 104789,
+   "files": 1120,
+   "lines": 104811,
    "tables": [
     "users"
    ],
@@ -198042,6 +198053,16 @@
     "using": "public.has_role(auth.uid(), 'admin'::app_role)",
     "check": "",
     "src": "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql"
+   },
+   {
+    "name": "companies_owner_or_admin",
+    "table": "companies",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))",
+    "check": "(select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))",
+    "src": "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql"
    }
   ],
   "db_triggers": [
@@ -217032,27 +217053,31 @@
      "public: true",
      "public: true",
      "authenticated: user_id = (SELECT auth.uid())",
-     "authenticated: user_id = (SELECT auth.uid())"
+     "authenticated: user_id = (SELECT auth.uid())",
+     "authenticated: (select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: auth.uid() = user_id",
      "public: true",
      "public: true",
      "authenticated: user_id = (SELECT auth.uid())",
-     "authenticated: user_id = (SELECT auth.uid())"
+     "authenticated: user_id = (SELECT auth.uid())",
+     "authenticated: (select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))"
     ],
     "UPDATE": [
      "public: ((select auth.uid()) = user_id)",
      "public: true",
      "public: true",
      "authenticated: user_id = (SELECT auth.uid())",
-     "authenticated: user_id = (SELECT auth.uid())"
+     "authenticated: user_id = (SELECT auth.uid())",
+     "authenticated: (select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))"
     ],
     "DELETE": [
      "public: auth.uid() = user_id",
      "public: true",
      "authenticated: user_id = (SELECT auth.uid())",
-     "authenticated: user_id = (SELECT auth.uid())"
+     "authenticated: user_id = (SELECT auth.uid())",
+     "authenticated: (select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))"
     ]
    },
    "company_addresses": {
@@ -297249,7 +297274,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 165,
+   "lines": 179,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -308567,6 +308592,10 @@
    "path": "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
    "lines": 123
   },
+  "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql": {
+   "path": "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql",
+   "lines": 22
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -309284,10 +309313,20 @@
   }
  },
  "git": {
-  "sha": "e6a9b2af9cff8da8932195a261e4c32724b5c3fd",
+  "sha": "42882061f6091214bb019bf39ecff28cdedd00fd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "4288206",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "fix(empresas): da ao admin a base inteira e remove filtro user_id das views sem essa coluna (#364)",
+    "files": [
+     "supabase/functions/external-data/tables.ts",
+     "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql"
+    ]
+   },
    {
     "sha": "e6a9b2a",
     "date": "2026-11-26",
@@ -309608,24 +309647,11 @@
      "src/pages/RolesPage.tsx",
      "supabase/migrations/20261124141500_rbac_admin_le_perfis_para_atribuir_papel.sql"
     ]
-   },
-   {
-    "sha": "5eedf57",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "docs: corrige o estado real da integracao Evolution no inventario (#334)",
-    "files": [
-     "docs/estado/06_INTEGRACOES.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
-    4
-   ],
-   [
-    "docs/estado/06_INTEGRACOES.md",
     4
    ],
    [
@@ -309637,8 +309663,16 @@
     3
    ],
    [
+    "docs/estado/06_INTEGRACOES.md",
+    3
+   ],
+   [
     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md",
     3
+   ],
+   [
+    "supabase/functions/external-data/tables.ts",
+    2
    ],
    [
     "tests/rls/security_definer_hardening.sql",
@@ -309665,6 +309699,10 @@
     2
    ],
    [
+    "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql",
+    1
+   ],
+   [
     "src/app/AppRoutes.tsx",
     1
    ],
@@ -309689,15 +309727,7 @@
     1
    ],
    [
-    "supabase/functions/external-data/tables.ts",
-    1
-   ],
-   [
     "src/components/contact-detail/SocialIntelligencePanel.tsx",
-    1
-   ],
-   [
-    "src/components/crm/commercial/components/SocialMatchDetails.test.tsx",
     1
    ]
   ]

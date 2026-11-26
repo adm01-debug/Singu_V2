@@ -1,7 +1,7 @@
 # Contexto do projeto para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `e6a9b2af9cff8da8932195a261e4c32724b5c3fd` (2026-11-26T10:38:12-03:00).
+Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR dela) a cada push em `main` e a cada 10 minutos pelo workflow `contexto.yml`; índice único das três fontes em `docs/contexto/00-INDEX.md`. Gere local com `node scripts/ai-context/gerar.mjs`. Commit-base: `42882061f6091214bb019bf39ecff28cdedd00fd` (2026-11-26T11:31:18-03:00).
 
 ## Como usar (leia antes de planejar ou executar qualquer tarefa)
 1. **Tela/rota/menu** → `rotas.json` (url/vista/menu → arquivo → hooks → tabelas → edges; `rotas_http_backend` para APIs) e `modulos.json` (módulo inteiro + dependências entre módulos).
@@ -14,7 +14,7 @@ Publicado em `docs/contexto/codigo/` na branch `contexto` (gerada, nunca abra PR
 Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (2111), SQL (1296), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
+- linguagens: TypeScript (2111), SQL (1297), Markdown (159), Shell (148), JavaScript (143), JSON (22), Python (22), YAML (20)
 - linguagem_principal: TypeScript
 - framework: React
 - backend_http: n/d
@@ -34,9 +34,9 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 3945 |
+| arquivos_total | 3946 |
 | arquivos_codigo | 2275 |
-| linhas_codigo | 423682 |
+| linhas_codigo | 423696 |
 | rotas | 117 |
 | rotas_http_backend | 8 |
 | vistas_por_id | 0 |
@@ -46,7 +46,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 | hooks | 413 |
 | edge_functions | 110 |
 | tabelas | 542 |
-| migrations | 1119 |
+| migrations | 1120 |
 | cron_jobs | 47 |
 | testes | 288 |
 | workflows | 14 |
@@ -452,7 +452,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - possiveis_segredos_no_codigo: 13 — ex.: scripts/ai-context/gerar.unit.mjs:40, scripts/ai-context/gerar.unit.mjs:41, scripts/ai-context/gerar.unit.mjs:42
 
 ## Grafo de código (graphify)
-- 26058 nós · 41662 arestas · 3070 comunidades · grafo do commit `e6a9b2af`
+- 26059 nós · 41662 arestas · 3071 comunidades · grafo do commit `42882061`
 - comunidades maiores: ref_hooks (351), _shared/auth.ts (297), ref_types (290), ref_lib (281), react (262), 02_tables.sql (259), framer-motion (258), react-router-dom (240), useAuth (233), 📖 Dicionário de Dados — SINGU CRM (224), date-fns (221), lucide-react (209)
 - símbolos mais chamados: useAuth() (src/hooks/useAuth.tsx), q() (scripts/supabase_snapshot/snapshot.py), mig_die() (scripts/migration/_lib.sh), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), fail() (scripts/automation/common.mjs), jsonError() (supabase/functions/_shared/auth.ts), MaintenanceError (scripts/maintenance/common.mjs), fail() (scripts/graphify-local/common.mjs), mig_help() (scripts/migration/_lib.sh), mig_load_env() (scripts/migration/_lib.sh), .iniciar() (scripts/migration/_mock_supabase.ts)
 - consulta local: `graphify query "<pergunta>"`, `graphify path "<A>" "<B>"`, `graphify explain "<X>"`
@@ -592,6 +592,7 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - CHANGELOG topo: [Unreleased]
 
 ## Últimos commits
+- 2026-11-26 `4288206` fix(empresas): da ao admin a base inteira e remove filtro user_id das views sem essa coluna (#364)
 - 2026-11-26 `e6a9b2a` feat(grupos): tela de grupos economicos com penetracao e prospects (#363)
 - 2026-11-26 `0dd35e1` feat(social,ofertas): liga social_insights e monta as duas UIs que nenhuma rota exibia (#362)
 - 2026-11-26 `8a79216` refactor: monta os cards de touchpoint e contatos estrategicos que ficaram orfaos (#361)
@@ -606,7 +607,6 @@ Os JSONs são grandes: filtre com `grep`/`jq` pelo caminho/arquivo/tabela da sua
 - 2026-11-25 `882db32` fix(sync): payload do catalogo respeita a coluna margin_pct gerada pelo banco (#351)
 - 2026-11-25 `bc7a0ba` fix(deploy): sync-product-catalog nasce sem verify_jwt verificavel e o cron nao a alcanca (#350)
 - 2026-11-25 `2c502bd` feat(ofertas): motor de recomendacao usa o catalogo real do ERP (#349)
-- 2026-11-25 `e347c01` fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

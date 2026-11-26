@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1119,
+ "migrations": 1120,
  "seeds": [],
  "avisos": [
   "212 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -14558,6 +14558,12 @@
      "nome": "companies_insert",
      "comando": "insert",
      "para": "public",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "companies_owner_or_admin",
+     "comando": "all",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {

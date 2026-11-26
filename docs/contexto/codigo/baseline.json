@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "e6a9b2af9cff8da8932195a261e4c32724b5c3fd",
+  "commit": "42882061f6091214bb019bf39ecff28cdedd00fd",
   "branch": "main",
-  "data_commit": "2026-11-26T10:38:12-03:00",
+  "data_commit": "2026-11-26T11:31:18-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "4288206",
+    "data": "2026-11-26",
+    "assunto": "fix(empresas): da ao admin a base inteira e remove filtro user_id das views sem essa coluna (#364)"
+   },
    {
     "sha": "e6a9b2a",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "2c7686a",
     "data": "2026-11-24",
     "assunto": "chore(scripts): recupera scripts de diagnostico de branch orfa e registra como legacy manual (#340)"
-   },
-   {
-    "sha": "6629194",
-    "data": "2026-11-24",
-    "assunto": "fix(docs): mecanismo real da falha do smart-notify (502, nao skip silencioso) (#338)"
    }
   ],
-  "arquivos_mudados_7d": 1022,
+  "arquivos_mudados_7d": 1023,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 196
+    "commits": 197
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3945,
+  "arquivos_total": 3946,
   "arquivos_codigo": 2275,
-  "linhas_codigo": 423682,
+  "linhas_codigo": 423696,
   "rotas": 117,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -338,7 +338,7 @@
   "hooks": 413,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1119,
+  "migrations": 1120,
   "cron_jobs": 47,
   "testes": 288,
   "workflows": 14,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28106
+   "linhas": 28120
   },
   "tailwind.config.ts": {
    "arquivos": 1,

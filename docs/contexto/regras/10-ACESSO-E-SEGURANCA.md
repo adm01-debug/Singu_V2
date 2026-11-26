@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e6a9b2af9c` · branch `main` · 2026-11-26 13:39 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `42882061f6` · branch `main` · 2026-11-26 14:33 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -98,7 +98,7 @@
 | `commission_rules` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `commissions` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
 | `communication_preferences` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `companies` | enabled | public: ((select auth.uid()) = user_id)<br>public: true<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>public: true<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: ((select auth.uid()) = user_id)<br>public: true<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) | public: auth.uid() = user_id<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid()) |
+| `companies` | enabled | public: ((select auth.uid()) = user_id)<br>public: true<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: (select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role)) | public: auth.uid() = user_id<br>public: true<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: (select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role)) | public: ((select auth.uid()) = user_id)<br>public: true<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: (select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role)) | public: auth.uid() = user_id<br>public: true<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: user_id = (SELECT auth.uid())<br>authenticated: (select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role)) |
 | `company_addresses` | enabled | public: true<br>public: true | public: true | public: true | public: true |
 | `company_cadences` | não encontrado | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) | authenticated: user_id = (SELECT auth.uid()) |
 | `company_cnaes` | enabled | public: true | public: true | public: true | public: true |
