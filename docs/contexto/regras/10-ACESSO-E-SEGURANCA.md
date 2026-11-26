@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0dd35e16e9` · branch `main` · 2026-11-26 13:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e6a9b2af9c` · branch `main` · 2026-11-26 13:39 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -800,6 +800,7 @@
 | /erp | Protected |  | `src/app/AppRoutes.tsx` |
 | /forecasting | Protected |  | `src/app/AppRoutes.tsx` |
 | /forecasting/setup | Protected |  | `src/app/AppRoutes.tsx` |
+| /grupos-economicos | Protected |  | `src/app/AppRoutes.tsx` |
 | /historico | Protected |  | `src/app/AppRoutes.tsx` |
 | /inbox | Protected |  | `src/app/AppRoutes.tsx` |
 | /intelligence | Protected |  | `src/app/AppRoutes.tsx` |

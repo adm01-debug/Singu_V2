@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0dd35e16e9` · branch `main` · 2026-11-26 13:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e6a9b2af9c` · branch `main` · 2026-11-26 13:39 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -307,7 +307,7 @@
 | `nurturing_executions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
 | `nurturing_workflows` | SINGU: Fluxos de nutrição long-term (mais complexos que sequences). Trigger-based (score/segment/inactivity/event). | 14 colunas | migration |
 | `oauth_tokens` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | migration |
-| … +461 linhas — lista completa em `context.json` | | | |
+| … +462 linhas — lista completa em `context.json` | | | |
 
 ## Dados de referência (seed — planos, categorias, perfis fixos)
 

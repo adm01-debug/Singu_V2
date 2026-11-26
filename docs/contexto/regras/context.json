@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "0dd35e16e9e9073218fce6e8792f4627bc2d23eb",
+  "sha": "e6a9b2af9cff8da8932195a261e4c32724b5c3fd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 13:13 UTC",
-  "files_total": 4048,
-  "code_files": 3570,
-  "code_lines": 481076
+  "generated_at": "2026-11-26 13:39 UTC",
+  "files_total": 4050,
+  "code_files": 3572,
+  "code_lines": 481510
  },
  "version": "1.3.2",
- "facts_hash": "e7a7f96641a0f070",
+ "facts_hash": "08b0b4b93bae2d63",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -273,8 +273,8 @@
   "package_manager": "bun",
   "languages": {
    ".sql": 1296,
-   ".tsx": 1190,
-   ".ts": 919,
+   ".tsx": 1191,
+   ".ts": 920,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -102322,6 +102322,39 @@
    },
    {
     "path": "",
+    "file": "src/pages/GruposEconomicos.tsx",
+    "component": "GruposEconomicos",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 106
+   },
+   {
+    "path": "",
     "file": "src/pages/Historico.tsx",
     "component": "Historico",
     "tables_transitive": [
@@ -107486,6 +107519,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/grupos-economicos",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/historico",
     "component": "P",
     "guard": "Protected",
@@ -109435,6 +109475,14 @@
     "file": "src/hooks/useGraphLayout.ts"
    },
    {
+    "name": "useGruposEconomicosPagina",
+    "file": "src/hooks/useGruposEconomicos.ts"
+   },
+   {
+    "name": "useGruposEconomicosTotais",
+    "file": "src/hooks/useGruposEconomicos.ts"
+   },
+   {
     "name": "useHapticFeedback",
     "file": "src/hooks/useHapticFeedback.ts"
    },
@@ -111090,6 +111138,10 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "guard": "Protected",
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "guard": "RequireAuth",
     "file": "src/app/AppRoutes.tsx"
    },
@@ -111463,14 +111515,14 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 594,
+   "lines": 596,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
     "AppProviders.tsx: AppProviders",
     "AppRoutes.tsx: AppRoutes",
     "composeProviders.tsx: ProviderEntry, composeProviders",
-    "lazyPages.tsx: AdminObservability, Analytics, Empresas, Cadastro, WhatsAppImport, Historico",
+    "lazyPages.tsx: AdminObservability, Analytics, Empresas, GruposEconomicos, Cadastro, WhatsAppImport",
     "queryClient.ts: queryClient"
    ],
    "docs": [],
@@ -111500,7 +111552,7 @@
   {
    "module": "src/components",
    "files": 1017,
-   "lines": 152375,
+   "lines": 152378,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -111947,8 +111999,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 444,
-   "lines": 58731,
+   "files": 445,
+   "lines": 58838,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -112522,8 +112574,8 @@
   },
   {
    "module": "src/pages",
-   "files": 156,
-   "lines": 29701,
+   "files": 157,
+   "lines": 30021,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -112682,6 +112734,7 @@
     "src/pages/Ficha360.tsx",
     "src/pages/Forecasting.tsx",
     "src/pages/ForecastingSetup.tsx",
+    "src/pages/GruposEconomicos.tsx",
     "src/pages/Historico.tsx",
     "src/pages/Inbox.tsx",
     "src/pages/Index.tsx",
@@ -112709,8 +112762,7 @@
     "src/pages/Notificacoes.tsx",
     "src/pages/NotificacoesConfig.tsx",
     "src/pages/Nurturing.tsx",
-    "src/pages/Onboarding.tsx",
-    "src/pages/PerfisComportamentais.tsx"
+    "src/pages/Onboarding.tsx"
    ]
   },
   {
@@ -112881,7 +112933,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28104,
+   "lines": 28106,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -123622,6 +123674,11 @@
     "file": "src/hooks/useGlobalDensity.ts",
     "name": "GlobalDensity",
     "values": "comfortable | compact"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "name": "GrupoSortKey",
+    "values": "grupo_economico | empresas | clientes"
    },
    {
     "file": "src/hooks/useInboundActivityHeatmap.ts",
@@ -153195,6 +153252,16 @@
     "value": "'ordem'"
    },
    {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "name": "TABLE",
+    "value": "'vw_grupos_economicos_resumo'"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "name": "CHUNK",
+    "value": "1000"
+   },
+   {
     "file": "src/hooks/useHiddenObjections.ts",
     "name": "PROBABILIDADE_BASE",
     "value": "60"
@@ -153508,6 +153575,16 @@
     "file": "src/pages/CRMRelationshipAuditPage.tsx",
     "name": "CONCURRENCY",
     "value": "5"
+   },
+   {
+    "file": "src/pages/GruposEconomicos.tsx",
+    "name": "PAGE_SIZE",
+    "value": "25"
+   },
+   {
+    "file": "src/pages/GruposEconomicos.tsx",
+    "name": "SEARCH_DEBOUNCE_MS",
+    "value": "400"
    },
    {
     "file": "src/pages/MapaEmpresas.tsx",
@@ -159632,6 +159709,30 @@
     "file": "src/hooks/useForms.ts",
     "field": "type",
     "value": "round_robin",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "field": "type",
+    "value": "neq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "field": "type",
+    "value": "neq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "field": "type",
+    "value": "ilike",
     "kind": "escreve"
    },
    {
@@ -169570,6 +169671,22 @@
    },
    {
     "file": "src/hooks/useGamification.ts",
+    "line": "staleTime: 5 * 60 * 1000,"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "line": "gcTime: 20 * 60 * 1000,"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "line": "gcTime: 30 * 60 * 1000,"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
+    "line": "staleTime: 10 * 60 * 1000,"
+   },
+   {
+    "file": "src/hooks/useGruposEconomicos.ts",
     "line": "staleTime: 5 * 60 * 1000,"
    },
    {
@@ -213606,6 +213723,7 @@
       "escreve:src/hooks/useEqEvolution.ts",
       "escreve:src/hooks/useErpData.ts",
       "escreve:src/hooks/useExternalInteractions.ts",
+      "escreve:src/hooks/useGruposEconomicos.ts",
       "escreve:src/hooks/useInactivityAlerts.ts",
       "escreve:src/hooks/useInteracoesSemApelidoView.ts",
       "escreve:src/hooks/useLeadsFullView.ts",
@@ -214350,6 +214468,13 @@
      "round_robin": [
       "escreve:src/hooks/useForms.ts"
      ],
+     "neq": [
+      "escreve:src/hooks/useGruposEconomicos.ts",
+      "escreve:src/hooks/useTasks.ts"
+     ],
+     "ilike": [
+      "escreve:src/hooks/useGruposEconomicos.ts"
+     ],
      "deleted": [
       "escreve:src/hooks/useInteractions.ts"
      ],
@@ -214385,9 +214510,6 @@
      ],
      "subtle": [
       "compara:src/hooks/useSuccessCelebration.ts"
-     ],
-     "neq": [
-      "escreve:src/hooks/useTasks.ts"
      ],
      "reassign": [
       "escreve:src/hooks/useTerritoryOptimization.ts",
@@ -235044,6 +235166,10 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "guard": "Protected",
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "guard": "RequireAuth",
     "file": "src/app/AppRoutes.tsx"
    },
@@ -235237,6 +235363,13 @@
    },
    {
     "path": "/forecasting/setup",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "path": "/grupos-economicos",
     "component": "P",
     "guard": "Protected",
     "roles": [],
@@ -247008,7 +247141,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 190,
+   "lines": 191,
    "exports": [
     "const AppRoutes"
    ],
@@ -247091,6 +247224,12 @@
     {
      "path": "/",
      "component": "Index",
+     "guard": "Protected",
+     "roles": []
+    },
+    {
+     "path": "/grupos-economicos",
+     "component": "P",
      "guard": "Protected",
      "roles": []
     },
@@ -247718,6 +247857,7 @@
     "Protected",
     "Protected",
     "Protected",
+    "Protected",
     "RequireAuth",
     "Protected"
    ]
@@ -247732,11 +247872,12 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 174,
+   "lines": 175,
    "exports": [
     "const AdminObservability",
     "const Analytics",
     "const Empresas",
+    "const GruposEconomicos",
     "const Cadastro",
     "const WhatsAppImport",
     "const Historico",
@@ -247792,8 +247933,7 @@
     "const MarketingMagnetDetail",
     "const PublicForm",
     "const PublicLeadMagnet",
-    "const AdminTelemetria",
-    "const AdminSchemaDrift"
+    "const AdminTelemetria"
    ]
   },
   "src/app/queryClient.ts": {
@@ -257386,7 +257526,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 321,
+   "lines": 322,
    "exports": [
     "const AppSidebar"
    ],
@@ -257451,7 +257591,7 @@
   },
   "src/components/layout/MobileSidebarDrawer.tsx": {
    "path": "src/components/layout/MobileSidebarDrawer.tsx",
-   "lines": 233,
+   "lines": 235,
    "exports": [
     "function MobileSidebarDrawer"
    ],
@@ -274853,6 +274993,66 @@
     "useGraphLayout"
    ]
   },
+  "src/hooks/useGruposEconomicos.ts": {
+   "path": "src/hooks/useGruposEconomicos.ts",
+   "lines": 107,
+   "exports": [
+    "type GrupoEconomicoResumo",
+    "type GrupoSortKey",
+    "interface GruposEconomicosParams",
+    "function useGruposEconomicosPagina",
+    "interface GruposEconomicosTotais",
+    "function useGruposEconomicosTotais"
+   ],
+   "enums": [
+    {
+     "name": "GrupoSortKey",
+     "values": "grupo_economico | empresas | clientes"
+    }
+   ],
+   "params": [
+    {
+     "name": "TABLE",
+     "value": "'vw_grupos_economicos_resumo'"
+    },
+    {
+     "name": "CHUNK",
+     "value": "1000"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "neq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "neq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "ilike",
+     "kind": "escreve"
+    }
+   ],
+   "hooks": [
+    "useGruposEconomicosPagina",
+    "useGruposEconomicosTotais"
+   ],
+   "temporal": [
+    "gcTime: 20 * 60 * 1000,",
+    "gcTime: 30 * 60 * 1000,",
+    "staleTime: 10 * 60 * 1000,",
+    "staleTime: 5 * 60 * 1000,"
+   ]
+  },
   "src/hooks/useHapticFeedback.ts": {
    "path": "src/hooks/useHapticFeedback.ts",
    "lines": 74,
@@ -288134,6 +288334,26 @@
     "function ForecastingSetup"
    ]
   },
+  "src/pages/GruposEconomicos.tsx": {
+   "path": "src/pages/GruposEconomicos.tsx",
+   "lines": 320,
+   "exports": [
+    "function GruposEconomicos"
+   ],
+   "navigates": [
+    "/empresas?filters="
+   ],
+   "params": [
+    {
+     "name": "PAGE_SIZE",
+     "value": "25"
+    },
+    {
+     "name": "SEARCH_DEBOUNCE_MS",
+     "value": "400"
+    }
+   ]
+  },
   "src/pages/Historico.tsx": {
    "path": "src/pages/Historico.tsx",
    "lines": 208,
@@ -297029,7 +297249,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 163,
+   "lines": 165,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -309064,10 +309284,25 @@
   }
  },
  "git": {
-  "sha": "0dd35e16e9e9073218fce6e8792f4627bc2d23eb",
+  "sha": "e6a9b2af9cff8da8932195a261e4c32724b5c3fd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "e6a9b2a",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(grupos): tela de grupos economicos com penetracao e prospects (#363)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/components/layout/MobileSidebarDrawer.tsx",
+     "src/hooks/useGruposEconomicos.ts",
+     "src/pages/GruposEconomicos.tsx",
+     "supabase/functions/external-data/tables.ts"
+    ]
+   },
    {
     "sha": "0dd35e1",
     "date": "2026-11-26",
@@ -309382,16 +309617,6 @@
     "files": [
      "docs/estado/06_INTEGRACOES.md"
     ]
-   },
-   {
-    "sha": "06b1732",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "docs: fixa a pasta canonica do projeto e ignora _docs/ (#331)",
-    "files": [
-     ".gitignore",
-     "AGENTS.md"
-    ]
    }
   ],
   "hot_files": [
@@ -309440,39 +309665,39 @@
     2
    ],
    [
+    "src/app/AppRoutes.tsx",
+    1
+   ],
+   [
+    "src/app/lazyPages.tsx",
+    1
+   ],
+   [
+    "src/components/layout/AppSidebar.tsx",
+    1
+   ],
+   [
+    "src/components/layout/MobileSidebarDrawer.tsx",
+    1
+   ],
+   [
+    "src/hooks/useGruposEconomicos.ts",
+    1
+   ],
+   [
+    "src/pages/GruposEconomicos.tsx",
+    1
+   ],
+   [
+    "supabase/functions/external-data/tables.ts",
+    1
+   ],
+   [
     "src/components/contact-detail/SocialIntelligencePanel.tsx",
     1
    ],
    [
     "src/components/crm/commercial/components/SocialMatchDetails.test.tsx",
-    1
-   ],
-   [
-    "src/components/crm/commercial/components/SocialMatchDetails.tsx",
-    1
-   ],
-   [
-    "src/hooks/useSocialInsights.ts",
-    1
-   ],
-   [
-    "src/pages/ContatoDetalhe.tsx",
-    1
-   ],
-   [
-    "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
-    1
-   ],
-   [
-    "src/components/company-detail/CompanyInsightsTab.test.tsx",
-    1
-   ],
-   [
-    "src/components/company-detail/CompanyInsightsTab.tsx",
-    1
-   ],
-   [
-    "src/components/company-detail/insights/KeyContactsStrategicCard.tsx",
     1
    ]
   ]

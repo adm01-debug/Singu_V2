@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 412,
+ "total": 413,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -5761,6 +5761,27 @@
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/components/intelligence/GraphTab.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useGruposEconomicos.ts",
+   "hooks_exportados": [
+    "useGruposEconomicosPagina",
+    "useGruposEconomicosTotais"
+   ],
+   "linhas": 107,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/GruposEconomicos.tsx"
    ],
    "coberto_por_testes": 0
   },

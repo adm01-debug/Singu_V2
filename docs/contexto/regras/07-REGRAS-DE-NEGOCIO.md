@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0dd35e16e9` · branch `main` · 2026-11-26 13:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e6a9b2af9c` · branch `main` · 2026-11-26 13:39 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1435,7 +1435,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `empathy` | compara | `src/hooks/useCarnegieAnalysis.ts` |
 | `type` | `enroll_in_sequence` | escreve | `src/components/automation/AutomationTemplates.tsx` |
 | `type` | `enum` | escreve | `src/lib/reports/reportEngine.ts` |
-| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +64 |
+| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +65 |
 | `type` | `error` | compara | `src/lib/queryErrorReporter.ts` |
 | `type` | `error_budget_100` | escreve | `supabase/functions/error-budget/index.ts` |
 | `type` | `error_budget_50` | escreve | `supabase/functions/error-budget/index.ts` |
@@ -1467,6 +1467,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `hobby` | compara, escreve | `src/components/contact-detail/behavioral-tab/RapportCard.tsx`<br>`src/components/dashboard/widgets/AIApprovalsWidget.tsx`<br>`src/components/ficha-360/DadosPessoaisCard.tsx`<br>`src/components/ficha-360/TagsInteresseCard.tsx`<br>`src/hooks/useAIApprovals.ts`<br>… +1 |
 | `type` | `how_to` | escreve | `src/data/copywritingData.ts` |
 | `type` | `identify_brain` | compara, escreve | `src/components/neuromarketing/NeuroTrainingMode.tsx`<br>`src/data/neuroTrainingQuestions.ts` |
+| `type` | `ilike` | escreve | `src/hooks/useGruposEconomicos.ts` |
 | `type` | `image` | compara, escreve | `src/components/email-builder/EmailBuilder.tsx`<br>`src/components/email-builder/types.ts`<br>`src/lib/emailBuilderRenderer.ts`<br>`src/pages/PublicLandingPage.tsx` |
 | `type` | `image_url` | escreve | `supabase/functions/visual-search/index.ts` |
 | `type` | `impersonal` | escreve | `src/data/carnegieWarmth.ts` |
@@ -1501,7 +1502,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `must_have` | escreve | `src/types/nlp-advanced.ts` |
 | `type` | `nba_escalation` | escreve | `supabase/functions/smart-reminders/index.ts` |
 | `type` | `negative` | compara, escreve | `src/components/nlp/AnchorTrackingSystem.tsx` |
-| `type` | `neq` | escreve | `src/hooks/useTasks.ts` |
+| `type` | `neq` | escreve | `src/hooks/useGruposEconomicos.ts`<br>`src/hooks/useTasks.ts` |
 | `type` | `network` | compara | `src/components/feedback/ErrorState.tsx` |
 | `type` | `neuro_update` | compara, escreve | `src/components/contact-detail/UnifiedTimeline.tsx`<br>`src/hooks/useUnifiedTimeline.ts` |
 | `type` | `neutral` | compara, escreve | `src/components/analytics/churn/ChurnHelpers.tsx`<br>`src/hooks/useCoalitionDetection.ts` |
@@ -1629,8 +1630,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `closed_lost` | compara | `supabase/functions/abm-account-scorer/index.ts` |
 | `status` | `closed_won` | compara | `supabase/functions/abm-account-scorer/index.ts` |
-| `status` | `completed` | compara, escreve | `src/components/company-detail/CompanyCommercialTab.tsx`<br>`src/components/contact-detail/ContactTasksPanel.tsx`<br>`src/components/contact-detail/commercial-tab/TasksCard.tsx`<br>`src/components/gamification/UserGoalsWidget.tsx`<br>`src/components/lux/LuxHistoryTimeline.tsx`<br>… +10 |
-| … +179 linhas — lista completa em `context.json` | | | |
+| … +180 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -1743,6 +1743,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | FollowUpDecision | approved \| rejected | `src/hooks/useFollowUpApprovals.ts` |
 | ForecastCategory | commit \| best_case \| pipeline \| omitted | `src/hooks/useForecasting.ts` |
 | GlobalDensity | comfortable \| compact | `src/hooks/useGlobalDensity.ts` |
+| GrupoSortKey | grupo_economico \| empresas \| clientes | `src/hooks/useGruposEconomicos.ts` |
 | InboundChannel | all \| whatsapp \| email \| call | `src/hooks/useInboundActivityHeatmap.ts` |
 | WebhookTargetEntity | contact \| company \| deal \| interaction \| note \| custom | `src/hooks/useIncomingWebhooks.ts` |
 | IntelDensity | compact \| comfortable | `src/hooks/useIntelDensity.ts` |
@@ -3702,6 +3703,8 @@ _nenhum item encontrado_
 | `SCOPE` | `'ficha360'` | `src/hooks/useFicha360PreferencesSync.ts` |
 | `DEFAULT` | `'recente'` | `src/hooks/useFicha360Sort.ts` |
 | `PARAM` | `'ordem'` | `src/hooks/useFicha360Sort.ts` |
+| `TABLE` | `'vw_grupos_economicos_resumo'` | `src/hooks/useGruposEconomicos.ts` |
+| `CHUNK` | `1000` | `src/hooks/useGruposEconomicos.ts` |
 | `PROBABILIDADE_BASE` | `60` | `src/hooks/useHiddenObjections.ts` |
 | `PROBABILIDADE_POR_REPETICAO` | `10` | `src/hooks/useHiddenObjections.ts` |
 | `PROBABILIDADE_TETO` | `95` | `src/hooks/useHiddenObjections.ts` |
@@ -3765,6 +3768,8 @@ _nenhum item encontrado_
 | `DEFAULT_EXCERPT_PRESET` | `"medium"` | `src/lib/insights/excerptWindow.ts` |
 | `MAX_TOTAL_CAP` | `5` | `src/lib/insights/pickTopPassages.ts` |
 | `CONCURRENCY` | `5` | `src/pages/CRMRelationshipAuditPage.tsx` |
+| `PAGE_SIZE` | `25` | `src/pages/GruposEconomicos.tsx` |
+| `SEARCH_DEBOUNCE_MS` | `400` | `src/pages/GruposEconomicos.tsx` |
 | `GEOCODING_BATCH_SIZE` | `50` | `src/pages/MapaEmpresas.tsx` |
 | `SMS_LIMIT` | `160` | `src/pages/SmsMarketing.tsx` |
 | `PAGE_SIZE` | `50` | `src/pages/admin/BehavioralRegenAudit.tsx` |
@@ -4090,6 +4095,10 @@ _nenhum item encontrado_
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useFeatureFlag.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useForecasting.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useGamification.ts` |
+| `gcTime: 20 * 60 * 1000,` | `src/hooks/useGruposEconomicos.ts` |
+| `gcTime: 30 * 60 * 1000,` | `src/hooks/useGruposEconomicos.ts` |
+| `staleTime: 10 * 60 * 1000,` | `src/hooks/useGruposEconomicos.ts` |
+| `staleTime: 5 * 60 * 1000,` | `src/hooks/useGruposEconomicos.ts` |
 | `nextAnniversary = addYears(nextAnniversary, 1);` | `src/hooks/useImportantDates.ts` |
 | `nextBday = addYears(nextBday, 1);` | `src/hooks/useImportantDates.ts` |
 | `nextBirthday = addYears(nextBirthday, 1);` | `src/hooks/useImportantDates.ts` |
@@ -4124,11 +4133,7 @@ _nenhum item encontrado_
 | `staleTime: 30 * 60 * 1000, // 30 min — resumo estável dentro do período` | `src/hooks/useObjectionContextSummary.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/useOrphanContacts.ts` |
 | `gcTime: 10 * 60 * 1000,` | `src/hooks/usePendingFollowups.ts` |
-| `staleTime: 5 * 60 * 1000,` | `src/hooks/usePendingFollowups.ts` |
-| `staleTime: 5 * 60 * 1000,` | `src/hooks/usePendingNotifications.ts` |
-| `staleTime: 10 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| `staleTime: 15 * 60 * 1000,` | `src/hooks/usePipeline.ts` |
-| … +237 linhas — lista completa em `context.json` | |
+| … +241 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 

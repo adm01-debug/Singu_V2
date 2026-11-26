@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1080,
+ "total": 1081,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -179,6 +179,10 @@
   "Ficha360": [
    "src/app/lazyPages.tsx",
    "src/pages/Ficha360.tsx"
+  ],
+  "GruposEconomicos": [
+   "src/app/lazyPages.tsx",
+   "src/pages/GruposEconomicos.tsx"
   ],
   "Historico": [
    "src/app/lazyPages.tsx",
@@ -491,7 +495,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 190,
+   "linhas": 191,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -565,6 +569,7 @@
     "Ficha360",
     "ForecastingPage",
     "ForecastingSetupPage",
+    "GruposEconomicos",
     "Historico",
     "Inbox",
     "Insights",
@@ -631,7 +636,7 @@
     "WinLossSetupPage"
    ],
    "export_default": null,
-   "linhas": 174,
+   "linhas": 175,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10335,7 +10340,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 47,
+   "usado_por": 48,
    "orfao": false
   },
   {
@@ -10344,7 +10349,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 321,
+   "linhas": 322,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -10410,7 +10415,7 @@
     "MobileSidebarDrawer"
    ],
    "export_default": null,
-   "linhas": 233,
+   "linhas": 235,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14230,7 +14235,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 552,
+   "usado_por": 553,
    "orfao": false
   },
   {
@@ -14245,7 +14250,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 532,
+   "usado_por": 533,
    "orfao": false
   },
   {
@@ -14280,7 +14285,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 590,
+   "usado_por": 591,
    "orfao": false
   },
   {
@@ -14559,7 +14564,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 207,
+   "usado_por": 208,
    "orfao": false
   },
   {
@@ -14735,7 +14740,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 106,
+   "usado_por": 107,
    "orfao": false
   },
   {
@@ -14905,7 +14910,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 128,
+   "usado_por": 129,
    "orfao": false
   },
   {
@@ -15065,7 +15070,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 205,
+   "usado_por": 206,
    "orfao": false
   },
   {
@@ -15189,7 +15194,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 18,
+   "usado_por": 19,
    "orfao": false
   },
   {
@@ -16871,6 +16876,23 @@
    "hooks_locais": [
     "useQuotaSettings",
     "useUpsertQuotaSettings"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/GruposEconomicos.tsx",
+   "exports": [
+    "GruposEconomicos"
+   ],
+   "export_default": "GruposEconomicos",
+   "linhas": 320,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useGruposEconomicosPagina",
+    "useGruposEconomicosTotais"
    ],
    "tabelas": [],
    "edges": [],

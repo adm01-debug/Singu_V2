@@ -3,15 +3,15 @@
  "format_version": 2,
  "onde_ficam": {
   "telas": [
-   "src/pages (115)"
+   "src/pages (116)"
   ],
   "componentes": [
    "src/components (929)",
-   "src/pages (142)",
+   "src/pages (143)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (381)",
+   "src/hooks (382)",
    "src/components (20)",
    "src/stores (5)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1080)"
+  ".tsx (1081)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(grupos): tela de grupos economicos com penetracao e prospects (#363)",
    "feat(social,ofertas): liga social_insights e monta as duas UIs que nenhuma rota exibia (#362)",
    "refactor: monta os cards de touchpoint e contatos estrategicos que ficaram orfaos (#361)",
    "fix: evidencia do match social nas ofertas (coluna inexistente causava perda silenciosa) (#360)",
-   "fix(social): para de gravar nome, email e telefone como interesse do cliente (#359)",
-   "feat(social): sincronizacao automatica com enqueue e dispatch (#355)"
+   "fix(social): para de gravar nome, email e telefone como interesse do cliente (#359)"
   ]
  },
  "pr_template": null,
