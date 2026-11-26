@@ -218168,7 +218168,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 87,
+          "code_total_files": 89,
           "cron": [],
           "db": [
             "public.ativar_cliente",
@@ -280731,6 +280731,11 @@
         "name": "admin_read_mfa_locked_tables",
         "statements": null,
         "version": "20261126160000"
+      },
+      {
+        "name": "admin_read_automation_notifications",
+        "statements": null,
+        "version": "20261126170000"
       }
     ],
     "policies": [
@@ -284178,6 +284183,18 @@
         "schema": "public",
         "table": "automation_rules",
         "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "automation_rules_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "automation_rules",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -294110,6 +294127,18 @@
         "with_check": null
       },
       {
+        "cmd": "SELECT",
+        "name": "notifications_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "notifications",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": null
+      },
+      {
         "cmd": "UPDATE",
         "name": "notifications_update",
         "permissive": "PERMISSIVE",
@@ -295500,6 +295529,18 @@
         "schema": "public",
         "table": "reminders",
         "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "reminders_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "reminders",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {

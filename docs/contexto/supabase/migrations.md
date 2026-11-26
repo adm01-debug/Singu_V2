@@ -759,3 +759,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261126150000 | [suppliers_carriers_admin_read](migrations/20261126150000_suppliers_carriers_admin_read.sql) | 0 |
 | 20261126151000 | [fix_data_quality_division_by_zero](migrations/20261126151000_fix_data_quality_division_by_zero.sql) | 0 |
 | 20261126160000 | [admin_read_mfa_locked_tables](migrations/20261126160000_admin_read_mfa_locked_tables.sql) | 0 |
+| 20261126170000 | [admin_read_automation_notifications](migrations/20261126170000_admin_read_automation_notifications.sql) | 0 |

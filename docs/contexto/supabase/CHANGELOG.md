@@ -2,6 +2,12 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 16:15 UTC
+
+- **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`
+- **migrations** adicionado (1): `20261126170000_admin_read_automation_notifications`
+- **policies (RLS)** adicionado (3): `public.automation_rules.automation_rules_select_admin`, `public.notifications.notifications_select_admin`, `public.reminders.reminders_select_admin`
+
 ## 2026-11-26 15:16 UTC
 
 - **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`

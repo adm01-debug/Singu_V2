@@ -255,7 +255,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.audit_log](tables/public/audit_log.md) | table | sim | 3 | 13 | não | Log de auditoria para alterações em tabelas críticas |
 | [public.automation_executions](tables/public/automation_executions.md) | table | sim | 1 | 11 | não |  |
 | [public.automation_logs](tables/public/automation_logs.md) | table | sim | 8 | 10 | não | SINGU: Log de cada execução de regra de automação. Audit trail completo. |
-| [public.automation_rules](tables/public/automation_rules.md) | table | sim | 8 | 14 | não | SINGU: Regras configuráveis de automação (trigger → condition → action). |
+| [public.automation_rules](tables/public/automation_rules.md) | table | sim | 9 | 14 | não | SINGU: Regras configuráveis de automação (trigger → condition → action). |
 | [public.automations](tables/public/automations.md) | table | sim | 4 | 14 | não |  |
 | [public.badges](tables/public/badges.md) | table | sim | 1 | 9 | não |  |
 | [public.battle_cards](tables/public/battle_cards.md) | table | sim | 4 | 17 | não |  |
@@ -485,7 +485,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.nlp_feedback](tables/public/nlp_feedback.md) | table | sim | 2 | 10 | não |  |
 | [public.notification_logs](tables/public/notification_logs.md) | table | sim | 1 | 9 | não |  |
 | [public.notification_preferences](tables/public/notification_preferences.md) | table | sim | 3 | 10 | não |  |
-| [public.notifications](tables/public/notifications.md) | table | sim | 4 | 11 | não |  |
+| [public.notifications](tables/public/notifications.md) | table | sim | 5 | 11 | não |  |
 | [public.nps_surveys](tables/public/nps_surveys.md) | table | sim | 1 | 12 | não |  |
 | [public.nurturing_enrollments](tables/public/nurturing_enrollments.md) | table | sim | 5 | 13 | não | SINGU: Contatos em workflows de nurturing. Context carrega estado entre steps. |
 | [public.nurturing_executions](tables/public/nurturing_executions.md) | table | sim | 1 | 14 | não |  |
@@ -517,7 +517,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.reframing_analysis](tables/public/reframing_analysis.md) | table | sim | 3 | 13 | não |  |
 | [public.reframing_analysis_audit](tables/public/reframing_analysis_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.relationship_score_history](tables/public/relationship_score_history.md) | table | sim | 4 | 18 | não | SINGU: Histórico de evolução do score de relacionamento |
-| [public.reminders](tables/public/reminders.md) | table | sim | 4 | 12 | não |  |
+| [public.reminders](tables/public/reminders.md) | table | sim | 5 | 12 | não |  |
 | [public.report_executions](tables/public/report_executions.md) | table | sim | 1 | 9 | não |  |
 | [public.revops_alerts](tables/public/revops_alerts.md) | table | sim | 4 | 10 | não |  |
 | [public.revops_benchmarks](tables/public/revops_benchmarks.md) | table | sim | 4 | 9 | não |  |
