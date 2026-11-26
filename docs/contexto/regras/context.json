@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "2e20fce68d30d5e8f992b0ed88f3ac0acadefb9c",
+  "sha": "c040dd38ddd2befc8437b92d92a051fe1521c76e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 18:33 UTC",
-  "files_total": 4073,
-  "code_files": 3595,
-  "code_lines": 485592
+  "generated_at": "2026-11-26 18:58 UTC",
+  "files_total": 4076,
+  "code_files": 3598,
+  "code_lines": 485998
  },
  "version": "1.3.2",
- "facts_hash": "f558796145e078b7",
+ "facts_hash": "5686f764286f643d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,9 +272,9 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1305,
-   ".tsx": 1198,
-   ".ts": 927,
+   ".sql": 1306,
+   ".tsx": 1199,
+   ".ts": 928,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -59533,46 +59533,6 @@
     "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
    },
    {
-    "name": "workspace_accounts_select",
-    "table": "workspace_accounts",
-    "cmd": "SELECT",
-    "roles": "authenticated",
-    "mode": "permissive",
-    "using": "id = (SELECT auth.uid())",
-    "check": "",
-    "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
-   },
-   {
-    "name": "workspace_accounts_insert",
-    "table": "workspace_accounts",
-    "cmd": "INSERT",
-    "roles": "authenticated",
-    "mode": "permissive",
-    "using": "",
-    "check": "id = (SELECT auth.uid())",
-    "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
-   },
-   {
-    "name": "workspace_accounts_update",
-    "table": "workspace_accounts",
-    "cmd": "UPDATE",
-    "roles": "authenticated",
-    "mode": "permissive",
-    "using": "id = (SELECT auth.uid())",
-    "check": "id = (SELECT auth.uid())",
-    "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
-   },
-   {
-    "name": "workspace_accounts_delete",
-    "table": "workspace_accounts",
-    "cmd": "DELETE",
-    "roles": "authenticated",
-    "mode": "permissive",
-    "using": "id = (SELECT auth.uid())",
-    "check": "",
-    "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
-   },
-   {
     "name": "company_rfm_scores_select",
     "table": "company_rfm_scores",
     "cmd": "SELECT",
@@ -87752,7 +87712,8 @@
    "supabase/migrations/20261126180000_clientes_views_read_only.sql",
    "supabase/migrations/20261126190000_parceiros_controle_read_only.sql",
    "supabase/migrations/20261126200000_governanca_ia_read_only.sql",
-   "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+   "supabase/migrations/20261126203000_eventos_cliente_read_only.sql",
+   "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -99716,6 +99677,38 @@
     "objkind": "table",
     "roles": "service_role",
     "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "insert, update, delete",
+    "object": "workspace_accounts",
+    "objkind": "table",
+    "roles": "authenticated, anon",
+    "src": "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "workspace_accounts",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "insert, update, delete",
+    "object": "vw_workspace_overview",
+    "objkind": "table",
+    "roles": "authenticated, anon",
+    "src": "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "vw_workspace_overview",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
    }
   ],
   "raises": [
@@ -104193,6 +104186,39 @@
     "deps_count": 17
    },
    {
+    "path": "",
+    "file": "src/pages/Workspaces.tsx",
+    "component": "Workspaces",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 105
+   },
+   {
     "path": "/",
     "file": "src/pages/Index.tsx",
     "component": "Index",
@@ -107650,6 +107676,13 @@
    },
    {
     "path": "/admin/voice-diagnostics",
+    "component": "Admin",
+    "guard": "",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "path": "/admin/workspaces",
     "component": "Admin",
     "guard": "",
     "roles": [],
@@ -111226,6 +111259,10 @@
     "file": "src/hooks/useWorkspaceAccounts.ts"
    },
    {
+    "name": "useWorkspaces",
+    "file": "src/hooks/useWorkspaces.ts"
+   },
+   {
     "name": "useYourDay",
     "file": "src/hooks/useYourDay.ts"
    },
@@ -112018,7 +112055,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 610,
+   "lines": 612,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -112055,7 +112092,7 @@
   {
    "module": "src/components",
    "files": 1017,
-   "lines": 152385,
+   "lines": 152386,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112502,8 +112539,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 452,
-   "lines": 59881,
+   "files": 453,
+   "lines": 59959,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -113077,8 +113114,8 @@
   },
   {
    "module": "src/pages",
-   "files": 164,
-   "lines": 32642,
+   "files": 165,
+   "lines": 32923,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -113436,7 +113473,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28190,
+   "lines": 28194,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113717,8 +113754,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1128,
-   "lines": 105102,
+   "files": 1129,
+   "lines": 105142,
    "tables": [
     "users"
    ],
@@ -124437,6 +124474,16 @@
     "file": "src/hooks/useWinLoss.ts",
     "name": "InsightSeverity",
     "values": "info | warning | critical | success"
+   },
+   {
+    "file": "src/hooks/useWorkspaces.ts",
+    "name": "SituacaoConta",
+    "values": "admin | suspenso | inativo | grupo | ativo"
+   },
+   {
+    "file": "src/hooks/useWorkspaces.ts",
+    "name": "TIPOS_CONTA_WORKSPACE",
+    "values": "{ valor: 'user', label: 'Usuários' }, { valor: 'group', label: 'Grupos' },"
    },
    {
     "file": "src/hooks/voice/types.ts",
@@ -154153,6 +154200,11 @@
     "value": "160"
    },
    {
+    "file": "src/pages/Workspaces.tsx",
+    "name": "TAMANHO_PAGINA",
+    "value": "25"
+   },
+   {
     "file": "src/pages/admin/BehavioralRegenAudit.tsx",
     "name": "PAGE_SIZE",
     "value": "50"
@@ -161400,6 +161452,18 @@
     "field": "type",
     "value": "eq",
     "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useWorkspaces.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useWorkspaces.ts",
+    "field": "tipo",
+    "value": "todos",
+    "kind": "compara"
    },
    {
     "file": "src/hooks/useYourDay.ts",
@@ -197922,46 +197986,6 @@
     "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
    },
    {
-    "name": "workspace_accounts_select",
-    "table": "workspace_accounts",
-    "cmd": "SELECT",
-    "roles": "authenticated",
-    "mode": "permissive",
-    "using": "id = (SELECT auth.uid())",
-    "check": "",
-    "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
-   },
-   {
-    "name": "workspace_accounts_insert",
-    "table": "workspace_accounts",
-    "cmd": "INSERT",
-    "roles": "authenticated",
-    "mode": "permissive",
-    "using": "",
-    "check": "id = (SELECT auth.uid())",
-    "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
-   },
-   {
-    "name": "workspace_accounts_update",
-    "table": "workspace_accounts",
-    "cmd": "UPDATE",
-    "roles": "authenticated",
-    "mode": "permissive",
-    "using": "id = (SELECT auth.uid())",
-    "check": "id = (SELECT auth.uid())",
-    "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
-   },
-   {
-    "name": "workspace_accounts_delete",
-    "table": "workspace_accounts",
-    "cmd": "DELETE",
-    "roles": "authenticated",
-    "mode": "permissive",
-    "using": "id = (SELECT auth.uid())",
-    "check": "",
-    "src": "supabase/migrations/20260721222845_fix_blanket_isnull_policies.sql"
-   },
-   {
     "name": "company_rfm_scores_select",
     "table": "company_rfm_scores",
     "cmd": "SELECT",
@@ -214529,6 +214553,7 @@
       "escreve:src/hooks/useUsageKpisView.ts",
       "escreve:src/hooks/useWhatsappMessages.ts",
       "escreve:src/hooks/useWorkspaceAccounts.ts",
+      "escreve:src/hooks/useWorkspaces.ts",
       "escreve:src/lib/externalData.ts",
       "escreve:src/pages/EmpresaDetalhe.tsx",
       "escreve:src/pages/RelatorioContato.tsx",
@@ -216620,7 +216645,8 @@
       "compara:src/hooks/useCompanies.ts"
      ],
      "todos": [
-      "compara:src/hooks/useEventosCliente.ts"
+      "compara:src/hooks/useEventosCliente.ts",
+      "compara:src/hooks/useWorkspaces.ts"
      ],
      "positivo": [
       "escreve:src/hooks/useFicha360ConversationSummary.ts"
@@ -223080,18 +223106,10 @@
    },
    "workspace_accounts": {
     "rls": "não encontrado",
-    "SELECT": [
-     "authenticated: id = (SELECT auth.uid())"
-    ],
-    "INSERT": [
-     "authenticated: id = (SELECT auth.uid())"
-    ],
-    "UPDATE": [
-     "authenticated: id = (SELECT auth.uid())"
-    ],
-    "DELETE": [
-     "authenticated: id = (SELECT auth.uid())"
-    ]
+    "SELECT": [],
+    "INSERT": [],
+    "UPDATE": [],
+    "DELETE": []
    },
    "xbz_upload_mapping": {
     "rls": "enabled",
@@ -223749,6 +223767,7 @@
    "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
    "supabase/migrations/20261126200000_governanca_ia_read_only.sql",
    "supabase/migrations/20261126203000_eventos_cliente_read_only.sql",
+   "supabase/migrations/20261126210000_workspaces_rls_read_only.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -235653,6 +235672,38 @@
     "objkind": "table",
     "roles": "service_role",
     "src": "supabase/migrations/20261126203000_eventos_cliente_read_only.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "insert, update, delete",
+    "object": "workspace_accounts",
+    "objkind": "table",
+    "roles": "authenticated, anon",
+    "src": "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "workspace_accounts",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "insert, update, delete",
+    "object": "vw_workspace_overview",
+    "objkind": "table",
+    "roles": "authenticated, anon",
+    "src": "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "vw_workspace_overview",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
    }
   ],
   "guards": [
@@ -248017,7 +248068,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 198,
+   "lines": 199,
    "exports": [
     "const AppRoutes"
    ],
@@ -248572,6 +248623,12 @@
      "roles": []
     },
     {
+     "path": "/admin/workspaces",
+     "component": "Admin",
+     "guard": "",
+     "roles": []
+    },
+    {
      "path": "/eventos",
      "component": "P.EventosCliente",
      "guard": "",
@@ -248791,7 +248848,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 182,
+   "lines": 183,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -258445,7 +258502,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 329,
+   "lines": 330,
    "exports": [
     "const AppSidebar"
    ],
@@ -284918,6 +284975,43 @@
     "useWorkspaceAccounts"
    ]
   },
+  "src/hooks/useWorkspaces.ts": {
+   "path": "src/hooks/useWorkspaces.ts",
+   "lines": 78,
+   "exports": [
+    "const TIPOS_CONTA_WORKSPACE",
+    "interface ContaWorkspaceRow",
+    "type SituacaoConta",
+    "function situacaoConta",
+    "const ROTULO_SITUACAO",
+    "function useWorkspaces"
+   ],
+   "enums": [
+    {
+     "name": "SituacaoConta",
+     "values": "admin | suspenso | inativo | grupo | ativo"
+    },
+    {
+     "name": "TIPOS_CONTA_WORKSPACE",
+     "values": "{ valor: 'user', label: 'Usuários' }, { valor: 'group', label: 'Grupos' },"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "tipo",
+     "value": "todos",
+     "kind": "compara"
+    }
+   ],
+   "hooks": [
+    "useWorkspaces"
+   ]
+  },
   "src/hooks/useYourDay.ts": {
    "path": "src/hooks/useYourDay.ts",
    "lines": 214,
@@ -291039,6 +291133,19 @@
    "lines": 34,
    "exports": [
     "function WinLossSetup"
+   ]
+  },
+  "src/pages/Workspaces.tsx": {
+   "path": "src/pages/Workspaces.tsx",
+   "lines": 281,
+   "exports": [
+    "function Workspaces"
+   ],
+   "params": [
+    {
+     "name": "TAMANHO_PAGINA",
+     "value": "25"
+    }
    ]
   },
   "src/pages/admin/AdminSegurancaPage.tsx": {
@@ -298522,7 +298629,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 243,
+   "lines": 247,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -309881,6 +309988,11 @@
    "lines": 10,
    "uses_service_role": true
   },
+  "supabase/migrations/20261126210000_workspaces_rls_read_only.sql": {
+   "path": "supabase/migrations/20261126210000_workspaces_rls_read_only.sql",
+   "lines": 40,
+   "uses_service_role": true
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -310598,10 +310710,25 @@
   }
  },
  "git": {
-  "sha": "2e20fce68d30d5e8f992b0ed88f3ac0acadefb9c",
+  "sha": "c040dd38ddd2befc8437b92d92a051fe1521c76e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "c040dd3",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(workspace): tela de contas do Google Workspace e correção da RLS que a zerava (#373)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/hooks/useWorkspaces.ts",
+     "src/pages/Workspaces.tsx",
+     "supabase/functions/external-data/tables.ts",
+     "supabase/migrations/20261126210000_workspaces_rls_read_only.sql"
+    ]
+   },
    {
     "sha": "2e20fce",
     "date": "2026-11-26",
@@ -310945,37 +311072,24 @@
      "supabase/functions/_shared/fetch-utils.ts",
      "supabase/functions/_shared/fetch-utils_test.ts"
     ]
-   },
-   {
-    "sha": "970f220",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "chore(diag): porta as ferramentas de diagnostico do bundle hermes para scripts/diag (#342)",
-    "files": [
-     "scripts/diag/README.md",
-     "scripts/diag/anon_crm_probe.sql",
-     "scripts/diag/fix_triggers.sql",
-     "scripts/diag/scan_triggers.sql",
-     "scripts/diag/verify_triggers.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/external-data/tables.ts",
-    10
+    11
    ],
    [
     "src/app/AppRoutes.tsx",
-    8
+    9
    ],
    [
     "src/app/lazyPages.tsx",
-    8
+    9
    ],
    [
     "src/components/layout/AppSidebar.tsx",
-    8
+    9
    ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
@@ -311010,6 +311124,18 @@
     2
    ],
    [
+    "src/hooks/useWorkspaces.ts",
+    1
+   ],
+   [
+    "src/pages/Workspaces.tsx",
+    1
+   ],
+   [
+    "supabase/migrations/20261126210000_workspaces_rls_read_only.sql",
+    1
+   ],
+   [
     "src/hooks/useEventosCliente.ts",
     1
    ],
@@ -311027,18 +311153,6 @@
    ],
    [
     "src/pages/GovernancaIA.tsx",
-    1
-   ],
-   [
-    "supabase/migrations/20261126200000_governanca_ia_read_only.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261126190000_parceiros_controle_read_only.sql",
-    1
-   ],
-   [
-    "src/hooks/useClientes.ts",
     1
    ]
   ]

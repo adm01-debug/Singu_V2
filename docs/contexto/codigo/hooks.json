@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 420,
+ "total": 421,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -10598,6 +10598,26 @@
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/components/contact-detail/WorkspaceAccountsCard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useWorkspaces.ts",
+   "hooks_exportados": [
+    "useWorkspaces"
+   ],
+   "linhas": 78,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/Workspaces.tsx"
    ],
    "coberto_por_testes": 0
   },

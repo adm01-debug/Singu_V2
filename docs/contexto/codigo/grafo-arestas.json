@@ -468,6 +468,7 @@
    "src/pages/WhatsAppImport.tsx",
    "src/pages/WinLoss.tsx",
    "src/pages/WinLossSetup.tsx",
+   "src/pages/Workspaces.tsx",
    "src/pages/admin/AdminSegurancaPage.tsx",
    "src/pages/admin/BehavioralRegenAudit.tsx",
    "src/pages/admin/ComponentGallery.tsx",
@@ -9526,6 +9527,9 @@
    "src/lib/externalData.ts",
    "src/lib/logger.ts"
   ],
+  "src/hooks/useWorkspaces.ts": [
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useYourDay.ts": [
    "src/hooks/useAuth.tsx",
    "src/integrations/supabase/client.ts",
@@ -11232,6 +11236,17 @@
    "src/components/ui/button.tsx",
    "src/components/win-loss/CompetitorEditor.tsx",
    "src/components/win-loss/ReasonsEditor.tsx"
+  ],
+  "src/pages/Workspaces.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useWorkspaces.ts"
   ],
   "src/pages/admin/AdminSegurancaPage.tsx": [
    "src/components/ui/badge.tsx",

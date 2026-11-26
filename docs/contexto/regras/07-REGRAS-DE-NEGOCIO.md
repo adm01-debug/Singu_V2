@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2e20fce68d` · branch `main` · 2026-11-26 18:33 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c040dd38dd` · branch `main` · 2026-11-26 18:58 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -311,7 +311,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `company_social_media` | company_social_media_update | UPDATE | public | permissive | `true` |  |
 | `company_social_media` | company_social_media_delete | DELETE | public | permissive | `true` |  |
 | `contact_phones` | contact_phones_select | SELECT | public | permissive | `true` |  |
-| … +965 linhas — lista completa em `context.json` | | | | | | |
+| … +961 linhas — lista completa em `context.json` | | | | | | |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -1435,7 +1435,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `empathy` | compara | `src/hooks/useCarnegieAnalysis.ts` |
 | `type` | `enroll_in_sequence` | escreve | `src/components/automation/AutomationTemplates.tsx` |
 | `type` | `enum` | escreve | `src/lib/reports/reportEngine.ts` |
-| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +68 |
+| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +69 |
 | `type` | `error` | compara | `src/lib/queryErrorReporter.ts` |
 | `type` | `error_budget_100` | escreve | `supabase/functions/error-budget/index.ts` |
 | `type` | `error_budget_50` | escreve | `supabase/functions/error-budget/index.ts` |
@@ -1795,6 +1795,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | ReasonOutcomeType | won \| lost \| both | `src/hooks/useWinLoss.ts` |
 | InsightType | pattern \| recommendation \| alert | `src/hooks/useWinLoss.ts` |
 | InsightSeverity | info \| warning \| critical \| success | `src/hooks/useWinLoss.ts` |
+| SituacaoConta | admin \| suspenso \| inativo \| grupo \| ativo | `src/hooks/useWorkspaces.ts` |
+| TIPOS_CONTA_WORKSPACE | { valor: 'user', label: 'Usuários' }, { valor: 'group', label: 'Grupos' }, | `src/hooks/useWorkspaces.ts` |
 | VoiceAgentPhase | idle \| listening \| processing \| speaking \| error | `src/hooks/voice/types.ts` |
 | INTERACTION_CHANNELS | 'whatsapp', 'call', 'email', 'meeting', 'video_call', 'note', | `src/lib/canaisInteracao.ts` |
 | FICHA360_CHANNELS | 'whatsapp', 'call', 'email', 'meeting', 'note', 'audio', 'transcription' | `src/lib/canaisInteracao.ts` |
@@ -3789,6 +3791,7 @@ _nenhum item encontrado_
 | `GEOCODING_BATCH_SIZE` | `50` | `src/pages/MapaEmpresas.tsx` |
 | `SEARCH_DEBOUNCE_MS` | `400` | `src/pages/Parceiros.tsx` |
 | `SMS_LIMIT` | `160` | `src/pages/SmsMarketing.tsx` |
+| `TAMANHO_PAGINA` | `25` | `src/pages/Workspaces.tsx` |
 | `PAGE_SIZE` | `50` | `src/pages/admin/BehavioralRegenAudit.tsx` |
 | `JANELA_DIAS` | `7` | `src/pages/admin/Observability.tsx` |
 | `RENDER_BATCH` | `100` | `src/pages/contatos/ContatosContent.tsx` |

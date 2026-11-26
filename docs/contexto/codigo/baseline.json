@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "2e20fce68d30d5e8f992b0ed88f3ac0acadefb9c",
+  "commit": "c040dd38ddd2befc8437b92d92a051fe1521c76e",
   "branch": "main",
-  "data_commit": "2026-11-26T15:33:02-03:00",
+  "data_commit": "2026-11-26T15:57:39-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "c040dd3",
+    "data": "2026-11-26",
+    "assunto": "feat(workspace): tela de contas do Google Workspace e correção da RLS que a zerava (#373)"
+   },
    {
     "sha": "2e20fce",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "e347c01",
     "data": "2026-11-25",
     "assunto": "fix(rbac): paleta de ctrl+k respeita as permissoes das rotas guardadas (#348)"
-   },
-   {
-    "sha": "a16128a",
-    "data": "2026-11-25",
-    "assunto": "feat(rbac): menu inferior do mobile respeita as permissoes das rotas (#347)"
    }
   ],
-  "arquivos_mudados_7d": 1035,
+  "arquivos_mudados_7d": 1038,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -149,7 +149,7 @@
    },
    {
     "pasta": "supabase/functions/external-data",
-    "mudancas": 22
+    "mudancas": 23
    },
    {
     "pasta": "src/components/triggers",
@@ -161,7 +161,7 @@
    },
    {
     "pasta": "src/components/layout",
-    "mudancas": 18
+    "mudancas": 19
    },
    {
     "pasta": "scripts/migration/functions",
@@ -222,6 +222,10 @@
     "mudancas": 17
    },
    {
+    "arquivo": "src/app/AppRoutes.tsx",
+    "mudancas": 15
+   },
+   {
     "arquivo": "tests/rls/security_definer_hardening.sql",
     "mudancas": 15
    },
@@ -230,20 +234,16 @@
     "mudancas": 14
    },
    {
-    "arquivo": "src/app/AppRoutes.tsx",
-    "mudancas": 14
-   },
-   {
     "arquivo": "src/components/layout/AppSidebar.tsx",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/external-data/tables.ts",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "src/app/lazyPages.tsx",
-    "mudancas": 11
+    "mudancas": 12
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 205
+    "commits": 206
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,19 +326,19 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3968,
-  "arquivos_codigo": 2289,
-  "linhas_codigo": 427451,
-  "rotas": 124,
+  "arquivos_total": 3971,
+  "arquivos_codigo": 2291,
+  "linhas_codigo": 427817,
+  "rotas": 125,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 74,
+  "itens_menu": 75,
   "modulos": 142,
-  "componentes": 1088,
-  "hooks": 420,
+  "componentes": 1089,
+  "hooks": 421,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1128,
+  "migrations": 1129,
   "cron_jobs": 47,
   "testes": 288,
   "workflows": 14,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 610
+   "linhas": 612
   },
   "src/components": {
    "arquivos": 1017,
-   "linhas": 152385
+   "linhas": 152386
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 452,
-   "linhas": 59881
+   "arquivos": 453,
+   "linhas": 59959
   },
   "src/integrations": {
    "arquivos": 3,
@@ -691,8 +691,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 164,
-   "linhas": 32642
+   "arquivos": 165,
+   "linhas": 32923
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28190
+   "linhas": 28194
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1284,7 +1284,8 @@
    "Toaster",
    "ViewMode",
    "WhatsAppImport",
-   "WhatsNewModal"
+   "WhatsNewModal",
+   "Workspaces"
   ],
   "scripts_orfaos": [
    "scripts/hardening/check-client-tls.sql",

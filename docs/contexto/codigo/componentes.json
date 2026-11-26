@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1088,
+ "total": 1089,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -470,6 +470,10 @@
   "WhatsNewModal": [
    "src/app/lazyPages.tsx",
    "src/components/features/WhatsNewModal.tsx"
+  ],
+  "Workspaces": [
+   "src/app/lazyPages.tsx",
+   "src/pages/Workspaces.tsx"
   ]
  },
  "componentes": [
@@ -523,7 +527,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 198,
+   "linhas": 199,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -668,10 +672,11 @@
     "WhatsAppImport",
     "WhatsNewModal",
     "WinLossPage",
-    "WinLossSetupPage"
+    "WinLossSetupPage",
+    "Workspaces"
    ],
    "export_default": null,
-   "linhas": 182,
+   "linhas": 183,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10375,7 +10380,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 55,
+   "usado_por": 56,
    "orfao": false
   },
   {
@@ -10384,7 +10389,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 329,
+   "linhas": 330,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14270,7 +14275,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 560,
+   "usado_por": 561,
    "orfao": false
   },
   {
@@ -14285,7 +14290,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 540,
+   "usado_por": 541,
    "orfao": false
   },
   {
@@ -14320,7 +14325,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 598,
+   "usado_por": 599,
    "orfao": false
   },
   {
@@ -14599,7 +14604,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 214,
+   "usado_por": 215,
    "orfao": false
   },
   {
@@ -14945,7 +14950,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 133,
+   "usado_por": 134,
    "orfao": false
   },
   {
@@ -15105,7 +15110,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 213,
+   "usado_por": 214,
    "orfao": false
   },
   {
@@ -15229,7 +15234,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 26,
+   "usado_por": 27,
    "orfao": false
   },
   {
@@ -18232,6 +18237,22 @@
    "linhas": 34,
    "dominio": "pages",
    "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/Workspaces.tsx",
+   "exports": [
+    "Workspaces"
+   ],
+   "export_default": "Workspaces",
+   "linhas": 281,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useWorkspaces"
+   ],
    "tabelas": [],
    "edges": [],
    "usado_por": 1,

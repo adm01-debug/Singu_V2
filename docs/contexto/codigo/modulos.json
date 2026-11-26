@@ -35,7 +35,7 @@
    "modulo": "app",
    "arquivos": 6,
    "testes": 0,
-   "linhas": 610,
+   "linhas": 612,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -729,6 +729,7 @@
     "useWinLossRecordByDeal",
     "useWinLossRecords",
     "useWorkspaceAccounts",
+    "useWorkspaces",
     "useYourDay",
     "useYoyComparison"
    ],
@@ -5569,7 +5570,7 @@
    "modulo": "components/layout",
    "arquivos": 6,
    "testes": 2,
-   "linhas": 1435,
+   "linhas": 1436,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -9896,9 +9897,9 @@
   },
   {
    "modulo": "hooks",
-   "arquivos": 387,
+   "arquivos": 388,
    "testes": 23,
-   "linhas": 52457,
+   "linhas": 52535,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],
@@ -10566,6 +10567,7 @@
     "useWinLossRecordByDeal",
     "useWinLossRecords",
     "useWorkspaceAccounts",
+    "useWorkspaces",
     "useYourDay",
     "useYoyComparison"
    ],
@@ -11247,6 +11249,7 @@
     "useWinLossRecordByDeal",
     "useWinLossRecords",
     "useWorkspaceAccounts",
+    "useWorkspaces",
     "useYourDay"
    ],
    "edges": [
@@ -12611,9 +12614,9 @@
   },
   {
    "modulo": "pages",
-   "arquivos": 114,
+   "arquivos": 115,
    "testes": 6,
-   "linhas": 24754,
+   "linhas": 25035,
    "itens_menu": [
     "ABM",
     "Análise PNL",
@@ -12630,6 +12633,7 @@
     "Clientes 360",
     "Conexões",
     "Configurações",
+    "Contas do Workspace",
     "Contatos",
     "Conversas",
     "Conversation Intel",
@@ -12701,6 +12705,7 @@
     "/admin/secrets-management",
     "/admin/telemetria",
     "/admin/voice-diagnostics",
+    "/admin/workspaces",
     "/analytics",
     "/aprovacoes-follow-up",
     "/assistente",
@@ -12793,7 +12798,7 @@
     "/win-loss/setup"
    ],
    "rotas_http": [],
-   "componentes": 114,
+   "componentes": 115,
    "hooks_locais": [
     "useABMAccount",
     "useABMAccountPlans",
@@ -13460,6 +13465,7 @@
     "useWinLossRecordByDeal",
     "useWinLossRecords",
     "useWorkspaceAccounts",
+    "useWorkspaces",
     "useYourDay",
     "useYoyComparison"
    ],

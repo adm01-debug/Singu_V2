@@ -1,20 +1,20 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 2003,
- "arestas": 8785,
+ "nos": 2005,
+ "arestas": 8796,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
-   "importado_por": 598
+   "importado_por": 599
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 561
+   "importado_por": 562
   },
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 541
+   "importado_por": 542
   },
   {
    "arquivo": "src/lib/utils.ts",
@@ -30,11 +30,11 @@
   },
   {
    "arquivo": "src/components/ui/input.tsx",
-   "importado_por": 214
+   "importado_por": 215
   },
   {
    "arquivo": "src/components/ui/skeleton.tsx",
-   "importado_por": 213
+   "importado_por": 214
   },
   {
    "arquivo": "src/lib/logger.ts",
@@ -46,11 +46,11 @@
   },
   {
    "arquivo": "src/lib/externalData.ts",
-   "importado_por": 139
+   "importado_por": 140
   },
   {
    "arquivo": "src/components/ui/select.tsx",
-   "importado_por": 133
+   "importado_por": 134
   },
   {
    "arquivo": "src/lib/errorMessages.ts",
@@ -98,7 +98,7 @@
   },
   {
    "arquivo": "src/components/layout/AppLayout.tsx",
-   "importado_por": 55
+   "importado_por": 56
   },
   {
    "arquivo": "supabase/functions/_shared/fetch-utils.ts",
@@ -141,12 +141,12 @@
    "importado_por": 27
   },
   {
-   "arquivo": "src/hooks/useIsAdmin.ts",
+   "arquivo": "src/components/ui/table.tsx",
    "importado_por": 27
   },
   {
-   "arquivo": "src/components/ui/table.tsx",
-   "importado_por": 26
+   "arquivo": "src/hooks/useIsAdmin.ts",
+   "importado_por": 27
   },
   {
    "arquivo": "src/types/triggers.ts",
