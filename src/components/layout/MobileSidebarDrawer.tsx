@@ -32,7 +32,8 @@ import {
   Brain,
   BookOpen,
   Kanban,
-  Layers
+  Layers,
+  Factory
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
@@ -56,6 +57,7 @@ const navItems = [
 
   { icon: Network, label: 'Network', path: '/network', section: 'Análise' },
   { icon: Layers, label: 'Grupos Econômicos', path: '/grupos-economicos', section: 'Análise' },
+  { icon: Factory, label: 'Inteligência por ramo', path: '/inteligencia-ramos', section: 'Análise' },
   { icon: Activity, label: 'Intelligence', path: '/intelligence', section: 'Análise' },
   { icon: Shield, label: 'Auditoria IA', path: '/intelligence/auditoria', section: 'Análise' },
   { icon: Lightbulb, label: 'Insights', path: '/insights', section: 'Análise' },

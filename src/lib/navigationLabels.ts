@@ -17,6 +17,8 @@ const ROUTE_LABELS: Record<string, string> = {
   'lead-scoring': 'Pontuação de leads',
   'deal-rooms': 'Salas de negociação',
   'customer-success': 'Sucesso do cliente',
+  'inteligencia-ramos': 'Inteligência por ramo',
+  'grupos-economicos': 'Grupos Econômicos',
 };
 
 export function getReadableLabel(path: string | null): string {
