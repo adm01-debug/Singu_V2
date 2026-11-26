@@ -5,9 +5,9 @@
   "vitest",
   "playwright"
  ],
- "total": 288,
+ "total": 289,
  "por_tipo": {
-  "contrato": 41,
+  "contrato": 42,
   "e2e": 12,
   "pytest": 9,
   "unit": 224
@@ -15,7 +15,7 @@
  "onde_ficam": [
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 130
+   "arquivos": 131
   },
   {
    "padrao": "co-localizado (__tests__)",
@@ -1920,6 +1920,16 @@
    "casos": 14
   },
   {
+   "arquivo": "src/hooks/useTrendAnalysis.contract.test.tsx",
+   "tipo": "contrato",
+   "linhas": 62,
+   "testa": [
+    "src/hooks/useReportsAnalytics.ts",
+    "src/lib/externalData.ts"
+   ],
+   "casos": 3
+  },
+  {
    "arquivo": "src/hooks/voice/__tests__/voice-system-exhaustive.test.ts",
    "tipo": "unit",
    "linhas": 861,
@@ -2793,6 +2803,7 @@
   "src/hooks/usePortfolioCompatibility.ts": 1,
   "src/hooks/useProactiveIntelligence.ts": 1,
   "src/hooks/useRFMAnalysis.ts": 2,
+  "src/hooks/useReportsAnalytics.ts": 1,
   "src/hooks/useRestoreEntity.ts": 3,
   "src/hooks/useSequenceProcessor.ts": 1,
   "src/hooks/useSequences.ts": 2,
@@ -2810,7 +2821,7 @@
   "src/lib/circuitBreaker.ts": 4,
   "src/lib/contactBehaviorAudit.ts": 1,
   "src/lib/errorReporting.ts": 2,
-  "src/lib/externalData.ts": 24,
+  "src/lib/externalData.ts": 25,
   "src/lib/formatters.ts": 1,
   "src/lib/insights/extractExcerpts.ts": 1,
   "src/lib/insights/pickTopPassages.ts": 1,
@@ -3259,7 +3270,6 @@
    "src/hooks/useReducedMotion.ts",
    "src/hooks/useRelationshipScoreHistory.ts",
    "src/hooks/useReportInfiniteScrollProgress.ts",
-   "src/hooks/useReportsAnalytics.ts",
    "src/hooks/useReportWidgets.ts",
    "src/hooks/useRevOps.ts",
    "src/hooks/useRFMSegmentConfig.ts",

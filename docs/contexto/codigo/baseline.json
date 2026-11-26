@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "3cf27ae23e49fc5de491c98773c9c0b91499ba2e",
+  "commit": "cf58aa24ef0f2b483a5508bd56eaf1e62fa39ac5",
   "branch": "main",
-  "data_commit": "2026-11-26T16:56:36-03:00",
+  "data_commit": "2026-11-26T17:37:37-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "cf58aa2",
+    "data": "2026-11-26",
+    "assunto": "fix(analytics): corrige contrato dos widgets de tendencia e comparativo anual (#377)"
+   },
    {
     "sha": "3cf27ae",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "882db32",
     "data": "2026-11-25",
     "assunto": "fix(sync): payload do catalogo respeita a coluna margin_pct gerada pelo banco (#351)"
-   },
-   {
-    "sha": "bc7a0ba",
-    "data": "2026-11-25",
-    "assunto": "fix(deploy): sync-product-catalog nasce sem verify_jwt verificavel e o cron nao a alcanca (#350)"
    }
   ],
-  "arquivos_mudados_7d": 1042,
+  "arquivos_mudados_7d": 1046,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 208
+    "commits": 209
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,9 +326,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3975,
-  "arquivos_codigo": 2295,
-  "linhas_codigo": 428845,
+  "arquivos_total": 3976,
+  "arquivos_codigo": 2296,
+  "linhas_codigo": 428928,
   "rotas": 126,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
@@ -340,7 +340,7 @@
   "tabelas": 542,
   "migrations": 1129,
   "cron_jobs": 47,
-  "testes": 288,
+  "testes": 289,
   "workflows": 14,
   "scripts": 302,
   "docs_md": 159
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 455,
-   "linhas": 60153
+   "arquivos": 456,
+   "linhas": 60236
   },
   "src/integrations": {
    "arquivos": 3,

@@ -9952,8 +9952,8 @@
   {
    "modulo": "hooks",
    "arquivos": 390,
-   "testes": 23,
-   "linhas": 52729,
+   "testes": 24,
+   "linhas": 52750,
    "itens_menu": [],
    "telas": [],
    "rotas_http": [],

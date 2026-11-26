@@ -8437,7 +8437,7 @@
     "useTrendAnalysis",
     "useYoyComparison"
    ],
-   "linhas": 322,
+   "linhas": 343,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -8458,7 +8458,7 @@
     "src/components/dashboard/widgets/ChurnRiskReportWidget.tsx",
     "src/components/dashboard/widgets/DailyInsightsWidget.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useReportWidgets.ts",

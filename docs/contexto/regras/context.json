@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "3cf27ae23e49fc5de491c98773c9c0b91499ba2e",
+  "sha": "cf58aa24ef0f2b483a5508bd56eaf1e62fa39ac5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 20:00 UTC",
-  "files_total": 4080,
-  "code_files": 3602,
-  "code_lines": 487026
+  "generated_at": "2026-11-26 20:39 UTC",
+  "files_total": 4081,
+  "code_files": 3603,
+  "code_lines": 487109
  },
  "version": "1.3.2",
- "facts_hash": "7bc90a93ea3b3c08",
+ "facts_hash": "99b30a2f8207e2c1",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -273,7 +273,7 @@
   "package_manager": "bun",
   "languages": {
    ".sql": 1306,
-   ".tsx": 1201,
+   ".tsx": 1202,
    ".ts": 930,
    ".mjs": 123,
    ".py": 22,
@@ -112603,8 +112603,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 455,
-   "lines": 60153,
+   "files": 456,
+   "lines": 60236,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -181168,6 +181168,22 @@
    {
     "file": "src/hooks/useSocialInsights.test.tsx",
     "name": "mantém o histórico visível e informa a falha parcial na recarga do painel"
+   },
+   {
+    "file": "src/hooks/useTrendAnalysis.contract.test.tsx",
+    "name": "Contrato da tendência mensal"
+   },
+   {
+    "file": "src/hooks/useTrendAnalysis.contract.test.tsx",
+    "name": "converte a série "
+   },
+   {
+    "file": "src/hooks/useTrendAnalysis.contract.test.tsx",
+    "name": "devolve lista vazia quando a RPC não traz a série"
+   },
+   {
+    "file": "src/hooks/useTrendAnalysis.contract.test.tsx",
+    "name": "expõe a falha da RPC sem apresentar dados de sucesso"
    },
    {
     "file": "src/hooks/__tests__/auth-logger.contract.test.tsx",
@@ -281157,7 +281173,7 @@
   },
   "src/hooks/useReportsAnalytics.ts": {
    "path": "src/hooks/useReportsAnalytics.ts",
-   "lines": 322,
+   "lines": 343,
    "exports": [
     "interface RfmDashboard",
     "interface CohortData",
@@ -283758,6 +283774,17 @@
    ],
    "pagination": [
     "5000"
+   ]
+  },
+  "src/hooks/useTrendAnalysis.contract.test.tsx": {
+   "path": "src/hooks/useTrendAnalysis.contract.test.tsx",
+   "lines": 62,
+   "is_test": true,
+   "tests": [
+    "Contrato da tendência mensal",
+    "converte a série ",
+    "devolve lista vazia quando a RPC não traz a série",
+    "expõe a falha da RPC sem apresentar dados de sucesso"
    ]
   },
   "src/hooks/useTriggerAnalytics.ts": {
@@ -310908,10 +310935,22 @@
   }
  },
  "git": {
-  "sha": "3cf27ae23e49fc5de491c98773c9c0b91499ba2e",
+  "sha": "cf58aa24ef0f2b483a5508bd56eaf1e62fa39ac5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "cf58aa2",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "fix(analytics): corrige contrato dos widgets de tendencia e comparativo anual (#377)",
+    "files": [
+     "src/components/analytics/ReportsTab.tsx",
+     "src/components/analytics/YoyComparisonWidget.tsx",
+     "src/hooks/useReportsAnalytics.ts",
+     "src/hooks/useTrendAnalysis.contract.test.tsx"
+    ]
+   },
    {
     "sha": "3cf27ae",
     "date": "2026-11-26",
@@ -311266,15 +311305,6 @@
      "supabase/migrations/20261125091000_rbac_popula_papeis_e_completa_matriz_rotas.sql",
      "tests/rls/contact_relations_owner_scope.sql"
     ]
-   },
-   {
-    "sha": "603c404",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)",
-    "files": [
-     "supabase/migrations/20261125090000_desativa_crons_modulo_zapp_history_morto.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -311331,6 +311361,22 @@
     2
    ],
    [
+    "src/components/analytics/ReportsTab.tsx",
+    1
+   ],
+   [
+    "src/components/analytics/YoyComparisonWidget.tsx",
+    1
+   ],
+   [
+    "src/hooks/useReportsAnalytics.ts",
+    1
+   ],
+   [
+    "src/hooks/useTrendAnalysis.contract.test.tsx",
+    1
+   ],
+   [
     "src/hooks/useQualidadeCadastral.ts",
     1
    ],
@@ -311340,22 +311386,6 @@
    ],
    [
     "src/components/governanca-ia/TelemetriaGateway.tsx",
-    1
-   ],
-   [
-    "src/hooks/useTelemetriaIA.ts",
-    1
-   ],
-   [
-    "src/hooks/useWorkspaces.ts",
-    1
-   ],
-   [
-    "src/pages/Workspaces.tsx",
-    1
-   ],
-   [
-    "supabase/migrations/20261126210000_workspaces_rls_read_only.sql",
     1
    ]
   ]

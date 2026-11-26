@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3cf27ae23e` · branch `main` · 2026-11-26 20:00 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `cf58aa24ef` · branch `main` · 2026-11-26 20:39 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -4805,7 +4805,7 @@ _nenhum item encontrado_
 | `admin` | `supabase/migrations/20261118182244_guard_contact_relation_write_fn.sql` |
 | `admin` | `supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql` |
 
-## K. Testes como especificação (3318 testes em 263 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (3322 testes em 264 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -5003,6 +5003,7 @@ _nenhum item encontrado_
 | `src/components/sequences/SequenceEnrollDialog.contract.test.tsx` | 4 | Inscrição com busca e cache da carteira · impede fechar pelo X ou Escape durante uma inscrição pendente · repete o mesmo termo depois de falha transitória e oferece o contato recuperado · não inscreve um contato selecionado que desapareceu do cache após arquivamento |
 | `src/hooks/useContactDetail.presence.test.tsx` | 4 | presença confirmada na recarga da ficha · retira a ficha anterior do cache quando ambas as fontes confirmam ausência · preserva a ficha se a consulta %s falhar e recupera no retry · mantém o contato da lixeira da fonte %s disponível para restauração |
 | `src/hooks/useDailySummary.contract.test.tsx` | 4 | Contrato do dia e fuso do resumo diário · usa o dia brasileiro no instante %s · preserva a data selecionada ao consultar um dia anterior · expõe a falha da RPC sem apresentar dados de sucesso |
+| `src/hooks/useTrendAnalysis.contract.test.tsx` | 4 | Contrato da tendência mensal · converte a série  · devolve lista vazia quando a RPC não traz a série · expõe a falha da RPC sem apresentar dados de sucesso |
 | `src/lib/errorReporting.auth.test.ts` | 4 | Relatórios de erros autenticados · envia o JWT e atribui os erros ao usuário da sessão · não tenta gravar com a chave pública quando não há sessão · descarta erros identificados como pertencentes a outra conta |
 | `src/lib/externalQueryOrder.contract.test.ts` | 4 | Ordenação de páginas pelo proxy externo · preserva a ordenação legada e sua direção padrão · preserva o desempate por ID na ordem recebida · aceita consultas sem ordenação |
 | `src/lib/externalSearchFilter.limits.test.ts` | 4 | Limites da busca composta · rejeita palavras excedentes sem descartar parte da pesquisa · aceita dez palavras e limita a expansão a cem predicados em dez colunas · preserva frases com mais palavras quando a busca composta não foi solicitada |
