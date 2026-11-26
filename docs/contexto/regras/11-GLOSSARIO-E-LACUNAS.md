@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6205952814` · branch `main` · 2026-11-26 16:30 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8f49ae8ae7` · branch `main` · 2026-11-26 16:58 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -337,6 +337,7 @@ _nenhum item encontrado_
 | status | valor `on_track` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useContactCadence.ts` |
 | status | valor `perdido` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDealsAtRisk.ts`<br>`compara:src/hooks/useReportWidgets.ts` |
 | status | valor `declined` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDocumentTemplates.ts`<br>`compara:src/pages/PublicSignaturePage.tsx`<br>`escreve:src/hooks/useDocumentTemplates.ts`<br>`escreve:supabase/functions/submit-signature/index.ts` |
+| status | valor `todos` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/Clientes.tsx` |
 | status | valor `ignored` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`escreve:supabase/functions/bitrix24-webhook/index.ts`<br>`escreve:supabase/functions/evolution-webhook/events.ts`<br>`escreve:supabase/functions/evolution-webhook/index.ts` |
 | status | valor `logged` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts`<br>`escreve:supabase/functions/evolution-webhook/events.ts` |
 | status | valor `recebida` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/_shared/evolution-dispatch-contract_test.ts` |
@@ -618,8 +619,7 @@ _nenhum item encontrado_
 | dinâmico | 5 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/cdc/replay.ts` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/compliance/lgpd-snapshot.ts` |
 | dinâmico | 1 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/migration/verify/dual-write-diverge.ts` |
-| dinâmico | 2 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `scripts/regras_negocio/generate.py` |
-| … +60 linhas — lista completa em `context.json` | | |
+| … +61 linhas — lista completa em `context.json` | | |
 
 ## Lacunas — o que este contexto NÃO consegue responder (perguntas para o dono do negócio)
 

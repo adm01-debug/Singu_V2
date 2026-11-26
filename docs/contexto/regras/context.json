@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "6205952814c91fef1b732883f92d2c46f02b9624",
+  "sha": "8f49ae8ae730f189ab76d25b873d4561b4f8c882",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 16:30 UTC",
-  "files_total": 4063,
-  "code_files": 3585,
-  "code_lines": 483750
+  "generated_at": "2026-11-26 16:58 UTC",
+  "files_total": 4066,
+  "code_files": 3588,
+  "code_lines": 484487
  },
  "version": "1.3.2",
- "facts_hash": "405879968f248c0d",
+ "facts_hash": "050066ad56c576e4",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,9 +272,9 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1301,
-   ".tsx": 1195,
-   ".ts": 924,
+   ".sql": 1302,
+   ".tsx": 1196,
+   ".ts": 925,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -87748,7 +87748,8 @@
    "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql",
    "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql",
    "supabase/migrations/20261126160000_admin_read_mfa_locked_tables.sql",
-   "supabase/migrations/20261126170000_admin_read_automation_notifications.sql"
+   "supabase/migrations/20261126170000_admin_read_automation_notifications.sql",
+   "supabase/migrations/20261126180000_clientes_views_read_only.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -101755,6 +101756,39 @@
    },
    {
     "path": "",
+    "file": "src/pages/Clientes.tsx",
+    "component": "Clientes",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 105
+   },
+   {
+    "path": "",
     "file": "src/pages/CompanyProfileAnalytics.tsx",
     "component": "CompanyProfileAnalytics",
     "tables_transitive": [
@@ -107626,6 +107660,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/clientes",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/contatos",
     "component": "P",
     "guard": "Protected",
@@ -108740,6 +108781,26 @@
    {
     "name": "useClientValues",
     "file": "src/hooks/useClientValues.ts"
+   },
+   {
+    "name": "useClientesKpis",
+    "file": "src/hooks/useClientes.ts"
+   },
+   {
+    "name": "useClientesLista",
+    "file": "src/hooks/useClientes.ts"
+   },
+   {
+    "name": "useHierarquiaEmpresas",
+    "file": "src/hooks/useClientes.ts"
+   },
+   {
+    "name": "useCooperativas",
+    "file": "src/hooks/useClientes.ts"
+   },
+   {
+    "name": "useHistoricoEmpresas",
+    "file": "src/hooks/useClientes.ts"
    },
    {
     "name": "useClosingScoreAlerts",
@@ -111447,6 +111508,10 @@
    {
     "guard": "Protected",
     "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "guard": "Protected",
+    "file": "src/app/AppRoutes.tsx"
    }
   ]
  },
@@ -111814,7 +111879,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 604,
+   "lines": 606,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -111851,7 +111916,7 @@
   {
    "module": "src/components",
    "files": 1017,
-   "lines": 152382,
+   "lines": 152383,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112298,8 +112363,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 449,
-   "lines": 59372,
+   "files": 450,
+   "lines": 59616,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -112656,6 +112721,7 @@
     "src/hooks/useClientHealth.ts",
     "src/hooks/useClientTriggers.ts",
     "src/hooks/useClientValues.ts",
+    "src/hooks/useClientes.ts",
     "src/hooks/useClosingScoreAlerts.ts",
     "src/hooks/useClosingScoreAlertsView.ts",
     "src/hooks/useClosingScoreRanking.ts",
@@ -112671,8 +112737,7 @@
     "src/hooks/useCompaniesDuplicatasView.ts",
     "src/hooks/useCompanyActions.ts",
     "src/hooks/useCompanyCommercial.ts",
-    "src/hooks/useCompanyFilterOptions.ts",
-    "src/hooks/useCompanyIntelligence.ts"
+    "src/hooks/useCompanyFilterOptions.ts"
    ]
   },
   {
@@ -112873,8 +112938,8 @@
   },
   {
    "module": "src/pages",
-   "files": 161,
-   "lines": 31410,
+   "files": 162,
+   "lines": 31862,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -112938,6 +113003,7 @@
     "Calendario.tsx: Calendario",
     "Campanhas.tsx: Campanhas",
     "Carteira.tsx: Carteira",
+    "Clientes.tsx: Clientes",
     "CompanyProfileAnalytics.tsx: CompanyProfileAnalytics",
     "Configuracoes.tsx: Configuracoes",
     "ContatoDetalhe.tsx: ContatoDetalhe",
@@ -112947,8 +113013,7 @@
     "CustomReports.tsx: CustomReports",
     "CustomerSuccess.tsx: CustomerSuccess",
     "CustomerSuccessAccount.tsx: CustomerSuccessAccount",
-    "DealRoomDetail.tsx: DealRoomDetail",
-    "DealRooms.tsx: DealRooms"
+    "DealRoomDetail.tsx: DealRoomDetail"
    ],
    "docs": [],
    "deps": [
@@ -113011,6 +113076,7 @@
     "src/pages/Calendario.tsx",
     "src/pages/Campanhas.tsx",
     "src/pages/Carteira.tsx",
+    "src/pages/Clientes.tsx",
     "src/pages/CompanyProfileAnalytics.tsx",
     "src/pages/Configuracoes.tsx",
     "src/pages/ContatoDetalhe.errors.test.tsx",
@@ -113060,8 +113126,7 @@
     "src/pages/NPS.contract.test.tsx",
     "src/pages/NPS.tsx",
     "src/pages/Network.tsx",
-    "src/pages/NotFound.tsx",
-    "src/pages/Notificacoes.tsx"
+    "src/pages/NotFound.tsx"
    ]
   },
   {
@@ -113232,7 +113297,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28166,
+   "lines": 28180,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113513,8 +113578,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1124,
-   "lines": 105034,
+   "files": 1125,
+   "lines": 105058,
    "tables": [
     "users"
    ],
@@ -153440,6 +153505,11 @@
     "value": "5"
    },
    {
+    "file": "src/hooks/useClientes.ts",
+    "name": "TAMANHO_PAGINA_CLIENTES",
+    "value": "25"
+   },
+   {
     "file": "src/hooks/useCompanies.ts",
     "name": "COMPANIES_PAGE_SIZE",
     "value": "500"
@@ -159033,6 +159103,48 @@
     "kind": "compara"
    },
    {
+    "file": "src/hooks/useClientes.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useClientes.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useClientes.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useClientes.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useClientes.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useClientes.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useClientes.ts",
+    "field": "type",
+    "value": "eq",
+    "kind": "escreve"
+   },
+   {
     "file": "src/hooks/useClosingScoreAlerts.ts",
     "field": "type",
     "value": "closing_score",
@@ -161796,6 +161908,12 @@
     "file": "src/pages/Campanhas.tsx",
     "field": "status",
     "value": "draft",
+    "kind": "compara"
+   },
+   {
+    "file": "src/pages/Clientes.tsx",
+    "field": "status",
+    "value": "todos",
     "kind": "compara"
    },
    {
@@ -169551,6 +169669,10 @@
    {
     "file": "src/hooks/useClientHealth.ts",
     "line": "const threeMonthsAgo = subDays(now, 90);"
+   },
+   {
+    "file": "src/hooks/useClientes.ts",
+    "line": "staleTime: 5 * 60 * 1000,"
    },
    {
     "file": "src/hooks/useClosingScoreAlerts.ts",
@@ -214137,6 +214259,7 @@
       "escreve:src/hooks/useCadenceEnrollments.ts",
       "escreve:src/hooks/useChannelPerformanceMatrix.ts",
       "escreve:src/hooks/useChurnRisk.ts",
+      "escreve:src/hooks/useClientes.ts",
       "escreve:src/hooks/useClosingScoreAlertsView.ts",
       "escreve:src/hooks/useClosingScoreView.ts",
       "escreve:src/hooks/useCommunicationDashboard.ts",
@@ -215814,6 +215937,9 @@
       "escreve:src/lib/systemHealth.ts",
       "escreve:supabase/functions/health-aggregate/index.ts",
       "escreve:supabase/functions/system-health/index.ts"
+     ],
+     "todos": [
+      "compara:src/pages/Clientes.tsx"
      ],
      "sending": [
       "compara:src/pages/SmsMarketing.tsx",
@@ -235640,6 +235766,10 @@
    {
     "guard": "Protected",
     "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "guard": "Protected",
+    "file": "src/app/AppRoutes.tsx"
    }
   ],
   "protected_routes": [
@@ -235722,6 +235852,13 @@
    },
    {
     "path": "/campanhas",
+    "component": "P",
+    "guard": "Protected",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
+    "path": "/clientes",
     "component": "P",
     "guard": "Protected",
     "roles": [],
@@ -239136,6 +239273,13 @@
      "compara:src/pages/PublicSignaturePage.tsx",
      "escreve:src/hooks/useDocumentTemplates.ts",
      "escreve:supabase/functions/submit-signature/index.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `todos` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:src/pages/Clientes.tsx"
     ]
    },
    {
@@ -247605,7 +247749,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 195,
+   "lines": 196,
    "exports": [
     "const AppRoutes"
    ],
@@ -248154,6 +248298,12 @@
      "roles": []
     },
     {
+     "path": "/clientes",
+     "component": "P",
+     "guard": "Protected",
+     "roles": []
+    },
+    {
      "path": "/admin/field-mapping",
      "component": "Admin",
      "guard": "",
@@ -248347,6 +248497,7 @@
     "Protected",
     "Protected",
     "RequireAuth",
+    "Protected",
     "Protected"
    ]
   },
@@ -248360,7 +248511,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 179,
+   "lines": 180,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -258014,7 +258165,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 326,
+   "lines": 327,
    "exports": [
     "const AppSidebar"
    ],
@@ -268946,6 +269097,79 @@
    ],
    "hooks": [
     "useClientValues"
+   ]
+  },
+  "src/hooks/useClientes.ts": {
+   "path": "src/hooks/useClientes.ts",
+   "lines": 244,
+   "exports": [
+    "type Percentual",
+    "const TAMANHO_PAGINA_CLIENTES",
+    "interface ClienteStatusKpis",
+    "interface ClienteRow",
+    "interface HierarquiaRow",
+    "interface CooperativaRow",
+    "interface HistoricoEmpresaRow",
+    "interface PaginaResultado",
+    "function useClientesKpis",
+    "interface FiltrosListaClientes",
+    "function useClientesLista",
+    "function useHierarquiaEmpresas",
+    "function useCooperativas",
+    "function useHistoricoEmpresas"
+   ],
+   "params": [
+    {
+     "name": "TAMANHO_PAGINA_CLIENTES",
+     "value": "25"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    }
+   ],
+   "hooks": [
+    "useClientesKpis",
+    "useClientesLista",
+    "useHierarquiaEmpresas",
+    "useCooperativas",
+    "useHistoricoEmpresas"
+   ],
+   "temporal": [
+    "staleTime: 5 * 60 * 1000,"
    ]
   },
   "src/hooks/useClosingScoreAlerts.ts": {
@@ -288537,6 +288761,20 @@
     "function Carteira"
    ]
   },
+  "src/pages/Clientes.tsx": {
+   "path": "src/pages/Clientes.tsx",
+   "lines": 452,
+   "exports": [
+    "function Clientes"
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "todos",
+     "kind": "compara"
+    }
+   ]
+  },
   "src/pages/CompanyProfileAnalytics.tsx": {
    "path": "src/pages/CompanyProfileAnalytics.tsx",
    "lines": 129,
@@ -297815,7 +298053,7 @@
   },
   "supabase/functions/external-data/index.ts": {
    "path": "supabase/functions/external-data/index.ts",
-   "lines": 402,
+   "lines": 408,
    "dyn_from": 3,
    "env": [
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
@@ -297879,7 +298117,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 225,
+   "lines": 233,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -309220,6 +309458,10 @@
    "path": "supabase/migrations/20261126170000_admin_read_automation_notifications.sql",
    "lines": 25
   },
+  "supabase/migrations/20261126180000_clientes_views_read_only.sql": {
+   "path": "supabase/migrations/20261126180000_clientes_views_read_only.sql",
+   "lines": 24
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -309937,10 +310179,26 @@
   }
  },
  "git": {
-  "sha": "6205952814c91fef1b732883f92d2c46f02b9624",
+  "sha": "8f49ae8ae730f189ab76d25b873d4561b4f8c882",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "8f49ae8",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(clientes): tela Clientes 360 com carteira, hierarquia, cooperativas e histórico (#369)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/hooks/useClientes.ts",
+     "src/pages/Clientes.tsx",
+     "supabase/functions/external-data/index.ts",
+     "supabase/functions/external-data/tables.ts",
+     "supabase/migrations/20261126180000_clientes_views_read_only.sql"
+    ]
+   },
    {
     "sha": "6205952",
     "date": "2026-11-26",
@@ -310268,34 +310526,24 @@
      "scripts/diag-extdata.sh",
      "scripts/diag-sb-inventory.py"
     ]
-   },
-   {
-    "sha": "6629194",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix(docs): mecanismo real da falha do smart-notify (502, nao skip silencioso) (#338)",
-    "files": [
-     "docs/estado/03_MARKETING_AUTOMACAO.md",
-     "docs/estado/05_ADMIN_SEGURANCA_OBSERVABILIDADE.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/external-data/tables.ts",
-    6
+    7
    ],
    [
     "src/app/AppRoutes.tsx",
-    5
+    6
    ],
    [
     "src/app/lazyPages.tsx",
-    5
+    6
    ],
    [
     "src/components/layout/AppSidebar.tsx",
-    5
+    6
    ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
@@ -310322,6 +310570,22 @@
     2
    ],
    [
+    "src/hooks/useClientes.ts",
+    1
+   ],
+   [
+    "src/pages/Clientes.tsx",
+    1
+   ],
+   [
+    "supabase/functions/external-data/index.ts",
+    1
+   ],
+   [
+    "supabase/migrations/20261126180000_clientes_views_read_only.sql",
+    1
+   ],
+   [
     "src/hooks/useAutomacoes.ts",
     1
    ],
@@ -310343,22 +310607,6 @@
    ],
    [
     "supabase/migrations/20261126160000_admin_read_mfa_locked_tables.sql",
-    1
-   ],
-   [
-    "src/hooks/useParceiros.ts",
-    1
-   ],
-   [
-    "src/pages/Parceiros.tsx",
-    1
-   ],
-   [
-    "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql",
     1
    ]
   ]

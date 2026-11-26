@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6205952814` · branch `main` · 2026-11-26 16:30 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8f49ae8ae7` · branch `main` · 2026-11-26 16:58 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1435,7 +1435,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `empathy` | compara | `src/hooks/useCarnegieAnalysis.ts` |
 | `type` | `enroll_in_sequence` | escreve | `src/components/automation/AutomationTemplates.tsx` |
 | `type` | `enum` | escreve | `src/lib/reports/reportEngine.ts` |
-| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +66 |
+| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +67 |
 | `type` | `error` | compara | `src/lib/queryErrorReporter.ts` |
 | `type` | `error_budget_100` | escreve | `supabase/functions/error-budget/index.ts` |
 | `type` | `error_budget_50` | escreve | `supabase/functions/error-budget/index.ts` |
@@ -1630,7 +1630,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `closed` | compara, escreve | `src/components/forecasting/PeriodSelector.tsx`<br>`src/components/reports/widgets/ReportWidgets.tsx`<br>`src/hooks/useForecasting.ts`<br>`src/hooks/useSupportTickets.ts`<br>`src/pages/Suporte.tsx` |
 | `status` | `closed_lost` | compara | `supabase/functions/abm-account-scorer/index.ts` |
 | `status` | `closed_won` | compara | `supabase/functions/abm-account-scorer/index.ts` |
-| … +180 linhas — lista completa em `context.json` | | | |
+| … +181 linhas — lista completa em `context.json` | | | |
 
 ### E.4 Enums e listas de valores
 
@@ -3684,6 +3684,7 @@ _nenhum item encontrado_
 | `HOUR_END` | `22` | `src/hooks/useBestTimeHeatmap.ts` |
 | `BATCH_SIZE` | `50` | `src/hooks/useBulkImport.ts` |
 | `MAX` | `5` | `src/hooks/useChannelHistory.ts` |
+| `TAMANHO_PAGINA_CLIENTES` | `25` | `src/hooks/useClientes.ts` |
 | `COMPANIES_PAGE_SIZE` | `500` | `src/hooks/useCompanies.ts` |
 | `MAX_COMPANIES_TOTAL` | `60000` | `src/hooks/useCompanies.ts` |
 | `INITIAL_FAST_LOAD` | `100` | `src/hooks/useCompanies.ts` |
@@ -3989,6 +3990,7 @@ _nenhum item encontrado_
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/useChurnRisk.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useChurnRisk.ts` |
 | `const threeMonthsAgo = subDays(now, 90);` | `src/hooks/useClientHealth.ts` |
+| `staleTime: 5 * 60 * 1000,` | `src/hooks/useClientes.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useClosingScoreAlerts.ts` |
 | `gcTime: 20 * 60 * 1000,` | `src/hooks/useClosingScoreAlertsView.ts` |
 | `staleTime: 10 * 60 * 1000,` | `src/hooks/useClosingScoreAlertsView.ts` |
@@ -4140,8 +4142,7 @@ _nenhum item encontrado_
 | `gcTime: 60 * 60 * 1000,` | `src/hooks/useObjectionContextSummary.ts` |
 | `staleTime: 30 * 60 * 1000, // 30 min — resumo estável dentro do período` | `src/hooks/useObjectionContextSummary.ts` |
 | `staleTime: 15 * 60 * 1000,` | `src/hooks/useOrphanContacts.ts` |
-| `gcTime: 10 * 60 * 1000,` | `src/hooks/usePendingFollowups.ts` |
-| … +242 linhas — lista completa em `context.json` | |
+| … +243 linhas — lista completa em `context.json` | |
 
 ### H.3 Limites de paginação
 

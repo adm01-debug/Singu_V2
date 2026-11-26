@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1085,
+ "total": 1086,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -115,6 +115,10 @@
   "ChurnRiskWidget": [
    "src/components/contact-detail/ChurnRiskWidget.tsx",
    "src/components/reports/widgets/ReportWidgets.tsx"
+  ],
+  "Clientes": [
+   "src/app/lazyPages.tsx",
+   "src/pages/Clientes.tsx"
   ],
   "CollapsibleSection": [
    "src/components/briefing/pre-contact/BriefingSections.tsx",
@@ -511,7 +515,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 195,
+   "linhas": 196,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -564,6 +568,7 @@
     "Calendario",
     "Campanhas",
     "Carteira",
+    "Clientes",
     "CompanyProfileAnalytics",
     "Configuracoes",
     "ContatoDetalhe",
@@ -656,7 +661,7 @@
     "WinLossSetupPage"
    ],
    "export_default": null,
-   "linhas": 179,
+   "linhas": 180,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10360,7 +10365,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 52,
+   "usado_por": 53,
    "orfao": false
   },
   {
@@ -10369,7 +10374,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 326,
+   "linhas": 327,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14255,7 +14260,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 557,
+   "usado_por": 558,
    "orfao": false
   },
   {
@@ -14270,7 +14275,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 537,
+   "usado_por": 538,
    "orfao": false
   },
   {
@@ -14305,7 +14310,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 595,
+   "usado_por": 596,
    "orfao": false
   },
   {
@@ -14584,7 +14589,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 212,
+   "usado_por": 213,
    "orfao": false
   },
   {
@@ -14930,7 +14935,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 131,
+   "usado_por": 132,
    "orfao": false
   },
   {
@@ -15090,7 +15095,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 210,
+   "usado_por": 211,
    "orfao": false
   },
   {
@@ -15214,7 +15219,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 23,
+   "usado_por": 24,
    "orfao": false
   },
   {
@@ -15231,7 +15236,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 94,
+   "usado_por": 95,
    "orfao": false
   },
   {
@@ -16407,6 +16412,26 @@
    "dominio": "pages",
    "hooks_locais": [
     "useCarteiraPainel"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/Clientes.tsx",
+   "exports": [
+    "Clientes"
+   ],
+   "export_default": "Clientes",
+   "linhas": 452,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useClientesKpis",
+    "useClientesLista",
+    "useCooperativas",
+    "useHierarquiaEmpresas",
+    "useHistoricoEmpresas"
    ],
    "tabelas": [],
    "edges": [],

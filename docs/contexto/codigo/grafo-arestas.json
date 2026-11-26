@@ -384,6 +384,7 @@
    "src/pages/Calendario.tsx",
    "src/pages/Campanhas.tsx",
    "src/pages/Carteira.tsx",
+   "src/pages/Clientes.tsx",
    "src/pages/CompanyProfileAnalytics.tsx",
    "src/pages/Configuracoes.tsx",
    "src/pages/ContatoDetalhe.tsx",
@@ -8115,6 +8116,9 @@
    "src/types/index.ts",
    "src/types/nlp-advanced.ts"
   ],
+  "src/hooks/useClientes.ts": [
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/useClosingScoreAlerts.ts": [
    "src/hooks/useAuth.tsx",
    "src/integrations/supabase/client.ts",
@@ -10042,6 +10046,18 @@
    "src/components/ui/skeleton.tsx",
    "src/components/ui/table.tsx",
    "src/hooks/useCarteira.ts"
+  ],
+  "src/pages/Clientes.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useClientes.ts"
   ],
   "src/pages/CompanyProfileAnalytics.tsx": [
    "src/components/company-analytics/ActivityTimeline.tsx",

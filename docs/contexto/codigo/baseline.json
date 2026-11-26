@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "6205952814c91fef1b732883f92d2c46f02b9624",
+  "commit": "8f49ae8ae730f189ab76d25b873d4561b4f8c882",
   "branch": "main",
-  "data_commit": "2026-11-26T13:27:18-03:00",
+  "data_commit": "2026-11-26T13:56:44-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "8f49ae8",
+    "data": "2026-11-26",
+    "assunto": "feat(clientes): tela Clientes 360 com carteira, hierarquia, cooperativas e histórico (#369)"
+   },
    {
     "sha": "6205952",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "e380fe1",
     "data": "2026-11-25",
     "assunto": "docs(estado): corrige inventario de IA para OPENROUTER_API_KEY (#346)"
-   },
-   {
-    "sha": "082f91a",
-    "data": "2026-11-25",
-    "assunto": "chore(ia): usa OPENROUTER_API_KEY como fonte da chave e trava o contrato (#343)"
    }
   ],
-  "arquivos_mudados_7d": 1035,
+  "arquivos_mudados_7d": 1038,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -157,7 +157,7 @@
    },
    {
     "pasta": "supabase/functions/external-data",
-    "mudancas": 17
+    "mudancas": 19
    },
    {
     "pasta": "scripts/migration/functions",
@@ -168,15 +168,15 @@
     "mudancas": 16
    },
    {
+    "pasta": "src/components/layout",
+    "mudancas": 16
+   },
+   {
     "pasta": "supabase/functions/evolution-webhook",
     "mudancas": 16
    },
    {
     "pasta": "src/components/crm",
-    "mudancas": 15
-   },
-   {
-    "pasta": "src/components/layout",
     "mudancas": 15
    },
    {
@@ -219,7 +219,7 @@
    },
    {
     "arquivo": "supabase/functions/external-data/index.ts",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "tests/rls/security_definer_hardening.sql",
@@ -231,7 +231,11 @@
    },
    {
     "arquivo": "src/app/AppRoutes.tsx",
-    "mudancas": 11
+    "mudancas": 12
+   },
+   {
+    "arquivo": "src/components/layout/AppSidebar.tsx",
+    "mudancas": 10
    },
    {
     "arquivo": "src/hooks/useContacts.ts",
@@ -250,7 +254,11 @@
     "mudancas": 9
    },
    {
-    "arquivo": "src/components/layout/AppSidebar.tsx",
+    "arquivo": "src/app/lazyPages.tsx",
+    "mudancas": 9
+   },
+   {
+    "arquivo": "supabase/functions/external-data/tables.ts",
     "mudancas": 9
    },
    {
@@ -259,14 +267,6 @@
    },
    {
     "arquivo": "inventario/estado/tabelas-uso.json",
-    "mudancas": 8
-   },
-   {
-    "arquivo": "src/app/lazyPages.tsx",
-    "mudancas": 8
-   },
-   {
-    "arquivo": "supabase/functions/external-data/tables.ts",
     "mudancas": 8
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 201
+    "commits": 202
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,19 +326,19 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3958,
-  "arquivos_codigo": 2283,
-  "linhas_codigo": 425677,
-  "rotas": 121,
+  "arquivos_total": 3961,
+  "arquivos_codigo": 2285,
+  "linhas_codigo": 426390,
+  "rotas": 122,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 71,
+  "itens_menu": 72,
   "modulos": 142,
-  "componentes": 1085,
-  "hooks": 417,
+  "componentes": 1086,
+  "hooks": 418,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1124,
+  "migrations": 1125,
   "cron_jobs": 47,
   "testes": 288,
   "workflows": 14,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 604
+   "linhas": 606
   },
   "src/components": {
    "arquivos": 1017,
-   "linhas": 152382
+   "linhas": 152383
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 449,
-   "linhas": 59372
+   "arquivos": 450,
+   "linhas": 59616
   },
   "src/integrations": {
    "arquivos": 3,
@@ -691,8 +691,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 161,
-   "linhas": 31410
+   "arquivos": 162,
+   "linhas": 31862
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28166
+   "linhas": 28180
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1197,6 +1197,7 @@
    "Campanhas",
    "Carteira",
    "ChurnRiskWidget",
+   "Clientes",
    "CollapsibleSection",
    "CompanyProfileAnalytics",
    "ComparisonBadge",
