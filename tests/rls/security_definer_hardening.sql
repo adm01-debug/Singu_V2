@@ -48,11 +48,11 @@ BEGIN
     RAISE EXCEPTION 'DEFINER exposto a anon usando auth.uid() (padrão inseguro): %', uses_authuid;
   END IF;
 
-  IF total <> 119 THEN
-      RAISE EXCEPTION 'baseline DEFINER esperado = 119; atual = %. Atualize docs/qa/security-definer-audit.md se intencional.', total;
+  IF total <> 120 THEN
+        RAISE EXCEPTION 'baseline DEFINER esperado = 120; atual = %. Atualize docs/qa/security-definer-audit.md se intencional.', total;
   END IF;
 
-  RAISE NOTICE 'OK — 119/119 DEFINERs conformes (search_path pinned; nenhum exposto a anon usa auth.uid()).';
+    RAISE NOTICE 'OK — 120/120 DEFINERs conformes (search_path pinned; nenhum exposto a anon usa auth.uid()).';
 END $$;
 
 ROLLBACK;

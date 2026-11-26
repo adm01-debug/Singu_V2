@@ -12,7 +12,8 @@ import {
    Heart,
    FileText,
    Briefcase,
-   HelpCircle
+      HelpCircle,
+      User
 } from 'lucide-react';
 import {
   Dialog,
@@ -112,15 +113,16 @@ export function SocialMatchDetails({ contactId, metadata, offerName }: Props) {
                                  "border-slate-200 text-slate-700 bg-slate-50"
                                )}>
                                  <ExternalLink className="h-2.5 w-2.5" />
-                                 {insight.platform}
+                                                                  {insight.platform === 'analysis' ? 'análise' : insight.platform}
                                </Badge>
                                <Badge variant="secondary" className="text-[10px] uppercase font-bold bg-slate-100 text-slate-600 border-none gap-1 px-1.5 h-5">
                                  {insight.insight_type === 'like' && <Heart className="h-2.5 w-2.5" />}
                                  {insight.insight_type === 'post' && <FileText className="h-2.5 w-2.5" />}
                                  {insight.insight_type === 'career_move' && <Briefcase className="h-2.5 w-2.5" />}
                                  {insight.insight_type === 'interest' && <ThumbsUp className="h-2.5 w-2.5" />}
-                                 {(!insight.insight_type || (insight.insight_type !== 'like' && insight.insight_type !== 'post' && insight.insight_type !== 'career_move' && insight.insight_type !== 'interest')) && <HelpCircle className="h-2.5 w-2.5" />}
-                                 {insight.insight_type || 'interação'}
+                                                                  {insight.insight_type === 'behavior_summary' && <User className="h-2.5 w-2.5" />}
+                                                                  {(!insight.insight_type || !['like', 'post', 'career_move', 'interest', 'behavior_summary'].includes(insight.insight_type)) && <HelpCircle className="h-2.5 w-2.5" />}
+                                                                  {insight.insight_type === 'behavior_summary' ? 'perfil' : (insight.insight_type || 'interação')}
                                </Badge>
                              </div>
                             <div className="flex items-center gap-1.5 text-[10px] text-slate-400">

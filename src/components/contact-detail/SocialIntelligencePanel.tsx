@@ -231,10 +231,10 @@ interface Props {
                    <div className="flex items-center justify-between">
                      <div className="flex items-center gap-2">
                        <Badge variant="outline" className="text-[9px] uppercase h-4">
-                         {insight.platform}
+                         {insight.platform === 'analysis' ? 'análise' : insight.platform}
                        </Badge>
                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
-                         {insight.insight_type.replace(/_/g, ' ')}
+                         {insight.insight_type === 'behavior_summary' ? 'perfil social' : insight.insight_type.replace(/_/g, ' ')}
                        </span>
                      </div>
                      <div className="flex items-center gap-1.5">

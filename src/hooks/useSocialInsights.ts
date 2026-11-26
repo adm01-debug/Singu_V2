@@ -17,8 +17,8 @@ type SupabaseWithDynamicTables = {
  
  export interface SocialInsight {
    id: string;
- platform: 'linkedin' | 'instagram' | 'twitter' | 'facebook' | 'youtube';
- insight_type: 'career_move' | 'interest' | 'post' | 'like' | 'comment';
+ platform: 'linkedin' | 'instagram' | 'twitter' | 'facebook' | 'youtube' | 'analysis';
+  insight_type: 'career_move' | 'interest' | 'post' | 'like' | 'comment' | 'behavior_summary';
  content: string;
  source_url?: string;
  metadata?: {
