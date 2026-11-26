@@ -142,10 +142,10 @@ export const ALLOWED_TABLES = [
   // ── Suppliers & carriers ──
   'vw_supplier_ranking', 'vw_supplier_qualification_dashboard',
   'vw_supplier_by_state', 'vw_supplier_data_quality',
-  'vw_supplier_homologation_queue',
+  'vw_supplier_homologation_queue', 'vw_supplier_homologation_control',
   'vw_carrier_ranking', 'vw_carrier_qualification_dashboard',
   'vw_carrier_by_state', 'vw_carrier_data_quality',
-  'vw_carrier_homologation_queue',
+  'vw_carrier_homologation_queue', 'vw_carrier_homologation_control',
   // ── Company cadences ──
   'company_cadences',
   // ── Carteira & ativação ──
@@ -192,11 +192,13 @@ export const USER_RLS_READ_ONLY_TABLES = new Set<AllowedTable>([
   'vw_supplier_by_state',
   'vw_supplier_data_quality',
   'vw_supplier_homologation_queue',
+  'vw_supplier_homologation_control',
   'vw_carrier_ranking',
   'vw_carrier_qualification_dashboard',
   'vw_carrier_by_state',
   'vw_carrier_data_quality',
   'vw_carrier_homologation_queue',
+  'vw_carrier_homologation_control',
   'vw_carteira_vendedores',
   'vw_dashboard_vendedor',
   'vw_dashboard_vendedor_v2',

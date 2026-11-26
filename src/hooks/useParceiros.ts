@@ -81,6 +81,7 @@ interface ParceiroConfig {
     qualidade: string;
     ranking: string;
     fila: string;
+    controle: string;
   };
   qualificadores: string[];
 }
@@ -109,6 +110,7 @@ export const PARCEIRO_CONFIG: Record<TipoParceiro, ParceiroConfig> = {
       qualidade: 'vw_supplier_data_quality',
       ranking: 'vw_supplier_ranking',
       fila: 'vw_supplier_homologation_queue',
+      controle: 'vw_supplier_homologation_control',
     },
     qualificadores: ['Excelente', 'Bom', 'Regular', 'Insuficiente', 'Crítico'],
   },
@@ -131,6 +133,7 @@ export const PARCEIRO_CONFIG: Record<TipoParceiro, ParceiroConfig> = {
       qualidade: 'vw_carrier_data_quality',
       ranking: 'vw_carrier_ranking',
       fila: 'vw_carrier_homologation_queue',
+      controle: 'vw_carrier_homologation_control',
     },
     qualificadores: ['Excelente', 'Bom', 'Regular', 'Insuficiente', 'Crítico'],
   },
@@ -231,5 +234,70 @@ export function useParceiroFilaHomologacao(tipo: TipoParceiro) {
       return data ?? [];
     },
     staleTime: 5 * 60_000,
+  });
+}
+
+export interface ParceiroControleRow {
+  fornecedor?: string | null;
+  transportadora?: string | null;
+  cnpj: string | null;
+  homologado: boolean | null;
+  ultimo_status: string | null;
+  data_solicitacao: string | null;
+  data_decisao: string | null;
+  validade: string | null;
+  dias_para_vencer: number | null;
+  situacao: string | null;
+  avaliador: string | null;
+  motivo_reprovacao: string | null;
+  observacoes: string | null;
+  criterios_checados: unknown;
+  [coluna: string]: unknown;
+}
+
+/** Situações calculadas pela própria view, na ordem em que o negócio as acompanha. */
+export const SITUACOES_HOMOLOGACAO = [
+  { valor: 'NUNCA_SOLICITADA', label: 'Nunca solicitada' },
+  { valor: 'pendente', label: 'Pendente' },
+  { valor: 'em_analise', label: 'Em análise' },
+  { valor: 'VENCIDA', label: 'Vencida' },
+  { valor: 'VENCENDO_EM_BREVE', label: 'Vencendo em 30 dias' },
+  { valor: 'VIGENTE', label: 'Vigente' },
+  { valor: 'homologado', label: 'Homologado' },
+  { valor: 'reprovado', label: 'Reprovado' },
+] as const;
+
+export function useParceiroControleHomologacao(
+  tipo: TipoParceiro,
+  params: { page: number; search: string; situacao: string },
+) {
+  const config = PARCEIRO_CONFIG[tipo];
+  const from = params.page * PARCEIROS_PAGE_SIZE;
+  return useQuery({
+    queryKey: ['parceiro-controle', tipo, params.page, params.search, params.situacao],
+    queryFn: async () => {
+      const { data, count, error } = await queryExternalData<ParceiroControleRow>({
+        table: config.views.controle,
+        select: '*',
+        search: params.search.trim()
+          ? { term: params.search.trim(), columns: config.camposBusca, matchAllTerms: true }
+          : undefined,
+        filters:
+          params.situacao === 'todas'
+            ? undefined
+            : [{ type: 'eq', column: 'situacao', value: params.situacao }],
+        order: [
+          { column: 'dias_para_vencer', ascending: true },
+          { column: 'cnpj', ascending: true },
+        ],
+        range: { from, to: from + PARCEIROS_PAGE_SIZE - 1 },
+        countMethod: 'exact',
+        auditAccess: false,
+      });
+      if (error) throw error;
+      return { rows: data ?? [], total: count ?? 0 };
+    },
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
   });
 }
