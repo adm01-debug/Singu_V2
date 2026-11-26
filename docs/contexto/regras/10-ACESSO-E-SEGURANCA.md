@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6409ca43b6` · branch `main` · 2026-11-26 14:57 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9ca772e610` · branch `main` · 2026-11-26 15:21 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -73,12 +73,12 @@
 | `campaign_recipients` | enabled | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) | public: (EXISTS ( SELECT 1 FROM email_campaigns ec WHERE ((ec.id = campaign_recipients.campaign_id) AND (ec.user_id = (select auth.uid())))) |
 | `campaigns` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `canned_responses` | enabled | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) | public: ((select auth.uid()) = user_id) |
-| `carrier_evaluations` | enabled | public: true | public: true | public: true | public: true |
-| `carrier_homologations` | enabled | public: true | public: true | public: true | public: true |
+| `carrier_evaluations` | enabled | public: true<br>authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role)) | public: true | public: true | public: true |
+| `carrier_homologations` | enabled | public: true<br>authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role)) | public: true | public: true | public: true |
 | `carrier_qualification_config` | enabled | public: true | public: true | public: true | public: true |
-| `carrier_score_history` | enabled | public: true | public: true | public: true | public: true |
-| `carrier_scores` | enabled | public: true | public: true | public: true | public: true |
-| `carriers` | enabled | public: true | public: true | public: true | public: true |
+| `carrier_score_history` | enabled | public: true<br>authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role)) | public: true | public: true | public: true |
+| `carrier_scores` | enabled | public: true<br>authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role)) | public: true | public: true | public: true |
+| `carriers` | enabled | public: true<br>authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role)) | public: true | public: true | public: true |
 | `category_metrics` | enabled | public: true | — | — | — |
 | `challenge_progress` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `chat_conversations` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |

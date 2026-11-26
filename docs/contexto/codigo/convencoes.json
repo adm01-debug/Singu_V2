@@ -3,15 +3,15 @@
  "format_version": 2,
  "onde_ficam": {
   "telas": [
-   "src/pages (117)"
+   "src/pages (118)"
   ],
   "componentes": [
    "src/components (929)",
-   "src/pages (144)",
+   "src/pages (145)",
    "src/app (4)"
   ],
   "hooks": [
-   "src/hooks (383)",
+   "src/hooks (384)",
    "src/components (20)",
    "src/stores (5)"
   ],
@@ -46,7 +46,7 @@
  },
  "barrels_index": 8,
  "extensao_componentes": [
-  ".tsx (1082)"
+  ".tsx (1083)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -57,11 +57,11 @@
  "commits": {
   "convencao": "commitlint",
   "exemplos": [
+   "feat(parceiros): tela de fornecedores e transportadoras com ranking, qualidade e homologacao (#366)",
    "feat(admin): tela de readiness dos dados por tabela (#365)",
    "fix(empresas): da ao admin a base inteira e remove filtro user_id das views sem essa coluna (#364)",
    "feat(grupos): tela de grupos economicos com penetracao e prospects (#363)",
-   "feat(social,ofertas): liga social_insights e monta as duas UIs que nenhuma rota exibia (#362)",
-   "refactor: monta os cards de touchpoint e contatos estrategicos que ficaram orfaos (#361)"
+   "feat(social,ofertas): liga social_insights e monta as duas UIs que nenhuma rota exibia (#362)"
   ]
  },
  "pr_template": null,

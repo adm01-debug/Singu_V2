@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6409ca43b6` · branch `main` · 2026-11-26 14:57 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9ca772e610` · branch `main` · 2026-11-26 15:21 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -311,7 +311,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `company_social_media` | company_social_media_update | UPDATE | public | permissive | `true` |  |
 | `company_social_media` | company_social_media_delete | DELETE | public | permissive | `true` |  |
 | `contact_phones` | contact_phones_select | SELECT | public | permissive | `true` |  |
-| … +955 linhas — lista completa em `context.json` | | | | | | |
+| … +965 linhas — lista completa em `context.json` | | | | | | |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -1435,7 +1435,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `empathy` | compara | `src/hooks/useCarnegieAnalysis.ts` |
 | `type` | `enroll_in_sequence` | escreve | `src/components/automation/AutomationTemplates.tsx` |
 | `type` | `enum` | escreve | `src/lib/reports/reportEngine.ts` |
-| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +65 |
+| `type` | `eq` | compara, escreve | `src/components/contact-detail/ContactBehavioralTab.tsx`<br>`src/components/contact-detail/ContactCommercialTab.tsx`<br>`src/components/contact-detail/DuplicateManagementPanel.tsx`<br>`src/components/contact-detail/behavioral-tab/EqDashboardCard.tsx`<br>`src/components/contacts/ExternalContactLookupDialog.tsx`<br>… +66 |
 | `type` | `error` | compara | `src/lib/queryErrorReporter.ts` |
 | `type` | `error_budget_100` | escreve | `supabase/functions/error-budget/index.ts` |
 | `type` | `error_budget_50` | escreve | `supabase/functions/error-budget/index.ts` |
@@ -1764,6 +1764,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | Urgency | critical \| high \| normal \| low | `src/hooks/useNotificationPreferences.ts` |
 | DigestMode | immediate \| hourly \| daily | `src/hooks/useNotificationPreferences.ts` |
 | Channel | in_app \| email \| push \| whatsapp | `src/hooks/useNotificationPreferences.ts` |
+| TipoParceiro | fornecedor \| transportadora | `src/hooks/useParceiros.ts` |
 | PlaybookScenario | discovery \| demo \| negotiation \| objection \| closing \| winback \| onboarding \| custom | `src/hooks/usePlaybooks.ts` |
 | PlaybookSectionType | talktrack \| questions \| objections \| next_steps \| resources | `src/hooks/usePlaybooks.ts` |
 | HealthStatus | healthy \| warning \| critical | `src/hooks/usePortfolioHealth.ts` |
@@ -2522,7 +2523,7 @@ _nenhum item encontrado_
 | `vw_supplier_evaluations_history` | `SELECT co.nome_crm AS fornecedor, se.data_avaliacao, se.referencia, se.nota_preco, se.nota_prazo, se.nota_qualidade, se.nota_entrega, se.nota_geral, se.comentario, u.name AS avaliador, u.departamento AS departamento_avaliador, s.id AS supplier_id, s.company_id, se.id AS evaluation_id, se.created_at …` |
 | `vw_supplier_alerts` | `SELECT a.id AS alert_id, a.type, a.priority, a.title, a.message, a.status AS alert_status, a.metadata, a.created_at, a.read_at, co.nome_crm AS fornecedor, co.cnpj, s.homologado, s.score_geral FROM alerts a JOIN companies co ON co.id = a.company_id AND co.deleted_at IS NULL LEFT JOIN suppliers s ON s …` |
 | `vw_supplier_homologation_queue` | `SELECT co.nome_crm AS fornecedor, co.cnpj, co.razao_social, CASE WHEN co.cnpj IS NOT NULL THEN true ELSE false END AS tem_cnpj, CASE WHEN EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id) THEN true ELSE false END AS tem_telefone, CASE WHEN EXISTS(SELECT 1 FROM company_emails ce WHE …` |
-| `vw_supplier_data_quality` | `SELECT COUNT(*) AS total_fornecedores, COUNT(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj != '') AS com_cnpj, ROUND(100.0 * COUNT(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj != '') / COUNT(*), 1) AS pct_cnpj, COUNT(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social != '') AS c …` |
+| `vw_supplier_data_quality` | `SELECT count(*) AS total_fornecedores, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social IS …` |
 | `vw_supplier_by_state` | `SELECT COALESCE(addr.estado, 'SEM ESTADO') AS estado, COUNT(*) AS total, COUNT(*) FILTER (WHERE s.homologado = true) AS homologados, COUNT(*) FILTER (WHERE s.homologado = false) AS nao_homologados, ROUND(AVG(ss.score_geral), 2) AS score_medio, COUNT(ss.supplier_id) AS com_avaliacao FROM suppliers s …` |
 | `vw_carriers_completo` | `SELECT ca.id, ca.company_id, ca.tipo_transporte, ca.grupo_economico, ca.estados_atendidos, ca.cidades_atendidas, ca.prazo_por_trecho, ca.tipo_frete, ca.tabela_frete, ca.homologado, ca.data_homologacao, ca.score_geral, ca.created_at, ca.updated_at, co.razao_social, co.nome_fantasia, co.nome_crm AS co …` |
 | `vw_carrier_qualification_dashboard` | `SELECT count(*) AS total_transportadoras, count(*) FILTER (WHERE ca.homologado = true) AS total_homologados, count(*) FILTER (WHERE ca.homologado = false) AS total_nao_homologados, round(100.0 * count(*) FILTER (WHERE ca.homologado = true)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_homologad …` |
@@ -2531,7 +2532,7 @@ _nenhum item encontrado_
 | `vw_carrier_homologation_queue` | `SELECT co.nome_crm AS transportadora, co.cnpj, co.razao_social, CASE WHEN co.cnpj IS NOT NULL THEN true ELSE false END AS tem_cnpj, CASE WHEN EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id) THEN true ELSE false END AS tem_telefone, CASE WHEN EXISTS(SELECT 1 FROM company_emails ce …` |
 | `vw_carrier_evaluations_history` | `SELECT co.nome_crm AS transportadora, ce.data_avaliacao, ce.referencia, ce.nota_pontualidade, ce.nota_conservacao, ce.nota_preco_frete, ce.nota_rastreamento, ce.nota_cobertura, ce.nota_geral, ce.comentario, u.name AS avaliador, u.departamento AS departamento_avaliador, ca.id AS carrier_id, ca.compan …` |
 | `vw_carrier_alerts` | `SELECT a.id AS alert_id, a.type, a.priority, a.title, a.message, a.status AS alert_status, a.metadata, a.created_at, a.read_at, co.nome_crm AS transportadora, co.cnpj, ca.homologado, ca.score_geral FROM alerts a JOIN companies co ON co.id = a.company_id AND co.deleted_at IS NULL LEFT JOIN carriers c …` |
-| `vw_carrier_data_quality` | `SELECT count(*) AS total_transportadoras, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> '') AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> '')::numeric / count(*)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.raz …` |
+| `vw_carrier_data_quality` | `SELECT count(*) AS total_transportadoras, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social …` |
 | `vw_carrier_by_state` | `SELECT COALESCE(addr.estado, 'SEM ESTADO') AS estado, count(*) AS total, count(*) FILTER (WHERE ca.homologado = true) AS homologados, count(*) FILTER (WHERE ca.homologado = false) AS nao_homologados, round(avg(cs.score_geral), 2) AS score_medio, count(cs.carrier_id) AS com_avaliacao FROM carriers ca …` |
 | `v_guardrail_dashboard` | `SELECT date_trunc('day', created_at) as dia, COUNT(*) as total_checks, COUNT(*) FILTER (WHERE all_passed = true) as passed, COUNT(*) FILTER (WHERE all_passed = false) as blocked, ROUND(COUNT(*) FILTER (WHERE all_passed = false)::numeric / NULLIF(COUNT(*),0) * 100, 1) as block_rate_pct, array_agg(DIS …` |
 | `v_ragas_by_agent` | `SELECT agent_id, COUNT(*) as evaluations, ROUND(AVG(faithfulness)::numeric, 3) as avg_faithfulness, ROUND(AVG(answer_relevancy)::numeric, 3) as avg_relevancy, ROUND(AVG(context_precision)::numeric, 3) as avg_precision, ROUND(AVG(context_recall)::numeric, 3) as avg_recall, ROUND(AVG(overall_score)::n …` |
@@ -3038,6 +3039,10 @@ _nenhum item encontrado_
 - **revalidationKey(userId: string)** — `src/hooks/useMFAGuard.ts`
   ```
   `singu:mfa-revalidar:${userId}`;
+  ```
+- **totalDoParceiro(tipo: TipoParceiro, row: ParceiroDashboardRow | ParceiroQualidadeRow | null)** — `src/hooks/useParceiros.ts`
+  ```
+  if (!row) return 0; const valor = (row as unknown as Record<string, unknown>)[PARCEIRO_CONFIG[tipo].campoTotal]; return typeof valor === 'number' ? valor : 0;
   ```
 - **generateOpeningTips(vakProfile: VAKProfile, discProfile: { type: string })** — `src/hooks/usePreContactBriefing.ts`
   ```
@@ -3724,6 +3729,7 @@ _nenhum item encontrado_
 | `TETO` | `98` | `src/hooks/useNLPClosingProbability.ts` |
 | `ACAO_GENERICA` | `'Seguir perfil'` | `src/hooks/useNLPClosingProbability.ts` |
 | `STALE_24H` | `24` | `src/hooks/useNextBestAction.ts` |
+| `PARCEIROS_PAGE_SIZE` | `25` | `src/hooks/useParceiros.ts` |
 | `DEFAULT_SORT` | `'sugerido'` | `src/hooks/useProximosPassosFilters.ts` |
 | `RAGE_THRESHOLD` | `5` | `src/hooks/useRageClickDetector.ts` |
 | `TIME_WINDOW` | `1000` | `src/hooks/useRageClickDetector.ts` |
@@ -3772,6 +3778,7 @@ _nenhum item encontrado_
 | `PAGE_SIZE` | `25` | `src/pages/GruposEconomicos.tsx` |
 | `SEARCH_DEBOUNCE_MS` | `400` | `src/pages/GruposEconomicos.tsx` |
 | `GEOCODING_BATCH_SIZE` | `50` | `src/pages/MapaEmpresas.tsx` |
+| `SEARCH_DEBOUNCE_MS` | `400` | `src/pages/Parceiros.tsx` |
 | `SMS_LIMIT` | `160` | `src/pages/SmsMarketing.tsx` |
 | `PAGE_SIZE` | `50` | `src/pages/admin/BehavioralRegenAudit.tsx` |
 | `JANELA_DIAS` | `7` | `src/pages/admin/Observability.tsx` |
@@ -5527,4 +5534,4 @@ _nenhum item encontrado_
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_spam_log LIMIT 20) sl), | `supabase/migrations/20260409221035_zapp_history_189_master_dashboard_v8.sql` |
 | ), '[]'::jsonb) FROM (SELECT * FROM zapp_history.v_proximas_respostas LIMIT 20) pr), | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
 | FROM zapp_history.v_intelligence_360 WHERE recebido_em > NOW() - INTERVAL '24 hours' LIMIT 10) t | `supabase/migrations/20260409222519_zapp_history_199_master_dashboard_v9.sql` |
-| … +59 linhas — lista completa em `context.json` | |
+| … +60 linhas — lista completa em `context.json` | |

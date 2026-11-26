@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "6409ca43b6582bb7be5a953d0b79e2d71c22c1d6",
+  "commit": "9ca772e61021b442642b5ae7493f91b6d64c973d",
   "branch": "main",
-  "data_commit": "2026-11-26T11:57:01-03:00",
+  "data_commit": "2026-11-26T12:19:14-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "9ca772e",
+    "data": "2026-11-26",
+    "assunto": "feat(parceiros): tela de fornecedores e transportadoras com ranking, qualidade e homologacao (#366)"
+   },
    {
     "sha": "6409ca4",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "f14b8be",
     "data": "2026-11-25",
     "assunto": "fix: fecha os 9 drops de indice duplicado que ficaram pendentes da Wave 119 (#341)"
-   },
-   {
-    "sha": "81fe6e1",
-    "data": "2026-11-25",
-    "assunto": "fix(whatsapp): alinha check de status e colunas do import em whatsapp_messages (#336)"
    }
   ],
-  "arquivos_mudados_7d": 1025,
+  "arquivos_mudados_7d": 1029,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -168,16 +168,20 @@
     "mudancas": 16
    },
    {
-    "pasta": "CHANGELOG.md",
-    "mudancas": 15
-   },
-   {
     "pasta": "src/components/crm",
     "mudancas": 15
    },
    {
     "pasta": "src/hooks/__tests__",
     "mudancas": 15
+   },
+   {
+    "pasta": "supabase/functions/external-data",
+    "mudancas": 15
+   },
+   {
+    "pasta": "CHANGELOG.md",
+    "mudancas": 14
    },
    {
     "pasta": "docs/prod-readiness.md",
@@ -189,10 +193,6 @@
    },
    {
     "pasta": "scripts/migration/tests",
-    "mudancas": 14
-   },
-   {
-    "pasta": "supabase/functions/external-data",
     "mudancas": 14
    }
   ],
@@ -246,6 +246,10 @@
     "mudancas": 9
    },
    {
+    "arquivo": "src/app/AppRoutes.tsx",
+    "mudancas": 9
+   },
+   {
     "arquivo": ".github/workflows/rls-exposure-guard.yml",
     "mudancas": 8
    },
@@ -254,11 +258,11 @@
     "mudancas": 8
    },
    {
-    "arquivo": "src/app/AppRoutes.tsx",
-    "mudancas": 8
+    "arquivo": "docs/qa/functions-authenticated-allowlist.md",
+    "mudancas": 7
    },
    {
-    "arquivo": "docs/qa/functions-authenticated-allowlist.md",
+    "arquivo": "src/components/layout/AppSidebar.tsx",
     "mudancas": 7
    },
    {
@@ -292,20 +296,16 @@
    {
     "arquivo": "scripts/docs/citacoes-baseline.json",
     "mudancas": 6
-   },
-   {
-    "arquivo": "scripts/rls-matrix/rls-baseline.json",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 198
+    "commits": 199
    },
    {
     "autor": "devin-ai-integration[bot]",
-    "commits": 17
+    "commits": 16
    },
    {
     "autor": "dependabot[bot]",
@@ -326,19 +326,19 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3948,
-  "arquivos_codigo": 2277,
-  "linhas_codigo": 423935,
-  "rotas": 118,
+  "arquivos_total": 3952,
+  "arquivos_codigo": 2279,
+  "linhas_codigo": 424576,
+  "rotas": 119,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 68,
+  "itens_menu": 69,
   "modulos": 142,
-  "componentes": 1082,
-  "hooks": 414,
+  "componentes": 1083,
+  "hooks": 415,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1120,
+  "migrations": 1122,
   "cron_jobs": 47,
   "testes": 288,
   "workflows": 14,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 598
+   "linhas": 600
   },
   "src/components": {
    "arquivos": 1017,
-   "linhas": 152379
+   "linhas": 152380
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 446,
-   "linhas": 58891
+   "arquivos": 447,
+   "linhas": 59126
   },
   "src/integrations": {
    "arquivos": 3,
@@ -691,8 +691,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 158,
-   "linhas": 30202
+   "arquivos": 159,
+   "linhas": 30588
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28122
+   "linhas": 28139
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1242,6 +1242,7 @@
    "Notificacoes",
    "NotificacoesConfig",
    "Onboarding",
+   "Parceiros",
    "PerfisComportamentais",
    "Performance",
    "PermissionsPage",

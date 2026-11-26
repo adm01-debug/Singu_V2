@@ -430,6 +430,7 @@
    "src/pages/NotificacoesConfig.tsx",
    "src/pages/Nurturing.tsx",
    "src/pages/Onboarding.tsx",
+   "src/pages/Parceiros.tsx",
    "src/pages/PerfisComportamentais.tsx",
    "src/pages/Performance.tsx",
    "src/pages/PermissionsPage.tsx",
@@ -9013,6 +9014,9 @@
    "src/hooks/useAuth.tsx",
    "src/lib/externalData.ts"
   ],
+  "src/hooks/useParceiros.ts": [
+   "src/lib/externalData.ts"
+  ],
   "src/hooks/usePasswordBreachCheck.tsx": [
    "src/lib/logger.ts"
   ],
@@ -10804,6 +10808,19 @@
   "src/pages/Onboarding.tsx": [
    "src/components/onboarding/OnboardingWizard.tsx",
    "src/hooks/useAuth.tsx"
+  ],
+  "src/pages/Parceiros.tsx": [
+   "src/components/layout/AppLayout.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/progress.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useParceiros.ts"
   ],
   "src/pages/PerfisComportamentais.tsx": [
    "src/components/ui/avatar.tsx",

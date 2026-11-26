@@ -8,7 +8,7 @@
   "supabase/migrations",
   "typeorm"
  ],
- "migrations": 1120,
+ "migrations": 1122,
  "seeds": [],
  "avisos": [
   "212 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -10527,6 +10527,12 @@
      "tipo": "permissive"
     },
     {
+     "nome": "carrier_evaluations_select_admin",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
      "nome": "carrier_evaluations_update",
      "comando": "update",
      "para": "public",
@@ -10698,6 +10704,12 @@
      "nome": "carrier_homologations_select",
      "comando": "select",
      "para": "public",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "carrier_homologations_select_admin",
+     "comando": "select",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {
@@ -11067,6 +11079,12 @@
      "tipo": "permissive"
     },
     {
+     "nome": "carrier_score_history_select_admin",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
      "nome": "carrier_score_history_update",
      "comando": "update",
      "para": "public",
@@ -11263,6 +11281,12 @@
      "nome": "carrier_scores_select",
      "comando": "select",
      "para": "public",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "carrier_scores_select_admin",
+     "comando": "select",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {
@@ -11479,6 +11503,12 @@
      "nome": "carriers_select",
      "comando": "select",
      "para": "public",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "carriers_select_admin",
+     "comando": "select",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {
@@ -65748,6 +65778,12 @@
      "tipo": "permissive"
     },
     {
+     "nome": "supplier_evaluations_select_admin",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
      "nome": "supplier_evaluations_update",
      "comando": "update",
      "para": "public",
@@ -65918,6 +65954,12 @@
      "nome": "supplier_homologations_select",
      "comando": "select",
      "para": "public",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "supplier_homologations_select_admin",
+     "comando": "select",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {
@@ -66610,6 +66652,12 @@
      "comando": "select",
      "para": "public",
      "tipo": "permissive"
+    },
+    {
+     "nome": "supplier_score_history_select_admin",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
     }
    ],
    "indices": [
@@ -66794,6 +66842,12 @@
      "nome": "supplier_scores_select",
      "comando": "select",
      "para": "public",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "supplier_scores_select_admin",
+     "comando": "select",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {
@@ -67037,6 +67091,12 @@
      "nome": "suppliers_select",
      "comando": "select",
      "para": "public",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "suppliers_select_admin",
+     "comando": "select",
+     "para": "authenticated",
      "tipo": "permissive"
     },
     {

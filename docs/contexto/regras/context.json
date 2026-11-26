@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "6409ca43b6582bb7be5a953d0b79e2d71c22c1d6",
+  "sha": "9ca772e61021b442642b5ae7493f91b6d64c973d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 14:57 UTC",
-  "files_total": 4053,
-  "code_files": 3575,
-  "code_lines": 481785
+  "generated_at": "2026-11-26 15:21 UTC",
+  "files_total": 4057,
+  "code_files": 3579,
+  "code_lines": 482586
  },
  "version": "1.3.2",
- "facts_hash": "c4310a49741a0e29",
+ "facts_hash": "33bf48db597d3a0d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,9 +272,9 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1297,
-   ".tsx": 1192,
-   ".ts": 921,
+   ".sql": 1299,
+   ".tsx": 1193,
+   ".ts": 922,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -60341,6 +60341,106 @@
     "using": "(select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))",
     "check": "(select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))",
     "src": "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql"
+   },
+   {
+    "name": "suppliers_select_admin",
+    "table": "suppliers",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carriers_select_admin",
+    "table": "carriers",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "supplier_scores_select_admin",
+    "table": "supplier_scores",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carrier_scores_select_admin",
+    "table": "carrier_scores",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "supplier_evaluations_select_admin",
+    "table": "supplier_evaluations",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carrier_evaluations_select_admin",
+    "table": "carrier_evaluations",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "supplier_homologations_select_admin",
+    "table": "supplier_homologations",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carrier_homologations_select_admin",
+    "table": "carrier_homologations",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "supplier_score_history_select_admin",
+    "table": "supplier_score_history",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carrier_score_history_select_admin",
+    "table": "carrier_score_history",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
    }
   ],
   "triggers": [
@@ -86097,8 +86197,8 @@
     "src": "supabase/migrations/20260329203937_create_vw_supplier_homologation_queue.sql"
    },
    "vw_supplier_data_quality": {
-    "body": "SELECT COUNT(*) AS total_fornecedores, COUNT(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj != '') AS com_cnpj, ROUND(100.0 * COUNT(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj != '') / COUNT(*), 1) AS pct_cnpj, COUNT(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social != '') AS com_razao_social, COUNT(*) FILTER (WHERE EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)) AS com_telefone, ROUND(100.0 * COUNT(*) FILTER (WHERE EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)) / COUNT(*), 1) AS pct_telefone, COUNT(*) FILTER (WHERE EXISTS(SELECT …",
-    "src": "supabase/migrations/20260329204035_create_vw_supplier_data_quality.sql"
+    "body": "SELECT count(*) AS total_fornecedores, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social, count(*) FILTER (WHERE (EXISTS ( SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id))) AS com_telefone, round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)))::numeric / NU …",
+    "src": "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql"
    },
    "vw_supplier_by_state": {
     "body": "SELECT COALESCE(addr.estado, 'SEM ESTADO') AS estado, COUNT(*) AS total, COUNT(*) FILTER (WHERE s.homologado = true) AS homologados, COUNT(*) FILTER (WHERE s.homologado = false) AS nao_homologados, ROUND(AVG(ss.score_geral), 2) AS score_medio, COUNT(ss.supplier_id) AS com_avaliacao FROM suppliers s JOIN companies co ON co.id = s.company_id AND co.deleted_at IS NULL LEFT JOIN supplier_scores ss ON ss.supplier_id = s.id LEFT JOIN LATERAL ( SELECT ca.estado FROM company_addresses ca WHERE ca.company_id = co.id ORDER BY ca.is_primary DESC LIMIT 1 ) addr ON true GROUP BY addr.estado ORDER BY total …",
@@ -86133,8 +86233,8 @@
     "src": "supabase/migrations/20260331124619_fix_b2_vw_carrier_alerts_deleted_at.sql"
    },
    "vw_carrier_data_quality": {
-    "body": "SELECT count(*) AS total_transportadoras, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> '') AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> '')::numeric / count(*)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> '') AS com_razao_social, count(*) FILTER (WHERE EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)) AS com_telefone, round(100.0 * count(*) FILTER (WHERE EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id))::numeric / count(*)::numeric, 1) AS pct_telefon …",
-    "src": "supabase/migrations/20260330122201_create_carrier_views_batch3.sql"
+    "body": "SELECT count(*) AS total_transportadoras, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social, count(*) FILTER (WHERE (EXISTS ( SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id))) AS com_telefone, round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)))::numeric / …",
+    "src": "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql"
    },
    "vw_carrier_by_state": {
     "body": "SELECT COALESCE(addr.estado, 'SEM ESTADO') AS estado, count(*) AS total, count(*) FILTER (WHERE ca.homologado = true) AS homologados, count(*) FILTER (WHERE ca.homologado = false) AS nao_homologados, round(avg(cs.score_geral), 2) AS score_medio, count(cs.carrier_id) AS com_avaliacao FROM carriers ca JOIN companies co ON co.id = ca.company_id AND co.deleted_at IS NULL LEFT JOIN carrier_scores cs ON cs.carrier_id = ca.id LEFT JOIN LATERAL ( SELECT cad.estado FROM company_addresses cad WHERE cad.company_id = co.id ORDER BY cad.is_primary DESC LIMIT 1 ) addr ON true GROUP BY addr.estado ORDER BY c …",
@@ -87644,7 +87744,9 @@
    "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
    "supabase/migrations/20261126090000_offer_suggestions_metadata_social_match.sql",
    "supabase/migrations/20261126114500_social_insights_from_behavior_analysis.sql",
-   "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql"
+   "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql",
+   "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql",
+   "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -103193,6 +103295,39 @@
    },
    {
     "path": "",
+    "file": "src/pages/Parceiros.tsx",
+    "component": "Parceiros",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 106
+   },
+   {
+    "path": "",
     "file": "src/pages/PerfisComportamentais.tsx",
     "component": "PerfisComportamentais",
     "tables_transitive": [
@@ -107766,6 +107901,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/parceiros",
+    "component": "Admin",
+    "guard": "",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/perfis-comportamentais",
     "component": "P",
     "guard": "Protected",
@@ -109954,6 +110096,18 @@
     "file": "src/hooks/usePageTitle.ts"
    },
    {
+    "name": "useParceiroResumo",
+    "file": "src/hooks/useParceiros.ts"
+   },
+   {
+    "name": "useParceiroRanking",
+    "file": "src/hooks/useParceiros.ts"
+   },
+   {
+    "name": "useParceiroFilaHomologacao",
+    "file": "src/hooks/useParceiros.ts"
+   },
+   {
     "name": "usePasswordBreachCheck",
     "file": "src/hooks/usePasswordBreachCheck.tsx"
    },
@@ -111570,7 +111724,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 598,
+   "lines": 600,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -111607,7 +111761,7 @@
   {
    "module": "src/components",
    "files": 1017,
-   "lines": 152379,
+   "lines": 152380,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112054,8 +112208,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 446,
-   "lines": 58891,
+   "files": 447,
+   "lines": 59126,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -112629,8 +112783,8 @@
   },
   {
    "module": "src/pages",
-   "files": 158,
-   "lines": 30202,
+   "files": 159,
+   "lines": 30588,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -112988,7 +113142,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28122,
+   "lines": 28139,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113269,8 +113423,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1120,
-   "lines": 104811,
+   "files": 1122,
+   "lines": 104971,
    "tables": [
     "users"
    ],
@@ -123836,6 +123990,11 @@
     "values": "in_app | email | push | whatsapp"
    },
    {
+    "file": "src/hooks/useParceiros.ts",
+    "name": "TipoParceiro",
+    "values": "fornecedor | transportadora"
+   },
+   {
     "file": "src/hooks/usePlaybooks.ts",
     "name": "PlaybookScenario",
     "values": "discovery | demo | negotiation | objection | closing | winback | onboarding | custom"
@@ -130496,6 +130655,10 @@
    {
     "file": "supabase/migrations/20261111210500_agenda_edge_functions_cron.sql",
     "text": "pgxfvjmuubtbowutlide.supabase.co/functions/v1/validation-queue-worker',"
+   },
+   {
+    "file": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql",
+    "text": "_owner_or_admin_mfa` dessas 12 tabelas liberam o admin apenas com"
    }
   ],
   "db_constraints": [
@@ -153412,6 +153575,11 @@
     "value": "24"
    },
    {
+    "file": "src/hooks/useParceiros.ts",
+    "name": "PARCEIROS_PAGE_SIZE",
+    "value": "25"
+   },
+   {
     "file": "src/hooks/useProximosPassosFilters.ts",
     "name": "DEFAULT_SORT",
     "value": "'sugerido'"
@@ -153650,6 +153818,11 @@
     "file": "src/pages/MapaEmpresas.tsx",
     "name": "GEOCODING_BATCH_SIZE",
     "value": "50"
+   },
+   {
+    "file": "src/pages/Parceiros.tsx",
+    "name": "SEARCH_DEBOUNCE_MS",
+    "value": "400"
    },
    {
     "file": "src/pages/SmsMarketing.tsx",
@@ -160099,6 +160272,12 @@
     "file": "src/hooks/useNurturingWorkflows.ts",
     "field": "status",
     "value": "active",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useParceiros.ts",
+    "field": "type",
+    "value": "eq",
     "kind": "escreve"
    },
    {
@@ -168112,6 +168291,12 @@
     "name": "revalidationKey",
     "params": "userId: string",
     "body": "`singu:mfa-revalidar:${userId}`;"
+   },
+   {
+    "file": "src/hooks/useParceiros.ts",
+    "name": "totalDoParceiro",
+    "params": "tipo: TipoParceiro, row: ParceiroDashboardRow | ParceiroQualidadeRow | null",
+    "body": "if (!row) return 0; const valor = (row as unknown as Record<string, unknown>)[PARCEIRO_CONFIG[tipo].campoTotal]; return typeof valor === 'number' ? valor : 0;"
    },
    {
     "file": "src/hooks/usePreContactBriefing.ts",
@@ -198116,6 +198301,106 @@
     "using": "(select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))",
     "check": "(select auth.uid()) = user_id or (select public.has_role((select auth.uid()), 'admin'::public.app_role))",
     "src": "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql"
+   },
+   {
+    "name": "suppliers_select_admin",
+    "table": "suppliers",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carriers_select_admin",
+    "table": "carriers",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "supplier_scores_select_admin",
+    "table": "supplier_scores",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carrier_scores_select_admin",
+    "table": "carrier_scores",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "supplier_evaluations_select_admin",
+    "table": "supplier_evaluations",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carrier_evaluations_select_admin",
+    "table": "carrier_evaluations",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "supplier_homologations_select_admin",
+    "table": "supplier_homologations",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carrier_homologations_select_admin",
+    "table": "carrier_homologations",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "supplier_score_history_select_admin",
+    "table": "supplier_score_history",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
+   },
+   {
+    "name": "carrier_score_history_select_admin",
+    "table": "carrier_score_history",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "(SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))",
+    "check": "",
+    "src": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql"
    }
   ],
   "db_triggers": [
@@ -210070,8 +210355,8 @@
     "src": "supabase/migrations/20260329203937_create_vw_supplier_homologation_queue.sql"
    },
    "vw_supplier_data_quality": {
-    "body": "SELECT COUNT(*) AS total_fornecedores, COUNT(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj != '') AS com_cnpj, ROUND(100.0 * COUNT(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj != '') / COUNT(*), 1) AS pct_cnpj, COUNT(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social != '') AS com_razao_social, COUNT(*) FILTER (WHERE EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)) AS com_telefone, ROUND(100.0 * COUNT(*) FILTER (WHERE EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)) / COUNT(*), 1) AS pct_telefone, COUNT(*) FILTER (WHERE EXISTS(SELECT …",
-    "src": "supabase/migrations/20260329204035_create_vw_supplier_data_quality.sql"
+    "body": "SELECT count(*) AS total_fornecedores, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social, count(*) FILTER (WHERE (EXISTS ( SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id))) AS com_telefone, round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)))::numeric / NU …",
+    "src": "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql"
    },
    "vw_supplier_by_state": {
     "body": "SELECT COALESCE(addr.estado, 'SEM ESTADO') AS estado, COUNT(*) AS total, COUNT(*) FILTER (WHERE s.homologado = true) AS homologados, COUNT(*) FILTER (WHERE s.homologado = false) AS nao_homologados, ROUND(AVG(ss.score_geral), 2) AS score_medio, COUNT(ss.supplier_id) AS com_avaliacao FROM suppliers s JOIN companies co ON co.id = s.company_id AND co.deleted_at IS NULL LEFT JOIN supplier_scores ss ON ss.supplier_id = s.id LEFT JOIN LATERAL ( SELECT ca.estado FROM company_addresses ca WHERE ca.company_id = co.id ORDER BY ca.is_primary DESC LIMIT 1 ) addr ON true GROUP BY addr.estado ORDER BY total …",
@@ -210106,8 +210391,8 @@
     "src": "supabase/migrations/20260331124619_fix_b2_vw_carrier_alerts_deleted_at.sql"
    },
    "vw_carrier_data_quality": {
-    "body": "SELECT count(*) AS total_transportadoras, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> '') AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> '')::numeric / count(*)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> '') AS com_razao_social, count(*) FILTER (WHERE EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)) AS com_telefone, round(100.0 * count(*) FILTER (WHERE EXISTS(SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id))::numeric / count(*)::numeric, 1) AS pct_telefon …",
-    "src": "supabase/migrations/20260330122201_create_carrier_views_batch3.sql"
+    "body": "SELECT count(*) AS total_transportadoras, count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj, round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj, count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social, count(*) FILTER (WHERE (EXISTS ( SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id))) AS com_telefone, round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1 FROM company_phones cp WHERE cp.company_id = co.id)))::numeric / …",
+    "src": "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql"
    },
    "vw_carrier_by_state": {
     "body": "SELECT COALESCE(addr.estado, 'SEM ESTADO') AS estado, count(*) AS total, count(*) FILTER (WHERE ca.homologado = true) AS homologados, count(*) FILTER (WHERE ca.homologado = false) AS nao_homologados, round(avg(cs.score_geral), 2) AS score_medio, count(cs.carrier_id) AS com_avaliacao FROM carriers ca JOIN companies co ON co.id = ca.company_id AND co.deleted_at IS NULL LEFT JOIN carrier_scores cs ON cs.carrier_id = ca.id LEFT JOIN LATERAL ( SELECT cad.estado FROM company_addresses cad WHERE cad.company_id = co.id ORDER BY cad.is_primary DESC LIMIT 1 ) addr ON true GROUP BY addr.estado ORDER BY c …",
@@ -213801,6 +214086,7 @@
       "escreve:src/hooks/useInactivityAlerts.ts",
       "escreve:src/hooks/useInteracoesSemApelidoView.ts",
       "escreve:src/hooks/useLeadsFullView.ts",
+      "escreve:src/hooks/useParceiros.ts",
       "escreve:src/hooks/usePendingNotifications.ts",
       "escreve:src/hooks/usePipeline.ts",
       "escreve:src/hooks/useRapportIntelView.ts",
@@ -216795,7 +217081,8 @@
    "carrier_evaluations": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -216810,7 +217097,8 @@
    "carrier_homologations": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -216840,7 +217128,8 @@
    "carrier_score_history": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -216855,7 +217144,8 @@
    "carrier_scores": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -216870,7 +217160,8 @@
    "carriers": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -221547,7 +221838,8 @@
    "supplier_evaluations": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -221562,7 +221854,8 @@
    "supplier_homologations": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -221620,7 +221913,8 @@
    "supplier_score_history": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -221631,7 +221925,8 @@
    "supplier_scores": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -221646,7 +221941,8 @@
    "suppliers": {
     "rls": "enabled",
     "SELECT": [
-     "public: true"
+     "public: true",
+     "authenticated: (SELECT public.has_role((SELECT auth.uid()), 'admin'::public.app_role))"
     ],
     "INSERT": [
      "public: true"
@@ -247219,7 +247515,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 192,
+   "lines": 193,
    "exports": [
     "const AppRoutes"
    ],
@@ -247750,6 +248046,12 @@
      "roles": []
     },
     {
+     "path": "/parceiros",
+     "component": "Admin",
+     "guard": "",
+     "roles": []
+    },
+    {
      "path": "/admin/field-mapping",
      "component": "Admin",
      "guard": "",
@@ -247956,7 +248258,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 176,
+   "lines": 177,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -257610,7 +257912,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 323,
+   "lines": 324,
    "exports": [
     "const AppSidebar"
    ],
@@ -278334,6 +278636,58 @@
     "usePageTitle"
    ]
   },
+  "src/hooks/useParceiros.ts": {
+   "path": "src/hooks/useParceiros.ts",
+   "lines": 235,
+   "exports": [
+    "type TipoParceiro",
+    "type Percentual",
+    "const PARCEIROS_PAGE_SIZE",
+    "interface ParceiroDashboardRow",
+    "interface ParceiroQualidadeRow",
+    "interface ParceiroEstadoRow",
+    "interface ParceiroRankingRow",
+    "interface ParceiroFilaRow",
+    "const PARCEIRO_CONFIG",
+    "function totalDoParceiro",
+    "function nomeDoParceiro",
+    "interface ParceiroResumo",
+    "function useParceiroResumo",
+    "function useParceiroRanking",
+    "function useParceiroFilaHomologacao"
+   ],
+   "enums": [
+    {
+     "name": "TipoParceiro",
+     "values": "fornecedor | transportadora"
+    }
+   ],
+   "params": [
+    {
+     "name": "PARCEIROS_PAGE_SIZE",
+     "value": "25"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "eq",
+     "kind": "escreve"
+    }
+   ],
+   "hooks": [
+    "useParceiroResumo",
+    "useParceiroRanking",
+    "useParceiroFilaHomologacao"
+   ],
+   "calc_fns": [
+    {
+     "name": "totalDoParceiro",
+     "params": "tipo: TipoParceiro, row: ParceiroDashboardRow | ParceiroQualidadeRow | null",
+     "body": "if (!row) return 0; const valor = (row as unknown as Record<string, unknown>)[PARCEIRO_CONFIG[tipo].campoTotal]; return typeof valor === 'number' ? valor : 0;"
+    }
+   ]
+  },
   "src/hooks/usePasswordBreachCheck.tsx": {
    "path": "src/hooks/usePasswordBreachCheck.tsx",
    "lines": 50,
@@ -289079,6 +289433,19 @@
     "/auth"
    ]
   },
+  "src/pages/Parceiros.tsx": {
+   "path": "src/pages/Parceiros.tsx",
+   "lines": 386,
+   "exports": [
+    "function Parceiros"
+   ],
+   "params": [
+    {
+     "name": "SEARCH_DEBOUNCE_MS",
+     "value": "400"
+    }
+   ]
+  },
   "src/pages/PerfisComportamentais.tsx": {
    "path": "src/pages/PerfisComportamentais.tsx",
    "lines": 222,
@@ -297362,7 +297729,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 181,
+   "lines": 198,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -308684,6 +309051,17 @@
    "path": "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql",
    "lines": 22
   },
+  "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql": {
+   "path": "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql",
+   "lines": 51,
+   "rule_comments": [
+    "_owner_or_admin_mfa` dessas 12 tabelas liberam o admin apenas com"
+   ]
+  },
+  "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql": {
+   "path": "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql",
+   "lines": 109
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -309401,10 +309779,26 @@
   }
  },
  "git": {
-  "sha": "6409ca43b6582bb7be5a953d0b79e2d71c22c1d6",
+  "sha": "9ca772e61021b442642b5ae7493f91b6d64c973d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "9ca772e",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(parceiros): tela de fornecedores e transportadoras com ranking, qualidade e homologacao (#366)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/hooks/useParceiros.ts",
+     "src/pages/Parceiros.tsx",
+     "supabase/functions/external-data/tables.ts",
+     "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql",
+     "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql"
+    ]
+   },
    {
     "sha": "6409ca4",
     "date": "2026-11-26",
@@ -309721,31 +310115,27 @@
      "supabase/functions/evolution-webhook/messages.ts",
      "supabase/functions/whatsapp-import/index.ts"
     ]
-   },
-   {
-    "sha": "bae345f",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix(seguranca): revoga authenticated dos stubs de ciclo de vida do cliente (#333)",
-    "files": [
-     "docs/qa/functions-authenticated-allowlist.md",
-     "docs/qa/security-definer-audit.md",
-     "supabase/migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql",
-     "tests/rls/functions_authenticated_allowlist.sql"
-    ]
    }
   ],
   "hot_files": [
+   [
+    "supabase/functions/external-data/tables.ts",
+    4
+   ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
     4
    ],
    [
-    "supabase/functions/external-data/tables.ts",
+    "src/app/AppRoutes.tsx",
     3
    ],
    [
-    "docs/qa/security-definer-audit.md",
+    "src/app/lazyPages.tsx",
+    3
+   ],
+   [
+    "src/components/layout/AppSidebar.tsx",
     3
    ],
    [
@@ -309757,15 +310147,7 @@
     3
    ],
    [
-    "src/app/AppRoutes.tsx",
-    2
-   ],
-   [
-    "src/app/lazyPages.tsx",
-    2
-   ],
-   [
-    "src/components/layout/AppSidebar.tsx",
+    "docs/qa/security-definer-audit.md",
     2
    ],
    [
@@ -309793,27 +310175,27 @@
     2
    ],
    [
+    "src/hooks/useParceiros.ts",
+    1
+   ],
+   [
+    "src/pages/Parceiros.tsx",
+    1
+   ],
+   [
+    "supabase/migrations/20261126150000_suppliers_carriers_admin_read.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20261126151000_fix_data_quality_division_by_zero.sql",
+    1
+   ],
+   [
     "src/hooks/useSinguReadiness.ts",
     1
    ],
    [
     "src/pages/AdminReadiness.tsx",
-    1
-   ],
-   [
-    "supabase/migrations/20261126120000_companies_owner_or_admin_policy.sql",
-    1
-   ],
-   [
-    "src/components/layout/MobileSidebarDrawer.tsx",
-    1
-   ],
-   [
-    "src/hooks/useGruposEconomicos.ts",
-    1
-   ],
-   [
-    "src/pages/GruposEconomicos.tsx",
     1
    ]
   ]

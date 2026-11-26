@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1082,
+ "total": 1083,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -296,6 +296,10 @@
    "src/app/lazyPages.tsx",
    "src/pages/Onboarding.tsx"
   ],
+  "Parceiros": [
+   "src/app/lazyPages.tsx",
+   "src/pages/Parceiros.tsx"
+  ],
   "PerfisComportamentais": [
    "src/app/lazyPages.tsx",
    "src/pages/PerfisComportamentais.tsx"
@@ -499,7 +503,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 192,
+   "linhas": 193,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -603,6 +607,7 @@
     "Nurturing",
     "Onboarding",
     "PWAShell",
+    "Parceiros",
     "PerfisComportamentais",
     "Performance",
     "PermissionsPage",
@@ -641,7 +646,7 @@
     "WinLossSetupPage"
    ],
    "export_default": null,
-   "linhas": 176,
+   "linhas": 177,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10345,7 +10350,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 49,
+   "usado_por": 50,
    "orfao": false
   },
   {
@@ -10354,7 +10359,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 323,
+   "linhas": 324,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14240,7 +14245,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 554,
+   "usado_por": 555,
    "orfao": false
   },
   {
@@ -14255,7 +14260,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 534,
+   "usado_por": 535,
    "orfao": false
   },
   {
@@ -14290,7 +14295,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 592,
+   "usado_por": 593,
    "orfao": false
   },
   {
@@ -14569,7 +14574,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 209,
+   "usado_por": 210,
    "orfao": false
   },
   {
@@ -14745,7 +14750,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 108,
+   "usado_por": 109,
    "orfao": false
   },
   {
@@ -14915,7 +14920,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 130,
+   "usado_por": 131,
    "orfao": false
   },
   {
@@ -15075,7 +15080,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 207,
+   "usado_por": 208,
    "orfao": false
   },
   {
@@ -15199,7 +15204,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 20,
+   "usado_por": 21,
    "orfao": false
   },
   {
@@ -15216,7 +15221,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 93,
+   "usado_por": 94,
    "orfao": false
   },
   {
@@ -17472,6 +17477,24 @@
    "dominio": "pages",
    "hooks_locais": [
     "useAuth"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/Parceiros.tsx",
+   "exports": [
+    "Parceiros"
+   ],
+   "export_default": "Parceiros",
+   "linhas": 386,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useParceiroFilaHomologacao",
+    "useParceiroRanking",
+    "useParceiroResumo"
    ],
    "tabelas": [],
    "edges": [],

@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 414,
+ "total": 415,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -7549,6 +7549,28 @@
     "src/pages/Network.tsx",
     "src/pages/Notificacoes.tsx",
     "src/pages/Sequencias.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useParceiros.ts",
+   "hooks_exportados": [
+    "useParceiroFilaHomologacao",
+    "useParceiroRanking",
+    "useParceiroResumo"
+   ],
+   "linhas": 235,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/Parceiros.tsx"
    ],
    "coberto_por_testes": 0
   },

@@ -1,20 +1,20 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "nos": 1991,
- "arestas": 8718,
+ "nos": 1993,
+ "arestas": 8731,
  "hubs": [
   {
    "arquivo": "src/components/ui/card.tsx",
-   "importado_por": 592
+   "importado_por": 593
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 555
+   "importado_por": 556
   },
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 535
+   "importado_por": 536
   },
   {
    "arquivo": "src/lib/utils.ts",
@@ -30,11 +30,11 @@
   },
   {
    "arquivo": "src/components/ui/input.tsx",
-   "importado_por": 209
+   "importado_por": 210
   },
   {
    "arquivo": "src/components/ui/skeleton.tsx",
-   "importado_por": 207
+   "importado_por": 208
   },
   {
    "arquivo": "src/lib/logger.ts",
@@ -46,11 +46,11 @@
   },
   {
    "arquivo": "src/lib/externalData.ts",
-   "importado_por": 133
+   "importado_por": 134
   },
   {
    "arquivo": "src/components/ui/select.tsx",
-   "importado_por": 130
+   "importado_por": 131
   },
   {
    "arquivo": "src/lib/errorMessages.ts",
@@ -70,7 +70,7 @@
   },
   {
    "arquivo": "src/components/ui/progress.tsx",
-   "importado_por": 108
+   "importado_por": 109
   },
   {
    "arquivo": "src/components/ui/textarea.tsx",
@@ -78,7 +78,7 @@
   },
   {
    "arquivo": "src/components/ui/tabs.tsx",
-   "importado_por": 93
+   "importado_por": 94
   },
   {
    "arquivo": "src/components/ui/scroll-area.tsx",
@@ -102,7 +102,7 @@
   },
   {
    "arquivo": "src/components/layout/AppLayout.tsx",
-   "importado_por": 49
+   "importado_por": 50
   },
   {
    "arquivo": "src/components/ui/switch.tsx",
