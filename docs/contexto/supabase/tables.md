@@ -630,7 +630,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.win_loss_insights](tables/public/win_loss_insights.md) | table | sim | 3 | 11 | não |  |
 | [public.win_loss_reasons](tables/public/win_loss_reasons.md) | table | sim | 1 | 9 | não |  |
 | [public.win_loss_records](tables/public/win_loss_records.md) | table | sim | 1 | 15 | não |  |
-| [public.workspace_accounts](tables/public/workspace_accounts.md) | table | sim | 4 | 30 | não |  |
+| [public.workspace_accounts](tables/public/workspace_accounts.md) | table | sim | 1 | 30 | não |  |
 | [public.xbz_upload_mapping](tables/public/xbz_upload_mapping.md) | table | sim | 1 | 8 | não | Rastreia requisições pg_net para upload de imagens XBZ ao Cloudflare Images |
 | [singu_migration._checklist](tables/singu_migration/checklist.md) | table | não | 0 | 10 | não | Controle de progresso da migração SINGU. Cada linha = 1 tabela ou 1 operação estrutural. |
 | [singu_migration._errors](tables/singu_migration/errors.md) | table | não | 0 | 6 | não |  |

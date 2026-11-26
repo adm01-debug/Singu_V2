@@ -556,6 +556,7 @@ Verificações objetivas feitas no catálogo. Um agente deve ler isto antes de p
 | BAIXA | policy_auth_fn_not_wrapped | public.whatsapp_instances.Users can manage their own whatsapp_instances | Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect. |
 | BAIXA | policy_auth_fn_not_wrapped | public.whatsapp_kpis.Users can manage their own whatsapp_kpis | Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect. |
 | BAIXA | policy_auth_fn_not_wrapped | public.whatsapp_messages.Users can manage their own whatsapp_messages | Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect. |
+| BAIXA | policy_auth_fn_not_wrapped | public.workspace_accounts.workspace_accounts_select_admin | Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect. |
 | BAIXA | policy_auth_fn_not_wrapped | storage.objects.am_service_all | Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect. |
 | BAIXA | policy_auth_fn_not_wrapped | storage.objects.wm_service_all | Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect. |
 | INFO | realtime_replica_identity | public.alerts | Publicada no Realtime sem REPLICA IDENTITY FULL: eventos de UPDATE/DELETE não trazem `old` completo. |

@@ -1655,10 +1655,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.win_loss_insights | users view own insights | SELECT | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` |  |
 | public.win_loss_reasons | users manage own reasons | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` | `(( SELECT auth.uid() AS uid) = user_id)` |
 | public.win_loss_records | users manage own win_loss_records | ALL | PERMISSIVE | authenticated | `(( SELECT auth.uid() AS uid) = user_id)` | `(( SELECT auth.uid() AS uid) = user_id)` |
-| public.workspace_accounts | workspace_accounts_delete | DELETE | PERMISSIVE | authenticated | `(id = ( SELECT auth.uid() AS uid))` |  |
-| public.workspace_accounts | workspace_accounts_insert | INSERT | PERMISSIVE | authenticated |  | `(id = ( SELECT auth.uid() AS uid))` |
-| public.workspace_accounts | workspace_accounts_select | SELECT | PERMISSIVE | authenticated | `(id = ( SELECT auth.uid() AS uid))` |  |
-| public.workspace_accounts | workspace_accounts_update | UPDATE | PERMISSIVE | authenticated | `(id = ( SELECT auth.uid() AS uid))` | `(id = ( SELECT auth.uid() AS uid))` |
+| public.workspace_accounts | workspace_accounts_select_admin | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.xbz_upload_mapping | xbz_upload_mapping_internal_deny_all | ALL | RESTRICTIVE | anon, authenticated | `false` |  |
 | storage.objects | Users delete own docs | DELETE | PERMISSIVE | authenticated | `((bucket_id = 'documents'::text) AND ((storage.foldername(name))[1] = (( SELECT auth.uid() AS uid))::text))` |  |
 | storage.objects | Users read own docs | SELECT | PERMISSIVE | authenticated | `((bucket_id = 'documents'::text) AND ((storage.foldername(name))[1] = (( SELECT auth.uid() AS uid))::text))` |  |

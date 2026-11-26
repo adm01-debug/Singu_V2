@@ -1708,7 +1708,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_top_clientes_vendedor | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_ultimo_inativador | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_ultimo_inativador | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_workspace_overview | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_workspace_overview | authenticated | SELECT |
 | public.vw_workspace_overview | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.webauthn_credentials | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.webauthn_credentials | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -1740,7 +1740,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.win_loss_reasons | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.win_loss_records | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.win_loss_records | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.workspace_accounts | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.workspace_accounts | authenticated | SELECT |
 | public.workspace_accounts | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.xbz_upload_mapping | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.xbz_upload_mapping | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

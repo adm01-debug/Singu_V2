@@ -2,6 +2,15 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 19:12 UTC
+
+- **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`
+- **grants** alterado (2): `public.vw_workspace_overview:authenticated`, `public.workspace_accounts:authenticated`
+- **lints** adicionado (1): `policy_auth_fn_not_wrapped:public.workspace_accounts.workspace_accounts_select_admin`
+- **migrations** adicionado (1): `20261126210000_workspaces_rls_read_only`
+- **policies (RLS)** adicionado (1): `public.workspace_accounts.workspace_accounts_select_admin`
+- **policies (RLS)** removido (4): `public.workspace_accounts.workspace_accounts_delete`, `public.workspace_accounts.workspace_accounts_insert`, `public.workspace_accounts.workspace_accounts_select`, `public.workspace_accounts.workspace_accounts_update`
+
 ## 2026-11-26 18:16 UTC
 
 - **grants** alterado (4): `public.v_model_catalog:authenticated`, `public.vw_recommended_scripts:authenticated`, `public.vw_reframe_suggestions:authenticated`, `public.vw_timeline_cliente:authenticated`

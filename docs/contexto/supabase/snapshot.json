@@ -218168,7 +218168,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 90,
+          "code_total_files": 91,
           "cron": [],
           "db": [
             "public.ativar_cliente",
@@ -247760,7 +247760,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_workspace_overview"
         },
@@ -247952,7 +247952,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "workspace_accounts"
         },
@@ -276105,6 +276105,12 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.workspace_accounts.workspace_accounts_select_admin",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "storage.objects.am_service_all",
         "severity": "BAIXA"
       },
@@ -280756,6 +280762,11 @@
         "name": "eventos_cliente_read_only",
         "statements": null,
         "version": "20261126203000"
+      },
+      {
+        "name": "workspaces_rls_read_only",
+        "statements": null,
+        "version": "20261126210000"
       }
     ],
     "policies": [
@@ -300569,52 +300580,16 @@
         "with_check": "(( SELECT auth.uid() AS uid) = user_id)"
       },
       {
-        "cmd": "DELETE",
-        "name": "workspace_accounts_delete",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "workspace_accounts",
-        "using": "(id = ( SELECT auth.uid() AS uid))",
-        "with_check": null
-      },
-      {
-        "cmd": "INSERT",
-        "name": "workspace_accounts_insert",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "workspace_accounts",
-        "using": null,
-        "with_check": "(id = ( SELECT auth.uid() AS uid))"
-      },
-      {
         "cmd": "SELECT",
-        "name": "workspace_accounts_select",
+        "name": "workspace_accounts_select_admin",
         "permissive": "PERMISSIVE",
         "roles": [
           "authenticated"
         ],
         "schema": "public",
         "table": "workspace_accounts",
-        "using": "(id = ( SELECT auth.uid() AS uid))",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
         "with_check": null
-      },
-      {
-        "cmd": "UPDATE",
-        "name": "workspace_accounts_update",
-        "permissive": "PERMISSIVE",
-        "roles": [
-          "authenticated"
-        ],
-        "schema": "public",
-        "table": "workspace_accounts",
-        "using": "(id = ( SELECT auth.uid() AS uid))",
-        "with_check": "(id = ( SELECT auth.uid() AS uid))"
       },
       {
         "cmd": "ALL",

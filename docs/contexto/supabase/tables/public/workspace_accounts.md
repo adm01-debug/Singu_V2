@@ -6,7 +6,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 4 |
+| policies | 1 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -69,45 +69,15 @@
 
 ## Policies (RLS)
 
-### `workspace_accounts_delete`
-
-| campo | valor |
-|---|---|
-| comando | DELETE |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(id = ( SELECT auth.uid() AS uid))` |
-| WITH CHECK |  |
-
-### `workspace_accounts_insert`
-
-| campo | valor |
-|---|---|
-| comando | INSERT |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING |  |
-| WITH CHECK | `(id = ( SELECT auth.uid() AS uid))` |
-
-### `workspace_accounts_select`
+### `workspace_accounts_select_admin`
 
 | campo | valor |
 |---|---|
 | comando | SELECT |
 | tipo | PERMISSIVE |
 | roles | authenticated |
-| USING | `(id = ( SELECT auth.uid() AS uid))` |
+| USING | `has_role(auth.uid(), 'admin'::app_role)` |
 | WITH CHECK |  |
-
-### `workspace_accounts_update`
-
-| campo | valor |
-|---|---|
-| comando | UPDATE |
-| tipo | PERMISSIVE |
-| roles | authenticated |
-| USING | `(id = ( SELECT auth.uid() AS uid))` |
-| WITH CHECK | `(id = ( SELECT auth.uid() AS uid))` |
 
 
 ## Triggers
@@ -122,5 +92,5 @@
 
 | role | privilégios |
 |---|---|
-| authenticated | DELETE, INSERT, SELECT, UPDATE |
+| authenticated | SELECT |
 | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
