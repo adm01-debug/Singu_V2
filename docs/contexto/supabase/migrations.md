@@ -756,3 +756,6 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261126090000 | [offer_suggestions_metadata_social_match](migrations/20261126090000_offer_suggestions_metadata_social_match.sql) | 1 |
 | 20261126114500 | [social_insights_from_behavior_analysis](migrations/20261126114500_social_insights_from_behavior_analysis.sql) | 0 |
 | 20261126120000 | [companies_owner_or_admin_policy](migrations/20261126120000_companies_owner_or_admin_policy.sql) | 0 |
+| 20261126150000 | [suppliers_carriers_admin_read](migrations/20261126150000_suppliers_carriers_admin_read.sql) | 0 |
+| 20261126151000 | [fix_data_quality_division_by_zero](migrations/20261126151000_fix_data_quality_division_by_zero.sql) | 0 |
+| 20261126160000 | [admin_read_mfa_locked_tables](migrations/20261126160000_admin_read_mfa_locked_tables.sql) | 0 |

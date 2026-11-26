@@ -269,12 +269,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.campaign_recipients](tables/public/campaign_recipients.md) | table | sim | 5 | 19 | não | SINGU: Destinatários individuais de email_campaigns com tracking granular (opens, clicks, bounces). |
 | [public.campaigns](tables/public/campaigns.md) | table | sim | 1 | 12 | não |  |
 | [public.canned_responses](tables/public/canned_responses.md) | table | sim | 5 | 12 | não | SINGU: Respostas prontas/templates curtos acessíveis por shortcut (/ola, /encerrar, etc). is_shared=true para disponibilizar ao time. |
-| [public.carrier_evaluations](tables/public/carrier_evaluations.md) | table | sim | 1 | 13 | não | Avaliações de transportadoras (append-only). 5 critérios: pontualidade, conservação, preço_frete, rastreamento, cobertura. Notas 1-5. |
-| [public.carrier_homologations](tables/public/carrier_homologations.md) | table | sim | 1 | 12 | não | Histórico de homologação de transportadoras. Homologador: Logística (Thiago id=80). Status via enum carrier_homologation_status. |
+| [public.carrier_evaluations](tables/public/carrier_evaluations.md) | table | sim | 2 | 13 | não | Avaliações de transportadoras (append-only). 5 critérios: pontualidade, conservação, preço_frete, rastreamento, cobertura. Notas 1-5. |
+| [public.carrier_homologations](tables/public/carrier_homologations.md) | table | sim | 2 | 12 | não | Histórico de homologação de transportadoras. Homologador: Logística (Thiago id=80). Status via enum carrier_homologation_status. |
 | [public.carrier_qualification_config](tables/public/carrier_qualification_config.md) | table | sim | 2 | 13 | não | Segmentos de classificação de transportadoras (Excelente a Crítico) com faixas de score e ações recomendadas |
-| [public.carrier_score_history](tables/public/carrier_score_history.md) | table | sim | 1 | 17 | não | Histórico de evolução do score de transportadoras. Append-only, 1 registro por recálculo. |
-| [public.carrier_scores](tables/public/carrier_scores.md) | table | sim | 1 | 17 | não | Score consolidado de transportadoras (1 registro por carrier). Recalculado via trigger após cada avaliação. |
-| [public.carriers](tables/public/carriers.md) | table | sim | 1 | 19 | não | Transportadoras vinculadas a companies (1:1 via company_id UNIQUE). 112 registros. Campos de qualificação: homologado, data_homologacao, score_geral (caches atualizados por triggers). Homologação: Logística (Thiago id=80). 5 critérios: pontualidade(30%), conservação(25%), preço_frete(20%), cobertura(15%), rastreamento(10%). |
+| [public.carrier_score_history](tables/public/carrier_score_history.md) | table | sim | 2 | 17 | não | Histórico de evolução do score de transportadoras. Append-only, 1 registro por recálculo. |
+| [public.carrier_scores](tables/public/carrier_scores.md) | table | sim | 2 | 17 | não | Score consolidado de transportadoras (1 registro por carrier). Recalculado via trigger após cada avaliação. |
+| [public.carriers](tables/public/carriers.md) | table | sim | 2 | 19 | não | Transportadoras vinculadas a companies (1:1 via company_id UNIQUE). 112 registros. Campos de qualificação: homologado, data_homologacao, score_geral (caches atualizados por triggers). Homologação: Logística (Thiago id=80). 5 critérios: pontualidade(30%), conservação(25%), preço_frete(20%), cobertura(15%), rastreamento(10%). |
 | [public.churn_predictions](tables/public/churn_predictions.md) | table | sim | 2 | 18 | não | Previsões de probabilidade de churn por contato |
 | [public.churn_risk_factors](tables/public/churn_risk_factors.md) | table | sim | 2 | 12 | não | Configuração dos fatores que indicam risco de churn |
 | [public.churn_risk_scores](tables/public/churn_risk_scores.md) | table | sim | 6 | 22 | não | SINGU: Histórico de scores de risco de churn (análise local, 5 fatores). Espelha feature churn-risk-detection das memories. is_current=true para score atual. |
@@ -293,11 +293,11 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.companies](tables/public/companies.md) | table | sim | 10 | 81 | sim | Cadastro mestre de organizações do CRM. Uma linha representa uma empresa, que pode atuar como cliente, fornecedor e/ou transportadora conforme os indicadores de papel. Centraliza identificação cadastral, vínculo com Bitrix24, hierarquia empresarial/cooperativista, dados de contato e atributos de qualificação comercial. PK: id. Relacionamentos confirmados: company_addresses.company_id, company_phones.company_id, company_emails.company_id, contacts.company_id, customers.company_id, suppliers.company_id, carriers.company_id e diversas tabelas operacionais apontam para companies.id. Valores monetários e métricas textuais devem ser interpretados conforme a unidade de origem; não inferir moeda ou escala quando não explicitadas. |
 | [public.company_addresses](tables/public/company_addresses.md) | table | sim | 6 | 24 | não | Endereços associados a empresas do CRM. Cada registro pertence a uma empresa e pode incluir tipo, endereço postal, coordenadas geográficas e referências de geocodificação. company_id referencia public.companies.id; cidade_ibge referencia public.cidades.ibge_code. A coluna tipo tem um DEFAULT legado cujo conteúdo é ambíguo; não interpretá-lo como lista oficial de categorias sem validar os dados. |
 | [public.company_cadences](tables/public/company_cadences.md) | table | sim | 4 | 11 | não |  |
-| [public.company_cnaes](tables/public/company_cnaes.md) | table | sim | 1 | 7 | não | Vínculo empresa ↔ CNAEs. Cada empresa tem 1 principal (is_principal=true) e N secundários. |
+| [public.company_cnaes](tables/public/company_cnaes.md) | table | sim | 2 | 7 | não | Vínculo empresa ↔ CNAEs. Cada empresa tem 1 principal (is_principal=true) e N secundários. |
 | [public.company_emails](tables/public/company_emails.md) | table | sim | 6 | 14 | não | Endereços de e-mail associados a empresas, com finalidade, sinalização de principal/verificado e metadados de origem/contexto. Cada registro referencia public.companies.id. |
 | [public.company_phones](tables/public/company_phones.md) | table | sim | 6 | 16 | não | Telefones de empresas com tipo, número normalizado, ramal, departamento e indicadores de principal/WhatsApp. Cada registro referencia public.companies.id. |
 | [public.company_rfm_scores](tables/public/company_rfm_scores.md) | table | sim | 4 | 18 | não | SINGU: Scores RFM agregados por empresa |
-| [public.company_social_media](tables/public/company_social_media.md) | table | sim | 1 | 16 | não |  |
+| [public.company_social_media](tables/public/company_social_media.md) | table | sim | 2 | 16 | não |  |
 | [public.company_stakeholder_map](tables/public/company_stakeholder_map.md) | table | sim | 4 | 16 | não | SINGU: Mapa de stakeholders por empresa (poder/interesse) |
 | [public.company_territories](tables/public/company_territories.md) | table | sim | 1 | 4 | não |  |
 | [public.compatibility_alerts](tables/public/compatibility_alerts.md) | table | sim | 8 | 11 | não | SINGU: Alertas quando compatibilidade DISC vendedor↔contato está abaixo do threshold. |
@@ -310,7 +310,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.connection_quotas](tables/public/connection_quotas.md) | table | sim | 2 | 9 | não |  |
 | [public.connection_test_logs](tables/public/connection_test_logs.md) | table | sim | 2 | 8 | não |  |
 | [public.connector_log](tables/public/connector_log.md) | table | sim | 1 | 13 | não | Log de integrações WhatsApp/Bitrix (auditoria) |
-| [public.contact_addresses](tables/public/contact_addresses.md) | table | sim | 1 | 25 | não | Endereços de pessoas/contatos. Cada registro pertence a public.contacts e possui categoria residencial, profissional, cobrança ou outro. Guarda dados postais e coordenadas opcionais. PK: id; contact_id → public.contacts.id; created_by e updated_by → public.users.id. |
+| [public.contact_addresses](tables/public/contact_addresses.md) | table | sim | 2 | 25 | não | Endereços de pessoas/contatos. Cada registro pertence a public.contacts e possui categoria residencial, profissional, cobrança ou outro. Guarda dados postais e coordenadas opcionais. PK: id; contact_id → public.contacts.id; created_by e updated_by → public.users.id. |
 | [public.contact_analytical_profile_versions](tables/public/contact_analytical_profile_versions.md) | table | sim | 2 | 16 | não |  |
 | [public.contact_analytical_profiles](tables/public/contact_analytical_profiles.md) | table | sim | 2 | 13 | não |  |
 | [public.contact_automation_settings](tables/public/contact_automation_settings.md) | table | sim | 1 | 11 | não |  |
@@ -319,7 +319,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_cadence](tables/public/contact_cadence.md) | table | sim | 8 | 11 | não | SINGU: Cadência ideal de contato por lead/cliente. Auto-remind e next_contact_due. |
 | [public.contact_cadence_audit](tables/public/contact_cadence_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.contact_decision_making](tables/public/contact_decision_making.md) | table | sim | 4 | 9 | não |  |
-| [public.contact_emails](tables/public/contact_emails.md) | table | sim | 5 | 12 | não | Endereços de e-mail associados a contatos, permitindo múltiplos e-mails tipados e sinalização de principal/verificado. Cada registro referencia public.contacts.id. |
+| [public.contact_emails](tables/public/contact_emails.md) | table | sim | 6 | 12 | não | Endereços de e-mail associados a contatos, permitindo múltiplos e-mails tipados e sinalização de principal/verificado. Cada registro referencia public.contacts.id. |
 | [public.contact_family_history](tables/public/contact_family_history.md) | table | sim | 2 | 5 | não |  |
 | [public.contact_influence](tables/public/contact_influence.md) | table | sim | 4 | 8 | não |  |
 | [public.contact_metaprograms](tables/public/contact_metaprograms.md) | table | sim | 4 | 15 | não |  |
@@ -335,7 +335,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.contact_relatives](tables/public/contact_relatives.md) | table | sim | 8 | 15 | não | SINGU: Familiares e relacionados do contato para estratégias de rapport. |
 | [public.contact_relatives_audit](tables/public/contact_relatives_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.contact_report_overrides](tables/public/contact_report_overrides.md) | table | sim | 3 | 6 | não |  |
-| [public.contact_social_media](tables/public/contact_social_media.md) | table | sim | 1 | 17 | não |  |
+| [public.contact_social_media](tables/public/contact_social_media.md) | table | sim | 2 | 17 | não |  |
 | [public.contact_time_analysis](tables/public/contact_time_analysis.md) | table | sim | 8 | 9 | não | SINGU: Heatmap de melhores horários/dias para contatar cada lead. Grid 7x24. |
 | [public.contact_time_analysis_audit](tables/public/contact_time_analysis_audit.md) | table | sim | 1 | 9 | não |  |
 | [public.contacts](tables/public/contacts.md) | table | sim | 10 | 65 | sim | Cadastro de pessoas/contatos comerciais vinculados opcionalmente a uma empresa. Reúne identificação, canais de contato, papéis de compra, atributos comportamentais e dados derivados. PK: id. company_id referencia public.companies.id; duplicate_of referencia public.contacts.id; assigned_by_id referencia public.users.id. Preferir as tabelas contact_emails, contact_phones e contact_social_media para múltiplos canais quando apropriado; não assumir que os campos legados equivalem a essas tabelas. |
@@ -360,12 +360,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.csat_surveys](tables/public/csat_surveys.md) | table | sim | 6 | 21 | não | SINGU: Pesquisas de satisfação (CSAT 1-5, NPS 0-10, CES 1-7). Vinculadas opcionalmente a ticket/contact/company. |
 | [public.custom_field_values](tables/public/custom_field_values.md) | table | sim | 5 | 12 | não |  |
 | [public.custom_fields](tables/public/custom_fields.md) | table | sim | 5 | 13 | não |  |
-| [public.customer_events](tables/public/customer_events.md) | table | sim | 3 | 13 | não | Todos os eventos do ciclo de vida do cliente |
+| [public.customer_events](tables/public/customer_events.md) | table | sim | 4 | 13 | não | Todos os eventos do ciclo de vida do cliente |
 | [public.customer_health_scores](tables/public/customer_health_scores.md) | table | sim | 1 | 13 | não |  |
-| [public.customer_ownership_history](tables/public/customer_ownership_history.md) | table | sim | 5 | 17 | não | Histórico de qual vendedor foi dono de cada cliente |
+| [public.customer_ownership_history](tables/public/customer_ownership_history.md) | table | sim | 6 | 17 | não | Histórico de qual vendedor foi dono de cada cliente |
 | [public.customer_purchases](tables/public/customer_purchases.md) | table | sim | 1 | 12 | não |  |
 | [public.customer_rotation_state](tables/public/customer_rotation_state.md) | table | sim | 4 | 15 | não |  |
-| [public.customer_sdr_history](tables/public/customer_sdr_history.md) | table | sim | 5 | 21 | não | Histórico de prospecção SDR ↔ Cliente |
+| [public.customer_sdr_history](tables/public/customer_sdr_history.md) | table | sim | 6 | 21 | não | Histórico de prospecção SDR ↔ Cliente |
 | [public.customer_surveys](tables/public/customer_surveys.md) | table | sim | 1 | 13 | não |  |
 | [public.customers](tables/public/customers.md) | table | sim | 4 | 37 | não | Extensão comercial de public.companies para empresas qualificadas como clientes. Armazena carteira, responsável comercial, ativação, histórico agregado de compras e métricas de valor. company_id é UNIQUE e referencia public.companies.id; id é a PK. O soft delete é representado por deleted_at. |
 | [public.daily_challenges](tables/public/daily_challenges.md) | table | sim | 1 | 10 | não |  |
@@ -582,12 +582,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.stakeholder_alerts](tables/public/stakeholder_alerts.md) | table | sim | 8 | 14 | não |  |
 | [public.suggested_life_events](tables/public/suggested_life_events.md) | table | sim | 5 | 13 | não |  |
 | [public.suggested_rapport_intel](tables/public/suggested_rapport_intel.md) | table | sim | 4 | 9 | não |  |
-| [public.supplier_evaluations](tables/public/supplier_evaluations.md) | table | sim | 1 | 12 | não | Avaliações de fornecedores por entrega ou período. Notas de 1-5 em 4 critérios. Trigger recalcula score automaticamente. |
-| [public.supplier_homologations](tables/public/supplier_homologations.md) | table | sim | 1 | 12 | não | Homologação de fornecedores pelo Depto de Compras. Cada registro = uma solicitação/decisão. Histórico completo mantido. |
+| [public.supplier_evaluations](tables/public/supplier_evaluations.md) | table | sim | 2 | 12 | não | Avaliações de fornecedores por entrega ou período. Notas de 1-5 em 4 critérios. Trigger recalcula score automaticamente. |
+| [public.supplier_homologations](tables/public/supplier_homologations.md) | table | sim | 2 | 12 | não | Homologação de fornecedores pelo Depto de Compras. Cada registro = uma solicitação/decisão. Histórico completo mantido. |
 | [public.supplier_qualification_config](tables/public/supplier_qualification_config.md) | table | sim | 2 | 13 | não | Configuração dos segmentos de classificação (Excelente/Bom/Regular/Insuficiente/Crítico) com faixas de score e cores. |
-| [public.supplier_score_history](tables/public/supplier_score_history.md) | table | sim | 2 | 16 | não | Histórico de evolução do score. Cada recálculo gera 1 registro. Permite rastrear tendências ao longo do tempo. |
-| [public.supplier_scores](tables/public/supplier_scores.md) | table | sim | 1 | 16 | não | Score consolidado do fornecedor (0-100). Atualizado automaticamente a cada avaliação. 1 registro por fornecedor. |
-| [public.suppliers](tables/public/suppliers.md) | table | sim | 1 | 23 | não | Fornecedores vinculados a companies (1:1 via company_id UNIQUE). Campos de qualificação: homologado, data_homologacao, score_geral (caches atualizados por triggers). Homologação: Compras (Thaina id=30, Elen id=31, Stephanie id=32). 4 critérios: preço(25%), prazo(25%), qualidade(30%), entrega(20%). |
+| [public.supplier_score_history](tables/public/supplier_score_history.md) | table | sim | 3 | 16 | não | Histórico de evolução do score. Cada recálculo gera 1 registro. Permite rastrear tendências ao longo do tempo. |
+| [public.supplier_scores](tables/public/supplier_scores.md) | table | sim | 2 | 16 | não | Score consolidado do fornecedor (0-100). Atualizado automaticamente a cada avaliação. 1 registro por fornecedor. |
+| [public.suppliers](tables/public/suppliers.md) | table | sim | 2 | 23 | não | Fornecedores vinculados a companies (1:1 via company_id UNIQUE). Campos de qualificação: homologado, data_homologacao, score_geral (caches atualizados por triggers). Homologação: Compras (Thaina id=30, Elen id=31, Stephanie id=32). 4 critérios: preço(25%), prazo(25%), qualidade(30%), entrega(20%). |
 | [public.support_tickets](tables/public/support_tickets.md) | table | sim | 5 | 27 | não | SINGU: Tickets de suporte com SLA automático por prioridade, canal multi (email/whatsapp/phone/chat), categorização e CSAT integrado. ticket_number sequential. |
 | [public.sync_log](tables/public/sync_log.md) | table | sim | 2 | 14 | não | Log de sincronização com Bitrix24 |
 | [public.system_alerts](tables/public/system_alerts.md) | table | sim | 2 | 11 | não |  |

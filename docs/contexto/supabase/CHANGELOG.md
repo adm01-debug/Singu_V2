@@ -2,6 +2,13 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 15:16 UTC
+
+- **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`
+- **migrations** adicionado (3): `20261126150000_suppliers_carriers_admin_read`, `20261126151000_fix_data_quality_division_by_zero`, `20261126160000_admin_read_mfa_locked_tables`
+- **policies (RLS)** adicionado (18): `public.carrier_evaluations.carrier_evaluations_select_admin`, `public.carrier_homologations.carrier_homologations_select_admin`, `public.carrier_score_history.carrier_score_history_select_admin`, `public.carrier_scores.carrier_scores_select_admin`, `public.carriers.carriers_select_admin`, `public.company_cnaes.company_cnaes_select_admin`, `public.company_social_media.company_social_media_select_admin`, `public.contact_addresses.contact_addresses_select_admin`, `public.contact_emails.contact_emails_select_admin`, `public.contact_social_media.contact_social_media_select_admin`, `public.customer_events.customer_events_select_admin`, `public.customer_ownership_history.customer_ownership_history_select_admin`, `public.customer_sdr_history.customer_sdr_history_select_admin`, `public.supplier_evaluations.supplier_evaluations_select_admin`, `public.supplier_homologations.supplier_homologations_select_admin`, `public.supplier_score_history.supplier_score_history_select_admin`, `public.supplier_scores.supplier_scores_select_admin`, `public.suppliers.suppliers_select_admin`
+- **views** alterado (2): `public.vw_carrier_data_quality`, `public.vw_supplier_data_quality`
+
 ## 2026-11-26 14:15 UTC
 
 - **migrations** adicionado (1): `20261126120000_companies_owner_or_admin_policy`

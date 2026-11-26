@@ -8,7 +8,7 @@
 | owner | postgres |
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
-| policies | 5 |
+| policies | 6 |
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
@@ -81,6 +81,16 @@
 | tipo | PERMISSIVE |
 | roles | authenticated |
 | USING | `(( SELECT auth.uid() AS uid) IS NOT NULL)` |
+| WITH CHECK |  |
+
+### `contact_emails_select_admin`
+
+| campo | valor |
+|---|---|
+| comando | SELECT |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)` |
 | WITH CHECK |  |
 
 ### `contact_emails_update`

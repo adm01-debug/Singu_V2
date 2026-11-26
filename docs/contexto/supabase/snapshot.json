@@ -218168,7 +218168,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 86,
+          "code_total_files": 87,
           "cron": [],
           "db": [
             "public.ativar_cliente",
@@ -280716,6 +280716,21 @@
         "name": "companies_owner_or_admin_policy",
         "statements": null,
         "version": "20261126120000"
+      },
+      {
+        "name": "suppliers_carriers_admin_read",
+        "statements": null,
+        "version": "20261126150000"
+      },
+      {
+        "name": "fix_data_quality_division_by_zero",
+        "statements": null,
+        "version": "20261126151000"
+      },
+      {
+        "name": "admin_read_mfa_locked_tables",
+        "statements": null,
+        "version": "20261126160000"
       }
     ],
     "policies": [
@@ -284646,6 +284661,18 @@
         "with_check": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_evaluations.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
+        "cmd": "SELECT",
+        "name": "carrier_evaluations_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "carrier_evaluations",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
+      },
+      {
         "cmd": "ALL",
         "name": "carrier_homologations_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
@@ -284656,6 +284683,18 @@
         "table": "carrier_homologations",
         "using": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_homologations.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_homologations.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "carrier_homologations_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "carrier_homologations",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
       },
       {
         "cmd": "ALL",
@@ -284694,6 +284733,18 @@
         "with_check": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_score_history.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
+        "cmd": "SELECT",
+        "name": "carrier_score_history_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "carrier_score_history",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
+      },
+      {
         "cmd": "ALL",
         "name": "carrier_scores_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
@@ -284706,6 +284757,18 @@
         "with_check": "((EXISTS ( SELECT 1\n   FROM (carriers ca\n     JOIN companies c ON ((c.id = ca.company_id)))\n  WHERE ((ca.id = carrier_scores.carrier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
+        "cmd": "SELECT",
+        "name": "carrier_scores_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "carrier_scores",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
+      },
+      {
         "cmd": "ALL",
         "name": "carriers_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
@@ -284716,6 +284779,18 @@
         "table": "carriers",
         "using": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = carriers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = carriers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "carriers_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "carriers",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
       },
       {
         "cmd": "SELECT",
@@ -285642,6 +285717,18 @@
         "with_check": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = company_cnaes.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
+        "cmd": "SELECT",
+        "name": "company_cnaes_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "company_cnaes",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": null
+      },
+      {
         "cmd": "DELETE",
         "name": "company_emails_delete",
         "permissive": "PERMISSIVE",
@@ -285844,6 +285931,18 @@
         "table": "company_social_media",
         "using": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = company_social_media.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = company_social_media.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "company_social_media_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "company_social_media",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": null
       },
       {
         "cmd": "DELETE",
@@ -286278,6 +286377,18 @@
         "with_check": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = contact_addresses.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
+        "cmd": "SELECT",
+        "name": "contact_addresses_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "contact_addresses",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": null
+      },
+      {
         "cmd": "INSERT",
         "name": "Users insert own profile versions",
         "permissive": "PERMISSIVE",
@@ -286623,6 +286734,18 @@
         "schema": "public",
         "table": "contact_emails",
         "using": "(( SELECT auth.uid() AS uid) IS NOT NULL)",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "contact_emails_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "contact_emails",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -287368,6 +287491,18 @@
         "table": "contact_social_media",
         "using": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = contact_social_media.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": "((EXISTS ( SELECT 1\n   FROM contacts c\n  WHERE ((c.id = contact_social_media.contact_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "contact_social_media_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "contact_social_media",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": null
       },
       {
         "cmd": "DELETE",
@@ -288318,6 +288453,18 @@
         "with_check": null
       },
       {
+        "cmd": "SELECT",
+        "name": "customer_events_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "customer_events",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
+        "with_check": null
+      },
+      {
         "cmd": "ALL",
         "name": "service_full",
         "permissive": "PERMISSIVE",
@@ -288387,6 +288534,18 @@
         "schema": "public",
         "table": "customer_ownership_history",
         "using": "((((customer_id IS NOT NULL) OR (company_id IS NOT NULL)) AND ((customer_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM (customers cu\n     JOIN companies co ON ((co.id = cu.company_id)))\n  WHERE ((cu.id = customer_ownership_history.customer_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid)))))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM companies co\n  WHERE ((co.id = customer_ownership_history.company_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "customer_ownership_history_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "customer_ownership_history",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -288507,6 +288666,18 @@
         "schema": "public",
         "table": "customer_sdr_history",
         "using": "((((customer_id IS NOT NULL) OR (company_id IS NOT NULL)) AND ((customer_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM (customers cu\n     JOIN companies co ON ((co.id = cu.company_id)))\n  WHERE ((cu.id = customer_sdr_history.customer_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid)))))) AND ((company_id IS NULL) OR (EXISTS ( SELECT 1\n   FROM companies co\n  WHERE ((co.id = customer_sdr_history.company_id) AND (co.deleted_at IS NULL) AND (co.user_id = ( SELECT auth.uid() AS uid))))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "customer_sdr_history_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "customer_sdr_history",
+        "using": "has_role(( SELECT auth.uid() AS uid), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -298165,6 +298336,18 @@
         "with_check": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_evaluations.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
+        "cmd": "SELECT",
+        "name": "supplier_evaluations_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "supplier_evaluations",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
+      },
+      {
         "cmd": "ALL",
         "name": "supplier_homologations_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
@@ -298175,6 +298358,18 @@
         "table": "supplier_homologations",
         "using": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_homologations.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_homologations.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "supplier_homologations_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "supplier_homologations",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
       },
       {
         "cmd": "ALL",
@@ -298225,6 +298420,18 @@
         "with_check": null
       },
       {
+        "cmd": "SELECT",
+        "name": "supplier_score_history_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "supplier_score_history",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
+      },
+      {
         "cmd": "ALL",
         "name": "supplier_scores_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
@@ -298237,6 +298444,18 @@
         "with_check": "((EXISTS ( SELECT 1\n   FROM (suppliers s\n     JOIN companies c ON ((c.id = s.company_id)))\n  WHERE ((s.id = supplier_scores.supplier_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
       },
       {
+        "cmd": "SELECT",
+        "name": "supplier_scores_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "supplier_scores",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
+      },
+      {
         "cmd": "ALL",
         "name": "suppliers_owner_or_admin_mfa",
         "permissive": "PERMISSIVE",
@@ -298247,6 +298466,18 @@
         "table": "suppliers",
         "using": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = suppliers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))",
         "with_check": "((EXISTS ( SELECT 1\n   FROM companies c\n  WHERE ((c.id = suppliers.company_id) AND (c.deleted_at IS NULL) AND (c.user_id = ( SELECT auth.uid() AS uid))))) OR (( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role) AND (( SELECT (auth.jwt() ->> 'aal'::text)) = 'aal2'::text)))"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "suppliers_select_admin",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "suppliers",
+        "using": "( SELECT has_role(( SELECT auth.uid() AS uid), 'admin'::app_role) AS has_role)",
+        "with_check": null
       },
       {
         "cmd": "DELETE",
@@ -317718,7 +317949,7 @@
       },
       {
         "comment": "Radiografia de qualidade de dados das transportadoras: % CNPJ, telefone, email, endereço, contato",
-        "definition": " SELECT count(*) AS total_transportadoras,\n    count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj,\n    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / count(*)::numeric, 1) AS pct_cnpj,\n    count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id))) AS com_telefone,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_telefone,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id))) AS com_email,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_email,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_addresses cad\n          WHERE cad.company_id = co.id))) AS com_endereco,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_addresses cad\n          WHERE cad.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_endereco,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM contacts ct\n          WHERE ct.company_id = co.id))) AS com_contato,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM contacts ct\n          WHERE ct.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_contato,\n    count(*) FILTER (WHERE co.situacao_rf IS NOT NULL) AS com_situacao_rf,\n    count(*) FILTER (WHERE NOT (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND NOT (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id))) AS sem_nenhum_contato,\n    count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text AND (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_addresses cad\n          WHERE cad.company_id = co.id))) AS cadastro_completo,\n    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text AND (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_addresses cad\n          WHERE cad.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_cadastro_completo\n   FROM carriers ca\n     JOIN companies co ON co.id = ca.company_id AND co.deleted_at IS NULL;",
+        "definition": " SELECT count(*) AS total_transportadoras,\n    count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj,\n    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj,\n    count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id))) AS com_telefone,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_telefone,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id))) AS com_email,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_email,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_addresses cad\n          WHERE cad.company_id = co.id))) AS com_endereco,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_addresses cad\n          WHERE cad.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_endereco,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM contacts ct\n          WHERE ct.company_id = co.id))) AS com_contato,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM contacts ct\n          WHERE ct.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_contato,\n    count(*) FILTER (WHERE co.situacao_rf IS NOT NULL) AS com_situacao_rf,\n    count(*) FILTER (WHERE NOT (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND NOT (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id))) AS sem_nenhum_contato,\n    count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text AND (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_addresses cad\n          WHERE cad.company_id = co.id))) AS cadastro_completo,\n    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text AND (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_addresses cad\n          WHERE cad.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cadastro_completo\n   FROM carriers ca\n     JOIN companies co ON co.id = ca.company_id AND co.deleted_at IS NULL;",
         "depends_on": [
           "public.carriers",
           "public.companies",
@@ -319517,7 +319748,7 @@
       },
       {
         "comment": "Radiografia de qualidade de dados dos fornecedores: % com CNPJ, telefone, email, endereço, cadastro completo.",
-        "definition": " SELECT count(*) AS total_fornecedores,\n    count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj,\n    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / count(*)::numeric, 1) AS pct_cnpj,\n    count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id))) AS com_telefone,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_telefone,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id))) AS com_email,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_email,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_addresses ca\n          WHERE ca.company_id = co.id))) AS com_endereco,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_addresses ca\n          WHERE ca.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_endereco,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM contacts ct\n          WHERE ct.company_id = co.id))) AS com_contato,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM contacts ct\n          WHERE ct.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_contato,\n    count(*) FILTER (WHERE co.situacao_rf IS NOT NULL) AS com_situacao_rf,\n    count(*) FILTER (WHERE NOT (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND NOT (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id))) AS sem_nenhum_contato,\n    count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text AND (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_addresses ca\n          WHERE ca.company_id = co.id))) AS cadastro_completo,\n    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text AND (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_addresses ca\n          WHERE ca.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_cadastro_completo\n   FROM suppliers s\n     JOIN companies co ON co.id = s.company_id AND co.deleted_at IS NULL;",
+        "definition": " SELECT count(*) AS total_fornecedores,\n    count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj,\n    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj,\n    count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id))) AS com_telefone,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_telefone,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id))) AS com_email,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_email,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_addresses ca\n          WHERE ca.company_id = co.id))) AS com_endereco,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM company_addresses ca\n          WHERE ca.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_endereco,\n    count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM contacts ct\n          WHERE ct.company_id = co.id))) AS com_contato,\n    round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1\n           FROM contacts ct\n          WHERE ct.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_contato,\n    count(*) FILTER (WHERE co.situacao_rf IS NOT NULL) AS com_situacao_rf,\n    count(*) FILTER (WHERE NOT (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND NOT (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id))) AS sem_nenhum_contato,\n    count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text AND (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_addresses ca\n          WHERE ca.company_id = co.id))) AS cadastro_completo,\n    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text AND (EXISTS ( SELECT 1\n           FROM company_phones cp\n          WHERE cp.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_emails ce\n          WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1\n           FROM company_addresses ca\n          WHERE ca.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cadastro_completo\n   FROM suppliers s\n     JOIN companies co ON co.id = s.company_id AND co.deleted_at IS NULL;",
         "depends_on": [
           "public.companies",
           "public.company_addresses",

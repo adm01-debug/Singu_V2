@@ -1055,32 +1055,32 @@ SELECT COALESCE(addr.estado, 'SEM ESTADO'::character varying) AS estado,
 ```sql
 SELECT count(*) AS total_transportadoras,
     count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj,
-    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / count(*)::numeric, 1) AS pct_cnpj,
+    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj,
     count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social,
     count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_phones cp
           WHERE cp.company_id = co.id))) AS com_telefone,
     round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_phones cp
-          WHERE cp.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_telefone,
+          WHERE cp.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_telefone,
     count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_emails ce
           WHERE ce.company_id = co.id))) AS com_email,
     round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_emails ce
-          WHERE ce.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_email,
+          WHERE ce.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_email,
     count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_addresses cad
           WHERE cad.company_id = co.id))) AS com_endereco,
     round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_addresses cad
-          WHERE cad.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_endereco,
+          WHERE cad.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_endereco,
     count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM contacts ct
           WHERE ct.company_id = co.id))) AS com_contato,
     round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM contacts ct
-          WHERE ct.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_contato,
+          WHERE ct.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_contato,
     count(*) FILTER (WHERE co.situacao_rf IS NOT NULL) AS com_situacao_rf,
     count(*) FILTER (WHERE NOT (EXISTS ( SELECT 1
            FROM company_phones cp
@@ -1100,7 +1100,7 @@ SELECT count(*) AS total_transportadoras,
            FROM company_emails ce
           WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1
            FROM company_addresses cad
-          WHERE cad.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_cadastro_completo
+          WHERE cad.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cadastro_completo
    FROM carriers ca
      JOIN companies co ON co.id = ca.company_id AND co.deleted_at IS NULL;
 ```
@@ -5670,32 +5670,32 @@ SELECT COALESCE(addr.estado, 'SEM ESTADO'::character varying) AS estado,
 ```sql
 SELECT count(*) AS total_fornecedores,
     count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text) AS com_cnpj,
-    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / count(*)::numeric, 1) AS pct_cnpj,
+    round(100.0 * count(*) FILTER (WHERE co.cnpj IS NOT NULL AND co.cnpj <> ''::text)::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cnpj,
     count(*) FILTER (WHERE co.razao_social IS NOT NULL AND co.razao_social <> ''::text) AS com_razao_social,
     count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_phones cp
           WHERE cp.company_id = co.id))) AS com_telefone,
     round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_phones cp
-          WHERE cp.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_telefone,
+          WHERE cp.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_telefone,
     count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_emails ce
           WHERE ce.company_id = co.id))) AS com_email,
     round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_emails ce
-          WHERE ce.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_email,
+          WHERE ce.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_email,
     count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_addresses ca
           WHERE ca.company_id = co.id))) AS com_endereco,
     round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM company_addresses ca
-          WHERE ca.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_endereco,
+          WHERE ca.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_endereco,
     count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM contacts ct
           WHERE ct.company_id = co.id))) AS com_contato,
     round(100.0 * count(*) FILTER (WHERE (EXISTS ( SELECT 1
            FROM contacts ct
-          WHERE ct.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_contato,
+          WHERE ct.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_contato,
     count(*) FILTER (WHERE co.situacao_rf IS NOT NULL) AS com_situacao_rf,
     count(*) FILTER (WHERE NOT (EXISTS ( SELECT 1
            FROM company_phones cp
@@ -5715,7 +5715,7 @@ SELECT count(*) AS total_fornecedores,
            FROM company_emails ce
           WHERE ce.company_id = co.id)) AND (EXISTS ( SELECT 1
            FROM company_addresses ca
-          WHERE ca.company_id = co.id)))::numeric / count(*)::numeric, 1) AS pct_cadastro_completo
+          WHERE ca.company_id = co.id)))::numeric / NULLIF(count(*), 0)::numeric, 1) AS pct_cadastro_completo
    FROM suppliers s
      JOIN companies co ON co.id = s.company_id AND co.deleted_at IS NULL;
 ```
