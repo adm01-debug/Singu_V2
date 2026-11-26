@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1c327708f5` · branch `main` · 2026-11-26 17:36 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3a745b60a2` · branch `main` · 2026-11-26 18:09 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -3710,6 +3710,7 @@ _nenhum item encontrado_
 | `SCOPE` | `'ficha360'` | `src/hooks/useFicha360PreferencesSync.ts` |
 | `DEFAULT` | `'recente'` | `src/hooks/useFicha360Sort.ts` |
 | `PARAM` | `'ordem'` | `src/hooks/useFicha360Sort.ts` |
+| `LIMITE` | `100` | `src/hooks/useGovernancaIA.ts` |
 | `TABLE` | `'vw_grupos_economicos_resumo'` | `src/hooks/useGruposEconomicos.ts` |
 | `CHUNK` | `1000` | `src/hooks/useGruposEconomicos.ts` |
 | `PROBABILIDADE_BASE` | `60` | `src/hooks/useHiddenObjections.ts` |

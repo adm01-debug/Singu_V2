@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 1086,
+ "total": 1087,
  "orfaos": 18,
  "nomes_duplicados": {
   "ABM": [
@@ -195,6 +195,10 @@
   "Ficha360": [
    "src/app/lazyPages.tsx",
    "src/pages/Ficha360.tsx"
+  ],
+  "GovernancaIA": [
+   "src/app/lazyPages.tsx",
+   "src/pages/GovernancaIA.tsx"
   ],
   "GruposEconomicos": [
    "src/app/lazyPages.tsx",
@@ -515,7 +519,7 @@
     "AppRoutes"
    ],
    "export_default": null,
-   "linhas": 196,
+   "linhas": 197,
    "dominio": "app",
    "hooks_locais": [
     "useCircuitBreakerHandler",
@@ -593,6 +597,7 @@
     "Ficha360",
     "ForecastingPage",
     "ForecastingSetupPage",
+    "GovernancaIA",
     "GruposEconomicos",
     "Historico",
     "Inbox",
@@ -661,7 +666,7 @@
     "WinLossSetupPage"
    ],
    "export_default": null,
-   "linhas": 180,
+   "linhas": 181,
    "dominio": "app",
    "hooks_locais": [
     "useEasterEggs"
@@ -10365,7 +10370,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 53,
+   "usado_por": 54,
    "orfao": false
   },
   {
@@ -10374,7 +10379,7 @@
     "AppSidebar"
    ],
    "export_default": null,
-   "linhas": 327,
+   "linhas": 328,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
@@ -14260,7 +14265,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 558,
+   "usado_por": 559,
    "orfao": false
   },
   {
@@ -14275,7 +14280,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 538,
+   "usado_por": 539,
    "orfao": false
   },
   {
@@ -14310,7 +14315,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 596,
+   "usado_por": 597,
    "orfao": false
   },
   {
@@ -15095,7 +15100,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 211,
+   "usado_por": 212,
    "orfao": false
   },
   {
@@ -15219,7 +15224,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 24,
+   "usado_por": 25,
    "orfao": false
   },
   {
@@ -15236,7 +15241,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 95,
+   "usado_por": 96,
    "orfao": false
   },
   {
@@ -16969,6 +16974,24 @@
    "hooks_locais": [
     "useQuotaSettings",
     "useUpsertQuotaSettings"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/GovernancaIA.tsx",
+   "exports": [
+    "GovernancaIA"
+   ],
+   "export_default": "GovernancaIA",
+   "linhas": 327,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useCatalogoModelos",
+    "useReframes",
+    "useScriptsRecomendados"
    ],
    "tabelas": [],
    "edges": [],

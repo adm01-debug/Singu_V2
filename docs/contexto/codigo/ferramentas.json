@@ -3,8 +3,8 @@
  "format_version": 2,
  "stack": {
   "linguagens": [
-   "TypeScript (2121)",
-   "SQL (1303)",
+   "TypeScript (2123)",
+   "SQL (1304)",
    "Markdown (159)",
    "Shell (148)",
    "JavaScript (143)",
@@ -1669,7 +1669,7 @@
    "src/components/auth/MFAGuard.tsx",
    "src/hooks/useAuth.tsx"
   ],
-  "rotas_protegidas": 110,
+  "rotas_protegidas": 111,
   "rotas_publicas": [
    "/*",
    "/auth",

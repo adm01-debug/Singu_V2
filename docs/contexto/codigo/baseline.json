@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
  "git": {
-  "commit": "1c327708f56bb159934e0d1c28e478d9bf85941c",
+  "commit": "3a745b60a24457c7206282055afe63a6f63e3509",
   "branch": "main",
-  "data_commit": "2026-11-26T14:32:15-03:00",
+  "data_commit": "2026-11-26T15:08:51-03:00",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "ultimos_commits": [
+   {
+    "sha": "3a745b6",
+    "data": "2026-11-26",
+    "assunto": "feat(admin): tela de Governança de IA com catálogo de modelos, reframes e scripts (#371)"
+   },
    {
     "sha": "1c32770",
     "data": "2026-11-26",
@@ -126,14 +131,9 @@
     "sha": "472ff96",
     "data": "2026-11-25",
     "assunto": "feat(rbac): popula papeis e completa a matriz das rotas guardadas (#345)"
-   },
-   {
-    "sha": "603c404",
-    "data": "2026-11-25",
-    "assunto": "chore(zapp_history): desativa os 5 crons ativos do modulo morto (#344)"
    }
   ],
-  "arquivos_mudados_7d": 1039,
+  "arquivos_mudados_7d": 1032,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "scripts/migration/verify",
@@ -152,12 +152,16 @@
     "mudancas": 21
    },
    {
+    "pasta": "supabase/functions/external-data",
+    "mudancas": 21
+   },
+   {
     "pasta": "scripts/migration/storage",
     "mudancas": 20
    },
    {
-    "pasta": "supabase/functions/external-data",
-    "mudancas": 20
+    "pasta": "src/components/layout",
+    "mudancas": 17
    },
    {
     "pasta": "scripts/migration/functions",
@@ -165,10 +169,6 @@
    },
    {
     "pasta": "src/components/admin",
-    "mudancas": 16
-   },
-   {
-    "pasta": "src/components/layout",
     "mudancas": 16
    },
    {
@@ -231,10 +231,18 @@
    },
    {
     "arquivo": "src/app/AppRoutes.tsx",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "src/components/layout/AppSidebar.tsx",
+    "mudancas": 11
+   },
+   {
+    "arquivo": "supabase/functions/external-data/tables.ts",
+    "mudancas": 11
+   },
+   {
+    "arquivo": "src/app/lazyPages.tsx",
     "mudancas": 10
    },
    {
@@ -246,19 +254,11 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/external-data/tables.ts",
-    "mudancas": 10
-   },
-   {
     "arquivo": "inventario/estado/banco.json",
     "mudancas": 9
    },
    {
     "arquivo": "inventario/estado/edges.json",
-    "mudancas": 9
-   },
-   {
-    "arquivo": "src/app/lazyPages.tsx",
     "mudancas": 9
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 203
+    "commits": 204
    },
    {
     "autor": "devin-ai-integration[bot]",
@@ -326,19 +326,19 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 3962,
-  "arquivos_codigo": 2285,
-  "linhas_codigo": 426635,
-  "rotas": 122,
+  "arquivos_total": 3965,
+  "arquivos_codigo": 2287,
+  "linhas_codigo": 427068,
+  "rotas": 123,
   "rotas_http_backend": 8,
   "vistas_por_id": 0,
-  "itens_menu": 72,
+  "itens_menu": 73,
   "modulos": 142,
-  "componentes": 1086,
-  "hooks": 418,
+  "componentes": 1087,
+  "hooks": 419,
   "edge_functions": 110,
   "tabelas": 542,
-  "migrations": 1126,
+  "migrations": 1127,
   "cron_jobs": 47,
   "testes": 288,
   "workflows": 14,
@@ -652,11 +652,11 @@
   },
   "src/app": {
    "arquivos": 6,
-   "linhas": 606
+   "linhas": 608
   },
   "src/components": {
    "arquivos": 1017,
-   "linhas": 152383
+   "linhas": 152384
   },
   "src/config": {
    "arquivos": 1,
@@ -675,8 +675,8 @@
    "linhas": 1254
   },
   "src/hooks": {
-   "arquivos": 450,
-   "linhas": 59684
+   "arquivos": 451,
+   "linhas": 59782
   },
   "src/integrations": {
    "arquivos": 3,
@@ -691,8 +691,8 @@
    "linhas": 97
   },
   "src/pages": {
-   "arquivos": 162,
-   "linhas": 32037
+   "arquivos": 163,
+   "linhas": 32364
   },
   "src/store": {
    "arquivos": 1,
@@ -712,7 +712,7 @@
   },
   "supabase/functions": {
    "arquivos": 178,
-   "linhas": 28182
+   "linhas": 28187
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -1217,6 +1217,7 @@
    "Empresas",
    "ErpViewer",
    "Ficha360",
+   "GovernancaIA",
    "GruposEconomicos",
    "Historico",
    "Inbox",

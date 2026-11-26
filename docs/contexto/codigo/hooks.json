@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 2,
- "total": 418,
+ "total": 419,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -5803,6 +5803,28 @@
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/components/layout/AppLayout.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useGovernancaIA.ts",
+   "hooks_exportados": [
+    "useCatalogoModelos",
+    "useReframes",
+    "useScriptsRecomendados"
+   ],
+   "linhas": 98,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/GovernancaIA.tsx"
    ],
    "coberto_por_testes": 0
   },

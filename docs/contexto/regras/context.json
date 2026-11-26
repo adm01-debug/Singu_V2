@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "1c327708f56bb159934e0d1c28e478d9bf85941c",
+  "sha": "3a745b60a24457c7206282055afe63a6f63e3509",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
-  "generated_at": "2026-11-26 17:36 UTC",
-  "files_total": 4067,
-  "code_files": 3589,
-  "code_lines": 484749
+  "generated_at": "2026-11-26 18:09 UTC",
+  "files_total": 4070,
+  "code_files": 3592,
+  "code_lines": 485199
  },
  "version": "1.3.2",
- "facts_hash": "cf34439a8ceb1f51",
+ "facts_hash": "acf08807dae11ea1",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -272,9 +272,9 @@
   ],
   "package_manager": "bun",
   "languages": {
-   ".sql": 1303,
-   ".tsx": 1196,
-   ".ts": 925,
+   ".sql": 1304,
+   ".tsx": 1197,
+   ".ts": 926,
    ".mjs": 123,
    ".py": 22,
    ".js": 18,
@@ -87750,7 +87750,8 @@
    "supabase/migrations/20261126160000_admin_read_mfa_locked_tables.sql",
    "supabase/migrations/20261126170000_admin_read_automation_notifications.sql",
    "supabase/migrations/20261126180000_clientes_views_read_only.sql",
-   "supabase/migrations/20261126190000_parceiros_controle_read_only.sql"
+   "supabase/migrations/20261126190000_parceiros_controle_read_only.sql",
+   "supabase/migrations/20261126200000_governanca_ia_read_only.sql"
   ],
   "rls": {
    "_migration_cdc_checkpoint": "enabled",
@@ -102571,6 +102572,39 @@
    },
    {
     "path": "",
+    "file": "src/pages/GovernancaIA.tsx",
+    "component": "GovernancaIA",
+    "tables_transitive": [
+     "activities",
+     "alerts",
+     "companies",
+     "contacts",
+     "emotional_states_history",
+     "error_logs",
+     "health_alerts",
+     "insights",
+     "interactions",
+     "metaprogram_analysis",
+     "objection_example_feedback",
+     "role_permissions",
+     "score_history",
+     "system_alerts",
+     "user_roles",
+     "vak_analysis_history"
+    ],
+    "invokes_transitive": [
+     "detect-new-device",
+     "disc-analyzer",
+     "validate-access",
+     "voice-to-text"
+    ],
+    "rpc_transitive": [
+     "has_role"
+    ],
+    "deps_count": 105
+   },
+   {
+    "path": "",
     "file": "src/pages/GruposEconomicos.tsx",
     "component": "GruposEconomicos",
     "tables_transitive": [
@@ -107458,6 +107492,13 @@
     "file": "src/app/AppRoutes.tsx"
    },
    {
+    "path": "/admin/ia",
+    "component": "Admin",
+    "guard": "",
+    "roles": [],
+    "file": "src/app/AppRoutes.tsx"
+   },
+   {
     "path": "/admin/insight-feedback",
     "component": "Admin",
     "guard": "",
@@ -109816,6 +109857,18 @@
     "file": "src/hooks/useGlobalSearch.ts"
    },
    {
+    "name": "useCatalogoModelos",
+    "file": "src/hooks/useGovernancaIA.ts"
+   },
+   {
+    "name": "useReframes",
+    "file": "src/hooks/useGovernancaIA.ts"
+   },
+   {
+    "name": "useScriptsRecomendados",
+    "file": "src/hooks/useGovernancaIA.ts"
+   },
+   {
     "name": "useGraphLayout",
     "file": "src/hooks/useGraphLayout.ts"
    },
@@ -111884,7 +111937,7 @@
   {
    "module": "src/app",
    "files": 6,
-   "lines": 606,
+   "lines": 608,
    "tables": [],
    "exports": [
     "AppChrome.tsx: DeferredAppChrome",
@@ -111921,7 +111974,7 @@
   {
    "module": "src/components",
    "files": 1017,
-   "lines": 152383,
+   "lines": 152384,
    "tables": [
     "audit_log",
     "brain_dominance_analysis",
@@ -112368,8 +112421,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 450,
-   "lines": 59684,
+   "files": 451,
+   "lines": 59782,
    "tables": [
     "abm_account_plans",
     "abm_accounts",
@@ -112943,8 +112996,8 @@
   },
   {
    "module": "src/pages",
-   "files": 162,
-   "lines": 32037,
+   "files": 163,
+   "lines": 32364,
    "tables": [
     "ai_recommendation_audit_logs_v2",
     "alerts",
@@ -113107,6 +113160,7 @@
     "src/pages/Ficha360.tsx",
     "src/pages/Forecasting.tsx",
     "src/pages/ForecastingSetup.tsx",
+    "src/pages/GovernancaIA.tsx",
     "src/pages/GruposEconomicos.tsx",
     "src/pages/Historico.tsx",
     "src/pages/Inbox.tsx",
@@ -113130,8 +113184,7 @@
     "src/pages/NLPAnalytics.tsx",
     "src/pages/NPS.contract.test.tsx",
     "src/pages/NPS.tsx",
-    "src/pages/Network.tsx",
-    "src/pages/NotFound.tsx"
+    "src/pages/Network.tsx"
    ]
   },
   {
@@ -113302,7 +113355,7 @@
   {
    "module": "supabase/functions",
    "files": 178,
-   "lines": 28182,
+   "lines": 28187,
    "tables": [
     "abm_accounts",
     "abm_buying_committee",
@@ -113583,8 +113636,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 1126,
-   "lines": 105075,
+   "files": 1127,
+   "lines": 105092,
    "tables": [
     "users"
    ],
@@ -153642,6 +153695,11 @@
     "file": "src/hooks/useFicha360Sort.ts",
     "name": "PARAM",
     "value": "'ordem'"
+   },
+   {
+    "file": "src/hooks/useGovernancaIA.ts",
+    "name": "LIMITE",
+    "value": "100"
    },
    {
     "file": "src/hooks/useGruposEconomicos.ts",
@@ -223551,6 +223609,7 @@
    "supabase/migrations/20261123200000_fix_claim_behavioral_profile_retry_admin_check.sql",
    "supabase/migrations/20261124143000_revoke_authenticated_exec_stubs_crm.sql",
    "supabase/migrations/20261125190000_social_sync_automatico_enqueue_dispatch.sql",
+   "supabase/migrations/20261126200000_governanca_ia_read_only.sql",
    "supabase/tests/get_contact_sidebar_by_phone.sql",
    "tests/rls/ai_gateway_health_mttr.sql",
    "tests/rls/atomic_queue_claims_contract.sql",
@@ -247787,7 +247846,7 @@
   },
   "src/app/AppRoutes.tsx": {
    "path": "src/app/AppRoutes.tsx",
-   "lines": 196,
+   "lines": 197,
    "exports": [
     "const AppRoutes"
    ],
@@ -248336,6 +248395,12 @@
      "roles": []
     },
     {
+     "path": "/admin/ia",
+     "component": "Admin",
+     "guard": "",
+     "roles": []
+    },
+    {
      "path": "/clientes",
      "component": "P",
      "guard": "Protected",
@@ -248549,7 +248614,7 @@
   },
   "src/app/lazyPages.tsx": {
    "path": "src/app/lazyPages.tsx",
-   "lines": 180,
+   "lines": 181,
    "exports": [
     "const AdminObservability",
     "const Analytics",
@@ -258203,7 +258268,7 @@
   },
   "src/components/layout/AppSidebar.tsx": {
    "path": "src/components/layout/AppSidebar.tsx",
-   "lines": 327,
+   "lines": 328,
    "exports": [
     "const AppSidebar"
    ],
@@ -275766,6 +275831,29 @@
     "useGlobalSearch"
    ]
   },
+  "src/hooks/useGovernancaIA.ts": {
+   "path": "src/hooks/useGovernancaIA.ts",
+   "lines": 98,
+   "exports": [
+    "interface ModeloIA",
+    "interface ReframeRow",
+    "interface ScriptRow",
+    "function useCatalogoModelos",
+    "function useReframes",
+    "function useScriptsRecomendados"
+   ],
+   "params": [
+    {
+     "name": "LIMITE",
+     "value": "100"
+    }
+   ],
+   "hooks": [
+    "useCatalogoModelos",
+    "useReframes",
+    "useScriptsRecomendados"
+   ]
+  },
   "src/hooks/useGraphLayout.ts": {
    "path": "src/hooks/useGraphLayout.ts",
    "lines": 70,
@@ -289248,6 +289336,13 @@
     "function ForecastingSetup"
    ]
   },
+  "src/pages/GovernancaIA.tsx": {
+   "path": "src/pages/GovernancaIA.tsx",
+   "lines": 327,
+   "exports": [
+    "function GovernancaIA"
+   ]
+  },
   "src/pages/GruposEconomicos.tsx": {
    "path": "src/pages/GruposEconomicos.tsx",
    "lines": 320,
@@ -298176,7 +298271,7 @@
   },
   "supabase/functions/external-data/tables.ts": {
    "path": "supabase/functions/external-data/tables.ts",
-   "lines": 235,
+   "lines": 240,
    "exports": [
     "const ALLOWED_RPCS",
     "type AllowedRpc",
@@ -309525,6 +309620,11 @@
    "path": "supabase/migrations/20261126190000_parceiros_controle_read_only.sql",
    "lines": 17
   },
+  "supabase/migrations/20261126200000_governanca_ia_read_only.sql": {
+   "path": "supabase/migrations/20261126200000_governanca_ia_read_only.sql",
+   "lines": 17,
+   "uses_service_role": true
+  },
   "supabase/tests/check-rls-coverage.sql": {
    "path": "supabase/tests/check-rls-coverage.sql",
    "lines": 140,
@@ -310242,10 +310342,25 @@
   }
  },
  "git": {
-  "sha": "1c327708f56bb159934e0d1c28e478d9bf85941c",
+  "sha": "3a745b60a24457c7206282055afe63a6f63e3509",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Singu_V2",
   "commits": [
+   {
+    "sha": "3a745b6",
+    "date": "2026-11-26",
+    "author": "adm01-debug",
+    "subject": "feat(admin): tela de Governança de IA com catálogo de modelos, reframes e scripts (#371)",
+    "files": [
+     "src/app/AppRoutes.tsx",
+     "src/app/lazyPages.tsx",
+     "src/components/layout/AppSidebar.tsx",
+     "src/hooks/useGovernancaIA.ts",
+     "src/pages/GovernancaIA.tsx",
+     "supabase/functions/external-data/tables.ts",
+     "supabase/migrations/20261126200000_governanca_ia_read_only.sql"
+    ]
+   },
    {
     "sha": "1c32770",
     "date": "2026-11-26",
@@ -310581,33 +310696,24 @@
     "files": [
      "supabase/migrations/20261124231412_remove_duplicate_indexes_wave119_restante.sql"
     ]
-   },
-   {
-    "sha": "81fe6e1",
-    "date": "2026-11-25",
-    "author": "adm01-debug",
-    "subject": "fix(whatsapp): alinha check de status e colunas do import em whatsapp_messages (#336)",
-    "files": [
-     "supabase/migrations/20261124211500_whatsapp_messages_status_played_e_colunas_import.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "supabase/functions/external-data/tables.ts",
-    8
+    9
    ],
    [
     "src/app/AppRoutes.tsx",
-    6
+    7
    ],
    [
     "src/app/lazyPages.tsx",
-    6
+    7
    ],
    [
     "src/components/layout/AppSidebar.tsx",
-    6
+    7
    ],
    [
     "supabase/functions/generate-offer-suggestions/index.ts",
@@ -310642,6 +310748,18 @@
     2
    ],
    [
+    "src/hooks/useGovernancaIA.ts",
+    1
+   ],
+   [
+    "src/pages/GovernancaIA.tsx",
+    1
+   ],
+   [
+    "supabase/migrations/20261126200000_governanca_ia_read_only.sql",
+    1
+   ],
+   [
     "supabase/migrations/20261126190000_parceiros_controle_read_only.sql",
     1
    ],
@@ -310659,18 +310777,6 @@
    ],
    [
     "supabase/migrations/20261126180000_clientes_views_read_only.sql",
-    1
-   ],
-   [
-    "src/hooks/useAutomacoes.ts",
-    1
-   ],
-   [
-    "src/pages/AdminAutomacoes.tsx",
-    1
-   ],
-   [
-    "supabase/migrations/20261126170000_admin_read_automation_notifications.sql",
     1
    ]
   ]
