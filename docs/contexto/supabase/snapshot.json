@@ -218168,7 +218168,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 89,
+          "code_total_files": 90,
           "cron": [],
           "db": [
             "public.ativar_cliente",
@@ -246536,7 +246536,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_carrier_homologation_control"
         },
@@ -246644,7 +246644,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_cliente_completo"
         },
@@ -246848,7 +246848,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_cooperativas_estrutura"
         },
@@ -246980,7 +246980,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_empresa_historico_completo"
         },
@@ -247004,7 +247004,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_empresas_hierarquia"
         },
@@ -247592,7 +247592,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_status_clientes"
         },
@@ -247652,7 +247652,7 @@
         },
         {
           "grantee": "authenticated",
-          "privileges": "DELETE, INSERT, SELECT, UPDATE",
+          "privileges": "SELECT",
           "schema": "public",
           "table": "vw_supplier_homologation_control"
         },
@@ -280736,6 +280736,16 @@
         "name": "admin_read_automation_notifications",
         "statements": null,
         "version": "20261126170000"
+      },
+      {
+        "name": "clientes_views_read_only",
+        "statements": null,
+        "version": "20261126180000"
+      },
+      {
+        "name": "parceiros_controle_read_only",
+        "statements": null,
+        "version": "20261126190000"
       }
     ],
     "policies": [

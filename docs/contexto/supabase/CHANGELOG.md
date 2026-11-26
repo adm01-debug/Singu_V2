@@ -2,6 +2,12 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-26 17:12 UTC
+
+- **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`
+- **grants** alterado (7): `public.vw_carrier_homologation_control:authenticated`, `public.vw_cliente_completo:authenticated`, `public.vw_cooperativas_estrutura:authenticated`, `public.vw_empresa_historico_completo:authenticated`, `public.vw_empresas_hierarquia:authenticated`, `public.vw_status_clientes:authenticated`, `public.vw_supplier_homologation_control:authenticated`
+- **migrations** adicionado (2): `20261126180000_clientes_views_read_only`, `20261126190000_parceiros_controle_read_only`
+
 ## 2026-11-26 16:15 UTC
 
 - **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`

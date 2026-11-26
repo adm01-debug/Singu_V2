@@ -1504,7 +1504,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_carrier_data_quality | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_carrier_evaluations_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_carrier_evaluations_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_carrier_homologation_control | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_carrier_homologation_control | authenticated | SELECT |
 | public.vw_carrier_homologation_control | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_carrier_homologation_queue | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_carrier_homologation_queue | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -1522,7 +1522,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_carteira_vendedores | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_churn_risk_ranking | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_churn_risk_ranking | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_cliente_completo | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_cliente_completo | authenticated | SELECT |
 | public.vw_cliente_completo | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_clientes_prioridade | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_clientes_prioridade | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -1556,7 +1556,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_contacts_full | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_contacts_sem_apelido | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_contacts_sem_apelido | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_cooperativas_estrutura | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_cooperativas_estrutura | authenticated | SELECT |
 | public.vw_cooperativas_estrutura | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_customers | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_customers | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -1578,11 +1578,11 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_disc_compatibility | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_emotional_trend_by_contact | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_emotional_trend_by_contact | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_empresa_historico_completo | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_empresa_historico_completo | authenticated | SELECT |
 | public.vw_empresa_historico_completo | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_empresa_timeline_completa | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_empresa_timeline_completa | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_empresas_hierarquia | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_empresas_hierarquia | authenticated | SELECT |
 | public.vw_empresas_hierarquia | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_eq_dashboard | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_eq_dashboard | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -1680,7 +1680,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_singu_usage_kpis | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_social_media_stats | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_social_media_stats | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_status_clientes | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_status_clientes | authenticated | SELECT |
 | public.vw_status_clientes | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_supplier_alerts | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_supplier_alerts | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
@@ -1690,7 +1690,7 @@ Roles da API: `anon` (sem login), `authenticated` (logado), `service_role` (bypa
 | public.vw_supplier_data_quality | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_supplier_evaluations_history | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_supplier_evaluations_history | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
-| public.vw_supplier_homologation_control | authenticated | DELETE, INSERT, SELECT, UPDATE |
+| public.vw_supplier_homologation_control | authenticated | SELECT |
 | public.vw_supplier_homologation_control | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
 | public.vw_supplier_homologation_queue | authenticated | DELETE, INSERT, SELECT, UPDATE |
 | public.vw_supplier_homologation_queue | service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
