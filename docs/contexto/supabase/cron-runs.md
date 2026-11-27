@@ -82,18 +82,18 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-27 20:10:00 | succeeded | 0.11 | 1 row |
-| 2026-11-27 20:05:00 | succeeded | 0.02 | 1 row |
-| 2026-11-27 20:00:00 | succeeded | 0.05 | 1 row |
+| 2026-11-27 22:10:00 | succeeded | 0.03 | 1 row |
+| 2026-11-27 22:05:00 | succeeded | 0.03 | 1 row |
+| 2026-11-27 22:00:00 | succeeded | 0.05 | 1 row |
 
 
 ## 289 · auto_resolve_ai_gateway_alerts
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-27 20:12:00 | succeeded | 0.05 | 1 row |
-| 2026-11-27 20:07:00 | succeeded | 0.05 | 1 row |
-| 2026-11-27 20:02:00 | succeeded | 0.03 | 1 row |
+| 2026-11-27 22:07:00 | succeeded | 0.02 | 1 row |
+| 2026-11-27 22:02:00 | succeeded | 0.03 | 1 row |
+| 2026-11-27 21:57:00 | succeeded | 0.01 | 1 row |
 
 
 ## 290 · ai-gateway-metrics-ensure-partition
@@ -125,9 +125,9 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-27 20:00:00 | succeeded | 0.22 | 1 row |
-| 2026-11-27 19:45:00 | succeeded | 0.23 | 1 row |
-| 2026-11-27 19:30:00 | succeeded | 0.19 | 1 row |
+| 2026-11-27 22:00:00 | succeeded | 0.18 | 1 row |
+| 2026-11-27 21:45:00 | succeeded | 0.22 | 1 row |
+| 2026-11-27 21:30:00 | succeeded | 0.23 | 1 row |
 
 
 ## 858 · cleanup_cron_job_run_details_daily
@@ -143,63 +143,63 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-27 20:10:00 | succeeded | 0.01 | 1 row |
-| 2026-11-27 20:05:00 | succeeded | 0.03 | 1 row |
-| 2026-11-27 20:00:00 | succeeded | 0.01 | 1 row |
+| 2026-11-27 22:10:00 | succeeded | 0.05 | 1 row |
+| 2026-11-27 22:05:00 | succeeded | 0.02 | 1 row |
+| 2026-11-27 22:00:00 | succeeded | 0.07 | 1 row |
 
 
 ## 2445 · singu-edge-process-webhook-dlq
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-27 20:11:00 | succeeded | 0.06 | 1 row |
-| 2026-11-27 20:06:00 | succeeded | 0.01 | 1 row |
-| 2026-11-27 20:01:00 | succeeded | 0.02 | 1 row |
+| 2026-11-27 22:11:00 | succeeded | 0.00 | 1 row |
+| 2026-11-27 22:06:00 | succeeded | 0.00 | 1 row |
+| 2026-11-27 22:01:00 | succeeded | 0.02 | 1 row |
 
 
 ## 2446 · singu-edge-sequence-processor
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-27 20:12:00 | succeeded | 0.01 | 1 row |
-| 2026-11-27 20:07:00 | succeeded | 0.02 | 1 row |
-| 2026-11-27 20:02:00 | succeeded | 0.05 | 1 row |
+| 2026-11-27 22:07:00 | succeeded | 0.02 | 1 row |
+| 2026-11-27 22:02:00 | succeeded | 0.05 | 1 row |
+| 2026-11-27 21:57:00 | succeeded | 0.01 | 1 row |
 
 
 ## 2447 · singu-edge-nurturing-runner
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-27 20:04:00 | succeeded | 0.02 | 1 row |
-| 2026-11-27 19:49:00 | succeeded | 0.01 | 1 row |
-| 2026-11-27 19:34:00 | succeeded | 0.02 | 1 row |
+| 2026-11-27 22:04:00 | succeeded | 0.01 | 1 row |
+| 2026-11-27 21:49:00 | succeeded | 0.02 | 1 row |
+| 2026-11-27 21:34:00 | succeeded | 0.06 | 1 row |
 
 
 ## 2448 · singu-edge-check-notifications
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-27 22:07:00 | succeeded | 0.03 | 1 row |
+| 2026-11-27 21:07:00 | succeeded | 0.02 | 1 row |
 | 2026-11-27 20:07:00 | succeeded | 0.01 | 1 row |
-| 2026-11-27 19:07:00 | succeeded | 0.03 | 1 row |
-| 2026-11-27 18:07:00 | succeeded | 0.02 | 1 row |
 
 
 ## 2449 · singu-edge-check-health-alerts
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-27 21:17:00 | succeeded | 0.00 | 1 row |
+| 2026-11-27 20:17:00 | succeeded | 0.02 | 1 row |
 | 2026-11-27 19:17:00 | succeeded | 0.04 | 1 row |
-| 2026-11-27 18:17:00 | succeeded | 0.05 | 1 row |
-| 2026-11-27 17:17:00 | succeeded | 0.03 | 1 row |
 
 
 ## 2450 · singu-edge-mql-evaluator
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-27 21:27:00 | succeeded | 0.02 | 1 row |
+| 2026-11-27 20:27:00 | succeeded | 0.04 | 1 row |
 | 2026-11-27 19:27:00 | succeeded | 0.02 | 1 row |
-| 2026-11-27 18:27:00 | succeeded | 0.01 | 1 row |
-| 2026-11-27 17:27:00 | succeeded | 0.01 | 1 row |
 
 
 ## 2451 · singu-edge-revops-snapshot-builder
@@ -260,9 +260,9 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-27 21:23:00 | succeeded | 0.02 | 1 row |
+| 2026-11-27 20:23:00 | succeeded | 0.00 | 1 row |
 | 2026-11-27 19:23:00 | succeeded | 0.01 | 1 row |
-| 2026-11-27 18:23:00 | succeeded | 0.01 | 1 row |
-| 2026-11-27 17:23:00 | succeeded | 0.06 | 1 row |
 
 
 ## 2458 · check-contact-health-daily
@@ -278,18 +278,18 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-27 22:07:00 | succeeded | 0.07 | 1 row |
+| 2026-11-27 21:07:00 | succeeded | 0.11 | 1 row |
 | 2026-11-27 20:07:00 | succeeded | 0.05 | 1 row |
-| 2026-11-27 19:07:00 | succeeded | 0.07 | 1 row |
-| 2026-11-27 18:07:00 | succeeded | 0.04 | 1 row |
 
 
 ## 2460 · mtta-auto-ack-heartbeat-watchdog
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-27 20:00:00 | succeeded | 0.17 | 1 row |
-| 2026-11-27 19:30:00 | succeeded | 0.06 | 1 row |
-| 2026-11-27 19:00:00 | succeeded | 0.08 | 1 row |
+| 2026-11-27 22:00:00 | succeeded | 0.19 | 1 row |
+| 2026-11-27 21:30:00 | succeeded | 0.09 | 1 row |
+| 2026-11-27 21:00:00 | succeeded | 0.03 | 1 row |
 
 
 ## 2461 · cleanup-simulated-alerts-weekly
@@ -320,15 +320,15 @@
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-27 20:10:00 | succeeded | 0.07 | 1 row |
-| 2026-11-27 20:05:00 | succeeded | 0.02 | 1 row |
-| 2026-11-27 20:00:00 | succeeded | 0.04 | 1 row |
+| 2026-11-27 22:10:00 | succeeded | 0.03 | 1 row |
+| 2026-11-27 22:05:00 | succeeded | 0.03 | 1 row |
+| 2026-11-27 22:00:00 | succeeded | 0.06 | 1 row |
 
 
 ## 2465 · singu-social-requeue-stuck
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-27 21:25:00 | succeeded | 0.08 | 1 row |
+| 2026-11-27 20:25:00 | succeeded | 0.09 | 1 row |
 | 2026-11-27 19:25:00 | succeeded | 0.11 | 1 row |
-| 2026-11-27 18:25:00 | succeeded | 0.06 | 1 row |
-| 2026-11-27 17:25:00 | succeeded | 0.06 | 1 row |
