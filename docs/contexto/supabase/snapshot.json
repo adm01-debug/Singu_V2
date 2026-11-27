@@ -2,11 +2,7 @@
   "api": {
     "enabled": false
   },
-  "carried": [
-    "columns",
-    "constraints",
-    "indexes"
-  ],
+  "carried": [],
   "db": {
     "columns": [
       {
@@ -187057,9 +187053,13 @@
             {
               "file": "supabase/migrations/20261011130000_report_payload_contracts.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261127001000_legado_funcoes_colunas_corrigidas.sql",
+              "hits": 3
             }
           ],
-          "code_total_files": 5,
+          "code_total_files": 6,
           "cron": [],
           "db": [
             "public.calculate_client_health_score",
@@ -187614,9 +187614,13 @@
             {
               "file": "supabase/migrations/20261011141000_pipeline_summary_addresses.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20261127001000_legado_funcoes_colunas_corrigidas.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 11,
+          "code_total_files": 12,
           "cron": [],
           "db": [
             "public.add_company_tag",
@@ -189924,8 +189928,13 @@
       {
         "args": "p_contact_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261127000000_legado_dormant_reativado.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -193930,8 +193939,13 @@
       {
         "args": "p_user_id uuid, p_title character varying, p_remind_at timestamp with time zone, p_contact_id uuid, p_description text, p_reminder_type character varying, p_priority character varying, p_suggested_actions text[]",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261127001000_legado_funcoes_colunas_corrigidas.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -199195,8 +199209,13 @@
       {
         "args": "p_contact_id uuid, p_contact_type character varying, p_user_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261127001000_legado_funcoes_colunas_corrigidas.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -201047,8 +201066,13 @@
       {
         "args": "p_contact_id uuid",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261127001000_legado_funcoes_colunas_corrigidas.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -226218,8 +226242,13 @@
       {
         "args": "",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261127000000_legado_dormant_reativado.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [
@@ -321350,27 +321379,6 @@
     ],
     "webhooks": []
   },
-  "errors": [
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "columns"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "constraints"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "indexes"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "table_stats"
-    },
-    {
-      "error": "canceling statement due to lock timeout",
-      "section": "db_stats"
-    }
-  ],
+  "errors": [],
   "format_version": 2
 }
