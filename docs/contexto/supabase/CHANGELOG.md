@@ -2,6 +2,11 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-27 01:14 UTC
+
+- **realtime** adicionado (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_30`
+- **realtime** removido (1): `supabase_realtime_messages_publication:realtime.messages_2026_11_23`
+
 ## 2026-11-27 00:32 UTC
 
 - **functions** alterado (7): `public.assert_contact_access(p_contact_id uuid)`, `public.assert_self_user_id(p_user_id uuid)`, `public.calculate_eq_score(p_contact_id uuid)`, `public.create_smart_reminder(p_user_id uuid, p_title character varying, p_remind_at timestamp with time zone, p_contact_id uuid, p_description text, p_reminder_type character varying, p_priority character varying, p_suggested_actions text[])`, `public.generate_pre_contact_briefing(p_contact_id uuid, p_contact_type character varying, p_user_id uuid)`, `public.get_best_closing_moment(p_contact_id uuid)`, `public.set_owner_from_contact()`
