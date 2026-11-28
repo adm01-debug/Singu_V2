@@ -26,7 +26,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.customers | ~78.6k | 39.0 MB | 24.9 MB | 14.1 MB | ~760 | ~5.6k | ~8.7M | 2026-11-14 |
 | public.company_social_media | ~99.1k | 32.3 MB | 18.0 MB | 14.3 MB | ~390 | ~200 | ~186.7k | 2026-03-21 |
 | public.company_phones | ~93.4k | 30.5 MB | 14.5 MB | 16.0 MB | ~980 | ~214.2k | ~16.7M | 2026-11-24 |
-| public.health_alerts | ~65k | 29.1 MB | 25.7 MB | 3.4 MB | 0 | ~420 | ~48.8k | 2026-11-27 |
+| public.health_alerts | ~65k | 29.4 MB | 25.9 MB | 3.4 MB | 0 | ~420 | ~48.8k | 2026-11-27 |
 | public.company_emails | ~58.6k | 27.5 MB | 9.5 MB | 18.0 MB | ~110 | ~390 | ~16.7M | 2026-11-26 |
 | public.error_logs | ~22.1k | 17.6 MB | 16.6 MB | 1.0 MB | ~10 | ~40 | ~10 | 2026-11-26 |
 | public.customer_rotation_state | ~48.6k | 17.5 MB | 11.1 MB | 6.4 MB | 0 | ~750.7k | ~9.2M | 2026-11-27 |
@@ -87,7 +87,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.nurturing_executions | 0 | 112.0 KB | 8.0 KB | 80.0 KB | ~20 | ~7.7k | ~840 | 2026-11-26 |
 | public.proposals | 1 | 112.0 KB | 8.0 KB | 96.0 KB | ~10 | ~11.6k | 2 |  |
 | public.sales_activities | 5 | 112.0 KB | 8.0 KB | 64.0 KB | ~20 | ~2.8k | ~2k | 2026-11-26 |
-| public.validation_queue | 4 | 112.0 KB | 8.0 KB | 64.0 KB | ~10 | ~36.8k | ~790 | 2026-11-26 |
+| public.validation_queue | 4 | 112.0 KB | 8.0 KB | 64.0 KB | ~10 | ~36.9k | ~790 | 2026-11-26 |
 | public.workspace_accounts | ~30 | 112.0 KB | 32.0 KB | 48.0 KB | ~30 | ~6.7k | ~380 |  |
 | zapp_history.message_links | 2 | 112.0 KB | 8.0 KB | 96.0 KB | ~10 | ~640 | ~920 |  |
 | zapp_history.message_media | 0 | 112.0 KB | 8.0 KB | 96.0 KB | 9 | ~650 | ~690 |  |
@@ -105,7 +105,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.role_permissions | ~60 | 96.0 KB | 16.0 KB | 48.0 KB | ~20 | ~450 | ~370 | 2026-11-25 |
 | public.sales | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~30 | ~3.4k | ~5.3k | 2026-11-26 |
 | public.salespeople | ~10 | 96.0 KB | 8.0 KB | 48.0 KB | ~30 | ~14.1k | ~4.9k | 2026-11-26 |
-| public.sequence_enrollments | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~40 | ~90.2k | ~69.9k | 2026-11-26 |
+| public.sequence_enrollments | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~40 | ~90.3k | ~69.9k | 2026-11-26 |
 | public.sequence_events | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~50 | ~21.2k | ~8.3k | 2026-11-26 |
 | public.sequence_steps | 0 | 96.0 KB | 8.0 KB | 64.0 KB | ~30 | ~29.2k | ~19.8k | 2026-11-26 |
 | public.social_profiles | 0 | 96.0 KB | 8.0 KB | 80.0 KB | 1 | ~60 | ~5.4k |  |
@@ -133,7 +133,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.notifications | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~30 | ~9.4k | ~590 | 2026-11-26 |
 | public.relationship_score_history | 7 | 80.0 KB | 8.0 KB | 64.0 KB | 8 | ~47.4k | 4 |  |
 | public.reminders | 3 | 80.0 KB | 8.0 KB | 64.0 KB | 8 | ~5.6k | ~70 |  |
-| public.rpc_perf_samples | 6 | 80.0 KB | 8.0 KB | 32.0 KB | 5 | ~22.7k | ~2k | 2026-11-26 |
+| public.rpc_perf_samples | 6 | 80.0 KB | 8.0 KB | 32.0 KB | 5 | ~22.8k | ~2k | 2026-11-26 |
 | public.sales_opportunities | 0 | 80.0 KB | 8.0 KB | 64.0 KB | 7 | ~90 | ~5.6k |  |
 | public.scheduled_visits | 3 | 80.0 KB | 8.0 KB | 64.0 KB | 3 | ~5.7k | 8 |  |
 | public.sdr_alert_history | ~90 | 80.0 KB | 32.0 KB | 16.0 KB | 0 | ~40 | ~90 |  |
@@ -149,7 +149,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.supplier_scores | 0 | 72.0 KB | 8.0 KB | 56.0 KB | ~40 | ~110 | ~13.1k |  |
 | public.user_roles | ~10 | 72.0 KB | 8.0 KB | 32.0 KB | ~10 | ~415.1k | ~1.1M | 2026-11-26 |
 | zapp_history.async_request_log | 0 | 72.0 KB | 0 B | 48.0 KB | 0 | ~110 | ~20 | 2026-04-10 |
-| public.ai_gateway_metrics_2026_11 | 0 | 64.0 KB | 8.0 KB | 48.0 KB | 0 | ~60 | ~49k |  |
+| public.ai_gateway_metrics_2026_11 | 0 | 64.0 KB | 8.0 KB | 48.0 KB | 0 | ~60 | ~49.1k |  |
 | public.ai_recommendation_audit_logs_v2 | ~60 | 64.0 KB | 16.0 KB | 16.0 KB | 1 | ~10.8k | ~30 |  |
 | public.behavioral_insight_feedback | 0 | 64.0 KB | 8.0 KB | 32.0 KB | 9 | ~16k | ~120 | 2026-11-26 |
 | public.coop_sistemas | 8 | 64.0 KB | 8.0 KB | 48.0 KB | ~20 | ~90 | 0 |  |
@@ -259,7 +259,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.forms | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~1.3k | ~2.4k |  |
 | public.insights | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~460 | ~46.3k |  |
 | public.lead_magnets | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~1k | ~1.6k |  |
-| public.life_events | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~450 | ~11.8k |  |
+| public.life_events | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~460 | ~11.8k |  |
 | public.nps_surveys | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~50 | ~14.3k |  |
 | public.playbook_usage_log | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~3.6k | ~1.8k |  |
 | public.purchase_history | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~5.5k | ~4.6k |  |
@@ -278,8 +278,8 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.ai_gateway_metrics_2026_08 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~13.8k |  |
 | public.ai_gateway_metrics_2026_09 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~13.8k |  |
 | public.ai_gateway_metrics_2026_10 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~30.5k |  |
-| public.ai_gateway_metrics_2026_12 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~49k |  |
-| public.ai_gateway_metrics_2027_01 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~49k |  |
+| public.ai_gateway_metrics_2026_12 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~49.1k |  |
+| public.ai_gateway_metrics_2027_01 | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~49.1k |  |
 | public.automation_executions | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~15.3k | ~80 |  |
 | public.campaigns | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~100 |  |
 | public.client_values | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~60 | ~10.9k |  |
@@ -719,7 +719,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | postgres | ~120 | ~3.4M | 29461.80 | `SELECT string_agg( format($1, id, table_name, record_id, action, CASE WHEN old_data IS NULL THEN $2 ELSE quote_literal(old_data::text) \|\|$3 END, CASE WHEN new_data IS NULL THEN $4 ELSE quote_literal(new_data::text) \|\|$5 ` |
 | service_role | ~7.1k | ~2.8M | 393.23 | `WITH pgrst_source AS ( SELECT "public"."companies".*, row_to_json("companies_customers_1".*)::jsonb AS "customers", COALESCE( "companies_contacts_1"."companies_contacts_1", $9) AS "contacts" FROM "public"."companies" LEF` |
 | authenticated | ~2.2k | ~2.8M | 1229.48 | `WITH pgrst_source AS ( SELECT "public"."companies"."id", "public"."companies"."nome_crm", "public"."companies"."nome_fantasia", "public"."companies"."razao_social", "public"."companies"."cnpj", "public"."companies"."cnpj` |
-| postgres | ~72.7k | ~2.6M | 36.38 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
+| postgres | ~72.9k | ~2.6M | 36.26 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
 | service_role | ~11.2k | ~2.4M | 210.84 | `WITH pgrst_source AS ( SELECT "public"."companies"."id", "public"."companies"."razao_social", "public"."companies"."nome_fantasia", "public"."companies"."ramo_atividade", "public"."companies"."cnpj", "public"."companies"` |
 | service_role | ~64.1M | ~2M | 0.03 | `select set_config('?', $1, true), set_config($2, $3, true), set_config('?', $4, true), set_config('?', $5, true), set_config('?', $6, true), set_config('?', $7, true)` |
 | postgres | ~5.1k | ~1.7M | 340.26 | `with policies as ( select pol.oid :: int8 as id, n.nspname as schema, c.relname as table, c.oid :: int8 as table_id, pol.polname as name, case when pol.polpermissive then $1::text else $2::text end as action, case when p` |
@@ -729,9 +729,8 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | usuário | estado | n |
 |---|---|---|
 | authenticator | idle | 20 |
-| pgbouncer | idle | 2 |
+| pgbouncer | idle | 1 |
 | postgres | active | 1 |
 | postgres |  | 1 |
 | supabase_admin | idle | 2 |
 | supabase_admin |  | 1 |
-| supabase_storage_admin | idle | 3 |
