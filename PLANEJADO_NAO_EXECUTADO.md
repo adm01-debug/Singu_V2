@@ -1,5 +1,7 @@
 # PLANEJADO × EXECUTADO — SINGU CRM v2
 
+> **Substituído em 28/11/2026** por [`docs/auditoria/planejado-x-implementado-20261128/00_CONSOLIDADO.md`](docs/auditoria/planejado-x-implementado-20261128/00_CONSOLIDADO.md) (reverificação no HEAD `e77396e`). Este documento fica como histórico.
+
 > **O que é:** levantamento exaustivo de tudo o que foi **planejado, prometido ou documentado** para o SINGU e que **não foi executado** (nem iniciado), **foi executado pela metade**, ou **existe no código mas não funciona de ponta a ponta**.
 > **Base auditada:** `main` @ `e616c20` (2026-10-11) · 447 migrations · 108 Edge Functions · 113 rotas · ~1.720 arquivos em `src/` · 95 documentos em `docs/` + 14 na raiz + 98 memórias do Lovable.
 > **Data do levantamento:** 2026-10-11/12. **Reconferência dos itens críticos** em `main` @ `36dfc19` (2026-10-12), 11 commits depois da base — ver [§0](#0-atualização-de-12102026-o-que-mudou-durante-a-auditoria).
